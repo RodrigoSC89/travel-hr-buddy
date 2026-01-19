@@ -90,7 +90,7 @@
     <h1>Você está offline</h1>
     <p>Não foi possível conectar-se ao Nautilus One. Verifique sua conexão com a internet e tente novamente.</p>
     
-    <button class="retry-btn" onclick="window.location.reload()">
+    <button class="retry-btn" onclick="retryWithCacheClear()">
       Tentar Novamente
     </button>
     
@@ -121,9 +121,25 @@
     // Auto-reload when connection is restored
     window.addEventListener('online', () => {
       setTimeout(() => {
-        window.location.reload();
+        retryWithCacheClear();
       }, 1000);
     });
+    
+    // Limpar caches antes de recarregar
+    async function retryWithCacheClear() {
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+      } catch(e) { console.error(e); }
+      // Hard reload com cache busting
+      window.location.href = window.location.origin + '/?_sw=' + Date.now();
+    }
   </script>
 </body>
 </html>

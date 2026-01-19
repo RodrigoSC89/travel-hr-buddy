@@ -1,9 +1,10 @@
 /**
- * Service Worker Update Manager
+ * Service Worker Update Manager v9
  * Força atualização do SW quando detecta versão antiga ou erros de chunk
+ * CRITICAL: Atualizado para v9 com limpeza mais agressiva
  */
 
-const EXPECTED_SW_VERSION = 'v8';
+const EXPECTED_SW_VERSION = 'v9';
 const SW_VERSION_KEY = 'nautilus_sw_version';
 const LAST_UPDATE_CHECK_KEY = 'nautilus_sw_last_check';
 

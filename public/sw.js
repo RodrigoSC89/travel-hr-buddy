@@ -1,69 +1,50 @@
-// Service Worker Avançado - Nautilus One v8
-// CRITICAL FIX: Auth requests (ALL endpoints) são SEMPRE bypass
-// CRITICAL FIX: JS/CSS chunks são SEMPRE Network First
-// CRITICAL FIX: Timeouts aumentados para redes de satélite
-const CACHE_VERSION = 'v8';
+// Service Worker Nautilus One v9
+// CRITICAL FIX: Bypass completo para auth + chunks SEMPRE da rede
+// CRITICAL FIX: Instalação mais rápida, menos cache agressivo
+// CRITICAL FIX: Detecção de erros e auto-limpeza
+const CACHE_VERSION = 'v9';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
-const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `nautilus-images-${CACHE_VERSION}`;
 
-// Limites de cache
-const MAX_DYNAMIC_CACHE_SIZE = 50;
-const MAX_IMAGE_CACHE_SIZE = 100;
-const MAX_API_CACHE_SIZE = 30;
-const API_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
+// Limites de cache reduzidos para PWA mais leve
+const MAX_DYNAMIC_CACHE_SIZE = 30;
+const MAX_IMAGE_CACHE_SIZE = 50;
 
-// Assets estáticos para pre-cache (APENAS arquivos que não mudam!)
+// APENAS arquivos absolutamente estáticos
 const STATIC_ASSETS = [
-  '/',
   '/offline.html',
-  '/favicon.ico',
-  '/manifest.json'
-  // NÃO cachear index.html - sempre buscar da rede
+  '/favicon.ico'
 ];
 
-// URLs da API que devem ser cacheadas
-const API_PATTERNS = [
-  /\/rest\/v1\//,
-  /\/functions\/v1\//
-];
-
-// Instalação do Service Worker
+// Instalação RÁPIDA - não bloquear em cache
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing v8 - Auth bypass + Extended timeouts...');
+  console.log('[SW v9] Installing - Fast install mode');
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('[SW] Pre-caching static assets');
-        return cache.addAll(STATIC_ASSETS).catch(err => {
-          console.warn('[SW] Some assets failed to cache:', err);
-        });
-      })
+      .then((cache) => cache.addAll(STATIC_ASSETS).catch(() => {}))
       .then(() => self.skipWaiting())
   );
 });
 
-// Ativação e limpeza de caches antigos
+// Ativação com limpeza AGRESSIVA de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating v8 - clearing ALL old caches...');
+  console.log('[SW v9] Activating - Clearing ALL old caches');
   event.waitUntil(
     caches.keys()
-      .then((keys) => {
-        return Promise.all(
-          keys
-            .filter((key) => !key.includes(CACHE_VERSION))
-            .map((key) => {
-              console.log('[SW] Removing old cache:', key);
-              return caches.delete(key);
-            })
-        );
-      })
+      .then((keys) => Promise.all(
+        keys
+          .filter((key) => !key.includes(CACHE_VERSION))
+          .map((key) => {
+            console.log('[SW v9] Deleting old cache:', key);
+            return caches.delete(key);
+          })
+      ))
       .then(() => self.clients.claim())
   );
 });
 
-// Estratégia de cache inteligente
+// Estratégia principal: Network First para TUDO exceto imagens
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -71,381 +52,268 @@ self.addEventListener('fetch', (event) => {
   // Ignorar chrome-extension e outros protocolos
   if (!url.protocol.startsWith('http')) return;
 
-  // ⚠️ CRÍTICO: NUNCA interceptar requisições de autenticação (GET ou POST)!
-  // Isso inclui /auth/v1/, tokens, sessions, callback, signup, login, etc.
-  const isAuthRequest = 
-    url.pathname.includes('/auth/') || 
-    url.pathname.includes('/auth') ||
-    url.pathname.includes('/token') ||
-    url.pathname.includes('/session') ||
-    url.pathname.includes('/callback') ||
-    url.pathname.includes('/signup') ||
-    url.pathname.includes('/login') ||
-    url.pathname.includes('/verify') ||
-    url.pathname.includes('/recover') ||
-    url.pathname.includes('/user') ||
-    url.pathname.includes('/logout') ||
-    (url.hostname.includes('supabase') && (
-      url.pathname.includes('auth') || 
-      url.pathname.includes('token') ||
-      url.pathname.includes('session')
-    ));
-  
-  if (isAuthRequest) {
-    // NÃO interceptar - deixar passar direto para a rede
-    console.log('[SW] Auth bypass:', url.pathname);
-    return;
+  // ⚠️ CRÍTICO: BYPASS TOTAL para autenticação
+  if (isAuthRequest(url)) {
+    console.log('[SW v9] Auth bypass:', url.pathname);
+    return; // Deixa o browser fazer fetch normal
   }
 
-  // Ignorar requisições não-GET para caching (POST, PUT, DELETE, etc.)
+  // Ignorar requisições não-GET
   if (request.method !== 'GET') return;
 
-  // ⚠️ CRÍTICO: JS e CSS chunks SEMPRE Network First
-  // Isso previne erros de "Failed to fetch dynamically imported module"
-  if (isJSorCSSChunk(url.pathname)) {
-    event.respondWith(networkFirstWithFallback(request));
+  // ⚠️ CRÍTICO: Chunks JS/CSS - SEMPRE Network First (sem fallback de cache)
+  if (isCodeAsset(url.pathname)) {
+    event.respondWith(fetchNetworkOnly(request));
     return;
   }
 
-  // Imagens: Cache First com limite
+  // HTML - SEMPRE da rede
+  if (request.headers.get('accept')?.includes('text/html') || url.pathname === '/') {
+    event.respondWith(fetchNetworkFirst(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // Imagens: Cache First (ok pra cachear)
   if (isImageRequest(url.pathname)) {
-    event.respondWith(imageStrategy(request));
+    event.respondWith(fetchCacheFirst(request, IMAGE_CACHE));
     return;
   }
 
-  // API requests: Network First com fallback para cache
-  if (API_PATTERNS.some((pattern) => pattern.test(url.pathname))) {
-    event.respondWith(networkFirstStrategy(request, API_CACHE));
+  // Fontes: Cache First
+  if (isFontRequest(url.pathname)) {
+    event.respondWith(fetchCacheFirst(request, STATIC_CACHE));
     return;
   }
 
-  // Páginas HTML: SEMPRE Network First (para pegar novos builds)
-  if (request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(networkFirstWithFallback(request));
+  // API: Network First com cache curto
+  if (isAPIRequest(url.pathname)) {
+    event.respondWith(fetchNetworkFirst(request, DYNAMIC_CACHE, 8000));
     return;
   }
 
-  // Fontes e outros assets estáticos: Cache First
-  if (isFontOrStaticAsset(url.pathname)) {
-    event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
-    return;
-  }
-
-  // Outros recursos: Network First
-  event.respondWith(networkFirstWithFallback(request));
+  // Default: Network First
+  event.respondWith(fetchNetworkFirst(request, DYNAMIC_CACHE));
 });
 
-// Estratégias de cache
+// ====== HELPERS ======
 
-async function networkFirstStrategy(request, cacheName) {
-  // Timeouts aumentados para conexões marítimas/satélite
-  const timeoutMs = isSlowConnection() ? 25000 : 12000;
+function isAuthRequest(url) {
+  const path = url.pathname.toLowerCase();
+  const host = url.hostname.toLowerCase();
+  
+  return (
+    path.includes('/auth') ||
+    path.includes('/token') ||
+    path.includes('/session') ||
+    path.includes('/callback') ||
+    path.includes('/signup') ||
+    path.includes('/login') ||
+    path.includes('/verify') ||
+    path.includes('/recover') ||
+    path.includes('/user') ||
+    path.includes('/logout') ||
+    (host.includes('supabase') && (path.includes('auth') || path.includes('token')))
+  );
+}
+
+function isCodeAsset(pathname) {
+  // JS e CSS com hash no nome = chunks do Vite
+  return /\.(js|css|mjs)(\?.*)?$/.test(pathname);
+}
+
+function isImageRequest(pathname) {
+  return /\.(png|jpg|jpeg|gif|svg|webp|avif|ico)(\?.*)?$/.test(pathname);
+}
+
+function isFontRequest(pathname) {
+  return /\.(woff|woff2|ttf|eot|otf)(\?.*)?$/.test(pathname);
+}
+
+function isAPIRequest(pathname) {
+  return pathname.includes('/rest/v1/') || pathname.includes('/functions/v1/');
+}
+
+// ====== ESTRATÉGIAS ======
+
+// Network Only - NUNCA usa cache (para code assets)
+async function fetchNetworkOnly(request) {
+  const timeout = isSlowConnection() ? 30000 : 15000;
   
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
     
-    const networkResponse = await fetch(request, { signal: controller.signal });
+    const response = await fetch(request, { 
+      signal: controller.signal,
+      cache: 'no-store' // Força bypass de cache do browser
+    });
     clearTimeout(timeoutId);
     
-    if (networkResponse.ok) {
-      const cache = await caches.open(cacheName);
-      const responseWithTimestamp = networkResponse.clone();
-      cache.put(request, responseWithTimestamp);
-      await trimCache(cacheName, MAX_API_CACHE_SIZE);
-    }
-    return networkResponse;
+    return response;
   } catch (error) {
-    // Try to get cached response first
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      console.log('[SW] Serving from cache:', request.url);
-      // Clone and add header to indicate cached response
-      const headers = new Headers(cachedResponse.headers);
-      headers.set('X-Cached', 'true');
-      return new Response(cachedResponse.body, {
-        status: cachedResponse.status,
-        statusText: cachedResponse.statusText,
-        headers
-      });
-    }
+    console.error('[SW v9] Network fetch failed:', request.url, error.message);
     
-    // Only return offline error if truly offline and no cache
-    if (!navigator.onLine) {
-      return new Response(JSON.stringify({ 
-        error: 'Offline', 
-        cached: false,
-        message: 'Você está offline. Reconecte para atualizar os dados.'
-      }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-    
-    // Network error but online - let it pass through
-    throw error;
+    // Para chunks, retornar erro claro (não tentar cache velho!)
+    return new Response('// Chunk load failed - please refresh', {
+      status: 503,
+      statusText: 'Network Error',
+      headers: { 'Content-Type': 'application/javascript' }
+    });
   }
 }
 
-// ⚠️ CRÍTICO: Network First com fallback para chunks JS/CSS e HTML
-// Se a rede falhar, tenta cache, mas SEMPRE prefere rede
-async function networkFirstWithFallback(request) {
-  // Timeouts MUITO generosos para redes instáveis (30s slow, 15s normal)
-  const timeoutMs = isSlowConnection() ? 30000 : 15000;
+// Network First com fallback para cache
+async function fetchNetworkFirst(request, cacheName, timeoutMs = null) {
+  const timeout = timeoutMs || (isSlowConnection() ? 25000 : 12000);
   
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
     
-    const networkResponse = await fetch(request, { signal: controller.signal });
+    const response = await fetch(request, { signal: controller.signal });
     clearTimeout(timeoutId);
     
-    if (networkResponse.ok) {
-      // Cachear para fallback offline
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    console.log('[SW] Network failed, trying cache for:', request.url);
-    
-    // Tentar cache como fallback
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      console.log('[SW] Serving from cache:', request.url);
-      return cachedResponse;
-    }
-    
-    // Para navegação, mostrar página offline
-    if (request.mode === 'navigate') {
-      const offlinePage = await caches.match('/offline.html');
-      if (offlinePage) return offlinePage;
-    }
-    
-    // Erro de chunk - retornar erro claro para o ErrorBoundary tratar
-    if (request.url.includes('/assets/') && request.url.endsWith('.js')) {
-      return new Response('Chunk load failed', { 
-        status: 503, 
-        statusText: 'Chunk Load Failed'
-      });
-    }
-    
-    throw error;
-  }
-}
-
-async function cacheFirstStrategy(request, cacheName) {
-  const cachedResponse = await caches.match(request);
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-  
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    // Cachear apenas respostas OK
+    if (response.ok && response.status < 400) {
       const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+      cache.put(request, response.clone()).catch(() => {});
+      trimCache(cacheName, MAX_DYNAMIC_CACHE_SIZE);
     }
-    return networkResponse;
+    
+    return response;
   } catch (error) {
-    // Return offline page for navigation requests
-    if (request.mode === 'navigate') {
-      const offlinePage = await caches.match('/offline.html');
-      if (offlinePage) return offlinePage;
+    console.log('[SW v9] Network failed, trying cache:', request.url);
+    
+    const cached = await caches.match(request);
+    if (cached) {
+      return cached;
     }
-    return new Response('Offline', { status: 503 });
+    
+    // Para navegação, mostrar offline page
+    if (request.mode === 'navigate') {
+      const offline = await caches.match('/offline.html');
+      if (offline) return offline;
+    }
+    
+    // Erro genérico
+    return new Response('Network error', { status: 503 });
   }
 }
 
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cachedResponse = await cache.match(request);
+// Cache First com revalidation
+async function fetchCacheFirst(request, cacheName) {
+  const cached = await caches.match(request);
   
-  const fetchPromise = fetch(request)
-    .then((networkResponse) => {
-      if (networkResponse.ok) {
-        cache.put(request, networkResponse.clone());
-        trimCache(cacheName, MAX_DYNAMIC_CACHE_SIZE);
-      }
-      return networkResponse;
-    })
-    .catch(() => cachedResponse);
-  
-  return cachedResponse || fetchPromise;
-}
-
-async function imageStrategy(request) {
-  const cache = await caches.open(IMAGE_CACHE);
-  const cachedResponse = await cache.match(request);
-  
-  if (cachedResponse) {
-    // Background revalidation for images
+  if (cached) {
+    // Background revalidation
     fetch(request).then(response => {
-      if (response.ok) cache.put(request, response);
+      if (response.ok) {
+        caches.open(cacheName).then(cache => cache.put(request, response));
+      }
     }).catch(() => {});
-    return cachedResponse;
+    
+    return cached;
   }
   
   try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-      await trimCache(IMAGE_CACHE, MAX_IMAGE_CACHE_SIZE);
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, response.clone()).catch(() => {});
     }
-    return networkResponse;
-  } catch (error) {
-    // Return placeholder for images
+    return response;
+  } catch {
     return new Response('', { status: 503 });
   }
 }
 
-// Helpers
-
-// Detecta chunks JS/CSS (arquivos com hash no nome)
-function isJSorCSSChunk(pathname) {
-  // Arquivos como: Component-AbCdEf12.js, style-XyZ123.css
-  return /\/assets\/.*-[a-zA-Z0-9]{6,}\.(js|css)$/.test(pathname);
-}
-
-// Fontes e assets que realmente não mudam
-function isFontOrStaticAsset(pathname) {
-  return /\.(woff|woff2|ttf|eot)$/.test(pathname);
-}
-
-function isImageRequest(pathname) {
-  return /\.(png|jpg|jpeg|gif|svg|webp|avif|ico)$/.test(pathname);
-}
-
+// Detectar conexão lenta
 function isSlowConnection() {
-  // Check if connection API is available
   if ('connection' in navigator) {
     const conn = navigator.connection;
-    // Considerar também 3g como lento para ser mais conservador
     return conn.saveData || 
            conn.effectiveType === '2g' || 
            conn.effectiveType === 'slow-2g' ||
            conn.effectiveType === '3g' ||
-           (conn.downlink && conn.downlink < 2); // Menos de 2Mbps
+           (conn.downlink && conn.downlink < 2);
   }
-  // Se não tem API de conexão, assumir que pode ser lento (mobile antigo)
-  return true;
+  return false;
 }
 
+// Limitar tamanho do cache
 async function trimCache(cacheName, maxSize) {
-  const cache = await caches.open(cacheName);
-  const keys = await cache.keys();
-  if (keys.length > maxSize) {
-    const deleteCount = keys.length - maxSize;
-    await Promise.all(
-      keys.slice(0, deleteCount).map(key => cache.delete(key))
-    );
-  }
+  try {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+    if (keys.length > maxSize) {
+      await Promise.all(keys.slice(0, keys.length - maxSize).map(k => cache.delete(k)));
+    }
+  } catch {}
 }
 
-// Background Sync para operações offline
-self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync:', event.tag);
-  if (event.tag === 'sync-data' || event.tag === 'background-sync') {
-    event.waitUntil(syncOfflineData());
+// ====== MESSAGE HANDLERS ======
+
+self.addEventListener('message', (event) => {
+  const { type } = event.data || {};
+  
+  if (type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (type === 'CLEAR_CACHE') {
+    caches.keys()
+      .then(keys => Promise.all(keys.map(k => caches.delete(k))))
+      .then(() => event.ports[0]?.postMessage({ success: true }))
+      .catch(() => event.ports[0]?.postMessage({ success: false }));
+  }
+  
+  if (type === 'GET_VERSION') {
+    event.ports[0]?.postMessage({ version: CACHE_VERSION });
   }
 });
 
-async function syncOfflineData() {
-  // Notify all clients that sync is happening
-  const clients = await self.clients.matchAll();
-  clients.forEach((client) => {
-    client.postMessage({ type: 'SYNC_START' });
-  });
-  
-  // Process queued actions from IndexedDB
-  try {
-    // This will be handled by the app's sync manager
-    clients.forEach((client) => {
-      client.postMessage({ type: 'SYNC_COMPLETE', success: true });
-    });
-  } catch (error) {
-    clients.forEach((client) => {
-      client.postMessage({ type: 'SYNC_COMPLETE', success: false, error: error.message });
-    });
+// ====== BACKGROUND SYNC ======
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-data' || event.tag === 'background-sync') {
+    event.waitUntil(notifyClients('SYNC_COMPLETE'));
   }
+});
+
+async function notifyClients(type) {
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => client.postMessage({ type }));
 }
 
-// Push Notifications
+// ====== PUSH NOTIFICATIONS ======
+
 self.addEventListener('push', (event) => {
   const data = event.data?.json() || {};
-  const options = {
-    body: data.body || 'Nova notificação',
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
-    vibrate: [100, 50, 100],
-    data: { url: data.url || '/' },
-    actions: data.actions || [],
-    tag: data.tag || 'default',
-    renotify: data.renotify || false
-  };
-  
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Nautilus One', options)
+    self.registration.showNotification(data.title || 'Nautilus One', {
+      body: data.body || 'Nova notificação',
+      icon: '/favicon.ico',
+      badge: '/favicon.ico',
+      vibrate: [100, 50, 100],
+      data: { url: data.url || '/' }
+    })
   );
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  
-  const urlToOpen = event.notification.data?.url || '/';
-  
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then((clientList) => {
-        // Try to focus existing window
-        for (const client of clientList) {
-          if (client.url.includes(self.location.origin) && 'focus' in client) {
-            client.navigate(urlToOpen);
+    self.clients.matchAll({ type: 'window' })
+      .then((clients) => {
+        for (const client of clients) {
+          if ('focus' in client) {
+            client.navigate(event.notification.data?.url || '/');
             return client.focus();
           }
         }
-        // Open new window if none exists
-        return self.clients.openWindow(urlToOpen);
+        return self.clients.openWindow(event.notification.data?.url || '/');
       })
   );
 });
 
-// Message handler for cache operations
-self.addEventListener('message', (event) => {
-  if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data?.type === 'CLEAR_CACHE') {
-    event.waitUntil(
-      caches.keys().then(keys => 
-        Promise.all(keys.map(key => caches.delete(key)))
-      ).then(() => {
-        event.ports[0]?.postMessage({ success: true });
-      })
-    );
-  }
-  
-  if (event.data?.type === 'GET_CACHE_SIZE') {
-    event.waitUntil(
-      getCacheSize().then(size => {
-        event.ports[0]?.postMessage({ size });
-      })
-    );
-  }
-});
-
-async function getCacheSize() {
-  const cacheNames = await caches.keys();
-  let totalSize = 0;
-  
-  for (const name of cacheNames) {
-    const cache = await caches.open(name);
-    const keys = await cache.keys();
-    totalSize += keys.length;
-  }
-  
-  return totalSize;
-}
-
-console.log('[SW] Service Worker v8 loaded - Full Auth bypass + Extended timeouts for maritime connections');
+console.log('[SW v9] Service Worker loaded - Network First for all code assets');
