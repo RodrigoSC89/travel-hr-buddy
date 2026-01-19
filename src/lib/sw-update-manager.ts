@@ -1,10 +1,10 @@
 /**
- * Service Worker Update Manager v9
+ * Service Worker Update Manager v10
  * Força atualização do SW quando detecta versão antiga ou erros de chunk
- * CRITICAL: Atualizado para v9 com limpeza mais agressiva
+ * CRITICAL: Atualizado para v10 com limpeza sincronizada com main.tsx
  */
 
-const EXPECTED_SW_VERSION = 'v9';
+const EXPECTED_SW_VERSION = 'v10';
 const SW_VERSION_KEY = 'nautilus_sw_version';
 const LAST_UPDATE_CHECK_KEY = 'nautilus_sw_last_check';
 

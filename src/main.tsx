@@ -45,25 +45,80 @@ const initializeOptionalFeatures = async () => {
   }
 };
 
-// Register and manage service worker (only in production)
-if ("serviceWorker" in navigator && import.meta.env.PROD) {
-  window.addEventListener("load", async () => {
-    try {
-      // Import SW manager for better update handling
-      const { registerServiceWorker, checkAndUpdateServiceWorker } = await import("@/lib/sw-update-manager");
+// ============================================
+// CRITICAL: Force SW update and cache clear on boot
+// This runs BEFORE React to prevent stale chunk issues
+// ============================================
+const forceUpdateIfNeeded = async () => {
+  const SW_VERSION_KEY = 'nautilus_sw_version';
+  const CURRENT_VERSION = 'v10'; // Increment to force update
+  
+  try {
+    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
+    
+    // Se versão diferente, fazer limpeza total
+    if (storedVersion !== CURRENT_VERSION) {
+      console.log('[Boot] Version mismatch, clearing all caches...', { stored: storedVersion, current: CURRENT_VERSION });
       
-      // Register SW with optimized settings
-      await registerServiceWorker();
+      // 1. Desregistrar TODOS os Service Workers
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(r => {
+          if (r.waiting) r.waiting.postMessage({ type: 'SKIP_WAITING' });
+          return r.unregister();
+        }));
+        console.log('[Boot] All SWs unregistered');
+      }
       
-      // Check for updates
-      await checkAndUpdateServiceWorker();
+      // 2. Limpar TODOS os caches
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+        console.log('[Boot] All caches cleared');
+      }
       
-      logger.info("Service Worker registered and checked for updates");
-    } catch (error) {
-      logger.warn("Service worker registration failed:", error instanceof Error ? { message: error.message } : undefined);
+      // 3. Atualizar versão
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      
+      // 4. Se não veio de reload recente, recarregar para pegar arquivos novos
+      const lastReload = sessionStorage.getItem('nautilus_last_reload');
+      const now = Date.now();
+      if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
+        sessionStorage.setItem('nautilus_last_reload', now.toString());
+        console.log('[Boot] Reloading to get fresh assets...');
+        window.location.reload();
+        return false; // Não continuar
+      }
     }
-  });
-}
+    
+    return true; // Continuar normalmente
+  } catch (error) {
+    console.error('[Boot] Cache cleanup error:', error);
+    return true; // Continuar mesmo com erro
+  }
+};
+
+// Register and manage service worker (only in production)
+const initServiceWorker = async () => {
+  if (!("serviceWorker" in navigator) || !import.meta.env.PROD) return;
+  
+  try {
+    const { registerServiceWorker, checkAndUpdateServiceWorker } = await import("@/lib/sw-update-manager");
+    await registerServiceWorker();
+    await checkAndUpdateServiceWorker();
+    logger.info("Service Worker registered");
+  } catch (error) {
+    logger.warn("SW registration failed:", error instanceof Error ? { message: error.message } : undefined);
+  }
+};
+
+// Execute cleanup IMMEDIATELY on load
+forceUpdateIfNeeded().then(shouldContinue => {
+  if (shouldContinue) {
+    // Register SW after boot cleanup
+    window.addEventListener("load", initServiceWorker);
+  }
+});
 
 // Initialize optional features after render
 if (typeof requestIdleCallback !== "undefined") {
