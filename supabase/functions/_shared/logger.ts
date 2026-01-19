@@ -153,3 +153,33 @@ export function trackPerformance<T>(
       throw error;
     });
 }
+
+/**
+ * Simple log function for quick logging
+ */
+export function log(
+  level: LogLevel,
+  functionName: string,
+  message: string,
+  data?: Record<string, unknown>
+): void {
+  const entry = createLogEntry(level, message, {
+    functionName,
+    data,
+  });
+  const output = JSON.stringify(entry);
+  
+  switch (level) {
+    case 'error':
+      console.error(output);
+      break;
+    case 'warn':
+      console.warn(output);
+      break;
+    case 'debug':
+      console.debug(output);
+      break;
+    default:
+      console.log(output);
+  }
+}

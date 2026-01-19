@@ -107,9 +107,11 @@ serve(async (req) => {
       query = query.or(`name.ilike.%${params.search}%,email.ilike.%${params.search}%`);
     }
 
-    // Apply pagination
-    const from = (params.page - 1) * params.page_size;
-    const to = from + params.page_size - 1;
+    // Apply pagination with defaults
+    const page = params.page ?? 1;
+    const pageSize = params.page_size ?? 20;
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
     query = query.range(from, to);
 
     // Apply sorting
@@ -125,18 +127,18 @@ serve(async (req) => {
       );
     }
 
-    const page = params.page || 1;
-    const pageSize = params.page_size || 20;
+    const finalPage = page;
+    const finalPageSize = pageSize;
 
     return new Response(
       JSON.stringify({
         success: true,
         data: crews,
         pagination: {
-          page,
-          page_size: pageSize,
+          page: finalPage,
+          page_size: finalPageSize,
           total: count,
-          total_pages: Math.ceil((count || 0) / pageSize),
+          total_pages: Math.ceil((count || 0) / finalPageSize),
         },
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
