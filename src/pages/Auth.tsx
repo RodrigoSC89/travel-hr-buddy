@@ -201,6 +201,7 @@ const Auth: React.FC = () => {
       if (error) {
         const errorMsg = error.message.toLowerCase();
         
+        // NUNCA mostrar erro de conexão no iOS PWA - apenas erros específicos de credenciais
         if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
         } else if (errorMsg.includes('email not confirmed')) {
@@ -208,15 +209,19 @@ const Auth: React.FC = () => {
         } else if (errorMsg.includes('too many requests')) {
           toast.error("Muitas tentativas", { description: "Aguarde alguns minutos e tente novamente." });
         } else {
-          toast.error("Erro no login", { description: error.message });
+          // Para qualquer outro erro (incluindo rede), mostrar mensagem genérica
+          // NÃO mencionar conexão pois navigator.onLine não é confiável no iOS PWA
+          toast.error("Erro no login", { description: "Verifique suas credenciais e tente novamente." });
         }
       } else {
         toast.success("Login realizado com sucesso");
       }
     } catch (err) {
+      // PATCH iOS PWA: Não mostrar erro de conexão - apenas erro genérico
+      // O iOS PWA frequentemente dispara TypeError mesmo com conexão ativa
       console.error("Login error:", err);
-      toast.error("Erro no login", { 
-        description: "Tente novamente. Se persistir, use 'Limpar sessão'." 
+      toast.error("Erro ao processar login", { 
+        description: "Tente novamente em alguns segundos." 
       });
     } finally {
       setIsLoading(false);
