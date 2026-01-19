@@ -34361,6 +34361,7 @@ export type Database = {
         Args: { user_uuid?: string }
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      get_user_tenant_ids: { Args: { _user_id: string }; Returns: string[] }
       get_user_tenant_role: {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: string
@@ -34403,6 +34404,14 @@ export type Database = {
         | { Args: never; Returns: boolean }
         | { Args: { _user_id: string }; Returns: boolean }
       is_admin_or_hr: { Args: { _user_id: string }; Returns: boolean }
+      is_channel_member: {
+        Args: { _channel_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_conversation_participant: {
+        Args: { _conversation_id: string; _user_id: string }
+        Returns: boolean
+      }
       is_hr: { Args: { _user_id: string }; Returns: boolean }
       is_manager_or_above: { Args: never; Returns: boolean }
       is_org_admin: {
@@ -34411,6 +34420,10 @@ export type Database = {
       }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_tenant_admin: {
+        Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
       }
       jobs_trend_by_month: {
