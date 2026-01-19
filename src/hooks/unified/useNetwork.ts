@@ -63,8 +63,18 @@ function getConnection(): NetworkConnection | null {
   return null;
 }
 
+/**
+ * IMPORTANTE: navigator.onLine NÃO É CONFIÁVEL no iOS Safari PWA
+ * Ele frequentemente retorna false mesmo quando há conexão
+ * Por isso, NUNCA bloqueamos funcionalidade baseado apenas em navigator.onLine
+ * O sistema de retry no customFetch vai lidar com problemas reais de rede
+ */
 function getConnectionQuality(connection: NetworkConnection | null): ConnectionQuality {
-  if (!navigator.onLine) return "offline";
+  // PATCH iOS PWA: NÃO confiar em navigator.onLine para determinar offline
+  // navigator.onLine é conhecido por retornar false positivos no iOS PWA
+  // Em vez de retornar "offline", retornamos "slow" para permitir tentativas
+  // O erro real será tratado pelo sistema de retry se não houver conexão
+  
   if (!connection) return "medium";
   
   const { effectiveType, downlink, rtt } = connection;
@@ -102,12 +112,14 @@ export function useNetwork(): NetworkStatus & {
   isSlow: boolean;
   isFast: boolean;
 } {
+  // PATCH iOS PWA: Sempre inicializar como online
+  // navigator.onLine não é confiável no iOS Safari PWA
   const [status, setStatus] = useState<NetworkStatus>(() => {
     const connection = getConnection();
     const quality = getConnectionQuality(connection);
     return {
-      online: typeof navigator !== "undefined" ? navigator.onLine : true,
-      isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+      online: true, // Sempre true por padrão - não confiar em navigator.onLine
+      isOnline: true, // Sempre true por padrão
       wasOffline: false,
       pendingChanges: 0,
       quality,
@@ -135,11 +147,16 @@ export function useNetwork(): NetworkStatus & {
     const updateStatus = () => {
       const conn = getConnection();
       const quality = getConnectionQuality(conn);
+      // PATCH iOS PWA: Não confiar em navigator.onLine
+      // Apenas marcar wasOffline se o evento offline foi disparado
+      // mas NUNCA bloquear funcionalidade baseado nisso
       setStatus(prev => ({
         ...prev,
-        online: navigator.onLine,
-        isOnline: navigator.onLine,
-        wasOffline: prev.wasOffline || !prev.online,
+        // IMPORTANTE: Mantemos online = true para não bloquear funcionalidade
+        // O sistema de retry vai lidar com problemas reais de conexão
+        online: true,
+        isOnline: true,
+        wasOffline: prev.wasOffline,
         quality,
         effectiveType: conn?.effectiveType || null,
         downlink: conn?.downlink || null,
@@ -149,14 +166,19 @@ export function useNetwork(): NetworkStatus & {
     };
 
     const handleOnline = async () => {
-      logger.info("Network: Online");
+      logger.info("Network: Online event received");
+      // Atualizar wasOffline e tentar sincronizar
+      setStatus(prev => ({ ...prev, wasOffline: false }));
       updateStatus();
       await updatePendingCount();
     };
 
     const handleOffline = () => {
-      logger.info("Network: Offline");
-      updateStatus();
+      // PATCH iOS PWA: Apenas marcar wasOffline para UI informativa
+      // NÃO definir online = false porque navigator.onLine não é confiável
+      logger.info("Network: Offline event received (will NOT block functionality)");
+      setStatus(prev => ({ ...prev, wasOffline: true }));
+      // NÃO chamar updateStatus aqui para evitar definir online = false
     };
 
     window.addEventListener("online", handleOnline);

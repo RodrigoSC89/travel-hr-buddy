@@ -1,11 +1,10 @@
 /**
- * PATCH 800: Offline-aware Mutation Hook
- * Automatically queues mutations when offline
+ * PATCH 801: Offline-aware Mutation Hook
+ * PATCH iOS PWA: Sempre tenta executar primeiro, enfileira apenas se falhar com erro de rede
  */
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { queueAction } from "@/lib/offline/sync-queue";
-import { useNetworkStatus } from "@/hooks/use-network-status";
 
 interface OfflineMutationOptions<TVariables> {
   /** Action type for the sync queue */
@@ -25,8 +24,6 @@ interface OfflineMutationOptions<TVariables> {
 export function useOfflineMutation<TVariables = unknown>(
   options: OfflineMutationOptions<TVariables>
 ) {
-  const { online } = useNetworkStatus();
-  
   const {
     actionType,
     mutationFn,
@@ -38,23 +35,40 @@ export function useOfflineMutation<TVariables = unknown>(
 
   return useMutation({
     mutationFn: async (variables: TVariables) => {
-      // If offline, queue the action
-      if (!online) {
-        await queueAction(actionType, variables);
+      // PATCH iOS PWA: Sempre tentar executar primeiro
+      // navigator.onLine não é confiável no iOS Safari PWA
+      // Se a execução falhar com erro de rede, então enfileirar para retry
+      try {
+        return await mutationFn(variables);
+      } catch (error) {
+        // Verificar se parece ser erro de rede
+        const errorMessage = (error as Error)?.message?.toLowerCase() || '';
+        const isNetworkError = 
+          errorMessage.includes('network') ||
+          errorMessage.includes('fetch') ||
+          errorMessage.includes('offline') ||
+          errorMessage.includes('connection') ||
+          errorMessage.includes('timeout') ||
+          errorMessage.includes('aborted') ||
+          errorMessage.includes('failed to fetch');
         
-        if (showToasts) {
-          toast({
-            title: "Modo Offline",
-            description: queuedMessage,
-          });
+        if (isNetworkError) {
+          // Enfileirar para retry posterior
+          await queueAction(actionType, variables);
+          
+          if (showToasts) {
+            toast({
+              title: "Salvo Localmente",
+              description: queuedMessage,
+            });
+          }
+          
+          return { queued: true };
         }
         
-        // Return a placeholder response
-        return { queued: true };
+        // Se não é erro de rede, propagar o erro
+        throw error;
       }
-      
-      // If online, execute normally
-      return mutationFn(variables);
     },
     onSuccess: (data, variables) => {
       // Don't call onSuccess for queued actions
@@ -65,13 +79,19 @@ export function useOfflineMutation<TVariables = unknown>(
       }
     },
     onError: (error, variables) => {
-      // If the error is due to network, queue the action
-      if (!navigator.onLine) {
+      // Tentar enfileirar como fallback
+      const errorMessage = (error as Error)?.message?.toLowerCase() || '';
+      const isNetworkError = 
+        errorMessage.includes('network') ||
+        errorMessage.includes('fetch') ||
+        errorMessage.includes('offline');
+      
+      if (isNetworkError) {
         queueAction(actionType, variables);
         
         if (showToasts) {
           toast({
-            title: "Modo Offline",
+            title: "Salvo para Sincronização",
             description: queuedMessage,
           });
         }
