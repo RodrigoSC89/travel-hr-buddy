@@ -62,7 +62,7 @@ serve(async (req) => {
     await supabase.from('alert_escalations').insert({
       alert_id,
       escalated_from: user.id,
-      escalated_to,
+      escalated_to: escalate_to,
       reason,
       previous_severity: currentAlert.severity,
       new_severity: new_severity || currentAlert.severity,
