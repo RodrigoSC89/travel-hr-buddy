@@ -1,8 +1,10 @@
 /**
- * Nautilus People Data Hooks - Simplified with default data
+ * Nautilus People Data Hooks - Integrated with Supabase
+ * Falls back to default data when database is empty
  */
 
 import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import type { Colaborador, Candidato, Vaga, Avaliacao, OKR, BankHours, NineBoxPosition } from '../types';
 
 // ==================== COLABORADORES ====================
@@ -18,7 +20,37 @@ const defaultColaboradores: Colaborador[] = [
 export function useColaboradores() {
   return useQuery({
     queryKey: ['colaboradores'],
-    queryFn: async (): Promise<Colaborador[]> => defaultColaboradores,
+    queryFn: async (): Promise<Colaborador[]> => {
+      try {
+        const { data } = await supabase
+          .from('crew_members')
+          .select('id, full_name, email, phone, rank, position, nationality, status')
+          .order('full_name')
+          .limit(50);
+
+        if (data && data.length > 0) {
+          return data.map(row => ({
+            id: row.id,
+            nome: row.full_name || '',
+            email: row.email || '',
+            telefone: row.phone || '',
+            cargo: row.rank || row.position || '',
+            departamento: 'Operações',
+            unidade: 'Escritório Central',
+            dataAdmissao: '2020-01-01',
+            status: row.status === 'active' ? 'ativo' as const : 'desligado' as const,
+            salario: 10000,
+            gestorDireto: '',
+            tipoContrato: 'CLT' as const,
+            documentos: [],
+            formacoes: []
+          }));
+        }
+      } catch (error) {
+        console.warn('Failed to fetch colaboradores from DB, using defaults');
+      }
+      return defaultColaboradores;
+    },
     staleTime: 5 * 60 * 1000
   });
 }

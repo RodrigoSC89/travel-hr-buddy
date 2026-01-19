@@ -123,6 +123,7 @@ export default function ComplianceEvidencias() {
   const [showUploadDialog, setShowUploadDialog] = useState(false);
   const { data: evidences, isLoading } = useComplianceEvidences();
 
+  // Use mock data as the display source - backend integration via useComplianceEvidences is available
   const displayEvidences = mockEvidences;
 
   const filteredEvidences = displayEvidences.filter(ev => {

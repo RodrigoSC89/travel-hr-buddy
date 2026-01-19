@@ -89,7 +89,38 @@ function getDefaultSupplies(): MedicalSupply[] {
 export function useMedicalRecords() {
   return useQuery({
     queryKey: ['medical-records'],
-    queryFn: async (): Promise<MedicalRecord[]> => getDefaultRecords(),
+    queryFn: async (): Promise<MedicalRecord[]> => {
+      try {
+        const { data } = await supabase
+          .from('incident_reports')
+          .select('id, title, description, type, severity, created_at, reported_by')
+          .eq('type', 'medical')
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        if (data && data.length > 0) {
+          return data.map(row => ({
+            id: row.id,
+            crewMemberId: row.reported_by || '1',
+            crewMemberName: 'Tripulante',
+            date: row.created_at?.split('T')[0] || '',
+            time: row.created_at?.split('T')[1]?.slice(0, 5) || '00:00',
+            type: 'consultation' as const,
+            chiefComplaint: row.title || '',
+            symptoms: row.description ? [row.description] : [],
+            diagnosis: '',
+            treatment: '',
+            medications: [],
+            vitalSigns: {},
+            notes: row.description || '',
+            status: 'resolved' as const
+          }));
+        }
+      } catch (error) {
+        console.warn('Failed to fetch medical records from DB, using defaults');
+      }
+      return getDefaultRecords();
+    },
     staleTime: 5 * 60 * 1000
   });
 }
