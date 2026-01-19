@@ -100,7 +100,7 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
         throw error;
       }
       
-      // Verificar se é erro recuperável
+      // Verificar se é erro recuperável (incluindo erros específicos do iOS Safari PWA)
       const isAborted = (error as Error).name === 'AbortError';
       const errorMessage = (error as Error).message || '';
       const isNetworkError = 
@@ -110,7 +110,11 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
         errorMessage.includes('Network request failed') ||
         errorMessage.includes('fetch') ||
         errorMessage.includes('CORS') ||
-        errorMessage.includes('Load failed');
+        errorMessage.includes('Load failed') ||
+        errorMessage.includes('cancelled') ||
+        errorMessage.includes('The operation was aborted') ||
+        errorMessage.includes('A network error') ||
+        errorMessage.includes('The Internet connection appears to be offline');
       
       const isRetryable = isAborted || isNetworkError;
       
