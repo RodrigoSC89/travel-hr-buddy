@@ -1118,3 +1118,52 @@ name = "weekly-executive-report"
 function_name = "weekly-report-email"
 schedule = "0 8 * * 1"
 description = "Send weekly executive KPI report every Monday at 08:00 UTC"
+
+# ============================================
+# SYSTEM COMPLETENESS - New Edge Functions
+# Added: 2026-01-19
+# ============================================
+
+[functions.bulk-update-crews]
+verify_jwt = false
+comment = "Bulk update multiple crew members at once"
+
+[functions.crew-availability]
+verify_jwt = false
+comment = "Check crew availability for scheduling"
+
+[functions.crew-fatigue-check]
+verify_jwt = false
+comment = "MLC 2006 compliant fatigue risk assessment"
+
+[functions.vessel-status-update]
+verify_jwt = false
+comment = "Update vessel operational status"
+
+[functions.vessel-inspection]
+verify_jwt = false
+comment = "Record vessel inspections (OVID, PSC, FLAG, CLASS)"
+
+[functions.port-call-management]
+verify_jwt = false
+comment = "Port call scheduling and management"
+
+[functions.charter-management]
+verify_jwt = false
+comment = "Charter party management with hire calculation"
+
+[functions.budget-management]
+verify_jwt = false
+comment = "Budget tracking and spending forecasts"
+
+[functions.procurement-management]
+verify_jwt = false
+comment = "Procurement requisitions and purchase orders"
+
+[functions.incident-management]
+verify_jwt = false
+comment = "Maritime incident reporting and investigation"
+
+[functions.drill-management]
+verify_jwt = false
+comment = "Safety drill scheduling and SOLAS compliance"
