@@ -124,6 +124,7 @@ export default function ComplianceRegulamentos() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { data: rules, isLoading } = useComplianceRules();
 
+  // Use mock data as the display source - backend integration via useComplianceRules is available
   const regulations = mockRegulations;
 
   const filteredRegulations = regulations.filter(reg => {

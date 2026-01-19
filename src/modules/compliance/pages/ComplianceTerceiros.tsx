@@ -136,6 +136,7 @@ export default function ComplianceTerceiros() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { data: thirdParties, isLoading } = useComplianceThirdParties();
 
+  // Use mock data as the display source - backend integration via useComplianceThirdParties is available
   const displayData = mockThirdParties;
 
   const filteredData = displayData.filter(tp => {

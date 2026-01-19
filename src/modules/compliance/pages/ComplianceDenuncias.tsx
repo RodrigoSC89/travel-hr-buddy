@@ -114,6 +114,7 @@ export default function ComplianceDenuncias() {
   const { data: reports, isLoading } = useComplianceReports();
   const createReport = useCreateComplianceReport();
 
+  // Use mock data as the display source - backend integration via useComplianceReports is available
   const displayReports = mockReports;
 
   const filteredReports = displayReports.filter(r => {
