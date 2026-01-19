@@ -46,55 +46,82 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: Force SW update and cache clear on boot
-// This runs BEFORE React to prevent stale chunk issues
+// CRITICAL: Force SW update and cache clear on boot v11
+// Estratégia mais agressiva - desregistra SW problemático
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v10'; // Increment to force update
+  const CURRENT_VERSION = 'v11';
+  const RELOAD_KEY = 'nautilus_reload_count';
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
+    const reloadCount = parseInt(sessionStorage.getItem(RELOAD_KEY) || '0', 10);
     
-    // Se versão diferente, fazer limpeza total
-    if (storedVersion !== CURRENT_VERSION) {
-      console.log('[Boot] Version mismatch, clearing all caches...', { stored: storedVersion, current: CURRENT_VERSION });
+    // Detectar loop de reload (mais de 2 reloads em sequência)
+    if (reloadCount > 2) {
+      console.warn('[Boot] Reload loop detected! Disabling SW completely.');
+      sessionStorage.removeItem(RELOAD_KEY);
       
-      // 1. Desregistrar TODOS os Service Workers
+      // Desregistrar TODOS os SWs permanentemente
       if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map(r => {
-          if (r.waiting) r.waiting.postMessage({ type: 'SKIP_WAITING' });
-          return r.unregister();
-        }));
-        console.log('[Boot] All SWs unregistered');
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
       }
       
-      // 2. Limpar TODOS os caches
+      // Limpar caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
-        console.log('[Boot] All caches cleared');
       }
       
-      // 3. Atualizar versão
+      // Marcar que SW está desabilitado
+      localStorage.setItem('nautilus_sw_disabled', 'true');
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      
-      // 4. Se não veio de reload recente, recarregar para pegar arquivos novos
-      const lastReload = sessionStorage.getItem('nautilus_last_reload');
-      const now = Date.now();
-      if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
-        sessionStorage.setItem('nautilus_last_reload', now.toString());
-        console.log('[Boot] Reloading to get fresh assets...');
-        window.location.reload();
-        return false; // Não continuar
-      }
+      return true;
     }
     
-    return true; // Continuar normalmente
+    // Versão diferente = precisa atualizar
+    if (storedVersion !== CURRENT_VERSION) {
+      console.log('[Boot] Version mismatch:', { stored: storedVersion, current: CURRENT_VERSION });
+      
+      // 1. Desregistrar todos os SWs
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const reg of regs) {
+          if (reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+          await reg.unregister();
+        }
+        console.log('[Boot] SWs unregistered:', regs.length);
+      }
+      
+      // 2. Limpar todos os caches
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+        console.log('[Boot] Caches cleared:', keys.length);
+      }
+      
+      // 3. Atualizar versão e contador
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      localStorage.removeItem('nautilus_sw_disabled');
+      sessionStorage.setItem(RELOAD_KEY, (reloadCount + 1).toString());
+      
+      // 4. Reload para pegar arquivos novos
+      console.log('[Boot] Reloading for fresh assets...');
+      window.location.reload();
+      return false;
+    }
+    
+    // Versão OK - resetar contador
+    sessionStorage.removeItem(RELOAD_KEY);
+    return true;
+    
   } catch (error) {
-    console.error('[Boot] Cache cleanup error:', error);
-    return true; // Continuar mesmo com erro
+    console.error('[Boot] Error:', error);
+    return true;
   }
 };
 

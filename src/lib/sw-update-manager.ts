@@ -1,12 +1,13 @@
 /**
- * Service Worker Update Manager v10
- * Força atualização do SW quando detecta versão antiga ou erros de chunk
- * CRITICAL: Atualizado para v10 com limpeza sincronizada com main.tsx
+ * Service Worker Update Manager v11
+ * Estratégia minimalista: SW só cacheia imagens
+ * CRITICAL: Desabilita SW completamente se detectar loops
  */
 
-const EXPECTED_SW_VERSION = 'v10';
+const EXPECTED_SW_VERSION = 'v11';
 const SW_VERSION_KEY = 'nautilus_sw_version';
 const LAST_UPDATE_CHECK_KEY = 'nautilus_sw_last_check';
+const SW_DISABLED_KEY = 'nautilus_sw_disabled';
 
 /**
  * Verifica se o Service Worker precisa ser atualizado
@@ -130,25 +131,41 @@ export function isChunkLoadError(error: Error): boolean {
 
 /**
  * Registra o Service Worker com configuração otimizada
+ * NÃO registra se SW foi desabilitado por loop detection
  */
 export async function registerServiceWorker(): Promise<void> {
   if (!('serviceWorker' in navigator)) {
     return;
   }
 
+  // Verificar se SW foi desabilitado por loop detection
+  if (localStorage.getItem(SW_DISABLED_KEY) === 'true') {
+    console.log('[SW-Manager] SW disabled due to previous loop detection');
+    return;
+  }
+
   try {
     const registration = await navigator.serviceWorker.register('/sw.js', {
-      updateViaCache: 'none', // Sempre verificar atualizações
+      updateViaCache: 'none',
     });
     
     console.log('[SW-Manager] SW registered:', registration.scope);
     
-    // Verificar atualizações periodicamente
+    // Verificar atualizações a cada hora
     setInterval(() => {
       registration.update().catch(() => {});
-    }, 1000 * 60 * 30); // A cada 30 minutos
+    }, 1000 * 60 * 60);
     
   } catch (error) {
     console.error('[SW-Manager] SW registration failed:', error);
   }
+}
+
+/**
+ * Reabilita o Service Worker após ter sido desabilitado
+ */
+export function reenableServiceWorker(): void {
+  localStorage.removeItem(SW_DISABLED_KEY);
+  localStorage.removeItem(SW_VERSION_KEY);
+  console.log('[SW-Manager] SW re-enabled, will register on next reload');
 }
