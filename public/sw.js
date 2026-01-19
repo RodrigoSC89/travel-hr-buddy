@@ -1,8 +1,9 @@
-// Service Worker Nautilus One v9
+// Service Worker Nautilus One v10
 // CRITICAL FIX: Bypass completo para auth + chunks SEMPRE da rede
 // CRITICAL FIX: Instalação mais rápida, menos cache agressivo
 // CRITICAL FIX: Detecção de erros e auto-limpeza
-const CACHE_VERSION = 'v9';
+// v10: Sincronizado com boot cleanup em main.tsx
+const CACHE_VERSION = 'v10';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `nautilus-images-${CACHE_VERSION}`;
@@ -316,4 +317,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log('[SW v9] Service Worker loaded - Network First for all code assets');
+console.log('[SW v10] Service Worker loaded - Network First for all code assets');
