@@ -2,60 +2,196 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Download, BarChart3, Clock, Users } from "lucide-react";
+import { Loader2, Download, BarChart3, Clock, Users, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LazyBarChart } from "@/components/charts/LazyChart";
+import { format, subDays, startOfDay, endOfDay } from "date-fns";
 
 /**
- * PATCH 643: Usage Metrics Dashboard
+ * PATCH 643.1: Usage Metrics Dashboard with Real Supabase Data
  * Intelligent metrics for data-driven decisions
  */
 export default function UsageMetrics() {
+  // Real module access tracking from analytics_events
   const { data: moduleAccess, isLoading: loadingModules } = useQuery({
-    queryKey: ["module-access-metrics"],
+    queryKey: ["module-access-metrics-real"],
     queryFn: async () => {
-      // TODO: Implement actual module access tracking
+      const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
+      
+      const { data, error } = await supabase
+        .from('analytics_events')
+        .select('page_url, created_at')
+        .gte('created_at', thirtyDaysAgo)
+        .not('page_url', 'is', null);
+
+      if (error) {
+        console.error("Error fetching module access:", error);
+        // Fallback to access_logs if analytics_events has no data
+        const { data: logsData } = await supabase
+          .from('access_logs')
+          .select('module_accessed, timestamp')
+          .gte('timestamp', thirtyDaysAgo);
+
+        if (logsData && logsData.length > 0) {
+          const moduleCounts = logsData.reduce((acc: Record<string, number>, log) => {
+            const module = log.module_accessed || 'Unknown';
+            acc[module] = (acc[module] || 0) + 1;
+            return acc;
+          }, {});
+
+          return Object.entries(moduleCounts)
+            .map(([module, count]) => ({ module, count: count as number, avgTime: 0 }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 10);
+        }
+      }
+
+      if (data && data.length > 0) {
+        // Parse page URLs to module names
+        const moduleCounts = data.reduce((acc: Record<string, number>, event) => {
+          const url = event.page_url || '';
+          const module = url.split('/')[1] || 'Dashboard';
+          const moduleName = module.charAt(0).toUpperCase() + module.slice(1).replace(/-/g, ' ');
+          acc[moduleName] = (acc[moduleName] || 0) + 1;
+          return acc;
+        }, {});
+
+        return Object.entries(moduleCounts)
+          .map(([module, count]) => ({ module, count: count as number, avgTime: 0 }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+      }
+
+      // Return real-looking default data if no data exists yet
       return [
-        { module: "Dashboard", count: 1247, avgTime: 245 },
-        { module: "Checklists", count: 892, avgTime: 312 },
-        { module: "Documents", count: 678, avgTime: 189 },
-        { module: "Fleet", count: 534, avgTime: 421 },
-        { module: "Incidents", count: 423, avgTime: 276 },
-        { module: "Reports", count: 367, avgTime: 198 },
+        { module: "Dashboard", count: 0, avgTime: 0 },
+        { module: "Checklists", count: 0, avgTime: 0 },
+        { module: "Documents", count: 0, avgTime: 0 },
       ];
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  // Real peak hours from analytics or access logs
   const { data: peakHours, isLoading: loadingHours } = useQuery({
-    queryKey: ["peak-hours-metrics"],
+    queryKey: ["peak-hours-metrics-real"],
     queryFn: async () => {
-      // TODO: Implement actual peak hours analysis
-      return [
-        { hour: "08:00", requests: 145 },
-        { hour: "09:00", requests: 234 },
-        { hour: "10:00", requests: 312 },
-        { hour: "11:00", requests: 289 },
-        { hour: "12:00", requests: 178 },
-        { hour: "13:00", requests: 156 },
-        { hour: "14:00", requests: 267 },
-        { hour: "15:00", requests: 298 },
-        { hour: "16:00", requests: 245 },
-        { hour: "17:00", requests: 189 },
-      ];
+      const today = new Date();
+      const startOfToday = startOfDay(today).toISOString();
+      
+      const { data, error } = await supabase
+        .from('analytics_events')
+        .select('created_at')
+        .gte('created_at', startOfToday);
+
+      if (error || !data || data.length === 0) {
+        // Try access_logs
+        const { data: logsData } = await supabase
+          .from('access_logs')
+          .select('timestamp')
+          .gte('timestamp', subDays(new Date(), 7).toISOString());
+
+        if (logsData && logsData.length > 0) {
+          const hourCounts: Record<string, number> = {};
+          for (let i = 0; i < 24; i++) {
+            hourCounts[`${i.toString().padStart(2, '0')}:00`] = 0;
+          }
+
+          logsData.forEach(log => {
+            const hour = new Date(log.timestamp).getHours();
+            const key = `${hour.toString().padStart(2, '0')}:00`;
+            hourCounts[key] = (hourCounts[key] || 0) + 1;
+          });
+
+          return Object.entries(hourCounts)
+            .map(([hour, requests]) => ({ hour, requests }))
+            .slice(8, 18); // Business hours
+        }
+      }
+
+      if (data && data.length > 0) {
+        const hourCounts: Record<string, number> = {};
+        for (let i = 0; i < 24; i++) {
+          hourCounts[`${i.toString().padStart(2, '0')}:00`] = 0;
+        }
+
+        data.forEach(event => {
+          const hour = new Date(event.created_at || '').getHours();
+          const key = `${hour.toString().padStart(2, '0')}:00`;
+          hourCounts[key] = (hourCounts[key] || 0) + 1;
+        });
+
+        return Object.entries(hourCounts)
+          .map(([hour, requests]) => ({ hour, requests }))
+          .slice(8, 18);
+      }
+
+      // Default business hours
+      return Array.from({ length: 10 }, (_, i) => ({
+        hour: `${(8 + i).toString().padStart(2, '0')}:00`,
+        requests: 0,
+      }));
     },
+    staleTime: 5 * 60 * 1000,
   });
 
+  // Real session metrics from active_sessions table
   const { data: sessionMetrics, isLoading: loadingSessions } = useQuery({
-    queryKey: ["session-metrics"],
+    queryKey: ["session-metrics-real"],
     queryFn: async () => {
-      // TODO: Implement actual session metrics
+      const sevenDaysAgo = subDays(new Date(), 7).toISOString();
+
+      const { data: sessions, error } = await supabase
+        .from('active_sessions')
+        .select('created_at, last_activity, is_active')
+        .gte('created_at', sevenDaysAgo);
+
+      if (error || !sessions || sessions.length === 0) {
+        return {
+          avgDuration: 0,
+          totalSessions: 0,
+          avgPagesPerSession: 0,
+          bounceRate: 0,
+        };
+      }
+
+      // Calculate average session duration
+      const durations = sessions.map(s => {
+        const start = new Date(s.created_at).getTime();
+        const end = new Date(s.last_activity).getTime();
+        return (end - start) / 1000 / 60; // minutes
+      }).filter(d => d > 0 && d < 480); // Filter valid durations (< 8 hours)
+
+      const avgDuration = durations.length > 0 
+        ? Math.round((durations.reduce((a, b) => a + b, 0) / durations.length) * 10) / 10
+        : 0;
+
+      // Get analytics for pages per session
+      const { count: eventCount } = await supabase
+        .from('analytics_events')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', sevenDaysAgo);
+
+      const avgPagesPerSession = sessions.length > 0 && eventCount
+        ? Math.round(((eventCount || 0) / sessions.length) * 10) / 10
+        : 0;
+
+      // Calculate bounce rate (sessions with only 1 page view)
+      const bounceRate = sessions.length > 0
+        ? Math.round((sessions.filter(s => {
+            const duration = (new Date(s.last_activity).getTime() - new Date(s.created_at).getTime()) / 1000;
+            return duration < 30; // Less than 30 seconds
+          }).length / sessions.length) * 100 * 10) / 10
+        : 0;
+
       return {
-        avgDuration: 28.5, // minutes
-        totalSessions: 1547,
-        avgPagesPerSession: 8.3,
-        bounceRate: 12.4,
+        avgDuration,
+        totalSessions: sessions.length,
+        avgPagesPerSession,
+        bounceRate,
       };
     },
+    staleTime: 5 * 60 * 1000,
   });
 
   const exportToCSV = () => {
@@ -70,7 +206,7 @@ export default function UsageMetrics() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `usage-metrics-${new Date().toISOString().split("T")[0]}.csv`;
+    a.download = `usage-metrics-${format(new Date(), 'yyyy-MM-dd')}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -105,6 +241,8 @@ export default function UsageMetrics() {
     ],
   };
 
+  const totalAccess = moduleAccess?.reduce((sum, m) => sum + m.count, 0) || 0;
+
   return (
     <div className="container mx-auto py-8 space-y-6">
       <div className="flex items-center justify-between">
@@ -114,10 +252,10 @@ export default function UsageMetrics() {
             Usage Metrics
           </h1>
           <p className="text-muted-foreground mt-2">
-            PATCH 643: Intelligent usage metrics for data-driven decisions
+            Real-time usage metrics from Supabase analytics
           </p>
         </div>
-        <Button onClick={exportToCSV}>
+        <Button onClick={exportToCSV} disabled={!moduleAccess || moduleAccess.length === 0}>
           <Download className="mr-2 h-4 w-4" />
           Export to CSV
         </Button>
@@ -132,29 +270,36 @@ export default function UsageMetrics() {
           <CardContent>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="text-2xl font-bold">{sessionMetrics?.avgDuration} min</span>
+              <span className="text-2xl font-bold">
+                {sessionMetrics?.avgDuration || 0} min
+              </span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Sessions (7d)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="text-2xl font-bold">{sessionMetrics?.totalSessions}</span>
+              <span className="text-2xl font-bold">
+                {sessionMetrics?.totalSessions || 0}
+              </span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Pages/Session</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Page Views (30d)</CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-2xl font-bold">{sessionMetrics?.avgPagesPerSession}</span>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <span className="text-2xl font-bold">{totalAccess}</span>
+            </div>
           </CardContent>
         </Card>
 
@@ -163,8 +308,8 @@ export default function UsageMetrics() {
             <CardTitle className="text-sm font-medium">Bounce Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <Badge variant="outline" className="text-lg">
-              {sessionMetrics?.bounceRate}%
+            <Badge variant={sessionMetrics?.bounceRate && sessionMetrics.bounceRate > 50 ? "destructive" : "outline"} className="text-lg">
+              {sessionMetrics?.bounceRate || 0}%
             </Badge>
           </CardContent>
         </Card>
@@ -177,7 +322,13 @@ export default function UsageMetrics() {
           <CardDescription>Module access frequency in the last 30 days</CardDescription>
         </CardHeader>
         <CardContent>
-          <LazyBarChart data={moduleChartData} height={300} />
+          {totalAccess > 0 ? (
+            <LazyBarChart data={moduleChartData} height={300} />
+          ) : (
+            <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+              No data available yet. Analytics will appear as users navigate the app.
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -188,7 +339,13 @@ export default function UsageMetrics() {
           <CardDescription>Request distribution throughout the day</CardDescription>
         </CardHeader>
         <CardContent>
-          <LazyBarChart data={peakHoursChartData} height={300} />
+          {peakHours && peakHours.some(h => h.requests > 0) ? (
+            <LazyBarChart data={peakHoursChartData} height={300} />
+          ) : (
+            <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+              No hourly data available yet.
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -199,19 +356,25 @@ export default function UsageMetrics() {
           <CardDescription>Detailed usage metrics for each module</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {moduleAccess?.map((module) => (
-              <div key={module.module} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex-1">
-                  <h3 className="font-medium">{module.module}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Avg. time: {module.avgTime}s
-                  </p>
+          {moduleAccess && moduleAccess.length > 0 && totalAccess > 0 ? (
+            <div className="space-y-3">
+              {moduleAccess.map((module) => (
+                <div key={module.module} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex-1">
+                    <h3 className="font-medium">{module.module}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {totalAccess > 0 ? Math.round((module.count / totalAccess) * 100) : 0}% of total traffic
+                    </p>
+                  </div>
+                  <Badge variant="outline">{module.count} accesses</Badge>
                 </div>
-                <Badge variant="outline">{module.count} accesses</Badge>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              No module access data available yet. Data will populate as users interact with the application.
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

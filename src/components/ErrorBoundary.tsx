@@ -2,10 +2,12 @@
  * Global Error Boundary
  * 
  * Captura erros React e exibe UI de fallback
+ * Integrado com Sentry para rastreamento de erros
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { logger } from '@/lib/logger';
+import * as Sentry from '@sentry/react';
 
 interface Props {
   children: ReactNode;
@@ -50,8 +52,18 @@ export class ErrorBoundary extends Component<Props, State> {
       this.props.onError(error, errorInfo);
     }
     
-    // TODO: Send to error tracking service (Sentry)
-    // logErrorToService(error, errorInfo);
+    // Send to Sentry error tracking
+    try {
+      Sentry.captureException(error, {
+        extra: {
+          componentStack: errorInfo.componentStack,
+          errorBoundary: true,
+        },
+      });
+    } catch (sentryError) {
+      // Sentry might not be initialized in dev
+      console.warn('Sentry not available:', sentryError);
+    }
   }
 
   handleReset = (): void => {
@@ -147,12 +159,14 @@ export interface ErrorContext {
 export function logError(error: Error, context?: ErrorContext): void {
   logger.error('Error:', { error, context });
   
-  // TODO: Send to error tracking service
-  // if (window.Sentry) {
-  //   window.Sentry.captureException(error, {
-  //     extra: context,
-  //   });
-  // }
+  // Send to Sentry error tracking
+  try {
+    Sentry.captureException(error, {
+      extra: context,
+    });
+  } catch (sentryError) {
+    console.warn('Sentry not available:', sentryError);
+  }
 }
 
 /**

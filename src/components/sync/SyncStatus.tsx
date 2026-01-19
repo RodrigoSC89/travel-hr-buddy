@@ -5,16 +5,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Wifi, WifiOff, RefreshCw, Check, AlertCircle } from "lucide-react";
 import { offlineCache } from "@/lib/offline-cache";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
- * PATCH 634: Sync Status Component
- * Display connection status and sync pending offline data
+ * PATCH 634.1: Sync Status Component with Real Supabase Integration
+ * Display connection status and sync pending offline data to Supabase
  */
 export function SyncStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
+  const [syncProgress, setSyncProgress] = useState({ current: 0, total: 0 });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -61,10 +63,110 @@ export function SyncStatus() {
     }
   };
 
+  /**
+   * Sync a single document to Supabase
+   */
+  const syncDocument = async (doc: any): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('ai_documents')
+        .upsert({
+          id: doc.id,
+          file_name: doc.file_name || doc.name,
+          file_type: doc.file_type || doc.type || 'application/octet-stream',
+          storage_path: doc.storage_path || `offline/${doc.id}`,
+          ocr_status: 'pending',
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'id' });
+
+      if (error) {
+        console.error("Failed to sync document:", error);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Document sync error:", error);
+      return false;
+    }
+  };
+
+  /**
+   * Sync a log entry to Supabase
+   */
+  const syncLog = async (log: any): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('access_logs')
+        .insert({
+          action: log.action || 'offline_action',
+          module_accessed: log.module || 'offline',
+          result: log.result || 'synced',
+          severity: log.severity || 'info',
+          details: log.details || {},
+          timestamp: log.timestamp || new Date().toISOString(),
+        });
+
+      if (error) {
+        console.error("Failed to sync log:", error);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Log sync error:", error);
+      return false;
+    }
+  };
+
+  /**
+   * Process a pending action (crew update, checklist item, etc.)
+   */
+  const processAction = async (action: any): Promise<boolean> => {
+    try {
+      const { actionType, payload, table } = action;
+
+      switch (actionType) {
+        case 'CREATE':
+          const { error: createError } = await supabase
+            .from(table || 'action_items')
+            .insert(payload);
+          if (createError) throw createError;
+          break;
+
+        case 'UPDATE':
+          const { error: updateError } = await supabase
+            .from(table || 'action_items')
+            .update(payload.data)
+            .eq('id', payload.id);
+          if (updateError) throw updateError;
+          break;
+
+        case 'DELETE':
+          const { error: deleteError } = await supabase
+            .from(table || 'action_items')
+            .delete()
+            .eq('id', payload.id);
+          if (deleteError) throw deleteError;
+          break;
+
+        default:
+          console.warn("Unknown action type:", actionType);
+          return true; // Mark as processed
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Action processing error:", error);
+      return false;
+    }
+  };
+
   const syncPendingData = async () => {
     if (!isOnline || isSyncing) return;
 
     setIsSyncing(true);
+    let successCount = 0;
+    let failCount = 0;
+
     try {
       // Get all pending items
       const [docs, logs, actions] = await Promise.all([
@@ -73,43 +175,60 @@ export function SyncStatus() {
         offlineCache.getPendingActions(),
       ]);
 
+      const totalItems = docs.length + logs.length + actions.length;
+      setSyncProgress({ current: 0, total: totalItems });
+
       // Sync documents
       for (const doc of docs) {
-        try {
-          // TODO: Implement actual sync to Supabase
+        const success = await syncDocument(doc);
+        if (success) {
           await offlineCache.markDocumentSynced(doc.id);
-        } catch (error) {
-          console.error("Failed to sync document:", error);
+          successCount++;
+        } else {
+          failCount++;
         }
+        setSyncProgress(prev => ({ ...prev, current: prev.current + 1 }));
       }
 
       // Sync logs
       for (const log of logs) {
-        try {
-          // TODO: Implement actual sync to Supabase
+        const success = await syncLog(log);
+        if (success) {
           await offlineCache.markLogSynced(log.id);
-        } catch (error) {
-          console.error("Failed to sync log:", error);
+          successCount++;
+        } else {
+          failCount++;
         }
+        setSyncProgress(prev => ({ ...prev, current: prev.current + 1 }));
       }
 
       // Process pending actions
       for (const action of actions) {
-        try {
-          // TODO: Implement actual action processing
+        const success = await processAction(action);
+        if (success) {
           await offlineCache.removePendingAction(action.id);
-        } catch (error) {
-          console.error("Failed to process action:", error);
+          successCount++;
+        } else {
+          failCount++;
         }
+        setSyncProgress(prev => ({ ...prev, current: prev.current + 1 }));
       }
 
       setLastSyncTime(new Date());
       await loadPendingCount();
 
-      toast({
-        title: "Sync complete",
-        description: "All pending changes have been synchronized",
-      });
+      if (failCount === 0) {
+        toast({
+          title: "Sync complete",
+          description: `All ${successCount} pending changes have been synchronized`,
+        });
+      } else {
+        toast({
+          title: "Sync partially complete",
+          description: `${successCount} synced, ${failCount} failed. Will retry failed items.`,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       toast({
         title: "Sync failed",
@@ -118,6 +237,7 @@ export function SyncStatus() {
       });
     } finally {
       setIsSyncing(false);
+      setSyncProgress({ current: 0, total: 0 });
     }
   };
 
@@ -146,8 +266,24 @@ export function SyncStatus() {
               </Badge>
             </div>
 
+            {/* Sync progress */}
+            {isSyncing && syncProgress.total > 0 && (
+              <div className="space-y-1">
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Syncing...</span>
+                  <span>{syncProgress.current}/{syncProgress.total}</span>
+                </div>
+                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary transition-all duration-300"
+                    style={{ width: `${(syncProgress.current / syncProgress.total) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Pending items */}
-            {pendingCount > 0 && (
+            {pendingCount > 0 && !isSyncing && (
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Pending changes:</span>
                 <span className="font-medium">{pendingCount}</span>
@@ -186,9 +322,9 @@ export function SyncStatus() {
 
             {/* Offline warning */}
             {!isOnline && (
-              <div className="flex items-start gap-2 p-2 bg-yellow-50 rounded text-xs">
+              <div className="flex items-start gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-xs">
                 <AlertCircle className="h-3 w-3 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <span className="text-yellow-900">
+                <span className="text-yellow-900 dark:text-yellow-100">
                   Working offline. Changes will sync when connection is restored.
                 </span>
               </div>
