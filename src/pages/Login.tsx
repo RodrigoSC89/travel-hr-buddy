@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { Anchor, Wifi, WifiOff, Trash2, Loader2 } from "lucide-react";
+import { Anchor, Wifi, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -47,6 +47,8 @@ const Login = () => {
     
     setLoading(true);
     setErrorMessage("");
+    // PATCH iOS PWA: Nunca setar connectionError = true
+    // navigator.onLine e erros de rede não são confiáveis no iOS Safari PWA
     setConnectionError(false);
 
     try {
@@ -59,22 +61,20 @@ const Login = () => {
         // Classificar tipo de erro
         const errorMsg = error.message?.toLowerCase() || "";
         
-        // Erros de rede/conexão
-        if (errorMsg.includes("network") || 
-            errorMsg.includes("fetch") || 
-            errorMsg.includes("timeout") ||
-            errorMsg.includes("retryable") ||
-            errorMsg.includes("failed to fetch")) {
-          setConnectionError(true);
-          setErrorMessage("Problema de conexão. Verifique sua internet.");
-        } 
-        // Credenciais inválidas
-        else if (errorMsg.includes("invalid") || errorMsg.includes("credentials")) {
+        // PATCH iOS PWA: NUNCA mostrar "Problema de conexão"
+        // O iOS PWA frequentemente retorna erros de rede falsos positivos
+        // Apenas mostrar erros específicos de credenciais
+        
+        if (errorMsg.includes("invalid") || errorMsg.includes("credentials")) {
           setErrorMessage("Email ou senha incorretos");
-        }
-        // Outros erros
-        else {
-          setErrorMessage(error.message || "Erro ao fazer login");
+        } else if (errorMsg.includes("email not confirmed")) {
+          setErrorMessage("Confirme seu email antes de entrar");
+        } else if (errorMsg.includes("too many requests")) {
+          setErrorMessage("Muitas tentativas. Aguarde um momento.");
+        } else {
+          // Para QUALQUER outro erro (incluindo rede), mensagem genérica
+          // NÃO mencionar conexão - o iOS PWA não é confiável nesse diagnóstico
+          setErrorMessage("Verifique suas credenciais e tente novamente");
         }
       } else {
         // Sucesso! Não precisa navegar - AuthContext vai detectar sessão
@@ -84,17 +84,9 @@ const Login = () => {
     } catch (err: any) {
       console.error("Erro no login:", err);
       
-      // Verificar se é erro de rede
-      const isNetworkError = err.name === "TypeError" || 
-                             err.message?.includes("fetch") ||
-                             err.message?.includes("network");
-      
-      if (isNetworkError) {
-        setConnectionError(true);
-        setErrorMessage("Problema de conexão. Verifique sua internet.");
-      } else {
-        setErrorMessage(err.message || "Erro ao fazer login");
-      }
+      // PATCH iOS PWA: Nunca mostrar erro de conexão
+      // Apenas mensagem genérica para qualquer exceção
+      setErrorMessage("Tente novamente em alguns segundos");
     } finally {
       setLoading(false);
     }
@@ -154,30 +146,8 @@ const Login = () => {
               </Alert>
             )}
 
-            {/* Erro de conexão com opções */}
-            {connectionError && (
-              <Alert className="bg-amber-900/50 border-amber-700">
-                <div className="flex items-center gap-2 mb-2">
-                  <WifiOff className="h-4 w-4 text-amber-400" />
-                  <span className="text-amber-200 text-sm font-medium">
-                    Problema de conexão detectado
-                  </span>
-                </div>
-                <AlertDescription className="text-amber-300/80 text-xs">
-                  O sistema está otimizado para conexões lentas (3G/4G/5G/Satélite).
-                </AlertDescription>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleClearSession}
-                  className="mt-2 text-amber-200 border-amber-600 hover:bg-amber-800/50"
-                >
-                  <Trash2 className="h-3 w-3 mr-1" />
-                  Limpar sessão
-                </Button>
-              </Alert>
-            )}
+            {/* REMOVIDO: Erro de conexão - não é confiável no iOS PWA */}
+            {/* O connectionError nunca mais será true, mantido por compatibilidade */}
 
             <Button 
               type="submit" 
