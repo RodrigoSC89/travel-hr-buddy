@@ -1,6 +1,6 @@
 /**
  * PATCH 180.0 - Loading Feedback Components
- * User-friendly loading states for slow connections
+ * PATCH iOS PWA v14: OfflineMessage disabled - navigator.onLine unreliable
  */
 
 import { useEffect, useState } from "react";
@@ -190,54 +190,22 @@ export function TimeoutMessage({
 }
 
 // ===== Offline Message =====
+// PATCH iOS PWA v14: DISABLED - navigator.onLine is unreliable on iOS Safari PWA
 
 interface OfflineMessageProps {
   onRetry?: () => void;
   className?: string;
 }
 
+/**
+ * DISABLED: OfflineMessage
+ * PATCH iOS PWA v14: This component previously showed "Você está offline" message
+ * which caused false positives on iOS Safari PWA due to unreliable navigator.onLine
+ * Now always returns null
+ */
 export function OfflineMessage({ onRetry, className }: OfflineMessageProps) {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
-  if (isOnline) return null;
-
-  return (
-    <div className={cn(
-      "flex flex-col items-center gap-4 p-8 text-center bg-muted/50 rounded-lg",
-      className
-    )}>
-      <div className="p-4 rounded-full bg-muted">
-        <WifiOff className="w-8 h-8 text-muted-foreground" />
-      </div>
-      
-      <div className="space-y-1">
-        <h3 className="font-medium text-foreground">Você está offline</h3>
-        <p className="text-sm text-muted-foreground">
-          Verifique sua conexão com a internet
-        </p>
-      </div>
-
-      {onRetry && (
-        <Button onClick={onRetry} variant="outline">
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Tentar novamente
-        </Button>
-      )}
-    </div>
-  );
+  // PATCH iOS PWA: Always return null - never show offline message
+  return null;
 }
 
 // ===== Data Loading Skeleton =====

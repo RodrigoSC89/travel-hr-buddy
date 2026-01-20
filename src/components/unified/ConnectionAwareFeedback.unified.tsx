@@ -7,6 +7,7 @@
  * - Loading adaptativo
  * 
  * PATCH 178.2 - Visual Feedback for Slow Connections
+ * PATCH iOS PWA v14: OfflineFallback disabled - navigator.onLine unreliable
  */
 
 import React, { memo, useEffect, useState } from "react";
@@ -33,6 +34,7 @@ export interface ConnectionBannerProps {
   dismissable?: boolean;
 }
 
+// PATCH iOS PWA v14: Never show offline banner
 export const ConnectionBanner = memo(function ConnectionBanner({
   className,
   showOnlyWhenSlow = true,
@@ -42,18 +44,13 @@ export const ConnectionBanner = memo(function ConnectionBanner({
   const connection = useConnectionQuality();
   const [dismissed, setDismissed] = useState(false);
 
-  // Reset dismissed state when connection changes significantly
-  useEffect(() => {
-    if (connection.quality === "offline") {
-      setDismissed(false);
-    }
-  }, [connection.quality]);
-
   if (dismissed) return null;
+  
+  // PATCH iOS PWA v14: Never show for "offline" - only slow connections
+  if (connection.quality === "offline") return null;
   
   if (showOnlyWhenSlow && 
       connection.quality !== "slow" && 
-      connection.quality !== "offline" &&
       connection.quality !== "moderate") {
     return null;
   }
@@ -81,7 +78,7 @@ export const ConnectionBanner = memo(function ConnectionBanner({
       </div>
       
       <div className="flex items-center gap-2">
-        {onRetry && connection.quality !== "offline" && (
+        {onRetry && (
           <Button
             variant="ghost"
             size="sm"
@@ -93,7 +90,7 @@ export const ConnectionBanner = memo(function ConnectionBanner({
           </Button>
         )}
         
-        {dismissable && connection.quality !== "offline" && (
+        {dismissable && (
           <Button
             variant="ghost"
             size="sm"
@@ -117,12 +114,17 @@ export interface ConnectionBadgeProps {
   size?: "sm" | "md" | "lg";
 }
 
+// PATCH iOS PWA v14: Never show offline badge
 export const ConnectionBadge = memo(function ConnectionBadge({
   className,
   showLabel = false,
   size = "md",
 }: ConnectionBadgeProps) {
   const connection = useConnectionQuality();
+  
+  // PATCH iOS PWA v14: Never show for "offline"
+  if (connection.quality === "offline") return null;
+  
   const config = getBadgeConfig(connection.quality);
   
   const sizeClasses = {
@@ -183,7 +185,7 @@ export const AdaptiveLoader = memo(function AdaptiveLoader({
     
     const timer = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 95) return prev; // Don't go to 100% until actually complete
+        if (prev >= 95) return prev;
         return Math.min(95, prev + step);
       });
     }, interval);
@@ -261,6 +263,7 @@ export const AdaptiveLoader = memo(function AdaptiveLoader({
 AdaptiveLoader.displayName = "AdaptiveLoader";
 
 // ==================== OFFLINE FALLBACK ====================
+// PATCH iOS PWA v14: DISABLED - navigator.onLine is unreliable on iOS Safari PWA
 
 export interface OfflineFallbackProps {
   cachedAt?: Date;
@@ -269,54 +272,20 @@ export interface OfflineFallbackProps {
   className?: string;
 }
 
+/**
+ * DISABLED: OfflineFallback
+ * PATCH iOS PWA v14: This component previously blocked children when "offline"
+ * which caused false positives on iOS Safari PWA due to unreliable navigator.onLine
+ * Now always renders children
+ */
 export const OfflineFallback = memo(function OfflineFallback({
   cachedAt,
   onRetry,
   children,
   className,
 }: OfflineFallbackProps) {
-  const connection = useConnectionQuality();
-
-  if (connection.isOnline) {
-    return <>{children}</>;
-  }
-
-  return (
-    <div className={cn("flex flex-col items-center justify-center gap-4 p-8", className)}>
-      <div className="relative">
-        <CloudOff className="h-16 w-16 text-muted-foreground/50" />
-        <div className="absolute -bottom-1 -right-1 bg-destructive rounded-full p-1">
-          <WifiOff className="h-4 w-4 text-destructive-foreground" />
-        </div>
-      </div>
-      
-      <div className="text-center space-y-2">
-        <h3 className="font-semibold text-lg">Sem conexão</h3>
-        <p className="text-sm text-muted-foreground max-w-xs">
-          Você está offline. Mostrando dados salvos localmente.
-        </p>
-        
-        {cachedAt && (
-          <p className="text-xs text-muted-foreground/70">
-            Última atualização: {cachedAt.toLocaleString("pt-BR")}
-          </p>
-        )}
-      </div>
-      
-      {onRetry && (
-        <Button variant="outline" onClick={onRetry} className="mt-2">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Tentar reconectar
-        </Button>
-      )}
-      
-      {children && (
-        <div className="w-full mt-4 opacity-75">
-          {children}
-        </div>
-      )}
-    </div>
-  );
+  // PATCH iOS PWA: Always render children - never block based on connection
+  return <>{children}</>;
 });
 OfflineFallback.displayName = "OfflineFallback";
 
@@ -325,11 +294,12 @@ OfflineFallback.displayName = "OfflineFallback";
 function getBannerConfig(quality: ConnectionQuality) {
   switch (quality) {
     case "offline":
+      // PATCH iOS PWA v14: Return slow config instead of offline
       return {
-        bgClass: "bg-destructive",
-        textClass: "text-destructive-foreground",
-        icon: <WifiOff className="h-4 w-4" />,
-        message: "Sem conexão com a internet",
+        bgClass: "bg-amber-500",
+        textClass: "text-amber-950",
+        icon: <Signal className="h-4 w-4" />,
+        message: "Verificando conexão...",
       };
     case "slow":
       return {
@@ -365,12 +335,13 @@ function getBannerConfig(quality: ConnectionQuality) {
 function getBadgeConfig(quality: ConnectionQuality) {
   switch (quality) {
     case "offline":
+      // PATCH iOS PWA v14: Return slow config instead of offline
       return {
-        bgClass: "bg-destructive/10",
-        textClass: "text-destructive",
-        borderClass: "border-destructive/30",
-        icon: <WifiOff />,
-        label: "Offline",
+        bgClass: "bg-amber-500/10",
+        textClass: "text-amber-600",
+        borderClass: "border-amber-500/30",
+        icon: <Signal />,
+        label: "Verificando",
       };
     case "slow":
       return {

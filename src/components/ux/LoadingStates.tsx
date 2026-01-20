@@ -1,6 +1,7 @@
 /**
  * Enhanced Loading States
  * PATCH 838: Estados de carregamento melhorados com Framer Motion
+ * PATCH iOS PWA v14: NetworkStatusIndicator disabled - navigator.onLine unreliable
  */
 
 import type { FC, ReactNode } from "react";
@@ -122,24 +123,16 @@ export const RefreshIndicator = ({
   </motion.button>
 );
 
-// Network Status Indicator
-export const NetworkStatusIndicator = ({ online }: { online: boolean }) => (
-  <AnimatePresence>
-    {!online && (
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-amber-500 text-white py-2 px-4 text-center text-sm"
-      >
-        <div className="flex items-center justify-center gap-2">
-          <WifiOff className="h-4 w-4" />
-          <span>Você está offline. Algumas funcionalidades podem estar limitadas.</span>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+/**
+ * DISABLED: NetworkStatusIndicator
+ * PATCH iOS PWA v14: This component previously showed "Você está offline" banner
+ * which caused false positives on iOS Safari PWA due to unreliable navigator.onLine
+ * Now always returns null
+ */
+export const NetworkStatusIndicator = ({ online }: { online: boolean }) => {
+  // PATCH iOS PWA: Always return null - never show offline indicator
+  return null;
+};
 
 // Progress Bar
 export const ProgressBar = ({ 

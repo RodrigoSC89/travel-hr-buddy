@@ -1,5 +1,6 @@
 /**
  * Hybrid LLM Engine - PATCH 850
+ * PATCH iOS PWA v14: Never return offline response based on navigator.onLine
  * Offline-first LLM with cloud fallback optimized for 2Mbps
  */
 
@@ -75,12 +76,8 @@ const OFFLINE_RESPONSES: Record<string, { response: string; confidence: number }
     response: 'Para verificar o status do sistema, acesse o Dashboard principal ou a página de Health Check em /health.',
     confidence: 0.9
   },
-  'offline': {
-    response: 'Você está offline. Os dados foram salvos localmente e serão sincronizados quando a conexão for restaurada.',
-    confidence: 1.0
-  },
   'error': {
-    response: 'Desculpe, não consegui processar sua solicitação no momento. Tente novamente quando estiver online.',
+    response: 'Desculpe, não consegui processar sua solicitação no momento. Tente novamente em alguns instantes.',
     confidence: 0.5
   }
 };
@@ -88,25 +85,10 @@ const OFFLINE_RESPONSES: Record<string, { response: string; confidence: number }
 class HybridLLMEngine {
   private db: IDBPDatabase | null = null;
   private config: HybridLLMConfig = DEFAULT_CONFIG;
-  private isOnline: boolean = navigator.onLine;
   private pendingRequests: Map<string, Promise<string>> = new Map();
 
   constructor() {
-    this.setupNetworkListeners();
-  }
-
-  private setupNetworkListeners() {
-    if (typeof window === 'undefined') return;
-
-    window.addEventListener('online', () => {
-      this.isOnline = true;
-      logger.info('[HybridLLM] Online mode activated');
-    });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-      logger.info('[HybridLLM] Offline mode activated');
-    });
+    // PATCH iOS PWA v14: Removed network listeners - we always try online first
   }
 
   private async getDB(): Promise<IDBPDatabase> {
@@ -126,7 +108,6 @@ class HybridLLMEngine {
   }
 
   private generateCacheKey(prompt: string): string {
-    // Simple hash for cache key
     let hash = 0;
     for (let i = 0; i < prompt.length; i++) {
       const char = prompt.charCodeAt(i);
@@ -144,7 +125,6 @@ class HybridLLMEngine {
 
       if (!cached) return null;
 
-      // Check if expired
       if (cached.expiresAt < Date.now()) {
         await db.delete(STORE_NAME, key);
         return null;
@@ -173,8 +153,6 @@ class HybridLLMEngine {
       };
 
       await db.put(STORE_NAME, cached);
-
-      // Cleanup old entries if cache is full
       await this.cleanupCache();
     } catch (error) {
       logger.warn('[HybridLLM] Cache write error:', { error });
@@ -188,11 +166,9 @@ class HybridLLMEngine {
       const store = tx.objectStore(STORE_NAME);
       const index = store.index('timestamp');
 
-      // Get all entries sorted by timestamp
       const entries = await index.getAll();
 
       if (entries.length > this.config.maxCacheSize) {
-        // Delete oldest entries
         const toDelete = entries.slice(0, entries.length - this.config.maxCacheSize);
         for (const entry of toDelete) {
           await store.delete(entry.key);
@@ -236,15 +212,13 @@ class HybridLLMEngine {
     if (lowerPrompt.includes('status') || lowerPrompt.includes('saúde') || lowerPrompt.includes('health')) {
       return OFFLINE_RESPONSES['status'];
     }
-    // PATCH iOS PWA: Não forçar modo offline baseado em navigator.onLine
-    // navigator.onLine não é confiável no iOS Safari PWA
-    // Deixar o sistema tentar a query online - se falhar, tratamos o erro
 
     return null;
   }
 
   /**
    * Query the LLM with offline-first strategy
+   * PATCH iOS PWA v14: Always try cloud first - never assume offline based on navigator.onLine
    */
   async query(prompt: string, options?: { forceOnline?: boolean; context?: string }): Promise<{
     response: string;
@@ -268,40 +242,38 @@ class HybridLLMEngine {
       }
     }
 
-    // 2. Try cloud if online
-    if (this.isOnline) {
-      try {
-        // Deduplicate concurrent requests
-        const cacheKey = this.generateCacheKey(prompt);
-        if (this.pendingRequests.has(cacheKey)) {
-          const response = await this.pendingRequests.get(cacheKey)!;
-          return {
-            response,
-            confidence: 0.9,
-            source: 'cloud',
-            latency: performance.now() - startTime,
-          };
-        }
-
-        const requestPromise = this.fetchFromCloud(prompt, options?.context);
-        this.pendingRequests.set(cacheKey, requestPromise);
-
-        try {
-          const response = await requestPromise;
-          await this.cacheResponse(prompt, response, 0.95, 'cloud');
-
-          return {
-            response,
-            confidence: 0.95,
-            source: 'cloud',
-            latency: performance.now() - startTime,
-          };
-        } finally {
-          this.pendingRequests.delete(cacheKey);
-        }
-      } catch (error) {
-        logger.warn('[HybridLLM] Cloud request failed, falling back to local', { error });
+    // 2. PATCH iOS PWA v14: Always try cloud first - never check navigator.onLine
+    try {
+      // Deduplicate concurrent requests
+      const cacheKey = this.generateCacheKey(prompt);
+      if (this.pendingRequests.has(cacheKey)) {
+        const response = await this.pendingRequests.get(cacheKey)!;
+        return {
+          response,
+          confidence: 0.9,
+          source: 'cloud',
+          latency: performance.now() - startTime,
+        };
       }
+
+      const requestPromise = this.fetchFromCloud(prompt, options?.context);
+      this.pendingRequests.set(cacheKey, requestPromise);
+
+      try {
+        const response = await requestPromise;
+        await this.cacheResponse(prompt, response, 0.95, 'cloud');
+
+        return {
+          response,
+          confidence: 0.95,
+          source: 'cloud',
+          latency: performance.now() - startTime,
+        };
+      } finally {
+        this.pendingRequests.delete(cacheKey);
+      }
+    } catch (error) {
+      logger.warn('[HybridLLM] Cloud request failed, falling back to local', { error });
     }
 
     // 3. Try offline pattern matching
@@ -341,7 +313,6 @@ class HybridLLMEngine {
         throw error;
       }
       
-      // Handle rate limiting gracefully
       if (data?.source === 'rate_limited' || data?.source === 'fallback') {
         logger.info('[HybridLLM] Using fallback response from cloud');
       }
@@ -366,7 +337,7 @@ class HybridLLMEngine {
 
     return {
       cacheSize,
-      isOnline: this.isOnline,
+      isOnline: true, // PATCH iOS PWA v14: Always report online
       config: this.config,
     };
   }

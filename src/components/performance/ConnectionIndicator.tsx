@@ -1,6 +1,7 @@
 /**
  * Connection Indicator Component
  * PATCH 834: Visual feedback for network status
+ * PATCH iOS PWA v14: Removed offline blocking - navigator.onLine unreliable
  */
 
 import React, { useState, useEffect } from 'react';
@@ -38,17 +39,18 @@ export function ConnectionIndicator({
     }
   }, []);
 
-  // Show indicator on slow connections or always
+  // PATCH iOS PWA v14: Never show offline indicator, only slow connection warnings
   useEffect(() => {
     if (showAlways) {
       setVisible(true);
       return;
     }
 
-    const shouldShow = ['2g', 'slow-2g', 'offline', '3g'].includes(connectionType);
+    // Only show for slow connections, NEVER for "offline"
+    const shouldShow = ['2g', 'slow-2g', '3g'].includes(connectionType);
     setVisible(shouldShow);
 
-    // Auto-hide after delay on fast connections
+    // Auto-hide after delay
     if (!shouldShow) {
       const timer = setTimeout(() => setVisible(false), 3000);
       return () => clearTimeout(timer);
@@ -64,8 +66,6 @@ export function ConnectionIndicator({
 
   const getConnectionIcon = () => {
     switch (connectionType) {
-      case 'offline':
-        return <WifiOff className="h-4 w-4" />;
       case 'slow-2g':
       case '2g':
         return <SignalLow className="h-4 w-4" />;
@@ -79,8 +79,6 @@ export function ConnectionIndicator({
 
   const getConnectionLabel = () => {
     switch (connectionType) {
-      case 'offline':
-        return 'Offline';
       case 'slow-2g':
         return 'Muito lento';
       case '2g':
@@ -95,8 +93,6 @@ export function ConnectionIndicator({
 
   const getConnectionColor = () => {
     switch (connectionType) {
-      case 'offline':
-        return 'bg-red-500/10 text-red-500 border-red-500/20';
       case 'slow-2g':
       case '2g':
         return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
@@ -134,37 +130,35 @@ export function ConnectionIndicator({
   );
 }
 
-// Compact badge version
+// Compact badge version - PATCH iOS PWA v14: Never show offline badge
 export function ConnectionBadge({ className }: { className?: string }) {
   const { connectionType } = useBandwidthOptimizer();
   
+  // Only show for slow connections, never for "offline"
   const isSlowConnection = ['2g', 'slow-2g', '3g'].includes(connectionType);
-  const isOffline = connectionType === 'offline';
 
-  if (!isSlowConnection && !isOffline) return null;
+  if (!isSlowConnection) return null;
 
   return (
     <div className={cn(
       'inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs',
-      isOffline 
-        ? 'bg-red-500/10 text-red-500' 
-        : 'bg-yellow-500/10 text-yellow-500',
+      'bg-yellow-500/10 text-yellow-500',
       className
     )}>
-      {isOffline ? <WifiOff className="h-3 w-3" /> : <SignalLow className="h-3 w-3" />}
-      <span>{isOffline ? 'Offline' : 'Conexão lenta'}</span>
+      <SignalLow className="h-3 w-3" />
+      <span>Conexão lenta</span>
     </div>
   );
 }
 
-// Hook to check if features should be disabled
+// Hook to check if features should be disabled - PATCH iOS PWA v14: Never return offline message
 export function useSlowConnectionWarning() {
   const { connectionType, isLowBandwidth } = useBandwidthOptimizer();
   
-  const showWarning = isLowBandwidth;
-  const warningMessage = connectionType === 'offline'
-    ? 'Você está offline. Algumas funcionalidades podem estar limitadas.'
-    : 'Conexão lenta detectada. O carregamento pode demorar mais.';
+  // Only show warning for slow connections, never for "offline"
+  const isSlowConnection = ['2g', 'slow-2g', '3g'].includes(connectionType);
+  const showWarning = isLowBandwidth && isSlowConnection;
+  const warningMessage = 'Conexão lenta detectada. O carregamento pode demorar mais.';
 
   return { showWarning, warningMessage, connectionType };
 }
