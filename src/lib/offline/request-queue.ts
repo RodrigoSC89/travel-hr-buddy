@@ -50,25 +50,17 @@ class RequestQueue {
   private queue: QueuedRequest[] = [];
   private activeRequests = 0;
   private config: QueueConfig;
-  private isOnline = navigator.onLine;
+  private isOnline = true; // PATCH v20: Sempre online - navigator.onLine não confiável no iOS PWA
   private isPaused = false;
 
   constructor(config: Partial<QueueConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.setupNetworkListeners();
+    // PATCH v20: Não configurar listeners de online/offline
   }
 
+  // PATCH v20: Listeners de rede REMOVIDOS - isOnline sempre true
   private setupNetworkListeners(): void {
-    window.addEventListener('online', () => {
-      this.isOnline = true;
-      logger.info('[RequestQueue] Online - processing queue');
-      this.processQueue();
-    });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-      logger.warn('[RequestQueue] Offline - queuing requests');
-    });
+    // Noop - erros de rede tratados pela camada fetch com retry
   }
 
   /**

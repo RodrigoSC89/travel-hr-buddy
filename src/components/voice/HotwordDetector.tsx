@@ -60,7 +60,7 @@ export function HotwordDetector({
     isProcessing: false,
     audioLevel: 0,
     lastDetection: null,
-    isOnline: navigator.onLine,
+    isOnline: true, // PATCH v20: Sempre online - navigator.onLine não confiável no iOS PWA
     detectionCount: 0,
   });
 
@@ -70,19 +70,7 @@ export function HotwordDetector({
   const animationFrameRef = useRef<number | null>(null);
   const recognitionRef = useRef<any>(null);
 
-  // Monitor online/offline status
-  useEffect(() => {
-    const handleOnline = () => setState(prev => ({ ...prev, isOnline: true }));
-    const handleOffline = () => setState(prev => ({ ...prev, isOnline: false }));
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  // PATCH v20: Monitoramento online/offline REMOVIDO - sempre assume online
 
   // Cleanup on unmount
   useEffect(() => {

@@ -80,15 +80,10 @@ class EmbeddedLLMManager {
     });
   }
 
+  // PATCH v20: Listeners de rede REMOVIDOS - navigator.onLine não confiável no iOS PWA
   private setupNetworkListeners(): void {
-    window.addEventListener('online', () => {
-      this.isOnline = true;
-      this.processPendingRequests();
-    });
-    
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-    });
+    // isOnline sempre true - erros de rede tratados pela camada fetch
+    this.isOnline = true;
   }
 
   private generateHash(text: string): string {
