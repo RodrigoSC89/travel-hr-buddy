@@ -327,7 +327,7 @@ class IndexedDBCacheService {
       const request = store.get("last_sync");
       request.onsuccess = () => {
         resolve({
-          is_offline: !navigator.onLine,
+          is_offline: false, // PATCH v18: Sempre online - navigator.onLine não confiável no iOS PWA
           last_sync: request.result?.value || null,
           pending_actions: pendingActions.length,
           cached_data_size: 0,

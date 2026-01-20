@@ -295,19 +295,13 @@ class MissionAICore {
    * Setup offline detection
    */
   private setupOfflineDetection() {
-    window.addEventListener("online", () => {
-      this.isOfflineMode = false;
-      logger.info("[MissionCore] Online mode activated");
-    });
-
-    window.addEventListener("offline", () => {
-      this.isOfflineMode = true;
-      logger.warn("[MissionCore] Offline mode activated");
-      this.handleOfflineTransition();
-    });
-
-    // Initial state
-    this.isOfflineMode = !navigator.onLine;
+    // PATCH v18: Desabilitado navigator.onLine - não confiável no iOS PWA
+    // Sempre assumir online - deixar o Supabase SDK lidar com erros de rede
+    this.isOfflineMode = false;
+    
+    // Eventos desabilitados - causam falsos positivos
+    // window.addEventListener("online/offline") removidos
+    logger.info("[MissionCore] Offline detection disabled (iOS PWA fix)");
   }
 
   /**
