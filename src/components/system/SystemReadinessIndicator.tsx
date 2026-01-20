@@ -1,10 +1,11 @@
 /**
  * System Readiness Indicator
+ * PATCH v12: Removed offline status - always shows operational for iOS PWA compatibility
  * Shows overall system health and readiness status
  */
 
 import React, { memo, useMemo } from 'react';
-import { CheckCircle2, AlertCircle, Wifi, WifiOff, Database, Shield, Zap } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Wifi, Database, Shield, Zap } from 'lucide-react';
 import { useNetworkStatus } from '@/hooks/use-network-status';
 import { cn } from '@/lib/utils';
 import {
@@ -16,22 +17,23 @@ import {
 
 interface SystemStatus {
   name: string;
-  status: 'operational' | 'degraded' | 'offline';
+  status: 'operational' | 'degraded';
   icon: React.ReactNode;
 }
 
 export const SystemReadinessIndicator = memo(function SystemReadinessIndicator() {
-  const { online, quality } = useNetworkStatus();
+  const { quality } = useNetworkStatus();
 
+  // PATCH v12: Always show operational - never show offline status
   const systems = useMemo<SystemStatus[]>(() => [
     {
       name: 'Rede',
-      status: !online ? 'offline' : quality === 'slow' ? 'degraded' : 'operational',
-      icon: online ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />
+      status: quality === 'slow' ? 'degraded' : 'operational',
+      icon: <Wifi className="h-3 w-3" />
     },
     {
       name: 'Banco de Dados',
-      status: online ? 'operational' : 'degraded',
+      status: 'operational',
       icon: <Database className="h-3 w-3" />
     },
     {
@@ -44,10 +46,9 @@ export const SystemReadinessIndicator = memo(function SystemReadinessIndicator()
       status: quality === 'slow' ? 'degraded' : 'operational',
       icon: <Zap className="h-3 w-3" />
     }
-  ], [online, quality]);
+  ], [quality]);
 
   const overallStatus = useMemo(() => {
-    if (systems.some(s => s.status === 'offline')) return 'offline';
     if (systems.some(s => s.status === 'degraded')) return 'degraded';
     return 'operational';
   }, [systems]);
@@ -55,13 +56,11 @@ export const SystemReadinessIndicator = memo(function SystemReadinessIndicator()
   const statusColor = {
     operational: 'text-green-500 bg-green-500/10',
     degraded: 'text-yellow-500 bg-yellow-500/10',
-    offline: 'text-red-500 bg-red-500/10'
   };
 
   const statusLabel = {
     operational: 'Operacional',
     degraded: 'Degradado',
-    offline: 'Offline'
   };
 
   return (

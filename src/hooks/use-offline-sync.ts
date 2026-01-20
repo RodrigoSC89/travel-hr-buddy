@@ -1,5 +1,6 @@
 /**
  * useOfflineSync - React hook for maritime offline-first data management
+ * PATCH v12: Removed navigator.onLine - always assumes online, queues on network failure
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -24,33 +25,28 @@ interface UseOfflineSyncOptions {
 export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
   const { autoSync = true, syncIntervalMs = 30000 } = options;
 
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v12: Always assume online - navigator.onLine is unreliable on iOS PWA
+  const [isOnline] = useState(true);
   const [connectionQuality, setConnectionQuality] = useState<ConnectionQuality | null>(null);
   const [pendingCount, setPendingCount] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
   const [estimatedSyncSeconds, setEstimatedSyncSeconds] = useState(0);
   const [lastSyncResult, setLastSyncResult] = useState<{ synced: number; failed: number } | null>(null);
 
-  // Initialize and monitor connection
+  // Initialize and monitor connection quality (not online status)
   useEffect(() => {
     initOfflineDB();
 
-    const updateConnectionStatus = () => {
-      setIsOnline(navigator.onLine);
+    const updateConnectionQuality = () => {
       setConnectionQuality(detectConnectionQuality());
     };
 
-    updateConnectionStatus();
+    updateConnectionQuality();
 
-    window.addEventListener('online', updateConnectionStatus);
-    window.addEventListener('offline', updateConnectionStatus);
-
-    // Periodic connection check
-    const interval = setInterval(updateConnectionStatus, 10000);
+    // Periodic connection quality check (not online/offline)
+    const interval = setInterval(updateConnectionQuality, 10000);
 
     return () => {
-      window.removeEventListener('online', updateConnectionStatus);
-      window.removeEventListener('offline', updateConnectionStatus);
       clearInterval(interval);
     };
   }, []);
@@ -83,10 +79,10 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
   }, [autoSync, syncIntervalMs]);
 
   /**
-   * Manually trigger sync
+   * Manually trigger sync - always attempts, queues on failure
    */
   const triggerSync = useCallback(async () => {
-    if (isSyncing || !isOnline) return;
+    if (isSyncing) return;
 
     setIsSyncing(true);
     try {
@@ -96,10 +92,13 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
       // Update pending count
       const items = await getPendingSyncItems(1000);
       setPendingCount(items.length);
+    } catch (error) {
+      // Silently handle - will retry on next sync
+      console.warn('Sync failed, will retry:', error);
     } finally {
       setIsSyncing(false);
     }
-  }, [isSyncing, isOnline]);
+  }, [isSyncing]);
 
   /**
    * Queue a mutation for later sync
@@ -126,10 +125,6 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
     // Try cache first
     const cached = await getCachedData<T>(key);
 
-    if (!isOnline && cached) {
-      return { data: cached.data, fromCache: true, stale: true };
-    }
-
     // If we have cached data and connection is poor, return cached immediately
     // and refresh in background (stale-while-revalidate)
     if (cached && connectionQuality?.isMaritime) {
@@ -153,7 +148,7 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
       }
       throw error;
     }
-  }, [isOnline, connectionQuality]);
+  }, [connectionQuality]);
 
   /**
    * Get adaptive timeout for current connection
@@ -164,7 +159,7 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
   }, [connectionQuality]);
 
   return {
-    // Connection status
+    // Connection status - always online for iOS PWA compatibility
     isOnline,
     connectionQuality,
     isMaritime: connectionQuality?.isMaritime || false,

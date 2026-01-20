@@ -1,7 +1,7 @@
 /**
  * Performance Provider
+ * PATCH v12: Removed navigator.onLine - always assumes online for iOS PWA compatibility
  * Centralizes all performance optimizations and provides context
- * PATCH: Fixed to avoid hook initialization issues
  */
 
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
@@ -9,10 +9,10 @@ import { webVitalsMonitor } from '@/lib/web-vitals-monitor';
 import { imageOptimizer } from '@/lib/image-optimizer';
 
 interface PerformanceContextType {
-  // Network state
+  // Network state - always online for iOS PWA compatibility
   isSlowConnection: boolean;
   isOffline: boolean;
-  networkQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  networkQuality: 'excellent' | 'good' | 'fair' | 'poor';
   
   // Performance metrics
   performanceScore: number;
@@ -46,11 +46,11 @@ interface PerformanceProviderProps {
   children: ReactNode;
 }
 
-// Simple network detection without external dependencies
+// Simple network detection without navigator.onLine
 function useSimpleNetworkState() {
-  const [isOnline, setIsOnline] = useState(true);
+  // PATCH v12: Always assume online - navigator.onLine is unreliable on iOS PWA
   const [isSlowConnection, setIsSlowConnection] = useState(false);
-  const [quality, setQuality] = useState<'excellent' | 'good' | 'fair' | 'poor' | 'offline'>('good');
+  const [quality, setQuality] = useState<'excellent' | 'good' | 'fair' | 'poor'>('good');
 
   useEffect(() => {
     // Check if we're in browser
@@ -58,24 +58,12 @@ function useSimpleNetworkState() {
       return;
     }
 
-    // Update online status
-    setIsOnline(navigator.onLine);
-
-    // Check connection quality
+    // Check connection quality only (not online/offline status)
     const connection = (navigator as any).connection || 
                       (navigator as any).mozConnection || 
                       (navigator as any).webkitConnection;
 
-    const updateNetworkState = () => {
-      const online = navigator.onLine;
-      setIsOnline(online);
-
-      if (!online) {
-        setQuality('offline');
-        setIsSlowConnection(true);
-        return;
-      }
-
+    const updateNetworkQuality = () => {
       if (connection) {
         const effectiveType = connection.effectiveType;
         const downlink = connection.downlink ?? 10;
@@ -96,26 +84,22 @@ function useSimpleNetworkState() {
       }
     };
 
-    updateNetworkState();
+    updateNetworkQuality();
 
-    // Listen for changes
-    window.addEventListener('online', updateNetworkState);
-    window.addEventListener('offline', updateNetworkState);
-    
+    // Listen for connection changes only
     if (connection?.addEventListener) {
-      connection.addEventListener('change', updateNetworkState);
+      connection.addEventListener('change', updateNetworkQuality);
     }
 
     return () => {
-      window.removeEventListener('online', updateNetworkState);
-      window.removeEventListener('offline', updateNetworkState);
       if (connection?.removeEventListener) {
-        connection.removeEventListener('change', updateNetworkState);
+        connection.removeEventListener('change', updateNetworkQuality);
       }
     };
   }, []);
 
-  return { isOnline, isSlowConnection, quality };
+  // PATCH v12: Always return online = true
+  return { isOnline: true, isSlowConnection, quality };
 }
 
 export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ children }) => {
@@ -164,7 +148,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
 
   // Prefetch route for faster navigation
   const prefetchRoute = useCallback((route: string) => {
-    if (networkState.isSlowConnection || !networkState.isOnline) return;
+    if (networkState.isSlowConnection) return;
     
     try {
       const link = document.createElement('link');
@@ -174,7 +158,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
     } catch (e) {
       // Silently fail
     }
-  }, [networkState.isSlowConnection, networkState.isOnline]);
+  }, [networkState.isSlowConnection]);
 
   // Report custom performance metric
   const reportCustomMetric = useCallback((name: string, value: number) => {
@@ -192,7 +176,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
 
   const value: PerformanceContextType = {
     isSlowConnection: networkState.isSlowConnection,
-    isOffline: !networkState.isOnline,
+    isOffline: false, // PATCH v12: Always false for iOS PWA compatibility
     networkQuality: networkState.quality,
     performanceScore,
     performanceRating,

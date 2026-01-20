@@ -1,5 +1,6 @@
 /**
  * useOptimizedApp Hook - PATCH 835
+ * PATCH v12: Removed offline handling - always assumes online for iOS PWA compatibility
  * Unified hook for all app optimizations
  */
 
@@ -17,7 +18,7 @@ export interface OptimizedAppConfig {
   imageQuality: number;
   batchSize: number;
   timeout: number;
-  connectionQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
   isLowMemory: boolean;
 }
 
@@ -34,16 +35,15 @@ export function useOptimizedApp(): OptimizedAppConfig & {
     getOptimizedFetchOptions 
   } = useBandwidthOptimizer();
   
-  const { quality: networkQuality, online } = useNetworkStatus();
+  const { quality: networkQuality } = useNetworkStatus();
 
-  // Determine connection quality
+  // PATCH v12: Determine connection quality without offline check
   const connectionQuality = useMemo(() => {
-    if (!online) return 'offline' as const;
     if (connectionType === '4g') return 'excellent' as const;
     if (connectionType === '3g') return 'good' as const;
     if (connectionType === '2g') return 'fair' as const;
     return 'poor' as const;
-  }, [connectionType, online]);
+  }, [connectionType]);
 
   // Memory-aware optimizations
   const isLowMemory = useMemo(() => shouldReduceMemory(), []);
@@ -133,16 +133,12 @@ export function useAdaptivePolling(
   const { connectionQuality } = useOptimizedApp();
   
   useEffect(() => {
-    // Don't poll when offline
-    if (connectionQuality === 'offline') return;
-    
     // Adjust interval based on connection
     const multiplier = {
       excellent: 1,
       good: 1.5,
       fair: 2,
       poor: 3,
-      offline: 0,
     }[connectionQuality];
     
     const adjustedInterval = baseInterval * multiplier;

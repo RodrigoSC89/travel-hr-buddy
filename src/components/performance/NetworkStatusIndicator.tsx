@@ -1,9 +1,9 @@
 /**
  * Network Status Indicator
- * Shows current connection quality and offline status
+ * PATCH v12: Removed offline status - always shows connected for iOS PWA compatibility
  */
 
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
+import { Wifi, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
 import { useNetworkStatus, ConnectionQuality } from '@/hooks/use-network-status';
 import { cn } from '@/lib/utils';
 import {
@@ -25,18 +25,16 @@ const sizeClasses = {
   lg: 'h-5 w-5',
 };
 
-const qualityLabels: Record<ConnectionQuality, string> = {
+const qualityLabels: Record<Exclude<ConnectionQuality, 'offline'>, string> = {
   fast: 'Conexão excelente',
   medium: 'Conexão boa',
   slow: 'Conexão lenta',
-  offline: 'Offline',
 };
 
-const qualityColors: Record<ConnectionQuality, string> = {
+const qualityColors: Record<Exclude<ConnectionQuality, 'offline'>, string> = {
   fast: 'text-green-500',
   medium: 'text-yellow-500',
   slow: 'text-orange-500',
-  offline: 'text-destructive',
 };
 
 export function NetworkStatusIndicator({
@@ -44,12 +42,13 @@ export function NetworkStatusIndicator({
   showLabel = false,
   size = 'md',
 }: NetworkStatusIndicatorProps) {
-  const { quality, online, effectiveType, downlink } = useNetworkStatus();
+  const { quality, effectiveType, downlink } = useNetworkStatus();
+
+  // PATCH v12: Map quality to non-offline value
+  const safeQuality = quality === 'offline' ? 'slow' : quality;
 
   const IconComponent = () => {
-    if (!online) return <WifiOff className={cn(sizeClasses[size], qualityColors.offline)} />;
-    
-    switch (quality) {
+    switch (safeQuality) {
       case 'fast':
         return <SignalHigh className={cn(sizeClasses[size], qualityColors.fast)} />;
       case 'medium':
@@ -63,7 +62,7 @@ export function NetworkStatusIndicator({
 
   const tooltipContent = (
     <div className="text-xs space-y-1">
-      <p className="font-medium">{qualityLabels[quality]}</p>
+      <p className="font-medium">{qualityLabels[safeQuality]}</p>
       {effectiveType && <p>Tipo: {effectiveType.toUpperCase()}</p>}
       {downlink && <p>Velocidade: ~{downlink} Mbps</p>}
     </div>
@@ -76,8 +75,8 @@ export function NetworkStatusIndicator({
           <div className={cn('flex items-center gap-1.5', className)}>
             <IconComponent />
             {showLabel && (
-              <span className={cn('text-xs', qualityColors[quality])}>
-                {qualityLabels[quality]}
+              <span className={cn('text-xs', qualityColors[safeQuality])}>
+                {qualityLabels[safeQuality]}
               </span>
             )}
           </div>
