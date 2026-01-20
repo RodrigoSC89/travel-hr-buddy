@@ -195,16 +195,18 @@ export const storeIncidentAnalysis = async (
 ): Promise<boolean> => {
   try {
     // Store analysis in ai_memory table for retrieval
-    const { error } = await supabase.from('ai_memory').insert({
+    const memoryContent = {
+      incidentId,
+      riskLevel: analysis.riskLevel,
+      analysis: analysis,
+      storedAt: new Date().toISOString()
+    };
+    
+    const { error } = await supabase.from('ai_memory').insert([{
       memory_type: 'incident_analysis',
-      content: {
-        incidentId,
-        riskLevel: analysis.riskLevel,
-        analysis: analysis,
-        storedAt: new Date().toISOString()
-      },
+      content: memoryContent,
       importance: 7
-    });
+    }] as any);
 
     if (error) {
       logger.warn("Failed to store incident analysis", { error, incidentId });
