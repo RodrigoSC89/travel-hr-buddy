@@ -40,9 +40,10 @@ class ConnectionResilience {
   private getInitialState(): ConnectionState {
     const conn = (navigator as any).connection;
     
+    // PATCH v17 iOS PWA: Sempre assumir online
     return {
-      isOnline: navigator.onLine,
-      effectiveType: conn?.effectiveType || 'unknown',
+      isOnline: true,
+      effectiveType: conn?.effectiveType || '4g',
       downlink: conn?.downlink || 10,
       rtt: conn?.rtt || 50,
       saveData: conn?.saveData || false,
@@ -50,8 +51,9 @@ class ConnectionResilience {
   }
 
   private setupListeners(): void {
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger
     window.addEventListener('online', () => this.updateState({ isOnline: true }));
-    window.addEventListener('offline', () => this.updateState({ isOnline: false }));
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
 
     if ('connection' in navigator) {
       const conn = (navigator as any).connection;
@@ -67,12 +69,13 @@ class ConnectionResilience {
   }
 
   private updateState(partial: Partial<ConnectionState>): void {
-    this.state = { ...this.state, ...partial };
-    this.listeners.forEach(fn => fn(this.state));
-    
-    if (!this.state.isOnline) {
-      logger.warn('[ConnectionResilience] Offline detected');
+    // PATCH v17 iOS PWA: Nunca definir isOnline como false
+    const safePartial = { ...partial };
+    if ('isOnline' in safePartial && safePartial.isOnline === false) {
+      delete safePartial.isOnline; // Ignorar tentativas de definir offline
     }
+    this.state = { ...this.state, ...safePartial };
+    this.listeners.forEach(fn => fn(this.state));
   }
 
   getState(): ConnectionState {
@@ -104,10 +107,8 @@ class ConnectionResilience {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= cfg.maxRetries; attempt++) {
-      // Skip if offline
-      if (!this.state.isOnline) {
-        throw new Error('No network connection');
-      }
+      // PATCH v17 iOS PWA: REMOVIDO check isOnline - sempre tentar fetch
+      // O erro real virá do próprio fetch se não houver conexão
 
       try {
         const controller = new AbortController();

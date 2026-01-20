@@ -174,12 +174,13 @@ class NetworkQualityMonitor {
   private detectInitialQuality(): NetworkQuality {
     const info = this.getConnectionInfo();
     
+    // PATCH v17 iOS PWA: Sempre assumir online
     return {
-      type: info.effectiveType || 'unknown',
+      type: info.effectiveType || '4g',
       downlink: info.downlink,
       rtt: info.rtt,
       saveData: info.saveData,
-      isOnline: navigator.onLine,
+      isOnline: true,
       timestamp: Date.now(),
     };
   }
@@ -192,9 +193,10 @@ class NetworkQualityMonitor {
   } {
     const connection = (navigator as any).connection;
     
+    // PATCH v17 iOS PWA: Nunca usar navigator.onLine para determinar tipo
     if (!connection) {
       return {
-        effectiveType: navigator.onLine ? 'unknown' : 'offline',
+        effectiveType: '4g',
         downlink: 10,
         rtt: 100,
         saveData: false,
@@ -202,7 +204,7 @@ class NetworkQualityMonitor {
     }
     
     return {
-      effectiveType: connection.effectiveType || 'unknown',
+      effectiveType: connection.effectiveType || '4g',
       downlink: connection.downlink || 10,
       rtt: connection.rtt || 100,
       saveData: connection.saveData || false,
@@ -210,7 +212,7 @@ class NetworkQualityMonitor {
   }
 
   private classifyConnection(downlink: number, rtt: number): NetworkQuality['type'] {
-    if (!navigator.onLine) return 'offline';
+    // PATCH v17 iOS PWA: Nunca retornar 'offline' baseado em navigator.onLine
     
     // Use both downlink and RTT for classification
     if (downlink >= BANDWIDTH_THRESHOLDS['4g'] && rtt <= RTT_THRESHOLDS['4g']) {
@@ -278,7 +280,7 @@ class NetworkQualityMonitor {
       });
     }
     
-    // Online/offline events
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger
     window.addEventListener('online', () => {
       this.updateQuality({
         ...this.currentQuality,
@@ -287,15 +289,7 @@ class NetworkQualityMonitor {
         timestamp: Date.now(),
       });
     });
-    
-    window.addEventListener('offline', () => {
-      this.updateQuality({
-        ...this.currentQuality,
-        isOnline: false,
-        type: 'offline',
-        timestamp: Date.now(),
-      });
-    });
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
   }
 
   private startPolling(): void {

@@ -39,7 +39,8 @@ const DB_VERSION = 1;
 
 class MobileSyncManager {
   private db: IDBDatabase | null = null;
-  private isOnline = navigator.onLine;
+  // PATCH v17 iOS PWA: Sempre assumir online
+  private isOnline = true;
   private isSyncing = false;
   private eventListeners: Map<SyncEventType, Set<EventCallback>> = new Map();
   private syncInterval: ReturnType<typeof setInterval> | null = null;
@@ -72,22 +73,19 @@ class MobileSyncManager {
   }
 
   private setupNetworkListeners(): void {
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger de sync
     window.addEventListener('online', () => {
       this.isOnline = true;
       this.emit({ type: 'online' });
       this.syncData();
     });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-      this.emit({ type: 'offline' });
-    });
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
   }
 
   private startBackgroundSync(): void {
-    // Sync every 30 seconds when online
+    // PATCH v17 iOS PWA: Sync a cada 30 segundos, ignorando status isOnline
     this.syncInterval = setInterval(() => {
-      if (this.isOnline && !this.isSyncing) {
+      if (!this.isSyncing) {
         this.syncData();
       }
     }, 30000);
@@ -176,7 +174,8 @@ class MobileSyncManager {
    * Sync all queued items to server
    */
   async syncData(): Promise<void> {
-    if (!this.isOnline || this.isSyncing) {
+    // PATCH v17 iOS PWA: Sempre tentar sync, ignorar status isOnline
+    if (this.isSyncing) {
       return;
     }
 

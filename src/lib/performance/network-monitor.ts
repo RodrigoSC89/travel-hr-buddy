@@ -40,14 +40,15 @@ class NetworkMonitor {
     
     const connection = nav.connection;
     
+    // PATCH v17 iOS PWA: Sempre assumir online
     return {
-      online: navigator.onLine,
-      effectiveType: (connection?.effectiveType as NetworkStatus['effectiveType']) || 'unknown',
+      online: true,
+      effectiveType: (connection?.effectiveType as NetworkStatus['effectiveType']) || '4g',
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
       saveData: connection?.saveData || false,
       quality: this.calculateQuality(
-        navigator.onLine,
+        true,
         connection?.effectiveType || '4g',
         connection?.rtt || 50
       ),
@@ -56,11 +57,11 @@ class NetworkMonitor {
   }
   
   private calculateQuality(
-    online: boolean,
+    _online: boolean,
     effectiveType: string,
     rtt: number
   ): NetworkStatus['quality'] {
-    if (!online) return 'offline';
+    // PATCH v17 iOS PWA: Nunca retornar 'offline' baseado em navigator.onLine
     
     if (effectiveType === 'slow-2g' || effectiveType === '2g' || rtt > 500) {
       return 'poor';
@@ -75,9 +76,10 @@ class NetworkMonitor {
   }
   
   private setupListeners(): void {
-    // Online/offline events
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para atualização de status
+    // NÃO definir offline baseado em navigator.onLine - não é confiável no iOS
     window.addEventListener('online', () => this.updateStatus({ online: true }));
-    window.addEventListener('offline', () => this.updateStatus({ online: false }));
+    // REMOVIDO: listener 'offline' - causava falsos positivos
     
     // Connection change events
     const nav = navigator as Navigator & {
@@ -174,10 +176,8 @@ class NetworkMonitor {
       
       this.updateStatus({ rtt: avgLatency });
     } catch {
-      // Measurement failed, might be offline
-      if (!navigator.onLine) {
-        this.updateStatus({ online: false });
-      }
+      // PATCH v17 iOS PWA: Não assumir offline se medição falhar
+      // O fetch pode falhar por outros motivos (CORS, timeout, etc.)
     }
   }
   

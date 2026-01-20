@@ -17,7 +17,8 @@ interface PendingAction {
 
 class OfflineManagerService {
   private pendingActions: PendingAction[] = [];
-  private isOnline: boolean = navigator.onLine;
+  // PATCH v17 iOS PWA: Sempre assumir online - navigator.onLine não é confiável
+  private isOnline: boolean = true;
   private syncInProgress: boolean = false;
   private syncListeners: Set<(status: 'syncing' | 'synced' | 'error') => void> = new Set();
 
@@ -47,22 +48,18 @@ class OfflineManagerService {
 
   async initialize(): Promise<void> {
     logger.info('Offline manager initialized');
-    if (this.isOnline) {
-      this.syncPendingActions();
-    }
+    // PATCH v17: Sempre tentar sync na inicialização
+    this.syncPendingActions();
   }
 
   private initializeEventListeners(): void {
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger de sync
+    // NÃO escutar 'offline' - deixar o sistema sempre tentar
     window.addEventListener('online', () => {
-      this.isOnline = true;
-      logger.info('Connection restored - starting sync');
+      logger.info('Online event detected - starting sync');
       this.syncPendingActions();
     });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-      logger.info('Connection lost - entering offline mode');
-    });
+    // REMOVIDO: listener 'offline' que causava falsos positivos no iOS
   }
 
   async queueAction(type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>): Promise<string> {
@@ -122,7 +119,8 @@ class OfflineManagerService {
   }
 
   async syncPendingActions(): Promise<void> {
-    if (this.syncInProgress || !this.isOnline) return;
+    // PATCH v17 iOS PWA: Sempre tentar sync, ignorar status isOnline
+    if (this.syncInProgress) return;
 
     this.syncInProgress = true;
     this.notifySyncListeners('syncing');
@@ -188,7 +186,7 @@ class OfflineManagerService {
   }
 
   async forceSync(): Promise<void> {
-    if (!this.isOnline) throw new Error('Cannot sync while offline');
+    // PATCH v17 iOS PWA: Sempre permitir sync manual
     await this.syncPendingActions();
   }
 }
