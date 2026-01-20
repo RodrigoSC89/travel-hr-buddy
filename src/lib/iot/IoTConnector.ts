@@ -225,7 +225,7 @@ class IoTConnectorService {
         .order('recorded_at', { ascending: false })
         .limit(1);
 
-      return recentData && recentData.length > 0;
+      return !!(recentData && recentData.length > 0);
     } catch (error) {
       logger.error('[IoT] Supabase Realtime connection error:', error);
       return false;
