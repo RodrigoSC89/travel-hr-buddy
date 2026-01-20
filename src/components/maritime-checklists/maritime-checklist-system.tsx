@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BaseChecklistManager } from "./base-checklist-manager";
 import { DPChecklist } from "./dp-checklist";
 import { MachineRoutineChecklist } from "./machine-routine-checklist";
 import { NauticalRoutineChecklist } from "./nautical-routine-checklist";
 import { SafetyChecklist } from "./safety-checklist";
 import { EnvironmentalChecklist } from "./environmental-checklist";
+import { useChecklistPersistence } from "@/hooks/use-checklist-persistence";
+import { useToast } from "@/hooks/use-toast";
 import type { Checklist, ChecklistTemplate } from "./checklist-types";
 
 interface MaritimeChecklistSystemProps {
@@ -21,23 +23,49 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
   const [currentView, setCurrentView] = useState<"manager" | "checklist">("manager");
   const [selectedChecklist, setSelectedChecklist] = useState<Checklist | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<ChecklistTemplate | null>(null);
+  const { toast } = useToast();
+
+  // Use the persistence hook
+  const {
+    isSaving,
+    isSubmitting,
+    lastSaved,
+    saveChecklist,
+    submitChecklist,
+    createFromTemplate
+  } = useChecklistPersistence({ userId, vesselId });
 
   const handleChecklistSelect = (checklist: Checklist) => {
     setSelectedChecklist(checklist);
     setCurrentView("checklist");
   };
 
-  const handleTemplateSelect = (template: ChecklistTemplate) => {
+  const handleTemplateSelect = async (template: ChecklistTemplate) => {
     setSelectedTemplate(template);
-    // TODO: Create new checklist from template
+    // Create new checklist from template
+    const newChecklist = await createFromTemplate(template);
+    if (newChecklist) {
+      setSelectedChecklist(newChecklist);
+      setCurrentView("checklist");
+      toast({
+        title: "📋 Checklist criado",
+        description: `Novo checklist baseado em "${template.name}"`
+      });
+    }
   };
 
   const handleSaveChecklist = async (checklist: Checklist) => {
-    // TODO: Implement save to database
+    const success = await saveChecklist(checklist);
+    if (success) {
+      setSelectedChecklist(checklist);
+    }
   };
 
   const handleSubmitChecklist = async (checklist: Checklist) => {
-    // TODO: Implement submit to database
+    const success = await submitChecklist(checklist);
+    if (success) {
+      setSelectedChecklist({ ...checklist, status: 'pending_review' });
+    }
   };
 
   const handleBackToManager = () => {

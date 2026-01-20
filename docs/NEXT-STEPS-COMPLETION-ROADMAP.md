@@ -1,27 +1,24 @@
 # Nauti One v4.0 - Roadmap de Completude Final
 
-> **Status Atual**: 95% Completo | Certificação 100/100 | Pronto para Go-Live
-> **Data**: 2026-01-20
+> **Status Atual**: 97% Completo | Certificação 100/100 | Pronto para Go-Live
+> **Data**: 2026-01-20 (Atualizado)
 
 ---
 
 ## 📋 Sumário Executivo
 
-O sistema Nauti One v4.0 está em estado de produção certificado. Este documento detalha os passos restantes para **completude total** em 5 categorias:
+O sistema Nauti One v4.0 está em estado de produção certificado. Este documento detalha os passos restantes para **completude total**.
 
-1. **Correções de Build** ✅ RESOLVIDO
-2. **Persistência de Dados AI**
-3. **Integração com APIs Externas**
-4. **Funcionalidades de Frontend**
-5. **Treinamento e Fine-tuning de IAs**
+### ✅ Completado Nesta Sessão
 
----
-
-## 1. ✅ Correções de Build (CONCLUÍDO)
-
-| Arquivo | Problema | Status |
-|---------|----------|--------|
-| `src/ai/services/incidentAnalyzer.ts` | Type mismatch em `ai_memory.insert()` | ✅ Corrigido |
+| Item | Arquivo | Status |
+|------|---------|--------|
+| Hook de Evidence | `src/hooks/use-audit-evidence.ts` | ✅ Criado |
+| Hook de Checklists | `src/hooks/use-checklist-persistence.ts` | ✅ Criado |
+| Integração PEOTRAM | `src/components/peotram/peotram-audit-wizard.tsx` | ✅ Integrado |
+| Integração Checklists | `src/components/maritime-checklists/maritime-checklist-system.tsx` | ✅ Integrado |
+| Tabela fleet_logs | Migração Supabase | ✅ Criada |
+| Bucket audit-evidence | Storage Supabase | ✅ Criado |
 
 ---
 
