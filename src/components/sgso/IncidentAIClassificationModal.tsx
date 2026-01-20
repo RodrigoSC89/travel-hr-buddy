@@ -67,7 +67,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
       console.error("Error classifying incident:", error);
       toast({
         title: "❌ Erro na classificação",
-        description: "Ocorreu um erro ao processar a classificação. Verifique sua conexão.",
+        description: "Tente novamente em alguns segundos.",
         variant: "destructive",
       });
     } finally {

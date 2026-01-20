@@ -42,7 +42,7 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
   } = useTimeTracking();
 
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(true); // PATCH v18: Sempre online - navigator.onLine não confiável no iOS PWA
 
   // Atualizar relógio
   useEffect(() => {
