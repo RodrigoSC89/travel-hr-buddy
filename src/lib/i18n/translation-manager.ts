@@ -102,7 +102,8 @@ const translations: Record<SupportedLanguage, TranslationDictionary> = {
       assignedTo: 'Responsável',
     },
     errors: {
-      networkError: 'Erro de conexão. Verifique sua internet.',
+      // PATCH v16 iOS PWA: Removido menção a internet/conexão
+      networkError: 'Erro temporário. Tente novamente.',
       serverError: 'Erro no servidor. Tente novamente.',
       notFound: 'Não encontrado.',
       unauthorized: 'Acesso não autorizado.',
