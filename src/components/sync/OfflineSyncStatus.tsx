@@ -38,35 +38,22 @@ interface OfflineSyncStatusProps {
 }
 
 export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v15 iOS PWA: SEMPRE assumir online - navigator.onLine não é confiável
+  const [isOnline] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [pendingChanges, setPendingChanges] = useState(0);
   const [syncProgress, setSyncProgress] = useState(0);
 
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      toast.success("Conexão restaurada");
-      // Auto-sync when back online
-      syncPendingChanges();
-    };
-
-    const handleOffline = () => {
-      setIsOnline(false);
-      toast.warning("Você está offline. As alterações serão sincronizadas quando a conexão for restaurada.");
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
+    // PATCH v15: Removido handlers de online/offline - causavam falsos positivos no iOS PWA
+    // O sistema agora tenta sincronizar silenciosamente e só mostra erro se realmente falhar
+    
     // Check for pending changes
     checkPendingChanges();
     const interval = setInterval(checkPendingChanges, 10000);
 
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
       clearInterval(interval);
     };
   }, []);

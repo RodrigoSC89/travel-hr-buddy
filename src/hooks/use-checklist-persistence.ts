@@ -94,9 +94,10 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
       // Fallback to local storage
       try {
         localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklist));
+        // PATCH v15 iOS PWA: Mensagem genérica sem mencionar conexão
         toast({
-          title: "⚠️ Salvo localmente",
-          description: "Sem conexão. O checklist será sincronizado quando online.",
+          title: "📝 Salvo localmente",
+          description: "O checklist será sincronizado em breve.",
           variant: "default"
         });
         return true;
