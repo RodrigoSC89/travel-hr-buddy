@@ -17,7 +17,8 @@ interface UseOfflineSyncReturn {
 }
 
 export function useOfflineSync(): UseOfflineSyncReturn {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [lastSyncStatus, setLastSyncStatus] = useState<'synced' | 'syncing' | 'error' | null>(null);
@@ -41,17 +42,10 @@ export function useOfflineSync(): UseOfflineSyncReturn {
       updatePendingCount();
     });
 
-    // Online/offline listeners
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH v19: Event listeners removidos - causam falsos positivos no iOS PWA
 
     return () => {
       unsubscribe();
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 

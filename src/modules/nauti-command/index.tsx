@@ -84,16 +84,10 @@ const NautilusCommandCenter = () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_members' }, () => loadSystemData())
       .subscribe();
 
-    // Online/offline detection
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH v19: Event listeners online/offline removidos - causam falsos positivos no iOS PWA
 
     return () => {
       supabase.removeChannel(channel);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 

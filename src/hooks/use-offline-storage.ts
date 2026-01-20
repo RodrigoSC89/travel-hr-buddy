@@ -26,7 +26,8 @@ const CACHE_STORE = "cache";
 const OFFLINE_STORE = "offline_actions";
 
 export const useOfflineStorage = (): UseOfflineStorageReturn => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [cacheSize, setCacheSize] = useState(0);
 
   // Initialize IndexedDB

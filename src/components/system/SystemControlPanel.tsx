@@ -223,25 +223,17 @@ const AccessibilityControls = () => {
 
 // PWA Controls
 const PWAControls = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [isInstalled, setIsInstalled] = useState(false);
   const [pendingSync, setPendingSync] = useState(0);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH v19: Event listeners removidos - causam falsos positivos no iOS PWA
     
     // Check if installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     setIsInstalled(isStandalone);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
   }, []);
 
   return (
