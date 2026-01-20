@@ -43,7 +43,8 @@ export function SystemHealthIndicator({
   const { score } = useWebVitals();
 
   const getOverallStatus = () => {
-    if (isOffline) return 'offline';
+    // PATCH v16 iOS PWA: NUNCA mostrar offline - causa falsos positivos
+    // if (isOffline) return 'offline';
     if (status.api === 'down' || status.database === 'down') return 'critical';
     if (status.api === 'degraded' || status.database === 'degraded') return 'warning';
     return 'healthy';
@@ -70,11 +71,12 @@ export function SystemHealthIndicator({
       bg: 'bg-red-500/10',
       label: 'Problemas detectados',
     },
+    // PATCH v16 iOS PWA: Mantido mas nunca será usado
     offline: {
-      icon: WifiOff,
-      color: 'text-gray-500',
-      bg: 'bg-gray-500/10',
-      label: 'Modo offline',
+      icon: CheckCircle2, // Mudado de WifiOff
+      color: 'text-green-500',
+      bg: 'bg-green-500/10',
+      label: 'Sistema operacional', // Removido "Modo offline"
     },
   };
 
@@ -89,7 +91,8 @@ export function SystemHealthIndicator({
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full ${config.bg}`}>
               <Icon className={`h-3.5 w-3.5 ${config.color}`} />
               <span className={`text-xs font-medium ${config.color}`}>
-                {isOffline ? 'Offline' : score > 0 ? `${score}%` : 'OK'}
+                {/* PATCH v16: Removido texto 'Offline' */}
+                {score > 0 ? `${score}%` : 'OK'}
               </span>
             </div>
           </TooltipTrigger>

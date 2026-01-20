@@ -133,7 +133,8 @@ const TRANSLATIONS: Record<string, TranslationNamespace> = {
 
   errors: {
     generic: { pt: 'Ocorreu um erro. Tente novamente.', en: 'An error occurred. Please try again.', es: 'Ocurrió un error. Inténtalo de nuevo.' },
-    network: { pt: 'Erro de conexão. Verifique sua internet.', en: 'Connection error. Check your internet.', es: 'Error de conexión. Verifica tu internet.' },
+    // PATCH v16 iOS PWA: Removido menção a internet/conexão - causa falsos positivos
+    network: { pt: 'Erro temporário. Tente novamente.', en: 'Temporary error. Please try again.', es: 'Error temporal. Inténtalo de nuevo.' },
     auth: { pt: 'Sessão expirada. Faça login novamente.', en: 'Session expired. Please login again.', es: 'Sesión expirada. Inicia sesión nuevamente.' },
     permission: { pt: 'Você não tem permissão para esta ação.', en: 'You do not have permission for this action.', es: 'No tienes permiso para esta acción.' },
     not_found: { pt: 'Recurso não encontrado.', en: 'Resource not found.', es: 'Recurso no encontrado.' },

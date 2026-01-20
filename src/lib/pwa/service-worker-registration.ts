@@ -157,14 +157,14 @@ import { useState, useEffect } from 'react';
 export function usePWA() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isInstallable, setIsInstallable] = useState(false);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  // PATCH v16 iOS PWA: SEMPRE false - navigator.onLine causa falsos positivos
+  const [isOffline] = useState(false);
   const [hasUpdate, setHasUpdate] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
     // Check if installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-      || (window.navigator as any).standalone === true;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     setIsInstalled(isStandalone);
 
     // Listen for install prompt
@@ -177,23 +177,18 @@ export function usePWA() {
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
 
     // Register service worker
-    swManager.register({
+    registerSW({
       onUpdate: () => setHasUpdate(true),
-      onOffline: () => setIsOffline(true),
-      onOnline: () => setIsOffline(false),
+      // PATCH v16: Removido handlers de online/offline - causam falsos positivos no iOS PWA
+      onOffline: () => {}, // No-op
+      onOnline: () => {}, // No-op
     });
 
-    // Network status
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH v16 iOS PWA: REMOVIDO event listeners de online/offline
+    // Estes causavam falsos positivos no iOS Safari PWA
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
