@@ -12110,6 +12110,50 @@ export type Database = {
         }
         Relationships: []
       }
+      fleet_logs: {
+        Row: {
+          created_at: string | null
+          data: Json
+          id: string
+          log_type: string
+          recorded_at: string | null
+          severity: string | null
+          source: string | null
+          user_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json
+          id?: string
+          log_type: string
+          recorded_at?: string | null
+          severity?: string | null
+          source?: string | null
+          user_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json
+          id?: string
+          log_type?: string
+          recorded_at?: string | null
+          severity?: string | null
+          source?: string | null
+          user_id?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       flight_price_history: {
         Row: {
           airline_code: string
