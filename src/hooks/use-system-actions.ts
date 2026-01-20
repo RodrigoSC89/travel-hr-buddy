@@ -70,15 +70,7 @@ export const useSystemActions = () => {
   };
 
   const handleRefreshData = async () => {
-    if (!isOnline) {
-      toast({
-        title: "Modo Offline",
-        description: "Dados salvos localmente serão sincronizados quando online",
-        variant: "destructive",
-      });
-      return;
-    }
-    
+    // PATCH v19: Removida verificação isOnline - sempre tentar atualizar
     toast({
       title: "Atualizando",
       description: "Carregando dados mais recentes",

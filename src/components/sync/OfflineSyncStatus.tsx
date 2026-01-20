@@ -103,14 +103,14 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
   };
 
   const getStatusIcon = () => {
-    if (!isOnline) return <WifiOff className="h-4 w-4" />;
+    // PATCH v19: Removida verificação !isOnline - sempre assumir online
     if (isSyncing) return <RefreshCw className="h-4 w-4 animate-spin" />;
     if (pendingChanges > 0) return <Upload className="h-4 w-4" />;
     return <Wifi className="h-4 w-4" />;
   };
 
   const getStatusColor = () => {
-    if (!isOnline) return "destructive";
+    // PATCH v19: Removida verificação !isOnline
     if (pendingChanges > 0) return "secondary";
     return "default";
   };

@@ -278,9 +278,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           <Badge variant={isListening ? "default" : "outline"}>
             {isListening ? "Listening..." : "Ready"}
           </Badge>
-          {!isOnline && (
-            <Badge variant="secondary">Offline Mode</Badge>
-          )}
+          {/* PATCH v19: Badge "Offline Mode" removido - sempre assume online */}
           {detectedIntent && (
             <Badge variant="outline">
               Intent: {detectedIntent.type} ({Math.round(detectedIntent.confidence * 100)}%)

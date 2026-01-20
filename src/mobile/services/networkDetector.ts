@@ -30,6 +30,7 @@ class NetworkDetector {
    * Get current network status
    */
   private getCurrentStatus(): NetworkStatus {
+    // PATCH v19: Sempre retornar online - navigator.onLine não é confiável no iOS PWA
     if (typeof window === "undefined" || typeof navigator === "undefined") {
       return { isOnline: true };
     }
@@ -39,7 +40,7 @@ class NetworkDetector {
                       (navigator as any).webkitConnection;
 
     return {
-      isOnline: navigator.onLine,
+      isOnline: true, // PATCH v19: Sempre online
       effectiveType: connection?.effectiveType,
       downlink: connection?.downlink,
       rtt: connection?.rtt
@@ -141,9 +142,8 @@ class NetworkDetector {
    * Check if connection is good enough for sync
    */
   public isGoodConnection(): boolean {
-    const { isOnline, effectiveType } = this.currentStatus;
-    
-    if (!isOnline) return false;
+    // PATCH v19: Sempre assumir conexão boa - navigator.onLine não é confiável
+    const { effectiveType } = this.currentStatus;
     
     // Consider 3g and better as good
     if (!effectiveType) return true; // Assume good if we can't detect
