@@ -1,10 +1,12 @@
 /**
  * Offline Sync Indicator Component
  * Shows pending offline actions and sync status
+ * 
+ * PATCH iOS PWA: NÃO usa navigator.onLine - apenas mostra operações pendentes
  */
 
 import React, { useState, useEffect } from 'react';
-import { Cloud, CloudOff, RefreshCw, Check, AlertCircle } from 'lucide-react';
+import { Cloud, RefreshCw, Check, AlertCircle } from 'lucide-react';
 import { offlineQueue } from '@/lib/performance/offline-queue';
 import { Button } from './button';
 import { cn } from '@/lib/utils';
@@ -24,17 +26,14 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
   className,
   showLabel = false
 }) => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH iOS PWA: REMOVIDO estado isOnline baseado em navigator.onLine
+  // navigator.onLine não é confiável no iOS Safari PWA
   const [pendingCount, setPendingCount] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncResult, setLastSyncResult] = useState<'success' | 'error' | null>(null);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH iOS PWA: Removidos event listeners de online/offline
 
     // Subscribe to queue changes
     const unsubscribe = offlineQueue.onQueueChange(setPendingCount);
@@ -43,14 +42,12 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
     offlineQueue.getPendingCount().then(setPendingCount);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
       unsubscribe();
     };
   }, []);
 
   const handleSync = async () => {
-    if (isSyncing || !isOnline) return;
+    if (isSyncing) return;
 
     setIsSyncing(true);
     setLastSyncResult(null);
@@ -67,8 +64,8 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
     }
   };
 
-  // Don't show if online and no pending items
-  if (isOnline && pendingCount === 0 && !lastSyncResult) {
+  // Don't show if no pending items and no recent result
+  if (pendingCount === 0 && !lastSyncResult) {
     return null;
   }
 
@@ -77,12 +74,7 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <div className={cn("flex items-center gap-2", className)}>
-            {!isOnline ? (
-              <div className="flex items-center gap-1.5 text-orange-500">
-                <CloudOff className="h-4 w-4" />
-                {showLabel && <span className="text-xs">Offline</span>}
-              </div>
-            ) : pendingCount > 0 ? (
+            {pendingCount > 0 ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -111,9 +103,7 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          {!isOnline ? (
-            <p>Você está offline. As alterações serão sincronizadas quando reconectar.</p>
-          ) : pendingCount > 0 ? (
+          {pendingCount > 0 ? (
             <p>{pendingCount} {pendingCount === 1 ? 'ação pendente' : 'ações pendentes'}. Clique para sincronizar.</p>
           ) : lastSyncResult === 'success' ? (
             <p>Todas as alterações foram sincronizadas!</p>

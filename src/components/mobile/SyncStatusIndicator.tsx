@@ -35,15 +35,8 @@ export function SyncStatusIndicator({
   } = useMobileSync({ showNotifications: false });
 
   const getStatusInfo = () => {
-    if (!isOnline) {
-      return {
-        icon: CloudOff,
-        color: 'text-yellow-500',
-        bgColor: 'bg-yellow-500/10',
-        label: 'Offline',
-        description: `${pendingCount} item(s) pendente(s)`
-      };
-    }
+    // PATCH iOS PWA: Removido check de !isOnline que mostrava "Offline"
+    // navigator.onLine não é confiável no iOS Safari PWA
     
     if (isSyncing) {
       return {

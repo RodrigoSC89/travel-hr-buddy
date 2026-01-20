@@ -138,7 +138,7 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
         >
           {getStatusIcon()}
           <Badge variant={getStatusColor() as "default" | "destructive" | "secondary"} className="h-5 px-1.5">
-            {!isOnline ? "Offline" : pendingChanges > 0 ? pendingChanges : "Online"}
+            {pendingChanges > 0 ? pendingChanges : "Sync"}
           </Badge>
         </Button>
       </PopoverTrigger>
@@ -146,18 +146,10 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="font-medium">Status de Sincronização</span>
-            <Badge variant={isOnline ? "default" : "destructive"}>
-              {isOnline ? (
-                <>
-                  <Cloud className="h-3 w-3 mr-1" />
-                  Online
-                </>
-              ) : (
-                <>
-                  <CloudOff className="h-3 w-3 mr-1" />
-                  Offline
-                </>
-              )}
+            {/* PATCH iOS PWA: Sempre mostrar Online - não usar navigator.onLine */}
+            <Badge variant="default">
+              <Cloud className="h-3 w-3 mr-1" />
+              Online
             </Badge>
           </div>
 

@@ -1,6 +1,8 @@
 /**
- * System Status Indicator - PATCH 750
+ * System Status Indicator - PATCH 750.1
  * Visual indicator of system health
+ * 
+ * PATCH iOS PWA: NÃO usa navigator.onLine para determinar ícone de conexão
  */
 
 import { memo } from 'react';
@@ -11,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Activity, Wifi, WifiOff, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Activity, Wifi, AlertTriangle, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SystemStatusIndicatorProps {
@@ -26,7 +28,8 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
   const health = useSystemHealth();
 
   const StatusIcon = health.isHealthy ? CheckCircle : AlertTriangle;
-  const ConnectionIcon = health.connection.type === 'unknown' || !navigator.onLine ? WifiOff : Wifi;
+  // PATCH iOS PWA: Sempre mostrar Wifi - não usar navigator.onLine
+  const ConnectionIcon = Wifi;
 
   return (
     <TooltipProvider delayDuration={0}>

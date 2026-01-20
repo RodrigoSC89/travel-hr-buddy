@@ -92,7 +92,8 @@ export const useAIAssistant = (type: "crew" | "general") => {
       // Check for offline mode or cache
       const { mode = "online", cacheEnabled = true } = options;
       
-      if (mode === "offline" || !navigator.onLine) {
+      // PATCH iOS PWA: Removido check de navigator.onLine - tentar sempre online primeiro
+      if (mode === "offline") {
         // Use cached responses for common queries
         const cachedResponse = await getCachedContext(`${type}-${content}`);
         
