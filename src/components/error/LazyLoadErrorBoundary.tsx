@@ -7,7 +7,7 @@
  * v2: Integrado com sw-update-manager para limpeza mais robusta
  */
 import React, { Component, ReactNode } from 'react';
-import { Loader2, RefreshCw, AlertTriangle, Wifi, WifiOff } from 'lucide-react';
+import { Loader2, RefreshCw, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Props {
@@ -19,7 +19,6 @@ interface State {
   hasError: boolean;
   isChunkError: boolean;
   retryCount: number;
-  isOnline: boolean;
 }
 
 const MAX_AUTO_RETRIES = 2;
@@ -49,7 +48,6 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
       hasError: false,
       isChunkError: false,
       retryCount,
-      isOnline: navigator.onLine,
     };
   }
 
@@ -72,28 +70,7 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
       sessionStorage.removeItem(RETRY_KEY);
       sessionStorage.removeItem(LAST_ERROR_KEY);
     }
-    
-    // Listen for online/offline events
-    window.addEventListener('online', this.handleOnline);
-    window.addEventListener('offline', this.handleOffline);
   }
-
-  componentWillUnmount() {
-    window.removeEventListener('online', this.handleOnline);
-    window.removeEventListener('offline', this.handleOffline);
-  }
-
-  handleOnline = () => {
-    this.setState({ isOnline: true });
-    // Se estava offline e voltou, tentar recarregar
-    if (this.state.hasError && this.state.isChunkError) {
-      this.handleManualRetry();
-    }
-  };
-
-  handleOffline = () => {
-    this.setState({ isOnline: false });
-  };
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('[LazyLoadErrorBoundary] Error caught:', error.message);
@@ -160,22 +137,6 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      // Se offline, mostrar mensagem específica
-      if (!this.state.isOnline) {
-        return (
-          <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-            <WifiOff className="h-12 w-12 text-amber-500 mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Sem Conexão</h2>
-            <p className="text-muted-foreground text-center mb-6 max-w-md">
-              Você está offline. Reconecte à internet para carregar a aplicação.
-            </p>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Wifi className="h-4 w-4 animate-pulse" />
-              Aguardando conexão...
-            </div>
-          </div>
-        );
-      }
       
       // If it's a chunk error and we're within auto-retry limit, show loading
       if (this.state.isChunkError && this.state.retryCount < MAX_AUTO_RETRIES) {

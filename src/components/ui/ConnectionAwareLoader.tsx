@@ -1,12 +1,12 @@
 /**
  * Connection-Aware Loader Component
- * Shows appropriate loading states based on network quality
+ * PATCH v12: Removido bloqueio de offline - sempre mostra conteúdo
  */
 
 import * as React from "react";
 import { useConnectionAware } from '@/hooks/use-connection-aware';
 import { Skeleton } from './skeleton';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
+import { Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ConnectionAwareLoaderProps {
@@ -24,19 +24,9 @@ export const ConnectionAwareLoader: React.FC<ConnectionAwareLoaderProps> = ({
   showNetworkStatus = false,
   className
 }) => {
-  const { isSlowConnection, isOffline, quality, shouldReduceData } = useConnectionAware();
+  const { isSlowConnection, quality, shouldReduceData } = useConnectionAware();
 
-  if (isOffline) {
-    return (
-      <div className={cn("flex flex-col items-center justify-center p-8 text-center", className)}>
-        <WifiOff className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-medium text-foreground mb-2">Sem Conexão</h3>
-        <p className="text-sm text-muted-foreground">
-          Verifique sua conexão com a internet e tente novamente.
-        </p>
-      </div>
-    );
-  }
+  // PATCH v12: Removido bloqueio de isOffline - nunca mostrar "Sem Conexão"
 
   if (isLoading) {
     return (
@@ -85,9 +75,8 @@ const NetworkQualityBadge: React.FC<NetworkQualityBadgeProps> = ({ quality }) =>
       case 'fair':
         return <SignalLow className="h-3 w-3" />;
       case 'poor':
-        return <Signal className="h-3 w-3" />;
       case 'offline':
-        return <WifiOff className="h-3 w-3" />;
+        return <Signal className="h-3 w-3" />;
     }
   };
 
@@ -99,9 +88,8 @@ const NetworkQualityBadge: React.FC<NetworkQualityBadgeProps> = ({ quality }) =>
       case 'fair':
         return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
       case 'poor':
-        return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
       case 'offline':
-        return 'bg-red-500/10 text-red-600 border-red-500/20';
+        return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
     }
   };
 
@@ -114,9 +102,8 @@ const NetworkQualityBadge: React.FC<NetworkQualityBadgeProps> = ({ quality }) =>
       case 'fair':
         return 'Regular';
       case 'poor':
-        return 'Lenta';
       case 'offline':
-        return 'Offline';
+        return 'Lenta';
     }
   };
 

@@ -26,23 +26,15 @@ export interface ConnectionMetrics {
 
 /**
  * Detect current connection quality
+ * PATCH v12: Sempre retorna isOnline: true - navigator.onLine não é confiável no iOS PWA
  */
 export function detectConnectionQuality(): ConnectionMetrics {
   const connection = (navigator as any).connection || 
                      (navigator as any).mozConnection || 
                      (navigator as any).webkitConnection;
   
-  const isOnline = navigator.onLine;
-  
-  if (!isOnline) {
-    return {
-      quality: "offline",
-      effectiveBandwidth: 0,
-      rtt: Infinity,
-      saveData: true,
-      isOnline: false,
-    };
-  }
+  // PATCH v12: Nunca retornar offline - navigator.onLine não é confiável
+  // Deixar a rede falhar naturalmente se realmente offline
   
   if (!connection) {
     // Fallback for browsers without Network Information API
@@ -413,13 +405,12 @@ export function estimateLoadTime(
 
 /**
  * Get user-friendly loading message based on connection
+ * PATCH v12: Removida mensagem "Sem conexão"
  */
 export function getLoadingMessage(connection?: ConnectionMetrics): string {
   const conn = connection || detectConnectionQuality();
   
   switch (conn.quality) {
-    case "offline":
-      return "Sem conexão. Usando dados em cache...";
     case "slow":
       return "Conexão lenta detectada. Carregando de forma otimizada...";
     case "moderate":

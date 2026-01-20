@@ -1,7 +1,6 @@
 /**
  * PWA Status Hook
- * Monitors PWA installation, offline status, and service worker updates
- * PATCH: Roadmap v3.2.0 - PWA & Mobile Ready
+ * PATCH v12: isOnline sempre true - navigator.onLine não é confiável no iOS
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -22,7 +21,7 @@ interface BeforeInstallPromptEvent extends Event {
 export function usePWAStatus() {
   const [status, setStatus] = useState<PWAStatus>({
     isInstalled: false,
-    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+    isOnline: true, // PATCH v12: Sempre true
     isUpdateAvailable: false,
     isStandalone: false,
     serviceWorkerStatus: 'unknown',
@@ -41,21 +40,7 @@ export function usePWAStatus() {
     setStatus(prev => ({ ...prev, isStandalone, isInstalled: isStandalone }));
   }, []);
 
-  // Listen for online/offline events
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleOnline = () => setStatus(prev => ({ ...prev, isOnline: true }));
-    const handleOffline = () => setStatus(prev => ({ ...prev, isOnline: false }));
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  // PATCH v12: Removido listeners de online/offline - não são confiáveis no iOS PWA
 
   // Listen for beforeinstallprompt
   useEffect(() => {

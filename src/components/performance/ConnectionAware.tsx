@@ -1,14 +1,14 @@
 /**
- * Connection-Aware Components - PATCH 831
- * Adaptive UI based on network conditions
+ * Connection-Aware Components - PATCH v12
+ * PATCH v12: Removido navigator.onLine - sempre assume online
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
+import { Wifi, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
 
-// Connection types
-type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+// Connection types - removido 'offline' das opções
+type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor';
 type EffectiveType = '4g' | '3g' | '2g' | 'slow-2g';
 
 interface ConnectionInfo {
@@ -30,6 +30,7 @@ interface ConnectionContextValue extends ConnectionInfo {
 const ConnectionContext = createContext<ConnectionContextValue | null>(null);
 
 // Get connection info from Network Information API
+// PATCH v12: Sempre retorna isOnline: true
 function getConnectionInfo(): ConnectionInfo {
   const nav = navigator as Navigator & {
     connection?: {
@@ -40,13 +41,9 @@ function getConnectionInfo(): ConnectionInfo {
     };
   };
 
-  const isOnline = navigator.onLine;
   const connection = nav.connection;
 
-  if (!isOnline) {
-    return { isOnline: false, quality: 'offline' };
-  }
-
+  // PATCH v12: Sempre online - nunca bloquear baseado em navigator.onLine
   if (!connection) {
     return { isOnline: true, quality: 'good' };
   }
@@ -66,7 +63,7 @@ function getConnectionInfo(): ConnectionInfo {
   }
 
   return {
-    isOnline,
+    isOnline: true, // PATCH v12: Sempre true
     quality,
     effectiveType,
     downlink,
@@ -84,11 +81,9 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
       setConnectionInfo(getConnectionInfo());
     };
 
-    // Listen for online/offline events
-    window.addEventListener('online', updateConnection);
-    window.addEventListener('offline', updateConnection);
+    // PATCH v12: Removido listeners de online/offline - não são confiáveis no iOS
 
-    // Listen for connection changes
+    // Listen for connection changes only
     const nav = navigator as Navigator & {
       connection?: {
         addEventListener: (event: string, handler: () => void) => void;
@@ -101,8 +96,6 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
     }
 
     return () => {
-      window.removeEventListener('online', updateConnection);
-      window.removeEventListener('offline', updateConnection);
       if (nav.connection) {
         nav.connection.removeEventListener('change', updateConnection);
       }
@@ -112,7 +105,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
   const value: ConnectionContextValue = {
     ...connectionInfo,
     shouldReduceData: connectionInfo.quality === 'poor' || connectionInfo.saveData || false,
-    shouldDisableAnimations: connectionInfo.quality === 'poor' || connectionInfo.quality === 'offline',
+    shouldDisableAnimations: connectionInfo.quality === 'poor',
     shouldUseLowQuality: connectionInfo.quality !== 'excellent' && connectionInfo.quality !== 'good',
     isSlowConnection: connectionInfo.quality === 'poor' || connectionInfo.quality === 'fair',
   };
@@ -130,7 +123,7 @@ export function useConnection() {
   if (!context) {
     // Return default values if not wrapped in provider
     return {
-      isOnline: navigator.onLine,
+      isOnline: true, // PATCH v12: Sempre true
       quality: 'good' as ConnectionQuality,
       shouldReduceData: false,
       shouldDisableAnimations: false,
@@ -151,7 +144,7 @@ export function ConnectionIndicator({
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
 }) {
-  const { isOnline, quality } = useConnection();
+  const { quality } = useConnection();
 
   const sizeClasses = {
     sm: 'h-4 w-4',
@@ -162,10 +155,6 @@ export function ConnectionIndicator({
   const iconClass = sizeClasses[size];
 
   const getIcon = () => {
-    if (!isOnline) {
-      return <WifiOff className={cn(iconClass, 'text-destructive')} />;
-    }
-
     switch (quality) {
       case 'excellent':
         return <SignalHigh className={cn(iconClass, 'text-green-500')} />;
@@ -181,7 +170,6 @@ export function ConnectionIndicator({
   };
 
   const getLabel = () => {
-    if (!isOnline) return 'Offline';
     switch (quality) {
       case 'excellent': return 'Excelente';
       case 'good': return 'Boa';
@@ -201,50 +189,10 @@ export function ConnectionIndicator({
   );
 }
 
-// Offline banner component
+// Offline banner component - PATCH v12: Nunca mostra "offline"
 export function OfflineBanner({ className }: { className?: string }) {
-  const { isOnline } = useConnection();
-  const [wasOffline, setWasOffline] = useState(false);
-  const [showReconnected, setShowReconnected] = useState(false);
-
-  useEffect(() => {
-    if (!isOnline) {
-      setWasOffline(true);
-    } else if (wasOffline) {
-      setShowReconnected(true);
-      const timer = setTimeout(() => {
-        setShowReconnected(false);
-        setWasOffline(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isOnline, wasOffline]);
-
-  if (isOnline && !showReconnected) return null;
-
-  return (
-    <div
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 px-4 py-2 text-center text-sm font-medium transition-all duration-300',
-        isOnline 
-          ? 'bg-green-500 text-white' 
-          : 'bg-destructive text-destructive-foreground',
-        className
-      )}
-    >
-      {isOnline ? (
-        <span className="flex items-center justify-center gap-2">
-          <Wifi className="h-4 w-4" />
-          Conexão restaurada
-        </span>
-      ) : (
-        <span className="flex items-center justify-center gap-2">
-          <WifiOff className="h-4 w-4" />
-          Você está offline. Algumas funcionalidades podem estar limitadas.
-        </span>
-      )}
-    </div>
-  );
+  // PATCH v12: Nunca mostrar banner de offline
+  return null;
 }
 
 // HOC for connection-aware components
@@ -254,11 +202,7 @@ export function withConnectionAware<P extends object>(
 ) {
   return function ConnectionAwareComponent(props: P) {
     const connection = useConnection();
-
-    if (!connection.isOnline && fallback) {
-      return <>{fallback}</>;
-    }
-
+    // PATCH v12: Removido fallback para offline
     return <Component {...props} connection={connection} />;
   };
 }
@@ -273,13 +217,13 @@ export function ConnectionConditional({
   fallback?: ReactNode;
   minQuality?: ConnectionQuality;
 }) {
-  const { quality, isOnline } = useConnection();
+  const { quality } = useConnection();
 
-  const qualityOrder: ConnectionQuality[] = ['offline', 'poor', 'fair', 'good', 'excellent'];
+  const qualityOrder: ConnectionQuality[] = ['poor', 'fair', 'good', 'excellent'];
   const currentIndex = qualityOrder.indexOf(quality);
   const minIndex = qualityOrder.indexOf(minQuality);
 
-  if (!isOnline || currentIndex < minIndex) {
+  if (currentIndex < minIndex) {
     return fallback ? <>{fallback}</> : null;
   }
 
@@ -295,18 +239,12 @@ export function useAdaptiveFetch<T>(
     onOffline?: () => T | null;
   } = {}
 ) {
-  const { isOnline, isSlowConnection } = useConnection();
+  const { isSlowConnection } = useConnection();
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetch = useCallback(async () => {
-    if (!isOnline && options.onOffline) {
-      const offlineData = options.onOffline();
-      setData(offlineData);
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
@@ -318,14 +256,14 @@ export function useAdaptiveFetch<T>(
     } finally {
       setIsLoading(false);
     }
-  }, [fetchFn, isOnline, options]);
+  }, [fetchFn]);
 
   return {
     data,
     isLoading,
     error,
     fetch,
-    isOnline,
+    isOnline: true, // PATCH v12: Sempre true
     isSlowConnection,
   };
 }
