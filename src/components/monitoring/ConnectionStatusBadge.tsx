@@ -1,12 +1,13 @@
 /**
  * ConnectionStatusBadge - Visual indicator for connection quality
+ * PATCH v12: Removed offline status - always shows connected for iOS PWA compatibility
  * Optimized for maritime environments
  */
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Wifi, WifiOff, Satellite, Signal, SignalLow, SignalMedium, SignalHigh, RefreshCw, Clock } from 'lucide-react';
+import { Wifi, Satellite, Signal, SignalLow, SignalMedium, SignalHigh, RefreshCw, Clock } from 'lucide-react';
 import { useOfflineSync } from '@/hooks/use-offline-sync';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +18,6 @@ interface ConnectionStatusBadgeProps {
 
 export function ConnectionStatusBadge({ showDetails = true, className }: ConnectionStatusBadgeProps) {
   const {
-    isOnline,
     connectionQuality,
     isMaritime,
     pendingCount,
@@ -26,8 +26,8 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
     triggerSync,
   } = useOfflineSync();
 
+  // PATCH v12: Always show connected status
   const getConnectionIcon = () => {
-    if (!isOnline) return <WifiOff className="h-4 w-4" />;
     if (isMaritime) return <Satellite className="h-4 w-4" />;
     
     const effectiveType = connectionQuality?.effectiveType;
@@ -45,7 +45,6 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
   };
 
   const getStatusColor = () => {
-    if (!isOnline) return 'bg-destructive text-destructive-foreground';
     if (isMaritime) return 'bg-amber-500 text-white';
     
     const effectiveType = connectionQuality?.effectiveType;
@@ -63,7 +62,6 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
   };
 
   const getStatusText = () => {
-    if (!isOnline) return 'Offline';
     if (isMaritime) return 'Satélite';
     
     const effectiveType = connectionQuality?.effectiveType;
@@ -104,9 +102,7 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
           </TooltipTrigger>
           <TooltipContent side="bottom" className="max-w-xs">
             <div className="space-y-2 text-sm">
-              <p className="font-medium">
-                {isOnline ? 'Conectado' : 'Sem conexão'}
-              </p>
+              <p className="font-medium">Conectado</p>
               {connectionQuality && (
                 <>
                   <p>Velocidade: {connectionQuality.downlink.toFixed(1)} Mbps</p>
@@ -128,7 +124,7 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
               <Badge 
                 variant="outline" 
                 className="flex items-center gap-1.5 cursor-pointer hover:bg-accent"
-                onClick={() => !isSyncing && isOnline && triggerSync()}
+                onClick={() => !isSyncing && triggerSync()}
               >
                 {isSyncing ? (
                   <RefreshCw className="h-3 w-3 animate-spin" />
@@ -149,9 +145,7 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
               <p>
                 {isSyncing 
                   ? 'Sincronizando...' 
-                  : isOnline 
-                    ? 'Clique para sincronizar agora'
-                    : 'Aguardando conexão para sincronizar'
+                  : 'Clique para sincronizar agora'
                 }
               </p>
             </TooltipContent>

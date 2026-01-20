@@ -1,5 +1,6 @@
 /**
  * React Hook for Mobile Offline Sync
+ * PATCH v12: Removed navigator.onLine - always assumes online
  * Provides sync status and queue management in components
  */
 
@@ -16,18 +17,20 @@ export function useMobileSync(options: UseMobileSyncOptions = {}) {
   const { showNotifications = true, autoSync = true } = options;
   const { toast } = useToast();
   
+  // PATCH v12: Always assume online - navigator.onLine is unreliable on iOS PWA
   const [status, setStatus] = useState<SyncStatus>({
     isSyncing: false,
     pendingCount: 0,
     lastSyncTime: null,
     failedCount: 0,
-    isOnline: navigator.onLine
+    isOnline: true
   });
 
   // Update status
   const refreshStatus = useCallback(async () => {
     const newStatus = await mobileSyncManager.getStatus();
-    setStatus(newStatus);
+    // Force isOnline to true for iOS PWA compatibility
+    setStatus({ ...newStatus, isOnline: true });
   }, []);
 
   useEffect(() => {
@@ -61,30 +64,12 @@ export function useMobileSync(options: UseMobileSyncOptions = {}) {
         }
       }),
       
-      mobileSyncManager.on('online', () => {
-        setStatus(prev => ({ ...prev, isOnline: true }));
-        if (showNotifications) {
-          toast({
-            title: 'Conexão restabelecida',
-            description: 'Sincronizando dados...'
-          });
-        }
-      }),
-      
-      mobileSyncManager.on('offline', () => {
-        setStatus(prev => ({ ...prev, isOnline: false }));
-        if (showNotifications) {
-          toast({
-            variant: 'destructive',
-            title: 'Sem conexão',
-            description: 'Dados serão sincronizados quando a conexão voltar'
-          });
-        }
-      })
+      // PATCH v12: Removed 'online' and 'offline' event handlers
+      // These events are unreliable on iOS PWA and cause false positives
     ];
 
     return () => {
-      unsubscribes.forEach(unsub => unsub());
+      unsubscribes.forEach(unsub => unsub?.());
     };
   }, [refreshStatus, showNotifications, toast]);
 

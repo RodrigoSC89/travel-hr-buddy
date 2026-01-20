@@ -1,12 +1,13 @@
 /**
  * Advanced Error Boundary - PATCH 832
+ * PATCH v12: Removed offline error detection - navigator.onLine is unreliable on iOS PWA
  * Error recovery, retry logic, and graceful degradation
  */
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home, Bug, WifiOff } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { logger } from '@/lib/monitoring/structured-logging';
 
 interface ErrorBoundaryProps {
@@ -117,9 +118,6 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       return fallback;
     }
 
-    // Check if offline error
-    const isOfflineError = !navigator.onLine || error?.message?.includes('network');
-
     // Compact error for component level
     if (level === 'component') {
       return (
@@ -144,18 +142,10 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       return (
         <Card className="border-destructive/50">
           <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-            {isOfflineError ? (
-              <WifiOff className="h-10 w-10 text-muted-foreground mb-4" />
-            ) : (
-              <AlertTriangle className="h-10 w-10 text-destructive mb-4" />
-            )}
-            <h3 className="font-semibold mb-2">
-              {isOfflineError ? 'Sem conexão' : 'Algo deu errado'}
-            </h3>
+            <AlertTriangle className="h-10 w-10 text-destructive mb-4" />
+            <h3 className="font-semibold mb-2">Algo deu errado</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              {isOfflineError
-                ? 'Verifique sua conexão e tente novamente.'
-                : 'Ocorreu um erro ao carregar esta seção.'}
+              Ocorreu um erro ao carregar esta seção.
             </p>
             <div className="flex gap-2">
               <Button
@@ -179,18 +169,10 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            {isOfflineError ? (
-              <WifiOff className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            ) : (
-              <Bug className="h-16 w-16 text-destructive mx-auto mb-4" />
-            )}
-            <CardTitle>
-              {isOfflineError ? 'Você está offline' : 'Oops! Algo deu errado'}
-            </CardTitle>
+            <Bug className="h-16 w-16 text-destructive mx-auto mb-4" />
+            <CardTitle>Oops! Algo deu errado</CardTitle>
             <CardDescription>
-              {isOfflineError
-                ? 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.'
-                : 'Encontramos um problema inesperado. Nossa equipe foi notificada.'}
+              Encontramos um problema inesperado. Nossa equipe foi notificada.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
