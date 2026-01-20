@@ -20,71 +20,13 @@ import {
   ArrowRight,
   CheckCircle,
   Loader2,
-  RefreshCw,
-  Wifi
+  RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
 
-// Hook para monitorar conexão - NÃO bloqueia login (navigator.onLine não é confiável no iOS PWA)
-const useNetworkStatus = () => {
-  // IMPORTANTE: Sempre assumir online por padrão
-  // navigator.onLine é notoriamente não-confiável em iOS PWA
-  const [isOnline, setIsOnline] = useState(true);
-  const [isSlowConnection, setIsSlowConnection] = useState(false);
-  const [hasVerified, setHasVerified] = useState(false);
-
-  useEffect(() => {
-    // Verificação real de conectividade via fetch (mais confiável que navigator.onLine)
-    const verifyConnection = async () => {
-      try {
-        // Usar HEAD request para verificar conectividade real
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        await fetch('https://vnbptmixvwropvanyhdb.supabase.co/rest/v1/', {
-          method: 'HEAD',
-          signal: controller.signal,
-          cache: 'no-store',
-        });
-        
-        clearTimeout(timeoutId);
-        setIsOnline(true);
-      } catch {
-        // Mesmo em caso de erro, NÃO bloquear - deixar o login tentar
-        // O erro real será mostrado se a autenticação falhar
-        setIsOnline(true);
-      }
-      setHasVerified(true);
-    };
-
-    verifyConnection();
-
-    // Detectar conexão lenta (apenas informativo, não bloqueia)
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-    if (connection) {
-      const checkSlow = () => {
-        const effectiveType = connection.effectiveType;
-        const downlink = connection.downlink;
-        setIsSlowConnection(
-          effectiveType === '2g' || 
-          effectiveType === 'slow-2g' || 
-          effectiveType === '3g' ||
-          (downlink && downlink < 2)
-        );
-      };
-      checkSlow();
-      connection.addEventListener('change', checkSlow);
-      return () => {
-        connection.removeEventListener('change', checkSlow);
-      };
-    }
-  }, []);
-
-  // SEMPRE retornar online = true para não bloquear login
-  // O sistema de retry no customFetch vai lidar com problemas reais
-  return { isOnline: true, isSlowConnection, hasVerified };
-};
+// REMOVED: useNetworkStatus hook - causes false positives on iOS PWA
+// Login always proceeds, errors handled by Supabase SDK retry logic
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -111,7 +53,6 @@ type ResetFormData = z.infer<typeof resetSchema>;
 
 const Auth: React.FC = () => {
   const { user, isLoading: authLoading } = useAuth();
-  const { isOnline, isSlowConnection } = useNetworkStatus();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -440,15 +381,7 @@ const Auth: React.FC = () => {
 
         {/* Right Side - Auth Forms */}
         <div className="w-full max-w-md mx-auto">
-          {/* Network Status Banner - Apenas informativo, não bloqueia login */}
-          {isSlowConnection && (
-            <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex items-center gap-2">
-              <Wifi className="h-5 w-5 text-yellow-600" />
-              <span className="text-sm text-yellow-700 dark:text-yellow-400 font-medium">
-                Conexão lenta detectada. O login pode demorar um pouco.
-              </span>
-            </div>
-          )}
+          {/* REMOVED: Network Status Banner - causes false positives on iOS PWA */}
           
           <Card className="shadow-xl border-border bg-card">
             <CardHeader className="space-y-1 text-center">
