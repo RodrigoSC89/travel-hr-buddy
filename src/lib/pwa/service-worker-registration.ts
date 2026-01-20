@@ -177,9 +177,9 @@ export function usePWA() {
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
 
     // Register service worker
-    registerSW({
+    swManager.register({
       onUpdate: () => setHasUpdate(true),
-      // PATCH v16: Removido handlers de online/offline - causam falsos positivos no iOS PWA
+      // PATCH v17: Removido handlers de online/offline - causam falsos positivos no iOS PWA
       onOffline: () => {}, // No-op
       onOnline: () => {}, // No-op
     });

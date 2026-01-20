@@ -113,8 +113,9 @@ export default function DPAIAnalyzer() {
       });
     } catch (err) {
       console.error("Error:", err);
-      toast.error("Erro de conexão", {
-        description: "Não foi possível conectar ao serviço de IA. Verifique sua conexão.",
+      // PATCH iOS PWA: Mensagem genérica sem mencionar conexão
+      toast.error("Erro temporário", {
+        description: "Não foi possível completar a análise. Tente novamente.",
       });
     } finally {
       setIsAnalyzing(false);

@@ -126,7 +126,7 @@
   },
   "errors": {
     "generic": "Algo salió mal",
-    "network": "Error de red. Verifique su conexión.",
+    "network": "Error temporal. Por favor, intente de nuevo.",
     "unauthorized": "No autorizado. Inicie sesión nuevamente.",
     "notFound": "Recurso no encontrado",
     "validation": "Verifique los datos ingresados",

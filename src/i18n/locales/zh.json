@@ -126,7 +126,7 @@
   },
   "errors": {
     "generic": "出了点问题",
-    "network": "网络错误。请检查您的连接。",
+    "network": "临时错误。请重试。",
     "unauthorized": "未授权。请重新登录。",
     "notFound": "资源未找到",
     "validation": "请检查您的输入",

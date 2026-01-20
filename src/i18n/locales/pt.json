@@ -126,7 +126,7 @@
   },
   "errors": {
     "generic": "Algo deu errado",
-    "network": "Erro de rede. Verifique sua conexão.",
+    "network": "Erro temporário. Por favor, tente novamente.",
     "unauthorized": "Não autorizado. Faça login novamente.",
     "notFound": "Recurso não encontrado",
     "validation": "Verifique os dados informados",

@@ -39,7 +39,7 @@ export const SystemHealthCheck: React.FC = () => {
         } catch (error) {
           return {
             status: "failing" as const,
-            message: `Erro de conexão: ${error}`,
+            message: `Erro temporário: ${error}`,
             duration: Date.now() - start
           };
         }
