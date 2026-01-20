@@ -14,7 +14,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [connectionError, setConnectionError] = useState(false);
+  // PATCH iOS PWA v16: Removido connectionError - nunca usado
+  // const [connectionError, setConnectionError] = useState(false);
   
   const { signIn } = useAuth();
 
@@ -32,7 +33,6 @@ const Login = () => {
       });
       
       setErrorMessage("");
-      setConnectionError(false);
       setPassword("");
       toast.success("Sessão limpa com sucesso!");
     } catch (error) {
@@ -47,9 +47,7 @@ const Login = () => {
     
     setLoading(true);
     setErrorMessage("");
-    // PATCH iOS PWA: Nunca setar connectionError = true
-    // navigator.onLine e erros de rede não são confiáveis no iOS Safari PWA
-    setConnectionError(false);
+    // PATCH iOS PWA v16: Sem verificação de conexão - não é confiável no iOS
 
     try {
       console.log("🔐 Tentando login...");

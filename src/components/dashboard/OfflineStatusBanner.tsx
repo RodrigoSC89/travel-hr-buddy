@@ -1,64 +1,30 @@
 /**
  * Offline Status Banner
- * PATCH 624 - Visual indicator for cached/offline data
+ * PATCH v16 iOS PWA: DESATIVADO - navigator.onLine não é confiável no iOS Safari
+ * Este componente NUNCA deve exibir UI de "Offline" pois causa falsos positivos
  */
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { WifiOff, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { memo } from "react";
 
 interface OfflineStatusBannerProps {
-  isFromCache: boolean;
-  lastSync: Date | null;
+  isFromCache?: boolean;
+  lastSync?: Date | null;
   onRetry?: () => void;
   retryCount?: number;
   maxRetries?: number;
 }
 
-export function OfflineStatusBanner({ 
-  isFromCache, 
-  lastSync, 
-  onRetry,
-  retryCount = 0,
-  maxRetries = 5
-}: OfflineStatusBannerProps) {
-  if (!isFromCache) {
-    return null;
-  }
+/**
+ * DISABLED: OfflineStatusBanner
+ * PATCH iOS PWA v16: Este componente causava falsos positivos de "Modo Offline"
+ * no iOS Safari PWA. Agora sempre retorna null.
+ */
+export const OfflineStatusBanner = memo<OfflineStatusBannerProps>(() => {
+  // PATCH iOS PWA: SEMPRE retornar null - nunca mostrar banner offline
+  // navigator.onLine e isFromCache não são confiáveis no iOS Safari PWA
+  return null;
+});
 
-  const isRetrying = retryCount > 0 && retryCount < maxRetries;
+OfflineStatusBanner.displayName = "OfflineStatusBanner";
 
-  return (
-    <Alert variant="destructive" className="mb-4">
-      <WifiOff className="h-4 w-4" />
-      <AlertTitle>Modo Offline</AlertTitle>
-      <AlertDescription className="flex items-center justify-between">
-        <div>
-          <p>Exibindo dados em cache. A conexão com o servidor está indisponível.</p>
-          {lastSync && (
-            <p className="text-xs mt-1">
-              Última sincronização: {lastSync.toLocaleString("pt-BR")}
-            </p>
-          )}
-          {isRetrying && (
-            <p className="text-xs mt-1">
-              Tentando reconectar... (tentativa {retryCount}/{maxRetries})
-            </p>
-          )}
-        </div>
-        {onRetry && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={onRetry}
-            className="ml-4"
-            disabled={isRetrying}
-          >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? "animate-spin" : ""}`} />
-            {isRetrying ? "Reconectando..." : "Tentar Agora"}
-          </Button>
-        )}
-      </AlertDescription>
-    </Alert>
-  );
-}
+export default OfflineStatusBanner;

@@ -70,9 +70,10 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
       ).matches;
 
       // Check network
+      // PATCH iOS PWA v16: NÃO usar !networkStatus.isOnline - não é confiável
+      // Apenas verificar tipo de conexão para otimizações, nunca bloquear funcionalidade
       const networkStatus = networkDetector.getStatus();
       const isSlowNetwork = 
-        !networkStatus.isOnline ||
         networkStatus.effectiveType === "slow-2g" ||
         networkStatus.effectiveType === "2g" ||
         (networkStatus.downlink && networkStatus.downlink < 1);
