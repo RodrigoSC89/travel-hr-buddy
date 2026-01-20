@@ -244,7 +244,7 @@ export default function MaritimeConnectivity() {
                       {conn.connectionType === "satellite" && "Satélite"}
                       {conn.connectionType === "4g" && "4G/LTE"}
                       {conn.connectionType === "wifi" && "Wi-Fi"}
-                      {conn.connectionType === "offline" && "Sem conexão"}
+                      {conn.connectionType === "offline" && "Reconectando..."}
                       {getSignalIcon(conn.signalStrength)}
                       {conn.signalStrength > 0 && `${conn.signalStrength}%`}
                     </CardDescription>
@@ -253,7 +253,7 @@ export default function MaritimeConnectivity() {
                 <Badge className={getStatusColor(conn.status)}>
                   {conn.status === "online" && "Online"}
                   {conn.status === "degraded" && "Degradado"}
-                  {conn.status === "offline" && "Offline"}
+                  {conn.status === "offline" && "Reconectando..."}
                 </Badge>
               </div>
             </CardHeader>

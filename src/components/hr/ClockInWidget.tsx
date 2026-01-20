@@ -50,19 +50,8 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Monitorar conexão
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  // PATCH v20: Monitoramento de conexão REMOVIDO - navigator.onLine não confiável no iOS PWA
+  // isOnline sempre true, erros de rede tratados pela camada Supabase/Fetch
 
   const nextClockType = getNextClockType();
 

@@ -33,20 +33,17 @@ export const useNetworkState = (): NetworkState => {
         isSlowConnection: isSlowConnection(),
         effectiveType: conn.effectiveType,
         downlink: conn.downlink,
-        isOnline: navigator.onLine,
+        isOnline: true, // PATCH v20: Sempre online - navigator.onLine não confiável no iOS PWA
         saveData: conn.saveData
       });
     };
 
-    window.addEventListener('online', updateState);
-    window.addEventListener('offline', updateState);
-    
+    // PATCH v20: Apenas eventos de mudança de conexão, NÃO online/offline
     const nav = navigator as Navigator & { connection?: { addEventListener: (type: string, cb: () => void) => void } };
     nav.connection?.addEventListener('change', updateState);
 
     return () => {
-      window.removeEventListener('online', updateState);
-      window.removeEventListener('offline', updateState);
+      // PATCH v20: Cleanup apenas do connection change
     };
   }, []);
 

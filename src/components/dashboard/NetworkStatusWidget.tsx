@@ -33,30 +33,26 @@ const NetworkStatusWidgetComponent: React.FC = () => {
     isOnline: navigator.onLine,
   });
 
+  // PATCH v20: Sempre assume online - navigator.onLine não confiável no iOS PWA
   const updateStats = useCallback(() => {
     const connection = (navigator as any).connection;
     setStats({
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
       effectiveType: connection?.effectiveType || '4g',
-      isOnline: navigator.onLine,
+      isOnline: true, // PATCH v20: Sempre true
     });
   }, []);
 
   useEffect(() => {
     updateStats();
     
-    // Apenas eventos, sem polling
-    window.addEventListener('online', updateStats);
-    window.addEventListener('offline', updateStats);
-    
+    // PATCH v20: Apenas eventos de mudança de conexão, NÃO online/offline
     if ('connection' in navigator) {
       (navigator as any).connection?.addEventListener('change', updateStats);
     }
 
     return () => {
-      window.removeEventListener('online', updateStats);
-      window.removeEventListener('offline', updateStats);
       if ('connection' in navigator) {
         (navigator as any).connection?.removeEventListener('change', updateStats);
       }
@@ -64,14 +60,14 @@ const NetworkStatusWidgetComponent: React.FC = () => {
   }, [updateStats]);
 
   const getSignalIcon = () => {
-    if (!stats.isOnline) return WifiOff;
+    // PATCH v20: Nunca retorna WifiOff
     if (stats.downlink < 1) return SignalLow;
     if (stats.downlink < 5) return SignalMedium;
     return SignalHigh;
   };
 
   const getSignalColor = () => {
-    if (!stats.isOnline) return "text-red-500";
+    // PATCH v20: Nunca retorna vermelho por "offline"
     if (stats.downlink < 2) return "text-amber-500";
     return "text-green-500";
   };

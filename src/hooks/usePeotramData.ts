@@ -61,12 +61,12 @@ export function usePeotramData() {
 
       if (data && data.length > 0) {
         setElements(data);
-        setIsOnline(true);
+        // PATCH v20: Não alterar isOnline baseado em dados
         return data;
       } else {
         // Fallback to local data
-        console.log('Using local PEOTRAM data');
-        setIsOnline(false);
+        console.log('Using local PEOTRAM data (no remote data)');
+        // PATCH v20: NÃO definir isOnline como false - dados locais não significam offline
         const localElements = PEOTRAM_2024_ELEMENTS.map(e => ({
           id: `local-${e.id}`,
           element_number: e.id,
@@ -84,7 +84,7 @@ export function usePeotramData() {
     } catch (err) {
       console.error('Error loading elements:', err);
       setError('Erro ao carregar elementos');
-      setIsOnline(false);
+      // PATCH v20: NÃO definir isOnline como false - erros de API não significam offline
       // Fallback to local data
       const localElements = PEOTRAM_2024_ELEMENTS.map(e => ({
         id: `local-${e.id}`,
