@@ -46,25 +46,70 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: Force SW cleanup on boot v12
+// CRITICAL: Force SW cleanup on boot v14 - iOS PWA FIX
 // Estratégia FINAL: Limpar caches e garantir SW mínimo
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v12-minimal';
+  const CURRENT_VERSION = 'v14-pwa-fix';
+  const RELOAD_KEY = 'nautilus_reload_count';
   
   try {
+    // Detectar loop de reload (> 2 reloads em 30 segundos)
+    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
+    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_time') || '0', 10);
+    const now = Date.now();
+    
+    if (now - reloadTime < 30000 && reloadCount > 2) {
+      console.log('[Boot v14] Reload loop detected! Unregistering ALL service workers...');
+      
+      // Limpar TUDO - SW causando problemas
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+      
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      
+      // Limpar tokens de auth corrompidos
+      Object.keys(localStorage)
+        .filter(k => k.includes('supabase') || k.includes('sb-'))
+        .forEach(k => localStorage.removeItem(k));
+      
+      localStorage.removeItem(RELOAD_KEY);
+      localStorage.removeItem(RELOAD_KEY + '_time');
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      
+      console.log('[Boot v14] Emergency cleanup complete');
+      return true;
+    }
+    
+    // Incrementar contador de reload
+    localStorage.setItem(RELOAD_KEY, String(reloadCount + 1));
+    localStorage.setItem(RELOAD_KEY + '_time', String(now));
+    
+    // Limpar contador após 30 segundos de estabilidade
+    setTimeout(() => {
+      localStorage.removeItem(RELOAD_KEY);
+      localStorage.removeItem(RELOAD_KEY + '_time');
+    }, 30000);
+    
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
     
     // Sempre limpar caches se versão diferente
     if (storedVersion !== CURRENT_VERSION) {
-      console.log('[Boot v12] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
+      console.log('[Boot v14] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
       
       // Limpar TODOS os caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
-        console.log('[Boot v12] Caches cleared:', keys.length);
+        console.log('[Boot v14] Caches cleared:', keys.length);
       }
       
       // Atualizar SW se existir
@@ -84,7 +129,7 @@ const forceUpdateIfNeeded = async () => {
     
     return true;
   } catch (error) {
-    console.error('[Boot v12] Error:', error);
+    console.error('[Boot v14] Error:', error);
     return true;
   }
 };
@@ -95,7 +140,7 @@ const initServiceWorker = async () => {
   
   // Em desenvolvimento, não registrar SW
   if (!import.meta.env.PROD) {
-    console.log('[Boot v12] Dev mode - skipping SW registration');
+    console.log('[Boot v14] Dev mode - skipping SW registration');
     return;
   }
 
@@ -103,9 +148,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v12] Minimal SW registered:', registration.scope);
+    console.log('[Boot v14] Minimal SW registered:', registration.scope);
   } catch (error) {
-    console.warn('[Boot v12] SW registration failed (not critical):', error);
+    console.warn('[Boot v14] SW registration failed (not critical):', error);
   }
 };
 

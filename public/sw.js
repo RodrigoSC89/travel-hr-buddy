@@ -1,9 +1,9 @@
-// Service Worker Nautilus One v12 - FINAL SOLUTION
+// Service Worker Nautilus One v14 - iOS PWA FINAL FIX
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
 
-const SW_VERSION = 'v12-minimal';
+const SW_VERSION = 'v14-pwa-fix';
 
 // Instalação instantânea - sem precache
 self.addEventListener('install', (event) => {
@@ -11,16 +11,27 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Ativação - limpar TODOS os caches antigos
+// Ativação - limpar TODOS os caches antigos IMEDIATAMENTE
 self.addEventListener('activate', (event) => {
   console.log(`[SW ${SW_VERSION}] Activating - Purging ALL caches`);
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.map((k) => {
+    (async () => {
+      // Limpar todos os caches
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => {
         console.log(`[SW ${SW_VERSION}] Deleting cache: ${k}`);
         return caches.delete(k);
-      })))
-      .then(() => self.clients.claim())
+      }));
+      
+      // Tomar controle imediato de todas as abas
+      await self.clients.claim();
+      
+      // Notificar todas as abas para reload
+      const clients = await self.clients.matchAll({ type: 'window' });
+      clients.forEach(client => {
+        client.postMessage({ type: 'SW_UPDATED', version: SW_VERSION });
+      });
+    })()
   );
 });
 
@@ -86,4 +97,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only`);
+console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only, NO fetch interception`);
