@@ -332,11 +332,11 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
   }
 
   // Handle NetworkError
+  // PATCH v15 iOS PWA: NUNCA mencionar "offline" ou "sem conexão"
+  // O iOS PWA retorna erros de rede falsos positivos
   if (error instanceof NetworkError) {
     return {
-      message: error.isOffline 
-        ? "Sem conexão com a internet. Verifique sua conexão."
-        : "Erro de conexão. Por favor, tente novamente.",
+      message: "Erro temporário. Por favor, tente novamente.",
       code: "NETWORK_ERROR",
       canRetry: true,
     };

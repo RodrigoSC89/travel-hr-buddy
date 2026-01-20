@@ -35,7 +35,8 @@ const connectionLabels = {
   '3g': 'Conexão moderada',
   '2g': 'Conexão lenta - modo economia ativo',
   'slow-2g': 'Conexão muito lenta - modo ultra economia',
-  'offline': 'Sem conexão - modo offline',
+  // PATCH v15 iOS PWA: Removido 'offline' - nunca mostrar status offline
+  // 'offline': 'Sem conexão - modo offline', // REMOVIDO
 };
 
 export const BandwidthIndicator = memo(function BandwidthIndicator({
