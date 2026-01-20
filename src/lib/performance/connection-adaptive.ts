@@ -71,9 +71,8 @@ class ConnectionAdaptiveService {
 
     let quality: ConnectionQuality = 'fast';
     
-    if (!navigator.onLine) {
-      quality = 'offline';
-    } else if (effectiveType === 'slow-2g' || effectiveType === '2g' || downlink < 0.5) {
+    // PATCH v17 iOS PWA: REMOVIDO check navigator.onLine - nunca setar 'offline'
+    if (effectiveType === 'slow-2g' || effectiveType === '2g' || downlink < 0.5) {
       quality = 'slow';
     } else if (effectiveType === '3g' || downlink < 2 || rtt > 300) {
       quality = 'moderate';
@@ -93,15 +92,7 @@ class ConnectionAdaptiveService {
       });
     }
 
-    window.addEventListener('online', () => {
-      this.currentInfo = this.detectConnection();
-      this.notifyListeners();
-    });
-
-    window.addEventListener('offline', () => {
-      this.currentInfo = { ...this.currentInfo, quality: 'offline' };
-      this.notifyListeners();
-    });
+    // PATCH v17 iOS PWA: REMOVIDO listeners online/offline - causam falsos positivos
   }
 
   private notifyListeners() {

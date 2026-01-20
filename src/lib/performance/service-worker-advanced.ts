@@ -202,8 +202,9 @@ class ServiceWorkerManager {
   }
 
   // Check if currently offline
+  // PATCH v17 iOS PWA: SEMPRE retorna false - navigator.onLine não é confiável no iOS Safari
   isOffline(): boolean {
-    return !navigator.onLine;
+    return false;
   }
 
   // Get service worker state
