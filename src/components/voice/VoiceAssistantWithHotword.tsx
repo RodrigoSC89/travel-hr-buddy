@@ -58,7 +58,8 @@ export function VoiceAssistantWithHotword({
   const [messages, setMessages] = useState<Message[]>([]);
   const [textInput, setTextInput] = useState('');
   const [audioLevel, setAudioLevel] = useState(0);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [useHDVoice, setUseHDVoice] = useState(true);
   
   const recognitionRef = useRef<any>(null);
@@ -69,19 +70,7 @@ export function VoiceAssistantWithHotword({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Monitor online status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  // PATCH v19: Event listeners removidos - causam falsos positivos no iOS PWA
 
   // Auto-scroll messages
   useEffect(() => {

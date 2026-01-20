@@ -38,7 +38,8 @@ export function EnhancedVoiceAI() {
   const [language, setLanguage] = useState<'pt-BR' | 'en-US' | 'es-ES'>('pt-BR');
   const [commands, setCommands] = useState<VoiceCommand[]>([]);
   const [noiseLevel, setNoiseLevel] = useState<NoiseLevel>({ level: 25, environment: 'quiet' });
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [offlineQueue, setOfflineQueue] = useState<VoiceCommand[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -68,21 +69,9 @@ export function EnhancedVoiceAI() {
     },
   });
 
-  // Monitor online/offline status
+  // PATCH v19: Event listeners removidos - causam falsos positivos no iOS PWA
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      processOfflineQueue();
-    };
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
+    // Processar fila offline ao montar (sempre assume online)
   }, []);
 
   // Noise level monitoring
