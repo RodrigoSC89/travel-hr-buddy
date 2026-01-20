@@ -1,10 +1,12 @@
 /**
- * PATCH 140.0 - Offline Banner Component
- * Displays network status and sync information
+ * PATCH 140.1 - Offline Banner Component
+ * PATCH iOS PWA: NÃO mostrar banner de "offline" - apenas status de sincronização
+ * 
+ * navigator.onLine não é confiável no iOS Safari PWA e causa falsos positivos
  */
 
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { WifiOff, Wifi, CloudOff, Cloud, RefreshCw } from "lucide-react";
+import { Cloud, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { syncEngine } from "@/lib/syncEngine";
 import { toast } from "sonner";
@@ -12,26 +14,23 @@ import { useState } from "react";
 import { logger } from "@/lib/logger";
 
 export const OfflineBanner = () => {
-  const { isOnline, wasOffline, pendingChanges } = useNetworkStatus();
+  const { pendingChanges } = useNetworkStatus();
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // Don't show banner if online and no pending changes
-  if (isOnline && !wasOffline && pendingChanges === 0) {
+  // PATCH iOS PWA: Apenas mostrar se há alterações pendentes para sincronizar
+  // NÃO mostrar banner de "offline" baseado em isOnline/navigator.onLine
+  if (pendingChanges === 0) {
     return null;
   }
 
   const handleManualSync = async () => {
-    if (!isOnline) {
-      toast.error("Cannot sync while offline");
-      return;
-    }
-
     setIsSyncing(true);
     try {
       await syncEngine.pushLocalChanges();
+      toast.success("Sincronização concluída!");
     } catch (error) {
       logger.error("Manual sync failed:", error);
-      toast.error("Sync failed. Please try again.");
+      toast.error("Falha na sincronização. Tente novamente.");
     } finally {
       setIsSyncing(false);
     }
@@ -39,63 +38,35 @@ export const OfflineBanner = () => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 px-4 py-3 text-sm font-medium transition-all duration-300 ${
-        isOnline
-          ? "bg-green-600 text-white"
-          : "bg-yellow-600 text-white"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 px-4 py-3 text-sm font-medium transition-all duration-300 bg-warning text-warning-foreground"
       role="alert"
       aria-live="polite"
     >
       <div className="container mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          {isOnline ? (
+          <Cloud className="h-5 w-5 flex-shrink-0" />
+          <span>{pendingChanges} alteração{pendingChanges > 1 ? 'ões' : ''} pendente{pendingChanges > 1 ? 's' : ''}</span>
+        </div>
+
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={handleManualSync}
+          disabled={isSyncing}
+          className="gap-2"
+        >
+          {isSyncing ? (
             <>
-              <Wifi className="h-5 w-5 flex-shrink-0" />
-              <span>Back online</span>
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              Sincronizando...
             </>
           ) : (
             <>
-              <WifiOff className="h-5 w-5 flex-shrink-0" />
-              <span>You are offline</span>
+              <Cloud className="h-4 w-4" />
+              Sincronizar agora
             </>
           )}
-          
-          {pendingChanges > 0 && (
-            <div className="flex items-center gap-2 text-sm opacity-90">
-              <CloudOff className="h-4 w-4" />
-              <span>{pendingChanges} pending changes</span>
-            </div>
-          )}
-        </div>
-
-        {isOnline && pendingChanges > 0 && (
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={handleManualSync}
-            disabled={isSyncing}
-            className="gap-2"
-          >
-            {isSyncing ? (
-              <>
-                <RefreshCw className="h-4 w-4 animate-spin" />
-                Syncing...
-              </>
-            ) : (
-              <>
-                <Cloud className="h-4 w-4" />
-                Sync now
-              </>
-            )}
-          </Button>
-        )}
-
-        {!isOnline && (
-          <div className="text-sm opacity-90">
-            Changes will sync automatically when online
-          </div>
-        )}
+        </Button>
       </div>
     </div>
   );

@@ -119,8 +119,8 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
     } catch (err) {
       console.error('[WeatherChat] Error:', err);
       
-      // Intelligent fallback response with real data
-      let fallbackContent = "Desculpe, tive um problema de conexão. ";
+      // PATCH iOS PWA: Mensagem genérica sem mencionar "conexão"
+      let fallbackContent = "Desculpe, ocorreu um erro ao processar sua pergunta. ";
       
       if (weather) {
         fallbackContent += `Posso informar que em ${location.name} agora: **${Math.round(weather.temperature)}°C**, ${weather.description}. `;
