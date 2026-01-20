@@ -15,6 +15,7 @@ import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
+import { ProductOnboardingTour } from "./components/onboarding/ProductOnboardingTour";
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -34,6 +35,7 @@ const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 const NOC = lazy(() => import("@/pages/NOC"));
 const NOCMonitoring = lazy(() => import("@/pages/NOCMonitoring"));
 const SOCPage = lazy(() => import("@/pages/SOCPage"));
+const HealthMonitor = lazy(() => import("@/pages/HealthMonitor"));
 
 // ============================================
 // OPERAÇÕES MARÍTIMAS
@@ -322,6 +324,9 @@ const AuthenticatedLayout = () => {
         {/* Mobile Bottom Navigation - only shows on mobile */}
         <MobileBottomNav />
         
+        {/* Onboarding Tour for new users */}
+        <ProductOnboardingTour />
+        
         {/* Toast Notifications */}
         <Toaster />
       </div>
@@ -366,6 +371,7 @@ const AppRoutes = () => (
       <Route path="/central-comando/*" element={<CentralComando />} />
       <Route path="/noc" element={<NOC />} />
       <Route path="/noc-monitoring" element={<NOCMonitoring />} />
+      <Route path="/health-monitor" element={<HealthMonitor />} />
       <Route path="/soc" element={<SOCPage />} />
       <Route path="/soc-dashboard" element={<SOCPage />} />
       
