@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
+import { useAuditEvidence } from "@/hooks/use-audit-evidence";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -32,7 +33,12 @@ import {
   Save,
   Send,
   X,
-  Plus
+  Plus,
+  Loader2,
+  File,
+  Image,
+  Music,
+  Trash2
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { nullToUndefined } from "@/lib/type-helpers";
@@ -180,6 +186,25 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
+  // Evidence management hook
+  const {
+    files: evidenceFiles,
+    isUploading,
+    isRecording,
+    openFilePicker,
+    capturePhoto,
+    toggleAudioRecording,
+    removeFile,
+    fetchEvidence
+  } = useAuditEvidence({ auditId: auditId || auditData.auditId });
+
+  // Fetch existing evidence on mount
+  useEffect(() => {
+    if (auditId) {
+      fetchEvidence();
+    }
+  }, [auditId, fetchEvidence]);
+
   const steps = [
     { id: "info", title: "Informações Gerais", icon: Info },
     { id: "audit", title: "Auditoria por Elementos", icon: FileCheck },
@@ -256,27 +281,71 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
   };
 
   const handleFileUpload = () => {
-    toast({
-      title: "📎 Upload de Arquivo",
-      description: "Selecione arquivos PDF, imagens ou documentos como evidência"
-    });
-    // TODO: Implement file upload dialog
+    openFilePicker();
   };
 
   const handleCameraCapture = () => {
-    toast({
-      title: "📷 Captura de Foto",
-      description: "Tire uma foto diretamente como evidência da auditoria"
-    });
-    // TODO: Implement camera capture functionality
+    capturePhoto();
   };
 
   const handleAudioRecording = () => {
-    toast({
-      title: "🎙️ Gravação de Áudio",
-      description: "Grave notas de voz ou observações verbais da auditoria"
-    });
-    // TODO: Implement audio recording functionality
+    toggleAudioRecording();
+  };
+
+  // Render evidence files panel
+  const renderEvidencePanel = () => {
+    if (evidenceFiles.length === 0 && !isUploading) return null;
+
+    const getFileIcon = (type: string) => {
+      switch (type) {
+        case 'photo': return <Image className="w-4 h-4" />;
+        case 'audio': return <Music className="w-4 h-4" />;
+        case 'video': return <File className="w-4 h-4" />;
+        default: return <File className="w-4 h-4" />;
+      }
+    };
+
+    return (
+      <Card className="mt-4">
+        <CardHeader className="py-3">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <FileCheck className="w-4 h-4" />
+            Evidências Anexadas ({evidenceFiles.length})
+            {isUploading && <Loader2 className="w-4 h-4 animate-spin" />}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="py-2">
+          <div className="flex flex-wrap gap-2">
+            {evidenceFiles.map(file => (
+              <div 
+                key={file.id}
+                className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded-md text-sm"
+              >
+                {getFileIcon(file.type)}
+                <span className="max-w-[150px] truncate">{file.name}</span>
+                {file.status === 'uploading' && (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                )}
+                {file.status === 'uploaded' && (
+                  <CheckCircle className="w-3 h-3 text-success" />
+                )}
+                {file.status === 'error' && (
+                  <AlertTriangle className="w-3 h-3 text-destructive" />
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-5 w-5 p-0"
+                  onClick={() => removeFile(file.id)}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
   };
 
   const renderStepIndicator = () => (
@@ -676,20 +745,49 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
 
               <div className="space-y-3">
                 <Label>Anexar Evidências</Label>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleFileUpload}>
-                    <Upload className="w-4 h-4 mr-2" />
+                <div className="flex gap-2 flex-wrap">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleFileUpload}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Upload className="w-4 h-4 mr-2" />
+                    )}
                     Upload Arquivo
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleCameraCapture}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleCameraCapture}
+                    disabled={isUploading}
+                  >
                     <Camera className="w-4 h-4 mr-2" />
                     Foto
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleAudioRecording}>
-                    <Mic className="w-4 h-4 mr-2" />
-                    Áudio
+                  <Button 
+                    variant={isRecording ? "destructive" : "outline"}
+                    size="sm" 
+                    onClick={handleAudioRecording}
+                    disabled={isUploading}
+                  >
+                    {isRecording ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Parar Gravação
+                      </>
+                    ) : (
+                      <>
+                        <Mic className="w-4 h-4 mr-2" />
+                        Áudio
+                      </>
+                    )}
                   </Button>
                 </div>
+                {renderEvidencePanel()}
               </div>
 
               {requirement.justification && (
