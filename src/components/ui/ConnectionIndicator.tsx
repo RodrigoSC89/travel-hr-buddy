@@ -1,10 +1,10 @@
 /**
- * Connection Indicator - PATCH 754
- * Shows current connection quality to user
+ * Connection Indicator - PATCH v12
+ * PATCH v12: Removido estado offline - sempre mostra conectado
  */
 
 import type { FC } from "react";
-import { WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
+import { Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
 import { useConnectionAdaptive } from "@/hooks/useConnectionAdaptive";
 import { cn } from "@/lib/utils";
 import {
@@ -37,10 +37,10 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
   showLabel = false,
   size = "md",
 }) => {
-  const { quality, isOnline, isSlow, isModerate, isFast } = useConnectionAdaptive();
+  const { isSlow, isModerate, isFast } = useConnectionAdaptive();
 
+  // PATCH v12: Removido estado offline
   const getIcon = () => {
-    if (!isOnline) return WifiOff;
     if (isSlow) return SignalLow;
     if (isModerate) return SignalMedium;
     if (isFast) return SignalHigh;
@@ -48,7 +48,6 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
   };
 
   const getColor = () => {
-    if (!isOnline) return "text-destructive";
     if (isSlow) return "text-warning";
     if (isModerate) return "text-info";
     if (isFast) return "text-success";
@@ -56,11 +55,10 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
   };
 
   const getLabel = () => {
-    if (!isOnline) return "Offline";
     if (isSlow) return "Conexão lenta";
     if (isModerate) return "Conexão moderada";
     if (isFast) return "Conexão rápida";
-    return "Verificando...";
+    return "Conectado";
   };
 
   const Icon = getIcon();
@@ -81,15 +79,11 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">
             <p className="font-medium">{getLabel()}</p>
-            {!isOnline ? (
-              <p className="text-xs text-muted-foreground">
-                Sem conexão com a internet. Alguns recursos podem não funcionar.
-              </p>
-            ) : isSlow ? (
+            {isSlow && (
               <p className="text-xs text-muted-foreground">
                 Modo economia ativado para melhor performance.
               </p>
-            ) : null}
+            )}
           </div>
         </TooltipContent>
       </Tooltip>

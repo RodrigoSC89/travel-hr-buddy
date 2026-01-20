@@ -1,10 +1,10 @@
 /**
- * Network Status Badge - PATCH 950
- * Visual indicator for network quality with detailed tooltip
+ * Network Status Badge - PATCH v12
+ * PATCH v12: Removido estado 'offline' - sempre mostra conectado
  */
 
 import React, { memo } from 'react';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh, Zap, Battery } from 'lucide-react';
+import { Wifi, Signal, SignalLow, SignalMedium, SignalHigh, Zap, Battery } from 'lucide-react';
 import { useNetworkQuality, NetworkQuality } from '@/lib/performance/network-quality-monitor';
 import { cn } from '@/lib/utils';
 import {
@@ -22,7 +22,8 @@ interface NetworkStatusBadgeProps {
   className?: string;
 }
 
-const QUALITY_CONFIG: Record<NetworkQuality['type'], {
+// PATCH v12: Removido 'offline' do mapeamento
+const QUALITY_CONFIG: Record<Exclude<NetworkQuality['type'], 'offline'>, {
   icon: typeof Wifi;
   color: string;
   label: string;
@@ -55,14 +56,8 @@ const QUALITY_CONFIG: Record<NetworkQuality['type'], {
   'unknown': {
     icon: Wifi,
     color: 'text-muted-foreground',
-    label: 'Desconhecida',
-    description: 'Qualidade da conexão não detectada',
-  },
-  'offline': {
-    icon: WifiOff,
-    color: 'text-destructive',
-    label: 'Offline',
-    description: 'Sem conexão - usando dados em cache',
+    label: 'Conectado',
+    description: 'Conexão ativa',
   },
 };
 
@@ -72,7 +67,10 @@ export const NetworkStatusBadge = memo(function NetworkStatusBadge({
   className,
 }: NetworkStatusBadgeProps) {
   const quality = useNetworkQuality();
-  const config = QUALITY_CONFIG[quality.type];
+  
+  // PATCH v12: Se tipo for 'offline', tratar como 'unknown'
+  const effectiveType = quality.type === 'offline' ? 'unknown' : quality.type;
+  const config = QUALITY_CONFIG[effectiveType];
   const Icon = config.icon;
 
   // Minimal variant - just icon

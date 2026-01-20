@@ -1,9 +1,9 @@
 /**
  * Sync Status Indicator (Compact inline version)
- * For use in header/navbar - minimal footprint
+ * PATCH v12: Removido estado offline - foca apenas em sync
  */
 
-import { Cloud, CloudOff, RefreshCw, AlertCircle, Check } from 'lucide-react';
+import { Cloud, RefreshCw, AlertCircle, Check } from 'lucide-react';
 import { useMobileSync } from '@/hooks/useMobileSync';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -19,14 +19,12 @@ interface SyncStatusBadgeProps {
 }
 
 export function SyncStatusBadge({ className }: SyncStatusBadgeProps) {
-  const { isOnline, isSyncing, pendingCount, failedCount } = useMobileSync({ 
+  const { isSyncing, pendingCount, failedCount } = useMobileSync({ 
     showNotifications: false 
   });
 
   const getStatusInfo = () => {
-    if (!isOnline) {
-      return { icon: CloudOff, color: 'text-yellow-500', bg: 'bg-yellow-500/10', label: 'Offline' };
-    }
+    // PATCH v12: Removido estado offline
     if (isSyncing) {
       return { icon: RefreshCw, color: 'text-blue-500', bg: 'bg-blue-500/10', label: 'Sincronizando' };
     }
@@ -42,8 +40,8 @@ export function SyncStatusBadge({ className }: SyncStatusBadgeProps) {
   const status = getStatusInfo();
   const Icon = status.icon;
 
-  // Don't show if online and synced
-  if (isOnline && pendingCount === 0 && failedCount === 0 && !isSyncing) {
+  // Don't show if synced with no pending items
+  if (pendingCount === 0 && failedCount === 0 && !isSyncing) {
     return null;
   }
 

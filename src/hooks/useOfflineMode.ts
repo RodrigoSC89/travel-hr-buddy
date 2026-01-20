@@ -1,3 +1,8 @@
+/**
+ * useOfflineMode Hook
+ * PATCH v12: isOnline sempre true - navigator.onLine não é confiável no iOS PWA
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { logger } from '@/lib/logger';
@@ -14,17 +19,13 @@ const DEFAULT_TTL = 30 * 60 * 1000; // 30 minutos
 
 /**
  * Hook para gerenciar modo offline com cache local
+ * PATCH v12: isOnline sempre true
  */
 export function useOfflineMode() {
-  const { isOnline } = useNetworkStatus();
   const [pendingSync, setPendingSync] = useState<string[]>([]);
 
-  // Verificar itens pendentes de sync ao reconectar
-  useEffect(() => {
-    if (isOnline && pendingSync.length > 0) {
-      logger.info('[Offline] Reconectado - itens pendentes:', { count: pendingSync.length });
-    }
-  }, [isOnline, pendingSync]);
+  // PATCH v12: Sempre online
+  const isOnline = true;
 
   /**
    * Salvar dados no cache local
@@ -108,8 +109,8 @@ export function useOfflineMode() {
   }, []);
 
   return {
-    isOnline,
-    isOffline: !isOnline,
+    isOnline: true, // PATCH v12: Sempre true
+    isOffline: false, // PATCH v12: Sempre false
     cacheData,
     getCachedData,
     clearExpiredCache,
@@ -122,13 +123,14 @@ export function useOfflineMode() {
 
 /**
  * Hook para fetch com fallback offline
+ * PATCH v12: Sempre tenta fetch primeiro, usa cache como fallback em caso de erro
  */
 export function useOfflineFetch<T>(
   key: string,
   fetchFn: () => Promise<T>,
   options?: { ttlMs?: number; enabled?: boolean }
 ) {
-  const { isOnline, cacheData, getCachedData } = useOfflineMode();
+  const { cacheData, getCachedData } = useOfflineMode();
   const [data, setData] = useState<T | null>(() => getCachedData<T>(key));
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -140,38 +142,25 @@ export function useOfflineFetch<T>(
     setIsLoading(true);
     setError(null);
 
-    // Se offline, usar cache
-    if (!isOnline) {
-      const cached = getCachedData<T>(key);
-      if (cached) {
-        setData(cached);
-        setIsFromCache(true);
-        setIsLoading(false);
-        return;
-      }
-      setError(new Error('Sem conexão e sem dados em cache'));
-      setIsLoading(false);
-      return;
-    }
-
+    // PATCH v12: Sempre tentar fetch primeiro
     try {
       const result = await fetchFn();
       setData(result);
       setIsFromCache(false);
       cacheData(key, result, options?.ttlMs);
     } catch (err) {
-      // Tentar cache em caso de erro
+      // Tentar cache em caso de erro de rede
       const cached = getCachedData<T>(key);
       if (cached) {
         setData(cached);
         setIsFromCache(true);
       } else {
-        setError(err instanceof Error ? err : new Error('Erro desconhecido'));
+        setError(err instanceof Error ? err : new Error('Erro ao carregar dados'));
       }
     } finally {
       setIsLoading(false);
     }
-  }, [key, fetchFn, isOnline, cacheData, getCachedData, options?.enabled, options?.ttlMs]);
+  }, [key, fetchFn, cacheData, getCachedData, options?.enabled, options?.ttlMs]);
 
   useEffect(() => {
     fetch();

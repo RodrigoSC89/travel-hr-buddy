@@ -48,9 +48,10 @@ export function isSlowConnection(): boolean {
 
 /**
  * Check if user is offline
+ * PATCH v12: Sempre retorna false - navigator.onLine não é confiável no iOS PWA
  */
 export function isOffline(): boolean {
-  return !navigator.onLine;
+  return false; // PATCH v12: Nunca reportar offline
 }
 
 /**

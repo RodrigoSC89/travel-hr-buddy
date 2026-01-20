@@ -1,29 +1,16 @@
 /**
  * PWA Hooks
- * PATCH 850: Hooks for PWA functionality
+ * PATCH v12: useOnlineStatus sempre retorna true - navigator.onLine não é confiável no iOS
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { offlineSyncManager } from '@/lib/pwa/offline-sync-manager';
 
 // Hook for online/offline status
+// PATCH v12: Sempre retorna true - não usar navigator.onLine
 export function useOnlineStatus() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  return isOnline;
+  // PATCH v12: Sempre online - navigator.onLine não é confiável no iOS PWA
+  return true;
 }
 
 // Hook for pending sync count
@@ -62,8 +49,8 @@ export function useOfflineMutations() {
     payload: unknown,
     priority: 'high' | 'medium' | 'low' = 'medium'
   ) => {
-    if (isOnline) {
-      // Execute immediately if online
+    // PATCH v12: Sempre tentar executar - se falhar, enfileirar
+    try {
       const method = type === 'delete' ? 'DELETE' : type === 'create' ? 'POST' : 'PUT';
       const response = await fetch(endpoint, {
         method,
@@ -71,16 +58,16 @@ export function useOfflineMutations() {
         body: JSON.stringify(payload),
       });
       return response.json();
+    } catch {
+      // Queue for later if network fails
+      return offlineSyncManager.queueMutation({
+        type,
+        endpoint,
+        payload,
+        priority,
+      });
     }
-
-    // Queue for later if offline
-    return offlineSyncManager.queueMutation({
-      type,
-      endpoint,
-      payload,
-      priority,
-    });
-  }, [isOnline]);
+  }, []);
 
   return { queueMutation, isOnline };
 }
@@ -90,7 +77,6 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const isOnline = useOnlineStatus();
 
   useEffect(() => {
     let mounted = true;
@@ -104,15 +90,19 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
           setLoading(false);
         }
 
-        // Fetch fresh data if online
-        if (isOnline) {
+        // Always try to fetch fresh data
+        try {
           const fresh = await fetcher();
           if (mounted) {
             setData(fresh);
             await offlineSyncManager.cacheData(key, fresh, ttl);
           }
-        } else if (!cached) {
-          throw new Error('No cached data available offline');
+        } catch (fetchError) {
+          // If fetch fails and no cached data, show error
+          if (!cached) {
+            throw fetchError;
+          }
+          // Otherwise silently use cache
         }
       } catch (err) {
         if (mounted) {
@@ -130,11 +120,9 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
     return () => {
       mounted = false;
     };
-  }, [key, isOnline, ttl]);
+  }, [key, ttl]);
 
   const refresh = useCallback(async () => {
-    if (!isOnline) return;
-    
     setLoading(true);
     try {
       const fresh = await fetcher();
@@ -145,9 +133,9 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
     } finally {
       setLoading(false);
     }
-  }, [key, isOnline, ttl]);
+  }, [key, ttl]);
 
-  return { data, loading, error, refresh, isOnline };
+  return { data, loading, error, refresh, isOnline: true };
 }
 
 // Hook for PWA install prompt

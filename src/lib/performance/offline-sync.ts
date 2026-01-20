@@ -1,5 +1,6 @@
 /**
- * Offline-First Sync Manager - Uses named imports
+ * Offline-First Sync Manager
+ * PATCH v12: Removido navigator.onLine - sempre assume online
  */
 
 import { useState, useEffect } from 'react';
@@ -104,23 +105,11 @@ class OfflineSyncManager {
         },
       });
 
-      // Start periodic sync when online
-      this.setupNetworkListeners();
+      // PATCH v12: Removido setupNetworkListeners - não usar navigator.onLine
+      // Sync será iniciado manualmente ou via intervalo
     } catch (error) {
       console.error('Failed to initialize offline sync DB:', error);
     }
-  }
-
-  private setupNetworkListeners() {
-    window.addEventListener('online', () => {
-      this.notifyListeners({ isOnline: true, pendingCount: 0, lastSync: null });
-      this.processPendingOperations();
-    });
-
-    window.addEventListener('offline', async () => {
-      const pendingCount = await this.getPendingCount();
-      this.notifyListeners({ isOnline: false, pendingCount, lastSync: null });
-    });
   }
 
   // Queue an operation for sync
@@ -143,17 +132,13 @@ class OfflineSyncManager {
 
     await this.db.put('pendingOperations', operation);
     
-    // Try to sync immediately if online
-    if (navigator.onLine) {
-      this.processPendingOperations();
-    }
+    // PATCH v12: Sempre tentar sync - não verificar navigator.onLine
+    this.processPendingOperations();
 
     return operation.id;
   }
 
   // Process pending operations
-  // PATCH iOS PWA: Não bloquear baseado em navigator.onLine (não é confiável no iOS)
-  // Permitir tentativa de sync - se falhar, as operações ficam pendentes
   async processPendingOperations(): Promise<void> {
     if (!this.db || this.syncInProgress) return;
 
@@ -350,9 +335,10 @@ interface SyncStatus {
 export const offlineSync = new OfflineSyncManager();
 
 // React hook for offline sync
+// PATCH v12: isOnline sempre true
 export function useOfflineSync() {
   const [status, setStatus] = useState<SyncStatus>({
-    isOnline: navigator.onLine,
+    isOnline: true, // PATCH v12: Sempre true
     pendingCount: 0,
     lastSync: null,
   });
@@ -376,5 +362,3 @@ export function useOfflineSync() {
     retryFailed: offlineSync.retryFailedOperations.bind(offlineSync),
   };
 }
-
-// useState and useEffect are imported at the top of the file
