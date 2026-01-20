@@ -176,11 +176,11 @@ export function handleApiError(error: any, context?: ErrorContext): {
   code?: string;
   status?: number;
 } {
-  // Network error
+  // Network error - PATCH iOS PWA: Mensagem genérica sem mencionar conexão
   if (!error.response) {
     logError(new Error('Network error'), context);
     return {
-      message: 'Erro de conexão. Verifique sua internet.',
+      message: 'Erro temporário. Por favor, tente novamente.',
       code: 'NETWORK_ERROR',
     };
   }

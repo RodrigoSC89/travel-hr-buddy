@@ -126,7 +126,7 @@
   },
   "errors": {
     "generic": "Something went wrong",
-    "network": "Network error. Please check your connection.",
+    "network": "Temporary error. Please try again.",
     "unauthorized": "Unauthorized. Please login again.",
     "notFound": "Resource not found",
     "validation": "Please check your input",
