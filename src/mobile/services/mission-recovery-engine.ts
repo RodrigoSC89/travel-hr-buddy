@@ -211,26 +211,12 @@ class MissionRecoveryEngine {
     });
 
     try {
-      // Check network connectivity
-      const isOnline = networkDetector.getStatus().isOnline;
+      // PATCH v21: Sempre assume online - networkDetector.getStatus().isOnline sempre retorna true
+      // Não bloquear missões baseado em status de rede não confiável
+      const isOnline = true; // networkDetector sempre retorna true agora
 
-      if (!isOnline && fallbackToLocal) {
-        // Continue in offline mode
-        state.status = "active";
-        state.error = undefined;
-        await this.persistState(missionId, state);
-        
-        structuredLogger.info("Mission recovered in offline mode", { missionId });
-        return true;
-      }
-
-      if (!isOnline && !fallbackToLocal) {
-        // Wait for connection and retry
-        if (autoRetry) {
-          setTimeout(() => this.attemptRecovery(missionId, options), retryDelay);
-        }
-        return false;
-      }
+      // Sempre tentar recuperar online primeiro
+      // Se falhar, o erro será tratado na camada de API
 
       // Online - restore from last checkpoint
       const lastCheckpoint = state.checkpoints[state.checkpoints.length - 1];

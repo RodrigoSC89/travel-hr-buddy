@@ -266,7 +266,7 @@ export const PWAStatus: React.FC = () => {
           <div className="flex gap-2">
             <Button 
               onClick={handleSync} 
-              disabled={!isOnline || pendingCount === 0}
+              disabled={pendingCount === 0}
               size="sm"
               variant="outline"
             >

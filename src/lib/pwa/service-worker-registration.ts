@@ -72,16 +72,13 @@ class ServiceWorkerManager {
       console.error('[SW] Service Worker registration failed:', error);
     }
 
-    // Network status listeners
+    // PATCH v21: Listeners de rede SIMPLIFICADOS - apenas 'online' para trigger de sync
+    // NÃO escutar 'offline' - causa falsos positivos no iOS PWA
     window.addEventListener('online', () => {
-      console.log('[SW] Back online');
+      console.log('[SW] Back online - triggering sync');
       config.onOnline?.();
     });
-
-    window.addEventListener('offline', () => {
-      console.log('[SW] Gone offline');
-      config.onOffline?.();
-    });
+    // REMOVIDO: listener 'offline' que bloqueava login no iOS
   }
 
   async unregister() {

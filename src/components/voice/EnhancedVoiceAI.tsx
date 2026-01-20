@@ -181,16 +181,8 @@ export function EnhancedVoiceAI() {
   };
 
   const handleQuickCommand = (command: string) => {
-    if (!isOnline) {
-      setOfflineQueue(prev => [...prev, {
-        id: `queue-${Date.now()}`,
-        text: command,
-        timestamp: new Date(),
-        status: 'pending',
-      }]);
-      toast.info('Comando salvo para envio quando online');
-      return;
-    }
+    // PATCH v21: Sempre processa comandos - não verificar isOnline
+    // Erros de rede serão tratados na camada de API
 
     addCommand({ text: command, status: 'processing' });
     // Simulate processing

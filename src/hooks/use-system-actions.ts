@@ -106,14 +106,9 @@ export const useSystemActions = () => {
     window.print();
   };
 
+  // PATCH v21: handleOfflineAction sempre adiciona à fila - não verificar isOnline
   const handleOfflineAction = (action: string, data: any) => {
-    if (!isOnline) {
-      addPendingChange(action, data);
-      toast({
-        title: "Ação Salva",
-        description: "Será sincronizada quando voltar online",
-      });
-    }
+    addPendingChange(action, data);
   };
 
   return {

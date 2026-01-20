@@ -62,9 +62,9 @@ class OfflineSyncManager {
       },
     });
 
-    // Setup online/offline listeners
+    // PATCH v21: Apenas 'online' para trigger de sync - NÃO escutar 'offline'
     window.addEventListener('online', () => this.onOnline());
-    window.addEventListener('offline', () => this.onOffline());
+    // REMOVIDO: listener 'offline' que bloqueava funcionalidades no iOS
 
     // Register for background sync if supported
     this.registerBackgroundSync();
