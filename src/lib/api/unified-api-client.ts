@@ -36,17 +36,17 @@ interface PendingRequest {
 class UnifiedAPIClient {
   private cache = new Map<string, { data: any; expiry: number }>();
   private pendingRequests: PendingRequest[] = [];
-  private isOnline = navigator.onLine;
+  // PATCH v17 iOS PWA: Sempre assumir online
+  private isOnline = true;
   private requestQueue: Map<string, Promise<any>> = new Map();
 
   constructor() {
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger de sync
     window.addEventListener('online', () => {
       this.isOnline = true;
       this.syncPendingRequests();
     });
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-    });
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
     this.loadPendingRequests();
   }
 

@@ -22,7 +22,8 @@ const DB_VERSION = 1;
 
 class OfflineQueueManager {
   private db: IDBPDatabase | null = null;
-  private isOnline = navigator.onLine;
+  // PATCH v17 iOS PWA: Sempre assumir online
+  private isOnline = true;
   private syncInProgress = false;
   private listeners: Array<(count: number) => void> = [];
 
@@ -43,14 +44,12 @@ class OfflineQueueManager {
   }
 
   private setupNetworkListeners() {
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger de sync
     window.addEventListener('online', () => {
       this.isOnline = true;
       this.syncQueue();
     });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-    });
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
   }
 
   /**
@@ -106,7 +105,8 @@ class OfflineQueueManager {
    * Sync all queued actions
    */
   async syncQueue(): Promise<{ success: number; failed: number }> {
-    if (this.syncInProgress || !this.isOnline) {
+    // PATCH v17 iOS PWA: Sempre tentar sync, ignorar status isOnline
+    if (this.syncInProgress) {
       return { success: 0, failed: 0 };
     }
 
@@ -216,8 +216,8 @@ export async function fetchWithOfflineSupport(
     const response = await fetch(url, options);
     return response;
   } catch (error) {
-    // If offline and method allows queuing
-    if (!navigator.onLine && options.method && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method)) {
+    // PATCH v17 iOS PWA: Sempre enfileirar se fetch falhar (não usar navigator.onLine)
+    if (options.method && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method)) {
       await offlineQueue.enqueue(
         url,
         options.method,

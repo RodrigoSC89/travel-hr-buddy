@@ -55,15 +55,14 @@ class ResourceManager {
       conn?.addEventListener('change', () => this.updateStatus());
     }
     
+    // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger
     window.addEventListener('online', () => this.updateStatus());
-    window.addEventListener('offline', () => this.updateStatus());
+    // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
   }
 
   private updateStatus(): void {
-    // Network
-    if (!navigator.onLine) {
-      this.status.network = 'offline';
-    } else if ('connection' in navigator) {
+    // PATCH v17 iOS PWA: Nunca definir network como 'offline' baseado em navigator.onLine
+    if ('connection' in navigator) {
       const conn = (navigator as any).connection;
       const effectiveType = conn?.effectiveType || '4g';
       
@@ -74,6 +73,8 @@ class ResourceManager {
       } else {
         this.status.network = 'fast';
       }
+    } else {
+      this.status.network = 'fast'; // Default para fast se não há API de conexão
     }
 
     // Battery
