@@ -46,12 +46,12 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: Force SW cleanup on boot v14 - iOS PWA FIX
-// Estratégia FINAL: Limpar caches e garantir SW mínimo
+// CRITICAL: Force SW cleanup on boot v16 - iOS PWA ULTIMATE FIX
+// Estratégia: Limpar caches e sincronizar versões
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v14-pwa-fix';
+  const CURRENT_VERSION = 'v16-ios-pwa-ultimate'; // SYNC com public/sw.js
   const RELOAD_KEY = 'nautilus_reload_count';
   
   try {
@@ -61,7 +61,7 @@ const forceUpdateIfNeeded = async () => {
     const now = Date.now();
     
     if (now - reloadTime < 30000 && reloadCount > 2) {
-      console.log('[Boot v14] Reload loop detected! Unregistering ALL service workers...');
+      console.log('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
       
       // Limpar TUDO - SW causando problemas
       if ('serviceWorker' in navigator) {
@@ -85,7 +85,7 @@ const forceUpdateIfNeeded = async () => {
       localStorage.removeItem(RELOAD_KEY + '_time');
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
       
-      console.log('[Boot v14] Emergency cleanup complete');
+      console.log('[Boot v16] Emergency cleanup complete');
       return true;
     }
     
@@ -103,13 +103,13 @@ const forceUpdateIfNeeded = async () => {
     
     // Sempre limpar caches se versão diferente
     if (storedVersion !== CURRENT_VERSION) {
-      console.log('[Boot v14] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
+      console.log('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
       
       // Limpar TODOS os caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
-        console.log('[Boot v14] Caches cleared:', keys.length);
+        console.log('[Boot v16] Caches cleared:', keys.length);
       }
       
       // Atualizar SW se existir
@@ -129,7 +129,7 @@ const forceUpdateIfNeeded = async () => {
     
     return true;
   } catch (error) {
-    console.error('[Boot v14] Error:', error);
+    console.error('[Boot v16] Error:', error);
     return true;
   }
 };
@@ -140,7 +140,7 @@ const initServiceWorker = async () => {
   
   // Em desenvolvimento, não registrar SW
   if (!import.meta.env.PROD) {
-    console.log('[Boot v14] Dev mode - skipping SW registration');
+    console.log('[Boot v16] Dev mode - skipping SW registration');
     return;
   }
 
@@ -148,9 +148,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v14] Minimal SW registered:', registration.scope);
+    console.log('[Boot v16] Minimal SW registered:', registration.scope);
   } catch (error) {
-    console.warn('[Boot v14] SW registration failed (not critical):', error);
+    console.warn('[Boot v16] SW registration failed (not critical):', error);
   }
 };
 
