@@ -1,13 +1,14 @@
-// Service Worker Nautilus One v14 - iOS PWA FINAL FIX
+// Service Worker Nautilus One v16 - iOS PWA ULTIMATE FIX
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
 
-const SW_VERSION = 'v14-pwa-fix';
+const SW_VERSION = 'v16-ios-pwa-ultimate';
 
 // Instalação instantânea - sem precache
 self.addEventListener('install', (event) => {
-  console.log(`[SW ${SW_VERSION}] Installing - No caching mode`);
+  console.log(`[SW ${SW_VERSION}] Installing - Zero cache mode`);
+  // Forçar ativação imediata
   self.skipWaiting();
 });
 
@@ -26,11 +27,17 @@ self.addEventListener('activate', (event) => {
       // Tomar controle imediato de todas as abas
       await self.clients.claim();
       
-      // Notificar todas as abas para reload
+      // Notificar todas as abas para atualizar
       const clients = await self.clients.matchAll({ type: 'window' });
       clients.forEach(client => {
-        client.postMessage({ type: 'SW_UPDATED', version: SW_VERSION });
+        client.postMessage({ 
+          type: 'SW_UPDATED', 
+          version: SW_VERSION,
+          action: 'RELOAD_RECOMMENDED'
+        });
       });
+      
+      console.log(`[SW ${SW_VERSION}] Activated - All caches cleared, clients claimed`);
     })()
   );
 });
@@ -45,14 +52,22 @@ self.addEventListener('message', (event) => {
   const { type } = event.data || {};
   
   if (type === 'SKIP_WAITING') {
+    console.log(`[SW ${SW_VERSION}] Skip waiting requested`);
     self.skipWaiting();
   }
   
-  if (type === 'CLEAR_CACHE') {
+  if (type === 'CLEAR_CACHE' || type === 'CLEAR_ALL_CACHES') {
+    console.log(`[SW ${SW_VERSION}] Clearing all caches`);
     caches.keys()
       .then(keys => Promise.all(keys.map(k => caches.delete(k))))
-      .then(() => event.ports[0]?.postMessage({ success: true }))
-      .catch(() => event.ports[0]?.postMessage({ success: false }));
+      .then(() => {
+        console.log(`[SW ${SW_VERSION}] All caches cleared`);
+        event.ports[0]?.postMessage({ success: true, version: SW_VERSION });
+      })
+      .catch((err) => {
+        console.error(`[SW ${SW_VERSION}] Cache clear failed:`, err);
+        event.ports[0]?.postMessage({ success: false, error: err.message });
+      });
   }
   
   if (type === 'GET_VERSION') {
@@ -60,7 +75,21 @@ self.addEventListener('message', (event) => {
   }
   
   if (type === 'UNREGISTER') {
+    console.log(`[SW ${SW_VERSION}] Unregister requested`);
     self.registration.unregister()
+      .then(() => {
+        console.log(`[SW ${SW_VERSION}] Unregistered successfully`);
+        event.ports[0]?.postMessage({ success: true });
+      })
+      .catch((err) => {
+        console.error(`[SW ${SW_VERSION}] Unregister failed:`, err);
+        event.ports[0]?.postMessage({ success: false, error: err.message });
+      });
+  }
+  
+  if (type === 'FORCE_UPDATE') {
+    console.log(`[SW ${SW_VERSION}] Force update requested`);
+    self.registration.update()
       .then(() => event.ports[0]?.postMessage({ success: true }))
       .catch(() => event.ports[0]?.postMessage({ success: false }));
   }
@@ -97,4 +126,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only, NO fetch interception`);
+console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only, NO fetch interception, NO caching`);

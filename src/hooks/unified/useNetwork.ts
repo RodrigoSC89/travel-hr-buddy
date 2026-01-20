@@ -229,8 +229,9 @@ export function useNetwork(): NetworkStatus & {
   return {
     ...status,
     adaptiveSettings,
-    shouldReduceData: status.quality === "slow" || status.quality === "offline" || status.saveData,
-    isSlow: status.quality === "slow" || status.quality === "offline",
+    // PATCH iOS PWA v16: Removido "offline" das condições - nunca consideramos offline
+    shouldReduceData: status.quality === "slow" || status.saveData,
+    isSlow: status.quality === "slow",
     isFast: status.quality === "fast",
   };
 }
