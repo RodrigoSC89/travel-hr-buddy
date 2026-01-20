@@ -34,23 +34,15 @@ export interface UseConnectionAwareResult {
  */
 export function useConnectionAware(): UseConnectionAwareResult {
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>(getConnectionInfo);
-  const [offline, setOffline] = useState(!navigator.onLine);
+  // PATCH v17 iOS PWA: SEMPRE false - navigator.onLine causa falsos positivos no iOS Safari PWA
+  const [offline] = useState(false);
 
   useEffect(() => {
     // Subscribe to connection changes
     const unsubscribe = onConnectionChange(setConnectionInfo);
-
-    // Subscribe to online/offline events
-    const handleOnline = () => setOffline(false);
-    const handleOffline = () => setOffline(true);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
+    // PATCH v17: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
     return () => {
       unsubscribe();
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
@@ -59,22 +51,22 @@ export function useConnectionAware(): UseConnectionAwareResult {
   }, [connectionInfo]);
 
   const slow = isSlowConnection();
-  const quality = offline ? 'offline' as const : 
-    connectionInfo.effectiveType === '4g' ? 'excellent' as const :
+  // PATCH v17: Nunca retornar 'offline' - causa bloqueio no iOS PWA
+  const quality = connectionInfo.effectiveType === '4g' ? 'excellent' as const :
     connectionInfo.effectiveType === '3g' ? 'good' as const :
     connectionInfo.effectiveType === '2g' ? 'fair' as const : 'poor' as const;
 
   return useMemo(() => ({
     connectionInfo,
     isSlowConnection: slow,
-    isOffline: offline,
+    isOffline: false, // PATCH v17: SEMPRE false
     imageQuality: getOptimalImageQuality(),
     animationLevel: getOptimalAnimationLevel(),
     getPollingInterval,
     timeout: getOptimalTimeout(),
     quality,
     shouldReduceData: slow || quality === 'fair' || quality === 'poor'
-  }), [connectionInfo, offline, getPollingInterval, slow, quality]);
+  }), [connectionInfo, getPollingInterval, slow, quality]);
 }
 
 /**

@@ -104,9 +104,8 @@ class LowBandwidthOptimizer {
       }
     }
 
-    if (!navigator.onLine) {
-      this.connectionType = 'offline';
-    }
+    // PATCH v17 iOS PWA: REMOVIDO check navigator.onLine - causa falsos positivos
+    // Nunca setar connectionType = 'offline' baseado em navigator.onLine
 
     this.config = BANDWIDTH_CONFIGS[this.connectionType] || BANDWIDTH_CONFIGS['4g'];
     this.notifyListeners();
@@ -122,16 +121,9 @@ class LowBandwidthOptimizer {
       });
     }
 
-    window.addEventListener('online', () => {
-      this.detectConnection();
-      this.applyOptimizations();
-    });
-
-    window.addEventListener('offline', () => {
-      this.connectionType = 'offline';
-      this.config = BANDWIDTH_CONFIGS['offline'];
-      this.notifyListeners();
-    });
+    // PATCH v17 iOS PWA: REMOVIDO listeners online/offline
+    // Estes causavam falsos positivos no iOS Safari PWA
+    // O app deve funcionar mesmo "offline" - Supabase SDK faz retry
   }
 
   private applyOptimizations() {

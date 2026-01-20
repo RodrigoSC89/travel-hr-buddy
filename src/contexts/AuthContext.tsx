@@ -192,9 +192,19 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       });
 
       if (error) {
-        toast.error("Erro no login", {
-          description: error.message,
-        });
+        // PATCH v17 iOS PWA: Nunca mostrar "Failed to fetch" - mensagem genérica
+        const errorMsg = error.message?.toLowerCase() || '';
+        let userMessage = "Verifique suas credenciais e tente novamente.";
+        
+        if (errorMsg.includes('invalid') || errorMsg.includes('credentials')) {
+          userMessage = "Email ou senha incorretos.";
+        } else if (errorMsg.includes('email not confirmed')) {
+          userMessage = "Confirme seu email antes de entrar.";
+        } else if (errorMsg.includes('too many requests')) {
+          userMessage = "Muitas tentativas. Aguarde um momento.";
+        }
+        
+        toast.error("Erro no login", { description: userMessage });
         setIsLoading(false);
         return { error };
       }
@@ -203,9 +213,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       return { error: null };
     } catch (err) {
       setIsLoading(false);
-      const error = err instanceof Error ? err : new Error("Erro desconhecido");
-      toast.error("Erro no login", { description: error.message });
-      return { error };
+      // PATCH v17 iOS PWA: Nunca mostrar erro técnico - mensagem genérica
+      toast.error("Erro no login", { description: "Tente novamente em alguns segundos." });
+      return { error: err instanceof Error ? err : new Error("Erro desconhecido") };
     }
   }, []);
 

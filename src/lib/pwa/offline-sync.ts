@@ -120,8 +120,9 @@ class OfflineSyncManager {
   }
 
   // Process sync queue
+  // PATCH v17 iOS PWA: REMOVIDO check navigator.onLine - sempre tentar sync
   async processQueue(): Promise<void> {
-    if (this.syncInProgress || !navigator.onLine) return;
+    if (this.syncInProgress) return;
 
     this.syncInProgress = true;
     this.notifyListeners({ type: 'syncing' });
