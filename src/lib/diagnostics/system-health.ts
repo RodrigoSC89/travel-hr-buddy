@@ -94,13 +94,13 @@ async function checkAuth(): Promise<HealthCheck> {
  * Check network connectivity
  */
 async function checkNetwork(): Promise<HealthCheck> {
-  const isOnline = navigator.onLine;
+  // PATCH iOS PWA: Sempre assumir online - navigator.onLine não é confiável
   const connection = (navigator as any).connection;
   
-  let message = isOnline ? "Online" : "Offline";
-  let status: HealthCheck["status"] = isOnline ? "healthy" : "critical";
+  let message = "Online";
+  let status: HealthCheck["status"] = "healthy";
   
-  const details: Record<string, unknown> = { online: isOnline };
+  const details: Record<string, unknown> = { online: true };
   
   if (connection) {
     details.effectiveType = connection.effectiveType;

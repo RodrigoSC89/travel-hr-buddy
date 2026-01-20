@@ -47,31 +47,9 @@ export function useDeltaSync(options: UseDeltaSyncOptions = {}) {
     };
   }, [autoSync]);
 
-  // Network status listener
-  useEffect(() => {
-    const handleOnline = () => {
-      setStats((prev) => ({ ...prev, isOnline: true }));
-      toast.success("Conexão restaurada", {
-        description: "Sincronizando dados...",
-      });
-      syncNow();
-    };
-
-    const handleOffline = () => {
-      setStats((prev) => ({ ...prev, isOnline: false }));
-      toast.warning("Sem conexão", {
-        description: "Alterações serão salvas localmente",
-      });
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
+  // PATCH iOS PWA: Removido network status listener que mostrava "Sem conexão"
+  // navigator.onLine não é confiável no iOS Safari PWA
+  // O sistema de retry no customFetch lida com erros reais de rede
 
   /**
    * Track changes for a record

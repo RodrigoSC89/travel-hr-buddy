@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
  * Display connection status and sync pending offline data to Supabase
  */
 export function SyncStatus() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH iOS PWA: Removido navigator.onLine - sempre assumir online
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
@@ -20,34 +20,11 @@ export function SyncStatus() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      toast({
-        title: "Back online",
-        description: "Connection restored. Syncing pending data...",
-      });
-      syncPendingData();
-    };
-
-    const handleOffline = () => {
-      setIsOnline(false);
-      toast({
-        title: "You're offline",
-        description: "Changes will be saved locally and synced when reconnected",
-        variant: "destructive",
-      });
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    // PATCH iOS PWA: Removidos event listeners de online/offline
+    // navigator.onLine não é confiável no iOS Safari PWA
 
     // Load pending count
     loadPendingCount();
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
   }, []);
 
   const loadPendingCount = async () => {
@@ -161,7 +138,8 @@ export function SyncStatus() {
   };
 
   const syncPendingData = async () => {
-    if (!isOnline || isSyncing) return;
+    // PATCH iOS PWA: Removido check de isOnline
+    if (isSyncing) return;
 
     setIsSyncing(true);
     let successCount = 0;
@@ -246,23 +224,14 @@ export function SyncStatus() {
       <Card className="w-64 shadow-lg">
         <CardContent className="p-4">
           <div className="space-y-3">
-            {/* Status indicator */}
+            {/* PATCH iOS PWA: Sempre mostrar Online */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {isOnline ? (
-                  <>
-                    <Wifi className="h-4 w-4 text-green-500" />
-                    <span className="text-sm font-medium">Online</span>
-                  </>
-                ) : (
-                  <>
-                    <WifiOff className="h-4 w-4 text-red-500" />
-                    <span className="text-sm font-medium">Offline</span>
-                  </>
-                )}
+                <Wifi className="h-4 w-4 text-green-500" />
+                <span className="text-sm font-medium">Online</span>
               </div>
-              <Badge variant={isOnline ? "default" : "destructive"}>
-                {isOnline ? "Connected" : "Disconnected"}
+              <Badge variant="default">
+                Connected
               </Badge>
             </div>
 
@@ -298,8 +267,8 @@ export function SyncStatus() {
               </div>
             )}
 
-            {/* Sync button */}
-            {isOnline && pendingCount > 0 && (
+            {/* Sync button - PATCH iOS PWA: Removido check de isOnline */}
+            {pendingCount > 0 && (
               <Button
                 size="sm"
                 onClick={syncPendingData}
@@ -320,15 +289,7 @@ export function SyncStatus() {
               </Button>
             )}
 
-            {/* Offline warning */}
-            {!isOnline && (
-              <div className="flex items-start gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded text-xs">
-                <AlertCircle className="h-3 w-3 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <span className="text-yellow-900 dark:text-yellow-100">
-                  Working offline. Changes will sync when connection is restored.
-                </span>
-              </div>
-            )}
+            {/* PATCH iOS PWA: Removido offline warning que usava isOnline */}
           </div>
         </CardContent>
       </Card>

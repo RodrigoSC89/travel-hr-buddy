@@ -1,10 +1,13 @@
 /**
  * Offline Status Bar Component
- * PATCH 850: Visual indicator for offline/sync status
+ * PATCH 850.1: Visual indicator for sync status
+ * 
+ * PATCH iOS PWA: NÃO usa navigator.onLine - apenas mostra operações pendentes
+ * navigator.onLine não é confiável no iOS Safari PWA e causa falsos positivos
  */
 
 import React, { useState, useEffect } from 'react';
-import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Cloud, RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { offlineSyncManager } from '@/lib/pwa/offline-sync-manager';
 import { cn } from '@/lib/utils';
 
@@ -13,18 +16,14 @@ interface OfflineStatusBarProps {
 }
 
 export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className }) => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // PATCH iOS PWA: REMOVIDO estado isOnline baseado em navigator.onLine
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // PATCH iOS PWA: Removidos event listeners de online/offline
 
     // Subscribe to sync manager updates
     const unsubscribe = offlineSyncManager.subscribe((status) => {
@@ -44,34 +43,24 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
     });
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
       unsubscribe();
     };
   }, []);
 
   const handleManualSync = async () => {
-    if (!isOnline || isSyncing) return;
+    if (isSyncing) return;
     await offlineSyncManager.syncPendingMutations();
   };
 
   const getStatusConfig = () => {
-    if (!isOnline) {
-      return {
-        icon: WifiOff,
-        text: 'Offline - Alterações serão sincronizadas',
-        bgColor: 'bg-amber-500/90',
-        textColor: 'text-white',
-        show: true,
-      };
-    }
+    // PATCH iOS PWA: Removido check de !isOnline que mostrava "Offline"
 
     if (isSyncing) {
       return {
         icon: RefreshCw,
         text: `Sincronizando ${pendingCount} alterações...`,
-        bgColor: 'bg-blue-500/90',
-        textColor: 'text-white',
+        bgColor: 'bg-primary',
+        textColor: 'text-primary-foreground',
         show: true,
         animate: true,
       };
@@ -81,8 +70,8 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
       return {
         icon: AlertTriangle,
         text: `${pendingCount} alterações pendentes`,
-        bgColor: 'bg-orange-500/90',
-        textColor: 'text-white',
+        bgColor: 'bg-warning',
+        textColor: 'text-warning-foreground',
         show: true,
       };
     }
@@ -91,7 +80,7 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
       return {
         icon: CheckCircle2,
         text: 'Tudo sincronizado',
-        bgColor: 'bg-green-500/90',
+        bgColor: 'bg-green-600',
         textColor: 'text-white',
         show: true,
       };
@@ -130,13 +119,13 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
           </div>
 
           <div className="flex items-center gap-3">
-            {lastSyncTime && isOnline && !isSyncing && (
+            {lastSyncTime && !isSyncing && (
               <span className={cn('text-xs opacity-80', config.textColor)}>
                 Última sync: {lastSyncTime.toLocaleTimeString()}
               </span>
             )}
 
-            {isOnline && pendingCount > 0 && !isSyncing && (
+            {pendingCount > 0 && !isSyncing && (
               <button
                 onClick={handleManualSync}
                 className={cn(
@@ -150,11 +139,7 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
               </button>
             )}
 
-            {isOnline ? (
-              <Cloud className={cn('h-4 w-4', config.textColor)} />
-            ) : (
-              <CloudOff className={cn('h-4 w-4', config.textColor)} />
-            )}
+            <Cloud className={cn('h-4 w-4', config.textColor)} />
           </div>
         </div>
       </div>
