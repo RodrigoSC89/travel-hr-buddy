@@ -217,29 +217,11 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, [initDB, updateCacheSize]);
 
 
-  // Listen for online/offline events
+  // PATCH v19: Event listeners online/offline removidos - causam falsos positivos no iOS PWA
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      // Auto-sync when coming online
-      setTimeout(() => {
-        syncPendingChanges();
-      }, 1000);
-    };
-    
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
     // Initial cache size calculation
     updateCacheSize();
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, [syncPendingChanges, updateCacheSize]);
+  }, [updateCacheSize]);
 
   // Listen for service worker messages
   useEffect(() => {

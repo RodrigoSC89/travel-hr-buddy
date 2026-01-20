@@ -219,7 +219,7 @@ export const MLCOfflineStatusPanel: React.FC = () => {
           variant="outline" 
           size="sm" 
           onClick={syncNow}
-          disabled={!isOnline || isSyncing || pendingSyncCount === 0}
+          disabled={isSyncing || pendingSyncCount === 0}
           className="flex-1"
         >
           <RefreshCw className={cn("h-4 w-4 mr-2", isSyncing && "animate-spin")} />
@@ -235,17 +235,7 @@ export const MLCOfflineStatusPanel: React.FC = () => {
         </Button>
       </div>
 
-      {!isOnline && (
-        <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-          <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5" />
-          <div className="text-sm">
-            <p className="font-medium text-yellow-600">Modo Offline Ativo</p>
-            <p className="text-muted-foreground">
-              Inspeções são salvas localmente e serão sincronizadas automaticamente quando a conexão for restaurada.
-            </p>
-          </div>
-        </div>
-      )}
+      {/* PATCH v19: Banner de "Modo Offline" removido - sempre assume online */}
     </div>
   );
 };

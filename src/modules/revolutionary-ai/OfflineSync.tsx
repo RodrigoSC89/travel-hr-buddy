@@ -81,10 +81,7 @@ export function OfflineSync() {
       setLocalStorageUsed(0);
     }
 
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
+    // PATCH v19: Event listeners removidos - sem cleanup necessário
   }, []);
 
   const handleSync = async () => {

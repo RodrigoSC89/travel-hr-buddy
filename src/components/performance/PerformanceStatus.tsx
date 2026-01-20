@@ -28,14 +28,13 @@ function getConnectionInfo(): PerformanceMetrics {
     downlink: connection?.downlink || 10,
     rtt: connection?.rtt || 50,
     saveData: connection?.saveData || false,
-    isOnline: navigator.onLine,
+    isOnline: true, // PATCH v19: Sempre online - navigator.onLine não confiável no iOS PWA
     effectiveType: connection?.effectiveType || "4g",
   };
 }
 
 function getStatusColor(effectiveType: string, isOnline: boolean): string {
-  if (!isOnline) return "bg-destructive text-destructive-foreground";
-  
+  // PATCH v19: Removida verificação !isOnline - sempre assumir online
   switch (effectiveType) {
     case "4g":
       return "bg-green-500/20 text-green-500 border-green-500/30";
@@ -50,8 +49,7 @@ function getStatusColor(effectiveType: string, isOnline: boolean): string {
 }
 
 function getStatusLabel(effectiveType: string, isOnline: boolean): string {
-  if (!isOnline) return "Offline";
-  
+  // PATCH v19: Removida verificação !isOnline - sempre assumir online
   switch (effectiveType) {
     case "4g":
       return "Conexão Rápida";
@@ -67,8 +65,7 @@ function getStatusLabel(effectiveType: string, isOnline: boolean): string {
 }
 
 function getStatusIcon(effectiveType: string, isOnline: boolean) {
-  if (!isOnline) return <WifiOff className="h-3 w-3" />;
-  
+  // PATCH v19: Removida verificação !isOnline - sempre assumir online
   switch (effectiveType) {
     case "4g":
       return <Zap className="h-3 w-3" />;

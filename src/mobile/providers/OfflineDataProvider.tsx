@@ -36,7 +36,8 @@ interface OfflineDataProviderProps {
 }
 
 export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
-  const [isOnline, setIsOnline] = useState(true);
+  // PATCH v19: Sempre online - navigator.onLine não é confiável no iOS PWA
+  const [isOnline] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingChanges, setPendingChanges] = useState(0);
   const [lastSync, setLastSync] = useState<Date | null>(null);
@@ -54,11 +55,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     
     init();
 
-    // Listen to network changes
-    const unsubNetwork = networkDetector.addListener((online) => {
-      setIsOnline(online);
-    });
-
+    // PATCH v19: Listener de network removido - sempre assume online
     // Listen to sync status changes
     const unsubSync = enhancedSyncEngine.addStatusListener((status) => {
       setPendingChanges(status.pendingChanges);
@@ -66,7 +63,6 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     });
 
     return () => {
-      unsubNetwork();
       unsubSync();
     };
   }, []);
@@ -186,9 +182,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
    * Force sync now
    */
   const syncNow = useCallback(async (): Promise<void> => {
-    if (!isOnline) {
-      throw new Error("Cannot sync while offline");
-    }
+    // PATCH v19: Removida verificação isOnline - sempre tentar sync
 
     setIsSyncing(true);
     try {

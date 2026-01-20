@@ -61,10 +61,11 @@ export const OfflineSyncManager: React.FC = () => {
 
   // Sincronização manual
   const performManualSync = async () => {
-    if (!isOnline || !user) {
+    // PATCH v19: Removida verificação isOnline - sempre tentar sync
+    if (!user) {
       toast({
-        title: "Sync Impossível",
-        description: "Você precisa estar online para sincronizar",
+        title: "Login Necessário",
+        description: "Faça login para sincronizar dados",
         variant: "destructive"
       });
       return;

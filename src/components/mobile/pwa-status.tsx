@@ -147,14 +147,12 @@ export const PWAStatus: React.FC = () => {
                 {isOnline ? "Online" : "Offline"}
               </Badge>
               <p className="text-sm text-muted-foreground mt-1">
-                {isOnline 
-                  ? "Conectado à internet" 
-                  : "Funcionando offline com dados em cache"
-                }
+                {/* PATCH v19: Sempre mostrar "Conectado" - removida verificação isOnline */}
+                Conectado à internet
               </p>
             </div>
-            {!isOnline && pendingCount > 0 && (
-              <Button onClick={handleSync} disabled={!isOnline} size="sm">
+            {pendingCount > 0 && (
+              <Button onClick={handleSync} size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Sincronizar ({pendingCount})
               </Button>

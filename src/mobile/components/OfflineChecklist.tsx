@@ -58,11 +58,8 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
 
       onUpdate(updatedChecklist);
 
-      if (!isOnline) {
-        toast.info("Checklist saved offline. Will sync when online.");
-      } else {
-        toast.success("Checklist updated");
-      }
+      // PATCH v19: Sempre mostrar sucesso - removida verificação isOnline
+      toast.success("Checklist updated");
     } catch (error) {
       console.error("Failed to save checklist:", error);
       toast.error("Failed to save checklist");
