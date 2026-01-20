@@ -66,14 +66,13 @@ const useSystemMetrics = () => {
     // Coletar métricas apenas uma vez no mount
     const timer = setTimeout(updateMetrics, 500);
     
-    // Atualizar apenas quando status de rede muda
+    // PATCH v21: Apenas escutar 'online' para atualização de métricas
+    // NÃO escutar 'offline' - causa falsos positivos no iOS PWA
     window.addEventListener('online', updateMetrics);
-    window.addEventListener('offline', updateMetrics);
     
     return () => {
       clearTimeout(timer);
       window.removeEventListener('online', updateMetrics);
-      window.removeEventListener('offline', updateMetrics);
     };
   }, [updateMetrics]);
 

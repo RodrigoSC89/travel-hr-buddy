@@ -85,8 +85,7 @@ export function OfflineSync() {
   }, []);
 
   const handleSync = async () => {
-    if (!isOnline) return;
-    
+    // PATCH v21: Sempre permite sync - não verificar isOnline
     setIsSyncing(true);
     setSyncProgress(0);
 
@@ -126,24 +125,17 @@ export function OfflineSync() {
 
   return (
     <div className="space-y-6">
-      {/* Status Header */}
+      {/* Status Header - PATCH v21: Sempre mostra Online */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <motion.div
-            animate={{ scale: isOnline ? [1, 1.1, 1] : 1 }}
-            transition={{ duration: 0.5, repeat: isOnline ? 0 : Infinity }}
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 0.5 }}
           >
-            {isOnline ? (
-              <div className="flex items-center gap-2 text-green-500">
-                <Wifi className="h-6 w-6" />
-                <span className="font-medium">Online</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-destructive">
-                <WifiOff className="h-6 w-6" />
-                <span className="font-medium">Offline</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2 text-green-500">
+              <Wifi className="h-6 w-6" />
+              <span className="font-medium">Conectado</span>
+            </div>
           </motion.div>
           
           <Badge variant="outline">
@@ -158,7 +150,7 @@ export function OfflineSync() {
 
         <Button 
           onClick={handleSync} 
-          disabled={!isOnline || isSyncing}
+          disabled={isSyncing}
           className="gap-2"
         >
           <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />

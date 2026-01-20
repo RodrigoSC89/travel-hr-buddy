@@ -133,9 +133,9 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     }
   }, [initDB]);
 
-  // Sync pending changes when online
+  // PATCH v21: Sync sempre permitido - não verificar isOnline
   const syncPendingChanges = useCallback(async () => {
-    if (!isOnline) return;
+    // Sempre tenta sincronizar - erros de rede tratados na camada API
     
     try {
       const pendingChanges = await getPendingChanges();

@@ -189,15 +189,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
           ))}
         </div>
 
-        {/* Offline indicator */}
-        {!isOnline && (
-          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md flex items-center gap-2">
-            <WifiOff className="h-4 w-4 text-yellow-600" />
-            <span className="text-sm text-yellow-800">
-              Working offline. Changes will sync when online.
-            </span>
-          </div>
-        )}
+        {/* PATCH v21: Offline indicator REMOVIDO - não mostrar status offline */}
       </CardContent>
     </Card>
   );

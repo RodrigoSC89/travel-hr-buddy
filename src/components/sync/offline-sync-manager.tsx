@@ -300,7 +300,7 @@ export const OfflineSyncManager: React.FC = () => {
       <div className="flex gap-2 flex-wrap">
         <Button 
           onClick={performManualSync}
-          disabled={!isOnline || isSync || syncItems.length === 0}
+          disabled={isSync || syncItems.length === 0}
           className="flex items-center gap-2"
         >
           {isSync ? (
