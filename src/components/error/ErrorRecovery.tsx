@@ -1,19 +1,23 @@
 /**
  * Error Recovery Component
  * Provides user-friendly error handling with recovery options
+ * 
+ * PATCH iOS PWA: Removido tipo 'network' para evitar mensagem "Problema de Conexão"
+ * que causa falsos positivos no iOS Safari PWA
  */
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
-  AlertTriangle, RefreshCw, Home, WifiOff, 
+  AlertTriangle, RefreshCw, Home,
   ServerOff, FileWarning, Loader2 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
-export type ErrorType = 'network' | 'server' | 'data' | 'unknown';
+// PATCH iOS PWA: Removido 'network' - causa falsos positivos
+export type ErrorType = 'server' | 'data' | 'unknown';
 
 interface ErrorRecoveryProps {
   error?: Error | null;
@@ -24,13 +28,8 @@ interface ErrorRecoveryProps {
   compact?: boolean;
 }
 
+// PATCH iOS PWA: Removido config 'network' com "Problema de Conexão"
 const errorConfig = {
-  network: {
-    icon: WifiOff,
-    title: 'Problema de Conexão',
-    description: 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.',
-    color: 'text-orange-500',
-  },
   server: {
     icon: ServerOff,
     title: 'Erro no Servidor',
@@ -56,9 +55,8 @@ function detectErrorType(error?: Error | null): ErrorType {
   
   const message = error.message.toLowerCase();
   
-  if (message.includes('network') || message.includes('fetch') || message.includes('offline')) {
-    return 'network';
-  }
+  // PATCH iOS PWA: Erros de rede agora mapeiam para 'unknown' com mensagem genérica
+  // Não mostrar "Problema de Conexão" pois navigator.onLine não é confiável no iOS PWA
   
   if (message.includes('500') || message.includes('502') || message.includes('503')) {
     return 'server';

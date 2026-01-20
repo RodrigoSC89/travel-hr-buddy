@@ -2,9 +2,8 @@
  * UNIFIED NETWORK STATUS HOOK
  * Fusão de: use-network-status.ts + useNetworkStatus.ts
  * 
- * Combina:
- * - Detecção de qualidade de conexão (use-network-status.ts)
- * - Sincronização e pending changes (useNetworkStatus.ts)
+ * PATCH iOS PWA: NÃO usa navigator.onLine - sempre assume online
+ * O sistema de retry no customFetch lida com erros reais de rede
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -18,7 +17,7 @@ import { logger } from "@/lib/logger";
 export type ConnectionQuality = "fast" | "medium" | "slow" | "offline";
 
 export interface NetworkStatus {
-  // Basic connectivity
+  // Basic connectivity - SEMPRE TRUE para iOS PWA
   online: boolean;
   isOnline: boolean; // Alias for backward compatibility
   
@@ -47,8 +46,14 @@ interface NetworkConnection {
 // HELPERS
 // ============================================
 
+/**
+ * PATCH iOS PWA: NUNCA retornar "offline" baseado em navigator.onLine
+ * navigator.onLine é notoriamente não-confiável em iOS Safari PWA
+ */
 function getConnectionQuality(connection: NetworkConnection | null): ConnectionQuality {
-  if (!navigator.onLine) return "offline";
+  // REMOVIDO: if (!navigator.onLine) return "offline";
+  // Isso causava falsos positivos no iOS PWA
+  
   if (!connection) return "medium";
   
   const { effectiveType, downlink, rtt } = connection;
@@ -89,13 +94,14 @@ function getConnection(): NetworkConnection | null {
 // ============================================
 
 export function useNetworkStatus(): NetworkStatus {
+  // PATCH iOS PWA: SEMPRE inicializar como online = true
+  // navigator.onLine não é confiável no iOS Safari PWA
   const [status, setStatus] = useState<NetworkStatus>(() => {
     const connection = getConnection();
-    const isOnline = typeof navigator !== "undefined" ? navigator.onLine : true;
     
     return {
-      online: isOnline,
-      isOnline: isOnline,
+      online: true, // SEMPRE true - não usar navigator.onLine
+      isOnline: true, // SEMPRE true - não usar navigator.onLine
       quality: getConnectionQuality(connection),
       effectiveType: connection?.effectiveType || null,
       downlink: connection?.downlink || null,
@@ -123,29 +129,27 @@ export function useNetworkStatus(): NetworkStatus {
 
     const updateStatus = async () => {
       const conn = getConnection();
-      const isOnline = navigator.onLine;
       const quality = getConnectionQuality(conn);
       
-      logger.info(`Network: ${isOnline ? 'Online' : 'Offline'} (${quality})`);
+      // PATCH iOS PWA: Apenas log informativo, NÃO setar online = false
+      logger.info(`Network quality: ${quality}`);
       
       setStatus(prev => ({
-        online: isOnline,
-        isOnline: isOnline,
+        online: true, // SEMPRE true
+        isOnline: true, // SEMPRE true
         quality,
         effectiveType: conn?.effectiveType || null,
         downlink: conn?.downlink || null,
         rtt: conn?.rtt || null,
         saveData: conn?.saveData || false,
-        wasOffline: prev.wasOffline || !isOnline,
+        wasOffline: prev.wasOffline, // Manter valor anterior
         pendingChanges: prev.pendingChanges,
       }));
       
-      if (isOnline) {
-        await updatePendingCount();
-      }
+      await updatePendingCount();
     };
 
-    // Event listeners
+    // Event listeners - apenas para atualizar qualidade, não status online
     window.addEventListener("online", updateStatus);
     window.addEventListener("offline", updateStatus);
     
@@ -216,11 +220,11 @@ export function useAdaptiveSettings(): AdaptiveSettings {
 // ============================================
 
 /**
- * Simple boolean hook for online status
+ * Simple boolean hook for online status - SEMPRE retorna true
  */
 export function useOnlineStatus(): boolean {
-  const { online } = useNetworkStatus();
-  return online;
+  // PATCH iOS PWA: Sempre retornar true
+  return true;
 }
 
 /**
