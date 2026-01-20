@@ -1,14 +1,14 @@
 /**
  * Data Loader Component
  * PATCH 834: Optimized data loading with skeleton states
+ * PATCH iOS PWA v14: Removed offline blocking - navigator.onLine unreliable
  */
 
 import React, { Suspense, ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw, WifiOff } from 'lucide-react';
-import { useBandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 import { 
   Skeleton, 
   CardSkeleton, 
@@ -40,36 +40,23 @@ interface DataLoaderProps {
   listItems?: number;
 }
 
-// Error Fallback Component
+// Error Fallback Component - PATCH iOS PWA v14: Never show "Você está offline"
 function ErrorFallback({ 
   error, 
   resetErrorBoundary,
-  isOffline 
 }: { 
   error: Error; 
   resetErrorBoundary: () => void;
-  isOffline: boolean;
 }) {
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center space-y-4">
-      <div className={cn(
-        'p-3 rounded-full',
-        isOffline ? 'bg-yellow-500/10' : 'bg-destructive/10'
-      )}>
-        {isOffline ? (
-          <WifiOff className="h-6 w-6 text-yellow-500" />
-        ) : (
-          <AlertCircle className="h-6 w-6 text-destructive" />
-        )}
+      <div className="p-3 rounded-full bg-destructive/10">
+        <AlertCircle className="h-6 w-6 text-destructive" />
       </div>
       <div>
-        <p className="font-medium">
-          {isOffline ? 'Você está offline' : 'Erro ao carregar dados'}
-        </p>
+        <p className="font-medium">Erro ao carregar dados</p>
         <p className="text-sm text-muted-foreground mt-1">
-          {isOffline 
-            ? 'Verifique sua conexão e tente novamente'
-            : error.message || 'Ocorreu um erro inesperado'}
+          {error.message || 'Ocorreu um erro inesperado'}
         </p>
       </div>
       <Button variant="outline" size="sm" onClick={resetErrorBoundary}>
@@ -141,8 +128,7 @@ export function DataLoader({
   tableColumns,
   listItems,
 }: DataLoaderProps) {
-  const { connectionType } = useBandwidthOptimizer();
-  const isOffline = connectionType === 'offline';
+  // PATCH iOS PWA v14: Never check for offline status - navigator.onLine is unreliable
 
   // Loading state
   if (isLoading) {
@@ -164,7 +150,6 @@ export function DataLoader({
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={onRetry || (() => window.location.reload())}
-          isOffline={isOffline}
         />
       </div>
     );
@@ -186,7 +171,6 @@ export function DataLoader({
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary}
-          isOffline={isOffline}
         />
       )}
       onReset={onRetry}

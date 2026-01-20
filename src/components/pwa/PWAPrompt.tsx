@@ -1,6 +1,7 @@
 /**
  * PWA Install Prompt Component
  * PATCH 833: User-friendly PWA installation prompt
+ * PATCH iOS PWA v14: OfflineIndicator disabled - navigator.onLine unreliable
  */
 
 import React, { useState, useEffect } from 'react';
@@ -159,21 +160,13 @@ export function PWAUpdatePrompt() {
   );
 }
 
+/**
+ * DISABLED: OfflineIndicator
+ * PATCH iOS PWA v14: This component previously showed "Você está offline" banner
+ * which caused false positives on iOS Safari PWA due to unreliable navigator.onLine
+ * Now always returns null
+ */
 export function OfflineIndicator() {
-  const { isOffline } = usePWA();
-
-  if (!isOffline) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="fixed top-0 left-0 right-0 bg-yellow-500 text-yellow-950 text-center py-1 text-sm font-medium z-50"
-    >
-      <div className="flex items-center justify-center gap-2">
-        <WifiOff className="h-4 w-4" />
-        <span>Você está offline. Algumas funcionalidades podem estar limitadas.</span>
-      </div>
-    </motion.div>
-  );
+  // PATCH iOS PWA: Always return null - never show offline indicator
+  return null;
 }

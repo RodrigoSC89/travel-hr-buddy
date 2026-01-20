@@ -1,6 +1,6 @@
 /**
  * PATCH 178.0 - Unified Offline Hook
- * Fusão de: use-offline-mutation.ts, use-offline-support.ts, use-offline-storage.ts
+ * PATCH iOS PWA v14: Never block based on navigator.onLine - it's unreliable
  * 
  * Provides offline-aware data fetching, mutations, and storage
  */
@@ -123,7 +123,7 @@ export const offlineQueue = new OfflineQueue();
 
 /**
  * Unified offline-aware mutation hook
- * Automatically queues mutations when offline
+ * PATCH iOS PWA v14: Always try to execute - only queue on actual network errors
  */
 export function useOfflineMutation<TData = unknown, TVariables = unknown>(
   options: OfflineMutationOptions<TData, TVariables>
@@ -136,7 +136,7 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
     showToasts = true,
     successMessage = 'Operação realizada com sucesso',
     errorMessage = 'Erro ao realizar operação',
-    offlineMessage = 'Você está offline. A operação será realizada quando reconectar.',
+    offlineMessage = 'Salvo localmente. Será sincronizado automaticamente.',
     onSuccess,
     onError,
     onOfflineQueue,
@@ -146,21 +146,33 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
 
   return useMutation({
     mutationFn: async (variables: TVariables) => {
-      // If offline, queue the action
-      if (!navigator.onLine) {
-        await offlineQueue.add(actionType, variables);
-        setIsQueued(true);
+      // PATCH iOS PWA v14: Always try to execute - never check navigator.onLine first
+      try {
+        return await mutationFn(variables);
+      } catch (error) {
+        // Check if it looks like a network error
+        const errorMessage = (error as Error)?.message?.toLowerCase() || '';
+        const isNetworkError = 
+          errorMessage.includes('network') ||
+          errorMessage.includes('fetch') ||
+          errorMessage.includes('connection') ||
+          errorMessage.includes('timeout') ||
+          errorMessage.includes('failed to fetch');
         
-        if (showToasts) {
-          toast.info(offlineMessage);
+        if (isNetworkError) {
+          await offlineQueue.add(actionType, variables);
+          setIsQueued(true);
+          
+          if (showToasts) {
+            toast.info(offlineMessage);
+          }
+          
+          onOfflineQueue?.();
+          return { queued: true } as any;
         }
         
-        onOfflineQueue?.();
-        return { queued: true } as any;
+        throw error;
       }
-      
-      // If online, execute normally
-      return mutationFn(variables);
     },
     onSuccess: (data, variables) => {
       if ((data as any)?.queued) return;
@@ -172,8 +184,14 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
       onSuccess?.(data, variables);
     },
     onError: (error, variables) => {
-      // If the error is due to network, queue the action
-      if (!navigator.onLine) {
+      // Check if it looks like a network error
+      const errorMsg = (error as Error)?.message?.toLowerCase() || '';
+      const isNetworkError = 
+        errorMsg.includes('network') ||
+        errorMsg.includes('fetch') ||
+        errorMsg.includes('connection');
+      
+      if (isNetworkError) {
         offlineQueue.add(actionType, variables);
         setIsQueued(true);
         
@@ -198,6 +216,7 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
 
 /**
  * Hook for offline-aware data fetching with caching
+ * PATCH iOS PWA v14: Never block based on navigator.onLine
  */
 export function useOfflineData<T>(options: OfflineDataOptions<T>) {
   const { key, fetchFn, staleTime = 5 * 60 * 1000, enabled = true } = options;
@@ -220,19 +239,16 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
         const { data: cachedData, timestamp } = JSON.parse(cached);
         const isExpired = Date.now() - timestamp > staleTime;
         
-        if (!isExpired || !navigator.onLine) {
-          setData(cachedData);
-          setIsStale(isExpired);
-          
-          if (!isExpired) {
-            setIsLoading(false);
-            return;
-          }
+        setData(cachedData);
+        setIsStale(isExpired);
+        
+        if (!isExpired) {
+          setIsLoading(false);
         }
       }
 
-      // Fetch fresh data if online
-      if (navigator.onLine) {
+      // PATCH iOS PWA v14: Always try to fetch
+      try {
         const freshData = await fetchFn();
         setData(freshData);
         setIsStale(false);
@@ -242,8 +258,15 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
           data: freshData,
           timestamp: Date.now()
         }));
-      } else if (!data) {
-        throw new Error('No cached data available offline');
+      } catch (fetchError) {
+        // If fetch fails and we have cached data, use it
+        if (cached) {
+          const { data: cachedData } = JSON.parse(cached);
+          setData(cachedData);
+          setIsStale(true);
+        } else if (!data) {
+          throw fetchError;
+        }
       }
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Failed to fetch');

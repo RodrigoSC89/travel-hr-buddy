@@ -1,4 +1,5 @@
 // PATCH 110.0: Offline Cache Service using IndexedDB
+// PATCH iOS PWA v14: is_offline always false - navigator.onLine unreliable
 import type { CachedRoute, CachedCrewMember, CachedVessel, PendingAction, OfflineStatus } from "@/types/offline";
 
 const DB_NAME = "maritime_offline_db";
@@ -137,7 +138,6 @@ class OfflineCacheService {
     const store = await this.getStore(STORES.PENDING_ACTIONS);
     return new Promise((resolve, reject) => {
       const index = store.index("synced");
-      // IDBKeyRange for boolean false - IndexedDB stores booleans as 0/1
       const request = index.getAll(IDBKeyRange.only(0));
       request.onsuccess = () => resolve(request.result as PendingAction[]);
       request.onerror = () => reject(request.error);
@@ -172,7 +172,7 @@ class OfflineCacheService {
     });
   }
 
-  // Status
+  // Status - PATCH iOS PWA v14: is_offline always false
   async getOfflineStatus(): Promise<OfflineStatus> {
     const store = await this.getStore(STORES.CONFIG);
     const pendingActions = await this.getPendingActions();
@@ -182,10 +182,11 @@ class OfflineCacheService {
       request.onsuccess = () => {
         const lastSync = request.result?.value || null;
         resolve({
-          is_offline: !navigator.onLine,
+          // PATCH iOS PWA v14: Always report online - navigator.onLine is unreliable
+          is_offline: false,
           last_sync: lastSync,
           pending_actions: pendingActions.length,
-          cached_data_size: 0, // TODO: Implement actual cache size calculation using navigator.storage.estimate()
+          cached_data_size: 0,
         });
       };
       request.onerror = () => reject(request.error);

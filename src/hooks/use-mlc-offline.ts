@@ -2,13 +2,13 @@
  * MLC Offline Hook
  * React hook for offline MLC inspection management
  * PATCH 860: PWA Offline Mode for MLC Module
+ * PATCH iOS PWA v14: isOnline always true - navigator.onLine unreliable
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { mlcOfflineStorage, type MLCInspection, type PendingSync } from '@/lib/mlc/offline-storage';
-import { useNetworkStatus } from '@/hooks/use-network-status';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
@@ -35,7 +35,8 @@ interface UseMLCOfflineReturn {
 
 export function useMLCOffline(): UseMLCOfflineReturn {
   const queryClient = useQueryClient();
-  const { isOnline } = useNetworkStatus();
+  // PATCH iOS PWA v14: Always report online - navigator.onLine is unreliable on iOS Safari PWA
+  const isOnline = true;
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
 
@@ -60,8 +61,8 @@ export function useMLCOffline(): UseMLCOfflineReturn {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['mlc-offline-inspections'] });
       refetchSyncCount();
-      toast.success('Inspeção salva localmente', {
-        description: isOnline ? 'Sincronizando...' : 'Será sincronizada quando online',
+      toast.success('Inspeção salva', {
+        description: 'Sincronizando...',
       });
     },
     onError: (error) => {
@@ -81,7 +82,7 @@ export function useMLCOffline(): UseMLCOfflineReturn {
 
   // Sync to Supabase
   const syncToSupabase = useCallback(async () => {
-    if (isSyncing || !isOnline) return;
+    if (isSyncing) return;
     
     setIsSyncing(true);
     
@@ -119,13 +120,12 @@ export function useMLCOffline(): UseMLCOfflineReturn {
                   nonCompliantItems: Object.values(inspection.answers).filter(a => a.status === 'non-compliant').length,
                   naItems: Object.values(inspection.answers).filter(a => a.status === 'na').length,
                   nonConformities: [],
-                  shipownerEmail: 'sync@nauti-one.app', // Placeholder for sync
+                  shipownerEmail: 'sync@nauti-one.app',
                 },
               });
               
               if (error) throw error;
             } catch {
-              // If edge function fails, just mark as synced locally
               logger.warn('[MLC Offline] Edge function not available, keeping local');
             }
 
@@ -163,15 +163,15 @@ export function useMLCOffline(): UseMLCOfflineReturn {
     } finally {
       setIsSyncing(false);
     }
-  }, [isSyncing, isOnline, refetchSyncCount, refetchInspections]);
+  }, [isSyncing, refetchSyncCount, refetchInspections]);
 
-  // Auto-sync when coming online
+  // Auto-sync when there are pending items
   useEffect(() => {
-    if (isOnline && pendingSyncCount > 0) {
+    if (pendingSyncCount > 0) {
       const timeout = setTimeout(syncToSupabase, 2000);
       return () => clearTimeout(timeout);
     }
-  }, [isOnline, pendingSyncCount, syncToSupabase]);
+  }, [pendingSyncCount, syncToSupabase]);
 
   // Listen for online event
   useEffect(() => {
@@ -190,13 +190,11 @@ export function useMLCOffline(): UseMLCOfflineReturn {
   const saveInspection = useCallback(async (inspection: Omit<MLCInspection, 'createdAt' | 'updatedAt'>) => {
     const id = await saveInspectionMutation.mutateAsync(inspection);
     
-    // If online, trigger immediate sync
-    if (isOnline) {
-      setTimeout(syncToSupabase, 500);
-    }
+    // Trigger sync
+    setTimeout(syncToSupabase, 500);
     
     return id;
-  }, [saveInspectionMutation, isOnline, syncToSupabase]);
+  }, [saveInspectionMutation, syncToSupabase]);
 
   const getInspection = useCallback(async (id: string) => {
     return mlcOfflineStorage.getInspection(id);
@@ -207,14 +205,8 @@ export function useMLCOffline(): UseMLCOfflineReturn {
   }, [deleteInspectionMutation]);
 
   const syncNow = useCallback(async () => {
-    if (!isOnline) {
-      toast.warning('Sem conexão', {
-        description: 'Aguarde a conexão para sincronizar',
-      });
-      return;
-    }
     await syncToSupabase();
-  }, [isOnline, syncToSupabase]);
+  }, [syncToSupabase]);
 
   const clearOfflineData = useCallback(async () => {
     await mlcOfflineStorage.clearAll();

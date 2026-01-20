@@ -1,5 +1,6 @@
 /**
  * Health Check-In Offline Component - PATCH 1000
+ * PATCH iOS PWA v14: Removed offline notice - navigator.onLine unreliable
  * Example of offline-first form that works without connectivity
  */
 
@@ -18,17 +19,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useOfflineMutation } from '@/hooks/unified/useOffline';
-import { useNetwork } from '@/hooks/unified/useNetwork';
 import { indexedDBSync } from '@/lib/offline/indexeddb-sync';
 import { toast } from 'sonner';
-import { Heart, Moon, Brain, Cloud, CloudOff, Send, Check } from 'lucide-react';
+import { Heart, Moon, Brain, Cloud, Send, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface HealthCheckInData {
   mood: 'excellent' | 'good' | 'neutral' | 'poor' | 'bad';
-  stress_level: number; // 1-5
-  sleep_quality: number; // 1-5
-  energy_level: number; // 1-5
+  stress_level: number;
+  sleep_quality: number;
+  energy_level: number;
   notes?: string;
 }
 
@@ -41,7 +41,6 @@ const MOOD_OPTIONS = [
 ];
 
 export function HealthCheckInOffline() {
-  const { online, quality } = useNetwork();
   const [submitted, setSubmitted] = useState(false);
   
   const [formData, setFormData] = useState<HealthCheckInData>({
@@ -54,15 +53,12 @@ export function HealthCheckInOffline() {
 
   const mutation = useOfflineMutation<any, HealthCheckInData>({
     mutationFn: async (data) => {
-      // Queue to IndexedDB for offline-first approach
-      // This would sync to backend when online
       const checkInData = {
         ...data,
         id: `checkin-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
         created_at: new Date().toISOString(),
       };
       
-      // Store in IndexedDB
       await indexedDBSync.queueOperation(
         'insert',
         'crew_health_checkins',
@@ -74,10 +70,9 @@ export function HealthCheckInOffline() {
     },
     actionType: 'health_checkin',
     successMessage: 'Check-in salvo com sucesso!',
-    offlineMessage: 'Check-in salvo offline. Será sincronizado quando você reconectar.',
+    offlineMessage: 'Check-in salvo. Será sincronizado automaticamente.',
     onSuccess: () => {
       setSubmitted(true);
-      // Reset after 3 seconds
       setTimeout(() => {
         setSubmitted(false);
         setFormData({
@@ -107,7 +102,7 @@ export function HealthCheckInOffline() {
           </div>
           <h3 className="text-lg font-semibold mb-2">Check-in Registrado!</h3>
           <p className="text-muted-foreground text-sm">
-            {online ? 'Sincronizado com o servidor.' : 'Será sincronizado quando você reconectar.'}
+            Seus dados foram salvos com sucesso.
           </p>
         </CardContent>
       </Card>
@@ -124,13 +119,10 @@ export function HealthCheckInOffline() {
           </CardTitle>
           <Badge 
             variant="outline" 
-            className={cn(
-              "flex items-center gap-1",
-              online ? "text-emerald-600 border-emerald-300" : "text-amber-600 border-amber-300"
-            )}
+            className="flex items-center gap-1 text-emerald-600 border-emerald-300"
           >
-            {online ? <Cloud className="h-3 w-3" /> : <CloudOff className="h-3 w-3" />}
-            {online ? 'Online' : 'Offline'}
+            <Cloud className="h-3 w-3" />
+            Pronto
           </Badge>
         </div>
         <CardDescription>
@@ -260,13 +252,6 @@ export function HealthCheckInOffline() {
               </>
             )}
           </Button>
-
-          {/* Offline notice */}
-          {!online && (
-            <p className="text-xs text-center text-amber-600 dark:text-amber-400">
-              💡 Você está offline. O check-in será salvo localmente e sincronizado quando você reconectar.
-            </p>
-          )}
         </form>
       </CardContent>
     </Card>
