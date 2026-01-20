@@ -194,13 +194,24 @@ export const storeIncidentAnalysis = async (
   analysis: IncidentAnalysis
 ): Promise<boolean> => {
   try {
-    // TODO: Add ai_analysis and risk_level columns to dp_incidents table
-    // For now, we just return true without persisting
-    logger.info("Incident analysis generated (not persisted - columns missing)", {
-      incidentId,
-      analysis
+    // Store analysis in ai_memory table for retrieval
+    const { error } = await supabase.from('ai_memory').insert({
+      memory_type: 'incident_analysis',
+      content: {
+        incidentId,
+        riskLevel: analysis.riskLevel,
+        analysis: analysis,
+        storedAt: new Date().toISOString()
+      },
+      importance: 7
     });
-    
+
+    if (error) {
+      logger.warn("Failed to store incident analysis", { error, incidentId });
+      return false;
+    }
+
+    logger.info("Incident analysis stored successfully", { incidentId });
     return true;
   } catch (error) {
     logger.error("Error storing incident analysis", error);
