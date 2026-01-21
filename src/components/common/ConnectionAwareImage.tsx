@@ -46,20 +46,8 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
     return () => clearTimeout(timer);
   }, [priority, quality]);
 
-  // Don't load images when offline (unless cached)
-  if (!online && !loaded) {
-    return (
-      <div 
-        className={cn(
-          "bg-muted flex items-center justify-center text-muted-foreground text-sm",
-          className
-        )}
-        style={{ width, height }}
-      >
-        📷 Offline
-      </div>
-    );
-  }
+  // PATCH v23: Removido check !online - sempre tenta carregar imagem
+  // O navegador vai lidar com erros de rede nativamente
 
   // Skip non-critical images on very slow connections
   if (quality === 'slow' && !priority && !loaded) {

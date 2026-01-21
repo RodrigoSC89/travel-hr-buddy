@@ -66,11 +66,12 @@ export function OfflineIndicator() {
     };
   }, []);
 
-  // Show indicator when offline or has pending changes
+  // PATCH v23: SEMPRE mostrar apenas se há pendências - NUNCA baseado em !online
+  // online sempre true no iOS PWA
   useEffect(() => {
-    const shouldShow = !online || syncStats.pending > 0 || syncStats.failed > 0;
+    const shouldShow = syncStats.pending > 0 || syncStats.failed > 0;
     setIsVisible(shouldShow);
-  }, [online, syncStats.pending, syncStats.failed]);
+  }, [syncStats.pending, syncStats.failed]);
 
   // Don't render if everything is synced and online
   if (!isVisible) {
@@ -78,9 +79,7 @@ export function OfflineIndicator() {
   }
 
   const getStatusIcon = () => {
-    if (!online) {
-      return <WifiOff className="h-4 w-4 text-amber-500" />;
-    }
+    // PATCH v23: Removido check !online - sempre assume online
     if (syncStats.failed > 0) {
       return <AlertTriangle className="h-4 w-4 text-destructive" />;
     }
@@ -94,9 +93,7 @@ export function OfflineIndicator() {
   };
 
   const getStatusText = () => {
-    if (!online) {
-      return 'Modo Offline';
-    }
+    // PATCH v23: Removido check !online
     if (syncStats.syncing > 0) {
       return `Sincronizando ${syncStats.syncing} item(s)...`;
     }
@@ -110,7 +107,7 @@ export function OfflineIndicator() {
   };
 
   const getStatusClass = () => {
-    if (!online) return 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400';
+    // PATCH v23: Removido check !online
     if (syncStats.failed > 0) return 'bg-destructive/10 border-destructive/30 text-destructive';
     if (syncStats.syncing > 0) return 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-400';
     if (syncStats.pending > 0) return 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400';

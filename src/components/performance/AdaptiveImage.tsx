@@ -159,12 +159,7 @@ export const AdaptiveImage = memo(function AdaptiveImage({
         </div>
       )}
 
-      {/* Offline indicator */}
-      {!online && !priority && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/80 text-muted-foreground">
-          <span className="text-xs">Offline</span>
-        </div>
-      )}
+      {/* PATCH v23: Removido offline indicator - online sempre true */}
     </div>
   );
 });

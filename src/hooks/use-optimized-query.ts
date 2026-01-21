@@ -72,12 +72,8 @@ export function useOptimizedQuery<T>({
   const fetchData = useCallback(async (): Promise<T[]> => {
     const cacheKey = queryKey.join(':');
     
-    // Try offline cache first if offline
-    if (!online && offlineCache) {
-      const cached = await getCachedData<T[]>(cacheKey);
-      if (cached) return cached;
-      throw new Error('Offline - no cached data available');
-    }
+    // PATCH v23: Removido check !online - sempre tenta buscar primeiro
+    // Se falhar, tenta cache como fallback
     
     // Deduplicated request
     return deduplicatedRequest(cacheKey, async () => {
@@ -140,16 +136,8 @@ export function useOptimizedMutation<T extends Record<string, unknown>, V = T>({
   const queryClient = useQueryClient();
 
   const mutationFn = useCallback(async (variables: V): Promise<T | null> => {
-    // If offline and offline support enabled, queue the action
-    if (!online && offlineSupport) {
-      await queueAction(
-        `supabase:${operation}`,
-        { table: tableName, data: variables },
-        3
-      );
-      // Return optimistic data
-      return variables as unknown as T;
-    }
+    // PATCH v23: Sempre tentar mutação primeiro, enfileirar apenas se falhar com erro de rede
+    // Removido check !online que causava falsos positivos no iOS PWA
 
     // Online mutation
     const table = supabase.from(tableName as any);
