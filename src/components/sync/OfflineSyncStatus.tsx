@@ -169,21 +169,16 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
             </div>
           )}
 
+          {/* PATCH v24: Removido !isOnline - sempre permite sincronizar */}
           <Button
             className="w-full"
             size="sm"
             onClick={syncPendingChanges}
-            disabled={!isOnline || isSyncing || pendingChanges === 0}
+            disabled={isSyncing || pendingChanges === 0}
           >
             <RefreshCw className={cn("h-4 w-4 mr-2", isSyncing && "animate-spin")} />
             {isSyncing ? "Sincronizando..." : "Sincronizar Agora"}
           </Button>
-
-          {!isOnline && (
-            <p className="text-xs text-muted-foreground text-center">
-              As alterações serão sincronizadas automaticamente quando a conexão for restaurada.
-            </p>
-          )}
         </div>
       </PopoverContent>
     </Popover>

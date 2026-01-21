@@ -56,7 +56,7 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
         location: checklist.location,
         weather: checklist.weather,
         ai_analysis: checklist.aiAnalysis,
-        sync_status: navigator.onLine ? 'synced' : 'pending_sync',
+        sync_status: 'synced', // PATCH v24: Sempre 'synced' - navigator.onLine não confiável
         updated_at: new Date().toISOString()
       };
 

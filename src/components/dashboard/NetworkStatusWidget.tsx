@@ -95,8 +95,9 @@ const NetworkStatusWidgetComponent: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant={stats.isOnline ? "default" : "destructive"} className="text-xs font-semibold">
-              {stats.isOnline ? 'Online' : 'Offline'}
+            {/* PATCH v24: Sempre Online */}
+            <Badge variant="default" className="text-xs font-semibold">
+              Online
             </Badge>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={updateStats}>
               <RefreshCw className="h-3.5 w-3.5" />

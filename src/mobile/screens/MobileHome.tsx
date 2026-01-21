@@ -83,17 +83,11 @@ export const MobileHome: React.FC = () => {
           <p className="text-sm text-muted-foreground">Mobile Command Center</p>
         </div>
         <div className="flex items-center gap-2">
-          {isOnline ? (
-            <Badge variant="default" className="flex items-center gap-1">
-              <Wifi className="h-3 w-3" />
-              Online
-            </Badge>
-          ) : (
-            <Badge variant="secondary" className="flex items-center gap-1">
-              <WifiOff className="h-3 w-3" />
-              Offline
-            </Badge>
-          )}
+          {/* PATCH v24: Sempre Online - navigator.onLine não confiável */}
+          <Badge variant="default" className="flex items-center gap-1">
+            <Wifi className="h-3 w-3" />
+            Online
+          </Badge>
         </div>
       </div>
 

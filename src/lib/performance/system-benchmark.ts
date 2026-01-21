@@ -150,9 +150,7 @@ class SystemBenchmark {
   }
 
   private async benchmarkNetwork(): Promise<{ latency: number; score: number }> {
-    if (!navigator.onLine) {
-      return { latency: 9999, score: 0 };
-    }
+    // PATCH v24: Removido check navigator.onLine - sempre tenta benchmark
     
     try {
       const start = performance.now();
