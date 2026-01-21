@@ -194,11 +194,35 @@ export default function AuditoriaTecnica() {
     }
   };
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
     toast.loading("Gerando relatório PDF...", { id: "audit-pdf" });
-    setTimeout(() => {
+    try {
+      const { jsPDF } = await import("jspdf");
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text("Relatório de Auditoria Técnica", 20, 20);
+      doc.setFontSize(10);
+      doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
+      doc.text(`Score Geral: ${overallScore}%`, 20, 38);
+      
+      let y = 55;
+      doc.setFontSize(12);
+      doc.text("Seções Auditadas:", 20, y);
+      y += 10;
+      doc.setFontSize(10);
+      sections.slice(0, 15).forEach((section: AuditSection) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(`• ${section.title}: ${section.score}% conformidade`, 25, y);
+        y += 7;
+      });
+      
+      doc.save(`auditoria-tecnica-${new Date().toISOString().split('T')[0]}.pdf`);
       toast.success("Relatório de Auditoria Técnica exportado!", { id: "audit-pdf" });
-    }, 1500);
+    } catch (error) {
+      console.error("PDF export error:", error);
+      toast.error("Erro ao gerar PDF", { id: "audit-pdf" });
+    }
   };
 
   return (

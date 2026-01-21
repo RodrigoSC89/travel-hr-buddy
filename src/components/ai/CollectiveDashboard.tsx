@@ -165,7 +165,34 @@ export const CollectiveDashboard: React.FC = () => {
   const exportPDF = async () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
     toast.loading("Gerando relatório PDF...", { id: "pdf-export" });
-    setTimeout(() => toast.success("PDF exportado com sucesso!", { id: "pdf-export" }), 1500);
+    try {
+      const { jsPDF } = await import("jspdf");
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text("Dashboard Coletivo de IA - Nautilus One", 20, 20);
+      doc.setFontSize(10);
+      doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
+      doc.text(`Total de Decisões: ${decisions.length}`, 20, 40);
+      doc.text(`Módulos: ${modulePerformance.length}`, 20, 48);
+      
+      let y = 60;
+      doc.setFontSize(12);
+      doc.text("Decisões Recentes:", 20, y);
+      y += 8;
+      doc.setFontSize(10);
+      decisions.slice(0, 10).forEach((decision: any) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(`• ${decision.decisionType || decision.id}: ${decision.status}`, 25, y);
+        y += 6;
+      });
+      
+      doc.save(`dashboard-ia-${new Date().toISOString().split('T')[0]}.pdf`);
+      toast.success("PDF exportado com sucesso!", { id: "pdf-export" });
+    } catch (error) {
+      logger.error("[CollectiveDashboard] PDF export failed:", error);
+      toast.error("Erro ao exportar PDF", { id: "pdf-export" });
+    }
   };
 
   const getStatusColor = (status: string): string => {
