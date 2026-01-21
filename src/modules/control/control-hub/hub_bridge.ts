@@ -14,6 +14,8 @@ export class HubBridge {
   /**
    * Check connection quality
    */
+  // PATCH v22 iOS PWA: checkConnection apenas para métricas, nunca retorna "offline"
+  // Isso evita bloqueios falsos no iOS PWA onde navigator.onLine não é confiável
   async checkConnection(): Promise<ConnectionQuality> {
     this.lastCheck = new Date();
 
@@ -28,7 +30,8 @@ export class HubBridge {
       const latency = Date.now() - startTime;
 
       if (!response.ok) {
-        this.connectionQuality = "offline";
+        // PATCH v22: Retorna "poor" em vez de "offline" para não bloquear operações
+        this.connectionQuality = "poor";
         return this.connectionQuality;
       }
 
@@ -43,7 +46,8 @@ export class HubBridge {
 
       return this.connectionQuality;
     } catch (error) {
-      this.connectionQuality = "offline";
+      // PATCH v22: Nunca retorna "offline" - deixar operações tentarem
+      this.connectionQuality = "poor";
       return this.connectionQuality;
     }
   }

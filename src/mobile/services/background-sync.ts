@@ -121,11 +121,9 @@ class BackgroundSyncService {
       return false;
     }
 
-    // Check network status
-    const networkStatus = networkDetector.getStatus();
-    if (!networkStatus.isOnline) {
-      return false;
-    }
+    // PATCH v22 iOS PWA: Não bloquear sync por status de rede
+    // networkDetector.isOnline não é confiável no iOS PWA
+    // Deixar a tentativa de sync acontecer - erros tratados na camada fetch
 
     // Check if there's pending data
     const pendingCount = await sqliteStorage.getQueueCount();
@@ -133,14 +131,7 @@ class BackgroundSyncService {
       return false;
     }
 
-    // Check network type preference
-    if (this.config.networkRequired === "wifi") {
-      // Only sync on WiFi
-      const effectiveType = networkStatus.effectiveType;
-      if (effectiveType && !["4g"].includes(effectiveType)) {
-        return false;
-      }
-    }
+    // PATCH v22: Verificação de WiFi removida - deixar sync tentar sempre
 
     return true;
   }
