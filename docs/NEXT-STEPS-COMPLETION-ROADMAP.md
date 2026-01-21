@@ -1,7 +1,7 @@
 # Nauti One v4.0 - Roadmap de Completude Final
 
 > **Status Atual**: 99% Completo | Certificação 100/100 | Pronto para Go-Live
-> **Data**: 2026-01-20 (Atualizado)
+> **Data**: 2026-01-21 (PATCH v26 Atualizado)
 
 ---
 
@@ -9,20 +9,27 @@
 
 O sistema Nauti One v4.0 está em estado de **produção certificado**. Este documento detalha os passos restantes e o progresso recente.
 
-### ✅ Completado Nesta Sessão
+### ✅ Completado PATCH v26 (2026-01-21)
+
+| Item | Arquivo | Status |
+|------|---------|--------|
+| **Service Worker v18** | `public/sw.js` | ✅ Zero cache, zero fetch interception |
+| **Remoção navigator.onLine** | 11 arquivos | ✅ Purge completo |
+| **Documentação Supabase** | `docs/deployment/SUPABASE_SETUP.md` | ✅ Guia completo |
+| **AI Rate Limiter** | `src/lib/ai/rate-limiter.ts` | ✅ Tier-based limiting |
+| **AI Response Cache** | `src/lib/ai/response-cache.ts` | ✅ LRU + cost-aware |
+| **Bundle Optimization** | `vite.config.ts` | ✅ 8 vendor chunks |
+
+### ✅ Completado Sessões Anteriores
 
 | Item | Arquivo | Status |
 |------|---------|--------|
 | Hook de Evidence | `src/hooks/use-audit-evidence.ts` | ✅ Criado |
 | Hook de Checklists | `src/hooks/use-checklist-persistence.ts` | ✅ Criado |
 | Integração PEOTRAM | `src/components/peotram/peotram-audit-wizard.tsx` | ✅ Integrado |
-| Integração Checklists | `src/components/maritime-checklists/maritime-checklist-system.tsx` | ✅ Integrado |
-| Tabela fleet_logs | Migração Supabase | ✅ Criada |
-| Bucket audit-evidence | Storage Supabase | ✅ Criado |
 | **IoT Connector Real** | `src/lib/iot/IoTConnector.ts` | ✅ MQTT + Realtime + Fallback |
 | **Fine-tuning Engine** | `src/ai/lang-training/index.ts` | ✅ Pipeline Completo |
 | **Maritime Datasets** | `src/ai/lang-training/maritime-datasets.ts` | ✅ STCW/MLC/Nav/Safety |
-| **Go-Live Script** | `scripts/go-live-validation.sh` | ✅ Criado |
 
 ---
 
@@ -111,11 +118,19 @@ console.log('Benchmarks:', result.benchmarks.map(b => `${b.language}=${b.score}%
 
 ### 3.1 Ações Manuais Obrigatórias
 
-- [ ] **Supabase Auth**: Habilitar "Leaked Password Protection"
-- [ ] **Secrets**: Configurar `BUNKER_API_KEY`, `STORMGLASS_API_KEY` (opcional)
-- [ ] **MQTT**: Configurar `VITE_MQTT_URL` para produção (opcional)
-- [ ] **DNS**: Apontar domínio de produção
-- [ ] **SSL**: Verificar certificados
+⚠️ **CRÍTICO - Configure AGORA no Supabase Dashboard:**
+
+1. **Auth URL Configuration** (https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb/auth/url-configuration)
+   - [ ] Site URL: `https://nautione.com.br`
+   - [ ] Redirect URLs: `https://nautione.com.br/**`, `https://www.nautione.com.br/**`
+   
+2. **Segurança** (https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb/auth/providers)
+   - [ ] Leaked Password Protection: **ON**
+
+3. **Secrets** (https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb/settings/functions)
+   - [ ] `OPENAI_API_KEY` - Obrigatório
+   - [ ] `GOOGLE_AI_API_KEY` - Obrigatório
+   - [ ] `BUNKER_API_KEY`, `STORMGLASS_API_KEY` - Opcional
 
 ### 3.2 Validação Automatizada
 

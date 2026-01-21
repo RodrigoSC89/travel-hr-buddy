@@ -58,10 +58,47 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     rollupOptions: {
       output: {
-        // Separate React into its own chunk to prevent duplication
+        // PATCH v26: Advanced chunk splitting for optimal bundle size
         manualChunks: {
+          // Core React - cached indefinitely
           'react-vendor': ['react', 'react-dom', 'react-dom/client'],
+          
+          // Query & State management
           'query-vendor': ['@tanstack/react-query'],
+          
+          // UI Components - shared across app
+          'ui-vendor': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-select',
+            '@radix-ui/react-checkbox',
+          ],
+          
+          // Animation - loaded when needed
+          'animation-vendor': ['framer-motion'],
+          
+          // Charts - lazy loaded for dashboards
+          'charts-vendor': ['recharts', 'chart.js', 'react-chartjs-2'],
+          
+          // Date utilities
+          'date-vendor': ['date-fns'],
+          
+          // Form handling
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          
+          // Supabase client
+          'supabase-vendor': ['@supabase/supabase-js', '@supabase/ssr'],
+        },
+        // Ensure consistent chunk naming for caching
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId;
+          if (facadeModuleId && facadeModuleId.includes('node_modules')) {
+            return 'assets/vendor/[name]-[hash].js';
+          }
+          return 'assets/[name]-[hash].js';
         },
       },
     },
