@@ -132,13 +132,14 @@ const Auth: React.FC = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: data.email.toLowerCase().trim(),
         password: data.password,
       });
       
       if (error) {
         const errorMsg = error.message.toLowerCase();
+        console.error('[Auth] Login error:', error.message, error.status);
         
         if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
@@ -146,27 +147,33 @@ const Auth: React.FC = () => {
           toast.error("Email não confirmado", { description: "Verifique seu email para confirmar a conta." });
         } else if (errorMsg.includes('too many requests')) {
           toast.error("Muitas tentativas", { description: "Aguarde alguns minutos e tente novamente." });
+        } else if (errorMsg.includes('request') || errorMsg.includes('fetch') || errorMsg.includes('network')) {
+          toast.error("Erro de conexão", { description: "Problema de rede. Tente novamente." });
+          setShowTroubleshooting(true);
         } else {
-          toast.error("Erro no login", { description: "Verifique suas credenciais e tente novamente." });
+          toast.error("Erro no login", { description: error.message || "Verifique suas credenciais e tente novamente." });
         }
-      } else {
+      } else if (authData?.user) {
         toast.success("Login realizado com sucesso");
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '';
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error('[Auth] Login exception:', errorMessage);
       
       // Handle network errors specifically  
       if (errorMessage.includes('Failed to fetch') || 
           errorMessage.includes('NetworkError') ||
           errorMessage.includes('fetch') ||
-          errorMessage.includes('network')) {
+          errorMessage.includes('network') ||
+          errorMessage.includes('Load failed') ||
+          errorMessage.includes('aborted')) {
         toast.error("Erro de conexão", { 
           description: "Verifique sua conexão com a internet e tente novamente." 
         });
         setShowTroubleshooting(true);
       } else {
         toast.error("Erro ao processar login", { 
-          description: "Tente novamente em alguns segundos." 
+          description: errorMessage || "Tente novamente em alguns segundos." 
         });
       }
     } finally {
