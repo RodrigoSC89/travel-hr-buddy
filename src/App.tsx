@@ -21,6 +21,7 @@ import { ProductOnboardingTour } from "./components/onboarding/ProductOnboarding
 // LAZY LOAD - PÁGINAS PRINCIPAIS
 // ============================================
 const Auth = lazy(() => import("@/pages/Auth"));
+const AuthCallback = lazy(() => import("@/pages/AuthCallback"));
 const LandingPage = lazy(() => import("@/pages/LandingPage"));
 const CentralComando = lazy(() => import("@/pages/CentralComando"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -349,6 +350,7 @@ const AppRoutes = () => (
 <Routes>
     {/* Public Routes */}
     <Route path="/auth" element={<Auth />} />
+    <Route path="/auth/callback" element={<AuthCallback />} />
     <Route path="/landing" element={<LandingPage />} />
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
