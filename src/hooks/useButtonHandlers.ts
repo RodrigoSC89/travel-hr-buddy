@@ -41,8 +41,10 @@ export const useButtonHandlers = () => {
     toast.loading("Exportando relatório em PDF...", { id: "export-pdf" });
     
     try {
+      const { jsPDF } = await import("jspdf");
       const doc = new jsPDF();
       const title = "Relatório Nautilus One";
+      
       // Header
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
@@ -54,15 +56,9 @@ export const useButtonHandlers = () => {
       doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
       
       // Content
-      if (content) {
-        doc.setFontSize(11);
-        const lines = doc.splitTextToSize(content, 170);
-        doc.text(lines, 20, 45);
-      } else {
-        doc.setFontSize(11);
-        doc.text("Relatório gerado automaticamente pelo sistema Nautilus One.", 20, 45);
-        doc.text("Para mais detalhes, acesse os módulos específicos.", 20, 55);
-      }
+      doc.setFontSize(11);
+      doc.text("Relatório gerado automaticamente pelo sistema Nautilus One.", 20, 45);
+      doc.text("Para mais detalhes, acesse os módulos específicos.", 20, 55);
       
       // Footer
       const pageHeight = doc.internal.pageSize.height;

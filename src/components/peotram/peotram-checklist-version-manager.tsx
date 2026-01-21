@@ -229,7 +229,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     toast.success("Template salvo com sucesso!");
   };
 
-  const exportTemplate = (format: "json" | "excel" | "pdf") => {
+  const exportTemplate = async (format: "json" | "excel" | "pdf") => {
     if (!selectedTemplate) return;
 
     switch (format) {
@@ -264,9 +264,31 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     }
     case "pdf": {
       toast.loading("Gerando PDF...", { id: "pdf-export" });
-      setTimeout(() => {
+      try {
+        const { jsPDF } = await import("jspdf");
+        const doc = new jsPDF();
+        
+        doc.setFontSize(16);
+        doc.text(`PEOTRAM - Template v${selectedTemplate?.version || '1.0'}`, 20, 20);
+        doc.setFontSize(10);
+        doc.text(`Versão: ${selectedTemplate?.version || 'N/A'}`, 20, 30);
+        doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 38);
+        doc.text(`Total de elementos: ${selectedTemplate?.elements?.length || 0}`, 20, 46);
+        
+        let y = 60;
+        doc.setFontSize(11);
+        selectedTemplate?.elements?.slice(0, 30).forEach((item: any, idx: number) => {
+          if (y > 270) { doc.addPage(); y = 20; }
+          doc.text(`${idx + 1}. ${item.title || item.id || 'Item'}`, 20, y);
+          y += 7;
+        });
+        
+        doc.save(`peotram-${selectedTemplate?.version || 'export'}.pdf`);
         toast.success("PDF gerado com sucesso!", { id: "pdf-export" });
-      }, 1500);
+      } catch (error) {
+        console.error("PDF export error:", error);
+        toast.error("Erro ao gerar PDF", { id: "pdf-export" });
+      }
       break;
     }
     }

@@ -62,17 +62,15 @@ export function useEmployeesDB() {
 
   const createEmployee = useMutation({
     mutationFn: async (employee: Omit<Colaborador, 'id'>) => {
-      const insertData: EmployeeInsert = {
-        full_name: employee.nome,
-        email: employee.email,
-        phone: employee.telefone,
-        rank: employee.cargo,
-        status: employee.status === 'ativo' ? 'active' : 'inactive'
-      };
-
       const { data, error } = await supabase
         .from('crew_members')
-        .insert(insertData)
+        .insert({
+          full_name: employee.nome,
+          email: employee.email || null,
+          phone: employee.telefone || null,
+          rank: employee.cargo || null,
+          status: employee.status === 'ativo' ? 'active' : 'inactive'
+        } as any)
         .select()
         .single();
 
