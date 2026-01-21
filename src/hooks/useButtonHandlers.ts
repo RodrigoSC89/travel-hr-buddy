@@ -34,15 +34,50 @@ export const useButtonHandlers = () => {
   };
 
   /**
-   * Export report in PDF format
+   * Export report in PDF format - Real implementation using jsPDF
    */
-  const exportReport = () => {
+  const exportReport = async () => {
     logger.info("[Control Hub] Exporting report to PDF...");
     toast.loading("Exportando relatório em PDF...", { id: "export-pdf" });
     
-    setTimeout(() => {
+    try {
+      const doc = new jsPDF();
+      const title = "Relatório Nautilus One";
+      // Header
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, 20, 20);
+      
+      // Date
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
+      
+      // Content
+      if (content) {
+        doc.setFontSize(11);
+        const lines = doc.splitTextToSize(content, 170);
+        doc.text(lines, 20, 45);
+      } else {
+        doc.setFontSize(11);
+        doc.text("Relatório gerado automaticamente pelo sistema Nautilus One.", 20, 45);
+        doc.text("Para mais detalhes, acesse os módulos específicos.", 20, 55);
+      }
+      
+      // Footer
+      const pageHeight = doc.internal.pageSize.height;
+      doc.setFontSize(8);
+      doc.text("Nautilus One - Maritime HR Management Platform", 20, pageHeight - 10);
+      
+      // Save
+      const filename = `relatorio-nautilus-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(filename);
+      
       toast.success("Relatório exportado com sucesso!", { id: "export-pdf" });
-    }, 2000);
+    } catch (error) {
+      logger.error("[Control Hub] PDF export failed:", error);
+      toast.error("Erro ao exportar PDF", { id: "export-pdf" });
+    }
   };
 
   /**

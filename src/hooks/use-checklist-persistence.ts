@@ -61,12 +61,17 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
       };
 
       // Persist to Supabase maritime_checklists table
-      const { error } = await (supabase
-        .from('maritime_checklists') as ReturnType<typeof supabase.from>)
-        .upsert([checklistData] as unknown[], { onConflict: 'id' });
-      
-      if (error) {
-        logger.error('[ChecklistPersistence] Database error, falling back to localStorage', error);
+      try {
+        const { error } = await supabase
+          .from('maritime_checklists')
+          .upsert([checklistData] as any, { onConflict: 'id' });
+        
+        if (error) {
+          logger.error('[ChecklistPersistence] Database error, falling back to localStorage', { error: String(error) });
+          localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
+        }
+      } catch (dbError) {
+        logger.warn('[ChecklistPersistence] Table may not exist yet, using localStorage', { error: String(dbError) });
         localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
       }
 
