@@ -17590,6 +17590,111 @@ export type Database = {
         }
         Relationships: []
       }
+      maritime_checklists: {
+        Row: {
+          actual_duration: number | null
+          ai_analysis: Json | null
+          completed_at: string | null
+          compliance_score: number | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          estimated_duration: number | null
+          id: string
+          inspector_id: string | null
+          inspector_name: string | null
+          items: Json | null
+          location: Json | null
+          organization_id: string | null
+          priority: string | null
+          scheduled_for: string | null
+          status: string | null
+          sync_status: string | null
+          tags: string[] | null
+          title: string
+          type: string
+          updated_at: string | null
+          version: string | null
+          vessel_id: string | null
+          vessel_name: string | null
+          weather: Json | null
+          workflow: Json | null
+        }
+        Insert: {
+          actual_duration?: number | null
+          ai_analysis?: Json | null
+          completed_at?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          estimated_duration?: number | null
+          id?: string
+          inspector_id?: string | null
+          inspector_name?: string | null
+          items?: Json | null
+          location?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          scheduled_for?: string | null
+          status?: string | null
+          sync_status?: string | null
+          tags?: string[] | null
+          title: string
+          type: string
+          updated_at?: string | null
+          version?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
+          weather?: Json | null
+          workflow?: Json | null
+        }
+        Update: {
+          actual_duration?: number | null
+          ai_analysis?: Json | null
+          completed_at?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          estimated_duration?: number | null
+          id?: string
+          inspector_id?: string | null
+          inspector_name?: string | null
+          items?: Json | null
+          location?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          scheduled_for?: string | null
+          status?: string | null
+          sync_status?: string | null
+          tags?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          version?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
+          weather?: Json | null
+          workflow?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maritime_checklists_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maritime_checklists_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maritime_incidents: {
         Row: {
           closed_at: string | null
@@ -17697,6 +17802,154 @@ export type Database = {
           },
           {
             foreignKeyName: "maritime_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_records: {
+        Row: {
+          allergies: string[] | null
+          blood_type: string | null
+          conditions: string[] | null
+          created_at: string | null
+          crew_member_id: string | null
+          crew_member_name: string
+          id: string
+          last_checkup: string | null
+          medical_history: Json | null
+          next_checkup: string | null
+          notes: string | null
+          organization_id: string | null
+          status: string | null
+          updated_at: string | null
+          vaccinations: Json | null
+          vessel_id: string | null
+        }
+        Insert: {
+          allergies?: string[] | null
+          blood_type?: string | null
+          conditions?: string[] | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name: string
+          id?: string
+          last_checkup?: string | null
+          medical_history?: Json | null
+          next_checkup?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vaccinations?: Json | null
+          vessel_id?: string | null
+        }
+        Update: {
+          allergies?: string[] | null
+          blood_type?: string | null
+          conditions?: string[] | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name?: string
+          id?: string
+          last_checkup?: string | null
+          medical_history?: Json | null
+          next_checkup?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vaccinations?: Json | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_records_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_supplies: {
+        Row: {
+          batch_number: string | null
+          category: string
+          created_at: string | null
+          expiry_date: string | null
+          id: string
+          last_restock: string | null
+          location: string | null
+          min_stock: number | null
+          name: string
+          organization_id: string | null
+          quantity: number | null
+          status: string | null
+          unit: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          batch_number?: string | null
+          category: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_restock?: string | null
+          location?: string | null
+          min_stock?: number | null
+          name: string
+          organization_id?: string | null
+          quantity?: number | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          batch_number?: string | null
+          category?: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_restock?: string | null
+          location?: string | null
+          min_stock?: number | null
+          name?: string
+          organization_id?: string | null
+          quantity?: number | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_supplies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_supplies_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
