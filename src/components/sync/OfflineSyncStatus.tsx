@@ -69,7 +69,8 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
   };
 
   const syncPendingChanges = async () => {
-    if (!navigator.onLine || isSyncing) return;
+    // PATCH v22 iOS PWA: Removido !navigator.onLine - sempre tentar sync
+    if (isSyncing) return;
 
     setIsSyncing(true);
     setSyncProgress(0);

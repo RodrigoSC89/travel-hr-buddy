@@ -57,16 +57,10 @@ export class HubSync {
     this.isSyncing = true;
     let pendingCount = 0;
     try {
-      // Check connection
-      const quality = await hubBridge.checkConnection();
-      if (quality === "offline") {
-        return {
-          success: false,
-          recordsSent: 0,
-          recordsFailed: 0,
-          errors: ["No connection to BridgeLink"],
-        };
-      }
+      // PATCH v22 iOS PWA: Não bloquear sync por status de conexão
+      // Deixar a camada de rede (fetch) tratar erros reais
+      // checkConnection apenas para métricas, não para bloqueio
+      await hubBridge.checkConnection();
 
       // Get pending entries
       const pending = hubCache.getPendingEntries();
