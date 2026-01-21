@@ -1,9 +1,9 @@
-// Service Worker Nautilus One v16 - iOS PWA ULTIMATE FIX
+// Service Worker Nautilus One v17 - PATCH v25 FORCE REFRESH
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
 
-const SW_VERSION = 'v16-ios-pwa-ultimate';
+const SW_VERSION = 'v17-force-refresh-jan2026';
 
 // Instalação instantânea - sem precache
 self.addEventListener('install', (event) => {
