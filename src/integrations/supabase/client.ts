@@ -61,9 +61,10 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
   const slow = isSlowConnection();
   
   // Adaptive timeouts for maritime/satellite connections
-  // Slow: 25s/40s/55s/70s | Normal: 15s/25s/35s/45s
+  // First attempt has longer timeout to avoid premature failures
+  // Slow: 30s/45s/60s/75s | Normal: 20s/30s/40s/50s
   const getTimeout = (attempt: number) => {
-    const base = slow ? 25000 : 15000;
+    const base = slow ? 30000 : 20000;
     return base + (attempt * (slow ? 15000 : 10000));
   };
   

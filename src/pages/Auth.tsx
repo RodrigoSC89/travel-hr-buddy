@@ -152,10 +152,23 @@ const Auth: React.FC = () => {
       } else {
         toast.success("Login realizado com sucesso");
       }
-    } catch {
-      toast.error("Erro ao processar login", { 
-        description: "Tente novamente em alguns segundos." 
-      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '';
+      
+      // Handle network errors specifically  
+      if (errorMessage.includes('Failed to fetch') || 
+          errorMessage.includes('NetworkError') ||
+          errorMessage.includes('fetch') ||
+          errorMessage.includes('network')) {
+        toast.error("Erro de conexão", { 
+          description: "Verifique sua conexão com a internet e tente novamente." 
+        });
+        setShowTroubleshooting(true);
+      } else {
+        toast.error("Erro ao processar login", { 
+          description: "Tente novamente em alguns segundos." 
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -180,6 +193,10 @@ const Auth: React.FC = () => {
         const errorMsg = error.message.toLowerCase();
         if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
           toast.error("Email já cadastrado", { description: "Tente fazer login ou recuperar a senha." });
+        } else if (errorMsg.includes('weak password') || errorMsg.includes('password')) {
+          toast.error("Senha muito fraca", { description: "Use pelo menos 6 caracteres com letras e números." });
+        } else if (errorMsg.includes('invalid email')) {
+          toast.error("Email inválido", { description: "Verifique o formato do email." });
         } else {
           toast.error("Erro no cadastro", { description: error.message });
         }
@@ -189,8 +206,21 @@ const Auth: React.FC = () => {
         });
         setActiveTab("signin");
       }
-    } catch {
-      toast.error("Erro no cadastro", { description: "Tente novamente." });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '';
+      
+      // Handle network errors specifically
+      if (errorMessage.includes('Failed to fetch') || 
+          errorMessage.includes('NetworkError') ||
+          errorMessage.includes('fetch') ||
+          errorMessage.includes('network')) {
+        toast.error("Erro de conexão", { 
+          description: "Verifique sua conexão com a internet e tente novamente." 
+        });
+        setShowTroubleshooting(true);
+      } else {
+        toast.error("Erro no cadastro", { description: "Tente novamente em alguns segundos." });
+      }
     } finally {
       setIsLoading(false);
     }
