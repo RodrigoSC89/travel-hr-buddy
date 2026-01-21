@@ -1,18 +1,9 @@
-// Service Worker Nautilus One v18 - PATCH v26 FINAL FIX
+// Service Worker Nautilus One v19 - PATCH v27 PRODUCTION FIX
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
 
-const SW_VERSION = 'v18-final-fix-jan2026';
-
-// Lista de auth endpoints que NUNCA devem ser cacheados
-const AUTH_ENDPOINTS = [
-  '/auth/',
-  '/rest/v1/',
-  '/functions/v1/',
-  'supabase.co',
-  'supabase.in'
-];
+const SW_VERSION = 'v19-production-jan2026';
 
 // Instalação instantânea - sem precache
 self.addEventListener('install', (event) => {
@@ -117,6 +108,16 @@ self.addEventListener('message', (event) => {
       .catch((err) => {
         event.ports[0]?.postMessage({ success: false, error: err.message });
       });
+  }
+  
+  if (type === 'HEALTH_CHECK') {
+    event.ports[0]?.postMessage({ 
+      healthy: true, 
+      version: SW_VERSION,
+      timestamp: Date.now(),
+      cacheEnabled: false,
+      fetchInterceptionEnabled: false
+    });
   }
 });
 
