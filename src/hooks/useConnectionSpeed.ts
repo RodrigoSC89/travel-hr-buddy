@@ -37,10 +37,9 @@ const getConnection = (): NetworkInformationType | undefined => {
   return nav.connection || nav.mozConnection || nav.webkitConnection;
 };
 
+// PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
 const getQuality = (effectiveType: string, rtt: number): ConnectionQuality => {
-  if (typeof navigator !== "undefined" && !navigator.onLine) return "offline";
-  
-  // Based on Network Information API
+  // Based on Network Information API only - não usar navigator.onLine
   if (effectiveType === "4g" && rtt < 100) return "fast";
   if (effectiveType === "4g" || effectiveType === "3g") return "moderate";
   if (effectiveType === "2g" || effectiveType === "slow-2g") return "slow";

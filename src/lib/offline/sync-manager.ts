@@ -26,7 +26,8 @@ export interface SyncStats {
 
 class OfflineSyncManager {
   private queue: SyncQueueItem[] = [];
-  private isOnline: boolean = navigator.onLine;
+  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
+  private isOnline: boolean = true;
   private isSyncing: boolean = false;
   private readonly STORAGE_KEY = "nautilus_offline_sync_queue";
   private readonly MAX_RETRIES = 3;
@@ -40,10 +41,11 @@ class OfflineSyncManager {
 
   /**
    * Setup network status listeners
+   * PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos sync
    */
   private setupNetworkListeners(): void {
     window.addEventListener("online", () => {
-      logger.info("[OfflineSync] Network online - starting sync");
+      logger.info("[OfflineSync] Network event: online - starting sync");
       this.isOnline = true;
       this.syncAll();
     });

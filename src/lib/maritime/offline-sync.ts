@@ -319,8 +319,9 @@ class SyncManager {
     }
   }
 
+  // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
   async performSync(): Promise<{ synced: number; failed: number }> {
-    if (this.syncInProgress || !navigator.onLine) {
+    if (this.syncInProgress) {
       return { synced: 0, failed: 0 };
     }
 

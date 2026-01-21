@@ -143,8 +143,10 @@ class RequestQueueManager {
   }
 
   // Process the queue
+  // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
+  // Deixar a requisição falhar naturalmente e usar retry logic
   async processQueue(): Promise<void> {
-    if (this.isProcessing || !navigator.onLine) return;
+    if (this.isProcessing) return;
 
     this.isProcessing = true;
 
@@ -163,10 +165,7 @@ class RequestQueueManager {
           break;
         }
 
-        if (!navigator.onLine) {
-          break;
-        }
-
+        // PATCH v26: Sempre tentar executar - erro de rede tratado no retry
         this.executeRequest(request);
       }
     } finally {

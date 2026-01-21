@@ -14,17 +14,19 @@ const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === "true";
 
 class TelemetryService {
   private initialized = false;
-  private online = navigator.onLine;
+  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
+  private online = true;
 
   constructor() {
-    // Monitor online/offline status
+    // PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos enviar
     window.addEventListener("online", () => {
       this.online = true;
       this.syncOfflineEvents();
     });
 
     window.addEventListener("offline", () => {
-      this.online = false;
+      // PATCH v26: Não desabilitar telemetry - deixar falhar naturalmente
+      // this.online = false;
     });
   }
 

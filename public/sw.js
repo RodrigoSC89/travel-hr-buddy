@@ -1,14 +1,23 @@
-// Service Worker Nautilus One v17 - PATCH v25 FORCE REFRESH
+// Service Worker Nautilus One v18 - PATCH v26 FINAL FIX
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
 
-const SW_VERSION = 'v17-force-refresh-jan2026';
+const SW_VERSION = 'v18-final-fix-jan2026';
+
+// Lista de auth endpoints que NUNCA devem ser cacheados
+const AUTH_ENDPOINTS = [
+  '/auth/',
+  '/rest/v1/',
+  '/functions/v1/',
+  'supabase.co',
+  'supabase.in'
+];
 
 // Instalação instantânea - sem precache
 self.addEventListener('install', (event) => {
   console.log(`[SW ${SW_VERSION}] Installing - Zero cache mode`);
-  // Forçar ativação imediata
+  // Forçar ativação imediata sem esperar tabs fecharem
   self.skipWaiting();
 });
 
@@ -17,7 +26,7 @@ self.addEventListener('activate', (event) => {
   console.log(`[SW ${SW_VERSION}] Activating - Purging ALL caches`);
   event.waitUntil(
     (async () => {
-      // Limpar todos os caches
+      // Limpar todos os caches sem exceção
       const keys = await caches.keys();
       await Promise.all(keys.map((k) => {
         console.log(`[SW ${SW_VERSION}] Deleting cache: ${k}`);
@@ -33,7 +42,8 @@ self.addEventListener('activate', (event) => {
         client.postMessage({ 
           type: 'SW_UPDATED', 
           version: SW_VERSION,
-          action: 'RELOAD_RECOMMENDED'
+          action: 'RELOAD_RECOMMENDED',
+          timestamp: Date.now()
         });
       });
       
@@ -45,6 +55,7 @@ self.addEventListener('activate', (event) => {
 // CRÍTICO: NÃO interceptar NENHUM fetch
 // Deixar o browser fazer todas as requisições normalmente
 // Isso elimina QUALQUER possibilidade de interferência do SW
+// NÃO usar navigator.onLine - não é confiável no iOS PWA
 
 // ====== MESSAGE HANDLERS ======
 
@@ -93,6 +104,20 @@ self.addEventListener('message', (event) => {
       .then(() => event.ports[0]?.postMessage({ success: true }))
       .catch(() => event.ports[0]?.postMessage({ success: false }));
   }
+  
+  if (type === 'CHECK_UPDATE') {
+    console.log(`[SW ${SW_VERSION}] Check update requested`);
+    self.registration.update()
+      .then(() => {
+        event.ports[0]?.postMessage({ 
+          success: true, 
+          currentVersion: SW_VERSION 
+        });
+      })
+      .catch((err) => {
+        event.ports[0]?.postMessage({ success: false, error: err.message });
+      });
+  }
 });
 
 // ====== PUSH NOTIFICATIONS (único propósito do SW agora) ======
@@ -105,7 +130,9 @@ self.addEventListener('push', (event) => {
       icon: '/favicon.ico',
       badge: '/favicon.ico',
       vibrate: [100, 50, 100],
-      data: { url: data.url || '/' }
+      data: { url: data.url || '/' },
+      tag: data.tag || 'default',
+      requireInteraction: data.requireInteraction || false
     })
   );
 });
@@ -126,4 +153,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only, NO fetch interception, NO caching`);
+console.log(`[SW ${SW_VERSION}] Minimal Service Worker loaded - Push notifications only, NO fetch interception, NO caching, NO navigator.onLine checks`);
