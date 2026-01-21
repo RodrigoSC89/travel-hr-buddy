@@ -60,18 +60,14 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
         updated_at: new Date().toISOString()
       };
 
-      // Store in local storage (table may not exist yet)
-      // TODO: Create maritime_checklists table via migration when ready
-      localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
+      // Persist to Supabase maritime_checklists table
+      const { error } = await (supabase
+        .from('maritime_checklists') as ReturnType<typeof supabase.from>)
+        .upsert([checklistData] as unknown[], { onConflict: 'id' });
       
-      const error: any = null;
       if (error) {
-        if (error.code === '42P01') {
-          logger.warn('[ChecklistPersistence] Table not found, using local storage');
-          localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
-        } else {
-          throw error;
-        }
+        logger.error('[ChecklistPersistence] Database error, falling back to localStorage', error);
+        localStorage.setItem(`checklist_${checklist.id}`, JSON.stringify(checklistData));
       }
 
       setLastSaved(new Date());
