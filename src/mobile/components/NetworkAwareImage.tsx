@@ -76,8 +76,8 @@ export const NetworkAwareImage = memo<NetworkAwareImageProps>(({
     if (!isInView) return;
 
     const networkStatus = networkDetector.getStatus();
+    // PATCH v23: Removido check !networkStatus.isOnline - sempre assume online
     const isSlowNetwork = 
-      !networkStatus.isOnline ||
       networkStatus.effectiveType === "slow-2g" ||
       networkStatus.effectiveType === "2g";
 

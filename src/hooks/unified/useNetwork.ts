@@ -283,7 +283,8 @@ export function useAdaptivePolling(
   const { online, quality } = useNetwork();
 
   useEffect(() => {
-    if (!enabled || !online) return;
+    // PATCH v23: Removido check !online - polling sempre ativo
+    if (!enabled) return;
 
     // Adjust interval based on quality
     const multiplier = quality === "slow" ? 3 : quality === "medium" ? 1.5 : 1;
@@ -291,7 +292,7 @@ export function useAdaptivePolling(
     
     const timer = setInterval(callback, interval);
     return () => clearInterval(timer);
-  }, [callback, baseInterval, enabled, online, quality]);
+  }, [callback, baseInterval, enabled, quality]);
 }
 
 // =============================================================================

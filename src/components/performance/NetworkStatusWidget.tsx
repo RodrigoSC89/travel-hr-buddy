@@ -22,21 +22,21 @@ export const NetworkStatusWidget = memo(function NetworkStatusWidget({
   const { online, quality, effectiveType, downlink, saveData } = useNetworkStatus();
 
   const getIcon = () => {
-    if (!online) return <WifiOff className="h-4 w-4" />;
+    // PATCH v23: Removido !online check - sempre assume online no iOS PWA
     if (quality === 'fast') return <Zap className="h-4 w-4" />;
     if (quality === 'slow') return <AlertTriangle className="h-4 w-4" />;
     return <Wifi className="h-4 w-4" />;
   };
 
   const getColor = () => {
-    if (!online) return 'text-destructive';
+    // PATCH v23: Removido !online check
     if (quality === 'fast') return 'text-green-500';
     if (quality === 'slow') return 'text-yellow-500';
     return 'text-blue-500';
   };
 
   const getLabel = () => {
-    if (!online) return 'Offline';
+    // PATCH v23: Removido !online check - nunca mostrar "Offline"
     if (quality === 'fast') return 'Rápida';
     if (quality === 'slow') return 'Lenta';
     return 'Normal';
