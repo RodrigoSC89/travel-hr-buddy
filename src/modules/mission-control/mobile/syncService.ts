@@ -56,7 +56,8 @@ function mapSupabaseToMission(row: Record<string, unknown>): Mission {
 }
 
 class MissionSyncService {
-  private isOnline: boolean = navigator.onLine;
+  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
+  private isOnline: boolean = true;
   private isSyncing: boolean = false;
   private syncCallbacks: SyncCallback[] = [];
   private syncInterval: ReturnType<typeof setInterval> | null = null;
@@ -70,10 +71,11 @@ class MissionSyncService {
 
   /**
    * Setup network status listeners
+   * PATCH v26: Listeners mantidos para compatibilidade, mas sempre assumimos online
    */
   private setupNetworkListeners() {
     window.addEventListener("online", () => {
-      console.log("Network: Online");
+      console.log("Network event: Online");
       this.isOnline = true;
       this.reconnectAttempts = 0;
       this.notifyCallbacks("online");

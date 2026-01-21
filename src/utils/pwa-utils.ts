@@ -186,10 +186,12 @@ type NavigatorWithExtensions = Navigator & {
 /**
  * Monitor network connectivity status
  */
+// PATCH v26: Sempre reportar online - navigator.onLine não é confiável no iOS PWA
 export function monitorNetworkStatus(callback: (status: NetworkStatus) => void): () => void {
   const updateStatus = () => {
     const status: NetworkStatus = {
-      online: navigator.onLine
+      // PATCH v26: Sempre true - deixar requisições falharem naturalmente
+      online: true
     };
 
     // Add connection info if available

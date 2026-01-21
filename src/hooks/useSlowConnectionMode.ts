@@ -41,19 +41,14 @@ const SLOW_SETTINGS: SlowModeSettings = {
 export function useSlowConnectionMode() {
   const [settings, setSettings] = useState<SlowModeSettings>(DEFAULT_SETTINGS);
 
+  // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
   const detectConnection = useCallback(() => {
     const connection = (navigator as any).connection || 
                        (navigator as any).mozConnection || 
                        (navigator as any).webkitConnection;
 
-    if (!navigator.onLine) {
-      setSettings({
-        ...SLOW_SETTINGS,
-        isSlowConnection: true,
-        enableLightweightMode: true,
-      });
-      return;
-    }
+    // PATCH v26: Não verificar navigator.onLine - causa falsos positivos no iOS
+    // Se não há Network Information API, usar defaults normais
 
     if (!connection) {
       setSettings(DEFAULT_SETTINGS);

@@ -258,11 +258,10 @@ class AdaptiveUI {
       }
     }
 
-    // Determine quality
+    // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
+    // Determinar qualidade apenas por latência e bandwidth
     let quality: NetworkQuality = "good";
-    if (!navigator.onLine) {
-      quality = "offline";
-    } else if (latency > 500 || bandwidth < 1) {
+    if (latency > 500 || bandwidth < 1) {
       quality = "poor";
     } else if (latency > 200 || bandwidth < 5) {
       quality = "fair";

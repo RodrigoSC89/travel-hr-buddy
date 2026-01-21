@@ -336,9 +336,8 @@ class SelfAdjustingSystem {
       }
     }
 
-    if (!navigator.onLine) {
-      profile.networkSpeed = 'offline';
-    }
+    // PATCH v26: Removido navigator.onLine check - não confiável no iOS PWA
+    // Deixar o sistema determinar velocidade apenas pelo Network Information API
 
     // Detect memory pressure
     if ('memory' in performance) {
