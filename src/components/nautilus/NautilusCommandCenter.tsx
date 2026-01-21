@@ -180,8 +180,9 @@ export function NautilusCommandCenter() {
                 <Badge variant="destructive" className="animate-pulse">{unreadCount} alertas</Badge>
               )}
 
-              <Badge variant={isOnline ? "default" : "destructive"}>
-                {isOnline ? <><Wifi className="h-3 w-3 mr-1" />Online</> : <><WifiOff className="h-3 w-3 mr-1" />Offline</>}
+              {/* PATCH v24: Sempre Online - removido check isOnline */}
+              <Badge variant="default">
+                <Wifi className="h-3 w-3 mr-1" />Online
               </Badge>
 
               <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing || isSyncing}>

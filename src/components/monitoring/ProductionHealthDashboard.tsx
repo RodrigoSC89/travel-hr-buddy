@@ -110,12 +110,12 @@ export const ProductionHealthDashboard: React.FC = () => {
       });
     }
 
-    // Network Check
+    // Network Check - PATCH v24: Sempre mostra online - navigator.onLine não confiável
     const connection = (navigator as Navigator & { connection?: { effectiveType: string } }).connection;
     newMetrics.push({
       name: 'Network',
-      status: navigator.onLine ? (connection?.effectiveType === '4g' ? 'healthy' : 'warning') : 'critical',
-      value: navigator.onLine ? (connection?.effectiveType || 'Connected') : 'Offline',
+      status: connection?.effectiveType === '4g' ? 'healthy' : 'warning',
+      value: connection?.effectiveType || 'Connected',
       icon: <Wifi className="h-5 w-5" />,
       lastCheck: now
     });

@@ -166,8 +166,9 @@ class AutomationManager {
   }
 
   private async performHealthCheck(): Promise<void> {
+    // PATCH v24: online sempre true - navigator.onLine não confiável no iOS PWA
     const health = {
-      online: navigator.onLine,
+      online: true,
       memory: (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0,
       serviceWorker: 'serviceWorker' in navigator,
       indexedDB: 'indexedDB' in window,

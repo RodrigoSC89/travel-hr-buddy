@@ -125,7 +125,8 @@ class SmartSyncManager {
   }
 
   async processQueue(): Promise<void> {
-    if (this.isRunning || !navigator.onLine) return;
+    // PATCH v24: Removido !navigator.onLine - sempre tenta processar
+    if (this.isRunning) return;
     
     this.isRunning = true;
     

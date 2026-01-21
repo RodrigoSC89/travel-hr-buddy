@@ -191,13 +191,9 @@ class MobileAICore {
 
     case "get_system_status":
       response = "System Status:\n";
-      response += `- Mode: ${context.isOnline ? "Online" : "Offline"}\n`;
+      response += `- Mode: Online\n`; // PATCH v24: Sempre online
       response += `- Active Mission: ${context.mission ? "Yes" : "No"}\n`;
       response += "- Cached Data: Available\n";
-        
-      if (!context.isOnline) {
-        response += "\n📡 Operating in offline mode. Some features may be limited.";
-      }
       break;
 
     default:
