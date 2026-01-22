@@ -1,6 +1,6 @@
 /**
  * Recruitment Hooks - v4.0
- * Connect recruitment pipeline to Supabase + AI
+ * Connected to Supabase recruitment_candidates and job_openings tables
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -45,109 +45,103 @@ export interface JobOpening {
   deadline?: string;
 }
 
-// List all candidates
 export function useCandidates(jobId?: string) {
   return useQuery({
     queryKey: ['candidates', jobId],
-    queryFn: async () => {
-      // For now, return mock data as recruitment_candidates table may not exist
-      const mockCandidates: Candidate[] = [
-        {
-          id: '1',
-          name: 'Carlos Mendes',
-          email: 'carlos.mendes@email.com',
-          rank_applied: 'Chief Officer',
-          experience_years: 12,
-          certifications: ['STCW', 'GMDSS', 'Advanced Firefighting', 'Medical First Aid'],
-          match_score: 94,
-          status: 'interview',
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          name: 'Ana Silva',
-          email: 'ana.silva@email.com',
-          rank_applied: '2nd Engineer',
-          experience_years: 8,
-          certifications: ['STCW', 'Engine Room Simulator', 'High Voltage'],
-          match_score: 87,
-          status: 'screening',
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: '3',
-          name: 'Pedro Santos',
-          email: 'pedro.santos@email.com',
-          rank_applied: 'Master',
-          experience_years: 20,
-          certifications: ['STCW', 'GMDSS', 'Ship Security Officer', 'ISM Lead Auditor'],
-          match_score: 98,
-          status: 'offer',
-          created_at: new Date().toISOString(),
-        },
-      ];
+    queryFn: async (): Promise<Candidate[]> => {
+      let query = supabase
+        .from('recruitment_candidates')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      return mockCandidates;
+      if (jobId) {
+        query = query.eq('job_opening_id', jobId);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      
+      return (data || []).map(row => ({
+        id: row.id,
+        name: row.name,
+        email: row.email,
+        phone: row.phone,
+        rank_applied: row.rank_applied,
+        experience_years: row.experience_years || 0,
+        certifications: row.certifications || [],
+        vessel_types: row.vessel_types || [],
+        languages: row.languages || [],
+        match_score: row.match_score || 0,
+        status: row.status as Candidate['status'],
+        cv_url: row.cv_url,
+        notes: row.notes,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        job_opening_id: row.job_opening_id,
+        ai_analysis: row.ai_analysis as Candidate['ai_analysis'],
+      }));
     },
     staleTime: 30000,
   });
 }
 
-// List job openings
 export function useJobOpenings() {
   return useQuery({
     queryKey: ['job-openings'],
-    queryFn: async () => {
-      const mockOpenings: JobOpening[] = [
-        {
-          id: '1',
-          title: 'Chief Officer - Container Vessel',
-          vessel_type: 'Container',
-          rank_required: 'Chief Officer',
-          certifications_required: ['STCW', 'GMDSS', 'Advanced Firefighting'],
-          experience_min: 8,
-          status: 'open',
-          applicants_count: 12,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          title: 'Master - Tanker Operations',
-          vessel_type: 'Tanker',
-          rank_required: 'Master',
-          certifications_required: ['STCW', 'Tanker Familiarization', 'Ship Security Officer'],
-          experience_min: 15,
-          status: 'open',
-          applicants_count: 5,
-          created_at: new Date().toISOString(),
-        },
-      ];
+    queryFn: async (): Promise<JobOpening[]> => {
+      const { data, error } = await supabase
+        .from('job_openings')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      return mockOpenings;
+      if (error) throw error;
+      
+      return (data || []).map(row => ({
+        id: row.id,
+        title: row.title,
+        vessel_type: row.vessel_type || '',
+        rank_required: row.rank_required,
+        certifications_required: row.certifications_required || [],
+        experience_min: row.experience_min || 0,
+        description: row.description,
+        salary_range: row.salary_range,
+        status: row.status as JobOpening['status'],
+        applicants_count: row.applicants_count || 0,
+        created_at: row.created_at,
+        deadline: row.deadline,
+      }));
     },
     staleTime: 60000,
   });
 }
 
-// Create job opening
 export function useCreateJobOpening() {
   const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: async (opening: Omit<JobOpening, 'id' | 'created_at' | 'applicants_count'>) => {
-      // Call AI to generate JD if description is empty
-      if (!opening.description) {
-        const { data } = await supabase.functions.invoke('ai-recruitment', {
-          body: {
-            action: 'generate_jd',
-            jobData: opening,
-          },
-        });
-        opening.description = data?.result?.description || '';
-      }
+      const { data: { user } } = await supabase.auth.getUser();
       
-      // For now, return mock
-      return { ...opening, id: crypto.randomUUID(), created_at: new Date().toISOString(), applicants_count: 0 };
+      const { data, error } = await supabase
+        .from('job_openings')
+        .insert({
+          title: opening.title,
+          vessel_type: opening.vessel_type,
+          rank_required: opening.rank_required,
+          certifications_required: opening.certifications_required,
+          experience_min: opening.experience_min,
+          description: opening.description,
+          salary_range: opening.salary_range,
+          status: opening.status,
+          deadline: opening.deadline,
+          created_by: user?.id,
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['job-openings'] });
@@ -159,13 +153,17 @@ export function useCreateJobOpening() {
   });
 }
 
-// Update candidate status
 export function useUpdateCandidateStatus() {
   const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: Candidate['status'] }) => {
-      // In real implementation, update in Supabase
+      const { error } = await supabase
+        .from('recruitment_candidates')
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      
+      if (error) throw error;
       return { id, status };
     },
     onSuccess: (_, variables) => {
@@ -175,41 +173,26 @@ export function useUpdateCandidateStatus() {
   });
 }
 
-// AI CV Analysis
 export function useAICVAnalysis() {
   return useMutation({
     mutationFn: async ({ cvText, jobId }: { cvText: string; jobId?: string }) => {
       const { data, error } = await supabase.functions.invoke('ai-recruitment', {
-        body: {
-          action: 'parse_cv',
-          cvText,
-          jobId,
-        },
+        body: { action: 'parse_cv', cvText, jobId },
       });
-      
       if (error) throw error;
       return data.result;
     },
-    onSuccess: () => {
-      toast.success('CV analisado com sucesso!');
-    },
-    onError: (error) => {
-      toast.error(`Erro na análise: ${error.message}`);
-    },
+    onSuccess: () => toast.success('CV analisado com sucesso!'),
+    onError: (error) => toast.error(`Erro na análise: ${error.message}`),
   });
 }
 
-// Generate interview questions
 export function useGenerateInterviewQuestions() {
   return useMutation({
     mutationFn: async (candidateData: { targetRank: string; vesselType: string; experience: number }) => {
       const { data, error } = await supabase.functions.invoke('ai-recruitment', {
-        body: {
-          action: 'generate_interview',
-          candidateData,
-        },
+        body: { action: 'generate_interview', candidateData },
       });
-      
       if (error) throw error;
       return data.result;
     },

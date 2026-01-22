@@ -16456,6 +16456,60 @@ export type Database = {
         }
         Relationships: []
       }
+      job_openings: {
+        Row: {
+          applicants_count: number | null
+          certifications_required: string[] | null
+          created_at: string | null
+          created_by: string | null
+          deadline: string | null
+          description: string | null
+          experience_min: number | null
+          id: string
+          organization_id: string | null
+          rank_required: string
+          salary_range: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_type: string | null
+        }
+        Insert: {
+          applicants_count?: number | null
+          certifications_required?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          experience_min?: number | null
+          id?: string
+          organization_id?: string | null
+          rank_required: string
+          salary_range?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_type?: string | null
+        }
+        Update: {
+          applicants_count?: number | null
+          certifications_required?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          experience_min?: number | null
+          id?: string
+          organization_id?: string | null
+          rank_required?: string
+          salary_range?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_type?: string | null
+        }
+        Relationships: []
+      }
       jobs: {
         Row: {
           assigned_to: string | null
@@ -17815,6 +17869,7 @@ export type Database = {
           blood_type: string | null
           conditions: string[] | null
           created_at: string | null
+          created_by: string | null
           crew_member_id: string | null
           crew_member_name: string
           id: string
@@ -17833,6 +17888,7 @@ export type Database = {
           blood_type?: string | null
           conditions?: string[] | null
           created_at?: string | null
+          created_by?: string | null
           crew_member_id?: string | null
           crew_member_name: string
           id?: string
@@ -17851,6 +17907,7 @@ export type Database = {
           blood_type?: string | null
           conditions?: string[] | null
           created_at?: string | null
+          created_by?: string | null
           crew_member_id?: string | null
           crew_member_name?: string
           id?: string
@@ -17893,6 +17950,7 @@ export type Database = {
           batch_number: string | null
           category: string
           created_at: string | null
+          created_by: string | null
           expiry_date: string | null
           id: string
           last_restock: string | null
@@ -17910,6 +17968,7 @@ export type Database = {
           batch_number?: string | null
           category: string
           created_at?: string | null
+          created_by?: string | null
           expiry_date?: string | null
           id?: string
           last_restock?: string | null
@@ -17927,6 +17986,7 @@ export type Database = {
           batch_number?: string | null
           category?: string
           created_at?: string | null
+          created_by?: string | null
           expiry_date?: string | null
           id?: string
           last_restock?: string | null
@@ -24015,6 +24075,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      recruitment_candidates: {
+        Row: {
+          ai_analysis: Json | null
+          certifications: string[] | null
+          created_at: string | null
+          created_by: string | null
+          cv_url: string | null
+          email: string
+          experience_years: number | null
+          id: string
+          job_opening_id: string | null
+          languages: string[] | null
+          match_score: number | null
+          name: string
+          notes: string | null
+          organization_id: string | null
+          phone: string | null
+          rank_applied: string
+          status: string | null
+          updated_at: string | null
+          vessel_types: string[] | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          certifications?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
+          email: string
+          experience_years?: number | null
+          id?: string
+          job_opening_id?: string | null
+          languages?: string[] | null
+          match_score?: number | null
+          name: string
+          notes?: string | null
+          organization_id?: string | null
+          phone?: string | null
+          rank_applied: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          certifications?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          cv_url?: string | null
+          email?: string
+          experience_years?: number | null
+          id?: string
+          job_opening_id?: string | null
+          languages?: string[] | null
+          match_score?: number | null
+          name?: string
+          notes?: string | null
+          organization_id?: string | null
+          phone?: string | null
+          rank_applied?: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Relationships: []
       }
       regulations: {
         Row: {
