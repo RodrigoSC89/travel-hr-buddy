@@ -1,3 +1,8 @@
+/**
+ * Voyage Planner Data - Ports and initial data
+ * Components should use hooks for persisted voyage data
+ */
+
 import type { Port, VoyageRoute, WeatherCondition } from "../types";
 
 export const DEMO_PORTS: Port[] = [
@@ -13,72 +18,8 @@ export const DEMO_PORTS: Port[] = [
   { id: "10", name: "Durban", country: "África do Sul", code: "ZADUR", lat: -29.9, lng: 31.0, type: "destination" },
 ];
 
-export const DEMO_VOYAGES: VoyageRoute[] = [
-  {
-    id: "v1",
-    name: "Santos → Rotterdam",
-    origin: DEMO_PORTS[0],
-    destination: DEMO_PORTS[2],
-    waypoints: [DEMO_PORTS[8]],
-    distanceNm: 5420,
-    estimatedDays: 14,
-    fuelConsumption: 2850,
-    status: "active",
-    vesselName: "MV Atlantic Pioneer",
-    departureDate: "2025-12-01",
-    arrivalDate: "2025-12-15",
-    weatherRisk: "low",
-    createdAt: "2025-11-28",
-  },
-  {
-    id: "v2",
-    name: "Rio de Janeiro → Singapura",
-    origin: DEMO_PORTS[1],
-    destination: DEMO_PORTS[5],
-    waypoints: [DEMO_PORTS[9]],
-    distanceNm: 8950,
-    estimatedDays: 24,
-    fuelConsumption: 4720,
-    status: "planned",
-    vesselName: "MV Pacific Star",
-    departureDate: "2025-12-10",
-    arrivalDate: "2026-01-03",
-    weatherRisk: "medium",
-    createdAt: "2025-12-01",
-  },
-  {
-    id: "v3",
-    name: "Santos → Houston",
-    origin: DEMO_PORTS[0],
-    destination: DEMO_PORTS[7],
-    waypoints: [],
-    distanceNm: 4850,
-    estimatedDays: 12,
-    fuelConsumption: 2550,
-    status: "active",
-    vesselName: "MV Gulf Carrier",
-    departureDate: "2025-12-03",
-    arrivalDate: "2025-12-15",
-    weatherRisk: "high",
-    createdAt: "2025-11-30",
-  },
-  {
-    id: "v4",
-    name: "Rio de Janeiro → Hamburgo",
-    origin: DEMO_PORTS[1],
-    destination: DEMO_PORTS[3],
-    waypoints: [DEMO_PORTS[8]],
-    distanceNm: 5680,
-    estimatedDays: 15,
-    fuelConsumption: 2990,
-    status: "completed",
-    vesselName: "MV Europa Express",
-    departureDate: "2025-11-15",
-    arrivalDate: "2025-11-30",
-    weatherRisk: "low",
-    createdAt: "2025-11-10",
-  },
-];
+// Empty arrays - voyages should be fetched from Supabase
+export const DEMO_VOYAGES: VoyageRoute[] = [];
 
 export const DEMO_WEATHER: WeatherCondition[] = [
   { location: "Atlântico Norte", condition: "Parcialmente nublado", windSpeed: 15, waveHeight: 2.5, visibility: "Boa", risk: "low" },
