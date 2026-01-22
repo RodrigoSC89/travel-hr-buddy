@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { FileUploadDialog } from "@/components/evidence/FileUploadDialog";
 import { 
   FolderOpen, Brain, Upload, Search, FileText, Image, 
   CheckCircle, Clock
@@ -46,11 +47,25 @@ const EVIDENCE_FIELDS = [
 ];
 
 export default function EvidencesV2() {
-  const [evidences] = useState<Evidence[]>([
+  const [evidences, setEvidences] = useState<Evidence[]>([
     { id: "1", title: "PSC Report - Santos", type: "pdf", category: "inspection", uploaded_at: "2025-01-02", module: "MLC", status: "approved" },
     { id: "2", title: "Drill Report - Fire", type: "pdf", category: "training", uploaded_at: "2025-01-01", module: "Drill Simulator", status: "approved" },
     { id: "3", title: "Photo - Equipment Check", type: "image", category: "audit", uploaded_at: "2024-12-30", module: "PEOTRAM", status: "pending" },
   ]);
+
+  const handleUploadComplete = (files: { id: string; name: string; type: string; url: string }[]) => {
+    const newEvidences: Evidence[] = files.map(file => ({
+      id: file.id,
+      title: file.name.replace(/\.[^/.]+$/, ""),
+      type: file.type.startsWith('image/') ? 'image' : 'pdf',
+      category: 'audit',
+      uploaded_at: new Date().toISOString().split('T')[0],
+      module: 'Upload Manual',
+      status: 'pending'
+    }));
+    
+    setEvidences(prev => [...newEvidences, ...prev]);
+  };
 
   const stats = [
     { label: "Total Evidências", value: evidences.length, icon: FolderOpen, color: "blue" as const },
@@ -107,7 +122,10 @@ export default function EvidencesV2() {
             onRefresh={() => toast.success("Dados atualizados")}
             actions={[
               { label: "Visualizar", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
-              { label: "Aprovar", icon: CheckCircle, onClick: (item) => toast.success(`Evidência aprovada`) },
+              { label: "Aprovar", icon: CheckCircle, onClick: (item) => {
+                setEvidences(prev => prev.map(e => e.id === item.id ? { ...e, status: 'approved' } : e));
+                toast.success(`Evidência aprovada`);
+              }},
             ]}
             filters={[
               { key: "category", label: "Categoria", options: [
@@ -121,19 +139,11 @@ export default function EvidencesV2() {
 
         <TabsContent value="upload">
           <CardV2 icon={Upload} title="Upload de Evidências" description="Arraste arquivos ou clique para selecionar" gradient="blue">
-            <div className="border-2 border-dashed rounded-lg p-12 text-center">
-              <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground mb-4">
-                Arraste arquivos aqui ou clique para selecionar
-              </p>
-              <p className="text-xs text-muted-foreground mb-4">
-                Suporta PDF, JPG, PNG até 50MB
-              </p>
-              <Button onClick={() => toast.info("Seletor de arquivos em desenvolvimento")}>
-                <Upload className="h-4 w-4 mr-2" />
-                Selecionar Arquivos
-              </Button>
-            </div>
+            <FileUploadDialog 
+              onUploadComplete={handleUploadComplete}
+              maxFiles={10}
+              maxSizeMB={50}
+            />
           </CardV2>
         </TabsContent>
 

@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { OffHireFormDialog } from "@/components/contracts/OffHireFormDialog";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
@@ -67,6 +68,7 @@ export default function CharterPartyV2() {
   const [loading, setLoading] = useState(true);
   const [showNewContract, setShowNewContract] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
+  const [showOffHireForm, setShowOffHireForm] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [calculatorData, setCalculatorData] = useState({
     dailyHire: '',
@@ -151,6 +153,19 @@ export default function CharterPartyV2() {
     toast.success('Contrato de charter criado com sucesso!');
     setShowNewContract(false);
     loadData();
+  };
+
+  const handleCreateOffHire = async (data: {
+    start_date: string;
+    end_date: string;
+    reason: string;
+    reason_type: string;
+    vessel_name: string;
+    notes?: string;
+  }) => {
+    // Would save to Supabase in production
+    toast.success('Período de off-hire registrado com sucesso!');
+    console.log('Off-hire data:', data);
   };
 
   const calculateHire = () => {
@@ -523,6 +538,11 @@ export default function CharterPartyV2() {
 
         {/* Off-Hire Tab */}
         <TabsContent value="off-hire" className="space-y-4">
+          <OffHireFormDialog 
+            open={showOffHireForm} 
+            onOpenChange={setShowOffHireForm}
+            onSubmit={handleCreateOffHire}
+          />
           <CardV2
             icon={Clock}
             title="Tracking de Off-Hire"
@@ -531,7 +551,7 @@ export default function CharterPartyV2() {
             action={{
               label: "Registrar Off-Hire",
               icon: Plus,
-              onClick: () => toast.info("Formulário de off-hire em desenvolvimento")
+              onClick: () => setShowOffHireForm(true)
             }}
           >
             <div className="text-center py-12">

@@ -22,7 +22,7 @@ export interface ComplianceAlert {
 class CompliancePushService {
   private swRegistration: ServiceWorkerRegistration | null = null;
   private isInitialized = false;
-  private vapidPublicKey = 'BNz0rMt5Y3nP7QqL2kRjX8W9_fake_key_placeholder_12345'; // Replace with real VAPID key
+  private vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY || '';
 
   async initialize(): Promise<boolean> {
     if (this.isInitialized) return true;
