@@ -226,7 +226,7 @@ export const AISuggestionsPanel: React.FC = () => {
           })
           .eq("id", suggestion.id);
       } catch (error) {
-        console.warn("Failed to update suggestion in database:", error);
+        // Silent fail - non-blocking operation
       }
     }
 
