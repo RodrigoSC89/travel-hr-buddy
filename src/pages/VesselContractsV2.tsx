@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { DowntimeFormDialog } from "@/components/contracts/DowntimeFormDialog";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
@@ -69,6 +70,7 @@ export default function VesselContractsV2() {
   const [downtimeEvents, setDowntimeEvents] = useState<DowntimeEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewContract, setShowNewContract] = useState(false);
+  const [showDowntimeForm, setShowDowntimeForm] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [newContract, setNewContract] = useState({
     contract_number: '',
@@ -99,6 +101,41 @@ export default function VesselContractsV2() {
       toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateDowntime = async (data: {
+    start_time: string;
+    end_time: string;
+    reason: string;
+    reason_category: string;
+    impact_level: string;
+    notes?: string;
+  }) => {
+    try {
+      const startTime = new Date(data.start_time);
+      const endTime = data.end_time ? new Date(data.end_time) : null;
+      const durationHours = endTime 
+        ? (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
+        : null;
+
+      const { error } = await supabase.from('downtime_events').insert({
+        start_time: startTime.toISOString(),
+        end_time: endTime?.toISOString() || null,
+        duration_hours: durationHours,
+        reason: data.reason,
+        reason_category: data.reason_category,
+        impact_level: data.impact_level,
+        justification_status: 'pending'
+      });
+
+      if (error) throw error;
+      
+      toast.success('Downtime registrado com sucesso!');
+      loadData();
+    } catch (error) {
+      console.error('Error creating downtime:', error);
+      toast.error('Erro ao registrar downtime');
     }
   };
 
@@ -368,6 +405,11 @@ export default function VesselContractsV2() {
 
         {/* Downtime Tab */}
         <TabsContent value="downtime" className="space-y-4">
+          <DowntimeFormDialog 
+            open={showDowntimeForm} 
+            onOpenChange={setShowDowntimeForm}
+            onSubmit={handleCreateDowntime}
+          />
           <CardV2
             icon={Clock}
             title="Eventos de Downtime"
@@ -376,7 +418,7 @@ export default function VesselContractsV2() {
             action={{
               label: "Registrar Downtime",
               icon: Plus,
-              onClick: () => toast.info("Formulário de downtime em desenvolvimento")
+              onClick: () => setShowDowntimeForm(true)
             }}
           >
             <div className="space-y-4">

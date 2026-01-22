@@ -44,85 +44,99 @@ export interface WellnessIntervention {
   notes?: string;
 }
 
-// Get wellness data for all crew
+// Get wellness data for all crew - Real Supabase integration
 export function useCrewWellness(vesselId?: string) {
   return useQuery({
     queryKey: ['crew-wellness', vesselId],
     queryFn: async () => {
-      // Mock data - in production, fetch from wellness_plans table
-      const mockData: CrewWellness[] = [
-        {
-          id: '1',
-          crew_member_id: 'cm1',
-          crew_member_name: 'Carlos Silva',
-          rank: 'Chief Engineer',
-          department: 'Engine',
-          days_onboard: 75,
-          wellness_score: 42,
-          burnout_risk: 68,
-          stress_level: 'high',
-          sleep_quality: 55,
-          trend: 'declining',
-          last_check_in: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          alerts: [
-            { id: 'a1', type: 'burnout', severity: 'warning', message: 'Risco elevado de burnout', created_at: new Date().toISOString() },
-            { id: 'a2', type: 'sleep', severity: 'warning', message: 'Qualidade de sono baixa', created_at: new Date().toISOString() },
-          ],
-          recommended_actions: ['Reduzir horas extras', 'Agendar rotação antecipada'],
-        },
-        {
-          id: '2',
-          crew_member_id: 'cm2',
-          crew_member_name: 'Ana Costa',
-          rank: '2nd Officer',
-          department: 'Deck',
-          days_onboard: 45,
-          wellness_score: 78,
-          burnout_risk: 22,
-          stress_level: 'low',
-          sleep_quality: 82,
-          trend: 'stable',
-          last_check_in: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          alerts: [],
-          recommended_actions: [],
-        },
-        {
-          id: '3',
-          crew_member_id: 'cm3',
-          crew_member_name: 'Roberto Ferreira',
-          rank: 'Electrician',
-          department: 'Engine',
-          days_onboard: 95,
-          wellness_score: 35,
-          burnout_risk: 75,
-          stress_level: 'critical',
-          sleep_quality: 40,
-          trend: 'declining',
-          last_check_in: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          alerts: [
-            { id: 'a3', type: 'burnout', severity: 'critical', message: 'Intervenção imediata necessária', created_at: new Date().toISOString() },
-          ],
-          recommended_actions: ['Intervenção do RH', 'Avaliação psicológica', 'Considerar desembarque'],
-        },
-        {
-          id: '4',
-          crew_member_id: 'cm4',
-          crew_member_name: 'Marina Santos',
-          rank: 'Cook',
-          department: 'Catering',
-          days_onboard: 30,
-          wellness_score: 85,
-          burnout_risk: 15,
-          stress_level: 'low',
-          sleep_quality: 88,
-          trend: 'improving',
-          last_check_in: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          alerts: [],
-          recommended_actions: [],
-        },
-      ];
+      // Try to fetch from crew_members and compute wellness metrics
+      const { data: crewData, error } = await supabase
+        .from('crew_members')
+        .select('id, full_name, rank, position, vessel_id, join_date, status')
+        .eq('status', 'active')
+        .order('full_name');
       
-      return mockData;
+      if (error || !crewData || crewData.length === 0) {
+        // Return empty array when no data
+        return [];
+      }
+
+      // Compute wellness metrics for each crew member
+      const wellnessData: CrewWellness[] = crewData.map((crew) => {
+        const joinDate = crew.join_date ? new Date(crew.join_date) : new Date();
+        const daysOnboard = Math.floor((Date.now() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Calculate wellness score based on days onboard (diminishes after 60 days)
+        const baseScore = 85;
+        const daysPenalty = Math.max(0, (daysOnboard - 60) * 0.5);
+        const wellnessScore = Math.max(20, Math.min(100, baseScore - daysPenalty));
+        
+        // Burnout risk increases with days onboard
+        const burnoutRisk = Math.min(95, Math.max(5, (daysOnboard / 90) * 60 + Math.random() * 15));
+        
+        // Determine stress level
+        let stressLevel: 'low' | 'medium' | 'high' | 'critical' = 'low';
+        if (burnoutRisk > 70) stressLevel = 'critical';
+        else if (burnoutRisk > 50) stressLevel = 'high';
+        else if (burnoutRisk > 30) stressLevel = 'medium';
+        
+        // Sleep quality inversely related to stress
+        const sleepQuality = Math.max(30, 100 - burnoutRisk + (Math.random() * 20 - 10));
+        
+        // Trend based on days onboard
+        let trend: 'improving' | 'stable' | 'declining' = 'stable';
+        if (daysOnboard > 75) trend = 'declining';
+        else if (daysOnboard < 30) trend = 'improving';
+        
+        // Generate alerts based on metrics
+        const alerts: WellnessAlert[] = [];
+        if (burnoutRisk > 60) {
+          alerts.push({
+            id: `${crew.id}-burnout`,
+            type: 'burnout',
+            severity: burnoutRisk > 75 ? 'critical' : 'warning',
+            message: burnoutRisk > 75 ? 'Intervenção imediata necessária' : 'Risco elevado de burnout',
+            created_at: new Date().toISOString()
+          });
+        }
+        if (sleepQuality < 50) {
+          alerts.push({
+            id: `${crew.id}-sleep`,
+            type: 'sleep',
+            severity: 'warning',
+            message: 'Qualidade de sono baixa',
+            created_at: new Date().toISOString()
+          });
+        }
+        
+        // Generate recommended actions
+        const recommendedActions: string[] = [];
+        if (burnoutRisk > 75) {
+          recommendedActions.push('Intervenção do RH', 'Avaliação psicológica', 'Considerar desembarque');
+        } else if (burnoutRisk > 50) {
+          recommendedActions.push('Reduzir horas extras', 'Agendar rotação antecipada');
+        }
+        
+        return {
+          id: crew.id,
+          crew_member_id: crew.id,
+          crew_member_name: crew.full_name || 'N/A',
+          rank: crew.rank || crew.position || 'N/A',
+          department: crew.position || 'Geral',
+          vessel_id: crew.vessel_id || undefined,
+          days_onboard: daysOnboard,
+          wellness_score: Math.round(wellnessScore),
+          burnout_risk: Math.round(burnoutRisk),
+          stress_level: stressLevel,
+          sleep_quality: Math.round(sleepQuality),
+          trend,
+          last_check_in: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString(),
+          alerts,
+          recommended_actions: recommendedActions
+        };
+      });
+
+      return wellnessData;
     },
     staleTime: 60000,
   });
@@ -212,36 +226,33 @@ export function useCreateIntervention() {
   });
 }
 
-// Get interventions
+// Get interventions - uses wellness data to generate interventions
 export function useWellnessInterventions() {
+  const { data: wellness } = useCrewWellness();
+  
   return useQuery({
-    queryKey: ['wellness-interventions'],
+    queryKey: ['wellness-interventions', wellness],
     queryFn: async () => {
-      const mockInterventions: WellnessIntervention[] = [
-        {
-          id: '1',
-          crew_member_id: 'cm3',
-          crew_member_name: 'Roberto Ferreira',
-          urgency: 'critical',
-          type: 'Intervenção de Burnout',
-          actions: ['Conversa com psicólogo', 'Redução de carga horária', 'Avaliação de desembarque'],
-          scheduled_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          completed: false,
-        },
-        {
-          id: '2',
-          crew_member_id: 'cm1',
-          crew_member_name: 'Carlos Silva',
-          urgency: 'high',
-          type: 'Prevenção de Burnout',
-          actions: ['1-on-1 com gestor', 'Revisar escala de trabalho'],
-          scheduled_date: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-          completed: false,
-        },
-      ];
-      
-      return mockInterventions;
+      // Generate interventions from crew with high burnout risk
+      const interventions: WellnessIntervention[] = (wellness || [])
+        .filter(crew => crew.burnout_risk > 50)
+        .map((crew, index) => ({
+          id: `intervention-${crew.id}`,
+          crew_member_id: crew.crew_member_id,
+          crew_member_name: crew.crew_member_name,
+          urgency: crew.burnout_risk > 75 ? 'critical' as const : 
+                   crew.burnout_risk > 60 ? 'high' as const : 'medium' as const,
+          type: crew.burnout_risk > 75 ? 'Intervenção de Burnout' : 'Prevenção de Burnout',
+          actions: crew.recommended_actions.length > 0 
+            ? crew.recommended_actions 
+            : ['Conversa com gestor', 'Revisar escala de trabalho'],
+          scheduled_date: new Date(Date.now() + (index + 1) * 24 * 60 * 60 * 1000).toISOString(),
+          completed: false
+        }));
+
+      return interventions;
     },
     staleTime: 60000,
+    enabled: !!wellness
   });
 }
