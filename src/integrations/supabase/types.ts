@@ -5623,6 +5623,56 @@ export type Database = {
           },
         ]
       }
+      communication_messages: {
+        Row: {
+          channel_id: string | null
+          content: string | null
+          created_at: string | null
+          id: string
+          message_type: string | null
+          organization_id: string | null
+          priority: string | null
+          read_at: string | null
+          responded_at: string | null
+          response_time_seconds: number | null
+          sender_id: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          message_type?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          read_at?: string | null
+          responded_at?: string | null
+          response_time_seconds?: number | null
+          sender_id?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          message_type?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          read_at?: string | null
+          responded_at?: string | null
+          response_time_seconds?: number | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_messages_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_ai_recommendations: {
         Row: {
           action_type: string | null
