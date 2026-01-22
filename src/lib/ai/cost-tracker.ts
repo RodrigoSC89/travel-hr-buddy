@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // Pricing per 1M tokens (as of 2024)
 const PRICING: Record<string, { input: number; output: number }> = {
@@ -133,14 +134,14 @@ async function flushUsageBuffer(): Promise<void> {
       .insert(records);
 
     if (error) {
-      console.warn('[CostTracker] Failed to flush usage:', error);
+      logger.warn('[CostTracker] Failed to flush usage', { error });
       // Re-add failed records back to buffer
       usageBuffer.push(...toFlush);
     } else {
-      console.log(`[CostTracker] Flushed ${records.length} usage records`);
+      logger.debug(`[CostTracker] Flushed ${records.length} usage records`);
     }
   } catch (error) {
-    console.error('[CostTracker] Flush error:', error);
+    logger.error('[CostTracker] Flush error', error);
     // Re-add failed records
     usageBuffer.push(...toFlush);
   }

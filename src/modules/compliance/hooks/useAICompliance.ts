@@ -82,8 +82,8 @@ export function useAICompliance() {
         // Parse AI response
         const aiResponse = data?.response || data?.text || "";
         analysisResult = parseAIResponse(aiResponse, input);
-      } catch (aiError) {
-        console.warn("AI service unavailable, using local analysis:", aiError);
+      } catch {
+        // AI service unavailable, fallback to local analysis
         analysisResult = generateLocalAnalysis(input);
       }
 

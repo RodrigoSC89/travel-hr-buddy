@@ -52,8 +52,7 @@ export function useEmployeesDB() {
           }));
         }
         return [];
-      } catch (error) {
-        console.warn('[useEmployeesDB] Fetch failed:', error);
+      } catch {
         return [];
       }
     },
@@ -70,7 +69,7 @@ export function useEmployeesDB() {
           phone: employee.telefone || null,
           rank: employee.cargo || null,
           status: employee.status === 'ativo' ? 'active' : 'inactive'
-        } as any)
+        } as never)
         .select()
         .single();
 
@@ -82,8 +81,7 @@ export function useEmployeesDB() {
       queryClient.invalidateQueries({ queryKey: ['colaboradores'] });
       toast.success('Colaborador criado com sucesso');
     },
-    onError: (error) => {
-      console.error('Create employee error:', error);
+    onError: () => {
       toast.error('Erro ao criar colaborador');
     }
   });
@@ -113,8 +111,7 @@ export function useEmployeesDB() {
       queryClient.invalidateQueries({ queryKey: ['colaboradores'] });
       toast.success('Colaborador atualizado');
     },
-    onError: (error) => {
-      console.error('Update employee error:', error);
+    onError: () => {
       toast.error('Erro ao atualizar colaborador');
     }
   });
@@ -133,8 +130,7 @@ export function useEmployeesDB() {
       queryClient.invalidateQueries({ queryKey: ['colaboradores'] });
       toast.success('Colaborador removido');
     },
-    onError: (error) => {
-      console.error('Delete employee error:', error);
+    onError: () => {
       toast.error('Erro ao remover colaborador');
     }
   });
