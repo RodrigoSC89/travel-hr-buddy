@@ -265,17 +265,17 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "Combate a Incêndio": return "text-red-600 bg-red-50";
-    case "Abandono": return "text-orange-600 bg-orange-50";
-    case "Alarmes": return "text-yellow-600 bg-yellow-50";
-    case "EPI": return "text-blue-600 bg-blue-50";
-    case "Resgate": return "text-purple-600 bg-purple-50";
-    case "Escape": return "text-green-600 bg-green-50";
-    case "Ventilação": return "text-cyan-600 bg-cyan-50";
-    case "Materiais Perigosos": return "text-red-600 bg-red-50";
-    case "Controle": return "text-muted-foreground bg-gray-50";
-    case "Observações": return "text-indigo-600 bg-indigo-50";
-    default: return "text-muted-foreground bg-gray-50";
+    case "Combate a Incêndio": return "text-destructive bg-destructive/10";
+    case "Abandono": return "text-warning bg-warning/10";
+    case "Alarmes": return "text-warning bg-warning/10";
+    case "EPI": return "text-primary bg-primary/10";
+    case "Resgate": return "text-secondary bg-secondary/10";
+    case "Escape": return "text-success bg-success/10";
+    case "Ventilação": return "text-primary bg-primary/10";
+    case "Materiais Perigosos": return "text-destructive bg-destructive/10";
+    case "Controle": return "text-muted-foreground bg-muted";
+    case "Observações": return "text-primary bg-primary/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 

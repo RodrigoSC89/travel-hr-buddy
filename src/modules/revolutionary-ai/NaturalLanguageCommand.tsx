@@ -132,11 +132,11 @@ export function NaturalLanguageCommand() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      maintenance: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      inventory: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      crew: 'bg-green-500/20 text-green-400 border-green-500/30',
-      compliance: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-      analytics: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+      maintenance: 'bg-warning/20 text-warning border-warning/30',
+      inventory: 'bg-primary/20 text-primary border-primary/30',
+      crew: 'bg-success/20 text-success border-success/30',
+      compliance: 'bg-secondary/20 text-secondary border-secondary/30',
+      analytics: 'bg-primary/20 text-primary border-primary/30'
     };
     return colors[category as keyof typeof colors] || 'bg-muted text-muted-foreground';
   };

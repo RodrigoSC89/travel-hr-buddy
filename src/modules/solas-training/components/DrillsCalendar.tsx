@@ -49,14 +49,14 @@ const drillTypeIcons: Record<Drill['type'], React.ComponentType<any>> = {
 };
 
 const drillTypeColors: Record<Drill['type'], string> = {
-  fire: "text-red-500 bg-red-500/10",
-  abandon: "text-blue-500 bg-blue-500/10",
-  mob: "text-cyan-500 bg-cyan-500/10",
-  blackout: "text-amber-500 bg-amber-500/10",
-  collision: "text-orange-500 bg-orange-500/10",
-  pollution: "text-green-500 bg-green-500/10",
-  security: "text-purple-500 bg-purple-500/10",
-  medical: "text-pink-500 bg-pink-500/10",
+  fire: "text-destructive bg-destructive/10",
+  abandon: "text-primary bg-primary/10",
+  mob: "text-primary bg-primary/10",
+  blackout: "text-warning bg-warning/10",
+  collision: "text-warning bg-warning/10",
+  pollution: "text-success bg-success/10",
+  security: "text-secondary bg-secondary/10",
+  medical: "text-destructive bg-destructive/10",
 };
 
 export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, onViewReport }: DrillsCalendarProps) {

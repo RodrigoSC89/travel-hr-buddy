@@ -289,7 +289,7 @@ const OceanSonar: React.FC = () => {
               <Button
                 onClick={startScan}
                 disabled={isScanning}
-                className="bg-cyan-600 hover:bg-cyan-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {isScanning ? (
                   <>
