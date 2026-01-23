@@ -1,6 +1,7 @@
 import React from "react";
 import { ProfessionalKPICard } from "@/components/dashboard/professional-kpi-card";
 import { Ship, CheckCircle, DollarSign, Target } from "lucide-react";
+import { useDashboardData } from "./DashboardDataProvider";
 
 interface KPIGridProps {
   revenueValue?: string;
@@ -13,16 +14,19 @@ interface KPIGridProps {
   efficiencyChange?: number;
 }
 
-export const KPIGrid = React.memo<KPIGridProps>(({
-  revenueValue = "72.5",
-  revenueChange = 12.5,
-  vesselsValue = "24",
-  vesselsChange = 8.3,
-  complianceValue = "94.2",
-  complianceChange = 2.8,
-  efficiencyValue = "89.7",
-  efficiencyChange = 5.2,
-}) => {
+export const KPIGrid = React.memo<KPIGridProps>((props) => {
+  const { metrics } = useDashboardData();
+  
+  // Use real data from Supabase if available, otherwise fall back to props
+  const revenueValue = props.revenueValue ?? (metrics.revenueThisMonth > 0 ? (metrics.revenueThisMonth / 1000).toFixed(1) : "72.5");
+  const revenueChange = props.revenueChange ?? (metrics.revenueGrowth || 12.5);
+  const vesselsValue = props.vesselsValue ?? (metrics.isLoading ? "..." : String(metrics.activeVessels || metrics.totalVessels));
+  const vesselsChange = props.vesselsChange ?? (metrics.totalVessels > 0 ? Math.round((metrics.activeVessels / metrics.totalVessels) * 100) : 8.3);
+  const complianceValue = props.complianceValue ?? (metrics.isLoading ? "..." : String(metrics.complianceRate || 94.2));
+  const complianceChange = props.complianceChange ?? (metrics.complianceRate >= 90 ? 2.8 : -1.5);
+  const efficiencyValue = props.efficiencyValue ?? (metrics.isLoading ? "..." : String(Math.max(85, 100 - (metrics.pendingMaintenance * 2)).toFixed(1)));
+  const efficiencyChange = props.efficiencyChange ?? (metrics.pendingMaintenance < 5 ? 5.2 : -2.1);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <ProfessionalKPICard

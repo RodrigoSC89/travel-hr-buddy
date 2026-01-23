@@ -13,6 +13,7 @@ import {
   Brain, Heart, Activity, AlertTriangle, CheckCircle, 
   TrendingUp, Users, Moon, Coffee
 } from "lucide-react";
+import { useSafetyMetrics } from "@/hooks/useModuleMetrics";
 
 const QUICK_QUESTIONS = [
   "O que é QE (Quociente Emocional)?",
@@ -35,18 +36,13 @@ const EVIDENCE_FIELDS = [
 ];
 
 export default function SafetyHumanFactorsV2() {
-  const [metrics, setMetrics] = useState({
-    avgQE: 78,
-    fatigueRisk: 15,
-    stressLevel: 22,
-    wellnessScore: 85
-  });
+  const metrics = useSafetyMetrics();
 
   const stats = [
-    { label: "QE Médio", value: `${metrics.avgQE}%`, icon: Heart, color: "purple" as const },
-    { label: "Risco Fadiga", value: `${metrics.fatigueRisk}%`, icon: Moon, color: "orange" as const },
-    { label: "Nível Estresse", value: `${metrics.stressLevel}%`, icon: Activity, color: "red" as const },
-    { label: "Wellness Score", value: `${metrics.wellnessScore}%`, icon: CheckCircle, color: "green" as const },
+    { label: "QE Médio", value: metrics.isLoading ? "..." : `${metrics.avgQE}%`, icon: Heart, color: "purple" as const },
+    { label: "Risco Fadiga", value: metrics.isLoading ? "..." : `${metrics.fatigueRisk}%`, icon: Moon, color: "orange" as const },
+    { label: "Nível Estresse", value: metrics.isLoading ? "..." : `${metrics.stressLevel}%`, icon: Activity, color: "red" as const },
+    { label: "Wellness Score", value: metrics.isLoading ? "..." : `${metrics.wellnessScore}%`, icon: CheckCircle, color: "green" as const },
   ];
 
   return (
