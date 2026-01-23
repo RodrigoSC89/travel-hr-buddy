@@ -1,6 +1,6 @@
 /**
  * VesselContractsV2 - Contratos de Embarcação
- * Módulo elevado com IA integrada, layout V2, e funcionalidades completas
+ * Módulo com IA integrada para análise de downtime, verificação de justificativas e geração de BROA
  */
 
 import { useState, useEffect } from "react";
@@ -17,6 +17,9 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { DowntimeFormDialog } from "@/components/contracts/DowntimeFormDialog";
+import { DowntimeAIAnalysisCard } from "@/components/contracts/DowntimeAIAnalysisCard";
+import { BROAGeneratorCard } from "@/components/contracts/BROAGeneratorCard";
+import { SLADashboardCard } from "@/components/contracts/SLADashboardCard";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
@@ -272,12 +275,12 @@ export default function VesselContractsV2() {
 
       {/* Main Content */}
       <Tabs defaultValue="contracts" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 max-w-3xl">
+        <TabsList className="grid w-full grid-cols-5 max-w-4xl">
           <TabsTrigger value="contracts">Contratos</TabsTrigger>
           <TabsTrigger value="downtime">Downtime</TabsTrigger>
-          <TabsTrigger value="broa">BROA</TabsTrigger>
-          <TabsTrigger value="ai-assistant">IA Assistente</TabsTrigger>
-          <TabsTrigger value="evidence">Evidências</TabsTrigger>
+          <TabsTrigger value="broa">BROA & IA</TabsTrigger>
+          <TabsTrigger value="dashboard">Dashboard SLA</TabsTrigger>
+          <TabsTrigger value="ai-assistant">Assistente</TabsTrigger>
         </TabsList>
 
         {/* Contratos Tab */}
@@ -458,24 +461,33 @@ export default function VesselContractsV2() {
 
         {/* BROA Tab */}
         <TabsContent value="broa" className="space-y-4">
-          <CardV2
-            icon={FileCheck}
-            title="BROA - Boletim de Registro de Ocorrências e Avarias"
-            description="Geração automática de documentos BROA com análise IA"
-            gradient="green"
-          >
-            <div className="text-center py-12">
-              <FileCheck className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-medium mb-2">Gerador de BROA com IA</h3>
-              <p className="text-muted-foreground mb-4">
-                Selecione um evento de downtime na aba anterior para gerar automaticamente o BROA
-              </p>
-              <Button onClick={() => toast.info('Selecione um evento de downtime primeiro')}>
-                <Brain className="h-4 w-4 mr-2" />
-                Gerar BROA Automático
-              </Button>
-            </div>
-          </CardV2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <BROAGeneratorCard 
+              events={downtimeEvents}
+              contracts={contracts.map(c => ({
+                id: c.id,
+                contract_number: c.contract_number,
+                client_name: c.client_name
+              }))}
+              onBROAGenerated={() => loadData()}
+            />
+            <DowntimeAIAnalysisCard 
+              events={downtimeEvents}
+              contracts={contracts.map(c => ({
+                id: c.id,
+                contract_number: c.contract_number,
+                client_name: c.client_name,
+                sla_downtime_percent: c.sla_downtime_percent,
+                penalty_per_hour: c.penalty_per_hour
+              }))}
+              onAnalysisComplete={() => loadData()}
+            />
+          </div>
+        </TabsContent>
+
+        {/* Dashboard SLA Tab */}
+        <TabsContent value="dashboard" className="space-y-4">
+          <SLADashboardCard contracts={contracts} downtimeEvents={downtimeEvents} />
         </TabsContent>
 
         {/* AI Assistant Tab */}
