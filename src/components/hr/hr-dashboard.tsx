@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CertificateManager } from "./certificate-manager";
 import { CertificateAlerts } from "./certificate-alerts";
+import { RotationPlanningDialog } from "@/components/dialogs/RotationPlanningDialog";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
@@ -26,7 +27,8 @@ import {
   Star,
   UserMinus,
   Trash2,
-  FileText
+  FileText,
+  RefreshCw
 } from "lucide-react";
 
 interface Employee {
@@ -112,6 +114,7 @@ export const HRDashboard = () => {
   const [employeeToRemove, setEmployeeToRemove] = useState<Employee | null>(null);
   const [certificateManagerOpen, setCertificateManagerOpen] = useState(false);
   const [selectedEmployeeForCertificates, setSelectedEmployeeForCertificates] = useState<Employee | null>(null);
+  const [rotationDialogOpen, setRotationDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
     name: "",
     position: "",
@@ -342,6 +345,14 @@ export const HRDashboard = () => {
           </p>
         </div>
         <div className="flex items-center space-x-2 mt-4 md:mt-0">
+          <Button 
+            variant="outline" 
+            onClick={() => setRotationDialogOpen(true)}
+            className="gap-2"
+          >
+            <RefreshCw size={18} />
+            Planejar Rotação
+          </Button>
           <Button 
             variant="outline" 
             onClick={() => setShowTable(!showTable)}
@@ -810,6 +821,12 @@ export const HRDashboard = () => {
           }} 
         />
       )}
+
+      {/* Rotation Planning Dialog */}
+      <RotationPlanningDialog
+        open={rotationDialogOpen}
+        onOpenChange={setRotationDialogOpen}
+      />
     </div>
   );
 };
