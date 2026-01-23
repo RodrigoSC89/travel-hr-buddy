@@ -111,7 +111,7 @@ export default function DPOverview() {
               {systemStatus.map((sys) => (
                 <div key={sys.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${sys.status === "online" ? "bg-emerald-500" : "bg-red-500"}`} />
+                    <div className={`w-2 h-2 rounded-full ${sys.status === "online" ? "bg-success" : "bg-destructive"}`} />
                     <span className="text-sm font-medium">{sys.name}</span>
                   </div>
                   <div className="flex items-center gap-2">

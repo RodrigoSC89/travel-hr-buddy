@@ -109,9 +109,9 @@ export function OfflineIndicator() {
   const getStatusClass = () => {
     // PATCH v23: Removido check !online
     if (syncStats.failed > 0) return 'bg-destructive/10 border-destructive/30 text-destructive';
-    if (syncStats.syncing > 0) return 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-400';
-    if (syncStats.pending > 0) return 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400';
-    return 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400';
+    if (syncStats.syncing > 0) return 'bg-primary/10 border-primary/30 text-primary';
+    if (syncStats.pending > 0) return 'bg-warning/10 border-warning/30 text-warning';
+    return 'bg-success/10 border-success/30 text-success';
   };
 
   return (

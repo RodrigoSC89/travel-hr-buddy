@@ -355,9 +355,9 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
                       value={((sensor.value - sensor.min) / (sensor.max - sensor.min)) * 100}
                       className={cn(
                         "h-1.5",
-                        sensor.status === "critical" && "[&>div]:bg-red-500",
-                        sensor.status === "warning" && "[&>div]:bg-amber-500",
-                        sensor.status === "normal" && "[&>div]:bg-emerald-500",
+                        sensor.status === "critical" && "[&>div]:bg-destructive",
+                        sensor.status === "warning" && "[&>div]:bg-warning",
+                        sensor.status === "normal" && "[&>div]:bg-success",
                       )}
                     />
 

@@ -231,9 +231,9 @@ export function ExecutiveDashboard() {
 
   const getMetricStatus = (status: SystemMetric["status"]) => {
     switch (status) {
-      case "healthy": return "bg-emerald-500";
-      case "warning": return "bg-amber-500";
-      case "critical": return "bg-red-500";
+      case "healthy": return "bg-success";
+      case "warning": return "bg-warning";
+      case "critical": return "bg-destructive";
     }
   };
 

@@ -189,9 +189,9 @@ export function InsightsPanel() {
 
   const getInsightStyles = (type: string) => {
     switch (type) {
-      case "warning": return { bg: "bg-rose-500/10 border-rose-500/20", icon: AlertTriangle, color: "text-rose-500" };
-      case "success": return { bg: "bg-emerald-500/10 border-emerald-500/20", icon: TrendingUp, color: "text-emerald-500" };
-      case "recommendation": return { bg: "bg-blue-500/10 border-blue-500/20", icon: Target, color: "text-blue-500" };
+      case "warning": return { bg: "bg-destructive/10 border-destructive/20", icon: AlertTriangle, color: "text-destructive" };
+      case "success": return { bg: "bg-success/10 border-success/20", icon: TrendingUp, color: "text-success" };
+      case "recommendation": return { bg: "bg-primary/10 border-primary/20", icon: Target, color: "text-primary" };
       case "info": return { bg: "bg-primary/10 border-primary/20", icon: Zap, color: "text-primary" };
       default: return { bg: "bg-muted", icon: Zap, color: "text-muted-foreground" };
     }

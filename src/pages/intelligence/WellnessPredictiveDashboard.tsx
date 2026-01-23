@@ -130,17 +130,17 @@ export default function WellnessPredictiveDashboard() {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "high": return "text-red-500 bg-red-500/10 border-red-500/20";
-      case "medium": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-      case "low": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
+      case "high": return "text-destructive bg-destructive/10 border-destructive/20";
+      case "medium": return "text-warning bg-warning/10 border-warning/20";
+      case "low": return "text-success bg-success/10 border-success/20";
       default: return "";
     }
   };
 
   const getMoodIcon = (mood: number) => {
-    if (mood >= 4) return <Smile className="h-5 w-5 text-emerald-500" />;
-    if (mood >= 3) return <Meh className="h-5 w-5 text-amber-500" />;
-    return <Frown className="h-5 w-5 text-red-500" />;
+    if (mood >= 4) return <Smile className="h-5 w-5 text-success" />;
+    if (mood >= 3) return <Meh className="h-5 w-5 text-warning" />;
+    return <Frown className="h-5 w-5 text-destructive" />;
   };
 
   return (
