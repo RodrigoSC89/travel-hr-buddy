@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { AISettingsDialog } from "./AISettingsDialog";
 
 interface Message {
   id: string;
@@ -68,6 +69,7 @@ const IntegratedAIAssistant = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [conversations] = useState<Conversation[]>([
     {
       id: "1",
@@ -430,11 +432,7 @@ Como posso ajudá-lo especificamente hoje?`,
   };
 
   const handleSettingsClick = () => {
-    toast({
-      title: "⚙️ Configurações do Assistente",
-      description: "Ajuste preferências de idioma, modelo de IA e comportamento"
-    });
-    // TODO: Implement settings dialog with model selection, temperature, etc.
+    setSettingsOpen(true);
   };
 
   return (
@@ -669,6 +667,11 @@ Como posso ajudá-lo especificamente hoje?`,
           </div>
         </div>
       </div>
+      
+      <AISettingsDialog 
+        open={settingsOpen} 
+        onOpenChange={setSettingsOpen} 
+      />
     </div>
   );
 };
