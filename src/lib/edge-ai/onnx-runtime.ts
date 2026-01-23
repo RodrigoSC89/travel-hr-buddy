@@ -4,6 +4,7 @@
  */
 
 import * as ort from 'onnxruntime-web';
+import { logger } from '@/lib/logger';
 
 export interface ModelConfig {
   name: string;
@@ -77,16 +78,16 @@ class ONNXRuntime {
       for (const backend of backends) {
         try {
           ort.env.wasm.numThreads = navigator.hardwareConcurrency || 4;
-          console.log(`ONNX Runtime initialized with ${backend} backend`);
+          logger.info(`ONNX Runtime initialized with ${backend} backend`);
           break;
         } catch (e) {
-          console.warn(`Failed to initialize ${backend} backend:`, e);
+          logger.warn(`Failed to initialize ${backend} backend`, { error: e });
         }
       }
 
       this.isInitialized = true;
     } catch (error) {
-      console.error('Failed to initialize ONNX Runtime:', error);
+      logger.error('Failed to initialize ONNX Runtime', error);
       throw error;
     }
   }

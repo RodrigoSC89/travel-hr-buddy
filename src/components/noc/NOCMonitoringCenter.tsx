@@ -259,7 +259,7 @@ export function NOCMonitoringCenter() {
           </div>
 
           <Badge variant={isMonitoring ? "default" : "secondary"} className={cn(isMonitoring && "animate-pulse")}>
-            <span className={cn("w-2 h-2 rounded-full mr-1", isMonitoring ? "bg-emerald-500" : "bg-slate-500")} />
+            <span className={cn("w-2 h-2 rounded-full mr-1", isMonitoring ? "bg-success" : "bg-muted-foreground")} />
             {isMonitoring ? "ATIVO" : "PAUSADO"}
           </Badge>
         </div>

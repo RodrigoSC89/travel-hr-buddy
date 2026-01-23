@@ -1,6 +1,7 @@
 import { useNavigate, NavigateOptions } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { isValidRoute, getSuggestion } from "@/utils/route-audit";
+import { logger } from "@/lib/logger";
 
 /**
  * Enhanced Navigation Manager with error handling, user feedback, and route validation
@@ -23,10 +24,12 @@ export const useNavigationManager = () => {
       // Validate route in development mode
       if (import.meta.env.DEV && !skipValidation && !isValidRoute(path)) {
         const suggestion = getSuggestion(path);
-        console.warn(
+        logger.warn(
           `[NavigationManager] Invalid route: "${path}"`,
-          suggestion ? `\n  → Suggestion: "${suggestion}"` : "",
-          "\n  → Add to VALID_ROUTES in src/utils/route-audit.ts if valid"
+          {
+            suggestion: suggestion || null,
+            hint: "Add to VALID_ROUTES in src/utils/route-audit.ts if valid"
+          }
         );
         
         // Show toast warning in development

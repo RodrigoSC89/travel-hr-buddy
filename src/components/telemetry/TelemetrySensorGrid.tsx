@@ -206,8 +206,8 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
 
   const getTrendIcon = (trend: Sensor["trend"]) => {
     const icons: Record<Sensor["trend"], React.ReactNode> = {
-      up: <TrendingUp className="h-4 w-4 text-emerald-500" />,
-      down: <TrendingDown className="h-4 w-4 text-red-500" />,
+      up: <TrendingUp className="h-4 w-4 text-success" />,
+      down: <TrendingDown className="h-4 w-4 text-destructive" />,
       stable: <Minus className="h-4 w-4 text-muted-foreground" />,
     };
     return icons[trend];
@@ -215,10 +215,10 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
 
   const getStatusColor = (status: Sensor["status"]) => {
     const colors: Record<Sensor["status"], string> = {
-      normal: "bg-emerald-500/20 text-emerald-500 border-emerald-500/50",
-      warning: "bg-amber-500/20 text-amber-500 border-amber-500/50",
-      critical: "bg-red-500/20 text-red-500 border-red-500/50",
-      offline: "bg-slate-500/20 text-slate-500 border-slate-500/50",
+      normal: "bg-success/20 text-success border-success/50",
+      warning: "bg-warning/20 text-warning border-warning/50",
+      critical: "bg-destructive/20 text-destructive border-destructive/50",
+      offline: "bg-muted text-muted-foreground border-muted",
     };
     return colors[status];
   };
@@ -290,19 +290,19 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
         {/* Status Summary */}
         <div className="flex items-center gap-4 mt-3">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-success" />
             <span className="text-xs text-muted-foreground">{statusCounts.normal} Normal</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-warning animate-pulse" />
             <span className="text-xs text-muted-foreground">{statusCounts.warning} Warning</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
             <span className="text-xs text-muted-foreground">{statusCounts.critical} Critical</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-slate-500" />
+            <span className="w-2 h-2 rounded-full bg-muted-foreground" />
             <span className="text-xs text-muted-foreground">{statusCounts.offline} Offline</span>
           </div>
         </div>

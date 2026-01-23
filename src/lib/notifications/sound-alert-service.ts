@@ -3,6 +3,8 @@
  * Plays audio alerts for critical IoT sensor events
  */
 
+import { logger } from "@/lib/logger";
+
 type AlertSeverity = 'critical' | 'warning' | 'info';
 
 interface SoundAlertConfig {
@@ -69,7 +71,7 @@ function playBeep(frequency: number, duration: number, volume: number): void {
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + duration);
   } catch (error) {
-    console.warn('Sound alert playback failed:', error);
+    logger.warn('Sound alert playback failed', { error });
   }
 }
 
