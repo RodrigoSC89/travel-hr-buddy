@@ -96,6 +96,7 @@ const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter")
 const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
+const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
 
 // ============================================
 // INTELIGÊNCIA AVANÇADA
@@ -618,6 +619,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* SISTEMA & CONFIGURAÇÕES */}
       {/* ============================================ */}
+      <Route path="/quality-dashboard" element={<QualityDashboard />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/integrations" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
