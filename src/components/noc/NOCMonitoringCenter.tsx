@@ -283,9 +283,9 @@ export function NOCMonitoringCenter() {
                 animate={{ opacity: 1, scale: 1 }}
                 className={cn(
                   "p-4 rounded-lg border-2 transition-all duration-300",
-                  system.status === "online" && "border-emerald-500/30 bg-emerald-500/5",
-                  system.status === "degraded" && "border-amber-500/30 bg-amber-500/5",
-                  system.status === "offline" && "border-red-500/30 bg-red-500/5"
+                  system.status === "online" && "border-success/30 bg-success/5",
+                  system.status === "degraded" && "border-warning/30 bg-warning/5",
+                  system.status === "offline" && "border-destructive/30 bg-destructive/5"
                 )}
               >
                 <div className="flex items-center justify-between mb-2">

@@ -84,12 +84,12 @@ export function OfflineIndicator() {
       return <AlertTriangle className="h-4 w-4 text-destructive" />;
     }
     if (syncStats.syncing > 0) {
-      return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
+      return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
     }
     if (syncStats.pending > 0) {
-      return <CloudOff className="h-4 w-4 text-amber-500" />;
+      return <CloudOff className="h-4 w-4 text-warning" />;
     }
-    return <Check className="h-4 w-4 text-emerald-500" />;
+    return <Check className="h-4 w-4 text-success" />;
   };
 
   const getStatusText = () => {

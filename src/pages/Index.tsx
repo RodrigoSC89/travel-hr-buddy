@@ -85,11 +85,11 @@ const NautilusCommandHero = memo(() => {
         
         <div className="grid grid-cols-5 gap-3 mt-4">
           {[
-            { label: 'Frota', icon: Ship, color: 'text-blue-500' },
-            { label: 'Tripulação', icon: Users, color: 'text-emerald-500' },
-            { label: 'Estoque', icon: ShoppingCart, color: 'text-amber-500' },
-            { label: 'Manutenção', icon: Wrench, color: 'text-purple-500' },
-            { label: 'IoT', icon: Sparkles, color: 'text-cyan-500' },
+            { label: 'Frota', icon: Ship, color: 'text-primary' },
+            { label: 'Tripulação', icon: Users, color: 'text-success' },
+            { label: 'Estoque', icon: ShoppingCart, color: 'text-warning' },
+            { label: 'Manutenção', icon: Wrench, color: 'text-accent-foreground' },
+            { label: 'IoT', icon: Sparkles, color: 'text-muted-foreground' },
           ].map((item) => (
             <div key={item.label} className="flex flex-col items-center gap-1 p-2 rounded-lg bg-muted/50">
               <item.icon className={`h-5 w-5 ${item.color}`} />
