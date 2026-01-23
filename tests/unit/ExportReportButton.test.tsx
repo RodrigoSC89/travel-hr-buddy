@@ -1,12 +1,14 @@
 /**
  * PATCH 638 - Unit Tests for ExportReportButton Component
  * Tests PDF/JSON export functionality and state handling
+ * PATCH 10/10 - Fixed React import issue
  */
 
+import React, { useState } from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
-// Mock ExportReportButton component
+// Type definitions
 type ExportFinding = {
   id: number;
   description: string;
@@ -27,6 +29,7 @@ type ExportData = {
   exportOptions?: ExportOptions;
 } | null;
 
+// Mock ExportReportButton component
 const MockExportReportButton = ({ 
   data, 
   format = "pdf",
@@ -36,7 +39,7 @@ const MockExportReportButton = ({
   format?: "pdf" | "json" | "csv";
   onExport?: () => void;
 }) => {
-  const [exporting, setExporting] = React.useState(false);
+  const [exporting, setExporting] = useState(false);
   const canExport = Boolean(data);
   
   const handleExport = async () => {
@@ -44,7 +47,7 @@ const MockExportReportButton = ({
       return;
     }
     setExporting(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 100));
     if (onExport) onExport();
     setExporting(false);
   };
@@ -59,8 +62,6 @@ const MockExportReportButton = ({
     </button>
   );
 };
-
-import { useState } from "react";
 
 describe("ExportReportButton Component", () => {
   const mockData = {
