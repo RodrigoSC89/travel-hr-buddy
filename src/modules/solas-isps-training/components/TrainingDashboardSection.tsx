@@ -213,11 +213,11 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
 
   const getDrillColor = (type: string) => {
     switch (type) {
-      case "fire": return "bg-red-500/10 text-red-600";
-      case "abandon": return "bg-blue-500/10 text-blue-600";
-      case "mob": return "bg-cyan-500/10 text-cyan-600";
-      case "isps": return "bg-purple-500/10 text-purple-600";
-      default: return "bg-amber-500/10 text-amber-600";
+      case "fire": return "bg-destructive/10 text-destructive";
+      case "abandon": return "bg-primary/10 text-primary";
+      case "mob": return "bg-primary/10 text-primary";
+      case "isps": return "bg-secondary/10 text-secondary";
+      default: return "bg-warning/10 text-warning";
     }
   };
 

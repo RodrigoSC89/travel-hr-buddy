@@ -37,12 +37,12 @@ const statusConfig = {
 };
 
 const categoryColors: Record<string, string> = {
-  weather: 'bg-blue-500/10 text-blue-500',
-  maritime: 'bg-cyan-500/10 text-cyan-500',
-  security: 'bg-red-500/10 text-red-500',
-  communication: 'bg-purple-500/10 text-purple-500',
-  ai: 'bg-amber-500/10 text-amber-500',
-  logistics: 'bg-green-500/10 text-green-500'
+  weather: 'bg-primary/10 text-primary',
+  maritime: 'bg-primary/10 text-primary',
+  security: 'bg-destructive/10 text-destructive',
+  communication: 'bg-secondary/10 text-secondary',
+  ai: 'bg-warning/10 text-warning',
+  logistics: 'bg-success/10 text-success'
 };
 
 export function ApiCard({ api, quota, onTest, onToggle, onClick }: ApiCardProps) {

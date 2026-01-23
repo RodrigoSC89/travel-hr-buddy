@@ -209,10 +209,10 @@ export default function TrainingSimulation() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "emergency": return "bg-red-500/20 text-red-400";
-      case "operation": return "bg-blue-500/20 text-blue-400";
-      case "navigation": return "bg-cyan-500/20 text-cyan-400";
-      case "maintenance": return "bg-orange-500/20 text-orange-400";
+      case "emergency": return "bg-destructive/20 text-destructive";
+      case "operation": return "bg-primary/20 text-primary";
+      case "navigation": return "bg-primary/20 text-primary";
+      case "maintenance": return "bg-warning/20 text-warning";
       default: return "bg-muted text-muted-foreground";
     }
   };

@@ -120,17 +120,17 @@ export const AuditTrailSystem = () => {
   const getActionColor = (action: string) => {
     const actionLower = action.toLowerCase();
     if (actionLower.includes('create') || actionLower.includes('insert')) 
-      return "bg-green-500/10 text-green-500 border-green-500/30";
+      return "bg-success/10 text-success border-success/30";
     if (actionLower.includes('update') || actionLower.includes('edit')) 
-      return "bg-blue-500/10 text-blue-500 border-blue-500/30";
+      return "bg-primary/10 text-primary border-primary/30";
     if (actionLower.includes('delete') || actionLower.includes('remove')) 
-      return "bg-red-500/10 text-red-500 border-red-500/30";
+      return "bg-destructive/10 text-destructive border-destructive/30";
     if (actionLower.includes('approve') || actionLower.includes('confirm')) 
-      return "bg-purple-500/10 text-purple-500 border-purple-500/30";
+      return "bg-secondary/10 text-secondary border-secondary/30";
     if (actionLower.includes('export') || actionLower.includes('download')) 
-      return "bg-cyan-500/10 text-cyan-500 border-cyan-500/30";
+      return "bg-primary/10 text-primary border-primary/30";
     if (actionLower.includes('login') || actionLower.includes('auth')) 
-      return "bg-emerald-500/10 text-emerald-500 border-emerald-500/30";
+      return "bg-success/10 text-success border-success/30";
     return "bg-muted text-muted-foreground";
   };
 

@@ -85,13 +85,13 @@ const getActivityIcon = (type: WorkspaceActivity["type"]) => {
 
 const getActivityColor = (type: WorkspaceActivity["type"]) => {
   switch (type) {
-    case "document": return "bg-blue-500/10 text-blue-500";
-    case "task": return "bg-green-500/10 text-green-500";
-    case "user": return "bg-purple-500/10 text-purple-500";
-    case "meeting": return "bg-orange-500/10 text-orange-500";
-    case "message": return "bg-cyan-500/10 text-cyan-500";
-    case "alert": return "bg-red-500/10 text-red-500";
-    case "maintenance": return "bg-yellow-500/10 text-yellow-500";
+    case "document": return "bg-primary/10 text-primary";
+    case "task": return "bg-success/10 text-success";
+    case "user": return "bg-secondary/10 text-secondary";
+    case "meeting": return "bg-warning/10 text-warning";
+    case "message": return "bg-primary/10 text-primary";
+    case "alert": return "bg-destructive/10 text-destructive";
+    case "maintenance": return "bg-warning/10 text-warning";
     default: return "bg-muted text-muted-foreground";
   }
 };

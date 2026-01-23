@@ -271,15 +271,15 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "Água": return "text-blue-600 bg-blue-50";
-    case "Emissões": return "text-muted-foreground bg-gray-50";
-    case "Resíduos": return "text-orange-600 bg-orange-50";
-    case "Vazamentos": return "text-red-600 bg-red-50";
-    case "Ruído": return "text-purple-600 bg-purple-50";
-    case "Biodiversidade": return "text-green-600 bg-green-50";
-    case "Contenção": return "text-indigo-600 bg-indigo-50";
-    case "Observações": return "text-emerald-600 bg-emerald-50";
-    default: return "text-green-600 bg-green-50";
+    case "Água": return "text-primary bg-primary/10";
+    case "Emissões": return "text-muted-foreground bg-muted";
+    case "Resíduos": return "text-warning bg-warning/10";
+    case "Vazamentos": return "text-destructive bg-destructive/10";
+    case "Ruído": return "text-secondary bg-secondary/10";
+    case "Biodiversidade": return "text-success bg-success/10";
+    case "Contenção": return "text-primary bg-primary/10";
+    case "Observações": return "text-success bg-success/10";
+    default: return "text-success bg-success/10";
     }
   };
 

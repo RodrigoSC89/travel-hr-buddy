@@ -173,11 +173,11 @@ export const BlockchainDashboard: React.FC = () => {
 
   const getTypeColor = (type: BlockchainTransaction['type']) => {
     switch (type) {
-      case 'certificate': return 'bg-blue-500/20 text-blue-400';
-      case 'audit': return 'bg-purple-500/20 text-purple-400';
-      case 'contract': return 'bg-green-500/20 text-green-400';
-      case 'inspection': return 'bg-yellow-500/20 text-yellow-400';
-      case 'training': return 'bg-cyan-500/20 text-cyan-400';
+      case 'certificate': return 'bg-primary/20 text-primary';
+      case 'audit': return 'bg-secondary/20 text-secondary';
+      case 'contract': return 'bg-success/20 text-success';
+      case 'inspection': return 'bg-warning/20 text-warning';
+      case 'training': return 'bg-primary/20 text-primary';
     }
   };
 
