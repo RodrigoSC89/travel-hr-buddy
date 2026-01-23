@@ -23,7 +23,7 @@ export class PEOEngine {
   private validateProfile(data: unknown, profileName: string): PEODPProfile {
     const profile = data as { versao?: string; name?: string; requisitos?: unknown[] };
     if (!profile.versao || !Array.isArray(profile.requisitos)) {
-      console.warn(`[PEOEngine] Invalid ${profileName} profile structure, using defaults`);
+      // Invalid profile structure - using defaults silently
       return {
         versao: profileName,
         name: profileName,

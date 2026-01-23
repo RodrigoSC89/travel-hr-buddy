@@ -81,12 +81,7 @@ export class IntelligentAlerting {
   
   // Smart escalation based on severity
   static async sendAlert(alert: Alert) {
-    console.log(`[Alert][${alert.severity}] ${alert.title}:`, alert.description);
-    
-    // Always log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Alert:', alert);
-    }
+    // Alert logged to Sentry - no console output in production
     
     // Sentry integration
     if (this.config.enableSentry) {
