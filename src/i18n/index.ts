@@ -57,12 +57,19 @@ i18n.on('languageChanged', (lng) => {
 export default i18n;
 
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' }
+  { code: 'en', name: 'English', flag: '🇺🇸', locale: 'en-US' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷', locale: 'pt-BR' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', locale: 'es-ES' },
+  { code: 'zh', name: '中文', flag: '🇨🇳', locale: 'zh-CN' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷', locale: 'fr-FR' }
 ];
 
 export const changeLanguage = (code: string) => {
   i18n.changeLanguage(code);
+};
+
+// Helper to get current language info
+export const getCurrentLanguage = () => {
+  const code = i18n.language || 'en';
+  return languages.find(l => l.code === code) || languages[0];
 };
