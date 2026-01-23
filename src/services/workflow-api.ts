@@ -8,6 +8,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { seedSuggestionsForWorkflow } from "@/lib/workflows/seedSuggestions";
+import { logger } from "@/lib/logger";
 import type {
   CreateWorkflowRequest,
   CreateWorkflowResponse,
