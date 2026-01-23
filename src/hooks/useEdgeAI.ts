@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { onnxRuntime, MARITIME_MODELS } from "@/lib/edge-ai/onnx-runtime";
+import { logger } from "@/lib/logger";
 
 export interface ModelConfig {
   name: string;
@@ -50,7 +51,7 @@ export function useEdgeAI() {
           offlineCapable: true
         }));
       } catch (error) {
-        console.warn("ONNX Runtime initialization failed:", error);
+        logger.warn("ONNX Runtime initialization failed", { error });
       }
     };
     init();

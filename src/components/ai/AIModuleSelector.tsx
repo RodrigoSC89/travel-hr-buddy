@@ -30,22 +30,27 @@ interface AIModuleSelectorProps {
   className?: string;
 }
 
-const colorMap: Record<string, string> = {
-  emerald: 'bg-emerald-500/20 text-emerald-500 border-emerald-500/30',
-  blue: 'bg-blue-500/20 text-blue-500 border-blue-500/30',
-  purple: 'bg-purple-500/20 text-purple-500 border-purple-500/30',
-  pink: 'bg-pink-500/20 text-pink-500 border-pink-500/30',
-  orange: 'bg-orange-500/20 text-orange-500 border-orange-500/30',
-  red: 'bg-red-500/20 text-red-500 border-red-500/30',
-  indigo: 'bg-indigo-500/20 text-indigo-500 border-indigo-500/30',
-  cyan: 'bg-cyan-500/20 text-cyan-500 border-cyan-500/30',
-  teal: 'bg-teal-500/20 text-teal-500 border-teal-500/30',
-  sky: 'bg-sky-500/20 text-sky-500 border-sky-500/30',
-  amber: 'bg-amber-500/20 text-amber-500 border-amber-500/30',
-  lime: 'bg-lime-500/20 text-lime-500 border-lime-500/30',
-  violet: 'bg-violet-500/20 text-violet-500 border-violet-500/30',
-  slate: 'bg-slate-500/20 text-slate-500 border-slate-500/30',
-  rose: 'bg-rose-500/20 text-rose-500 border-rose-500/30'
+// Semantic color mapping for AI modules
+const getModuleColorClass = (color: string) => {
+  const semanticMap: Record<string, string> = {
+    emerald: 'bg-success/20 text-success border-success/30',
+    green: 'bg-success/20 text-success border-success/30',
+    blue: 'bg-primary/20 text-primary border-primary/30',
+    purple: 'bg-accent/20 text-accent border-accent/30',
+    pink: 'bg-accent/20 text-accent border-accent/30',
+    orange: 'bg-warning/20 text-warning border-warning/30',
+    red: 'bg-destructive/20 text-destructive border-destructive/30',
+    indigo: 'bg-primary/20 text-primary border-primary/30',
+    cyan: 'bg-info/20 text-info border-info/30',
+    teal: 'bg-info/20 text-info border-info/30',
+    sky: 'bg-info/20 text-info border-info/30',
+    amber: 'bg-warning/20 text-warning border-warning/30',
+    lime: 'bg-success/20 text-success border-success/30',
+    violet: 'bg-accent/20 text-accent border-accent/30',
+    slate: 'bg-muted text-muted-foreground border-muted',
+    rose: 'bg-destructive/20 text-destructive border-destructive/30'
+  };
+  return semanticMap[color] || 'bg-primary/20 text-primary border-primary/30';
 };
 
 export function AIModuleSelector({ onSelect, showChat = true, className }: AIModuleSelectorProps) {
@@ -140,7 +145,7 @@ export function AIModuleSelector({ onSelect, showChat = true, className }: AIMod
                               <div className="flex items-center gap-3">
                                 <div className={cn(
                                   'w-10 h-10 rounded-lg flex items-center justify-center text-xl border',
-                                  colorMap[module.color]
+                                  getModuleColorClass(module.color)
                                 )}>
                                   {module.icon}
                                 </div>

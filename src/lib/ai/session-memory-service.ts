@@ -321,7 +321,7 @@ class AISessionMemoryService {
         importance: entry.importance,
       });
     } catch (error) {
-      console.warn("[AIMemory] Failed to sync to Supabase:", error);
+      logger.warn("[AIMemory] Failed to sync to Supabase", { error });
     }
   }
 

@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface MarineWeatherData {
   source: 'openweathermap' | 'windy' | 'stormglass';
@@ -74,19 +75,19 @@ export async function getMarineWeather(
 
   for (const provider of providers) {
     try {
-      console.log(`[WeatherFallback] Trying provider: ${provider}`);
+      logger.debug(`[WeatherFallback] Trying provider: ${provider}`);
       const result = await fetchFromProvider(provider, lat, lon);
       
       if (result.success && result.data) {
-        console.log(`[WeatherFallback] Success with ${provider}`);
+        logger.info(`[WeatherFallback] Success with ${provider}`);
         return result.data;
       }
       
       lastError = result.error || `Provider ${provider} returned no data`;
-      console.warn(`[WeatherFallback] ${provider} failed: ${lastError}`);
+      logger.warn(`[WeatherFallback] ${provider} failed: ${lastError}`);
     } catch (error) {
       lastError = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`[WeatherFallback] ${provider} error:`, error);
+      logger.error(`[WeatherFallback] ${provider} error`, error);
     }
   }
 

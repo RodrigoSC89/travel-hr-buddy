@@ -224,11 +224,11 @@ const AnalyticsDashboard = () => {
               <CardContent>
                 <div className="space-y-6">
                   {[
-                    { name: "Receita Anual", current: 85, target: 100, color: "bg-blue-500" },
-                    { name: "Satisfação Cliente", current: 94, target: 96, color: "bg-green-500" },
-                    { name: "Eficiência Operacional", current: 87, target: 90, color: "bg-purple-500" },
-                    { name: "Redução de Custos", current: 76, target: 85, color: "bg-orange-500" },
-                    { name: "Inovação (IA)", current: 68, target: 80, color: "bg-pink-500" }
+                    { name: "Receita Anual", current: 85, target: 100, colorClass: "bg-info" },
+                    { name: "Satisfação Cliente", current: 94, target: 96, colorClass: "bg-success" },
+                    { name: "Eficiência Operacional", current: 87, target: 90, colorClass: "bg-accent" },
+                    { name: "Redução de Custos", current: 76, target: 85, colorClass: "bg-warning" },
+                    { name: "Inovação (IA)", current: 68, target: 80, colorClass: "bg-primary" }
                   ].map((goal, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -239,7 +239,7 @@ const AnalyticsDashboard = () => {
                       </div>
                       <div className="w-full bg-muted rounded-full h-2">
                         <div 
-                          className={`h-2 rounded-full transition-all duration-300 ${goal.color}`}
+                          className={`h-2 rounded-full transition-all duration-300 ${goal.colorClass}`}
                           style={{ width: `${(goal.current / goal.target) * 100}%` }}
                         />
                       </div>

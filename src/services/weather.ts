@@ -7,6 +7,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import * as Sentry from "@sentry/react";
+import { logger } from "@/lib/logger";
 
 // ===============================
 // Types & Interfaces
@@ -77,10 +78,10 @@ export function logWeatherRequest(log: WeatherRequestLog): void {
 
   if (log.status === "success") {
     if (ENABLE_LOGS) {
-      console.info(logMessage);
+      logger.info(logMessage);
     }
   } else {
-    console.warn(logMessage, log.error);
+    logger.warn(logMessage, { error: log.error });
 
     // Send to Sentry for error tracking
     if (log.status === "error" || log.status === "timeout") {

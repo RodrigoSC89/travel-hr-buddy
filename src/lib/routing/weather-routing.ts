@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { getWeatherData, NormalizedWeatherData } from "@/services/weather";
 import * as Sentry from "@sentry/react";
+import { logger } from "@/lib/logger";
 
 // ===============================
 // Types
@@ -248,7 +249,7 @@ async function fetchWeatherForRoute(
         currentTime = new Date(currentTime.getTime() + hours * 3600000);
       }
     } catch (err) {
-      console.warn(`[WeatherRouting] Failed to fetch weather for waypoint ${i}:`, err);
+      logger.warn(`[WeatherRouting] Failed to fetch weather for waypoint ${i}`, { error: err });
     }
   }
 

@@ -36,22 +36,27 @@ interface GlobalAIButtonProps {
   defaultModule?: AIModuleKey;
 }
 
-const colorMap: Record<string, string> = {
-  emerald: 'bg-emerald-500',
-  blue: 'bg-blue-500',
-  purple: 'bg-purple-500',
-  pink: 'bg-pink-500',
-  orange: 'bg-orange-500',
-  red: 'bg-red-500',
-  indigo: 'bg-indigo-500',
-  cyan: 'bg-cyan-500',
-  teal: 'bg-teal-500',
-  sky: 'bg-sky-500',
-  amber: 'bg-amber-500',
-  lime: 'bg-lime-500',
-  violet: 'bg-violet-500',
-  slate: 'bg-slate-500',
-  rose: 'bg-rose-500'
+// Semantic color mapping using CSS variables
+const getModuleColorClass = (color: string) => {
+  const semanticMap: Record<string, string> = {
+    emerald: 'bg-success',
+    green: 'bg-success',
+    blue: 'bg-primary',
+    purple: 'bg-accent',
+    pink: 'bg-accent',
+    orange: 'bg-warning',
+    red: 'bg-destructive',
+    indigo: 'bg-primary',
+    cyan: 'bg-info',
+    teal: 'bg-info',
+    sky: 'bg-info',
+    amber: 'bg-warning',
+    lime: 'bg-success',
+    violet: 'bg-accent',
+    slate: 'bg-muted-foreground',
+    rose: 'bg-destructive'
+  };
+  return semanticMap[color] || 'bg-primary';
 };
 
 export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalAIButtonProps) {
@@ -236,7 +241,7 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
                 >
                   <div className={cn(
                     'w-8 h-8 rounded-lg flex items-center justify-center text-white',
-                    colorMap[module.color]
+                    getModuleColorClass(module.color)
                   )}>
                     <span className="text-sm">{module.icon}</span>
                   </div>
