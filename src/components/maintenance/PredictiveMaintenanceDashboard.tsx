@@ -80,9 +80,9 @@ const MOCK_EQUIPMENT: EquipmentMetrics[] = [
 
 const urgencyColors = {
   critical: 'bg-destructive text-destructive-foreground',
-  high: 'bg-orange-500 text-white',
-  medium: 'bg-amber-500 text-white',
-  low: 'bg-emerald-500 text-white',
+  high: 'bg-warning text-warning-foreground',
+  medium: 'bg-muted text-muted-foreground',
+  low: 'bg-success text-success-foreground',
 };
 
 const urgencyIcons = {
@@ -151,26 +151,26 @@ export function PredictiveMaintenanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-orange-500/50">
+        <Card className="border-warning/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alto</p>
-                <p className="text-2xl font-bold text-orange-500">{stats.high}</p>
+                <p className="text-2xl font-bold text-warning">{stats.high}</p>
               </div>
-              <Clock className="h-8 w-8 text-orange-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-500/50">
+        <Card className="border-muted-foreground/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Médio</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.medium}</p>
+                <p className="text-2xl font-bold text-muted-foreground">{stats.medium}</p>
               </div>
-              <Wrench className="h-8 w-8 text-amber-500" />
+              <Wrench className="h-8 w-8 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>

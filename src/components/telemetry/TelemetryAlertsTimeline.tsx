@@ -205,10 +205,10 @@ export function TelemetryAlertsTimeline({
 
   const getStatusBadge = (status: TelemetryAlert["status"]) => {
     const badges: Record<TelemetryAlert["status"], { color: string; label: string }> = {
-      active: { color: "bg-red-500/20 text-red-500", label: "Ativo" },
-      acknowledged: { color: "bg-amber-500/20 text-amber-500", label: "Reconhecido" },
-      resolved: { color: "bg-emerald-500/20 text-emerald-500", label: "Resolvido" },
-      escalated: { color: "bg-purple-500/20 text-purple-500", label: "Escalado" },
+      active: { color: "bg-destructive/20 text-destructive", label: "Ativo" },
+      acknowledged: { color: "bg-warning/20 text-warning", label: "Reconhecido" },
+      resolved: { color: "bg-success/20 text-success", label: "Resolvido" },
+      escalated: { color: "bg-accent/20 text-accent-foreground", label: "Escalado" },
     };
     return badges[status];
   };

@@ -145,10 +145,10 @@ export function FleetIntelligence() {
 
   const getStatusColor = (status: VesselStatus["status"]) => {
     const colors = {
-      navigating: "bg-emerald-500",
-      anchored: "bg-blue-500",
-      maintenance: "bg-amber-500",
-      emergency: "bg-red-500",
+      navigating: "bg-success",
+      anchored: "bg-primary",
+      maintenance: "bg-warning",
+      emergency: "bg-destructive",
     };
     return colors[status];
   };

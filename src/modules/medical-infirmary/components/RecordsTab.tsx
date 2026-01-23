@@ -32,10 +32,10 @@ export default function RecordsTab() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'resolved': return <Badge className="bg-green-500/20 text-green-500">Resolvido</Badge>;
-      case 'monitoring': return <Badge className="bg-amber-500/20 text-amber-500">Monitorando</Badge>;
-      case 'referred': return <Badge className="bg-blue-500/20 text-blue-500">Encaminhado</Badge>;
-      case 'pending': return <Badge className="bg-gray-500/20 text-gray-500">Pendente</Badge>;
+      case 'resolved': return <Badge className="bg-success/20 text-success">Resolvido</Badge>;
+      case 'monitoring': return <Badge className="bg-warning/20 text-warning">Monitorando</Badge>;
+      case 'referred': return <Badge className="bg-primary/20 text-primary">Encaminhado</Badge>;
+      case 'pending': return <Badge className="bg-muted text-muted-foreground">Pendente</Badge>;
       default: return null;
     }
   };

@@ -186,11 +186,11 @@ export function SecurityAuditCenter() {
 
       {/* Score Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border-emerald-500/30">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="h-5 w-5 text-emerald-500" />
-              <Badge className="bg-emerald-500">{overallScore}%</Badge>
+              <Shield className="h-5 w-5 text-success" />
+              <Badge className="bg-success">{overallScore}%</Badge>
             </div>
             <h3 className="font-semibold">Score de Segurança</h3>
             <Progress value={overallScore} className="h-2 mt-2" />
