@@ -2,6 +2,7 @@
  * AI Module Routes
  * All AI-related pages and features
  */
+import { lazy, Suspense } from "react";
 import { Route } from "react-router-dom";
 import {
   RevolutionaryAI,
@@ -17,6 +18,15 @@ import {
   AutonomousCommandCenter,
 } from "./lazy-imports";
 
+// Lazy load new AI pages
+const NautiBrainPage = lazy(() => import("@/pages/ai/NautiBrainPage"));
+
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-64">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+  </div>
+);
+
 export const aiRoutes = (
   <>
     <Route path="revolutionary-ai/*" element={<RevolutionaryAI />} />
@@ -30,5 +40,13 @@ export const aiRoutes = (
     <Route path="voice-assistant" element={<VoiceAssistant />} />
     <Route path="voice-transcriber" element={<VoiceTranscriber />} />
     <Route path="autonomous-command" element={<AutonomousCommandCenter />} />
+    <Route 
+      path="nauti-brain" 
+      element={
+        <Suspense fallback={<LoadingFallback />}>
+          <NautiBrainPage />
+        </Suspense>
+      } 
+    />
   </>
 );
