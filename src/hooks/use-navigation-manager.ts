@@ -85,7 +85,7 @@ export const useNavigationManager = () => {
     const targetPath = suggestion || path;
     
     if (suggestion && import.meta.env.DEV) {
-      console.info(`[NavigationManager] Auto-corrected: "${path}" → "${suggestion}"`);
+      logger.info(`[NavigationManager] Auto-corrected: "${path}" → "${suggestion}"`);
     }
     
     navigateTo(targetPath, { ...options, skipValidation: true });
