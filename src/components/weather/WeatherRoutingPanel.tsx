@@ -127,9 +127,9 @@ export function WeatherRoutingPanel({
 
   const getRiskColor = (score: number) => {
     if (score >= 60) return "text-destructive bg-destructive/10";
-    if (score >= 40) return "text-orange-500 bg-orange-500/10";
-    if (score >= 20) return "text-amber-500 bg-amber-500/10";
-    return "text-emerald-500 bg-emerald-500/10";
+    if (score >= 40) return "text-warning bg-warning/10";
+    if (score >= 20) return "text-muted-foreground bg-muted/10";
+    return "text-success bg-success/10";
   };
 
   const getRouteTypeIcon = (type: string) => {

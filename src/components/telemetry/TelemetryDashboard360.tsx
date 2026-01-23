@@ -66,8 +66,8 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
             </div>
 
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="gap-1 bg-emerald-500/10 text-emerald-500 border-emerald-500/30">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
+                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 Sistema Online
               </Badge>
               <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>

@@ -165,9 +165,9 @@ export function NOCMonitoringCenter() {
 
   const getStatusColor = (status: SystemStatus["status"]) => {
     switch (status) {
-      case "online": return "bg-emerald-500";
-      case "degraded": return "bg-amber-500 animate-pulse";
-      case "offline": return "bg-red-500 animate-pulse";
+      case "online": return "bg-success";
+      case "degraded": return "bg-warning animate-pulse";
+      case "offline": return "bg-destructive animate-pulse";
     }
   };
 

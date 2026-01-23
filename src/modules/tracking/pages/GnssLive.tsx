@@ -39,10 +39,10 @@ export default function GnssLive() {
   }, []);
 
   const getSignalQuality = (accuracy: number) => {
-    if (accuracy <= 0.05) return { level: "Excelente", color: "text-emerald-500", percent: 95 };
-    if (accuracy <= 0.5) return { level: "Ótimo", color: "text-blue-500", percent: 80 };
-    if (accuracy <= 2) return { level: "Bom", color: "text-orange-500", percent: 60 };
-    return { level: "Regular", color: "text-red-500", percent: 40 };
+    if (accuracy <= 0.05) return { level: "Excelente", color: "text-success", percent: 95 };
+    if (accuracy <= 0.5) return { level: "Ótimo", color: "text-primary", percent: 80 };
+    if (accuracy <= 2) return { level: "Bom", color: "text-warning", percent: 60 };
+    return { level: "Regular", color: "text-destructive", percent: 40 };
   };
 
   return (
@@ -50,8 +50,8 @@ export default function GnssLive() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg">
-            <Navigation className="h-8 w-8 text-white" />
+          <div className="p-3 bg-gradient-to-br from-primary to-primary/60 rounded-xl shadow-lg">
+            <Navigation className="h-8 w-8 text-primary-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">GNSS Live Tracking</h1>
@@ -61,7 +61,7 @@ export default function GnssLive() {
         
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted border">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             <span className="text-sm font-medium">Live</span>
             <span className="text-xs text-muted-foreground">
               {currentTime.toLocaleTimeString('pt-BR')}
@@ -240,7 +240,7 @@ export default function GnssLive() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Fix Type</span>
-                <Badge className="bg-emerald-500">{logs[0]?.fix_type ?? 'RTK_FIXED'}</Badge>
+                <Badge className="bg-success">{logs[0]?.fix_type ?? 'RTK_FIXED'}</Badge>
               </div>
             </CardContent>
           </Card>
