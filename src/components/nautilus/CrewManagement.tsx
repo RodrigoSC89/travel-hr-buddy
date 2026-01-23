@@ -148,11 +148,11 @@ export function CrewManagement() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/20">
-                  <CheckCircle className="h-5 w-5 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/20">
+                  <CheckCircle className="h-5 w-5 text-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-emerald-500">{stats.onDuty}</p>
+                  <p className="text-2xl font-bold text-success">{stats.onDuty}</p>
                   <p className="text-xs text-muted-foreground">Em Serviço</p>
                 </div>
               </div>
@@ -168,11 +168,11 @@ export function CrewManagement() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/20">
-                  <AlertCircle className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <AlertCircle className="h-5 w-5 text-warning" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-amber-500">{stats.expiringCerts}</p>
+                  <p className="text-2xl font-bold text-warning">{stats.expiringCerts}</p>
                   <p className="text-xs text-muted-foreground">Certificados Expirando</p>
                 </div>
               </div>
@@ -188,11 +188,11 @@ export function CrewManagement() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/20">
-                  <Award className="h-5 w-5 text-blue-500" />
+                <div className="p-2 rounded-lg bg-primary/20">
+                  <Award className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-500">{stats.avgPerformance.toFixed(0)}%</p>
+                  <p className="text-2xl font-bold text-primary">{stats.avgPerformance.toFixed(0)}%</p>
                   <p className="text-xs text-muted-foreground">Performance Média</p>
                 </div>
               </div>

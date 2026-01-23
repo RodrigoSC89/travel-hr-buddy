@@ -80,15 +80,15 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
     const daysUntilExpiry = differenceInDays(expiry, today);
 
     if (isPast(expiry)) {
-      return { label: "Vencido", variant: "destructive" as const, icon: AlertTriangle, color: "text-rose-500" };
+      return { label: "Vencido", variant: "destructive" as const, icon: AlertTriangle, color: "text-destructive" };
     }
     if (daysUntilExpiry <= 30) {
-      return { label: `${daysUntilExpiry} dias`, variant: "default" as const, icon: Clock, color: "text-amber-500" };
+      return { label: `${daysUntilExpiry} dias`, variant: "default" as const, icon: Clock, color: "text-warning" };
     }
     if (daysUntilExpiry <= 60) {
-      return { label: `${daysUntilExpiry} dias`, variant: "secondary" as const, icon: Clock, color: "text-yellow-500" };
+      return { label: `${daysUntilExpiry} dias`, variant: "secondary" as const, icon: Clock, color: "text-muted-foreground" };
     }
-    return { label: "Válido", variant: "outline" as const, icon: CheckCircle, color: "text-emerald-500" };
+    return { label: "Válido", variant: "outline" as const, icon: CheckCircle, color: "text-success" };
   };
 
   return (

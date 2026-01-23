@@ -90,11 +90,11 @@ function LiveMetricsBarComponent() {
             <div className={getStatusColor(metric.status)}>
               {metric.icon}
             </div>
-            <span className="text-slate-300 dark:text-slate-300 hidden sm:inline font-medium">{metric.label}:</span>
+            <span className="text-muted-foreground hidden sm:inline font-medium">{metric.label}:</span>
             <span className="font-bold text-foreground">{metric.value}</span>
           </div>
         ))}
-        <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shrink-0 font-semibold">
+        <Badge variant="outline" className="text-xs bg-success/20 text-success border-success/50 shrink-0 font-semibold">
           <Radio className="h-2.5 w-2.5 mr-1" />
           LIVE
         </Badge>

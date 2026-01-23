@@ -180,14 +180,14 @@ export function FleetIntelligence() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/20">
-                  <Navigation className="h-5 w-5 text-emerald-500" />
+                <div className="p-2 rounded-lg bg-success/20">
+                  <Navigation className="h-5 w-5 text-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-emerald-500">
+                  <p className="text-2xl font-bold text-success">
                     {vessels.filter(v => v.status === "navigating").length}
                   </p>
                   <p className="text-xs text-muted-foreground">Navegando</p>
