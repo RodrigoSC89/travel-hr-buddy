@@ -160,7 +160,7 @@ const CollaboratorRegistry: React.FC = () => {
       tipoContrato: newColaborador.tipoContrato as 'CLT' | 'PJ' | 'Estágio' | 'Temporário'
     };
 
-    setColaboradores([novoColab, ...colaboradores]);
+    setLocalColaboradores(prev => [novoColab, ...prev]);
     setIsAddDialogOpen(false);
     setNewColaborador({
       nome: '', email: '', telefone: '', cpf: '', cargo: '',
