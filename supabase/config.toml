@@ -1167,3 +1167,27 @@ comment = "Maritime incident reporting and investigation"
 [functions.drill-management]
 verify_jwt = false
 comment = "Safety drill scheduling and SOLAS compliance"
+
+# ============================================
+# VESSEL CONTRACTS AI - Added 2026-01-23
+# ============================================
+
+[functions.contract-ai-chat]
+verify_jwt = false
+comment = "AI Chat assistant for vessel contracts, SLA and downtime analysis"
+
+[functions.contract-downtime-ai]
+verify_jwt = false
+comment = "AI orchestrator for downtime analysis, BROA generation and contract compliance"
+
+[functions.analyze-downtime]
+verify_jwt = false
+comment = "AI-powered downtime justification validation and SLA impact calculation"
+
+[functions.generate-broa]
+verify_jwt = false
+comment = "Generate BROA documents following ANTAQ/Marinha standards"
+
+[functions.contract-generate-evidence]
+verify_jwt = false
+comment = "AI-powered evidence generation for contract non-conformities"
