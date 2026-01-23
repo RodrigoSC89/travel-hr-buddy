@@ -1,13 +1,14 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// PATCH-601: Re-added @ts-nocheck for build stability due to schema mismatches
 /**
  * Workflow API Service Layer
  * 
  * Service layer for managing workflows through API calls
+ * NOTE: Uses type coercion due to schema mismatches between
+ * frontend Workflow types and Supabase smart_workflows table
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { seedSuggestionsForWorkflow } from "@/lib/workflows/seedSuggestions";
 import { logger } from "@/lib/logger";
 import type {
   CreateWorkflowRequest,
@@ -15,6 +16,44 @@ import type {
   Workflow,
   WorkflowStep,
 } from "@/types/workflow";
+
+/**
+ * Maps database workflow to frontend Workflow type
+ */
+function mapDbToWorkflow(dbWorkflow: Record<string, unknown>): Workflow {
+  return {
+    id: String(dbWorkflow.id || ""),
+    title: String(dbWorkflow.name || dbWorkflow.title || ""),
+    description: dbWorkflow.description as string | undefined,
+    status: (dbWorkflow.status as "draft" | "active" | "inactive") || "draft",
+    created_at: String(dbWorkflow.created_at || ""),
+    updated_at: String(dbWorkflow.updated_at || ""),
+    created_by: dbWorkflow.created_by as string | undefined,
+    category: dbWorkflow.workflow_type as string | undefined,
+    config: dbWorkflow.metadata as Record<string, unknown> | undefined,
+  };
+}
+
+/**
+ * Maps database workflow step to frontend WorkflowStep type
+ */
+function mapDbToWorkflowStep(dbStep: Record<string, unknown>): WorkflowStep {
+  return {
+    id: String(dbStep.id || ""),
+    workflow_id: String(dbStep.workflow_id || ""),
+    title: String(dbStep.step_name || dbStep.title || ""),
+    description: dbStep.description as string | undefined,
+    status: (dbStep.status as "pendente" | "em_progresso" | "concluido") || "pendente",
+    position: Number(dbStep.position || dbStep.step_order || 0),
+    assigned_to: dbStep.assigned_to as string | undefined,
+    due_date: dbStep.due_date as string | undefined,
+    priority: (dbStep.priority as "low" | "medium" | "high" | "urgent") || "medium",
+    created_at: String(dbStep.created_at || ""),
+    updated_at: String(dbStep.updated_at || dbStep.created_at || ""),
+    created_by: dbStep.created_by as string | undefined,
+    metadata: dbStep.metadata as Record<string, unknown> | undefined,
+  };
+}
 
 /**
  * Creates a new workflow and seeds initial suggestions
@@ -32,15 +71,14 @@ export async function createWorkflow(
       throw new Error("User not authenticated");
     }
 
-    // Create workflow
+    // Create workflow using 'name' field (as per DB schema)
     const { data: workflow, error: workflowError } = await supabase
       .from("smart_workflows")
       .insert({
-        title: request.title,
-        description: request.description,
-        category: request.category,
-        tags: request.tags,
-        config: request.config || {},
+        name: request.title,
+        description: request.description || null,
+        workflow_type: request.category || "general",
+        metadata: request.config || {},
         created_by: user.id,
         status: "draft",
       })
@@ -60,16 +98,16 @@ export async function createWorkflow(
     });
 
     if (!seedResult.success) {
-      console.warn("Failed to seed suggestions:", seedResult.error);
+      logger.warn("Failed to seed suggestions", { error: seedResult.error });
     }
 
     return {
       success: true,
-      workflow: workflow as Workflow,
-      suggestions: seedResult.suggestions as WorkflowStep[],
+      workflow: mapDbToWorkflow(workflow as unknown as Record<string, unknown>),
+      suggestions: seedResult.suggestions,
     };
   } catch (error) {
-    console.error("Error creating workflow:", error);
+    logger.error("Error creating workflow", error);
     throw error;
   }
 }
@@ -88,13 +126,13 @@ export async function getWorkflow(workflowId: string): Promise<Workflow | null> 
       .single();
 
     if (error) {
-      console.error("Error fetching workflow:", error);
+      logger.error("Error fetching workflow", error, { workflowId });
       return null;
     }
 
-    return data as Workflow;
+    return mapDbToWorkflow(data as unknown as Record<string, unknown>);
   } catch (error) {
-    console.error("Error in getWorkflow:", error);
+    logger.error("Error in getWorkflow", error, { workflowId });
     return null;
   }
 }
@@ -111,13 +149,13 @@ export async function getWorkflows(): Promise<Workflow[]> {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching workflows:", error);
+      logger.error("Error fetching workflows", error);
       return [];
     }
 
-    return (data as Workflow[]) || [];
+    return (data || []).map(w => mapDbToWorkflow(w as unknown as Record<string, unknown>));
   } catch (error) {
-    console.error("Error in getWorkflows:", error);
+    logger.error("Error in getWorkflows", error);
     return [];
   }
 }
@@ -133,21 +171,29 @@ export async function updateWorkflow(
   updates: Partial<Workflow>
 ): Promise<Workflow | null> {
   try {
+    // Map frontend updates to DB fields
+    const dbUpdates: Record<string, unknown> = {};
+    if (updates.title !== undefined) dbUpdates.name = updates.title;
+    if (updates.description !== undefined) dbUpdates.description = updates.description;
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.category !== undefined) dbUpdates.workflow_type = updates.category;
+    if (updates.config !== undefined) dbUpdates.metadata = updates.config;
+
     const { data, error } = await supabase
       .from("smart_workflows")
-      .update(updates)
+      .update(dbUpdates)
       .eq("id", workflowId)
       .select()
       .single();
 
     if (error) {
-      console.error("Error updating workflow:", error);
+      logger.error("Error updating workflow", error, { workflowId });
       return null;
     }
 
-    return data as Workflow;
+    return mapDbToWorkflow(data as unknown as Record<string, unknown>);
   } catch (error) {
-    console.error("Error in updateWorkflow:", error);
+    logger.error("Error in updateWorkflow", error, { workflowId });
     return null;
   }
 }
@@ -165,13 +211,13 @@ export async function deleteWorkflow(workflowId: string): Promise<boolean> {
       .eq("id", workflowId);
 
     if (error) {
-      console.error("Error deleting workflow:", error);
+      logger.error("Error deleting workflow", error, { workflowId });
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error("Error in deleteWorkflow:", error);
+    logger.error("Error in deleteWorkflow", error, { workflowId });
     return false;
   }
 }
@@ -190,13 +236,13 @@ export async function getWorkflowSteps(workflowId: string): Promise<WorkflowStep
       .order("position", { ascending: true });
 
     if (error) {
-      console.error("Error fetching workflow steps:", error);
+      logger.error("Error fetching workflow steps", error, { workflowId });
       return [];
     }
 
-    return (data as WorkflowStep[]) || [];
+    return (data || []).map(s => mapDbToWorkflowStep(s as unknown as Record<string, unknown>));
   } catch (error) {
-    console.error("Error in getWorkflowSteps:", error);
+    logger.error("Error in getWorkflowSteps", error, { workflowId });
     return [];
   }
 }
@@ -219,21 +265,27 @@ export async function createWorkflowStep(
     const { data, error } = await supabase
       .from("smart_workflow_steps")
       .insert({
-        ...step,
-        created_by: user.id,
+        workflow_id: step.workflow_id,
+        step_name: step.title,
+        description: step.description || null,
+        position: step.position || 0,
+        status: step.status || "pendente",
+        priority: step.priority || "medium",
         assigned_to: step.assigned_to || user.id,
+        created_by: user.id,
+        metadata: step.metadata || {},
       })
       .select()
       .single();
 
     if (error) {
-      console.error("Error creating workflow step:", error);
+      logger.error("Error creating workflow step", error);
       return null;
     }
 
-    return data as WorkflowStep;
+    return mapDbToWorkflowStep(data as unknown as Record<string, unknown>);
   } catch (error) {
-    console.error("Error in createWorkflowStep:", error);
+    logger.error("Error in createWorkflowStep", error);
     return null;
   }
 }
@@ -249,21 +301,31 @@ export async function updateWorkflowStep(
   updates: Partial<WorkflowStep>
 ): Promise<WorkflowStep | null> {
   try {
+    // Map frontend updates to DB fields
+    const dbUpdates: Record<string, unknown> = {};
+    if (updates.title !== undefined) dbUpdates.step_name = updates.title;
+    if (updates.description !== undefined) dbUpdates.description = updates.description;
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.position !== undefined) dbUpdates.position = updates.position;
+    if (updates.priority !== undefined) dbUpdates.priority = updates.priority;
+    if (updates.assigned_to !== undefined) dbUpdates.assigned_to = updates.assigned_to;
+    if (updates.metadata !== undefined) dbUpdates.metadata = updates.metadata;
+
     const { data, error } = await supabase
       .from("smart_workflow_steps")
-      .update(updates)
+      .update(dbUpdates)
       .eq("id", stepId)
       .select()
       .single();
 
     if (error) {
-      console.error("Error updating workflow step:", error);
+      logger.error("Error updating workflow step", error, { stepId });
       return null;
     }
 
-    return data as WorkflowStep;
+    return mapDbToWorkflowStep(data as unknown as Record<string, unknown>);
   } catch (error) {
-    console.error("Error in updateWorkflowStep:", error);
+    logger.error("Error in updateWorkflowStep", error, { stepId });
     return null;
   }
 }
@@ -281,13 +343,13 @@ export async function deleteWorkflowStep(stepId: string): Promise<boolean> {
       .eq("id", stepId);
 
     if (error) {
-      console.error("Error deleting workflow step:", error);
+      logger.error("Error deleting workflow step", error, { stepId });
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error("Error in deleteWorkflowStep:", error);
+    logger.error("Error in deleteWorkflowStep", error, { stepId });
     return false;
   }
 }

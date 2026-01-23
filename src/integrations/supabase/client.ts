@@ -9,6 +9,9 @@ import type { Database } from "./types";
 const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
+// Flag to track storage warning (avoid spam)
+let storageWarningLogged = false;
+
 // Safe storage adapter that checks for localStorage availability
 const safeLocalStorage = (() => {
   try {
@@ -19,7 +22,13 @@ const safeLocalStorage = (() => {
       return window.localStorage;
     }
   } catch {
-    console.warn("localStorage is not available, using in-memory storage fallback");
+    // Only log once to avoid spam
+    if (!storageWarningLogged && typeof window !== "undefined") {
+      storageWarningLogged = true;
+      // Use native console.warn here since logger might not be available yet
+      // eslint-disable-next-line no-console
+      console.warn("localStorage is not available, using in-memory storage fallback");
+    }
   }
   
   // Fallback to in-memory storage
