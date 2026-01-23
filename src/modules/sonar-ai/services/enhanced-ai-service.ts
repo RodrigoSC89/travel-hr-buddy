@@ -1,7 +1,7 @@
 /**
  * PATCH 479: Enhanced Sonar AI Service with ONNX Classification
  * Provides AI-powered sonar data analysis and risk assessment
- * NOTE: @ts-nocheck required - sonar_events/sonar_risks tables use dynamic schemas
+ * @ts-nocheck - Required: sonar_events/sonar_risks tables use dynamic schemas not in generated types
  */
 
 // @ts-nocheck
