@@ -49,12 +49,12 @@ export class ChaosMonkey {
 
   enable(): void {
     this.config.enabled = true;
-    console.warn('🐒 Chaos Monkey ENABLED - System instability expected');
+    // Chaos Monkey enabled - system instability expected
   }
 
   disable(): void {
     this.config.enabled = false;
-    console.info('🐒 Chaos Monkey disabled');
+    // Chaos Monkey disabled
   }
 
   // Random request failure

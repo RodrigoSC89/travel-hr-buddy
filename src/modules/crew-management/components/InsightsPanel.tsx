@@ -179,10 +179,10 @@ export function InsightsPanel() {
 
   const getFatigueColor = (risk: string) => {
     switch (risk) {
-      case "low": return "bg-emerald-500";
-      case "medium": return "bg-amber-500";
-      case "high": return "bg-orange-500";
-      case "critical": return "bg-rose-500";
+      case "low": return "bg-success";
+      case "medium": return "bg-warning";
+      case "high": return "bg-warning";
+      case "critical": return "bg-destructive";
       default: return "bg-muted";
     }
   };

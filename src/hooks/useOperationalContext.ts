@@ -111,8 +111,8 @@ export function useOperationalContext(): UseOperationalContextReturn {
         setSystemHealth("healthy");
       }
 
-    } catch (error) {
-      console.warn("[OperationalContext] Failed to fetch data:", error);
+    } catch {
+      // Silent failure - non-critical context fetch
     } finally {
       setIsLoading(false);
     }
