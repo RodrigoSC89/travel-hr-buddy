@@ -131,5 +131,30 @@
     "notFound": "资源未找到",
     "validation": "请检查您的输入",
     "serverError": "服务器错误。请稍后重试。"
+  },
+  "auth": {
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码？",
+    "resetPassword": "重置密码",
+    "loginWithGoogle": "使用 Google 继续",
+    "loginWithGithub": "使用 GitHub 继续",
+    "loginWithMicrosoft": "使用 Microsoft 继续",
+    "noAccount": "还没有账户？",
+    "hasAccount": "已有账户？",
+    "invalidCredentials": "凭证无效",
+    "emailNotConfirmed": "邮箱未确认",
+    "welcomeBack": "欢迎回来",
+    "signInToContinue": "登录以继续使用 Nautilus One",
+    "orContinueWith": "或继续使用",
+    "rememberMe": "记住我"
+  },
+  "language": {
+    "select": "选择语言",
+    "current": "当前语言"
   }
 }
