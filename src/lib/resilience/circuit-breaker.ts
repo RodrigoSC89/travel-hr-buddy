@@ -10,6 +10,8 @@
  * @version 4.1.0
  */
 
+import { logger } from '@/lib/logger';
+
 export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
 export interface CircuitBreakerConfig {
@@ -85,7 +87,7 @@ class CircuitBreaker {
 
   private transitionTo(newState: CircuitState): void {
     if (this.state !== newState) {
-      console.log(`[CircuitBreaker:${this.config.name}] ${this.state} → ${newState}`);
+      logger.info(`[CircuitBreaker:${this.config.name}] State transition`, { from: this.state, to: newState });
       this.state = newState;
       this.notifyListeners();
     }
@@ -142,7 +144,7 @@ class CircuitBreaker {
       }
     }
 
-    console.warn(`[CircuitBreaker:${this.config.name}] Failure #${this.failures}:`, error.message);
+    logger.warn(`[CircuitBreaker:${this.config.name}] Failure #${this.failures}`, { error: error.message });
     this.notifyListeners();
   }
 
@@ -179,7 +181,7 @@ class CircuitBreaker {
     this.failures = 0;
     this.successes = 0;
     this.notifyListeners();
-    console.log(`[CircuitBreaker:${this.config.name}] Manually reset`);
+    logger.info(`[CircuitBreaker:${this.config.name}] Manually reset`);
   }
 
   getState(): CircuitState {

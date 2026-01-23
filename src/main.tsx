@@ -61,7 +61,7 @@ const forceUpdateIfNeeded = async () => {
     const now = Date.now();
     
     if (now - reloadTime < 30000 && reloadCount > 2) {
-      console.log('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
+      logger.warn('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
       
       // Limpar TUDO - SW causando problemas
       if ('serviceWorker' in navigator) {
@@ -85,7 +85,7 @@ const forceUpdateIfNeeded = async () => {
       localStorage.removeItem(RELOAD_KEY + '_time');
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
       
-      console.log('[Boot v16] Emergency cleanup complete');
+      logger.info('[Boot v16] Emergency cleanup complete');
       return true;
     }
     
@@ -103,13 +103,13 @@ const forceUpdateIfNeeded = async () => {
     
     // Sempre limpar caches se versão diferente
     if (storedVersion !== CURRENT_VERSION) {
-      console.log('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
+      logger.info('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
       
       // Limpar TODOS os caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
-        console.log('[Boot v16] Caches cleared:', keys.length);
+        logger.info('[Boot v16] Caches cleared', { count: keys.length });
       }
       
       // Atualizar SW se existir
@@ -129,7 +129,7 @@ const forceUpdateIfNeeded = async () => {
     
     return true;
   } catch (error) {
-    console.error('[Boot v16] Error:', error);
+    logger.error('[Boot v16] Error during update check', error);
     return true;
   }
 };
@@ -140,7 +140,7 @@ const initServiceWorker = async () => {
   
   // Em desenvolvimento, não registrar SW
   if (!import.meta.env.PROD) {
-    console.log('[Boot v16] Dev mode - skipping SW registration');
+    logger.info('[Boot v16] Dev mode - skipping SW registration');
     return;
   }
 
@@ -148,9 +148,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v16] Minimal SW registered:', registration.scope);
+    logger.info('[Boot v16] Minimal SW registered', { scope: registration.scope });
   } catch (error) {
-    console.warn('[Boot v16] SW registration failed (not critical):', error);
+    logger.warn('[Boot v16] SW registration failed (not critical)', error instanceof Error ? { message: error.message } : undefined);
   }
 };
 
