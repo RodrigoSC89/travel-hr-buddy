@@ -1,6 +1,7 @@
 /**
  * PredictiveDowntimeCard - Predição de Downtime com IA
  * Analisa padrões históricos e prevê downtimes futuros
+ * Usa tokens semânticos do design system
  */
 
 import { useState, useEffect } from "react";
@@ -38,6 +39,32 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
   const [loading, setLoading] = useState(false);
   const [lastAnalysis, setLastAnalysis] = useState<string | null>(null);
 
+  // Carregar predições salvas do banco
+  useEffect(() => {
+    loadSavedPredictions();
+  }, []);
+
+  const loadSavedPredictions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('ai_predictions')
+        .select('*')
+        .eq('prediction_type', 'downtime')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (data && data.length > 0) {
+        const parsed = data.map((d: any) => d.prediction_data).filter(Boolean);
+        if (parsed.length > 0) {
+          setPredictions(parsed.flat().slice(0, 5));
+          setLastAnalysis(data[0].created_at);
+        }
+      }
+    } catch (err) {
+      // Silently fail - fallback to running fresh prediction
+    }
+  };
+
   const runPrediction = async () => {
     setLoading(true);
     try {
@@ -50,6 +77,15 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
       if (data?.predictions) {
         setPredictions(data.predictions);
         setLastAnalysis(new Date().toISOString());
+        
+        // Salvar predição no banco
+        await supabase.from('ai_predictions').insert({
+          prediction_type: 'downtime',
+          prediction_data: data.predictions,
+          confidence_score: data.predictions[0]?.confidence || 0.75,
+          method: data.method || 'ai_powered'
+        });
+        
         toast.success('Análise preditiva concluída!');
       }
     } catch (error) {
@@ -61,15 +97,21 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
   };
 
   const getRiskColor = (probability: number) => {
-    if (probability >= 0.7) return 'text-red-500';
-    if (probability >= 0.4) return 'text-yellow-500';
-    return 'text-green-500';
+    if (probability >= 0.7) return 'text-destructive';
+    if (probability >= 0.4) return 'text-warning';
+    return 'text-success';
   };
 
   const getRiskBadge = (probability: number) => {
     if (probability >= 0.7) return <Badge variant="destructive">Alto Risco</Badge>;
-    if (probability >= 0.4) return <Badge className="bg-yellow-500">Risco Moderado</Badge>;
-    return <Badge className="bg-green-500">Baixo Risco</Badge>;
+    if (probability >= 0.4) return <Badge className="bg-warning text-warning-foreground">Risco Moderado</Badge>;
+    return <Badge className="bg-success text-success-foreground">Baixo Risco</Badge>;
+  };
+
+  const getRiskBgColor = (probability: number) => {
+    if (probability >= 0.7) return 'border-destructive/30 bg-destructive/5';
+    if (probability >= 0.4) return 'border-warning/30 bg-warning/5';
+    return 'border-success/30 bg-success/5';
   };
 
   return (
@@ -126,7 +168,7 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
               {predictions.map((pred, idx) => (
                 <div 
                   key={idx} 
-                  className="p-4 rounded-lg border bg-card hover:shadow-md transition-shadow"
+                  className={`p-4 rounded-lg border ${getRiskBgColor(pred.probability)} hover:shadow-md transition-shadow`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -155,7 +197,7 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
                         Data Estimada
                       </div>
                       <p className="font-medium">
-                        {new Date(pred.estimated_date).toLocaleDateString('pt-BR')}
+                        {pred.estimated_date ? new Date(pred.estimated_date).toLocaleDateString('pt-BR') : 'N/A'}
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -163,14 +205,14 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
                         <Clock className="h-3 w-3" />
                         Duração Prevista
                       </div>
-                      <p className="font-medium">{pred.predicted_duration_hours}h</p>
+                      <p className="font-medium">{pred.predicted_duration_hours || 0}h</p>
                     </div>
                   </div>
 
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium flex items-center gap-1 mb-1">
-                        <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                        <AlertTriangle className="h-4 w-4 text-warning" />
                         Causa Provável
                       </p>
                       <p className="text-sm text-muted-foreground">{pred.predicted_cause}</p>
@@ -178,11 +220,11 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
 
                     <div>
                       <p className="text-sm font-medium flex items-center gap-1 mb-2">
-                        <BarChart3 className="h-4 w-4 text-orange-500" />
+                        <BarChart3 className="h-4 w-4 text-accent-foreground" />
                         Fatores de Risco
                       </p>
                       <div className="flex flex-wrap gap-1">
-                        {pred.risk_factors.map((factor, fIdx) => (
+                        {pred.risk_factors?.map((factor, fIdx) => (
                           <Badge key={fIdx} variant="outline" className="text-xs">
                             {factor}
                           </Badge>
@@ -192,11 +234,11 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
 
                     <div>
                       <p className="text-sm font-medium flex items-center gap-1 mb-2">
-                        <ShieldCheck className="h-4 w-4 text-green-500" />
+                        <ShieldCheck className="h-4 w-4 text-success" />
                         Ações Preventivas Recomendadas
                       </p>
                       <ul className="space-y-1">
-                        {pred.preventive_actions.map((action, aIdx) => (
+                        {pred.preventive_actions?.map((action, aIdx) => (
                           <li key={aIdx} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <ArrowRight className="h-4 w-4 shrink-0 text-primary mt-0.5" />
                             {action}
@@ -206,10 +248,10 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t">
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Lightbulb className="h-3 w-3" />
-                      Confiança do modelo: {(pred.confidence * 100).toFixed(0)}%
+                      Confiança do modelo: {((pred.confidence || 0.75) * 100).toFixed(0)}%
                     </div>
                     <Button size="sm" variant="outline">
                       <Calendar className="h-4 w-4 mr-1" />

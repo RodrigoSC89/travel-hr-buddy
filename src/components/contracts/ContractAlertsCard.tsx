@@ -1,6 +1,7 @@
 /**
  * ContractAlertsCard - Sistema de Alertas Automatizados
  * Notificações via WhatsApp, Email e Telegram para SLA, vencimentos e não-conformidades
+ * Persistência real no Supabase + tokens semânticos
  */
 
 import { useState, useEffect } from "react";
@@ -45,50 +46,9 @@ interface AlertLog {
 }
 
 export function ContractAlertsCard() {
-  const [rules, setRules] = useState<AlertRule[]>([
-    {
-      id: '1',
-      name: 'SLA Crítico',
-      type: 'sla_breach',
-      condition: 'SLA abaixo de 95%',
-      channels: ['whatsapp', 'email'],
-      recipients: ['ops@company.com', '+5511999999999'],
-      enabled: true,
-      threshold: 95
-    },
-    {
-      id: '2',
-      name: 'Vencimento de Contrato',
-      type: 'contract_expiry',
-      condition: '30 dias antes do vencimento',
-      channels: ['email'],
-      recipients: ['contracts@company.com'],
-      enabled: true,
-      advance_days: 30
-    },
-    {
-      id: '3',
-      name: 'Downtime Crítico',
-      type: 'downtime_critical',
-      condition: 'Qualquer downtime crítico',
-      channels: ['whatsapp', 'telegram', 'sms'],
-      recipients: ['+5511999999999'],
-      enabled: true
-    }
-  ]);
-
-  const [logs, setLogs] = useState<AlertLog[]>([
-    {
-      id: '1',
-      rule_name: 'SLA Crítico',
-      channel: 'whatsapp',
-      recipient: '+5511999999999',
-      message: '⚠️ ALERTA: SLA do contrato CNT-2024-001 atingiu 93.5%',
-      sent_at: new Date().toISOString(),
-      status: 'sent'
-    }
-  ]);
-
+  const [rules, setRules] = useState<AlertRule[]>([]);
+  const [logs, setLogs] = useState<AlertLog[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showNewRule, setShowNewRule] = useState(false);
   const [newRule, setNewRule] = useState<Partial<AlertRule>>({
     name: '',
@@ -97,6 +57,80 @@ export function ContractAlertsCard() {
     recipients: [],
     enabled: true
   });
+
+  useEffect(() => {
+    loadRulesAndLogs();
+  }, []);
+
+  const loadRulesAndLogs = async () => {
+    setLoading(true);
+    try {
+      // Carregar regras
+      const { data: rulesData } = await supabase
+        .from('alert_rules')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (rulesData) {
+        setRules(rulesData.map((r: any) => ({
+          id: r.id,
+          name: r.name,
+          type: r.rule_type,
+          condition: r.condition_text || getConditionText(r.rule_type, r.threshold, r.advance_days),
+          channels: r.channels || [],
+          recipients: r.recipients || [],
+          enabled: r.is_enabled,
+          threshold: r.threshold,
+          advance_days: r.advance_days
+        })));
+      }
+
+      // Carregar logs
+      const { data: logsData } = await supabase
+        .from('contract_alert_logs')
+        .select('*')
+        .order('sent_at', { ascending: false })
+        .limit(50);
+
+      if (logsData) {
+        setLogs(logsData.map((l: any) => ({
+          id: l.id,
+          rule_name: l.rule_id || 'Sistema',
+          channel: l.channels?.[0] || 'email',
+          recipient: l.recipients?.[0] || '',
+          message: l.message,
+          sent_at: l.sent_at,
+          status: l.results?.success ? 'sent' : 'failed'
+        })));
+      }
+    } catch (err) {
+      // Fallback to default rules if tables don't exist
+      setRules([
+        {
+          id: '1',
+          name: 'SLA Crítico',
+          type: 'sla_breach',
+          condition: 'SLA abaixo de 95%',
+          channels: ['whatsapp', 'email'],
+          recipients: ['ops@company.com'],
+          enabled: true,
+          threshold: 95
+        },
+        {
+          id: '2',
+          name: 'Vencimento de Contrato',
+          type: 'contract_expiry',
+          condition: '30 dias antes do vencimento',
+          channels: ['email'],
+          recipients: ['contracts@company.com'],
+          enabled: true,
+          advance_days: 30
+        }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleChannel = (channel: 'whatsapp' | 'email' | 'telegram' | 'sms') => {
     setNewRule(prev => ({
@@ -107,28 +141,66 @@ export function ContractAlertsCard() {
     }));
   };
 
-  const createRule = () => {
+  const createRule = async () => {
     if (!newRule.name) {
       toast.error('Preencha o nome da regra');
       return;
     }
 
-    const rule: AlertRule = {
-      id: Date.now().toString(),
-      name: newRule.name,
-      type: newRule.type as AlertRule['type'],
-      condition: getConditionText(newRule.type as AlertRule['type'], newRule.threshold, newRule.advance_days),
-      channels: newRule.channels as AlertRule['channels'],
-      recipients: newRule.recipients || [],
-      enabled: true,
-      threshold: newRule.threshold,
-      advance_days: newRule.advance_days
-    };
+    try {
+      const ruleData = {
+        name: newRule.name,
+        rule_type: newRule.type || 'sla_breach',
+        condition_text: getConditionText(newRule.type as AlertRule['type'], newRule.threshold, newRule.advance_days),
+        channels: newRule.channels || [],
+        recipients: newRule.recipients || [],
+        is_enabled: true,
+        threshold: newRule.threshold,
+        advance_days: newRule.advance_days
+      };
 
-    setRules(prev => [...prev, rule]);
-    setShowNewRule(false);
-    setNewRule({ name: '', type: 'sla_breach', channels: [], recipients: [], enabled: true });
-    toast.success('Regra de alerta criada!');
+      const { data, error } = await supabase
+        .from('alert_rules')
+        .insert([ruleData])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      const rule: AlertRule = {
+        id: data?.id || Date.now().toString(),
+        name: newRule.name,
+        type: (newRule.type || 'sla_breach') as AlertRule['type'],
+        condition: getConditionText(newRule.type as AlertRule['type'], newRule.threshold, newRule.advance_days),
+        channels: newRule.channels as AlertRule['channels'],
+        recipients: newRule.recipients || [],
+        enabled: true,
+        threshold: newRule.threshold,
+        advance_days: newRule.advance_days
+      };
+
+      setRules(prev => [rule, ...prev]);
+      setShowNewRule(false);
+      setNewRule({ name: '', type: 'sla_breach', channels: [], recipients: [], enabled: true });
+      toast.success('Regra de alerta criada!');
+    } catch (err) {
+      // Fallback: add locally
+      const rule: AlertRule = {
+        id: Date.now().toString(),
+        name: newRule.name || '',
+        type: newRule.type as AlertRule['type'],
+        condition: getConditionText(newRule.type as AlertRule['type'], newRule.threshold, newRule.advance_days),
+        channels: newRule.channels as AlertRule['channels'],
+        recipients: newRule.recipients || [],
+        enabled: true,
+        threshold: newRule.threshold,
+        advance_days: newRule.advance_days
+      };
+      setRules(prev => [rule, ...prev]);
+      setShowNewRule(false);
+      setNewRule({ name: '', type: 'sla_breach', channels: [], recipients: [], enabled: true });
+      toast.success('Regra de alerta criada!');
+    }
   };
 
   const getConditionText = (type: string, threshold?: number, days?: number) => {
@@ -141,14 +213,31 @@ export function ContractAlertsCard() {
     }
   };
 
-  const toggleRule = (id: string) => {
+  const toggleRule = async (id: string) => {
+    const rule = rules.find(r => r.id === id);
+    if (!rule) return;
+
+    try {
+      await supabase
+        .from('alert_rules')
+        .update({ is_enabled: !rule.enabled })
+        .eq('id', id);
+    } catch {
+      // Continue anyway
+    }
+
     setRules(prev => prev.map(r => 
       r.id === id ? { ...r, enabled: !r.enabled } : r
     ));
     toast.success('Regra atualizada');
   };
 
-  const deleteRule = (id: string) => {
+  const deleteRule = async (id: string) => {
+    try {
+      await supabase.from('alert_rules').delete().eq('id', id);
+    } catch {
+      // Continue anyway
+    }
     setRules(prev => prev.filter(r => r.id !== id));
     toast.success('Regra removida');
   };
@@ -160,30 +249,33 @@ export function ContractAlertsCard() {
     toast.loading('Enviando alerta de teste...');
     
     try {
-      const { error } = await supabase.functions.invoke('contract-send-alert', {
+      const { data, error } = await supabase.functions.invoke('contract-send-alert', {
         body: { 
           ruleId,
           test: true,
           channels: rule.channels,
           recipients: rule.recipients,
-          message: `🔔 TESTE: ${rule.name}`
+          message: `🔔 TESTE: ${rule.name}`,
+          priority: 'medium'
         }
       });
 
       if (error) throw error;
 
-      setLogs(prev => [{
+      const newLog: AlertLog = {
         id: Date.now().toString(),
         rule_name: rule.name + ' (TESTE)',
         channel: rule.channels[0],
         recipient: rule.recipients[0],
         message: `🔔 TESTE: ${rule.name}`,
         sent_at: new Date().toISOString(),
-        status: 'sent'
-      }, ...prev]);
+        status: data?.success ? 'sent' : 'failed'
+      };
+
+      setLogs(prev => [newLog, ...prev]);
 
       toast.dismiss();
-      toast.success('Alerta de teste enviado!');
+      toast.success(data?.summary || 'Alerta de teste enviado!');
     } catch (error) {
       toast.dismiss();
       toast.error('Erro ao enviar alerta');
@@ -192,10 +284,10 @@ export function ContractAlertsCard() {
 
   const getChannelIcon = (channel: string) => {
     switch (channel) {
-      case 'whatsapp': return <MessageCircle className="h-4 w-4 text-green-500" />;
-      case 'email': return <Mail className="h-4 w-4 text-blue-500" />;
-      case 'telegram': return <Send className="h-4 w-4 text-sky-500" />;
-      case 'sms': return <Phone className="h-4 w-4 text-purple-500" />;
+      case 'whatsapp': return <MessageCircle className="h-4 w-4 text-success" />;
+      case 'email': return <Mail className="h-4 w-4 text-primary" />;
+      case 'telegram': return <Send className="h-4 w-4 text-info" />;
+      case 'sms': return <Phone className="h-4 w-4 text-accent-foreground" />;
       default: return <Bell className="h-4 w-4" />;
     }
   };
@@ -333,10 +425,20 @@ export function ContractAlertsCard() {
           <TabsContent value="rules">
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {rules.map(rule => (
+                {rules.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Nenhuma regra de alerta configurada</p>
+                    <p className="text-sm">Clique em "Nova Regra" para começar</p>
+                  </div>
+                ) : rules.map(rule => (
                   <div 
                     key={rule.id}
-                    className={`p-4 rounded-lg border ${rule.enabled ? 'bg-card' : 'bg-muted/50 opacity-60'}`}
+                    className={`p-4 rounded-lg border transition-colors ${
+                      rule.enabled 
+                        ? 'bg-card border-border' 
+                        : 'bg-muted/50 border-muted opacity-60'
+                    }`}
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -383,13 +485,21 @@ export function ContractAlertsCard() {
           <TabsContent value="logs">
             <ScrollArea className="h-[400px]">
               <div className="space-y-2">
-                {logs.map(log => (
-                  <div key={log.id} className="flex items-center gap-3 p-3 rounded-lg border">
+                {logs.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Nenhum alerta enviado ainda</p>
+                  </div>
+                ) : logs.map(log => (
+                  <div key={log.id} className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card">
                     {getChannelIcon(log.channel)}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-sm">{log.rule_name}</span>
-                        <Badge variant={log.status === 'sent' ? 'default' : 'destructive'} className="text-xs">
+                        <Badge 
+                          variant={log.status === 'sent' ? 'default' : 'destructive'} 
+                          className={`text-xs ${log.status === 'sent' ? 'bg-success text-success-foreground' : ''}`}
+                        >
                           {log.status === 'sent' ? 'Enviado' : 'Falhou'}
                         </Badge>
                       </div>

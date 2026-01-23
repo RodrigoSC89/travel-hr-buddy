@@ -1458,6 +1458,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_predictions: {
+        Row: {
+          confidence_score: number | null
+          contract_id: string | null
+          created_at: string | null
+          id: string
+          method: string | null
+          organization_id: string | null
+          prediction_data: Json | null
+          prediction_type: string
+          vessel_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          contract_id?: string | null
+          created_at?: string | null
+          id?: string
+          method?: string | null
+          organization_id?: string | null
+          prediction_data?: Json | null
+          prediction_type: string
+          vessel_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          contract_id?: string | null
+          created_at?: string | null
+          id?: string
+          method?: string | null
+          organization_id?: string | null
+          prediction_data?: Json | null
+          prediction_type?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_predictions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_reports: {
         Row: {
           content: string
@@ -1913,6 +1964,59 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alert_rules: {
+        Row: {
+          advance_days: number | null
+          channels: string[] | null
+          condition_text: string | null
+          created_at: string | null
+          id: string
+          is_enabled: boolean | null
+          name: string
+          organization_id: string | null
+          recipients: string[] | null
+          rule_type: string
+          threshold: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          advance_days?: number | null
+          channels?: string[] | null
+          condition_text?: string | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          name: string
+          organization_id?: string | null
+          recipients?: string[] | null
+          rule_type: string
+          threshold?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          advance_days?: number | null
+          channels?: string[] | null
+          condition_text?: string | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          name?: string
+          organization_id?: string | null
+          recipients?: string[] | null
+          rule_type?: string
+          threshold?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -6734,6 +6838,50 @@ export type Database = {
           target_modules?: string[] | null
         }
         Relationships: []
+      }
+      contract_alert_logs: {
+        Row: {
+          channels: string[] | null
+          id: string
+          is_test: boolean | null
+          message: string | null
+          priority: string | null
+          recipients: string[] | null
+          results: Json | null
+          rule_id: string | null
+          sent_at: string | null
+        }
+        Insert: {
+          channels?: string[] | null
+          id?: string
+          is_test?: boolean | null
+          message?: string | null
+          priority?: string | null
+          recipients?: string[] | null
+          results?: Json | null
+          rule_id?: string | null
+          sent_at?: string | null
+        }
+        Update: {
+          channels?: string[] | null
+          id?: string
+          is_test?: boolean | null
+          message?: string | null
+          priority?: string | null
+          recipients?: string[] | null
+          results?: Json | null
+          rule_id?: string | null
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_alert_logs_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "alert_rules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       conversation_participants: {
         Row: {
