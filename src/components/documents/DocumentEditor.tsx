@@ -1,8 +1,8 @@
 /**
  * PATCH 851 - Document Editor Component
- * Removed @ts-nocheck, added proper typing
+ * @ts-nocheck - Required: document_versions table uses dynamic schema
  */
-// @ts-nocheck - Dynamic table access requires type override
+// @ts-nocheck
 "use client";
 
 import * as React from "react";

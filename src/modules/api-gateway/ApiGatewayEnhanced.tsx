@@ -1,7 +1,7 @@
 /**
  * PATCH 300: Enhanced API Gateway
  * Added documentation generation and Markdown export
- * NOTE: @ts-nocheck required due to dynamic API routes schema not in generated types
+ * @ts-nocheck - Required: api_routes table uses dynamic schema not in generated types
  */
 
 // @ts-nocheck
