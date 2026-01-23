@@ -150,14 +150,14 @@ export function AuditAssistant() {
 
   const getTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      ANTAQ: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      DPC: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-      IMO: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-      ISM: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      ISPS: 'bg-red-500/20 text-red-400 border-red-500/30',
-      MLC: 'bg-green-500/20 text-green-400 border-green-500/30',
-      ESG: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-      ISO: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30'
+      ANTAQ: 'bg-primary/20 text-primary border-primary/30',
+      DPC: 'bg-secondary/20 text-secondary border-secondary/30',
+      IMO: 'bg-accent/20 text-accent-foreground border-accent/30',
+      ISM: 'bg-warning/20 text-warning border-warning/30',
+      ISPS: 'bg-destructive/20 text-destructive border-destructive/30',
+      MLC: 'bg-success/20 text-success border-success/30',
+      ESG: 'bg-success/20 text-success border-success/30',
+      ISO: 'bg-primary/20 text-primary border-primary/30'
     };
     return colors[type] || 'bg-muted';
   };

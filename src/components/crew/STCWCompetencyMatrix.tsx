@@ -39,9 +39,9 @@ interface CompetencyAssessment {
 }
 
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; label: string }> = {
-  competent: { icon: CheckCircle2, color: "text-emerald-400 bg-emerald-500/20", label: "Competente" },
-  in_training: { icon: Clock, color: "text-amber-400 bg-amber-500/20", label: "Em Treinamento" },
-  not_yet_competent: { icon: XCircle, color: "text-orange-400 bg-orange-500/20", label: "Não Competente" },
+  competent: { icon: CheckCircle2, color: "text-success bg-success/20", label: "Competente" },
+  in_training: { icon: Clock, color: "text-warning bg-warning/20", label: "Em Treinamento" },
+  not_yet_competent: { icon: XCircle, color: "text-warning bg-warning/20", label: "Não Competente" },
   expired: { icon: AlertTriangle, color: "text-destructive bg-destructive/20", label: "Expirado" },
   not_assessed: { icon: HelpCircle, color: "text-muted-foreground bg-muted", label: "Não Avaliado" },
 };

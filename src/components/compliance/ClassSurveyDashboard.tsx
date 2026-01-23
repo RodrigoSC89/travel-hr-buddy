@@ -41,11 +41,11 @@ interface ClassificationSociety {
 }
 
 const statusConfig: Record<string, { color: string; label: string; icon: typeof CheckCircle2 }> = {
-  pending: { color: "bg-blue-500/20 text-blue-400 border-blue-500/30", label: "Pendente", icon: Clock },
-  due_soon: { color: "bg-amber-500/20 text-amber-400 border-amber-500/30", label: "Vence em Breve", icon: AlertTriangle },
+  pending: { color: "bg-primary/20 text-primary border-primary/30", label: "Pendente", icon: Clock },
+  due_soon: { color: "bg-warning/20 text-warning border-warning/30", label: "Vence em Breve", icon: AlertTriangle },
   overdue: { color: "bg-destructive/20 text-destructive border-destructive/30", label: "Vencido", icon: AlertTriangle },
   in_progress: { color: "bg-primary/20 text-primary border-primary/30", label: "Em Andamento", icon: Clock },
-  completed: { color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30", label: "Concluído", icon: CheckCircle2 },
+  completed: { color: "bg-success/20 text-success border-success/30", label: "Concluído", icon: CheckCircle2 },
   postponed: { color: "bg-muted text-muted-foreground border-muted", label: "Adiado", icon: Clock },
 };
 

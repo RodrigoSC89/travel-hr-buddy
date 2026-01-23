@@ -636,8 +636,8 @@ export function IoTSensorHistory() {
                   <div className={cn(
                     "p-3 rounded-lg text-sm",
                     Math.abs(correlationCoefficient) > 0.7 ? "bg-destructive/10 text-destructive" :
-                    Math.abs(correlationCoefficient) > 0.4 ? "bg-amber-500/10 text-amber-600" :
-                    "bg-emerald-500/10 text-emerald-600"
+                    Math.abs(correlationCoefficient) > 0.4 ? "bg-warning/10 text-warning" :
+                    "bg-success/10 text-success"
                   )}>
                     {Math.abs(correlationCoefficient) > 0.7 ? (
                       <>
