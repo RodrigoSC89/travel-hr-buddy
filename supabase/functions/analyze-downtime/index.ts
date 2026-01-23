@@ -1,3 +1,7 @@
+/**
+ * Analyze Downtime - Edge Function
+ * Analisa eventos de downtime com IA para verificar justificativas e calcular impacto SLA
+ */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -18,34 +22,56 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `Você é um especialista em análise de downtime marítimo e contratos de SLA.
-Analise eventos de parada e determine:
-1. Se a justificativa é válida conforme o contrato
-2. Impacto no SLA (% permitido vs % usado)
-3. Possíveis penalidades
-4. Recomendações de melhoria
+    // Calcular duração se não fornecida
+    const durationHours = downtime_event.duration_hours || 
+      (downtime_event.end_time 
+        ? (new Date(downtime_event.end_time).getTime() - new Date(downtime_event.start_time).getTime()) / (1000 * 60 * 60)
+        : 0);
 
-Sempre responda em português brasileiro de forma técnica e objetiva.`;
+    // Calcular impacto SLA (baseado em período mensal de 720h)
+    const monthlyHours = 720;
+    const slaImpact = parseFloat(((durationHours / monthlyHours) * 100).toFixed(2));
+    const penaltyEstimate = durationHours * (contract.penalty_per_hour || 0);
+
+    const systemPrompt = `Você é um especialista em operações marítimas e compliance de SLA para contratos de embarcações.
+    
+Sua tarefa é analisar eventos de downtime e determinar:
+1. Se a justificativa é válida de acordo com práticas marítimas e contratuais
+2. Classificar o nível de risco
+3. Fornecer recomendações acionáveis
+
+Categorias de downtime geralmente aceitas:
+- Manutenção preventiva programada
+- Condições climáticas adversas (força maior)
+- Requisitos regulatórios/inspeções obrigatórias
+- Emergências de segurança
+
+Categorias que requerem justificativa adicional:
+- Falhas mecânicas não planejadas
+- Falhas elétricas
+- Problemas operacionais
+- Indisponibilidade de tripulação
+
+Responda SEMPRE em português brasileiro.`;
 
     const userPrompt = `Analise o seguinte evento de downtime:
 
-**Embarcação**: ${vessel_name}
-**Início da Parada**: ${downtime_event.start_time}
-**Fim da Parada**: ${downtime_event.end_time || 'Em andamento'}
-**Motivo**: ${downtime_event.reason}
-**Sistema Afetado**: ${downtime_event.system_affected}
-**Nível de Impacto**: ${downtime_event.impact_level}
+**Embarcação:** ${vessel_name}
+**Cliente:** ${contract.client}
+**Período:** ${new Date(downtime_event.start_time).toLocaleString('pt-BR')} até ${downtime_event.end_time ? new Date(downtime_event.end_time).toLocaleString('pt-BR') : 'Em andamento'}
+**Duração:** ${durationHours.toFixed(1)} horas
+**Sistema Afetado:** ${downtime_event.system_affected || 'Não especificado'}
+**Nível de Impacto:** ${downtime_event.impact_level || 'Não classificado'}
+**Motivo Informado:** ${downtime_event.reason || 'Não informado'}
 
-**Contrato**:
+**Parâmetros do Contrato:**
 - SLA Downtime Permitido: ${contract.sla_downtime_percent}%
-- Penalidade por Hora: R$ ${contract.penalty_per_hour}
-- Cliente: ${contract.client}
+- Penalidade por Hora: USD ${contract.penalty_per_hour}
 
-Forneça uma análise completa incluindo:
-1. Validação da justificativa
-2. Impacto no SLA
-3. Cálculo de penalidade (se aplicável)
-4. Recomendações`;
+**Impacto SLA Calculado:** ${slaImpact}%
+**Penalidade Estimada:** USD ${penaltyEstimate.toFixed(2)}
+
+Forneça sua análise completa.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -54,18 +80,59 @@ Forneça uma análise completa incluindo:
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "analyze_downtime",
+              description: "Análise estruturada do evento de downtime",
+              parameters: {
+                type: "object",
+                properties: {
+                  justification_valid: {
+                    type: "boolean",
+                    description: "Se a justificativa é válida"
+                  },
+                  analysis: {
+                    type: "string",
+                    description: "Análise detalhada da situação (máximo 500 palavras)"
+                  },
+                  recommendations: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Lista de até 5 recomendações"
+                  },
+                  risk_assessment: {
+                    type: "string",
+                    enum: ["low", "medium", "high", "critical"],
+                    description: "Avaliação de risco"
+                  }
+                },
+                required: ["justification_valid", "analysis", "recommendations", "risk_assessment"],
+                additionalProperties: false
+              }
+            }
+          }
+        ],
+        tool_choice: { type: "function", function: { name: "analyze_downtime" } }
       }),
     });
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded" }), {
+        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
           status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: "Payment required, please add funds to your workspace." }), {
+          status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
@@ -73,16 +140,38 @@ Forneça uma análise completa incluindo:
     }
 
     const data = await response.json();
-    const analysis = data.choices?.[0]?.message?.content || "";
+    
+    let aiResult = {
+      justification_valid: false,
+      analysis: "Análise não disponível",
+      recommendations: [] as string[],
+      risk_assessment: "medium"
+    };
 
-    // Parse da análise para estruturar
+    // Parse tool call response
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
+    if (toolCall?.function?.arguments) {
+      try {
+        aiResult = JSON.parse(toolCall.function.arguments);
+      } catch (e) {
+        console.error("Failed to parse AI response:", e);
+        // Fallback to content parsing
+        const content = data.choices?.[0]?.message?.content || "";
+        aiResult.analysis = content;
+      }
+    }
+
     const result = {
-      analysis,
-      justification_valid: analysis.toLowerCase().includes("válida") || analysis.toLowerCase().includes("justificável"),
-      sla_impact: extractSLAImpact(analysis),
-      penalty_estimate: extractPenalty(analysis, contract.penalty_per_hour),
-      recommendations: extractRecommendations(analysis),
-      generated_at: new Date().toISOString()
+      success: true,
+      justification_valid: aiResult.justification_valid,
+      sla_impact: slaImpact,
+      penalty_estimate: penaltyEstimate,
+      analysis: aiResult.analysis,
+      recommendations: aiResult.recommendations || [],
+      risk_level: aiResult.risk_assessment,
+      generated_at: new Date().toISOString(),
+      vessel_name,
+      duration_hours: durationHours
     };
 
     console.log("Downtime analysis completed for vessel:", vessel_name);
@@ -93,28 +182,12 @@ Forneça uma análise completa incluindo:
 
   } catch (error: unknown) {
     console.error("Error in analyze-downtime:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ 
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error" 
+    }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
-
-function extractSLAImpact(analysis: string): string {
-  const match = analysis.match(/(\d+[,.]?\d*)\s*%/);
-  return match ? match[0] : "A calcular";
-}
-
-function extractPenalty(analysis: string, hourlyRate: number): number {
-  const hoursMatch = analysis.match(/(\d+)\s*(hora|hours)/i);
-  if (hoursMatch) {
-    return parseInt(hoursMatch[1]) * hourlyRate;
-  }
-  return 0;
-}
-
-function extractRecommendations(analysis: string): string[] {
-  const recSection = analysis.split(/recomenda/i)[1] || "";
-  const items = recSection.split(/\n[-•*]|\d\./);
-  return items.filter(r => r.trim().length > 10).slice(0, 5).map(r => r.trim());
-}
