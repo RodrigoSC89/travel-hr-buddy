@@ -130,12 +130,12 @@ const mockJobOpenings: JobOpening[] = [
 ];
 
 const statusColors: Record<Candidate["status"], string> = {
-  new: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  screening: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  interview: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-  offer: "bg-green-500/10 text-green-500 border-green-500/20",
-  hired: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  rejected: "bg-red-500/10 text-red-500 border-red-500/20"
+  new: "bg-primary/10 text-primary border-primary/20",
+  screening: "bg-warning/10 text-warning border-warning/20",
+  interview: "bg-secondary/10 text-secondary border-secondary/20",
+  offer: "bg-success/10 text-success border-success/20",
+  hired: "bg-success/10 text-success border-success/20",
+  rejected: "bg-destructive/10 text-destructive border-destructive/20"
 };
 
 const statusLabels: Record<Candidate["status"], string> = {

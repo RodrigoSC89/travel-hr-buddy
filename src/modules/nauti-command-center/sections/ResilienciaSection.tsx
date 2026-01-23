@@ -175,8 +175,8 @@ export function ResilienciaSection() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "healthy": return <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Saudável</Badge>;
-      case "degraded": return <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20">Degradado</Badge>;
+      case "healthy": return <Badge className="bg-success/10 text-success border-success/20">Saudável</Badge>;
+      case "degraded": return <Badge className="bg-warning/10 text-warning border-warning/20">Degradado</Badge>;
       case "down": return <Badge variant="destructive">Offline</Badge>;
       default: return <Badge variant="outline">Desconhecido</Badge>;
     }

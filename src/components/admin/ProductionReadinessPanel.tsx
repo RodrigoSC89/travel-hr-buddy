@@ -142,9 +142,9 @@ export function ProductionReadinessPanel() {
   ) || [];
 
   const overallStatusColors = {
-    'ready': 'bg-emerald-500',
-    'not-ready': 'bg-red-500',
-    'ready-with-restrictions': 'bg-amber-500'
+    'ready': 'bg-success',
+    'not-ready': 'bg-destructive',
+    'ready-with-restrictions': 'bg-warning'
   };
 
   const overallStatusText = {

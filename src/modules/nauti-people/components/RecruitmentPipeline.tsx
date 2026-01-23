@@ -69,19 +69,19 @@ const RecruitmentPipeline: React.FC = () => {
   });
 
   const etapas = [
-    { id: 'triagem', label: 'Triagem IA', color: 'bg-blue-500' },
-    { id: 'entrevista_rh', label: 'Entrevista RH', color: 'bg-purple-500' },
-    { id: 'entrevista_tecnica', label: 'Entrevista Técnica', color: 'bg-orange-500' },
-    { id: 'proposta', label: 'Proposta', color: 'bg-green-500' },
-    { id: 'contratado', label: 'Contratado', color: 'bg-emerald-500' }
+    { id: 'triagem', label: 'Triagem IA', color: 'bg-primary' },
+    { id: 'entrevista_rh', label: 'Entrevista RH', color: 'bg-secondary' },
+    { id: 'entrevista_tecnica', label: 'Entrevista Técnica', color: 'bg-warning' },
+    { id: 'proposta', label: 'Proposta', color: 'bg-success' },
+    { id: 'contratado', label: 'Contratado', color: 'bg-success' }
   ];
 
   const getUrgenciaColor = (urgencia: string) => {
     switch (urgencia) {
-      case 'critica': return 'bg-red-500 text-white';
-      case 'alta': return 'bg-orange-500 text-white';
-      case 'media': return 'bg-yellow-500 text-black';
-      default: return 'bg-blue-500 text-white';
+      case 'critica': return 'bg-destructive text-destructive-foreground';
+      case 'alta': return 'bg-warning text-warning-foreground';
+      case 'media': return 'bg-warning/80 text-warning-foreground';
+      default: return 'bg-primary text-primary-foreground';
     }
   };
 

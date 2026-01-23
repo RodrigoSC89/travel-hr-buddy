@@ -86,7 +86,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className={cn("p-2 rounded-full", stats.isOnline ? "bg-emerald-500/20" : "bg-red-500/20")}>
+            <div className={cn("p-2 rounded-full", stats.isOnline ? "bg-success/20" : "bg-destructive/20")}>
               <SignalIcon className={cn("h-4 w-4", getSignalColor())} />
             </div>
             <div>

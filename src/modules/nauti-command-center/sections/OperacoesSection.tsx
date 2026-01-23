@@ -133,10 +133,10 @@ export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionPr
 
   const getStatusColor = (status: Process["status"]) => {
     switch (status) {
-      case "running": return "bg-emerald-500";
-      case "paused": return "bg-amber-500";
-      case "completed": return "bg-blue-500";
-      case "error": return "bg-red-500";
+      case "running": return "bg-success";
+      case "paused": return "bg-warning";
+      case "completed": return "bg-primary";
+      case "error": return "bg-destructive";
       default: return "bg-muted";
     }
   };
