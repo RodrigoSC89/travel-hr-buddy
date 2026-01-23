@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface WeatherDataUnified {
   temperature: number | null;
@@ -87,7 +88,7 @@ async function fetchFromEdgeFunction(
       if (error) throw error;
       return data;
     } catch (err) {
-      console.warn(`[Weather] Attempt ${attempt}/${retries} failed:`, err);
+      logger.warn(`[Weather] Attempt ${attempt}/${retries} failed`, { error: err instanceof Error ? err.message : String(err) });
       if (attempt === retries) throw err;
       // Exponential backoff: 1s, 2s, 4s
       await new Promise((r) => setTimeout(r, Math.pow(2, attempt - 1) * 1000));
@@ -107,7 +108,7 @@ async function fetchStormGlassData(lat: number, lon: number): Promise<any> {
     if (error) throw error;
     return data;
   } catch (err) {
-    console.warn("[Weather] StormGlass fallback failed:", err);
+    logger.warn("[Weather] StormGlass fallback failed", { error: err instanceof Error ? err.message : String(err) });
     return null;
   }
 }
@@ -214,7 +215,7 @@ export async function getWeatherData(
   if (!forceRefresh) {
     const cached = weatherCache.get(cacheKey);
     if (cached && isCacheValid(cached)) {
-      console.log("[Weather] Using cached data");
+      logger.debug("[Weather] Using cached data");
       return cached.data;
     }
   }
@@ -223,7 +224,7 @@ export async function getWeatherData(
 
   try {
     // Try primary source (OpenWeather via Edge Function)
-    console.log("[Weather] Fetching from primary source (OpenWeather)...");
+    logger.debug("[Weather] Fetching from primary source (OpenWeather)...");
     const primaryData = await fetchFromEdgeFunction(lat, lon, "openweather");
     const parsed = parseOpenWeatherResponse(primaryData);
 
@@ -237,7 +238,7 @@ export async function getWeatherData(
 
     // Fetch marine data if requested
     if (includeMarineData) {
-      console.log("[Weather] Fetching marine data (StormGlass)...");
+      logger.debug("[Weather] Fetching marine data (StormGlass)...");
       const marineData = await fetchStormGlassData(lat, lon);
       const marineParsed = parseStormGlassResponse(marineData);
 
@@ -257,15 +258,15 @@ export async function getWeatherData(
       timestamp: Date.now(),
     });
 
-    console.log("[Weather] Data fetched successfully from:", weatherData.source);
+    logger.info("[Weather] Data fetched successfully", { source: weatherData.source });
     return weatherData;
   } catch (error) {
-    console.error("[Weather] All sources failed:", error);
+    logger.error("[Weather] All sources failed", error);
     
     // Return cached data if available (even if expired)
     const cached = weatherCache.get(cacheKey);
     if (cached) {
-      console.log("[Weather] Using expired cache as fallback");
+      logger.warn("[Weather] Using expired cache as fallback");
       return { ...cached.data, description: "Dados em cache (offline)" };
     }
 
