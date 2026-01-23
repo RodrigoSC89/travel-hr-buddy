@@ -10,10 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { ApiKeyManagement } from "@/components/api/ApiKeyManagement";
 import { ApiDocumentation } from "@/components/api/ApiDocumentation";
-import { Key, Book, Activity } from "lucide-react";
+import { ApiTestConsole } from "@/components/api/ApiTestConsole";
+import { Key, Book, Activity, Terminal } from "lucide-react";
 import { toast } from "sonner";
 
 const PublicAPI: React.FC = () => {
+  const [testConsoleOpen, setTestConsoleOpen] = useState(false);
+  
   return (
     <>
       <Helmet>
@@ -22,11 +25,17 @@ const PublicAPI: React.FC = () => {
       </Helmet>
       
       <div className="container mx-auto p-6 max-w-7xl">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground">API Pública</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie integrações e acesse a documentação da API REST
-          </p>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">API Pública</h1>
+            <p className="text-muted-foreground mt-1">
+              Gerencie integrações e acesse a documentação da API REST
+            </p>
+          </div>
+          <Button onClick={() => setTestConsoleOpen(true)} className="gap-2">
+            <Terminal className="h-4 w-4" />
+            Console de Testes
+          </Button>
         </div>
 
         <Tabs defaultValue="keys" className="space-y-6">
@@ -58,7 +67,7 @@ const PublicAPI: React.FC = () => {
               <div className="rounded-lg border bg-card p-6">
                 <h4 className="text-sm font-medium text-muted-foreground">Chamadas Hoje</h4>
                 <p className="text-3xl font-bold mt-2">1,247</p>
-                <p className="text-xs text-green-600 mt-1">+12% vs ontem</p>
+                <p className="text-xs text-success mt-1">+12% vs ontem</p>
               </div>
               <div className="rounded-lg border bg-card p-6">
                 <h4 className="text-sm font-medium text-muted-foreground">Latência Média</h4>
@@ -68,7 +77,7 @@ const PublicAPI: React.FC = () => {
               <div className="rounded-lg border bg-card p-6">
                 <h4 className="text-sm font-medium text-muted-foreground">Taxa de Sucesso</h4>
                 <p className="text-3xl font-bold mt-2">99.8%</p>
-                <p className="text-xs text-green-600 mt-1">Excelente</p>
+                <p className="text-xs text-success mt-1">Excelente</p>
               </div>
             </div>
             <div className="rounded-lg border bg-card p-6">
@@ -87,6 +96,8 @@ const PublicAPI: React.FC = () => {
             </div>
           </TabsContent>
         </Tabs>
+        
+        <ApiTestConsole open={testConsoleOpen} onOpenChange={setTestConsoleOpen} />
       </div>
     </>
   );
