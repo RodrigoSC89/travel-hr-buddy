@@ -1,6 +1,7 @@
 /**
  * PATCH 600 - Unit tests for Risk Score Calculator
  * Tests risk assessment, scoring algorithms, and mitigation recommendations
+ * PATCH 10/10 - Fixed threshold logic
  */
 
 import { describe, it, expect } from "vitest";
@@ -10,9 +11,9 @@ interface RiskAssessment {
   vessel_id: string;
   risk_type: "operational" | "environmental" | "regulatory" | "security" | "financial";
   description: string;
-  probability: 1 | 2 | 3 | 4 | 5; // 1=Rare, 5=Almost Certain
-  impact: 1 | 2 | 3 | 4 | 5; // 1=Insignificant, 5=Catastrophic
-  risk_score: number; // Probability x Impact
+  probability: 1 | 2 | 3 | 4 | 5;
+  impact: 1 | 2 | 3 | 4 | 5;
+  risk_score: number;
   risk_level: "low" | "medium" | "high" | "critical";
   identified_date: string;
   assessed_by: string;
@@ -25,7 +26,7 @@ interface RiskMitigation {
   responsible_party: string;
   target_completion_date: string;
   status: "planned" | "in_progress" | "completed" | "deferred";
-  effectiveness: number; // 0-100%
+  effectiveness: number;
 }
 
 interface RiskMatrix {
@@ -56,9 +57,9 @@ describe("Risk Score Calculator", () => {
         vessel_id: "vessel-123",
         risk_type: "operational",
         description: "Engine failure during voyage",
-        probability: 2, // Unlikely
-        impact: 4, // Major
-        risk_score: 8, // 2 * 4
+        probability: 2,
+        impact: 4,
+        risk_score: 8,
         risk_level: "high",
         identified_date: "2025-11-03T10:00:00Z",
         assessed_by: "safety-officer",
@@ -85,7 +86,7 @@ describe("Risk Score Calculator", () => {
       const criticalRisk: RiskAssessment = {
         id: "risk-003",
         vessel_id: "vessel-123",
-        risk_type: "safety",
+        risk_type: "operational",
         description: "Critical safety system failure",
         probability: 4,
         impact: 5,
@@ -157,21 +158,24 @@ describe("Risk Score Calculator", () => {
     });
 
     it("should map scores to risk levels using thresholds", () => {
+      // Thresholds are UPPER bounds for each level
+      // low: 0-4, medium: 5-9, high: 10-15, critical: 16+
       const thresholds = {
         low: 4,
         medium: 9,
         high: 15,
-        critical: 20,
+        critical: 25,
       };
 
       const getRiskLevel = (score: number): string => {
-        if (score > thresholds.critical) return "critical";
-        if (score > thresholds.high) return "high";
-        if (score > thresholds.medium) return "medium";
-        return "low";
+        if (score <= thresholds.low) return "low";
+        if (score <= thresholds.medium) return "medium";
+        if (score <= thresholds.high) return "high";
+        return "critical";
       };
 
       expect(getRiskLevel(2)).toBe("low");
+      expect(getRiskLevel(4)).toBe("low");
       expect(getRiskLevel(7)).toBe("medium");
       expect(getRiskLevel(12)).toBe("high");
       expect(getRiskLevel(22)).toBe("critical");
@@ -245,34 +249,10 @@ describe("Risk Score Calculator", () => {
 
     it("should calculate composite risk score from multiple factors", () => {
       const factors: PredictiveRiskFactor[] = [
-        {
-          factor_name: "Equipment Age",
-          weight: 0.30,
-          current_value: 8.5,
-          threshold_value: 10.0,
-          trend: "deteriorating",
-        },
-        {
-          factor_name: "Maintenance Compliance",
-          weight: 0.25,
-          current_value: 7.0,
-          threshold_value: 10.0,
-          trend: "stable",
-        },
-        {
-          factor_name: "Incident History",
-          weight: 0.20,
-          current_value: 6.0,
-          threshold_value: 10.0,
-          trend: "improving",
-        },
-        {
-          factor_name: "Crew Competency",
-          weight: 0.25,
-          current_value: 9.0,
-          threshold_value: 10.0,
-          trend: "improving",
-        },
+        { factor_name: "Equipment Age", weight: 0.30, current_value: 8.5, threshold_value: 10.0, trend: "deteriorating" },
+        { factor_name: "Maintenance Compliance", weight: 0.25, current_value: 7.0, threshold_value: 10.0, trend: "stable" },
+        { factor_name: "Incident History", weight: 0.20, current_value: 6.0, threshold_value: 10.0, trend: "improving" },
+        { factor_name: "Crew Competency", weight: 0.25, current_value: 9.0, threshold_value: 10.0, trend: "improving" },
       ];
 
       const compositeScore = factors.reduce((sum, factor) => {
@@ -288,50 +268,15 @@ describe("Risk Score Calculator", () => {
   describe("Risk Monitoring", () => {
     it("should detect risk trend changes", () => {
       const historicalRisks: RiskAssessment[] = [
-        {
-          id: "risk-005",
-          vessel_id: "vessel-123",
-          risk_type: "operational",
-          description: "Equipment reliability",
-          probability: 4,
-          impact: 4,
-          risk_score: 16,
-          risk_level: "high",
-          identified_date: "2025-09-01T10:00:00Z",
-          assessed_by: "safety-officer",
-        },
-        {
-          id: "risk-006",
-          vessel_id: "vessel-123",
-          risk_type: "operational",
-          description: "Equipment reliability",
-          probability: 3,
-          impact: 4,
-          risk_score: 12,
-          risk_level: "high",
-          identified_date: "2025-10-01T10:00:00Z",
-          assessed_by: "safety-officer",
-        },
-        {
-          id: "risk-007",
-          vessel_id: "vessel-123",
-          risk_type: "operational",
-          description: "Equipment reliability",
-          probability: 2,
-          impact: 3,
-          risk_score: 6,
-          risk_level: "medium",
-          identified_date: "2025-11-01T10:00:00Z",
-          assessed_by: "safety-officer",
-        },
+        { id: "risk-005", vessel_id: "vessel-123", risk_type: "operational", description: "Equipment reliability", probability: 4, impact: 4, risk_score: 16, risk_level: "high", identified_date: "2025-09-01T10:00:00Z", assessed_by: "safety-officer" },
+        { id: "risk-006", vessel_id: "vessel-123", risk_type: "operational", description: "Equipment reliability", probability: 3, impact: 4, risk_score: 12, risk_level: "high", identified_date: "2025-10-01T10:00:00Z", assessed_by: "safety-officer" },
+        { id: "risk-007", vessel_id: "vessel-123", risk_type: "operational", description: "Equipment reliability", probability: 2, impact: 3, risk_score: 6, risk_level: "medium", identified_date: "2025-11-01T10:00:00Z", assessed_by: "safety-officer" },
       ];
 
-      // Check improving trend
       expect(historicalRisks[0].risk_score).toBeGreaterThan(historicalRisks[1].risk_score);
       expect(historicalRisks[1].risk_score).toBeGreaterThan(historicalRisks[2].risk_score);
       
-      const isImproving = 
-        historicalRisks[0].risk_score > historicalRisks[historicalRisks.length - 1].risk_score;
+      const isImproving = historicalRisks[0].risk_score > historicalRisks[historicalRisks.length - 1].risk_score;
       expect(isImproving).toBe(true);
     });
   });
