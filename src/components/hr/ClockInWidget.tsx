@@ -70,11 +70,11 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
     if (isActive) {
       switch (variant) {
         case 'entry':
-          return cn(baseClasses, 'bg-green-500 hover:bg-green-600 text-white ring-2 ring-green-500/50');
+          return cn(baseClasses, 'bg-success hover:bg-success/90 text-success-foreground ring-2 ring-success/50');
         case 'exit':
-          return cn(baseClasses, 'bg-red-500 hover:bg-red-600 text-white ring-2 ring-red-500/50');
+          return cn(baseClasses, 'bg-destructive hover:bg-destructive/90 text-destructive-foreground ring-2 ring-destructive/50');
         case 'break':
-          return cn(baseClasses, 'bg-amber-500 hover:bg-amber-600 text-white ring-2 ring-amber-500/50');
+          return cn(baseClasses, 'bg-warning hover:bg-warning/90 text-warning-foreground ring-2 ring-warning/50');
       }
     }
     
