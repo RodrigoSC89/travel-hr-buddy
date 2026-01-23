@@ -23,11 +23,23 @@ import {
 } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { InsightImplementationDialog } from "@/components/dialogs/InsightImplementationDialog";
+
+interface SelectedInsight {
+  id: number;
+  title: string;
+  description: string;
+  recommendations: string[];
+  estimatedSavings: string;
+  confidence: number;
+}
 
 const AdvancedAIInsights = () => {
   const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeTab, setActiveTab] = useState("insights");
+  const [implementDialogOpen, setImplementDialogOpen] = useState(false);
+  const [selectedInsight, setSelectedInsight] = useState<SelectedInsight | undefined>(undefined);
 
   const [aiInsights, setAiInsights] = useState([
     {
@@ -167,12 +179,16 @@ const AdvancedAIInsights = () => {
     }
   };
 
-  const handleImplementInsight = (insightTitle: string) => {
-    toast({
-      title: "✨ Implementar Insight",
-      description: `Iniciando implementação: ${insightTitle}`
+  const handleImplementInsight = (insight: typeof aiInsights[0]) => {
+    setSelectedInsight({
+      id: insight.id,
+      title: insight.title,
+      description: insight.description,
+      recommendations: insight.recommendations,
+      confidence: insight.confidence,
+      estimatedSavings: insight.estimatedSavings
     });
-    // TODO: Open implementation workflow dialog
+    setImplementDialogOpen(true);
   };
 
   return (
@@ -326,7 +342,7 @@ const AdvancedAIInsights = () => {
                         {insight.estimatedSavings}
                       </span>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight.title)}>
+                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight)}>
                       Implementar
                     </Button>
                   </div>
@@ -500,7 +516,17 @@ const AdvancedAIInsights = () => {
                         </Badge>
                       </div>
                     </div>
-                    <Button onClick={() => handleImplementInsight(rec.title)}>Implementar</Button>
+                    <Button onClick={() => handleImplementInsight({
+                      id: index,
+                      title: rec.title,
+                      description: rec.description,
+                      confidence: 85,
+                      impact: rec.impact,
+                      category: "recommendation",
+                      recommendations: [rec.description],
+                      estimatedSavings: "20% eficiência",
+                      status: "new"
+                    })}>Implementar</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -508,6 +534,13 @@ const AdvancedAIInsights = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Implementation Dialog */}
+      <InsightImplementationDialog
+        open={implementDialogOpen}
+        onOpenChange={setImplementDialogOpen}
+        insight={selectedInsight}
+      />
     </div>
   );
 };

@@ -17,10 +17,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { CreateMissionDialog } from "@/components/dialogs/CreateMissionDialog";
 import {
   Ship, Plus, RefreshCw, Brain, MapPin, Anchor, Fuel, Activity,
   AlertTriangle, CheckCircle, Navigation, Gauge, Waves, Clock,
-  TrendingUp, BarChart3, Wrench, Route, Users
+  TrendingUp, BarChart3, Wrench, Route, Users, Target
 } from "lucide-react";
 import {
   LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid,
@@ -350,6 +351,7 @@ export default function FleetCommandCenter() {
   const [maintenance, setMaintenance] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showMissionDialog, setShowMissionDialog] = useState(false);
   const [selectedVessel, setSelectedVessel] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
@@ -436,6 +438,10 @@ export default function FleetCommandCenter() {
           <Button variant="outline" onClick={loadData} disabled={loading}>
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Atualizar
+          </Button>
+          <Button variant="outline" onClick={() => setShowMissionDialog(true)}>
+            <Target className="h-4 w-4 mr-2" />
+            Nova Missão
           </Button>
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
             <DialogTrigger asChild>
@@ -654,6 +660,12 @@ export default function FleetCommandCenter() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Mission Dialog */}
+      <CreateMissionDialog
+        open={showMissionDialog}
+        onOpenChange={setShowMissionDialog}
+      />
     </div>
   );
 }
