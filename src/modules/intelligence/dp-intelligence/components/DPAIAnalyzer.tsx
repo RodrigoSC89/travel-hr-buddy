@@ -140,12 +140,12 @@ export default function DPAIAnalyzer() {
 
   const getStatusBadge = (status: string) => {
     if (status === "OK") {
-      return <Badge className="bg-emerald-100 text-emerald-700">OK</Badge>;
+      return <Badge className="bg-success/10 text-success">OK</Badge>;
     }
     if (status === "WARNING") {
-      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+      return <Badge className="bg-warning/10 text-warning">Alerta</Badge>;
     }
-    return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
+    return <Badge className="bg-destructive/10 text-destructive">Crítico</Badge>;
   };
 
   return (

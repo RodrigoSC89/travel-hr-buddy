@@ -33,11 +33,11 @@ interface HealthCheckInData {
 }
 
 const MOOD_OPTIONS = [
-  { value: 'excellent', label: 'Excelente 😊', color: 'bg-emerald-500' },
-  { value: 'good', label: 'Bom 🙂', color: 'bg-green-500' },
-  { value: 'neutral', label: 'Neutro 😐', color: 'bg-amber-500' },
-  { value: 'poor', label: 'Ruim 😕', color: 'bg-orange-500' },
-  { value: 'bad', label: 'Muito Ruim 😞', color: 'bg-red-500' },
+  { value: 'excellent', label: 'Excelente 😊', color: 'bg-success' },
+  { value: 'good', label: 'Bom 🙂', color: 'bg-success/80' },
+  { value: 'neutral', label: 'Neutro 😐', color: 'bg-warning' },
+  { value: 'poor', label: 'Ruim 😕', color: 'bg-warning/80' },
+  { value: 'bad', label: 'Muito Ruim 😞', color: 'bg-destructive' },
 ];
 
 export function HealthCheckInOffline() {

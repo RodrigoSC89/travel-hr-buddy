@@ -102,16 +102,16 @@ const initialWorkflows: Workflow[] = [
 ];
 
 const statusConfig = {
-  active: { label: 'Ativo', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
-  paused: { label: 'Pausado', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' },
-  completed: { label: 'Concluído', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
+  active: { label: 'Ativo', color: 'bg-success/20 text-success border-success/30' },
+  paused: { label: 'Pausado', color: 'bg-warning/20 text-warning border-warning/30' },
+  completed: { label: 'Concluído', color: 'bg-primary/20 text-primary border-primary/30' },
   draft: { label: 'Rascunho', color: 'bg-muted text-muted-foreground border-border' }
 };
 
 const priorityConfig = {
   low: { label: 'Baixa', color: 'text-muted-foreground' },
-  medium: { label: 'Média', color: 'text-amber-400' },
-  high: { label: 'Alta', color: 'text-orange-400' },
+  medium: { label: 'Média', color: 'text-warning' },
+  high: { label: 'Alta', color: 'text-warning' },
   critical: { label: 'Crítica', color: 'text-destructive' }
 };
 

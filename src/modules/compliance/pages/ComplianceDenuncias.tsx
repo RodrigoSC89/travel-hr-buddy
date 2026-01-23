@@ -156,9 +156,9 @@ export default function ComplianceDenuncias() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "open": return <Badge className="bg-blue-500/20 text-blue-400"><Clock className="h-3 w-3 mr-1" />Aberto</Badge>;
-      case "investigating": return <Badge className="bg-amber-500/20 text-amber-400"><Eye className="h-3 w-3 mr-1" />Em Análise</Badge>;
-      case "resolved": return <Badge className="bg-emerald-500/20 text-emerald-400"><CheckCircle2 className="h-3 w-3 mr-1" />Resolvido</Badge>;
+      case "open": return <Badge className="bg-primary/20 text-primary"><Clock className="h-3 w-3 mr-1" />Aberto</Badge>;
+      case "investigating": return <Badge className="bg-warning/20 text-warning"><Eye className="h-3 w-3 mr-1" />Em Análise</Badge>;
+      case "resolved": return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Resolvido</Badge>;
       case "closed": return <Badge variant="outline"><XCircle className="h-3 w-3 mr-1" />Fechado</Badge>;
       case "dismissed": return <Badge variant="destructive">Arquivado</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;

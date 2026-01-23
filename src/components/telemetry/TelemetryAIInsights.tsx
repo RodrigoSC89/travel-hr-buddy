@@ -225,10 +225,10 @@ Responda em JSON:
 
   const getSeverityColor = (severity: AIInsight["severity"]) => {
     const colors = {
-      critical: "bg-red-500/20 text-red-500 border-red-500/50",
-      high: "bg-orange-500/20 text-orange-500 border-orange-500/50",
-      medium: "bg-amber-500/20 text-amber-500 border-amber-500/50",
-      low: "bg-emerald-500/20 text-emerald-500 border-emerald-500/50",
+      critical: "bg-destructive/20 text-destructive border-destructive/50",
+      high: "bg-warning/20 text-warning border-warning/50",
+      medium: "bg-warning/15 text-warning border-warning/40",
+      low: "bg-success/20 text-success border-success/50",
     };
     return colors[severity];
   };
