@@ -1,6 +1,6 @@
 /**
  * VesselContractsV2 - Contratos de Embarcação
- * Módulo com IA integrada para análise de downtime, verificação de justificativas e geração de BROA
+ * Módulo completo com IA, predição, alertas, analytics, documentos, rastreamento e ERP
  */
 
 import { useState, useEffect } from "react";
@@ -20,10 +20,17 @@ import { DowntimeFormDialog } from "@/components/contracts/DowntimeFormDialog";
 import { DowntimeAIAnalysisCard } from "@/components/contracts/DowntimeAIAnalysisCard";
 import { BROAGeneratorCard } from "@/components/contracts/BROAGeneratorCard";
 import { SLADashboardCard } from "@/components/contracts/SLADashboardCard";
+import { PredictiveDowntimeCard } from "@/components/contracts/PredictiveDowntimeCard";
+import { ContractAlertsCard } from "@/components/contracts/ContractAlertsCard";
+import { ContractAnalyticsDashboard } from "@/components/contracts/ContractAnalyticsDashboard";
+import { DocumentSignatureCard } from "@/components/contracts/DocumentSignatureCard";
+import { VesselTrackingCard } from "@/components/contracts/VesselTrackingCard";
+import { ERPIntegrationCard } from "@/components/contracts/ERPIntegrationCard";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
-  XCircle, FileCheck, DollarSign, Calendar, Ship, Eye, Edit, Trash2
+  XCircle, FileCheck, DollarSign, Calendar, Ship, Eye, Edit, Trash2,
+  Bell, Navigation, Building2, FileSignature, Zap
 } from "lucide-react";
 
 interface Contract {
@@ -275,11 +282,16 @@ export default function VesselContractsV2() {
 
       {/* Main Content */}
       <Tabs defaultValue="contracts" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 max-w-4xl">
+        <TabsList className="flex flex-wrap gap-1 h-auto p-1">
           <TabsTrigger value="contracts">Contratos</TabsTrigger>
           <TabsTrigger value="downtime">Downtime</TabsTrigger>
           <TabsTrigger value="broa">BROA & IA</TabsTrigger>
-          <TabsTrigger value="dashboard">Dashboard SLA</TabsTrigger>
+          <TabsTrigger value="prediction">Predição IA</TabsTrigger>
+          <TabsTrigger value="alerts">Alertas</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="documents">Documentos</TabsTrigger>
+          <TabsTrigger value="tracking">Rastreamento</TabsTrigger>
+          <TabsTrigger value="erp">ERP</TabsTrigger>
           <TabsTrigger value="ai-assistant">Assistente</TabsTrigger>
         </TabsList>
 
