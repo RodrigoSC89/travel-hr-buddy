@@ -13,6 +13,7 @@ import {
   Scale, Brain, Shield, FileCheck, AlertTriangle, CheckCircle, 
   TrendingUp, Eye, BookOpen, Flag
 } from "lucide-react";
+import { useComplianceMetrics } from "@/hooks/useModuleMetrics";
 
 const QUICK_QUESTIONS = [
   "O que é ISO 37301?",
@@ -35,19 +36,13 @@ const EVIDENCE_FIELDS = [
 ];
 
 export default function ComplianceOneV2() {
-  const [metrics] = useState({
-    overallScore: 91,
-    regulatoryCompliance: 94,
-    riskMitigation: 88,
-    trainingCompletion: 85,
-    openIssues: 3
-  });
+  const metrics = useComplianceMetrics();
 
   const stats = [
-    { label: "Score Geral", value: `${metrics.overallScore}%`, icon: Scale, color: "green" as const },
-    { label: "Compliance Regulatório", value: `${metrics.regulatoryCompliance}%`, icon: Shield, color: "blue" as const },
-    { label: "Mitigação de Riscos", value: `${metrics.riskMitigation}%`, icon: TrendingUp, color: "purple" as const },
-    { label: "Issues Abertas", value: metrics.openIssues, icon: AlertTriangle, color: "orange" as const },
+    { label: "Score Geral", value: metrics.isLoading ? "..." : `${metrics.overallScore}%`, icon: Scale, color: "green" as const },
+    { label: "Compliance Regulatório", value: metrics.isLoading ? "..." : `${metrics.regulatoryCompliance}%`, icon: Shield, color: "blue" as const },
+    { label: "Mitigação de Riscos", value: metrics.isLoading ? "..." : `${metrics.riskMitigation}%`, icon: TrendingUp, color: "purple" as const },
+    { label: "Issues Abertas", value: metrics.isLoading ? "..." : metrics.openIssues, icon: AlertTriangle, color: "orange" as const },
   ];
 
   return (

@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Wrench, Users, Brain, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useFleetMetrics } from "@/hooks/useModuleMetrics";
+
 // Lazy load onboarding and launch celebration
 const WelcomeOnboarding = lazy(() => import("@/components/onboarding/WelcomeOnboarding").then(m => ({ default: m.WelcomeOnboarding })));
 const LaunchCelebration = lazy(() => import("@/components/onboarding/LaunchCelebration").then(m => ({ default: m.LaunchCelebration })));
@@ -33,7 +35,7 @@ const InstallPrompt = lazy(() => import("@/components/pwa/InstallPrompt").then(m
 // Loading placeholder
 const LoadingPlaceholder = () => <div className="h-32 bg-muted/20 rounded-lg animate-pulse" />;
 
-// PATCH 584: Memoized data constants for better performance
+// PATCH 584: Revenue data (static for now - could be fetched from financial module)
 const REVENUE_DATA = [
   { month: "Jan", revenue: 42000, target: 40000 },
   { month: "Fev", revenue: 48000, target: 45000 },
@@ -41,12 +43,6 @@ const REVENUE_DATA = [
   { month: "Abr", revenue: 58000, target: 55000 },
   { month: "Mai", revenue: 65000, target: 60000 },
   { month: "Jun", revenue: 72000, target: 70000 },
-] as const;
-
-const FLEET_DATA = [
-  { name: "Operacional", value: 20, color: "#10b981" },
-  { name: "Manutenção", value: 3, color: "#f59e0b" },
-  { name: "Standby", value: 1, color: "#3b82f6" },
 ] as const;
 
 // Nautilus Command Center Hero - Primary CTA
@@ -234,6 +230,14 @@ AIModulesPanel.displayName = 'AIModulesPanel';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const fleetMetrics = useFleetMetrics();
+
+  // Generate fleet data from real metrics
+  const fleetData = useMemo(() => [
+    { name: "Operacional", value: fleetMetrics.activeVessels || 20, color: "#10b981" },
+    { name: "Manutenção", value: fleetMetrics.inMaintenance || 3, color: "#f59e0b" },
+    { name: "Standby", value: fleetMetrics.standby || 1, color: "#3b82f6" },
+  ], [fleetMetrics.activeVessels, fleetMetrics.inMaintenance, fleetMetrics.standby]);
 
   // PATCH 584: Memoize callback to prevent unnecessary re-renders
   const handleTabChange = useCallback((value: string) => {
@@ -363,9 +367,9 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          {/* PATCH 584: Charts extracted to memoized component */}
+          {/* PATCH 584: Charts extracted to memoized component - now with real data */}
           <Suspense fallback={<LoadingPlaceholder />}>
-            <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
+            <OverviewCharts revenueData={REVENUE_DATA} fleetData={fleetData} />
           </Suspense>
           
           {/* PATCH 584: Quick Stats extracted to memoized component */}
