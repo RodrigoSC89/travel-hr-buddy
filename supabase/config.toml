@@ -1,5 +1,11 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+[functions.contract-predict-downtime]
+verify_jwt = false
+
+[functions.contract-send-alert]
+verify_jwt = true
+
 # ============================================
 # AUTONOMOUS PLATFORM v4.0 - Added 2026-01-06
 # Multi-agent AI consensus and autonomous decision-making

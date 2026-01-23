@@ -497,9 +497,34 @@ export default function VesselContractsV2() {
           </div>
         </TabsContent>
 
-        {/* Dashboard SLA Tab */}
-        <TabsContent value="dashboard" className="space-y-4">
-          <SLADashboardCard contracts={contracts} downtimeEvents={downtimeEvents} />
+        {/* Prediction Tab */}
+        <TabsContent value="prediction" className="space-y-4">
+          <PredictiveDowntimeCard />
+        </TabsContent>
+
+        {/* Alerts Tab */}
+        <TabsContent value="alerts" className="space-y-4">
+          <ContractAlertsCard />
+        </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics" className="space-y-4">
+          <ContractAnalyticsDashboard />
+        </TabsContent>
+
+        {/* Documents Tab */}
+        <TabsContent value="documents" className="space-y-4">
+          <DocumentSignatureCard />
+        </TabsContent>
+
+        {/* Tracking Tab */}
+        <TabsContent value="tracking" className="space-y-4">
+          <VesselTrackingCard />
+        </TabsContent>
+
+        {/* ERP Tab */}
+        <TabsContent value="erp" className="space-y-4">
+          <ERPIntegrationCard />
         </TabsContent>
 
         {/* AI Assistant Tab */}
@@ -514,56 +539,8 @@ export default function VesselContractsV2() {
               accentColor="blue"
             />
             
-            <CardV2
-              icon={BarChart3}
-              title="Insights IA"
-              description="Análises automáticas dos contratos"
-              gradient="purple"
-            >
-              <div className="space-y-4">
-                <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-4 w-4 text-blue-500" />
-                    <span className="font-medium text-blue-500">SLA em dia</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {activeContracts} contratos ativos com média de {avgSLA}% de SLA permitido
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-4 w-4 text-orange-500" />
-                    <span className="font-medium text-orange-500">Atenção</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {criticalDowntimes} eventos críticos de downtime identificados
-                  </p>
-                </div>
-                
-                <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="font-medium text-green-500">Recomendação</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Revise contratos com vencimento nos próximos 30 dias
-                  </p>
-                </div>
-              </div>
-            </CardV2>
+            <SLADashboardCard contracts={contracts} downtimeEvents={downtimeEvents} />
           </div>
-        </TabsContent>
-
-        {/* Evidence Tab */}
-        <TabsContent value="evidence" className="space-y-4">
-          <ModuleEvidenceGenerator
-            moduleName="Contratos de Embarcação"
-            moduleContext="análise de contratos, SLA, downtime e penalidades marítimas"
-            edgeFunctionName="contract-generate-evidence"
-            fields={EVIDENCE_FIELDS}
-            accentColor="blue"
-          />
         </TabsContent>
       </Tabs>
     </PageLayoutV2>
