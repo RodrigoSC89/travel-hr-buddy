@@ -38,10 +38,11 @@ import {
   Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mockColaboradores, departamentos, unidades } from '../data/mockData';
+import { useColaboradores, departamentos, unidades } from '../hooks/useNautilusPeopleData';
 import type { Colaborador } from '../types';
 
 const CollaboratorRegistry: React.FC = () => {
+  const { data: colaboradoresData = [], isLoading: isLoadingData } = useColaboradores();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('todos');
   const [selectedStatus, setSelectedStatus] = useState('todos');
@@ -50,8 +51,11 @@ const CollaboratorRegistry: React.FC = () => {
   const [isDocumentsDialogOpen, setIsDocumentsDialogOpen] = useState(false);
   const [isTrainingDialogOpen, setIsTrainingDialogOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [colaboradores, setColaboradores] = useState<Colaborador[]>(mockColaboradores);
+  const [localColaboradores, setLocalColaboradores] = useState<Colaborador[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Sync with Supabase data
+  const colaboradores = localColaboradores.length > 0 ? localColaboradores : colaboradoresData;
   
   // Form state
   const [newColaborador, setNewColaborador] = useState({
