@@ -147,7 +147,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             } else if (event === "SIGNED_OUT") {
               setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
             } else if (event === "TOKEN_REFRESHED") {
-              console.info("[AuthContext] Token refreshed successfully");
+              // Token refreshed - silent success
             }
           }
         );

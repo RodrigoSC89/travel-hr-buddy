@@ -42,8 +42,8 @@ export function useAINotifications(options: UseAINotificationsOptions = {}) {
       
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.5);
-    } catch (error) {
-      console.warn('Could not play notification sound:', error);
+    } catch {
+      // Silent failure - audio not critical
     }
   }, [soundEnabled]);
 
