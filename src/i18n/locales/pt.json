@@ -131,5 +131,30 @@
     "notFound": "Recurso não encontrado",
     "validation": "Verifique os dados informados",
     "serverError": "Erro no servidor. Tente novamente mais tarde."
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "email": "Email",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "resetPassword": "Redefinir Senha",
+    "loginWithGoogle": "Continuar com Google",
+    "loginWithGithub": "Continuar com GitHub",
+    "loginWithMicrosoft": "Continuar com Microsoft",
+    "noAccount": "Não tem uma conta?",
+    "hasAccount": "Já tem uma conta?",
+    "invalidCredentials": "Credenciais inválidas",
+    "emailNotConfirmed": "Email não confirmado",
+    "welcomeBack": "Bem-vindo de Volta",
+    "signInToContinue": "Entre para continuar no Nautilus One",
+    "orContinueWith": "Ou continue com",
+    "rememberMe": "Lembrar de mim"
+  },
+  "language": {
+    "select": "Selecionar Idioma",
+    "current": "Idioma Atual"
   }
 }
