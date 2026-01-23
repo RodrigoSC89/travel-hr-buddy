@@ -129,9 +129,9 @@ export function ProfessionalHeader({
           {showRealTime && (
             <Badge 
               variant="outline" 
-              className="gap-2 px-3 py-1.5 text-sm hidden sm:flex border-emerald-600 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300 font-medium bg-emerald-50 dark:bg-emerald-950/30"
+              className="gap-2 px-3 py-1.5 text-sm hidden sm:flex border-success text-success font-medium bg-success/10"
             >
-              <div className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
               Tempo Real
             </Badge>
           )}

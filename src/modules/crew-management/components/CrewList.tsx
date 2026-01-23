@@ -52,10 +52,10 @@ const nationalityLabels: Record<string, string> = {
 };
 
 const statusStyles: Record<string, { label: string; className: string }> = {
-  active: { label: "Ativo", className: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
-  on_leave: { label: "Licença Terra", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+  active: { label: "Ativo", className: "bg-success/10 text-success border-success/20" },
+  on_leave: { label: "Licença Terra", className: "bg-warning/10 text-warning border-warning/20" },
   inactive: { label: "Inativo", className: "bg-muted text-muted-foreground" },
-  embarked: { label: "Embarcado", className: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
+  embarked: { label: "Embarcado", className: "bg-primary/10 text-primary border-primary/20" },
 };
 
 export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {

@@ -82,9 +82,9 @@ export function PEOTRAMVoiceButton() {
           size="lg"
           className={cn(
             "h-14 w-14 rounded-full shadow-xl transition-all duration-300",
-            isListening && "bg-red-500 hover:bg-red-600 animate-pulse",
-            isSpeaking && "bg-green-500 hover:bg-green-600",
-            isProcessing && "bg-amber-500 hover:bg-amber-600",
+            isListening && "bg-destructive hover:bg-destructive/90 animate-pulse",
+            isSpeaking && "bg-success hover:bg-success/90",
+            isProcessing && "bg-warning hover:bg-warning/90",
             !isListening && !isSpeaking && !isProcessing && "bg-primary hover:bg-primary/90"
           )}
           disabled={isProcessing}

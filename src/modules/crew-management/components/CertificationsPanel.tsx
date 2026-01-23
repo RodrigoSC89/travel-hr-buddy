@@ -114,22 +114,22 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
       <CardContent className="p-4">
         {/* Summary Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card className="p-3 border-rose-500/30 bg-rose-500/5">
+          <Card className="p-3 border-destructive/30 bg-destructive/5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Vencidos</p>
-                <p className="text-2xl font-bold text-rose-500">{categorizedCerts.expired.length}</p>
+                <p className="text-2xl font-bold text-destructive">{categorizedCerts.expired.length}</p>
               </div>
-              <AlertTriangle className="h-5 w-5 text-rose-500" />
+              <AlertTriangle className="h-5 w-5 text-destructive" />
             </div>
           </Card>
-          <Card className="p-3 border-amber-500/30 bg-amber-500/5">
+          <Card className="p-3 border-warning/30 bg-warning/5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Vencendo (30d)</p>
-                <p className="text-2xl font-bold text-amber-500">{categorizedCerts.expiring30.length}</p>
+                <p className="text-2xl font-bold text-warning">{categorizedCerts.expiring30.length}</p>
               </div>
-              <Clock className="h-5 w-5 text-amber-500" />
+              <Clock className="h-5 w-5 text-warning" />
             </div>
           </Card>
           <Card className="p-3 border-yellow-500/30 bg-yellow-500/5">
@@ -141,13 +141,13 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
               <Calendar className="h-5 w-5 text-yellow-600" />
             </div>
           </Card>
-          <Card className="p-3 border-emerald-500/30 bg-emerald-500/5">
+          <Card className="p-3 border-success/30 bg-success/5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Em Dia</p>
-                <p className="text-2xl font-bold text-emerald-500">{categorizedCerts.valid.length}</p>
+                <p className="text-2xl font-bold text-success">{categorizedCerts.valid.length}</p>
               </div>
-              <CheckCircle className="h-5 w-5 text-emerald-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
             </div>
           </Card>
         </div>

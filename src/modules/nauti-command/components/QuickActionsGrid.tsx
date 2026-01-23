@@ -122,7 +122,7 @@ export function QuickActionsGrid({
       icon: <Truck className="h-4 w-4" />,
       label: "Solicitar Reposição",
       onClick: handleReorder,
-      color: "bg-amber-500 hover:bg-amber-600",
+      color: "bg-warning hover:bg-warning/90",
       badge: context?.inventory?.lowStock > 0 ? context.inventory.lowStock : null
     },
     {
@@ -163,7 +163,7 @@ export function QuickActionsGrid({
           description: "Abrindo ferramenta de simulação What-If"
         });
       },
-      color: "bg-rose-500 hover:bg-rose-600",
+      color: "bg-destructive hover:bg-destructive/90",
       badge: null
     }
   ];

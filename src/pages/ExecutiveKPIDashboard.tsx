@@ -290,12 +290,12 @@ export default function ExecutiveKPIDashboard() {
           <CardContent>
             {sensorSummary && (
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-emerald-500/10 rounded-lg text-center">
-                  <p className="text-2xl font-bold text-emerald-600">{sensorSummary.online}</p>
+                <div className="p-3 bg-success/10 rounded-lg text-center">
+                  <p className="text-2xl font-bold text-success">{sensorSummary.online}</p>
                   <p className="text-xs">Online</p>
                 </div>
-                <div className="p-3 bg-amber-500/10 rounded-lg text-center">
-                  <p className="text-2xl font-bold text-amber-600">{sensorSummary.anomalies}</p>
+                <div className="p-3 bg-warning/10 rounded-lg text-center">
+                  <p className="text-2xl font-bold text-warning">{sensorSummary.anomalies}</p>
                   <p className="text-xs">Anomalias</p>
                 </div>
                 <div className="p-3 bg-destructive/10 rounded-lg text-center">

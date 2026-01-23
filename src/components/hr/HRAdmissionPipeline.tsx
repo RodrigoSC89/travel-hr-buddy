@@ -32,13 +32,13 @@ import { HRAdmissionModal } from './HRAdmissionModal';
 import { toast } from 'sonner';
 
 const PIPELINE_STAGES = [
-  { id: 'pending', label: 'Pendente', color: 'bg-gray-500' },
-  { id: 'documents_sent', label: 'Docs Enviados', color: 'bg-blue-500' },
-  { id: 'documents_received', label: 'Docs Recebidos', color: 'bg-purple-500' },
-  { id: 'validating', label: 'Validando IA', color: 'bg-amber-500' },
-  { id: 'approved', label: 'Aprovado', color: 'bg-green-500' },
-  { id: 'contract_signed', label: 'Contrato Assinado', color: 'bg-teal-500' },
-  { id: 'completed', label: 'Concluído', color: 'bg-emerald-600' },
+  { id: 'pending', label: 'Pendente', color: 'bg-muted-foreground' },
+  { id: 'documents_sent', label: 'Docs Enviados', color: 'bg-primary' },
+  { id: 'documents_received', label: 'Docs Recebidos', color: 'bg-secondary' },
+  { id: 'validating', label: 'Validando IA', color: 'bg-warning' },
+  { id: 'approved', label: 'Aprovado', color: 'bg-success' },
+  { id: 'contract_signed', label: 'Contrato Assinado', color: 'bg-accent' },
+  { id: 'completed', label: 'Concluído', color: 'bg-success' },
 ];
 
 export function HRAdmissionPipeline() {

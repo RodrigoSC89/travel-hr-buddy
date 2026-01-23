@@ -52,10 +52,10 @@ const getCategoryIcon = (category: QualityCheck["category"]) => {
 };
 
 const getGradeColor = (grade: string) => {
-  if (grade.startsWith("A")) return "bg-emerald-600 dark:bg-emerald-500";
+  if (grade.startsWith("A")) return "bg-success";
   if (grade.startsWith("B")) return "bg-primary";
-  if (grade.startsWith("C")) return "bg-amber-600 dark:bg-amber-500";
-  if (grade.startsWith("D")) return "bg-orange-600 dark:bg-orange-500";
+  if (grade.startsWith("C")) return "bg-warning";
+  if (grade.startsWith("D")) return "bg-warning";
   return "bg-destructive";
 };
 
