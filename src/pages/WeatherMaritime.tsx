@@ -146,7 +146,7 @@ export default function WeatherMaritime() {
                     {getWaveDescription(weather.waveHeight)}
                   </Badge>
                 </div>
-                <Waves className="h-12 w-12 text-blue-500/50" />
+                <Waves className="h-12 w-12 text-primary/50" />
               </div>
             </CardContent>
           </Card>

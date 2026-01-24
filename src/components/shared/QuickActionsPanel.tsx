@@ -66,7 +66,7 @@ export function QuickActionsPanel() {
       label: "Agendar Evento",
       icon: Calendar,
       action: () => navigate("/calendar"),
-      color: "text-pink-500"
+      color: "text-accent"
     },
     {
       id: "send-message",

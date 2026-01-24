@@ -56,7 +56,7 @@ export function GlobalAILevel3Button() {
       <SheetTrigger asChild>
         <div className="relative">
           <Button
-            className="rounded-full h-12 w-12 shadow-xl bg-gradient-to-br from-violet-600 to-purple-700 hover:from-violet-500 hover:to-purple-600 border border-white/20"
+            className="rounded-full h-12 w-12 shadow-xl bg-gradient-to-br from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 border border-white/20"
           >
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
