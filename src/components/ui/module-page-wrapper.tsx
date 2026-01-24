@@ -9,10 +9,10 @@ interface ModulePageWrapperProps {
 }
 
 const gradientClasses = {
-  blue: "from-background via-primary/5 to-blue-500/10",
-  purple: "from-background via-purple-500/5 to-pink-500/10",
-  green: "from-background via-green-500/5 to-emerald-500/10",
-  orange: "from-background via-orange-500/5 to-amber-500/10",
+  blue: "from-background via-primary/5 to-primary/10",
+  purple: "from-background via-secondary/5 to-accent/10",
+  green: "from-background via-success/5 to-success/10",
+  orange: "from-background via-warning/5 to-warning/10",
   neutral: "from-background via-muted/20 to-background",
 };
 

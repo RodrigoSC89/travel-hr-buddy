@@ -46,10 +46,10 @@ export function GamificationSystem() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "legendary": return "from-yellow-400 to-orange-500";
-      case "epic": return "from-purple-400 to-pink-500";
-      case "rare": return "from-blue-400 to-cyan-500";
-      default: return "from-gray-400 to-gray-500";
+      case "legendary": return "from-warning to-warning";
+      case "epic": return "from-secondary to-accent";
+      case "rare": return "from-primary to-info";
+      default: return "from-muted to-muted-foreground";
     }
   };
 

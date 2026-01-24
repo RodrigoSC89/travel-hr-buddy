@@ -38,25 +38,25 @@ export function CommandCenterAI() {
   };
 
   const kpis = [
-    { label: "Embarcações Ativas", value: "5/6", icon: Ship, color: "text-blue-500", trend: "stable" },
-    { label: "Tripulação a Bordo", value: "45", icon: Users, color: "text-green-500", trend: "up" },
-    { label: "Manutenções Pendentes", value: "3", icon: Wrench, color: "text-orange-500", trend: "down" },
-    { label: "Score Compliance", value: "92%", icon: Shield, color: "text-purple-500", trend: "up" },
-    { label: "OPEX vs Budget", value: "+5%", icon: DollarSign, color: "text-yellow-500", trend: "warning" },
-    { label: "Alertas Ativos", value: "4", icon: AlertTriangle, color: "text-red-500", trend: "attention" },
+    { label: "Embarcações Ativas", value: "5/6", icon: Ship, color: "text-primary", trend: "stable" },
+    { label: "Tripulação a Bordo", value: "45", icon: Users, color: "text-success", trend: "up" },
+    { label: "Manutenções Pendentes", value: "3", icon: Wrench, color: "text-warning", trend: "down" },
+    { label: "Score Compliance", value: "92%", icon: Shield, color: "text-secondary", trend: "up" },
+    { label: "OPEX vs Budget", value: "+5%", icon: DollarSign, color: "text-warning", trend: "warning" },
+    { label: "Alertas Ativos", value: "4", icon: AlertTriangle, color: "text-destructive", trend: "attention" },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-slate-500/20 to-zinc-500/20 rounded-xl">
-            <LayoutDashboard className="h-6 w-6 text-slate-500" />
+          <div className="p-3 bg-gradient-to-br from-muted to-muted/50 rounded-xl">
+            <LayoutDashboard className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Command Center
-              <Badge className="bg-gradient-to-r from-slate-500 to-zinc-500">
+              <Badge className="bg-gradient-to-r from-muted-foreground to-muted-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Visão 360°
               </Badge>

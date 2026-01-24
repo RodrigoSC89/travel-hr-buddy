@@ -270,7 +270,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
               <TabsContent value="insights" className="mt-0 space-y-6 animate-fade-in">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-slate-500/20 to-gray-500/20">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-muted to-muted/50">
                       <Brain className="w-6 h-6 text-muted-foreground" />
                     </div>
                     <div>
@@ -338,7 +338,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                           </CardContent>
                         </Card>
 
-                        <Card className="bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200/50">
+                        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/30">
                           <CardContent className="p-6">
                             <div className="space-y-4">
                               <h3 className="font-semibold text-primary-foreground flex items-center gap-2">
@@ -347,7 +347,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                               </h3>
                               <ul className="space-y-3 text-sm">
                                 <li className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                                   Expandir uso de IA para 80% dos processos
                                 </li>
                                 <li className="flex items-start gap-2">

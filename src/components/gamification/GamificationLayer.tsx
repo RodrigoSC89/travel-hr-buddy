@@ -100,10 +100,10 @@ export function GamificationLayer() {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "legendary": return "bg-gradient-to-r from-yellow-500 to-amber-500 text-white";
-      case "epic": return "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
-      case "rare": return "bg-gradient-to-r from-blue-500 to-cyan-500 text-white";
-      default: return "bg-gray-500/20 text-gray-700";
+      case "legendary": return "bg-gradient-to-r from-warning to-warning text-warning-foreground";
+      case "epic": return "bg-gradient-to-r from-secondary to-accent text-secondary-foreground";
+      case "rare": return "bg-gradient-to-r from-primary to-info text-primary-foreground";
+      default: return "bg-muted/50 text-muted-foreground";
     }
   };
 

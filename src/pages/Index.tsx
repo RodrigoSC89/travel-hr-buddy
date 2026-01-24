@@ -127,7 +127,7 @@ const AIModulesPanel = memo(() => {
       route: "/crew",
       icon: Users,
       badge: "IA Avançada",
-      color: "from-green-500 to-emerald-500"
+      color: "from-success to-success"
     },
     { 
       name: "PEO-DP", 
@@ -135,7 +135,7 @@ const AIModulesPanel = memo(() => {
       route: "/peo-dp",
       icon: Ship,
       badge: "IMCA M117",
-      color: "from-purple-500 to-indigo-500"
+      color: "from-secondary to-primary"
     },
     { 
       name: "IMCA Audit", 
@@ -143,7 +143,7 @@ const AIModulesPanel = memo(() => {
       route: "/imca-audit",
       icon: Shield,
       badge: "M103/M166",
-      color: "from-amber-500 to-orange-500"
+      color: "from-warning to-warning"
     },
     { 
       name: "MLC Inspection", 
@@ -159,7 +159,7 @@ const AIModulesPanel = memo(() => {
       route: "/pre-ovid-inspection",
       icon: Ship,
       badge: "OVIQ4",
-      color: "from-sky-500 to-blue-600"
+      color: "from-info to-primary"
     },
     { 
       name: "Safety Guardian", 
@@ -167,7 +167,7 @@ const AIModulesPanel = memo(() => {
       route: "/safety-guardian",
       icon: AlertTriangle,
       badge: "TRIR/LTI",
-      color: "from-red-500 to-orange-500"
+      color: "from-destructive to-warning"
     },
     { 
       name: "Nautilus Academy", 
@@ -175,7 +175,7 @@ const AIModulesPanel = memo(() => {
       route: "/nautilus-academy",
       icon: GraduationCap,
       badge: "AI Training",
-      color: "from-indigo-500 to-purple-600"
+      color: "from-primary to-secondary"
     },
     { 
       name: "Smart Mobility", 
@@ -183,7 +183,7 @@ const AIModulesPanel = memo(() => {
       route: "/smart-mobility",
       icon: Plane,
       badge: "Viagens",
-      color: "from-sky-500 to-blue-600"
+      color: "from-info to-primary"
     }
   ], []);
 
