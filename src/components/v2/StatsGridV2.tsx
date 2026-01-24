@@ -48,24 +48,24 @@ const colorClasses = {
     text: "text-orange-500"
   },
   yellow: {
-    bg: "from-yellow-500/10 to-amber-500/5",
-    icon: "bg-yellow-500/20 text-yellow-500",
-    text: "text-yellow-500"
+    bg: "from-warning/10 to-warning/5",
+    icon: "bg-warning/20 text-warning",
+    text: "text-warning"
   },
   red: {
-    bg: "from-red-500/10 to-rose-500/5",
-    icon: "bg-red-500/20 text-red-500",
-    text: "text-red-500"
+    bg: "from-destructive/10 to-destructive/5",
+    icon: "bg-destructive/20 text-destructive",
+    text: "text-destructive"
   },
   cyan: {
-    bg: "from-cyan-500/10 to-teal-500/5",
-    icon: "bg-cyan-500/20 text-cyan-500",
-    text: "text-cyan-500"
+    bg: "from-info/10 to-info/5",
+    icon: "bg-info/20 text-info",
+    text: "text-info"
   },
   teal: {
-    bg: "from-teal-500/10 to-emerald-500/5",
-    icon: "bg-teal-500/20 text-teal-500",
-    text: "text-teal-500"
+    bg: "from-info/10 to-success/5",
+    icon: "bg-info/20 text-info",
+    text: "text-info"
   },
 };
 

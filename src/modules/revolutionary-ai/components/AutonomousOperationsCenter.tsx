@@ -287,12 +287,12 @@ export function AutonomousOperationsCenter() {
                           exit={{ opacity: 0, x: 20 }}
                           transition={{ delay: i * 0.1 }}
                         >
-                          <Card className="border-l-4 border-l-violet-500">
+                          <Card className="border-l-4 border-l-secondary">
                             <CardContent className="p-4">
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex items-center gap-2">
-                                  <div className="p-2 rounded-lg bg-violet-100 dark:bg-violet-900/30">
-                                    <TypeIcon className="h-4 w-4 text-violet-600" />
+                                  <div className="p-2 rounded-lg bg-secondary/10 dark:bg-secondary/20">
+                                    <TypeIcon className="h-4 w-4 text-secondary" />
                                   </div>
                                   <div>
                                     <p className="font-medium">{decision.title}</p>

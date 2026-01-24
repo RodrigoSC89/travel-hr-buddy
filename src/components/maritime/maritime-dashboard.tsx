@@ -296,10 +296,10 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
                 </div>
               </div>
 
-              <div className="p-4 border rounded-lg bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
+              <div className="p-4 border rounded-lg bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-cyan-100 rounded-lg">
-                    <Heart className="h-5 w-5 text-cyan-600" />
+                  <div className="p-2 bg-info/20 rounded-lg">
+                    <Heart className="h-5 w-5 text-info" />
                   </div>
                   <h3 className="font-semibold">Wellness Marítimo</h3>
                 </div>
@@ -425,16 +425,16 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-lg">
-              <h4 className="font-semibold text-teal-800 mb-2">🤖 Assistente IA Marítimo</h4>
-              <p className="text-sm text-teal-600">
+            <div className="p-4 bg-gradient-to-br from-info/10 to-primary/10 border border-info/20 rounded-lg">
+              <h4 className="font-semibold text-info mb-2">🤖 Assistente IA Marítimo</h4>
+              <p className="text-sm text-info/80">
                 Chatbot especializado em regulamentações marítimas, emergências e suporte operacional 24/7
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg">
-              <h4 className="font-semibold text-indigo-800 mb-2">🎯 Otimização Quântica</h4>
-              <p className="text-sm text-indigo-600">
+            <div className="p-4 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-lg">
+              <h4 className="font-semibold text-primary mb-2">🎯 Otimização Quântica</h4>
+              <p className="text-sm text-primary/80">
                 Algoritmos quânticos resolvem problemas complexos de logística e alocação de recursos
               </p>
             </div>
