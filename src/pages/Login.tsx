@@ -116,13 +116,13 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 focus:border-primary"
+                className="bg-muted border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-200">Senha</Label>
+              <Label htmlFor="password" className="text-foreground">Senha</Label>
               <Input
                 id="password"
                 type="password"
@@ -130,15 +130,15 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 focus:border-primary"
+                className="bg-muted border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 required
               />
             </div>
 
             {/* Mensagem de erro */}
             {errorMessage && (
-              <Alert variant="destructive" className="bg-red-900/50 border-red-700">
-                <AlertDescription className="text-red-200">
+              <Alert variant="destructive" className="bg-destructive/10 border-destructive">
+                <AlertDescription className="text-destructive">
                   ⚠️ {errorMessage}
                 </AlertDescription>
               </Alert>
@@ -167,7 +167,7 @@ const Login = () => {
           </form>
 
           {/* Info de conexão */}
-          <div className="text-center text-xs text-slate-500 pt-2">
+          <div className="text-center text-xs text-muted-foreground pt-2">
             💡 Otimizado para internet lenta (3G, 4G, 5G, Satélite)
           </div>
         </CardContent>

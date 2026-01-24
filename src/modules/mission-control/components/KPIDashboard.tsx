@@ -56,11 +56,11 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ modules }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {kpis.map((kpi, index) => (
-        <Card key={index} className="bg-zinc-800/50 border-zinc-700">
+        <Card key={index} className="bg-card/50 border-border">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400 mb-1">{kpi.label}</p>
+                <p className="text-sm text-muted-foreground mb-1">{kpi.label}</p>
                 <p className={`text-3xl font-bold ${kpi.color}`}>{kpi.value}</p>
               </div>
               <div className={`p-3 rounded-full ${kpi.bgColor}`}>

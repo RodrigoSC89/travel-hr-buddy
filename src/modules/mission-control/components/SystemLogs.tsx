@@ -94,10 +94,10 @@ export const SystemLogs: React.FC = () => {
   };
 
   return (
-    <Card className="bg-zinc-800/50 border-zinc-700">
+    <Card className="bg-card/50 border-border">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Activity className="w-5 h-5 text-blue-400" />
+          <Activity className="w-5 h-5 text-primary" />
           System Activity Logs
         </CardTitle>
       </CardHeader>
@@ -107,20 +107,20 @@ export const SystemLogs: React.FC = () => {
             {logs.map((log) => (
               <div
                 key={log.id}
-                className={`p-3 bg-zinc-900/50 rounded-lg border-l-4 ${getLevelColor(log.level)} hover:bg-zinc-900/70 transition-colors`}
+                className={`p-3 bg-background/50 rounded-lg border-l-4 ${getLevelColor(log.level)} hover:bg-muted/50 transition-colors`}
               >
                 <div className="flex items-start gap-3">
                   <div className="mt-0.5">{getLevelIcon(log.level)}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-blue-400">
+                      <span className="text-xs font-semibold text-primary">
                         {log.module}
                       </span>
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-muted-foreground">
                         {formatTime(log.timestamp)}
                       </span>
                     </div>
-                    <p className="text-sm text-zinc-300">{log.message}</p>
+                    <p className="text-sm text-foreground/80">{log.message}</p>
                   </div>
                 </div>
               </div>
