@@ -55,14 +55,14 @@ const SENSOR_ICONS: Record<string, React.ComponentType<any>> = {
 };
 
 const SENSOR_COLORS: Record<string, string> = {
-  temperature: 'text-orange-500',
-  vibration: 'text-violet-500',
-  pressure: 'text-blue-500',
-  voltage: 'text-amber-500',
-  current: 'text-yellow-500',
-  flow: 'text-cyan-500',
-  rpm: 'text-emerald-500',
-  fuel: 'text-green-500',
+  temperature: 'text-warning',
+  vibration: 'text-secondary',
+  pressure: 'text-primary',
+  voltage: 'text-warning',
+  current: 'text-warning',
+  flow: 'text-info',
+  rpm: 'text-success',
+  fuel: 'text-success',
 };
 
 export function RealtimeSensorMonitor() {

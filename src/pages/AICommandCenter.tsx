@@ -367,14 +367,14 @@ export default function AICommandCenter() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-teal-500/10 to-green-500/10 border-teal-500/20">
+            <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground">Taxa Sucesso</p>
-                    <p className="text-lg font-bold text-green-500">{successRate}%</p>
+                    <p className="text-lg font-bold text-success">{successRate}%</p>
                   </div>
-                  <TrendingUp className="h-5 w-5 text-teal-500" />
+                  <TrendingUp className="h-5 w-5 text-success" />
                 </div>
               </CardContent>
             </Card>

@@ -77,13 +77,13 @@ export function GlobalAILevel3Button() {
       <SheetContent side="right" className="w-[420px] sm:w-[480px] overflow-y-auto">
         <SheetHeader className="pb-4">
           <SheetTitle className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20">
-              <Brain className="h-5 w-5 text-violet-500" />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20">
+              <Brain className="h-5 w-5 text-secondary" />
             </div>
             <div>
               <span className="flex items-center gap-2">
                 IA Autônoma Level 3
-                <Sparkles className="h-4 w-4 text-yellow-500" />
+                <Sparkles className="h-4 w-4 text-warning" />
               </span>
               <p className="text-xs font-normal text-muted-foreground">
                 Módulo: {currentModule}

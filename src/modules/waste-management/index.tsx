@@ -137,28 +137,28 @@ function WasteManagement() {
 
               {/* KPI Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                <Card className="border-l-4 border-l-teal-500">
+                <Card className="border-l-4 border-l-success">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Conformidade MARPOL</p>
                         <p className="text-2xl font-bold">100%</p>
-                        <p className="text-xs text-teal-600">Todos os anexos</p>
+                        <p className="text-xs text-success">Todos os anexos</p>
                       </div>
-                      <Leaf className="h-8 w-8 text-teal-500 opacity-80" />
+                      <Leaf className="h-8 w-8 text-success opacity-80" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-blue-500">
+                <Card className="border-l-4 border-l-primary">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Descartes (Mês)</p>
                         <p className="text-2xl font-bold">8</p>
-                        <p className="text-xs text-blue-600">Todos certificados</p>
+                        <p className="text-xs text-primary">Todos certificados</p>
                       </div>
-                      <Recycle className="h-8 w-8 text-blue-500 opacity-80" />
+                      <Recycle className="h-8 w-8 text-primary opacity-80" />
                     </div>
                   </CardContent>
                 </Card>
