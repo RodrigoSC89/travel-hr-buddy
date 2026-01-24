@@ -277,7 +277,7 @@ contract CharterParty {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-indigo-500" />
+                <Globe className="h-5 w-5 text-primary" />
                 Distributed Ledger
               </CardTitle>
             </CardHeader>

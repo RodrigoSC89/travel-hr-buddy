@@ -280,7 +280,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
               onClick={analyzeCrewOptimization}
               disabled={isAnalyzing}
               size="lg"
-              className="bg-white text-indigo-600 hover:bg-white/90"
+              className="bg-card text-primary hover:bg-card/90"
             >
               <Zap className="h-5 w-5 mr-2" />
               {isAnalyzing ? "Analisando..." : "Otimizar Escalas"}

@@ -221,7 +221,7 @@ const SystemBackupAudit = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-indigo-500" />
+              <Clock className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm font-medium">Uptime</p>
                 <p className="text-sm font-bold">{systemMetrics.uptime}</p>

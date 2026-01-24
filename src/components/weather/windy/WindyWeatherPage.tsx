@@ -453,7 +453,7 @@ export const WindyWeatherPage: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="windy" 
-                className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 text-white/70"
+                className="data-[state=active]:bg-info/20 data-[state=active]:text-info text-foreground/70"
               >
                 <Waves className="h-4 w-4 mr-2" />
                 Mapa Windy

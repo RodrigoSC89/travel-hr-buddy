@@ -411,10 +411,10 @@ export default function AdminDashboard() {
                   <Icon
                     className={`w-8 h-8 ${
                       card.color === "blue"
-                        ? "text-blue-500"
+                        ? "text-primary"
                         : card.color === "purple"
-                          ? "text-purple-500"
-                          : "text-indigo-500"
+                          ? "text-secondary"
+                          : "text-info"
                     }`}
                   />
                   <ArrowRight className="w-5 h-5 text-muted-foreground" />

@@ -177,8 +177,8 @@ const PILLARS: PillarData[] = [
     name: "Testes Anuais DP",
     code: "3.7",
     icon: TestTube,
-    color: "text-indigo-600",
-    bgColor: "bg-indigo-50 dark:bg-indigo-950/20",
+    color: "text-primary",
+    bgColor: "bg-primary/10 dark:bg-primary/20",
     description: "DP Annual Trials, CAMO, ASOG e cronograma de testes de 5 anos",
     objectives: [
       "Realizar DP Annual Trials conforme IMCA M 190",

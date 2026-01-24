@@ -425,7 +425,7 @@ const OceanSonar: React.FC = () => {
               </Card>
               <Card className="bg-zinc-800/50 border-zinc-700">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-indigo-400">
+                  <div className="text-2xl font-bold text-primary">
                     {bathymetricData.maxDepth.toFixed(1)}m
                   </div>
                   <div className="text-sm text-zinc-400">Maximum Depth</div>

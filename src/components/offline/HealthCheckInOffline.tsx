@@ -182,7 +182,7 @@ export function HealthCheckInOffline() {
           {/* Sleep Quality */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
-              <Moon className="h-4 w-4 text-indigo-500" />
+              <Moon className="h-4 w-4 text-secondary" />
               Qualidade do Sono: {formData.sleep_quality}/5
             </Label>
             <Slider
