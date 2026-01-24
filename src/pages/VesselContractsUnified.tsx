@@ -28,11 +28,12 @@ function LoadingFallback() {
 }
 
 export default function VesselContractsUnified() {
-  const useV2 = useFeatureFlag('use-v2-modules');
+  // ALWAYS use V2 with AI features - V1 is deprecated
+  const useV2 = true; // Force V2 - useFeatureFlag('use-v2-modules');
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      {useV2 ? <VesselContractsV2 /> : <VesselContractsV1 />}
+      <VesselContractsV2 />
     </Suspense>
   );
 }
