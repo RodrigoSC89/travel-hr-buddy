@@ -259,28 +259,28 @@ const OceanSonar: React.FC = () => {
                   step="0.0001"
                   value={centerLat}
                   onChange={(e) => setCenterLat(parseFloat(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-muted/50 border-border"
                   disabled={isScanning}
                 />
               </div>
               <div>
-                <label className="text-sm text-zinc-400 mb-2 block">Center Longitude</label>
+                <label className="text-sm text-muted-foreground mb-2 block">Center Longitude</label>
                 <Input
                   type="number"
                   step="0.0001"
                   value={centerLon}
                   onChange={(e) => setCenterLon(parseFloat(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-muted/50 border-border"
                   disabled={isScanning}
                 />
               </div>
               <div>
-                <label className="text-sm text-zinc-400 mb-2 block">Radius (km)</label>
+                <label className="text-sm text-muted-foreground mb-2 block">Radius (km)</label>
                 <Input
                   type="number"
                   value={radiusKm}
                   onChange={(e) => setRadiusKm(parseInt(e.target.value))}
-                  className="bg-zinc-900/50 border-zinc-700 text-white"
+                  className="bg-muted/50 border-border"
                   disabled={isScanning}
                 />
               </div>

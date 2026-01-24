@@ -349,27 +349,27 @@ const UnderwaterDrone: React.FC = () => {
           </Card>
 
           {/* Telemetry */}
-          <Card className="bg-zinc-800/50 border-zinc-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Gauge className="w-5 h-5 text-blue-400" />
+                <Gauge className="w-5 h-5 text-info" />
                 Telemetry
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <div className="text-zinc-400 text-xs">Position</div>
+                  <div className="text-muted-foreground text-xs">Position</div>
                   <div className="font-mono">
                     {droneState.position.lat.toFixed(4)}°, {droneState.position.lon.toFixed(4)}°
                   </div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-xs">Pressure</div>
+                  <div className="text-muted-foreground text-xs">Pressure</div>
                   <div className="font-mono">{telemetryData.pressure.toFixed(2)} bar</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-xs">Orientation (Yaw/Pitch/Roll)</div>
+                  <div className="text-muted-foreground text-xs">Orientation (Yaw/Pitch/Roll)</div>
                   <div className="font-mono">
                     {droneState.orientation.yaw.toFixed(0)}° / 
                     {droneState.orientation.pitch.toFixed(0)}° / 
@@ -377,29 +377,29 @@ const UnderwaterDrone: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-xs">Visibility</div>
+                  <div className="text-muted-foreground text-xs">Visibility</div>
                   <div className="font-mono">
                     {telemetryData.environmental.visibility.toFixed(1)}m
                   </div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-xs">Battery Time</div>
+                  <div className="text-muted-foreground text-xs">Battery Time</div>
                   <div className="font-mono">{telemetryData.battery.timeRemaining} min</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-xs">Connection</div>
+                  <div className="text-muted-foreground text-xs">Connection</div>
                   <div className="font-mono capitalize">
                     {telemetryData.communication.connectionType}
                   </div>
                 </div>
               </div>
 
-              <Separator className="bg-zinc-700" />
+              <Separator className="bg-border" />
 
               <div className="space-y-2">
-                <div className="text-xs font-semibold text-zinc-400">Active Alerts</div>
+                <div className="text-xs font-semibold text-muted-foreground">Active Alerts</div>
                 {alerts.length === 0 ? (
-                  <div className="text-xs text-zinc-500">No active alerts</div>
+                  <div className="text-xs text-muted-foreground">No active alerts</div>
                 ) : (
                   <div className="space-y-1 max-h-32 overflow-y-auto">
                     {alerts.slice(0, 5).map((alert) => (

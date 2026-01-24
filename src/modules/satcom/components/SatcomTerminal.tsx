@@ -246,9 +246,9 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto bg-zinc-950 rounded-lg p-4 font-mono text-sm space-y-2">
+        <div className="flex-1 overflow-y-auto bg-background rounded-lg p-4 font-mono text-sm space-y-2">
           {messages.length === 0 && (
-            <div className="text-zinc-500 text-center py-8">
+            <div className="text-muted-foreground text-center py-8">
               <Terminal className="w-12 h-12 mx-auto mb-2 opacity-50" />
               <p>No transmissions yet. Send a message to begin.</p>
             </div>
@@ -256,24 +256,24 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
           {messages.map((msg) => (
             <div key={msg.id} className={`
               p-2 rounded border-l-2
-              ${msg.type === "send" ? "border-blue-500 bg-blue-500/5" : ""}
-              ${msg.type === "receive" ? "border-green-500 bg-green-500/5" : ""}
-              ${msg.type === "system" ? "border-yellow-500 bg-yellow-500/5" : ""}
+              ${msg.type === "send" ? "border-info bg-info/5" : ""}
+              ${msg.type === "receive" ? "border-success bg-success/5" : ""}
+              ${msg.type === "system" ? "border-warning bg-warning/5" : ""}
             `}>
               <div className="flex items-start gap-2 mb-1">
                 <Badge variant="outline" className={`text-xs ${getStatusColor(msg.status)}`}>
                   {msg.status}
                 </Badge>
-                <span className="text-xs text-zinc-400">
+                <span className="text-xs text-muted-foreground">
                   {msg.timestamp.toLocaleTimeString()}
                 </span>
                 {msg.latency && (
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-muted-foreground">
                     {msg.latency}ms
                   </span>
                 )}
                 {msg.signalStrength && (
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-muted-foreground">
                     <Activity className="inline w-3 h-3 mr-1" />
                     {msg.signalStrength}%
                   </span>

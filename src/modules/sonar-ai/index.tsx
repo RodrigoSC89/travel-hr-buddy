@@ -269,27 +269,27 @@ const SonarAI: React.FC = () => {
                     type="number"
                     value={scanDepth}
                     onChange={(e) => setScanDepth(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-muted/50 border-border"
                     disabled={isScanning || autoScan}
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">Scan Radius (m)</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">Scan Radius (m)</label>
                   <Input
                     type="number"
                     value={scanRadius}
                     onChange={(e) => setScanRadius(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-muted/50 border-border"
                     disabled={isScanning || autoScan}
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-2 block">Resolution (pings)</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">Resolution (pings)</label>
                   <Input
                     type="number"
                     value={numPings}
                     onChange={(e) => setNumPings(parseInt(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-muted/50 border-border"
                     disabled={isScanning || autoScan}
                   />
                 </div>

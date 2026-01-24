@@ -264,22 +264,22 @@ export const RealTimeMissionDashboard = () => {
       </div>
 
       {/* Live Status Indicator */}
-      <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/50 rounded-lg border border-zinc-700">
+      <div className="flex items-center justify-between px-4 py-2 bg-muted/50 rounded-lg border border-border">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-          <span className="text-sm text-zinc-300">Live Updates Active</span>
+          <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+          <span className="text-sm text-foreground">Live Updates Active</span>
         </div>
-        <div className="text-xs text-zinc-500">
+        <div className="text-xs text-muted-foreground">
           Last update: {lastUpdate.toLocaleTimeString()}
         </div>
       </div>
 
       {/* Mission List */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card className="bg-zinc-900/50 border-zinc-700">
+        <Card className="bg-card/50 border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-yellow-400" />
+              <Zap className="w-5 h-5 text-warning" />
               Active Missions
             </CardTitle>
           </CardHeader>
