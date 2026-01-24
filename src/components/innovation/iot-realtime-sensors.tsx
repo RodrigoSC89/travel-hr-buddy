@@ -37,7 +37,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: 60,
       maxRange: 85,
       icon: Thermometer,
-      color: "text-red-500"
+      color: "text-destructive"
     },
     {
       id: "PRESS_001",
@@ -51,7 +51,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: 2.0,
       maxRange: 3.5,
       icon: Waves,
-      color: "text-blue-500"
+      color: "text-info"
     },
     {
       id: "VIB_001",
@@ -65,7 +65,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: 0,
       maxRange: 4,
       icon: Activity,
-      color: "text-green-500"
+      color: "text-success"
     },
     {
       id: "POW_001",
@@ -79,7 +79,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: 200,
       maxRange: 300,
       icon: Zap,
-      color: "text-yellow-500"
+      color: "text-warning"
     },
     {
       id: "CONN_001",
@@ -93,7 +93,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: -80,
       maxRange: -50,
       icon: Radio,
-      color: "text-purple-500"
+      color: "text-primary"
     },
     {
       id: "FLOW_001",
@@ -107,7 +107,7 @@ const IoTRealtimeSensors: React.FC = () => {
       minRange: 10,
       maxRange: 15,
       icon: Gauge,
-      color: "text-cyan-500"
+      color: "text-info"
     }
   ]);
 
@@ -141,8 +141,8 @@ const IoTRealtimeSensors: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "normal": return <Badge className="bg-green-100 text-green-700">Normal</Badge>;
-    case "warning": return <Badge className="bg-orange-100 text-orange-700">Atenção</Badge>;
+    case "normal": return <Badge className="bg-success/10 text-success">Normal</Badge>;
+    case "warning": return <Badge className="bg-warning/10 text-warning">Atenção</Badge>;
     case "critical": return <Badge variant="destructive">Crítico</Badge>;
     case "offline": return <Badge variant="outline">Offline</Badge>;
     default: return <Badge variant="outline">Desconhecido</Badge>;
@@ -151,8 +151,8 @@ const IoTRealtimeSensors: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="h-3 w-3 text-green-500" />;
-    case "down": return <TrendingDown className="h-3 w-3 text-red-500" />;
+    case "up": return <TrendingUp className="h-3 w-3 text-success" />;
+    case "down": return <TrendingDown className="h-3 w-3 text-destructive" />;
     default: return null;
     }
   };

@@ -45,18 +45,18 @@ interface HullInspection {
 }
 
 const statusColors: Record<string, string> = {
-  planned: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  in_progress: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  completed: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  planned: "bg-info/20 text-info border-info/30",
+  in_progress: "bg-warning/20 text-warning border-warning/30",
+  completed: "bg-success/20 text-success border-success/30",
   cancelled: "bg-destructive/20 text-destructive border-destructive/30",
-  delayed: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  delayed: "bg-warning/20 text-warning border-warning/30",
 };
 
 const conditionColors: Record<string, string> = {
-  excellent: "text-emerald-400",
-  good: "text-green-400",
-  fair: "text-amber-400",
-  poor: "text-orange-400",
+  excellent: "text-success",
+  good: "text-success",
+  fair: "text-warning",
+  poor: "text-warning",
   failed: "text-destructive",
   depleted: "text-destructive",
 };

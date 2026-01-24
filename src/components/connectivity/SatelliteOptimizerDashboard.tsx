@@ -46,10 +46,10 @@ const PROVIDER_INFO: Record<SatelliteProvider, { name: string; costPerMB: number
 };
 
 const QUALITY_CONFIG = {
-  excellent: { icon: SignalHigh, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-  good: { icon: Signal, color: 'text-green-500', bg: 'bg-green-500/10' },
-  fair: { icon: SignalLow, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-  poor: { icon: SignalZero, color: 'text-red-500', bg: 'bg-red-500/10' },
+  excellent: { icon: SignalHigh, color: 'text-success', bg: 'bg-success/10' },
+  good: { icon: Signal, color: 'text-success', bg: 'bg-success/10' },
+  fair: { icon: SignalLow, color: 'text-warning', bg: 'bg-warning/10' },
+  poor: { icon: SignalZero, color: 'text-destructive', bg: 'bg-destructive/10' },
 };
 
 interface QueueItem {
@@ -225,13 +225,13 @@ export function SatelliteOptimizerDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <TrendingDown className="h-4 w-4 text-emerald-500" />
+              <TrendingDown className="h-4 w-4 text-success" />
               Economia
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-emerald-500">
+              <span className="text-2xl font-bold text-success">
                 ${stats.costSaved.toFixed(2)}
               </span>
             </div>
@@ -248,7 +248,7 @@ export function SatelliteOptimizerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" />
+              <Zap className="h-5 w-5 text-warning" />
               Otimização de Dados
             </CardTitle>
             <CardDescription>
@@ -258,12 +258,12 @@ export function SatelliteOptimizerDashboard() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-muted rounded-lg text-center">
-                <Upload className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                <Upload className="h-6 w-6 mx-auto mb-2 text-info" />
                 <p className="text-sm text-muted-foreground">Dados enviados</p>
                 <p className="text-xl font-bold">{stats.totalSent} KB</p>
               </div>
               <div className="p-4 bg-muted rounded-lg text-center">
-                <Download className="h-6 w-6 mx-auto mb-2 text-emerald-500" />
+                <Download className="h-6 w-6 mx-auto mb-2 text-success" />
                 <p className="text-sm text-muted-foreground">Comprimido</p>
                 <p className="text-xl font-bold">{(stats.totalCompressed / 1024).toFixed(1)} KB</p>
               </div>

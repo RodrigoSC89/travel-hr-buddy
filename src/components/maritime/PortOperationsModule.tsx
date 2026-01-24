@@ -98,17 +98,17 @@ const operations: PortOperation[] = [
 ];
 
 const operationTypeConfig = {
-  loading: { label: 'Carregamento', color: 'bg-blue-500/20 text-blue-400', icon: ArrowUpDown },
-  unloading: { label: 'Descarga', color: 'bg-amber-500/20 text-amber-400', icon: Package },
-  bunkering: { label: 'Abastecimento', color: 'bg-purple-500/20 text-purple-400', icon: Container },
-  maintenance: { label: 'Manutenção', color: 'bg-orange-500/20 text-orange-400', icon: Anchor }
+  loading: { label: 'Carregamento', color: 'bg-info/20 text-info', icon: ArrowUpDown },
+  unloading: { label: 'Descarga', color: 'bg-warning/20 text-warning', icon: Package },
+  bunkering: { label: 'Abastecimento', color: 'bg-primary/20 text-primary', icon: Container },
+  maintenance: { label: 'Manutenção', color: 'bg-accent/20 text-accent-foreground', icon: Anchor }
 };
 
 const statusConfig = {
   scheduled: { label: 'Agendado', color: 'bg-muted text-muted-foreground' },
-  in_progress: { label: 'Em Andamento', color: 'bg-emerald-500/20 text-emerald-400' },
+  in_progress: { label: 'Em Andamento', color: 'bg-success/20 text-success' },
   delayed: { label: 'Atrasado', color: 'bg-destructive/20 text-destructive' },
-  completed: { label: 'Concluído', color: 'bg-blue-500/20 text-blue-400' }
+  completed: { label: 'Concluído', color: 'bg-info/20 text-info' }
 };
 
 export function PortOperationsModule() {

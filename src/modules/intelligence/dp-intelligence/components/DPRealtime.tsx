@@ -83,14 +83,14 @@ export default function DPRealtime() {
               label="Heading" 
               value={telemetry.heading.toFixed(1)} 
               unit="°"
-              color="text-purple-500"
+              color="text-primary"
             />
             <Metric 
               icon={Navigation}
               label="Pitch" 
               value={telemetry.pitch.toFixed(2)} 
               unit="°"
-              color="text-cyan-500"
+              color="text-info"
             />
             <Metric 
               icon={Navigation}
