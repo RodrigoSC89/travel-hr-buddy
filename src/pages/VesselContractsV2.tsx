@@ -26,6 +26,7 @@ import { ContractAnalyticsDashboard } from "@/components/contracts/ContractAnaly
 import { DocumentSignatureCard } from "@/components/contracts/DocumentSignatureCard";
 import { VesselTrackingCard } from "@/components/contracts/VesselTrackingCard";
 import { ERPIntegrationCard } from "@/components/contracts/ERPIntegrationCard";
+import { AdvancedDowntimeValidator } from "@/components/contracts/AdvancedDowntimeValidator";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
@@ -495,6 +496,19 @@ export default function VesselContractsV2() {
               onAnalysisComplete={() => loadData()}
             />
           </div>
+          
+          {/* Advanced AI Validator */}
+          <AdvancedDowntimeValidator 
+            downtimeEvent={downtimeEvents[0] ? {
+              start_time: downtimeEvents[0].start_time,
+              end_time: downtimeEvents[0].end_time || undefined,
+              reason: downtimeEvents[0].reason || '',
+              reason_category: downtimeEvents[0].reason_category || '',
+              impact_level: downtimeEvents[0].impact_level || 'medium',
+              duration_hours: downtimeEvents[0].duration_hours || undefined
+            } : undefined}
+            onValidationComplete={() => loadData()}
+          />
         </TabsContent>
 
         {/* Prediction Tab */}
