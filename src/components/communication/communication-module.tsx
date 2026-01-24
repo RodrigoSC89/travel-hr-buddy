@@ -115,7 +115,7 @@ export const CommunicationModule = () => {
   const renderOverview = () => (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/80 to-info p-8 text-primary-foreground">
         <div className="relative z-10">
           <h2 className="text-3xl font-bold mb-4">
             Centro de Comunicação Inteligente
@@ -289,30 +289,30 @@ export const CommunicationModule = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">🤖 IA Conversacional</h4>
-              <p className="text-sm text-blue-600">
+            <div className="p-4 bg-gradient-to-br from-primary/10 to-info/10 border border-primary/20 rounded-lg">
+              <h4 className="font-semibold text-primary mb-2">🤖 IA Conversacional</h4>
+              <p className="text-sm text-primary/80">
                 Assistente inteligente para tradução, resumos e análise de sentimentos em tempo real
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">🔒 Criptografia Ponta a Ponta</h4>
-              <p className="text-sm text-green-600">
+            <div className="p-4 bg-gradient-to-br from-success/10 to-success/5 border border-success/20 rounded-lg">
+              <h4 className="font-semibold text-success mb-2">🔒 Criptografia Ponta a Ponta</h4>
+              <p className="text-sm text-success/80">
                 Segurança máxima com criptografia avançada e verificação de identidade
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-lg">
-              <h4 className="font-semibold text-purple-800 mb-2">📊 Analytics de Comunicação</h4>
-              <p className="text-sm text-purple-600">
+            <div className="p-4 bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20 rounded-lg">
+              <h4 className="font-semibold text-secondary mb-2">📊 Analytics de Comunicação</h4>
+              <p className="text-sm text-secondary/80">
                 Métricas detalhadas de engajamento, produtividade e eficiência da equipe
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-lg">
-              <h4 className="font-semibold text-orange-800 mb-2">🎥 Conferências HD</h4>
-              <p className="text-sm text-orange-600">
+            <div className="p-4 bg-gradient-to-br from-warning/10 to-destructive/10 border border-warning/20 rounded-lg">
+              <h4 className="font-semibold text-warning mb-2">🎥 Conferências HD</h4>
+              <p className="text-sm text-warning/80">
                 Videochamadas de alta qualidade com compartilhamento de tela e gravação
               </p>
             </div>

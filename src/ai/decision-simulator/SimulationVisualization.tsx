@@ -79,16 +79,16 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-blue-500" />
+              <CheckCircle className="w-5 h-5 text-primary" />
               <div>
-                <p className="text-sm text-gray-500">Confidence</p>
+                <p className="text-sm text-muted-foreground">Confidence</p>
                 <p className="text-lg font-semibold">{simulation.confidenceLevel}%</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-purple-500" />
+              <Clock className="w-5 h-5 text-secondary" />
               <div>
-                <p className="text-sm text-gray-500">Duration</p>
+                <p className="text-sm text-muted-foreground">Duration</p>
                 <p className="text-lg font-semibold">
                   {simulation.duration ? `${simulation.duration.toFixed(1)}s` : "N/A"}
                 </p>
@@ -97,14 +97,14 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
             <div className="flex items-center space-x-2">
               <Info className="w-5 h-5 text-primary" />
               <div>
-                <p className="text-sm text-gray-500">Scenarios</p>
+                <p className="text-sm text-muted-foreground">Scenarios</p>
                 <p className="text-lg font-semibold">{simulation.scenarios.length}</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <TrendingUp className="w-5 h-5 text-green-500" />
+              <TrendingUp className="w-5 h-5 text-success" />
               <div>
-                <p className="text-sm text-gray-500">Success Probability</p>
+                <p className="text-sm text-muted-foreground">Success Probability</p>
                 <p className="text-lg font-semibold">
                   {(simulation.strategy.successProbability * 100).toFixed(0)}%
                 </p>
@@ -172,7 +172,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
 
             <TabsContent value="cost" className="space-y-4">
               <div className="flex items-center space-x-2 mb-4">
-                <DollarSign className="w-5 h-5 text-green-600" />
+                <DollarSign className="w-5 h-5 text-success" />
                 <h3 className="text-lg font-semibold">Cost Analysis</h3>
               </div>
               <div className="space-y-3">
@@ -203,8 +203,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   </div>
                   <Progress value={90} className="h-2" />
                 </div>
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600">
+                <div className="mt-4 p-3 bg-muted rounded-lg">
+                  <p className="text-sm text-muted-foreground">
                     Variance: {simulation.metrics.cost.variance.toFixed(2)}
                   </p>
                 </div>
@@ -213,7 +213,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
 
             <TabsContent value="risk" className="space-y-4">
               <div className="flex items-center space-x-2 mb-4">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
+                <AlertTriangle className="w-5 h-5 text-warning" />
                 <h3 className="text-lg font-semibold">Risk Analysis</h3>
               </div>
               <div className="space-y-3">
@@ -244,7 +244,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   </div>
                   <Progress value={simulation.metrics.risk.max} className="h-2" />
                 </div>
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <div className="mt-4 p-3 bg-muted rounded-lg">
                   <p className="text-sm font-semibold mb-2">Risk Distribution</p>
                   <div className="grid grid-cols-2 gap-2">
                     {Object.entries(simulation.metrics.risk.distribution).map(([level, count]) => (
@@ -260,7 +260,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
 
             <TabsContent value="time" className="space-y-4">
               <div className="flex items-center space-x-2 mb-4">
-                <Clock className="w-5 h-5 text-blue-600" />
+                <Clock className="w-5 h-5 text-primary" />
                 <h3 className="text-lg font-semibold">Time Analysis</h3>
               </div>
               <div className="space-y-3">
@@ -292,11 +292,11 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   <Progress value={90} className="h-2" />
                 </div>
                 {simulation.metrics.time.criticalPath && (
-                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="mt-4 p-3 bg-muted rounded-lg">
                     <p className="text-sm font-semibold mb-2">Critical Path</p>
                     <ul className="list-disc list-inside space-y-1">
                       {simulation.metrics.time.criticalPath.slice(0, 5).map((action, index) => (
-                        <li key={index} className="text-sm text-gray-600">
+                        <li key={index} className="text-sm text-muted-foreground">
                           {action}
                         </li>
                       ))}
@@ -308,7 +308,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
 
             <TabsContent value="crew" className="space-y-4">
               <div className="flex items-center space-x-2 mb-4">
-                <Users className="w-5 h-5 text-purple-600" />
+                <Users className="w-5 h-5 text-secondary" />
                 <h3 className="text-lg font-semibold">Crew Impact Analysis</h3>
               </div>
               <div className="space-y-3">
@@ -340,8 +340,8 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                   <Progress value={simulation.metrics.crewImpact.max} className="h-2" />
                 </div>
                 {simulation.metrics.crewImpact.affectedCrew && (
-                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600">
+                  <div className="mt-4 p-3 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">
                       Affected Crew Members: ~{simulation.metrics.crewImpact.affectedCrew}
                     </p>
                   </div>
@@ -365,23 +365,23 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
             {simulation.scenarios.map((scenario) => (
               <div
                 key={scenario.id}
-                className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                className="border rounded-lg p-4 hover:bg-muted cursor-pointer transition-colors"
                 onClick={() => onScenarioSelect?.(scenario)}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <h4 className="font-semibold">{scenario.name}</h4>
-                    <p className="text-sm text-gray-600">{scenario.description}</p>
+                    <p className="text-sm text-muted-foreground">{scenario.description}</p>
                   </div>
                   <Badge variant="outline">
                     {(scenario.probability * 100).toFixed(0)}% probability
                   </Badge>
                 </div>
                 <div className="mt-3">
-                  <p className="text-xs text-gray-500 mb-2">Outcomes:</p>
+                  <p className="text-xs text-muted-foreground mb-2">Outcomes:</p>
                   <div className="space-y-2">
                     {scenario.outcomes.map((outcome) => (
-                      <div key={outcome.id} className="text-sm bg-gray-100 p-2 rounded">
+                      <div key={outcome.id} className="text-sm bg-muted p-2 rounded">
                         <p className="font-medium">{outcome.description}</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 text-xs">
                           <span>Cost: {formatCurrency(outcome.impact.cost)}</span>
@@ -397,7 +397,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
                 </div>
                 {scenario.triggers && scenario.triggers.length > 0 && (
                   <div className="mt-3">
-                    <p className="text-xs text-gray-500 mb-1">Triggers:</p>
+                    <p className="text-xs text-muted-foreground mb-1">Triggers:</p>
                     <div className="flex flex-wrap gap-1">
                       {scenario.triggers.map((trigger, index) => (
                         <Badge key={index} variant="secondary" className="text-xs">

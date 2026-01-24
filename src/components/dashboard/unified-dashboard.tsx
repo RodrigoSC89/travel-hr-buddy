@@ -160,9 +160,9 @@ const UnifiedDashboard = () => {
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-    case "warning": return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-    case "success": return <CheckCircle className="w-4 h-4 text-green-500" />;
-    default: return <Bell className="w-4 h-4 text-blue-500" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-warning" />;
+    case "success": return <CheckCircle className="w-4 h-4 text-success" />;
+    default: return <Bell className="w-4 h-4 text-primary" />;
     }
   };
 
