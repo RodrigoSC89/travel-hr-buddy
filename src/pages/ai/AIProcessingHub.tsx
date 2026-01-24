@@ -226,19 +226,19 @@ const AIProcessingHub: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Throughput</p>
                 <p className="text-2xl font-bold">1.2K/s</p>
               </div>
-              <Gauge className="h-8 w-8 text-green-400" />
+              <Gauge className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Jobs Concluídos Hoje</p>
                 <p className="text-2xl font-bold">47</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-purple-400" />
+              <CheckCircle className="h-8 w-8 text-secondary" />
             </div>
           </CardContent>
         </Card>

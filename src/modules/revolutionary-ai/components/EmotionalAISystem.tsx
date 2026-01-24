@@ -362,15 +362,15 @@ export function EmotionalAISystem() {
       </div>
 
       {/* ROI */}
-      <Card className="bg-gradient-to-br from-pink-500/10 to-purple-500/5">
+      <Card className="bg-gradient-to-br from-accent/10 to-secondary/5">
         <CardContent className="pt-6">
           <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-green-500" />
+            <TrendingUp className="h-5 w-5 text-success" />
             Impacto da IA Emocional
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-500">-80%</div>
+              <div className="text-3xl font-bold text-success">-80%</div>
               <div className="text-sm text-muted-foreground">Conflitos</div>
             </div>
             <div className="text-center">
