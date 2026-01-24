@@ -116,7 +116,7 @@ export function ExecutiveDashboard() {
         trend: "up",
         change: 0.02,
         icon: <Activity className="h-5 w-5" />,
-        color: "from-violet-500 to-violet-600",
+        color: "from-secondary to-accent",
       },
       {
         id: "ai-accuracy",
