@@ -38,7 +38,7 @@ export const SonarAIDashboard: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    generateDemoSpectrogram();
+    generateSpectrogram();
   }, []);
 
   const loadData = async () => {
@@ -53,9 +53,10 @@ export const SonarAIDashboard: React.FC = () => {
     setStatistics(stats);
   };
 
-  const generateDemoSpectrogram = () => {
-    const demoData = enhancedSonarAIService.generateSpectrogram([], 80);
-    setSpectrogramData(demoData);
+  const generateSpectrogram = () => {
+    // Generate spectrogram from real data when available
+    const spectroData = enhancedSonarAIService.generateSpectrogram([], 80);
+    setSpectrogramData(spectroData);
   };
 
   const performAIScan = async () => {

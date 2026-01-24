@@ -185,3 +185,32 @@ export const medicalCategories = [
   'Analgésicos', 'Anti-inflamatórios', 'Antibióticos', 'Antieméticos',
   'Gastrointestinal', 'Curativos', 'Soluções', 'Emergência', 'EPIs', 'Equipamentos'
 ];
+
+// Create medical record mutation
+export function useCreateMedicalRecord() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (record: Partial<MedicalRecord>) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { data, error } = await supabase
+        .from('medical_records')
+        .insert([{
+          crew_member_name: record.crewMemberName || 'Tripulante',
+          notes: record.chiefComplaint || record.notes || '',
+          conditions: record.symptoms || [],
+          status: 'active',
+          created_by: user?.id
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['medical-records'] });
+    }
+  });
+}

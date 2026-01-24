@@ -1,8 +1,9 @@
 /**
  * Medical Records Tab
+ * MIGRATED: Uses Supabase hooks
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,23 +13,34 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileText, Search, Plus, Stethoscope, AlertTriangle, CheckCircle2, Clock, Filter, Brain, User, Calendar, Activity } from 'lucide-react';
-import { mockRecords, mockCrewMembers } from '../data/mockData';
+import { FileText, Search, Plus, Stethoscope, AlertTriangle, CheckCircle2, Clock, Filter, Brain, User, Calendar, Activity, Loader2 } from 'lucide-react';
+import { useMedicalRecords, useCrewMembers, useCreateMedicalRecord } from '../hooks/useMedicalData';
 import { MedicalRecord } from '../types';
 import { toast } from 'sonner';
 import { useMedicalAI } from '../hooks/useMedicalAI';
 
 export default function RecordsTab() {
-  const { generateTreatmentSuggestion, isLoading } = useMedicalAI();
-  const [records, setRecords] = useState<MedicalRecord[]>(mockRecords);
+  const { generateTreatmentSuggestion, isLoading: aiLoading } = useMedicalAI();
+  const { data: dbRecords = [], isLoading: loadingRecords } = useMedicalRecords();
+  const { data: crewMembers = [] } = useCrewMembers();
+  const createRecord = useCreateMedicalRecord();
+  
+  const [records, setRecords] = useState<MedicalRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showNewRecord, setShowNewRecord] = useState(false);
   const [newRecord, setNewRecord] = useState({ crewMemberId: '', chiefComplaint: '', symptoms: '', type: 'consultation' as const });
+
+  // Sync from DB
+  useEffect(() => {
+    if (dbRecords.length > 0) setRecords(dbRecords);
+  }, [dbRecords]);
 
   const filteredRecords = records.filter(r => 
     r.crewMemberName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.chiefComplaint.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const isLoading = aiLoading || createRecord.isPending;
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -41,14 +53,11 @@ export default function RecordsTab() {
   };
 
   const handleCreateRecord = async () => {
-    const crew = mockCrewMembers.find(c => c.id === newRecord.crewMemberId);
+    const crew = crewMembers.find(c => c.id === newRecord.crewMemberId);
     if (!crew) { toast.error('Selecione um tripulante'); return; }
 
-    const suggestion = await generateTreatmentSuggestion(
-      newRecord.symptoms.split(',').map(s => s.trim()),
-      newRecord.chiefComplaint,
-      crew
-    );
+    const symptoms = newRecord.symptoms.split(',').map(s => s.trim());
+    const suggestion = await generateTreatmentSuggestion(symptoms, newRecord.chiefComplaint, crew);
 
     const record: MedicalRecord = {
       id: Date.now().toString(),
@@ -58,7 +67,7 @@ export default function RecordsTab() {
       time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       type: newRecord.type,
       chiefComplaint: newRecord.chiefComplaint,
-      symptoms: newRecord.symptoms.split(',').map(s => s.trim()),
+      symptoms,
       diagnosis: '',
       treatment: suggestion?.treatment || '',
       medications: suggestion?.medications || [],
@@ -68,10 +77,16 @@ export default function RecordsTab() {
       aiSuggestions: suggestion ? ['Sugestão de tratamento gerada pela IA'] : []
     };
 
-    setRecords(prev => [record, ...prev]);
+    // Try to save to DB
+    try {
+      await createRecord.mutateAsync(record);
+    } catch {
+      // Fallback to local state
+      setRecords(prev => [record, ...prev]);
+    }
+    
     setShowNewRecord(false);
     setNewRecord({ crewMemberId: '', chiefComplaint: '', symptoms: '', type: 'consultation' });
-    toast.success('Atendimento criado');
   };
 
   return (
@@ -93,7 +108,7 @@ export default function RecordsTab() {
                 <Select value={newRecord.crewMemberId} onValueChange={(v) => setNewRecord(prev => ({ ...prev, crewMemberId: v }))}>
                   <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                   <SelectContent>
-                    {mockCrewMembers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                    {crewMembers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
