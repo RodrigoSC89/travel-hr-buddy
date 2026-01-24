@@ -11,10 +11,10 @@ import ReportsTab from "./components/ReportsTab";
 export default function MedicalInfirmary() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b bg-gradient-to-r from-red-500/10 via-pink-500/10 to-rose-500/10">
+      <div className="border-b bg-gradient-to-r from-destructive/10 via-destructive/5 to-accent/10">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 text-white">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-destructive to-destructive/80 text-destructive-foreground">
               <Stethoscope className="h-8 w-8" />
             </div>
             <div>

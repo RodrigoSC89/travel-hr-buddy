@@ -35,25 +35,25 @@ const quickActions = [
     label: "Análise de Fadiga", 
     icon: AlertTriangle, 
     prompt: "Analise o nível de fadiga atual da tripulação e identifique riscos conforme MLC 2006",
-    color: "text-amber-500"
+    color: "text-warning"
   },
   { 
     label: "Certificações", 
     icon: Award, 
     prompt: "Quais certificações estão vencendo nos próximos 30 dias e qual o impacto operacional?",
-    color: "text-rose-500"
+    color: "text-destructive"
   },
   { 
     label: "Otimizar Escala", 
     icon: Calendar, 
     prompt: "Sugira uma otimização na escala de trabalho para reduzir fadiga e manter compliance",
-    color: "text-blue-500"
+    color: "text-primary"
   },
   { 
     label: "Performance", 
     icon: TrendingUp, 
     prompt: "Analise a performance da tripulação e identifique candidatos para promoção",
-    color: "text-emerald-500"
+    color: "text-success"
   },
 ];
 

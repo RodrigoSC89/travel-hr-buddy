@@ -56,13 +56,13 @@ export interface Alert {
 }
 
 const tabs = [
-  { id: "overview", label: "Visão Geral", icon: LayoutDashboard, gradient: "from-blue-500 to-cyan-500" },
-  { id: "operations", label: "Operações", icon: Activity, gradient: "from-emerald-500 to-teal-500" },
-  { id: "executive", label: "Executivo", icon: TrendingUp, gradient: "from-violet-500 to-purple-500" },
-  { id: "ai", label: "IA", icon: Brain, gradient: "from-pink-500 to-rose-500" },
-  { id: "resilience", label: "Resiliência", icon: Shield, gradient: "from-amber-500 to-orange-500" },
-  { id: "alerts", label: "Alertas", icon: Bell, gradient: "from-red-500 to-pink-500" },
-  { id: "settings", label: "Config", icon: Settings, gradient: "from-slate-500 to-zinc-500" },
+  { id: "overview", label: "Visão Geral", icon: LayoutDashboard, gradient: "from-primary to-info" },
+  { id: "operations", label: "Operações", icon: Activity, gradient: "from-success to-success/80" },
+  { id: "executive", label: "Executivo", icon: TrendingUp, gradient: "from-secondary to-accent" },
+  { id: "ai", label: "IA", icon: Brain, gradient: "from-accent to-destructive" },
+  { id: "resilience", label: "Resiliência", icon: Shield, gradient: "from-warning to-warning/80" },
+  { id: "alerts", label: "Alertas", icon: Bell, gradient: "from-destructive to-destructive/80" },
+  { id: "settings", label: "Config", icon: Settings, gradient: "from-muted to-muted-foreground/20" },
 ];
 
 export default function NautilusCommandCenter() {
