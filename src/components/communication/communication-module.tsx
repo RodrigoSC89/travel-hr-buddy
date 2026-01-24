@@ -146,10 +146,10 @@ export const CommunicationModule = () => {
         {communicationStats.map((stat, index) => {
           const Icon = stat.icon;
           const colorClasses: Record<string, string> = {
-            blue: "from-blue-500/20 via-blue-400/10 to-cyan-500/20 border-blue-200/50 text-blue-600",
-            green: "from-green-500/20 via-green-400/10 to-emerald-500/20 border-green-200/50 text-green-600",
-            purple: "from-purple-500/20 via-purple-400/10 to-violet-500/20 border-purple-200/50 text-purple-600",
-            orange: "from-orange-500/20 via-orange-400/10 to-red-500/20 border-orange-200/50 text-orange-600"
+            blue: "from-primary/20 via-primary/10 to-info/20 border-primary/30 text-primary",
+            green: "from-success/20 via-success/10 to-success/20 border-success/30 text-success",
+            purple: "from-secondary/20 via-secondary/10 to-accent/20 border-secondary/30 text-secondary",
+            orange: "from-warning/20 via-warning/10 to-destructive/20 border-warning/30 text-warning"
           };
 
           const colorClass = colorClasses[stat.color] || colorClasses.blue;

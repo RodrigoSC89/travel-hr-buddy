@@ -297,23 +297,23 @@ export default function MaritimeCommandCenter() {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
         <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
           <CardContent className="p-4 text-center">
-            <Users className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+            <Users className="h-6 w-6 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{stats.totalCrew}</div>
             <div className="text-xs text-muted-foreground">Tripulantes</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-6 w-6 mx-auto mb-2 text-green-500" />
+            <CheckCircle className="h-6 w-6 mx-auto mb-2 text-success" />
             <div className="text-2xl font-bold">{stats.activeCrew}</div>
             <div className="text-xs text-muted-foreground">Ativos</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="p-4 text-center">
-            <Award className="h-6 w-6 mx-auto mb-2 text-purple-500" />
+            <Award className="h-6 w-6 mx-auto mb-2 text-secondary" />
             <div className="text-2xl font-bold">{stats.certValid}</div>
             <div className="text-xs text-muted-foreground">Cert. Válidas</div>
           </CardContent>
