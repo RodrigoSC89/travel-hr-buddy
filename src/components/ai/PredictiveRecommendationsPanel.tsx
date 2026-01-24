@@ -235,13 +235,13 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-purple-600 to-pink-500">
-            <Brain className="h-6 w-6 text-white" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-secondary to-accent">
+            <Brain className="h-6 w-6 text-secondary-foreground" />
           </div>
           <div>
             <h2 className="text-2xl font-bold flex items-center gap-2">
               Recomendações Preditivas
-              <Badge variant="secondary" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+              <Badge variant="secondary" className="bg-secondary/10 text-secondary-foreground dark:bg-secondary/30">
                 <Sparkles className="h-3 w-3 mr-1" />
                 IA
               </Badge>
@@ -265,14 +265,14 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
       {/* Summary Cards */}
       {analysis && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className={criticalCount > 0 ? 'border-red-500/50 bg-red-500/5' : ''}>
+          <Card className={criticalCount > 0 ? 'border-destructive/50 bg-destructive/5' : ''}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Alertas Críticos</p>
-                  <p className="text-3xl font-bold text-red-500">{criticalCount}</p>
+                  <p className="text-3xl font-bold text-destructive">{criticalCount}</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-500" />
+                <AlertTriangle className="h-8 w-8 text-destructive" />
               </div>
             </CardContent>
           </Card>
@@ -282,9 +282,9 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Alta Prioridade</p>
-                  <p className="text-3xl font-bold text-orange-500">{highCount}</p>
+                  <p className="text-3xl font-bold text-warning">{highCount}</p>
                 </div>
-                <TrendingUp className="h-8 w-8 text-orange-500" />
+                <TrendingUp className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -294,9 +294,9 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Saúde Geral</p>
-                  <p className="text-3xl font-bold text-green-500">{analysis.insights.overallHealth}%</p>
+                  <p className="text-3xl font-bold text-success">{analysis.insights.overallHealth}%</p>
                 </div>
-                <BarChart3 className="h-8 w-8 text-green-500" />
+                <BarChart3 className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>

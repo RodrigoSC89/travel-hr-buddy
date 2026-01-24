@@ -240,31 +240,31 @@ export default function ComplianceEvidencias() {
             <div className="text-xs text-muted-foreground">Total</div>
           </CardContent>
         </Card>
-        <Card className="bg-emerald-500/10 border-emerald-500/30">
+        <Card className="bg-success/10 border-success/30">
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
-            <div className="text-2xl font-bold text-emerald-400">{stats.valid}</div>
+            <CheckCircle2 className="h-6 w-6 mx-auto text-success mb-2" />
+            <div className="text-2xl font-bold text-success">{stats.valid}</div>
             <div className="text-xs text-muted-foreground">Válidos</div>
           </CardContent>
         </Card>
-        <Card className="bg-amber-500/10 border-amber-500/30">
+        <Card className="bg-warning/10 border-warning/30">
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 mx-auto text-amber-400 mb-2" />
-            <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
+            <Clock className="h-6 w-6 mx-auto text-warning mb-2" />
+            <div className="text-2xl font-bold text-warning">{stats.pending}</div>
             <div className="text-xs text-muted-foreground">Pendentes</div>
           </CardContent>
         </Card>
-        <Card className="bg-red-500/10 border-red-500/30">
+        <Card className="bg-destructive/10 border-destructive/30">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 mx-auto text-red-400 mb-2" />
-            <div className="text-2xl font-bold text-red-400">{stats.expired}</div>
+            <AlertTriangle className="h-6 w-6 mx-auto text-destructive mb-2" />
+            <div className="text-2xl font-bold text-destructive">{stats.expired}</div>
             <div className="text-xs text-muted-foreground">Expirados</div>
           </CardContent>
         </Card>
-        <Card className="bg-purple-500/10 border-purple-500/30">
+        <Card className="bg-secondary/10 border-secondary/30">
           <CardContent className="p-4 text-center">
-            <Brain className="h-6 w-6 mx-auto text-purple-400 mb-2" />
-            <div className="text-2xl font-bold text-purple-400">{stats.aiVerified}</div>
+            <Brain className="h-6 w-6 mx-auto text-secondary-foreground mb-2" />
+            <div className="text-2xl font-bold text-secondary-foreground">{stats.aiVerified}</div>
             <div className="text-xs text-muted-foreground">IA Verificados</div>
           </CardContent>
         </Card>

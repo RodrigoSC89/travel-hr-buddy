@@ -182,36 +182,36 @@ export default function WellnessPredictiveDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Risco Médio</p>
-                <p className="text-2xl font-bold text-amber-500">7</p>
-                <p className="text-xs text-amber-400">tripulantes</p>
+                <p className="text-2xl font-bold text-warning">7</p>
+                <p className="text-xs text-warning/80">tripulantes</p>
               </div>
-              <TrendingDown className="h-10 w-10 text-amber-500/50" />
+              <TrendingDown className="h-10 w-10 text-warning/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Saudáveis</p>
-                <p className="text-2xl font-bold text-emerald-500">14</p>
-                <p className="text-xs text-emerald-400">tripulantes</p>
+                <p className="text-2xl font-bold text-success">14</p>
+                <p className="text-xs text-success/80">tripulantes</p>
               </div>
-              <TrendingUp className="h-10 w-10 text-emerald-500/50" />
+              <TrendingUp className="h-10 w-10 text-success/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sono Médio</p>
-                <p className="text-2xl font-bold text-blue-500">6.2h</p>
-                <p className="text-xs text-blue-400">-0.8h vs ideal</p>
+                <p className="text-2xl font-bold text-info">6.2h</p>
+                <p className="text-xs text-info/80">-0.8h vs ideal</p>
               </div>
-              <Moon className="h-10 w-10 text-blue-500/50" />
+              <Moon className="h-10 w-10 text-info/50" />
             </div>
           </CardContent>
         </Card>

@@ -289,24 +289,24 @@ Responda em JSON:
 
         {/* Health Metrics */}
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <div className="p-3 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20">
+          <div className="p-3 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-muted-foreground">Saúde da Frota</span>
-              <Activity className="h-4 w-4 text-emerald-500" />
+              <Activity className="h-4 w-4 text-success" />
             </div>
             <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-emerald-500">{overallHealth}%</span>
+              <span className="text-2xl font-bold text-success">{overallHealth}%</span>
               <Progress value={overallHealth} className="flex-1 h-2" />
             </div>
           </div>
           
-          <div className="p-3 rounded-lg bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20">
+          <div className="p-3 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-muted-foreground">Score de Risco</span>
-              <Target className="h-4 w-4 text-amber-500" />
+              <Target className="h-4 w-4 text-warning" />
             </div>
             <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-amber-500">{riskScore}%</span>
+              <span className="text-2xl font-bold text-warning">{riskScore}%</span>
               <Progress value={riskScore} className="flex-1 h-2" />
             </div>
           </div>

@@ -191,13 +191,13 @@ export function VoyageIntelligenceAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
-            <Navigation className="h-6 w-6 text-cyan-500" />
+          <div className="p-3 bg-gradient-to-br from-info/20 to-primary/20 rounded-xl">
+            <Navigation className="h-6 w-6 text-info" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Voyage Intelligence
-              <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500">
+              <Badge className="bg-gradient-to-r from-info to-primary text-primary-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Multi-Objetivo
               </Badge>
@@ -225,17 +225,17 @@ export function VoyageIntelligenceAI() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-green-500" />
+                <MapPin className="h-4 w-4 text-success" />
                 <div>
                   <p className="text-xs text-muted-foreground">Origem</p>
                   <p className="font-medium">{voyageData.origin}</p>
                 </div>
               </div>
               <div className="h-px w-20 bg-border" />
-              <Ship className="h-5 w-5 text-blue-500" />
+              <Ship className="h-5 w-5 text-info" />
               <div className="h-px w-20 bg-border" />
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-red-500" />
+                <MapPin className="h-4 w-4 text-destructive" />
                 <div>
                   <p className="text-xs text-muted-foreground">Destino</p>
                   <p className="font-medium">{voyageData.destination}</p>

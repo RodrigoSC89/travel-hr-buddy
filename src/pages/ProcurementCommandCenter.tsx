@@ -410,11 +410,11 @@ export default function ProcurementCommandCenter() {
 
         {/* KPI Cards Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+          <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-purple-500/20">
-                  <ShoppingCart className="h-5 w-5 text-purple-500" />
+                <div className="p-2 rounded-lg bg-secondary/20">
+                  <ShoppingCart className="h-5 w-5 text-secondary-foreground" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Pedidos Pendentes</p>
@@ -438,29 +438,29 @@ export default function ProcurementCommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-green-500/20">
-                  <DollarSign className="h-5 w-5 text-green-500" />
+                <div className="p-2 rounded-lg bg-success/20">
+                  <DollarSign className="h-5 w-5 text-success" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Economia (mês)</p>
-                  <p className="text-2xl font-bold text-green-500">R$ {aiStats.savingsThisMonth.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-success">R$ {aiStats.savingsThisMonth.toLocaleString()}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border-orange-500/20">
+          <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-orange-500/20">
-                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Estoque Crítico</p>
-                  <p className="text-2xl font-bold text-orange-500">{criticalStockItems.length}</p>
+                  <p className="text-2xl font-bold text-warning">{criticalStockItems.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -483,8 +483,8 @@ export default function ProcurementCommandCenter() {
           <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/20">
-                  <Send className="h-5 w-5 text-amber-500" />
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <Send className="h-5 w-5 text-warning" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">RFQs Pendentes</p>

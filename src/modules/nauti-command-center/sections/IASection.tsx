@@ -249,8 +249,8 @@ export function IASection() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-lg bg-gradient-to-br from-purple-600 to-pink-500">
-                      <Brain className="h-5 w-5 text-white" />
+                    <div className="p-2 rounded-lg bg-gradient-to-br from-secondary to-accent">
+                      <Brain className="h-5 w-5 text-secondary-foreground" />
                     </div>
                     <div>
                       <CardTitle className="text-lg">Nautilus AI Assistant</CardTitle>
@@ -258,7 +258,7 @@ export function IASection() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">Online</Badge>
+                    <Badge className="bg-success/10 text-success border-success/20">Online</Badge>
                     <Button variant="ghost" size="sm" onClick={clearMessages}>
                       Limpar
                     </Button>

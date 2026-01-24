@@ -229,14 +229,14 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl">
-            <Radio className="h-6 w-6 text-cyan-500" />
+          <div className="p-3 bg-gradient-to-br from-info/20 to-primary/20 rounded-xl">
+            <Radio className="h-6 w-6 text-info" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Monitor IoT Sensores
               {isConnected ? (
-                <Badge className="bg-green-500/20 text-green-500">
+                <Badge className="bg-success/20 text-success">
                   <Wifi className="h-3 w-3 mr-1" />
                   Conectado
                 </Badge>
@@ -264,18 +264,18 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
       {(criticalCount > 0 || warningCount > 0) && (
         <div className="flex gap-4">
           {criticalCount > 0 && (
-            <Card className="border-red-500/50 bg-red-500/10 flex-1">
+            <Card className="border-destructive/50 bg-destructive/10 flex-1">
               <CardContent className="py-3 flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
-                <span className="font-medium text-red-500">{criticalCount} sensor(es) em estado crítico</span>
+                <AlertTriangle className="h-5 w-5 text-destructive" />
+                <span className="font-medium text-destructive">{criticalCount} sensor(es) em estado crítico</span>
               </CardContent>
             </Card>
           )}
           {warningCount > 0 && (
-            <Card className="border-yellow-500/50 bg-yellow-500/10 flex-1">
+            <Card className="border-warning/50 bg-warning/10 flex-1">
               <CardContent className="py-3 flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
-                <span className="font-medium text-yellow-500">{warningCount} sensor(es) em alerta</span>
+                <AlertTriangle className="h-5 w-5 text-warning" />
+                <span className="font-medium text-warning">{warningCount} sensor(es) em alerta</span>
               </CardContent>
             </Card>
           )}
