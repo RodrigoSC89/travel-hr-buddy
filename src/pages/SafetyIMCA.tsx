@@ -8,9 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { IMCAIncidentAnalyzer } from "@/components/compliance/IMCAIncidentAnalyzer";
 import { 
   Shield, Search, AlertTriangle, FileText, TrendingUp,
-  ExternalLink, BookOpen, Users, Calendar
+  ExternalLink, BookOpen, Users, Calendar, Brain
 } from "lucide-react";
 
 interface IMCAIncident {
@@ -129,6 +130,10 @@ const SafetyIMCA = () => {
         <TabsList>
           <TabsTrigger value="database">Base de Dados</TabsTrigger>
           <TabsTrigger value="fleet">Incidentes da Frota</TabsTrigger>
+          <TabsTrigger value="ai-analyzer">
+            <Brain className="h-4 w-4 mr-1" />
+            Análise IA
+          </TabsTrigger>
           <TabsTrigger value="analysis">Análise Comparativa</TabsTrigger>
           <TabsTrigger value="briefings">Briefings</TabsTrigger>
         </TabsList>
@@ -276,6 +281,11 @@ const SafetyIMCA = () => {
           </Card>
         </TabsContent>
 
+        {/* AI-Powered IMCA Analyzer */}
+        <TabsContent value="ai-analyzer">
+          <IMCAIncidentAnalyzer />
+        </TabsContent>
+
         <TabsContent value="analysis">
           <Card>
             <CardHeader>
@@ -286,19 +296,19 @@ const SafetyIMCA = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card className="bg-muted/50">
                   <CardContent className="p-4 text-center">
-                    <p className="text-3xl font-bold text-green-600">0</p>
+                    <p className="text-3xl font-bold text-success">0</p>
                     <p className="text-sm text-muted-foreground">Incidentes Similares</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-muted/50">
                   <CardContent className="p-4 text-center">
-                    <p className="text-3xl font-bold text-yellow-600">3</p>
+                    <p className="text-3xl font-bold text-warning">3</p>
                     <p className="text-sm text-muted-foreground">Riscos Identificados</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-muted/50">
                   <CardContent className="p-4 text-center">
-                    <p className="text-3xl font-bold text-blue-600">85%</p>
+                    <p className="text-3xl font-bold text-info">85%</p>
                     <p className="text-sm text-muted-foreground">Conformidade</p>
                   </CardContent>
                 </Card>

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { CTSCompliancePanel } from "@/components/fleet/CTSCompliancePanel";
 import { 
   Users, Brain, Shield, AlertTriangle, CheckCircle, FileCheck, 
   UserCheck, GraduationCap, Calendar, RefreshCw
@@ -94,8 +95,9 @@ export default function VesselCTSV2() {
       <StatsGridV2 stats={stats} columns={4} />
 
       <Tabs defaultValue="crew" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 max-w-2xl">
+        <TabsList className="grid w-full grid-cols-5 max-w-3xl">
           <TabsTrigger value="crew">Tripulação</TabsTrigger>
+          <TabsTrigger value="cts-compliance">CTS/STCW</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
           <TabsTrigger value="ai-assistant">IA Assistente</TabsTrigger>
           <TabsTrigger value="evidence">Evidências</TabsTrigger>
@@ -121,6 +123,19 @@ export default function VesselCTSV2() {
                 { value: "non_compliant", label: "Não Conforme" }
               ]}
             ]}
+          />
+        </TabsContent>
+
+        {/* CTS/STCW AI Compliance Tab */}
+        <TabsContent value="cts-compliance">
+          <CTSCompliancePanel 
+            vesselId="demo-vessel-001"
+            vesselName="MV Atlantic Star"
+            onComplianceCheck={(result) => {
+              if (!result.compliant) {
+                toast.warning(`${result.violations.length} violações CTS detectadas`);
+              }
+            }}
           />
         </TabsContent>
 
