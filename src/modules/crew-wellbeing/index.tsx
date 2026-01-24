@@ -218,7 +218,7 @@ export default function CrewWellbeing() {
                   {avgHealth.toFixed(0)}%
                 </p>
               </div>
-              <Heart className="h-8 w-8 text-pink-500 opacity-80" />
+              <Heart className="h-8 w-8 text-destructive opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -259,17 +259,17 @@ export default function CrewWellbeing() {
                   <p className="font-bold">{member.hoursWorked}h</p>
                 </div>
                 <div className="p-2 bg-muted/30 rounded">
-                  <Moon className="h-4 w-4 mx-auto mb-1 text-blue-500" />
+                  <Moon className="h-4 w-4 mx-auto mb-1 text-info" />
                   <p className="text-xs text-muted-foreground">Descanso</p>
                   <p className="font-bold">{member.restHours}h</p>
                 </div>
                 <div className="p-2 bg-muted/30 rounded">
-                  <Sun className="h-4 w-4 mx-auto mb-1 text-amber-500" />
+                  <Sun className="h-4 w-4 mx-auto mb-1 text-warning" />
                   <p className="text-xs text-muted-foreground">Dias a Bordo</p>
                   <p className="font-bold">{member.daysOnboard}</p>
                 </div>
                 <div className="p-2 bg-muted/30 rounded">
-                  <Heart className="h-4 w-4 mx-auto mb-1 text-pink-500" />
+                  <Heart className="h-4 w-4 mx-auto mb-1 text-destructive" />
                   <p className="text-xs text-muted-foreground">Saúde</p>
                   <p className={`font-bold ${getHealthColor(member.healthScore)}`}>{member.healthScore}%</p>
                 </div>

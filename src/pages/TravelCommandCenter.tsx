@@ -619,7 +619,7 @@ export default function TravelCommandCenter() {
                               <DollarSign className="h-4 w-4" />
                               R$ {trip.cost.toLocaleString()}
                             </span>
-                            <span className="flex items-center gap-1 text-teal-600">
+                            <span className="flex items-center gap-1 text-success">
                               <Leaf className="h-4 w-4" />
                               {trip.carbonFootprint} kg CO₂
                             </span>
@@ -647,7 +647,7 @@ export default function TravelCommandCenter() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-green-600">R$ 4.850</p>
+                    <p className="text-2xl font-bold text-success">R$ 4.850</p>
                     <p className="text-sm text-muted-foreground">economia potencial</p>
                   </div>
                   <Button onClick={() => toast({ title: "Sugestões de IA", description: "3 oportunidades identificadas para otimização de custos" })}>

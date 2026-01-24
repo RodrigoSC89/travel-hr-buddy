@@ -385,10 +385,10 @@ const AutoSub: React.FC = () => {
                       >
                         <div className="flex justify-between items-start mb-1">
                           <Badge className={
-                            fb.type === "completion" ? "bg-green-500" :
-                              fb.type === "error" || fb.type === "abort" ? "bg-red-500" :
-                                fb.type === "warning" ? "bg-yellow-500" :
-                                  "bg-blue-500"
+                            fb.type === "completion" ? "bg-success text-success-foreground" :
+                              fb.type === "error" || fb.type === "abort" ? "bg-destructive text-destructive-foreground" :
+                                fb.type === "warning" ? "bg-warning text-warning-foreground" :
+                                  "bg-info text-info-foreground"
                           }>
                             {fb.type.toUpperCase()}
                           </Badge>

@@ -59,7 +59,7 @@ export default function DPRealtime() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wifi className="text-primary" /> DP Realtime Telemetry
-            <Badge className="ml-2 bg-emerald-100 text-emerald-700">Live</Badge>
+            <Badge className="ml-2 bg-success/10 text-success border-success/20">Live</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -69,14 +69,14 @@ export default function DPRealtime() {
               label="Thrusters Ativos" 
               value={`${telemetry.thrusters}`} 
               unit="/ 6"
-              color="text-blue-500"
+              color="text-info"
             />
             <Metric 
               icon={Activity}
               label="Potência Total" 
               value={telemetry.power.toFixed(1)} 
               unit="MW"
-              color="text-amber-500"
+              color="text-warning"
             />
             <Metric 
               icon={Compass}
@@ -115,7 +115,7 @@ export default function DPRealtime() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Wind className="h-5 w-5 text-blue-500" /> Vento
+              <Wind className="h-5 w-5 text-info" /> Vento
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -150,7 +150,7 @@ export default function DPRealtime() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Navigation className="h-5 w-5 text-cyan-500" /> Corrente
+              <Navigation className="h-5 w-5 text-info" /> Corrente
             </CardTitle>
           </CardHeader>
           <CardContent>
