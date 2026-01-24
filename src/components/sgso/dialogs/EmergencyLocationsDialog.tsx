@@ -182,28 +182,28 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                       {/* Simplified ship shape */}
                       <div className="absolute inset-x-8 inset-y-4 bg-gray-300 rounded-t-[50%] rounded-b-lg border-2 border-gray-400">
                         {/* Meeting points markers */}
-                        <div className="absolute top-1/3 left-4 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                        <div className="absolute top-1/3 left-4 w-8 h-8 bg-warning rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
                           1
                         </div>
-                        <div className="absolute top-1/3 right-4 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                        <div className="absolute top-1/3 right-4 w-8 h-8 bg-warning/70 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
                           2
                         </div>
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
                           C
                         </div>
                       </div>
                     </div>
                     <div className="flex justify-center gap-4 mt-4 text-xs">
                       <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 bg-orange-500 rounded-full" />
+                        <div className="w-4 h-4 bg-warning rounded-full" />
                         <span>Principal</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 bg-yellow-500 rounded-full" />
+                        <div className="w-4 h-4 bg-warning/70 rounded-full" />
                         <span>Secundário</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 bg-indigo-500 rounded-full" />
+                        <div className="w-4 h-4 bg-secondary rounded-full" />
                         <span>Comando</span>
                       </div>
                     </div>

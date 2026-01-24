@@ -102,8 +102,8 @@ const NautilusAssistant: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 border border-violet-500/30">
-            <Bot className="h-8 w-8 text-violet-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 border border-secondary/30">
+            <Bot className="h-8 w-8 text-secondary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Nautilus Assistant</h1>
@@ -214,8 +214,8 @@ const NautilusAssistant: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center py-12 space-y-6">
-              <div className="p-8 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-600/20 border border-violet-500/30">
-                <Mic className="h-16 w-16 text-violet-400" />
+              <div className="p-8 rounded-full bg-gradient-to-br from-secondary/20 to-accent/20 border border-secondary/30">
+                <Mic className="h-16 w-16 text-secondary" />
               </div>
               <p className="text-muted-foreground text-center max-w-md">
                 Pressione o botão do microfone e fale seu comando. O Nautilus Assistant 

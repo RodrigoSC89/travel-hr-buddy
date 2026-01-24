@@ -218,22 +218,22 @@ export default function MobilityDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Pegada CO₂</p>
                 <p className="text-2xl font-bold">{totalCarbon} kg</p>
-                <p className="text-xs text-teal-600">ESG tracking ativo</p>
+                <p className="text-xs text-success">ESG tracking ativo</p>
               </div>
-              <Leaf className="h-8 w-8 text-teal-500 opacity-80" />
+              <Leaf className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-secondary">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Check-ins Digitais</p>
                 <p className="text-2xl font-bold">89%</p>
-                <p className="text-xs text-purple-600">↑ 15% adoção</p>
+                <p className="text-xs text-secondary">↑ 15% adoção</p>
               </div>
-              <QrCode className="h-8 w-8 text-purple-500 opacity-80" />
+              <QrCode className="h-8 w-8 text-secondary opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -448,18 +448,18 @@ export default function MobilityDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Leaf className="h-5 w-5 text-teal-500" />
+            <Leaf className="h-5 w-5 text-success" />
             Relatório ESG - Pegada de Carbono
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-lg bg-teal-500/10 border border-teal-500/20">
+            <div className="p-4 rounded-lg bg-success/10 border border-success/20">
               <p className="text-sm text-muted-foreground">Emissões Aéreas</p>
               <p className="text-2xl font-bold">1.2 ton</p>
               <Progress value={60} className="mt-2 h-2" />
             </div>
-            <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
               <p className="text-sm text-muted-foreground">Transporte Terrestre</p>
               <p className="text-2xl font-bold">0.3 ton</p>
               <Progress value={25} className="mt-2 h-2" />

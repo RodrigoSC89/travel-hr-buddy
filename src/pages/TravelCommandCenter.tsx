@@ -662,28 +662,28 @@ export default function TravelCommandCenter() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Leaf className="h-5 w-5 text-teal-500" />
+                  <Leaf className="h-5 w-5 text-success" />
                   Relatório ESG - Pegada de Carbono
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="p-4 rounded-lg bg-teal-500/10 border border-teal-500/20">
+                  <div className="p-4 rounded-lg bg-success/10 border border-success/20">
                     <p className="text-sm text-muted-foreground">Emissões Aéreas</p>
                     <p className="text-2xl font-bold">{totalCarbon} kg</p>
                     <Progress value={65} className="mt-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
                     <p className="text-sm text-muted-foreground">Transporte Terrestre</p>
                     <p className="text-2xl font-bold">45 kg</p>
                     <Progress value={30} className="mt-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="p-4 rounded-lg bg-success/10 border border-success/20">
                     <p className="text-sm text-muted-foreground">Compensação</p>
                     <p className="text-2xl font-bold">120 kg</p>
                     <Progress value={80} className="mt-2" />
                   </div>
-                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
                     <p className="text-sm text-muted-foreground">Meta Mensal</p>
                     <p className="text-2xl font-bold">78%</p>
                     <Progress value={78} className="mt-2" />

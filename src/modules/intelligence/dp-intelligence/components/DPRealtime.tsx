@@ -97,14 +97,14 @@ export default function DPRealtime() {
               label="Roll" 
               value={telemetry.roll.toFixed(2)} 
               unit="°"
-              color="text-pink-500"
+              color="text-accent"
             />
             <Metric 
               icon={Waves}
               label="Heave" 
               value={telemetry.heave.toFixed(2)} 
               unit="m"
-              color="text-indigo-500"
+              color="text-secondary"
             />
           </div>
         </CardContent>
@@ -181,7 +181,7 @@ export default function DPRealtime() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Waves className="h-5 w-5 text-indigo-500" /> Ondas
+              <Waves className="h-5 w-5 text-secondary" /> Ondas
             </CardTitle>
           </CardHeader>
           <CardContent>
