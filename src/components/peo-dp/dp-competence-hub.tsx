@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useDPCompetence } from "@/hooks/useCrewData";
 import {
   GraduationCap,
   Award,
@@ -38,7 +39,7 @@ import {
 interface CrewMember {
   id: string;
   name: string;
-  role: "DPO" | "SDPO" | "JDPO" | "C/E" | "ETO" | "Master";
+  role: "DPO" | "SDPO" | "JDPO" | "C/E" | "ETO" | "Master" | string;
   vessel: string;
   dpHours: number;
   targetDpHours: number;
@@ -53,11 +54,11 @@ interface CrewMember {
 interface Certification {
   id: string;
   name: string;
-  issuer: "NI" | "IMCA" | "STCW" | "DNV";
+  issuer: "NI" | "IMCA" | "STCW" | "DNV" | string;
   issueDate: string;
   expiryDate: string;
   status: "valid" | "expiring" | "expired";
-  type: "Induction" | "Simulator" | "Refresher" | "Advanced" | "Unlimited";
+  type: "Induction" | "Simulator" | "Refresher" | "Advanced" | "Unlimited" | string;
 }
 
 interface Training {
@@ -81,68 +82,8 @@ interface Assessment {
   passScore: number;
 }
 
-const mockCrewMembers: CrewMember[] = [
-  {
-    id: "CREW-001",
-    name: "João Silva",
-    role: "SDPO",
-    vessel: "MV Atlantic Explorer",
-    dpHours: 4500,
-    targetDpHours: 5000,
-    cpdScore: 85,
-    mentoringStatus: "mentor",
-    certifications: [
-      { id: "CERT-001", name: "NI DP Unlimited Certificate", issuer: "NI", issueDate: "2022-03-15", expiryDate: "2027-03-15", status: "valid", type: "Unlimited" },
-      { id: "CERT-002", name: "DP Simulator Course", issuer: "NI", issueDate: "2023-06-20", expiryDate: "2025-06-20", status: "expiring", type: "Simulator" },
-      { id: "CERT-003", name: "STCW Basic Safety", issuer: "STCW", issueDate: "2021-01-10", expiryDate: "2026-01-10", status: "valid", type: "Induction" }
-    ],
-    trainings: [
-      { id: "TRN-001", name: "Fault Response Avançado", type: "simulator", status: "completed", completedDate: "2024-11-15", score: 92, passScore: 80 },
-      { id: "TRN-002", name: "TAM/CAM Procedures", type: "online", status: "completed", completedDate: "2024-10-20", score: 88, passScore: 75 },
-      { id: "TRN-003", name: "ASOG Review 2024", type: "assessment", status: "pending", dueDate: "2024-12-31", passScore: 80 }
-    ]
-  },
-  {
-    id: "CREW-002",
-    name: "Maria Santos",
-    role: "JDPO",
-    vessel: "MV Atlantic Explorer",
-    dpHours: 1200,
-    targetDpHours: 2500,
-    cpdScore: 72,
-    mentoringStatus: "mentee",
-    mentorId: "CREW-001",
-    certifications: [
-      { id: "CERT-004", name: "NI DP Induction", issuer: "NI", issueDate: "2023-08-01", expiryDate: "2024-08-01", status: "expired", type: "Induction" },
-      { id: "CERT-005", name: "DP Simulator Course", issuer: "NI", issueDate: "2023-09-15", expiryDate: "2025-09-15", status: "valid", type: "Simulator" }
-    ],
-    trainings: [
-      { id: "TRN-004", name: "DP Fundamentals", type: "online", status: "completed", completedDate: "2024-09-10", score: 85, passScore: 70 },
-      { id: "TRN-005", name: "Gain & Bias Configuration", type: "simulator", status: "in_progress", dueDate: "2024-12-15", passScore: 80 },
-      { id: "TRN-006", name: "Emergency Procedures", type: "practical", status: "overdue", dueDate: "2024-11-30", passScore: 85 }
-    ]
-  },
-  {
-    id: "CREW-003",
-    name: "Carlos Eduardo",
-    role: "DPO",
-    vessel: "OSV Petrobras XXI",
-    dpHours: 3200,
-    targetDpHours: 4000,
-    cpdScore: 78,
-    mentoringStatus: null,
-    certifications: [
-      { id: "CERT-006", name: "NI DP Certificate", issuer: "NI", issueDate: "2021-05-20", expiryDate: "2026-05-20", status: "valid", type: "Advanced" },
-      { id: "CERT-007", name: "DP Refresher", issuer: "NI", issueDate: "2024-02-10", expiryDate: "2025-02-10", status: "expiring", type: "Refresher" }
-    ],
-    trainings: [
-      { id: "TRN-007", name: "WCF Analysis", type: "online", status: "completed", completedDate: "2024-08-05", score: 90, passScore: 75 },
-      { id: "TRN-008", name: "SIMOPS Procedures", type: "assessment", status: "pending", dueDate: "2025-01-15", passScore: 80 }
-    ]
-  }
-];
-
-const mockAssessments: Assessment[] = [
+// Static assessments - could be moved to database
+const defaultAssessments: Assessment[] = [
   { id: "ASS-001", name: "Fault Response Básico", type: "fault_response", difficulty: "basic", duration: 30, questions: 20, passScore: 70 },
   { id: "ASS-002", name: "TAM/CAM Procedures", type: "tam_cam", difficulty: "intermediate", duration: 45, questions: 30, passScore: 75 },
   { id: "ASS-003", name: "Gain & Bias Configuration", type: "gain_bias", difficulty: "intermediate", duration: 40, questions: 25, passScore: 80 },
@@ -151,12 +92,28 @@ const mockAssessments: Assessment[] = [
 ];
 
 export const DPCompetenceHub: React.FC = () => {
-  const [crewMembers] = useState<CrewMember[]>(mockCrewMembers);
-  const [assessments] = useState<Assessment[]>(mockAssessments);
+  // Fetch real crew data from Supabase
+  const { data: dpCrewData, isLoading } = useDPCompetence();
+  
+  const [assessments] = useState<Assessment[]>(defaultAssessments);
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("cpd");
+
+  // Transform Supabase data to component format
+  const crewMembers: CrewMember[] = (dpCrewData || []).map(crew => ({
+    id: crew.id,
+    name: crew.name,
+    role: crew.role as CrewMember['role'],
+    vessel: crew.vessel,
+    dpHours: crew.dpHours,
+    targetDpHours: crew.targetDpHours,
+    cpdScore: crew.cpdScore,
+    mentoringStatus: crew.mentoringStatus as CrewMember['mentoringStatus'],
+    certifications: crew.certifications as Certification[],
+    trainings: crew.trainings as Training[]
+  }));
 
   const filteredMembers = crewMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -179,8 +136,8 @@ export const DPCompetenceHub: React.FC = () => {
 
   const getCertStatusBadge = (status: string) => {
     switch (status) {
-      case "valid": return <Badge className="bg-green-500">Válido</Badge>;
-      case "expiring": return <Badge className="bg-yellow-500 text-black">Vencendo</Badge>;
+      case "valid": return <Badge className="bg-success text-success-foreground">Válido</Badge>;
+      case "expiring": return <Badge className="bg-warning text-warning-foreground">Vencendo</Badge>;
       case "expired": return <Badge variant="destructive">Expirado</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }
@@ -188,9 +145,9 @@ export const DPCompetenceHub: React.FC = () => {
 
   const getTrainingStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-green-500">Concluído</Badge>;
-      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
-      case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
+      case "completed": return <Badge className="bg-success text-success-foreground">Concluído</Badge>;
+      case "in_progress": return <Badge className="bg-info text-info-foreground">Em Progresso</Badge>;
+      case "pending": return <Badge className="bg-warning text-warning-foreground">Pendente</Badge>;
       case "overdue": return <Badge variant="destructive">Atrasado</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
     }

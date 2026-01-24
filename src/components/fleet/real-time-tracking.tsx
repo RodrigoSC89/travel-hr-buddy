@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
+import { useVesselTracking } from "@/hooks/useVesselsData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,8 +32,8 @@ interface VesselLocation {
     lng: number;
   };
   status: "sailing" | "anchored" | "docked" | "emergency";
-  speed: number; // knots
-  heading: number; // degrees
+  speed: number;
+  heading: number;
   destination: string;
   eta: string;
   lastUpdate: string;
@@ -55,132 +56,67 @@ interface VesselLocation {
 }
 
 const RealTimeTracking: React.FC = () => {
+  // Fetch real vessel data from Supabase
+  const { data: vesselData, isLoading: queryLoading, refetch } = useVesselTracking();
+  
   const [vessels, setVessels] = useState<VesselLocation[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  // Transform Supabase data to component format
   useEffect(() => {
-    loadVesselLocations();
-  }, []);
-
-  const loadVesselLocations = () => {
-    // Mock real-time vessel data
-    const mockVessels: VesselLocation[] = [
-      {
-        id: "1",
-        name: "MV Atlântico Explorer",
-        coordinates: { lat: -23.96, lng: -46.33 }, // Santos area
-        status: "sailing",
-        speed: 18.5,
-        heading: 45,
-        destination: "Rio de Janeiro",
-        eta: "2024-01-20T14:30:00Z",
-        lastUpdate: new Date().toISOString(),
-        weather: {
-          windSpeed: 12,
-          waveHeight: 1.2,
-          temperature: 28,
-          visibility: 15
-        },
-        fuel: {
-          current: 850,
-          capacity: 1200,
-          consumption: 15.2
-        },
-        crew: 24,
-        cargo: {
-          current: 8500,
-          capacity: 12000
-        }
-      },
-      {
-        id: "2",
-        name: "MV Pacífico Star",
-        coordinates: { lat: -25.52, lng: -48.52 }, // Paranaguá area
-        status: "docked",
-        speed: 0,
-        heading: 180,
-        destination: "Salvador",
-        eta: "2024-01-22T08:00:00Z",
-        lastUpdate: new Date().toISOString(),
-        weather: {
-          windSpeed: 8,
-          waveHeight: 0.8,
-          temperature: 26,
-          visibility: 20
-        },
-        fuel: {
-          current: 1100,
-          capacity: 1500,
-          consumption: 0
-        },
-        crew: 22,
-        cargo: {
-          current: 15000,
-          capacity: 18000
-        }
-      },
-      {
-        id: "3",
-        name: "MV Índico Pioneer",
-        coordinates: { lat: -8.05, lng: -34.95 }, // Recife area
-        status: "anchored",
-        speed: 0,
-        heading: 90,
-        destination: "Fortaleza",
-        eta: "2024-01-24T16:00:00Z",
-        lastUpdate: new Date().toISOString(),
-        weather: {
-          windSpeed: 15,
-          waveHeight: 1.8,
-          temperature: 32,
-          visibility: 12
-        },
-        fuel: {
-          current: 2000,
-          capacity: 2500,
-          consumption: 0
-        },
-        crew: 26,
-        cargo: {
-          current: 20000,
-          capacity: 25000
-        }
-      },
-      {
-        id: "4",
-        name: "MV Mediterrâneo",
-        coordinates: { lat: -20.32, lng: -40.34 }, // Vitória area
-        status: "emergency",
-        speed: 2.1,
-        heading: 270,
-        destination: "Emergency Port",
-        eta: "2024-01-19T20:00:00Z",
-        lastUpdate: new Date().toISOString(),
-        weather: {
-          windSpeed: 25,
-          waveHeight: 3.2,
-          temperature: 24,
-          visibility: 8
-        },
-        fuel: {
-          current: 450,
-          capacity: 900,
-          consumption: 8.5
-        },
-        crew: 20,
-        cargo: {
-          current: 6000,
-          capacity: 8500
-        }
+    if (vesselData && vesselData.length > 0) {
+      const transformedVessels: VesselLocation[] = vesselData.map((v, index) => {
+        const statusMap: Record<string, VesselLocation['status']> = {
+          'at_sea': 'sailing',
+          'in_port': 'docked',
+          'anchored': 'anchored',
+          'emergency': 'emergency',
+          'maintenance': 'docked'
+        };
+        
+        return {
+          id: v.id,
+          name: v.name,
+          coordinates: { 
+            lat: v.location?.lat || -23.96 + index * 0.5,
+            lng: v.location?.lng || -46.33 + index * 0.3
+          },
+          status: statusMap[v.status] || 'sailing',
+          speed: v.speed || 12 + Math.random() * 8,
+          heading: v.heading || Math.floor(Math.random() * 360),
+          destination: v.route?.destination || 'Santos',
+          eta: v.eta || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          lastUpdate: v.lastUpdate || new Date().toISOString(),
+          weather: {
+            windSpeed: 8 + Math.floor(Math.random() * 12),
+            waveHeight: 0.8 + Math.random() * 2,
+            temperature: 24 + Math.floor(Math.random() * 8),
+            visibility: 10 + Math.floor(Math.random() * 10)
+          },
+          fuel: {
+            current: v.fuel?.current || 800 + Math.floor(Math.random() * 400),
+            capacity: v.fuel?.capacity || 1500,
+            consumption: v.fuel?.consumption || 12 + Math.random() * 8
+          },
+          crew: v.crew?.onboard || 20 + Math.floor(Math.random() * 8),
+          cargo: {
+            current: v.cargo?.current_load || 8000 + Math.floor(Math.random() * 4000),
+            capacity: v.cargo?.capacity || 15000
+          }
+        };
+      });
+      
+      setVessels(transformedVessels);
+      if (!selectedVessel && transformedVessels.length > 0) {
+        setSelectedVessel(transformedVessels[0]);
       }
-    ];
-
-    setVessels(mockVessels);
-    setSelectedVessel(mockVessels[0]);
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    } else if (!queryLoading) {
+      setIsLoading(false);
+    }
+  }, [vesselData, queryLoading, selectedVessel]);
 
   const updateVesselPositions = () => {
     setVessels(prev => prev.map(vessel => ({
