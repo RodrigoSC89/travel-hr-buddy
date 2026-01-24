@@ -187,7 +187,7 @@ const SonarAI: React.FC = () => {
           </div>
           <div className="flex items-center gap-3">
             {isScanning && (
-              <Badge className="bg-cyan-500 animate-pulse">
+              <Badge className="bg-info animate-pulse">
                 SCANNING
               </Badge>
             )}
@@ -202,10 +202,10 @@ const SonarAI: React.FC = () => {
         {/* Quick Stats */}
         {analysis && riskAssessment && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="bg-zinc-800/50 border-cyan-500/30">
+            <Card className="bg-muted/50 border-info/30">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="w-4 h-4 text-cyan-400" />
+                  <TrendingUp className="w-4 h-4 text-info" />
                   <span className="text-xs text-zinc-400">Quality Score</span>
                 </div>
                 <div className="text-2xl font-bold text-cyan-400">
@@ -299,7 +299,7 @@ const SonarAI: React.FC = () => {
                 <Button
                   onClick={performScan}
                   disabled={isScanning || autoScan}
-                  className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+                  className="flex-1 bg-info hover:bg-info/90"
                 >
                   {isScanning ? (
                     <>

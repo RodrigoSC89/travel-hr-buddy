@@ -145,15 +145,15 @@ export function TelemetryTideChart({
           <div className={cn(
             "p-4 rounded-lg border-2",
             nextTide.type === 'high' 
-              ? "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800" 
-              : "bg-cyan-50 border-cyan-200 dark:bg-cyan-900/20 dark:border-cyan-800"
+              ? "bg-primary/10 border-primary/30 dark:bg-primary/20 dark:border-primary/40" 
+              : "bg-info/10 border-info/30 dark:bg-info/20 dark:border-info/40"
           )}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {nextTide.type === 'high' ? (
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
+                  <TrendingUp className="h-8 w-8 text-primary" />
                 ) : (
-                  <TrendingDown className="h-8 w-8 text-cyan-600" />
+                  <TrendingDown className="h-8 w-8 text-info" />
                 )}
                 <div>
                   <p className="text-sm text-muted-foreground">Próxima Maré</p>
@@ -188,8 +188,8 @@ export function TelemetryTideChart({
                     className={cn(
                       "w-16 justify-center",
                       tide.type === 'high' 
-                        ? "bg-blue-500 hover:bg-blue-600" 
-                        : "bg-cyan-500 hover:bg-cyan-600 text-white"
+                        ? "bg-primary hover:bg-primary/90" 
+                        : "bg-info hover:bg-info/90 text-white"
                     )}
                   >
                     {tide.type === 'high' ? 'Alta' : 'Baixa'}

@@ -170,16 +170,16 @@ export function ESGDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="border-cyan-500/30 bg-cyan-500/5">
+          <Card className="border-info/30 bg-info/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-cyan-500/20">
-                  <Droplets className="h-6 w-6 text-cyan-500" />
+                <div className="p-3 rounded-full bg-info/20">
+                  <Droplets className="h-6 w-6 text-info" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Água Tratada</p>
                   <p className="text-2xl font-bold">100%</p>
-                  <p className="text-xs text-cyan-500">IMO compliant</p>
+                  <p className="text-xs text-info">IMO compliant</p>
                 </div>
               </div>
             </CardContent>
@@ -191,7 +191,7 @@ export function ESGDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="border-purple-500/30 bg-purple-500/5">
+          <Card className="border-secondary/30 bg-secondary/5">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-full bg-purple-500/20">

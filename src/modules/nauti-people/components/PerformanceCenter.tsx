@@ -203,15 +203,15 @@ const PerformanceCenter: React.FC = () => {
   };
 
   const nineBoxGrid = [
-    { row: 0, col: 0, label: 'Enigma', performance: 'low', potential: 'high', color: 'bg-yellow-500/20' },
-    { row: 0, col: 1, label: 'Potencial Crescente', performance: 'medium', potential: 'high', color: 'bg-blue-500/20' },
-    { row: 0, col: 2, label: 'Estrela', performance: 'high', potential: 'high', color: 'bg-green-500/20' },
-    { row: 1, col: 0, label: 'Questionável', performance: 'low', potential: 'medium', color: 'bg-orange-500/20' },
-    { row: 1, col: 1, label: 'Profissional Chave', performance: 'medium', potential: 'medium', color: 'bg-purple-500/20' },
-    { row: 1, col: 2, label: 'Alto Performer', performance: 'high', potential: 'medium', color: 'bg-teal-500/20' },
-    { row: 2, col: 0, label: 'Em Risco', performance: 'low', potential: 'low', color: 'bg-red-500/20' },
-    { row: 2, col: 1, label: 'Eficiente', performance: 'medium', potential: 'low', color: 'bg-gray-500/20' },
-    { row: 2, col: 2, label: 'Especialista', performance: 'high', potential: 'low', color: 'bg-indigo-500/20' },
+    { row: 0, col: 0, label: 'Enigma', performance: 'low', potential: 'high', color: 'bg-warning/20' },
+    { row: 0, col: 1, label: 'Potencial Crescente', performance: 'medium', potential: 'high', color: 'bg-primary/20' },
+    { row: 0, col: 2, label: 'Estrela', performance: 'high', potential: 'high', color: 'bg-success/20' },
+    { row: 1, col: 0, label: 'Questionável', performance: 'low', potential: 'medium', color: 'bg-warning/30' },
+    { row: 1, col: 1, label: 'Profissional Chave', performance: 'medium', potential: 'medium', color: 'bg-secondary/20' },
+    { row: 1, col: 2, label: 'Alto Performer', performance: 'high', potential: 'medium', color: 'bg-info/20' },
+    { row: 2, col: 0, label: 'Em Risco', performance: 'low', potential: 'low', color: 'bg-destructive/20' },
+    { row: 2, col: 1, label: 'Eficiente', performance: 'medium', potential: 'low', color: 'bg-muted/50' },
+    { row: 2, col: 2, label: 'Especialista', performance: 'high', potential: 'low', color: 'bg-accent/20' },
   ];
 
   const getCollaboratorsInBox = (performance: string, potential: string): NineBoxPosition[] => {
