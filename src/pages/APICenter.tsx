@@ -148,9 +148,9 @@ export default function APICenter() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30"><CheckCircle2 className="h-3 w-3 mr-1" />Ativo</Badge>;
-      case "degraded": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30"><AlertTriangle className="h-3 w-3 mr-1" />Degradado</Badge>;
-      case "error": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30"><XCircle className="h-3 w-3 mr-1" />Erro</Badge>;
+      case "active": return <Badge className="bg-success/20 text-success border-success/30"><CheckCircle2 className="h-3 w-3 mr-1" />Ativo</Badge>;
+      case "degraded": return <Badge className="bg-warning/20 text-warning border-warning/30"><AlertTriangle className="h-3 w-3 mr-1" />Degradado</Badge>;
+      case "error": return <Badge className="bg-destructive/20 text-destructive border-destructive/30"><XCircle className="h-3 w-3 mr-1" />Erro</Badge>;
       default: return <Badge variant="outline">Inativo</Badge>;
     }
   };

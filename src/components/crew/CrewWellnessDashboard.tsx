@@ -183,26 +183,26 @@ export function CrewWellnessDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-emerald-500/50">
+        <Card className="border-success/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Saudáveis</p>
-                <p className="text-2xl font-bold text-emerald-500">{stats.healthy}</p>
+                <p className="text-2xl font-bold text-success">{stats.healthy}</p>
               </div>
-              <Heart className="h-8 w-8 text-emerald-500" />
+              <Heart className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-500/50">
+        <Card className="border-warning/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Risco</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.atRisk}</p>
+                <p className="text-2xl font-bold text-warning">{stats.atRisk}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -232,8 +232,8 @@ export function CrewWellnessDashboard() {
               value={avgWellness} 
               className={cn(
                 "h-3",
-                avgWellness >= 70 ? "[&>div]:bg-emerald-500" :
-                avgWellness >= 50 ? "[&>div]:bg-amber-500" :
+                avgWellness >= 70 ? "[&>div]:bg-success" :
+                avgWellness >= 50 ? "[&>div]:bg-warning" :
                 "[&>div]:bg-destructive"
               )}
             />
@@ -250,8 +250,8 @@ export function CrewWellnessDashboard() {
               value={avgBurnoutRisk} 
               className={cn(
                 "h-3",
-                avgBurnoutRisk <= 30 ? "[&>div]:bg-emerald-500" :
-                avgBurnoutRisk <= 50 ? "[&>div]:bg-amber-500" :
+                avgBurnoutRisk <= 30 ? "[&>div]:bg-success" :
+                avgBurnoutRisk <= 50 ? "[&>div]:bg-warning" :
                 "[&>div]:bg-destructive"
               )}
             />
@@ -322,8 +322,8 @@ export function CrewWellnessDashboard() {
                           <span className={cn(
                             "font-bold",
                             member.burnoutRisk > 60 ? "text-destructive" :
-                            member.burnoutRisk > 40 ? "text-amber-500" :
-                            "text-emerald-500"
+                            member.burnoutRisk > 40 ? "text-warning" :
+                            "text-success"
                           )}>
                             {member.burnoutRisk}%
                           </span>
@@ -361,7 +361,7 @@ export function CrewWellnessDashboard() {
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="p-3 bg-muted rounded-lg text-center">
-                    <Heart className="h-5 w-5 mx-auto mb-1 text-rose-500" />
+                    <Heart className="h-5 w-5 mx-auto mb-1 text-destructive" />
                     <p className="font-bold">{selectedMember.wellnessScore}%</p>
                     <p className="text-xs text-muted-foreground">Wellness</p>
                   </div>
