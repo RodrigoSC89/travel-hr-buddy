@@ -16,9 +16,11 @@ import {
   Wifi,
   Battery,
   Waves,
-  Settings
+  Settings,
+  Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useVesselSensors } from "@/hooks/useVesselsData";
 
 interface SensorReading {
   id: string;
@@ -39,15 +41,37 @@ interface VesselSensors {
 }
 
 export const IoTSensorDashboard = () => {
-  const [vessels, setVessels] = useState<VesselSensors[]>([]);
+  // Use real vessel sensor data from Supabase
+  const { data: vesselSensorData = [], isLoading } = useVesselSensors();
+  
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Transform hook data to local interface
+  const vessels: VesselSensors[] = vesselSensorData.map(v => ({
+    vesselId: v.vesselId,
+    vesselName: v.vesselName,
+    sensors: v.sensors.map(s => ({
+      id: s.id,
+      sensorType: s.sensorType,
+      value: s.value,
+      unit: s.unit,
+      timestamp: s.timestamp,
+      status: s.status,
+      location: s.location
+    })),
+    lastUpdate: v.lastUpdate,
+    connectionStatus: v.connectionStatus
+  }));
+
   useEffect(() => {
-    loadSensorData();
-    
+    if (vessels.length > 0 && !selectedVessel) {
+      setSelectedVessel(vessels[0].vesselId);
+    }
+  }, [vessels.length]);
+
+  useEffect(() => {
     // Set up real-time sensor updates with cleanup tracking
     intervalRef.current = setInterval(() => {
       simulateSensorUpdates();
@@ -61,145 +85,34 @@ export const IoTSensorDashboard = () => {
     };
   }, []);
 
-  const loadSensorData = () => {
-    // Mock sensor data - in real implementation, this would come from IoT sensors
-    const mockData: VesselSensors[] = [
-      {
-        vesselId: "1",
-        vesselName: "MV Atlantic Explorer",
-        lastUpdate: new Date(),
-        connectionStatus: "online",
-        sensors: [
-          {
-            id: "temp_001",
-            sensorType: "engine_temperature",
-            value: 78,
-            unit: "°C",
-            timestamp: new Date(),
-            status: "normal",
-            location: "Motor Principal"
-          },
-          {
-            id: "vib_001",
-            sensorType: "vibration",
-            value: 3.2,
-            unit: "mm/s",
-            timestamp: new Date(),
-            status: "normal",
-            location: "Eixo Principal"
-          },
-          {
-            id: "fuel_001",
-            sensorType: "fuel_level",
-            value: 75,
-            unit: "%",
-            timestamp: new Date(),
-            status: "normal",
-            location: "Tanque Principal"
-          },
-          {
-            id: "oil_001",
-            sensorType: "oil_pressure",
-            value: 3.8,
-            unit: "bar",
-            timestamp: new Date(),
-            status: "normal",
-            location: "Sistema de Lubrificação"
-          },
-          {
-            id: "bat_001",
-            sensorType: "battery_voltage",
-            value: 12.6,
-            unit: "V",
-            timestamp: new Date(),
-            status: "normal",
-            location: "Bateria Principal"
-          }
-        ]
-      },
-      {
-        vesselId: "2",
-        vesselName: "MV Pacific Navigator",
-        lastUpdate: new Date(Date.now() - 120000), // 2 minutes ago
-        connectionStatus: "unstable",
-        sensors: [
-          {
-            id: "temp_002",
-            sensorType: "engine_temperature",
-            value: 92,
-            unit: "°C",
-            timestamp: new Date(),
-            status: "warning",
-            location: "Motor Principal"
-          },
-          {
-            id: "vib_002",
-            sensorType: "vibration",
-            value: 6.1,
-            unit: "mm/s",
-            timestamp: new Date(),
-            status: "warning",
-            location: "Eixo Principal"
-          },
-          {
-            id: "fuel_002",
-            sensorType: "fuel_level",
-            value: 15,
-            unit: "%",
-            timestamp: new Date(),
-            status: "critical",
-            location: "Tanque Principal"
-          }
-        ]
-      }
-    ];
-
-    setVessels(mockData);
-    setSelectedVessel(mockData[0].vesselId);
-    setLoading(false);
-  };
-
   const simulateSensorUpdates = () => {
-    setVessels(prev => prev.map(vessel => ({
-      ...vessel,
-      lastUpdate: new Date(),
-      sensors: vessel.sensors.map(sensor => {
-        // Simulate realistic sensor value changes
-        let newValue = sensor.value;
-        let newStatus = sensor.status;
-        
-        switch (sensor.sensorType) {
-        case "engine_temperature":
-          newValue = Math.max(60, Math.min(100, sensor.value + (Math.random() - 0.5) * 4));
-          newStatus = newValue > 85 ? "warning" : newValue > 95 ? "critical" : "normal";
-          break;
-        case "vibration":
-          newValue = Math.max(0, Math.min(10, sensor.value + (Math.random() - 0.5) * 1));
-          newStatus = newValue > 5 ? "warning" : newValue > 8 ? "critical" : "normal";
-          break;
-        case "fuel_level":
-          newValue = Math.max(0, sensor.value - Math.random() * 0.5);
-          newStatus = newValue < 20 ? "warning" : newValue < 10 ? "critical" : "normal";
-          break;
-        case "oil_pressure":
-          newValue = Math.max(1, Math.min(5, sensor.value + (Math.random() - 0.5) * 0.3));
-          newStatus = newValue < 2.5 ? "warning" : newValue < 1.5 ? "critical" : "normal";
-          break;
-        case "battery_voltage":
-          newValue = Math.max(10, Math.min(14, sensor.value + (Math.random() - 0.5) * 0.2));
-          newStatus = newValue < 12 ? "warning" : newValue < 11.5 ? "critical" : "normal";
-          break;
-        }
-
-        return {
-          ...sensor,
-          value: Number(newValue.toFixed(1)),
-          status: newStatus,
-          timestamp: new Date()
-        };
-      })
-    })));
+    // Only simulate updates if we have vessel data
+    if (vessels.length === 0) return;
+    
+    // Update alerts based on sensor status
+    const criticalSensors = vessels.flatMap(v => 
+      v.sensors.filter(s => s.status === 'critical')
+    );
+    
+    if (criticalSensors.length > 0) {
+      setAlerts(criticalSensors.map(s => ({
+        id: s.id,
+        type: 'critical',
+        message: `Alerta: ${s.sensorType} em ${s.location}`,
+        value: s.value,
+        unit: s.unit
+      })));
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando sensores IoT...</span>
+      </div>
+    );
+  }
 
   const processSensorData = async (vesselId: string, sensorData: any) => {
     try {
@@ -262,7 +175,7 @@ export const IoTSensorDashboard = () => {
 
   const selectedVesselData = vessels.find(v => v.vesselId === selectedVessel);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
