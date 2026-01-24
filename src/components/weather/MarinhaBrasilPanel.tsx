@@ -327,21 +327,21 @@ export function MarinhaBrasilPanel({ lat, lon, region, compact = false }: Marinh
                 </Card>
                 <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10">
                   <CardContent className="pt-4 text-center">
-                    <Waves className="h-8 w-8 mx-auto mb-2 text-cyan-500" />
+                    <Waves className="h-8 w-8 mx-auto mb-2 text-info" />
                     <p className="text-2xl font-bold">{data.ondas.maxima}m</p>
                     <p className="text-xs text-muted-foreground">Altura Máxima</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+                <Card className="bg-gradient-to-br from-primary/10 to-secondary/10">
                   <CardContent className="pt-4 text-center">
-                    <Clock className="h-8 w-8 mx-auto mb-2 text-indigo-500" />
+                    <Clock className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <p className="text-2xl font-bold">{data.ondas.periodo}s</p>
                     <p className="text-xs text-muted-foreground">Período</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-teal-500/10 to-green-500/10">
+                <Card className="bg-gradient-to-br from-info/10 to-success/10">
                   <CardContent className="pt-4 text-center">
-                    <div className="h-8 w-8 mx-auto mb-2 flex items-center justify-center text-teal-500 font-bold">
+                    <div className="h-8 w-8 mx-auto mb-2 flex items-center justify-center text-info font-bold">
                       {data.ondas.direcao}
                     </div>
                     <p className="text-2xl font-bold">{data.ondas.temperatura}°C</p>

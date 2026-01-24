@@ -714,13 +714,13 @@ export default function MentorDPProfessional() {
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
-                        module.category === "fundamentals" ? "bg-blue-500/10 text-blue-500" :
-                        module.category === "sensors" ? "bg-purple-500/10 text-purple-500" :
-                        module.category === "thrusters" ? "bg-green-500/10 text-green-500" :
-                        module.category === "redundancy" ? "bg-amber-500/10 text-amber-500" :
-                        module.category === "operations" ? "bg-cyan-500/10 text-cyan-500" :
-                        module.category === "emergency" ? "bg-red-500/10 text-red-500" :
-                        "bg-gray-500/10 text-gray-500"
+                        module.category === "fundamentals" ? "bg-primary/10 text-primary" :
+                        module.category === "sensors" ? "bg-secondary/10 text-secondary" :
+                        module.category === "thrusters" ? "bg-success/10 text-success" :
+                        module.category === "redundancy" ? "bg-warning/10 text-warning" :
+                        module.category === "operations" ? "bg-info/10 text-info" :
+                        module.category === "emergency" ? "bg-destructive/10 text-destructive" :
+                        "bg-muted/10 text-muted-foreground"
                       }`}>
                         {module.icon}
                       </div>

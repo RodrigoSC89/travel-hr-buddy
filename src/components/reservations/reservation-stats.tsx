@@ -81,8 +81,8 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
       title: "Tripulantes",
       value: uniqueCrewMembers,
       icon: Users,
-      color: "text-indigo-600",
-      bgColor: "bg-indigo-100 dark:bg-indigo-900/30"
+      color: "text-primary",
+      bgColor: "bg-primary/10 dark:bg-primary/20"
     },
     {
       title: "Canceladas",

@@ -529,11 +529,11 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
   const navigate = useNavigate();
   
   const colorClasses = {
-    blue: 'text-blue-500 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50',
-    green: 'text-green-500 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50',
-    orange: 'text-orange-500 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50',
-    purple: 'text-purple-500 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50',
-    cyan: 'text-cyan-500 bg-cyan-100 dark:bg-cyan-900/30 hover:bg-cyan-200 dark:hover:bg-cyan-900/50'
+    blue: 'text-primary bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30',
+    green: 'text-success bg-success/10 dark:bg-success/20 hover:bg-success/20 dark:hover:bg-success/30',
+    orange: 'text-warning bg-warning/10 dark:bg-warning/20 hover:bg-warning/20 dark:hover:bg-warning/30',
+    purple: 'text-secondary bg-secondary/10 dark:bg-secondary/20 hover:bg-secondary/20 dark:hover:bg-secondary/30',
+    cyan: 'text-info bg-info/10 dark:bg-info/20 hover:bg-info/20 dark:hover:bg-info/30'
   };
 
   return (

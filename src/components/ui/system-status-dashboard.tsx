@@ -98,11 +98,11 @@ const SystemStatusDashboard = () => {
 
   const getIconColor = (color: string) => {
     const iconColors = {
-      green: "bg-green-100 text-green-600",
-      blue: "bg-blue-100 text-blue-600",
-      orange: "bg-orange-100 text-orange-600",
-      cyan: "bg-cyan-100 text-cyan-600",
-      purple: "bg-purple-100 text-purple-600"
+      green: "bg-success/10 text-success",
+      blue: "bg-primary/10 text-primary",
+      orange: "bg-warning/10 text-warning",
+      cyan: "bg-info/10 text-info",
+      purple: "bg-secondary/10 text-secondary"
     };
     return iconColors[color as keyof typeof iconColors] || iconColors.blue;
   };

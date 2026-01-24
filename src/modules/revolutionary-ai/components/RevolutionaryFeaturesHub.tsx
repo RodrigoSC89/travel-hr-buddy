@@ -101,7 +101,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Wrench,
     status: "active",
     progress: 82,
-    color: "from-teal-500 to-cyan-600",
+    color: "from-info to-primary",
     description: "Infraestrutura que detecta e corrige problemas automaticamente",
     stats: { uptime: "99.99%", mttr: "36s", prevented: "847" },
     component: "selfhealing"

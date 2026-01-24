@@ -139,12 +139,12 @@ const mockZones: SimopsZone[] = [
 ];
 
 const operationTypeConfig = {
-  ROV: { icon: Target, color: "bg-blue-500" },
-  Diving: { icon: Users, color: "bg-purple-500" },
-  Crane: { icon: Anchor, color: "bg-yellow-500" },
-  Offloading: { icon: Ship, color: "bg-orange-500" },
-  Anchor: { icon: Anchor, color: "bg-green-500" },
-  Survey: { icon: MapPin, color: "bg-cyan-500" }
+  ROV: { icon: Target, color: "bg-primary" },
+  Diving: { icon: Users, color: "bg-secondary" },
+  Crane: { icon: Anchor, color: "bg-warning" },
+  Offloading: { icon: Ship, color: "bg-warning" },
+  Anchor: { icon: Anchor, color: "bg-success" },
+  Survey: { icon: MapPin, color: "bg-info" }
 };
 
 export const SIMOPSManager: React.FC = () => {

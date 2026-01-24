@@ -186,12 +186,12 @@ const mockLessons: LessonLearned[] = [
 ];
 
 const failureTypeColors: Record<string, string> = {
-  Human: "bg-purple-500",
-  Electrical: "bg-yellow-500",
-  Software: "bg-blue-500",
-  Sensors: "bg-cyan-500",
-  Mechanical: "bg-orange-500",
-  Environmental: "bg-green-500"
+  Human: "bg-secondary",
+  Electrical: "bg-warning",
+  Software: "bg-primary",
+  Sensors: "bg-info",
+  Mechanical: "bg-warning",
+  Environmental: "bg-success"
 };
 
 const sourceColors: Record<string, string> = {

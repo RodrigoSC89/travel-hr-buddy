@@ -214,12 +214,12 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-    case "auditorias": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-    case "módulos": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-    case "rh": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    case "relatórios": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-    case "ia": return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+    case "auditorias": return "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary";
+    case "módulos": return "bg-secondary/10 text-secondary dark:bg-secondary/20 dark:text-secondary";
+    case "rh": return "bg-success/10 text-success dark:bg-success/20 dark:text-success";
+    case "relatórios": return "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning";
+    case "ia": return "bg-info/10 text-info dark:bg-info/20 dark:text-info";
+    default: return "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground";
     }
   };
 

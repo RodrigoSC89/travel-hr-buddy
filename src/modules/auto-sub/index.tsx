@@ -133,13 +133,13 @@ const AutoSub: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      draft: "bg-gray-500",
-      approved: "bg-blue-500",
-      active: "bg-green-500 animate-pulse",
-      completed: "bg-cyan-500",
-      aborted: "bg-red-500",
+      draft: "bg-muted-foreground",
+      approved: "bg-primary",
+      active: "bg-success animate-pulse",
+      completed: "bg-info",
+      aborted: "bg-destructive",
     };
-    return colors[status as keyof typeof colors] || "bg-gray-500";
+    return colors[status as keyof typeof colors] || "bg-muted-foreground";
   };
 
   return (

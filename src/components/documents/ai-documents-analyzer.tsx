@@ -499,14 +499,14 @@ export function AIDocumentsAnalyzer() {
 
   const getEntityBadgeColor = (entityType: string) => {
     const colors: Record<string, string> = {
-      email: "bg-blue-100 text-blue-800",
-      date: "bg-green-100 text-green-800",
-      amount: "bg-yellow-100 text-yellow-800",
-      phone: "bg-purple-100 text-purple-800",
-      imo_number: "bg-red-100 text-red-800",
-      name: "bg-indigo-100 text-indigo-800",
+      email: "bg-primary/10 text-primary",
+      date: "bg-success/10 text-success",
+      amount: "bg-warning/10 text-warning",
+      phone: "bg-secondary/10 text-secondary",
+      imo_number: "bg-destructive/10 text-destructive",
+      name: "bg-info/10 text-info",
     };
-    return colors[entityType] || "bg-gray-100 text-gray-800";
+    return colors[entityType] || "bg-muted text-muted-foreground";
   };
 
   return (

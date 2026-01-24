@@ -50,8 +50,8 @@ const quickActions = [
     icon: BarChart3,
     path: "/business-intelligence",
     description: "Business Intelligence",
-    color: "text-indigo-600",
-    bgColor: "hover:bg-indigo-50 dark:hover:bg-indigo-900/20"
+    color: "text-primary",
+    bgColor: "hover:bg-primary/10 dark:hover:bg-primary/20"
   },
   {
     title: "Gamificação",

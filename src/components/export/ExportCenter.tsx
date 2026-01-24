@@ -148,8 +148,8 @@ export function ExportCenter() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-xl">
-            <Download className="h-6 w-6 text-indigo-500" />
+          <div className="p-3 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">
+            <Download className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold">Export Center</h2>
