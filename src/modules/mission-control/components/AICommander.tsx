@@ -63,11 +63,11 @@ export const AICommander: React.FC = () => {
     <Card className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border-blue-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Brain className="w-6 h-6 text-blue-400 animate-pulse" />
+          <Brain className="w-6 h-6 text-primary animate-pulse" />
           AI Commander
-          <Sparkles className="w-4 h-4 text-yellow-400" />
+          <Sparkles className="w-4 h-4 text-warning" />
         </CardTitle>
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-muted-foreground">
           Ask questions or issue commands. AI will coordinate with all tactical modules.
         </p>
       </CardHeader>
@@ -78,13 +78,13 @@ export const AICommander: React.FC = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-500"
+            className="flex-1 bg-background/50 border-border text-foreground placeholder:text-muted-foreground"
             disabled={isProcessing}
           />
           <Button 
             onClick={handleCommand}
             disabled={!query.trim() || isProcessing}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-primary hover:bg-primary/90"
           >
             {isProcessing ? (
               <div className="animate-spin">⟳</div>
@@ -95,12 +95,12 @@ export const AICommander: React.FC = () => {
         </div>
 
         {response && (
-          <div className="p-4 bg-zinc-900/50 rounded-lg border border-blue-500/20">
+          <div className="p-4 bg-background/50 rounded-lg border border-primary/20">
             <div className="flex items-start gap-2">
-              <Brain className="w-5 h-5 text-blue-400 mt-0.5" />
+              <Brain className="w-5 h-5 text-primary mt-0.5" />
               <div>
-                <div className="text-xs text-zinc-400 mb-1">AI Commander Response:</div>
-                <p className="text-sm text-white">{response}</p>
+                <div className="text-xs text-muted-foreground mb-1">AI Commander Response:</div>
+                <p className="text-sm text-foreground">{response}</p>
               </div>
             </div>
           </div>
@@ -108,14 +108,14 @@ export const AICommander: React.FC = () => {
 
         {!response && (
           <div className="flex flex-wrap gap-2">
-            <span className="text-xs text-zinc-500">Try:</span>
+            <span className="text-xs text-muted-foreground">Try:</span>
             {suggestedCommands.map((cmd) => (
               <Button
                 key={cmd}
                 variant="outline"
                 size="sm"
                 onClick={() => setQuery(cmd)}
-                className="text-xs bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700"
+                className="text-xs bg-muted/50 border-border hover:bg-muted"
               >
                 {cmd}
               </Button>
