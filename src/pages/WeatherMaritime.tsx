@@ -170,31 +170,31 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Water Temperature */}
-          <Card className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/20">
+          <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Temp. Água</p>
-                  <p className="text-3xl font-bold text-cyan-500">
+                  <p className="text-3xl font-bold text-info">
                     {weather.waterTemperature?.toFixed(1) ?? "—"} °C
                   </p>
                 </div>
-                <Thermometer className="h-12 w-12 text-cyan-500/50" />
+                <Thermometer className="h-12 w-12 text-info/50" />
               </div>
             </CardContent>
           </Card>
 
           {/* Air Temperature */}
-          <Card className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/20">
+          <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Temp. Ar</p>
-                  <p className="text-3xl font-bold text-orange-500">
+                  <p className="text-3xl font-bold text-warning">
                     {weather.airTemperature?.toFixed(1) ?? "—"} °C
                   </p>
                 </div>
-                <Thermometer className="h-12 w-12 text-orange-500/50" />
+                <Thermometer className="h-12 w-12 text-warning/50" />
               </div>
             </CardContent>
           </Card>
@@ -224,22 +224,22 @@ export default function WeatherMaritime() {
                     {weather.visibility?.toFixed(1) ?? "—"} km
                   </p>
                 </div>
-                <Eye className="h-12 w-12 text-purple-500/50" />
+                <Eye className="h-12 w-12 text-secondary/50" />
               </div>
             </CardContent>
           </Card>
 
           {/* Current Speed */}
-          <Card className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border-indigo-500/20">
+          <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Corrente</p>
-                  <p className="text-3xl font-bold text-indigo-500">
+                  <p className="text-3xl font-bold text-secondary">
                     {weather.currentSpeed?.toFixed(2) ?? "—"} m/s
                   </p>
                 </div>
-                <Compass className="h-12 w-12 text-indigo-500/50" />
+                <Compass className="h-12 w-12 text-secondary/50" />
               </div>
             </CardContent>
           </Card>

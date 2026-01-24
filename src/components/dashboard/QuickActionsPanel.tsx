@@ -83,7 +83,7 @@ const quickActions: QuickAction[] = [
     label: "Checklists",
     icon: ClipboardCheck,
     route: "/admin/checklists",
-    color: "bg-teal-500 hover:bg-teal-600",
+    color: "bg-info hover:bg-info/90",
     badge: "5 pendentes",
     description: "Gerenciar checklists",
   },
@@ -92,7 +92,7 @@ const quickActions: QuickAction[] = [
     label: "Relatórios",
     icon: BarChart3,
     route: "/reports",
-    color: "bg-indigo-500 hover:bg-indigo-600",
+    color: "bg-secondary hover:bg-secondary/90",
     description: "Gerar relatórios",
   },
   {
@@ -100,7 +100,7 @@ const quickActions: QuickAction[] = [
     label: "Manutenção",
     icon: Wrench,
     route: "/maintenance-planner",
-    color: "bg-orange-500 hover:bg-orange-600",
+    color: "bg-warning hover:bg-warning/90",
     badge: "2 urgentes",
     description: "Planejar manutenção",
   },
@@ -154,7 +154,7 @@ const QuickActionsPanelComponent: React.FC = () => {
                 {action.badge && (
                   <Badge 
                     variant="secondary" 
-                    className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 bg-slate-900 text-white font-semibold border-0"
+                    className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 bg-background text-foreground font-semibold border-0"
                   >
                     {action.badge}
                   </Badge>
