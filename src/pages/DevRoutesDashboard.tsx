@@ -28,17 +28,17 @@ type CIStatus = 'pending' | 'success' | 'failure' | 'running';
 const ROUTE_CATEGORIES: Record<string, { icon: React.ElementType; routes: string[]; color: string }> = {
   "Central de Comando": {
     icon: LayoutDashboard,
-    color: "bg-blue-500",
+    color: "bg-info",
     routes: ["/central-comando", "/noc", "/noc-monitoring"]
   },
   "Operações Marítimas": {
     icon: Ship,
-    color: "bg-emerald-500",
+    color: "bg-success",
     routes: ["/maritime-command", "/fleet-command", "/voyage-command", "/route-optimizer", "/mission-command", "/bridge-link", "/tracking"]
   },
   "Manutenção": {
     icon: Wrench,
-    color: "bg-amber-500",
+    color: "bg-warning",
     routes: ["/maintenance-command", "/predictive-maintenance", "/drydock-management"]
   },
   "IA & Automação": {
@@ -198,7 +198,7 @@ export default function DevRoutesDashboard() {
                 variant={ciStatus === 'success' ? 'default' : ciStatus === 'failure' ? 'destructive' : 'secondary'}
                 className={cn(
                   "ml-2 gap-1",
-                  ciStatus === 'success' && "bg-emerald-500 hover:bg-emerald-600",
+                  ciStatus === 'success' && "bg-success hover:bg-success/90",
                   ciStatus === 'running' && "animate-pulse"
                 )}
               >

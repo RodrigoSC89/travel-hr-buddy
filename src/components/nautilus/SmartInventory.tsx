@@ -121,9 +121,9 @@ export function SmartInventory() {
   });
 
   const getStockStatus = (item: InventoryItem) => {
-    if (item.currentStock < item.minStock) return { color: "text-red-500", bg: "bg-red-500/10", label: "Crítico" };
-    if (item.currentStock > item.maxStock) return { color: "text-amber-500", bg: "bg-amber-500/10", label: "Excesso" };
-    return { color: "text-emerald-500", bg: "bg-emerald-500/10", label: "OK" };
+    if (item.currentStock < item.minStock) return { color: "text-destructive", bg: "bg-destructive/10", label: "Crítico" };
+    if (item.currentStock > item.maxStock) return { color: "text-warning", bg: "bg-warning/10", label: "Excesso" };
+    return { color: "text-success", bg: "bg-success/10", label: "OK" };
   };
 
   if (isLoading) {

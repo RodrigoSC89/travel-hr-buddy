@@ -133,9 +133,9 @@ const MOCK_CREW: CrewMember[] = [
 
 const urgencyColors = {
   critical: 'bg-destructive text-destructive-foreground',
-  high: 'bg-orange-500 text-white',
-  medium: 'bg-amber-500 text-white',
-  low: 'bg-emerald-500 text-white',
+  high: 'bg-warning text-warning-foreground',
+  medium: 'bg-accent text-accent-foreground',
+  low: 'bg-success text-success-foreground',
 };
 
 export function CrewWellnessDashboard() {

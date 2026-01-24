@@ -567,14 +567,14 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className={`w-3 h-3 rounded-full shadow-lg ${
-                          item.status === "success" ? "bg-emerald-500 shadow-emerald-500/50" :
-                            item.status === "warning" ? "bg-amber-500 shadow-amber-500/50" : 
-                              "bg-red-500 shadow-red-500/50"
+                          item.status === "success" ? "bg-success shadow-success/50" :
+                            item.status === "warning" ? "bg-warning shadow-warning/50" : 
+                              "bg-destructive shadow-destructive/50"
                         }`} />
                         <span className="text-sm font-semibold text-foreground">{item.metric}</span>
                       </div>
                       {item.status === "success" && (
-                        <CheckCircle className="w-4 h-4 text-emerald-500" />
+                        <CheckCircle className="w-4 h-4 text-success" />
                       )}
                     </div>
                     
