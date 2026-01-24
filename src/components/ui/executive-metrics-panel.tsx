@@ -111,10 +111,10 @@ const ExecutiveMetricsPanel = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "excellent": return "text-green-700 bg-green-100 border-green-200";
-    case "good": return "text-blue-700 bg-blue-100 border-blue-200";
-    case "warning": return "text-orange-700 bg-orange-100 border-orange-200";
-    case "critical": return "text-red-700 bg-red-100 border-red-200";
+    case "excellent": return "text-success bg-success/10 border-success/20";
+    case "good": return "text-primary bg-primary/10 border-primary/20";
+    case "warning": return "text-warning bg-warning/10 border-warning/20";
+    case "critical": return "text-destructive bg-destructive/10 border-destructive/20";
     default: return "text-secondary-foreground bg-secondary border-border";
     }
   };

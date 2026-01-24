@@ -231,9 +231,9 @@ export function PredictiveMaintenanceDashboard() {
                         className={cn(
                           "h-2",
                           pred.riskScore > 80 ? "[&>div]:bg-destructive" :
-                          pred.riskScore > 60 ? "[&>div]:bg-orange-500" :
+                          pred.riskScore > 60 ? "[&>div]:bg-warning" :
                           pred.riskScore > 40 ? "[&>div]:bg-amber-500" :
-                          "[&>div]:bg-emerald-500"
+                          "[&>div]:bg-success"
                         )}
                       />
                       

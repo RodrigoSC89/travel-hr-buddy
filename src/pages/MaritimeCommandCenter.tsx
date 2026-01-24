@@ -488,12 +488,12 @@ export default function MaritimeCommandCenter() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                    <div className="text-2xl font-bold text-emerald-600">{stats.completedChecklists}</div>
+                  <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+                    <div className="text-2xl font-bold text-success">{stats.completedChecklists}</div>
                     <div className="text-sm text-muted-foreground">Concluídos</div>
                   </div>
-                  <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                    <div className="text-2xl font-bold text-orange-600">{stats.pendingChecklists}</div>
+                  <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
+                    <div className="text-2xl font-bold text-warning">{stats.pendingChecklists}</div>
                     <div className="text-sm text-muted-foreground">Pendentes</div>
                   </div>
                 </div>

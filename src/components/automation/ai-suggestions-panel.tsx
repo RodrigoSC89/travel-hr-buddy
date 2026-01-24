@@ -264,9 +264,9 @@ export const AISuggestionsPanel: React.FC = () => {
 
   const getSuggestionColor = (priority: number) => {
     switch (priority) {
-      case 4: return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400";
-      case 3: return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
-      case 2: return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400";
+      case 4: return "bg-destructive/10 text-destructive border-destructive/20";
+      case 3: return "bg-warning/10 text-warning border-warning/20";
+      case 2: return "bg-primary/10 text-primary border-primary/20";
       default: return "bg-secondary text-secondary-foreground border-border";
     }
   };

@@ -365,11 +365,11 @@ Responda em JSON:
                         <div className="flex items-start gap-3">
                           <div className={cn(
                             "p-2 rounded-lg",
-                            insight.type === "anomaly" && "bg-red-500/20",
-                            insight.type === "prediction" && "bg-blue-500/20",
-                            insight.type === "maintenance" && "bg-amber-500/20",
-                            insight.type === "optimization" && "bg-emerald-500/20",
-                            insight.type === "risk" && "bg-purple-500/20",
+                            insight.type === "anomaly" && "bg-destructive/20",
+                            insight.type === "prediction" && "bg-primary/20",
+                            insight.type === "maintenance" && "bg-warning/20",
+                            insight.type === "optimization" && "bg-success/20",
+                            insight.type === "risk" && "bg-info/20",
                           )}>
                             {getTypeIcon(insight.type)}
                           </div>

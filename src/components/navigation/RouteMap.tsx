@@ -315,7 +315,7 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
             Mapa da Rota
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-600 border-emerald-500">
+            <Badge variant="outline" className="text-xs bg-success/10 text-success border-success">
               Partida
             </Badge>
             <Badge variant="outline" className="text-xs bg-destructive/10 text-destructive border-destructive">

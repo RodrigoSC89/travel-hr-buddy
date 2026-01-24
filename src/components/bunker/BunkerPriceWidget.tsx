@@ -281,11 +281,11 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
 
         {/* Potential Savings */}
         {potentialSavings > 1000 && (
-          <div className="flex items-center justify-between text-xs p-2 bg-emerald-500/10 rounded-lg">
-            <span className="text-emerald-700 dark:text-emerald-400 font-medium">
+          <div className="flex items-center justify-between text-xs p-2 bg-success/10 rounded-lg">
+            <span className="text-success font-medium">
               💰 Economia potencial (500 MT):
             </span>
-            <span className="font-bold text-emerald-600">
+            <span className="font-bold text-success">
               ${potentialSavings.toLocaleString()}
             </span>
           </div>

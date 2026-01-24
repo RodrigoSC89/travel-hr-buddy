@@ -93,11 +93,11 @@ export const SGSOMaturityCurve: React.FC = () => {
   const improvement = overallScore - previousScore;
 
   const getMaturityLevel = (score: number) => {
-    if (score >= 90) return { level: 'Excelência', color: 'text-green-600', bg: 'bg-green-100' };
-    if (score >= 75) return { level: 'Maduro', color: 'text-blue-600', bg: 'bg-blue-100' };
-    if (score >= 60) return { level: 'Em Desenvolvimento', color: 'text-yellow-600', bg: 'bg-yellow-100' };
-    if (score >= 40) return { level: 'Inicial', color: 'text-orange-600', bg: 'bg-orange-100' };
-    return { level: 'Crítico', color: 'text-red-600', bg: 'bg-red-100' };
+    if (score >= 90) return { level: 'Excelência', color: 'text-success', bg: 'bg-success/10' };
+    if (score >= 75) return { level: 'Maduro', color: 'text-primary', bg: 'bg-primary/10' };
+    if (score >= 60) return { level: 'Em Desenvolvimento', color: 'text-warning', bg: 'bg-warning/10' };
+    if (score >= 40) return { level: 'Inicial', color: 'text-warning', bg: 'bg-warning/10' };
+    return { level: 'Crítico', color: 'text-destructive', bg: 'bg-destructive/10' };
   };
 
   const maturity = getMaturityLevel(overallScore);

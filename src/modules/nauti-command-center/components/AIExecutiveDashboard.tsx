@@ -56,39 +56,39 @@ interface KPICardProps {
 
 const colorClasses = {
   green: {
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/30',
-    text: 'text-emerald-400',
-    fill: 'hsl(142, 76%, 36%)',
-    gradient: 'from-emerald-500/20 to-transparent'
+    bg: 'bg-success/10',
+    border: 'border-success/30',
+    text: 'text-success',
+    fill: 'hsl(var(--success))',
+    gradient: 'from-success/20 to-transparent'
   },
   blue: {
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/30',
-    text: 'text-blue-400',
-    fill: 'hsl(217, 91%, 60%)',
-    gradient: 'from-blue-500/20 to-transparent'
+    bg: 'bg-primary/10',
+    border: 'border-primary/30',
+    text: 'text-primary',
+    fill: 'hsl(var(--primary))',
+    gradient: 'from-primary/20 to-transparent'
   },
   purple: {
-    bg: 'bg-purple-500/10',
-    border: 'border-purple-500/30',
-    text: 'text-purple-400',
-    fill: 'hsl(271, 91%, 65%)',
-    gradient: 'from-purple-500/20 to-transparent'
+    bg: 'bg-info/10',
+    border: 'border-info/30',
+    text: 'text-info',
+    fill: 'hsl(var(--info))',
+    gradient: 'from-info/20 to-transparent'
   },
   orange: {
-    bg: 'bg-orange-500/10',
-    border: 'border-orange-500/30',
-    text: 'text-orange-400',
-    fill: 'hsl(38, 92%, 50%)',
-    gradient: 'from-orange-500/20 to-transparent'
+    bg: 'bg-warning/10',
+    border: 'border-warning/30',
+    text: 'text-warning',
+    fill: 'hsl(var(--warning))',
+    gradient: 'from-warning/20 to-transparent'
   },
   red: {
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/30',
-    text: 'text-red-400',
-    fill: 'hsl(0, 84%, 60%)',
-    gradient: 'from-red-500/20 to-transparent'
+    bg: 'bg-destructive/10',
+    border: 'border-destructive/30',
+    text: 'text-destructive',
+    fill: 'hsl(var(--destructive))',
+    gradient: 'from-destructive/20 to-transparent'
   }
 };
 
