@@ -401,20 +401,20 @@ const FuelOptimizerPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.totalSavings.toFixed(1)}%</div>
+            <div className="text-2xl font-bold text-success">{stats.totalSavings.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">Por rota analisada</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-200 dark:border-blue-800">
+        <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Ship className="h-4 w-4 text-blue-500" />
+              <Ship className="h-4 w-4 text-primary" />
               Rotas Analisadas
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.routesAnalyzed}</div>
+            <div className="text-2xl font-bold text-primary">{stats.routesAnalyzed}</div>
             <p className="text-xs text-muted-foreground">Total de análises</p>
           </CardContent>
         </Card>

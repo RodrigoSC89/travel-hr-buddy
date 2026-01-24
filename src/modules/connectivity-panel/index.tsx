@@ -164,17 +164,17 @@ export default function ConnectivityPanel() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online": return <Wifi className="h-4 w-4 text-green-500" />;
-      case "unstable": return <SignalMedium className="h-4 w-4 text-amber-500" />;
-      case "offline": return <WifiOff className="h-4 w-4 text-red-500" />;
+      case "online": return <Wifi className="h-4 w-4 text-success" />;
+      case "unstable": return <SignalMedium className="h-4 w-4 text-warning" />;
+      case "offline": return <WifiOff className="h-4 w-4 text-destructive" />;
       default: return <Signal className="h-4 w-4" />;
     }
   };
 
   const getSignalIcon = (strength: number) => {
-    if (strength >= 70) return <SignalHigh className="h-5 w-5 text-green-500" />;
-    if (strength >= 40) return <SignalMedium className="h-5 w-5 text-amber-500" />;
-    if (strength > 0) return <SignalLow className="h-5 w-5 text-red-500" />;
+    if (strength >= 70) return <SignalHigh className="h-5 w-5 text-success" />;
+    if (strength >= 40) return <SignalMedium className="h-5 w-5 text-warning" />;
+    if (strength > 0) return <SignalLow className="h-5 w-5 text-destructive" />;
     return <WifiOff className="h-5 w-5 text-muted-foreground" />;
   };
 
@@ -187,7 +187,7 @@ export default function ConnectivityPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-info to-primary text-white">
             <Satellite className="h-8 w-8" />
           </div>
           <div>

@@ -351,8 +351,8 @@ export const EnhancedPeotramManager: React.FC = () => {
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
         <TabsList className="grid w-full grid-cols-11 bg-muted/50">
-          <TabsTrigger value="13-elements" className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10">
-            <Target className="w-4 h-4 text-amber-500" />
+          <TabsTrigger value="13-elements" className="flex items-center gap-2 bg-gradient-to-r from-warning/10 to-warning/5">
+            <Target className="w-4 h-4 text-warning" />
             13 Elementos
           </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
@@ -363,20 +363,20 @@ export const EnhancedPeotramManager: React.FC = () => {
             <FileCheck className="w-4 h-4" />
             Auditorias
           </TabsTrigger>
-          <TabsTrigger value="ai-assistant" className="flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10">
-            <Brain className="w-4 h-4 text-orange-500" />
+          <TabsTrigger value="ai-assistant" className="flex items-center gap-2 bg-gradient-to-r from-warning/10 to-warning/5">
+            <Brain className="w-4 h-4 text-warning" />
             IA Chat
           </TabsTrigger>
-          <TabsTrigger value="voice-chat" className="flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
-            <Mic className="w-4 h-4 text-purple-500" />
+          <TabsTrigger value="voice-chat" className="flex items-center gap-2 bg-gradient-to-r from-secondary/10 to-accent/10">
+            <Mic className="w-4 h-4 text-secondary" />
             Voz IA
           </TabsTrigger>
-          <TabsTrigger value="evidence-gen" className="flex items-center gap-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10">
-            <FileCheckIcon className="w-4 h-4 text-green-500" />
+          <TabsTrigger value="evidence-gen" className="flex items-center gap-2 bg-gradient-to-r from-success/10 to-success/5">
+            <FileCheckIcon className="w-4 h-4 text-success" />
             Evidências
           </TabsTrigger>
-          <TabsTrigger value="pdf-report" className="flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
-            <Download className="w-4 h-4 text-blue-500" />
+          <TabsTrigger value="pdf-report" className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-info/10">
+            <Download className="w-4 h-4 text-primary" />
             Relatório PDF
           </TabsTrigger>
           <TabsTrigger value="cnpj-history" className="flex items-center gap-2">
