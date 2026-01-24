@@ -91,14 +91,14 @@ import { SmartOnboardingWizard } from "@/components/automation/smart-onboarding-
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area, BarChart, Bar, Legend } from "recharts";
 
 const REVOLUTIONARY_FEATURES = [
-  { id: "command", name: "Comando Universal", icon: Command, color: "text-blue-400", description: "Linguagem natural" },
-  { id: "cockpit", name: "Cockpit 360°", icon: Ship, color: "text-cyan-400", description: "Visão da frota" },
-  { id: "maintenance", name: "Manutenção Preditiva", icon: Wrench, color: "text-amber-400", description: "ML + Telemetria" },
-  { id: "inventory", name: "Estoque Vivo", icon: Package, color: "text-green-400", description: "Mapa geográfico" },
-  { id: "agent", name: "Agente Autônomo", icon: Bot, color: "text-purple-400", description: "IA proativa" },
-  { id: "simulator", name: "Simulador", icon: Calculator, color: "text-pink-400", description: "What-if analysis" },
-  { id: "audit", name: "Auditoria", icon: FileSearch, color: "text-indigo-400", description: "Dossiês automáticos" },
-  { id: "suppliers", name: "Fornecedores", icon: Building2, color: "text-orange-400", description: "Comparação IA" },
+  { id: "command", name: "Comando Universal", icon: Command, color: "text-primary", description: "Linguagem natural" },
+  { id: "cockpit", name: "Cockpit 360°", icon: Ship, color: "text-info", description: "Visão da frota" },
+  { id: "maintenance", name: "Manutenção Preditiva", icon: Wrench, color: "text-warning", description: "ML + Telemetria" },
+  { id: "inventory", name: "Estoque Vivo", icon: Package, color: "text-success", description: "Mapa geográfico" },
+  { id: "agent", name: "Agente Autônomo", icon: Bot, color: "text-secondary-foreground", description: "IA proativa" },
+  { id: "simulator", name: "Simulador", icon: Calculator, color: "text-accent-foreground", description: "What-if analysis" },
+  { id: "audit", name: "Auditoria", icon: FileSearch, color: "text-primary", description: "Dossiês automáticos" },
+  { id: "suppliers", name: "Fornecedores", icon: Building2, color: "text-warning", description: "Comparação IA" },
 ];
 
 export default function AICommandCenter() {

@@ -111,12 +111,12 @@ export function AdaptiveInterface() {
 
   const getThemeColors = (theme: string) => {
     switch (theme) {
-      case 'technical': return 'from-blue-500 to-cyan-500';
-      case 'commercial': return 'from-green-500 to-emerald-500';
-      case 'executive': return 'from-purple-500 to-indigo-500';
-      case 'compliance': return 'from-orange-500 to-amber-500';
-      case 'people': return 'from-pink-500 to-rose-500';
-      default: return 'from-gray-500 to-slate-500';
+      case 'technical': return 'from-primary to-info';
+      case 'commercial': return 'from-success to-success/80';
+      case 'executive': return 'from-secondary to-accent';
+      case 'compliance': return 'from-warning to-warning/80';
+      case 'people': return 'from-destructive/80 to-destructive';
+      default: return 'from-muted to-muted-foreground/20';
     }
   };
 

@@ -30,21 +30,21 @@ interface CardV2Props {
 }
 
 const gradientClasses = {
-  blue: "from-blue-500/10 to-cyan-500/5",
-  purple: "from-purple-500/10 to-pink-500/5",
-  green: "from-green-500/10 to-emerald-500/5",
-  orange: "from-orange-500/10 to-amber-500/5",
-  yellow: "from-yellow-500/10 to-amber-500/5",
-  red: "from-red-500/10 to-rose-500/5",
+  blue: "from-primary/10 to-info/5",
+  purple: "from-secondary/10 to-accent/5",
+  green: "from-success/10 to-success/5",
+  orange: "from-warning/10 to-warning/5",
+  yellow: "from-warning/10 to-warning/5",
+  red: "from-destructive/10 to-destructive/5",
 };
 
 const iconColorClasses = {
-  blue: "text-blue-500",
-  purple: "text-purple-500",
-  green: "text-green-500",
-  orange: "text-orange-500",
-  yellow: "text-yellow-500",
-  red: "text-red-500",
+  blue: "text-primary",
+  purple: "text-secondary-foreground",
+  green: "text-success",
+  orange: "text-warning",
+  yellow: "text-warning",
+  red: "text-destructive",
 };
 
 export function CardV2({

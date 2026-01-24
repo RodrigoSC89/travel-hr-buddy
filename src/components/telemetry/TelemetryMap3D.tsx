@@ -300,11 +300,11 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
         el.className = "vessel-marker-3d cursor-pointer";
         
         const statusColors: Record<VesselTelemetry["status"], string> = {
-          active: "bg-emerald-500 shadow-emerald-500/50",
-          idle: "bg-slate-400 shadow-slate-400/50",
-          maintenance: "bg-amber-500 shadow-amber-500/50",
-          alert: "bg-orange-500 shadow-orange-500/50 animate-pulse",
-          emergency: "bg-red-500 shadow-red-500/50 animate-ping",
+          active: "bg-success shadow-success/50",
+          idle: "bg-muted shadow-muted/50",
+          maintenance: "bg-warning shadow-warning/50",
+          alert: "bg-warning shadow-warning/50 animate-pulse",
+          emergency: "bg-destructive shadow-destructive/50 animate-ping",
         };
 
         el.innerHTML = `
@@ -531,19 +531,19 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
         {/* Legend */}
         <div className="flex items-center gap-4 pointer-events-auto bg-background/80 backdrop-blur-md rounded-lg p-3 border border-primary/20">
           <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-success" />
             <span className="text-xs">Ativo</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+            <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground" />
             <span className="text-xs">Parado</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-warning" />
             <span className="text-xs">Manutenção</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse" />
             <span className="text-xs">Emergência</span>
           </div>
         </div>

@@ -319,41 +319,41 @@ export default function MaritimeCommandCenter() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 mx-auto mb-2 text-yellow-500" />
+            <Clock className="h-6 w-6 mx-auto mb-2 text-warning" />
             <div className="text-2xl font-bold">{stats.certExpiring}</div>
             <div className="text-xs text-muted-foreground">Cert. Vencendo</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10 border-cyan-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4 text-center">
-            <ClipboardList className="h-6 w-6 mx-auto mb-2 text-cyan-500" />
+            <ClipboardList className="h-6 w-6 mx-auto mb-2 text-info" />
             <div className="text-2xl font-bold">{stats.totalChecklists}</div>
             <div className="text-xs text-muted-foreground">Checklists</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4 text-center">
-            <FileText className="h-6 w-6 mx-auto mb-2 text-emerald-500" />
+            <FileText className="h-6 w-6 mx-auto mb-2 text-success" />
             <div className="text-2xl font-bold">{stats.completedChecklists}</div>
             <div className="text-xs text-muted-foreground">Concluídos</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-indigo-500/10 to-blue-500/10 border-indigo-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4 text-center">
-            <Target className="h-6 w-6 mx-auto mb-2 text-indigo-500" />
+            <Target className="h-6 w-6 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{stats.averageCompliance}%</div>
             <div className="text-xs text-muted-foreground">Conformidade</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-rose-500/10 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-red-500" />
+            <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-destructive" />
             <div className="text-2xl font-bold">{stats.criticalIssues}</div>
             <div className="text-xs text-muted-foreground">Issues Críticos</div>
           </CardContent>

@@ -201,26 +201,26 @@ export function ProductionReadinessPanel() {
 
             {/* Resumo */}
             <div className="grid grid-cols-4 gap-4">
-              <div className="text-center p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
-                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <div className="text-center p-3 rounded-lg bg-success/10">
+                <div className="text-2xl font-bold text-success">
                   {readiness.summary.passed}
                 </div>
                 <div className="text-xs text-muted-foreground">Passou</div>
               </div>
-              <div className="text-center p-3 rounded-lg bg-red-50 dark:bg-red-900/20">
-                <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+              <div className="text-center p-3 rounded-lg bg-destructive/10">
+                <div className="text-2xl font-bold text-destructive">
                   {readiness.summary.failed}
                 </div>
                 <div className="text-xs text-muted-foreground">Falhou</div>
               </div>
-              <div className="text-center p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20">
-                <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+              <div className="text-center p-3 rounded-lg bg-warning/10">
+                <div className="text-2xl font-bold text-warning">
                   {readiness.summary.warnings}
                 </div>
                 <div className="text-xs text-muted-foreground">Alertas</div>
               </div>
-              <div className="text-center p-3 rounded-lg bg-slate-50 dark:bg-slate-900/20">
-                <div className="text-2xl font-bold text-slate-600 dark:text-slate-400">
+              <div className="text-center p-3 rounded-lg bg-muted">
+                <div className="text-2xl font-bold text-muted-foreground">
                   {readiness.summary.critical}
                 </div>
                 <div className="text-xs text-muted-foreground">Críticos</div>
