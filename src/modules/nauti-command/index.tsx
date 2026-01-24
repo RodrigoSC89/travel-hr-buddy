@@ -218,17 +218,17 @@ const NautilusCommandCenter = () => {
         >
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-teal-500 shadow-xl">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-primary via-info to-accent shadow-xl">
                 <Compass className="h-10 w-10 text-white" />
               </div>
               {isOnline ? (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background animate-pulse" />
               ) : (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full border-2 border-background" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full border-2 border-background" />
               )}
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-info to-accent bg-clip-text text-transparent">
                 Nautilus Command Center
               </h1>
               <p className="text-muted-foreground flex items-center gap-2">

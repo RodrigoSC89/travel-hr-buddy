@@ -40,17 +40,18 @@ function formatTimestamp(timestamp: string): string {
 }
 
 /**
- * Get level badge color
+ * Get level badge color - RGB values for PDF generation
+ * Maps semantic levels to appropriate RGB colors
  */
 function getLevelColor(level: string): [number, number, number] {
   switch (level) {
   case "error":
-    return [239, 68, 68]; // red-500
+    return [220, 38, 38]; // destructive equivalent
   case "warn":
-    return [251, 191, 36]; // amber-400
+    return [234, 179, 8]; // warning equivalent  
   case "info":
   default:
-    return [59, 130, 246]; // blue-500
+    return [59, 130, 246]; // primary/info equivalent
   }
 }
 

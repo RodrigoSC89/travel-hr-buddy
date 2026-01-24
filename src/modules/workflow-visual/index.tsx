@@ -75,12 +75,12 @@ import { motion, AnimatePresence } from "framer-motion";
 const WorkflowNode = ({ data }: { data: any }) => {
   const getStatusColor = () => {
     switch (data.status) {
-      case "completed": return "border-green-500 bg-green-50 dark:bg-green-900/20";
-      case "in_progress": return "border-blue-500 bg-blue-50 dark:bg-blue-900/20 animate-pulse";
-      case "pending": return "border-gray-300 bg-gray-50 dark:bg-gray-800";
-      case "blocked": return "border-red-500 bg-red-50 dark:bg-red-900/20";
-      case "warning": return "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20";
-      default: return "border-gray-300 bg-white dark:bg-gray-800";
+      case "completed": return "border-success bg-success/10 dark:bg-success/20";
+      case "in_progress": return "border-info bg-info/10 dark:bg-info/20 animate-pulse";
+      case "pending": return "border-muted-foreground/30 bg-muted/50 dark:bg-muted";
+      case "blocked": return "border-destructive bg-destructive/10 dark:bg-destructive/20";
+      case "warning": return "border-warning bg-warning/10 dark:bg-warning/20";
+      default: return "border-muted-foreground/30 bg-background dark:bg-muted";
     }
   };
 

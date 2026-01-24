@@ -182,11 +182,11 @@ export function RevolutionaryFeaturesHub() {
         className="text-center space-y-2"
       >
         <div className="flex items-center justify-center gap-2">
-          <Sparkles className="h-8 w-8 text-yellow-500" />
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <Sparkles className="h-8 w-8 text-warning" />
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-secondary via-accent to-primary bg-clip-text text-transparent">
             Funcionalidades Revolucionárias
           </h1>
-          <Sparkles className="h-8 w-8 text-yellow-500" />
+          <Sparkles className="h-8 w-8 text-warning" />
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           9 tecnologias disruptivas que transformam o Nautilus One no sistema marítimo mais avançado do mundo
