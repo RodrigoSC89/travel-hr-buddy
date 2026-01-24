@@ -130,8 +130,8 @@ export function AILearningMetricsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20">
-            <BarChart3 className="h-6 w-6 text-purple-400" />
+          <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20">
+            <BarChart3 className="h-6 w-6 text-secondary" />
           </div>
           <div>
             <h2 className="text-xl font-bold">Métricas de Aprendizado</h2>
@@ -141,78 +141,78 @@ export function AILearningMetricsDashboard() {
           </div>
         </div>
         <Badge variant="outline" className="flex items-center gap-1">
-          <Activity className="h-3 w-3 animate-pulse text-green-500" />
+          <Activity className="h-3 w-3 animate-pulse text-success" />
           {learningMetrics.learningCycles} ciclos
         </Badge>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between mb-2">
-              <Target className="h-5 w-5 text-green-500" />
-              <TrendingUp className="h-4 w-4 text-green-400" />
+              <Target className="h-5 w-5 text-success" />
+              <TrendingUp className="h-4 w-4 text-success/80" />
             </div>
-            <div className="text-3xl font-bold text-green-400">
+            <div className="text-3xl font-bold text-success">
               {(learningMetrics.accuracy * 100).toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground mt-1">Taxa de Precisão</p>
             <Progress 
               value={learningMetrics.accuracy * 100} 
-              className="mt-2 h-1 bg-green-500/20" 
+              className="mt-2 h-1 bg-success/20" 
             />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-info/5 border-primary/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between mb-2">
-              <Brain className="h-5 w-5 text-blue-500" />
-              <span className="text-xs text-blue-400">
+              <Brain className="h-5 w-5 text-primary" />
+              <span className="text-xs text-primary/80">
                 +{(learningMetrics.improvementRate * 100).toFixed(1)}%
               </span>
             </div>
-            <div className="text-3xl font-bold text-blue-400">
+            <div className="text-3xl font-bold text-primary">
               {(statistics.averageConfidence * 100).toFixed(0)}%
             </div>
             <p className="text-xs text-muted-foreground mt-1">Confiança Média</p>
-            <Progress 
+            <Progress
               value={statistics.averageConfidence * 100} 
-              className="mt-2 h-1 bg-blue-500/20" 
+              className="mt-2 h-1 bg-primary/20" 
             />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/5 border-secondary/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between mb-2">
-              <Zap className="h-5 w-5 text-purple-500" />
-              <span className="text-xs text-purple-400">{statistics.pending} pendentes</span>
+              <Zap className="h-5 w-5 text-secondary" />
+              <span className="text-xs text-secondary/80">{statistics.pending} pendentes</span>
             </div>
-            <div className="text-3xl font-bold text-purple-400">
+            <div className="text-3xl font-bold text-secondary">
               {statistics.total}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Total de Decisões</p>
             <div className="flex gap-1 mt-2">
-              <div className="h-1 bg-green-500 rounded-full" style={{ width: `${(statistics.executed / Math.max(statistics.total, 1)) * 100}%` }} />
-              <div className="h-1 bg-yellow-500 rounded-full" style={{ width: `${(statistics.pending / Math.max(statistics.total, 1)) * 100}%` }} />
-              <div className="h-1 bg-red-500 rounded-full" style={{ width: `${(statistics.rejected / Math.max(statistics.total, 1)) * 100}%` }} />
+              <div className="h-1 bg-success rounded-full" style={{ width: `${(statistics.executed / Math.max(statistics.total, 1)) * 100}%` }} />
+              <div className="h-1 bg-warning rounded-full" style={{ width: `${(statistics.pending / Math.max(statistics.total, 1)) * 100}%` }} />
+              <div className="h-1 bg-destructive rounded-full" style={{ width: `${(statistics.rejected / Math.max(statistics.total, 1)) * 100}%` }} />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-amber-500/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle2 className="h-5 w-5 text-orange-500" />
+              <CheckCircle2 className="h-5 w-5 text-warning" />
               <XCircle className="h-4 w-4 text-muted-foreground" />
             </div>
-            <div className="text-3xl font-bold text-orange-400">
+            <div className="text-3xl font-bold text-warning">
               {statistics.executed}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Decisões Executadas</p>
-            <p className="text-xs text-orange-400 mt-2">
+            <p className="text-xs text-warning mt-2">
               {statistics.rejected} rejeitadas • {statistics.failed} falhas
             </p>
           </CardContent>
@@ -225,7 +225,7 @@ export function AILearningMetricsDashboard() {
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
               Evolução da Precisão
             </CardTitle>
             <CardDescription>Taxa de acerto ao longo do tempo</CardDescription>
@@ -286,7 +286,7 @@ export function AILearningMetricsDashboard() {
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Activity className="h-4 w-4 text-blue-500" />
+              <Activity className="h-4 w-4 text-primary" />
               Distribuição por Status
             </CardTitle>
             <CardDescription>Proporção de decisões por status</CardDescription>
@@ -334,7 +334,7 @@ export function AILearningMetricsDashboard() {
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Zap className="h-4 w-4 text-purple-500" />
+              <Zap className="h-4 w-4 text-secondary" />
               Tipos de Decisões
             </CardTitle>
             <CardDescription>Distribuição por categoria</CardDescription>
@@ -377,7 +377,7 @@ export function AILearningMetricsDashboard() {
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Brain className="h-4 w-4 text-orange-500" />
+              <Brain className="h-4 w-4 text-warning" />
               Distribuição de Confiança
             </CardTitle>
             <CardDescription>Níveis de confiança das decisões</CardDescription>
@@ -414,7 +414,7 @@ export function AILearningMetricsDashboard() {
       </div>
 
       {/* Learning Summary */}
-      <Card className="bg-gradient-to-r from-primary/5 via-purple-500/5 to-pink-500/5 border-primary/20">
+      <Card className="bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 border-primary/20">
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

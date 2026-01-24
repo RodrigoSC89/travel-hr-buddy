@@ -73,7 +73,7 @@ export function QuickActionsPanel() {
       label: "Enviar Mensagem",
       icon: MessageSquare,
       action: () => navigate("/communication-command"),
-      color: "text-cyan-500"
+      color: "text-info"
     },
     {
       id: "upload-file",
