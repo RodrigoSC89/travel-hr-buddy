@@ -47,7 +47,7 @@ export function SmartLayout() {
             <main 
               id="main-content"
               tabIndex={-1}
-              className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
+              className={`flex-1 overflow-y-auto bg-background ${mobileClasses.responsivePadding} focus:outline-none`}
             >
               <Suspense fallback={<LoadingFallback />}>
                 <Outlet />

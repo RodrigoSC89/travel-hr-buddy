@@ -483,10 +483,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-violet-300" onClick={() => setActiveTab("dashboard")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-secondary/50" onClick={() => setActiveTab("dashboard")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-violet-500" />
+                  <BarChart3 className="h-5 w-5 text-secondary" />
                   Dashboard BI
                 </CardTitle>
                 <CardDescription>

@@ -386,20 +386,20 @@ const DeepRiskAI: React.FC = () => {
 
         {/* Predictive Analysis */}
         {prediction && (
-          <Card className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border-cyan-500/30">
+          <Card className="bg-gradient-to-r from-info/20 to-secondary/20 border-info/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-cyan-400" />
+                <Activity className="w-5 h-5 text-info" />
                 Análise Preditiva com IA
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400">
+                  <div className="text-3xl font-bold text-info">
                     {prediction.predictedScore.toFixed(0)}
                   </div>
-                  <div className="text-xs text-zinc-400">Score Previsto</div>
+                  <div className="text-xs text-muted-foreground">Score Previsto</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple-400">

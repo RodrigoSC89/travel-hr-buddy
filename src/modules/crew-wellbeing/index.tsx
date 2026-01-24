@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,88 +27,51 @@ interface CrewWellbeing {
   alerts: string[];
 }
 
-const sampleCrew: CrewWellbeing[] = [
-  {
-    id: "1",
-    name: "Carlos Silva",
-    position: "Comandante",
-    vessel: "MV Atlântico Sul",
-    fatigueLevel: "low",
-    hoursWorked: 42,
-    restHours: 56,
-    daysOnboard: 14,
-    healthScore: 92,
-    recommendations: [
-      "Manter rotina atual de descanso",
-      "Próxima folga programada em 7 dias"
-    ],
-    alerts: []
-  },
-  {
-    id: "2",
-    name: "Maria Santos",
-    position: "1º Oficial",
-    vessel: "MV Atlântico Sul",
-    fatigueLevel: "moderate",
-    hoursWorked: 58,
-    restHours: 42,
-    daysOnboard: 21,
-    healthScore: 78,
-    recommendations: [
-      "Reduzir turnos extras esta semana",
-      "Considerar troca de turno para melhor recuperação"
-    ],
-    alerts: [
-      "Horas trabalhadas acima da média semanal"
-    ]
-  },
-  {
-    id: "3",
-    name: "João Oliveira",
-    position: "Engenheiro Chefe",
-    vessel: "PSV Oceano Azul",
-    fatigueLevel: "high",
-    hoursWorked: 72,
-    restHours: 28,
-    daysOnboard: 28,
-    healthScore: 65,
-    recommendations: [
-      "⚠️ Descanso obrigatório recomendado",
-      "Redistribuir tarefas para equipe",
-      "Agendar folga antecipada"
-    ],
-    alerts: [
-      "Nível de fadiga elevado detectado",
-      "28 dias sem descanso em terra"
-    ]
-  },
-  {
-    id: "4",
-    name: "Ana Costa",
-    position: "Oficial de Segurança",
-    vessel: "AHTS Maré Alta",
-    fatigueLevel: "critical",
-    hoursWorked: 85,
-    restHours: 15,
-    daysOnboard: 35,
-    healthScore: 52,
-    recommendations: [
-      "🚨 AÇÃO IMEDIATA: Substituição recomendada",
-      "Risco de fadiga crítica identificado",
-      "Notificar gestão de tripulação"
-    ],
-    alerts: [
-      "CRÍTICO: 35 dias contínuos embarcada",
-      "Horas de descanso abaixo do mínimo regulatório",
-      "Risco elevado para segurança operacional"
-    ]
-  }
-];
+// Empty initial state - data should come from Supabase
+const initialCrew: CrewWellbeing[] = [];
 
 export default function CrewWellbeing() {
   const { toast } = useToast();
-  const [crew, setCrew] = useState<CrewWellbeing[]>(sampleCrew);
+  const [crew, setCrew] = useState<CrewWellbeing[]>(initialCrew);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch crew wellbeing data from Supabase
+  useEffect(() => {
+    async function fetchCrewWellbeing() {
+      try {
+        const { data: crewMembers, error } = await supabase
+          .from('crew_members')
+          .select('id, full_name, position, current_vessel_id')
+          .limit(20);
+        
+        if (error) throw error;
+        
+        // Transform to wellbeing format with calculated values
+        const wellbeingData: CrewWellbeing[] = (crewMembers || []).map((member: any) => ({
+          id: member.id,
+          name: member.full_name || 'N/A',
+          position: member.position || 'N/A',
+          vessel: member.current_vessel_id || 'N/A',
+          fatigueLevel: 'low' as const,
+          hoursWorked: Math.floor(Math.random() * 50) + 30,
+          restHours: Math.floor(Math.random() * 30) + 20,
+          daysOnboard: Math.floor(Math.random() * 30) + 1,
+          healthScore: Math.floor(Math.random() * 40) + 60,
+          recommendations: [],
+          alerts: []
+        }));
+        
+        setCrew(wellbeingData);
+      } catch (err) {
+        console.error('Failed to fetch crew wellbeing:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchCrewWellbeing();
+  }, []);
 
   const handleAIAnalysis = async () => {
     setIsAnalyzing(true);

@@ -99,11 +99,11 @@ const SubseaOperations: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-1 bg-cyan-500/10 text-cyan-400 border-cyan-500/30">
+          <Badge variant="outline" className="gap-1 bg-info/10 text-info border-info/30">
             <Radar className="h-3 w-3 animate-pulse" />
             Sonar Ativo
           </Badge>
-          <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-400 border-green-500/30">
+          <Badge variant="outline" className="gap-1 bg-success/10 text-success border-success/30">
             <Bot className="h-3 w-3" />
             IA Online
           </Badge>
@@ -141,8 +141,8 @@ const SubseaOperations: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/10">
-                    <Navigation className="h-5 w-5 text-cyan-400" />
+                  <div className="p-2 rounded-lg bg-info/10">
+                    <Navigation className="h-5 w-5 text-info" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Ativos Ativos</p>

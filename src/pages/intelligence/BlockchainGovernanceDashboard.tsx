@@ -339,7 +339,7 @@ export default function BlockchainGovernanceDashboard() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+                <div className="p-4 rounded-lg bg-secondary/10 border border-secondary/20">
                   <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
                     <Hash className="h-3 w-3" />
                     Transaction Hash
@@ -374,8 +374,8 @@ export default function BlockchainGovernanceDashboard() {
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-lg bg-indigo-500/10">
-                        <Award className="h-6 w-6 text-indigo-500" />
+                      <div className="p-3 rounded-lg bg-secondary/10">
+                        <Award className="h-6 w-6 text-secondary" />
                       </div>
                       <div>
                         <h4 className="font-bold">{cert.type}</h4>
@@ -383,7 +383,7 @@ export default function BlockchainGovernanceDashboard() {
                       </div>
                     </div>
                     <Badge variant={cert.status === "valid" ? "default" : "secondary"} 
-                           className={cert.status === "valid" ? "bg-emerald-500" : "bg-amber-500"}>
+                           className={cert.status === "valid" ? "bg-success" : "bg-warning"}>
                       {cert.status === "valid" ? "Válido" : "Expirando"}
                     </Badge>
                   </div>
