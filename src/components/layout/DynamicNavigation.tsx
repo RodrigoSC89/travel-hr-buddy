@@ -141,26 +141,26 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-zinc-900 dark:bg-zinc-950 text-white h-screen overflow-y-auto shadow-lg transition-transform duration-300",
+          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-sidebar dark:bg-sidebar text-sidebar-foreground h-screen overflow-y-auto shadow-lg transition-transform duration-300",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           className
         )}
       >
-        <div className="p-4 border-b border-zinc-800">
+        <div className="p-4 border-b border-sidebar-border">
           <h1 className="font-bold text-xl flex items-center gap-2">
-            <Ship className="w-6 h-6 text-blue-400" />
+            <Ship className="w-6 h-6 text-primary" />
             🧭 Nautilus One
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">Sistema Corporativo - v177.0</p>
+          <p className="text-xs text-muted-foreground mt-1">Sistema Corporativo - v177.0</p>
         </div>
 
         {/* Filter Controls */}
-        <div className="p-3 border-b border-zinc-800">
-          <label className="text-xs text-zinc-400 mb-2 block">Filter by Status:</label>
+        <div className="p-3 border-b border-sidebar-border">
+          <label className="text-xs text-muted-foreground mb-2 block">Filter by Status:</label>
           <select
             value={filterMode}
             onChange={(e) => setFilterMode(e.target.value as FilterMode)}
-            className="w-full p-2 text-sm bg-zinc-800 border border-zinc-700 rounded-md text-white"
+            className="w-full p-2 text-sm bg-sidebar-accent border border-sidebar-border rounded-md text-sidebar-foreground"
           >
             <option value="all">All Modules</option>
             <option value="complete">✅ Complete Only</option>
@@ -180,11 +180,11 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
               <div key={category} className="mb-2">
                 <button
                   onClick={() => toggleSection(category)}
-                  className="w-full flex items-center justify-between p-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-semibold"
+                  className="w-full flex items-center justify-between p-2 rounded-md hover:bg-sidebar-accent transition-colors text-sm font-semibold"
                 >
                   <span>{getCategoryLabel(category)}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-zinc-500">({filteredModules.length})</span>
+                    <span className="text-xs text-muted-foreground">({filteredModules.length})</span>
                     {isOpen ? (
                       <ChevronDown className="w-4 h-4" />
                     ) : (
@@ -203,8 +203,8 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
                         className={cn(
                           "flex items-center justify-between px-4 py-2 rounded-md text-sm transition-colors",
                           isActive(module.route || "")
-                            ? "bg-blue-600 text-white"
-                            : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                            ? "bg-primary text-primary-foreground"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent"
                         )}
                       >
                         <span className="truncate">{module.name}</span>

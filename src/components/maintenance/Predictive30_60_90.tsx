@@ -239,13 +239,13 @@ export function Predictive30_60_90() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl">
-            <Brain className="h-6 w-6 text-purple-500" />
+          <div className="p-3 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-xl">
+            <Brain className="h-6 w-6 text-secondary-foreground" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Previsão 30/60/90 Dias
-              <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
+              <Badge className="bg-gradient-to-r from-secondary to-accent text-secondary-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 IA Preditiva 2.0
               </Badge>

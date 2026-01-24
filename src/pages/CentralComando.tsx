@@ -367,7 +367,7 @@ function CentralComandoContent() {
 
               <motion.div whileHover={{ scale: 1.05 }} data-tour="ia-button">
                 <Badge 
-                  className="cursor-pointer bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 text-white border-0 shadow-lg shadow-purple-500/25 px-3 py-1"
+                  className="cursor-pointer bg-gradient-to-r from-secondary via-accent to-destructive text-secondary-foreground border-0 shadow-lg shadow-secondary/25 px-3 py-1"
                   onClick={() => setShowAIPanel(!showAIPanel)}
                 >
                   <Brain className="h-3 w-3 mr-1.5 animate-pulse" />

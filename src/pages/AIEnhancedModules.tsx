@@ -45,13 +45,13 @@ export default function AIEnhancedModules() {
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <div className="p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl">
-          <Brain className="h-8 w-8 text-purple-500" />
+        <div className="p-4 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-2xl">
+          <Brain className="h-8 w-8 text-secondary-foreground" />
         </div>
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             Nautilus One - Módulos com IA Integrada
-            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500">
+            <Badge className="bg-gradient-to-r from-secondary to-accent text-secondary-foreground">
               Revolucionário
             </Badge>
           </h1>

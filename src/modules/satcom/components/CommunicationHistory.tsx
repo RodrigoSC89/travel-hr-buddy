@@ -169,31 +169,31 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
       </CardHeader>
       <CardContent>
         {/* Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-4 bg-zinc-900/50 rounded-lg">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-4 bg-muted/50 rounded-lg">
           <div>
-            <div className="text-sm text-zinc-400">Success Rate</div>
-            <div className="text-2xl font-bold text-green-400">{stats.successRate}%</div>
+            <div className="text-sm text-muted-foreground">Success Rate</div>
+            <div className="text-2xl font-bold text-success">{stats.successRate}%</div>
           </div>
           <div>
-            <div className="text-sm text-zinc-400">Avg Latency</div>
-            <div className="text-2xl font-bold text-blue-400">{stats.avgLatency}ms</div>
+            <div className="text-sm text-muted-foreground">Avg Latency</div>
+            <div className="text-2xl font-bold text-info">{stats.avgLatency}ms</div>
           </div>
           <div>
-            <div className="text-sm text-zinc-400">Sent</div>
-            <div className="text-2xl font-bold text-purple-400">{stats.sent}</div>
+            <div className="text-sm text-muted-foreground">Sent</div>
+            <div className="text-2xl font-bold text-secondary-foreground">{stats.sent}</div>
           </div>
           <div>
-            <div className="text-sm text-zinc-400">Received</div>
-            <div className="text-2xl font-bold text-cyan-400">{stats.received}</div>
+            <div className="text-sm text-muted-foreground">Received</div>
+            <div className="text-2xl font-bold text-primary">{stats.received}</div>
           </div>
         </div>
 
         {/* History Log */}
         <ScrollArea className="h-[400px] pr-4">
           {loading ? (
-            <div className="text-center py-8 text-zinc-400">Loading history...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading history...</div>
           ) : filteredLogs.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">
+            <div className="text-center py-8 text-muted-foreground">
               <History className="w-12 h-12 mx-auto mb-2 opacity-50" />
               <p>No transmission history yet</p>
             </div>

@@ -171,10 +171,10 @@ export default function ListaAuditoriasIMCA() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">📋 Auditorias Técnicas Registradas</h2>
         <div className="flex gap-2">
-          <Button onClick={exportarCSV} className="bg-blue-600 text-white hover:bg-blue-700">
+          <Button onClick={exportarCSV} className="bg-primary text-primary-foreground hover:bg-primary/90">
             Exportar CSV
           </Button>
-          <Button onClick={exportarPDF} className="bg-zinc-700 text-white hover:bg-zinc-800">
+          <Button onClick={exportarPDF} className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
             Exportar PDF
           </Button>
         </div>

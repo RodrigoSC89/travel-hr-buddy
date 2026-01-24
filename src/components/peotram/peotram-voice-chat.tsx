@@ -342,8 +342,8 @@ export function PeotramVoiceChat() {
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg">
-            <Mic className="h-6 w-6 text-purple-500" />
+          <div className="p-2 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-lg">
+            <Mic className="h-6 w-6 text-secondary-foreground" />
           </div>
           <div>
             <h3 className="font-semibold flex items-center gap-2">

@@ -394,19 +394,19 @@ export default function NOC() {
         </div>
 
         {/* Bottom Status Bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 px-4 py-2">
+        <div className="fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border px-4 py-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-6">
               <span className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-green-400" />
+                <Shield className="h-4 w-4 text-success" />
                 Segurança: OK
               </span>
               <span className="flex items-center gap-2">
-                <Fuel className="h-4 w-4 text-blue-400" />
+                <Fuel className="h-4 w-4 text-info" />
                 Combustível: Normal
               </span>
               <span className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-purple-400" />
+                <Users className="h-4 w-4 text-secondary-foreground" />
                 Tripulação: 247 ativos
               </span>
             </div>

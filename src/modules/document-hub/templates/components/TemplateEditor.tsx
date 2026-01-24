@@ -113,7 +113,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Toolbar */}
-        <div className="flex flex-wrap gap-1 p-2 bg-zinc-900/50 rounded-lg border border-zinc-700">
+        <div className="flex flex-wrap gap-1 p-2 bg-muted/50 rounded-lg border border-border">
           {/* Text Formatting */}
           <MenuButton
             onClick={() => editor.chain().focus().toggleBold().run()}
