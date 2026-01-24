@@ -445,15 +445,15 @@ const FuelOptimizerPage = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-200 dark:border-emerald-800">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30 dark:border-success/20">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Leaf className="h-4 w-4 text-emerald-500" />
+              <Leaf className="h-4 w-4 text-success" />
               CO₂ Reduzido
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">{stats.co2Reduced.toFixed(1)}t</div>
+            <div className="text-2xl font-bold text-success">{stats.co2Reduced.toFixed(1)}t</div>
             <p className="text-xs text-muted-foreground">Impacto ambiental</p>
           </CardContent>
         </Card>
@@ -643,9 +643,9 @@ const FuelOptimizerPage = () => {
                   </Card>
                   <Card className="bg-muted/50">
                     <CardContent className="pt-4">
-                      <Leaf className="h-8 w-8 text-emerald-500 mb-2" />
+                      <Leaf className="h-8 w-8 text-success mb-2" />
                       <p className="text-sm text-muted-foreground">CO₂ Reduzido</p>
-                      <p className="text-2xl font-bold text-emerald-600">
+                      <p className="text-2xl font-bold text-success">
                         {selectedOptimization.ai_analysis?.environmental_impact?.co2_reduction_tons?.toFixed(1) || "0"}t
                       </p>
                     </CardContent>

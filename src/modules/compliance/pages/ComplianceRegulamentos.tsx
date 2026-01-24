@@ -143,11 +143,11 @@ export default function ComplianceRegulamentos() {
 
   const getCategoryBadge = (category: string) => {
     const colors: Record<string, string> = {
-      maritime: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-      labor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-      environmental: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-      financial: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-      safety: "bg-red-500/20 text-red-400 border-red-500/30",
+      maritime: "bg-primary/20 text-primary border-primary/30",
+      labor: "bg-info/20 text-info border-info/30",
+      environmental: "bg-success/20 text-success border-success/30",
+      financial: "bg-warning/20 text-warning border-warning/30",
+      safety: "bg-destructive/20 text-destructive border-destructive/30",
     };
     const labels: Record<string, string> = {
       maritime: "Marítimo",

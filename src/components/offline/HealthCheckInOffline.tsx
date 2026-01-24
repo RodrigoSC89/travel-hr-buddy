@@ -97,8 +97,8 @@ export function HealthCheckInOffline() {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="py-12 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/10 flex items-center justify-center">
-            <Check className="h-8 w-8 text-emerald-500" />
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-success/10 flex items-center justify-center">
+            <Check className="h-8 w-8 text-success" />
           </div>
           <h3 className="text-lg font-semibold mb-2">Check-in Registrado!</h3>
           <p className="text-muted-foreground text-sm">
@@ -114,12 +114,12 @@ export function HealthCheckInOffline() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-rose-500" />
+            <Heart className="h-5 w-5 text-destructive" />
             Check-in de Saúde
           </CardTitle>
           <Badge 
             variant="outline" 
-            className="flex items-center gap-1 text-emerald-600 border-emerald-300"
+            className="flex items-center gap-1 text-success border-success/50"
           >
             <Cloud className="h-3 w-3" />
             Pronto

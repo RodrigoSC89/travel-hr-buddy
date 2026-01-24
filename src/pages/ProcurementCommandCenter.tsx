@@ -118,9 +118,9 @@ interface InventoryItem {
 
 const statusColors: Record<string, string> = {
   draft: "bg-muted text-muted-foreground border-muted",
-  sent: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  quoted: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  awarded: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  sent: "bg-primary/20 text-primary border-primary/30",
+  quoted: "bg-warning/20 text-warning border-warning/30",
+  awarded: "bg-success/20 text-success border-success/30",
   cancelled: "bg-destructive/20 text-destructive border-destructive/30",
   expired: "bg-muted text-muted-foreground border-muted",
 };

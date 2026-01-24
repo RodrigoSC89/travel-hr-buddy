@@ -324,7 +324,7 @@ export function InsightsPanel() {
                   <div className="flex items-center gap-2">
                     <h4 className="font-medium">{crew.name}</h4>
                     {crew.readyForPromotion && (
-                      <Badge variant="outline" className="text-emerald-600 border-emerald-500">
+                      <Badge variant="outline" className="text-success border-success">
                         <ArrowUpRight className="h-3 w-3 mr-1" />
                         Promoção
                       </Badge>
@@ -347,7 +347,7 @@ export function InsightsPanel() {
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs">
                     <span className="text-muted-foreground">Fadiga</span>
-                    <span className={crew.fatigueRisk === "critical" ? "text-rose-500" : ""}>{crew.fatigueScore}%</span>
+                    <span className={crew.fatigueRisk === "critical" ? "text-destructive" : ""}>{crew.fatigueScore}%</span>
                   </div>
                   <Progress value={crew.fatigueScore} className={`h-2 ${getFatigueColor(crew.fatigueRisk)}`} />
                 </div>
@@ -378,7 +378,7 @@ export function InsightsPanel() {
               {crew.alerts.length > 0 && (
                 <div className="space-y-1">
                   {crew.alerts.map((alert, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-rose-600">
+                    <div key={i} className="flex items-center gap-2 text-xs text-destructive">
                       <AlertTriangle className="h-3 w-3" />
                       <span>{alert}</span>
                     </div>
