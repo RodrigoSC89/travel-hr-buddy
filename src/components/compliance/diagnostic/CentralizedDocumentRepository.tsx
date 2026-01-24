@@ -95,55 +95,12 @@ function useDocuments() {
   });
 }
 
-const MOCK_DOCUMENTS: Document[] = [
-  {
-    id: '1',
-    name: 'POP-SEG-001 - Procedimento de Combate a Incêndio',
-    type: 'pdf',
-    category: 'procedure',
-    module: 'PEOTRAM',
-    version: '3.2',
-    status: 'current',
-    created_at: '2024-01-15',
-    updated_at: '2025-01-10',
-    created_by: 'João Silva',
-    size: '2.4 MB',
-    tags: ['segurança', 'incêndio', 'emergência', 'NR-10'],
-    vessel: 'Todos',
-    description: 'Procedimento operacional para combate a incêndio conforme PEOTRAM Elemento 3',
-    ocr_indexed: true,
-    download_count: 45
-  },
-  {
-    id: '2',
-    name: 'Manual de Operações DP - IMCA M117',
-    type: 'pdf',
-    category: 'manual',
-    module: 'PEO-DP',
-    version: '2.0',
-    status: 'current',
-    created_at: '2023-06-20',
-    updated_at: '2024-12-05',
-    created_by: 'Maria Santos',
-    size: '15.8 MB',
-    tags: ['DP', 'operação', 'IMCA', 'posicionamento'],
-    vessel: 'Navio Alpha',
-    description: 'Manual completo de operações de posicionamento dinâmico',
-    ocr_indexed: true,
-    download_count: 123
-  }
-];
-
-const VERSION_HISTORY: Version[] = [
-  { version: '3.2', date: '2025-01-10', author: 'João Silva', changes: 'Atualização de procedimentos de evacuação' },
-  { version: '3.1', date: '2024-09-15', author: 'Maria Santos', changes: 'Correção de erros tipográficos' },
-  { version: '3.0', date: '2024-06-01', author: 'João Silva', changes: 'Revisão completa conforme novo PEOTRAM 2024' },
-  { version: '2.5', date: '2024-01-20', author: 'Carlos Oliveira', changes: 'Adição de novos equipamentos' }
-];
+// Empty fallback - use Supabase hook for real data
+const VERSION_HISTORY: Version[] = [];
 
 export function CentralizedDocumentRepository() {
-  const { data: realDocuments, isLoading } = useDocuments();
-  const documents = realDocuments?.length ? realDocuments : MOCK_DOCUMENTS;
+  const { data: realDocuments = [], isLoading } = useDocuments();
+  const documents = realDocuments;
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedModule, setSelectedModule] = useState('all');

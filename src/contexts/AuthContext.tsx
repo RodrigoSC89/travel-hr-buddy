@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/production-logger";
 
 type OAuthProvider = "google" | "github" | "azure";
 
@@ -40,7 +41,7 @@ const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    console.warn("useAuth called outside of AuthProvider, returning default value");
+    logger.warn("useAuth called outside of AuthProvider, returning default value");
     return defaultAuthValue;
   }
   return context;

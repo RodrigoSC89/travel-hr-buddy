@@ -5,6 +5,7 @@
 
 import * as Sentry from '@sentry/react';
 import { AdvancedMonitoring } from './advanced-metrics';
+import { logger } from '@/lib/utils/production-logger';
 
 // Types
 interface Alert {
@@ -226,7 +227,7 @@ export class IntelligentAlerting {
   
   // Private: Critical notification
   private static async notifyCritical(alert: Alert) {
-    console.error('[CRITICAL ALERT]', alert);
+    logger.error('[CRITICAL ALERT]', undefined, { alert });
     
     Sentry.captureMessage(`CRITICAL: ${alert.title}`, {
       level: 'error',
@@ -236,12 +237,12 @@ export class IntelligentAlerting {
   
   // Private: Warning notification
   private static async notifyWarning(alert: Alert) {
-    console.warn('[WARNING ALERT]', alert);
+    logger.warn('[WARNING ALERT]', { alert });
   }
   
   // Private: Info notification
   private static async notifyInfo(alert: Alert) {
-    console.info('[INFO ALERT]', alert);
+    logger.info('[INFO ALERT]', { alert });
   }
 }
 

@@ -75,78 +75,8 @@ const SEVERITY_CONFIG: Record<NCSeverity, { color: string; weight: number; maxDa
   low: { color: 'bg-blue-500 text-white', weight: 1, maxDays: 45 }
 };
 
-const MOCK_NCS: NonConformance[] = [
-  {
-    id: '1',
-    code: 'NC-2025-00041',
-    title: 'Certificado NR-10 Vencido',
-    description: 'Colaborador Carlos Mendes com certificado NR-10 vencido há 15 dias',
-    severity: 'critical',
-    status: 'assigned',
-    category: 'Treinamento',
-    source: 'audit',
-    created_at: new Date().toISOString(),
-    due_date: addDays(new Date(), 7).toISOString(),
-    assigned_to: 'user-1',
-    assigned_name: 'João Silva (Gestor RH)',
-    progress: 25,
-    escalation_count: 0,
-    workflow_history: [
-      { step: 'Abertura Automática', status: 'completed', date: new Date().toISOString(), user: 'Sistema', notes: 'NC aberta automaticamente após auditoria' },
-      { step: 'Designação', status: 'current', date: new Date().toISOString(), user: 'Sistema', notes: 'Atribuído ao Gestor RH conforme regra de negócio' }
-    ]
-  },
-  {
-    id: '2',
-    code: 'NC-2025-00042',
-    title: 'Documentação Incompleta de EPI',
-    description: 'Falta registro de entrega de EPIs para 3 colaboradores da operação',
-    severity: 'high',
-    status: 'in_progress',
-    category: 'Documentação',
-    source: 'inspection',
-    created_at: addDays(new Date(), -5).toISOString(),
-    due_date: addDays(new Date(), 10).toISOString(),
-    assigned_to: 'user-2',
-    assigned_name: 'Maria Santos (Coord. Segurança)',
-    root_cause: 'Processo manual de registro sem controle sistêmico',
-    action_plan: 'Implementar registro digital de entrega de EPIs com assinatura eletrônica',
-    evidence_expected: 'Print do sistema + Lista de EPIs atualizada',
-    progress: 60,
-    escalation_count: 0,
-    workflow_history: [
-      { step: 'Abertura', status: 'completed', date: addDays(new Date(), -5).toISOString(), user: 'Inspetor', notes: 'Identificado durante inspeção de campo' },
-      { step: 'Designação', status: 'completed', date: addDays(new Date(), -4).toISOString(), user: 'Sistema' },
-      { step: 'Plano de Ação', status: 'current', date: addDays(new Date(), -3).toISOString(), user: 'Maria Santos' }
-    ]
-  },
-  {
-    id: '3',
-    code: 'NC-2025-00043',
-    title: 'Procedimento NR-35 Desatualizado',
-    description: 'Procedimento de trabalho em altura não revisado há mais de 12 meses',
-    severity: 'medium',
-    status: 'pending_approval',
-    category: 'Procedimentos',
-    source: 'audit',
-    created_at: addDays(new Date(), -10).toISOString(),
-    due_date: addDays(new Date(), 20).toISOString(),
-    assigned_to: 'user-3',
-    assigned_name: 'Pedro Costa (Eng. Segurança)',
-    root_cause: 'Falta de cronograma de revisão periódica',
-    action_plan: 'Revisar procedimento e implementar calendário de revisões',
-    evidence_expected: 'Procedimento revisado + Cronograma de revisões',
-    evidence_uploaded: true,
-    progress: 85,
-    escalation_count: 0,
-    workflow_history: [
-      { step: 'Abertura', status: 'completed', date: addDays(new Date(), -10).toISOString() },
-      { step: 'Designação', status: 'completed', date: addDays(new Date(), -9).toISOString() },
-      { step: 'Plano de Ação', status: 'completed', date: addDays(new Date(), -7).toISOString() },
-      { step: 'Evidência Enviada', status: 'current', date: addDays(new Date(), -1).toISOString() }
-    ]
-  }
-];
+// Empty fallback - components use useNonConformities hook for real data
+const EMPTY_NCS: NonConformance[] = [];
 
 const RESPONSIBLE_OPTIONS = [
   { id: 'user-1', name: 'João Silva', role: 'Gestor RH' },
@@ -168,7 +98,7 @@ const ROOT_CAUSE_OPTIONS = [
 ];
 
 export function NCAutomaticWorkflow() {
-  const [ncs, setNcs] = useState<NonConformance[]>(MOCK_NCS);
+  const [ncs, setNcs] = useState<NonConformance[]>(EMPTY_NCS);
   const [selectedNC, setSelectedNC] = useState<NonConformance | null>(null);
   const [activeTab, setActiveTab] = useState('all');
   const [isCreatingNC, setIsCreatingNC] = useState(false);
