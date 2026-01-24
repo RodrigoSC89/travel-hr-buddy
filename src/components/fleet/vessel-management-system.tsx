@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface Vessel {
   id: string;
@@ -130,84 +131,25 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         .order("created_at", { ascending: false });
       
       if (error) {
-        // Mock data fallback
-        const mockVessels: Vessel[] = [
-          {
-            id: "1",
-            name: "MV Atlântico Explorer",
-            imo_number: "9876543",
-            vessel_type: "Container Ship",
-            flag_state: "Brasil",
-            status: "active",
-            current_location: "Santos, Brasil",
-            next_port: "Rio de Janeiro",
-            eta: "2024-01-15T10:00:00Z",
-            created_at: "2024-01-01T00:00:00Z",
-            crew_count: 24,
-            cargo_capacity: 12000,
-            fuel_consumption: 15.2,
-            last_maintenance: "2024-01-01"
-          },
-          {
-            id: "2",
-            name: "MV Pacífico Star",
-            imo_number: "9765432",
-            vessel_type: "Bulk Carrier",
-            flag_state: "Brasil",
-            status: "active",
-            current_location: "Paranaguá, Brasil",
-            next_port: "Salvador",
-            eta: "2024-01-18T14:30:00Z",
-            created_at: "2024-01-01T00:00:00Z",
-            crew_count: 22,
-            cargo_capacity: 18000,
-            fuel_consumption: 18.5,
-            last_maintenance: "2023-12-15"
-          },
-          {
-            id: "3",
-            name: "MV Índico Pioneer",
-            imo_number: "9654321",
-            vessel_type: "Tanker",
-            flag_state: "Brasil",
-            status: "maintenance",
-            current_location: "Estaleiro Suape",
-            next_port: "Fortaleza",
-            eta: "2024-01-22T08:00:00Z",
-            created_at: "2024-01-01T00:00:00Z",
-            crew_count: 26,
-            cargo_capacity: 25000,
-            fuel_consumption: 22.1,
-            last_maintenance: "2024-01-10"
-          },
-          {
-            id: "4",
-            name: "MV Mediterrâneo",
-            imo_number: "9543210",
-            vessel_type: "Cargo Ship",
-            flag_state: "Brasil",
-            status: "active",
-            current_location: "Vitória, Brasil",
-            next_port: "Recife",
-            eta: "2024-01-20T16:00:00Z",
-            created_at: "2024-01-01T00:00:00Z",
-            crew_count: 20,
-            cargo_capacity: 8500,
-            fuel_consumption: 12.8,
-            last_maintenance: "2023-12-20"
-          }
-        ];
-        
-        setVessels(mockVessels);
+        logger.error('Failed to fetch vessels', { error });
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar as embarcações do servidor",
+          variant: "destructive"
+        });
+        // Set empty array on error - no mock data fallback
+        setVessels([]);
       } else {
         setVessels(vessels || []);
       }
     } catch (error) {
+      logger.error('Vessel load error', { error });
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
         variant: "destructive"
       });
+      setVessels([]);
     } finally {
       setIsLoading(false);
     }
