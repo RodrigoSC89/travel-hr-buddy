@@ -310,11 +310,11 @@ export function TelemetryAlertsTimeline({
                     {/* Timeline dot */}
                     <div className={cn(
                       "absolute left-2 w-5 h-5 rounded-full border-2 flex items-center justify-center z-10",
-                      alert.status === "active" && alert.severity === "critical" && "border-red-500 bg-red-500 animate-pulse",
-                      alert.status === "active" && alert.severity !== "critical" && "border-orange-500 bg-orange-500",
-                      alert.status === "acknowledged" && "border-amber-500 bg-amber-500/50",
-                      alert.status === "resolved" && "border-emerald-500 bg-emerald-500/50",
-                      alert.status === "escalated" && "border-purple-500 bg-purple-500"
+                      alert.status === "active" && alert.severity === "critical" && "border-destructive bg-destructive animate-pulse",
+                      alert.status === "active" && alert.severity !== "critical" && "border-warning bg-warning",
+                      alert.status === "acknowledged" && "border-warning bg-warning/50",
+                      alert.status === "resolved" && "border-success bg-success/50",
+                      alert.status === "escalated" && "border-info bg-info"
                     )}>
                       {alert.status === "resolved" ? (
                         <CheckCircle className="h-3 w-3 text-white" />

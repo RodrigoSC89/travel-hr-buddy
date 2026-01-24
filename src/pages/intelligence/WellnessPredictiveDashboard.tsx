@@ -149,14 +149,14 @@ export default function WellnessPredictiveDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Heart className="h-8 w-8 text-rose-500" />
+            <Heart className="h-8 w-8 text-destructive" />
             SAWP - Wellness Preditivo
           </h1>
           <p className="text-muted-foreground mt-1">
             Monitoramento e predição de bem-estar da tripulação
           </p>
         </div>
-        <Badge variant="outline" className="text-rose-500 border-rose-500">
+        <Badge variant="outline" className="text-destructive border-destructive">
           <Activity className="h-3 w-3 mr-1" />
           Monitorando 24 tripulantes
         </Badge>
@@ -292,17 +292,17 @@ export default function WellnessPredictiveDashboard() {
                     <p className="text-xl font-bold">{selectedCrew.mood}/5</p>
                   </div>
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <Moon className="h-5 w-5 mx-auto text-blue-500" />
+                    <Moon className="h-5 w-5 mx-auto text-primary" />
                     <p className="text-xs text-muted-foreground mt-1">Sono</p>
                     <p className="text-xl font-bold">{selectedCrew.sleep}h</p>
                   </div>
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <Heart className="h-5 w-5 mx-auto text-rose-500" />
+                    <Heart className="h-5 w-5 mx-auto text-destructive" />
                     <p className="text-xs text-muted-foreground mt-1">FC Repouso</p>
                     <p className="text-xl font-bold">{selectedCrew.heartRate}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <Activity className="h-5 w-5 mx-auto text-purple-500" />
+                    <Activity className="h-5 w-5 mx-auto text-info" />
                     <p className="text-xs text-muted-foreground mt-1">HRV</p>
                     <p className="text-xl font-bold capitalize">{selectedCrew.hrvTrend}</p>
                   </div>

@@ -251,9 +251,9 @@ export function SecurityAuditCenter() {
                     key={check.id}
                     className={cn(
                       "p-4 rounded-lg border-2 transition-all",
-                      check.status === "passed" && "border-emerald-500/30 bg-emerald-500/5",
-                      check.status === "warning" && "border-amber-500/30 bg-amber-500/5",
-                      check.status === "failed" && "border-red-500/30 bg-red-500/5"
+                      check.status === "passed" && "border-success/30 bg-success/5",
+                      check.status === "warning" && "border-warning/30 bg-warning/5",
+                      check.status === "failed" && "border-destructive/30 bg-destructive/5"
                     )}
                   >
                     <div className="flex items-start gap-3">

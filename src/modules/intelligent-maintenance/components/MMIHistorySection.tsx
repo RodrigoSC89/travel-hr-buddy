@@ -110,11 +110,11 @@ export default function MMIHistorySection() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "preventiva":
-        return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Preventiva</Badge>;
+        return <Badge className="bg-primary/10 text-primary">Preventiva</Badge>;
       case "corretiva":
-        return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Corretiva</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Corretiva</Badge>;
       case "preditiva":
-        return <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">Preditiva</Badge>;
+        return <Badge className="bg-info/10 text-info">Preditiva</Badge>;
       default:
         return <Badge variant="secondary">{type}</Badge>;
     }

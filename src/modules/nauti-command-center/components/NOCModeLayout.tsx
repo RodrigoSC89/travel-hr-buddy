@@ -202,7 +202,7 @@ export function NOCModeLayout() {
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="bg-[#12121a] border border-gray-800">
-          <TabsTrigger value="executive" className="data-[state=active]:bg-emerald-500/20">
+          <TabsTrigger value="executive" className="data-[state=active]:bg-success/20">
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Executivo
           </TabsTrigger>
@@ -210,7 +210,7 @@ export function NOCModeLayout() {
             <Monitor className="h-4 w-4 mr-2" />
             Monitoramento
           </TabsTrigger>
-          <TabsTrigger value="ai" className="data-[state=active]:bg-purple-500/20">
+          <TabsTrigger value="ai" className="data-[state=active]:bg-info/20">
             <Brain className="h-4 w-4 mr-2" />
             IA Autônoma
             {statistics.pending > 0 && (

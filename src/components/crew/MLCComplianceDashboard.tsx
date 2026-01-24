@@ -185,12 +185,12 @@ export function MLCComplianceDashboard() {
         <Card className="border-border/50 bg-card/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+              <div className="p-2 bg-success/10 rounded-lg">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Conformes</p>
-                <p className="text-xl font-bold text-emerald-400">{compliantRecords}</p>
+                <p className="text-xl font-bold text-success">{compliantRecords}</p>
               </div>
             </div>
           </CardContent>

@@ -399,7 +399,7 @@ export function WeatherRoutingPanel({
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                           {index === 0 && (
-                            <Badge className="bg-emerald-500">
+                            <Badge className="bg-success">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Recomendada
                             </Badge>

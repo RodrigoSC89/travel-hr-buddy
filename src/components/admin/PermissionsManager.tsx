@@ -241,9 +241,9 @@ export function PermissionsManager() {
           </div>
 
           {selectedRole === 'admin' && (
-            <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-400" />
-              <p className="text-sm text-amber-400">
+            <div className="mt-4 p-4 bg-warning/10 border border-warning/30 rounded-lg flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+              <p className="text-sm text-warning">
                 Administradores possuem acesso total. Permissões não podem ser alteradas.
               </p>
             </div>
@@ -255,8 +255,8 @@ export function PermissionsManager() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-4 cursor-pointer hover:border-primary/50 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 rounded-lg">
-              <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            <div className="p-2 bg-success/10 rounded-lg">
+              <CheckCircle2 className="h-5 w-5 text-success" />
             </div>
             <div>
               <h4 className="font-medium">Conceder Todas</h4>
@@ -266,8 +266,8 @@ export function PermissionsManager() {
         </Card>
         <Card className="p-4 cursor-pointer hover:border-primary/50 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-500/10 rounded-lg">
-              <Eye className="h-5 w-5 text-amber-400" />
+            <div className="p-2 bg-warning/10 rounded-lg">
+              <Eye className="h-5 w-5 text-warning" />
             </div>
             <div>
               <h4 className="font-medium">Somente Leitura</h4>
