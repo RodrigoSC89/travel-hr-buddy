@@ -35,7 +35,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Brain,
     status: "active",
     progress: 75,
-    color: "from-violet-500 to-purple-600",
+    color: "from-secondary to-accent",
     description: "IA que opera com ZERO intervenção humana em operações rotineiras",
     stats: { decisions: "12,458", accuracy: "97.3%", savings: "$2.3M" },
     component: "autonomous"
@@ -46,7 +46,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Blocks,
     status: "beta",
     progress: 60,
-    color: "from-blue-500 to-cyan-600",
+    color: "from-primary to-info",
     description: "Smart contracts e certificados imutáveis na blockchain",
     stats: { contracts: "847", verified: "100%", disputes: "0" },
     component: "blockchain"
@@ -57,7 +57,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Glasses,
     status: "active",
     progress: 85,
-    color: "from-green-500 to-emerald-600",
+    color: "from-success to-success/80",
     description: "Treinamento imersivo e suporte remoto com realidade aumentada",
     stats: { trained: "1,247", scenarios: "45", retention: "+60%" },
     component: "vrar"
@@ -68,7 +68,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Heart,
     status: "active",
     progress: 80,
-    color: "from-red-500 to-pink-600",
+    color: "from-destructive to-accent",
     description: "Monitoramento 24/7 de saúde e prevenção preditiva",
     stats: { monitored: "847", prevented: "23", satisfaction: "94%" },
     component: "health"
@@ -79,7 +79,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Globe2,
     status: "beta",
     progress: 45,
-    color: "from-indigo-500 to-blue-600",
+    color: "from-secondary to-primary",
     description: "Rede global de inteligência coletiva entre 10,000+ navios",
     stats: { vessels: "3,847", dataPoints: "1.2B", savings: "$1.8M" },
     component: "network"
@@ -90,7 +90,7 @@ const REVOLUTIONARY_FEATURES = [
     icon: Trophy,
     status: "active",
     progress: 95,
-    color: "from-amber-500 to-yellow-600",
+    color: "from-warning to-warning/80",
     description: "Sistema de pontos, níveis e recompensas para engagement máximo",
     stats: { users: "2,847", engagement: "95%", performance: "+40%" },
     component: "gamification"

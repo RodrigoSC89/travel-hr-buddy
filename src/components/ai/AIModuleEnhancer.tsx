@@ -179,8 +179,8 @@ export function AIModuleEnhancer({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg">
-              <Brain className="h-5 w-5 text-purple-500" />
+            <div className="p-2 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-lg">
+              <Brain className="h-5 w-5 text-secondary" />
             </div>
             <div>
               <CardTitle className="text-sm flex items-center gap-2">

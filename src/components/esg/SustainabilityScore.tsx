@@ -125,24 +125,24 @@ export function SustainabilityScore() {
   const [activeTab, setActiveTab] = useState("overview");
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return "text-green-500";
-    if (score >= 70) return "text-yellow-500";
-    if (score >= 50) return "text-orange-500";
-    return "text-red-500";
+    if (score >= 85) return "text-success";
+    if (score >= 70) return "text-warning";
+    if (score >= 50) return "text-warning/80";
+    return "text-destructive";
   };
 
   const getScoreGradient = (score: number) => {
-    if (score >= 85) return "from-green-500 to-emerald-500";
-    if (score >= 70) return "from-yellow-500 to-amber-500";
-    if (score >= 50) return "from-orange-500 to-red-500";
-    return "from-red-500 to-rose-500";
+    if (score >= 85) return "from-success to-success/80";
+    if (score >= 70) return "from-warning to-warning/80";
+    if (score >= 50) return "from-warning/80 to-destructive";
+    return "from-destructive to-destructive/80";
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <Target className="h-4 w-4 text-gray-500" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down": return <TrendingDown className="h-4 w-4 text-destructive" />;
+      default: return <Target className="h-4 w-4 text-muted-foreground" />;
     }
   };
 

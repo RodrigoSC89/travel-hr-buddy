@@ -168,10 +168,10 @@ export default function TrackingDashboard() {
 
       {/* AI Recommendations */}
       {recommendations.length > 0 && (
-        <Card className="border-purple-500/30 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+        <Card className="border-secondary/30 bg-gradient-to-r from-secondary/5 to-accent/5">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Brain className="h-5 w-5 text-purple-500" />
+              <Brain className="h-5 w-5 text-secondary" />
               Recomendações da IA
             </CardTitle>
           </CardHeader>

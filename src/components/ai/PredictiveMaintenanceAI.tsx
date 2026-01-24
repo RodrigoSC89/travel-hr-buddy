@@ -215,11 +215,11 @@ export const PredictiveMaintenanceAI: React.FC = () => {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/20">
-                <Settings className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-primary/20">
+                <Settings className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Componentes Monitorados</p>
@@ -229,15 +229,15 @@ export const PredictiveMaintenanceAI: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/20">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Em Risco</p>
-                <p className="text-2xl font-bold text-orange-500">{stats.atRisk}</p>
+                <p className="text-2xl font-bold text-warning">{stats.atRisk}</p>
               </div>
             </div>
           </CardContent>
@@ -257,11 +257,11 @@ export const PredictiveMaintenanceAI: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <Brain className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-secondary/20">
+                <Brain className="h-5 w-5 text-secondary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Precisão ML</p>

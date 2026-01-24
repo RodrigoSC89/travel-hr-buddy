@@ -348,11 +348,11 @@ export function PeotramVoiceChat() {
           <div>
             <h3 className="font-semibold flex items-center gap-2">
               Voice Chat PEOTRAM
-              <Badge variant="outline" className="text-xs bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+              <Badge variant="outline" className="text-xs bg-gradient-to-r from-secondary/10 to-accent/10">
                 <Sparkles className="h-3 w-3 mr-1" /> IA de Voz
               </Badge>
               {useElevenLabs && (
-                <Badge className="text-xs bg-gradient-to-r from-emerald-500 to-teal-500">
+                <Badge className="text-xs bg-gradient-to-r from-success to-info">
                   <Zap className="h-3 w-3 mr-1" /> ElevenLabs HD
                 </Badge>
               )}

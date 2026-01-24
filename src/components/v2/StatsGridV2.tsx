@@ -28,24 +28,24 @@ interface StatsGridV2Props {
 
 const colorClasses = {
   blue: {
-    bg: "from-blue-500/10 to-cyan-500/5",
-    icon: "bg-blue-500/20 text-blue-500",
-    text: "text-blue-500"
+    bg: "from-primary/10 to-info/5",
+    icon: "bg-primary/20 text-primary",
+    text: "text-primary"
   },
   purple: {
-    bg: "from-purple-500/10 to-pink-500/5",
-    icon: "bg-purple-500/20 text-purple-500",
-    text: "text-purple-500"
+    bg: "from-secondary/10 to-accent/5",
+    icon: "bg-secondary/20 text-secondary",
+    text: "text-secondary"
   },
   green: {
-    bg: "from-green-500/10 to-emerald-500/5",
-    icon: "bg-green-500/20 text-green-500",
-    text: "text-green-500"
+    bg: "from-success/10 to-success/5",
+    icon: "bg-success/20 text-success",
+    text: "text-success"
   },
   orange: {
-    bg: "from-orange-500/10 to-amber-500/5",
-    icon: "bg-orange-500/20 text-orange-500",
-    text: "text-orange-500"
+    bg: "from-warning/10 to-warning/5",
+    icon: "bg-warning/20 text-warning",
+    text: "text-warning"
   },
   yellow: {
     bg: "from-warning/10 to-warning/5",
