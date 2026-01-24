@@ -144,15 +144,15 @@ export const ResponsiveDashboard: React.FC = () => {
       change: 5.1, 
       icon: <Zap className="h-6 w-6 sm:h-8 sm:w-8" />, 
       trend: "up" as const,
-      gradient: "from-purple-500 to-pink-400"
+      gradient: "from-secondary to-accent"
     }
   ]);
 
   const [quickStats] = useState([
-    { label: "Viagens Ativas", value: "23", icon: Plane, color: "text-blue-500" },
-    { label: "Funcionários", value: "1,247", icon: Users, color: "text-green-500" },
-    { label: "Escritórios", value: "8", icon: Building, color: "text-purple-500" },
-    { label: "Países", value: "12", icon: Globe, color: "text-orange-500" }
+    { label: "Viagens Ativas", value: "23", icon: Plane, color: "text-primary" },
+    { label: "Funcionários", value: "1,247", icon: Users, color: "text-success" },
+    { label: "Escritórios", value: "8", icon: Building, color: "text-secondary-foreground" },
+    { label: "Países", value: "12", icon: Globe, color: "text-warning" }
   ]);
 
   useEffect(() => {

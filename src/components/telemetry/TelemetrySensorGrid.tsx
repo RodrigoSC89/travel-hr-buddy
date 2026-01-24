@@ -385,10 +385,10 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
                           key={i}
                           className={cn(
                             "flex-1 rounded-t-sm transition-all",
-                            sensor.status === "critical" && "bg-red-500/60",
-                            sensor.status === "warning" && "bg-amber-500/60",
+                            sensor.status === "critical" && "bg-destructive/60",
+                            sensor.status === "warning" && "bg-warning/60",
                             sensor.status === "normal" && "bg-primary/60",
-                            sensor.status === "offline" && "bg-slate-500/60"
+                            sensor.status === "offline" && "bg-muted/60"
                           )}
                           style={{ height: `${Math.max(10, height)}%` }}
                         />
