@@ -1,8 +1,9 @@
 /**
  * Medical Supplies Management Tab
+ * MIGRATED: Uses Supabase hooks
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,16 +16,23 @@ import { Label } from '@/components/ui/label';
 import { 
   Pill, Search, Package, AlertTriangle, Calendar, 
   Plus, Download, Filter, Brain, ShoppingCart, BarChart3,
-  CheckCircle2, Clock, MapPin, Trash2
+  CheckCircle2, Clock, MapPin, Trash2, Loader2
 } from 'lucide-react';
-import { mockSupplies, medicalCategories } from '../data/mockData';
+import { useMedicalSupplies } from '../hooks/useMedicalData';
 import { MedicalSupply } from '../types';
 import { toast } from 'sonner';
 import { useMedicalAI } from '../hooks/useMedicalAI';
 
+const medicalCategories = [
+  'Analgésicos', 'Anti-inflamatórios', 'Antibióticos', 'Antieméticos',
+  'Gastrointestinal', 'Curativos', 'Soluções', 'Emergência', 'EPIs', 'Equipamentos'
+];
+
 export default function SuppliesTab() {
-  const { analyzeInventoryRisks, isLoading } = useMedicalAI();
-  const [supplies, setSupplies] = useState<MedicalSupply[]>(mockSupplies);
+  const { analyzeInventoryRisks, isLoading: aiLoading } = useMedicalAI();
+  const { data: dbSupplies = [], isLoading: loadingSupplies } = useMedicalSupplies();
+  
+  const [supplies, setSupplies] = useState<MedicalSupply[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -41,6 +49,13 @@ export default function SuppliesTab() {
     batchNumber: '',
     location: ''
   });
+
+  // Sync from DB
+  useEffect(() => {
+    if (dbSupplies.length > 0) setSupplies(dbSupplies);
+  }, [dbSupplies]);
+  
+  const isLoading = aiLoading || loadingSupplies;
 
   const filteredSupplies = supplies.filter(supply => {
     const matchesSearch = supply.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
