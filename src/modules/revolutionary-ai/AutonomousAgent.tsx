@@ -1,6 +1,7 @@
 /**
  * REVOLUTIONARY AI - Autonomous Agent (AI Ops)
  * Funcionalidade 6 & 10: Gestor Digital Autônomo + Agente Autônomo de Decisão
+ * MIGRATED: Uses ai_decisions table from Supabase
  */
 
 import React, { useState, useEffect } from 'react';
@@ -14,9 +15,12 @@ import {
   Brain, Zap, CheckCircle, AlertTriangle, Clock, 
   ShoppingCart, Wrench, FileText, Bell, Activity,
   Play, Pause, Settings, Eye, ThumbsUp, ThumbsDown,
-  RefreshCw, Target
+  RefreshCw, Target, Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface AgentAction {
   id: string;
@@ -39,90 +43,80 @@ interface AgentMetrics {
   activeRules: number;
 }
 
-const MOCK_ACTIONS: AgentAction[] = [
-  {
-    id: '1',
-    type: 'purchase',
-    title: 'Pedido Automático: Filtros de Óleo',
-    description: 'Estoque abaixo do mínimo (2 unidades). Gerando pedido para 10 unidades ao fornecedor preferencial.',
-    status: 'pending',
-    confidence: 95,
-    impact: 'medium',
-    timestamp: new Date(),
-    requiresApproval: true
-  },
-  {
-    id: '2',
-    type: 'maintenance',
-    title: 'Agendamento: Manutenção Preventiva Motor #2',
-    description: 'Baseado em padrão de vibração e horas de operação, agendando manutenção para próxima janela disponível.',
-    status: 'executing',
-    confidence: 87,
-    impact: 'high',
-    timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    requiresApproval: false
-  },
-  {
-    id: '3',
-    type: 'report',
-    title: 'Relatório Semanal de Compliance',
-    description: 'Gerando e enviando relatório automático para stakeholders conforme cronograma.',
-    status: 'completed',
-    confidence: 100,
-    impact: 'low',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    result: 'Relatório enviado para 5 destinatários',
-    requiresApproval: false
-  },
-  {
-    id: '4',
-    type: 'alert',
-    title: 'Alerta: Certificado STCW Vencendo',
-    description: 'Notificando RH e tripulante sobre certificação vencendo em 15 dias.',
-    status: 'completed',
-    confidence: 100,
-    impact: 'high',
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    result: 'Notificações enviadas via email e push',
-    requiresApproval: false
-  },
-  {
-    id: '5',
-    type: 'optimization',
-    title: 'Otimização: Rota de Abastecimento',
-    description: 'Sugerindo rota alternativa com economia de 12% no combustível baseado em condições climáticas.',
-    status: 'pending',
-    confidence: 78,
-    impact: 'high',
-    timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
-    requiresApproval: true
-  }
-];
+// Fetch agent actions from ai_decisions
+function useAgentActions() {
+  return useQuery({
+    queryKey: ['agent-actions'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('ai_decisions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
 
-const MOCK_METRICS: AgentMetrics = {
-  actionsToday: 23,
-  successRate: 94.5,
-  timeSaved: 12.5,
-  costSaved: 15800,
-  activeRules: 18
-};
+      if (error) throw error;
+
+      return (data || []).map(d => ({
+        id: d.id,
+        type: (d.type || 'optimization') as AgentAction['type'],
+        title: d.title,
+        description: d.description,
+        status: (d.status || 'pending') as AgentAction['status'],
+        confidence: d.confidence || 85,
+        impact: (d.impact || 'medium') as AgentAction['impact'],
+        timestamp: new Date(d.created_at),
+        result: d.justification_expected_outcome || undefined,
+        requiresApproval: d.status === 'pending'
+      } as AgentAction));
+    },
+    staleTime: 30 * 1000
+  });
+}
+
+// Calculate metrics from actions
+function useAgentMetrics(actions: AgentAction[]) {
+  const today = new Date().toDateString();
+  const actionsToday = actions.filter(a => a.timestamp.toDateString() === today).length;
+  const completed = actions.filter(a => a.status === 'completed');
+  const successRate = actions.length > 0 ? (completed.length / actions.length) * 100 : 0;
+
+  return {
+    actionsToday,
+    successRate: Math.round(successRate * 10) / 10,
+    timeSaved: actionsToday * 0.5,
+    costSaved: completed.length * 650,
+    activeRules: 18
+  };
+}
 
 export function AutonomousAgent() {
+  const queryClient = useQueryClient();
+  const { data: actions = [], isLoading } = useAgentActions();
   const [isAgentActive, setIsAgentActive] = useState(true);
-  const [actions, setActions] = useState(MOCK_ACTIONS);
-  const [metrics] = useState(MOCK_METRICS);
   const [selectedAction, setSelectedAction] = useState<AgentAction | null>(null);
+  
+  const metrics = useAgentMetrics(actions);
+
+  const updateActionMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { error } = await supabase
+        .from('ai_decisions')
+        .update({ status, executed_at: status === 'completed' ? new Date().toISOString() : null })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['agent-actions'] });
+      toast.success('Ação atualizada');
+    }
+  });
 
   const handleApprove = (actionId: string) => {
-    setActions(prev => prev.map(a => 
-      a.id === actionId ? { ...a, status: 'executing' as const } : a
-    ));
+    updateActionMutation.mutate({ id: actionId, status: 'executing' });
   };
 
   const handleReject = (actionId: string) => {
-    setActions(prev => prev.map(a => 
-      a.id === actionId ? { ...a, status: 'cancelled' as const } : a
-    ));
+    updateActionMutation.mutate({ id: actionId, status: 'cancelled' });
   };
 
   const getActionIcon = (type: string) => {

@@ -271,11 +271,11 @@ export function InsightsPanel() {
             </div>
           </div>
         </Card>
-        <Card className={`p-4 ${criticalCount > 0 ? "border-rose-500/50" : ""}`}>
+        <Card className={`p-4 ${criticalCount > 0 ? "border-destructive/50" : ""}`}>
           <div className="flex items-center gap-3">
-            <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-rose-500" : "text-muted-foreground"} opacity-50`} />
+            <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-destructive" : "text-muted-foreground"} opacity-50`} />
             <div>
-              <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-rose-500" : ""}`}>
+              <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-destructive" : ""}`}>
                 {criticalCount}
               </p>
               <p className="text-xs text-muted-foreground">Em Risco</p>
@@ -284,7 +284,7 @@ export function InsightsPanel() {
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <Heart className="h-8 w-8 text-emerald-500 opacity-50" />
+            <Heart className="h-8 w-8 text-success opacity-50" />
             <div>
               <p className="text-2xl font-bold">{(100 - avgFatigue).toFixed(0)}%</p>
               <p className="text-xs text-muted-foreground">Bem-estar</p>
@@ -293,7 +293,7 @@ export function InsightsPanel() {
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <Award className="h-8 w-8 text-amber-500 opacity-50" />
+            <Award className="h-8 w-8 text-warning opacity-50" />
             <div>
               <p className="text-2xl font-bold">
                 {crewData.filter(c => c.readyForPromotion).length}
@@ -314,10 +314,10 @@ export function InsightsPanel() {
             transition={{ delay: index * 0.1 }}
           >
             <Card className={`p-4 border-l-4 ${
-              crew.fatigueRisk === "critical" ? "border-l-rose-500 bg-rose-500/5" :
-              crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
-              crew.fatigueRisk === "medium" ? "border-l-amber-500" :
-              "border-l-emerald-500"
+              crew.fatigueRisk === "critical" ? "border-l-destructive bg-destructive/5" :
+              crew.fatigueRisk === "high" ? "border-l-warning bg-warning/5" :
+              crew.fatigueRisk === "medium" ? "border-l-warning" :
+              "border-l-success"
             }`}>
               <div className="flex items-start justify-between mb-3">
                 <div>

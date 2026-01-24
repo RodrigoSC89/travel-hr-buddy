@@ -159,7 +159,7 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
               <TabsTrigger value="all">
                 Todos ({categorizedCerts.all.length})
               </TabsTrigger>
-              <TabsTrigger value="expired" className="text-rose-500">
+              <TabsTrigger value="expired" className="text-destructive">
                 Vencidos ({categorizedCerts.expired.length})
               </TabsTrigger>
               <TabsTrigger value="expiring30">
@@ -209,8 +209,8 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        status.variant === 'destructive' ? 'bg-rose-500/10' :
-                        status.variant === 'default' ? 'bg-amber-500/10' :
+                        status.variant === 'destructive' ? 'bg-destructive/10' :
+                        status.variant === 'default' ? 'bg-warning/10' :
                         'bg-muted'
                       }`}>
                         <FileText className={`h-4 w-4 ${status.color}`} />
