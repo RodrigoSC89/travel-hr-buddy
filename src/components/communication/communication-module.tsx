@@ -317,16 +317,16 @@ export const CommunicationModule = () => {
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-lg">
-              <h4 className="font-semibold text-teal-800 mb-2">📋 Integração com Tarefas</h4>
-              <p className="text-sm text-teal-600">
+            <div className="p-4 bg-gradient-to-br from-info/10 to-primary/10 border border-info/20 rounded-lg">
+              <h4 className="font-semibold text-info mb-2">📋 Integração com Tarefas</h4>
+              <p className="text-sm text-info/80">
                 Criação automática de tarefas e lembretes a partir das conversas
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg">
-              <h4 className="font-semibold text-indigo-800 mb-2">🌐 Tradução Instantânea</h4>
-              <p className="text-sm text-indigo-600">
+            <div className="p-4 bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-lg">
+              <h4 className="font-semibold text-primary mb-2">🌐 Tradução Instantânea</h4>
+              <p className="text-sm text-primary/80">
                 Comunicação global com tradução automática em mais de 100 idiomas
               </p>
             </div>

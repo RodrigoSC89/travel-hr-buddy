@@ -119,7 +119,7 @@ const MaritimeIdentitySystem: React.FC = () => {
         secondary: "#0d9488",
         accent: "#14b8a6"
       },
-      preview: "bg-gradient-to-br from-teal-700 to-teal-400",
+      preview: "bg-gradient-to-br from-info to-info/60",
       maritime: true
     },
     {

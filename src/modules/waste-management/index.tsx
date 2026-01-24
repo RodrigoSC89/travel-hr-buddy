@@ -72,10 +72,10 @@ function WasteManagement() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b bg-gradient-to-r from-teal-500/10 via-green-500/10 to-emerald-500/10">
+      <div className="border-b bg-gradient-to-r from-info/10 via-success/10 to-success/10">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-teal-500 to-green-600 text-white">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-info to-success text-primary-foreground">
               <Recycle className="h-8 w-8" />
             </div>
             <div>

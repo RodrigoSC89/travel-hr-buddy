@@ -257,7 +257,7 @@ const Innovation = () => {
                   Repositório centralizado de dados para treinamento de IA
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-cyan-100 text-cyan-700">45.7TB</Badge>
+                  <Badge className="bg-info/20 text-info">45.7TB</Badge>
                   <span className="text-xs text-muted-foreground">Estruturado</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/data-lake")}>Explorar Dados</Button>

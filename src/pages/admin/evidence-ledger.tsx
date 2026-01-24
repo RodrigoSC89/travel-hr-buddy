@@ -131,14 +131,14 @@ export default function EvidenceLedgerPage() {
 
   const getEventTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      inspection: "bg-blue-100 text-blue-800",
-      audit: "bg-purple-100 text-purple-800",
-      correction: "bg-yellow-100 text-yellow-800",
-      checklist: "bg-green-100 text-green-800",
-      incident: "bg-red-100 text-red-800",
-      training: "bg-indigo-100 text-indigo-800"
+      inspection: "bg-primary/10 text-primary",
+      audit: "bg-secondary/10 text-secondary",
+      correction: "bg-warning/10 text-warning",
+      checklist: "bg-success/10 text-success",
+      incident: "bg-destructive/10 text-destructive",
+      training: "bg-info/10 text-info"
     };
-    return colors[type] || "bg-gray-100 text-gray-800";
+    return colors[type] || "bg-muted text-muted-foreground";
   };
 
   if (loading) {

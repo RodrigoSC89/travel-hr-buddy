@@ -166,10 +166,10 @@ export default function DPRealtime() {
               </div>
               <div className="flex items-center justify-center">
                 <div 
-                  className="w-16 h-16 rounded-full border-2 border-cyan-500 flex items-center justify-center relative"
+                  className="w-16 h-16 rounded-full border-2 border-info flex items-center justify-center relative"
                 >
                   <div 
-                    className="absolute w-1 h-6 bg-cyan-500 rounded-full origin-bottom"
+                    className="absolute w-1 h-6 bg-info rounded-full origin-bottom"
                     style={{ transform: `rotate(${telemetry.currentDirection}deg)` }}
                   />
                 </div>

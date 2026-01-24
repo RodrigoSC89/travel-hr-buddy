@@ -219,23 +219,23 @@ export function NOCModeLayout() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="metrics" className="data-[state=active]:bg-blue-500/20">
+          <TabsTrigger value="metrics" className="data-[state=active]:bg-primary/20">
             <BarChart3 className="h-4 w-4 mr-2" />
             Métricas IA
           </TabsTrigger>
-          <TabsTrigger value="history" className="data-[state=active]:bg-cyan-500/20">
+          <TabsTrigger value="history" className="data-[state=active]:bg-info/20">
             <HistoryIcon className="h-4 w-4 mr-2" />
             Histórico
           </TabsTrigger>
-          <TabsTrigger value="comparison" className="data-[state=active]:bg-pink-500/20">
+          <TabsTrigger value="comparison" className="data-[state=active]:bg-accent/20">
             <TrendingUp className="h-4 w-4 mr-2" />
             Comparativo
           </TabsTrigger>
-          <TabsTrigger value="insights" className="data-[state=active]:bg-teal-500/20">
+          <TabsTrigger value="insights" className="data-[state=active]:bg-success/20">
             <Lightbulb className="h-4 w-4 mr-2" />
             Insights
           </TabsTrigger>
-          <TabsTrigger value="config" className="data-[state=active]:bg-orange-500/20">
+          <TabsTrigger value="config" className="data-[state=active]:bg-warning/20">
             <Settings className="h-4 w-4 mr-2" />
             Config
           </TabsTrigger>

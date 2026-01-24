@@ -291,8 +291,8 @@ Formate a resposta em markdown estruturado com informações práticas para nave
 
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-cyan-500/10">
-              <Waves className="h-5 w-5 text-cyan-500" />
+            <div className="p-2 rounded-lg bg-info/10">
+              <Waves className="h-5 w-5 text-info" />
             </div>
             <div>
               <p className="font-medium text-sm">Ondas</p>

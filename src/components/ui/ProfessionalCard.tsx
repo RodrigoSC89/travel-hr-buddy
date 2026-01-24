@@ -157,11 +157,11 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {dot && (
         <span className={cn(
           "w-1.5 h-1.5 rounded-full",
-          status === 'success' && "bg-green-500",
-          status === 'warning' && "bg-amber-500",
-          status === 'danger' && "bg-red-500",
-          status === 'info' && "bg-cyan-500",
-          status === 'neutral' && "bg-gray-500"
+          status === 'success' && "bg-success",
+          status === 'warning' && "bg-warning",
+          status === 'danger' && "bg-destructive",
+          status === 'info' && "bg-info",
+          status === 'neutral' && "bg-muted-foreground"
         )} />
       )}
       {children}

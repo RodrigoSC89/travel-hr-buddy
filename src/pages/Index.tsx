@@ -64,7 +64,7 @@ const NautilusCommandHero = memo(() => {
             <div>
               <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 Nautilus Command Center
-                <Badge className="bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30">
+                <Badge className="bg-info/20 text-info border-info/30">
                   Novo
                 </Badge>
               </h2>
@@ -151,7 +151,7 @@ const AIModulesPanel = memo(() => {
       route: "/mlc-inspection",
       icon: Shield,
       badge: "ILO",
-      color: "from-teal-500 to-green-600"
+      color: "from-info to-success"
     },
     { 
       name: "Pre-OVID", 

@@ -174,19 +174,19 @@ export default function ProcurementDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-r from-cyan-500/5 to-transparent">
+        <Card className="border-l-4 border-l-info bg-gradient-to-r from-info/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Lead Time Médio</p>
                 <p className="text-2xl font-bold">4.8d</p>
-                <div className="flex items-center gap-1 text-xs text-cyan-600">
+                <div className="flex items-center gap-1 text-xs text-info">
                   <TrendingDown className="h-3 w-3" />
                   -1.2 dias
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-cyan-500/10">
-                <Clock className="h-6 w-6 text-cyan-500" />
+              <div className="p-3 rounded-full bg-info/10">
+                <Clock className="h-6 w-6 text-info" />
               </div>
             </div>
           </CardContent>

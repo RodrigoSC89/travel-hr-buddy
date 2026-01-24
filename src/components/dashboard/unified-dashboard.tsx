@@ -99,21 +99,21 @@ const UnifiedDashboard = () => {
       description: "Alertas inteligentes", 
       icon: Bell, 
       path: "/notification-center",
-      color: "bg-orange-500"
+      color: "bg-warning"
     },
     { 
       title: "IA & Inovação", 
       description: "Ferramentas avançadas", 
       icon: Zap, 
       path: "/innovation",
-      color: "bg-cyan-500"
+      color: "bg-info"
     },
     { 
       title: "Sistema Marítimo", 
       description: "Gestão completa marítima", 
       icon: Globe, 
       path: "/maritime",
-      color: "bg-indigo-500"
+      color: "bg-primary"
     }
   ];
 

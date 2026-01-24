@@ -42,14 +42,14 @@ const getWindArrow = (direction: number): string => {
 };
 
 const getGustColor = (gust: number): string => {
-  if (gust >= 20) return 'bg-red-500/30 text-red-300';
-  if (gust >= 10) return 'bg-cyan-500/30 text-cyan-300';
+  if (gust >= 20) return 'bg-destructive/30 text-destructive';
+  if (gust >= 10) return 'bg-info/30 text-info';
   return '';
 };
 
 const getRainColor = (rain: number): string => {
-  if (rain > 0) return 'bg-blue-500/20 text-blue-300';
-  return 'text-white/50';
+  if (rain > 0) return 'bg-primary/20 text-primary';
+  return 'text-muted-foreground';
 };
 
 export const HourlyForecastTable: React.FC<HourlyForecastTableProps> = ({

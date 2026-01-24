@@ -135,16 +135,16 @@ Garanta que este modo funcione mesmo sob conexão inexistente.`,
 ];
 
 const categoryColors: Record<string, string> = {
-  security: 'bg-red-500',
-  ai: 'bg-purple-500',
-  testing: 'bg-blue-500',
-  performance: 'bg-orange-500',
-  offline: 'bg-cyan-500',
-  iot: 'bg-green-500',
-  refactoring: 'bg-yellow-500',
-  i18n: 'bg-pink-500',
-  deploy: 'bg-indigo-500',
-  safety: 'bg-red-600',
+  security: 'bg-destructive',
+  ai: 'bg-secondary',
+  testing: 'bg-primary',
+  performance: 'bg-warning',
+  offline: 'bg-info',
+  iot: 'bg-success',
+  refactoring: 'bg-warning',
+  i18n: 'bg-accent',
+  deploy: 'bg-primary',
+  safety: 'bg-destructive',
 };
 
 export default function PromptPanel() {

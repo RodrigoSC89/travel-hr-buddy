@@ -43,27 +43,27 @@ const ROUTE_CATEGORIES: Record<string, { icon: React.ElementType; routes: string
   },
   "IA & Automação": {
     icon: Brain,
-    color: "bg-purple-500",
+    color: "bg-secondary",
     routes: ["/ai-command", "/ai-hub", "/autonomous-command", "/workflow-command", "/revolutionary-ai"]
   },
   "Compliance": {
     icon: Shield,
-    color: "bg-red-500",
+    color: "bg-destructive",
     routes: ["/peo-dp", "/peotram", "/sgso", "/mlc-inspection", "/compliance-hub", "/pre-ovid"]
   },
   "Relatórios": {
     icon: FileText,
-    color: "bg-cyan-500",
+    color: "bg-info",
     routes: ["/reports-command", "/documents", "/templates", "/export-center"]
   },
   "RH & Tripulação": {
     icon: Users,
-    color: "bg-pink-500",
+    color: "bg-accent",
     routes: ["/crew", "/crew-wellness", "/users", "/ai-training"]
   },
   "Sistema": {
     icon: Settings,
-    color: "bg-slate-500",
+    color: "bg-muted-foreground",
     routes: ["/settings", "/integrations", "/api-center", "/admin"]
   },
 };

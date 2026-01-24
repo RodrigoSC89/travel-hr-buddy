@@ -236,13 +236,13 @@ export function TrainingAcademyAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-xl">
-            <GraduationCap className="h-6 w-6 text-indigo-500" />
+          <div className="p-3 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">
+            <GraduationCap className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Academia Nautilus
-              <Badge className="bg-gradient-to-r from-indigo-500 to-purple-500">
+              <Badge className="bg-gradient-to-r from-primary to-secondary">
                 <Sparkles className="h-3 w-3 mr-1" />
                 IA Adaptativa
               </Badge>

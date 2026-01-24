@@ -220,16 +220,16 @@ export const RealTimeSystemMonitor: React.FC = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  {metric.label === "CPU Usage" && <Cpu className="w-5 h-5 text-blue-500" />}
-                  {metric.label === "Memory Usage" && <HardDrive className="w-5 h-5 text-purple-500" />}
-                  {metric.label === "Network I/O" && <Wifi className="w-5 h-5 text-green-500" />}
-                  {metric.label === "Disk Usage" && <Database className="w-5 h-5 text-orange-500" />}
-                  {metric.label === "Active Users" && <Users className="w-5 h-5 text-pink-500" />}
-                  {metric.label === "Response Time" && <Clock className="w-5 h-5 text-indigo-500" />}
+                  {metric.label === "CPU Usage" && <Cpu className="w-5 h-5 text-primary" />}
+                  {metric.label === "Memory Usage" && <HardDrive className="w-5 h-5 text-secondary" />}
+                  {metric.label === "Network I/O" && <Wifi className="w-5 h-5 text-success" />}
+                  {metric.label === "Disk Usage" && <Database className="w-5 h-5 text-warning" />}
+                  {metric.label === "Active Users" && <Users className="w-5 h-5 text-accent-foreground" />}
+                  {metric.label === "Response Time" && <Clock className="w-5 h-5 text-info" />}
                   <span className="font-medium">{metric.label}</span>
                 </div>
                 <div className={`flex items-center gap-1 text-sm ${
-                  metric.trend > 0 ? "text-green-500" : "text-red-500"
+                  metric.trend > 0 ? "text-success" : "text-destructive"
                 }`}>
                   {metric.trend > 0 ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
                   {Math.abs(metric.trend).toFixed(1)}%

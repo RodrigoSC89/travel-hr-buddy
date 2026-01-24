@@ -246,14 +246,14 @@ export function FleetIntelligence() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-cyan-500/20">
+          <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-cyan-500/20">
-                  <Zap className="h-5 w-5 text-cyan-500" />
+                <div className="p-2 rounded-lg bg-info/20">
+                  <Zap className="h-5 w-5 text-info" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-cyan-500">
+                  <p className="text-2xl font-bold text-info">
                     {Math.round(vessels.reduce((acc, v) => acc + v.efficiency, 0) / vessels.length || 0)}%
                   </p>
                   <p className="text-xs text-muted-foreground">Eficiência</p>
