@@ -272,7 +272,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/ar")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5 text-indigo-500" />
+                  <Eye className="h-5 w-5 text-secondary" />
                   Realidade Aumentada
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -282,7 +282,7 @@ const Innovation = () => {
                   Interfaces imersivas para manutenção e treinamento
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-indigo-100 text-indigo-700">Beta</Badge>
+                  <Badge className="bg-secondary/20 text-secondary">Beta</Badge>
                   <span className="text-xs text-muted-foreground">3 aplicações</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/ar")}>Explorar AR</Button>
@@ -293,7 +293,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/blockchain")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-emerald-500" />
+                  <Shield className="h-5 w-5 text-success" />
                   Blockchain
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -303,7 +303,7 @@ const Innovation = () => {
                   Segurança e transparência distribuída para documentos
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-emerald-100 text-emerald-700">Seguro</Badge>
+                  <Badge className="bg-success/20 text-success">Seguro</Badge>
                   <span className="text-xs text-muted-foreground">1,247 transações</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/blockchain")}>Acessar Blockchain</Button>
@@ -356,7 +356,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/quantum-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-pink-500" />
+                  <Activity className="h-5 w-5 text-accent" />
                   Computação Quântica
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -366,7 +366,7 @@ const Innovation = () => {
                   Simulações avançadas para otimização de rotas
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-pink-100 text-pink-700">Experimental</Badge>
+                  <Badge className="bg-accent/20 text-accent">Experimental</Badge>
                   <span className="text-xs text-muted-foreground">Em pesquisa</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/quantum-computing")}>Ver Projetos</Button>
@@ -377,7 +377,7 @@ const Innovation = () => {
               onClick={() => handleModuleAccess("/generative-ai")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-yellow-500" />
+                  <Sparkles className="h-5 w-5 text-warning" />
                   IA Generativa
                   <ChevronRight className="h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </CardTitle>
@@ -387,7 +387,7 @@ const Innovation = () => {
                   Geração automática de documentos e relatórios
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <Badge className="bg-yellow-100 text-yellow-700">GPT-4</Badge>
+                  <Badge className="bg-warning/20 text-warning">GPT-4</Badge>
                   <span className="text-xs text-muted-foreground">156 docs gerados</span>
                 </div>
                 <Button className="w-full" onClick={() => handleModuleAccess("/generative-ai")}>Criar Conteúdo</Button>

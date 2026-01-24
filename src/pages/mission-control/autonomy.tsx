@@ -61,12 +61,12 @@ export default function AutonomyConsole() {
 
   const getActionColor = (action: string) => {
     switch (action) {
-    case "restart": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-    case "cache-clear": return "bg-purple-500/10 text-purple-500 border-purple-500/20";
-    case "reconnect-ai": return "bg-pink-500/10 text-pink-500 border-pink-500/20";
-    case "hotfix": return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-    case "fallback": return "bg-red-500/10 text-red-500 border-red-500/20";
-    default: return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "restart": return "bg-primary/10 text-primary border-primary/20";
+    case "cache-clear": return "bg-secondary/10 text-secondary border-secondary/20";
+    case "reconnect-ai": return "bg-info/10 text-info border-info/20";
+    case "hotfix": return "bg-warning/10 text-warning border-warning/20";
+    case "fallback": return "bg-destructive/10 text-destructive border-destructive/20";
+    default: return "bg-muted/10 text-muted-foreground border-muted/20";
     }
   };
 

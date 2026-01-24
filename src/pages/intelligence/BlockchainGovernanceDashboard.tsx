@@ -175,14 +175,14 @@ export default function BlockchainGovernanceDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Blocks className="h-8 w-8 text-indigo-500" />
+            <Blocks className="h-8 w-8 text-secondary" />
             GDCB - Blockchain Governance
           </h1>
           <p className="text-muted-foreground mt-1">
             Audit trail imutável e certificados de compliance
           </p>
         </div>
-        <Badge variant="outline" className="text-indigo-500 border-indigo-500">
+        <Badge variant="outline" className="text-secondary border-secondary">
           <Lock className="h-3 w-3 mr-1" />
           Rede Polygon Ativa
         </Badge>

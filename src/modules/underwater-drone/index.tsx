@@ -185,36 +185,36 @@ const UnderwaterDrone: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "idle": return "bg-gray-500";
-    case "moving": return "bg-blue-500";
-    case "hovering": return "bg-green-500";
-    case "ascending": return "bg-cyan-500";
-    case "descending": return "bg-indigo-500";
-    case "emergency": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "idle": return "bg-muted";
+    case "moving": return "bg-primary";
+    case "hovering": return "bg-success";
+    case "ascending": return "bg-info";
+    case "descending": return "bg-secondary";
+    case "emergency": return "bg-destructive";
+    default: return "bg-muted";
     }
   };
 
   const getAlertColor = (severity: string) => {
     switch (severity) {
-    case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "info": return "bg-primary/20 text-primary border-primary/30";
+    case "warning": return "bg-warning/20 text-warning border-warning/30";
+    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
+    default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted to-background text-foreground p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Anchor className="w-8 h-8 text-cyan-400" />
+              <Anchor className="w-8 h-8 text-info" />
               Underwater Drone Control
             </h1>
-            <p className="text-zinc-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               ROV/AUV Control System - PATCH 181.0
             </p>
           </div>
@@ -227,49 +227,49 @@ const UnderwaterDrone: React.FC = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="bg-zinc-800/50 border-cyan-500/30">
+          <Card className="bg-muted/50 border-info/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Waves className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs text-zinc-400">Depth</span>
+                <Waves className="w-4 h-4 text-info" />
+                <span className="text-xs text-muted-foreground">Depth</span>
               </div>
-              <div className="text-2xl font-bold text-cyan-400">
+              <div className="text-2xl font-bold text-info">
                 {droneState.position.depth.toFixed(1)}m
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 border-blue-500/30">
+          <Card className="bg-muted/50 border-primary/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Thermometer className="w-4 h-4 text-blue-400" />
-                <span className="text-xs text-zinc-400">Temperature</span>
+                <Thermometer className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground">Temperature</span>
               </div>
-              <div className="text-2xl font-bold text-blue-400">
+              <div className="text-2xl font-bold text-primary">
                 {telemetryData.temperature.toFixed(1)}°C
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 border-green-500/30">
+          <Card className="bg-muted/50 border-success/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Battery className="w-4 h-4 text-green-400" />
-                <span className="text-xs text-zinc-400">Battery</span>
+                <Battery className="w-4 h-4 text-success" />
+                <span className="text-xs text-muted-foreground">Battery</span>
               </div>
-              <div className="text-2xl font-bold text-green-400">
+              <div className="text-2xl font-bold text-success">
                 {telemetryData.battery.level.toFixed(0)}%
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-zinc-800/50 border-purple-500/30">
+          <Card className="bg-muted/50 border-secondary/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Radio className="w-4 h-4 text-purple-400" />
-                <span className="text-xs text-zinc-400">Signal</span>
+                <Radio className="w-4 h-4 text-secondary" />
+                <span className="text-xs text-muted-foreground">Signal</span>
               </div>
-              <div className="text-2xl font-bold text-purple-400">
+              <div className="text-2xl font-bold text-secondary">
                 {telemetryData.communication.signalStrength.toFixed(0)}%
               </div>
             </CardContent>
@@ -278,56 +278,56 @@ const UnderwaterDrone: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Manual Control */}
-          <Card className="bg-zinc-800/50 border-zinc-700">
+          <Card className="bg-muted/50 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Navigation className="w-5 h-5 text-cyan-400" />
+                <Navigation className="w-5 h-5 text-info" />
                 Manual Control
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-xs text-zinc-400 mb-1 block">Target Lat</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Target Lat</label>
                   <Input
                     type="number"
                     step="0.0001"
                     value={targetLat}
                     onChange={(e) => setTargetLat(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-1 block">Target Lon</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Target Lon</label>
                   <Input
                     type="number"
                     step="0.0001"
                     value={targetLon}
                     onChange={(e) => setTargetLon(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-zinc-400 mb-1 block">Target Depth (m)</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Target Depth (m)</label>
                   <Input
                     type="number"
                     value={targetDepth}
                     onChange={(e) => setTargetDepth(parseFloat(e.target.value))}
-                    className="bg-zinc-900/50 border-zinc-700 text-white"
+                    className="bg-background/50 border-border"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <Button onClick={handleMoveTo} className="bg-cyan-600 hover:bg-cyan-700">
+                <Button onClick={handleMoveTo} className="bg-info hover:bg-info/90">
                   <Navigation className="w-4 h-4 mr-2" />
                   Move To Position
                 </Button>
-                <Button onClick={handleChangeDepth} className="bg-blue-600 hover:bg-blue-700">
+                <Button onClick={handleChangeDepth} className="bg-primary hover:bg-primary/90">
                   <Waves className="w-4 h-4 mr-2" />
                   Change Depth
                 </Button>
-                <Button onClick={handleHover} className="bg-green-600 hover:bg-green-700">
+                <Button onClick={handleHover} className="bg-success hover:bg-success/90">
                   <Activity className="w-4 h-4 mr-2" />
                   Hover
                 </Button>

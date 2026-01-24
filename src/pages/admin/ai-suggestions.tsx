@@ -1,6 +1,7 @@
 /**
  * PATCH 648 - AI Suggestions Dashboard
  * Proactive AI insights and automation recommendations
+ * PATCH 649 - Migrated from mock data to real Supabase data
  */
 
 import React, { useState, useEffect } from "react";
@@ -9,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 import {
   AlertCircle,
   Brain,
@@ -50,97 +52,47 @@ const AISuggestionsDashboard: React.FC = () => {
   const loadSuggestions = async () => {
     setLoading(true);
     
-    // Simulated AI suggestions - in production, this would call the AI service
-    const mockSuggestions: AISuggestion[] = [
-      {
-        id: "ai-001",
-        title: "Optimize SGSO Audit Scheduling",
-        description: "Based on historical data, scheduling audits on Tuesdays results in 23% faster completion times. Suggest rescheduling upcoming audits.",
-        category: "optimization",
-        priority: "medium",
-        status: "pending",
-        impact: "Reduce audit completion time by ~2 days",
-        module: "sgso",
-        createdAt: "2025-11-04T10:00:00Z",
-        confidence: 0.87
-      },
-      {
-        id: "ai-002",
-        title: "Crew Training Renewal Alert",
-        description: "5 crew members have certifications expiring within 30 days. Auto-schedule renewal training sessions?",
-        category: "compliance",
-        priority: "high",
-        status: "pending",
-        impact: "Prevent certification lapses",
-        module: "crew-management",
-        createdAt: "2025-11-04T09:30:00Z",
-        confidence: 0.95
-      },
-      {
-        id: "ai-003",
-        title: "Database Index Optimization",
-        description: "Queries on 'missions' table are 40% slower than baseline. Add composite index on (vessel_id, status, created_at)?",
-        category: "optimization",
-        priority: "medium",
-        status: "pending",
-        impact: "Improve query performance by ~40%",
-        module: "mission-control",
-        createdAt: "2025-11-04T08:15:00Z",
-        confidence: 0.92
-      },
-      {
-        id: "ai-004",
-        title: "Predictive Maintenance Alert",
-        description: "Equipment E-42 shows usage patterns similar to previous failures. Schedule preventive maintenance within 7 days.",
-        category: "maintenance",
-        priority: "critical",
-        status: "pending",
-        impact: "Prevent potential equipment failure",
-        module: "mmi",
-        createdAt: "2025-11-04T07:00:00Z",
-        confidence: 0.89
-      },
-      {
-        id: "ai-005",
-        title: "Security Policy Update Needed",
-        description: "Detected outdated security headers. Update Content-Security-Policy to include latest threat vectors.",
-        category: "security",
-        priority: "high",
-        status: "pending",
-        impact: "Enhance application security",
-        module: "api-gateway",
-        createdAt: "2025-11-04T06:45:00Z",
-        confidence: 0.91
-      },
-      {
-        id: "ai-006",
-        title: "Automated Checklist Pre-fill",
-        description: "Mission data suggests standard departure checklist items. Auto-populate checklist based on mission type?",
-        category: "efficiency",
-        priority: "low",
-        status: "applied",
-        impact: "Reduce checklist completion time by 15%",
-        module: "checklists-inteligentes",
-        createdAt: "2025-11-03T14:20:00Z",
-        appliedAt: "2025-11-04T08:00:00Z",
-        confidence: 0.85
-      },
-      {
-        id: "ai-007",
-        title: "Anomaly in Data Sync Pattern",
-        description: "Detected unusual data sync patterns in DP module. Investigate potential data integrity issue.",
-        category: "security",
-        priority: "critical",
-        status: "in_progress",
-        impact: "Ensure data integrity",
-        module: "dp-intelligence",
-        createdAt: "2025-11-04T05:30:00Z",
-        confidence: 0.78
-      }
-    ];
+    try {
+      // Fetch real AI suggestions from Supabase
+      const { data, error } = await supabase
+        .from("ai_suggestions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
 
-    setSuggestions(mockSuggestions);
-    setLoading(false);
+      if (error) {
+        // If table doesn't exist or RLS blocks, use empty array
+        console.warn("Could not fetch AI suggestions:", error.message);
+        setSuggestions([]);
+        setLoading(false);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const mappedSuggestions: AISuggestion[] = data.map((item) => ({
+          id: item.id,
+          title: item.suggestion_text?.substring(0, 50) || "Sugestão IA",
+          description: item.suggestion_text || item.issue_description || "",
+          category: (item.suggestion_type as AISuggestion["category"]) || "optimization",
+          priority: (item.severity as AISuggestion["priority"]) || "medium",
+          status: (item.status as AISuggestion["status"]) || "pending",
+          impact: item.expected_impact || "Melhoria do sistema",
+          module: item.module_name || "system",
+          createdAt: item.created_at || new Date().toISOString(),
+          appliedAt: item.applied_at || undefined,
+          confidence: item.confidence || 0.85
+        }));
+        setSuggestions(mappedSuggestions);
+      } else {
+        // No suggestions found - show empty state
+        setSuggestions([]);
+      }
+    } catch (err) {
+      console.error("Error loading AI suggestions:", err);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredSuggestions = suggestions.filter(s => {
@@ -175,10 +127,10 @@ const AISuggestionsDashboard: React.FC = () => {
 
   const getPriorityBadge = (priority: string) => {
     const styles = {
-      critical: "bg-red-500/10 text-red-500 border-red-500/20",
-      high: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-      medium: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-      low: "bg-blue-500/10 text-blue-500 border-blue-500/20"
+      critical: "bg-destructive/10 text-destructive border-destructive/20",
+      high: "bg-warning/10 text-warning border-warning/20",
+      medium: "bg-warning/10 text-warning/80 border-warning/20",
+      low: "bg-primary/10 text-primary border-primary/20"
     };
 
     return (
@@ -240,42 +192,42 @@ const AISuggestionsDashboard: React.FC = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-yellow-500">Pending</CardTitle>
+            <CardTitle className="text-sm font-medium text-warning">Pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
+            <div className="text-2xl font-bold text-warning">{stats.pending}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-blue-500">In Progress</CardTitle>
+            <CardTitle className="text-sm font-medium text-info">In Progress</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-500">{stats.inProgress}</div>
+            <div className="text-2xl font-bold text-info">{stats.inProgress}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-green-500">Applied</CardTitle>
+            <CardTitle className="text-sm font-medium text-success">Applied</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{stats.applied}</div>
+            <div className="text-2xl font-bold text-success">{stats.applied}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Rejected</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Rejected</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-500">{stats.rejected}</div>
+            <div className="text-2xl font-bold text-muted-foreground">{stats.rejected}</div>
           </CardContent>
         </Card>
-        <Card className="border-red-500/50">
+        <Card className="border-destructive/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-red-500">Critical</CardTitle>
+            <CardTitle className="text-sm font-medium text-destructive">Critical</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-500">{stats.critical}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.critical}</div>
           </CardContent>
         </Card>
       </div>
@@ -318,7 +270,7 @@ const AISuggestionsDashboard: React.FC = () => {
                               </Badge>
                               <Badge
                                 variant="outline"
-                                className="text-xs bg-purple-500/10 text-purple-500"
+                                className="text-xs bg-secondary/10 text-secondary"
                               >
                                 {Math.round(suggestion.confidence * 100)}% confidence
                               </Badge>
@@ -338,7 +290,7 @@ const AISuggestionsDashboard: React.FC = () => {
                                 {new Date(suggestion.createdAt).toLocaleString()}
                               </span>
                               {suggestion.appliedAt && (
-                                <span className="flex items-center gap-1 text-green-500">
+                                <span className="flex items-center gap-1 text-success">
                                   <CheckCircle className="h-3 w-3" />
                                   Applied: {new Date(suggestion.appliedAt).toLocaleString()}
                                 </span>
@@ -351,7 +303,7 @@ const AISuggestionsDashboard: React.FC = () => {
                               <Button
                                 size="sm"
                                 onClick={() => applySuggestion(suggestion.id)}
-                                className="bg-green-500 hover:bg-green-600"
+                                className="bg-success hover:bg-success/90"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
                                 Apply
@@ -368,21 +320,21 @@ const AISuggestionsDashboard: React.FC = () => {
                           )}
 
                           {suggestion.status === "applied" && (
-                            <Badge variant="outline" className="bg-green-500/10 text-green-500">
+                            <Badge variant="outline" className="bg-success/10 text-success">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Applied
                             </Badge>
                           )}
 
                           {suggestion.status === "rejected" && (
-                            <Badge variant="outline" className="bg-gray-500/10 text-gray-500">
+                            <Badge variant="outline" className="bg-muted text-muted-foreground">
                               <XCircle className="h-3 w-3 mr-1" />
                               Rejected
                             </Badge>
                           )}
 
                           {suggestion.status === "in_progress" && (
-                            <Badge variant="outline" className="bg-blue-500/10 text-blue-500">
+                            <Badge variant="outline" className="bg-info/10 text-info">
                               <RefreshCw className="h-3 w-3 mr-1" />
                               In Progress
                             </Badge>
