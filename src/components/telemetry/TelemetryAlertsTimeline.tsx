@@ -185,10 +185,10 @@ export function TelemetryAlertsTimeline({
 
   const getSeverityColor = (severity: TelemetryAlert["severity"]) => {
     const colors: Record<TelemetryAlert["severity"], string> = {
-      critical: "border-red-500 bg-red-500/10",
-      high: "border-orange-500 bg-orange-500/10",
-      medium: "border-amber-500 bg-amber-500/10",
-      low: "border-blue-500 bg-blue-500/10",
+      critical: "border-destructive bg-destructive/10",
+      high: "border-warning bg-warning/10",
+      medium: "border-warning bg-warning/10",
+      low: "border-primary bg-primary/10",
     };
     return colors[severity];
   };

@@ -196,21 +196,21 @@ const generateHistoricalData = () => {
 // Color helpers
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'conforme': case 'fechada': return 'bg-green-500/20 text-green-600 border-green-500/30';
-    case 'nao_conforme': case 'aberta': return 'bg-red-500/20 text-red-600 border-red-500/30';
-    case 'pendente': case 'em_pac': return 'bg-yellow-500/20 text-yellow-600 border-yellow-500/30';
-    case 'em_analise': case 'em_execucao': return 'bg-blue-500/20 text-blue-600 border-blue-500/30';
-    case 'aguardando_validacao': return 'bg-purple-500/20 text-purple-600 border-purple-500/30';
+    case 'conforme': case 'fechada': return 'bg-success/20 text-success border-success/30';
+    case 'nao_conforme': case 'aberta': return 'bg-destructive/20 text-destructive border-destructive/30';
+    case 'pendente': case 'em_pac': return 'bg-warning/20 text-warning border-warning/30';
+    case 'em_analise': case 'em_execucao': return 'bg-primary/20 text-primary border-primary/30';
+    case 'aguardando_validacao': return 'bg-secondary/20 text-secondary border-secondary/30';
     default: return 'bg-muted/20 text-muted-foreground';
   }
 };
 
 const getCriticidadeColor = (criticidade: string) => {
   switch (criticidade) {
-    case 'critico': case 'critica': case 'A': return 'bg-red-500 text-white';
-    case 'alto': case 'alta': case 'B': return 'bg-orange-500 text-white';
-    case 'medio': case 'media': case 'C': return 'bg-yellow-500 text-black';
-    case 'baixo': case 'baixa': case 'D': return 'bg-green-500 text-white';
+    case 'critico': case 'critica': case 'A': return 'bg-destructive text-destructive-foreground';
+    case 'alto': case 'alta': case 'B': return 'bg-warning text-warning-foreground';
+    case 'medio': case 'media': case 'C': return 'bg-warning text-warning-foreground';
+    case 'baixo': case 'baixa': case 'D': return 'bg-success text-success-foreground';
     default: return 'bg-muted';
   }
 };

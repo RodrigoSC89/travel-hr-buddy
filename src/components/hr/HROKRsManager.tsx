@@ -136,9 +136,9 @@ export function HROKRsManager() {
 
   const getLevelBadge = (level: string) => {
     switch (level) {
-      case "company": return <Badge variant="outline" className="border-purple-500 text-purple-500">Empresa</Badge>;
-      case "team": return <Badge variant="outline" className="border-blue-500 text-blue-500">Time</Badge>;
-      case "individual": return <Badge variant="outline" className="border-green-500 text-green-500">Individual</Badge>;
+      case "company": return <Badge variant="outline" className="border-secondary text-secondary">Empresa</Badge>;
+      case "team": return <Badge variant="outline" className="border-primary text-primary">Time</Badge>;
+      case "individual": return <Badge variant="outline" className="border-success text-success">Individual</Badge>;
       default: return null;
     }
   };
