@@ -121,15 +121,15 @@ export default function TrainingDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Drills Pendentes</p>
                 <p className="text-2xl font-bold">{dueDrills}</p>
-                <p className="text-xs text-amber-600">Agendar</p>
+                <p className="text-xs text-warning">Agendar</p>
               </div>
-              <Calendar className="h-8 w-8 text-amber-500 opacity-80" />
+              <Calendar className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>

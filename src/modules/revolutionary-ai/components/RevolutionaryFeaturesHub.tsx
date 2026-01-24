@@ -196,10 +196,10 @@ export function RevolutionaryFeaturesHub() {
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Features Ativas", value: "7", icon: Zap, color: "text-green-500" },
-          { label: "Decisões IA/Dia", value: "45K", icon: Brain, color: "text-violet-500" },
-          { label: "ROI Anual", value: "$9.5M", icon: TrendingUp, color: "text-emerald-500" },
-          { label: "Tripulantes", value: "2,847", icon: Users, color: "text-blue-500" }
+          { label: "Features Ativas", value: "7", icon: Zap, color: "text-success" },
+          { label: "Decisões IA/Dia", value: "45K", icon: Brain, color: "text-secondary" },
+          { label: "ROI Anual", value: "$9.5M", icon: TrendingUp, color: "text-success" },
+          { label: "Tripulantes", value: "2,847", icon: Users, color: "text-primary" }
         ].map((stat, i) => (
           <motion.div
             key={stat.label}

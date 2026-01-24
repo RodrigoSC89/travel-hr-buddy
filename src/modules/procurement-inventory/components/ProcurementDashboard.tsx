@@ -138,19 +138,19 @@ export default function ProcurementDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500 bg-gradient-to-r from-amber-500/5 to-transparent">
+        <Card className="border-l-4 border-l-warning bg-gradient-to-r from-warning/5 to-transparent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Estoque</p>
                 <p className="text-2xl font-bold">4</p>
-                <div className="flex items-center gap-1 text-xs text-amber-600">
+                <div className="flex items-center gap-1 text-xs text-warning">
                   <AlertTriangle className="h-3 w-3" />
                   1 crítico
                 </div>
               </div>
-              <div className="p-3 rounded-full bg-amber-500/10">
-                <AlertCircle className="h-6 w-6 text-amber-500" />
+              <div className="p-3 rounded-full bg-warning/10">
+                <AlertCircle className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>

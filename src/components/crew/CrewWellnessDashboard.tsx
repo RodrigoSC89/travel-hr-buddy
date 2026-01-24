@@ -366,7 +366,7 @@ export function CrewWellnessDashboard() {
                     <p className="text-xs text-muted-foreground">Wellness</p>
                   </div>
                   <div className="p-3 bg-muted rounded-lg text-center">
-                    <Brain className="h-5 w-5 mx-auto mb-1 text-violet-500" />
+                    <Brain className="h-5 w-5 mx-auto mb-1 text-secondary" />
                     <p className="font-bold">{selectedMember.burnoutRisk}%</p>
                     <p className="text-xs text-muted-foreground">Burnout</p>
                   </div>

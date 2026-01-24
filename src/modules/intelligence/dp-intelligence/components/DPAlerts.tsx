@@ -354,9 +354,9 @@ export default function DPAlerts() {
           <div className="space-y-4">
             {pendingFilteredAlerts.map(alert => (
               <Card key={alert.id} className={`border-l-4 ${
-                alert.severity === "critical" ? "border-l-red-500" :
-                alert.severity === "warning" ? "border-l-amber-500" :
-                "border-l-blue-500"
+                alert.severity === "critical" ? "border-l-destructive" :
+                alert.severity === "warning" ? "border-l-warning" :
+                "border-l-primary"
               }`}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">

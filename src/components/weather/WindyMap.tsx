@@ -396,32 +396,32 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               {selectedLayer === "precipitation" && (
                 <>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-cyan-300 rounded" /> Leve
+                    <span className="w-3 h-3 bg-info/40 rounded" /> Leve
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-cyan-500 rounded" /> Moderada
+                    <span className="w-3 h-3 bg-info rounded" /> Moderada
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-blue-500 rounded" /> Forte
+                    <span className="w-3 h-3 bg-primary rounded" /> Forte
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-purple-500 rounded" /> Intensa
+                    <span className="w-3 h-3 bg-secondary rounded" /> Intensa
                   </span>
                 </>
               )}
               {(selectedLayer === "clouds" || selectedLayer === "pressure") && (
                 <>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-gray-300 rounded" /> Baixo
+                    <span className="w-3 h-3 bg-muted rounded" /> Baixo
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-gray-400 rounded" /> Médio
+                    <span className="w-3 h-3 bg-muted-foreground/40 rounded" /> Médio
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-gray-500 rounded" /> Alto
+                    <span className="w-3 h-3 bg-muted-foreground/60 rounded" /> Alto
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-gray-600 rounded" /> Muito Alto
+                    <span className="w-3 h-3 bg-muted-foreground rounded" /> Muito Alto
                   </span>
                 </>
               )}

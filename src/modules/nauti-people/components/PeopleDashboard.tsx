@@ -208,7 +208,7 @@ const PeopleDashboard: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-pink-500" />
+              <Calendar className="w-5 h-5 text-accent" />
               Aniversariantes
             </CardTitle>
           </CardHeader>
