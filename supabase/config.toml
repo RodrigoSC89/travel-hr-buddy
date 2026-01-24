@@ -56,6 +56,22 @@ comment = "Unified AI chat for all V2 modules - Lovable AI gateway streaming"
 verify_jwt = false
 comment = "Unified AI evidence generator for all V2 modules - non-conformity analysis"
 
+[functions.gmud-workflow]
+verify_jwt = false
+comment = "GMUD approval workflow with digital signatures and sequential approval"
+
+[functions.responsibility-matrix-dispatch]
+verify_jwt = false
+comment = "Action plan notifications via Email, SMS, WhatsApp, Zapier"
+
+[functions.validate-downtime-ai]
+verify_jwt = false
+comment = "AI validation of vessel downtime justifications with BROA evidence"
+
+[functions.imca-incident-analyzer]
+verify_jwt = false
+comment = "IMCA incident analysis with Tripod Beta root cause methodology"
+
 # ============================================
 # MLC Inspection AI Functions - Added 2026-01-02
 # ============================================

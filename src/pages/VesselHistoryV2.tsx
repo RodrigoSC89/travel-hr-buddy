@@ -14,6 +14,7 @@ import {
   Ship, Brain, History, FileText, Wrench, Shield, AlertTriangle, 
   CheckCircle, Calendar, Search, TrendingUp
 } from "lucide-react";
+import { VesselTimelineAdvanced } from "@/components/vessel-history/VesselTimelineAdvanced";
 
 interface HistoryEvent {
   id: string;
@@ -104,37 +105,12 @@ export default function VesselHistoryV2() {
         </TabsList>
 
         <TabsContent value="timeline">
-          <CardV2 icon={History} title="Timeline de Eventos" description="Histórico cronológico da embarcação" gradient="blue">
-            <ScrollArea className="h-[500px] pr-4">
-              <div className="relative">
-                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
-                <div className="space-y-6 pl-12">
-                  {events.map((event, idx) => (
-                    <div key={event.id} className="relative">
-                      <div className="absolute -left-8 p-2 bg-background border rounded-full">
-                        {getEventIcon(event.event_type)}
-                      </div>
-                      <div className="p-4 bg-muted/50 rounded-lg border">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <p className="font-medium">{event.description}</p>
-                            <p className="text-sm text-muted-foreground">{event.vessel_name}</p>
-                          </div>
-                          <Badge variant="outline">{new Date(event.event_date).toLocaleDateString('pt-BR')}</Badge>
-                        </div>
-                        <div className="flex gap-2 mt-2">
-                          {event.documents.map((doc, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
-                              <FileText className="h-3 w-3 mr-1" />{doc}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollArea>
+          <CardV2 icon={History} title="Timeline de Eventos" description="Histórico cronológico da embarcação com filtros avançados" gradient="blue">
+            <VesselTimelineAdvanced 
+              showFilters={true}
+              maxHeight="600px"
+              onEventClick={(event) => toast.info(`Evento: ${event.title}`)}
+            />
           </CardV2>
         </TabsContent>
 

@@ -14,6 +14,7 @@ import {
   GitBranch, Brain, Shield, Users, CheckCircle, XCircle, Clock, 
   Send, FileCheck, AlertTriangle, PenTool
 } from "lucide-react";
+import { GMUDApprovalModal } from "@/components/gmud/GMUDApprovalModal";
 
 interface GMUDRequest {
   id: string;
@@ -49,6 +50,8 @@ const EVIDENCE_FIELDS = [
 export default function GMUDV2() {
   const [requests, setRequests] = useState<GMUDRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGmud, setSelectedGmud] = useState<GMUDRequest | null>(null);
+  const [isApprovalOpen, setIsApprovalOpen] = useState(false);
 
   useEffect(() => {
     setRequests([
@@ -67,6 +70,11 @@ export default function GMUDV2() {
     ]);
     setLoading(false);
   }, []);
+
+  const handleOpenApproval = (gmud: GMUDRequest) => {
+    setSelectedGmud(gmud);
+    setIsApprovalOpen(true);
+  };
 
   const total = requests.length;
   const approved = requests.filter(r => r.status === 'approved').length;
@@ -134,10 +142,41 @@ export default function GMUDV2() {
             loading={loading}
             actions={[
               { label: "Ver Workflow", icon: Users, onClick: (item) => toast.info(`Workflow: ${item.id}`) },
-              { label: "Aprovar", icon: CheckCircle, onClick: (item) => toast.success(`Aprovação registrada`) },
+              { label: "Aprovar", icon: CheckCircle, onClick: (item) => handleOpenApproval(item) },
             ]}
           />
         </TabsContent>
+
+        {/* Approval Modal */}
+        {selectedGmud && (
+          <GMUDApprovalModal
+            open={isApprovalOpen}
+            onClose={() => setIsApprovalOpen(false)}
+            gmudData={{
+              id: selectedGmud.id,
+              gmud_number: selectedGmud.id,
+              title: selectedGmud.title,
+              description: "Descrição detalhada da mudança proposta",
+              change_type: selectedGmud.change_type,
+              risk_level: "medium",
+              rollback_plan: "Reverter para configuração anterior",
+              current_step: selectedGmud.current_step,
+              total_steps: selectedGmud.total_steps,
+              approvers: selectedGmud.approvers.map((a, i) => ({
+                id: `ap-${i}`,
+                role: a.role,
+                status: a.status as 'pending' | 'approved' | 'rejected',
+                signed_at: a.date,
+              })),
+            }}
+            approvalId="pending-approval-id"
+            userRole="Chief Engineer"
+            onApprovalComplete={() => {
+              toast.success("GMUD aprovada com sucesso!");
+              setIsApprovalOpen(false);
+            }}
+          />
+        )}
 
         <TabsContent value="workflow">
           <CardV2 icon={Users} title="Workflow de Aprovação" description="Sequência de assinaturas digitais" gradient="purple">
