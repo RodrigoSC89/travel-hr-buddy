@@ -1,5 +1,6 @@
 /**
  * Advanced Search - Global search with filters, AI suggestions
+ * MIGRATED: Now searches real Supabase data
  */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -10,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Search,
@@ -25,13 +25,13 @@ import {
   Clock,
   Sparkles,
   History,
-  Star,
-  TrendingUp,
   ChevronRight,
-  Brain
+  Brain,
+  Loader2
 } from "lucide-react";
-import { useDebounce } from "@/hooks/unified";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 interface SearchResult {
   id: string;
@@ -52,23 +52,6 @@ interface SearchFilter {
   vessels: string[];
 }
 
-const MOCK_RESULTS: SearchResult[] = [
-  { id: "1", type: "maintenance", title: "Ordem de Serviço #12345", description: "Manutenção preventiva do motor principal BB", module: "Maintenance", url: "/maintenance-command", relevance: 95, lastModified: new Date(), highlights: ["motor principal", "preventiva"] },
-  { id: "2", type: "document", title: "Manual do Motor CAT 3512", description: "Manual técnico completo do motor Caterpillar", module: "Documents", url: "/documents", relevance: 88, lastModified: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), highlights: ["motor", "CAT", "manual"] },
-  { id: "3", type: "vessel", title: "PSV Atlantic Star", description: "Platform Supply Vessel - IMO 9876543", module: "Fleet", url: "/fleet-tracking", relevance: 82, lastModified: new Date(), highlights: ["PSV", "Atlantic"] },
-  { id: "4", type: "crew", title: "João Silva - Chief Engineer", description: "Engenheiro Chefe com certificações STCW", module: "Crew", url: "/crew-management", relevance: 78, lastModified: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), highlights: ["engineer", "STCW"] },
-  { id: "5", type: "incident", title: "Incidente #789 - Vazamento de óleo", description: "Vazamento menor no sistema hidráulico", module: "Safety", url: "/safety-incidents", relevance: 75, lastModified: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), highlights: ["vazamento", "óleo", "hidráulico"] },
-  { id: "6", type: "contract", title: "Contrato de Afretamento - Petrobras", description: "Time charter para operações no pré-sal", module: "Charter", url: "/charter-party", relevance: 70, lastModified: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), highlights: ["Petrobras", "pré-sal"] }
-];
-
-const RECENT_SEARCHES = [
-  "motor principal",
-  "certificado STCW",
-  "inspeção PSC",
-  "ordem de serviço pendente",
-  "relatório ESG"
-];
-
 const AI_SUGGESTIONS = [
   "Manutenções vencidas nos últimos 30 dias",
   "Certificados expirando em 60 dias",
@@ -77,10 +60,148 @@ const AI_SUGGESTIONS = [
   "Equipamentos com saúde crítica"
 ];
 
+// Hook for recent searches from localStorage
+function useRecentSearches() {
+  const [searches, setSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('nautilus_recent_searches');
+    if (stored) {
+      try {
+        setSearches(JSON.parse(stored).slice(0, 5));
+      } catch {
+        setSearches([]);
+      }
+    }
+  }, []);
+
+  const addSearch = useCallback((term: string) => {
+    if (!term.trim()) return;
+    setSearches(prev => {
+      const updated = [term, ...prev.filter(s => s !== term)].slice(0, 5);
+      localStorage.setItem('nautilus_recent_searches', JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  return { searches, addSearch };
+}
+
+// Hook to search across multiple tables
+function useGlobalSearch(query: string) {
+  return useQuery({
+    queryKey: ['global-search', query],
+    queryFn: async () => {
+      if (query.length < 2) return [];
+      
+      const results: SearchResult[] = [];
+      const searchTerm = `%${query}%`;
+
+      // Search vessels
+      const { data: vessels } = await supabase
+        .from('vessels')
+        .select('id, name, imo_number, updated_at')
+        .ilike('name', searchTerm)
+        .limit(5);
+
+      vessels?.forEach(v => {
+        results.push({
+          id: v.id,
+          type: 'vessel',
+          title: v.name,
+          description: `Embarcação - IMO ${v.imo_number || 'N/A'}`,
+          module: 'Fleet',
+          url: '/fleet-tracking',
+          relevance: 90,
+          lastModified: new Date(v.updated_at || Date.now()),
+          highlights: ['vessel']
+        });
+      });
+
+      // Search crew
+      const { data: crew } = await supabase
+        .from('crew_members')
+        .select('id, full_name, rank, email, updated_at')
+        .or(`full_name.ilike.${searchTerm},rank.ilike.${searchTerm}`)
+        .limit(5);
+
+      crew?.forEach(c => {
+        results.push({
+          id: c.id,
+          type: 'crew',
+          title: c.full_name,
+          description: c.rank || 'Tripulante',
+          module: 'Crew',
+          url: '/crew-management',
+          relevance: 85,
+          lastModified: new Date(c.updated_at || Date.now()),
+          highlights: [c.rank || 'crew'].filter(Boolean)
+        });
+      });
+
+      // Search maintenance tasks
+      const { data: maintenance } = await supabase
+        .from('maintenance_tasks')
+        .select('id, title, description, status, updated_at')
+        .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
+        .limit(5);
+
+      maintenance?.forEach(m => {
+        results.push({
+          id: m.id,
+          type: 'maintenance',
+          title: m.title || 'Ordem de Serviço',
+          description: m.description || '',
+          module: 'Maintenance',
+          url: '/maintenance-command',
+          relevance: 80,
+          lastModified: new Date(m.updated_at || Date.now()),
+          highlights: [m.status || 'maintenance'].filter(Boolean)
+        });
+      });
+
+      // Search incidents
+      const { data: incidents } = await supabase
+        .from('safety_incidents')
+        .select('id, title, description, severity, updated_at')
+        .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)
+        .limit(5);
+
+      incidents?.forEach(i => {
+        results.push({
+          id: i.id,
+          type: 'incident',
+          title: i.title || 'Incidente',
+          description: i.description || '',
+          module: 'Safety',
+          url: '/safety-incidents',
+          relevance: 75,
+          lastModified: new Date(i.updated_at || Date.now()),
+          highlights: [i.severity || 'incident'].filter(Boolean)
+        });
+      });
+
+      // Sort by relevance
+      return results.sort((a, b) => b.relevance - a.relevance);
+    },
+    enabled: query.length >= 2,
+    staleTime: 30 * 1000
+  });
+}
+
+function useDebouncedValue<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export function AdvancedSearch() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<SearchFilter>({
     modules: [],
@@ -90,31 +211,13 @@ export function AdvancedSearch() {
   });
 
   const debouncedQuery = useDebouncedValue(query, 300);
+  const { data: results = [], isLoading: isSearching } = useGlobalSearch(debouncedQuery);
+  const { searches: recentSearches, addSearch } = useRecentSearches();
 
-  useEffect(() => {
-    if (debouncedQuery.length >= 2) {
-      performSearch(debouncedQuery);
-    } else {
-      setResults([]);
-    }
-  }, [debouncedQuery]);
-
-  const performSearch = async (searchQuery: string) => {
-    setIsSearching(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const filtered = MOCK_RESULTS.filter(result =>
-        result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        result.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ).sort((a, b) => b.relevance - a.relevance);
-
-      setResults(filtered);
-    } finally {
-      setIsSearching(false);
-    }
-  };
+  const handleSearch = useCallback((searchTerm: string) => {
+    setQuery(searchTerm);
+    addSearch(searchTerm);
+  }, [addSearch]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -128,10 +231,6 @@ export function AdvancedSearch() {
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setQuery(suggestion);
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -143,7 +242,7 @@ export function AdvancedSearch() {
           <div>
             <h2 className="text-xl font-bold">Busca Avançada</h2>
             <p className="text-sm text-muted-foreground">
-              Pesquise em todos os módulos com filtros inteligentes
+              Pesquise em todos os módulos com dados reais
             </p>
           </div>
         </div>
@@ -158,6 +257,7 @@ export function AdvancedSearch() {
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch(query)}
                 placeholder="Buscar documentos, embarcações, tripulação, manutenções..."
                 className="pl-10 pr-10"
               />
@@ -252,17 +352,21 @@ export function AdvancedSearch() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {RECENT_SEARCHES.map((search, idx) => (
-                  <Button
-                    key={idx}
-                    variant="ghost"
-                    className="w-full justify-start text-sm"
-                    onClick={() => handleSuggestionClick(search)}
-                  >
-                    <Clock className="h-3 w-3 mr-2 text-muted-foreground" />
-                    {search}
-                  </Button>
-                ))}
+                {recentSearches.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Nenhuma busca recente</p>
+                ) : (
+                  recentSearches.map((search, idx) => (
+                    <Button
+                      key={idx}
+                      variant="ghost"
+                      className="w-full justify-start text-sm"
+                      onClick={() => handleSearch(search)}
+                    >
+                      <Clock className="h-3 w-3 mr-2 text-muted-foreground" />
+                      {search}
+                    </Button>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -282,7 +386,7 @@ export function AdvancedSearch() {
                     key={idx}
                     variant="ghost"
                     className="w-full justify-start text-sm"
-                    onClick={() => handleSuggestionClick(suggestion)}
+                    onClick={() => handleSearch(suggestion)}
                   >
                     <Brain className="h-3 w-3 mr-2 text-purple-500" />
                     {suggestion}
@@ -297,8 +401,15 @@ export function AdvancedSearch() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm">
-                {isSearching ? "Buscando..." : `${results.length} resultado(s) encontrado(s)`}
+              <CardTitle className="text-sm flex items-center gap-2">
+                {isSearching ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Buscando...
+                  </>
+                ) : (
+                  `${results.length} resultado(s) encontrado(s)`
+                )}
               </CardTitle>
               <div className="flex gap-2">
                 <Select defaultValue="relevance">
@@ -337,7 +448,7 @@ export function AdvancedSearch() {
                         <p className="text-sm text-muted-foreground mt-1">{result.description}</p>
                         <div className="flex items-center gap-2 mt-2">
                           {result.highlights.map((hl, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs bg-yellow-500/20 text-yellow-700">
+                            <Badge key={idx} variant="secondary" className="text-xs bg-warning/20 text-warning-foreground">
                               {hl}
                             </Badge>
                           ))}
@@ -367,17 +478,6 @@ export function AdvancedSearch() {
       )}
     </div>
   );
-}
-
-function useDebouncedValue<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
 }
 
 export default AdvancedSearch;
