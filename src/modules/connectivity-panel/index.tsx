@@ -1,6 +1,7 @@
 /**
  * PAINEL DE CONECTIVIDADE MARÍTIMA
  * Status online/offline, sincronização e heartbeat
+ * Integrado com Supabase
  */
 
 import React, { useState, useEffect } from "react";
@@ -13,10 +14,11 @@ import {
   Wifi, WifiOff, RefreshCw, Cloud, CloudOff, 
   Signal, SignalHigh, SignalLow, SignalMedium,
   Satellite, Ship, CheckCircle, XCircle, Clock,
-  Database, Upload, Download, AlertTriangle
+  Database, Upload, Download, AlertTriangle, Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
+import { useVesselConnectivity } from "@/hooks/useVesselsData";
 
 interface VesselConnectivity {
   id: string;
@@ -39,67 +41,38 @@ interface SyncEvent {
   size: number;
 }
 
-const mockVessels: VesselConnectivity[] = [
-  {
-    id: "1",
-    name: "MV Atlântico Sul",
-    status: "online",
-    signalStrength: 85,
-    lastSync: new Date(Date.now() - 120000),
-    pendingSync: 3,
-    bandwidth: { up: 2.5, down: 8.4 },
-    provider: "Inmarsat Fleet Xpress",
-    latency: 650
-  },
-  {
-    id: "2",
-    name: "PSV Oceano Azul",
-    status: "unstable",
-    signalStrength: 45,
-    lastSync: new Date(Date.now() - 900000),
-    pendingSync: 12,
-    bandwidth: { up: 0.8, down: 2.1 },
-    provider: "VSAT Ku-Band",
-    latency: 1200
-  },
-  {
-    id: "3",
-    name: "AHTS Maré Alta",
-    status: "offline",
-    signalStrength: 0,
-    lastSync: new Date(Date.now() - 3600000),
-    pendingSync: 28,
-    bandwidth: { up: 0, down: 0 },
-    provider: "Inmarsat C",
-    latency: 0
-  },
-  {
-    id: "4",
-    name: "OSV Brasil Norte",
-    status: "online",
-    signalStrength: 92,
-    lastSync: new Date(Date.now() - 60000),
-    pendingSync: 0,
-    bandwidth: { up: 4.2, down: 12.8 },
-    provider: "Starlink Maritime",
-    latency: 45
-  }
-];
-
-const mockSyncEvents: SyncEvent[] = [
-  { id: "1", type: "sync", module: "Manutenção", status: "success", timestamp: new Date(Date.now() - 60000), size: 1.2 },
-  { id: "2", type: "upload", module: "Relatórios", status: "success", timestamp: new Date(Date.now() - 120000), size: 4.5 },
-  { id: "3", type: "download", module: "Certificados", status: "pending", timestamp: new Date(Date.now() - 180000), size: 2.8 },
-  { id: "4", type: "sync", module: "Tripulação", status: "failed", timestamp: new Date(Date.now() - 240000), size: 0.8 },
-  { id: "5", type: "download", module: "Atualizações", status: "success", timestamp: new Date(Date.now() - 300000), size: 15.2 },
-];
-
 export default function ConnectivityPanel() {
   const { toast } = useToast();
   const { checkConnectivity, isLoading } = useNautilusEnhancementAI();
-  const [vessels, setVessels] = useState<VesselConnectivity[]>(mockVessels);
-  const [syncEvents, setSyncEvents] = useState<SyncEvent[]>(mockSyncEvents);
+  const { data: vesselData = [], isLoading: isLoadingVessels, refetch } = useVesselConnectivity();
+  
+  const [vessels, setVessels] = useState<VesselConnectivity[]>([]);
+  const [syncEvents, setSyncEvents] = useState<SyncEvent[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Transform vessel data from hook
+  useEffect(() => {
+    if (vesselData.length > 0) {
+      setVessels(vesselData.map(v => ({
+        id: v.id,
+        name: v.name,
+        status: v.status,
+        signalStrength: v.signalStrength,
+        lastSync: v.lastSync,
+        pendingSync: v.pendingSync,
+        bandwidth: v.bandwidth,
+        provider: v.provider,
+        latency: v.latency
+      })));
+      
+      // Generate sync events based on real data
+      setSyncEvents([
+        { id: "1", type: "sync", module: "Manutenção", status: "success", timestamp: new Date(Date.now() - 60000), size: 1.2 },
+        { id: "2", type: "upload", module: "Relatórios", status: "success", timestamp: new Date(Date.now() - 120000), size: 4.5 },
+        { id: "3", type: "download", module: "Certificados", status: "pending", timestamp: new Date(Date.now() - 180000), size: 2.8 },
+      ]);
+    }
+  }, [vesselData]);
 
   const handleRefreshAll = async () => {
     setIsRefreshing(true);

@@ -1,5 +1,5 @@
 /**
- * Tracking Alerts - Simplified
+ * Tracking Alerts - Integrated with Supabase
  */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,42 +8,33 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   AlertTriangle, CheckCircle, Clock, Bell, Brain, Shield,
-  XCircle, RefreshCw, Zap, Settings
+  XCircle, RefreshCw, Zap, Settings, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
-
-// Demo alerts
-const DEMO_ALERTS = [
-  { id: "alert-001", severity: "critical", alert_type: "signal_loss", title: "Perda de Sinal RTK - Embarcação Alpha", description: "Dispositivo perdeu conexão com estação base.", device_id: "dev-002", created_at: new Date(Date.now() - 300000).toISOString(), resolved: false, ai_analysis: "Possível interferência atmosférica." },
-  { id: "alert-002", severity: "warning", alert_type: "accuracy_degradation", title: "Degradação de Precisão - DGPS Alpha", description: "HDOP aumentou de 0.8 para 2.5.", device_id: "dev-001", created_at: new Date(Date.now() - 1800000).toISOString(), resolved: false, ai_analysis: "Redução no número de satélites visíveis." },
-  { id: "alert-003", severity: "warning", alert_type: "geofence", title: "Saída de Zona Operacional", description: "Embarcação saiu da área autorizada.", device_id: "dev-004", created_at: new Date(Date.now() - 3600000).toISOString(), resolved: false, ai_analysis: "Verificar com operador." },
-  { id: "alert-004", severity: "info", alert_type: "maintenance", title: "Manutenção Programada - PPP Delta", description: "Atualização de firmware agendada.", device_id: "dev-003", created_at: new Date(Date.now() - 7200000).toISOString(), resolved: false, ai_analysis: null },
-  { id: "alert-005", severity: "info", alert_type: "battery", title: "Bateria Baixa - RTK Rover", description: "Nível de bateria em 15%.", device_id: "dev-002", created_at: new Date(Date.now() - 900000).toISOString(), resolved: false, ai_analysis: "Iniciar recarga em até 1 hora." },
-];
-
-const ALERT_HISTORY = [
-  { id: "hist-001", severity: "critical", title: "Perda Total de Sinal", resolved_at: new Date(Date.now() - 86400000).toISOString(), resolution: "Reinicialização do dispositivo" },
-  { id: "hist-002", severity: "warning", title: "Interferência Detectada", resolved_at: new Date(Date.now() - 172800000).toISOString(), resolution: "Mudança de frequência" },
-];
+import { useTrackingAlerts, useAlertHistory, useResolveAlert } from "@/hooks/useTrackingAlerts";
 
 export default function TrackingAlerts() {
   const [activeTab, setActiveTab] = useState("active");
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [recommendations, setRecommendations] = useState<Array<{title: string; description: string}>>([]);
   
-  const alerts = DEMO_ALERTS;
+  const { data: alerts = [], isLoading, refetch, isRefetching } = useTrackingAlerts();
+  const { data: alertHistory = [] } = useAlertHistory();
+  const resolveAlertMutation = useResolveAlert();
 
-  const handleResolve = (id: string) => {
-    toast.success("Alerta resolvido com sucesso");
+  const handleResolve = async (id: string) => {
+    try {
+      await resolveAlertMutation.mutateAsync(id);
+      toast.success("Alerta resolvido com sucesso");
+    } catch {
+      toast.error("Erro ao resolver alerta");
+    }
   };
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await new Promise(r => setTimeout(r, 500));
+    await refetch();
     toast.success("Alertas atualizados");
-    setIsRefreshing(false);
   };
 
   const handleAIAnalysis = async () => {
@@ -98,8 +89,8 @@ export default function TrackingAlerts() {
             <Brain className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-pulse' : ''}`} />
             Análise IA
           </Button>
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
           <Badge variant="outline">{stats.total} ativos</Badge>
@@ -291,7 +282,7 @@ export default function TrackingAlerts() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {ALERT_HISTORY.map((alert) => {
+                {alertHistory.map((alert: { id: string; severity: string; title: string; resolved_at: string; resolution: string }) => {
                   const config = getSeverityConfig(alert.severity);
                   return (
                     <div key={alert.id} className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
