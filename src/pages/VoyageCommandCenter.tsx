@@ -77,8 +77,8 @@ interface WeatherCondition {
   risk: "low" | "medium" | "high";
 }
 
-// Demo Data
-const DEMO_PORTS: Port[] = [
+// Port data - loaded from Supabase in production
+const DEFAULT_PORTS: Port[] = [
   { id: "1", name: "Santos", country: "Brasil", code: "BRSSZ", lat: -23.95, lng: -46.3, type: "origin" },
   { id: "2", name: "Rio de Janeiro", country: "Brasil", code: "BRRIO", lat: -22.9, lng: -43.2, type: "origin" },
   { id: "3", name: "Rotterdam", country: "Holanda", code: "NLRTM", lat: 51.9, lng: 4.5, type: "destination" },
@@ -88,92 +88,8 @@ const DEMO_PORTS: Port[] = [
   { id: "7", name: "Las Palmas", country: "Espanha", code: "ESLPA", lat: 28.1, lng: -15.4, type: "waypoint" },
 ];
 
-const DEMO_VOYAGES: VoyageRoute[] = [
-  {
-    id: "v1",
-    name: "Santos → Rotterdam",
-    origin: DEMO_PORTS[0],
-    destination: DEMO_PORTS[2],
-    waypoints: [DEMO_PORTS[6]],
-    distanceNm: 5420,
-    estimatedDays: 14,
-    fuelConsumption: 2850,
-    status: "active",
-    vesselName: "MV Atlantic Pioneer",
-    departureDate: "2025-12-01",
-    arrivalDate: "2025-12-15",
-    weatherRisk: "low",
-    createdAt: "2025-11-28",
-    estimatedCost: 485000,
-    aiRecommendations: [
-      "Desvio de 120nm recomendado para evitar tempestade atlântica",
-      "Economia de 8% de combustível com velocidade otimizada de 12.5 nós"
-    ]
-  },
-  {
-    id: "v2",
-    name: "Rio de Janeiro → Singapura",
-    origin: DEMO_PORTS[1],
-    destination: DEMO_PORTS[4],
-    waypoints: [],
-    distanceNm: 8950,
-    estimatedDays: 24,
-    fuelConsumption: 4720,
-    status: "planned",
-    vesselName: "MV Pacific Star",
-    departureDate: "2025-12-10",
-    arrivalDate: "2026-01-03",
-    weatherRisk: "medium",
-    createdAt: "2025-12-01",
-    estimatedCost: 890000,
-    aiRecommendations: [
-      "Monitorar condições no Oceano Índico",
-      "Escala técnica recomendada em Durban"
-    ]
-  },
-  {
-    id: "v3",
-    name: "Santos → Houston",
-    origin: DEMO_PORTS[0],
-    destination: DEMO_PORTS[5],
-    waypoints: [],
-    distanceNm: 4850,
-    estimatedDays: 12,
-    fuelConsumption: 2550,
-    status: "active",
-    vesselName: "MV Gulf Carrier",
-    departureDate: "2025-12-03",
-    arrivalDate: "2025-12-15",
-    weatherRisk: "high",
-    createdAt: "2025-11-30",
-    estimatedCost: 320000,
-    aiRecommendations: [
-      "Tempestade tropical no Golfo do México - rota alternativa sugerida",
-      "Atraso estimado de 18h devido condições climáticas"
-    ]
-  },
-  {
-    id: "v4",
-    name: "Rio de Janeiro → Hamburgo",
-    origin: DEMO_PORTS[1],
-    destination: DEMO_PORTS[3],
-    waypoints: [DEMO_PORTS[6]],
-    distanceNm: 5680,
-    estimatedDays: 15,
-    fuelConsumption: 2990,
-    status: "completed",
-    vesselName: "MV Europa Express",
-    departureDate: "2025-11-15",
-    arrivalDate: "2025-11-30",
-    weatherRisk: "low",
-    createdAt: "2025-11-10",
-    estimatedCost: 425000,
-    aiRecommendations: [
-      "Viagem concluída com sucesso",
-      "Economia de 12% vs estimativa inicial"
-    ]
-  },
-];
+// Empty initial voyages - loaded from Supabase
+const EMPTY_VOYAGES: VoyageRoute[] = [];
 
 const DEMO_WEATHER: WeatherCondition[] = [
   { location: "Atlântico Norte", condition: "Parcialmente nublado", windSpeed: 15, waveHeight: 2.5, visibility: "Boa", risk: "low" },
@@ -185,7 +101,8 @@ const DEMO_WEATHER: WeatherCondition[] = [
 
 export default function VoyageCommandCenter() {
   const { toast: shadcnToast } = useToast();
-  const [voyages, setVoyages] = useState<VoyageRoute[]>(DEMO_VOYAGES);
+  const [voyages, setVoyages] = useState<VoyageRoute[]>(EMPTY_VOYAGES);
+  const [ports] = useState<Port[]>(DEFAULT_PORTS);
   const [activeTab, setActiveTab] = useState("overview");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -275,8 +192,8 @@ export default function VoyageCommandCenter() {
       return;
     }
 
-    const originPort = DEMO_PORTS.find(p => p.id === newVoyage.origin) || DEMO_PORTS[0];
-    const destPort = DEMO_PORTS.find(p => p.id === newVoyage.destination) || DEMO_PORTS[2];
+    const originPort = ports.find((p: Port) => p.id === newVoyage.origin) || ports[0];
+    const destPort = ports.find((p: Port) => p.id === newVoyage.destination) || ports[2];
 
     const voyage: VoyageRoute = {
       id: Date.now().toString(),
@@ -938,7 +855,7 @@ export default function VoyageCommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {DEMO_PORTS.map(port => (
+                {ports.map((port: Port) => (
                   <div key={port.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium">{port.name}</h4>
@@ -981,7 +898,7 @@ export default function VoyageCommandCenter() {
                   <SelectValue placeholder="Selecionar porto de origem" />
                 </SelectTrigger>
                 <SelectContent>
-                  {DEMO_PORTS.filter(p => p.type === "origin").map(port => (
+                  {ports.filter((p: Port) => p.type === "origin").map((port: Port) => (
                     <SelectItem key={port.id} value={port.id}>{port.name}, {port.country}</SelectItem>
                   ))}
                 </SelectContent>
@@ -994,7 +911,7 @@ export default function VoyageCommandCenter() {
                   <SelectValue placeholder="Selecionar porto de destino" />
                 </SelectTrigger>
                 <SelectContent>
-                  {DEMO_PORTS.filter(p => p.type === "destination").map(port => (
+                  {ports.filter((p: Port) => p.type === "destination").map((port: Port) => (
                     <SelectItem key={port.id} value={port.id}>{port.name}, {port.country}</SelectItem>
                   ))}
                 </SelectContent>

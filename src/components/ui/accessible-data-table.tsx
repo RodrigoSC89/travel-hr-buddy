@@ -62,22 +62,22 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
     const configs = {
       active: {
         label: "Ativo",
-        className: "bg-emerald-100 text-emerald-800 border-emerald-200",
+        className: "bg-success/10 text-success border-success/20",
         icon: <CheckCircle2 className="w-3 h-3" />
       },
       inactive: {
         label: "Inativo",
-        className: "bg-slate-100 text-slate-800 border-slate-200",
+        className: "bg-muted text-muted-foreground border-border",
         icon: <Clock className="w-3 h-3" />
       },
       warning: {
         label: "Atenção",
-        className: "bg-amber-100 text-amber-800 border-amber-200",
+        className: "bg-warning/10 text-warning border-warning/20",
         icon: <AlertTriangle className="w-3 h-3" />
       },
       expired: {
         label: "Expirado",
-        className: "bg-red-100 text-red-800 border-red-200",
+        className: "bg-destructive/10 text-destructive border-destructive/20",
         icon: <AlertTriangle className="w-3 h-3" />
       }
     };

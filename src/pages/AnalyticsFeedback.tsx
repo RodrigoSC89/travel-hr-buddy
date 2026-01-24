@@ -146,11 +146,11 @@ export default function AnalyticsFeedback() {
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      planned: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      in_progress: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-      done: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      review: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-      investigating: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300',
+      planned: 'bg-primary/10 text-primary',
+      in_progress: 'bg-warning/10 text-warning',
+      done: 'bg-success/10 text-success',
+      review: 'bg-info/10 text-info',
+      investigating: 'bg-warning/10 text-warning',
     };
     return styles[status] || styles.planned;
   };

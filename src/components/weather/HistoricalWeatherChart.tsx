@@ -38,46 +38,12 @@ interface HistoricalWeatherChartProps {
 type MetricType = "temperature" | "wind" | "humidity" | "pressure";
 type PeriodType = "7d" | "30d" | "90d";
 
-// Generate realistic demo historical data
-const generateHistoricalData = (days: number, metric: MetricType) => {
-  const data = [];
-  const now = new Date();
-  
-  for (let i = days; i >= 0; i--) {
-    const date = new Date(now);
-    date.setDate(date.getDate() - i);
-    
-    let value: number;
-    const randomFactor = Math.random() * 0.3 - 0.15; // ±15% variation
-    
-    switch (metric) {
-      case "temperature":
-        // Simulate seasonal variation
-        const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
-        value = 25 + 5 * Math.sin((dayOfYear / 365) * 2 * Math.PI) + randomFactor * 10;
-        break;
-      case "wind":
-        value = 10 + Math.random() * 15 + randomFactor * 5;
-        break;
-      case "humidity":
-        value = 70 + Math.random() * 20 + randomFactor * 10;
-        break;
-      case "pressure":
-        value = 1013 + Math.random() * 20 - 10 + randomFactor * 5;
-        break;
-      default:
-        value = 0;
-    }
-    
-    data.push({
-      date: date.toISOString().split("T")[0],
-      value: Math.round(value * 10) / 10,
-      min: Math.round((value - Math.random() * 3) * 10) / 10,
-      max: Math.round((value + Math.random() * 3) * 10) / 10,
-    });
-  }
-  
-  return data;
+// Placeholder for weather data - will be loaded from API/Supabase
+// Returns empty array when no real data is available
+const getHistoricalData = (_days: number, _metric: MetricType): { date: string; value: number; min: number; max: number }[] => {
+  // In production, this would fetch from weather_historical table or external API
+  // For now, return empty to indicate no mock data
+  return [];
 };
 
 const metricConfig: Record<MetricType, { label: string; unit: string; color: string; icon: React.ElementType }> = {
@@ -100,7 +66,7 @@ export const HistoricalWeatherChart: React.FC<HistoricalWeatherChartProps> = ({
   };
 
   const historicalData = useMemo(() => {
-    return generateHistoricalData(periodDays[period], metric);
+    return getHistoricalData(periodDays[period], metric);
   }, [metric, period]);
 
   const config = metricConfig[metric];

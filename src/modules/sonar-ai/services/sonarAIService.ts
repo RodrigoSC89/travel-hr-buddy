@@ -270,80 +270,24 @@ class SonarAIService {
   }
 
   /**
-   * Generate enhanced mock sonar data with realistic patterns
+   * Get sonar data - placeholder for real sensor integration
+   * In production, this would connect to actual sonar hardware or IoT data stream
    */
-  generateEnhancedMockData(
-    depth: number,
-    radius: number,
-    numPings: number
+  getSonarData(
+    _depth: number,
+    _radius: number,
+    _numPings: number
   ): {
     returns: SonarReturn[];
     includeObjects: boolean;
     objectCount: number;
   } {
-    const returns: SonarReturn[] = [];
-    let objectCount = 0;
-    const includeObjects = Math.random() > 0.3; // 70% chance of objects
-
-    // Generate object locations
-    const objects: { angle: number; distance: number; size: number }[] = [];
-    if (includeObjects) {
-      objectCount = Math.floor(Math.random() * 3) + 1;
-      for (let i = 0; i < objectCount; i++) {
-        objects.push({
-          angle: Math.random() * 360,
-          distance: Math.random() * radius * 0.8,
-          size: Math.random() * 10 + 2,
-        });
-      }
-    }
-
-    // Generate pings
-    for (let i = 0; i < numPings; i++) {
-      const angle = (i * 360) / numPings;
-      const baseDistance = depth + (Math.random() - 0.5) * 20;
-      
-      // Check if near an object
-      let nearObject = false;
-      let objectIntensity = 0;
-      objects.forEach((obj) => {
-        const angleDiff = Math.abs(obj.angle - angle);
-        const normalizedDiff = Math.min(angleDiff, 360 - angleDiff);
-        if (normalizedDiff < 10 && Math.abs(obj.distance - depth) < 20) {
-          nearObject = true;
-          objectIntensity = 60 + Math.random() * 30;
-        }
-      });
-
-      const intensity = nearObject
-        ? objectIntensity
-        : 30 + Math.random() * 40 - Math.abs(Math.sin((angle * Math.PI) / 180)) * 10;
-
-      const material = nearObject
-        ? Math.random() > 0.5
-          ? "metal"
-          : "rock"
-        : Math.random() > 0.7
-          ? "rock"
-          : "sand";
-
-      returns.push({
-        ping: {
-          id: `ping-${i}`,
-          timestamp: new Date().toISOString(),
-          angle,
-          distance: baseDistance,
-          intensity,
-          echoDelay: baseDistance / 1.5, // Simplified
-        },
-        depth: baseDistance,
-        material,
-        confidence: 60 + Math.random() * 30,
-        noise: 10 + Math.random() * 15,
-      } as SonarReturn);
-    }
-
-    return { returns, includeObjects, objectCount };
+    // Return empty data structure - real data comes from sonar hardware integration
+    return {
+      returns: [],
+      includeObjects: false,
+      objectCount: 0
+    };
   }
 
   /**

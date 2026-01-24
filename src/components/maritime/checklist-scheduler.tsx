@@ -51,17 +51,17 @@ export const ChecklistScheduler = () => {
 
   const getFrequencyColor = (frequency: string) => {
     switch (frequency) {
-    case "daily": return "bg-red-100 text-red-800";
-    case "weekly": return "bg-orange-100 text-orange-800";
-    case "monthly": return "bg-blue-100 text-blue-800";
-    case "quarterly": return "bg-purple-100 text-purple-800";
-    case "annually": return "bg-green-100 text-green-800";
+    case "daily": return "bg-destructive/10 text-destructive";
+    case "weekly": return "bg-warning/10 text-warning";
+    case "monthly": return "bg-primary/10 text-primary";
+    case "quarterly": return "bg-info/10 text-info";
+    case "annually": return "bg-success/10 text-success";
     default: return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground";
+    return isActive ? "bg-success/10 text-success" : "bg-secondary text-secondary-foreground";
   };
 
   const handleCreateSchedule = () => {

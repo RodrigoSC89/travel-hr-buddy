@@ -237,10 +237,10 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-    case "high": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-    default: return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "critical": return "bg-destructive/10 text-destructive";
+    case "high": return "bg-warning/10 text-warning";
+    case "medium": return "bg-amber-500/10 text-amber-600 dark:text-amber-400";
+    default: return "bg-primary/10 text-primary";
     }
   };
 

@@ -32,36 +32,48 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Demo data
-const vaultItems = [
-  { id: 1, name: "Contrato_Frete_2024.pdf", type: "document", size: "2.4 MB", encrypted: true, lastAccess: "2024-01-15", category: "contracts" },
-  { id: 2, name: "Certificados_IMO.zip", type: "archive", size: "15.8 MB", encrypted: true, lastAccess: "2024-01-14", category: "certificates" },
-  { id: 3, name: "Credenciais_API.json", type: "credentials", size: "1.2 KB", encrypted: true, lastAccess: "2024-01-10", category: "secrets" },
-  { id: 4, name: "Backup_DB_Jan.sql", type: "backup", size: "45.2 MB", encrypted: true, lastAccess: "2024-01-08", category: "backups" },
-  { id: 5, name: "Relatório_Auditoria.docx", type: "document", size: "856 KB", encrypted: true, lastAccess: "2024-01-05", category: "reports" },
-];
+// Types for Vault data
+interface VaultItem {
+  id: number;
+  name: string;
+  type: string;
+  size: string;
+  encrypted: boolean;
+  lastAccess: string;
+  category: string;
+}
 
-const accessLogs = [
-  { id: 1, user: "admin@nautilus.com", action: "view", item: "Contrato_Frete_2024.pdf", timestamp: "2024-01-15 14:32:00", ip: "192.168.1.100" },
-  { id: 2, user: "carlos@nautilus.com", action: "download", item: "Certificados_IMO.zip", timestamp: "2024-01-14 11:20:00", ip: "192.168.1.105" },
-  { id: 3, user: "admin@nautilus.com", action: "upload", item: "Credenciais_API.json", timestamp: "2024-01-10 09:45:00", ip: "192.168.1.100" },
-  { id: 4, user: "sistema", action: "backup", item: "Backup_DB_Jan.sql", timestamp: "2024-01-08 03:00:00", ip: "127.0.0.1" },
-];
+interface AccessLog {
+  id: number;
+  user: string;
+  action: string;
+  item: string;
+  timestamp: string;
+  ip: string;
+}
 
-const aiInsights = [
-  { id: 1, type: "warning", message: "3 documentos não foram acessados há mais de 90 dias", action: "Revisar e arquivar" },
-  { id: 2, type: "info", message: "Padrão de acesso normal detectado - sem anomalias", action: null },
-  { id: 3, type: "success", message: "Todos os backups estão em dia e verificados", action: null },
-  { id: 4, type: "warning", message: "Certificado SSL expira em 15 dias", action: "Renovar certificado" },
-];
+interface AIInsight {
+  id: number;
+  type: string;
+  message: string;
+  action: string | null;
+}
+
+// Empty initial data - will be loaded from Supabase
+const EMPTY_VAULT_ITEMS: VaultItem[] = [];
+const EMPTY_ACCESS_LOGS: AccessLog[] = [];
+const EMPTY_AI_INSIGHTS: AIInsight[] = [];
 
 const VaultAI: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("vault");
   const [searchQuery, setSearchQuery] = useState("");
   const [showContent, setShowContent] = useState<Record<number, boolean>>({});
+  const [vaultItems] = useState<VaultItem[]>(EMPTY_VAULT_ITEMS);
+  const [accessLogs] = useState<AccessLog[]>(EMPTY_ACCESS_LOGS);
+  const [aiInsights] = useState<AIInsight[]>(EMPTY_AI_INSIGHTS);
 
-  const filteredItems = vaultItems.filter(item =>
+  const filteredItems = vaultItems.filter((item: VaultItem) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
