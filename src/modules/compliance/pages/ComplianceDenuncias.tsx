@@ -147,9 +147,9 @@ export default function ComplianceDenuncias() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "low": return <Badge variant="outline">Baixa</Badge>;
-      case "medium": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Média</Badge>;
-      case "high": return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Alta</Badge>;
-      case "critical": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Crítica</Badge>;
+      case "medium": return <Badge className="bg-warning/20 text-warning border-warning/30">Média</Badge>;
+      case "high": return <Badge className="bg-warning/20 text-warning border-warning/30">Alta</Badge>;
+      case "critical": return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Crítica</Badge>;
       default: return <Badge variant="outline">{severity}</Badge>;
     }
   };

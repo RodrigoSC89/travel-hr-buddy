@@ -143,9 +143,9 @@ export default function ComplianceEvidencias() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "valid": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30"><CheckCircle2 className="h-3 w-3 mr-1" />Válido</Badge>;
-      case "pending_review": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
-      case "expired": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30"><AlertTriangle className="h-3 w-3 mr-1" />Expirado</Badge>;
+      case "valid": return <Badge className="bg-success/20 text-success border-success/30"><CheckCircle2 className="h-3 w-3 mr-1" />Válido</Badge>;
+      case "pending_review": return <Badge className="bg-warning/20 text-warning border-warning/30"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+      case "expired": return <Badge className="bg-destructive/20 text-destructive border-destructive/30"><AlertTriangle className="h-3 w-3 mr-1" />Expirado</Badge>;
       case "rejected": return <Badge variant="destructive">Rejeitado</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
@@ -153,9 +153,9 @@ export default function ComplianceEvidencias() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case "certificate": return <Shield className="h-8 w-8 text-emerald-400" />;
-      case "image": return <FileImage className="h-8 w-8 text-blue-400" />;
-      case "report": return <FilePdf className="h-8 w-8 text-red-400" />;
+      case "certificate": return <Shield className="h-8 w-8 text-success" />;
+      case "image": return <FileImage className="h-8 w-8 text-primary" />;
+      case "report": return <FilePdf className="h-8 w-8 text-destructive" />;
       default: return <File className="h-8 w-8 text-muted-foreground" />;
     }
   };

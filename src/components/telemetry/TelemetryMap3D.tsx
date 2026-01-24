@@ -400,11 +400,11 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
 
   const getStatusColor = (status: VesselTelemetry["status"]) => {
     const colors: Record<VesselTelemetry["status"], string> = {
-      active: "text-emerald-500",
-      idle: "text-slate-400",
-      maintenance: "text-amber-500",
-      alert: "text-orange-500",
-      emergency: "text-red-500",
+      active: "text-success",
+      idle: "text-muted-foreground",
+      maintenance: "text-warning",
+      alert: "text-warning",
+      emergency: "text-destructive",
     };
     return colors[status];
   };

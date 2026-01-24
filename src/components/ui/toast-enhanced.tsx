@@ -28,10 +28,10 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: 'border-green-500/50 bg-green-500/10 text-green-500',
-  error: 'border-red-500/50 bg-red-500/10 text-red-500',
-  warning: 'border-amber-500/50 bg-amber-500/10 text-amber-500',
-  info: 'border-blue-500/50 bg-blue-500/10 text-blue-500',
+  success: 'border-success/50 bg-success/10 text-success',
+  error: 'border-destructive/50 bg-destructive/10 text-destructive',
+  warning: 'border-warning/50 bg-warning/10 text-warning',
+  info: 'border-primary/50 bg-primary/10 text-primary',
 };
 
 const positionMap = {

@@ -181,9 +181,9 @@ export function NOCMonitoringCenter() {
 
   const getAlertColor = (type: ProactiveAlert["type"]) => {
     switch (type) {
-      case "critical": return "border-red-500 bg-red-500/10";
-      case "warning": return "border-amber-500 bg-amber-500/10";
-      case "info": return "border-blue-500 bg-blue-500/10";
+      case "critical": return "border-destructive bg-destructive/10";
+      case "warning": return "border-warning bg-warning/10";
+      case "info": return "border-primary bg-primary/10";
     }
   };
 
