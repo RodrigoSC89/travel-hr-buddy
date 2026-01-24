@@ -3,27 +3,40 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Users, Award, AlertTriangle, CheckCircle, BookOpen } from "lucide-react";
+import { Users, Award, AlertTriangle, CheckCircle, BookOpen, Loader2 } from "lucide-react";
+import { useCrewTrainingCompliance } from "@/hooks/useCrewData";
 
 interface Props { searchQuery?: string; }
 
-const mockCrew = [
-  { id: "1", name: "João Silva", role: "Capitão", trainings: 12, completed: 12, compliance: 100 },
-  { id: "2", name: "Maria Santos", role: "Imediato", trainings: 10, completed: 9, compliance: 90 },
-  { id: "3", name: "Carlos Lima", role: "Chefe de Máquinas", trainings: 8, completed: 7, compliance: 87 },
-  { id: "4", name: "Ana Costa", role: "Oficial de Náutica", trainings: 10, completed: 8, compliance: 80 },
-];
-
 export default function CrewTrainingSection({ searchQuery }: Props) {
-  const filtered = mockCrew.filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const { data: crewData = [], isLoading } = useCrewTrainingCompliance();
+  
+  const filtered = crewData.filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  // Calculate stats from real data
+  const totalCrew = crewData.length;
+  const avgCompliance = crewData.length > 0 
+    ? Math.round(crewData.reduce((acc, c) => acc + c.compliance, 0) / crewData.length) 
+    : 0;
+  const totalTrainings = crewData.reduce((acc, c) => acc + c.trainings, 0);
+  const pendingTrainings = crewData.reduce((acc, c) => acc + (c.trainings - c.completed), 0);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando dados de treinamento...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card><CardContent className="p-4 flex items-center gap-3"><Users className="h-8 w-8 text-primary" /><div><p className="text-2xl font-bold">24</p><p className="text-sm text-muted-foreground">Tripulantes</p></div></CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3"><Award className="h-8 w-8 text-green-500" /><div><p className="text-2xl font-bold">89%</p><p className="text-sm text-muted-foreground">Conformidade Média</p></div></CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3"><BookOpen className="h-8 w-8 text-blue-500" /><div><p className="text-2xl font-bold">156</p><p className="text-sm text-muted-foreground">Treinamentos</p></div></CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3"><AlertTriangle className="h-8 w-8 text-amber-500" /><div><p className="text-2xl font-bold">8</p><p className="text-sm text-muted-foreground">Pendentes</p></div></CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3"><Users className="h-8 w-8 text-primary" /><div><p className="text-2xl font-bold">{totalCrew}</p><p className="text-sm text-muted-foreground">Tripulantes</p></div></CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3"><Award className="h-8 w-8 text-primary" /><div><p className="text-2xl font-bold">{avgCompliance}%</p><p className="text-sm text-muted-foreground">Conformidade Média</p></div></CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3"><BookOpen className="h-8 w-8 text-primary" /><div><p className="text-2xl font-bold">{totalTrainings}</p><p className="text-sm text-muted-foreground">Treinamentos</p></div></CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3"><AlertTriangle className="h-8 w-8 text-warning" /><div><p className="text-2xl font-bold">{pendingTrainings}</p><p className="text-sm text-muted-foreground">Pendentes</p></div></CardContent></Card>
       </div>
       <Card>
         <CardHeader><CardTitle>Tripulação e Treinamentos</CardTitle></CardHeader>

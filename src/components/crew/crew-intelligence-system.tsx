@@ -72,135 +72,50 @@ interface ShiftOptimization {
 }
 
 export const CrewIntelligenceSystem: React.FC = () => {
-  const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const [shiftOptimizations, setShiftOptimizations] = useState<ShiftOptimization[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { toast } = useToast();
+  
+  // Use real crew data from Supabase
+  const { data: crewData = [], isLoading } = useCrewIntelligence();
+  
+  // Transform to local interface
+  const crewMembers: CrewMember[] = crewData.map(c => ({
+    id: c.id,
+    name: c.name,
+    position: c.position,
+    fatigueLevel: c.fatigueLevel,
+    performanceScore: c.performanceScore,
+    hoursWorked: c.hoursWorked,
+    restHours: c.restHours,
+    competencyLevel: c.competencyLevel,
+    certifications: c.certifications,
+    achievements: c.achievements.map(a => ({
+      id: a.id,
+      title: a.title,
+      description: a.description,
+      points: a.points,
+      icon: a.icon,
+      date: a.date
+    })),
+    trainingProgress: c.trainingProgress.map(t => ({
+      id: t.id,
+      name: t.name,
+      category: t.category,
+      progress: t.progress,
+      dueDate: t.dueDate,
+      priority: t.priority
+    })),
+    alertLevel: c.alertLevel
+  }));
 
-  useEffect(() => {
-    loadCrewData();
-  }, []);
-
-  const loadCrewData = () => {
-    const mockCrew: CrewMember[] = [
-      {
-        id: "1",
-        name: "Capitão João Silva",
-        position: "Comandante",
-        fatigueLevel: 25,
-        performanceScore: 95,
-        hoursWorked: 8,
-        restHours: 12,
-        competencyLevel: 98,
-        certifications: ["Master Mariner", "STCW Advanced", "ECDIS"],
-        achievements: [
-          {
-            id: "a1",
-            title: "Navegador Expert",
-            description: "1000 horas sem incidentes",
-            points: 500,
-            icon: "🏆",
-            date: new Date("2025-01-15")
-          },
-          {
-            id: "a2",
-            title: "Mentor do Mês",
-            description: "Treinamento de 5 oficiais",
-            points: 300,
-            icon: "👨‍🏫",
-            date: new Date("2025-01-10")
-          }
-        ],
-        trainingProgress: [
-          {
-            id: "t1",
-            name: "Liderança Avançada",
-            category: "Management",
-            progress: 75,
-            dueDate: new Date("2025-03-01"),
-            priority: "medium"
-          },
-          {
-            id: "t2",
-            name: "Cyber Security at Sea",
-            category: "Security",
-            progress: 40,
-            dueDate: new Date("2025-02-15"),
-            priority: "high"
-          }
-        ],
-        alertLevel: "green"
-      },
-      {
-        id: "2",
-        name: "Maria Santos",
-        position: "Oficial de Máquinas",
-        fatigueLevel: 45,
-        performanceScore: 88,
-        hoursWorked: 10,
-        restHours: 8,
-        competencyLevel: 92,
-        certifications: ["Chief Engineer", "STCW II/2", "Refrigeration"],
-        achievements: [
-          {
-            id: "a3",
-            title: "Eficiência Energética",
-            description: "15% economia de combustível",
-            points: 400,
-            icon: "⚡",
-            date: new Date("2025-01-20")
-          }
-        ],
-        trainingProgress: [
-          {
-            id: "t3",
-            name: "Manutenção Preditiva",
-            category: "Technical",
-            progress: 60,
-            dueDate: new Date("2025-02-28"),
-            priority: "high"
-          }
-        ],
-        alertLevel: "yellow"
-      },
-      {
-        id: "3",
-        name: "Pedro Costa",
-        position: "Oficial de Náutica",
-        fatigueLevel: 65,
-        performanceScore: 82,
-        hoursWorked: 12,
-        restHours: 6,
-        competencyLevel: 85,
-        certifications: ["Officer of the Watch", "STCW II/1", "ARPA/RADAR"],
-        achievements: [
-          {
-            id: "a4",
-            title: "Vigilante Atento",
-            description: "Detecção precoce de risco",
-            points: 250,
-            icon: "👁️",
-            date: new Date("2025-01-18")
-          }
-        ],
-        trainingProgress: [
-          {
-            id: "t4",
-            name: "Bridge Resource Management",
-            category: "Operations",
-            progress: 30,
-            dueDate: new Date("2025-02-20"),
-            priority: "high"
-          }
-        ],
-        alertLevel: "red"
-      }
-    ];
-
-    setCrewMembers(mockCrew);
-    setSelectedCrew(mockCrew[0]);
-  };
+  // Set selected crew when data loads
+  React.useEffect(() => {
+    if (crewMembers.length > 0 && !selectedCrew) {
+      setSelectedCrew(crewMembers[0]);
+    }
+  }, [crewMembers.length]);
 
   const analyzeCrewOptimization = () => {
     setIsAnalyzing(true);

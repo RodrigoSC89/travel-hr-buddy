@@ -2,8 +2,9 @@
  * Emotional AI System
  * PATCH REVOLUTION v1.0
  * AI that understands emotions and optimizes team dynamics
+ * Integrated with Supabase
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,22 +14,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Smile, Frown, Meh, Heart, Users, TrendingUp,
   AlertTriangle, MessageSquare, Phone, Video,
-  Brain, Activity, Shield, Zap, Target
+  Brain, Activity, Shield, Zap, Target, Loader2
 } from "lucide-react";
 import { motion } from "framer-motion";
-
-interface CrewEmotionalState {
-  id: string;
-  name: string;
-  role: string;
-  primaryEmotion: "happy" | "neutral" | "frustrated" | "stressed" | "anxious";
-  emotionIntensity: number;
-  trend: "improving" | "stable" | "declining";
-  riskLevel: "low" | "medium" | "high";
-  lastInteraction: string;
-  teamCompatibility: number;
-  stressFactors: string[];
-}
+import { useCrewEmotions, type CrewEmotionalState } from "@/hooks/useCrewData";
 
 interface TeamDynamics {
   overallMorale: number;
@@ -38,77 +27,7 @@ interface TeamDynamics {
   communicationHealth: number;
 }
 
-const mockCrewEmotions: CrewEmotionalState[] = [
-  {
-    id: "1",
-    name: "Carlos Ferreira",
-    role: "Captain",
-    primaryEmotion: "happy",
-    emotionIntensity: 85,
-    trend: "stable",
-    riskLevel: "low",
-    lastInteraction: "2h ago",
-    teamCompatibility: 92,
-    stressFactors: [],
-  },
-  {
-    id: "2",
-    name: "Maria Santos",
-    role: "Chief Officer",
-    primaryEmotion: "stressed",
-    emotionIntensity: 72,
-    trend: "declining",
-    riskLevel: "medium",
-    lastInteraction: "30m ago",
-    teamCompatibility: 78,
-    stressFactors: ["Workload increase", "Deadline pressure"],
-  },
-  {
-    id: "3",
-    name: "João Lima",
-    role: "Chief Engineer",
-    primaryEmotion: "neutral",
-    emotionIntensity: 60,
-    trend: "stable",
-    riskLevel: "low",
-    lastInteraction: "1h ago",
-    teamCompatibility: 88,
-    stressFactors: [],
-  },
-  {
-    id: "4",
-    name: "Pedro Costa",
-    role: "2nd Officer",
-    primaryEmotion: "frustrated",
-    emotionIntensity: 78,
-    trend: "declining",
-    riskLevel: "high",
-    lastInteraction: "15m ago",
-    teamCompatibility: 65,
-    stressFactors: ["Conflict with Chief Officer", "Sleep deprivation", "Personal issues"],
-  },
-  {
-    id: "5",
-    name: "Ana Silva",
-    role: "Bosun",
-    primaryEmotion: "happy",
-    emotionIntensity: 80,
-    trend: "improving",
-    riskLevel: "low",
-    lastInteraction: "45m ago",
-    teamCompatibility: 95,
-    stressFactors: [],
-  },
-];
-
-const mockTeamDynamics: TeamDynamics = {
-  overallMorale: 76,
-  conflictRisk: 35,
-  collaborationScore: 82,
-  leadershipEffectiveness: 88,
-  communicationHealth: 74,
-};
-
+// Design token helper maps
 const emotionIcons = {
   happy: Smile,
   neutral: Meh,
@@ -117,27 +36,51 @@ const emotionIcons = {
   anxious: Activity,
 };
 
-const emotionColors = {
-  happy: "text-green-500 bg-green-500/10",
-  neutral: "text-yellow-500 bg-yellow-500/10",
-  frustrated: "text-red-500 bg-red-500/10",
-  stressed: "text-orange-500 bg-orange-500/10",
-  anxious: "text-purple-500 bg-purple-500/10",
+const emotionColors: Record<string, string> = {
+  happy: "text-primary bg-primary/10",
+  neutral: "text-accent bg-accent/10",
+  frustrated: "text-destructive bg-destructive/10",
+  stressed: "text-warning bg-warning/10",
+  anxious: "text-secondary bg-secondary/10",
 };
 
-const riskColors = {
-  low: "bg-green-500/10 text-green-500 border-green-500/30",
-  medium: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30",
-  high: "bg-red-500/10 text-red-500 border-red-500/30",
+const riskColors: Record<string, string> = {
+  low: "bg-primary/10 text-primary border-primary/30",
+  medium: "bg-warning/10 text-warning border-warning/30",
+  high: "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 export function EmotionalAISystem() {
+  // Fetch real crew emotions data from Supabase
+  const { data: crewEmotionsData = [], isLoading } = useCrewEmotions();
   const [selectedCrew, setSelectedCrew] = useState<CrewEmotionalState | null>(null);
+  
+  // Calculate team dynamics from real data
+  const teamDynamics: TeamDynamics = {
+    overallMorale: crewEmotionsData.length > 0 
+      ? Math.round(crewEmotionsData.reduce((acc, c) => acc + c.emotionIntensity, 0) / crewEmotionsData.length)
+      : 75,
+    conflictRisk: crewEmotionsData.filter(c => c.riskLevel === 'high').length * 15,
+    collaborationScore: crewEmotionsData.length > 0
+      ? Math.round(crewEmotionsData.reduce((acc, c) => acc + c.teamCompatibility, 0) / crewEmotionsData.length)
+      : 80,
+    leadershipEffectiveness: 85,
+    communicationHealth: 78
+  };
 
-  const highRiskCount = mockCrewEmotions.filter(c => c.riskLevel === "high").length;
-  const avgCompatibility = Math.round(
-    mockCrewEmotions.reduce((acc, c) => acc + c.teamCompatibility, 0) / mockCrewEmotions.length
-  );
+  const highRiskCount = crewEmotionsData.filter(c => c.riskLevel === "high").length;
+  const avgCompatibility = crewEmotionsData.length > 0 
+    ? Math.round(crewEmotionsData.reduce((acc, c) => acc + c.teamCompatibility, 0) / crewEmotionsData.length)
+    : 0;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando dados emocionais...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -153,9 +96,9 @@ export function EmotionalAISystem() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Badge variant="outline" className="bg-success/10 text-success">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             <Smile className="h-3 w-3 mr-1" />
-            Moral: {mockTeamDynamics.overallMorale}%
+            Moral: {teamDynamics.overallMorale}%
           </Badge>
           {highRiskCount > 0 && (
             <Badge variant="outline" className="bg-destructive/10 text-destructive">
@@ -169,12 +112,12 @@ export function EmotionalAISystem() {
       {/* Team Dynamics Overview */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: "Moral Geral", value: mockTeamDynamics.overallMorale, icon: Smile, color: "text-success" },
-          { label: "Risco Conflito", value: mockTeamDynamics.conflictRisk, icon: AlertTriangle, color: "text-warning", inverted: true },
-          { label: "Colaboração", value: mockTeamDynamics.collaborationScore, icon: Users, color: "text-primary" },
-          { label: "Liderança", value: mockTeamDynamics.leadershipEffectiveness, icon: Shield, color: "text-secondary" },
-          { label: "Comunicação", value: mockTeamDynamics.communicationHealth, icon: MessageSquare, color: "text-info" },
-        ].map((metric, i) => (
+          { label: "Moral Geral", value: teamDynamics.overallMorale, icon: Smile, color: "text-primary" },
+          { label: "Risco Conflito", value: teamDynamics.conflictRisk, icon: AlertTriangle, color: "text-warning", inverted: true },
+          { label: "Colaboração", value: teamDynamics.collaborationScore, icon: Users, color: "text-primary" },
+          { label: "Liderança", value: teamDynamics.leadershipEffectiveness, icon: Shield, color: "text-secondary" },
+          { label: "Comunicação", value: teamDynamics.communicationHealth, icon: MessageSquare, color: "text-accent" },
+        ].map((metric: { label: string; value: number; icon: typeof Smile; color: string; inverted?: boolean }, i: number) => (
           <motion.div
             key={metric.label}
             initial={{ opacity: 0, y: 20 }}
@@ -210,8 +153,8 @@ export function EmotionalAISystem() {
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {mockCrewEmotions.map((crew, index) => {
-                  const EmotionIcon = emotionIcons[crew.primaryEmotion];
+                {crewEmotionsData.map((crew: CrewEmotionalState, index: number) => {
+                  const EmotionIcon = emotionIcons[crew.primaryEmotion] || Meh;
                   return (
                     <motion.div
                       key={crew.id}
@@ -219,14 +162,14 @@ export function EmotionalAISystem() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                       className={`p-3 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-                        crew.riskLevel === "high" ? "bg-red-500/5 border-red-500/30" : "bg-card"
+                        crew.riskLevel === "high" ? "bg-destructive/5 border-destructive/30" : "bg-card"
                       }`}
                       onClick={() => setSelectedCrew(crew)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <Avatar>
-                            <AvatarFallback className={emotionColors[crew.primaryEmotion]}>
+                            <AvatarFallback className={emotionColors[crew.primaryEmotion] || "text-muted-foreground"}>
                               <EmotionIcon className="h-4 w-4" />
                             </AvatarFallback>
                           </Avatar>
@@ -236,12 +179,12 @@ export function EmotionalAISystem() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <Badge variant="outline" className={riskColors[crew.riskLevel]}>
+                          <Badge variant="outline" className={riskColors[crew.riskLevel] || "bg-muted"}>
                             {crew.riskLevel}
                           </Badge>
                           <div className="text-xs text-muted-foreground mt-1">
-                            {crew.trend === "improving" && <TrendingUp className="h-3 w-3 inline text-green-500" />}
-                            {crew.trend === "declining" && <TrendingUp className="h-3 w-3 inline text-red-500 rotate-180" />}
+                            {crew.trend === "improving" && <TrendingUp className="h-3 w-3 inline text-primary" />}
+                            {crew.trend === "declining" && <TrendingUp className="h-3 w-3 inline text-destructive rotate-180" />}
                             {" "}{crew.lastInteraction}
                           </div>
                         </div>
@@ -253,8 +196,8 @@ export function EmotionalAISystem() {
                       </div>
                       {crew.stressFactors.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
-                          {crew.stressFactors.map((factor, i) => (
-                            <Badge key={i} variant="outline" className="text-xs bg-orange-500/10 text-orange-500">
+                          {crew.stressFactors.map((factor: string, i: number) => (
+                            <Badge key={i} variant="outline" className="text-xs bg-warning/10 text-warning">
                               {factor}
                             </Badge>
                           ))}
