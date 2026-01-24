@@ -11,8 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   LayoutGrid, Brain, Users, CheckCircle, AlertTriangle, Clock, 
-  Send, Mail, MessageSquare
+  Send, Mail, MessageSquare, ClipboardList
 } from "lucide-react";
+import { ActionPlanWithNotifications } from "@/components/action-plans/ActionPlanWithNotifications";
 
 interface ResponsibilityItem {
   id: string;
@@ -99,8 +100,9 @@ export default function ResponsibilityMatrixV2() {
       <StatsGridV2 stats={stats} columns={4} />
 
       <Tabs defaultValue="matrix" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 max-w-2xl">
+        <TabsList className="grid w-full grid-cols-5 max-w-3xl">
           <TabsTrigger value="matrix">Matriz RACI</TabsTrigger>
+          <TabsTrigger value="action-plans">Planos de Ação</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
           <TabsTrigger value="ai-assistant">IA Assistente</TabsTrigger>
           <TabsTrigger value="evidence">Evidências</TabsTrigger>
@@ -120,6 +122,14 @@ export default function ResponsibilityMatrixV2() {
               { label: "Marcar Concluída", icon: CheckCircle, onClick: (item) => toast.success(`Tarefa concluída`) },
             ]}
           />
+        </TabsContent>
+
+        <TabsContent value="action-plans">
+          <CardV2 icon={ClipboardList} title="Planos de Ação" description="Gestão de ações com notificações automáticas" gradient="orange">
+            <ActionPlanWithNotifications 
+              onActionComplete={() => toast.success("Ação concluída!")}
+            />
+          </CardV2>
         </TabsContent>
 
         <TabsContent value="notifications">
