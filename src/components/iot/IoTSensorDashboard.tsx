@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, Thermometer, Gauge, Waves, Wind, Battery, Wifi, AlertTriangle, CheckCircle, RefreshCw, Zap } from 'lucide-react';
+import { useIoTSensors, useVesselSensorAlerts } from '@/hooks/useIoTSensors';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface SensorReading {
   id: string;
@@ -28,7 +30,8 @@ interface AlertData {
   acknowledged: boolean;
 }
 
-const mockSensors: SensorReading[] = [
+// Default sensors for demonstration when no vessel data is available
+const defaultSensors: SensorReading[] = [
   {
     id: '1',
     sensorId: 'TEMP-001',
@@ -103,38 +106,39 @@ const mockSensors: SensorReading[] = [
   }
 ];
 
-const mockAlerts: AlertData[] = [
-  {
-    id: '1',
-    sensorName: 'Exhaust Gas Temperature',
-    message: 'Temperature exceeds safe threshold (485°C > 450°C)',
-    severity: 'critical',
-    timestamp: '2024-01-20 14:32:15',
-    acknowledged: false
-  },
-  {
-    id: '2',
-    sensorName: 'Hydraulic Pressure',
-    message: 'Pressure approaching upper limit (285 bar)',
-    severity: 'warning',
-    timestamp: '2024-01-20 14:30:45',
-    acknowledged: false
-  },
-  {
-    id: '3',
-    sensorName: 'Fuel Tank Level',
-    message: 'Tank level below 75% - schedule refueling',
-    severity: 'info',
-    timestamp: '2024-01-20 14:25:00',
-    acknowledged: true
-  }
-];
-
 export const IoTSensorDashboard: React.FC = () => {
-  const [sensors, setSensors] = useState<SensorReading[]>(mockSensors);
+  const { data: vesselData, isLoading, refetch } = useIoTSensors();
+  const { data: alertsData } = useVesselSensorAlerts();
+  const [sensors, setSensors] = useState<SensorReading[]>(defaultSensors);
   const [isLive, setIsLive] = useState(true);
 
-  // Simulate real-time updates
+  // Use real data when available, otherwise use defaults with simulated updates
+  useEffect(() => {
+    if (vesselData && vesselData.length > 0) {
+      // Map vessel data to sensor readings format
+      const mappedSensors = vesselData.flatMap(vessel => 
+        vessel.sensors.length > 0 
+          ? vessel.sensors.map((s: any) => ({
+              id: s.id,
+              sensorId: s.id,
+              sensorName: s.name,
+              sensorType: s.type || 'generic',
+              value: s.value || 0,
+              unit: s.unit || '',
+              status: s.status || 'normal',
+              lastUpdate: 'Real-time',
+              location: vessel.vesselName,
+              threshold: { min: s.min || 0, max: s.max || 100 }
+            }))
+          : []
+      );
+      if (mappedSensors.length > 0) {
+        setSensors(mappedSensors);
+      }
+    }
+  }, [vesselData]);
+
+  // Simulate real-time updates for demo data
   useEffect(() => {
     if (!isLive) return;
 
@@ -149,11 +153,29 @@ export const IoTSensorDashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, [isLive]);
 
+  const alerts: AlertData[] = useMemo(() => {
+    if (alertsData && alertsData.length > 0) {
+      return alertsData.map((alert: any) => ({
+        id: alert.id,
+        sensorName: alert.source || 'Sensor',
+        message: alert.message || alert.description,
+        severity: alert.severity || 'info',
+        timestamp: new Date(alert.created_at).toLocaleString(),
+        acknowledged: alert.acknowledged || false
+      }));
+    }
+    // Default alerts for demonstration
+    return [
+      { id: '1', sensorName: 'Exhaust Gas Temperature', message: 'Temperature exceeds safe threshold', severity: 'critical' as const, timestamp: new Date().toLocaleString(), acknowledged: false },
+      { id: '2', sensorName: 'Hydraulic Pressure', message: 'Pressure approaching upper limit', severity: 'warning' as const, timestamp: new Date().toLocaleString(), acknowledged: false }
+    ];
+  }, [alertsData]);
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'warning': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'normal': return 'bg-success/20 text-success border-success/30';
+      case 'warning': return 'bg-warning/20 text-warning border-warning/30';
+      case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -217,12 +239,12 @@ export const IoTSensorDashboard: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/20">
-                <CheckCircle className="h-5 w-5 text-green-400" />
+              <div className="p-2 rounded-lg bg-success/20">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Normal</p>
-                <p className="text-2xl font-bold text-green-400">{stats.normal}</p>
+                <p className="text-2xl font-bold text-success">{stats.normal}</p>
               </div>
             </div>
           </CardContent>
@@ -231,12 +253,12 @@ export const IoTSensorDashboard: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/20">
-                <AlertTriangle className="h-5 w-5 text-yellow-400" />
+              <div className="p-2 rounded-lg bg-warning/20">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Warnings</p>
-                <p className="text-2xl font-bold text-yellow-400">{stats.warning}</p>
+                <p className="text-2xl font-bold text-warning">{stats.warning}</p>
               </div>
             </div>
           </CardContent>
@@ -245,12 +267,12 @@ export const IoTSensorDashboard: React.FC = () => {
         <Card className="bg-card/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/20">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
+              <div className="p-2 rounded-lg bg-destructive/20">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Critical</p>
-                <p className="text-2xl font-bold text-red-400">{stats.critical}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.critical}</p>
               </div>
             </div>
           </CardContent>
@@ -260,7 +282,7 @@ export const IoTSensorDashboard: React.FC = () => {
       <Tabs defaultValue="sensors" className="space-y-4">
         <TabsList className="bg-muted/50">
           <TabsTrigger value="sensors">Sensor Grid</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts ({mockAlerts.filter(a => !a.acknowledged).length})</TabsTrigger>
+          <TabsTrigger value="alerts">Alerts ({alerts.filter((a: AlertData) => !a.acknowledged).length})</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
@@ -323,15 +345,15 @@ export const IoTSensorDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {mockAlerts.map((alert) => (
+                {alerts.map((alert: AlertData) => (
                   <div
                     key={alert.id}
                     className={`p-4 rounded-lg border ${
                       alert.severity === 'critical' 
-                        ? 'border-red-500/30 bg-red-500/10' 
+                        ? 'border-destructive/30 bg-destructive/10' 
                         : alert.severity === 'warning'
-                        ? 'border-yellow-500/30 bg-yellow-500/10'
-                        : 'border-blue-500/30 bg-blue-500/10'
+                        ? 'border-warning/30 bg-warning/10'
+                        : 'border-primary/30 bg-primary/10'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">

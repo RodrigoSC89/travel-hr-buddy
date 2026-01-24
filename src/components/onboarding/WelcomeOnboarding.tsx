@@ -36,28 +36,28 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     title: "Módulos Inteligentes",
     description: "Acesse MMI, Crew Management, PEOTRAM, ESG e mais de 50 módulos especializados para sua operação.",
     icon: Sparkles,
-    color: "from-purple-500 to-pink-500"
+    color: "from-secondary to-accent"
   },
   {
     id: "security",
     title: "Segurança & Compliance",
     description: "Políticas RLS, auditoria completa e conformidade com IMCA, IMO e regulamentações marítimas.",
     icon: Shield,
-    color: "from-green-500 to-emerald-500"
+    color: "from-success to-success/80"
   },
   {
     id: "analytics",
     title: "Analytics em Tempo Real",
     description: "Dashboards executivos, KPIs, métricas de performance e relatórios automatizados.",
     icon: BarChart3,
-    color: "from-orange-500 to-amber-500"
+    color: "from-warning to-warning/80"
   },
   {
     id: "ready",
     title: "Tudo Pronto!",
     description: "Seu sistema está configurado. Explore os módulos e comece a transformar sua operação.",
     icon: Rocket,
-    color: "from-indigo-500 to-blue-500"
+    color: "from-secondary to-primary"
   }
 ];
 

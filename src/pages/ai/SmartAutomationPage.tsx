@@ -204,19 +204,19 @@ const SmartAutomationPage: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Execuções (7d)</p>
                 <p className="text-2xl font-bold">871</p>
               </div>
-              <RefreshCw className="h-8 w-8 text-blue-400" />
+              <RefreshCw className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
                 <p className="text-2xl font-bold">97.2%</p>
               </div>
-              <Target className="h-8 w-8 text-purple-400" />
+              <Target className="h-8 w-8 text-secondary" />
             </div>
           </CardContent>
         </Card>

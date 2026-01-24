@@ -217,19 +217,19 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
                 <p className="text-sm text-muted-foreground">Tempo Médio</p>
                 <p className="text-2xl font-bold">8.5s</p>
               </div>
-              <Clock className="h-8 w-8 text-green-400" />
+              <Clock className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Templates</p>
                 <p className="text-2xl font-bold">{templates.length}</p>
               </div>
-              <PenTool className="h-8 w-8 text-purple-400" />
+              <PenTool className="h-8 w-8 text-secondary" />
             </div>
           </CardContent>
         </Card>
