@@ -422,25 +422,25 @@ const FuelOptimizerPage = () => {
         <Card className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-200 dark:border-orange-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Fuel className="h-4 w-4 text-orange-500" />
+              <Fuel className="h-4 w-4 text-warning" />
               Combustível Economizado
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{stats.totalFuelSaved.toFixed(1)}t</div>
+            <div className="text-2xl font-bold text-warning">{stats.totalFuelSaved.toFixed(1)}t</div>
             <p className="text-xs text-muted-foreground">Toneladas totais</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 border-purple-200 dark:border-purple-800">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/30 dark:border-secondary/20">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Brain className="h-4 w-4 text-purple-500" />
+              <Brain className="h-4 w-4 text-secondary" />
               Confiança IA
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">{stats.avgConfidence.toFixed(0)}%</div>
+            <div className="text-2xl font-bold text-secondary">{stats.avgConfidence.toFixed(0)}%</div>
             <p className="text-xs text-muted-foreground">Média das análises</p>
           </CardContent>
         </Card>
