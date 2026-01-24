@@ -165,14 +165,14 @@ export function PredictiveMaintenanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-emerald-500/50">
+        <Card className="border-success/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Baixo</p>
-                <p className="text-2xl font-bold text-emerald-500">{stats.low}</p>
+                <p className="text-2xl font-bold text-success">{stats.low}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-emerald-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

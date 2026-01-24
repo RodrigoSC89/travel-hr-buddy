@@ -194,7 +194,7 @@ export function RealtimeSensorMonitor() {
               variant="outline" 
               className={cn(
                 "flex items-center gap-1",
-                isConnected ? "text-emerald-600 border-emerald-500" : "text-amber-600 border-amber-500"
+                isConnected ? "text-success border-success" : "text-warning border-warning"
               )}
             >
               {isConnected ? (
@@ -235,7 +235,7 @@ export function RealtimeSensorMonitor() {
                   {sensor.is_anomaly ? (
                     <AlertTriangle className="h-4 w-4 text-destructive" />
                   ) : (
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
+                    <CheckCircle className="h-4 w-4 text-success" />
                   )}
                 </div>
                 <div className="flex items-baseline gap-1">

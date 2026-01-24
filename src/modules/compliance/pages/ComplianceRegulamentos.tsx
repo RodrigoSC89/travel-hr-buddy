@@ -235,24 +235,24 @@ export default function ComplianceRegulamentos() {
             <div className="text-xs text-muted-foreground">Total Regulamentos</div>
           </CardContent>
         </Card>
-        <Card className="bg-emerald-500/10 border-emerald-500/30">
+        <Card className="bg-success/10 border-success/30">
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
-            <div className="text-2xl font-bold text-emerald-400">{stats.active}</div>
+            <CheckCircle2 className="h-6 w-6 mx-auto text-success mb-2" />
+            <div className="text-2xl font-bold text-success">{stats.active}</div>
             <div className="text-xs text-muted-foreground">Ativos</div>
           </CardContent>
         </Card>
-        <Card className="bg-blue-500/10 border-blue-500/30">
+        <Card className="bg-info/10 border-info/30">
           <CardContent className="p-4 text-center">
-            <TrendingUp className="h-6 w-6 mx-auto text-blue-400 mb-2" />
-            <div className="text-2xl font-bold text-blue-400">{stats.avgCompliance}%</div>
+            <TrendingUp className="h-6 w-6 mx-auto text-info mb-2" />
+            <div className="text-2xl font-bold text-info">{stats.avgCompliance}%</div>
             <div className="text-xs text-muted-foreground">Conformidade Média</div>
           </CardContent>
         </Card>
-        <Card className="bg-purple-500/10 border-purple-500/30">
+        <Card className="bg-secondary/10 border-secondary/30">
           <CardContent className="p-4 text-center">
-            <Brain className="h-6 w-6 mx-auto text-purple-400 mb-2" />
-            <div className="text-2xl font-bold text-purple-400">{stats.pendingAI}</div>
+            <Brain className="h-6 w-6 mx-auto text-secondary-foreground mb-2" />
+            <div className="text-2xl font-bold text-secondary-foreground">{stats.pendingAI}</div>
             <div className="text-xs text-muted-foreground">Recomendações IA</div>
           </CardContent>
         </Card>

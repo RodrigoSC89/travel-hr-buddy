@@ -184,21 +184,21 @@ export default function APICenter() {
             <div className="text-xs text-muted-foreground">Total APIs</div>
           </CardContent>
         </Card>
-        <Card className="bg-emerald-500/10 border-emerald-500/30">
+        <Card className="bg-success/10 border-success/30">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-emerald-400">{stats.active}</div>
+            <div className="text-2xl font-bold text-success">{stats.active}</div>
             <div className="text-xs text-muted-foreground">Ativas</div>
           </CardContent>
         </Card>
-        <Card className="bg-amber-500/10 border-amber-500/30">
+        <Card className="bg-warning/10 border-warning/30">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-amber-400">{stats.degraded}</div>
+            <div className="text-2xl font-bold text-warning">{stats.degraded}</div>
             <div className="text-xs text-muted-foreground">Degradadas</div>
           </CardContent>
         </Card>
-        <Card className="bg-red-500/10 border-red-500/30">
+        <Card className="bg-destructive/10 border-destructive/30">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-red-400">{stats.error}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.error}</div>
             <div className="text-xs text-muted-foreground">Com Erro</div>
           </CardContent>
         </Card>
