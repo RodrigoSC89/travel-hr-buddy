@@ -76,7 +76,7 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       value: telemetry.heading,
       unit: '°',
       icon: Waves,
-      color: 'text-cyan-500'
+      color: 'text-info'
     },
     {
       id: 'engine',

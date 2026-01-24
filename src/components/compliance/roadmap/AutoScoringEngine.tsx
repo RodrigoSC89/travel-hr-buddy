@@ -142,10 +142,10 @@ const getNivelColor = (nivel: string) => {
 
 const getCriticidadeColor = (criticidade: string) => {
   switch (criticidade) {
-    case 'critico': return 'bg-red-500 text-white';
-    case 'alto': return 'bg-orange-500 text-white';
-    case 'medio': return 'bg-yellow-500 text-black';
-    case 'baixo': return 'bg-green-500 text-white';
+    case 'critico': return 'bg-destructive text-destructive-foreground';
+    case 'alto': return 'bg-warning text-warning-foreground';
+    case 'medio': return 'bg-warning/80 text-foreground';
+    case 'baixo': return 'bg-success text-success-foreground';
     default: return 'bg-muted';
   }
 };
