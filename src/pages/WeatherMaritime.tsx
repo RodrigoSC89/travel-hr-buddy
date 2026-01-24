@@ -200,27 +200,27 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Humidity */}
-          <Card className="bg-gradient-to-br from-sky-500/10 to-indigo-500/10 border-sky-500/20">
+          <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Umidade</p>
-                  <p className="text-3xl font-bold text-sky-500">
+                  <p className="text-3xl font-bold text-info">
                     {weather.humidity?.toFixed(0) ?? "—"} %
                   </p>
                 </div>
-                <Droplets className="h-12 w-12 text-sky-500/50" />
+                <Droplets className="h-12 w-12 text-info/50" />
               </div>
             </CardContent>
           </Card>
 
           {/* Visibility */}
-          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+          <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Visibilidade</p>
-                  <p className="text-3xl font-bold text-purple-500">
+                  <p className="text-3xl font-bold text-secondary">
                     {weather.visibility?.toFixed(1) ?? "—"} km
                   </p>
                 </div>

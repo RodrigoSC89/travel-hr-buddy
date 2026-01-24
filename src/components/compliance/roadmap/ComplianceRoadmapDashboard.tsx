@@ -319,11 +319,11 @@ export function ComplianceRoadmapDashboard() {
   
   // Score visual
   const getScoreLevel = (score: number) => {
-    if (score >= 90) return { label: 'EXCELENTE', color: 'text-green-600', bg: 'bg-green-500' };
-    if (score >= 80) return { label: 'BOM', color: 'text-lime-600', bg: 'bg-lime-500' };
-    if (score >= 70) return { label: 'ACEITÁVEL', color: 'text-yellow-600', bg: 'bg-yellow-500' };
-    if (score >= 50) return { label: 'INADEQUADO', color: 'text-orange-600', bg: 'bg-orange-500' };
-    return { label: 'CRÍTICO', color: 'text-red-600', bg: 'bg-red-500' };
+    if (score >= 90) return { label: 'EXCELENTE', color: 'text-success', bg: 'bg-success' };
+    if (score >= 80) return { label: 'BOM', color: 'text-success/80', bg: 'bg-success/80' };
+    if (score >= 70) return { label: 'ACEITÁVEL', color: 'text-warning', bg: 'bg-warning' };
+    if (score >= 50) return { label: 'INADEQUADO', color: 'text-warning/80', bg: 'bg-warning/80' };
+    return { label: 'CRÍTICO', color: 'text-destructive', bg: 'bg-destructive' };
   };
   
   const scoreLevel = getScoreLevel(metrics.scoreFinal);

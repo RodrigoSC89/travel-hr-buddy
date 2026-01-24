@@ -222,8 +222,8 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
               <TabsContent value="system-health" className="mt-0 space-y-6 animate-fade-in">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
-                      <Brain className="w-6 h-6 text-teal-600" />
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-info/20 to-primary/20">
+                      <Brain className="w-6 h-6 text-info" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Status do Sistema</h2>
@@ -237,8 +237,8 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
               <TabsContent value="recommendations" className="mt-0 space-y-6 animate-fade-in">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20">
-                      <Sparkles className="w-6 h-6 text-violet-600" />
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-secondary/20 to-primary/20">
+                      <Sparkles className="w-6 h-6 text-secondary" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Recomendações IA</h2>
@@ -255,8 +255,8 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
               <TabsContent value="notifications" className="mt-0 space-y-6 animate-fade-in">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-rose-500/20 to-pink-500/20">
-                      <Bell className="w-6 h-6 text-rose-600" />
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-destructive/20 to-warning/20">
+                      <Bell className="w-6 h-6 text-destructive" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Centro de Notificações</h2>

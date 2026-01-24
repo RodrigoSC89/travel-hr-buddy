@@ -131,11 +131,11 @@ const generateAuditItems = (): AuditItem[] => {
 // Helper functions
 const getNivelColor = (nivel: string) => {
   switch (nivel) {
-    case 'excelente': return { bg: 'bg-green-600', text: 'text-green-600', border: 'border-green-500' };
-    case 'bom': return { bg: 'bg-lime-500', text: 'text-lime-600', border: 'border-lime-500' };
-    case 'aceitavel': return { bg: 'bg-yellow-500', text: 'text-yellow-600', border: 'border-yellow-500' };
-    case 'inadequado': return { bg: 'bg-orange-500', text: 'text-orange-600', border: 'border-orange-500' };
-    case 'critico': return { bg: 'bg-red-500', text: 'text-red-600', border: 'border-red-500' };
+    case 'excelente': return { bg: 'bg-success', text: 'text-success', border: 'border-success' };
+    case 'bom': return { bg: 'bg-success/80', text: 'text-success', border: 'border-success/80' };
+    case 'aceitavel': return { bg: 'bg-warning', text: 'text-warning', border: 'border-warning' };
+    case 'inadequado': return { bg: 'bg-warning/80', text: 'text-warning', border: 'border-warning/80' };
+    case 'critico': return { bg: 'bg-destructive', text: 'text-destructive', border: 'border-destructive' };
     default: return { bg: 'bg-muted', text: 'text-muted-foreground', border: 'border-muted' };
   }
 };
