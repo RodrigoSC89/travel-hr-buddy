@@ -236,8 +236,8 @@ export function AdvancedSearch() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl">
-            <Search className="h-6 w-6 text-blue-500" />
+          <div className="p-3 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl">
+            <Search className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold">Busca Avançada</h2>

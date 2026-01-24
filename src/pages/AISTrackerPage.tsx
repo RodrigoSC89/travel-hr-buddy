@@ -156,10 +156,10 @@ export default function AISTrackerPage() {
           </Card>
 
           {/* Position Card */}
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-info/10 border-success/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-emerald-500" />
+                <MapPin className="h-5 w-5 text-success" />
                 Posição Atual
               </CardTitle>
             </CardHeader>
@@ -208,10 +208,10 @@ export default function AISTrackerPage() {
           </Card>
 
           {/* Timestamp Card */}
-          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+          <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-purple-500" />
+                <Clock className="h-5 w-5 text-secondary" />
                 Última Atualização
               </CardTitle>
             </CardHeader>

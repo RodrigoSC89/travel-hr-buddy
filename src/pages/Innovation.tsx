@@ -90,9 +90,9 @@ const Innovation = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-200">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-purple-700">
+            <CardTitle className="flex items-center gap-2 text-secondary">
               <Sparkles className="h-5 w-5" />
               Eficiência IA
             </CardTitle>

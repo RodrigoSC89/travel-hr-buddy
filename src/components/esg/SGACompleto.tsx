@@ -174,11 +174,11 @@ export function SGACompleto() {
   const calculateCII = () => {
     const totalCO2 = emissionsData.reduce((sum, d) => sum + d.co2, 0);
     const avgEfficiency = 0.46;
-    if (avgEfficiency < 0.42) return { rating: "A", color: "bg-green-500" };
-    if (avgEfficiency < 0.46) return { rating: "B", color: "bg-lime-500" };
-    if (avgEfficiency < 0.50) return { rating: "C", color: "bg-yellow-500" };
-    if (avgEfficiency < 0.54) return { rating: "D", color: "bg-orange-500" };
-    return { rating: "E", color: "bg-red-500" };
+    if (avgEfficiency < 0.42) return { rating: "A", color: "bg-success" };
+    if (avgEfficiency < 0.46) return { rating: "B", color: "bg-success/80" };
+    if (avgEfficiency < 0.50) return { rating: "C", color: "bg-warning" };
+    if (avgEfficiency < 0.54) return { rating: "D", color: "bg-warning/80" };
+    return { rating: "E", color: "bg-destructive" };
   };
 
   const cii = calculateCII();
@@ -188,13 +188,13 @@ export function SGACompleto() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl">
-            <Leaf className="h-6 w-6 text-green-500" />
+          <div className="p-3 bg-gradient-to-br from-success/20 to-success/10 rounded-xl">
+            <Leaf className="h-6 w-6 text-success" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Sistema de Gestão Ambiental
-              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500">
+              <Badge className="bg-gradient-to-r from-success to-success/80">
                 ISO 14001 + MARPOL
               </Badge>
             </h2>

@@ -336,7 +336,7 @@ export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionPr
             <Button variant="destructive" className="gap-2" onClick={handleEmergencyStop}>
               <Square className="h-4 w-4" /> Parada Emergencial
             </Button>
-            <Button className="gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600" onClick={handleAIOptimization}>
+            <Button className="gap-2 bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90" onClick={handleAIOptimization}>
               <Activity className="h-4 w-4" /> Otimizar com IA
             </Button>
           </div>

@@ -312,7 +312,7 @@ export function ExecutivoSection({ systemStatus, isLoading }: ExecutivoSectionPr
         <Button variant="outline" className="gap-2">
           <Download className="h-4 w-4" /> Exportar Dados
         </Button>
-        <Button className="gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">
+        <Button className="gap-2 bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90">
           <Brain className="h-4 w-4" /> Gerar Relatório com IA
         </Button>
       </div>

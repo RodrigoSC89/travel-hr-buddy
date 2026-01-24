@@ -270,9 +270,9 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
                 <div 
                   className={cn(
                     "absolute inset-0 opacity-20 transition-all duration-500",
-                    voiceState.isListening && "bg-gradient-to-br from-green-500 to-emerald-500",
-                    voiceState.isProcessing && "bg-gradient-to-br from-blue-500 to-cyan-500",
-                    voiceState.isSpeaking && "bg-gradient-to-br from-purple-500 to-pink-500"
+                    voiceState.isListening && "bg-gradient-to-br from-success to-success/80",
+                    voiceState.isProcessing && "bg-gradient-to-br from-primary to-info",
+                    voiceState.isSpeaking && "bg-gradient-to-br from-secondary to-accent"
                   )}
                 />
 

@@ -160,13 +160,13 @@ export function ProcurementIntelligenceAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-xl">
-            <ShoppingCart className="h-6 w-6 text-emerald-500" />
+          <div className="p-3 bg-gradient-to-br from-success/20 to-info/20 rounded-xl">
+            <ShoppingCart className="h-6 w-6 text-success" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Procurement Intelligence
-              <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500">
+              <Badge className="bg-gradient-to-r from-success to-info">
                 <Sparkles className="h-3 w-3 mr-1" />
                 IA Preditiva
               </Badge>

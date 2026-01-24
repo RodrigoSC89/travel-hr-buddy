@@ -113,14 +113,14 @@ const EdgeComputingPage: React.FC = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Nós Ativos</p>
                 <p className="text-2xl font-bold">{onlineNodes}/{nodes.length}</p>
               </div>
-              <Server className="h-8 w-8 text-purple-400" />
+              <Server className="h-8 w-8 text-secondary" />
             </div>
           </CardContent>
         </Card>

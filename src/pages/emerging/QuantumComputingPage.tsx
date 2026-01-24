@@ -173,14 +173,14 @@ const QuantumComputingPage: React.FC = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-secondary/10 border-accent/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Experimentos</p>
                 <p className="text-2xl font-bold">{experiments.length}</p>
               </div>
-              <Atom className="h-8 w-8 text-pink-400" />
+              <Atom className="h-8 w-8 text-accent" />
             </div>
           </CardContent>
         </Card>

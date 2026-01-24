@@ -64,13 +64,13 @@ const initialDrills: ScheduledDrill[] = [
 ];
 
 const DRILL_TYPES = [
-  { value: "fire", label: "Combate a Incêndio", icon: Flame, color: "text-red-500" },
-  { value: "abandon", label: "Abandono de Embarcação", icon: LifeBuoy, color: "text-blue-500" },
-  { value: "mob", label: "Homem ao Mar", icon: Anchor, color: "text-cyan-500" },
-  { value: "isps", label: "ISPS Security Drill", icon: ShieldAlert, color: "text-purple-500" },
-  { value: "oil_spill", label: "Derramamento de Óleo", icon: AlertTriangle, color: "text-green-500" },
-  { value: "medical", label: "Emergência Médica", icon: Plus, color: "text-pink-500" },
-  { value: "blackout", label: "Blackout Recovery", icon: AlertTriangle, color: "text-amber-500" },
+  { value: "fire", label: "Combate a Incêndio", icon: Flame, color: "text-destructive" },
+  { value: "abandon", label: "Abandono de Embarcação", icon: LifeBuoy, color: "text-primary" },
+  { value: "mob", label: "Homem ao Mar", icon: Anchor, color: "text-info" },
+  { value: "isps", label: "ISPS Security Drill", icon: ShieldAlert, color: "text-secondary" },
+  { value: "oil_spill", label: "Derramamento de Óleo", icon: AlertTriangle, color: "text-success" },
+  { value: "medical", label: "Emergência Médica", icon: Plus, color: "text-accent" },
+  { value: "blackout", label: "Blackout Recovery", icon: AlertTriangle, color: "text-warning" },
 ];
 
 const TIME_SLOTS = [

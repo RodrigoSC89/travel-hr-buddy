@@ -343,19 +343,19 @@ export default function AICommandCenter() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+            <Card className="bg-gradient-to-br from-secondary/10 to-accent/10 border-secondary/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground">Automação</p>
                     <p className="text-lg font-bold">{performanceMetrics.automationEfficiency}%</p>
                   </div>
-                  <Zap className="h-5 w-5 text-purple-500" />
+                  <Zap className="h-5 w-5 text-secondary" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/20">
+            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
