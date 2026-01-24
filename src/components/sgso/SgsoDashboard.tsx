@@ -442,7 +442,7 @@ export const SgsoDashboard: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="evidence"
-                className="data-[state=active]:bg-background data-[state=active]:text-indigo-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:font-bold min-h-[44px]"
               >
                 <FileCheck className="h-4 w-4 mr-2" />
                 Evidências

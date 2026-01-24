@@ -43,13 +43,13 @@ export const QuickActionsPanel: React.FC = () => {
       icon: <Users className="h-4 w-4" />,
       label: "Gestão de Tripulação",
       onClick: () => navigate("/maritime-command"),
-      color: "bg-teal-500 hover:bg-teal-600"
+      color: "bg-info hover:bg-info/80"
     },
     {
       icon: <Shield className="h-4 w-4" />,
       label: "Auditorias",
       onClick: () => navigate("/compliance-hub"),
-      color: "bg-cyan-500 hover:bg-cyan-600"
+      color: "bg-info hover:bg-info/80"
     }
   ];
 

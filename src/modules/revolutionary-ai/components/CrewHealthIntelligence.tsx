@@ -333,22 +333,22 @@ export function CrewHealthIntelligence() {
                 <div className="text-xs text-muted-foreground">HRV</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Droplets className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                <Droplets className="h-6 w-6 mx-auto mb-2 text-primary" />
                 <div className="text-2xl font-bold">{selectedCrew.spO2}%</div>
                 <div className="text-xs text-muted-foreground">SpO2</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Thermometer className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+                <Thermometer className="h-6 w-6 mx-auto mb-2 text-warning" />
                 <div className="text-2xl font-bold">{selectedCrew.temperature}°</div>
                 <div className="text-xs text-muted-foreground">Temp</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Moon className="h-6 w-6 mx-auto mb-2 text-indigo-500" />
+                <Moon className="h-6 w-6 mx-auto mb-2 text-secondary" />
                 <div className="text-2xl font-bold">{selectedCrew.sleepQuality}%</div>
                 <div className="text-xs text-muted-foreground">Sono</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Brain className="h-6 w-6 mx-auto mb-2 text-green-500" />
+                <Brain className="h-6 w-6 mx-auto mb-2 text-success" />
                 <div className="text-2xl font-bold">{100 - selectedCrew.stressLevel}%</div>
                 <div className="text-xs text-muted-foreground">Bem-estar</div>
               </div>

@@ -152,8 +152,8 @@ const SECTIONS = [
     name: "Testes Anuais",
     icon: TestTube,
     description: "DP trials, capability plots e validação",
-    color: "text-indigo-600",
-    bgColor: "bg-indigo-50"
+    color: "text-primary",
+    bgColor: "bg-primary/10"
   }
 ];
 

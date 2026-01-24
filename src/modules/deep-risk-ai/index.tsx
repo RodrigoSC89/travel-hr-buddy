@@ -420,11 +420,11 @@ const DeepRiskAI: React.FC = () => {
                   <div className="text-xs text-zinc-400 mt-1">Tendência</div>
                 </div>
               </div>
-              <div className="p-3 bg-cyan-500/10 rounded border border-cyan-500/30">
+              <div className="p-3 bg-info/10 rounded border border-info/30">
                 <div className="flex items-start gap-2">
-                  <Brain className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                  <Brain className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
                   <div className="text-sm">
-                    <strong className="text-cyan-400">Recomendação Preditiva:</strong>
+                    <strong className="text-info">Recomendação Preditiva:</strong>
                     <p className="text-zinc-300 mt-1">{prediction.recommendation}</p>
                   </div>
                 </div>

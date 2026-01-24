@@ -47,9 +47,9 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ modules }) => {
     {
       label: "System Uptime",
       value: "99.8%",
-      icon: <TrendingUp className="w-5 h-5 text-cyan-400" />,
-      color: "text-cyan-400",
-      bgColor: "bg-cyan-500/10"
+      icon: <TrendingUp className="w-5 h-5 text-info" />,
+      color: "text-info",
+      bgColor: "bg-info/10"
     }
   ];
 

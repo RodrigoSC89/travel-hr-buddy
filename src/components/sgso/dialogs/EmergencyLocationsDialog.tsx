@@ -126,14 +126,14 @@ const getTypeIcon = (type: string) => {
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case "fire": return "text-red-500 bg-red-100";
-    case "medical": return "text-purple-500 bg-purple-100";
-    case "rescue": return "text-blue-500 bg-blue-100";
-    case "spill": return "text-green-500 bg-green-100";
-    case "primary": return "text-orange-500 bg-orange-100";
-    case "secondary": return "text-yellow-500 bg-yellow-100";
-    case "command": return "text-indigo-500 bg-indigo-100";
-    default: return "text-gray-500 bg-gray-100";
+    case "fire": return "text-destructive bg-destructive/10";
+    case "medical": return "text-secondary bg-secondary/10";
+    case "rescue": return "text-primary bg-primary/10";
+    case "spill": return "text-success bg-success/10";
+    case "primary": return "text-warning bg-warning/10";
+    case "secondary": return "text-warning bg-warning/10";
+    case "command": return "text-info bg-info/10";
+    default: return "text-muted-foreground bg-muted";
   }
 };
 

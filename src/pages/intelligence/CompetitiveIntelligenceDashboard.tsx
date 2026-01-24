@@ -1108,12 +1108,12 @@ export default function CompetitiveIntelligenceDashboard() {
         <TabsContent value="opportunities" className="space-y-4">
           <div className="grid gap-4">
             {marketOpportunities.map((opp) => (
-              <Card key={opp.id} className={opp.demand === "high" ? "border-emerald-500/50" : ""}>
+              <Card key={opp.id} className={opp.demand === "high" ? "border-success/50" : ""}>
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-cyan-500/10">
-                        <Navigation className="h-5 w-5 text-cyan-500" />
+                      <div className="p-2 rounded-lg bg-info/10">
+                        <Navigation className="h-5 w-5 text-info" />
                       </div>
                       <div>
                         <h4 className="font-bold">{opp.route}</h4>

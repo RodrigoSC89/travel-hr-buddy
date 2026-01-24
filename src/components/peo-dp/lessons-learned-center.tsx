@@ -195,10 +195,10 @@ const failureTypeColors: Record<string, string> = {
 };
 
 const sourceColors: Record<string, string> = {
-  IMCA: "bg-blue-600",
-  Internal: "bg-green-600",
-  Petrobras: "bg-yellow-600",
-  Industry: "bg-purple-600"
+  IMCA: "bg-primary",
+  Internal: "bg-success",
+  Petrobras: "bg-warning",
+  Industry: "bg-secondary"
 };
 
 export const LessonsLearnedCenter: React.FC = () => {

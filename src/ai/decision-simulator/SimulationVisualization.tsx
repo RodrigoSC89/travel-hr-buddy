@@ -95,7 +95,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Info className="w-5 h-5 text-indigo-500" />
+              <Info className="w-5 h-5 text-primary" />
               <div>
                 <p className="text-sm text-gray-500">Scenarios</p>
                 <p className="text-lg font-semibold">{simulation.scenarios.length}</p>
