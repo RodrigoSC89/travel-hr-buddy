@@ -134,12 +134,12 @@ export default function WeatherMaritime() {
       {weather && !isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Wave Height */}
-          <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Altura das Ondas</p>
-                  <p className="text-3xl font-bold text-blue-500">
+                  <p className="text-3xl font-bold text-primary">
                     {weather.waveHeight?.toFixed(1) ?? "—"} m
                   </p>
                   <Badge variant="outline" className="mt-2">
@@ -152,19 +152,19 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Wind Speed */}
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-info/10 border-success/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Velocidade do Vento</p>
-                  <p className="text-3xl font-bold text-emerald-500">
+                  <p className="text-3xl font-bold text-success">
                     {weather.windSpeed?.toFixed(1) ?? "—"} m/s
                   </p>
                   <Badge variant="outline" className="mt-2">
                     {getWindDescription(weather.windSpeed)}
                   </Badge>
                 </div>
-                <Wind className="h-12 w-12 text-emerald-500/50" />
+                <Wind className="h-12 w-12 text-success/50" />
               </div>
             </CardContent>
           </Card>

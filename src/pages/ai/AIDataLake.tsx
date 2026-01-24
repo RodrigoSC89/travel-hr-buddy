@@ -209,21 +209,21 @@ const AIDataLake: React.FC = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Armazenamento Total</p>
                 <p className="text-2xl font-bold">45.7TB</p>
               </div>
-              <HardDrive className="h-8 w-8 text-cyan-400" />
+              <HardDrive className="h-8 w-8 text-info" />
             </div>
             <Progress value={72} className="mt-3 h-1" />
             <p className="text-xs text-muted-foreground mt-1">72% de 64TB usado</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -247,14 +247,14 @@ const AIDataLake: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fontes de Dados</p>
                 <p className="text-2xl font-bold">{dataSources.length}</p>
               </div>
-              <Database className="h-8 w-8 text-orange-400" />
+              <Database className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

@@ -318,14 +318,14 @@ export function MarinhaBrasilPanel({ lat, lon, region, compact = false }: Marinh
           <TabsContent value="ondas" className="mt-4">
             {data.ondas ? (
               <div className="grid grid-cols-2 gap-4">
-                <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10">
+                <Card className="bg-gradient-to-br from-primary/10 to-info/10">
                   <CardContent className="pt-4 text-center">
-                    <Waves className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                    <Waves className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <p className="text-2xl font-bold">{data.ondas.significativa}m</p>
                     <p className="text-xs text-muted-foreground">Altura Significativa</p>
                   </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-500/10">
+                <Card className="bg-gradient-to-br from-info/10 to-success/10">
                   <CardContent className="pt-4 text-center">
                     <Waves className="h-8 w-8 mx-auto mb-2 text-info" />
                     <p className="text-2xl font-bold">{data.ondas.maxima}m</p>

@@ -132,10 +132,10 @@ export default function AISTrackerPage() {
       {data && !isLoading && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Vessel Info Card */}
-          <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Ship className="h-5 w-5 text-blue-500" />
+                <Ship className="h-5 w-5 text-primary" />
                 Informações da Embarcação
               </CardTitle>
             </CardHeader>
@@ -147,7 +147,7 @@ export default function AISTrackerPage() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Status</p>
-                  <Badge variant="default" className="bg-green-500">
+                  <Badge variant="default" className="bg-success">
                     Rastreando
                   </Badge>
                 </div>
@@ -182,10 +182,10 @@ export default function AISTrackerPage() {
           </Card>
 
           {/* Navigation Card */}
-          <Card className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/20">
+          <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Navigation className="h-5 w-5 text-orange-500" />
+                <Navigation className="h-5 w-5 text-warning" />
                 Navegação
               </CardTitle>
             </CardHeader>
@@ -193,13 +193,13 @@ export default function AISTrackerPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Velocidade</p>
-                  <p className="text-2xl font-bold text-orange-500">
+                  <p className="text-2xl font-bold text-warning">
                     {data.track?.[0]?.speed?.toFixed(1) ?? "—"} kts
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Rumo</p>
-                  <p className="text-2xl font-bold text-orange-500">
+                  <p className="text-2xl font-bold text-warning">
                     {data.track?.[0]?.course?.toFixed(0) ?? "—"}°
                   </p>
                 </div>

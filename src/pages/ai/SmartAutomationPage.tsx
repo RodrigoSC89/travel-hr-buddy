@@ -185,19 +185,19 @@ const SmartAutomationPage: React.FC = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Workflows Ativos</p>
                 <p className="text-2xl font-bold">{workflows.filter(w => w.status === "active").length}</p>
               </div>
-              <Activity className="h-8 w-8 text-green-400" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -221,14 +221,14 @@ const SmartAutomationPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Horas Economizadas</p>
                 <p className="text-2xl font-bold">156h</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-orange-400" />
+              <TrendingUp className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

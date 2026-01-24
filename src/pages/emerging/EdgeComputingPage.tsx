@@ -125,38 +125,38 @@ const EdgeComputingPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Latência Média</p>
                 <p className="text-2xl font-bold">{avgLatency.toFixed(1)}ms</p>
               </div>
-              <Gauge className="h-8 w-8 text-green-400" />
+              <Gauge className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tasks em Execução</p>
                 <p className="text-2xl font-bold">{nodes.reduce((a, b) => a + b.tasks, 0)}</p>
               </div>
-              <Activity className="h-8 w-8 text-blue-400" />
+              <Activity className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-destructive/10 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Uptime Global</p>
                 <p className="text-2xl font-bold">98.6%</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-orange-400" />
+              <CheckCircle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
