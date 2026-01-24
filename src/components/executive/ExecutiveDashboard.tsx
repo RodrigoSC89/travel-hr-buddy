@@ -80,7 +80,7 @@ export function ExecutiveDashboard() {
         trend: "up",
         change: 5.2,
         icon: <Ship className="h-5 w-5" />,
-        color: "from-blue-500 to-blue-600",
+        color: "from-primary to-info",
       },
       {
         id: "crew-onboard",
@@ -92,7 +92,7 @@ export function ExecutiveDashboard() {
         trend: "stable",
         change: 0.3,
         icon: <Users className="h-5 w-5" />,
-        color: "from-emerald-500 to-emerald-600",
+        color: "from-success to-success/80",
       },
       {
         id: "alerts-resolved",
@@ -104,7 +104,7 @@ export function ExecutiveDashboard() {
         trend: "up",
         change: 2.1,
         icon: <AlertTriangle className="h-5 w-5" />,
-        color: "from-amber-500 to-amber-600",
+        color: "from-warning to-warning/80",
       },
       {
         id: "system-uptime",
@@ -128,7 +128,7 @@ export function ExecutiveDashboard() {
         trend: "up",
         change: 1.8,
         icon: <Brain className="h-5 w-5" />,
-        color: "from-pink-500 to-pink-600",
+        color: "from-accent to-secondary",
       },
       {
         id: "fuel-efficiency",
@@ -140,7 +140,7 @@ export function ExecutiveDashboard() {
         trend: "down",
         change: -1.2,
         icon: <Zap className="h-5 w-5" />,
-        color: "from-orange-500 to-orange-600",
+        color: "from-warning to-destructive/70",
       },
       {
         id: "compliance-score",
@@ -152,7 +152,7 @@ export function ExecutiveDashboard() {
         trend: "stable",
         change: 0.1,
         icon: <Shield className="h-5 w-5" />,
-        color: "from-cyan-500 to-cyan-600",
+        color: "from-info to-primary",
       },
       {
         id: "response-time",
@@ -164,7 +164,7 @@ export function ExecutiveDashboard() {
         trend: "up",
         change: 15.3,
         icon: <Clock className="h-5 w-5" />,
-        color: "from-indigo-500 to-indigo-600",
+        color: "from-secondary to-primary",
       },
     ];
 
@@ -223,8 +223,8 @@ export function ExecutiveDashboard() {
 
   const getTrendIcon = (trend: KPI["trend"]) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-emerald-500" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-red-500" />;
+      case "up": return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down": return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -335,8 +335,8 @@ export function ExecutiveDashboard() {
                     {getTrendIcon(kpi.trend)}
                     <span className={cn(
                       "text-xs font-medium",
-                      kpi.trend === "up" && "text-emerald-500",
-                      kpi.trend === "down" && "text-red-500",
+                      kpi.trend === "up" && "text-success",
+                      kpi.trend === "down" && "text-destructive",
                       kpi.trend === "stable" && "text-muted-foreground"
                     )}>
                       {kpi.change > 0 ? "+" : ""}{kpi.change}%
@@ -355,7 +355,7 @@ export function ExecutiveDashboard() {
                     <span className="text-muted-foreground">Meta: {kpi.target} {kpi.unit}</span>
                     <span className={cn(
                       "font-medium",
-                      (kpi.value / kpi.target) >= 1 ? "text-emerald-500" : "text-amber-500"
+                      (kpi.value / kpi.target) >= 1 ? "text-success" : "text-warning"
                     )}>
                       {((kpi.value / kpi.target) * 100).toFixed(0)}%
                     </span>
@@ -399,8 +399,8 @@ export function ExecutiveDashboard() {
                     value={(metric.value / metric.maxValue) * 100}
                     className={cn(
                       "h-2",
-                      metric.status === "warning" && "[&>div]:bg-amber-500",
-                      metric.status === "critical" && "[&>div]:bg-red-500"
+                      metric.status === "warning" && "[&>div]:bg-warning",
+                      metric.status === "critical" && "[&>div]:bg-destructive"
                     )}
                   />
                 </div>
@@ -419,30 +419,30 @@ export function ExecutiveDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20">
+              <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <Ship className="h-4 w-4 text-blue-500" />
+                  <Ship className="h-4 w-4 text-primary" />
                   <span className="text-sm text-muted-foreground">Navegando</span>
                 </div>
                 <span className="text-2xl font-bold">32</span>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20">
+              <div className="p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <Target className="h-4 w-4 text-emerald-500" />
+                  <Target className="h-4 w-4 text-success" />
                   <span className="text-sm text-muted-foreground">Atracados</span>
                 </div>
                 <span className="text-2xl font-bold">13</span>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20">
+              <div className="p-4 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   <span className="text-sm text-muted-foreground">Manutenção</span>
                 </div>
                 <span className="text-2xl font-bold">4</span>
               </div>
-              <div className="p-4 rounded-lg bg-gradient-to-br from-red-500/10 to-red-500/5 border border-red-500/20">
+              <div className="p-4 rounded-lg bg-gradient-to-br from-destructive/10 to-destructive/5 border border-destructive/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                  <AlertTriangle className="h-4 w-4 text-destructive" />
                   <span className="text-sm text-muted-foreground">Alertas Ativos</span>
                 </div>
                 <span className="text-2xl font-bold">7</span>

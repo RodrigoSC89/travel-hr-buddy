@@ -176,22 +176,22 @@ export function GarbageRegistry() {
               <div>
                 <p className="text-sm text-muted-foreground">Volume Total</p>
                 <p className="text-2xl font-bold">{totalWaste} kg</p>
-                <p className="text-xs text-blue-600">Todas categorias</p>
+                <p className="text-xs text-primary">Todas categorias</p>
               </div>
-              <Package className="h-8 w-8 text-blue-500 opacity-80" />
+              <Package className="h-8 w-8 text-primary opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-teal-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Reciclagem</p>
                 <p className="text-2xl font-bold">{totalWaste > 0 ? Math.round((totalRecycled / totalWaste) * 100) : 0}%</p>
-                <p className="text-xs text-teal-600">{totalRecycled} kg reciclados</p>
+                <p className="text-xs text-info">{totalRecycled} kg reciclados</p>
               </div>
-              <Recycle className="h-8 w-8 text-teal-500 opacity-80" />
+              <Recycle className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
