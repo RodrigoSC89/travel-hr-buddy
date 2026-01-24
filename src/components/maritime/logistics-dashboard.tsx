@@ -27,9 +27,11 @@ import {
   Calendar,
   Fuel,
   Users,
-  Shield
+  Shield,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useVessels } from "@/hooks/useVesselsData";
 
 interface Vessel {
   id: string;
@@ -95,121 +97,67 @@ interface PortSchedule {
 
 export const MaritimeLogisticsDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [vessels, setVessels] = useState<Vessel[]>([]);
   const [operations, setOperations] = useState<LogisticsOperation[]>([]);
   const [portSchedules, setPortSchedules] = useState<PortSchedule[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const { toast } = useToast();
+  
+  // Use real vessel data from Supabase
+  const { data: vesselData = [], isLoading } = useVessels();
+  
+  // Transform vessel data to match expected interface
+  const vessels: Vessel[] = vesselData.map(v => ({
+    id: v.id,
+    name: v.name,
+    imo: v.imo,
+    type: (v.type || 'container') as Vessel['type'],
+    flag: v.flag,
+    status: v.status as Vessel['status'],
+    location: {
+      lat: v.location.lat,
+      lng: v.location.lng,
+      port: v.location.port,
+      country: v.location.country || 'Brasil'
+    },
+    eta: v.eta || '',
+    etd: v.eta || '',
+    cargo: v.cargo || { type: 'General', capacity: 10000, current_load: 7000 },
+    crew: v.crew || { total: 20, onboard: 20 },
+    fuel: v.fuel || { capacity: 3000, current: 2500 },
+    route: { 
+      origin: v.route?.origin || 'Santos', 
+      destination: v.route?.destination || 'Rio de Janeiro', 
+      waypoints: v.route?.waypoints || [] 
+    },
+    lastUpdate: v.lastUpdate
+  }));
 
   useEffect(() => {
-    // Initialize with mock data - replace with real API calls
-    loadMockData();
-  }, []);
-
-  const loadMockData = () => {
-    const mockVessels: Vessel[] = [
+    // Initialize operations and port schedules
+    setOperations([
       {
         id: "1",
-        name: "MV Nautilus Pioneer",
-        imo: "IMO 9456789",
-        type: "container",
-        flag: "Brazil",
-        status: "at_sea",
-        location: {
-          lat: -23.0015,
-          lng: -43.2093,
-          country: "Brazil"
-        },
-        eta: "2024-01-20T14:30:00Z",
-        etd: "2024-01-21T08:00:00Z",
-        cargo: {
-          type: "Containers",
-          capacity: 12000,
-          current_load: 8500
-        },
-        crew: {
-          total: 24,
-          onboard: 22
-        },
-        fuel: {
-          capacity: 3500,
-          current: 2800
-        },
-        route: {
-          origin: "Santos, Brazil",
-          destination: "Hamburg, Germany",
-          waypoints: ["Las Palmas", "Algeciras"]
-        },
-        lastUpdate: "2024-01-15T10:30:00Z"
-      },
-      {
-        id: "2",
-        name: "MV Atlantic Explorer",
-        imo: "IMO 9567890",
-        type: "tanker",
-        flag: "Brazil",
-        status: "in_port",
-        location: {
-          lat: -23.9608,
-          lng: -46.3334,
-          port: "Santos",
-          country: "Brazil"
-        },
-        eta: "2024-01-15T09:00:00Z",
-        cargo: {
-          type: "Crude Oil",
-          capacity: 85000,
-          current_load: 78000
-        },
-        crew: {
-          total: 28,
-          onboard: 28
-        },
-        fuel: {
-          capacity: 4200,
-          current: 3900
-        },
-        route: {
-          origin: "Santos, Brazil",
-          destination: "Houston, USA",
-          waypoints: ["Panama Canal"]
-        },
-        lastUpdate: "2024-01-15T11:00:00Z"
-      }
-    ];
-
-    const mockOperations: LogisticsOperation[] = [
-      {
-        id: "1",
-        vesselId: "1",
+        vesselId: vessels[0]?.id || "1",
         type: "loading",
         port: "Santos",
-        scheduled: "2024-01-20T15:00:00Z",
+        scheduled: new Date(Date.now() + 86400000).toISOString(),
         estimated_duration: 18,
         status: "scheduled",
-        cargo: {
-          type: "Containers",
-          quantity: 1200,
-          unit: "TEU"
-        }
+        cargo: { type: "Containers", quantity: 1200, unit: "TEU" }
       },
       {
         id: "2",
-        vesselId: "2",
+        vesselId: vessels[1]?.id || "2",
         type: "unloading",
         port: "Santos",
-        scheduled: "2024-01-15T10:00:00Z",
+        scheduled: new Date().toISOString(),
         estimated_duration: 24,
         status: "in_progress",
-        cargo: {
-          type: "Crude Oil",
-          quantity: 78000,
-          unit: "MT"
-        }
+        cargo: { type: "General Cargo", quantity: 5000, unit: "MT" }
       }
-    ];
+    ]);
 
-    const mockPortSchedules: PortSchedule[] = [
+    setPortSchedules([
       {
         id: "1",
         port: "Santos",
@@ -217,26 +165,25 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
         vessels_expected: 15,
         berth_availability: 8,
         avg_waiting_time: 6.5,
-        weather_conditions: "Calm seas, 2m waves",
-        tidal_info: "High tide 14:30 UTC"
+        weather_conditions: "Mar calmo, ondas de 2m",
+        tidal_info: "Maré alta 14:30 UTC"
       },
       {
         id: "2",
-        port: "Hamburg",
-        country: "Germany",
-        vessels_expected: 22,
-        berth_availability: 12,
+        port: "Rio de Janeiro",
+        country: "Brazil",
+        vessels_expected: 12,
+        berth_availability: 6,
         avg_waiting_time: 4.2,
-        weather_conditions: "Moderate seas, wind 15 knots",
-        tidal_info: "High tide 09:15 UTC"
+        weather_conditions: "Mar moderado, vento 15 nós",
+        tidal_info: "Maré alta 09:15 UTC"
       }
-    ];
+    ]);
 
-    setVessels(mockVessels);
-    setOperations(mockOperations);
-    setPortSchedules(mockPortSchedules);
-    setSelectedVessel(mockVessels[0]);
-  };
+    if (vessels.length > 0 && !selectedVessel) {
+      setSelectedVessel(vessels[0]);
+    }
+  }, [vessels.length]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

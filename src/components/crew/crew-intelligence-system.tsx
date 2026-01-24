@@ -24,9 +24,11 @@ import {
   Zap,
   Shield,
   Calendar,
-  BarChart3
+  BarChart3,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCrewIntelligence, type CrewMemberData } from "@/hooks/useCrewData";
 
 interface CrewMember {
   id: string;
