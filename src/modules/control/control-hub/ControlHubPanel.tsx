@@ -93,7 +93,7 @@ export default function ControlHubPanel() {
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
             <p className="mt-4 text-muted-foreground">Inicializando Control Hub...</p>
           </div>
         </div>
@@ -124,17 +124,17 @@ export default function ControlHubPanel() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="p-4 bg-success/10 dark:bg-success/20 rounded-lg border border-success/30 dark:border-success/40">
               <p className="text-sm text-muted-foreground">DP Reliability</p>
-              <p className="text-3xl font-bold text-green-600">98.5%</p>
+              <p className="text-3xl font-bold text-success">98.5%</p>
             </div>
-            <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="p-4 bg-primary/10 dark:bg-primary/20 rounded-lg border border-primary/30 dark:border-primary/40">
               <p className="text-sm text-muted-foreground">ASOG Compliance</p>
-              <p className="text-3xl font-bold text-blue-600">100%</p>
+              <p className="text-3xl font-bold text-primary">100%</p>
             </div>
-            <div className="p-4 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div className="p-4 bg-secondary/10 dark:bg-secondary/20 rounded-lg border border-secondary/30 dark:border-secondary/40">
               <p className="text-sm text-muted-foreground">FMEA Actions</p>
-              <p className="text-3xl font-bold text-purple-600">12</p>
+              <p className="text-3xl font-bold text-secondary">12</p>
             </div>
           </div>
           <div className="flex gap-3">

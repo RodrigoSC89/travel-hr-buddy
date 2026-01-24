@@ -251,28 +251,28 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
       description: "Dashboard consolidado de KPIs",
       icon: BarChart3,
       path: "/executive-dashboard",
-      color: "from-blue-500 to-indigo-600"
+      color: "from-primary to-info"
     },
     {
       title: "Vessel Tracking",
       description: "Rastreamento AIS em tempo real",
       icon: MapPin,
       path: "/tracking",
-      color: "from-emerald-500 to-teal-600"
+      color: "from-success to-info"
     },
     {
       title: "Finance Command",
       description: "Gestão financeira e bunker",
       icon: Fuel,
       path: "/finance-command",
-      color: "from-amber-500 to-orange-600"
+      color: "from-warning to-warning"
     },
     {
       title: "Route Optimizer",
       description: "Otimização de rotas com IA",
       icon: Anchor,
       path: "/route-optimizer",
-      color: "from-purple-500 to-pink-600"
+      color: "from-secondary to-accent"
     }
   ];
 
