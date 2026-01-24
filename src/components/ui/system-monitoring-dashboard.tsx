@@ -44,12 +44,12 @@ const systemStatus: SystemStatus[] = [
 ];
 
 const kpiMetrics: KPIMetric[] = [
-  { title: "Usuários Ativos", value: "1,247", change: "+12%", trend: "up", icon: Users, color: "text-blue-600" },
-  { title: "Embarcações Monitoradas", value: "34", change: "+2", trend: "up", icon: Ship, color: "text-cyan-600" },
-  { title: "Eficiência IA", value: "94.8%", change: "+3.2%", trend: "up", icon: Zap, color: "text-purple-600" },
-  { title: "Compliance Score", value: "97.2%", change: "+1.8%", trend: "up", icon: Shield, color: "text-green-600" },
-  { title: "Performance Geral", value: "96.5%", change: "+2.1%", trend: "up", icon: Target, color: "text-orange-600" },
-  { title: "Satisfação", value: "4.8/5", change: "+0.2", trend: "up", icon: TrendingUp, color: "text-pink-600" }
+  { title: "Usuários Ativos", value: "1,247", change: "+12%", trend: "up", icon: Users, color: "text-primary" },
+  { title: "Embarcações Monitoradas", value: "34", change: "+2", trend: "up", icon: Ship, color: "text-info" },
+  { title: "Eficiência IA", value: "94.8%", change: "+3.2%", trend: "up", icon: Zap, color: "text-secondary-foreground" },
+  { title: "Compliance Score", value: "97.2%", change: "+1.8%", trend: "up", icon: Shield, color: "text-success" },
+  { title: "Performance Geral", value: "96.5%", change: "+2.1%", trend: "up", icon: Target, color: "text-warning" },
+  { title: "Satisfação", value: "4.8/5", change: "+0.2", trend: "up", icon: TrendingUp, color: "text-accent-foreground" }
 ];
 
 export const SystemMonitoringDashboard: React.FC = () => {

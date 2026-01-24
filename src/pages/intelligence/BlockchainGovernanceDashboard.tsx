@@ -190,64 +190,64 @@ export default function BlockchainGovernanceDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-indigo-500/10 to-indigo-600/5 border-indigo-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Transações</p>
-                <p className="text-2xl font-bold text-indigo-500">
+                <p className="text-2xl font-bold text-primary">
                   {blockchainStats.totalTransactions.toLocaleString()}
                 </p>
               </div>
-              <Database className="h-8 w-8 text-indigo-500/50" />
+              <Database className="h-8 w-8 text-primary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Blocos</p>
-                <p className="text-2xl font-bold text-purple-500">
+                <p className="text-2xl font-bold text-secondary-foreground">
                   {blockchainStats.blocksCreated.toLocaleString()}
                 </p>
               </div>
-              <Blocks className="h-8 w-8 text-purple-500/50" />
+              <Blocks className="h-8 w-8 text-secondary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Eventos Hoje</p>
-                <p className="text-2xl font-bold text-blue-500">{blockchainStats.eventsToday}</p>
+                <p className="text-2xl font-bold text-info">{blockchainStats.eventsToday}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-500/50" />
+              <TrendingUp className="h-8 w-8 text-info/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Verificação</p>
-                <p className="text-2xl font-bold text-emerald-500">{blockchainStats.verificationRate}%</p>
+                <p className="text-2xl font-bold text-success">{blockchainStats.verificationRate}%</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-emerald-500/50" />
+              <CheckCircle className="h-8 w-8 text-success/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Confirmação</p>
-                <p className="text-2xl font-bold text-amber-500">{blockchainStats.averageConfirmation}</p>
+                <p className="text-2xl font-bold text-warning">{blockchainStats.averageConfirmation}</p>
               </div>
               <Clock className="h-8 w-8 text-amber-500/50" />
             </div>
