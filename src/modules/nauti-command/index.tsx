@@ -486,11 +486,11 @@ interface StatusCardProps {
 
 const StatusCard: React.FC<StatusCardProps> = ({ icon, title, value, subtitle, color, alerts = 0 }) => {
   const colorClasses = {
-    blue: 'from-blue-500 to-blue-600 text-blue-500',
-    green: 'from-green-500 to-green-600 text-green-500',
-    orange: 'from-orange-500 to-orange-600 text-orange-500',
-    purple: 'from-purple-500 to-purple-600 text-purple-500',
-    cyan: 'from-cyan-500 to-cyan-600 text-cyan-500'
+    blue: 'from-primary to-info text-primary',
+    green: 'from-success to-success/80 text-success',
+    orange: 'from-warning to-warning/80 text-warning',
+    purple: 'from-secondary to-accent text-secondary',
+    cyan: 'from-info to-primary text-info'
   };
 
   return (

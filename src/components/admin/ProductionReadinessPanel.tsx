@@ -26,9 +26,9 @@ import { useProductionReadiness, type ValidationResult } from '@/lib/validation/
 import { testPlan, type TestCase } from '@/lib/testing/test-plan';
 
 const statusIcons = {
-  pass: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
-  fail: <XCircle className="h-4 w-4 text-red-500" />,
-  warning: <AlertTriangle className="h-4 w-4 text-amber-500" />
+  pass: <CheckCircle2 className="h-4 w-4 text-success" />,
+  fail: <XCircle className="h-4 w-4 text-destructive" />,
+  warning: <AlertTriangle className="h-4 w-4 text-warning" />
 };
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -309,10 +309,10 @@ export function ProductionReadinessPanel() {
 
       {/* Recomendações */}
       {readiness && readiness.recommendations.length > 0 && (
-        <Card className="border-amber-200 dark:border-amber-800">
+        <Card className="border-warning/30">
           <CardHeader>
             <CardTitle className="text-lg text-foreground flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Recomendações
             </CardTitle>
           </CardHeader>
