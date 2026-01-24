@@ -82,56 +82,12 @@ function useNonConformities() {
   });
 }
 
-// Mock data para demonstração quando não há dados reais
-const MOCK_NCS: NonConformity[] = [
-  {
-    id: 'nc-001',
-    title: 'Extintor sem inspeção mensal',
-    description: 'Extintor do convés principal sem registro de inspeção mensal conforme NR-23',
-    source: 'inspection',
-    severity: 'major',
-    status: 'open',
-    assigned_to: 'user-001',
-    assigned_to_name: 'João Silva',
-    due_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-    days_remaining: 5,
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    regulation: 'NR-23'
-  },
-  {
-    id: 'nc-002',
-    title: 'Documentação STCW incompleta',
-    description: 'Registros de treinamento STCW não atualizados para 3 tripulantes',
-    source: 'audit',
-    severity: 'critical',
-    status: 'in_progress',
-    assigned_to: 'user-002',
-    assigned_to_name: 'Maria Santos',
-    due_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    days_remaining: 2,
-    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    action_plan: '1. Levantar lista de tripulantes\n2. Verificar certificados\n3. Agendar treinamentos',
-    regulation: 'STCW'
-  },
-  {
-    id: 'nc-003',
-    title: 'Plano de emergência desatualizado',
-    description: 'Plano de contingência não revisado há mais de 12 meses',
-    source: 'audit',
-    severity: 'major',
-    status: 'overdue',
-    assigned_to: 'user-003',
-    assigned_to_name: 'Carlos Oliveira',
-    due_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    days_remaining: -3,
-    created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-    regulation: 'ISM Code'
-  }
-];
+// Empty fallback - real data should come from the useNonConformities hook
+const EMPTY_FALLBACK: NonConformity[] = [];
 
 export function NCAutomaticWorkflowAdvanced() {
-  const { data: realNCs, isLoading } = useNonConformities();
-  const ncs = realNCs?.length ? realNCs : MOCK_NCS;
+  const { data: realNCs = [], isLoading } = useNonConformities();
+  const ncs = realNCs;
   
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [selectedNC, setSelectedNC] = useState<NonConformity | null>(null);
