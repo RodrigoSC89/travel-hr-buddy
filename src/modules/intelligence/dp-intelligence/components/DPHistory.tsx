@@ -117,15 +117,15 @@ const getStatusBadge = (status: string) => {
 const getTypeIcon = (type: string) => {
   switch (type) {
     case "analysis":
-      return <TrendingUp className="h-4 w-4 text-purple-500" />;
+      return <TrendingUp className="h-4 w-4 text-secondary" />;
     case "operation":
-      return <Activity className="h-4 w-4 text-blue-500" />;
+      return <Activity className="h-4 w-4 text-primary" />;
     case "alert":
-      return <Activity className="h-4 w-4 text-amber-500" />;
+      return <Activity className="h-4 w-4 text-warning" />;
     case "optimization":
-      return <TrendingUp className="h-4 w-4 text-emerald-500" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     case "maintenance":
-      return <Activity className="h-4 w-4 text-cyan-500" />;
+      return <Activity className="h-4 w-4 text-info" />;
     default:
       return <Clock className="h-4 w-4" />;
   }

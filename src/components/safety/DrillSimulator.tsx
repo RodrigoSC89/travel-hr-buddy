@@ -197,22 +197,22 @@ export function DrillSimulator() {
 
   const getScenarioIcon = (type: string) => {
     switch (type) {
-      case "fire": return <Flame className="h-5 w-5 text-red-500" />;
-      case "abandon_ship": return <Ship className="h-5 w-5 text-orange-500" />;
-      case "mob": return <LifeBuoy className="h-5 w-5 text-blue-500" />;
-      case "oil_spill": return <Droplets className="h-5 w-5 text-yellow-500" />;
-      case "flooding": return <Droplets className="h-5 w-5 text-cyan-500" />;
-      case "collision": return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case "security": return <AlertTriangle className="h-5 w-5 text-purple-500" />;
+      case "fire": return <Flame className="h-5 w-5 text-destructive" />;
+      case "abandon_ship": return <Ship className="h-5 w-5 text-warning" />;
+      case "mob": return <LifeBuoy className="h-5 w-5 text-primary" />;
+      case "oil_spill": return <Droplets className="h-5 w-5 text-warning" />;
+      case "flooding": return <Droplets className="h-5 w-5 text-info" />;
+      case "collision": return <AlertTriangle className="h-5 w-5 text-destructive" />;
+      case "security": return <AlertTriangle className="h-5 w-5 text-secondary" />;
       default: return <Siren className="h-5 w-5" />;
     }
   };
 
   const getDifficultyBadge = (difficulty: string) => {
     switch (difficulty) {
-      case "easy": return <Badge className="bg-green-500/20 text-green-500">Fácil</Badge>;
-      case "medium": return <Badge className="bg-yellow-500/20 text-yellow-500">Médio</Badge>;
-      case "hard": return <Badge className="bg-red-500/20 text-red-500">Difícil</Badge>;
+      case "easy": return <Badge className="bg-success/20 text-success">Fácil</Badge>;
+      case "medium": return <Badge className="bg-warning/20 text-warning">Médio</Badge>;
+      case "hard": return <Badge className="bg-destructive/20 text-destructive">Difícil</Badge>;
       default: return <Badge variant="secondary">{difficulty}</Badge>;
     }
   };

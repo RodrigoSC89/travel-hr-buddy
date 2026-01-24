@@ -216,22 +216,22 @@ const NauticalCopilot: React.FC = () => {
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {
-    case "navigation": return <Compass className="w-4 h-4 text-blue-500" />;
-    case "operations": return <Ship className="w-4 h-4 text-green-500" />;
-    case "hr": return <Users className="w-4 h-4 text-purple-500" />;
-    case "analytics": return <BarChart3 className="w-4 h-4 text-orange-500" />;
-    case "logistics": return <Navigation className="w-4 h-4 text-cyan-500" />;
+    case "navigation": return <Compass className="w-4 h-4 text-primary" />;
+    case "operations": return <Ship className="w-4 h-4 text-success" />;
+    case "hr": return <Users className="w-4 h-4 text-secondary" />;
+    case "analytics": return <BarChart3 className="w-4 h-4 text-warning" />;
+    case "logistics": return <Navigation className="w-4 h-4 text-info" />;
     default: return <Brain className="w-4 h-4 text-primary" />;
     }
   };
 
   const getSuggestionColor = (category: SmartSuggestion["category"]) => {
     switch (category) {
-    case "optimization": return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-900/20";
-    case "alert": return "border-l-red-500 bg-red-50/50 dark:bg-red-900/20";
-    case "insight": return "border-l-green-500 bg-green-50/50 dark:bg-green-900/20";
-    case "task": return "border-l-purple-500 bg-purple-50/50 dark:bg-purple-900/20";
-    default: return "border-l-gray-500 bg-gray-50/50 dark:bg-gray-900/20";
+    case "optimization": return "border-l-primary bg-primary/5 dark:bg-primary/10";
+    case "alert": return "border-l-destructive bg-destructive/5 dark:bg-destructive/10";
+    case "insight": return "border-l-success bg-success/5 dark:bg-success/10";
+    case "task": return "border-l-secondary bg-secondary/5 dark:bg-secondary/10";
+    default: return "border-l-muted-foreground bg-muted/50";
     }
   };
 
@@ -446,7 +446,7 @@ const NauticalCopilot: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Condições do Mar</span>
-                <Badge variant="secondary" className="text-green-600">Favorável</Badge>
+                <Badge variant="secondary" className="text-success">Favorável</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Frota Ativa</span>
@@ -454,7 +454,7 @@ const NauticalCopilot: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Eficiência Geral</span>
-                <Badge className="bg-green-500">94%</Badge>
+                <Badge className="bg-success">94%</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Próxima Manutenção</span>

@@ -480,7 +480,7 @@ const UnderwaterDrone: React.FC = () => {
                   </div>
                   <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
+                      className="h-full bg-gradient-to-r from-info to-primary transition-all"
                       style={{ width: `${currentMission.progress}%` }}
                     />
                   </div>

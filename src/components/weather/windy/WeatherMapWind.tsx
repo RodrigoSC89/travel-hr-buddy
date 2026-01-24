@@ -75,13 +75,13 @@ export const WeatherMapWind: React.FC<WeatherMapWindProps> = ({
   const getLayerGradient = () => {
     switch (layer) {
       case 'temp':
-        return 'from-blue-900 via-purple-800 via-orange-600 to-red-500';
+        return 'from-primary/90 via-secondary/80 via-warning/60 to-destructive';
       case 'rain':
-        return 'from-slate-900 via-blue-800 to-cyan-500';
+        return 'from-muted via-primary/80 to-info';
       case 'pressure':
-        return 'from-purple-900 via-blue-700 to-green-500';
+        return 'from-secondary/90 via-primary/70 to-success';
       default:
-        return 'from-blue-950 via-blue-800 via-cyan-700 to-green-600';
+        return 'from-primary/95 via-primary/80 via-info/70 to-success/60';
     }
   };
 
@@ -172,7 +172,7 @@ export const WeatherMapWind: React.FC<WeatherMapWindProps> = ({
       {/* Bottom Left Badge */}
       <div className="absolute bottom-4 left-4 z-20">
         <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3 flex items-center gap-3">
-          <MapPin className="h-5 w-5 text-red-400" />
+          <MapPin className="h-5 w-5 text-destructive" />
           <div className="text-white">
             <div className="text-2xl font-bold flex items-center gap-2">
               {weather ? Math.round(weather.temperature) : '--'}°

@@ -166,18 +166,18 @@ export function IASection() {
 
   const getInsightIcon = (type: RealTimeInsight["type"]) => {
     switch (type) {
-      case "opportunity": return <Rocket className="h-4 w-4 text-emerald-500" />;
-      case "risk": return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-      case "optimization": return <Target className="h-4 w-4 text-blue-500" />;
-      case "info": return <Sparkles className="h-4 w-4 text-purple-500" />;
+      case "opportunity": return <Rocket className="h-4 w-4 text-success" />;
+      case "risk": return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case "optimization": return <Target className="h-4 w-4 text-primary" />;
+      case "info": return <Sparkles className="h-4 w-4 text-secondary" />;
     }
   };
 
   const getImpactBadge = (impact: RealTimeInsight["impact"]) => {
     const colors = {
-      high: "bg-red-100 text-red-700 border-red-200",
-      medium: "bg-amber-100 text-amber-700 border-amber-200",
-      low: "bg-emerald-100 text-emerald-700 border-emerald-200"
+      high: "bg-destructive/10 text-destructive border-destructive/20",
+      medium: "bg-warning/10 text-warning border-warning/20",
+      low: "bg-success/10 text-success border-success/20"
     };
     return colors[impact];
   };

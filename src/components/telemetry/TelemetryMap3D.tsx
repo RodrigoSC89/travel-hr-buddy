@@ -610,9 +610,9 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
                         key={sensor.id}
                         className={cn(
                           "flex items-center gap-2 p-2 rounded-lg text-xs",
-                          sensor.status === "normal" && "bg-emerald-500/10",
-                          sensor.status === "warning" && "bg-amber-500/10",
-                          sensor.status === "critical" && "bg-red-500/10"
+                          sensor.status === "normal" && "bg-success/10",
+                          sensor.status === "warning" && "bg-warning/10",
+                          sensor.status === "critical" && "bg-destructive/10"
                         )}
                       >
                         {getSensorIcon(sensor.type)}

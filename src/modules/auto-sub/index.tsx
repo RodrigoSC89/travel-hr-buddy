@@ -405,7 +405,7 @@ const AutoSub: React.FC = () => {
                             </div>
                             <div className="h-1.5 bg-zinc-700 rounded-full overflow-hidden">
                               <div 
-                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                                className="h-full bg-gradient-to-r from-info to-primary"
                                 style={{ width: `${fb.progress}%` }}
                               />
                             </div>
