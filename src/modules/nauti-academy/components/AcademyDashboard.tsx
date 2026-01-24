@@ -333,10 +333,10 @@ export default function AcademyDashboard() {
   return (
     <div className="space-y-6">
       {/* Professional Header */}
-      <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-indigo-500/10 rounded-xl p-6 border">
+      <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-xl p-6 border">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-purple-600 text-white shadow-lg">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
               <GraduationCap className="h-8 w-8" />
             </div>
             <div>

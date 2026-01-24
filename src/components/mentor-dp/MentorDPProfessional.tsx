@@ -562,12 +562,12 @@ export default function MentorDPProfessional() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <StatCard icon={<MessageSquare className="h-5 w-5 text-blue-500" />} label="Sessões" value={stats.sessionsCompleted.toString()} color="border-blue-500" />
-          <StatCard icon={<GraduationCap className="h-5 w-5 text-purple-500" />} label="Lições" value={stats.lessonsCompleted.toString()} trend="+5 esta semana" color="border-purple-500" />
-          <StatCard icon={<Play className="h-5 w-5 text-green-500" />} label="Simulações" value={stats.simulationsPassed.toString()} color="border-green-500" />
-          <StatCard icon={<Target className="h-5 w-5 text-amber-500" />} label="Pontuação Média" value={`${stats.avgScore}%`} color="border-amber-500" />
-          <StatCard icon={<Clock className="h-5 w-5 text-cyan-500" />} label="Horas de Estudo" value={`${stats.totalHours}h`} color="border-cyan-500" />
-          <StatCard icon={<Award className="h-5 w-5 text-rose-500" />} label="Nível" value={stats.proficiencyLevel} color="border-rose-500" />
+          <StatCard icon={<MessageSquare className="h-5 w-5 text-primary" />} label="Sessões" value={stats.sessionsCompleted.toString()} color="border-primary" />
+          <StatCard icon={<GraduationCap className="h-5 w-5 text-secondary-foreground" />} label="Lições" value={stats.lessonsCompleted.toString()} trend="+5 esta semana" color="border-secondary" />
+          <StatCard icon={<Play className="h-5 w-5 text-success" />} label="Simulações" value={stats.simulationsPassed.toString()} color="border-success" />
+          <StatCard icon={<Target className="h-5 w-5 text-warning" />} label="Pontuação Média" value={`${stats.avgScore}%`} color="border-warning" />
+          <StatCard icon={<Clock className="h-5 w-5 text-info" />} label="Horas de Estudo" value={`${stats.totalHours}h`} color="border-info" />
+          <StatCard icon={<Award className="h-5 w-5 text-destructive" />} label="Nível" value={stats.proficiencyLevel} color="border-destructive" />
         </div>
 
         {/* Main Content */}
@@ -665,10 +665,10 @@ export default function MentorDPProfessional() {
                 <Card>
                   <CardHeader className="pb-3"><CardTitle className="text-sm font-medium">Ações Rápidas</CardTitle></CardHeader>
                   <CardContent className="space-y-2">
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("academy")}><GraduationCap className="h-4 w-4 text-purple-500" />Iniciar Lição</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("simulator")}><Play className="h-4 w-4 text-green-500" />Nova Simulação</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setShowQuizDialog(true)}><ClipboardList className="h-4 w-4 text-amber-500" />Gerar Quiz</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => sendMessage("Avalie minha proficiência atual em DP")}><Award className="h-4 w-4 text-rose-500" />Avaliar Proficiência</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("academy")}><GraduationCap className="h-4 w-4 text-primary" />Iniciar Lição</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("simulator")}><Play className="h-4 w-4 text-success" />Nova Simulação</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setShowQuizDialog(true)}><ClipboardList className="h-4 w-4 text-warning" />Gerar Quiz</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => sendMessage("Avalie minha proficiência atual em DP")}><Award className="h-4 w-4 text-destructive" />Avaliar Proficiência</Button>
                   </CardContent>
                 </Card>
                 <Card>

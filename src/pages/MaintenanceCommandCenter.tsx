@@ -348,10 +348,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-indigo-300" onClick={() => setActiveTab("predictive")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-primary/50" onClick={() => setActiveTab("predictive")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-indigo-500" />
+                  <Brain className="h-5 w-5 text-primary" />
                   IA Preditiva
                 </CardTitle>
                 <CardDescription>
@@ -363,10 +363,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-pink-300" onClick={() => setActiveTab("forecast")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-accent/50" onClick={() => setActiveTab("forecast")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-pink-500" />
+                  <Sparkles className="h-5 w-5 text-accent-foreground" />
                   Forecast com IA
                 </CardTitle>
                 <CardDescription>
@@ -378,10 +378,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-green-300" onClick={() => setActiveTab("jobs")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-success/50" onClick={() => setActiveTab("jobs")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Wrench className="h-5 w-5 text-green-500" />
+                  <Wrench className="h-5 w-5 text-success" />
                   Central de Jobs
                 </CardTitle>
                 <CardDescription>
@@ -393,10 +393,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-orange-300" onClick={() => setActiveTab("tasks")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-warning/50" onClick={() => setActiveTab("tasks")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-500" />
+                  <Target className="h-5 w-5 text-warning" />
                   Tarefas de Manutenção
                 </CardTitle>
                 <CardDescription>
@@ -408,10 +408,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-amber-300" onClick={() => setActiveTab("os")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-warning/50" onClick={() => setActiveTab("os")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-amber-500" />
+                  <FileText className="h-5 w-5 text-warning" />
                   Ordens de Serviço
                 </CardTitle>
                 <CardDescription>
@@ -423,10 +423,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-cyan-300" onClick={() => setActiveTab("twin")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-info/50" onClick={() => setActiveTab("twin")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Box className="h-5 w-5 text-cyan-500" />
+                  <Box className="h-5 w-5 text-info" />
                   Digital Twin 3D
                 </CardTitle>
                 <CardDescription>
@@ -438,10 +438,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-teal-300" onClick={() => setActiveTab("horimetros")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-success/50" onClick={() => setActiveTab("horimetros")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-teal-500" />
+                  <Clock className="h-5 w-5 text-success" />
                   Horímetros
                 </CardTitle>
                 <CardDescription>
@@ -453,10 +453,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-sky-300" onClick={() => setActiveTab("calendar")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-info/50" onClick={() => setActiveTab("calendar")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-sky-500" />
+                  <Calendar className="h-5 w-5 text-info" />
                   Calendário
                 </CardTitle>
                 <CardDescription>
@@ -468,10 +468,10 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-rose-300" onClick={() => setActiveTab("history")}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-destructive/50" onClick={() => setActiveTab("history")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <History className="h-5 w-5 text-rose-500" />
+                  <History className="h-5 w-5 text-destructive" />
                   Histórico
                 </CardTitle>
                 <CardDescription>

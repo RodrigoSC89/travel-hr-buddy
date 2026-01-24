@@ -322,18 +322,18 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
                 <div className={cn(
                   "p-4 rounded-xl border-2 transition-all duration-300",
                   "hover:shadow-lg hover:scale-[1.02]",
-                  sensor.status === "critical" && "border-red-500/50 bg-red-500/5 animate-pulse",
-                  sensor.status === "warning" && "border-amber-500/50 bg-amber-500/5",
+                  sensor.status === "critical" && "border-destructive/50 bg-destructive/5 animate-pulse",
+                  sensor.status === "warning" && "border-warning/50 bg-warning/5",
                   sensor.status === "normal" && "border-border bg-card hover:border-primary/30",
-                  sensor.status === "offline" && "border-slate-500/50 bg-slate-500/5 opacity-60"
+                  sensor.status === "offline" && "border-muted/50 bg-muted/5 opacity-60"
                 )}>
                   <div className="flex items-start justify-between mb-3">
                     <div className={cn(
                       "p-2 rounded-lg",
-                      sensor.status === "critical" && "bg-red-500/20 text-red-500",
-                      sensor.status === "warning" && "bg-amber-500/20 text-amber-500",
+                      sensor.status === "critical" && "bg-destructive/20 text-destructive",
+                      sensor.status === "warning" && "bg-warning/20 text-warning",
                       sensor.status === "normal" && "bg-primary/20 text-primary",
-                      sensor.status === "offline" && "bg-slate-500/20 text-slate-500"
+                      sensor.status === "offline" && "bg-muted/20 text-muted-foreground"
                     )}>
                       {getTypeIcon(sensor.type)}
                     </div>

@@ -25,27 +25,27 @@ interface PageLayoutV2Props {
 }
 
 const gradientBgClasses = {
-  blue: "from-background via-primary/5 to-blue-500/10",
-  purple: "from-background via-purple-500/5 to-pink-500/10",
-  green: "from-background via-green-500/5 to-emerald-500/10",
-  orange: "from-background via-orange-500/5 to-amber-500/10",
-  yellow: "from-background via-yellow-500/5 to-amber-500/10",
-  red: "from-background via-red-500/5 to-rose-500/10",
-  indigo: "from-background via-indigo-500/5 to-violet-500/10",
-  cyan: "from-background via-cyan-500/5 to-teal-500/10",
-  teal: "from-background via-teal-500/5 to-emerald-500/10",
+  blue: "from-background via-primary/5 to-info/10",
+  purple: "from-background via-secondary/5 to-accent/10",
+  green: "from-background via-success/5 to-success/10",
+  orange: "from-background via-warning/5 to-warning/10",
+  yellow: "from-background via-warning/5 to-warning/10",
+  red: "from-background via-destructive/5 to-destructive/10",
+  indigo: "from-background via-primary/5 to-secondary/10",
+  cyan: "from-background via-info/5 to-info/10",
+  teal: "from-background via-success/5 to-success/10",
 };
 
 const gradientHeaderClasses = {
-  blue: "from-blue-600 via-blue-600/90 to-blue-700",
-  purple: "from-purple-600 via-purple-600/90 to-purple-700",
-  green: "from-green-600 via-green-600/90 to-green-700",
-  orange: "from-orange-600 via-orange-600/90 to-orange-700",
-  yellow: "from-yellow-600 via-yellow-600/90 to-yellow-700",
-  red: "from-red-600 via-red-600/90 to-red-700",
-  indigo: "from-indigo-600 via-indigo-600/90 to-indigo-700",
-  cyan: "from-cyan-600 via-cyan-600/90 to-cyan-700",
-  teal: "from-teal-600 via-teal-600/90 to-teal-700",
+  blue: "from-primary via-primary/90 to-primary/80",
+  purple: "from-secondary via-secondary/90 to-secondary/80",
+  green: "from-success via-success/90 to-success/80",
+  orange: "from-warning via-warning/90 to-warning/80",
+  yellow: "from-warning via-warning/90 to-warning/80",
+  red: "from-destructive via-destructive/90 to-destructive/80",
+  indigo: "from-primary via-primary/90 to-secondary/80",
+  cyan: "from-info via-info/90 to-info/80",
+  teal: "from-success via-success/90 to-success/80",
 };
 
 export function PageLayoutV2({
