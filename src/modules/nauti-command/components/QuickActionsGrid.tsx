@@ -108,14 +108,14 @@ export function QuickActionsGrid({
       icon: <Shield className="h-4 w-4" />,
       label: "Auditorias",
       onClick: () => navigate("/compliance-hub"),
-      color: "bg-cyan-500 hover:bg-cyan-600",
+      color: "bg-info hover:bg-info/90",
       badge: context?.compliance?.pendingAudits > 0 ? context.compliance.pendingAudits : null
     },
     {
       icon: <Phone className="h-4 w-4" />,
       label: "Contatar",
       onClick: handleContact,
-      color: "bg-indigo-500 hover:bg-indigo-600",
+      color: "bg-primary hover:bg-primary/90",
       badge: null
     },
     {
@@ -129,7 +129,7 @@ export function QuickActionsGrid({
       icon: <ShoppingCart className="h-4 w-4" />,
       label: "Criar Pedido",
       onClick: handleCreateOrder,
-      color: "bg-pink-500 hover:bg-pink-600",
+      color: "bg-accent hover:bg-accent/90",
       badge: null
     },
     {
@@ -141,7 +141,7 @@ export function QuickActionsGrid({
         });
         navigate("/fleet-command");
       },
-      color: "bg-slate-500 hover:bg-slate-600",
+      color: "bg-muted hover:bg-muted/80",
       badge: null
     },
     {
@@ -152,7 +152,7 @@ export function QuickActionsGrid({
           description: "Exibindo visão detalhada do sistema"
         });
       },
-      color: "bg-gray-500 hover:bg-gray-600",
+      color: "bg-secondary hover:bg-secondary/90",
       badge: null
     },
     {

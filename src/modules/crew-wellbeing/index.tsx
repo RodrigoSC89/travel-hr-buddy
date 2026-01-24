@@ -164,7 +164,7 @@ export default function CrewWellbeing() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-destructive/80 to-destructive text-destructive-foreground">
             <Heart className="h-8 w-8" />
           </div>
           <div>

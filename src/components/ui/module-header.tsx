@@ -17,13 +17,13 @@ interface ModuleHeaderProps {
 }
 
 const gradientClasses = {
-  blue: "from-blue-600 via-blue-600/90 to-blue-700",
-  purple: "from-purple-600 via-purple-600/90 to-purple-700",
-  green: "from-green-600 via-green-600/90 to-green-700",
-  orange: "from-orange-600 via-orange-600/90 to-orange-700",
-  yellow: "from-yellow-600 via-yellow-600/90 to-yellow-700",
-  red: "from-red-600 via-red-600/90 to-red-700",
-  indigo: "from-indigo-600 via-indigo-600/90 to-indigo-700",
+  blue: "from-primary via-primary/90 to-primary/80",
+  purple: "from-secondary via-secondary/90 to-secondary/80",
+  green: "from-success via-success/90 to-success/80",
+  orange: "from-warning via-warning/90 to-warning/80",
+  yellow: "from-warning via-warning/90 to-warning/80",
+  red: "from-destructive via-destructive/90 to-destructive/80",
+  indigo: "from-primary via-primary/90 to-secondary/80",
 };
 
 export const ModuleHeader: FC<ModuleHeaderProps> = ({
