@@ -94,36 +94,36 @@ const ProfessionalKPICards = () => {
   const getColorClasses = (color: string) => {
     const colors = {
       green: {
-        bg: "from-emerald-700/90 to-green-800/90",
-        icon: "from-emerald-500 to-green-600",
-        text: "text-white",
-        progress: "bg-emerald-200",
-        border: "border-emerald-400",
-        card: "bg-emerald-800/95 border-emerald-600/50"
+        bg: "from-success/90 to-success/80",
+        icon: "from-success to-success",
+        text: "text-success-foreground",
+        progress: "bg-success/30",
+        border: "border-success",
+        card: "bg-success/20 border-success/50"
       },
       blue: {
-        bg: "from-azure-700/90 to-azure-800/90",
-        icon: "from-azure-400 to-azure-500",
-        text: "text-white",
-        progress: "bg-azure-200",
-        border: "border-azure-400",
-        card: "bg-azure-800/95 border-azure-600/50"
+        bg: "from-primary/90 to-primary/80",
+        icon: "from-primary to-primary",
+        text: "text-primary-foreground",
+        progress: "bg-primary/30",
+        border: "border-primary",
+        card: "bg-primary/20 border-primary/50"
       },
       purple: {
-        bg: "from-purple-700/90 to-violet-800/90",
-        icon: "from-purple-400 to-violet-500",
-        text: "text-white",
-        progress: "bg-purple-200",
-        border: "border-purple-400",
-        card: "bg-purple-800/95 border-purple-600/50"
+        bg: "from-secondary/90 to-accent/80",
+        icon: "from-secondary to-accent",
+        text: "text-secondary-foreground",
+        progress: "bg-secondary/30",
+        border: "border-secondary",
+        card: "bg-secondary/20 border-secondary/50"
       },
       orange: {
-        bg: "from-orange-700/90 to-amber-800/90",
-        icon: "from-orange-400 to-amber-500",
-        text: "text-white",
-        progress: "bg-orange-200",
-        border: "border-orange-400",
-        card: "bg-orange-800/95 border-orange-600/50"
+        bg: "from-warning/90 to-warning/80",
+        icon: "from-warning to-warning",
+        text: "text-warning-foreground",
+        progress: "bg-warning/30",
+        border: "border-warning",
+        card: "bg-warning/20 border-warning/50"
       }
     };
     return colors[color as keyof typeof colors];

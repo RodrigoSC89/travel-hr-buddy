@@ -399,10 +399,10 @@ export default function AdminDashboard() {
               key={card.path}
               className={`cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 ${
                 card.color === "blue"
-                  ? "border-l-blue-500"
+                  ? "border-l-primary"
                   : card.color === "purple"
-                    ? "border-l-purple-500"
-                    : "border-l-indigo-500"
+                    ? "border-l-secondary"
+                    : "border-l-info"
               }`}
               onClick={() => navigate(cardPath)}
             >
