@@ -16,7 +16,7 @@ export function NautilusBrainButton() {
   return (
     <Button
       onClick={() => openBrain()}
-      className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+      className="h-14 w-14 rounded-full bg-gradient-to-br from-secondary to-accent shadow-lg hover:shadow-xl transition-all hover:scale-105"
       aria-label="Abrir Nauti Brain"
     >
       <Brain className="h-6 w-6 text-white" />
