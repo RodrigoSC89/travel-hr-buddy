@@ -221,12 +221,12 @@ export function AdvancedSearch() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "document": return <FileText className="h-4 w-4 text-blue-500" />;
-      case "vessel": return <Ship className="h-4 w-4 text-cyan-500" />;
-      case "crew": return <Users className="h-4 w-4 text-green-500" />;
-      case "maintenance": return <Wrench className="h-4 w-4 text-orange-500" />;
-      case "incident": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "contract": return <FileText className="h-4 w-4 text-purple-500" />;
+      case "document": return <FileText className="h-4 w-4 text-primary" />;
+      case "vessel": return <Ship className="h-4 w-4 text-info" />;
+      case "crew": return <Users className="h-4 w-4 text-success" />;
+      case "maintenance": return <Wrench className="h-4 w-4 text-warning" />;
+      case "incident": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case "contract": return <FileText className="h-4 w-4 text-secondary" />;
       default: return <FileText className="h-4 w-4" />;
     }
   };

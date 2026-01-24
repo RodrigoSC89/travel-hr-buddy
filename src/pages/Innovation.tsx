@@ -48,15 +48,15 @@ const Innovation = () => {
               Sistemas inteligentes em operação
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-blue-600">12</span>
-              <Badge className="bg-blue-100 text-blue-700">Ativo</Badge>
+              <span className="text-2xl font-bold text-primary">12</span>
+              <Badge className="bg-primary/10 text-primary">Ativo</Badge>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-200">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-green-700">
+            <CardTitle className="flex items-center gap-2 text-success">
               <Lightbulb className="h-5 w-5" />
               Projetos Ativos
             </CardTitle>
@@ -66,8 +66,8 @@ const Innovation = () => {
               Iniciativas em desenvolvimento
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-green-600">8</span>
-              <Badge className="bg-green-100 text-green-700">Em Progresso</Badge>
+              <span className="text-2xl font-bold text-success">8</span>
+              <Badge className="bg-success/10 text-success">Em Progresso</Badge>
             </div>
           </CardContent>
         </Card>

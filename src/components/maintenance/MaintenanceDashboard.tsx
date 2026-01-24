@@ -117,7 +117,7 @@ export default function MaintenanceDashboard() {
       <CardContent className="space-y-4">
         {loading && !status ? (
           <div className="flex items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-info" />
           </div>
         ) : status ? (
           <>

@@ -492,13 +492,13 @@ const UnderwaterDrone: React.FC = () => {
                     {currentMission.waypoints.map((wp, idx) => (
                       <div 
                         key={wp.id}
-                        className={`p-2 rounded ${wp.completed ? "bg-green-500/10 border border-green-500/30" : "bg-zinc-900/50 border border-zinc-700"}`}
+                        className={`p-2 rounded ${wp.completed ? "bg-success/10 border border-success/30" : "bg-muted/50 border border-border"}`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-xs">
                             {idx + 1}. {wp.description || wp.id}
                           </span>
-                          {wp.completed && <Badge className="bg-green-500 text-xs">✓</Badge>}
+                          {wp.completed && <Badge className="bg-success text-xs">✓</Badge>}
                         </div>
                       </div>
                     ))}
@@ -507,7 +507,7 @@ const UnderwaterDrone: React.FC = () => {
 
                 <div className="flex gap-2">
                   {currentMission.status === "pending" && (
-                    <Button onClick={handleStartMission} className="bg-green-600 hover:bg-green-700">
+                    <Button onClick={handleStartMission} className="bg-success hover:bg-success/80">
                       <PlayCircle className="w-4 h-4 mr-2" />
                       Start Mission
                     </Button>

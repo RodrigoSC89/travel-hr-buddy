@@ -243,10 +243,10 @@ const OceanSonar: React.FC = () => {
         </div>
 
         {/* Scan Controls */}
-        <Card className="bg-zinc-800/50 border-cyan-500/30">
+        <Card className="bg-muted/50 border-info/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-cyan-400" />
+              <MapPin className="w-5 h-5 text-info" />
               Scan Configuration
             </CardTitle>
           </CardHeader>
