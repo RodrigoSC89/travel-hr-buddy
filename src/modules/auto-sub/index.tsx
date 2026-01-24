@@ -143,13 +143,13 @@ const AutoSub: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background text-foreground p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Bot className="w-8 h-8 text-purple-400 animate-pulse" />
+              <Bot className="w-8 h-8 text-secondary animate-pulse" />
               AutoSub - Autonomous Mission Planner
             </h1>
             <p className="text-zinc-400 mt-1">

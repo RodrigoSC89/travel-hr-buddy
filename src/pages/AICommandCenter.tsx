@@ -331,14 +331,14 @@ export default function AICommandCenter() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+            <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground">Precisão IA</p>
                     <p className="text-lg font-bold">{performanceMetrics.aiAccuracy}%</p>
                   </div>
-                  <Target className="h-5 w-5 text-blue-500" />
+                  <Target className="h-5 w-5 text-primary" />
                 </div>
               </CardContent>
             </Card>

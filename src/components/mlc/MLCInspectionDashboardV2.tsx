@@ -136,18 +136,18 @@ export const MLCInspectionDashboardV2: React.FC = () => {
 
   const getStatusIcon = (status: ChecklistStatus) => {
     switch (status) {
-      case 'compliant': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'non-compliant': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'na': return <AlertCircle className="h-4 w-4 text-gray-400" />;
+      case 'compliant': return <CheckCircle className="h-4 w-4 text-success" />;
+      case 'non-compliant': return <XCircle className="h-4 w-4 text-destructive" />;
+      case 'na': return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
       default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: ChecklistStatus) => {
     switch (status) {
-      case 'compliant': return 'bg-green-500';
-      case 'non-compliant': return 'bg-red-500';
-      case 'na': return 'bg-gray-400';
+      case 'compliant': return 'bg-success';
+      case 'non-compliant': return 'bg-destructive';
+      case 'na': return 'bg-muted-foreground';
       default: return 'bg-muted';
     }
   };
@@ -175,12 +175,12 @@ export const MLCInspectionDashboardV2: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* AI Banner with Offline Indicator */}
-      <Card className="bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 border-blue-500/20">
+      <Card className="bg-gradient-to-r from-primary/10 via-info/10 to-primary/10 border-primary/20">
         <CardContent className="py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Brain className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Brain className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="font-medium flex items-center gap-2">
@@ -216,7 +216,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setActiveTab('overview')}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-blue-500" />
+              <Target className="h-4 w-4 text-primary" />
               <p className="text-sm text-muted-foreground">Score</p>
             </div>
             <p className="text-2xl font-bold">{complianceScore}%</p>
@@ -224,20 +224,20 @@ export const MLCInspectionDashboardV2: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-green-500/50 transition-colors">
+        <Card className="cursor-pointer hover:border-success/50 transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <p className="text-sm text-muted-foreground">Conforme</p>
             </div>
-            <p className="text-2xl font-bold text-green-500">{compliantItems}</p>
+            <p className="text-2xl font-bold text-success">{compliantItems}</p>
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-red-500/50 transition-colors">
+        <Card className="cursor-pointer hover:border-destructive/50 transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-red-500" />
+              <XCircle className="h-4 w-4 text-destructive" />
               <p className="text-sm text-muted-foreground">Não Conforme</p>
             </div>
             <p className="text-2xl font-bold text-red-500">{nonCompliantItems}</p>
