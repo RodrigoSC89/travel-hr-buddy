@@ -244,8 +244,8 @@ export const LessonsLearnedCenter: React.FC = () => {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "Critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "High": return <Badge className="bg-orange-500 text-white">Alto</Badge>;
-      case "Medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      case "High": return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
+      case "Medium": return <Badge className="bg-warning/70 text-warning-foreground">Médio</Badge>;
       default: return <Badge variant="secondary">Baixo</Badge>;
     }
   };

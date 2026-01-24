@@ -225,9 +225,9 @@ export default function PromptPanel() {
                   <SelectItem key={p.id} value={p.id}>
                     <div className="flex items-center gap-2">
                       {p.status === 'completed' ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                       ) : (
-                        <AlertCircle className="h-4 w-4 text-yellow-500" />
+                        <AlertCircle className="h-4 w-4 text-warning" />
                       )}
                       <span>{p.title}</span>
                     </div>
@@ -314,9 +314,9 @@ export default function PromptPanel() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     {p.status === 'completed' ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                     ) : (
-                      <AlertCircle className="h-4 w-4 text-yellow-500" />
+                      <AlertCircle className="h-4 w-4 text-warning" />
                     )}
                     <Badge className={`${categoryColors[p.category]} text-xs`}>
                       {p.category}

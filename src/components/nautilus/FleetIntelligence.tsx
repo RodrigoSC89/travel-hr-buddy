@@ -202,14 +202,14 @@ export function FleetIntelligence() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/20">
-                  <Anchor className="h-5 w-5 text-blue-500" />
+                <div className="p-2 rounded-lg bg-primary/20">
+                  <Anchor className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-500">
+                  <p className="text-2xl font-bold text-primary">
                     {vessels.filter(v => v.status === "anchored").length}
                   </p>
                   <p className="text-xs text-muted-foreground">Ancorados</p>

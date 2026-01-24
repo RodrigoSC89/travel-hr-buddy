@@ -317,12 +317,12 @@ export const WindyWeatherPage: React.FC = () => {
   }, [error, toast]);
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background">
       <div className="flex min-h-screen">
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <div className="p-4 bg-slate-900/80 border-b border-white/10 flex items-center gap-4 flex-wrap">
+          <div className="p-4 bg-muted/80 border-b border-border flex items-center gap-4 flex-wrap">
             <CitySearch
               onSelectLocation={handleSelectLocation}
               favorites={favorites}
@@ -335,13 +335,13 @@ export const WindyWeatherPage: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={() => handleToggleFavorite(location)}
-              className="text-white/60 hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
-              <Heart className={favorites.some(f => f.id === location.id) ? "fill-red-400 text-red-400" : ""} />
+              <Heart className={favorites.some(f => f.id === location.id) ? "fill-destructive text-destructive" : ""} />
             </Button>
 
             {/* Data source badge */}
-            <Badge variant="outline" className="text-green-400 border-green-400/50">
+            <Badge variant="outline" className="text-success border-success/50">
               {dataSource}
             </Badge>
 

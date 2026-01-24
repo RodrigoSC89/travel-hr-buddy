@@ -160,7 +160,7 @@ export function HealthCheckInOffline() {
           {/* Stress Level */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
-              <Brain className="h-4 w-4 text-violet-500" />
+              <Brain className="h-4 w-4 text-secondary" />
               Nível de Estresse: {formData.stress_level}/5
             </Label>
             <Slider
