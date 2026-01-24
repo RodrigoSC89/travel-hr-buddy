@@ -88,16 +88,16 @@ const SonarAI: React.FC = () => {
     setIsScanning(true);
 
     try {
-      // Generate enhanced mock data with realistic patterns
-      const mockData = sonarAIService.generateEnhancedMockData(scanDepth, scanRadius, numPings);
+      // Get sonar data (placeholder for real sensor integration)
+      const sonarData = sonarAIService.getSonarData(scanDepth, scanRadius, numPings);
       
       // Analyze pings
-      const sonarAnalysis = analyzer.analyzePings(mockData.returns.map(r => r.ping));
+      const sonarAnalysis = analyzer.analyzePings(sonarData.returns.map((r) => r.ping));
       setAnalysis(sonarAnalysis);
 
       // Assess risks
       const risks = interpreter.assessRisks(
-        mockData.returns,
+        sonarData.returns,
         sonarAnalysis.patterns,
         scanDepth
       );
@@ -127,8 +127,8 @@ const SonarAI: React.FC = () => {
       // Reload detection history
       await loadDetectionHistory();
 
-      if (mockData.includeObjects) {
-        toast.success(`Scan concluído: ${mockData.objectCount} objetos detectados!`);
+      if (sonarData.includeObjects) {
+        toast.success(`Scan concluído: ${sonarData.objectCount} objetos detectados!`);
       } else {
         toast.success("Scan concluído - Área limpa");
       }
