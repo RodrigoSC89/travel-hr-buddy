@@ -463,7 +463,7 @@ const DeepRiskAI: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-zinc-300">Score:</span>
-                        <span className="font-semibold text-purple-400">
+                        <span className="font-semibold text-secondary-foreground">
                           {event.riskScore.toFixed(0)}
                         </span>
                         <span className="text-zinc-500">|</span>

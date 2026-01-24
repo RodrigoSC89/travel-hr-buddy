@@ -161,10 +161,10 @@ export default function InfirmaryDashboard() {
       {/* AI Assistant + Records */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* AI Medical Assistant */}
-        <Card className="lg:col-span-1 bg-gradient-to-br from-red-500/5 to-pink-500/5 border-red-500/20">
+        <Card className="lg:col-span-1 bg-gradient-to-br from-destructive/5 to-accent/5 border-destructive/20">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Brain className="h-5 w-5 text-red-500" />
+              <Brain className="h-5 w-5 text-destructive" />
               Assistente Médico IA
               <Badge variant="secondary" className="ml-auto">
                 <Sparkles className="h-3 w-3 mr-1" />

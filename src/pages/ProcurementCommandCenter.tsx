@@ -929,7 +929,7 @@ export default function ProcurementCommandCenter() {
                           )}
                         </div>
                         {supplier.is_approved && (
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                          <Badge className="bg-success/20 text-success border-success/30">
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Aprovado
                           </Badge>

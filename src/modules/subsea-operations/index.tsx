@@ -272,15 +272,15 @@ const SubseaOperations: React.FC = () => {
           {/* Sonar Display Placeholder */}
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-8">
-              <div className="aspect-square max-w-md mx-auto relative rounded-full border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-600/5">
+              <div className="aspect-square max-w-md mx-auto relative rounded-full border-2 border-info/30 bg-gradient-to-br from-info/5 to-primary/5">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                  <div className="w-2 h-2 rounded-full bg-info animate-ping" />
                 </div>
-                <div className="absolute inset-4 rounded-full border border-cyan-500/20" />
-                <div className="absolute inset-8 rounded-full border border-cyan-500/20" />
-                <div className="absolute inset-12 rounded-full border border-cyan-500/20" />
+                <div className="absolute inset-4 rounded-full border border-info/20" />
+                <div className="absolute inset-8 rounded-full border border-info/20" />
+                <div className="absolute inset-12 rounded-full border border-info/20" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Radar className="h-12 w-12 text-cyan-400 opacity-30" />
+                  <Radar className="h-12 w-12 text-info opacity-30" />
                 </div>
               </div>
             </CardContent>

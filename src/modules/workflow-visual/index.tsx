@@ -364,8 +364,8 @@ const WorkflowVisual = () => {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600">
-              <Workflow className="h-8 w-8 text-white" />
+            <div className="p-3 rounded-xl bg-gradient-to-br from-secondary to-accent">
+              <Workflow className="h-8 w-8 text-secondary-foreground" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Workflow Visual Dinâmico</h1>
@@ -375,7 +375,7 @@ const WorkflowVisual = () => {
 
           <div className="flex items-center gap-2 flex-wrap">
             <Badge variant="outline" className="gap-1">
-              <CheckCircle className="h-3 w-3 text-green-500" />
+              <CheckCircle className="h-3 w-3 text-success" />
               {stats.completed} Concluídas
             </Badge>
             <Badge variant="outline" className="gap-1">

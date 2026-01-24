@@ -268,7 +268,7 @@ const NautilusCommandCenter = () => {
 
             <Button 
               onClick={() => setShowBrain(true)}
-              className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
+              className="bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90"
             >
               <Brain className="h-4 w-4 mr-2" />
               Nautilus Brain

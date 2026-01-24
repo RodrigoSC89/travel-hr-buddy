@@ -319,7 +319,7 @@ export default function Patch516UnderwaterDrone() {
                 </div>
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
-                    <Waves className="h-5 w-5 text-cyan-500" />
+                    <Waves className="h-5 w-5 text-info" />
                     <div>
                       <div className="font-medium">Pressão Hidrostática</div>
                       <div className="text-sm text-muted-foreground">{(droneStatus.depth * 0.1).toFixed(2)} bar</div>
@@ -329,7 +329,7 @@ export default function Patch516UnderwaterDrone() {
                 </div>
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
-                    <Activity className="h-5 w-5 text-green-500" />
+                    <Activity className="h-5 w-5 text-success" />
                     <div>
                       <div className="font-medium">Sistemas</div>
                       <div className="text-sm text-muted-foreground">Todos operacionais</div>
