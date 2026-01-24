@@ -152,15 +152,15 @@ export default function CrewWellbeing() {
 
       {/* Alert Banner */}
       {criticalCount > 0 && (
-        <Card className="border-red-500 bg-red-50 dark:bg-red-950/20">
+        <Card className="border-destructive bg-destructive/10">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+              <AlertTriangle className="h-6 w-6 text-destructive" />
               <div>
-                <p className="font-medium text-red-700 dark:text-red-400">
+                <p className="font-medium text-destructive">
                   {criticalCount} tripulante(s) com nível de fadiga CRÍTICO
                 </p>
-                <p className="text-sm text-red-600 dark:text-red-500">
+                <p className="text-sm text-destructive/80">
                   Ação imediata recomendada para garantir segurança operacional
                 </p>
               </div>

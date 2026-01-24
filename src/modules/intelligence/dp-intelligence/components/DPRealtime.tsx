@@ -196,7 +196,7 @@ export default function DPRealtime() {
                 <span className="text-lg font-semibold">{telemetry.wavePeriod} s</span>
               </div>
               <div className="flex items-center justify-center h-16">
-                <svg width="100" height="40" className="text-indigo-500">
+                <svg width="100" height="40" className="text-secondary">
                   <path 
                     d="M0,20 Q12.5,5 25,20 T50,20 T75,20 T100,20" 
                     fill="none" 

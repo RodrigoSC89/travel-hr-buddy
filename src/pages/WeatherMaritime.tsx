@@ -245,16 +245,16 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Pressure */}
-          <Card className="bg-gradient-to-br from-slate-500/10 to-gray-500/10 border-slate-500/20">
+          <Card className="bg-gradient-to-br from-muted/50 to-muted/30 border-muted-foreground/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Pressão</p>
-                  <p className="text-3xl font-bold text-slate-500">
+                  <p className="text-3xl font-bold text-muted-foreground">
                     {weather.pressure?.toFixed(0) ?? "—"} hPa
                   </p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-slate-500/20 flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
                   <span className="text-2xl">📊</span>
                 </div>
               </div>
@@ -262,16 +262,16 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Cloud Cover */}
-          <Card className="bg-gradient-to-br from-gray-500/10 to-zinc-500/10 border-gray-500/20">
+          <Card className="bg-gradient-to-br from-muted/30 to-muted/20 border-muted-foreground/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Cobertura de Nuvens</p>
-                  <p className="text-3xl font-bold text-gray-500">
+                  <p className="text-3xl font-bold text-muted-foreground">
                     {weather.cloudCover?.toFixed(0) ?? "—"} %
                   </p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-gray-500/20 flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
                   <span className="text-2xl">☁️</span>
                 </div>
               </div>

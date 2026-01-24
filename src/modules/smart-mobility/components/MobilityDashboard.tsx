@@ -199,20 +199,20 @@ export default function MobilityDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Voos Atrasados</p>
                 <p className="text-2xl font-bold">{delayedFlights}</p>
-                <p className="text-xs text-amber-600">Remarcação automática ativa</p>
+                <p className="text-xs text-warning">Remarcação automática ativa</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-teal-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>

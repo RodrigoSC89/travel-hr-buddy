@@ -196,15 +196,15 @@ export function GarbageRegistry() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">{records.filter(r => r.status === "pending").length}</p>
-                <p className="text-xs text-amber-600">Aguardando verificação</p>
+                <p className="text-xs text-warning">Aguardando verificação</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>

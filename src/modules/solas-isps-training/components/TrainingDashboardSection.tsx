@@ -258,16 +258,16 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500 bg-gradient-to-br from-background to-amber-500/5">
+        <Card className="border-l-4 border-l-warning bg-gradient-to-br from-background to-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Drills Pendentes</p>
                 <p className="text-2xl font-bold">{dueDrills}</p>
-                <p className="text-xs text-amber-600 mt-1">Agendar</p>
+                <p className="text-xs text-warning mt-1">Agendar</p>
               </div>
-              <div className="p-3 rounded-xl bg-amber-500/10">
-                <Calendar className="h-6 w-6 text-amber-500" />
+              <div className="p-3 rounded-xl bg-warning/10">
+                <Calendar className="h-6 w-6 text-warning" />
               </div>
             </div>
           </CardContent>

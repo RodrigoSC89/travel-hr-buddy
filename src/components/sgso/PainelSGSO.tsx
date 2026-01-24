@@ -116,7 +116,7 @@ export const PainelSGSO: React.FC = () => {
           </Button>
           <Button
             onClick={exportarPDF}
-            className="bg-zinc-800 hover:bg-zinc-900 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             Exportar PDF
           </Button>

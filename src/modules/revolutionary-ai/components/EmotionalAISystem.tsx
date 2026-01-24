@@ -145,7 +145,7 @@ export function EmotionalAISystem() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Heart className="h-6 w-6 text-pink-500" />
+            <Heart className="h-6 w-6 text-accent" />
             Emotional AI System
           </h2>
           <p className="text-muted-foreground">
@@ -153,12 +153,12 @@ export function EmotionalAISystem() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Badge variant="outline" className="bg-green-500/10 text-green-500">
+          <Badge variant="outline" className="bg-success/10 text-success">
             <Smile className="h-3 w-3 mr-1" />
             Moral: {mockTeamDynamics.overallMorale}%
           </Badge>
           {highRiskCount > 0 && (
-            <Badge variant="outline" className="bg-red-500/10 text-red-500">
+            <Badge variant="outline" className="bg-destructive/10 text-destructive">
               <AlertTriangle className="h-3 w-3 mr-1" />
               {highRiskCount} Atenção
             </Badge>
@@ -169,11 +169,11 @@ export function EmotionalAISystem() {
       {/* Team Dynamics Overview */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: "Moral Geral", value: mockTeamDynamics.overallMorale, icon: Smile, color: "text-green-500" },
-          { label: "Risco Conflito", value: mockTeamDynamics.conflictRisk, icon: AlertTriangle, color: "text-orange-500", inverted: true },
-          { label: "Colaboração", value: mockTeamDynamics.collaborationScore, icon: Users, color: "text-blue-500" },
-          { label: "Liderança", value: mockTeamDynamics.leadershipEffectiveness, icon: Shield, color: "text-purple-500" },
-          { label: "Comunicação", value: mockTeamDynamics.communicationHealth, icon: MessageSquare, color: "text-cyan-500" },
+          { label: "Moral Geral", value: mockTeamDynamics.overallMorale, icon: Smile, color: "text-success" },
+          { label: "Risco Conflito", value: mockTeamDynamics.conflictRisk, icon: AlertTriangle, color: "text-warning", inverted: true },
+          { label: "Colaboração", value: mockTeamDynamics.collaborationScore, icon: Users, color: "text-primary" },
+          { label: "Liderança", value: mockTeamDynamics.leadershipEffectiveness, icon: Shield, color: "text-secondary" },
+          { label: "Comunicação", value: mockTeamDynamics.communicationHealth, icon: MessageSquare, color: "text-info" },
         ].map((metric, i) => (
           <motion.div
             key={metric.label}
@@ -203,7 +203,7 @@ export function EmotionalAISystem() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-pink-500" />
+              <Brain className="h-5 w-5 text-accent" />
               Estado Emocional da Tripulação
             </CardTitle>
           </CardHeader>
