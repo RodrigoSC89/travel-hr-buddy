@@ -33,7 +33,15 @@ const MODULE_ROUTES: Record<string, string> = {
   sgso: "/sgso",
   "imca-audit": "/imca-audit",
   "pre-ovid": "/pre-ovid-inspection",
-  "mlc-inspection": "/mlc-inspection"
+  "mlc-inspection": "/mlc-inspection",
+  // V2 Modules - Advanced Features
+  "human-factors": "/safety-human-factors-v2",
+  "gmud": "/gmud-v2",
+  "vessel-history": "/vessel-history-v2",
+  "responsibility-matrix": "/responsibility-matrix-v2",
+  "contract-downtime": "/vessel-contracts-v2",
+  "cts-compliance": "/cts-compliance-v2",
+  "imca-incidents": "/imca-incidents-v2"
 };
 
 /**

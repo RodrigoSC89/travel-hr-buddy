@@ -1,6 +1,7 @@
 /**
  * SafetyHumanFactorsV2 - Fatores Humanos
  * Neurociência e QE para segurança operacional
+ * Integrado com HumanFactorsPanel para avaliações HFACS
  */
 
 import { useState, useEffect } from "react";
@@ -11,9 +12,10 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Brain, Heart, Activity, AlertTriangle, CheckCircle, 
-  TrendingUp, Users, Moon, Coffee
+  TrendingUp, Users, Moon, Coffee, Shield
 } from "lucide-react";
 import { useSafetyMetrics } from "@/hooks/useModuleMetrics";
+import { HumanFactorsPanel } from "@/components/human-factors";
 
 const QUICK_QUESTIONS = [
   "O que é QE (Quociente Emocional)?",
@@ -60,8 +62,9 @@ export default function SafetyHumanFactorsV2() {
       <StatsGridV2 stats={stats} columns={4} />
 
       <Tabs defaultValue="assessment" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 max-w-2xl">
+        <TabsList className="grid w-full grid-cols-5 max-w-3xl">
           <TabsTrigger value="assessment">Avaliações</TabsTrigger>
+          <TabsTrigger value="hfacs">HFACS</TabsTrigger>
           <TabsTrigger value="fatigue">Fadiga</TabsTrigger>
           <TabsTrigger value="ai-assistant">IA Assistente</TabsTrigger>
           <TabsTrigger value="evidence">Evidências</TabsTrigger>
@@ -104,6 +107,12 @@ export default function SafetyHumanFactorsV2() {
               </div>
             </CardV2>
           </div>
+        </TabsContent>
+
+        <TabsContent value="hfacs">
+          <CardV2 icon={Shield} title="Avaliação HFACS" description="Human Factors Analysis and Classification System" gradient="purple">
+            <HumanFactorsPanel vesselId="default" />
+          </CardV2>
         </TabsContent>
 
         <TabsContent value="fatigue">
