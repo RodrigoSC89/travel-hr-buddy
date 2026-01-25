@@ -15753,6 +15753,146 @@ export type Database = {
           },
         ]
       }
+      imca_incidents_database: {
+        Row: {
+          bulletin_id: string
+          category: string
+          created_at: string | null
+          description: string
+          id: string
+          incident_date: string | null
+          is_global: boolean | null
+          lessons_learned: string[] | null
+          organization_id: string | null
+          recommendations: string[] | null
+          root_causes: string[] | null
+          severity: string | null
+          source: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          bulletin_id: string
+          category: string
+          created_at?: string | null
+          description: string
+          id?: string
+          incident_date?: string | null
+          is_global?: boolean | null
+          lessons_learned?: string[] | null
+          organization_id?: string | null
+          recommendations?: string[] | null
+          root_causes?: string[] | null
+          severity?: string | null
+          source?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          bulletin_id?: string
+          category?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          incident_date?: string | null
+          is_global?: boolean | null
+          lessons_learned?: string[] | null
+          organization_id?: string | null
+          recommendations?: string[] | null
+          root_causes?: string[] | null
+          severity?: string | null
+          source?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "imca_incidents_database_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      imca_local_incidents: {
+        Row: {
+          ai_analysis: Json | null
+          category: string
+          created_at: string | null
+          description: string
+          environmental_impact: boolean | null
+          equipment_involved: string | null
+          id: string
+          incident_code: string
+          incident_date: string
+          injuries: number | null
+          organization_id: string | null
+          reported_by: string | null
+          severity: string | null
+          similar_bulletins: Json | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          category: string
+          created_at?: string | null
+          description: string
+          environmental_impact?: boolean | null
+          equipment_involved?: string | null
+          id?: string
+          incident_code: string
+          incident_date: string
+          injuries?: number | null
+          organization_id?: string | null
+          reported_by?: string | null
+          severity?: string | null
+          similar_bulletins?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          category?: string
+          created_at?: string | null
+          description?: string
+          environmental_impact?: boolean | null
+          equipment_involved?: string | null
+          id?: string
+          incident_code?: string
+          incident_date?: string
+          injuries?: number | null
+          organization_id?: string | null
+          reported_by?: string | null
+          severity?: string | null
+          similar_bulletins?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "imca_local_incidents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "imca_local_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incident_comments: {
         Row: {
           attachments: Json | null

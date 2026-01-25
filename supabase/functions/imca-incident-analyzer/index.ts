@@ -25,53 +25,63 @@ const IMCA_CATEGORIES = [
   "Structural Integrity"
 ];
 
-// Sample IMCA bulletin database (in production, this would come from Supabase)
-const IMCA_BULLETINS_DB = [
-  {
-    id: "SF-2024-01",
-    title: "Failure of crane wire during subsea operations",
-    category: "Lifting & Mechanical Handling",
-    description: "Crane wire parted during routine subsea equipment recovery operation",
-    root_causes: ["Wire fatigue not detected", "Inspection interval exceeded", "Load cell malfunction"],
-    lessons_learned: ["Implement weekly wire rope inspections", "Install backup load monitoring", "Review lifting procedures"],
-    recommendations: ["Reduce inspection interval to 7 days", "Install redundant load cells", "Update risk assessment"],
-    severity: "high",
-    date: "2024-03-15"
-  },
-  {
-    id: "SF-2024-02",
-    title: "DP excursion due to thruster failure",
-    category: "DP Operations",
-    description: "Vessel experienced uncontrolled excursion after main thruster tripped offline",
-    root_causes: ["VFD overheating", "Cooling system fouled", "Maintenance backlog"],
-    lessons_learned: ["VFD cooling critical for DP reliability", "Thruster redundancy must be verified daily"],
-    recommendations: ["Implement thermal monitoring", "Clean cooling systems quarterly", "Update DP FMEA"],
-    severity: "critical",
-    date: "2024-02-28"
-  },
-  {
-    id: "SF-2024-03",
-    title: "Personnel injury during offshore transfer",
-    category: "Personal Safety",
-    description: "Crew member sustained injury during personnel basket transfer",
-    root_causes: ["Improper PPE usage", "Weather window misjudged", "Communication breakdown"],
-    lessons_learned: ["Strict adherence to transfer weather limits", "Two-way radio mandatory for all transfers"],
-    recommendations: ["Review POB transfer procedures", "Implement weather monitoring automation"],
-    severity: "medium",
-    date: "2024-01-20"
-  },
-  {
-    id: "SF-2023-15",
-    title: "Engine room fire during maintenance",
-    category: "Fire & Explosion",
-    description: "Fire broke out in engine room during hot work operations",
-    root_causes: ["Hot work permit not properly executed", "Fire watch not maintained", "Combustible materials nearby"],
-    lessons_learned: ["Zero tolerance for hot work permit violations", "30-minute fire watch minimum after work"],
-    recommendations: ["Reinforce hot work training", "Install additional fixed fire detection"],
-    severity: "critical",
-    date: "2023-11-05"
+// IMCA bulletins are now stored in Supabase table 'imca_incidents_database'
+// This function fetches them dynamically
+
+interface IMCABulletin {
+  id: string;
+  bulletin_id: string;
+  title: string;
+  category: string;
+  description: string;
+  root_causes: string[];
+  lessons_learned: string[];
+  recommendations: string[];
+  severity: string;
+  incident_date: string | null;
+}
+
+interface DBBulletin {
+  bulletin_id: string;
+  title: string;
+  category: string;
+  description: string;
+  root_causes: string[] | null;
+  lessons_learned: string[] | null;
+  recommendations: string[] | null;
+  severity: string;
+  incident_date: string | null;
+}
+
+async function fetchIMCABulletins(supabase: ReturnType<typeof createClient>): Promise<IMCABulletin[]> {
+  try {
+    const { data, error } = await supabase
+      .from('imca_incidents_database')
+      .select('*')
+      .order('incident_date', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching IMCA bulletins:', error);
+      return [];
+    }
+    
+    return (data || []).map((b: DBBulletin) => ({
+      id: b.bulletin_id,
+      bulletin_id: b.bulletin_id,
+      title: b.title,
+      category: b.category,
+      description: b.description,
+      root_causes: b.root_causes || [],
+      lessons_learned: b.lessons_learned || [],
+      recommendations: b.recommendations || [],
+      severity: b.severity,
+      incident_date: b.incident_date
+    }));
+  } catch (e) {
+    console.error('Failed to fetch bulletins:', e);
+    return [];
   }
-];
+}
 
 interface LocalIncident {
   id: string;
@@ -124,6 +134,9 @@ serve(async (req) => {
     }
 
     const supabase = createClient(supabaseUrl!, supabaseKey!);
+
+    // Fetch bulletins from database
+    const IMCA_BULLETINS_DB = await fetchIMCABulletins(supabase);
 
     if (action === 'list_categories') {
       return new Response(JSON.stringify({ categories: IMCA_CATEGORIES }), {
