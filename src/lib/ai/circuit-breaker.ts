@@ -3,6 +3,8 @@
  * Production-grade failure handling with multi-provider fallback
  */
 
+import { logger } from "@/lib/utils/production-logger";
+
 export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
 export interface CircuitBreakerConfig {
@@ -90,7 +92,7 @@ class CircuitBreaker {
     if (this.state === 'OPEN') {
       if (Date.now() - (this.lastFailure || 0) > this.config.timeout) {
         this.state = 'HALF_OPEN';
-        console.log(`[CircuitBreaker:${this.config.name}] Transitioning to HALF_OPEN`);
+        logger.debug(`[CircuitBreaker:${this.config.name}] Transitioning to HALF_OPEN`);
       } else {
         throw new Error(`Circuit breaker ${this.config.name} is OPEN`);
       }
@@ -114,7 +116,7 @@ class CircuitBreaker {
     if (this.state === 'HALF_OPEN') {
       if (this.successes >= this.config.successThreshold) {
         this.state = 'CLOSED';
-        console.log(`[CircuitBreaker:${this.config.name}] Circuit CLOSED after recovery`);
+        logger.info(`[CircuitBreaker:${this.config.name}] Circuit CLOSED after recovery`);
       }
     }
   }
@@ -127,7 +129,7 @@ class CircuitBreaker {
 
     if (this.failures >= this.config.failureThreshold) {
       this.state = 'OPEN';
-      console.warn(`[CircuitBreaker:${this.config.name}] Circuit OPENED after ${this.failures} failures`);
+      logger.warn(`[CircuitBreaker:${this.config.name}] Circuit OPENED after ${this.failures} failures`);
     }
   }
 
@@ -239,13 +241,13 @@ export async function executeWithFallback(
         }
       });
 
-      console.log(`[AI] Success with ${provider.name} (${result.latencyMs}ms)`);
+      logger.debug(`[AI] Success with ${provider.name} (${result.latencyMs}ms)`);
       return result;
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       errors.push({ provider: provider.name, error: errorMessage });
-      console.warn(`[AI] ${provider.name} failed: ${errorMessage}`);
+      logger.warn(`[AI] ${provider.name} failed: ${errorMessage}`);
     }
   }
 
