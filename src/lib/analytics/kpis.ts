@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/utils/production-logger';
 
 export interface KPIDefinition {
   id: string;
@@ -209,7 +210,7 @@ export class KPITracker {
   async trackKPI(kpiId: string, value: number, metadata?: Record<string, unknown>): Promise<void> {
     const kpi = KPI_DEFINITIONS[kpiId.toUpperCase()];
     if (!kpi) {
-      console.warn(`Unknown KPI: ${kpiId}`);
+      logger.warn(`Unknown KPI: ${kpiId}`);
       return;
     }
 

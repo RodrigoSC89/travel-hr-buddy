@@ -15,6 +15,7 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { PushNotifications } from '@capacitor/push-notifications';
+import { logger } from '@/lib/utils/production-logger';
 
 // ============================================
 // PLATFORM DETECTION
@@ -242,7 +243,7 @@ export async function registerPushNotifications(): Promise<PushNotificationToken
     }
 
     if (permStatus.receive !== 'granted') {
-      console.warn('[Push] Permission not granted');
+      logger.debug('[Push] Permission not granted');
       return null;
     }
 
@@ -252,17 +253,17 @@ export async function registerPushNotifications(): Promise<PushNotificationToken
     // Get the token
     return new Promise((resolve) => {
       PushNotifications.addListener('registration', (token) => {
-        console.log('[Push] Registration successful:', token.value);
+        logger.info('[Push] Registration successful', { token: token.value });
         resolve({ value: token.value });
       });
 
       PushNotifications.addListener('registrationError', (error) => {
-        console.error('[Push] Registration failed:', error);
+        logger.error('[Push] Registration failed', error);
         resolve(null);
       });
     });
   } catch (error) {
-    console.error('[Push] Registration error:', error);
+    logger.error('[Push] Registration error', error);
     return null;
   }
 }
@@ -274,12 +275,12 @@ export function setupPushNotificationListeners(
   if (!platformInfo.isNative) return;
 
   PushNotifications.addListener('pushNotificationReceived', (notification) => {
-    console.log('[Push] Notification received:', notification);
+    logger.debug('[Push] Notification received', { notification });
     onNotificationReceived(notification);
   });
 
   PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-    console.log('[Push] Notification action performed:', action);
+    logger.debug('[Push] Notification action performed', { action });
     onNotificationTapped(action.notification);
   });
 }
@@ -309,7 +310,7 @@ export async function scheduleLocalNotification(
     if (permStatus.display !== 'granted') {
       const newStatus = await LocalNotifications.requestPermissions();
       if (newStatus.display !== 'granted') {
-        console.warn('[LocalNotifications] Permission not granted');
+        logger.debug('[LocalNotifications] Permission not granted');
         return false;
       }
     }

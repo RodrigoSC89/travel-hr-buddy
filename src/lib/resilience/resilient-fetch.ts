@@ -6,6 +6,7 @@
  */
 
 import { getCircuitBreaker } from '@/lib/resilience/circuit-breaker';
+import { logger } from '@/lib/utils/production-logger';
 
 export interface ResilientFetchOptions extends RequestInit {
   /** Circuit breaker service name */
@@ -94,7 +95,7 @@ export async function resilientFetch(
 
   // If circuit is open and we have a fallback, return it
   if (breaker.isOpen() && fallback) {
-    console.warn(`[resilientFetch] Circuit ${circuitName} is OPEN, using fallback`);
+    logger.warn(`[resilientFetch] Circuit ${circuitName} is OPEN, using fallback`);
     return typeof fallback === 'function' ? fallback() : fallback;
   }
 
@@ -122,7 +123,7 @@ export async function resilientFetch(
 
         if (attempt < retries) {
           const delay = retryDelay * Math.pow(2, attempt);
-          console.warn(`[resilientFetch] Attempt ${attempt + 1} failed for ${circuitName}, retrying in ${delay}ms`);
+          logger.debug(`[resilientFetch] Attempt ${attempt + 1} failed for ${circuitName}, retrying in ${delay}ms`);
           await sleep(delay);
         }
       }

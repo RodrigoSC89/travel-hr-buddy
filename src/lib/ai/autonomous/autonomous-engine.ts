@@ -7,6 +7,7 @@
 import { agentOrchestrator, type Situation, type Decision } from './agent-orchestrator';
 import { vesselDigitalTwin, type VesselState, type Anomaly } from './digital-twin';
 import { blockchainLedger } from '@/lib/blockchain/compliance-ledger';
+import { logger } from '@/lib/utils/production-logger';
 
 export interface AutonomousConfig {
   enabled: boolean;
@@ -67,7 +68,7 @@ export class AutonomousDecisionEngine {
     // Setup event listeners
     this.setupEventListeners();
     
-    console.log('[AutonomousEngine] Initialized');
+    logger.debug('[AutonomousEngine] Initialized');
     this.emit('initialized', { vesselId, vesselName });
   }
 
@@ -76,7 +77,7 @@ export class AutonomousDecisionEngine {
    */
   start(): void {
     if (this.loopInterval) {
-      console.warn('[AutonomousEngine] Already running');
+      logger.debug('[AutonomousEngine] Already running');
       return;
     }
 

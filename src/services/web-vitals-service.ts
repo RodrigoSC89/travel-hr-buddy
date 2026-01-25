@@ -1,6 +1,7 @@
 // Web Vitals Service - Collects and reports Web Vitals metrics
 import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from "web-vitals";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface WebVitalsData {
   name: string;
@@ -108,9 +109,9 @@ export class WebVitalsService {
   private checkForDegradation(metric: WebVitalsData) {
     // Log warnings for degraded performance
     if (metric.rating === "poor") {
-      console.warn(`🔴 Critical performance issue: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
+      logger.warn(`🔴 Critical performance issue: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     } else if (metric.rating === "needs-improvement") {
-      console.warn(`🟡 Performance needs improvement: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
+      logger.warn(`🟡 Performance needs improvement: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     }
   }
   
