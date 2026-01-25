@@ -86,8 +86,8 @@ export function measureCoreWebVitals(callback: (metric: {
   
   try {
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-  } catch (e) {
-    console.warn('LCP observer not supported');
+  } catch {
+    // LCP observer not supported in this browser
   }
 
   // FID Observer
@@ -106,8 +106,8 @@ export function measureCoreWebVitals(callback: (metric: {
   
   try {
     fidObserver.observe({ type: 'first-input', buffered: true });
-  } catch (e) {
-    console.warn('FID observer not supported');
+  } catch {
+    // FID observer not supported in this browser
   }
 
   // CLS Observer
@@ -129,23 +129,21 @@ export function measureCoreWebVitals(callback: (metric: {
   
   try {
     clsObserver.observe({ type: 'layout-shift', buffered: true });
-  } catch (e) {
-    console.warn('CLS observer not supported');
+  } catch {
+    // CLS observer not supported in this browser
   }
 }
 
 export function reportWebVitalsToAnalytics(metric: { name: string; value: number }) {
   // Send to analytics (can be extended for PostHog, Sentry, etc.)
   if (typeof window !== 'undefined' && 'sendBeacon' in navigator) {
-    const body = JSON.stringify({
-      metric: metric.name,
-      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-      page: window.location.pathname,
-      timestamp: Date.now(),
-    });
-    
     // Beacon to analytics endpoint (if configured)
+    // const body = JSON.stringify({
+    //   metric: metric.name,
+    //   value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+    //   page: window.location.pathname,
+    //   timestamp: Date.now(),
+    // });
     // navigator.sendBeacon('/api/analytics/vitals', body);
-    console.log('[WebVitals]', metric.name, metric.value);
   }
 }
