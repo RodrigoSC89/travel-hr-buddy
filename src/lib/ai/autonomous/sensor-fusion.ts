@@ -177,7 +177,7 @@ class SensorFusionEngine extends SimpleEventEmitter {
   ingestReading(reading: SensorReading): void {
     const sensorReadings = this.readings.get(reading.sensorId);
     if (!sensorReadings) {
-      console.warn(`Unknown sensor: ${reading.sensorId}`);
+      // Unknown sensor silently ignored - not registered
       return;
     }
 

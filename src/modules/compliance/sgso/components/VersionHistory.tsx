@@ -5,6 +5,7 @@ import { History, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
 interface VersionHistoryProps {
   selectedPlanId?: string;
@@ -52,7 +53,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
 
       if (error) {
         // Table might not exist, show empty state
-        console.warn("Could not load versions:", error.message);
+        logger.warn("Could not load versions", { error: error.message });
         setVersions([]);
         return;
       }

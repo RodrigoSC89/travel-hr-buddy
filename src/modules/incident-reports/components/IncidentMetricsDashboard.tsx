@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { Clock, TrendingDown, TrendingUp, AlertTriangle } from "lucide-react";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
 interface IncidentMetrics {
   id: string;
@@ -57,7 +58,7 @@ export const IncidentMetricsDashboard: React.FC = () => {
         .order("period_start", { ascending: true });
 
       if (error) {
-        console.warn("Could not load incident metrics:", error.message);
+        logger.warn("Could not load incident metrics", { error: error.message });
         setMetrics([]);
         return;
       }

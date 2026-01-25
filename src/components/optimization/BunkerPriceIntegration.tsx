@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RefreshCw, TrendingUp, TrendingDown, Minus, Fuel, MapPin, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface BunkerPrice {
   port: string;
@@ -55,7 +56,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
       const { data, error: fnError } = await supabase.functions.invoke("bunker-prices");
       
       if (fnError) {
-        console.warn("Edge function error, using mock data:", fnError);
+        logger.warn("Edge function error, using mock data", { error: fnError.message });
         // Use mock data as fallback
         setPrices(mockBunkerPrices);
       } else if (data?.prices) {

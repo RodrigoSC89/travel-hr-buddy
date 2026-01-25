@@ -45,7 +45,7 @@ class DataRetentionManager {
   }
 
   async runCleanup(force: boolean = false): Promise<CleanupResult[]> {
-    console.log('[DataRetention] Starting cleanup...');
+    // Data retention cleanup runs silently
     const results: CleanupResult[] = [];
     const now = Date.now();
 
@@ -113,7 +113,7 @@ class DataRetentionManager {
         itemsRemoved++;
       }
     } catch (e) {
-      console.warn(`[DataRetention] Error cleaning ${policy.module}:`, e);
+      // Silent fail for data retention cleanup errors
     }
 
     return {

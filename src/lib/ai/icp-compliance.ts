@@ -379,7 +379,7 @@ export class ICPCompliancePredictor {
       };
       localStorage.setItem('icp_compliance_state', JSON.stringify(state));
     } catch (e) {
-      console.warn('ICP: Failed to save state', e);
+      // Silent fail for localStorage operations in compliance predictor
     }
   }
 
@@ -403,7 +403,7 @@ export class ICPCompliancePredictor {
         this.modelWeights = new Map(state.modelWeights || []);
       }
     } catch (e) {
-      console.warn('ICP: Failed to load state', e);
+      // Silent fail for localStorage operations in compliance predictor
     }
   }
 
