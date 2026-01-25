@@ -7,6 +7,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { RealtimeChannel } from '@supabase/supabase-js';
+import { logger } from '@/lib/utils/production-logger';
 
 export interface ComplianceAlert {
   id: string;
@@ -45,7 +46,7 @@ export function useComplianceRealtimeAlerts(channelName = 'compliance-alerts'): 
     // Listen for broadcast messages (alerts)
     realtimeChannel
       .on('broadcast', { event: 'compliance_alert' }, (payload) => {
-        console.log('[Realtime] Received alert:', payload);
+        logger.debug('[Realtime] Received alert', { payload });
         const alert = payload.payload as ComplianceAlert;
         
         setAlerts(prev => {
@@ -98,14 +99,14 @@ export function useComplianceRealtimeAlerts(channelName = 'compliance-alerts'): 
 
     // Cleanup on unmount
     return () => {
-      console.log('[Realtime] Cleaning up channel');
+      logger.debug('[Realtime] Cleaning up channel');
       supabase.removeChannel(realtimeChannel);
     };
   }, [channelName]);
 
   const sendAlert = useCallback((alertData: Omit<ComplianceAlert, 'id' | 'timestamp'>) => {
     if (!channel) {
-      console.warn('[Realtime] Channel not ready');
+      logger.debug('[Realtime] Channel not ready');
       return;
     }
 
@@ -115,7 +116,7 @@ export function useComplianceRealtimeAlerts(channelName = 'compliance-alerts'): 
       timestamp: new Date().toISOString(),
     };
 
-    console.log('[Realtime] Sending alert:', alert);
+    logger.debug('[Realtime] Sending alert', { alert });
 
     channel.send({
       type: 'broadcast',

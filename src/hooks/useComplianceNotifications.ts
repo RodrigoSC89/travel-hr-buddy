@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/production-logger";
 
 export type ComplianceNotificationType = 
   | "deadline_warning" 
@@ -45,7 +46,7 @@ export function useComplianceNotifications() {
   const sendNotification = useCallback(
     async (options: SendNotificationOptions) => {
       if (!user) {
-        console.warn("No user logged in, cannot send notification");
+        logger.debug("No user logged in, cannot send notification");
         return { success: false, error: "No user" };
       }
 

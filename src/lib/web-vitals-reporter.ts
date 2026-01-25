@@ -5,6 +5,7 @@
  */
 
 import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
+import { logger } from '@/lib/utils/production-logger';
 
 // Thresholds based on Google's recommendations
 const THRESHOLDS = {
@@ -137,7 +138,7 @@ const checkForIssues = (vitals: VitalReport[]) => {
   });
   
   if (issues.length > 0 && import.meta.env.DEV) {
-    console.warn('[Web Vitals] Performance issues detected:', issues);
+    logger.warn('[Web Vitals] Performance issues detected', { issues });
   }
   
   return issues;
@@ -166,10 +167,10 @@ export const initWebVitals = () => {
     window.addEventListener('beforeunload', flushVitals);
     
     if (import.meta.env.DEV) {
-      console.log('[Web Vitals] Initialized');
+      logger.debug('[Web Vitals] Initialized');
     }
   } catch (error) {
-    console.warn('[Web Vitals] Failed to initialize:', error);
+    logger.warn('[Web Vitals] Failed to initialize', { error });
   }
 };
 

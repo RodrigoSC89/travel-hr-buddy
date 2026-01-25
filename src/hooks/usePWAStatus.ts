@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { logger } from '@/lib/utils/production-logger';
 
 interface PWAStatus {
   isInstalled: boolean;
@@ -118,7 +119,7 @@ export function usePWAStatus() {
   // Install PWA
   const installPWA = useCallback(async () => {
     if (!deferredPrompt) {
-      console.warn('[PWA] No install prompt available');
+      logger.debug('[PWA] No install prompt available');
       return false;
     }
 

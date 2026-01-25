@@ -3,6 +3,8 @@
  * Lightweight memory management for low-end devices
  */
 
+import { logger } from '@/lib/utils/production-logger';
+
 interface MemoryInfo {
   usedJSHeapSize?: number;
   totalJSHeapSize?: number;
@@ -54,7 +56,7 @@ class MemoryOptimizer {
         }
       }
     } catch (e) {
-      console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
+      logger.warn('[MemoryOptimizer] Error clearing localStorage', { error: e });
     }
   }
 
@@ -94,7 +96,7 @@ class MemoryOptimizer {
         }
       }
     } catch (e) {
-      console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
+      logger.warn('[MemoryOptimizer] Error clearing SW cache', { error: e });
     }
   }
 

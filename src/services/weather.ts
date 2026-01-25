@@ -399,7 +399,7 @@ export async function getWeatherData(
   // Try each source sequentially
   for (const source of sources) {
     try {
-      console.log(`[Weather] Trying ${source.name}...`);
+      logger.debug(`[Weather] Trying ${source.name}...`);
       const data = await source.fetch();
 
       // Cache successful result
@@ -408,19 +408,19 @@ export async function getWeatherData(
         timestamp: Date.now(),
       });
 
-      console.log(`[Weather] Success from ${source.name}`);
+      logger.debug(`[Weather] Success from ${source.name}`);
       return data;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       attempts.push({ source: source.name, error: errorMessage });
-      console.warn(`[Weather] ${source.name} failed: ${errorMessage}`);
+      logger.warn(`[Weather] ${source.name} failed: ${errorMessage}`);
     }
   }
 
   // All sources failed - try to use expired cache
   const expiredCache = weatherCache.get(cacheKey);
   if (expiredCache) {
-    console.warn("[Weather] All sources failed, using expired cache");
+    logger.warn("[Weather] All sources failed, using expired cache");
     return {
       ...expiredCache.data,
       source: "fallback",
