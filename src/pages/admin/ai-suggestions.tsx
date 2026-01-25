@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,7 @@ const AISuggestionsDashboard: React.FC = () => {
 
       if (error) {
         // If table doesn't exist or RLS blocks, use empty array
-        console.warn("Could not fetch AI suggestions:", error.message);
+        logger.warn("Could not fetch AI suggestions", { error: error.message });
         setSuggestions([]);
         setLoading(false);
         return;

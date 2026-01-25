@@ -62,7 +62,7 @@ export class ErrorBoundary extends Component<Props, State> {
       });
     } catch (sentryError) {
       // Sentry might not be initialized in dev
-      console.warn('Sentry not available:', sentryError);
+      logger.warn('Sentry not available', { error: sentryError });
     }
   }
 

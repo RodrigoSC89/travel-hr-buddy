@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface HotwordDetectorProps {
   onHotwordDetected: () => void;
@@ -138,7 +139,7 @@ export function HotwordDetector({
       const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
       if (!SpeechRecognitionAPI) {
-        console.warn('[HotwordDetector] SpeechRecognition not supported, using audio-only mode');
+        logger.warn('[HotwordDetector] SpeechRecognition not supported, using audio-only mode');
         return false;
       }
 

@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Camera, Upload, X, Loader2, Save, FileText, Mic, Image } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface PhotoCaptureModalProps {
   isOpen: boolean;
@@ -131,14 +132,14 @@ export const PhotoCaptureModal: React.FC<PhotoCaptureModalProps> = ({
         });
 
       if (uploadError) {
-        console.warn('Storage upload failed, using local data:', uploadError);
+        logger.warn('Storage upload failed, using local data', { error: uploadError });
       }
 
       onPhotoCaptured?.({ url: capturedPhoto, caption });
       toast.success('Foto salva como evidência');
       handleClose();
     } catch (error) {
-      console.error('Save error:', error);
+      logger.error('Save error', error);
       // Still call callback with local data
       onPhotoCaptured?.({ url: capturedPhoto, caption });
       toast.success('Foto registrada localmente');

@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 // Web Speech API types
 interface SpeechRecognitionAlternative {
@@ -190,7 +191,7 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
 
   const speak = useCallback((text: string) => {
     if (!("speechSynthesis" in window)) {
-      console.warn("Speech synthesis not supported");
+      logger.warn("Speech synthesis not supported");
       return;
     }
 

@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // SSO Provider Types
 export type SSOProvider = 
@@ -118,7 +119,7 @@ export async function initiateSSOLogin(
     const status = await getSSOStatus(organizationId);
     
     if (!status.configured) {
-      console.warn('[SSO] Not configured for organization:', organizationId);
+      logger.warn('[SSO] Not configured for organization', { organizationId });
       return null;
     }
     
