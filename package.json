@@ -76,6 +76,7 @@
   },
   "dependencies": {
     "@11labs/react": "^0.2.0",
+    "@axe-core/react": "^4.11.0",
     "@capacitor/android": "^7.4.3",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/cli": "^7.4.3",
@@ -146,6 +147,7 @@
     "docx": "^9.5.1",
     "driver.js": "^1.4.0",
     "embla-carousel-react": "^8.6.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "file-saver": "^2.0.5",
     "firebase": "^12.4.0",
     "framer-motion": "^11.15.0",

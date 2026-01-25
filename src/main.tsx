@@ -25,12 +25,30 @@ const initializeTheme = () => {
 
 initializeTheme();
 
+// Initialize axe-core accessibility checker in development
+const initializeAccessibilityChecker = async () => {
+  if (import.meta.env.DEV) {
+    try {
+      const axe = await import("@axe-core/react");
+      const React = await import("react");
+      const ReactDOM = await import("react-dom");
+      axe.default(React, ReactDOM, 1000);
+      logger.info("[A11y] axe-core accessibility checker initialized");
+    } catch {
+      // axe-core is optional, fail silently
+    }
+  }
+};
+
 // Defer non-critical initializations - only after app is loaded
 const initializeOptionalFeatures = async () => {
   // Wait for app to be interactive first
   await new Promise(resolve => setTimeout(resolve, 2000));
   
   try {
+    // Initialize accessibility checker in dev
+    await initializeAccessibilityChecker();
+    
     // Initialize route prefetching for better navigation
     const { initRoutePrefetch } = await import("@/lib/performance/route-prefetch");
     initRoutePrefetch();
