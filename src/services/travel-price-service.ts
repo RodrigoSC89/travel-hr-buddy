@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface FlightSearchParams {
   origin: string;
@@ -188,7 +189,7 @@ class TravelPriceService {
    */
   exportToCSV(data: any[], filename: string): void {
     if (!data || data.length === 0) {
-      console.warn("No data to export");
+      logger.warn("No data to export");
       return;
     }
 

@@ -3,6 +3,7 @@
  * Netflix-style chaos engineering for Nautilus One
  */
 
+import { logger } from "@/lib/utils/production-logger";
 export interface ChaosConfig {
   enabled: boolean;
   failureRate: number; // 0-1
@@ -93,7 +94,7 @@ export class ChaosMonkey {
     const latency = await this.maybeAddLatency(url);
     
     if (latency > 0) {
-      console.warn(`🐒 Chaos: Added ${latency.toFixed(0)}ms latency to ${url}`);
+      logger.warn(`🐒 Chaos: Added ${latency.toFixed(0)}ms latency to ${url}`);
     }
     
     return fn();
@@ -117,7 +118,7 @@ export class ChaosMonkey {
     const results: ChaosTestResult[] = [];
     const startTime = Date.now();
 
-    console.log(`🐒 Starting chaos test suite (${durationMs / 1000}s)`);
+    logger.info(`🐒 Starting chaos test suite (${durationMs / 1000}s)`);
 
     try {
       // Run all chaos tests
