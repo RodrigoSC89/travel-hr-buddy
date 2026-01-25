@@ -1,4 +1,16 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+/**
+ * SGSO Audit Service - Refactored
+ * Removed @ts-ignore suppressions, using proper Supabase types
+ */
+
+// Type aliases from Supabase schema
+type SGSOAuditRow = Database['public']['Tables']['sgso_audits']['Row'];
+type SGSOAuditInsert = Database['public']['Tables']['sgso_audits']['Insert'];
+type SGSOAuditItemRow = Database['public']['Tables']['sgso_audit_items']['Row'];
+type SGSOAuditItemInsert = Database['public']['Tables']['sgso_audit_items']['Insert'];
 
 /**
  * SGSO Audit Item representing a single requirement in an audit
@@ -22,16 +34,17 @@ export type SGSOAudit = {
 };
 
 /**
- * DB record type for audit items
+ * Maps a database audit item row to the AuditItem type
  */
-type AuditItemDBRecord = {
-  id: string;
-  requirement_number: number;
-  requirement_title: string;
-  compliance_status: string;
-  evidence: string | null;
-  comment: string | null;
-};
+function mapAuditItem(item: SGSOAuditItemRow): AuditItem {
+  return {
+    requirement_number: item.requirement_number,
+    requirement_title: item.requirement_title,
+    compliance_status: item.compliance_status as AuditItem['compliance_status'],
+    evidence: item.evidence ?? '',
+    comment: item.comment ?? '',
+  };
+}
 
 /**
  * Submit a new SGSO audit with items
@@ -41,13 +54,15 @@ export async function submitSGSOAudit(
   auditorId: string,
   items: AuditItem[]
 ): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: audit, error: auditError } = await (supabase
-    .from("sgso_audits") as any)
-    .insert({
-      vessel_id: vesselId,
-      auditor_id: auditorId
-    })
+  const auditInsert: SGSOAuditInsert = {
+    vessel_id: vesselId,
+    auditor_id: auditorId,
+    audit_date: new Date().toISOString(),
+  };
+
+  const { data: audit, error: auditError } = await supabase
+    .from("sgso_audits")
+    .insert(auditInsert)
     .select()
     .single();
 
@@ -55,14 +70,17 @@ export async function submitSGSOAudit(
     throw new Error(`Erro ao criar auditoria: ${auditError.message}`);
   }
 
-  const itemsPayload = items.map(item => ({
+  const itemsPayload: SGSOAuditItemInsert[] = items.map(item => ({
     audit_id: audit.id,
-    ...item
+    requirement_number: item.requirement_number,
+    requirement_title: item.requirement_title,
+    compliance_status: item.compliance_status,
+    evidence: item.evidence,
+    comment: item.comment,
   }));
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: itemsError } = await (supabase
-    .from("sgso_audit_items") as any)
+  const { error: itemsError } = await supabase
+    .from("sgso_audit_items")
     .insert(itemsPayload);
 
   if (itemsError) {
@@ -98,17 +116,11 @@ export async function loadSGSOAudit(vesselId: string): Promise<SGSOAudit[]> {
     throw new Error(`Erro ao carregar auditorias: ${error.message}`);
   }
 
-  // Map DB records to typed SGSOAudit with proper type assertions
   return (audits || []).map(audit => ({
     id: audit.id,
     audit_date: audit.audit_date,
     auditor_id: audit.auditor_id,
-    sgso_audit_items: (audit.sgso_audit_items as unknown as AuditItemDBRecord[] || []).map(item => ({
-      requirement_number: item.requirement_number,
-      requirement_title: item.requirement_title,
-      compliance_status: item.compliance_status as AuditItem['compliance_status'],
-      evidence: item.evidence || '',
-      comment: item.comment || '',
-    })),
+    sgso_audit_items: ((audit.sgso_audit_items as unknown as SGSOAuditItemRow[]) || [])
+      .map(mapAuditItem),
   }));
 }

@@ -1,9 +1,10 @@
 /**
  * Hook for Compliance as Code Engine
  * Automated compliance checking with MLC 2006, STCW, LGPD, ISM rules
+ * Refactored: useMemo for stats calculation, cleaner data mapping
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { complianceEngine, MARITIME_COMPLIANCE_RULES } from "@/lib/compliance-as-code/compliance-engine";
@@ -30,6 +31,45 @@ export interface ComplianceStats {
   complianceRate: number;
 }
 
+/**
+ * Maps database row to ComplianceViolation type
+ */
+function mapViolationRow(row: Record<string, unknown>): ComplianceViolation {
+  return {
+    id: String(row.id ?? ""),
+    rule_id: String(row.rule_id ?? ""),
+    entity_type: String(row.entity_type ?? ""),
+    entity_id: String(row.entity_id ?? ""),
+    severity: String(row.severity ?? "low"),
+    status: String(row.status ?? "open"),
+    detected_at: String(row.detected_at ?? new Date().toISOString()),
+    resolved_at: row.resolved_at ? String(row.resolved_at) : undefined,
+    resolution_notes: row.resolution_notes ? String(row.resolution_notes) : undefined,
+  };
+}
+
+/**
+ * Calculates compliance statistics from violations
+ */
+function calculateStats(
+  violations: ComplianceViolation[],
+  activeViolations: ComplianceViolation[]
+): ComplianceStats {
+  const rules = MARITIME_COMPLIANCE_RULES;
+  
+  return {
+    totalRules: rules.length,
+    activeRules: rules.filter(r => r.is_active).length,
+    criticalViolations: activeViolations.filter(v => v.severity === "critical").length,
+    highViolations: activeViolations.filter(v => v.severity === "high").length,
+    mediumViolations: activeViolations.filter(v => v.severity === "medium").length,
+    lowViolations: activeViolations.filter(v => v.severity === "low").length,
+    complianceRate: violations.length > 0
+      ? Math.round((1 - activeViolations.length / Math.max(violations.length, 1)) * 100)
+      : 100,
+  };
+}
+
 export function useComplianceEngine() {
   const queryClient = useQueryClient();
   const [isAuditing, setIsAuditing] = useState(false);
@@ -46,37 +86,21 @@ export function useComplianceEngine() {
 
       if (error) throw error;
       
-      return (data || []).map(row => ({
-        id: row.id,
-        rule_id: row.rule_id,
-        entity_type: row.entity_type,
-        entity_id: row.entity_id,
-        severity: row.severity,
-        status: row.status,
-        detected_at: row.detected_at || new Date().toISOString(),
-        resolved_at: row.resolved_at || undefined,
-        resolution_notes: row.resolution_notes || undefined
-      })) as ComplianceViolation[];
-    }
+      return (data || []).map(mapViolationRow);
+    },
   });
 
-  // Get active (unresolved) violations
-  const activeViolations = violations.filter(v => v.status === "open" || v.status === "in_progress");
+  // Memoized active violations
+  const activeViolations = useMemo(
+    () => violations.filter(v => v.status === "open" || v.status === "in_progress"),
+    [violations]
+  );
 
-  // Use the predefined rules from the compliance engine
-  const rules = MARITIME_COMPLIANCE_RULES;
-  
-  const stats: ComplianceStats = {
-    totalRules: rules.length,
-    activeRules: rules.filter(r => r.is_active).length,
-    criticalViolations: activeViolations.filter(v => v.severity === "critical").length,
-    highViolations: activeViolations.filter(v => v.severity === "high").length,
-    mediumViolations: activeViolations.filter(v => v.severity === "medium").length,
-    lowViolations: activeViolations.filter(v => v.severity === "low").length,
-    complianceRate: violations.length > 0 
-      ? Math.round((1 - activeViolations.length / Math.max(violations.length, 1)) * 100)
-      : 100
-  };
+  // Memoized stats - recalculated only when violations change
+  const stats = useMemo(
+    () => calculateStats(violations, activeViolations),
+    [violations, activeViolations]
+  );
 
   // Run full audit
   const runAudit = useCallback(async (organizationId: string) => {

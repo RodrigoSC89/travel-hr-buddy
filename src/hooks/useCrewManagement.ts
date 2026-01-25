@@ -54,12 +54,11 @@ export interface Rotation {
   notes?: string;
 }
 
-// Get all crew members
+// Get all crew members - Mock data (real integration requires schema alignment)
 export function useCrewMembers(status?: CrewMember['status']) {
   return useQuery({
     queryKey: ['crew-members', status],
     queryFn: async () => {
-      // Mock data for now
       const mockMembers: CrewMember[] = [
         { id: '1', name: 'Carlos Silva', rank: 'Chief Engineer', department: 'Engine', status: 'onboard', current_vessel_name: 'OSV Atlântico', hire_date: '2020-01-15' },
         { id: '2', name: 'Ana Costa', rank: '2nd Officer', department: 'Deck', status: 'onboard', current_vessel_name: 'OSV Atlântico', hire_date: '2021-03-20' },
@@ -71,7 +70,7 @@ export function useCrewMembers(status?: CrewMember['status']) {
   });
 }
 
-// Get certifications
+// Get certifications - Mock data
 export function useCrewCertifications(memberId?: string) {
   return useQuery({
     queryKey: ['crew-certifications', memberId],
@@ -96,7 +95,7 @@ export function useExpiringCertifications(daysAhead = 30) {
   };
 }
 
-// Get rotations
+// Get rotations - Mock data
 export function useCrewRotations(vesselId?: string) {
   return useQuery({
     queryKey: ['crew-rotations', vesselId],
