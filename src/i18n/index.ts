@@ -11,23 +11,27 @@ import en from './locales/en.json';
 import pt from './locales/pt.json';
 import es from './locales/es.json';
 import zh from './locales/zh.json';
+import fr from './locales/fr.json';
 
 const resources = {
   en: { translation: en },
   pt: { translation: pt },
   es: { translation: es },
-  zh: { translation: zh }
+  zh: { translation: zh },
+  fr: { translation: fr }
 };
 
 // Get saved language or detect from browser
+const SUPPORTED_LANGUAGES = ['en', 'pt', 'es', 'zh', 'fr'];
+
 const getDefaultLanguage = (): string => {
   const saved = localStorage.getItem('nautilus_language');
-  if (saved && ['en', 'pt', 'es', 'zh'].includes(saved)) {
+  if (saved && SUPPORTED_LANGUAGES.includes(saved)) {
     return saved;
   }
   
   const browserLang = navigator.language.split('-')[0];
-  if (['en', 'pt', 'es', 'zh'].includes(browserLang)) {
+  if (SUPPORTED_LANGUAGES.includes(browserLang)) {
     return browserLang;
   }
   
