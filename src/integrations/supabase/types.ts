@@ -15182,6 +15182,130 @@ export type Database = {
           },
         ]
       }
+      human_factors_assessments: {
+        Row: {
+          ai_analysis: Json | null
+          assessed_by: string | null
+          assessment_date: string | null
+          confidence_score: number | null
+          created_at: string | null
+          crew_member_id: string | null
+          days_on_duty: number | null
+          empathy_score: number | null
+          fatigue_level: string | null
+          hours_rest_24h: number | null
+          hours_worked_24h: number | null
+          id: string
+          motivation_score: number | null
+          notes: string | null
+          organization_id: string | null
+          organizational_influences: Json | null
+          overall_eq_score: number | null
+          preconditions: Json | null
+          recommendations: Json | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_factors: Json | null
+          self_awareness_score: number | null
+          self_regulation_score: number | null
+          social_skills_score: number | null
+          status: string | null
+          stress_level: string | null
+          unsafe_acts: Json | null
+          unsafe_supervision: Json | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          assessed_by?: string | null
+          assessment_date?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          days_on_duty?: number | null
+          empathy_score?: number | null
+          fatigue_level?: string | null
+          hours_rest_24h?: number | null
+          hours_worked_24h?: number | null
+          id?: string
+          motivation_score?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          organizational_influences?: Json | null
+          overall_eq_score?: number | null
+          preconditions?: Json | null
+          recommendations?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_factors?: Json | null
+          self_awareness_score?: number | null
+          self_regulation_score?: number | null
+          social_skills_score?: number | null
+          status?: string | null
+          stress_level?: string | null
+          unsafe_acts?: Json | null
+          unsafe_supervision?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          assessed_by?: string | null
+          assessment_date?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          days_on_duty?: number | null
+          empathy_score?: number | null
+          fatigue_level?: string | null
+          hours_rest_24h?: number | null
+          hours_worked_24h?: number | null
+          id?: string
+          motivation_score?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          organizational_influences?: Json | null
+          overall_eq_score?: number | null
+          preconditions?: Json | null
+          recommendations?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_factors?: Json | null
+          self_awareness_score?: number | null
+          self_regulation_score?: number | null
+          social_skills_score?: number | null
+          status?: string | null
+          stress_level?: string | null
+          unsafe_acts?: Json | null
+          unsafe_supervision?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "human_factors_assessments_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "human_factors_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "human_factors_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       human_factors_incidents: {
         Row: {
           ai_analysis: Json | null
