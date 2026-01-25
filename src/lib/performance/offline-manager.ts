@@ -3,6 +3,8 @@
  * Otimiza experiência em conexões lentas ou instáveis
  */
 
+import { logger } from "@/lib/utils/production-logger";
+
 interface CacheConfig {
   maxAge: number; // em segundos
   strategy: "cache-first" | "network-first" | "cache-only";
@@ -89,7 +91,7 @@ class OfflineManager {
       const data = Array.from(this.storage.entries());
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn("Failed to save cache to localStorage:", error);
+      logger.warn("Failed to save cache to localStorage", { error });
     }
   }
 
@@ -107,7 +109,7 @@ class OfflineManager {
         this.cleanExpiredEntries();
       }
     } catch (error) {
-      console.warn("Failed to load cache from localStorage:", error);
+      logger.warn("Failed to load cache from localStorage", { error });
     }
   }
 
@@ -188,7 +190,7 @@ export async function cachedFetch<T>(
     // Em caso de erro de rede, tenta cache
     const cached = offlineManager.get<T>(cacheKey);
     if (cached) {
-      console.warn("Network failed, using cached data:", url);
+      logger.warn("Network failed, using cached data", { url });
       return cached;
     }
     throw error;
