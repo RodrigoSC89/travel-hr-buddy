@@ -1,17 +1,18 @@
 /**
  * SGSO Maturity Curve - PDCA Cycle Tracking
  * Visual maturity assessment aligned with ANP guidelines
+ * REFACTORED: Uses useSGSOMaturityData hook for real data
  */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   TrendingUp, Target, CheckCircle2, RotateCcw,
-  ArrowRight, Award, AlertCircle
+  ArrowRight, Award, AlertCircle, Loader2
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useSGSOMaturityData } from "@/hooks/useSGSOMaturityData";
 
 // Maturity levels
 const MATURITY_LEVELS = [
@@ -30,50 +31,8 @@ const PDCA_PHASES = [
   { id: "act", name: "Act (Agir)", icon: RotateCcw, color: "text-purple-500", bgColor: "bg-purple-500/10" },
 ];
 
-interface MaturityData {
-  practiceId: string;
-  practiceName: string;
-  currentLevel: number;
-  targetLevel: number;
-  pdcaPhase: string;
-  trend: "up" | "down" | "stable";
-  lastAuditScore: number;
-}
-
 export const SGSOMaturityCurve: React.FC = () => {
-  const [maturityData, setMaturityData] = useState<MaturityData[]>([]);
-  const [overallMaturity, setOverallMaturity] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadMaturityData();
-  }, []);
-
-  const loadMaturityData = async () => {
-    // Simulated data - in production, fetch from sgso_audits
-    const mockData: MaturityData[] = [
-      { practiceId: "PG-01", practiceName: "Liderança e Comprometimento", currentLevel: 4, targetLevel: 5, pdcaPhase: "check", trend: "up", lastAuditScore: 85 },
-      { practiceId: "PG-02", practiceName: "Política de SGSO", currentLevel: 5, targetLevel: 5, pdcaPhase: "act", trend: "stable", lastAuditScore: 95 },
-      { practiceId: "PG-03", practiceName: "Objetivos e Metas", currentLevel: 3, targetLevel: 4, pdcaPhase: "do", trend: "up", lastAuditScore: 70 },
-      { practiceId: "PG-04", practiceName: "Organização e Responsabilidades", currentLevel: 4, targetLevel: 5, pdcaPhase: "check", trend: "stable", lastAuditScore: 80 },
-      { practiceId: "PG-05", practiceName: "Qualificação e Treinamento", currentLevel: 3, targetLevel: 4, pdcaPhase: "plan", trend: "up", lastAuditScore: 65 },
-      { practiceId: "PG-06", practiceName: "Comunicação", currentLevel: 4, targetLevel: 4, pdcaPhase: "act", trend: "stable", lastAuditScore: 82 },
-      { practiceId: "PG-07", practiceName: "Documentação", currentLevel: 4, targetLevel: 5, pdcaPhase: "do", trend: "up", lastAuditScore: 78 },
-      { practiceId: "PG-08", practiceName: "Gestão de Riscos", currentLevel: 3, targetLevel: 5, pdcaPhase: "plan", trend: "up", lastAuditScore: 60 },
-      { practiceId: "PG-09", practiceName: "Integridade Mecânica", currentLevel: 4, targetLevel: 5, pdcaPhase: "check", trend: "stable", lastAuditScore: 85 },
-      { practiceId: "PG-10", practiceName: "Segurança de Processo", currentLevel: 4, targetLevel: 5, pdcaPhase: "do", trend: "up", lastAuditScore: 88 },
-      { practiceId: "PG-11", practiceName: "Gestão de Mudanças", currentLevel: 3, targetLevel: 4, pdcaPhase: "plan", trend: "up", lastAuditScore: 62 },
-      { practiceId: "PG-12", practiceName: "Operações e Manutenção", currentLevel: 4, targetLevel: 5, pdcaPhase: "act", trend: "stable", lastAuditScore: 90 },
-      { practiceId: "PG-13", practiceName: "Gestão de Contratadas", currentLevel: 3, targetLevel: 4, pdcaPhase: "check", trend: "up", lastAuditScore: 68 },
-      { practiceId: "PG-14", practiceName: "Logística e Transporte", currentLevel: 4, targetLevel: 4, pdcaPhase: "act", trend: "stable", lastAuditScore: 84 },
-      { practiceId: "PG-15", practiceName: "Investigação de Incidentes", currentLevel: 4, targetLevel: 5, pdcaPhase: "do", trend: "up", lastAuditScore: 75 },
-      { practiceId: "PG-16", practiceName: "Auditorias e Verificações", currentLevel: 5, targetLevel: 5, pdcaPhase: "act", trend: "stable", lastAuditScore: 92 },
-    ];
-
-    setMaturityData(mockData);
-    setOverallMaturity(Math.round(mockData.reduce((acc, d) => acc + d.currentLevel, 0) / mockData.length * 20));
-    setIsLoading(false);
-  };
+  const { maturityData, stats, isLoading, error } = useSGSOMaturityData();
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -95,8 +54,24 @@ export const SGSOMaturityCurve: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-8">Carregando dados de maturidade...</div>;
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando dados de maturidade...</span>
+      </div>
+    );
   }
+
+  if (error) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        <AlertCircle className="h-8 w-8 mx-auto mb-2" />
+        <p>Erro ao carregar dados: {error.message}</p>
+      </div>
+    );
+  }
+
+  const overallMaturity = stats?.overallMaturity || 0;
 
   return (
     <div className="space-y-6">
@@ -134,7 +109,7 @@ export const SGSOMaturityCurve: React.FC = () => {
           <CardContent>
             <div className="grid grid-cols-2 gap-2">
               {PDCA_PHASES.map((phase) => {
-                const count = maturityData.filter(d => d.pdcaPhase === phase.id).length;
+                const count = stats?.practicesByPhase?.[phase.id as keyof typeof stats.practicesByPhase] || 0;
                 const IconComponent = phase.icon;
                 return (
                   <div key={phase.id} className={`p-3 rounded-lg ${phase.bgColor}`}>
@@ -151,87 +126,135 @@ export const SGSOMaturityCurve: React.FC = () => {
         </Card>
       </div>
 
-      {/* Maturity by Practice */}
+      {/* Practice Details Tabs */}
       <Card>
         <CardHeader>
-          <CardTitle>Maturidade por Prática de Gestão</CardTitle>
+          <CardTitle>Práticas de Gestão ANP</CardTitle>
           <CardDescription>
-            Nível atual, meta e fase PDCA de cada prática
+            Detalhamento das 16 práticas com níveis de maturidade e fase PDCA
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {maturityData.map((data) => {
-              const currentLevel = getMaturityLevel(data.currentLevel);
-              const targetLevel = getMaturityLevel(data.targetLevel);
-              const pdcaPhase = getPDCAPhase(data.pdcaPhase);
-              const PhaseIcon = pdcaPhase.icon;
-              
-              return (
-                <div key={data.practiceId} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="font-mono">{data.practiceId}</Badge>
-                      <span className="font-medium">{data.practiceName}</span>
-                      {getTrendIcon(data.trend)}
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      <div className={`px-3 py-1 rounded-full ${pdcaPhase.bgColor}`}>
-                        <div className="flex items-center gap-1">
-                          <PhaseIcon className={`h-3 w-3 ${pdcaPhase.color}`} />
-                          <span className={`text-xs font-medium ${pdcaPhase.color}`}>
-                            {pdcaPhase.name.split(" ")[0]}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${currentLevel.color}`} />
-                        <span className="text-sm">Nível {data.currentLevel}</span>
-                        <ArrowRight className="h-3 w-3 text-muted-foreground" />
-                        <div className={`w-3 h-3 rounded-full ${targetLevel.color} opacity-50`} />
-                        <span className="text-sm text-muted-foreground">Meta {data.targetLevel}</span>
-                      </div>
-                      
-                      <Badge variant={data.lastAuditScore >= 80 ? "default" : data.lastAuditScore >= 60 ? "secondary" : "destructive"}>
-                        {data.lastAuditScore}%
+          <Tabs defaultValue="all" className="w-full">
+            <TabsList className="mb-4">
+              <TabsTrigger value="all">Todas</TabsTrigger>
+              {PDCA_PHASES.map(phase => (
+                <TabsTrigger key={phase.id} value={phase.id}>
+                  {phase.name.split(" ")[0]}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="all" className="space-y-2">
+              {maturityData.map(practice => {
+                const maturityLevel = getMaturityLevel(practice.currentLevel);
+                const pdcaPhase = getPDCAPhase(practice.pdcaPhase);
+                const gap = practice.targetLevel - practice.currentLevel;
+                
+                return (
+                  <div 
+                    key={practice.practiceId}
+                    className="flex items-center gap-4 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="w-16 text-center">
+                      <Badge variant="outline" className="font-mono">
+                        {practice.practiceId}
                       </Badge>
                     </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">{practice.practiceName}</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className={`w-2 h-2 rounded-full ${maturityLevel.color}`} />
+                        <span className="text-xs text-muted-foreground">
+                          Nível {practice.currentLevel} - {maturityLevel.name}
+                        </span>
+                        {gap > 0 && (
+                          <Badge variant="secondary" className="text-xs">
+                            Gap: {gap}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className={`px-2 py-1 rounded text-xs ${pdcaPhase.bgColor} ${pdcaPhase.color}`}>
+                        {pdcaPhase.name.split(" ")[0]}
+                      </div>
+                      <div className="text-sm font-medium w-12 text-right">
+                        {practice.lastAuditScore}%
+                      </div>
+                      {getTrendIcon(practice.trend)}
+                    </div>
                   </div>
-                  
-                  <div className="mt-2">
-                    <Progress 
-                      value={(data.currentLevel / 5) * 100} 
-                      className="h-2"
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </TabsContent>
+
+            {PDCA_PHASES.map(phase => (
+              <TabsContent key={phase.id} value={phase.id} className="space-y-2">
+                {maturityData
+                  .filter(p => p.pdcaPhase === phase.id)
+                  .map(practice => {
+                    const maturityLevel = getMaturityLevel(practice.currentLevel);
+                    
+                    return (
+                      <div 
+                        key={practice.practiceId}
+                        className="flex items-center gap-4 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                      >
+                        <Badge variant="outline" className="font-mono w-16 justify-center">
+                          {practice.practiceId}
+                        </Badge>
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">{practice.practiceName}</div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className={`w-2 h-2 rounded-full ${maturityLevel.color}`} />
+                            <span className="text-xs text-muted-foreground">
+                              {maturityLevel.name}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium">{practice.lastAuditScore}%</div>
+                        {getTrendIcon(practice.trend)}
+                      </div>
+                    );
+                  })}
+              </TabsContent>
+            ))}
+          </Tabs>
         </CardContent>
       </Card>
 
-      {/* Maturity Levels Legend */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Níveis de Maturidade</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            {MATURITY_LEVELS.map((level) => (
-              <div key={level.level} className="flex items-center gap-2">
-                <div className={`w-4 h-4 rounded-full ${level.color}`} />
-                <div>
-                  <span className="font-medium">Nível {level.level}: {level.name}</span>
-                  <p className="text-xs text-muted-foreground">{level.description}</p>
-                </div>
+      {/* Stats Summary */}
+      {stats && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="pt-4">
+              <div className="text-2xl font-bold">{stats.totalAudits}</div>
+              <div className="text-sm text-muted-foreground">Auditorias Realizadas</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="text-2xl font-bold">{stats.avgComplianceScore}%</div>
+              <div className="text-sm text-muted-foreground">Score Médio</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="text-2xl font-bold text-red-500">{stats.nonConformitiesCount}</div>
+              <div className="text-sm text-muted-foreground">Não Conformidades</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4">
+              <div className="text-2xl font-bold text-green-500">
+                {maturityData.filter(p => p.currentLevel >= p.targetLevel).length}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="text-sm text-muted-foreground">Metas Atingidas</div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
