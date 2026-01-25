@@ -4,6 +4,7 @@
  */
 
 import type { TelemetryEvent } from "./events";
+import { logger } from "@/lib/logger";
 
 const QUEUE_KEY = "telemetry_offline_queue";
 const MAX_QUEUE_SIZE = 100;
@@ -28,8 +29,8 @@ export class OfflineQueue {
       }
 
       localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-    } catch (error) {
-      console.warn("Failed to enqueue telemetry event:", error);
+    } catch {
+      // Silent fail - telemetry is non-critical
     }
   }
 
@@ -40,8 +41,7 @@ export class OfflineQueue {
     try {
       const queueJson = localStorage.getItem(QUEUE_KEY);
       return queueJson ? JSON.parse(queueJson) : [];
-    } catch (error) {
-      console.warn("Failed to get offline queue:", error);
+    } catch {
       return [];
     }
   }
@@ -52,8 +52,8 @@ export class OfflineQueue {
   static clearQueue(): void {
     try {
       localStorage.removeItem(QUEUE_KEY);
-    } catch (error) {
-      console.warn("Failed to clear offline queue:", error);
+    } catch {
+      // Silent fail
     }
   }
 
@@ -83,11 +83,14 @@ export class OfflineQueue {
         await Promise.all(
           batch.map((event) => sendFn(event))
         );
-      } catch (error) {
-        console.error("Failed to process queue batch:", error);
+      } catch {
         // Keep remaining events in queue
         const remaining = queue.slice(i);
-        localStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+        try {
+          localStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+        } catch {
+          // Silent fail
+        }
         return;
       }
     }
