@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface AnalyticsEvent {
   id: string;
@@ -103,7 +104,7 @@ export function useRealtimeAnalytics() {
 
       } catch (err: any) {
         setError(err.message);
-        console.error("Error setting up realtime subscriptions:", err);
+        logger.error("Error setting up realtime subscriptions", err);
       }
     };
 
@@ -133,7 +134,7 @@ export function useRealtimeAnalytics() {
       setEvents(data as AnalyticsEvent[]);
     } catch (err: any) {
       setError(err.message);
-      console.error("Error loading events:", err);
+      logger.error("Error loading events", err);
     }
   }, []);
 
@@ -151,7 +152,7 @@ export function useRealtimeAnalytics() {
       setMetrics(data as AnalyticsMetric[]);
     } catch (err: any) {
       setError(err.message);
-      console.error("Error loading metrics:", err);
+      logger.error("Error loading metrics", err);
     }
   }, []);
 
