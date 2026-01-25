@@ -61,16 +61,40 @@ serve(async (req) => {
     // Fetch downtime entry if ID provided
     let entry: DowntimeEntry;
     if (downtimeId) {
-      const { data, error } = await supabase
-        .from('downtime_events')
+      // Try new table first, fallback to legacy
+      let { data, error } = await supabase
+        .from('vessel_downtimes')
         .select('*')
         .eq('id', downtimeId)
         .single();
       
       if (error || !data) {
-        throw new Error('Downtime entry not found');
+        // Fallback to legacy table
+        const legacy = await supabase
+          .from('downtime_events')
+          .select('*')
+          .eq('id', downtimeId)
+          .single();
+        
+        if (legacy.error || !legacy.data) {
+          throw new Error('Downtime entry not found');
+        }
+        data = legacy.data;
       }
-      entry = data;
+      
+      // Map to expected interface
+      entry = {
+        id: data.id,
+        vessel_id: data.vessel_id,
+        start_time: data.start_time,
+        end_time: data.end_time,
+        duration_hours: data.duration_hours,
+        reason: data.reported_reason || data.reason,
+        reason_category: data.category || data.reason_category,
+        impact_level: data.impact_level || 'medium',
+        evidence_urls: data.evidence_urls,
+        reported_by: data.reported_by
+      };
     } else {
       entry = downtime_entry;
     }
@@ -333,20 +357,46 @@ EXECUTE ANÁLISE COMPLETA E FORNEÇA VALIDAÇÃO.`;
 
     // Update database if downtimeId provided
     if (downtimeId) {
-      await supabase
-        .from('downtime_events')
+      // Try new table first
+      const { error: newTableError } = await supabase
+        .from('vessel_downtimes')
         .update({
           ai_validation: validation,
-          justification_status: validation.is_valid ? 'approved' : 'requires_review',
-          validated_at: new Date().toISOString()
+          validation_status: validation.is_valid ? 'approved' : 'requires_review',
+          validated_at: new Date().toISOString(),
+          broa_evidence: broaEvidence,
+          broa_generated_at: broaEvidence ? new Date().toISOString() : null
         })
         .eq('id', downtimeId);
 
+      // Fallback to legacy table if new table fails
+      if (newTableError) {
+        await supabase
+          .from('downtime_events')
+          .update({
+            ai_validation: validation,
+            justification_status: validation.is_valid ? 'approved' : 'requires_review',
+            validated_at: new Date().toISOString()
+          })
+          .eq('id', downtimeId);
+      }
+
       // Log to broa_evidence_logs if compliant
       if (broaEvidence) {
+        // Get organization_id from the entry
+        const { data: downtimeData } = await supabase
+          .from('vessel_downtimes')
+          .select('organization_id')
+          .eq('id', downtimeId)
+          .single();
+
         await supabase.from('broa_evidence_logs').insert({
           downtime_id: downtimeId,
+          organization_id: downtimeData?.organization_id,
           evidence_data: broaEvidence,
+          evidence_type: 'downtime_justification',
+          ai_model: 'gemini-3-flash-preview',
+          ai_confidence: validation.confidence,
           created_at: new Date().toISOString()
         }).catch((err: Error) => console.log("BROA log insert skipped:", err.message));
       }
