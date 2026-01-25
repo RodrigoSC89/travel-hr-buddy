@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AlertTriangle, X, Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 interface ErrorInfo {
   module: string;
@@ -31,7 +32,7 @@ export const ErrorDebugBanner: React.FC = () => {
           }
         }
       } catch (err) {
-        console.warn('Failed to read error debug info', err);
+        logger.warn('Failed to read error debug info', { error: err });
       }
     };
 

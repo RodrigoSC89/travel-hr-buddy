@@ -6,6 +6,7 @@ import { Wifi, WifiOff, RefreshCw, Check, AlertCircle } from "lucide-react";
 import { offlineCache } from "@/lib/offline-cache";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 /**
  * PATCH 634.1: Sync Status Component with Real Supabase Integration
@@ -126,13 +127,13 @@ export function SyncStatus() {
           break;
 
         default:
-          console.warn("Unknown action type:", actionType);
+          logger.warn("Unknown action type", { actionType });
           return true; // Mark as processed
       }
 
       return true;
     } catch (error) {
-      console.error("Action processing error:", error);
+      logger.error("Action processing error", error);
       return false;
     }
   };

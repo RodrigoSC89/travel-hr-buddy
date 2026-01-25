@@ -3,6 +3,8 @@
  * Handles critical IoT sensor alerts via browser notifications
  */
 
+import { logger } from '@/lib/logger';
+
 export interface NotificationPreferences {
   enabled: boolean;
   criticalAlerts: boolean;
@@ -31,7 +33,7 @@ export function saveNotificationPreferences(prefs: NotificationPreferences): voi
 
 export async function requestNotificationPermission(): Promise<boolean> {
   if (!("Notification" in window)) {
-    console.warn("Browser does not support notifications");
+    logger.warn("Browser does not support notifications");
     return false;
   }
 

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface DueDiligenceReport {
   id: string;
@@ -105,7 +106,7 @@ export function useDueDiligenceReports(filters?: {
         if (filters?.subject_type) result = result.filter(r => r.subject_type === filters.subject_type);
         return result;
       } catch {
-        console.warn('Using mock due diligence data');
+        logger.warn('Using mock due diligence data');
         return mockReports;
       }
     },

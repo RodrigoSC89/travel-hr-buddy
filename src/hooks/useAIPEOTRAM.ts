@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { usePeotramData } from './usePeotramData';
+import { logger } from '@/lib/logger';
 
 interface EvidenceRequest {
   elementId: number;
@@ -51,7 +52,7 @@ export function useAIPEOTRAM(vesselId?: string) {
           .limit(100);
 
         if (error) {
-        console.warn('Error fetching evidences, using local cache');
+          logger.warn('Error fetching evidences, using local cache');
           return [];
         }
         return data || [];

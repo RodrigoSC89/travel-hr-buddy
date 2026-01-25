@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -77,7 +78,7 @@ export default function AuditoriaTecnica() {
         if (results[3].status === "fulfilled") alertsCount = (results[3].value as any).count || 0;
         if (results[4].status === "fulfilled") sensorData = (results[4].value as any).count || 0;
       } catch (e) {
-        console.warn("Some audit queries failed, using defaults");
+        logger.warn("Some audit queries failed, using defaults");
       }
 
       const auditSections: AuditSection[] = [

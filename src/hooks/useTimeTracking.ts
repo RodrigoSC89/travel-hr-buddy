@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Json } from '@/integrations/supabase/types';
+import { logger } from '@/lib/logger';
 
 export type ClockType = 'entry' | 'lunch_start' | 'lunch_end' | 'exit';
 
@@ -110,7 +111,7 @@ export function useTimeTracking() {
           resolve(data);
         },
         (error) => {
-          console.warn('Geolocation error:', error);
+          logger.warn('Geolocation error', { error });
           toast({
             title: 'Localização não disponível',
             description: 'Verifique se permitiu acesso à localização.',

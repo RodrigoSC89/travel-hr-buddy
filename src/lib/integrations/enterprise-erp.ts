@@ -3,6 +3,8 @@
  * SAP, Oracle, and other ERP system connectors
  */
 
+import { logger } from '@/lib/logger';
+
 export interface ERPConnection {
   id: string;
   type: 'sap' | 'oracle' | 'microsoft' | 'custom';
@@ -209,7 +211,7 @@ export async function handleERPWebhook(
       await handleOracleWebhook(event, payload);
       break;
     default:
-      console.warn(`Unknown ERP source: ${source}`);
+      logger.warn(`Unknown ERP source: ${source}`);
   }
 }
 
