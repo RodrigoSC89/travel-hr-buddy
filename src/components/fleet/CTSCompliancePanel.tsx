@@ -69,29 +69,57 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
     if (!vesselId) return;
     setLoading(true);
     try {
-      // Load crew data - CTS will use mock for now
+      // Load crew data
       const crewRes = await supabase
         .from('crew_members')
-        .select('id, full_name, rank, category, status, vessel_id')
+        .select('id, full_name, rank, status, vessel_id')
         .eq('vessel_id', vesselId)
         .eq('status', 'onboard');
 
-      // Mock CTS record since table may not exist
-      const mockCts = {
+      // Load real CTS record from database
+      const ctsRes = await supabase
+        .from('cts_records')
+        .select('*')
+        .eq('vessel_id', vesselId)
+        .eq('status', 'valid')
+        .order('expiry_date', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      // Use real data or fallback to mock
+      const ctsData = ctsRes.data ? {
+        id: ctsRes.data.id,
+        vessel_id: ctsRes.data.vessel_id,
+        cts_number: ctsRes.data.cts_number,
+        approved_positions: (ctsRes.data.required_positions as Record<string, number>) || { captain: 1, chief_engineer: 1, officer: 3, crew: 8 },
+        expiry_date: ctsRes.data.expiry_date,
+        flag_state: ctsRes.data.flag_state,
+        classification_society: ctsRes.data.classification_society
+      } : {
         id: '1',
         vessel_id: vesselId,
         cts_number: 'CTS-2024-001',
         approved_positions: { captain: 1, chief_engineer: 1, officer: 3, crew: 8 },
-        expiry_date: '2025-12-31'
+        expiry_date: '2025-12-31',
+        flag_state: 'Brazil',
+        classification_society: 'DNV'
       };
       
-      setCtsRecord(mockCts);
-      if (crewRes.data) setCrew(crewRes.data);
+      setCtsRecord(ctsData);
+      
+      // Transform crew data
+      const crewData = (crewRes.data || []).map(c => ({
+        ...c,
+        crew_certifications: []
+      }));
+      
+      setCrew(crewData);
 
-      // Run initial compliance check with mock CTS
-      runLocalComplianceCheck(mockCts, crewRes.data || []);
+      // Run compliance check
+      runLocalComplianceCheck(ctsData, crewData);
     } catch (error: unknown) {
       console.error('Error loading CTS data:', error);
+      toast.error('Erro ao carregar dados CTS');
     } finally {
       setLoading(false);
     }
