@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/utils/production-logger';
 import {
   initOfflineDB,
   detectConnectionQuality,
@@ -94,7 +95,7 @@ export function useOfflineSync(options: UseOfflineSyncOptions = {}) {
       setPendingCount(items.length);
     } catch (error) {
       // Silently handle - will retry on next sync
-      console.warn('Sync failed, will retry:', error);
+      logger.warn('Sync failed, will retry', { error });
     } finally {
       setIsSyncing(false);
     }

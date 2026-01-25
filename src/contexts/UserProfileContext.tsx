@@ -6,6 +6,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 
 export type UserRole = "admin" | "operator" | "auditor" | "manager" | "dpo" | "guest";
 
@@ -164,7 +165,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
           }));
         }
       } catch (error) {
-        console.error("Error loading profile:", error);
+        logger.error("Error loading profile", error);
         setRoleState("operator");
       } finally {
         setIsLoading(false);
