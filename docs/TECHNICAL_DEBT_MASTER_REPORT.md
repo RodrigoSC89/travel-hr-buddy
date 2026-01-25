@@ -147,12 +147,18 @@ Manter redirects por 6 meses para backward compatibility.
 
 ---
 
-## 9. ACCESSIBILITY ⚠️ A VERIFICAR
+## 9. ACCESSIBILITY ✅ IMPLEMENTADO
 
-### Recomendações
-- Verificar WCAG 2.1 AA compliance
-- Testar com screen readers
-- Garantir keyboard navigation
+### Infraestrutura Criada
+- ✅ `@axe-core/react` para dev testing
+- ✅ `eslint-plugin-jsx-a11y` com regras WCAG 2.1 AA
+- ✅ `FormField` component com labels e error handling
+- ✅ `IconButton` com aria-label obrigatório
+- ✅ `LiveRegion` para anúncios dinâmicos
+- ✅ `SkipLink` para navegação por teclado
+- ✅ `VisuallyHidden` para texto só para screen readers
+- ✅ `useFocusTrap` hook para modais
+- ✅ `useAnnounce` hook para anúncios programáticos
 
 ---
 
