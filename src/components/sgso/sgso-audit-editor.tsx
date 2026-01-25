@@ -59,6 +59,7 @@ export default function SGSOAuditEditor() {
       const { data: audit, error } = await supabase
         .from("safety_incidents")
         .insert({
+          title: `Auditoria SGSO - ${auditType}`,
           incident_type: "operational",
           severity,
           status: "investigating",
@@ -75,13 +76,19 @@ export default function SGSOAuditEditor() {
 
       // Create action plans for non-compliances
       const nonCompliances = getNonCompliances(auditResults);
+      const deadline = new Date();
+      deadline.setDate(deadline.getDate() + 30); // 30 dias para resolver
+      
       for (const nc of nonCompliances) {
         await supabase.from("sgso_action_plans").insert({
-          incident_id: audit.id,
-          action_description: `Resolver não conformidade: ${nc.criterion}`,
-          priority: "high",
+          code: `SGSO-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+          title: `NC: ${nc.criterion}`,
+          description: `Resolver não conformidade: ${nc.criterion}`,
+          deadline: deadline.toISOString(),
+          responsible: user?.id ?? "unassigned",
           status: "open",
-          assigned_to: user?.id,
+          audit_id: audit.id,
+          created_by: user?.id,
         });
       }
 
