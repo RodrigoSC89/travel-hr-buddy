@@ -6,7 +6,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { offlineCacheService as offlineCache } from "@/services/unified/offline-cache.service";
+import { localStorageCache as offlineCache } from "@/services/unified/offline-cache.service";
 import { logger } from "@/lib/logger";
 
 interface UseRealtimeSyncOptions<T> {
