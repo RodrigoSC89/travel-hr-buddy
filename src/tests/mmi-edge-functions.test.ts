@@ -134,9 +134,14 @@ describe("simulate-hours Edge Function", () => {
       const mediumDue = new Date(now);
       mediumDue.setDate(mediumDue.getDate() + 10);
       
-      expect(criticalDue.getDate()).toBe(now.getDate() + 2);
-      expect(highDue.getDate()).toBe(now.getDate() + 5);
-      expect(mediumDue.getDate()).toBe(now.getDate() + 10);
+      // Use getTime() diff to avoid month-boundary issues
+      const criticalDiff = Math.round((criticalDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      const highDiff = Math.round((highDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      const mediumDiff = Math.round((mediumDue.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      
+      expect(criticalDiff).toBe(2);
+      expect(highDiff).toBe(5);
+      expect(mediumDiff).toBe(10);
     });
   });
 
