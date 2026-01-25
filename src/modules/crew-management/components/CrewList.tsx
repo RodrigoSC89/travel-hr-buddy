@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,12 +58,12 @@ const statusStyles: Record<string, { label: string; className: string }> = {
   embarked: { label: "Embarcado", className: "bg-primary/10 text-primary border-primary/20" },
 };
 
-export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
+function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [positionFilter, setPositionFilter] = useState<string>("all");
 
-  const filteredCrew = crewMembers.filter(member => {
+  const filteredCrew = useMemo(() => crewMembers.filter(member => {
     const matchesSearch = 
       member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.position?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,15 +73,15 @@ export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: C
     const matchesPosition = positionFilter === "all" || member.position === positionFilter;
     
     return matchesSearch && matchesStatus && matchesPosition;
-  });
+  }), [crewMembers, searchTerm, statusFilter, positionFilter]);
 
-  const getPositionInfo = (position: string) => {
+  const getPositionInfo = useCallback((position: string) => {
     return positionLabels[position] || { label: position, badge: "" };
-  };
+  }, []);
 
-  const getStatusInfo = (status: string | null) => {
+  const getStatusInfo = useCallback((status: string | null) => {
     return statusStyles[status || "inactive"] || statusStyles.inactive;
-  };
+  }, []);
 
   return (
     <Card>
@@ -236,3 +236,6 @@ export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: C
     </Card>
   );
 }
+
+// Export memoized component for performance
+export const CrewList = memo(CrewListComponent);

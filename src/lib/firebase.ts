@@ -11,6 +11,7 @@ import {
   type Messaging,
   isSupported 
 } from "firebase/messaging";
+import { logger } from "@/lib/logger";
 
 // Firebase configuration - should be moved to environment variables in production
 const firebaseConfig: FirebaseOptions = {
@@ -36,14 +37,14 @@ export const initializeFirebase = async (): Promise<void> => {
   try {
     // Check if all required config is present
     if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
-      console.warn("Firebase configuration incomplete. Push notifications will not be available.");
+      logger.debug("Firebase configuration incomplete - push notifications unavailable");
       return;
     }
 
     // Check if messaging is supported
     const messagingSupported = await isSupported();
     if (!messagingSupported) {
-      console.warn("Firebase Messaging is not supported in this environment");
+      logger.debug("Firebase Messaging not supported in this environment");
       return;
     }
 
@@ -57,7 +58,7 @@ export const initializeFirebase = async (): Promise<void> => {
       messaging = getMessaging(app);
     }
   } catch (error) {
-    console.error("Error initializing Firebase:", error);
+    logger.error("Firebase initialization failed", { error: error instanceof Error ? error.message : String(error) });
   }
 };
 
@@ -76,16 +77,16 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     // Request permission
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      console.log("Notification permission not granted");
+      logger.info("Notification permission not granted by user");
       return null;
     }
 
     // Get FCM token
     const token = await getToken(messaging, { vapidKey: VAPID_KEY });
-    console.log("FCM Token obtained:", token);
+    logger.info("FCM Token obtained successfully");
     return token;
   } catch (error) {
-    console.error("Error getting FCM token:", error);
+    logger.error("Failed to get FCM token", { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 };
@@ -96,16 +97,16 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
 export const onForegroundMessage = (callback: (payload: any) => void): (() => void) | null => {
   try {
     if (!messaging) {
-      console.warn("Messaging not initialized");
+      logger.debug("Messaging not initialized for foreground listener");
       return null;
     }
 
     return onMessage(messaging, (payload) => {
-      console.log("Foreground message received:", payload);
+      logger.info("Foreground message received", { type: payload.notification?.title });
       callback(payload);
     });
   } catch (error) {
-    console.error("Error setting up message listener:", error);
+    logger.error("Error setting up message listener", { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 };
@@ -131,14 +132,14 @@ export const saveFCMTokenToSupabase = async (
       });
 
     if (error) {
-      console.error("Error saving FCM token to Supabase:", error);
+      logger.error("Error saving FCM token to Supabase", { error: error.message });
       return false;
     }
 
-    console.log("FCM token saved to Supabase successfully");
+    logger.info("FCM token saved to Supabase successfully");
     return true;
   } catch (error) {
-    console.error("Error in saveFCMTokenToSupabase:", error);
+    logger.error("saveFCMTokenToSupabase failed", { error: error instanceof Error ? error.message : String(error) });
     return false;
   }
 };

@@ -2,7 +2,7 @@
  * PATCH 628 - Voice Assistant (Experimental)
  * Voice command interface with Web Speech API and fallback
  */
-
+import { logger } from "@/lib/logger";
 export type VoiceCommand =
   | 'start_psc_inspection'
   | 'open_ism_panel'
@@ -65,7 +65,7 @@ export class VoiceRecognitionEngine {
    */
   private initializeRecognition(): void {
     if (!this.isBrowserSupported()) {
-      console.warn('Web Speech API not supported in this browser');
+      logger.debug("Web Speech API not supported in this browser");
       return;
     }
 
@@ -103,16 +103,16 @@ export class VoiceRecognitionEngine {
 
     this.recognition.onstart = () => {
       this.isListening = true;
-      console.log('Voice recognition started');
+      logger.info("Voice recognition started");
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
-      console.log('Voice recognition ended');
+      logger.info("Voice recognition ended");
     };
 
     this.recognition.onerror = (event: any) => {
-      console.error('Voice recognition error:', event.error);
+      logger.warn("Voice recognition error", { error: event.error });
       this.isListening = false;
     };
 
@@ -137,7 +137,7 @@ export class VoiceRecognitionEngine {
     };
 
     this.commandHistory.push(result);
-    console.log('Voice transcript:', transcript, 'Confidence:', confidence);
+    logger.debug("Voice transcript captured", { transcript, confidence });
   }
 
   /**
@@ -145,19 +145,19 @@ export class VoiceRecognitionEngine {
    */
   start(): void {
     if (!this.recognition) {
-      console.error('Speech recognition not available');
+      logger.warn("Speech recognition not available");
       return;
     }
 
     if (this.isListening) {
-      console.warn('Already listening');
+      logger.debug("Voice recognition already active");
       return;
     }
 
     try {
       this.recognition.start();
     } catch (error) {
-      console.error('Failed to start recognition:', error);
+      logger.error("Failed to start voice recognition", { error: error instanceof Error ? error.message : String(error) });
     }
   }
 

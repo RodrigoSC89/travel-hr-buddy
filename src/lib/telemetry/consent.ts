@@ -22,8 +22,7 @@ export class ConsentManager {
     try {
       const consent = localStorage.getItem(CONSENT_KEY);
       return consent === "true";
-    } catch (error) {
-      console.warn("Failed to check telemetry consent:", error);
+    } catch {
       return false;
     }
   }
@@ -36,8 +35,8 @@ export class ConsentManager {
       localStorage.setItem(CONSENT_KEY, "true");
       localStorage.setItem(CONSENT_TIMESTAMP_KEY, new Date().toISOString());
       localStorage.setItem("telemetry_consent_version", this.CONSENT_VERSION);
-    } catch (error) {
-      console.error("Failed to grant telemetry consent:", error);
+    } catch {
+      // Silent fail - consent is non-critical
     }
   }
 
@@ -48,8 +47,8 @@ export class ConsentManager {
     try {
       localStorage.setItem(CONSENT_KEY, "false");
       localStorage.setItem(CONSENT_TIMESTAMP_KEY, new Date().toISOString());
-    } catch (error) {
-      console.error("Failed to revoke telemetry consent:", error);
+    } catch {
+      // Silent fail
     }
   }
 
@@ -71,8 +70,7 @@ export class ConsentManager {
         timestamp,
         version,
       };
-    } catch (error) {
-      console.warn("Failed to get consent state:", error);
+    } catch {
       return null;
     }
   }
@@ -93,8 +91,8 @@ export class ConsentManager {
       localStorage.removeItem(CONSENT_KEY);
       localStorage.removeItem(CONSENT_TIMESTAMP_KEY);
       localStorage.removeItem("telemetry_consent_version");
-    } catch (error) {
-      console.error("Failed to clear consent data:", error);
+    } catch {
+      // Silent fail
     }
   }
 }

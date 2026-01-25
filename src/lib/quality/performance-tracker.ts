@@ -51,8 +51,8 @@ class PerformanceTracker {
           }
         });
         lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
-      } catch (e) {
-        console.warn("[PerformanceTracker] LCP observer not supported");
+      } catch {
+        // LCP observer not supported
       }
 
       // FID Observer
@@ -68,8 +68,8 @@ class PerformanceTracker {
           });
         });
         fidObserver.observe({ type: "first-input", buffered: true });
-      } catch (e) {
-        console.warn("[PerformanceTracker] FID observer not supported");
+      } catch {
+        // FID observer not supported
       }
 
       // CLS Observer
@@ -85,8 +85,8 @@ class PerformanceTracker {
           });
         });
         clsObserver.observe({ type: "layout-shift", buffered: true });
-      } catch (e) {
-        console.warn("[PerformanceTracker] CLS observer not supported");
+      } catch {
+        // CLS observer not supported
       }
     }
 

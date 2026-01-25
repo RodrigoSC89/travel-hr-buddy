@@ -1,5 +1,5 @@
 import React, { ComponentType } from "react";
-
+import { logger } from "@/lib/logger";
 /**
  * Safe Lazy Import – Prevents failures when loading dynamic modules
  * and displays a user-friendly fallback in case of error.
@@ -46,9 +46,7 @@ export const safeLazyImport = (
         throw error;
       }
       
-      console.warn(
-        `⚠️ Falha ao carregar ${name}. Tentando novamente... (${retries - retriesLeft + 1}/${retries})`
-      );
+      logger.debug(`Retry loading module ${name}`, { attempt: retries - retriesLeft + 1, total: retries });
       
       // Exponential backoff
       await new Promise((resolve) => setTimeout(resolve, interval));
@@ -67,7 +65,11 @@ export const safeLazyImport = (
 
       return await retryImport(importerWithTimeout as () => Promise<{ default: React.ComponentType<any> }>);
     } catch (err) {
-      console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
+      logger.error(`Module load failed: ${name}`, { 
+        error: err instanceof Error ? err.message : String(err),
+        retries,
+        timeout: timeoutMs
+      });
       
       // Save detailed error info for debugging
       const errorInfo = {
@@ -81,9 +83,8 @@ export const safeLazyImport = (
       
       try {
         localStorage.setItem('safeLazyImport:lastError', JSON.stringify(errorInfo));
-        console.warn('🔍 Debug info salvo em localStorage["safeLazyImport:lastError"]', errorInfo);
-      } catch (storageErr) {
-        console.warn('Não foi possível salvar debug info no localStorage', storageErr);
+      } catch {
+        // Silent fail - localStorage not critical
       }
       
       // Return a fallback component that displays an error message

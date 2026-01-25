@@ -94,8 +94,8 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
       }
 
       setSuggestions(data.suggestions || []);
-    } catch (error) {
-      console.warn("[ContextualAI] Failed to fetch suggestions:", error);
+    } catch {
+      // AI suggestions are non-critical - silent fail
     } finally {
       setIsLoading(false);
     }
@@ -114,13 +114,13 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
       });
 
       if (error) {
-        console.warn("[ContextualAI] Analysis failed:", error);
+        // Analysis failure is non-critical
         return;
       }
 
       setAnalysis(data.analysis || null);
-    } catch (error) {
-      console.warn("[ContextualAI] Failed to fetch analysis:", error);
+    } catch {
+      // AI analysis is non-critical - silent fail
     } finally {
       setIsLoading(false);
     }
