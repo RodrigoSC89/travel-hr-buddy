@@ -54,32 +54,103 @@ export interface Rotation {
   notes?: string;
 }
 
-// Get all crew members - Mock data (real integration requires schema alignment)
+// Get all crew members - Real Supabase integration
 export function useCrewMembers(status?: CrewMember['status']) {
   return useQuery({
     queryKey: ['crew-members', status],
     queryFn: async () => {
-      const mockMembers: CrewMember[] = [
-        { id: '1', name: 'Carlos Silva', rank: 'Chief Engineer', department: 'Engine', status: 'onboard', current_vessel_name: 'OSV Atlântico', hire_date: '2020-01-15' },
-        { id: '2', name: 'Ana Costa', rank: '2nd Officer', department: 'Deck', status: 'onboard', current_vessel_name: 'OSV Atlântico', hire_date: '2021-03-20' },
-        { id: '3', name: 'Pedro Santos', rank: 'Master', department: 'Deck', status: 'on_leave', hire_date: '2018-06-10' },
-      ];
-      return status ? mockMembers.filter(m => m.status === status) : mockMembers;
+      let query = supabase
+        .from('crew_members')
+        .select(`
+          id,
+          full_name,
+          rank,
+          position,
+          nationality,
+          passport_number,
+          status,
+          vessel_id,
+          contract_start,
+          contract_end,
+          email,
+          phone,
+          emergency_contact,
+          vessels!crew_members_vessel_id_fkey(name)
+        `)
+        .order('full_name');
+
+      if (status) {
+        query = query.eq('status', status);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return (data || []).map((row): CrewMember => ({
+        id: row.id,
+        name: row.full_name ?? '',
+        rank: row.rank ?? row.position ?? '',
+        department: row.position ?? 'Deck',
+        nationality: row.nationality ?? undefined,
+        passport_number: row.passport_number ?? undefined,
+        status: (row.status as CrewMember['status']) ?? 'available',
+        current_vessel_id: row.vessel_id ?? undefined,
+        current_vessel_name: (row.vessels as { name: string } | null)?.name ?? undefined,
+        hire_date: row.contract_start ?? '',
+        contract_end_date: row.contract_end ?? undefined,
+        email: row.email ?? undefined,
+        phone: row.phone ?? undefined,
+        emergency_contact: row.emergency_contact as CrewMember['emergency_contact'],
+      }));
     },
     staleTime: 60000,
   });
 }
 
-// Get certifications - Mock data
+// Get certifications - Real Supabase integration
 export function useCrewCertifications(memberId?: string) {
   return useQuery({
     queryKey: ['crew-certifications', memberId],
     queryFn: async () => {
-      const mockCerts: Certification[] = [
-        { id: '1', crew_member_id: '1', type: 'STCW', name: 'STCW Basic Safety', issuing_authority: 'DPC', issue_date: '2023-01-01', expiry_date: '2028-01-01', certificate_number: 'STCW-001', status: 'valid' },
-        { id: '2', crew_member_id: '1', type: 'Medical', name: 'Medical Certificate', issuing_authority: 'ANS', issue_date: '2024-01-01', expiry_date: '2025-02-15', certificate_number: 'MED-001', status: 'expiring_soon' },
-      ];
-      return memberId ? mockCerts.filter(c => c.crew_member_id === memberId) : mockCerts;
+      let query = supabase
+        .from('crew_certifications')
+        .select('*')
+        .order('expiry_date', { ascending: true });
+
+      if (memberId) {
+        query = query.eq('crew_member_id', memberId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      const now = new Date();
+      const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+      return (data || []).map((row): Certification => {
+        const expiryDateStr = row.expiry_date ?? '';
+        const expiryDate = new Date(expiryDateStr);
+        let certStatus: Certification['status'] = 'valid';
+        
+        if (expiryDate < now) {
+          certStatus = 'expired';
+        } else if (expiryDate < thirtyDaysFromNow) {
+          certStatus = 'expiring_soon';
+        }
+
+        return {
+          id: row.id,
+          crew_member_id: row.crew_member_id ?? '',
+          type: row.certification_type ?? '',
+          name: row.certification_name ?? '',
+          issuing_authority: row.issuing_authority ?? '',
+          issue_date: row.issue_date ?? '',
+          expiry_date: expiryDateStr,
+          certificate_number: row.certificate_number ?? '',
+          status: certStatus,
+          document_url: row.certificate_file_url ?? undefined,
+        };
+      });
     },
     staleTime: 60000,
   });
@@ -95,15 +166,46 @@ export function useExpiringCertifications(daysAhead = 30) {
   };
 }
 
-// Get rotations - Mock data
+// Get rotations - Real Supabase integration
 export function useCrewRotations(vesselId?: string) {
   return useQuery({
     queryKey: ['crew-rotations', vesselId],
     queryFn: async () => {
-      const mockRotations: Rotation[] = [
-        { id: '1', crew_member_id: '1', crew_member_name: 'Carlos Silva', vessel_id: 'v1', vessel_name: 'OSV Atlântico', embark_date: '2024-12-01', status: 'active', position: 'Chief Engineer' },
-      ];
-      return mockRotations;
+      let query = supabase
+        .from('crew_rotations')
+        .select(`
+          id,
+          crew_member_id,
+          vessel_id,
+          embark_date,
+          disembark_date,
+          status,
+          position,
+          notes,
+          crew_members!crew_rotations_crew_member_id_fkey(full_name),
+          vessels!crew_rotations_vessel_id_fkey(name)
+        `)
+        .order('embark_date', { ascending: false });
+
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return (data || []).map((row): Rotation => ({
+        id: row.id,
+        crew_member_id: row.crew_member_id ?? '',
+        crew_member_name: (row.crew_members as { full_name: string } | null)?.full_name ?? '',
+        vessel_id: row.vessel_id ?? '',
+        vessel_name: (row.vessels as { name: string } | null)?.name ?? '',
+        embark_date: row.embark_date ?? '',
+        disembark_date: row.disembark_date ?? undefined,
+        status: (row.status as Rotation['status']) ?? 'scheduled',
+        position: row.position ?? '',
+        notes: row.notes ?? undefined,
+      }));
     },
     staleTime: 60000,
   });
