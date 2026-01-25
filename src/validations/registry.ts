@@ -3,10 +3,12 @@
  * Consolidated validation system for all patches
  */
 
+import { logger } from '@/lib/utils/production-logger';
+
 export interface ValidationResult {
   passed: boolean;
   tests: Record<string, boolean>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   errors?: string[];
   timestamp: string;
 }
@@ -34,7 +36,7 @@ class ValidationRegistry {
 
   register(validator: PatchValidator): void {
     if (this.validators.has(validator.metadata.id)) {
-      console.warn(`Validator for Patch ${validator.metadata.id} already registered, overwriting`);
+      logger.warn(`Validator for Patch ${validator.metadata.id} already registered, overwriting`);
     }
     this.validators.set(validator.metadata.id, validator);
   }

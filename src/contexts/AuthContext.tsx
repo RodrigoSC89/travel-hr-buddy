@@ -122,7 +122,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     // Safety timeout - ALWAYS exit loading state
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        console.warn("[AuthContext] Safety timeout (20s) - forcing ready state");
+        logger.warn("[AuthContext] Safety timeout (20s) - forcing ready state");
         setIsLoading(false);
       }
     }, 20000);
@@ -162,7 +162,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           if (!mounted) return;
 
           if (error) {
-            console.warn("[AuthContext] Error getting session:", error.message);
+            logger.warn("[AuthContext] Error getting session", { error: error.message });
             // Clear potentially corrupted session
             clearCorruptedTokens();
           }
@@ -170,7 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           setSession(sessionData?.session ?? null);
           setUser(sessionData?.session?.user ?? null);
         } catch (fetchError) {
-          console.warn("[AuthContext] Failed to fetch session (network issue)");
+          logger.warn("[AuthContext] Failed to fetch session (network issue)");
         } finally {
           if (mounted) {
             setIsLoading(false);
@@ -178,7 +178,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         }
       } catch (error) {
         if (!mounted) return;
-        console.warn("[AuthContext] Error initializing auth:", error);
+        logger.warn("[AuthContext] Error initializing auth", { error });
         setIsLoading(false);
       }
     };
@@ -345,7 +345,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       setUser(null);
       setSession(null);
     } catch (error) {
-      console.warn("[AuthContext] Error signing out:", error);
+      logger.warn("[AuthContext] Error signing out", { error });
     } finally {
       setIsLoading(false);
     }
