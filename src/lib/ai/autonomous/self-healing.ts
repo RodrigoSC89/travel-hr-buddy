@@ -4,6 +4,8 @@
  * NAUTILUS ONE v4.0 - Autonomous Platform
  */
 
+import { logger } from '@/lib/utils/production-logger';
+
 export interface HealthIssue {
   id: string;
   type: 'performance-degradation' | 'memory-leak' | 'database-connection-error' | 
@@ -54,11 +56,11 @@ export class SelfHealingSystem {
    */
   start(intervalMs = 30000): void {
     if (this.monitorInterval) {
-      console.warn('[SelfHealing] Already running');
+      logger.debug('[SelfHealing] Already running');
       return;
     }
 
-    console.log('[SelfHealing] Starting monitoring...');
+    logger.info('[SelfHealing] Starting monitoring...');
 
     this.monitorInterval = setInterval(() => {
       this.runHealthCheck();
