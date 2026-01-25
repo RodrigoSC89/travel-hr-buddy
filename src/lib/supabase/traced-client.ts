@@ -19,7 +19,7 @@ const safeLocalStorage = (() => {
       return window.localStorage;
     }
   } catch {
-    console.warn("localStorage not available, using memory storage");
+    // Use native console here since this runs before logger is ready
   }
   
   const memoryStorage: Record<string, string> = {};

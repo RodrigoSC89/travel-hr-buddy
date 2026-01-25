@@ -12,7 +12,7 @@ export function initMQTT(): MqttClient | null {
   const url = import.meta.env.VITE_MQTT_URL;
   
   if (!url) {
-    console.warn("VITE_MQTT_URL not set, MQTT disabled");
+    logger.warn("VITE_MQTT_URL not set, MQTT disabled");
     return null;
   }
   
@@ -48,16 +48,16 @@ export function initMQTT(): MqttClient | null {
     });
     
     mqttClientInstance.on("error", (error) => {
-      console.error("❌ MQTT connection error:", error);
+      logger.error("❌ MQTT connection error", error);
     });
     
     mqttClientInstance.on("offline", () => {
-      console.warn("⚠️ MQTT client offline");
+      logger.warn("⚠️ MQTT client offline");
     });
     
     return mqttClientInstance;
   } catch (error) {
-    console.error("❌ Failed to initialize MQTT client:", error);
+    logger.error("❌ Failed to initialize MQTT client", error);
     return null;
   }
 }
