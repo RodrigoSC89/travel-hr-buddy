@@ -2,7 +2,7 @@
  * PATCH 652 - Error Tracking System
  * Centralized error tracking and logging
  */
-import { logger } from "@/lib/logger";
+import { logger } from "@/lib/utils/production-logger";
 
 export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type ErrorCategory = 'network' | 'validation' | 'authentication' | 'runtime' | 'unknown';
@@ -181,17 +181,24 @@ class ErrorTracker {
    */
   private logToConsole(error: ErrorLog): void {
     const prefix = `[ErrorTracker][${error.severity.toUpperCase()}][${error.category}]`;
+    const context: Record<string, unknown> = {
+      id: error.id,
+      category: error.category,
+      severity: error.severity,
+      url: error.url,
+      timestamp: error.timestamp,
+    };
     
     switch (error.severity) {
       case 'critical':
       case 'high':
-        logger.error(prefix, new Error(error.message), error);
+        logger.error(prefix, new Error(error.message), context);
         break;
       case 'medium':
-        logger.warn(prefix, error);
+        logger.warn(prefix, context);
         break;
       case 'low':
-        logger.info(prefix, error);
+        logger.info(prefix, context);
         break;
     }
   }

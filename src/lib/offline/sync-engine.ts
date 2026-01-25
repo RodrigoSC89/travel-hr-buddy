@@ -4,6 +4,7 @@
  */
 
 import { openDB, DBSchema, IDBPDatabase } from "idb";
+import { logger } from "@/lib/utils/production-logger";
 
 // IndexedDB Schema
 interface NautilusOfflineDB extends DBSchema {
@@ -165,24 +166,29 @@ export async function syncPendingOperations(): Promise<{
       if (result.success) {
         await database.delete("pendingOperations", op.id);
         synced++;
+        logger.debug("Sync operation completed", { operationId: op.id, table: op.table, type: op.type });
       } else if (result.conflict) {
         await handleConflict(op, result.serverData);
         conflicts++;
+        logger.warn("Sync conflict detected", { operationId: op.id, table: op.table });
       } else {
         // Update retry count
         op.retries++;
         op.lastError = result.error;
         await database.put("pendingOperations", op);
         failed++;
+        logger.warn("Sync operation failed", { operationId: op.id, table: op.table, retries: op.retries, error: result.error });
       }
     } catch (error) {
       op.retries++;
       op.lastError = String(error);
       await database.put("pendingOperations", op);
       failed++;
+      logger.error("Sync operation exception", error, { operationId: op.id, table: op.table });
     }
   }
 
+  logger.info("Sync batch completed", { synced, failed, conflicts });
   return { synced, failed, conflicts };
 }
 
