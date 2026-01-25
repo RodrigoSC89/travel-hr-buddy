@@ -85,7 +85,7 @@ export const usePerformanceData = (period: number = 7) => {
       }
 
     } catch (err: any) {
-      console.error("Error loading performance data:", err);
+      logger.error("Error loading performance data", err);
       setError(err.message);
       // Show empty state on error
       setMetrics({
