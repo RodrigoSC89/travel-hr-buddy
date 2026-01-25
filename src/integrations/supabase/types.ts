@@ -4128,6 +4128,63 @@ export type Database = {
         }
         Relationships: []
       }
+      broa_evidence_logs: {
+        Row: {
+          ai_confidence: number | null
+          ai_model: string | null
+          ai_processing_time_ms: number | null
+          created_at: string
+          created_by: string | null
+          downtime_id: string | null
+          evidence_data: Json
+          evidence_hash: string | null
+          evidence_type: string | null
+          id: string
+          organization_id: string | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_model?: string | null
+          ai_processing_time_ms?: number | null
+          created_at?: string
+          created_by?: string | null
+          downtime_id?: string | null
+          evidence_data?: Json
+          evidence_hash?: string | null
+          evidence_type?: string | null
+          id?: string
+          organization_id?: string | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_model?: string | null
+          ai_processing_time_ms?: number | null
+          created_at?: string
+          created_by?: string | null
+          downtime_id?: string | null
+          evidence_data?: Json
+          evidence_hash?: string | null
+          evidence_type?: string | null
+          id?: string
+          organization_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broa_evidence_logs_downtime_id_fkey"
+            columns: ["downtime_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_downtimes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broa_evidence_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broa_records: {
         Row: {
           affected_equipment: Json | null
@@ -32434,6 +32491,99 @@ export type Database = {
           },
         ]
       }
+      vessel_downtimes: {
+        Row: {
+          ai_validation: Json | null
+          broa_evidence: Json | null
+          broa_generated_at: string | null
+          category: Database["public"]["Enums"]["downtime_category"]
+          contract_id: string | null
+          created_at: string
+          duration_hours: number | null
+          end_time: string | null
+          evidence_urls: string[] | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          reported_by: string | null
+          reported_reason: string
+          start_time: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_status:
+            | Database["public"]["Enums"]["validation_status"]
+            | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_validation?: Json | null
+          broa_evidence?: Json | null
+          broa_generated_at?: string | null
+          category?: Database["public"]["Enums"]["downtime_category"]
+          contract_id?: string | null
+          created_at?: string
+          duration_hours?: number | null
+          end_time?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          reported_by?: string | null
+          reported_reason: string
+          start_time: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_status?:
+            | Database["public"]["Enums"]["validation_status"]
+            | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_validation?: Json | null
+          broa_evidence?: Json | null
+          broa_generated_at?: string | null
+          category?: Database["public"]["Enums"]["downtime_category"]
+          contract_id?: string | null
+          created_at?: string
+          duration_hours?: number | null
+          end_time?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          reported_by?: string | null
+          reported_reason?: string
+          start_time?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_status?:
+            | Database["public"]["Enums"]["validation_status"]
+            | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_downtimes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_downtimes_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_history: {
         Row: {
           created_at: string | null
@@ -35351,6 +35501,13 @@ export type Database = {
         | "emergency_procedure"
         | "training_record"
         | "maintenance_procedure"
+      downtime_category:
+        | "mechanical"
+        | "weather"
+        | "operational"
+        | "administrative"
+        | "regulatory"
+        | "emergency"
       invoice_status:
         | "draft"
         | "pending_approval"
@@ -35383,6 +35540,7 @@ export type Database = {
         | "supervisor"
         | "coordinator"
         | "auditor"
+      validation_status: "pending" | "approved" | "requires_review" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -35531,6 +35689,14 @@ export const Constants = {
         "training_record",
         "maintenance_procedure",
       ],
+      downtime_category: [
+        "mechanical",
+        "weather",
+        "operational",
+        "administrative",
+        "regulatory",
+        "emergency",
+      ],
       invoice_status: [
         "draft",
         "pending_approval",
@@ -35567,6 +35733,7 @@ export const Constants = {
         "coordinator",
         "auditor",
       ],
+      validation_status: ["pending", "approved", "requires_review", "rejected"],
     },
   },
 } as const

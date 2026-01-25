@@ -239,6 +239,7 @@ const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
+const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 
 // ============================================
 // ADMIN & DASHBOARDS
@@ -621,6 +622,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/quality-dashboard" element={<QualityDashboard />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/settings/security" element={<SecuritySettings />} />
       <Route path="/integrations" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
       <Route path="/collaboration" element={<Collaboration />} />
