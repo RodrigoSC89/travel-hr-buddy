@@ -164,7 +164,7 @@ export function logError(error: Error, context?: ErrorContext): void {
     const extras: Record<string, unknown> = context ? { ...context } : {};
     Sentry.captureException(error, { extra: extras });
   } catch (sentryError) {
-    console.warn('Sentry not available:', sentryError);
+    logger.warn('Sentry not available', { error: sentryError });
   }
 }
 

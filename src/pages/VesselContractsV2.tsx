@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { PageLayoutV2, CardV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -108,7 +109,7 @@ export default function VesselContractsV2() {
       if (contractsRes.data) setContracts(contractsRes.data);
       if (downtimeRes.data) setDowntimeEvents(downtimeRes.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading contracts data', error);
       toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
