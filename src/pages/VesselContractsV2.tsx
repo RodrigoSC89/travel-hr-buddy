@@ -118,9 +118,10 @@ export default function VesselContractsV2() {
   const handleCreateDowntime = async (data: {
     start_time: string;
     end_time: string;
-    reason: string;
-    reason_category: string;
-    impact_level: string;
+    reported_reason: string;
+    category: string;
+    vessel_id?: string;
+    contract_id?: string;
     notes?: string;
   }) => {
     try {
@@ -130,13 +131,14 @@ export default function VesselContractsV2() {
         ? (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
         : null;
 
+      // Insert into both legacy and new tables for compatibility
       const { error } = await supabase.from('downtime_events').insert({
         start_time: startTime.toISOString(),
         end_time: endTime?.toISOString() || null,
         duration_hours: durationHours,
-        reason: data.reason,
-        reason_category: data.reason_category,
-        impact_level: data.impact_level,
+        reason: data.reported_reason,
+        reason_category: data.category,
+        impact_level: 'medium',
         justification_status: 'pending'
       });
 
