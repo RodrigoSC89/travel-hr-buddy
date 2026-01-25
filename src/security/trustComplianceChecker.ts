@@ -486,13 +486,12 @@ async function logTrustEvent(event: {
 
     // Console alert for critical issues
     if (event.trustScore < 50 || event.complianceStatus === "blocked") {
-      console.warn(
-        "🚨 SECURITY ALERT:",
-        `Source: ${event.sourceSystem}`,
-        `Trust Score: ${event.trustScore}`,
-        `Status: ${event.complianceStatus}`,
-        event.alerts
-      );
+      logger.warn("🚨 SECURITY ALERT", {
+        source: event.sourceSystem,
+        trustScore: event.trustScore,
+        status: event.complianceStatus,
+        alerts: event.alerts
+      });
     }
   } catch (error) {
     logger.error("[TrustComplianceChecker] Error logging trust event:", error);

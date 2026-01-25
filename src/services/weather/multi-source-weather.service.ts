@@ -5,6 +5,7 @@
  */
 
 import { openMeteoService } from "./open-meteo.service";
+import { logger } from "@/lib/utils/production-logger";
 
 // WeatherData interface
 interface WeatherSourceData {
@@ -68,14 +69,10 @@ const weatherCache = new Map<string, { data: WeatherSourceData; expires: number 
  */
 async function fetchWindGuruData(lat: number, lon: number): Promise<WeatherSourceData | null> {
   try {
-    // WindGuru API would require authentication
-    // This is a placeholder that simulates the data format
-    console.log('[MultiSource] WindGuru: API key required for real data');
-    
-    // Return null to trigger fallback
+    logger.debug('[MultiSource] WindGuru: API key required for real data');
     return null;
   } catch (error) {
-    console.error('[MultiSource] WindGuru fetch failed:', error);
+    logger.error('[MultiSource] WindGuru fetch failed', error);
     return null;
   }
 }
@@ -85,13 +82,10 @@ async function fetchWindGuruData(lat: number, lon: number): Promise<WeatherSourc
  */
 async function fetchWindyAPIData(lat: number, lon: number): Promise<WeatherSourceData | null> {
   try {
-    // Windy Point Forecast API
-    // https://api.windy.com/point-forecast/v2
-    console.log('[MultiSource] Windy API: Using embedded map, point forecast requires API key');
-    
+    logger.debug('[MultiSource] Windy API: Using embedded map, point forecast requires API key');
     return null;
   } catch (error) {
-    console.error('[MultiSource] Windy API fetch failed:', error);
+    logger.error('[MultiSource] Windy API fetch failed', error);
     return null;
   }
 }
@@ -101,12 +95,10 @@ async function fetchWindyAPIData(lat: number, lon: number): Promise<WeatherSourc
  */
 async function fetchAccuWeatherData(lat: number, lon: number): Promise<WeatherSourceData | null> {
   try {
-    // AccuWeather requires location key lookup first
-    console.log('[MultiSource] AccuWeather: API key required for real data');
-    
+    logger.debug('[MultiSource] AccuWeather: API key required for real data');
     return null;
   } catch (error) {
-    console.error('[MultiSource] AccuWeather fetch failed:', error);
+    logger.error('[MultiSource] AccuWeather fetch failed', error);
     return null;
   }
 }
@@ -147,7 +139,7 @@ async function fetchOpenMeteoData(lat: number, lon: number): Promise<WeatherSour
       })),
     };
   } catch (error) {
-    console.error('[MultiSource] Open-Meteo fetch failed:', error);
+    logger.error('[MultiSource] Open-Meteo fetch failed', error);
     return null;
   }
 }
@@ -171,7 +163,7 @@ class MultiSourceWeatherService {
     
     // Return cached data if valid
     if (cached && cached.expires > Date.now()) {
-      console.log(`[MultiSource] Returning cached data from ${cached.data.source}`);
+      logger.debug(`[MultiSource] Returning cached data from ${cached.data.source}`);
       return cached.data;
     }
 
@@ -209,13 +201,13 @@ class MultiSourceWeatherService {
           expires: Date.now() + (this.config.cacheTimeout || 600000),
         });
         
-        console.log(`[MultiSource] Successfully fetched from ${source}`);
+        logger.debug(`[MultiSource] Successfully fetched from ${source}`);
         return data;
       }
     }
 
     // Return empty result if all sources fail
-    console.warn('[MultiSource] All sources failed, returning empty data');
+    logger.warn('[MultiSource] All sources failed, returning empty data');
     return {
       source: 'none',
       timestamp: new Date(),
@@ -242,7 +234,7 @@ class MultiSourceWeatherService {
       }
       return null;
     } catch (error) {
-      console.error('[MultiSource] Marine data fetch failed:', error);
+      logger.error('[MultiSource] Marine data fetch failed', error);
       return null;
     }
   }
@@ -259,7 +251,7 @@ class MultiSourceWeatherService {
    */
   clearCache() {
     weatherCache.clear();
-    console.log('[MultiSource] Cache cleared');
+    logger.debug('[MultiSource] Cache cleared');
   }
 
   /**
