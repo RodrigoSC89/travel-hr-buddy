@@ -3,6 +3,7 @@
  * Integrates with N2YO API for real-time satellite tracking
  */
 
+import { logger } from "@/lib/utils/production-logger";
 export interface SatelliteOrbitData {
   id: string;
   noradId: string;
@@ -83,7 +84,7 @@ class SatelliteOrbitService {
       const response = await fetch(url);
       
       if (!response.ok) {
-        console.warn(`N2YO API error for satellite ${noradId}, falling back to simulation`);
+        logger.warn(`N2YO API error for satellite ${noradId}, falling back to simulation`);
         return null;
       }
 
@@ -96,7 +97,7 @@ class SatelliteOrbitService {
         positions: data.positions
       } : null;
     } catch (error) {
-      console.error(`Error fetching satellite ${noradId} from N2YO:`, error);
+      logger.error(`Error fetching satellite ${noradId} from N2YO`, error);
       return null;
     }
   }

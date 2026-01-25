@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Box, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/utils/production-logger';
 
 interface Safe3DWrapperProps {
   fallback: React.ReactNode;
@@ -30,7 +31,7 @@ class ThreeErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error) {
-    console.warn('3D rendering failed, using 2D fallback:', error.message);
+    logger.warn('3D rendering failed, using 2D fallback', { error: error.message });
     this.props.onError();
   }
 
