@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/utils/production-logger';
 
 interface ErrorReport {
   type: 'error' | 'warning' | 'unhandled_rejection' | 'network_error';
@@ -146,7 +147,7 @@ class ErrorTracker {
     this.errorCount++;
 
     if (this.config.debug) {
-      console.error('[ErrorTracker] Captured:', report);
+      logger.debug('[ErrorTracker] Captured', { report });
     }
 
     // Flush immediately for critical errors
@@ -165,7 +166,7 @@ class ErrorTracker {
     } else if (level === 'warning') {
       this.captureWarning(message);
     } else if (this.config.debug) {
-      console.log('[ErrorTracker] Message:', message);
+      logger.debug('[ErrorTracker] Message', { message });
     }
   }
 

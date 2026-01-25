@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 import { 
   Key, 
   Plus, 
@@ -85,7 +86,7 @@ export const ApiKeyManagement: React.FC = () => {
       if (error) throw error;
       setApiKeys(data || []);
     } catch (error) {
-      console.error("Error fetching API keys:", error);
+      logger.error("Error fetching API keys", error);
       toast.error("Erro ao carregar chaves de API");
     } finally {
       setLoading(false);

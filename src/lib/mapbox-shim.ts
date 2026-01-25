@@ -7,6 +7,8 @@
  * Solution: Use dynamic import with * as syntax and handle module structure
  */
 
+import { logger } from "@/lib/utils/production-logger";
+
 // Type definitions
 type MapboxMapConstructor = new (options: any) => any;
 type MapboxMarkerConstructor = new (options?: any) => any;
@@ -31,7 +33,7 @@ class MockMap {
   private _container: any;
   constructor(options?: any) {
     this._container = options?.container;
-    console.warn('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
+    logger.debug('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
   }
   on(_event: string, callback: Function) { 
     // Simulate load event for compatibility
@@ -147,7 +149,7 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
     const mapboxModule = await import('mapbox-gl');
     
     // Debug: log what we got
-    console.log('[mapbox-shim] Module keys:', Object.keys(mapboxModule));
+    logger.debug('[mapbox-shim] Module keys:', { keys: Object.keys(mapboxModule) });
     
     // Handle various possible module structures
     let resolved: any = null;
@@ -169,7 +171,7 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
     }
     
     if (resolved && resolved.Map) {
-      console.log('[mapbox-shim] Successfully resolved mapbox-gl');
+      logger.debug('[mapbox-shim] Successfully resolved mapbox-gl');
       
       // Create mutable wrapper with proper accessToken handling
       let _accessToken = '';
@@ -213,14 +215,14 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
       mapboxInstance = wrapper;
       return wrapper;
     } else {
-      console.warn('[mapbox-shim] Could not resolve Map from module');
+      logger.warn('[mapbox-shim] Could not resolve Map from module');
     }
   } catch (error) {
-    console.error('[mapbox-shim] Failed to load mapbox-gl:', error);
+    logger.error('[mapbox-shim] Failed to load mapbox-gl', error);
   }
   
   // Return mock as fallback
-  console.warn('[mapbox-shim] Using mock implementation');
+  logger.debug('[mapbox-shim] Using mock implementation');
   mapboxInstance = createMockMapbox();
   return mapboxInstance;
 };

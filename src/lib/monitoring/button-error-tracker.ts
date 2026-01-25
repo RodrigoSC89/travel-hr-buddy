@@ -4,6 +4,7 @@
  */
 
 import * as Sentry from "@sentry/react";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface ButtonErrorContext {
   buttonId?: string;
@@ -25,7 +26,7 @@ export function trackButtonError(
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   
   if (!sentryDsn) {
-    console.warn('[ButtonErrorTracker] Sentry not configured, logging locally:', {
+    logger.warn('[ButtonErrorTracker] Sentry not configured, logging locally', {
       error: error.message,
       ...context
     });
@@ -64,7 +65,7 @@ export function trackNonFunctionalButton(context: ButtonErrorContext): void {
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   
   if (!sentryDsn) {
-    console.warn('[ButtonErrorTracker] Non-functional button detected:', context);
+    logger.warn('[ButtonErrorTracker] Non-functional button detected', { ...context });
     return;
   }
 

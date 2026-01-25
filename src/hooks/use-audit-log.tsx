@@ -10,6 +10,7 @@ import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from "@/lib/utils/production-logger";
 
 type AuditLogStatus = "success" | "failure" | "error";
 type JsonObject = Record<string, Json | undefined>;
@@ -80,12 +81,12 @@ export const useAuditLog = () => {
     details,
   }: LogActionParams) => {
     if (!user) {
-      console.warn("Cannot log action: User not authenticated");
+      logger.debug("Cannot log action: User not authenticated");
       return null;
     }
 
     if (!action || !resourceType) {
-      console.warn("Cannot log action: Missing required fields", { action, resourceType });
+      logger.warn("Cannot log action: Missing required fields", { action, resourceType });
       return null;
     }
 
