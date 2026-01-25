@@ -9031,6 +9031,63 @@ export type Database = {
           },
         ]
       }
+      crew_wellbeing_logs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          crew_member_id: string | null
+          energy_level: number | null
+          factors: string[] | null
+          id: string
+          mood_score: number | null
+          notes: string | null
+          recorded_at: string
+          stress_level: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          crew_member_id?: string | null
+          energy_level?: number | null
+          factors?: string[] | null
+          id?: string
+          mood_score?: number | null
+          notes?: string | null
+          recorded_at?: string
+          stress_level?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          crew_member_id?: string | null
+          energy_level?: number | null
+          factors?: string[] | null
+          id?: string
+          mood_score?: number | null
+          notes?: string | null
+          recorded_at?: string
+          stress_level?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_wellbeing_logs_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_wellbeing_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cron_execution_logs: {
         Row: {
           completed_at: string | null
@@ -34176,6 +34233,71 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      weather_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_vessels: string[] | null
+          alert_type: string
+          created_at: string
+          description: string | null
+          id: string
+          location: Json | null
+          organization_id: string | null
+          raw_data: Json | null
+          severity: string
+          source: string | null
+          title: string
+          valid_from: string
+          valid_until: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_vessels?: string[] | null
+          alert_type: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: Json | null
+          organization_id?: string | null
+          raw_data?: Json | null
+          severity: string
+          source?: string | null
+          title: string
+          valid_from: string
+          valid_until: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_vessels?: string[] | null
+          alert_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: Json | null
+          organization_id?: string | null
+          raw_data?: Json | null
+          severity?: string
+          source?: string | null
+          title?: string
+          valid_from?: string
+          valid_until?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weather_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       weather_cache: {
         Row: {
