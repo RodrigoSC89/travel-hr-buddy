@@ -3,6 +3,8 @@
  * Natural language voice commands for maritime operations
  */
 
+import { logger } from "@/lib/utils/production-logger";
+
 export interface VoiceIntent {
   action: string;
   params: Record<string, string>;
@@ -143,7 +145,7 @@ export class VoiceCommander {
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognitionAPI) {
-      console.warn('Speech recognition not supported');
+      logger.warn('Speech recognition not supported');
       return;
     }
 
@@ -170,7 +172,7 @@ export class VoiceCommander {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
+      logger.error('Speech recognition error', { error: event.error });
       this.isListening = false;
       this.onListeningChange?.(false);
     };
@@ -204,7 +206,7 @@ export class VoiceCommander {
       this.isListening = true;
       this.onListeningChange?.(true);
     } catch (error) {
-      console.error('Microphone access denied:', error);
+      logger.error('Microphone access denied', error);
       throw error;
     }
   }

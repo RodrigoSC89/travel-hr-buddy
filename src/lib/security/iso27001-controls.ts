@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 
 // ============================================
 // SESSION SECURITY CONTROLS
@@ -117,13 +118,13 @@ export async function logSecurityEvent(event: Omit<SecurityEvent, 'timestamp'>):
       await notifyCriticalSecurityEvent(fullEvent);
     }
   } catch (error) {
-    console.error('[ISO27001] Failed to log security event:', error);
+    logger.error('[ISO27001] Failed to log security event', error);
   }
 }
 
 async function notifyCriticalSecurityEvent(event: SecurityEvent): Promise<void> {
   // In production, integrate with SIEM/alerting system
-  console.warn('[CRITICAL SECURITY EVENT]', event);
+  logger.warn('[CRITICAL SECURITY EVENT]', { event });
   
   // Could trigger Slack/Email/SMS alert here
   try {
@@ -132,7 +133,7 @@ async function notifyCriticalSecurityEvent(event: SecurityEvent): Promise<void> 
     });
   } catch {
     // Fail silently but log
-    console.error('[ISO27001] Failed to send security alert');
+    logger.error('[ISO27001] Failed to send security alert');
   }
 }
 
@@ -244,7 +245,7 @@ export async function checkSessionSecurity(userId: string): Promise<{
 
     return { isValid: true };
   } catch (error) {
-    console.error('[ISO27001] Session check failed:', error);
+    logger.error('[ISO27001] Session check failed', error);
     return { isValid: false, reason: 'Session validation error', requiresReauth: true };
   }
 }
