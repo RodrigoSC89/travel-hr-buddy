@@ -271,14 +271,7 @@ export function useRouteValidator() {
       validatePath: (path: string): { valid: boolean; suggestion?: string } => {
         const valid = isValidRoute(path);
         const suggestion = valid ? undefined : getSuggestion(path);
-        
-        if (!valid) {
-          console.warn(
-            `[RouteAudit] Invalid route: "${path}"`,
-            suggestion ? `Suggestion: "${suggestion}"` : ""
-          );
-        }
-        
+        // Invalid routes are detected by the validator, no console output needed
         return { valid, suggestion };
       },
     };

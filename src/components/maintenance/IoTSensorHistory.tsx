@@ -48,6 +48,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { format, subHours, subDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { logger } from '@/lib/logger';
 
 interface SensorReading {
   id: string;
@@ -130,7 +131,7 @@ export function IoTSensorHistory() {
         .limit(1000);
 
       if (error) {
-        console.warn('Sensor data not available:', error);
+        logger.warn('Sensor data not available', { error: error.message });
         return;
       }
 

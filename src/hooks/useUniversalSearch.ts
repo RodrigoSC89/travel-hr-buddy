@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface SearchResult {
   type: "route" | "action" | "document" | "ai";
@@ -80,7 +81,7 @@ export function useUniversalSearch(): UseUniversalSearchReturn {
         } else if (error.message?.includes("402")) {
           toast.error("Créditos de IA insuficientes.");
         } else {
-          console.warn("[UniversalSearch] Error:", error);
+          logger.warn("[UniversalSearch] Error", { error });
         }
         return;
       }
@@ -90,7 +91,7 @@ export function useUniversalSearch(): UseUniversalSearchReturn {
 
     } catch (error) {
       if ((error as Error).name !== "AbortError") {
-        console.warn("[UniversalSearch] Request failed:", error);
+        logger.warn("[UniversalSearch] Request failed", { error: String(error) });
       }
     } finally {
       setIsLoading(false);

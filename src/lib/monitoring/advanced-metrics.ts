@@ -132,8 +132,7 @@ export class AdvancedMonitoring {
           `SLA ${severity}: ${operation} took ${duration}ms (threshold: ${config.alertThreshold}ms)`,
           severity
         );
-        
-        console.warn(`[SLA] ${operation}: ${duration}ms (threshold: ${config.alertThreshold}ms)`);
+        // SLA violations are captured by Sentry above
       }
     }
   }

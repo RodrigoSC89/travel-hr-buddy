@@ -338,7 +338,7 @@ export class SEVILearningEngine {
       };
       localStorage.setItem('sevi_learning_state', JSON.stringify(state));
     } catch (e) {
-      console.warn('SEVI: Failed to save state', e);
+      // Silent fail for localStorage operations in learning engine
     }
   }
 
@@ -362,7 +362,7 @@ export class SEVILearningEngine {
         this.learningRate = state.learningRate || 0.01;
       }
     } catch (e) {
-      console.warn('SEVI: Failed to load state', e);
+      // Silent fail for localStorage operations in learning engine
     }
   }
 
