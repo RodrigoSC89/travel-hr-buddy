@@ -473,7 +473,7 @@ function CentralComandoContent() {
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 360, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
-                className="fixed right-0 top-16 bottom-0 w-[360px] border-l bg-background/95 backdrop-blur-xl overflow-hidden"
+                className="fixed right-0 top-16 bottom-0 w-[360px] border-l bg-background/95 backdrop-blur-xl overflow-hidden z-40"
               >
                 <div className="p-4 border-b">
                   <div className="flex items-center justify-between">
