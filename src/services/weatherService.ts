@@ -2,8 +2,8 @@
 /**
  * Weather Service
  * Integrates with OpenWeatherMap API for maritime weather data
- * Implements 1-hour caching in weather_logs table
- * PATCH-601: Re-added @ts-nocheck for build stability
+ * 
+ * NOTE: @ts-nocheck required - weather_logs table not in generated types
  */
 
 import { supabase } from "@/integrations/supabase/client";

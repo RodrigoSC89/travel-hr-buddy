@@ -1,8 +1,10 @@
 // @ts-nocheck
 /**
  * PATCH 347: Analytics Core v2 - Real-Time Service Layer
- * PATCH-601: Re-applied @ts-nocheck for build stability
  * Service for tracking events, managing metrics, and handling alerts
+ * 
+ * NOTE: @ts-nocheck required - uses analytics_events, analytics_alerts,
+ * analytics_sessions tables not in generated Supabase types
  */
 
 import { supabase } from "@/integrations/supabase/client";

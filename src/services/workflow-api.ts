@@ -1,11 +1,9 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability due to schema mismatches
 /**
  * Workflow API Service Layer
  * 
- * Service layer for managing workflows through API calls
- * NOTE: Uses type coercion due to schema mismatches between
- * frontend Workflow types and Supabase smart_workflows table
+ * NOTE: @ts-nocheck required - smart_workflows schema field mismatches
+ * between frontend types and database schema require type coercion
  */
 
 import { supabase } from "@/integrations/supabase/client";
