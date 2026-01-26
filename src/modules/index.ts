@@ -112,7 +112,7 @@ export { default as MedicalInfirmary } from "./medical-infirmary";
 // ============================================
 export { default as ESGEmissions } from "./esg-emissions";
 export { default as SafetyGuardian } from "./safety-guardian";
-export { default as SmartMobility } from "./smart-mobility";
+// REMOVED: SmartMobility redirect - merged into TravelCommandCenter
 
 // ============================================
 // PROCUREMENT & INVENTORY (UNIFIED)

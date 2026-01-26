@@ -105,9 +105,9 @@ const ONBOARDING_STEPS: Step[] = [
     description: 'Reservas, viagens e planejamento',
     icon: Calendar,
     tasks: [
-      { id: 'reservation', label: 'Criar reserva', path: '/reservations' },
-      { id: 'travel', label: 'Planejar viagem', path: '/travel' },
-      { id: 'alerts', label: 'Configurar alertas de preço', path: '/price-alerts' },
+      { id: 'reservation', label: 'Criar reserva', path: '/travel-command' },
+      { id: 'travel', label: 'Planejar viagem', path: '/travel-command' },
+      { id: 'alerts', label: 'Configurar alertas de preço', path: '/alerts-command' },
     ],
     tips: [
       'Alertas de preço notificam automaticamente quando há oportunidades',
