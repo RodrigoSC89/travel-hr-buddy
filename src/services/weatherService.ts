@@ -1,13 +1,13 @@
-// @ts-nocheck
 /**
  * Weather Service
  * Integrates with OpenWeatherMap API for maritime weather data
- * 
- * NOTE: @ts-nocheck required - weather_logs table not in generated types
+ * Implements 1-hour caching using weather_logs table
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { weatherLogsTable, type WeatherLog } from "@/lib/supabase/dynamic-tables";
+import type { Json } from "@/integrations/supabase/types";
 
 interface WeatherData {
   temperature: number;
@@ -103,23 +103,23 @@ async function getCachedWeather(lat: number, lon: number): Promise<WeatherData |
   try {
     const oneHourAgo = new Date(Date.now() - CACHE_DURATION_MS).toISOString();
     
-    const { data, error } = await supabase
-      .from("weather_logs")
+    // Use the type-safe query builder
+    const { data, error } = await weatherLogsTable.query()
       .select("*")
       .eq("latitude", lat)
       .eq("longitude", lon)
       .gte("created_at", oneHourAgo)
       .order("created_at", { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle() as { data: WeatherLog | null; error: Error | null };
 
     if (error || !data) {
       return null;
     }
 
-    return data.weather_data as WeatherData;
-  } catch (error) {
-    logger.warn("Failed to get cached weather", error);
+    return data.weather_data as unknown as WeatherData;
+  } catch (err) {
+    logger.warn("Failed to get cached weather", { error: err });
     return null;
   }
 }
@@ -129,13 +129,13 @@ async function getCachedWeather(lat: number, lon: number): Promise<WeatherData |
  */
 async function cacheWeather(lat: number, lon: number, weatherData: WeatherData): Promise<void> {
   try {
-    await supabase.from("weather_logs").insert({
+    await weatherLogsTable.insert({
       latitude: lat,
       longitude: lon,
-      weather_data: weatherData,
+      weather_data: weatherData as unknown as Json,
     });
-  } catch (error) {
-    logger.error("Failed to cache weather data", error);
+  } catch (err) {
+    logger.error("Failed to cache weather data", { error: err });
     // Don't throw - caching failure shouldn't break the weather service
   }
 }
@@ -196,9 +196,9 @@ export async function getCurrentWeather(
 
     logger.info("Weather data fetched successfully");
     return weatherData;
-  } catch (error) {
-    logger.error("Failed to fetch weather data", error);
-    throw error;
+  } catch (err) {
+    logger.error("Failed to fetch weather data", { error: err });
+    throw err;
   }
 }
 
@@ -257,9 +257,9 @@ export async function getWeatherForecast(
 
     logger.info("Forecast data fetched successfully", { days: forecast.length });
     return forecast;
-  } catch (error) {
-    logger.error("Failed to fetch forecast data", error);
-    throw error;
+  } catch (err) {
+    logger.error("Failed to fetch forecast data", { error: err });
+    throw err;
   }
 }
 
@@ -301,8 +301,8 @@ export async function getWeatherAlerts(
 
     logger.info("Weather alerts fetched", { count: alerts.length });
     return alerts;
-  } catch (error) {
-    logger.warn("Failed to fetch weather alerts", error);
+  } catch (err) {
+    logger.warn("Failed to fetch weather alerts", { error: err });
     return []; // Don't throw - alerts are optional
   }
 }
