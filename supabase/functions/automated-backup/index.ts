@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -73,9 +74,10 @@ Deno.serve(async (req) => {
         .from("backup_logs")
         .select("*")
         .eq("id", backup_id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!backup) throw new Error("Backup not found");
 
       // Simulate integrity check
       const integrityCheck = {
@@ -93,7 +95,7 @@ Deno.serve(async (req) => {
     }
 
     // Create new backup
-    console.log(`[BACKUP] Starting ${backup_type} backup...`);
+    edgeLogger.info("automated-backup", `Starting ${backup_type} backup`);
 
     // Log backup start
     const backupLog: BackupLog = {
@@ -110,7 +112,7 @@ Deno.serve(async (req) => {
       .single();
 
     if (insertError) {
-      console.error("[BACKUP] Failed to log backup start:", insertError);
+      edgeLogger.warn("automated-backup", "Failed to log backup start", { error: insertError.message });
     }
 
     // Get table statistics for backup metadata
@@ -146,8 +148,8 @@ Deno.serve(async (req) => {
           });
           totalRows += count;
         }
-      } catch (e) {
-        console.warn(`[BACKUP] Could not get stats for ${tableName}:`, e);
+      } catch {
+        // Silent fail - table stats are optional
       }
     }
 
@@ -179,9 +181,9 @@ Deno.serve(async (req) => {
         total_rows: totalRows,
         estimated_size_bytes: estimatedSizeBytes,
       },
-    }).catch(console.warn);
+    }).catch(() => { /* Silent fail - health check logging is optional */ });
 
-    console.log(`[BACKUP] Completed ${backup_type} backup in ${durationMs}ms`);
+    edgeLogger.success("automated-backup", `Completed ${backup_type} backup`, { durationMs });
 
     return new Response(
       JSON.stringify({
@@ -209,7 +211,7 @@ Deno.serve(async (req) => {
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    console.error("[BACKUP] Error:", errorMessage);
+    edgeLogger.error("automated-backup", "Backup failed", error);
 
     return new Response(
       JSON.stringify({

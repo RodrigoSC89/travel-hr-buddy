@@ -1,5 +1,6 @@
 /// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -85,7 +86,7 @@ async function getAmadeusToken(): Promise<string> {
       return tokenData.access_token;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error("Unknown error");
-      console.warn(`Token fetch attempt ${attempt + 1} failed:`, lastError.message);
+      edgeLogger.warn("amadeus-search", `Token fetch attempt ${attempt + 1} failed`, { error: lastError.message });
       
       if (attempt < maxRetries - 1) {
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
@@ -172,7 +173,7 @@ serve(async (req: Request) => {
     const requestData: SearchRequest = await req.json();
     const { searchType, ...searchParams } = requestData;
     
-    console.log(`Amadeus ${searchType} search:`, searchParams);
+    edgeLogger.info("amadeus-search", `Processing ${searchType} search`, searchParams);
     
     let result: unknown;
     
@@ -192,7 +193,7 @@ serve(async (req: Request) => {
       },
     );
   } catch (error) {
-    console.error("Amadeus search error:", error);
+    edgeLogger.error("amadeus-search", "Search failed", error);
     return new Response(
       JSON.stringify({ 
         success: false, 

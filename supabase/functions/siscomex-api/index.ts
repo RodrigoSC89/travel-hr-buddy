@@ -62,7 +62,7 @@ serve(async (req) => {
     }
 
     const { operation, payload, transmission_id } = await req.json();
-    console.log(`[siscomex-api] Operation: ${operation}, User: ${user.id}`);
+    // Silent logging - operation tracked via audit_log
 
     // Get user's organization
     const { data: orgUser } = await supabase
@@ -70,7 +70,7 @@ serve(async (req) => {
       .select("organization_id")
       .eq("user_id", user.id)
       .eq("status", "active")
-      .single();
+      .maybeSingle();
 
     if (!orgUser) {
       throw new Error("User not associated with any organization");
@@ -92,7 +92,7 @@ serve(async (req) => {
           .from("vessels")
           .select("*")
           .eq("id", siscomexPayload.vessel_id)
-          .single();
+          .maybeSingle();
 
         if (!vessel) {
           throw new Error("Vessel not found");
