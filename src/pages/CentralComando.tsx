@@ -473,7 +473,7 @@ function CentralComandoContent() {
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 360, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
-                className="fixed right-0 top-16 bottom-0 w-[360px] border-l bg-background/95 backdrop-blur-xl overflow-hidden z-40"
+                className="fixed right-0 top-0 bottom-0 w-[360px] border-l bg-background/95 backdrop-blur-xl overflow-hidden z-[60] pt-16"
               >
                 <div className="p-4 border-b">
                   <div className="flex items-center justify-between">
@@ -534,7 +534,6 @@ function CentralComandoContent() {
         {/* ARIA Voice Assistant with Hotword - Centered Bottom */}
         <VoiceAssistantWithHotword 
           onCommand={(cmd) => {
-            console.log('[ARIA] Command received:', cmd);
             sendMessage(cmd);
           }}
         />
