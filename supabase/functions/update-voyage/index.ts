@@ -33,11 +33,15 @@ serve(async (req) => {
       })
       .eq('id', voyage_id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       log('error', 'update-voyage', 'Failed to update voyage', { error: error.message });
-      return errorResponse('Failed to update voyage', 500);
+      return errorResponse('Database error', 500);
+    }
+
+    if (!data) {
+      return errorResponse('Voyage not found', 404);
     }
 
     log('info', 'update-voyage', 'Voyage updated successfully', { voyageId: voyage_id });

@@ -39,7 +39,7 @@ serve(async (req) => {
       return errorResponse('Failed to remove crew from ship', 500);
     }
 
-    // End assignment record
+    // End assignment record (use maybeSingle since assignment might not exist)
     const { data, error } = await supabase
       .from('crew_vessel_assignments')
       .update({
@@ -52,10 +52,12 @@ serve(async (req) => {
       .eq('vessel_id', vessel_id)
       .eq('status', 'active')
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
-      log('warn', 'remove-crew-from-ship', 'No active assignment found', { error: error.message });
+      log('warn', 'remove-crew-from-ship', 'Database error updating assignment', { error: error.message });
+    } else if (!data) {
+      log('info', 'remove-crew-from-ship', 'No active assignment found to end', { crewMemberId: crew_member_id, vesselId: vessel_id });
     }
 
     log('info', 'remove-crew-from-ship', 'Crew removed from ship successfully', { crewMemberId: crew_member_id, vesselId: vessel_id });

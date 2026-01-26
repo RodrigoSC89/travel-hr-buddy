@@ -36,10 +36,14 @@ serve(async (req) => {
         )
       `)
       .eq('id', shipId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       log('error', 'get-ship', 'Failed to fetch ship', { error: error.message });
+      return errorResponse('Database error', 500);
+    }
+
+    if (!data) {
       return errorResponse('Ship not found', 404);
     }
 

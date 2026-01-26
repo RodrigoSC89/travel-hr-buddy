@@ -35,10 +35,14 @@ serve(async (req) => {
         documents:crew_documents(*)
       `)
       .eq('id', crewId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       log('error', 'get-crew', 'Failed to fetch crew', { error: error.message });
+      return errorResponse('Database error', 500);
+    }
+
+    if (!data) {
       return errorResponse('Crew member not found', 404);
     }
 
