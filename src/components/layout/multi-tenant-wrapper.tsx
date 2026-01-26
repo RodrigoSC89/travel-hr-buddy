@@ -1,6 +1,6 @@
 import React from "react";
 import { useOrganization } from "@/contexts/OrganizationContext";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Loading as LoadingSpinner } from "@/components/ui/Loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Loading as LoadingSpinner } from "@/components/ui/Loading";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { 
   Ship, 
