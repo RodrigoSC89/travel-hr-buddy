@@ -90,16 +90,136 @@ export type SystemMetric = TableRow<"system_metrics">;
 export type EquipmentSensor = TableRow<"equipment_sensors">;
 export type RouteOptimization = TableRow<"route_optimizations">;
 
+// API Gateway - Aligned with existing schema
+export type ApiKey = TableRow<"api_keys">;
+export type ApiKeyInsert = TableInsert<"api_keys">;
+export type ApiRateLimit = TableRow<"api_rate_limits">;
+export type ApiEndpoint = TableRow<"api_endpoints">;
+
+// Interop & Mission - Aligned with existing schema
+export type JointMissionLog = TableRow<"joint_mission_log">;
+export type AgentSwarmMetric = TableRow<"agent_swarm_metrics">;
+export type TrustEvent = TableRow<"trust_events">;
+export type InteropLog = TableRow<"interop_log">;
+
+// SGSO
+export type SgsoPlan = TableRow<"sgso_plans">;
+export type SgsoPlanInsert = TableInsert<"sgso_plans">;
+
+// Document Templates
+export type DocumentTemplateVersion = TableRow<"document_template_versions">;
+export type DocumentTemplateVersionInsert = TableInsert<"document_template_versions">;
+
+// Agent Registry
+export type AgentRegistry = TableRow<"agent_registry">;
+
 // ============================================================================
-// UTILITIES
+// JSONB CONTENT HELPERS - Extract typed data from Json columns
 // ============================================================================
 
+/**
+ * Safely extract a value from a JSONB column
+ */
+export function getJsonField<T>(json: Json | null | undefined, key: string, fallback: T): T {
+  if (json === null || json === undefined) return fallback;
+  if (typeof json !== "object" || Array.isArray(json)) return fallback;
+  const value = (json as Record<string, unknown>)[key];
+  return value !== undefined ? (value as T) : fallback;
+}
+
+/**
+ * Cast entire JSONB to a typed object
+ */
 export function castJson<T>(json: Json | null, fallback: T): T {
   if (json === null || json === undefined) return fallback;
   return json as unknown as T;
 }
 
+/**
+ * Cast JSONB to array of typed items
+ */
 export function castJsonArray<T>(json: Json | null, fallback: T[] = []): T[] {
   if (!Array.isArray(json)) return fallback;
   return json as unknown as T[];
+}
+
+// ============================================================================
+// MISSION/INTEROP JSONB CONTENT TYPES
+// ============================================================================
+
+/** Content structure for joint_mission_log.details JSONB */
+export interface MissionDetails {
+  mission_name?: string;
+  mission_type?: string;
+  mission_status?: string;
+  priority?: string;
+  completion_percentage?: number;
+  sync_status?: string;
+}
+
+/** Content structure for trust_events.details JSONB */
+export interface TrustAlertDetails {
+  alert_level?: string;
+  alert_message?: string;
+  compliance_status?: string;
+  source_system?: string;
+}
+
+/** Content structure for interop_log.message JSONB */
+export interface InteropMessage {
+  protocol?: string;
+  source_system?: string;
+  latency_ms?: number;
+}
+
+/** Content structure for sgso_plans.content JSONB */
+export interface SgsoPlanContent {
+  description?: string;
+  sections?: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+/** Content for document_template_versions.variables JSONB */
+export interface TemplateVariables {
+  [key: string]: string | number | boolean;
+}
+
+// ============================================================================
+// API ROUTES - Custom table from migrations (not in generated types)
+// Use with dynamicFrom helper
+// ============================================================================
+
+export interface ApiRoute {
+  id: string;
+  route_path: string;
+  route_name: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
+  description: string | null;
+  schema_validation: Json;
+  rate_limit_tier: string | null;
+  requires_auth: boolean;
+  is_public: boolean;
+  status: "active" | "beta" | "deprecated" | "disabled";
+  version: string;
+  tags: string[];
+  metadata: Json;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ApiRouteInsert {
+  route_path: string;
+  route_name: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
+  description?: string | null;
+  schema_validation?: Json;
+  rate_limit_tier?: string | null;
+  requires_auth?: boolean;
+  is_public?: boolean;
+  status?: "active" | "beta" | "deprecated" | "disabled";
+  version?: string;
+  tags?: string[];
+  metadata?: Json;
 }
