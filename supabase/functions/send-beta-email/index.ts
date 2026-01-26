@@ -1,10 +1,10 @@
-// @ts-nocheck
 // Deno Edge Function - TypeScript checks are skipped for Deno-specific imports
 // This file is deployed and executed in Deno runtime, not Node.js
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@4.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -236,7 +236,7 @@ serve(async (req: Request): Promise<Response> => {
 
     const { email_type, recipient_email, recipient_name, custom_data }: BetaEmailRequest = await req.json();
 
-    console.log(`📧 Sending ${email_type} email to ${recipient_email}`);
+    edgeLogger.info("BETA-EMAIL", `Sending ${email_type} email`, { recipient: recipient_email });
 
     // Get email content based on type
     let emailContent: { subject: string; html: string };
@@ -267,7 +267,7 @@ serve(async (req: Request): Promise<Response> => {
     });
 
     if (error) {
-      console.error("❌ Resend error:", error);
+      edgeLogger.error("BETA-EMAIL", "Resend error", error);
       
       // Log failed attempt
       await supabase.from("beta_email_logs").insert({
@@ -282,7 +282,7 @@ serve(async (req: Request): Promise<Response> => {
       throw error;
     }
 
-    console.log("✅ Email sent successfully:", data);
+    edgeLogger.success("BETA-EMAIL", "Email sent successfully", { id: data?.id });
 
     // Log successful send
     await supabase.from("beta_email_logs").insert({
@@ -299,10 +299,11 @@ serve(async (req: Request): Promise<Response> => {
       JSON.stringify({ success: true, data }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
-  } catch (error: any) {
-    console.error("❌ Error:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("BETA-EMAIL", "Error in send-beta-email", error);
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: errorMessage }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }

@@ -1,7 +1,7 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,12 +37,13 @@ serve(async (req) => {
     default:
       throw new Error("Invalid action");
     }
-  } catch (error: any) {
-    console.error("Travel predictive analysis error:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("TRAVEL-ANALYSIS", "Travel predictive analysis error", error);
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error?.message || "Unknown error" 
+        error: errorMessage 
       }),
       {
         status: 500,
@@ -53,7 +54,7 @@ serve(async (req) => {
 });
 
 async function generatePredictions(type: string, route: string) {
-  console.log(`Generating predictions for ${type}: ${route}`);
+  edgeLogger.info("TRAVEL-ANALYSIS", `Generating predictions for ${type}: ${route}`);
   
   try {
     // Buscar dados históricos
@@ -99,8 +100,9 @@ async function generatePredictions(type: string, route: string) {
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    console.error("Error generating predictions:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("TRAVEL-ANALYSIS", "Error generating predictions", error);
     throw error;
   }
 }
@@ -159,8 +161,9 @@ async function performAIPrediction(type: string, route: string, historicalData: 
     const analysis = JSON.parse(aiResponse.choices[0].message.content);
 
     return analysis;
-  } catch (error) {
-    console.error("AI prediction error:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.warn("TRAVEL-ANALYSIS", "AI prediction fallback to simple", { error: errorMessage });
     return generateSimplePrediction(historicalData);
   }
 }
@@ -319,7 +322,7 @@ async function generateUserRecommendations(userId: string) {
     .from("travel_recommendations")
     .insert(baseRecommendations);
 
-  if (error) console.error("Error generating recommendations:", error);
+  if (error) edgeLogger.error("TRAVEL-ANALYSIS", "Error generating recommendations", error);
 }
 
 async function storePriceData(data: any) {
@@ -368,8 +371,9 @@ async function storePriceData(data: any) {
       JSON.stringify({ success: true, message: "Dados de preço armazenados com sucesso" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    console.error("Error storing price data:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("TRAVEL-ANALYSIS", "Error storing price data", error);
     throw error;
   }
 }
@@ -395,7 +399,7 @@ async function analyzeTrends(type: string, route: string) {
         .eq("city", route)
         .gte("captured_at", thirtyDaysAgo)
         .order("captured_at", { ascending: true });
-      trendData = (data || []).map(item => ({ 
+      trendData = (data || []).map((item: { price_per_night: number; check_in_date: string; captured_at: string }) => ({ 
         price: item.price_per_night, 
         check_in_date: item.check_in_date, 
         captured_at: item.captured_at 
@@ -421,8 +425,9 @@ async function analyzeTrends(type: string, route: string) {
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    console.error("Error analyzing trends:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("TRAVEL-ANALYSIS", "Error analyzing trends", error);
     throw error;
   }
 }
