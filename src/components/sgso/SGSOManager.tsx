@@ -1,8 +1,9 @@
-// @ts-nocheck - JUSTIFIED: sgso_plans table uses dynamic schema not in generated types
 /**
  * PATCH 851 - SGSO Manager Component
  * Sistema de Gestão de Segurança Operacional
+ * PATCH 862: Removed @ts-nocheck, aligned with Supabase schema
  */
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -19,38 +20,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-
-interface SGSOPlan {
-  id: string;
-  plan_name: string;
-  plan_version?: string | number;
-  status: string;
-  content: unknown;
-  created_at: string;
-  created_by?: string;
-}
-
-// Dynamic DB access for tables not in schema - using any to bypass strict typing
-const dynamicDb = {
-  from: (table: string) => supabase.from(table as "organizations")
-};
+import type { SgsoPlan } from "@/types/supabase-aliases";
 
 export default function SGSOManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [planName, setPlanName] = React.useState("");
-  const [planContent, setPlanContent] = React.useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [planName, setPlanName] = useState("");
+  const [planContent, setPlanContent] = useState("");
 
   const { data: plans, isLoading } = useQuery({
     queryKey: ["sgso-plans"],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from("sgso_plans")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as SGSOPlan[];
+      return data;
     },
   });
 
@@ -59,14 +46,16 @@ export default function SGSOManager() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { data, error } = await dynamicDb
+      const planData = {
+        plan_name: planName,
+        content: { description: planContent },
+        created_by: user.id,
+        status: "draft",
+      };
+
+      const { data, error } = await supabase
         .from("sgso_plans")
-        .insert({
-          plan_name: planName,
-          content: { description: planContent },
-          created_by: user.id,
-          status: "draft",
-        })
+        .insert(planData)
         .select()
         .single();
 
@@ -83,7 +72,7 @@ export default function SGSOManager() {
       setPlanName("");
       setPlanContent("");
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Erro ao criar plano",
         description: error.message,
@@ -92,13 +81,13 @@ export default function SGSOManager() {
     },
   });
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
     const variants: Record<string, "default" | "secondary" | "outline"> = {
       draft: "outline",
       active: "default",
       completed: "secondary",
     };
-    return <Badge variant={variants[status] || "outline"}>{status}</Badge>;
+    return <Badge variant={variants[status || "draft"] || "outline"}>{status || "draft"}</Badge>;
   };
 
   return (

@@ -1,7 +1,7 @@
-// @ts-nocheck - JUSTIFIED: Uses JSONB columns in joint_mission_log, trust_events, interop_log
 /**
  * PATCH 230 - Interop Dashboard
  * Unified dashboard for joint operations, external status, and intelligence coordination
+ * PATCH 862: Removed @ts-nocheck, aligned with Supabase schema
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,10 +21,20 @@ import {
   TrendingUp,
   XCircle,
 } from "lucide-react";
+import type { 
+  JointMissionLog, 
+  AgentSwarmMetric, 
+  TrustEvent, 
+  InteropLog as InteropLogRow,
+  MissionDetails,
+  TrustAlertDetails,
+  InteropMessage,
+  getJsonField
+} from "@/types/supabase-aliases";
+import { getJsonField as extractJson } from "@/types/supabase-aliases";
 
-// Local interfaces matching the expected runtime data structure
-// Data is fetched from tables with JSONB columns that are flattened in queries
-interface Mission {
+// Transformed view types for UI display
+interface MissionView {
   id: string;
   mission_id: string;
   mission_name: string;
@@ -36,7 +46,7 @@ interface Mission {
   timestamp: string;
 }
 
-interface Agent {
+interface AgentView {
   id: string;
   agent_id: string;
   agent_name: string;
@@ -47,7 +57,7 @@ interface Agent {
   last_active_at: string;
 }
 
-interface TrustAlert {
+interface TrustAlertView {
   id: string;
   source_system: string;
   trust_score: number;
@@ -57,7 +67,7 @@ interface TrustAlert {
   timestamp: string;
 }
 
-interface InteropLog {
+interface InteropLogView {
   id: string;
   protocol: string;
   source_system: string;
@@ -66,11 +76,63 @@ interface InteropLog {
   timestamp: string;
 }
 
+// Transform DB rows to view types
+function transformMission(row: JointMissionLog): MissionView {
+  const details = row.details as MissionDetails | null;
+  return {
+    id: row.id,
+    mission_id: row.mission_id,
+    mission_name: extractJson(row.details, "mission_name", "Unknown Mission"),
+    mission_type: extractJson(row.details, "mission_type", "general"),
+    mission_status: extractJson(row.details, "mission_status", "pending"),
+    priority: extractJson(row.details, "priority", "medium"),
+    completion_percentage: extractJson(row.details, "completion_percentage", 0),
+    sync_status: extractJson(row.details, "sync_status", "pending"),
+    timestamp: row.created_at,
+  };
+}
+
+function transformAgent(row: AgentSwarmMetric): AgentView {
+  return {
+    id: row.id,
+    agent_id: row.agent_id,
+    agent_name: row.agent_id, // Use agent_id as name
+    agent_type: "swarm",
+    status: row.task_count > 0 ? "active" : "idle",
+    total_tasks_completed: row.success_count,
+    success_rate: row.task_count > 0 ? (row.success_count / row.task_count) * 100 : 0,
+    last_active_at: row.last_task_at || row.updated_at,
+  };
+}
+
+function transformTrustAlert(row: TrustEvent): TrustAlertView {
+  return {
+    id: row.id,
+    source_system: extractJson(row.details, "source_system", row.entity_id),
+    trust_score: row.trust_score_after,
+    compliance_status: extractJson(row.details, "compliance_status", "unknown"),
+    alert_level: extractJson(row.details, "alert_level", row.severity),
+    alert_message: extractJson(row.details, "alert_message", row.event_type),
+    timestamp: row.created_at,
+  };
+}
+
+function transformInteropLog(row: InteropLogRow): InteropLogView {
+  return {
+    id: row.id,
+    protocol: row.protocol_type,
+    source_system: extractJson(row.message, "source_system", "unknown"),
+    status: row.status,
+    latency_ms: extractJson(row.message, "latency_ms", 0),
+    timestamp: row.created_at,
+  };
+}
+
 export default function InteropDashboard() {
-  const [missions, setMissions] = useState<Mission[]>([]);
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [trustAlerts, setTrustAlerts] = useState<TrustAlert[]>([]);
-  const [interopLogs, setInteropLogs] = useState<InteropLog[]>([]);
+  const [missions, setMissions] = useState<MissionView[]>([]);
+  const [agents, setAgents] = useState<AgentView[]>([]);
+  const [trustAlerts, setTrustAlerts] = useState<TrustAlertView[]>([]);
+  const [interopLogs, setInteropLogs] = useState<InteropLogView[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -129,11 +191,11 @@ export default function InteropDashboard() {
       const { data, error } = await supabase
         .from("joint_mission_log")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      setMissions(data || []);
+      setMissions((data || []).map(transformMission));
     } catch (error) {
       logger.error("[InteropDashboard] Error loading missions:", error);
     }
@@ -144,18 +206,19 @@ export default function InteropDashboard() {
       const { data, error } = await supabase
         .from("agent_swarm_metrics")
         .select("*")
-        .order("last_active_at", { ascending: false })
+        .order("updated_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       
       // Deduplicate by agent_id, keeping most recent
-      const uniqueAgents = data?.reduce((acc: Agent[], curr) => {
+      const transformed = (data || []).map(transformAgent);
+      const uniqueAgents = transformed.reduce((acc: AgentView[], curr) => {
         if (!acc.find(a => a.agent_id === curr.agent_id)) {
           acc.push(curr);
         }
         return acc;
-      }, []) || [];
+      }, []);
       
       setAgents(uniqueAgents);
     } catch (error) {
@@ -168,12 +231,12 @@ export default function InteropDashboard() {
       const { data, error } = await supabase
         .from("trust_events")
         .select("*")
-        .in("alert_level", ["high", "critical", "emergency"])
-        .order("timestamp", { ascending: false })
+        .in("severity", ["high", "critical"])
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      setTrustAlerts(data || []);
+      setTrustAlerts((data || []).map(transformTrustAlert));
     } catch (error) {
       logger.error("[InteropDashboard] Error loading trust alerts:", error);
     }
@@ -184,11 +247,11 @@ export default function InteropDashboard() {
       const { data, error } = await supabase
         .from("interop_log")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
-      setInteropLogs(data || []);
+      setInteropLogs((data || []).map(transformInteropLog));
     } catch (error) {
       logger.error("[InteropDashboard] Error loading interop logs:", error);
     }
@@ -237,28 +300,28 @@ export default function InteropDashboard() {
           value={activeMissions.length}
           total={missions.length}
           icon={<MapPin className="h-5 w-5" />}
-          color="blue"
+          variant="primary"
         />
         <SummaryCard
           title="Connected Agents"
           value={activeAgents.length}
           total={agents.length}
           icon={<Users className="h-5 w-5" />}
-          color="green"
+          variant="success"
         />
         <SummaryCard
           title="Critical Alerts"
           value={criticalAlerts.length}
           total={trustAlerts.length}
           icon={<AlertTriangle className="h-5 w-5" />}
-          color="red"
+          variant="destructive"
         />
         <SummaryCard
           title="Interop Events"
           value={interopLogs.filter(l => l.status === "completed").length}
           total={interopLogs.length}
           icon={<Activity className="h-5 w-5" />}
-          color="purple"
+          variant="secondary"
         />
       </div>
 
@@ -333,7 +396,7 @@ export default function InteropDashboard() {
             <div className="space-y-3">
               {trustAlerts.length === 0 ? (
                 <div className="text-center py-4">
-                  <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+                  <CheckCircle2 className="h-8 w-8 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">All systems secure</p>
                 </div>
               ) : (
@@ -377,20 +440,20 @@ function SummaryCard({
   value, 
   total, 
   icon, 
-  color 
+  variant 
 }: { 
   title: string; 
   value: number; 
   total: number; 
   icon: React.ReactNode; 
-  color: string;
+  variant: "primary" | "success" | "destructive" | "secondary";
 }) {
-  const colorClasses = {
-    blue: "text-blue-500 bg-blue-50 dark:bg-blue-950",
-    green: "text-green-500 bg-green-50 dark:bg-green-950",
-    red: "text-red-500 bg-red-50 dark:bg-red-950",
-    purple: "text-purple-500 bg-purple-50 dark:bg-purple-950",
-  }[color];
+  const variantClasses = {
+    primary: "text-primary bg-primary/10",
+    success: "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400",
+    destructive: "text-destructive bg-destructive/10",
+    secondary: "text-secondary-foreground bg-secondary",
+  };
 
   return (
     <Card>
@@ -403,7 +466,7 @@ function SummaryCard({
               <p className="text-sm text-muted-foreground">/ {total}</p>
             </div>
           </div>
-          <div className={`p-3 rounded-lg ${colorClasses}`}>
+          <div className={`p-3 rounded-lg ${variantClasses[variant]}`}>
             {icon}
           </div>
         </div>
@@ -412,30 +475,17 @@ function SummaryCard({
   );
 }
 
-function MissionCard({ mission }: { mission: Mission }) {
-  const statusColors = {
-    planning: "secondary",
-    assigned: "default",
-    executing: "default",
-    completed: "default",
-    failed: "destructive",
-    cancelled: "secondary",
-  };
-
-  const priorityColors = {
-    low: "secondary",
-    medium: "default",
-    high: "default",
-    critical: "destructive",
-    emergency: "destructive",
-  };
+function MissionCard({ mission }: { mission: MissionView }) {
+  const statusVariant = mission.mission_status === "failed" ? "destructive" : 
+                        mission.mission_status === "completed" ? "secondary" : "default";
+  const priorityVariant = ["critical", "emergency"].includes(mission.priority) ? "destructive" : "secondary";
 
   return (
     <div className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <p className="font-medium text-sm">{mission.mission_name}</p>
-          <Badge variant={statusColors[mission.mission_status as keyof typeof statusColors] as any} className="text-xs">
+          <Badge variant={statusVariant} className="text-xs">
             {mission.mission_status}
           </Badge>
         </div>
@@ -444,7 +494,7 @@ function MissionCard({ mission }: { mission: Mission }) {
             <MapPin className="h-3 w-3" />
             {mission.mission_type}
           </span>
-          <Badge variant={priorityColors[mission.priority as keyof typeof priorityColors] as any} className="text-xs">
+          <Badge variant={priorityVariant} className="text-xs">
             {mission.priority}
           </Badge>
         </div>
@@ -457,20 +507,20 @@ function MissionCard({ mission }: { mission: Mission }) {
   );
 }
 
-function AgentCard({ agent }: { agent: Agent }) {
-  const statusIcons = {
-    registered: <Clock className="h-4 w-4 text-gray-500" />,
-    active: <Activity className="h-4 w-4 text-green-500" />,
+function AgentCard({ agent }: { agent: AgentView }) {
+  const statusIcons: Record<string, React.ReactNode> = {
+    registered: <Clock className="h-4 w-4 text-muted-foreground" />,
+    active: <Activity className="h-4 w-4 text-primary" />,
     idle: <Clock className="h-4 w-4 text-yellow-500" />,
-    busy: <TrendingUp className="h-4 w-4 text-blue-500" />,
-    offline: <XCircle className="h-4 w-4 text-gray-400" />,
-    error: <AlertTriangle className="h-4 w-4 text-red-500" />,
+    busy: <TrendingUp className="h-4 w-4 text-primary" />,
+    offline: <XCircle className="h-4 w-4 text-muted-foreground" />,
+    error: <AlertTriangle className="h-4 w-4 text-destructive" />,
   };
 
   return (
     <div className="flex items-center justify-between p-3 rounded-lg border bg-card">
       <div className="flex items-center gap-3">
-        {statusIcons[agent.status as keyof typeof statusIcons]}
+        {statusIcons[agent.status] || statusIcons.idle}
         <div>
           <p className="font-medium text-sm">{agent.agent_name}</p>
           <p className="text-xs text-muted-foreground">{agent.agent_type}</p>
@@ -484,71 +534,66 @@ function AgentCard({ agent }: { agent: Agent }) {
   );
 }
 
-function TrustAlertCard({ alert }: { alert: TrustAlert }) {
-  const levelColors = {
-    info: "bg-blue-50 dark:bg-blue-950 border-blue-200",
-    warning: "bg-yellow-50 dark:bg-yellow-950 border-yellow-200",
-    high: "bg-orange-50 dark:bg-orange-950 border-orange-200",
-    critical: "bg-red-50 dark:bg-red-950 border-red-200",
-    emergency: "bg-red-100 dark:bg-red-900 border-red-300",
+function TrustAlertCard({ alert }: { alert: TrustAlertView }) {
+  const levelVariants: Record<string, string> = {
+    info: "bg-primary/10 border-primary/20",
+    warning: "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800",
+    high: "bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800",
+    critical: "bg-destructive/10 border-destructive/20",
+    emergency: "bg-destructive/20 border-destructive/30",
   };
 
   return (
-    <div className={`p-3 rounded-lg border ${levelColors[alert.alert_level as keyof typeof levelColors]}`}>
+    <div className={`p-3 rounded-lg border ${levelVariants[alert.alert_level] || levelVariants.info}`}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-4 w-4" />
-          <p className="font-medium text-sm">{alert.source_system}</p>
+          <span className="font-medium text-sm">{alert.source_system}</span>
         </div>
-        <Badge variant="outline" className="text-xs">
-          Score: {alert.trust_score}
+        <Badge variant={alert.alert_level === "critical" ? "destructive" : "secondary"}>
+          {alert.alert_level}
         </Badge>
       </div>
-      <p className="text-xs text-muted-foreground">{alert.alert_message}</p>
+      <p className="text-sm text-muted-foreground">{alert.alert_message}</p>
+      <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
+        <span>Trust: {alert.trust_score}%</span>
+        <span>{new Date(alert.timestamp).toLocaleTimeString()}</span>
+      </div>
     </div>
   );
 }
 
-function ProtocolStatusMap({ logs }: { logs: InteropLog[] }) {
+function ProtocolStatusMap({ logs }: { logs: InteropLogView[] }) {
+  // Group by protocol
   const protocolStats = logs.reduce((acc, log) => {
     if (!acc[log.protocol]) {
-      acc[log.protocol] = { total: 0, completed: 0, failed: 0, avgLatency: 0 };
+      acc[log.protocol] = { total: 0, completed: 0, avgLatency: 0, latencies: [] as number[] };
     }
     acc[log.protocol].total++;
     if (log.status === "completed") acc[log.protocol].completed++;
-    if (log.status === "failed") acc[log.protocol].failed++;
-    acc[log.protocol].avgLatency += log.latency_ms || 0;
+    if (log.latency_ms > 0) acc[log.protocol].latencies.push(log.latency_ms);
     return acc;
-  }, {} as Record<string, { total: number; completed: number; failed: number; avgLatency: number }>);
+  }, {} as Record<string, { total: number; completed: number; avgLatency: number; latencies: number[] }>);
 
-  Object.keys(protocolStats).forEach(protocol => {
-    protocolStats[protocol].avgLatency = 
-      protocolStats[protocol].avgLatency / protocolStats[protocol].total;
+  // Calculate averages
+  Object.keys(protocolStats).forEach(key => {
+    const stats = protocolStats[key];
+    if (stats.latencies.length > 0) {
+      stats.avgLatency = stats.latencies.reduce((a, b) => a + b, 0) / stats.latencies.length;
+    }
   });
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {Object.entries(protocolStats).map(([protocol, stats]) => (
-        <div key={protocol} className="p-3 rounded-lg border bg-card">
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-medium text-sm uppercase">{protocol}</p>
-            <Badge variant="outline" className="text-xs">
-              {stats.total} msgs
-            </Badge>
+        <div key={protocol} className="flex items-center justify-between p-2 rounded border">
+          <div className="flex items-center gap-2">
+            <Radio className="h-4 w-4 text-primary" />
+            <span className="font-medium text-sm">{protocol}</span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="h-3 w-3 text-green-500" />
-              {stats.completed}
-            </span>
-            <span className="flex items-center gap-1">
-              <XCircle className="h-3 w-3 text-red-500" />
-              {stats.failed}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
-              {stats.avgLatency.toFixed(0)}ms
-            </span>
+            <span>{stats.completed}/{stats.total} completed</span>
+            <span>{stats.avgLatency.toFixed(0)}ms avg</span>
           </div>
         </div>
       ))}
