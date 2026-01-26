@@ -1,6 +1,8 @@
 /**
- * Smart Loader
+ * Smart Loader - PATCH 750.1
  * Intelligent resource loading based on network conditions
+ * 
+ * AUDIT FIX: Replaced `any` types with proper generics for type safety
  */
 
 import { bandwidthOptimizer } from './low-bandwidth-optimizer';
@@ -13,17 +15,17 @@ interface LoaderConfig {
   timeout?: number;
 }
 
-interface QueuedItem {
+interface QueuedItem<T = unknown> {
   url: string;
   config: LoaderConfig;
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
+  resolve: (value: T) => void;
+  reject: (error: Error) => void;
 }
 
 class SmartLoader {
   private queue: QueuedItem[] = [];
   private loading: Set<string> = new Set();
-  private cache: Map<string, any> = new Map();
+  private cache: Map<string, unknown> = new Map();
   private isProcessing = false;
   private maxConcurrent = 6;
 
@@ -31,7 +33,7 @@ class SmartLoader {
     this.updateMaxConcurrent();
   }
 
-  private updateMaxConcurrent() {
+  private updateMaxConcurrent(): void {
     if (ultraLightMode.isEnabled()) {
       this.maxConcurrent = ultraLightMode.getMaxConcurrentRequests();
     } else {
@@ -43,7 +45,7 @@ class SmartLoader {
   async load<T>(url: string, config: LoaderConfig): Promise<T> {
     // Check cache first
     if (this.cache.has(url)) {
-      return this.cache.get(url);
+      return this.cache.get(url) as T;
     }
 
     // Skip non-critical in ultra-light mode
@@ -51,21 +53,26 @@ class SmartLoader {
       return Promise.resolve(null as T);
     }
 
-    return new Promise((resolve, reject) => {
-      this.queue.push({ url, config, resolve, reject });
+    return new Promise<T>((resolve, reject) => {
+      this.queue.push({ 
+        url, 
+        config, 
+        resolve: resolve as (value: unknown) => void, 
+        reject 
+      });
       this.sortQueue();
       this.processQueue();
     });
   }
 
-  private sortQueue() {
+  private sortQueue(): void {
     const priorityOrder = { critical: 0, high: 1, normal: 2, low: 3 };
     this.queue.sort((a, b) => 
       priorityOrder[a.config.priority] - priorityOrder[b.config.priority]
     );
   }
 
-  private async processQueue() {
+  private async processQueue(): Promise<void> {
     if (this.isProcessing) return;
     this.isProcessing = true;
 
@@ -91,7 +98,7 @@ class SmartLoader {
     this.isProcessing = false;
   }
 
-  private async loadItem(item: QueuedItem) {
+  private async loadItem(item: QueuedItem): Promise<void> {
     const { url, config, resolve, reject } = item;
     const timeout = config.timeout || bandwidthOptimizer.getConfig().requestTimeout;
 
@@ -99,7 +106,7 @@ class SmartLoader {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-      let result: any;
+      let result: unknown;
 
       switch (config.type) {
         case 'script':
@@ -125,8 +132,9 @@ class SmartLoader {
       this.cache.set(url, result);
       resolve(result);
     } catch (error) {
-      Logger.error(`Failed to load: ${url}`, error, "SmartLoader");
-      reject(error);
+      const errorMessage = error instanceof Error ? error : new Error(String(error));
+      Logger.error(`Failed to load: ${url}`, errorMessage, "SmartLoader");
+      reject(errorMessage);
     }
   }
 
@@ -136,7 +144,7 @@ class SmartLoader {
       script.src = url;
       script.async = true;
       script.onload = () => resolve();
-      script.onerror = reject;
+      script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
       document.head.appendChild(script);
     });
   }
@@ -147,7 +155,7 @@ class SmartLoader {
       link.rel = 'stylesheet';
       link.href = url;
       link.onload = () => resolve();
-      link.onerror = reject;
+      link.onerror = () => reject(new Error(`Failed to load style: ${url}`));
       document.head.appendChild(link);
     });
   }
@@ -156,27 +164,27 @@ class SmartLoader {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve(img);
-      img.onerror = reject;
+      img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
       img.src = url;
     });
   }
 
-  private async loadData(url: string, signal: AbortSignal): Promise<any> {
+  private async loadData<T = unknown>(url: string, signal: AbortSignal): Promise<T> {
     const response = await fetch(url, {
       signal,
       headers: {
         'Accept-Encoding': 'gzip, deflate, br',
       },
     });
-    return response.json();
+    return response.json() as Promise<T>;
   }
 
-  private async loadModule(url: string): Promise<any> {
-    return import(/* @vite-ignore */ url);
+  private async loadModule<T = unknown>(url: string): Promise<T> {
+    return import(/* @vite-ignore */ url) as Promise<T>;
   }
 
   // Preload a resource
-  preload(url: string, as: 'script' | 'style' | 'image' | 'font' = 'script') {
+  preload(url: string, as: 'script' | 'style' | 'image' | 'font' = 'script'): void {
     if (document.querySelector(`link[href="${url}"]`)) return;
     
     const link = document.createElement('link');
@@ -188,7 +196,7 @@ class SmartLoader {
   }
 
   // Prefetch for future navigation
-  prefetch(url: string) {
+  prefetch(url: string): void {
     if (!bandwidthOptimizer.shouldPrefetch()) return;
     if (document.querySelector(`link[href="${url}"]`)) return;
     
@@ -199,12 +207,12 @@ class SmartLoader {
   }
 
   // Clear cache
-  clearCache() {
+  clearCache(): void {
     this.cache.clear();
   }
 
   // Get cache stats
-  getCacheStats() {
+  getCacheStats(): { size: number; queueLength: number; loadingCount: number } {
     return {
       size: this.cache.size,
       queueLength: this.queue.length,

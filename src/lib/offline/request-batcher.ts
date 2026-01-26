@@ -1,6 +1,8 @@
 /**
- * Request Batcher - PATCH 901
+ * Request Batcher - PATCH 901.1
  * Batches and deduplicates requests for low-bandwidth optimization
+ * 
+ * AUDIT FIX: Replaced `any` types with proper types for type safety
  */
 
 import { logger } from '@/lib/logger';
@@ -11,7 +13,7 @@ interface BatchedRequest {
   url: string;
   options: RequestInit;
   resolve: (value: Response) => void;
-  reject: (reason: any) => void;
+  reject: (reason: Error) => void;
   timestamp: number;
   priority: 'high' | 'normal' | 'low';
 }
@@ -77,7 +79,7 @@ class RequestBatcher {
             originalResolve(response.clone());
             resolve(response.clone());
           };
-          existing.reject = (error: any) => {
+          existing.reject = (error: Error) => {
             originalReject(error);
             reject(error);
           };
@@ -184,7 +186,7 @@ class RequestBatcher {
 
       request.resolve(response);
     } catch (error) {
-      request.reject(error);
+      request.reject(error instanceof Error ? error : new Error(String(error)));
     }
   }
 
@@ -200,7 +202,13 @@ class RequestBatcher {
   /**
    * Get queue statistics
    */
-  getStats() {
+  getStats(): {
+    queueLength: number;
+    cacheSize: number;
+    pendingHigh: number;
+    pendingNormal: number;
+    pendingLow: number;
+  } {
     return {
       queueLength: this.queue.length,
       cacheSize: this.requestCache.size,

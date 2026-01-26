@@ -1,7 +1,25 @@
 /**
- * Connection-Aware Utilities - PATCH 750
+ * Connection-Aware Utilities - PATCH 750.1
  * Optimizes app behavior based on network conditions
+ * 
+ * AUDIT FIX: Replaced `any` types with proper generics for type safety
  */
+
+// Network Connection API type (not available in standard TypeScript)
+interface NetworkInformation {
+  effectiveType?: 'slow-2g' | '2g' | '3g' | '4g';
+  saveData?: boolean;
+  downlink?: number;
+  rtt?: number;
+  addEventListener?(type: string, listener: () => void): void;
+  removeEventListener?(type: string, listener: () => void): void;
+}
+
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+}
 
 export interface ConnectionInfo {
   type: 'slow-2g' | '2g' | '3g' | '4g' | 'unknown';
@@ -15,9 +33,8 @@ export interface ConnectionInfo {
  * Get current connection information
  */
 export function getConnectionInfo(): ConnectionInfo {
-  const conn = (navigator as any).connection || 
-               (navigator as any).mozConnection || 
-               (navigator as any).webkitConnection;
+  const nav = navigator as NavigatorWithConnection;
+  const conn = nav.connection || nav.mozConnection || nav.webkitConnection;
 
   if (!conn) {
     return {
@@ -128,16 +145,17 @@ export function getOptimalTimeout(): number {
  * Subscribe to connection changes
  */
 export function onConnectionChange(callback: (info: ConnectionInfo) => void): () => void {
-  const conn = (navigator as any).connection;
+  const nav = navigator as NavigatorWithConnection;
+  const conn = nav.connection;
   
-  if (!conn) {
+  if (!conn || !conn.addEventListener) {
     return () => {};
   }
 
   const handler = () => callback(getConnectionInfo());
   conn.addEventListener('change', handler);
   
-  return () => conn.removeEventListener('change', handler);
+  return () => conn.removeEventListener?.('change', handler);
 }
 
 /**
@@ -157,14 +175,17 @@ export function deferOnSlowConnection<T>(
 
 /**
  * Batch requests on slow connections
+ * AUDIT FIX: Replaced `any` with proper generics
  */
+interface QueuedRequest<T> {
+  fn: () => Promise<T>;
+  resolve: (value: T) => void;
+  reject: (error: Error) => void;
+}
+
 export class RequestBatcher {
-  private queue: Array<{
-    fn: () => Promise<any>;
-    resolve: (value: any) => void;
-    reject: (error: any) => void;
-  }> = [];
-  private timeout: NodeJS.Timeout | null = null;
+  private queue: QueuedRequest<unknown>[] = [];
+  private timeout: ReturnType<typeof setTimeout> | null = null;
   private batchDelay: number;
 
   constructor(batchDelay: number = 500) {
@@ -173,12 +194,16 @@ export class RequestBatcher {
 
   add<T>(fn: () => Promise<T>): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.queue.push({ fn, resolve, reject });
+      this.queue.push({ 
+        fn: fn as () => Promise<unknown>, 
+        resolve: resolve as (value: unknown) => void, 
+        reject 
+      });
       this.scheduleBatch();
     });
   }
 
-  private scheduleBatch() {
+  private scheduleBatch(): void {
     if (this.timeout) return;
 
     const delay = isSlowConnection() ? this.batchDelay * 2 : this.batchDelay;
@@ -195,11 +220,25 @@ export class RequestBatcher {
             const result = await fn();
             resolve(result);
           } catch (error) {
-            reject(error);
+            reject(error instanceof Error ? error : new Error(String(error)));
           }
         })
       );
     }, delay);
+  }
+
+  /**
+   * Cancel all pending requests
+   */
+  clear(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+    this.queue.forEach(({ reject }) => {
+      reject(new Error('Request cancelled'));
+    });
+    this.queue = [];
   }
 }
 
