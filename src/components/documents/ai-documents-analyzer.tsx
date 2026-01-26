@@ -396,11 +396,12 @@ export function AIDocumentsAnalyzer() {
       setSelectedFile(null);
       setProgress(0);
       
-    } catch (error: any) {
-      console.error("Error processing document:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Tente novamente mais tarde";
+      console.error("Error processing document:", errorMessage);
       toast({
         title: "Erro ao processar documento",
-        description: error.message || "Tente novamente mais tarde",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

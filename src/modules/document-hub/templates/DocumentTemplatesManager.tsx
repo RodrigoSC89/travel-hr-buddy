@@ -141,8 +141,9 @@ const DocumentTemplatesManager = () => {
 
       if (error) throw error;
       setVersions(data || []);
-    } catch (error: any) {
-      console.error("Error loading versions:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error loading versions:", errorMessage);
     }
   };
 
@@ -201,10 +202,11 @@ const DocumentTemplatesManager = () => {
         tags: ""
       });
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error creating template",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -225,10 +227,11 @@ const DocumentTemplatesManager = () => {
       });
 
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error updating template",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -249,10 +252,11 @@ const DocumentTemplatesManager = () => {
       });
 
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error archiving template",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }

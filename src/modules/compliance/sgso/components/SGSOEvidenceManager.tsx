@@ -72,8 +72,9 @@ export const SGSOEvidenceManager: React.FC = () => {
 
       toast({ title: "Evidência enviada com sucesso" });
       loadEvidences();
-    } catch (error: any) {
-      toast({ title: "Erro no upload", description: error.message, variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro no upload";
+      toast({ title: "Erro no upload", description: errorMessage, variant: "destructive" });
     } finally {
       setIsUploading(false);
     }

@@ -128,7 +128,7 @@ export default function AuditDashboard() {
       window.URL.revokeObjectURL(url);
 
       toast.success("Logs exported successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error("Failed to export logs");
     }
   }

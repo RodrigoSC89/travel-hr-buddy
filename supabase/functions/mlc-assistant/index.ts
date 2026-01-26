@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -219,7 +220,7 @@ serve(async (req: Request) => {
         justification_reasoning: `Processed MLC query using knowledge base. Mode: ${mode}. Response time: ${responseTime}ms`,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      }).catch((err: Error) => console.error("[MLC Assistant] Decision logging error:", err));
+      }).catch((err: unknown) => edgeLogger.error("MLC-ASSISTANT", "Decision logging error", err));
 
       // Also log to ai_audit_logs for compliance tracking
       await supabase.from('ai_audit_logs').insert({
@@ -233,16 +234,16 @@ serve(async (req: Request) => {
         confidence_score: 0.90,
         rag_enabled: true,
         rag_sources: { source: 'MLC_KNOWLEDGE_BASE', version: '2006' }
-      }).catch((err: Error) => console.error("[MLC Assistant] Audit logging error:", err));
+      }).catch((err: unknown) => edgeLogger.error("MLC-ASSISTANT", "Audit logging error", err));
 
-      console.log("[MLC Assistant] Response successful in", responseTime, "ms");
+      edgeLogger.success("MLC-ASSISTANT", `Response successful in ${responseTime}ms`);
     }
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
-  } catch (error) {
-    console.error("[MLC Assistant] Error:", error);
+  } catch (error: unknown) {
+    edgeLogger.error("MLC-ASSISTANT", "Error processing request", error);
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

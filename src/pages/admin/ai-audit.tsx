@@ -34,8 +34,9 @@ export default function AIAuditDashboard() {
       // Fetch metrics
       const metricsData = await aiLogger.getMetrics(selectedService || undefined);
       setMetrics(metricsData);
-    } catch (error: any) {
-      logger.error("Error fetching AI audit data", { error, selectedService, selectedStatus });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      logger.error("Error fetching AI audit data", { error: errorMessage, selectedService, selectedStatus });
       toast.error("Failed to fetch AI audit data");
     } finally {
       setLoading(false);

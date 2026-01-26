@@ -149,11 +149,12 @@ const TravelManagement = () => {
 
       if (error) throw error;
       setItineraries(data || []);
-    } catch (error: any) {
-      console.error("Error loading itineraries:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error loading itineraries:", errorMessage);
       toast({
         title: "Error loading itineraries",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -172,8 +173,9 @@ const TravelManagement = () => {
 
       if (error) throw error;
       setConflicts(data || []);
-    } catch (error: any) {
-      console.error("Error loading conflicts:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error loading conflicts:", errorMessage);
     }
   };
 
@@ -203,10 +205,11 @@ const TravelManagement = () => {
         status: "pending"
       });
       loadItineraries();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error creating itinerary",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -295,10 +298,11 @@ const TravelManagement = () => {
       });
 
       loadConflicts();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error resolving conflict",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }

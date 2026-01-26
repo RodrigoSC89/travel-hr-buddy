@@ -34,10 +34,11 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
       const { data, error } = await query;
       if (error) throw error;
       setActions(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading actions",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
