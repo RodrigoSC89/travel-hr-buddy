@@ -3,6 +3,10 @@
  * PATCH 62.0 - AI-powered audit evaluation using Lovable AI Gateway
  */
 
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "evaluate-audit";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -17,7 +21,7 @@ Deno.serve(async (req: Request) => {
   try {
     const { checklistData, auditType, auditId, prompt } = await req.json();
     
-    console.log(`[evaluate-audit] Starting evaluation for ${auditType} audit ${auditId}`);
+    edgeLogger.info(TAG, `Starting evaluation for ${auditType} audit ${auditId}`);
 
     // Get Lovable AI API key from environment
     // @ts-ignore: Deno is available in edge runtime
@@ -55,7 +59,7 @@ Return your response as valid JSON only, no markdown formatting.`
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`[evaluate-audit] AI gateway error:`, response.status, errorText);
+      edgeLogger.error(TAG, `AI gateway error: ${response.status}`, errorText);
       
       if (response.status === 429) {
         return new Response(
@@ -81,7 +85,7 @@ Return your response as valid JSON only, no markdown formatting.`
       throw new Error("No content in AI response");
     }
 
-    console.log(`[evaluate-audit] AI response received`);
+    edgeLogger.debug(TAG, "AI response received");
 
     // Parse JSON response
     let parsedResponse;
@@ -94,7 +98,7 @@ Return your response as valid JSON only, no markdown formatting.`
       
       parsedResponse = JSON.parse(cleanContent);
     } catch (parseError) {
-      console.error(`[evaluate-audit] Failed to parse AI response:`, content);
+      edgeLogger.warn(TAG, "Failed to parse AI response", { excerpt: content.substring(0, 200) });
       
       // Return structured fallback
       parsedResponse = {
@@ -107,7 +111,7 @@ Return your response as valid JSON only, no markdown formatting.`
       };
     }
 
-    console.log(`[evaluate-audit] Evaluation completed successfully`);
+    edgeLogger.success(TAG, "Evaluation completed successfully");
 
     return new Response(
       JSON.stringify(parsedResponse),
@@ -120,7 +124,7 @@ Return your response as valid JSON only, no markdown formatting.`
     );
 
   } catch (error) {
-    console.error(`[evaluate-audit] Error:`, error);
+    edgeLogger.error(TAG, "Error in evaluate-audit", error);
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : "Unknown error",

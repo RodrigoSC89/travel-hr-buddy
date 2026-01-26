@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 // Lazy load jsPDF
 const loadPDFLibs = async () => {
@@ -440,9 +441,7 @@ export default function AssistantLogsPage() {
                             <p className="text-sm font-medium mb-1">Resposta</p>
                             <div 
                               className="text-sm text-gray-700"
-                              dangerouslySetInnerHTML={{ 
-                                __html: log.answer.replace(/<a /g, "<a target=\"_blank\" rel=\"noopener noreferrer\" ") 
-                              }}
+                              dangerouslySetInnerHTML={createSafeHTML(log.answer || "")}
                             />
                           </div>
                         </div>

@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import {
   FileText,
   Save,
@@ -605,7 +606,7 @@ export const TemplatesDynamic = () => {
 
               <TabsContent value="preview">
                 <div className="border rounded-lg p-4 min-h-[400px] bg-background">
-                  <div id="preview-content" dangerouslySetInnerHTML={{ __html: previewHtml }} />
+                  <div id="preview-content" dangerouslySetInnerHTML={createSafeHTML(previewHtml || "")} />
                 </div>
                 <div className="flex gap-2 mt-4">
                   <Button onClick={exportToPDF} disabled={loading}>

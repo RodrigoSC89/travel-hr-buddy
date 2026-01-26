@@ -39,6 +39,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import html2pdf from "html2pdf.js";
 import { TemplateWYSIWYGEditor } from "./components/TemplateWYSIWYGEditor";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 interface Template {
   id: string;
@@ -447,7 +448,7 @@ export default function TemplatesPanel() {
                 <h3 className="text-sm font-medium mb-2">Visualização:</h3>
                 <div 
                   className="prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ __html: renderPreview() }}
+                  dangerouslySetInnerHTML={createSafeHTML(renderPreview())}
                 />
               </div>
             </div>
