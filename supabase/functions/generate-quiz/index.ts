@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger as log } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -153,7 +154,7 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
             const jsonString = jsonMatch ? jsonMatch[1] : content;
             questions = JSON.parse(jsonString);
           } catch (parseError) {
-            console.error("Failed to parse AI response:", parseError);
+            log.error("generate-quiz", "Failed to parse AI response", parseError);
             throw new Error("AI generated invalid response format");
           }
 
@@ -165,12 +166,12 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
             );
           }
         } else if (response.status === 429) {
-          console.warn("AI rate limit exceeded, falling back to templates");
+          log.warn("generate-quiz", "AI rate limit exceeded, falling back to templates");
         } else if (response.status === 402) {
-          console.warn("AI credits exhausted, falling back to templates");
+          log.warn("generate-quiz", "AI credits exhausted, falling back to templates");
         }
       } catch (aiError) {
-        console.error("AI generation failed:", aiError);
+        log.error("generate-quiz", "AI generation failed", aiError);
         // Fall through to fallback generation
       }
     }
@@ -183,7 +184,7 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error generating quiz:", error);
+    log.error("generate-quiz", "Error generating quiz", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
