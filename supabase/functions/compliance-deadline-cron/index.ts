@@ -3,9 +3,7 @@
  * Runs daily to check for upcoming deadlines and send notifications
  */
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
-import { Resend } from "npm:resend@2.0.0";
 import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const TAG = "COMPLIANCE-CRON";
@@ -31,7 +29,7 @@ const DEADLINE_CHECKS: DeadlineCheck[] = [
 
 const WARNING_DAYS = [30, 14, 7, 3, 1]; // Days before deadline to warn
 
-serve(async (req) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -45,7 +43,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     const now = new Date();
     const notifications: any[] = [];
 
@@ -132,15 +130,26 @@ serve(async (req) => {
                 }
 
                 // Send email for critical/high priority
-                if ((priority === "critical" || priority === "high") && user.email) {
+                if ((priority === "critical" || priority === "high") && user.email && RESEND_API_KEY) {
                   try {
-                    await resend.emails.send({
-                      from: "NautiOne Compliance <compliance@nautione.app>",
-                      to: [user.email],
-                      subject: notification.title,
-                      html: generateEmailHtml(notification, user.full_name || "Usuário"),
+                    const emailResponse = await fetch("https://api.resend.com/emails", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${RESEND_API_KEY}`,
+                      },
+                      body: JSON.stringify({
+                        from: "NautiOne Compliance <compliance@nautione.app>",
+                        to: [user.email],
+                        subject: notification.title,
+                        html: generateEmailHtml(notification, user.full_name || "Usuário"),
+                      }),
                     });
-                    edgeLogger.info(TAG, `Email sent to ${user.email}`);
+                    if (emailResponse.ok) {
+                      edgeLogger.info(TAG, `Email sent to ${user.email}`);
+                    } else {
+                      edgeLogger.warn(TAG, "Email send failed", { status: emailResponse.status });
+                    }
                   } catch (emailError) {
                     edgeLogger.warn(TAG, "Email send error", { error: String(emailError) });
                   }

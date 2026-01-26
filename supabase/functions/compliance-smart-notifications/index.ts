@@ -3,9 +3,7 @@
  * Email and Push notifications for critical compliance deadlines
  */
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
-import { Resend } from "npm:resend@2.0.0";
 import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const TAG = "COMPLIANCE-NOTIFICATIONS";
@@ -39,9 +37,7 @@ interface EmailTemplate {
   html: string;
 }
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-
-serve(async (req) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -73,7 +69,7 @@ serve(async (req) => {
       inApp: null as any,
     };
 
-    // 1. Send Email Notification via Resend
+    // 1. Send Email Notification via Resend API
     if (channels.email && userEmail) {
       const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
       
@@ -81,15 +77,29 @@ serve(async (req) => {
         const emailTemplate = generateEmailTemplate(type, priority, data, userName);
         
         try {
-          const emailResponse = await resend.emails.send({
-            from: "NautiOne Compliance <compliance@nautione.app>",
-            to: [userEmail],
-            subject: emailTemplate.subject,
-            html: emailTemplate.html,
+          const emailResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${RESEND_API_KEY}`,
+            },
+            body: JSON.stringify({
+              from: "NautiOne Compliance <compliance@nautione.app>",
+              to: [userEmail],
+              subject: emailTemplate.subject,
+              html: emailTemplate.html,
+            }),
           });
           
-          results.email = { success: true, id: emailResponse.data?.id };
-          console.log(`[Email] Sent to ${userEmail}:`, emailResponse);
+          if (emailResponse.ok) {
+            const emailData = await emailResponse.json();
+            results.email = { success: true, id: emailData.id };
+            console.log(`[Email] Sent to ${userEmail}:`, emailData);
+          } else {
+            const errorText = await emailResponse.text();
+            console.error("[Email Error]:", errorText);
+            results.email = { success: false, error: errorText };
+          }
         } catch (emailError) {
           console.error("[Email Error]:", emailError);
           results.email = { success: false, error: String(emailError) };
