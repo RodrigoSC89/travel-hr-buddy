@@ -218,15 +218,16 @@ export function ComplianceInspectionMap({
       el.innerHTML = getMarkerHTML(vessel.status);
       el.style.cursor = 'pointer';
 
-      // Create popup
+      // Create popup with XSS-safe content
+      const escapeHtml = (str: string) => str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c);
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
         <div style="padding: 8px; min-width: 200px;">
-          <h3 style="margin: 0 0 8px 0; font-weight: 600;">${vessel.vesselName}</h3>
-          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">IMO: ${vessel.imoNumber}</p>
-          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">Flag: ${vessel.flagState}</p>
+          <h3 style="margin: 0 0 8px 0; font-weight: 600;">${escapeHtml(vessel.vesselName)}</h3>
+          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">IMO: ${escapeHtml(vessel.imoNumber)}</p>
+          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">Flag: ${escapeHtml(vessel.flagState)}</p>
           <p style="margin: 0 0 8px 0; font-size: 12px;">
             <strong>Status:</strong> 
-            <span style="color: ${getStatusColor(vessel.status)}">${getStatusLabel(vessel.status)}</span>
+            <span style="color: ${getStatusColor(vessel.status)}">${escapeHtml(getStatusLabel(vessel.status))}</span>
           </p>
           <p style="margin: 0; font-size: 12px;">
             <strong>Próxima Inspeção:</strong> ${new Date(vessel.dueDate).toLocaleDateString('pt-BR')}

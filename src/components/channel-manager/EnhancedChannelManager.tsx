@@ -181,10 +181,16 @@ export const EnhancedChannelManager: React.FC = () => {
     }
   };
 
-  let channelSubscription: any = null;
+  // Use ref to prevent memory leaks from stale subscriptions
+  const channelSubscriptionRef = React.useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const subscribeToChannel = (channelId: string) => {
-    channelSubscription = supabase
+    // Clean up existing subscription first
+    if (channelSubscriptionRef.current) {
+      supabase.removeChannel(channelSubscriptionRef.current);
+    }
+    
+    channelSubscriptionRef.current = supabase
       .channel(`channel-${channelId}`)
       .on(
         "postgres_changes",
@@ -212,12 +218,21 @@ export const EnhancedChannelManager: React.FC = () => {
   };
 
   const unsubscribeFromChannel = () => {
-    if (channelSubscription) {
-      supabase.removeChannel(channelSubscription);
-      channelSubscription = null;
+    if (channelSubscriptionRef.current) {
+      supabase.removeChannel(channelSubscriptionRef.current);
+      channelSubscriptionRef.current = null;
       setRealtimeStatus("disconnected");
     }
   };
+  
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      if (channelSubscriptionRef.current) {
+        supabase.removeChannel(channelSubscriptionRef.current);
+      }
+    };
+  }, []);
 
   const handleCreateChannel = async () => {
     try {

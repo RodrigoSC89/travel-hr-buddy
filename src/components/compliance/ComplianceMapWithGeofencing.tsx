@@ -422,18 +422,20 @@ export function ComplianceMapWithGeofencing({
       el.innerHTML = getMarkerHTML(vessel.status, !!geofence);
       el.style.cursor = 'pointer';
 
+      // XSS-safe popup content
+      const escapeHtml = (str: string) => str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c);
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
         <div style="padding: 8px; min-width: 220px;">
-          <h3 style="margin: 0 0 8px 0; font-weight: 600;">${vessel.vesselName}</h3>
-          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">IMO: ${vessel.imoNumber}</p>
-          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">Flag: ${vessel.flagState}</p>
+          <h3 style="margin: 0 0 8px 0; font-weight: 600;">${escapeHtml(vessel.vesselName)}</h3>
+          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">IMO: ${escapeHtml(vessel.imoNumber)}</p>
+          <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">Flag: ${escapeHtml(vessel.flagState)}</p>
           <p style="margin: 0 0 4px 0; font-size: 12px;">
             <strong>Status:</strong> 
-            <span style="color: ${getStatusColor(vessel.status)}">${getStatusLabel(vessel.status)}</span>
+            <span style="color: ${getStatusColor(vessel.status)}">${escapeHtml(getStatusLabel(vessel.status))}</span>
           </p>
           ${geofence ? `
             <p style="margin: 8px 0 0 0; padding: 4px 8px; background: rgba(245, 158, 11, 0.2); border-radius: 4px; font-size: 11px;">
-              ⚠️ Zona: ${geofence.name}
+              ⚠️ Zona: ${escapeHtml(geofence.name)}
             </p>
           ` : ''}
         </div>
