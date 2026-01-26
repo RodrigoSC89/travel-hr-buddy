@@ -66,10 +66,11 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
       });
 
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error recording health data",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

@@ -369,8 +369,9 @@ export default function MentorDPProfessional() {
 
       toast({ title: "Quiz Gerado", description: `Quiz sobre "${quizTopicToUse}" pronto!` });
       setQuizTopic("");
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message || "Não foi possível gerar o quiz", variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível gerar o quiz";
+      toast({ title: "Erro", description: errorMessage, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -462,8 +463,9 @@ export default function MentorDPProfessional() {
       setRepositoryQuestions(prev => prev.map(q => q.id === question.id ? { ...q, answer: data.content, answers: q.answers + 1 } : q));
       setSelectedQuestion({ ...question, answer: data.content });
       toast({ title: "Resposta Gerada", description: "A IA respondeu sua pergunta!" });
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message || "Não foi possível gerar resposta", variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível gerar resposta";
+      toast({ title: "Erro", description: errorMessage, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }

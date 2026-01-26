@@ -301,10 +301,11 @@ export default function ProcurementCommandCenter() {
 
       if (error) throw error;
       setInventoryItems((data as unknown as InventoryItem[]) || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Erro ao carregar inventário",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

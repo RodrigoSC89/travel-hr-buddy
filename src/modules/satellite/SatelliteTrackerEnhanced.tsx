@@ -129,8 +129,9 @@ export const SatelliteTrackerEnhanced = () => {
 
       if (error) throw error;
       setCoverageEvents(data || []);
-    } catch (error: any) {
-      console.error("Error loading coverage events:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error loading coverage events:", errorMessage);
     }
   };
 
@@ -186,8 +187,9 @@ export const SatelliteTrackerEnhanced = () => {
       }
 
       await loadSatelliteData();
-    } catch (error: any) {
-      console.error("Error creating mock satellites:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error creating mock satellites:", errorMessage);
     }
   };
 
@@ -223,8 +225,9 @@ export const SatelliteTrackerEnhanced = () => {
 
       // Check for coverage events
       checkCoverageEvents(updates);
-    } catch (error: any) {
-      console.error("Error updating satellites:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error updating satellites:", errorMessage);
     }
   };
 
