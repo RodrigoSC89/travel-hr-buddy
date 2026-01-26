@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -69,7 +70,7 @@ Formato: Markdown`
       ];
     }
 
-    console.log(`AI Advisor request - Action: ${action || "chat"}, Profile: ${profile}`);
+    edgeLogger.info("ai-advisor", `Request - Action: ${action || "chat"}`, { profile });
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -124,7 +125,7 @@ Formato: Markdown`
     });
 
   } catch (error) {
-    console.error("AI Advisor error:", error);
+    edgeLogger.error("ai-advisor", "Request failed", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       {
