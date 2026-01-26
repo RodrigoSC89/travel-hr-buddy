@@ -357,8 +357,8 @@ function getStoredSessionId(): string | null {
 
   try {
     return window.sessionStorage.getItem("session_id");
-  } catch (error) {
-    console.warn("Unable to access sessionStorage for session_id", error);
+  } catch {
+    // Silent fail - sessionStorage may not be available
     return null;
   }
 }

@@ -133,8 +133,8 @@ class LocalPermissionsSystem {
           this.userPermissions.set(userId, perms as UserPermissions);
         });
       }
-    } catch (error) {
-      console.warn('Failed to load permissions from storage:', error);
+    } catch {
+      // Silent fail - storage may not be available in all environments
     }
   }
 
@@ -148,8 +148,8 @@ class LocalPermissionsSystem {
         data[userId] = perms;
       });
       localStorage.setItem(USER_PERMS_KEY, JSON.stringify(data));
-    } catch (error) {
-      console.warn('Failed to save permissions to storage:', error);
+    } catch {
+      // Silent fail - storage may not be available in all environments
     }
   }
 
