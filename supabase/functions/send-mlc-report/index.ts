@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Send MLC Report Email Edge Function
  * Sends MLC inspection reports via Resend to shipowner and Flag State
@@ -7,6 +6,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -64,7 +64,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: MLCReportEmailRequest = await req.json();
-    console.log("[MLC Email] Processing request for vessel:", data.vesselName);
+    edgeLogger.info("MLC-EMAIL", "Processing MLC report email", { vessel: data.vesselName });
 
     // Validate required fields
     if (!data.shipownerEmail || !data.vesselName || !data.imoNumber) {
@@ -234,7 +234,7 @@ const handler = async (req: Request): Promise<Response> => {
       attachments,
     });
 
-    console.log("[MLC Email] Email sent successfully:", emailResponse);
+    edgeLogger.success("MLC-EMAIL", "Email sent successfully", { messageId: emailResponse.id, recipients });
 
     return new Response(
       JSON.stringify({
@@ -250,13 +250,14 @@ const handler = async (req: Request): Promise<Response> => {
       }
     );
 
-  } catch (error: any) {
-    console.error("[MLC Email] Error:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    edgeLogger.error("MLC-EMAIL", "Error sending MLC email", error);
     
     return new Response(
       JSON.stringify({ 
-        error: error.message || "Failed to send email",
-        details: error.toString()
+        error: errorMessage || "Failed to send email",
+        details: String(error)
       }),
       {
         status: 500,
