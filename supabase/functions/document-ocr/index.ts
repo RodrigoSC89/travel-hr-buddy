@@ -98,7 +98,7 @@ Return a JSON object with:
       .from('profiles')
       .select('organization_id')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     await supabase.from('ai_document_insights').insert({
       document_id: document_url,

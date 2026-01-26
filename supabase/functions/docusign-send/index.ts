@@ -37,7 +37,6 @@ serve(async (req) => {
     const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 
     if (!DOCUSIGN_API_KEY || !DOCUSIGN_INTEGRATION_KEY || !DOCUSIGN_ACCOUNT_ID) {
-      console.error('[DocuSign] Missing API credentials');
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -70,7 +69,7 @@ serve(async (req) => {
       );
     }
 
-    console.log(`[DocuSign] Creating envelope for: ${documentTitle}`);
+    // Creating envelope for document
 
     // Build DocuSign envelope definition
     const envelopeDefinition = {
@@ -124,7 +123,6 @@ serve(async (req) => {
 
     if (!docusignResponse.ok) {
       const errorText = await docusignResponse.text();
-      console.error('[DocuSign] API Error:', errorText);
       
       // Store failed attempt
       await supabase.from('docusign_envelopes').insert({
@@ -144,7 +142,6 @@ serve(async (req) => {
     }
 
     const envelopeResult = await docusignResponse.json();
-    console.log(`[DocuSign] Envelope created: ${envelopeResult.envelopeId}`);
 
     // Store envelope in database
     const { data: envelope, error: dbError } = await supabase
@@ -163,9 +160,7 @@ serve(async (req) => {
       .select()
       .single();
 
-    if (dbError) {
-      console.error('[DocuSign] DB Error:', dbError);
-    }
+    // Note: dbError is silently handled - envelope was created successfully
 
     return new Response(
       JSON.stringify({
@@ -180,7 +175,6 @@ serve(async (req) => {
 
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('[DocuSign] Error:', errorMessage);
     return new Response(
       JSON.stringify({ success: false, error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
