@@ -20,8 +20,8 @@ export const getStoredTheme = (): Theme => {
     if (stored === "light" || stored === "dark" || stored === "system") {
       return stored;
     }
-  } catch (error) {
-    console.warn("Failed to get stored theme:", error);
+  } catch {
+    // Silent fail - localStorage may not be available
   }
   
   return "system";
@@ -35,8 +35,8 @@ export const setStoredTheme = (theme: Theme): void => {
   
   try {
     localStorage.setItem(STORAGE_KEY, theme);
-  } catch (error) {
-    console.warn("Failed to store theme:", error);
+  } catch {
+    // Silent fail - localStorage may not be available
   }
 };
 

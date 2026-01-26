@@ -370,8 +370,8 @@ function setStoredSessionId(sessionId: string) {
 
   try {
     window.sessionStorage.setItem("session_id", sessionId);
-  } catch (error) {
-    console.warn("Unable to persist session_id", error);
+  } catch {
+    // Silent fail - sessionStorage may not be available
   }
 }
 
@@ -382,8 +382,8 @@ function clearStoredSessionId() {
 
   try {
     window.sessionStorage.removeItem("session_id");
-  } catch (error) {
-    console.warn("Unable to clear session_id", error);
+  } catch {
+    // Silent fail - sessionStorage may not be available
   }
 }
 

@@ -72,8 +72,8 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
           setIsLoading(false);
           return;
         }
-      } catch (error) {
-        console.warn('Supabase load failed, falling back to localStorage:', error);
+      } catch {
+        // Supabase load failed, falling back to localStorage
       }
     }
 
@@ -137,8 +137,8 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
           });
           return updatedSession;
         }
-      } catch (error) {
-        console.warn('Supabase save failed, using localStorage:', error);
+      } catch {
+        // Supabase save failed, using localStorage fallback
       }
     }
 
@@ -193,8 +193,8 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
           toast.success('Conversa excluída');
           return;
         }
-      } catch (error) {
-        console.warn('Supabase delete failed, using localStorage:', error);
+      } catch {
+        // Supabase delete failed, using localStorage fallback
       }
     }
 

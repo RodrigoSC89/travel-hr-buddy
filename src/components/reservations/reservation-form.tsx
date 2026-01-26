@@ -24,6 +24,32 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 import { ReservationTemplates } from "./reservation-templates";
+import { z } from "zod";
+
+// Zod validation schema for reservation form
+const reservationSchema = z.object({
+  title: z.string().min(1, "Título é obrigatório").max(200, "Título muito longo"),
+  description: z.string().max(2000, "Descrição muito longa").optional(),
+  reservation_type: z.enum(["hotel", "flight", "car", "restaurant", "event", "other"]),
+  start_date: z.string().min(1, "Data de início é obrigatória"),
+  end_date: z.string().min(1, "Data de fim é obrigatória"),
+  location: z.string().max(500, "Localização muito longa").optional(),
+  address: z.string().max(500, "Endereço muito longo").optional(),
+  contact_info: z.string().max(200, "Informação de contato muito longa").optional(),
+  confirmation_number: z.string().max(100, "Número de confirmação muito longo").optional(),
+  supplier_url: z.string().url("URL inválida").max(500, "URL muito longa").optional().or(z.literal("")),
+  room_type: z.string().max(100, "Tipo de quarto muito longo").optional(),
+  total_amount: z.string().optional().refine(
+    (val) => !val || !isNaN(parseFloat(val)),
+    "Valor deve ser numérico"
+  ),
+  currency: z.string().default("BRL"),
+  status: z.enum(["confirmed", "pending", "cancelled", "completed"]),
+  notes: z.string().max(2000, "Notas muito longas").optional(),
+}).refine(
+  (data) => new Date(data.start_date) < new Date(data.end_date),
+  { message: "Data de fim deve ser posterior à data de início", path: ["end_date"] }
+);
 
 interface ReservationFormProps {
   isOpen: boolean;
@@ -122,33 +148,18 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   };
 
   const validateForm = () => {
-    if (!formData.title.trim()) {
+    const result = reservationSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const firstError = result.error.issues[0];
       toast({
         title: "Erro de validação",
-        description: "Título é obrigatório",
+        description: firstError.message,
         variant: "destructive"
       });
       return false;
     }
-
-    if (!formData.start_date || !formData.end_date) {
-      toast({
-        title: "Erro de validação",
-        description: "Data de início e fim são obrigatórias",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    if (new Date(formData.start_date) >= new Date(formData.end_date)) {
-      toast({
-        title: "Erro de validação",
-        description: "Data de fim deve ser posterior à data de início",
-        variant: "destructive"
-      });
-      return false;
-    }
-
+    
     return true;
   };
 

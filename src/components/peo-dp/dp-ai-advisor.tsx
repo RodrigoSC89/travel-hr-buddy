@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { createSimpleSafeHTML } from "@/lib/utils/safe-html";
 import {
   Brain,
   Send,
@@ -318,7 +319,7 @@ export const DPAIAdvisor: React.FC = () => {
                             {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-purple-500" />}
                           </div>
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') }} />
+                            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={createSimpleSafeHTML(message.content)} />
                             {message.references && message.references.length > 0 && (
                               <div className="mt-2 pt-2 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-1">Referências:</p>

@@ -3,12 +3,13 @@
  * Natural language command input with AI processing
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Mic, MicOff, Loader2, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { parseIntent, getSuggestedActions } from './AIIntentParser';
+import { stripHtml } from '@/lib/validation/sanitize';
 import type { ParsedIntent, VoiceState } from './types';
 
 interface ConversationalInputProps {
@@ -80,12 +81,17 @@ export function ConversationalInput({
     }
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = useCallback((e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!query.trim() || isProcessing) return;
+    
+    // Sanitize and validate input
+    const sanitizedQuery = stripHtml(query.trim());
+    if (!sanitizedQuery || sanitizedQuery.length < 1 || sanitizedQuery.length > 500 || isProcessing) {
+      return;
+    }
 
-    const finalIntent = parseIntent(query);
-    onSubmit(query, finalIntent);
+    const finalIntent = parseIntent(sanitizedQuery);
+    onSubmit(sanitizedQuery, finalIntent);
 
     // Auto-navigate if high confidence
     if (finalIntent.suggestedRoute && finalIntent.confidence > 0.8 && onNavigate) {
@@ -94,7 +100,7 @@ export function ConversationalInput({
 
     setQuery('');
     setIntent(null);
-  };
+  }, [query, isProcessing, onSubmit, onNavigate]);
 
   const suggestions = intent ? getSuggestedActions(intent) : [];
 
