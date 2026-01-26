@@ -70,16 +70,28 @@ serve(async (req) => {
         .contains('alert_types', [alert_type]);
 
       if (subscribers && subscribers.length > 0) {
-        // Queue notifications
-        for (const sub of subscribers) {
-          await supabase.from('notification_queue').insert({
+        // Queue notifications with proper error handling
+        const notificationPromises = subscribers.map(async (sub: { user_id: string; notification_methods: string[] }) => {
+          const { error: queueError } = await supabase.from('notification_queue').insert({
             alert_id: data.id,
             user_id: sub.user_id,
             notification_methods: sub.notification_methods,
             status: 'pending',
             created_at: new Date().toISOString()
           });
-        }
+          
+          if (queueError) {
+            log('warn', 'create-alert', 'Failed to queue notification', { 
+              userId: sub.user_id, 
+              error: queueError.message 
+            });
+          }
+          return !queueError;
+        });
+        
+        const results = await Promise.allSettled(notificationPromises);
+        const successCount = results.filter(r => r.status === 'fulfilled' && r.value).length;
+        log('info', 'create-alert', `Queued ${successCount}/${subscribers.length} notifications`);
       }
     }
 
