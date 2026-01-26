@@ -1,12 +1,14 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "AI-CHAT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -33,7 +35,7 @@ serve(async (req: Request) => {
     const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
     const model = LOVABLE_API_KEY ? "google/gemini-2.5-flash" : "gpt-4o-mini";
 
-    console.log("Processing chat request with model:", model);
+    edgeLogger.info(TAG, `Processing request`, { model });
 
     const systemPrompt = `Você é um assistente corporativo inteligente chamado Nautilus Assistant. 
 
@@ -97,7 +99,7 @@ serve(async (req: Request) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("AI API error:", response.status, errorText);
+      edgeLogger.error(TAG, "AI API error", { status: response.status, error: errorText });
       throw new Error(`AI API error: ${response.status}`);
     }
 
@@ -109,7 +111,7 @@ serve(async (req: Request) => {
     
     const reply = data.choices[0].message.content;
 
-    console.log("Generated response:", reply.substring(0, 100) + "...");
+    edgeLogger.success(TAG, `Response generated`, { length: reply.length });
 
     return new Response(JSON.stringify({ 
       reply,
@@ -120,7 +122,7 @@ serve(async (req: Request) => {
     });
 
   } catch (error) {
-    console.error("Error in ai-chat function:", error);
+    edgeLogger.error(TAG, "Error in ai-chat function", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error occurred",
       timestamp: new Date().toISOString()

@@ -51,14 +51,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    console.log(`[Compliance Notification] Type: ${type}, Priority: ${priority}, User: ${userId}`);
+    edgeLogger.info(TAG, `Notification request`, { type, priority, userId });
 
     // Get user profile for personalization
     const { data: profile } = await supabase
       .from("profiles")
       .select("full_name, email")
       .eq("id", userId)
-      .single();
+      .maybeSingle();
 
     const userName = profile?.full_name || "Usuário";
     const userEmail = profile?.email;
@@ -94,14 +94,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
           if (emailResponse.ok) {
             const emailData = await emailResponse.json();
             results.email = { success: true, id: emailData.id };
-            console.log(`[Email] Sent to ${userEmail}:`, emailData);
+            edgeLogger.info(TAG, `Email sent to ${userEmail}`, { emailId: emailData.id });
           } else {
             const errorText = await emailResponse.text();
-            console.error("[Email Error]:", errorText);
+            edgeLogger.error(TAG, "Email send error", { error: errorText });
             results.email = { success: false, error: errorText };
           }
         } catch (emailError) {
-          console.error("[Email Error]:", emailError);
+          edgeLogger.error(TAG, "Email exception", { error: String(emailError) });
           results.email = { success: false, error: String(emailError) };
         }
       } else {
@@ -119,17 +119,17 @@ Deno.serve(async (req: Request): Promise<Response> => {
           .select("token")
           .eq("user_id", userId)
           .eq("is_active", true)
-          .single();
+          .maybeSingle();
 
         if (fcmToken?.token) {
           // In production, integrate with Firebase Cloud Messaging
-          console.log(`[Push] Would send to FCM token: ${fcmToken.token.slice(0, 20)}...`);
+          edgeLogger.info(TAG, `Push notification queued`, { tokenPrefix: fcmToken.token.slice(0, 20) });
           results.push = { success: true, queued: true };
         } else {
           results.push = { success: false, error: "No active FCM token" };
         }
       } catch (pushError) {
-        console.error("[Push Error]:", pushError);
+        edgeLogger.error(TAG, "Push notification error", { error: String(pushError) });
         results.push = { success: false, error: String(pushError) };
       }
     }
@@ -162,14 +162,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
           .single();
 
         if (saveError) {
-          console.error("[InApp Save Error]:", saveError);
+          edgeLogger.error(TAG, "InApp save error", { error: saveError.message });
           results.inApp = { success: false, error: saveError.message };
         } else {
           results.inApp = { success: true, id: savedNotification.id };
-          console.log(`[InApp] Notification saved: ${savedNotification.id}`);
+          edgeLogger.info(TAG, `InApp notification saved`, { notificationId: savedNotification.id });
         }
       } catch (inAppError) {
-        console.error("[InApp Error]:", inAppError);
+        edgeLogger.error(TAG, "InApp exception", { error: String(inAppError) });
         results.inApp = { success: false, error: String(inAppError) };
       }
     }
@@ -202,7 +202,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     });
 
   } catch (error) {
-    console.error("[Compliance Notification Error]:", error);
+    edgeLogger.error(TAG, "Compliance Notification Error", error);
     return new Response(JSON.stringify({
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

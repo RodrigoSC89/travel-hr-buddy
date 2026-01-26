@@ -4,7 +4,9 @@
  */
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "AI-COPILOT-STREAM";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -77,7 +79,7 @@ EXPERTISE:
 Identifique gaps de conformidade e sugira ações corretivas.`
 };
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -102,7 +104,7 @@ serve(async (req: Request) => {
       ...messages
     ];
 
-    console.log(`[AI Copilot] Mode: ${mode}, Route: ${context?.currentRoute || "unknown"}`);
+    edgeLogger.info(TAG, `Request`, { mode, route: context?.currentRoute || "unknown" });
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -131,7 +133,7 @@ serve(async (req: Request) => {
         );
       }
       const errorText = await response.text();
-      console.error("[AI Copilot] Gateway error:", response.status, errorText);
+      edgeLogger.error(TAG, "Gateway error", { status: response.status, error: errorText });
       throw new Error("AI gateway error");
     }
 
@@ -140,7 +142,7 @@ serve(async (req: Request) => {
     });
 
   } catch (error) {
-    console.error("[AI Copilot] Error:", error);
+    edgeLogger.error(TAG, "Error", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

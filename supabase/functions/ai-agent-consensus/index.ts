@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -32,7 +32,9 @@ const AGENT_PROMPTS = {
   communicator: `You are the COMMUNICATOR AI Agent. Focus on stakeholder updates, reporting requirements, flag state communications, and emergency broadcasts. Ensure clear information flow.`
 };
 
-serve(async (req) => {
+const TAG = "AI-AGENT-CONSENSUS";
+
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -45,8 +47,7 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY not configured");
     }
 
-    console.log(`Multi-agent consensus requested for: ${situation}`);
-    console.log(`Agents involved: ${requiredAgents.join(', ')}`);
+    edgeLogger.info(TAG, `Consensus requested for: ${situation}`, { agents: requiredAgents });
 
     // Query each agent in parallel
     const agentPromises = requiredAgents.map(async (agentId: string): Promise<AgentDecision> => {
@@ -155,14 +156,14 @@ serve(async (req) => {
       }
     };
 
-    console.log(`Consensus achieved with ${avgConfidence.toFixed(1)}% average confidence`);
+    edgeLogger.success(TAG, `Consensus achieved`, { avgConfidence: avgConfidence.toFixed(1) });
 
     return new Response(JSON.stringify({ success: true, result }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
 
   } catch (error) {
-    console.error("Agent Consensus error:", error);
+    edgeLogger.error(TAG, "Agent Consensus error", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" }
