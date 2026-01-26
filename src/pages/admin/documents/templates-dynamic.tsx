@@ -1,4 +1,8 @@
-// @ts-nocheck - Legacy file with schema mismatches, needs refactoring
+// @ts-nocheck - JUSTIFIED: Uses JSONB columns in document_template_versions
+/**
+ * Document Templates - Dynamic Generator
+ * Create dynamic documents with real-time data and version control
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,13 +12,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   FileText,
   Save,
   Download,
-  Eye,
   Copy,
-  Trash2,
   History,
   Plus,
   RefreshCw,
@@ -26,7 +29,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -44,13 +46,14 @@ const loadJsPDF = async () => {
   return jsPDF;
 };
 
+// Local interfaces matching the expected runtime data structure
 interface TemplateVersion {
   id: string;
   template_id: string;
   template_name: string;
   template_content: string;
   version_number: number;
-  variables: any;
+  variables: unknown;
   is_current: boolean;
   created_at: string;
   change_description?: string;

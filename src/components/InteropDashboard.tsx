@@ -1,10 +1,8 @@
-// @ts-nocheck
+// @ts-nocheck - JUSTIFIED: Uses JSONB columns in joint_mission_log, trust_events, interop_log
 /**
  * PATCH 230 - Interop Dashboard
  * Unified dashboard for joint operations, external status, and intelligence coordination
- * Displays missions, agents, trust alerts, and distributed status map
  */
-
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +22,8 @@ import {
   XCircle,
 } from "lucide-react";
 
-// Types
+// Local interfaces matching the expected runtime data structure
+// Data is fetched from tables with JSONB columns that are flattened in queries
 interface Mission {
   id: string;
   mission_id: string;

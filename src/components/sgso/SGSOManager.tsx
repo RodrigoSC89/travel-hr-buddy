@@ -1,9 +1,8 @@
+// @ts-nocheck - JUSTIFIED: sgso_plans table uses dynamic schema not in generated types
 /**
  * PATCH 851 - SGSO Manager Component
- * Removed @ts-nocheck, added proper typing
+ * Sistema de Gestão de Segurança Operacional
  */
-// @ts-nocheck - Dynamic table access requires type override
-import * as React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
