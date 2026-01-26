@@ -1,11 +1,11 @@
+// @ts-nocheck - Deno Edge Function (TypeScript checks skipped for Deno-specific imports)
 /**
  * Send MLC Report Email Edge Function
  * Sends MLC inspection reports via Resend to shipowner and Flag State
  * PATCH 861: MLC Report Email Integration
  */
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "npm:resend@4.0.0";
 import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -56,7 +56,7 @@ interface MLCReportEmailRequest {
   additionalNotes?: string;
 }
 
-const handler = async (req: Request): Promise<Response> => {
+Deno.serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -265,6 +265,4 @@ const handler = async (req: Request): Promise<Response> => {
       }
     );
   }
-};
-
-serve(handler);
+});
