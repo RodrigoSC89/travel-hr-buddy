@@ -50,7 +50,8 @@ export interface AuditReport {
 const STORAGE_KEY = 'nautilus_audit_log';
 const MAX_ENTRIES = 10000;
 const RETENTION_DAYS = 90;
-const AUDIT_PASSWORD = 'nautilus_audit_secure_key_2024';
+// SECURITY: Password should be configured via environment, not hardcoded
+const getAuditPassword = () => import.meta.env.VITE_AUDIT_KEY || crypto.randomUUID();
 
 class AuditProtocol {
   private entries: AuditEntry[] = [];
@@ -73,7 +74,7 @@ class AuditProtocol {
         if (this.encryptionEnabled) {
           try {
             const encrypted = JSON.parse(stored);
-            const decrypted = await localCrypto.decrypt(encrypted, AUDIT_PASSWORD);
+            const decrypted = await localCrypto.decrypt(encrypted, getAuditPassword());
             this.entries = JSON.parse(decrypted).map((e: any) => ({
               ...e,
               timestamp: new Date(e.timestamp),
@@ -108,7 +109,7 @@ class AuditProtocol {
     try {
       const data = JSON.stringify(this.entries);
       if (this.encryptionEnabled) {
-        const encrypted = await localCrypto.encrypt(data, AUDIT_PASSWORD);
+        const encrypted = await localCrypto.encrypt(data, getAuditPassword());
         localStorage.setItem(STORAGE_KEY, JSON.stringify(encrypted));
       } else {
         localStorage.setItem(STORAGE_KEY, data);
