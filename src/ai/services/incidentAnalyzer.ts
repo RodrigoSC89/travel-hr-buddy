@@ -222,19 +222,39 @@ export const storeIncidentAnalysis = async (
 };
 
 /**
- * Get stored incident analysis (Note: dp_incidents table doesn't have ai_analysis column yet)
- * Returns null until the column is added
+ * Get stored incident analysis from ai_memory table
+ * Uses ai_memory as storage since dp_incidents already has sgso_risk_level
  */
 export const getIncidentAnalysis = async (
   incidentId: string
 ): Promise<IncidentAnalysis | null> => {
   try {
-    // TODO: Add ai_analysis and risk_level columns to dp_incidents table
-    logger.info("Get incident analysis called (not implemented - columns missing)", {
-      incidentId
+    // Query from ai_memory where incident analysis was stored
+    const { data, error } = await supabase
+      .from('ai_memory')
+      .select('content')
+      .eq('memory_type', 'incident_analysis')
+      .order('created_at', { ascending: false })
+      .limit(100);
+    
+    if (error) {
+      logger.warn("Error fetching incident analyses from ai_memory", { error });
+      return null;
+    }
+    
+    // Find the analysis for this specific incident
+    const analysisRecord = data?.find((record) => {
+      const content = record.content as { incidentId?: string; analysis?: IncidentAnalysis } | null;
+      return content?.incidentId === incidentId;
     });
     
-    return null;
+    if (!analysisRecord) {
+      logger.info("No stored analysis found for incident", { incidentId });
+      return null;
+    }
+    
+    const content = analysisRecord.content as { analysis?: IncidentAnalysis } | null;
+    return content?.analysis || null;
   } catch (error) {
     logger.error("Error getting incident analysis", error);
     return null;

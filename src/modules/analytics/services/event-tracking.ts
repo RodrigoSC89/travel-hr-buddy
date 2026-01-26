@@ -30,12 +30,22 @@ class EventTrackingService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // TODO: Replace with actual organization lookup
-        // For now, using user_id as placeholder. In production, fetch from:
-        // - profiles table with organization_id foreign key
-        // - organization_members junction table
-        // - or similar organizational structure
-        this.organizationId = user.id;
+        // Fetch organization_id from organization_users table (established pattern)
+        const { data: orgData, error } = await supabase
+          .from('organization_users')
+          .select('organization_id')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .maybeSingle();
+        
+        if (error) {
+          console.warn("Failed to fetch organization, using user_id as fallback:", error.message);
+          this.organizationId = user.id;
+          return;
+        }
+        
+        // Use organization_id if found, otherwise fallback to user_id
+        this.organizationId = orgData?.organization_id || user.id;
       }
     } catch (error) {
       console.error("Error initializing organization:", error);
