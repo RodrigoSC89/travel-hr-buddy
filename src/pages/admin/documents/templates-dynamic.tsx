@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy file with schema mismatches, needs refactoring
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -116,10 +116,11 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setTemplates(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading templates",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -135,8 +136,8 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setVersions(data || []);
-    } catch (error: any) {
-      console.error("Error loading versions:", error);
+    } catch (error: unknown) {
+      logger.error("Error loading versions", error);
     }
   };
 
@@ -150,8 +151,8 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setGenerationHistory(data || []);
-    } catch (error: any) {
-      console.error("Error loading history:", error);
+    } catch (error: unknown) {
+      logger.error("Error loading history", error);
     }
   };
 
@@ -208,8 +209,8 @@ export const TemplatesDynamic = () => {
       }
 
       setVariableValues(values);
-    } catch (error: any) {
-      console.error("Error fetching variables:", error);
+    } catch (error: unknown) {
+      logger.error("Error fetching variables", error);
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
         values[v.key] = `{{${v.key}}}`;
@@ -289,10 +290,11 @@ export const TemplatesDynamic = () => {
       setChangeDescription("");
       await loadTemplates();
       await loadVersions(templateId);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error saving template",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -330,10 +332,11 @@ export const TemplatesDynamic = () => {
 
       loadTemplate(version);
       await loadTemplates();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error restoring version",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -375,10 +378,11 @@ export const TemplatesDynamic = () => {
         title: "PDF exported",
         description: "Document has been exported successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Export failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -418,10 +422,11 @@ export const TemplatesDynamic = () => {
         title: "Document exported",
         description: "Document has been exported as HTML",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Export failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

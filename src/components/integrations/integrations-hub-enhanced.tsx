@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy file with schema mismatches, needs refactoring
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,10 +98,11 @@ export const IntegrationsHubEnhanced = () => {
 
       if (error) throw error;
       setIntegrations(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading integrations",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -119,8 +120,8 @@ export const IntegrationsHubEnhanced = () => {
 
       if (error) throw error;
       setWebhookEvents(data || []);
-    } catch (error: any) {
-      console.error("Error loading webhook events:", error);
+    } catch (error: unknown) {
+      logger.error("Error loading webhook events", error);
     }
   };
 
@@ -159,10 +160,11 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Connection failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -183,10 +185,11 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error disconnecting",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -232,10 +235,11 @@ export const IntegrationsHubEnhanced = () => {
       setWebhookUrl("");
       setWebhookSecret("");
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error creating webhook",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -270,10 +274,11 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadWebhookEvents();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Webhook test failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -302,10 +307,11 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadWebhookEvents();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Retry failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
