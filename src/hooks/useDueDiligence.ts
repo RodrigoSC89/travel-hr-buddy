@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface DueDiligenceReport {
   id: string;
@@ -186,17 +187,12 @@ export function useDeleteDueDiligence() {
   });
 }
 
-// AI-powered risk assessment
+// AI-powered risk assessment using Supabase client (no hardcoded tokens)
 export function useAIRiskAssessment() {
   return useMutation({
     mutationFn: async (subjectData: { name: string; type: string; details?: Record<string, unknown> }) => {
-      const response = await fetch('https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/module-ai-chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('module-ai-chat', {
+        body: {
           module: 'due-diligence',
           system_prompt: 'Você é um especialista em Due Diligence marítimo e verificação de sanções.',
           context: 'Análise de risco e compliance',
@@ -206,14 +202,14 @@ export function useAIRiskAssessment() {
               content: `Analise o risco para: ${subjectData.name} (${subjectData.type}). Detalhes: ${JSON.stringify(subjectData.details || {})}. Forneça: score de risco (0-100), nível (low/medium/high/critical), e recomendações.`,
             },
           ],
-        }),
+        },
       });
 
-      if (!response.ok) {
-        throw new Error('Falha na análise de risco');
+      if (error) {
+        throw new Error(`Falha na análise de risco: ${error.message}`);
       }
 
-      return response.json();
+      return data;
     },
   });
 }

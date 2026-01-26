@@ -204,27 +204,28 @@ function checkLocalStorage(): HealthCheck {
 }
 
 /**
- * Check network connectivity
+ * Check network connectivity using Supabase client (no hardcoded tokens)
  */
 async function checkNetworkConnectivity(): Promise<HealthCheck> {
   const start = Date.now();
   
   try {
-    // Try to fetch a small resource
-    const response = await fetch('https://vnbptmixvwropvanyhdb.supabase.co/rest/v1/', {
-      method: 'HEAD',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE',
-      },
-    });
+    // Import dynamically to avoid circular dependencies
+    const { supabase } = await import('@/integrations/supabase/client');
+    
+    // Simple query to check connectivity - using limit(0) to minimize data transfer
+    const { error } = await supabase
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
+      .limit(0);
 
     const responseTimeMs = Date.now() - start;
 
     return {
       name: 'Network Connectivity',
-      status: response.ok ? 'pass' : 'warn',
+      status: error ? 'warn' : 'pass',
       responseTimeMs,
-      message: response.ok ? 'OK' : `Status: ${response.status}`,
+      message: error ? `Database issue: ${error.message}` : 'OK',
     };
   } catch {
     return {

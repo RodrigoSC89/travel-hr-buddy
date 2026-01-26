@@ -31,9 +31,14 @@ serve(async (req) => {
       .from('voyages')
       .select('id, origin_port, destination_port, departure_date, arrival_date')
       .eq('id', voyage_id)
-      .single();
+      .maybeSingle();
 
     if (voyageError) {
+      log('error', 'get-voyage-route', 'Database error', { error: voyageError.message });
+      return errorResponse('Database error', 500);
+    }
+
+    if (!voyage) {
       return errorResponse('Voyage not found', 404);
     }
 

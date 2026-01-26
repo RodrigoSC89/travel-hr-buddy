@@ -65,9 +65,13 @@ export class SatelliteOrbitPersistence {
         .from("satellite_orbits")
         .select("*")
         .eq("norad_id", parseInt(noradId))
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        logger.error("Error fetching satellite by NORAD ID", error);
+        return null;
+      }
+      
       if (!data) return null;
 
       return this.mapRowToOrbitData(data);

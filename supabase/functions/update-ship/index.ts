@@ -33,11 +33,15 @@ serve(async (req) => {
       })
       .eq('id', ship_id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       log('error', 'update-ship', 'Failed to update ship', { error: error.message });
-      return errorResponse('Failed to update ship', 500);
+      return errorResponse('Database error', 500);
+    }
+
+    if (!data) {
+      return errorResponse('Ship not found', 404);
     }
 
     log('info', 'update-ship', 'Ship updated successfully', { shipId: ship_id });

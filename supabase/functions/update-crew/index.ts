@@ -33,11 +33,15 @@ serve(async (req) => {
       })
       .eq('id', crew_id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       log('error', 'update-crew', 'Failed to update crew', { error: error.message });
-      return errorResponse('Failed to update crew member', 500);
+      return errorResponse('Database error', 500);
+    }
+
+    if (!data) {
+      return errorResponse('Crew member not found', 404);
     }
 
     log('info', 'update-crew', 'Crew updated successfully', { crewId: crew_id });
