@@ -5,6 +5,9 @@
  */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "ValidateDowntimeAI";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -40,13 +43,42 @@ interface ValidationResult {
   };
 }
 
+interface DowntimeData {
+  id: string;
+  vessel_id?: string;
+  start_time: string;
+  end_time?: string;
+  duration_hours?: number;
+  reported_reason?: string;
+  reason?: string;
+  category?: string;
+  reason_category?: string;
+  impact_level?: string;
+  evidence_urls?: string[];
+  reported_by?: string;
+  organization_id?: string;
+}
+
+interface HistoricalDowntime {
+  start_time: string;
+  reason_category?: string;
+  duration_hours?: number;
+  reason?: string;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+
   try {
-    const { downtimeId, downtime_entry, include_historical_analysis } = await req.json();
+    const { downtimeId, downtime_entry, include_historical_analysis } = await req.json() as {
+      downtimeId?: string;
+      downtime_entry?: DowntimeEntry;
+      include_historical_analysis?: boolean;
+    };
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -82,25 +114,28 @@ serve(async (req) => {
         data = legacy.data;
       }
       
+      const downtimeData = data as DowntimeData;
       // Map to expected interface
       entry = {
-        id: data.id,
-        vessel_id: data.vessel_id,
-        start_time: data.start_time,
-        end_time: data.end_time,
-        duration_hours: data.duration_hours,
-        reason: data.reported_reason || data.reason,
-        reason_category: data.category || data.reason_category,
-        impact_level: data.impact_level || 'medium',
-        evidence_urls: data.evidence_urls,
-        reported_by: data.reported_by
+        id: downtimeData.id,
+        vessel_id: downtimeData.vessel_id,
+        start_time: downtimeData.start_time,
+        end_time: downtimeData.end_time,
+        duration_hours: downtimeData.duration_hours,
+        reason: downtimeData.reported_reason || downtimeData.reason || '',
+        reason_category: downtimeData.category || downtimeData.reason_category || '',
+        impact_level: downtimeData.impact_level || 'medium',
+        evidence_urls: downtimeData.evidence_urls,
+        reported_by: downtimeData.reported_by
       };
-    } else {
+    } else if (downtime_entry) {
       entry = downtime_entry;
+    } else {
+      throw new Error('Either downtimeId or downtime_entry is required');
     }
 
     // Fetch historical data for pattern analysis
-    let historicalData: any[] = [];
+    let historicalData: HistoricalDowntime[] = [];
     if (include_historical_analysis && entry.vessel_id) {
       const { data } = await supabase
         .from('downtime_events')
@@ -109,7 +144,7 @@ serve(async (req) => {
         .order('start_time', { ascending: false })
         .limit(20);
       
-      historicalData = data || [];
+      historicalData = (data || []) as HistoricalDowntime[];
     }
 
     // Calculate duration if not provided
@@ -152,7 +187,7 @@ Responda SEMPRE em português brasileiro com análise detalhada.`;
 
     const historicalSummary = historicalData.length > 0 
       ? `\n\nHISTÓRICO DA EMBARCAÇÃO (últimos 20 eventos):
-${historicalData.map(h => `- ${new Date(h.start_time).toLocaleDateString('pt-BR')}: ${h.reason_category} - ${h.duration_hours?.toFixed(1)}h - "${h.reason}"`).join('\n')}
+${historicalData.map(h => `- ${new Date(h.start_time).toLocaleDateString('pt-BR')}: ${h.reason_category || 'N/A'} - ${h.duration_hours?.toFixed(1) || '?'}h - "${h.reason || 'Sem descrição'}"`).join('\n')}
 
 Padrões identificados:
 - Total de downtimes: ${historicalData.length}
@@ -309,7 +344,7 @@ EXECUTE ANÁLISE COMPLETA E FORNEÇA VALIDAÇÃO.`;
           }
         };
       } catch (e) {
-        console.error("Failed to parse AI response:", e);
+        edgeLogger.error(TAG, "Failed to parse AI response", e);
       }
     }
 
@@ -398,7 +433,9 @@ EXECUTE ANÁLISE COMPLETA E FORNEÇA VALIDAÇÃO.`;
           ai_model: 'gemini-3-flash-preview',
           ai_confidence: validation.confidence,
           created_at: new Date().toISOString()
-        }).catch((err: Error) => console.log("BROA log insert skipped:", err.message));
+        }).catch((err: unknown) => {
+          edgeLogger.warn(TAG, "BROA log insert skipped", { reason: err instanceof Error ? err.message : 'Unknown' });
+        });
       }
     }
 
@@ -411,14 +448,17 @@ EXECUTE ANÁLISE COMPLETA E FORNEÇA VALIDAÇÃO.`;
       generated_at: new Date().toISOString()
     };
 
-    console.log("Downtime validation completed:", entry.id || "new entry");
+    edgeLogger.success(TAG, "Downtime validation completed", { 
+      entryId: entry.id || "new entry",
+      durationMs: Date.now() - startTime 
+    });
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error: unknown) {
-    console.error("Error in validate-downtime-ai:", error);
+    edgeLogger.error(TAG, "Error in validate-downtime-ai", error);
     return new Response(JSON.stringify({ 
       success: false,
       error: error instanceof Error ? error.message : "Unknown error" 
@@ -429,7 +469,7 @@ EXECUTE ANÁLISE COMPLETA E FORNEÇA VALIDAÇÃO.`;
   }
 });
 
-function getMostFrequentCategory(data: any[]): string {
+function getMostFrequentCategory(data: HistoricalDowntime[]): string {
   const counts: Record<string, number> = {};
   data.forEach(d => {
     const cat = d.reason_category || 'unknown';
