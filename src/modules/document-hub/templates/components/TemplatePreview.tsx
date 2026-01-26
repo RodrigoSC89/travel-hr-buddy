@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, FileDown, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { escapeRegexSpecialChars } from "../services/template-utils";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -150,7 +151,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
             {/* Preview Area */}
             <div 
               className="p-6 border border-zinc-700 rounded-lg bg-white text-black min-h-[400px] prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: previewContent }}
+              dangerouslySetInnerHTML={createSafeHTML(previewContent)}
             />
 
             {/* Export Options */}

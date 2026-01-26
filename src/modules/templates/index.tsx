@@ -30,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import {
   FileText,
   Download,
@@ -543,7 +544,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           </DialogHeader>
           <div 
             className="prose prose-sm max-w-none border rounded-md p-4 bg-white"
-            dangerouslySetInnerHTML={{ __html: previewContent }}
+            dangerouslySetInnerHTML={createSafeHTML(previewContent)}
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowPreviewDialog(false)}>

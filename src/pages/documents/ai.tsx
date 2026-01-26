@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from "tesseract.js";
 import { AIDocumentsAnalyzer } from "@/components/documents/ai-documents-analyzer";
 import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import {
   FileText,
   Upload,
@@ -488,12 +489,12 @@ export default function AIDocuments() {
                 <h4 className="font-semibold mb-2">Extracted Text</h4>
                 <div
                   className="text-sm bg-muted p-4 rounded whitespace-pre-wrap h-96 overflow-auto"
-                  dangerouslySetInnerHTML={{
-                    __html: highlightKeywords(
+                  dangerouslySetInnerHTML={createSafeHTML(
+                    highlightKeywords(
                       selectedDocument.ocr_text || "No text extracted yet",
                       selectedDocument.extracted_keywords || []
                     )
-                  }}
+                  )}
                 />
               </div>
             </CardContent>
