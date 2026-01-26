@@ -10,6 +10,9 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "AI-SEARCH";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -139,7 +142,7 @@ Rotas disponíveis: ${SYSTEM_ROUTES.map(r => r.path).join(", ")}`
         }
       }
     } catch (e) {
-      console.warn("[Search] AI enhancement failed:", e);
+      edgeLogger.warn(TAG, "AI enhancement failed", { error: String(e) });
     }
   }
 
@@ -224,7 +227,7 @@ async function handleSuggest(context: any, currentRoute: string, apiKey: string,
     enrichedContext.pendingMaintenance = pendingMaintenance || 0;
 
   } catch (e) {
-    console.warn("[Suggest] Data enrichment failed:", e);
+    edgeLogger.warn(TAG, "Data enrichment failed", { error: String(e) });
   }
 
   // Generate contextual suggestions
@@ -324,7 +327,7 @@ async function handleAnalyze(context: any, currentRoute: string, apiKey: string,
       analysisContext.vessels = vessels;
     }
   } catch (e) {
-    console.warn("[Analyze] Data fetch failed:", e);
+    edgeLogger.warn(TAG, "Data fetch failed", { error: String(e) });
   }
 
   // Generate analysis

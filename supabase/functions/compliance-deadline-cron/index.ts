@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Compliance Deadline Cron Job - Phase 7
  * Runs daily to check for upcoming deadlines and send notifications
@@ -7,6 +6,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend@2.0.0";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "COMPLIANCE-CRON";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -64,7 +66,7 @@ serve(async (req) => {
             .lt(check.dateField, new Date(targetDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0]);
 
           if (error) {
-            console.warn(`[Cron] Error querying ${check.table}:`, error.message);
+            edgeLogger.warn(TAG, `Error querying ${check.table}`, { error: error.message });
             continue;
           }
 
@@ -124,7 +126,7 @@ serve(async (req) => {
                   .single();
 
                 if (saveError) {
-                  console.warn(`[Cron] Error saving notification:`, saveError.message);
+                  edgeLogger.warn(TAG, "Error saving notification", { error: saveError.message });
                 } else {
                   notifications.push(saved);
                 }
@@ -138,16 +140,16 @@ serve(async (req) => {
                       subject: notification.title,
                       html: generateEmailHtml(notification, user.full_name || "Usuário"),
                     });
-                    console.log(`[Cron] Email sent to ${user.email}`);
+                    edgeLogger.info(TAG, `Email sent to ${user.email}`);
                   } catch (emailError) {
-                    console.warn(`[Cron] Email error:`, emailError);
+                    edgeLogger.warn(TAG, "Email send error", { error: String(emailError) });
                   }
                 }
               }
             }
           }
         } catch (queryError) {
-          console.warn(`[Cron] Query error for ${check.table}:`, queryError);
+          edgeLogger.warn(TAG, `Query error for ${check.table}`, { error: String(queryError) });
         }
       }
     }

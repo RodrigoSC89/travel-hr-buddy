@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Compliance Smart Notifications - Phase 7
  * Email and Push notifications for critical compliance deadlines
@@ -7,6 +6,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend@2.0.0";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "COMPLIANCE-NOTIFICATIONS";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -93,7 +95,7 @@ serve(async (req) => {
           results.email = { success: false, error: String(emailError) };
         }
       } else {
-        console.warn("[Email] RESEND_API_KEY not configured - skipping email");
+        edgeLogger.warn(TAG, "RESEND_API_KEY not configured - skipping email");
         results.email = { success: false, error: "RESEND_API_KEY not configured" };
       }
     }
@@ -178,7 +180,7 @@ serve(async (req) => {
         created_at: new Date().toISOString(),
       });
     } catch (auditError) {
-      console.warn("[Audit Trail] Could not log:", auditError);
+      edgeLogger.warn(TAG, "Could not log to audit trail", { error: String(auditError) });
     }
 
     return new Response(JSON.stringify({
