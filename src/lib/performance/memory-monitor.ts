@@ -3,6 +3,8 @@
  * PATCH 541 Phase 3 - Memory validation
  */
 
+import { logger } from "@/lib/logger";
+
 export interface MemorySnapshot {
   timestamp: Date;
   usedJSHeapSize: number;
@@ -28,7 +30,7 @@ class MemoryMonitor {
    */
   startMonitoring(intervalMs: number = 5000): void {
     if (this.monitoringInterval) {
-      console.warn("Memory monitoring already started");
+      logger.warn("Memory monitoring already started");
       return;
     }
 
@@ -39,7 +41,7 @@ class MemoryMonitor {
       this.takeSnapshot();
     }, intervalMs);
 
-    console.log("Memory monitoring started");
+    logger.info("Memory monitoring started");
   }
 
   /**
@@ -58,8 +60,8 @@ class MemoryMonitor {
    * Take memory snapshot
    */
   private takeSnapshot(): void {
-    if (!(performance as any).memory) {
-      console.warn("Performance.memory API not available");
+    if (!(performance as unknown as { memory?: unknown }).memory) {
+      // Silent - API not available in most browsers
       return;
     }
 
