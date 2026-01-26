@@ -1,4 +1,6 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "PEOTRAM-AI-CHAT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -63,8 +65,7 @@ Responda em português brasileiro, de forma técnica mas acessível. Forneça ex
 4. Melhores práticas do setor
 5. Orientações sobre legislação marítima`;
 
-serve(async (req: Request) => {
-  // Handle CORS preflight requests
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -74,11 +75,11 @@ serve(async (req: Request) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
-      console.error("LOVABLE_API_KEY is not configured");
+      edgeLogger.error(TAG, "LOVABLE_API_KEY is not configured");
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    console.log("Processing PEOTRAM AI chat request with", messages?.length || 0, "messages, action:", action);
+    edgeLogger.info(TAG, "Processing request", { messagesCount: messages?.length, action });
 
     // Build the full system prompt based on action
     let fullSystemPrompt = systemPrompt || SYSTEM_PROMPT;
@@ -129,7 +130,7 @@ Forneça uma matriz estruturada com:
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      edgeLogger.error(TAG, "AI gateway error", new Error(errorText), { status: response.status });
       
       if (response.status === 429) {
         return new Response(JSON.stringify({ 
@@ -183,7 +184,7 @@ Forneça uma matriz estruturada com:
       }
     });
 
-    console.log("Successfully processed PEOTRAM AI response, references:", references);
+    edgeLogger.success(TAG, "Response generated", { referencesCount: references.length });
 
     return new Response(JSON.stringify({ 
       response: aiResponse,
@@ -192,7 +193,7 @@ Forneça uma matriz estruturada com:
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error in peotram-ai-chat function:", error);
+    edgeLogger.error(TAG, "Error", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error",
       response: "Desculpe, ocorreu um erro ao processar sua pergunta. Por favor, tente novamente."

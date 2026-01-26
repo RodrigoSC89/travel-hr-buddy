@@ -1,12 +1,12 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "WEATHER-AI-CHAT";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
 
 const SYSTEM_PROMPT = `Você é um assistente meteorológico inteligente especializado em previsão do tempo e condições marítimas para o Brasil.
 
@@ -37,13 +37,13 @@ interface ChatRequest {
   history?: Array<{ role: string; content: string }>;
 }
 
-serve(async (req: Request) => {
-  // Handle CORS preflight
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
       throw new Error('OPENAI_API_KEY not configured');
     }
@@ -54,8 +54,7 @@ serve(async (req: Request) => {
       throw new Error('Message is required');
     }
 
-    console.log(`[Weather AI Chat] Processing request for location: ${location}`);
-    console.log(`[Weather AI Chat] Context length: ${context?.length || 0} chars`);
+    edgeLogger.info(TAG, "Processing request", { location, contextLength: context?.length || 0 });
 
     // Build messages array
     const messages = [
@@ -85,8 +84,6 @@ serve(async (req: Request) => {
       content: message
     });
 
-    console.log(`[Weather AI Chat] Sending ${messages.length} messages to GPT-4o`);
-
     // Call OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -104,7 +101,7 @@ serve(async (req: Request) => {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error(`[Weather AI Chat] OpenAI API error: ${response.status}`, errorData);
+      edgeLogger.error(TAG, "OpenAI API error", new Error(errorData), { status: response.status });
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
@@ -115,7 +112,7 @@ serve(async (req: Request) => {
       throw new Error('No response from AI');
     }
 
-    console.log(`[Weather AI Chat] Response generated successfully`);
+    edgeLogger.success(TAG, "Response generated");
 
     return new Response(
       JSON.stringify({ 
@@ -129,7 +126,7 @@ serve(async (req: Request) => {
 
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('[Weather AI Chat] Error:', errorMessage);
+    edgeLogger.error(TAG, "Error", error);
 
     return new Response(
       JSON.stringify({ 

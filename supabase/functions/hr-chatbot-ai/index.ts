@@ -4,8 +4,10 @@
  * Uses Lovable AI Gateway with RAG context
  */
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "HR-CHATBOT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -56,7 +58,7 @@ const HR_KNOWLEDGE_BASE = `
 - Multa FGTS: 40% (demissão sem justa causa)
 `;
 
-serve(async (req) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -81,7 +83,7 @@ serve(async (req) => {
         .from("hr_employees")
         .select("full_name, position, department, hire_date, base_salary, status")
         .eq("id", employee_id)
-        .single();
+        .maybeSingle();
 
       if (employee) {
         employeeContext = `
@@ -151,6 +153,8 @@ EXEMPLOS DE RESPOSTAS:
 
     const detectedIntent = intentPatterns.find(p => p.pattern.test(message))?.intent || "general_inquiry";
 
+    edgeLogger.info(TAG, "Processing request", { employee_id, intent: detectedIntent });
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -178,7 +182,7 @@ EXEMPLOS DE RESPOSTAS:
         });
       }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      edgeLogger.error(TAG, "AI gateway error", new Error(errorText), { status: response.status });
       throw new Error("AI gateway error");
     }
 
@@ -190,14 +194,16 @@ EXEMPLOS DE RESPOSTAS:
       user_message: message,
       intent_detected: detectedIntent,
       response_time_ms: responseTime,
-    }).then(() => {}).catch(console.error);
+    }).catch((err: unknown) => edgeLogger.warn(TAG, "Log failed", { error: String(err) }));
+
+    edgeLogger.success(TAG, "Response generated", { durationMs: responseTime });
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
 
   } catch (error) {
-    console.error("[hr-chatbot-ai] Error:", error);
+    edgeLogger.error(TAG, "Error", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error" 
     }), {

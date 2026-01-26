@@ -1,6 +1,8 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "AI-CREW-OPTIMIZER";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,7 +16,7 @@ interface CrewOptimizerRequest {
   constraints?: Record<string, any>;
 }
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -31,7 +33,7 @@ serve(async (req: Request) => {
 
     const { optimizationType, vesselId, dateRange, constraints }: CrewOptimizerRequest = await req.json();
     
-    console.log(`[AI-Crew] Optimization type: ${optimizationType}`);
+    edgeLogger.info(TAG, `Optimization type: ${optimizationType}`, { vesselId });
 
     // Fetch crew data
     const { data: crewMembers } = await supabase
@@ -174,7 +176,7 @@ Considere fatores humanos e bem-estar da tripulação.`;
     const data = await aiResponse.json();
     const optimization = data.choices[0].message.content;
 
-    console.log(`[AI-Crew] Optimization completed: ${optimizationType}`);
+    edgeLogger.success(TAG, `Optimization completed: ${optimizationType}`);
 
     return new Response(
       JSON.stringify({
@@ -191,7 +193,7 @@ Considere fatores humanos e bem-estar da tripulação.`;
     );
 
   } catch (error) {
-    console.error('[AI-Crew] Error:', error);
+    edgeLogger.error(TAG, 'Error', error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
