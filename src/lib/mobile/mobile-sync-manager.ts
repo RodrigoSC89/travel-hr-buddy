@@ -202,7 +202,7 @@ class MobileSyncManager {
           if (item.retries >= item.maxRetries) {
             // Move to dead letter queue or delete
             await this.removeFromStore(item.id);
-            console.error('Max retries reached for item:', item);
+            // Error tracked via sync-error event emission below
           } else {
             await this.updateInStore(item);
           }
