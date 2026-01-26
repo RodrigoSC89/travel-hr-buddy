@@ -2053,6 +2053,106 @@ export type Database = {
           },
         ]
       }
+      analytics_alert_history: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_id: string
+          id: string
+          message: string | null
+          metadata: Json | null
+          triggered_at: string | null
+          value: number
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_id: string
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          triggered_at?: string | null
+          value: number
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_id?: string
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          triggered_at?: string | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_alert_history_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "analytics_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_alerts: {
+        Row: {
+          condition: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_enabled: boolean | null
+          metric_name: string
+          name: string
+          notification_channels: Json | null
+          organization_id: string | null
+          severity: string | null
+          threshold: number
+          updated_at: string | null
+        }
+        Insert: {
+          condition: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          metric_name: string
+          name: string
+          notification_channels?: Json | null
+          organization_id?: string | null
+          severity?: string | null
+          threshold: number
+          updated_at?: string | null
+        }
+        Update: {
+          condition?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          metric_name?: string
+          name?: string
+          notification_channels?: Json | null
+          organization_id?: string | null
+          severity?: string | null
+          threshold?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       analytics_dashboards: {
         Row: {
           created_at: string | null
@@ -2326,6 +2426,71 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "analytics_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_sessions: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          device_type: string | null
+          ended_at: string | null
+          events_count: number | null
+          id: string
+          ip_address: unknown
+          last_activity_at: string | null
+          metadata: Json | null
+          organization_id: string | null
+          os: string | null
+          pages_viewed: number | null
+          session_id: string
+          started_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device_type?: string | null
+          ended_at?: string | null
+          events_count?: number | null
+          id?: string
+          ip_address?: unknown
+          last_activity_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          os?: string | null
+          pages_viewed?: number | null
+          session_id: string
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device_type?: string | null
+          ended_at?: string | null
+          events_count?: number | null
+          id?: string
+          ip_address?: unknown
+          last_activity_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          os?: string | null
+          pages_viewed?: number | null
+          session_id?: string
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_sessions_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -3002,6 +3167,80 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      api_routes: {
+        Row: {
+          cache_ttl: number | null
+          created_at: string | null
+          description: string | null
+          handler_function: string | null
+          id: string
+          is_public: boolean | null
+          metadata: Json | null
+          method: string
+          organization_id: string | null
+          rate_limit_tier: string | null
+          requires_auth: boolean | null
+          route_name: string
+          route_path: string
+          schema_validation: Json | null
+          status: string | null
+          tags: string[] | null
+          timeout_ms: number | null
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          cache_ttl?: number | null
+          created_at?: string | null
+          description?: string | null
+          handler_function?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          method: string
+          organization_id?: string | null
+          rate_limit_tier?: string | null
+          requires_auth?: boolean | null
+          route_name: string
+          route_path: string
+          schema_validation?: Json | null
+          status?: string | null
+          tags?: string[] | null
+          timeout_ms?: number | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          cache_ttl?: number | null
+          created_at?: string | null
+          description?: string | null
+          handler_function?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          method?: string
+          organization_id?: string | null
+          rate_limit_tier?: string | null
+          requires_auth?: boolean | null
+          route_name?: string
+          route_path?: string
+          schema_validation?: Json | null
+          status?: string | null
+          tags?: string[] | null
+          timeout_ms?: number | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_routes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       audit_center_logs: {
         Row: {
@@ -16351,6 +16590,56 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      incident_workflow_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          incident_id: string
+          metadata: Json | null
+          new_status: string | null
+          notes: string | null
+          organization_id: string | null
+          performed_at: string | null
+          performed_by: string | null
+          previous_status: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          incident_id: string
+          metadata?: Json | null
+          new_status?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          performed_at?: string | null
+          performed_by?: string | null
+          previous_status?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          incident_id?: string
+          metadata?: Json | null
+          new_status?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          performed_at?: string | null
+          performed_by?: string | null
+          previous_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_workflow_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       incidents: {
         Row: {
@@ -34502,6 +34791,44 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      weather_logs: {
+        Row: {
+          created_at: string | null
+          id: string
+          latitude: number
+          longitude: number
+          organization_id: string | null
+          source: string | null
+          weather_data: Json
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          organization_id?: string | null
+          source?: string | null
+          weather_data?: Json
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          organization_id?: string | null
+          source?: string | null
+          weather_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weather_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
