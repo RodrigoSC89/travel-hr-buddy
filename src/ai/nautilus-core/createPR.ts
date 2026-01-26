@@ -82,16 +82,19 @@ export async function createAutoPR(
       prNumber: response.data.number,
       prUrl: response.data.html_url
     };
-  } catch (error: any) {
-    logger.error("Failed to create PR", { error: error.message });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    const errorStatus = (error as { status?: number }).status;
+    
+    logger.error("Failed to create PR", { error: errorMessage });
     
     // Handle specific error cases
-    if (error.status === 404) {
+    if (errorStatus === 404) {
       return {
         success: false,
         error: "Repository not found or insufficient permissions"
       };
-    } else if (error.status === 422) {
+    } else if (errorStatus === 422) {
       return {
         success: false,
         error: "Branch does not exist or PR already exists"
@@ -100,7 +103,7 @@ export async function createAutoPR(
 
     return {
       success: false,
-      error: error.message || "Unknown error occurred"
+      error: errorMessage
     };
   }
 }
@@ -215,8 +218,9 @@ export async function commentOnPR(
 
     logger.info("✅ Comment added to PR", { prNumber });
     return true;
-  } catch (error: any) {
-    logger.error("Failed to comment on PR", { error: error.message, prNumber });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    logger.error("Failed to comment on PR", { error: errorMessage, prNumber });
     return false;
   }
 }

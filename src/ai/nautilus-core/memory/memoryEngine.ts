@@ -6,6 +6,8 @@ import * as path from "path";
  * 
  * Registers, organizes and analyzes the history of failures and corrections.
  * Learns from the system's past behavior and provides preventive insights.
+ * 
+ * Note: This module uses Node.js fs - runs in Node.js environment only
  */
 
 interface MemoryEntry {
@@ -21,6 +23,12 @@ interface RecurrentPattern {
 }
 
 const MEMORY_PATH = path.resolve("src/ai/nautilus-core/memory/memoryDB.json");
+
+// Simple logger for Node.js context (avoids browser-only logger import)
+const nodeLogger = {
+  warn: (msg: string, data?: unknown) => console.warn(`[MemoryEngine] ${msg}`, data || ""),
+  error: (msg: string, data?: unknown) => console.error(`[MemoryEngine] ${msg}`, data || ""),
+};
 
 export class MemoryEngine {
   private memory: MemoryEntry[] = [];
@@ -38,7 +46,7 @@ export class MemoryEngine {
         const data = fs.readFileSync(MEMORY_PATH, "utf-8");
         this.memory = JSON.parse(data);
       } catch (error) {
-        console.warn("⚠️  Failed to load memory, starting fresh:", error);
+        nodeLogger.warn("Failed to load memory, starting fresh", error);
         this.memory = [];
       }
     } else {
@@ -54,7 +62,7 @@ export class MemoryEngine {
       fs.mkdirSync(path.dirname(MEMORY_PATH), { recursive: true });
       fs.writeFileSync(MEMORY_PATH, JSON.stringify(this.memory, null, 2), "utf-8");
     } catch (error) {
-      console.error("❌ Failed to save memory:", error);
+      nodeLogger.error("Failed to save memory", error);
     }
   }
 

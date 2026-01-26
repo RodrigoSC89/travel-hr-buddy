@@ -165,10 +165,11 @@ export const SGSOAuditTrail: React.FC = () => {
         title: "Auditoria salva",
         description: "Os dados da auditoria foram salvos com sucesso.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Erro ao salvar",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

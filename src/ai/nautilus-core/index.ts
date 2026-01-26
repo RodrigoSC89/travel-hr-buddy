@@ -106,8 +106,10 @@ async function main() {
 
     logger.info("🎉 Nautilus Intelligence Core - Analysis Complete");
     process.exit(0);
-  } catch (error: any) {
-    logger.error("❌ Fatal error", { message: error.message, stack: error.stack });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    logger.error("❌ Fatal error", { message: errorMessage, stack: errorStack });
     process.exit(1);
   }
 }
@@ -162,8 +164,9 @@ async function collectLogs(sources: string[]): Promise<string> {
       } else {
         logger.debug(`⚠ Skipped: ${source} (not found)`);
       }
-    } catch (error: any) {
-      logger.warn(`Error reading ${source}`, { error: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      logger.warn(`Error reading ${source}`, { error: errorMessage });
     }
   }
 

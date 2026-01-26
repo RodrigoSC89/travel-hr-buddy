@@ -45,10 +45,11 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
       if (error) throw error;
       setAudits(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Error loading audits",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -92,10 +93,11 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
       loadAudits();
       if (onRefresh) onRefresh();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Error",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     }
