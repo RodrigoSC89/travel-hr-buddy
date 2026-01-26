@@ -106,8 +106,9 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         duration_ms: duration,
         success: true
       };
-    } catch (error: any) {
-      logger.error(`Agent task failed`, { agent_id: agentId, task_id: task.task_id, error });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      logger.error(`Agent task failed`, { agent_id: agentId, task_id: task.task_id, error: errorMessage });
       await updateAgentMetrics(agentId, false, Date.now() - taskStartTime);
       
       await supabase
@@ -118,7 +119,7 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
       return {
         agent_id: agentId,
         task_id: task.task_id,
-        result: { error: error.message },
+        result: { error: errorMessage },
         duration_ms: Date.now() - taskStartTime,
         success: false
       };

@@ -244,8 +244,9 @@ export default function MentorDPProfessional() {
       }
 
       return data;
-    } catch (error: any) {
-      console.error("[MentorDP] callMentorAI error:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      console.error("[MentorDP] callMentorAI error:", errorMessage);
       throw error;
     }
   };
@@ -268,8 +269,9 @@ export default function MentorDPProfessional() {
       const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
       addLogEntry("chat", "Conversa com Mentor", messageText.substring(0, 100) + "...");
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message || "Não foi possível obter resposta", variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível obter resposta";
+      toast({ title: "Erro", description: errorMessage, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -290,8 +292,9 @@ export default function MentorDPProfessional() {
       setAcademyModules(prev => prev.map(m => m.id === module.id ? { ...m, progress: Math.min((m.progress || 0) + 25, 100) } : m));
       
       toast({ title: "Lição Gerada", description: `Lição sobre "${module.name}" pronta!` });
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message || "Não foi possível gerar a lição", variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível gerar a lição";
+      toast({ title: "Erro", description: errorMessage, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -314,8 +317,9 @@ export default function MentorDPProfessional() {
       addLogEntry("simulation", `Simulação: ${scenario.name}`, scenario.description);
       
       toast({ title: "Simulação Iniciada", description: `Cenário "${scenario.name}" carregado!` });
-    } catch (error: any) {
-      toast({ title: "Erro", description: error.message || "Não foi possível iniciar a simulação", variant: "destructive" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível iniciar a simulação";
+      toast({ title: "Erro", description: errorMessage, variant: "destructive" });
       setActiveSimulation(null);
     } finally {
       setIsLoading(false);

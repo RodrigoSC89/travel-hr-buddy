@@ -5,6 +5,7 @@
 
 import type { FirebaseApp, FirebaseOptions } from "firebase/app";
 import type { Messaging } from "firebase/messaging";
+import { logger } from "@/lib/logger";
 
 let app: FirebaseApp | null = null;
 let messaging: Messaging | null = null;
@@ -30,7 +31,7 @@ export const initializeFirebaseLazy = async (): Promise<FirebaseApp | null> => {
   
   // Check if config is present
   if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
-    console.warn("Firebase config not complete - skipping initialization");
+    logger.warn("Firebase config not complete - skipping initialization");
     return null;
   }
 
@@ -38,10 +39,10 @@ export const initializeFirebaseLazy = async (): Promise<FirebaseApp | null> => {
     const { initializeApp } = await import("firebase/app");
     app = initializeApp(firebaseConfig);
     isInitialized = true;
-    console.log("Firebase initialized lazily");
+    logger.info("Firebase initialized lazily");
     return app;
   } catch (error) {
-    console.error("Failed to initialize Firebase:", error);
+    logger.error("Failed to initialize Firebase", error);
     return null;
   }
 };
@@ -60,14 +61,14 @@ export const initializeMessagingLazy = async (): Promise<Messaging | null> => {
     
     const supported = await isSupported();
     if (!supported) {
-      console.warn("Firebase Messaging not supported in this environment");
+      logger.warn("Firebase Messaging not supported in this environment");
       return null;
     }
 
     messaging = getMessaging(firebaseApp);
     return messaging;
   } catch (error) {
-    console.error("Failed to initialize Firebase Messaging:", error);
+    logger.error("Failed to initialize Firebase Messaging", error);
     return null;
   }
 };
@@ -79,7 +80,7 @@ export const requestNotificationPermissionLazy = async (): Promise<string | null
   try {
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      console.warn("Notification permission denied");
+      logger.warn("Notification permission denied");
       return null;
     }
 
@@ -89,10 +90,10 @@ export const requestNotificationPermissionLazy = async (): Promise<string | null
     const { getToken } = await import("firebase/messaging");
     const token = await getToken(msg, { vapidKey: VAPID_KEY });
     
-    console.log("FCM Token obtained:", token.substring(0, 20) + "...");
+    logger.info("FCM Token obtained", { tokenPrefix: token.substring(0, 20) + "..." });
     return token;
   } catch (error) {
-    console.error("Failed to get FCM token:", error);
+    logger.error("Failed to get FCM token", error);
     return null;
   }
 };
@@ -101,7 +102,7 @@ export const requestNotificationPermissionLazy = async (): Promise<string | null
  * Subscribe to foreground messages
  */
 export const onForegroundMessageLazy = async (
-  callback: (payload: any) => void
+  callback: (payload: unknown) => void
 ): Promise<(() => void) | null> => {
   try {
     const msg = await initializeMessagingLazy();
@@ -110,7 +111,7 @@ export const onForegroundMessageLazy = async (
     const { onMessage } = await import("firebase/messaging");
     return onMessage(msg, callback);
   } catch (error) {
-    console.error("Failed to subscribe to messages:", error);
+    logger.error("Failed to subscribe to messages", error);
     return null;
   }
 };
