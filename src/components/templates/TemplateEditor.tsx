@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import html2pdf from "html2pdf.js";
 import { supabase } from "@/integrations/supabase/client";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import { 
   Sparkles, 
   Save, 
@@ -387,7 +388,7 @@ export default function TemplateEditor() {
             <div className="border rounded-lg bg-white p-4 min-h-[400px]">
               <div 
                 className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto"
-                dangerouslySetInnerHTML={{ __html: editor?.getHTML() || "" }}
+                dangerouslySetInnerHTML={createSafeHTML(editor?.getHTML() || "")}
               />
             </div>
           </TabsContent>

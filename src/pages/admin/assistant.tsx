@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Send, Loader2, Bot, User, CheckCircle2, Zap, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 interface Message {
   role: "user" | "assistant";
@@ -155,7 +156,7 @@ export default function AssistantPage() {
                         {msg.role === "assistant" ? (
                           <div 
                             className="text-sm whitespace-pre-wrap"
-                            dangerouslySetInnerHTML={{ __html: msg.content }}
+                            dangerouslySetInnerHTML={createSafeHTML(msg.content)}
                           />
                         ) : (
                           <p className="text-sm whitespace-pre-wrap">{msg.content}</p>

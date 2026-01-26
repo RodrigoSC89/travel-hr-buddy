@@ -30,6 +30,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Document, Packer, Paragraph, TextRun } from "docx";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -594,9 +595,9 @@ const DocumentTemplatesManager = () => {
                 <Label>Preview</Label>
                 <div 
                   className="mt-2 prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ 
-                    __html: substituteVariables(selectedTemplate.content, previewVariables) 
-                  }}
+                  dangerouslySetInnerHTML={createSafeHTML(
+                    substituteVariables(selectedTemplate.content, previewVariables)
+                  )}
                 />
               </div>
             </div>

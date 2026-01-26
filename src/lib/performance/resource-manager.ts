@@ -37,12 +37,17 @@ class ResourceManager {
     this.updateStatus();
   }
 
+  private batteryLevelHandler = () => this.updateStatus();
+  private batteryChargingHandler = () => this.updateStatus();
+  private networkChangeHandler = () => this.updateStatus();
+  private onlineHandler = () => this.updateStatus();
+
   private async initBatteryMonitor(): Promise<void> {
     if ('getBattery' in navigator) {
       try {
         this.batteryManager = await (navigator as any).getBattery();
-        this.batteryManager?.addEventListener('levelchange', () => this.updateStatus());
-        this.batteryManager?.addEventListener('chargingchange', () => this.updateStatus());
+        this.batteryManager?.addEventListener('levelchange', this.batteryLevelHandler);
+        this.batteryManager?.addEventListener('chargingchange', this.batteryChargingHandler);
       } catch {
         // Battery API not available
       }
@@ -52,12 +57,31 @@ class ResourceManager {
   private initNetworkMonitor(): void {
     if ('connection' in navigator) {
       const conn = (navigator as any).connection;
-      conn?.addEventListener('change', () => this.updateStatus());
+      conn?.addEventListener('change', this.networkChangeHandler);
     }
     
     // PATCH v17 iOS PWA: Apenas escutar 'online' para trigger
-    window.addEventListener('online', () => this.updateStatus());
+    window.addEventListener('online', this.onlineHandler);
     // REMOVIDO: listener 'offline' - causava falsos positivos no iOS
+  }
+
+  cleanup(): void {
+    // Remove battery listeners
+    if (this.batteryManager) {
+      this.batteryManager.removeEventListener('levelchange', this.batteryLevelHandler);
+      this.batteryManager.removeEventListener('chargingchange', this.batteryChargingHandler);
+    }
+    
+    // Remove network listeners
+    if ('connection' in navigator) {
+      const conn = (navigator as any).connection;
+      conn?.removeEventListener('change', this.networkChangeHandler);
+    }
+    
+    window.removeEventListener('online', this.onlineHandler);
+    
+    // Stop monitoring interval
+    this.stopMonitoring();
   }
 
   private updateStatus(): void {
