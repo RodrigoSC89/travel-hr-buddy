@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 export interface EmployeeProfile {
   id: string;
@@ -70,7 +71,7 @@ export function useEmployeeProfile() {
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching employee profile:', error);
+        logger.error('Error fetching employee profile:', error);
       }
 
       if (!data) {
@@ -185,7 +186,7 @@ export function useHRChat() {
       return data.content;
     },
     onError: (error: Error) => {
-      console.error('Chat error:', error);
+      logger.error('Chat error:', error);
       if (error.message.includes('429')) {
         toast.error('Muitas requisições. Aguarde um momento.');
       } else if (error.message.includes('402')) {

@@ -1,5 +1,6 @@
 /// <reference path="../deno-ambient.d.ts" />
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { edgeLogger as log } from "../_shared/edge-logger.ts";
 
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -38,7 +39,7 @@ Deno.serve(async (req) => {
       );
     }
   } catch (error) {
-    console.error("Dashboard Analytics Error:", error);
+    log.error("dashboard-analytics", "Dashboard Analytics Error", error);
     return new Response(
       JSON.stringify({ error: (error as Error).message }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -141,7 +142,7 @@ async function generateAIInsights(data: any) {
         }
       });
 
-    if (insertError) console.warn("Failed to save insights:", insertError);
+    if (insertError) log.warn("dashboard-analytics", "Failed to save insights", { error: insertError.message });
 
     return new Response(
       JSON.stringify({
