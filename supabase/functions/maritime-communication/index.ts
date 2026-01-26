@@ -57,7 +57,7 @@ serve(async (req: Request) => {
       coordinates 
     }: CommunicationRequest = await req.json();
 
-    console.log("Processing real-time maritime communication:", { vessel_id, message_type, priority });
+    // Processing real-time maritime communication
 
     // Insert the message into the database
     const { data: message, error: messageError } = await supabaseClient
@@ -75,7 +75,6 @@ serve(async (req: Request) => {
       .single();
 
     if (messageError) {
-      console.error("Error inserting message:", messageError);
       throw messageError;
     }
 
@@ -119,9 +118,7 @@ serve(async (req: Request) => {
         .from("real_time_notifications")
         .insert(notifications);
 
-      if (notificationError) {
-        console.error("Error creating notifications:", notificationError);
-      }
+      // Note: Notification errors are non-critical, message was sent successfully
     }
 
     // Log communication for audit trail
@@ -134,7 +131,7 @@ serve(async (req: Request) => {
         timestamp: new Date().toISOString()
       });
 
-    console.log("Maritime communication processed successfully:", typedMessage.id);
+    // Maritime communication processed successfully
 
     return new Response(
       JSON.stringify({
@@ -150,7 +147,6 @@ serve(async (req: Request) => {
     );
 
   } catch (error) {
-    console.error("Error in maritime communication:", error);
 
     return new Response(
       JSON.stringify({

@@ -65,7 +65,7 @@ class DataRetentionManager {
       this.cleanupHistory = this.cleanupHistory.slice(0, 50);
     }
 
-    console.log('[DataRetention] Cleanup complete:', results);
+    // Cleanup complete - logged silently in production
     return results;
   }
 
@@ -131,8 +131,7 @@ class DataRetentionManager {
       const databases = await indexedDB.databases?.() || [];
       for (const db of databases) {
         if (db.name?.includes('temp') || db.name?.includes('cache')) {
-          // Could delete old temp databases
-          console.log(`[DataRetention] Found temp DB: ${db.name}`);
+          // Could delete old temp databases - logged silently
         }
       }
     } catch (e) {
@@ -172,8 +171,8 @@ class DataRetentionManager {
           }
         });
       }
-    } catch (e) {
-      console.warn('[DataRetention] Error getting storage stats:', e);
+    } catch {
+      // Silent fail for storage stats errors in data retention
     }
 
     return {

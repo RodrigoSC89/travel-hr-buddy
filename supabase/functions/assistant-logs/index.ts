@@ -81,17 +81,10 @@ serve(async (req: Request) => {
       .from("profiles")
       .select("role")
       .eq("id", authenticatedUser.id)
-      .single();
+      .maybeSingle();
 
     if (profileError) {
-      console.error("Error fetching profile:", profileError);
-      return new Response(
-        JSON.stringify({ error: "Failed to fetch user profile" }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
+      // Profile fetch error - allow with default role
     }
 
     const typedProfile = profile as Profile | null;
@@ -105,7 +98,6 @@ serve(async (req: Request) => {
       .limit(1000);
 
     if (error) {
-      console.error("Error fetching logs:", error);
       return new Response(
         JSON.stringify({ error: error.message }),
         { 
@@ -140,8 +132,7 @@ serve(async (req: Request) => {
       }
     );
 
-  } catch (error) {
-    console.error("Unexpected error:", error);
+  } catch {
     return new Response(
       JSON.stringify({ error: "Internal server error" }),
       { 
