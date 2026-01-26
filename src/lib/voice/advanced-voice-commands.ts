@@ -126,8 +126,8 @@ class AdvancedVoiceEngine {
     this.registerCommand({
       id: 'nav-travel',
       patterns: ['ir para viagens', 'abrir viagens', 'módulo de viagens'],
-      action: () => window.location.href = '/travel',
-      description: 'Navegar para Viagens',
+      action: () => window.location.href = '/travel-command',
+      description: 'Navegar para Travel Command Center',
       category: 'navigation',
     });
     

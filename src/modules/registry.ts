@@ -842,20 +842,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "2.0.0",
   },
 
-  // DEPRECATED: Reservations - Fusão no Travel Command Center
-  "features.reservations": {
-    id: "features.reservations",
-    name: "Reservations",
-    category: "features",
-    path: "pages/Reservations",
-    description: "DEPRECATED: Redirecionado para Travel Command Center",
-    status: "deprecated",
-    completeness: "100%",
-    route: "/reservations",
-    redirectTo: "/travel-command",
-    icon: "Calendar",
-    lazy: true,
-  },
+  // REMOVED: Reservations - Merged into Travel Command Center
+  // Old path: pages/Reservations - File deleted, use /travel-command directly
 
   "planning.calendar": {
     id: "planning.calendar",
@@ -1336,20 +1324,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "650.2",
   },
 
-  // Travel & Logistics
-  "travel": {
-    id: "travel",
-    name: "Travel Management",
-    category: "operations",
-    path: "pages/Travel",
-    description: "Sistema integrado de gestão de viagens corporativas",
-    status: "active",
-    completeness: "100%",
-    route: "/travel",
-    icon: "Plane",
-    lazy: true,
-    version: "651.0",
-  },
+  // REMOVED: Travel - Merged into Travel Command Center
+  // Old path: pages/Travel - File deleted, use /travel-command directly
 
   // DEPRECATED: Communication Hub - Merged into Communication Command Center
   "communication": {
@@ -1732,20 +1708,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "2.0.0",
   },
 
-  // DEPRECATED: Procurement & Inventory AI - Fusão no Procurement Command Center
-  "logistics.procurement-inventory": {
-    id: "logistics.procurement-inventory",
-    name: "Procurement & Inventory AI",
-    category: "logistics",
-    path: "pages/ProcurementInventory",
-    description: "DEPRECATED: Redirecionado para Procurement Command Center",
-    status: "deprecated",
-    completeness: "100%",
-    route: "/procurement-inventory",
-    redirectTo: "/procurement-command",
-    icon: "ShoppingCart",
-    lazy: true,
-  },
+  // REMOVED: Procurement & Inventory AI - Merged into Procurement Command Center
+  // Old path: pages/ProcurementInventory - File deleted, use /procurement-command directly
 
   // DEPRECATED: AI Dashboard - Fusão no AI Command Center (PATCH UNIFY-11.0)
   "intelligence.ai-dashboard": {
@@ -2308,19 +2272,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  "logistics.supplier-marketplace": {
-    id: "logistics.supplier-marketplace",
-    name: "Supplier Marketplace",
-    category: "logistics",
-    path: "pages/SupplierMarketplace",
-    description: "Maritime supplier marketplace with RFQ management and price benchmarking",
-    status: "active",
-    completeness: "100%",
-    route: "/supplier-marketplace",
-    icon: "ShoppingCart",
-    lazy: true,
-    version: "1.0.0",
-  },
+  // REMOVED: Supplier Marketplace - Merged into Procurement Command Center
+  // Old path: pages/SupplierMarketplace - File deleted, use /procurement-command directly
 
   // PATCH 177.0: Orphan Routes Integration
   "operations.telemetry": {
