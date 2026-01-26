@@ -252,8 +252,7 @@ export const useTrainingAcademy = () => {
       toast({ title: "Curso criado", description: "Curso criado com sucesso!" });
       await fetchCourses();
       return data;
-    } catch (err: any) {
-      console.error("Error creating course:", err);
+    } catch (error: unknown) {
       toast({ title: "Erro", description: "Falha ao criar curso", variant: "destructive" });
       return null;
     }
@@ -279,8 +278,7 @@ export const useTrainingAcademy = () => {
       toast({ title: "Inscrito!", description: "Você foi inscrito no curso." });
       await fetchProgress();
       return data;
-    } catch (err: any) {
-      console.error("Error enrolling:", err);
+    } catch (error: unknown) {
       toast({ title: "Erro", description: "Falha ao inscrever", variant: "destructive" });
       return null;
     }

@@ -119,11 +119,11 @@ const DocumentTemplatesManager = () => {
       }));
       
       setTemplates(templatesWithVars);
-    } catch (error: any) {
-      console.error("Error loading templates:", error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro ao carregar templates";
       toast({
         title: "Error loading templates",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {

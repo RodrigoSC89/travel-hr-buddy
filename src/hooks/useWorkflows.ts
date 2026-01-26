@@ -187,8 +187,7 @@ export const useWorkflows = () => {
       toast({ title: "Sucesso", description: "Workflow criado com sucesso!" });
       await fetchWorkflows();
       return data;
-    } catch (err: any) {
-      console.error("Error creating workflow:", err);
+    } catch (error: unknown) {
       toast({ title: "Erro", description: "Falha ao criar workflow", variant: "destructive" });
       return null;
     }

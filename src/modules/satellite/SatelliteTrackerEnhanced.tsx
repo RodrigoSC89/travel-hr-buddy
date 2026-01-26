@@ -107,11 +107,11 @@ export const SatelliteTrackerEnhanced = () => {
       }
 
       setSatellites(data);
-    } catch (error: any) {
-      console.error("Error loading satellite data:", error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro ao carregar satélites";
       toast({
         title: "Error loading satellites",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {

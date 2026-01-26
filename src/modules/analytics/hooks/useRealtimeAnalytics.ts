@@ -102,9 +102,10 @@ export function useRealtimeAnalytics() {
           )
           .subscribe();
 
-      } catch (err: any) {
-        setError(err.message);
-        logger.error("Error setting up realtime subscriptions", err);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Erro desconhecido';
+        setError(message);
+        logger.error("Error setting up realtime subscriptions", error);
       }
     };
 
@@ -132,9 +133,10 @@ export function useRealtimeAnalytics() {
       if (error) throw error;
 
       setEvents(data as AnalyticsEvent[]);
-    } catch (err: any) {
-      setError(err.message);
-      logger.error("Error loading events", err);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      setError(message);
+      logger.error("Error loading events", error);
     }
   }, []);
 
@@ -150,9 +152,10 @@ export function useRealtimeAnalytics() {
       if (error) throw error;
 
       setMetrics(data as AnalyticsMetric[]);
-    } catch (err: any) {
-      setError(err.message);
-      logger.error("Error loading metrics", err);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Erro desconhecido';
+      setError(message);
+      logger.error("Error loading metrics", error);
     }
   }, []);
 
