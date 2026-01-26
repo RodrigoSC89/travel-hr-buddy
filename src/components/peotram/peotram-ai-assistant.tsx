@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import {
   Brain,
   Send,
@@ -382,16 +383,7 @@ Por favor, tente novamente ou consulte:
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                             <div 
                               className="prose prose-sm dark:prose-invert max-w-none text-sm"
-                              dangerouslySetInnerHTML={{ 
-                                __html: message.content
-                                  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                                  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                  .replace(/\n- /g, '<br/>• ')
-                                  .replace(/\n/g, '<br/>') 
-                              }} 
+                              dangerouslySetInnerHTML={createSafeHTML(message.content)} 
                             />
                             {message.references && message.references.length > 0 && (
                               <div className="mt-2 pt-2 border-t border-border/50">

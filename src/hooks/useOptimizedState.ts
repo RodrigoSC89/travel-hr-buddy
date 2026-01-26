@@ -64,8 +64,8 @@ export function usePersistedState<T>(
         const valueToStore = value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      } catch (error) {
-        console.warn(`Error saving to localStorage key "${key}":`, error);
+      } catch {
+        // Silent fail - localStorage may not be available or full
       }
     },
     [key, storedValue]
@@ -87,7 +87,7 @@ export function useSafeLoading(timeout: number = 30000) {
     // Timeout de segurança para evitar loading infinito
     timeoutRef.current = setTimeout(() => {
       setIsLoading(false);
-      console.warn("Loading timeout reached");
+      // Silent timeout - handled gracefully
     }, timeout);
   }, [timeout]);
 

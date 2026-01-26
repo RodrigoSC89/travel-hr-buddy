@@ -3,6 +3,8 @@
  * Optimized sync for 2Mbps connections with chunking and priority
  */
 
+import { logger } from "@/lib/logger";
+
 export interface SyncItem {
   id: string;
   module: string;
@@ -162,7 +164,7 @@ class SmartSyncManager {
       this.stats.lastSyncAt = Date.now();
       
     } catch (error) {
-      console.warn(`[SmartSync] Failed to sync ${item.id}:`, error);
+      logger.warn(`[SmartSync] Failed to sync ${item.id}`, { error: String(error) });
       
       item.retries++;
       item.lastAttempt = Date.now();
@@ -193,7 +195,7 @@ class SmartSyncManager {
     const chunkSize = this.config.chunkSizeKB * 1024;
     const chunks = Math.ceil(dataStr.length / chunkSize);
     
-    console.log(`[SmartSync] Processing large item in ${chunks} chunks`);
+    logger.info(`[SmartSync] Processing large item in ${chunks} chunks`);
     
     for (let i = 0; i < chunks; i++) {
       const chunk = dataStr.slice(i * chunkSize, (i + 1) * chunkSize);
@@ -248,8 +250,8 @@ class SmartSyncManager {
   private saveQueue(): void {
     try {
       localStorage.setItem('smart_sync_queue', JSON.stringify(this.queue));
-    } catch (e) {
-      console.warn('[SmartSync] Failed to save queue:', e);
+    } catch {
+      // Silent fail - localStorage may be full
     }
   }
 
@@ -270,8 +272,8 @@ class SmartSyncManager {
       failed.push({ ...item, failedAt: Date.now() });
       if (failed.length > 100) failed.shift();
       localStorage.setItem('smart_sync_failed', JSON.stringify(failed));
-    } catch (e) {
-      console.warn('[SmartSync] Failed to save failed item:', e);
+    } catch {
+      // Silent fail - localStorage may be full
     }
   }
 
