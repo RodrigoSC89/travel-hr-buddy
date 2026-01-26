@@ -19898,40 +19898,69 @@ export type Database = {
         Row: {
           action: string | null
           component: string | null
+          cost_usd: number | null
           created_at: string
           description: string | null
           embedding: string | null
           id: string
           job_id: string
+          labor_hours: number | null
           metadata: Json | null
           organization_id: string | null
           outcome: string | null
+          parts_used: Json | null
+          technician_id: string | null
+          technician_name: string | null
+          updated_at: string | null
+          vessel_id: string | null
         }
         Insert: {
           action?: string | null
           component?: string | null
+          cost_usd?: number | null
           created_at?: string
           description?: string | null
           embedding?: string | null
           id?: string
           job_id: string
+          labor_hours?: number | null
           metadata?: Json | null
           organization_id?: string | null
           outcome?: string | null
+          parts_used?: Json | null
+          technician_id?: string | null
+          technician_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
         }
         Update: {
           action?: string | null
           component?: string | null
+          cost_usd?: number | null
           created_at?: string
           description?: string | null
           embedding?: string | null
           id?: string
           job_id?: string
+          labor_hours?: number | null
           metadata?: Json | null
           organization_id?: string | null
           outcome?: string | null
+          parts_used?: Json | null
+          technician_id?: string | null
+          technician_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mmi_job_history_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mmi_maintenance_jobs: {
         Row: {
