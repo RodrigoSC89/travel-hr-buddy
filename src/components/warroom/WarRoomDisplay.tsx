@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 interface KPIMetric {
   id: string;
@@ -140,7 +141,7 @@ export function WarRoomDisplay() {
         }))
       );
     } catch (err) {
-      console.error("[WarRoom] Error fetching data:", err);
+      logger.error("[WarRoom] Error fetching data:", err instanceof Error ? { message: err.message } : undefined);
     } finally {
       setIsLoading(false);
     }

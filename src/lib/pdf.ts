@@ -9,6 +9,7 @@
 
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 /**
  * PATCH 91.1 - Fallback PDF Parser
@@ -79,7 +80,11 @@ export function formatPDFContent(
 /**
  * Export HTML content to PDF with customizable options
  * 
- * @param contentHtml - The HTML content to export
+ * SECURITY NOTE: The contentHtml parameter should be pre-sanitized by the caller
+ * if it contains any user-generated content. Use escapeHtml from @/lib/validation/sanitize
+ * for user input before constructing the HTML.
+ * 
+ * @param contentHtml - The HTML content to export (must be pre-sanitized if from user input)
  * @param filename - Optional filename (defaults to "document.pdf")
  * @param customOptions - Optional custom html2pdf.js options
  * @returns Promise that resolves when PDF is generated and downloaded
@@ -93,6 +98,9 @@ export async function exportToPDF(
 
   // Create temporary container
   const element = document.createElement("div");
+  
+  // Note: Caller is responsible for sanitizing contentHtml before passing it here
+  // This function renders trusted HTML content for PDF generation
   element.innerHTML = contentHtml;
   document.body.appendChild(element);
 
@@ -121,7 +129,7 @@ export async function exportToPDF(
     
     toast.success("PDF gerado com sucesso!");
   } catch (error) {
-    console.error("Error exporting PDF:", error);
+    logger.error("Error exporting PDF:", error instanceof Error ? { message: error.message } : undefined);
     toast.error("Erro ao gerar PDF");
     throw error; // Re-throw for test assertions
   } finally {
