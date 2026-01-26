@@ -64,9 +64,9 @@ export async function generateTemplateWithCustomPrompt(prompt: string): Promise<
 
     const json = await res.json();
     return json.output || "";
-  } catch (error: any) {
-    console.error("Error generating template with AI:", error);
-    throw new Error(error.message || "Failed to generate template with AI");
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Failed to generate template with AI";
+    throw new Error(errorMessage);
   }
 }
 

@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/production-logger";
 import { 
   BarChart3, 
   Users, 
@@ -176,9 +177,10 @@ export default function BetaDashboard() {
         .limit(50);
 
       setEmailLogs((logsData as unknown as EmailLog[]) || []);
-    } catch (error: any) {
-      console.error("Error fetching data:", error);
-      toast.error("Erro ao carregar dados: " + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      logger.error("Error fetching data:", { error: errorMessage });
+      toast.error("Erro ao carregar dados: " + errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -207,9 +209,10 @@ export default function BetaDashboard() {
 
       toast.success(`Email de teste (${type}) enviado!`);
       fetchData(); // Refresh logs
-    } catch (error: any) {
-      console.error("Error sending email:", error);
-      toast.error("Erro ao enviar email: " + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      logger.error("Error sending email:", { error: errorMessage });
+      toast.error("Erro ao enviar email: " + errorMessage);
     } finally {
       setIsSending(false);
     }

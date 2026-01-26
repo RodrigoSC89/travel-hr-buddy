@@ -18,6 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 import { User, Star, Bug, Lightbulb, Heart, ChevronRight, ChevronLeft, Send, CheckCircle } from "lucide-react";
 
 const feedbackSchema = z.object({
@@ -111,9 +112,10 @@ export default function BetaFeedback() {
 
       toast.success("Feedback enviado com sucesso! Obrigado por participar do beta.");
       setIsSubmitted(true);
-    } catch (error: any) {
-      console.error("Error submitting feedback:", error);
-      toast.error("Erro ao enviar feedback: " + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      logger.error("Error submitting feedback:", { error: errorMessage });
+      toast.error("Erro ao enviar feedback: " + errorMessage);
     } finally {
       setIsSubmitting(false);
     }

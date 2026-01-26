@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/production-logger";
 import { 
   Brain, FileCheck, AlertTriangle, CheckCircle2, XCircle,
   Download, RefreshCw, Shield, Clock, BarChart3, FileText
@@ -71,9 +72,10 @@ export function AdvancedDowntimeValidator({ downtimeId, downtimeEvent, onValidat
       setResult(data);
       onValidationComplete?.(data.validation);
       toast.success('Validação IA concluída com sucesso');
-    } catch (error: any) {
-      console.error('Validation error:', error);
-      if (error.message?.includes('429')) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      logger.error('Validation error:', { error: errorMessage });
+      if (errorMessage.includes('429')) {
         toast.error('Limite de requisições excedido. Tente novamente em alguns minutos.');
       } else {
         toast.error('Erro ao validar downtime com IA');
