@@ -224,18 +224,37 @@ export const SGSOEvidenceManager: React.FC = () => {
 
       // Get current user and organization
       const { data: { user } } = await supabase.auth.getUser();
-      const orgId = await supabase
+      
+      if (!user) {
+        toast({
+          title: "Erro de autenticação",
+          description: "Você precisa estar logado para registrar evidências",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { data: orgData, error: orgError } = await supabase
         .from('organization_users')
         .select('organization_id')
-        .eq('user_id', user?.id || '')
+        .eq('user_id', user.id)
         .eq('status', 'active')
-        .single();
+        .maybeSingle();
 
-      // Insert into Supabase
+      if (orgError || !orgData?.organization_id) {
+        toast({
+          title: "Organização não encontrada",
+          description: "Você precisa estar associado a uma organização",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Insert into Supabase with validated organization_id
       const { data: insertedEvidence, error: insertError } = await supabase
         .from('sgso_evidence')
         .insert({
-          organization_id: orgId.data?.organization_id || null,
+          organization_id: orgData.organization_id,
           practice_number: newEvidence.practice_number,
           practice_name: newEvidence.practice_name,
           evidence_type: newEvidence.evidence_type,
@@ -248,7 +267,7 @@ export const SGSOEvidenceManager: React.FC = () => {
           ocr_confidence: ocrResult?.confidence || null,
           compliance_status: newEvidence.compliance_status,
           justification: newEvidence.justification || null,
-          created_by: user?.id || null
+          created_by: user.id
         })
         .select()
         .single();
