@@ -1,14 +1,28 @@
 /// <reference path="../deno-ambient.d.ts" />
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+
+const TAG = "FLEET-TRACKING";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+interface LocationData {
+  lat: number;
+  lon: number;
+  accuracy?: number;
+}
+
+interface VesselData {
+  id: string;
+  name: string;
+  current_location: LocationData | null;
+  status: string;
+}
+
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -29,6 +43,8 @@ serve(async (req) => {
     if (!vesselId) {
       throw new Error("Vessel ID is required");
     }
+
+    edgeLogger.info(TAG, `Processing tracking update for vessel ${vesselId}`);
 
     const timestamp = new Date().toISOString();
 
@@ -69,21 +85,19 @@ serve(async (req) => {
       .insert(trackingData);
 
     if (trackingError) {
-      console.warn("Could not insert tracking data:", trackingError);
-      // Continue without failing - tracking table might not exist yet
+      edgeLogger.warn(TAG, "Could not insert tracking data", { error: trackingError.message });
     }
 
     // Calculate distance from last position for fuel/maintenance estimates
     let distanceTraveled = 0;
     if (location && speed) {
-      // Simple distance calculation for demonstration
-      distanceTraveled = (speed || 0) * 0.1; // Rough estimate
+      distanceTraveled = (speed || 0) * 0.1;
     }
 
     // Check for alerts based on position and status
-    const alerts = [];
+    const alerts: Array<{ type: string; severity: string; message: string }> = [];
 
-    // Check if vessel is in restricted area (mock check)
+    // Check if vessel is in restricted area
     if (location && location.lat > 50 && location.lat < 60) {
       alerts.push({
         type: "restricted_area",
@@ -111,7 +125,7 @@ serve(async (req) => {
     }
 
     // Get nearby vessels for collision avoidance
-    let nearbyVessels: any[] = [];
+    let nearbyVessels: Array<{ id: string; name: string; location: LocationData | null; status: string }> = [];
     if (location) {
       const { data: vessels } = await supabaseClient
         .from("vessels")
@@ -120,14 +134,14 @@ serve(async (req) => {
         .not("current_location", "is", null);
 
       if (vessels) {
-        nearbyVessels = vessels.filter((vessel: any) => {
+        nearbyVessels = (vessels as VesselData[]).filter((vessel) => {
           if (!vessel.current_location) return false;
           const distance = calculateDistance(
             location.lat, location.lon,
             vessel.current_location.lat, vessel.current_location.lon
           );
-          return distance < 10; // Within 10km
-        }).map((vessel: any) => ({
+          return distance < 10;
+        }).map((vessel) => ({
           id: vessel.id,
           name: vessel.name,
           location: vessel.current_location,
@@ -136,7 +150,8 @@ serve(async (req) => {
       }
     }
 
-    // Return tracking response
+    edgeLogger.success(TAG, `Tracking updated for vessel ${vesselId}`, { alerts: alerts.length });
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -158,7 +173,7 @@ serve(async (req) => {
       },
     );
   } catch (error) {
-    console.error("Error in fleet-tracking:", error);
+    edgeLogger.error(TAG, "Error in fleet-tracking", error);
     return new Response(
       JSON.stringify({
         success: false,
