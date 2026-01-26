@@ -2,7 +2,7 @@ import type { ComponentType, FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Loading as LoadingSpinner } from "@/components/ui/Loading";
 
 interface QuickLoadCardProps {
   title: string;

@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Loading as LoadingSpinner } from "@/components/ui/Loading";
 import { logger } from "@/lib/logger";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
