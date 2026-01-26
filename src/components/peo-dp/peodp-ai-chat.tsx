@@ -9,6 +9,7 @@
  */
 
 import React, { useState, useRef, useEffect } from "react";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -250,8 +251,8 @@ Use as **ações rápidas** abaixo ou faça sua pergunta diretamente!`,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error("Error calling AI:", error);
+    } catch {
+      // AI error fallback - no console needed
       
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -399,18 +400,9 @@ Por favor, tente novamente ou consulte diretamente:
                             {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-blue-500" />}
                           </div>
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                            <div 
+                          <div 
                               className="prose prose-sm dark:prose-invert max-w-none text-sm"
-                              dangerouslySetInnerHTML={{ 
-                                __html: message.content
-                                  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                                  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                  .replace(/\n- /g, '<br/>• ')
-                                  .replace(/\n/g, '<br/>') 
-                              }} 
+                              dangerouslySetInnerHTML={createSafeHTML(message.content)} 
                             />
                             {message.references && message.references.length > 0 && (
                               <div className="mt-2 pt-2 border-t border-border/50">
