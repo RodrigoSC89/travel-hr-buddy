@@ -1,10 +1,8 @@
+// @ts-nocheck - JUSTIFIED: Uses dynamic tables (api_routes, api_rate_limits) not in generated types
 /**
  * PATCH 300: Enhanced API Gateway
- * Added documentation generation and Markdown export
- * @ts-nocheck - Required: api_routes table uses dynamic schema not in generated types
+ * API management platform with routing, rate limiting, and documentation
  */
-
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,17 +12,13 @@ import {
   Activity, 
   Server, 
   Shield, 
-  Zap, 
   AlertCircle, 
   CheckCircle2, 
   Key, 
   Plus, 
   Trash2, 
   Copy, 
-  RefreshCw, 
-  TrendingUp, 
   Clock,
-  FileText,
   Download,
   BookOpen
 } from "lucide-react";
@@ -36,13 +30,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
+// Local interfaces matching the actual database schema (custom tables)
 interface APIRoute {
   id: string;
   route_path: string;
   route_name: string;
   method: string;
   description: string;
-  schema_validation: any;
+  schema_validation: unknown;
   requires_auth: boolean;
   is_public: boolean;
   status: string;
