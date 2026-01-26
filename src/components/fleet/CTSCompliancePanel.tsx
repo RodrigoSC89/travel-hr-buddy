@@ -242,8 +242,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
           ]
         });
       }
-    } catch (error: any) {
-      console.error('CTS AI check error:', error);
+    } catch (error: unknown) {
       toast.error('Erro na análise IA de conformidade');
     } finally {
       setChecking(false);

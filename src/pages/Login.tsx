@@ -79,9 +79,7 @@ const Login = () => {
         toast.success("Login realizado com sucesso!");
       }
       
-    } catch (err: any) {
-      console.error("Erro no login:", err);
-      
+    } catch (error: unknown) {
       // PATCH iOS PWA: Nunca mostrar erro de conexão
       // Apenas mensagem genérica para qualquer exceção
       setErrorMessage("Tente novamente em alguns segundos");

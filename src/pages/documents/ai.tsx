@@ -119,10 +119,11 @@ export default function AIDocuments() {
       });
       
       setSelectedFile(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Falha no upload";
       toast({
         title: "Upload failed",
-        description: error.message,
+        description: message,
         variant: "destructive"
       });
     } finally {

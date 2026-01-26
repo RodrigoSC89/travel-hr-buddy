@@ -260,12 +260,12 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
         description: "A imagem está sendo processada..."
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[AuditEvidence] Camera capture failed', error);
-      
+      const message = error instanceof Error ? error.message : "Não foi possível acessar a câmera";
       toast({
         title: "❌ Erro na câmera",
-        description: error.message || "Não foi possível acessar a câmera",
+        description: message,
         variant: "destructive"
       });
     }
@@ -309,12 +309,12 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
         description: "Clique novamente para parar a gravação"
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[AuditEvidence] Audio recording failed', error);
-      
+      const message = error instanceof Error ? error.message : "Não foi possível acessar o microfone";
       toast({
         title: "❌ Erro no microfone",
-        description: error.message || "Não foi possível acessar o microfone",
+        description: message,
         variant: "destructive"
       });
     }

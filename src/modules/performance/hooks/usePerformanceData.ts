@@ -84,9 +84,10 @@ export const usePerformanceData = (period: number = 7) => {
         setDowntimeData([]);
       }
 
-    } catch (err: any) {
-      logger.error("Error loading performance data", err);
-      setError(err.message);
+    } catch (error: unknown) {
+      logger.error("Error loading performance data", error);
+      const message = error instanceof Error ? error.message : 'Erro ao carregar dados';
+      setError(message);
       // Show empty state on error
       setMetrics({
         fuelEfficiency: 0,

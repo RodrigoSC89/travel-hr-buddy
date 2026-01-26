@@ -74,7 +74,7 @@ export default function AuditDashboard() {
       if (count) {
         setTotalPages(Math.ceil(count / pageSize));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error("Failed to fetch audit logs");
     } finally {
       setLoading(false);

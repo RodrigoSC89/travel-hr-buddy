@@ -119,13 +119,12 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       if (data.tipo_resposta === "criacao_job" && data.job && onJobCreated) {
         onJobCreated(data.job);
       }
-    } catch (error: any) {
-      console.error("Copilot error:", error);
-      
+    } catch (error: unknown) {
+      const errorContent = error instanceof Error ? error.message : "Desculpe, ocorreu um erro. Por favor, tente novamente.";
       const errorMessage: CopilotMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: error.message || "Desculpe, ocorreu um erro. Por favor, tente novamente.",
+        content: errorContent,
         timestamp: new Date(),
       };
 
@@ -133,7 +132,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       
       toast({
         title: "Erro no Copilot",
-        description: error.message,
+        description: errorContent,
         variant: "destructive",
       });
     } finally {
