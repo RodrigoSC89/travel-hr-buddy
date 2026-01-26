@@ -1,10 +1,12 @@
-// @ts-nocheck
 // ✅ Edge Function: daily-restore-report v2.0
 // This function sends a daily email with the restore chart as PNG attachment
 // Refactored with TypeScript type safety and modular architecture
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "DAILY-RESTORE-REPORT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -121,7 +123,7 @@ async function fetchSummaryData(supabase: any): Promise<RestoreSummary> {
   );
 
   if (error) {
-    console.warn("Error fetching summary data:", error);
+    edgeLogger.warn(TAG, "Error fetching summary data", { error: error.message });
   }
 
   const summary = data && data.length > 0 ? data[0] : {

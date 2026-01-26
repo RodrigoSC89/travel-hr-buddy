@@ -1,5 +1,7 @@
-// @ts-nocheck
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "SECURITY-RLS-AUDIT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,7 +69,7 @@ Deno.serve(async (req) => {
           recommendation: "Manter políticas RLS ativas e revisá-las periodicamente.",
         });
       } catch (e) {
-        console.warn(`[SECURITY-AUDIT] Could not check ${tableName}:`, e);
+        edgeLogger.warn(TAG, `Could not check ${tableName}`, { error: String(e) });
       }
     }
 
