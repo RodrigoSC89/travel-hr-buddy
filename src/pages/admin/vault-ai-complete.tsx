@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { createSafeHTML } from "@/lib/utils/safe-html";
 
 interface VaultDocument {
   id: string;
@@ -376,7 +377,7 @@ export default function VaultAIComplete() {
                               </div>
                               <div 
                                 className="text-sm text-muted-foreground leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: result.highlighted_excerpt }}
+                                dangerouslySetInnerHTML={createSafeHTML(result.highlighted_excerpt || "")}
                               />
                             </div>
                           </div>
