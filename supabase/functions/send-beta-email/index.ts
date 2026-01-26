@@ -1,7 +1,6 @@
-// Deno Edge Function - TypeScript checks are skipped for Deno-specific imports
+// @ts-nocheck - Deno Edge Function (TypeScript checks skipped for Deno-specific imports)
 // This file is deployed and executed in Deno runtime, not Node.js
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@4.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { edgeLogger } from "../_shared/edge-logger.ts";
@@ -218,7 +217,7 @@ function getCompletionEmail(name: string, data: BetaEmailRequest["custom_data"])
   };
 }
 
-serve(async (req: Request): Promise<Response> => {
+Deno.serve(async (req: Request): Promise<Response> => {
   // Handle CORS
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
