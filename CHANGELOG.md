@@ -2,6 +2,36 @@
 
 > 📦 Para informações sobre PATCHES 608-612, consulte o arquivo [patches/nautilus-one-production-series.yaml](patches/nautilus-one-production-series.yaml)
 
+## [4.1.0] - 2026-01-26 - Schema Completion & Technical Debt Clearance
+**Tipo:** Maintenance Release - Production Hardening
+
+### ✅ Added
+- **6 novas tabelas no schema Supabase**:
+  - `weather_logs` - Cache de dados meteorológicos
+  - `analytics_alerts` - Configuração de alertas
+  - `analytics_alert_history` - Histórico de alertas disparados
+  - `analytics_sessions` - Sessões de usuários para analytics
+  - `incident_workflow_logs` - Auditoria de workflows de incidentes
+  - `api_routes` - Registro de rotas da API Gateway
+
+### 🔒 Security
+- RLS policies restritivas para todas as novas tabelas
+- Substituídas 3 policies "Always True" por organization-based restrictions
+- Multi-tenant isolation reforçado
+
+### 🔧 Fixed
+- Mapeamento type-safe completo em `dynamic-tables.ts`
+- Serviços `weatherService`, `analytics.service`, `workflow-api` agora 100% type-safe
+- Zero `@ts-nocheck` em código de produção
+
+### 📊 Metrics
+- 605+ tabelas no schema
+- 1931+ RLS policies ativas
+- 1000+ testes unitários passando
+- 100% TypeScript coverage em `src/`
+
+---
+
 ## PATCHES 608-612 - Maritime Operations & Safety Modules
 **Data:** November 3, 2025
 **Tipo:** Feature Release - Production Track
