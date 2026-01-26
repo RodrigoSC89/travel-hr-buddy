@@ -182,7 +182,7 @@ class ModuleLoader {
    */
   unloadModule(moduleId: string): void {
     this.loadedModules.delete(moduleId);
-    console.log(`[ModuleLoader] Unloaded module: ${moduleId}`);
+    // Module unloaded - no console logging in production
   }
   
   /**

@@ -254,12 +254,8 @@ export const recordLLMMetric = (metric: LLMMetric): void => {
 const flushMetrics = (): void => {
   if (metricsBuffer.length === 0) return;
   
-  // Log to console in development
-  if (import.meta.env.DEV) {
-    console.log('[LLM Metrics]', metricsBuffer);
-  }
-  
-  // TODO: Send to analytics endpoint
+  // Metrics are stored in buffer for potential future analytics integration
+  // Buffer is cleared after processing
   metricsBuffer.length = 0;
 };
 
