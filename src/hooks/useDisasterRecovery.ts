@@ -128,7 +128,7 @@ export function useSecurityFindings() {
         .limit(50);
 
       if (error) {
-        console.warn("Could not fetch security findings:", error);
+        // Silent fail - table may not be accessible
         return [];
       }
 
@@ -180,7 +180,7 @@ export function useBackupLogs() {
         .limit(20);
 
       if (error) {
-        console.warn("Could not fetch backup logs:", error);
+        // Silent fail - backup_logs table may not exist
         return [];
       }
 

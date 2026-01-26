@@ -26,12 +26,12 @@ async function fetchComplianceTable<T>(table: string): Promise<T[]> {
       .order("created_at", { ascending: false }) as unknown as Promise<{ data: T[] | null; error: Error | null }>);
     
     if (error) {
-      console.warn(`Failed to fetch ${table}:`, error.message);
+      // Silent fail - table may not exist or be inaccessible
       return [];
     }
     return data || [];
-  } catch (e) {
-    console.warn(`Table ${table} may not exist yet:`, e);
+  } catch {
+    // Silent fail - table may not exist yet in this environment
     return [];
   }
 }
