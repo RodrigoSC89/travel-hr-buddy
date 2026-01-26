@@ -1,11 +1,13 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "VOYAGE-AI-COPILOT";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -17,6 +19,8 @@ serve(async (req: Request) => {
     }
 
     const { messages, context } = await req.json();
+
+    edgeLogger.info(TAG, "Processing request", { messagesCount: messages?.length });
 
     const systemPrompt = `Você é um Copiloto de Viagem Marítima especializado em:
 - Otimização de rotas marítimas
@@ -66,12 +70,14 @@ Diretrizes:
         );
       }
       const errorText = await response.text();
-      console.error("AI Gateway error:", response.status, errorText);
+      edgeLogger.error(TAG, "AI Gateway error", new Error(errorText), { status: response.status });
       throw new Error(`AI Gateway error: ${response.status}`);
     }
 
     const data = await response.json();
     const aiResponse = data.choices?.[0]?.message?.content || "Desculpe, não consegui processar sua solicitação.";
+
+    edgeLogger.success(TAG, "Response generated");
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
@@ -79,7 +85,7 @@ Diretrizes:
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    console.error("Error in voyage-ai-copilot:", error);
+    edgeLogger.error(TAG, "Error", error);
     return new Response(
       JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

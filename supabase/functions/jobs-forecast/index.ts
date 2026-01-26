@@ -1,6 +1,5 @@
 /// <reference path="../deno-ambient.d.ts" />
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const TAG = "JobsForecast";
@@ -17,7 +16,7 @@ interface JobsForecastRequest {
   }>;
 }
 
-serve(async (req) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
