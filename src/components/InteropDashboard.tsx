@@ -26,10 +26,6 @@ import type {
   AgentSwarmMetric, 
   TrustEvent, 
   InteropLog as InteropLogRow,
-  MissionDetails,
-  TrustAlertDetails,
-  InteropMessage,
-  getJsonField
 } from "@/types/supabase-aliases";
 import { getJsonField as extractJson } from "@/types/supabase-aliases";
 
@@ -78,7 +74,6 @@ interface InteropLogView {
 
 // Transform DB rows to view types
 function transformMission(row: JointMissionLog): MissionView {
-  const details = row.details as MissionDetails | null;
   return {
     id: row.id,
     mission_id: row.mission_id,
