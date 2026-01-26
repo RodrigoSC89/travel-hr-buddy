@@ -5,6 +5,9 @@
  */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "IMCAIncidentAnalyzer";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -24,9 +27,6 @@ const IMCA_CATEGORIES = [
   "Fire & Explosion",
   "Structural Integrity"
 ];
-
-// IMCA bulletins are now stored in Supabase table 'imca_incidents_database'
-// This function fetches them dynamically
 
 interface IMCABulletin {
   id: string;
@@ -61,7 +61,7 @@ async function fetchIMCABulletins(supabase: ReturnType<typeof createClient>): Pr
       .order('incident_date', { ascending: false });
     
     if (error) {
-      console.error('Error fetching IMCA bulletins:', error);
+      edgeLogger.error(TAG, "Error fetching IMCA bulletins", error);
       return [];
     }
     
@@ -78,7 +78,7 @@ async function fetchIMCABulletins(supabase: ReturnType<typeof createClient>): Pr
       incident_date: b.incident_date
     }));
   } catch (e) {
-    console.error('Failed to fetch bulletins:', e);
+    edgeLogger.error(TAG, "Failed to fetch bulletins", e);
     return [];
   }
 }
@@ -122,8 +122,13 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+
   try {
-    const { incident, action = 'analyze' } = await req.json();
+    const { incident, action = 'analyze' } = await req.json() as {
+      incident?: LocalIncident;
+      action?: string;
+    };
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -334,7 +339,7 @@ FORNEÇA:
           training_recommendations: parsed.training_recommendations || []
         };
       } catch (e) {
-        console.error("Failed to parse AI response:", e);
+        edgeLogger.error(TAG, "Failed to parse AI response", e);
       }
     }
 
@@ -345,7 +350,9 @@ FORNEÇA:
       ai_response: JSON.stringify(analysis),
       interaction_type: 'incident_analysis',
       created_at: new Date().toISOString()
-    }).catch((err: Error) => console.log("Audit log skipped:", err.message));
+    }).catch((err: unknown) => {
+      edgeLogger.warn(TAG, "Audit log skipped", { reason: err instanceof Error ? err.message : 'Unknown' });
+    });
 
     const result = {
       success: true,
@@ -356,14 +363,17 @@ FORNEÇA:
       generated_at: new Date().toISOString()
     };
 
-    console.log("IMCA incident analysis completed for:", incident.id || "new incident");
+    edgeLogger.success(TAG, "IMCA incident analysis completed", { 
+      incidentId: incident.id || "new incident",
+      durationMs: Date.now() - startTime 
+    });
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error: unknown) {
-    console.error("Error in imca-incident-analyzer:", error);
+    edgeLogger.error(TAG, "Error in imca-incident-analyzer", error);
     return new Response(JSON.stringify({ 
       success: false,
       error: error instanceof Error ? error.message : "Unknown error" 

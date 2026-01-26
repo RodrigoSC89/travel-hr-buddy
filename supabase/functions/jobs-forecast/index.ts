@@ -1,6 +1,9 @@
 /// <reference path="../deno-ambient.d.ts" />
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "JobsForecast";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,6 +21,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const startTime = Date.now();
 
   try {
     const { trend }: JobsForecastRequest = await req.json();
@@ -37,7 +42,7 @@ serve(async (req) => {
       throw new Error("OPENAI_API_KEY is not set");
     }
 
-    console.log("Generating jobs forecast for trend data:", trend);
+    edgeLogger.info(TAG, "Generating jobs forecast", { trendLength: trend.length });
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -66,14 +71,14 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("OpenAI API error:", errorText);
+      edgeLogger.error(TAG, "OpenAI API error", new Error(errorText), { status: response.status });
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
     const forecast = data.choices[0].message.content;
 
-    console.log("Jobs forecast generated successfully");
+    edgeLogger.success(TAG, "Jobs forecast generated", { durationMs: Date.now() - startTime });
 
     return new Response(
       JSON.stringify({ forecast }),
@@ -83,11 +88,10 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     );
 
   } catch (err: unknown) {
-    console.error("Error generating jobs forecast:", err);
+    const errorMessage = err instanceof Error ? err.message : "Erro ao gerar previsão com IA.";
+    edgeLogger.error(TAG, "Error generating jobs forecast", err);
     return new Response(
-      JSON.stringify({ 
-        error: err instanceof Error ? err.message : "Erro ao gerar previsão com IA."
-      }),
+      JSON.stringify({ error: errorMessage }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -1,5 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { edgeLogger } from "../_shared/edge-logger.ts";
+
+const TAG = "NautiBrain";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,7 +31,7 @@ function checkCircuitBreaker(): boolean {
     if (timeSinceLastFailure > CIRCUIT_BREAKER_RESET_MS) {
       circuitBreaker.isOpen = false;
       circuitBreaker.failures = 0;
-      console.log("[Nauti Brain] Circuit breaker reset - attempting recovery");
+      edgeLogger.info(TAG, "Circuit breaker reset - attempting recovery");
       return false; // Circuit closed, allow request
     }
     return true; // Circuit still open
@@ -41,7 +44,7 @@ function recordFailure(): void {
   circuitBreaker.lastFailure = Date.now();
   if (circuitBreaker.failures >= CIRCUIT_BREAKER_THRESHOLD) {
     circuitBreaker.isOpen = true;
-    console.log("[Nauti Brain] Circuit breaker OPENED after", circuitBreaker.failures, "failures");
+    edgeLogger.warn(TAG, "Circuit breaker OPENED", { failures: circuitBreaker.failures });
   }
 }
 
@@ -84,7 +87,7 @@ Quando o usuário perguntar sobre:
 
 // Fallback to OpenAI GPT-4o if Lovable AI fails
 async function callWithFallback(
-  messages: any[], 
+  messages: unknown[], 
   contextualPrompt: string,
   LOVABLE_API_KEY: string
 ): Promise<Response> {
@@ -102,7 +105,7 @@ async function callWithFallback(
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: contextualPrompt },
-          ...(messages || []),
+          ...(Array.isArray(messages) ? messages : []),
         ],
         stream: true,
       }),
@@ -120,12 +123,12 @@ async function callWithFallback(
 
     throw new Error(`Lovable AI error: ${response.status}`);
   } catch (primaryError) {
-    console.error("[Nauti Brain] Primary (Lovable AI) failed:", primaryError);
+    edgeLogger.error(TAG, "Primary (Lovable AI) failed", primaryError);
     recordFailure();
 
     // Fallback to OpenAI GPT-4o
     if (OPENAI_API_KEY) {
-      console.log("[Nauti Brain] Attempting fallback to OpenAI GPT-4o...");
+      edgeLogger.info(TAG, "Attempting fallback to OpenAI GPT-4o");
       try {
         const fallbackResponse = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
@@ -137,20 +140,20 @@ async function callWithFallback(
             model: "gpt-4o",
             messages: [
               { role: "system", content: contextualPrompt },
-              ...(messages || []),
+              ...(Array.isArray(messages) ? messages : []),
             ],
             stream: true,
           }),
         });
 
         if (fallbackResponse.ok) {
-          console.log("[Nauti Brain] Fallback to GPT-4o successful");
+          edgeLogger.success(TAG, "Fallback to GPT-4o successful");
           recordSuccess();
           return fallbackResponse;
         }
         throw new Error(`OpenAI fallback error: ${fallbackResponse.status}`);
       } catch (fallbackError) {
-        console.error("[Nauti Brain] Fallback (OpenAI) also failed:", fallbackError);
+        edgeLogger.error(TAG, "Fallback (OpenAI) also failed", fallbackError);
         recordFailure();
       }
     }
@@ -159,13 +162,28 @@ async function callWithFallback(
   }
 }
 
+interface NautiBrainContext {
+  vessels?: { active: number; total: number; maintenance: number };
+  alerts?: { count: number; critical: number };
+  maintenance?: { pending: number; upcoming: number };
+  crew?: { onboard: number; total: number };
+  stock?: { critical: number; low: number };
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+
   try {
-    const { messages, context, action, userId } = await req.json();
+    const { messages, context, action, userId } = await req.json() as {
+      messages?: unknown[];
+      context?: NautiBrainContext;
+      action?: string;
+      userId?: string;
+    };
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -174,7 +192,7 @@ serve(async (req: Request) => {
 
     // Check circuit breaker
     if (checkCircuitBreaker()) {
-      console.log("[Nauti Brain] Circuit breaker is OPEN - returning cached response");
+      edgeLogger.warn(TAG, "Circuit breaker is OPEN - returning cached response");
       return new Response(JSON.stringify({ 
         error: "Sistema de IA temporariamente indisponível. Tente novamente em 30 segundos.",
         circuitBreakerOpen: true
@@ -221,11 +239,10 @@ Analise níveis de estoque, consumo médio e sugira compras otimizadas com forne
 Gere análises executivas com métricas, tendências e recomendações acionáveis.`;
     }
 
-    console.log("[Nauti Brain] Processing request:", { 
+    edgeLogger.info(TAG, "Processing request", { 
       hasContext: !!context, 
       action,
-      messagesCount: messages?.length,
-      circuitBreakerState: circuitBreaker
+      messagesCount: Array.isArray(messages) ? messages.length : 0
     });
 
     // Log decision to database
@@ -234,14 +251,13 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
     
     if (supabaseUrl && supabaseKey) {
       const supabase = createClient(supabaseUrl, supabaseKey);
-      const startTime = Date.now();
       
       try {
-        const response = await callWithFallback(messages, contextualPrompt, LOVABLE_API_KEY);
+        const response = await callWithFallback(messages || [], contextualPrompt, LOVABLE_API_KEY);
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error("[Nauti Brain] AI error:", response.status, errorText);
+          edgeLogger.error(TAG, "AI error", new Error(errorText), { status: response.status });
           
           if (response.status === 429) {
             return new Response(JSON.stringify({ 
@@ -275,24 +291,26 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
           confidence_level: 'high',
           impact: 'low',
           status: 'completed',
-          justification_reasoning: `Processed ${messages?.length || 0} messages with context`,
+          justification_reasoning: `Processed ${Array.isArray(messages) ? messages.length : 0} messages with context`,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        }).catch((err: Error) => console.error("[Nauti Brain] Decision logging error:", err));
+        }).catch((err: unknown) => {
+          edgeLogger.warn(TAG, "Decision logging skipped", { reason: err instanceof Error ? err.message : 'Unknown' });
+        });
 
-        console.log("[Nauti Brain] Response successful in", responseTime, "ms");
+        edgeLogger.success(TAG, "Response successful", { durationMs: responseTime });
 
         // Return streaming response
         return new Response(response.body, {
           headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
         });
       } catch (error) {
-        console.error("[Nauti Brain] All providers failed:", error);
+        edgeLogger.error(TAG, "All providers failed", error);
         throw error;
       }
     } else {
       // No Supabase - just call AI directly
-      const response = await callWithFallback(messages, contextualPrompt, LOVABLE_API_KEY);
+      const response = await callWithFallback(messages || [], contextualPrompt, LOVABLE_API_KEY);
       
       if (!response.ok) {
         if (response.status === 429) {
@@ -322,7 +340,7 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
       });
     }
   } catch (error) {
-    console.error("[Nauti Brain] Error:", error);
+    edgeLogger.error(TAG, "Error", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Erro desconhecido" 
     }), {
