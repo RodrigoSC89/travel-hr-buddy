@@ -16,6 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/production-logger";
 import { 
   Brain, AlertTriangle, FileText, Shield, CheckCircle2,
   RefreshCw, BookOpen, Users, Wrench, Target
@@ -107,9 +108,10 @@ export function IMCAIncidentAnalyzer() {
       
       setResult(data.analysis);
       toast.success('Análise IMCA concluída');
-    } catch (error: any) {
-      console.error('Analysis error:', error);
-      if (error.message?.includes('429')) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      logger.error('Analysis error:', { error: errorMessage });
+      if (errorMessage.includes('429')) {
         toast.error('Limite de requisições. Aguarde alguns minutos.');
       } else {
         toast.error('Erro na análise de incidente');

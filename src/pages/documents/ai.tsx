@@ -194,15 +194,16 @@ export default function AIDocuments() {
         p_results: { confidence, word_count: text.split(/\s+/).length }
       });
       
-    } catch (error: any) {
-      console.error("OCR Error:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "OCR processing failed";
+      logger.error("OCR Error:", { error: errorMessage });
       
       // Log analysis failure
       await supabase.rpc("log_document_analysis", {
         p_document_id: documentId,
         p_analysis_type: "ocr",
         p_status: "failed",
-        p_error: error.message
+        p_error: errorMessage
       });
       
       throw error;
