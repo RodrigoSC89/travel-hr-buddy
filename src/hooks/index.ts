@@ -39,8 +39,7 @@ export { useRestoreLogsSummary } from "./use-restore-logs-summary";
 export { useRestoreLogsMetrics } from "./use-restore-logs-metrics";
 
 // Business Logic
-export { useUserProfile as useProfile } from "./unified/useUserProfile";
-export { useAuthProfile } from "./use-auth-profile";
+export { useUserProfile as useProfile, useUserProfile } from "./unified/useUserProfile";
 export { useExpenses } from "./useExpenses";
 export { default as useModules } from "./useModules";
 export { useMaritimeActions } from "./useMaritimeActions";
