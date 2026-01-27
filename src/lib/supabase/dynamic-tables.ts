@@ -339,6 +339,254 @@ export const incidentWorkflowLogsTable = createTableAccessor<IncidentWorkflowLog
 export const apiRoutesTable = createTableAccessor<ApiRoute, ApiRouteInsert>("api_routes");
 
 // ============================================================================
+// ADDITIONAL DYNAMIC TABLES FOR LEGACY MODULES
+// ============================================================================
+
+/** Travel Reservations - Used by TravelReservations component */
+export interface TravelReservation {
+  id: string;
+  reservation_number: string;
+  itinerary_id?: string | null;
+  crew_member_id?: string | null;
+  reservation_type: string;
+  provider_name: string;
+  booking_reference?: string | null;
+  status: string;
+  check_in_date?: string | null;
+  check_out_date?: string | null;
+  location?: string | null;
+  cost?: number | null;
+  currency: string;
+  payment_status: string;
+  notes?: string | null;
+  created_at: string;
+}
+
+export interface TravelReservationInsert {
+  reservation_number: string;
+  itinerary_id?: string | null;
+  crew_member_id?: string | null;
+  reservation_type: string;
+  provider_name: string;
+  booking_reference?: string | null;
+  status?: string;
+  check_in_date?: string | null;
+  check_out_date?: string | null;
+  location?: string | null;
+  cost?: number | null;
+  currency?: string;
+  payment_status?: string;
+  notes?: string | null;
+}
+
+/** Type-safe accessor for travel_reservations table */
+export const travelReservationsTable = createTableAccessor<TravelReservation, TravelReservationInsert>("travel_reservations");
+
+/** Sonar Readings - Used by SonarPersistenceService */
+export interface SonarReading {
+  id: string;
+  mission_id?: string | null;
+  user_id: string;
+  location: Json;
+  depth: number;
+  timestamp: string;
+  terrain_type: string;
+  risk_level: string;
+  temperature?: number | null;
+  pressure?: number | null;
+  visibility?: number | null;
+  reading_data?: Json | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SonarReadingInsert {
+  mission_id?: string | null;
+  user_id: string;
+  location: Json;
+  depth: number;
+  timestamp?: string;
+  terrain_type: string;
+  risk_level: string;
+  temperature?: number | null;
+  pressure?: number | null;
+  visibility?: number | null;
+  reading_data?: Json | null;
+  metadata?: Json | null;
+}
+
+/** Type-safe accessor for sonar_readings table */
+export const sonarReadingsTable = createTableAccessor<SonarReading, SonarReadingInsert>("sonar_readings");
+
+/** Sonar AI Predictions */
+export interface SonarAIPrediction {
+  id: string;
+  reading_id?: string | null;
+  user_id: string;
+  prediction_type: string;
+  confidence: number;
+  location: Json;
+  depth_range?: Json | null;
+  description?: string | null;
+  detected_objects?: Json | null;
+  safe_route_recommendation?: Json | null;
+  warnings?: string[] | null;
+  ai_model?: string | null;
+  processed_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SonarAIPredictionInsert {
+  reading_id?: string | null;
+  user_id: string;
+  prediction_type: string;
+  confidence: number;
+  location: Json;
+  depth_range?: Json | null;
+  description?: string | null;
+  detected_objects?: Json | null;
+  safe_route_recommendation?: Json | null;
+  warnings?: string[] | null;
+  ai_model?: string | null;
+  processed_at?: string;
+}
+
+/** Type-safe accessor for sonar_ai_predictions table */
+export const sonarAIPredictionsTable = createTableAccessor<SonarAIPrediction, SonarAIPredictionInsert>("sonar_ai_predictions");
+
+/** Vessel Sensors - Used by FleetTelemetryModule */
+export interface VesselSensor {
+  id: string;
+  vessel_id: string;
+  sensor_type: string;
+  value: number;
+  unit: string;
+  threshold_min?: number | null;
+  threshold_max?: number | null;
+  status: string;
+  timestamp: string;
+  created_at: string;
+}
+
+export interface VesselSensorInsert {
+  vessel_id: string;
+  sensor_type: string;
+  value: number;
+  unit: string;
+  threshold_min?: number | null;
+  threshold_max?: number | null;
+  status?: string;
+  timestamp?: string;
+}
+
+/** Type-safe accessor for vessel_sensors table */
+export const vesselSensorsTable = createTableAccessor<VesselSensor, VesselSensorInsert>("vessel_sensors");
+
+/** Maintenance Alerts - Used by FleetTelemetryModule */
+export interface MaintenanceAlert {
+  id: string;
+  vessel_id: string;
+  alert_type: string;
+  component: string;
+  severity: string;
+  message: string;
+  predicted_failure_date?: string | null;
+  is_resolved: boolean;
+  resolved_at?: string | null;
+  created_at: string;
+}
+
+export interface MaintenanceAlertInsert {
+  vessel_id: string;
+  alert_type: string;
+  component: string;
+  severity: string;
+  message: string;
+  predicted_failure_date?: string | null;
+  is_resolved?: boolean;
+  resolved_at?: string | null;
+}
+
+/** Type-safe accessor for maintenance_alerts table */
+export const maintenanceAlertsTable = createTableAccessor<MaintenanceAlert, MaintenanceAlertInsert>("maintenance_alerts");
+
+/** PEODP Plans - Used by PEODP Wizard */
+export interface PeodpPlan {
+  id: string;
+  vessel_name: string;
+  vessel_type: string;
+  dp_class: string;
+  operation_type: string;
+  form_data: Json;
+  validation_results: Json | null;
+  inference_results: Json | null;
+  status: string;
+  created_by: string;
+  organization_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PeodpPlanInsert {
+  vessel_name: string;
+  vessel_type: string;
+  dp_class: string;
+  operation_type: string;
+  form_data: Json;
+  validation_results?: Json | null;
+  inference_results?: Json | null;
+  status?: string;
+  created_by: string;
+  organization_id?: string | null;
+}
+
+/** Type-safe accessor for peodp_plans table */
+export const peodpPlansTable = createTableAccessor<PeodpPlan, PeodpPlanInsert>("peodp_plans");
+
+/** Organization Branding - Used by OrganizationCustomization */
+export interface OrganizationBranding {
+  id: string;
+  organization_id: string;
+  company_name: string;
+  logo_url?: string | null;
+  primary_color: string;
+  secondary_color: string;
+  accent_color: string;
+  theme_mode: string;
+  default_language: string;
+  default_currency: string;
+  timezone: string;
+  custom_fields: Json | null;
+  business_rules: Json | null;
+  enabled_modules: Json | null;
+  module_settings: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationBrandingInsert {
+  organization_id: string;
+  company_name: string;
+  logo_url?: string | null;
+  primary_color?: string;
+  secondary_color?: string;
+  accent_color?: string;
+  theme_mode?: string;
+  default_language?: string;
+  default_currency?: string;
+  timezone?: string;
+  custom_fields?: Json | null;
+  business_rules?: Json | null;
+  enabled_modules?: Json | null;
+  module_settings?: Json | null;
+}
+
+/** Type-safe accessor for organization_branding table */
+export const organizationBrandingTable = createTableAccessor<OrganizationBranding, OrganizationBrandingInsert>("organization_branding");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 

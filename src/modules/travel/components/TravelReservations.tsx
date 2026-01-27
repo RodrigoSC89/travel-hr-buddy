@@ -1,7 +1,7 @@
-// @ts-nocheck - Legacy: travel_reservations table not in generated types
 /**
  * PATCH 377: Travel Reservations & Group Management
  * Reservations synchronization, group travel, and enhanced exports
+ * PATCH 865: Removed @ts-nocheck, using dynamic-tables accessor
  */
 
 import React, { useState, useEffect } from "react";
@@ -15,32 +15,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { 
+  travelReservationsTable, 
+  type TravelReservation, 
+  type TravelReservationInsert 
+} from "@/lib/supabase/dynamic-tables";
 import { Hotel, Plus } from "lucide-react";
 import { logger } from "@/lib/logger";
 
-interface Reservation {
-  id: string;
-  reservation_number: string;
-  itinerary_id?: string;
-  crew_member_id?: string;
-  reservation_type: string;
-  provider_name: string;
-  booking_reference?: string;
-  status: string;
-  check_in_date?: string;
-  check_out_date?: string;
-  location?: string;
-  cost?: number;
-  currency: string;
-  payment_status: string;
-  notes?: string;
-  created_at: string;
-}
-
 export const TravelReservations: React.FC = () => {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
+  const [reservations, setReservations] = useState<TravelReservation[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<TravelReservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
@@ -73,10 +58,7 @@ export const TravelReservations: React.FC = () => {
   const loadReservations = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("travel_reservations")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await travelReservationsTable.select("*");
 
       if (error) throw error;
       setReservations(data || []);
@@ -108,9 +90,7 @@ export const TravelReservations: React.FC = () => {
 
   const handleCreate = async () => {
     try {
-      const { error } = await supabase
-        .from("travel_reservations")
-        .insert([formData]);
+      const { error } = await travelReservationsTable.insertNoSelect(formData);
 
       if (error) throw error;
 
@@ -393,7 +373,7 @@ export const TravelReservations: React.FC = () => {
         {loading ? (
           <div className="text-center py-8">Loading reservations...</div>
         ) : filteredReservations.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No reservations found. Create your first reservation to get started.
           </div>
         ) : (
@@ -423,7 +403,7 @@ export const TravelReservations: React.FC = () => {
                     <TableCell>
                       <div className="font-medium">{reservation.provider_name}</div>
                       {reservation.booking_reference && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           Ref: {reservation.booking_reference}
                         </div>
                       )}
