@@ -1,9 +1,7 @@
-// @ts-nocheck - Tables: satellites, satellite_positions, satellite_alerts, start_tracking_session RPC (require migration)
+// @ts-nocheck - RPC functions not in generated types (start_tracking_session, etc.)
 /**
  * Satellite Tracker Page
  * Real-time satellite tracking with 3D orbital visualization
- * 
- * Technical Debt: Satellite tables require migration for type support
  */
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

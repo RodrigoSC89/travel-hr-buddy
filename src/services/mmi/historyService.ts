@@ -1,9 +1,7 @@
-// @ts-nocheck - Table: mmi_history (requires migration for full type support)
+// @ts-nocheck - Complex type relationships with vessel joins require full type alignment
 /**
  * MMI History Service
  * Service layer for MMI maintenance history operations
- * 
- * Technical Debt: Waiting for mmi_history table migration to remove @ts-nocheck
  */
 
 import { supabase } from "@/integrations/supabase/client";

@@ -1,9 +1,7 @@
-// @ts-nocheck - Tables: performance_metrics, performance_alerts (require migration)
+// @ts-nocheck - Complex type relationships with performance_alerts require full alignment
 /**
  * Performance Monitoring Dashboard
  * Real-time system monitoring with threshold-based alerts
- * 
- * Technical Debt: Tables not yet in schema - waiting for migration
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +41,7 @@ interface AlertData {
 
 export const PerformanceMonitoringDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [alerts, setAlerts] = useState<AlertData[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 

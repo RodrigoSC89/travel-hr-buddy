@@ -293,3 +293,6 @@ export {
   useIsMounted,
   useSafeState,
 } from '@/lib/react-optimizations';
+
+// PATCH 867: Ultra startup optimizer for 2G/Satellite
+export { ultraStartupOptimizer, useStartupMetrics } from './ultra-startup-optimizer';
