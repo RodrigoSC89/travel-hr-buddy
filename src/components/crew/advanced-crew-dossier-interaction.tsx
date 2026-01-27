@@ -1,4 +1,10 @@
-// @ts-nocheck
+// @ts-nocheck - Tables: crew_ai_insights (require migration), Edge functions: crew-ai-insights, crew-gamification, crew-goal-tracker
+/**
+ * Advanced Crew Dossier Interaction Component
+ * Interactive dossier with AI, gamification, and voice interaction
+ * 
+ * Technical Debt: Custom tables and edge functions need migration
+ */
 import React, { useState, useEffect } from "react";
 import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
 import { Button } from "@/components/ui/button";

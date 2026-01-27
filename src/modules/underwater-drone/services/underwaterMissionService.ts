@@ -1,7 +1,9 @@
-// @ts-nocheck
+// @ts-nocheck - Tables: underwater_missions, drone_telemetry, mission_events (require migration)
 /**
  * PATCH 459 - Underwater Missions Persistence Service
  * Service for persisting underwater drone missions, telemetry, and events to database
+ * 
+ * Technical Debt: Tables not yet in schema - waiting for migration
  */
 
 import { supabase } from "@/integrations/supabase/client";

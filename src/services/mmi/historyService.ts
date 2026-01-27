@@ -1,10 +1,9 @@
-// @ts-nocheck
+// @ts-nocheck - Table: mmi_history (requires migration for full type support)
 /**
  * MMI History Service
  * Service layer for MMI maintenance history operations
  * 
- * @ts-nocheck reason: MMIHistory interface expects string status values but
- * database returns string | null. Full alignment requires updating all consumers.
+ * Technical Debt: Waiting for mmi_history table migration to remove @ts-nocheck
  */
 
 import { supabase } from "@/integrations/supabase/client";
