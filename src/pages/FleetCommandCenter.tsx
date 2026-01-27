@@ -149,88 +149,19 @@ const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) =
   );
 };
 
-// Tracking Map Component (simplificado do vessel-tracking-map)
+// Import the real FleetMapBox component
+import { FleetMapBox } from "@/components/fleet/FleetMapBox";
+
+// Tracking Map Panel - Uses the real Mapbox component
 const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[600px]">
-      {/* Vessel List */}
-      <div className="lg:col-span-1 space-y-3 overflow-y-auto">
-        <Card>
-          <CardHeader className="py-3">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Ship className="h-4 w-4" />
-              Embarcações ({vessels.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 p-2">
-            {vessels.map((vessel: any) => (
-              <div
-                key={vessel.id}
-                className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-muted/50 ${
-                  selectedVessel?.id === vessel.id ? "ring-2 ring-primary bg-primary/5" : "border"
-                }`}
-                onClick={() => onSelectVessel(vessel)}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-sm">{vessel.name}</span>
-                  <Badge variant={vessel.status === "active" || vessel.status === "operational" ? "default" : "secondary"} className="text-xs">
-                    {vessel.status === "active" || vessel.status === "operational" ? "Ativa" : vessel.status}
-                  </Badge>
-                </div>
-                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Navigation className="h-3 w-3" />
-                    {vessel.speed || 0} kn
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="h-3 w-3" />
-                    {vessel.course || 0}°
-                  </span>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Map Placeholder */}
-      <div className="lg:col-span-3 relative">
-        <Card className="h-full">
-          <CardContent className="h-full p-0">
-            <div className="relative h-full bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <Waves className="h-20 w-20 mx-auto text-primary animate-pulse" />
-                <div>
-                  <h3 className="text-xl font-semibold">Mapa de Rastreamento</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Integração com sistema de rastreamento via satélite
-                  </p>
-                </div>
-                <div className="flex flex-wrap justify-center gap-2 mt-4">
-                  {vessels.slice(0, 4).map((v: any) => (
-                    <Badge key={v.id} variant="outline" className="gap-1">
-                      <div className="h-2 w-2 rounded-full bg-green-500" />
-                      {v.name}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Legend */}
-              <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur p-3 rounded-lg shadow-lg">
-                <div className="text-sm font-medium mb-2">Legenda</div>
-                <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-green-500" /><span>Ativa</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-yellow-500" /><span>Ancorada</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-orange-500" /><span>Manutenção</span></div>
-                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-red-500" /><span>Emergência</span></div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <FleetMapBox 
+      vessels={vessels}
+      onSelectVessel={onSelectVessel}
+      selectedVessel={selectedVessel}
+      height="600px"
+      showList={true}
+    />
   );
 };
 
