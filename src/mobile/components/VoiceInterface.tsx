@@ -11,6 +11,7 @@ import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { intentParser, Intent } from "../ai/intentParser";
 import { localMemory } from "../ai/localMemory";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Type declarations for Web Speech API - using any to avoid conflicts with browser types
 interface VoiceSpeechRecognition {
@@ -55,7 +56,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
-      console.warn("Speech recognition not supported in this browser");
+      logger.warn("Speech recognition not supported in this browser");
       return;
     }
 
@@ -66,7 +67,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-      console.log("Voice recognition started");
+      logger.debug("Voice recognition started");
     };
 
     recognition.onresult = (event: any) => {
