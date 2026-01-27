@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -188,7 +189,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
 
         setRecentActivities(activities.slice(0, 6));
       } catch (error) {
-        console.error('Error fetching real-time stats:', error);
+        logger.error('Error fetching real-time stats:', error);
       }
     }
 

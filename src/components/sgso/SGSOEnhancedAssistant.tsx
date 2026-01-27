@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   Brain,
   Send,
@@ -152,7 +153,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error calling SGSO assistant:", error);
+      logger.error("Error calling SGSO assistant:", error);
       toast({
         title: "Erro na consulta",
         description: "Não foi possível processar sua solicitação. Tente novamente.",

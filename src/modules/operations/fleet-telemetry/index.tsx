@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   Ship, 
   Activity, 
@@ -120,7 +121,7 @@ export default function FleetTelemetryModule() {
       })) || []);
 
     } catch (error) {
-      console.error("Error loading telemetry:", error);
+      logger.error("Error loading telemetry:", error);
       toast({
         title: "Erro ao carregar telemetria",
         description: "Não foi possível carregar os dados dos sensores.",
@@ -142,7 +143,7 @@ export default function FleetTelemetryModule() {
           table: "fleet_sensors"
         },
         (payload) => {
-          console.log("New sensor data:", payload);
+          logger.debug("New sensor data received", { payload_id: payload.new?.id });
           loadTelemetryData();
         }
       )
@@ -154,7 +155,7 @@ export default function FleetTelemetryModule() {
           table: "maintenance_alerts"
         },
         (payload) => {
-          console.log("New maintenance alert:", payload);
+          logger.info("New maintenance alert", { payload_id: payload.new?.id });
           toast({
             title: "Novo alerta de manutenção",
             description: payload.new.message,
@@ -203,7 +204,7 @@ export default function FleetTelemetryModule() {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error generating sensor data:", error);
+      logger.error("Error generating sensor data:", error);
     }
   };
 

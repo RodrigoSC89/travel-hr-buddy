@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { logger } from "@/lib/logger";
 let ort: any = null;
 const loadORT = async () => {
   if (!ort) {
@@ -62,7 +63,7 @@ export default function ForecastAI() {
           1
         );
       } catch (err) {
-        console.error("AI Forecast Error:", err);
+        logger.error("AI Forecast Error:", err);
         setStatus("offline");
         
         // Fallback prediction when model is unavailable

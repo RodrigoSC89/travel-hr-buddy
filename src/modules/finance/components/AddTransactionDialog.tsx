@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Plus, TrendingUp, TrendingDown } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface AddTransactionDialogProps {
   open: boolean;
@@ -89,7 +90,7 @@ export function AddTransactionDialog({ open, onOpenChange, onSuccess }: AddTrans
       onSuccess?.();
 
     } catch (error) {
-      console.error("Error adding transaction:", error);
+      logger.error("Error adding transaction:", error);
       toast({
         title: "Erro",
         description: "Falha ao registrar transação. Tente novamente.",
