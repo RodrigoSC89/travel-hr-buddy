@@ -61,23 +61,26 @@ export function FleetMapBox({
   useEffect(() => {
     const fetchToken = async () => {
       try {
+        console.log("[FleetMapBox] Fetching Mapbox token...");
         const { data, error: fnError } = await supabase.functions.invoke("mapbox-token");
         
         if (fnError) {
-          console.error("Mapbox token error:", fnError);
+          console.error("[FleetMapBox] Mapbox token error:", fnError);
           setError("Erro ao carregar token do mapa");
           setLoading(false);
           return;
         }
         
         if (data?.token) {
+          console.log("[FleetMapBox] Token received successfully");
           setMapboxToken(data.token);
         } else {
+          console.warn("[FleetMapBox] No token returned from function");
           setError("Token do Mapbox não configurado");
           setLoading(false);
         }
       } catch (err) {
-        console.error("Failed to get Mapbox token:", err);
+        console.error("[FleetMapBox] Failed to get Mapbox token:", err);
         setError("Falha ao conectar com o serviço de mapas");
         setLoading(false);
       }
@@ -159,11 +162,20 @@ export function FleetMapBox({
     if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
     let mounted = true;
+    console.log("[FleetMapBox] Initializing map with token...");
 
     const initMap = async () => {
       try {
         const mapboxgl = await getMapboxGLAsync();
-        if (!mounted || !mapContainer.current) return;
+        if (!mounted || !mapContainer.current) {
+          console.log("[FleetMapBox] Component unmounted before map init");
+          return;
+        }
+        
+        // Check if we got the real mapbox or mock
+        const isRealMapbox = mapboxgl.Map.toString().includes('native code') || 
+                             mapboxgl.Map.toString().length > 100;
+        console.log("[FleetMapBox] Mapbox loaded:", isRealMapbox ? "REAL" : "MOCK");
         
         mapboxRef.current = mapboxgl;
         mapboxgl.accessToken = mapboxToken;
@@ -180,14 +192,27 @@ export function FleetMapBox({
 
         mapInstance.on("load", () => {
           if (mounted) {
+            console.log("[FleetMapBox] Map loaded successfully");
             setMapReady(true);
+            setLoading(false);
+          }
+        });
+
+        mapInstance.on("error", (e: any) => {
+          console.error("[FleetMapBox] Mapbox error:", e);
+          if (mounted) {
+            setError("Erro ao carregar o mapa");
+            setLoading(false);
           }
         });
 
         mapRef.current = mapInstance;
       } catch (err) {
-        console.error("Failed to initialize map:", err);
-        setError("Falha ao inicializar o mapa");
+        console.error("[FleetMapBox] Failed to initialize map:", err);
+        if (mounted) {
+          setError("Falha ao inicializar o mapa");
+          setLoading(false);
+        }
       }
     };
 
@@ -442,15 +467,15 @@ export function FleetMapBox({
               <div className="text-sm font-medium mb-2">Legenda</div>
               <div className="space-y-1.5 text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <div className="w-3 h-3 rounded-full bg-primary" />
                   <span>Em navegação</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <div className="w-3 h-3 rounded-full bg-secondary" />
                   <span>Parado/Ancorado</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-orange-500" />
+                  <div className="w-3 h-3 rounded-full bg-destructive" />
                   <span>Selecionado</span>
                 </div>
               </div>
