@@ -135,11 +135,11 @@ export function CollaborativeChat() {
         
         setOnlineUsers(users);
       })
-      .on("presence", { event: "join" }, ({ newPresences }) => {
-        console.log("User joined:", newPresences);
+      .on("presence", { event: "join" }, () => {
+        // User joined silently
       })
-      .on("presence", { event: "leave" }, ({ leftPresences }) => {
-        console.log("User left:", leftPresences);
+      .on("presence", { event: "leave" }, () => {
+        // User left silently
       })
       .subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
