@@ -404,8 +404,28 @@ export function TraceabilityMatrix() {
     setExpandedElements(new Set());
   };
 
-  const handleExport = () => {
-    toast.success('Exportando matriz...', { description: 'Download iniciará em breve' });
+  const handleExport = async () => {
+    toast.loading('Gerando arquivo...', { id: 'export-matrix' });
+    await new Promise(r => setTimeout(r, 1500));
+    // Gerar CSV da matriz
+    const csvData = requirements.map((item: typeof PEOTRAM_REQUIREMENTS[0]) => ({
+      Requisito: item.code,
+      Descrição: item.title,
+      Elementos: item.elements?.length || 0,
+      Status: item.status,
+    }));
+    const csv = [
+      Object.keys(csvData[0] || {}).join(','),
+      ...csvData.map((row: Record<string, unknown>) => Object.values(row).join(','))
+    ].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `matriz-rastreabilidade-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Matriz exportada com sucesso!', { id: 'export-matrix', description: `${csvData.length} requisitos exportados` });
   };
 
   return (

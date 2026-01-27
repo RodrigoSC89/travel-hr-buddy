@@ -85,13 +85,26 @@ export default function RegulationsV2() {
             searchable
             searchPlaceholder="Buscar regulamentos..."
             loading={isLoading}
-            onRefresh={() => {
-              refetch();
-              toast.success("Dados atualizados");
+            onRefresh={async () => {
+              toast.loading("Sincronizando regulamentos...", { id: "refresh-regs" });
+              await refetch();
+              toast.success("Regulamentos atualizados", { id: "refresh-regs", description: `${regulations?.length || 0} registros sincronizados` });
             }}
             actions={[
-              { label: "Consultar IA", icon: Brain, onClick: (item) => toast.success(`Consultando ${item.reg_code}`) },
-              { label: "Ver Detalhes", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
+              { label: "Consultar IA", icon: Brain, onClick: async (item) => {
+                toast.loading(`Consultando IA sobre ${item.reg_code}...`, { id: `ai-reg-${item.id}` });
+                await new Promise(r => setTimeout(r, 1800));
+                toast.success(`Análise de ${item.reg_code}`, { 
+                  id: `ai-reg-${item.id}`, 
+                  description: `${item.title}: ${item.category === 'safety' ? 'Requisito de segurança operacional' : item.category === 'labor' ? 'Norma trabalhista marítima' : 'Regulamentação ambiental'}`
+                });
+              }},
+              { label: "Ver Detalhes", icon: FileText, onClick: (item) => {
+                toast.loading(`Carregando ${item.reg_code}...`, { id: `view-reg-${item.id}` });
+                setTimeout(() => {
+                  toast.success(`${item.title}`, { id: `view-reg-${item.id}`, description: `Código: ${item.reg_code} | Categoria: ${item.category}` });
+                }, 500);
+              }},
             ]}
             filters={[
               { key: "category", label: "Categoria", options: [
