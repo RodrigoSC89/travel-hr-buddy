@@ -3,6 +3,8 @@
  * Validates data flow and integration between modules
  */
 
+import { logger } from "@/lib/logger";
+
 export interface IntegrationFlow {
   source: string;
   target: string;
@@ -37,7 +39,7 @@ class ModuleIntegrationValidator {
    * Validate all module integrations
    */
   async validate(): Promise<IntegrationReport> {
-    console.log('[Integration] Validating module integrations...');
+    logger.info("[Integration] Validating module integrations...");
     
     const flows = this.analyzeFlows();
     const duplications = this.findDuplications();
