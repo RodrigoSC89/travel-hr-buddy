@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Ship, RefreshCw, Navigation, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 interface VesselPosition {
   vesselId?: string;
@@ -61,7 +62,7 @@ export function FleetMapBox({
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        console.log("[FleetMapBox] Fetching Mapbox token...");
+        logger.debug("[FleetMapBox] Fetching Mapbox token...");
         const { data, error: fnError } = await supabase.functions.invoke("mapbox-token");
         
         if (fnError) {
@@ -158,20 +159,20 @@ export function FleetMapBox({
     if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
     let mounted = true;
-    console.log("[FleetMapBox] Initializing map with token...");
+    logger.debug("[FleetMapBox] Initializing map with token...");
 
     const initMap = async () => {
       try {
         const mapboxgl = await getMapboxGLAsync();
         if (!mounted || !mapContainer.current) {
-          console.log("[FleetMapBox] Component unmounted before map init");
+          logger.debug("[FleetMapBox] Component unmounted before map init");
           return;
         }
         
         // Check if we got the real mapbox or mock
         const isRealMapbox = mapboxgl.Map.toString().includes('native code') || 
                              mapboxgl.Map.toString().length > 100;
-        console.log("[FleetMapBox] Mapbox loaded:", isRealMapbox ? "REAL" : "MOCK");
+        logger.debug(`[FleetMapBox] Mapbox loaded: ${isRealMapbox ? "REAL" : "MOCK"}`);
         
         mapboxRef.current = mapboxgl;
         mapboxgl.accessToken = mapboxToken;
@@ -188,14 +189,14 @@ export function FleetMapBox({
 
         mapInstance.on("load", () => {
           if (mounted) {
-            console.log("[FleetMapBox] Map loaded successfully");
+            logger.debug("[FleetMapBox] Map loaded successfully");
             setMapReady(true);
             setLoading(false);
           }
         });
 
         mapInstance.on("error", (e: any) => {
-          console.error("[FleetMapBox] Mapbox error:", e);
+          logger.error("[FleetMapBox] Mapbox error:", e);
           if (mounted) {
             setError("Erro ao carregar o mapa");
             setLoading(false);
