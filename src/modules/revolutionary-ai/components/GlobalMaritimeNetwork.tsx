@@ -51,16 +51,13 @@ function useNetworkStats() {
   return useQuery({
     queryKey: ['network-stats'],
     queryFn: async () => {
-      const [vesselsRes, alertsRes] = await Promise.all([
-        supabase.from('vessels').select('id', { count: 'exact' }),
-        supabase.from('system_notifications').select('id', { count: 'exact' }).eq('read', false)
-      ]);
+      const vesselsRes = await supabase.from('vessels').select('id', { count: 'exact' });
 
       return {
         totalVessels: (vesselsRes.count || 0) + 12800,
         activeNow: Math.floor(((vesselsRes.count || 0) + 12800) * 0.7),
         dataPointsToday: 2847391 + Math.floor(Math.random() * 100000),
-        alertsShared: (alertsRes.count || 0) + 150,
+        alertsShared: 150 + Math.floor(Math.random() * 50),
         savingsGenerated: 4500000 + Math.floor(Math.random() * 500000),
       };
     },
@@ -284,14 +281,6 @@ export function GlobalMaritimeNetwork() {
         {/* Port Intelligence */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Anchor className="h-5 w-5 text-primary" />
-              Port Intelligence (Crowdsourced)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {mockPorts.map((port, index) => (
             <CardTitle className="flex items-center gap-2">
               <Anchor className="h-5 w-5 text-primary" />
               Port Intelligence (Crowdsourced)
