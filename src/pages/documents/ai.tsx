@@ -1,6 +1,6 @@
-// @ts-nocheck - Legacy: ai_documents schema mismatch with component interface
 /**
  * AI Documents Page
+ * PATCH 866: Removed @ts-nocheck - ai_documents schema extended with required columns
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,12 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from "tesseract.js";
 import { AIDocumentsAnalyzer } from "@/components/documents/ai-documents-analyzer";
 import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
 import { createSafeHTML } from "@/lib/utils/safe-html";
+import { logger } from "@/lib/logger";
 import {
   FileText,
   Upload,
@@ -30,18 +31,19 @@ import {
   Tag,
   AlertCircle
 } from "lucide-react";
+import type { Json } from "@/integrations/supabase/types";
 
 interface AIDocument {
   id: string;
-  title: string;
-  description: string;
-  file_url: string;
+  title: string | null;
+  description: string | null;
+  file_url: string | null;
   file_type: string;
-  ocr_text: string;
+  ocr_text: string | null;
   ocr_status: string;
-  extracted_keywords: any[];
-  category: string;
-  confidence_score: number;
+  extracted_keywords: Json | null;
+  category: string | null;
+  confidence_score: number | null;
   created_at: string;
 }
 
@@ -95,15 +97,14 @@ export default function AIDocuments() {
         .from("documents")
         .getPublicUrl(fileName);
       
-      // Create document record
+      // Create document record using file_name (schema field) mapped from selectedFile.name
       const { data: { user } } = await supabase.auth.getUser();
       const { data: docData, error: docError } = await supabase
         .from("ai_documents")
         .insert({
-          title: selectedFile.name,
-          file_url: publicUrl,
+          file_name: selectedFile.name,
           file_type: selectedFile.type.includes("pdf") ? "pdf" : "image",
-          file_size_bytes: selectedFile.size,
+          storage_path: fileName,
           ocr_status: "processing",
           uploaded_by: user?.id
         })
@@ -149,16 +150,13 @@ export default function AIDocuments() {
         p_status: "started"
       });
 
-      const worker = await createWorker();
-      
-      await worker.loadLanguage("eng+por");
-      await worker.initialize("eng+por");
+      const worker = await createWorker("eng+por");
       
       setOcrProgress(30);
       
-      const { data: { text, confidence } } = await worker.recognize(file, {}, (progress) => {
-        setOcrProgress(30 + (progress.progress * 50));
-      });
+      const result = await worker.recognize(file);
+      const { text, confidence } = result.data;
+      setOcrProgress(80);
       
       await worker.terminate();
       
@@ -250,13 +248,13 @@ export default function AIDocuments() {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case "processing":
-      return <Clock className="h-4 w-4 text-blue-600 animate-spin" />;
+      return <Clock className="h-4 w-4 text-info animate-spin" />;
     case "failed":
-      return <XCircle className="h-4 w-4 text-red-600" />;
+      return <XCircle className="h-4 w-4 text-destructive" />;
     default:
-      return <AlertCircle className="h-4 w-4 text-gray-600" />;
+      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -389,11 +387,11 @@ export default function AIDocuments() {
                           )}
                         </div>
                         
-                        {doc.extracted_keywords && doc.extracted_keywords.length > 0 && (
+                        {doc.extracted_keywords && Array.isArray(doc.extracted_keywords) && doc.extracted_keywords.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {doc.extracted_keywords.slice(0, 5).map((kw: any, i: number) => (
+                            {(doc.extracted_keywords as Array<{ text?: string }>).slice(0, 5).map((kw, i: number) => (
                               <Badge key={i} variant="outline" className="text-xs">
-                                {kw.text || kw}
+                                {kw.text || String(kw)}
                               </Badge>
                             ))}
                           </div>
@@ -428,7 +426,8 @@ export default function AIDocuments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open(doc.file_url, "_blank")}
+                          onClick={() => doc.file_url && window.open(doc.file_url, "_blank")}
+                          disabled={!doc.file_url}
                         >
                           <Download className="w-4 h-4" />
                         </Button>
@@ -483,7 +482,7 @@ export default function AIDocuments() {
               <div>
                 <h4 className="font-semibold mb-2">Original Document</h4>
                 <iframe
-                  src={selectedDocument.file_url}
+                  src={selectedDocument.file_url ?? undefined}
                   className="w-full h-96 border rounded"
                   title="Document Preview"
                 />
@@ -495,7 +494,7 @@ export default function AIDocuments() {
                   dangerouslySetInnerHTML={createSafeHTML(
                     highlightKeywords(
                       selectedDocument.ocr_text || "No text extracted yet",
-                      selectedDocument.extracted_keywords || []
+                      Array.isArray(selectedDocument.extracted_keywords) ? selectedDocument.extracted_keywords : []
                     )
                   )}
                 />
