@@ -102,18 +102,31 @@ class UltraLightMode {
     }
   }
 
+  // PATCH v22: Store listener refs for cleanup
+  private connectionHandler = () => this.detectAndApply();
+  private motionHandler = (e: MediaQueryListEvent) => {
+    this.config.disableAnimations = e.matches;
+    this.applyStyles();
+  };
+  private motionQuery = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)') 
+    : null;
+
   private setupListeners() {
     const connection = (navigator as any).connection;
     
     if (connection) {
-      connection.addEventListener('change', () => this.detectAndApply());
+      connection.addEventListener('change', this.connectionHandler);
     }
 
-    // Listen for user preference changes
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
-      this.config.disableAnimations = e.matches;
-      this.applyStyles();
-    });
+    this.motionQuery?.addEventListener('change', this.motionHandler);
+  }
+
+  destroy() {
+    const connection = (navigator as any).connection;
+    connection?.removeEventListener('change', this.connectionHandler);
+    this.motionQuery?.removeEventListener('change', this.motionHandler);
+    this.removeStyles();
   }
 
   enable(mode: 'light' | 'ultra' = 'light') {
