@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
+// Animation variants for framer-motion compatibility
+export const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+
+export const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
+
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const [isVisible, setIsVisible] = useState(false);

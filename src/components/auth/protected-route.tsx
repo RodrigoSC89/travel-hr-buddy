@@ -4,7 +4,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
-import { OffshoreLoader } from "@/components/LoadingStates";
+import { ModulePageSkeleton as OffshoreLoader } from "@/components/ui/enhanced-skeletons";
 import type { ReactNode, FC } from "react";
 
 interface ProtectedRouteProps {

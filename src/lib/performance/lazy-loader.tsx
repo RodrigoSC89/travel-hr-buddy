@@ -3,7 +3,7 @@
  * Provides optimized lazy loading with retry, timeout, and fallback support
  */
 import React, { Suspense, ComponentType, lazy } from "react";
-import { OffshoreLoader } from "@/components/LoadingStates";
+import { ModulePageSkeleton as OffshoreLoader } from "@/components/ui/enhanced-skeletons";
 
 interface LazyConfig {
   /** Timeout in ms before showing error (default: 10000) */
