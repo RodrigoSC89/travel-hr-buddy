@@ -1,34 +1,44 @@
 /**
- * Performance Provider
- * PATCH 624 - Context provider para funcionalidades de performance
+ * Performance Provider v4.0
+ * Context provider for performance optimization features
+ * Optimized for 2G/Satellite (2MB/s) connections
  */
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { useConnectionAdaptive } from '@/hooks/useConnectionAdaptive';
 import { useOfflineMode } from '@/hooks/useOfflineMode';
 import { PERFORMANCE_CONFIG } from '@/lib/performance';
 
+type ConnectionQuality = 'fast' | 'moderate' | 'slow' | 'offline';
+
 interface PerformanceContextValue {
-  // Conexão
-  connectionQuality: 'fast' | 'moderate' | 'slow' | 'offline';
+  // Connection
+  connectionQuality: ConnectionQuality;
   isOnline: boolean;
   saveData: boolean;
-  
-  // Modo leve
+  effectiveType: string;
+  downlink: number;
+  rtt: number;
+
+  // Light mode
   lightMode: boolean;
   setLightMode: (value: boolean) => void;
-  
-  // Cache
+
+  // Cache & Sync
   hasPendingSync: boolean;
   clearCache: () => void;
-  
-  // Configurações
+
+  // Configuration
   config: typeof PERFORMANCE_CONFIG;
-  
-  // Recomendações
+
+  // Recommendations
   shouldLoadImages: boolean;
   shouldAnimate: boolean;
+  shouldPrefetch: boolean;
   debounceMs: number;
+  imageQuality: number;
+  timeout: number;
+  batchSize: number;
 }
 
 const PerformanceContext = createContext<PerformanceContextValue | null>(null);
@@ -37,50 +47,81 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
   const connection = useConnectionAdaptive();
   const offline = useOfflineMode();
   const [lightMode, setLightModeState] = useState(false);
-  
-  // Carregar preferência de lightMode
+
+  // Load lightMode preference from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('lightMode');
-    if (saved !== null) {
-      setLightModeState(saved === 'true');
+    try {
+      const saved = localStorage.getItem('lightMode');
+      if (saved !== null) {
+        setLightModeState(saved === 'true');
+      }
+    } catch {
+      // Ignore localStorage errors
     }
   }, []);
-  
-  // Salvar preferência de lightMode
-  const setLightMode = (value: boolean) => {
+
+  // Save lightMode preference
+  const setLightMode = useCallback((value: boolean) => {
     setLightModeState(value);
-    localStorage.setItem('lightMode', String(value));
-  };
-  
-  // Determinar se deve carregar imagens
-  const shouldLoadImages = !lightMode && connection.quality !== 'slow' && connection.quality !== 'offline';
-  
-  // Determinar se deve animar
-  const shouldAnimate = !lightMode && connection.recommendations.enableAnimations;
-  
-  // Debounce baseado em conexão
-  const debounceMs = lightMode 
-    ? PERFORMANCE_CONFIG.DEBOUNCE_SLOW 
-    : connection.recommendations.debounceMs;
-  
-  const value: PerformanceContextValue = {
-    connectionQuality: connection.quality,
-    isOnline: connection.isOnline,
-    saveData: connection.saveData,
-    lightMode,
-    setLightMode,
-    hasPendingSync: offline.hasPendingSync,
-    clearCache: offline.clearExpiredCache,
-    config: PERFORMANCE_CONFIG,
-    shouldLoadImages,
-    shouldAnimate,
-    debounceMs,
-  };
-  
+    try {
+      localStorage.setItem('lightMode', String(value));
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  // Clear cache wrapper
+  const clearCache = useCallback(() => {
+    offline.clearExpiredCache();
+  }, [offline]);
+
+  // Memoized recommendations
+  const recommendations = useMemo(() => {
+    const quality = connection.quality;
+    const saveData = connection.saveData;
+    const connRec = connection.recommendations;
+    const isRestricted = lightMode || quality === 'slow' || quality === 'offline' || saveData;
+
+    return {
+      shouldLoadImages: !isRestricted,
+      shouldAnimate: !isRestricted && connRec.enableAnimations,
+      shouldPrefetch: !isRestricted && connRec.enablePrefetch,
+      debounceMs: isRestricted ? PERFORMANCE_CONFIG.DEBOUNCE_SLOW : connRec.debounceMs,
+      imageQuality: isRestricted ? PERFORMANCE_CONFIG.IMAGE_QUALITY_LOW : connRec.imageQuality,
+      timeout: isRestricted ? 45000 : 15000,
+      batchSize: isRestricted ? 5 : 20,
+    };
+  }, [connection.quality, connection.saveData, connection.recommendations, lightMode]);
+
+  const value = useMemo<PerformanceContextValue>(
+    () => ({
+      // Connection
+      connectionQuality: connection.quality,
+      isOnline: connection.isOnline,
+      saveData: connection.saveData,
+      effectiveType: connection.effectiveType,
+      downlink: connection.downlink,
+      rtt: connection.rtt,
+
+      // Light mode
+      lightMode,
+      setLightMode,
+
+      // Cache & Sync
+      hasPendingSync: offline.hasPendingSync,
+      clearCache,
+
+      // Configuration
+      config: PERFORMANCE_CONFIG,
+
+      // Recommendations
+      ...recommendations,
+    }),
+    [connection, lightMode, setLightMode, offline.hasPendingSync, clearCache, recommendations]
+  );
+
   return (
-    <PerformanceContext.Provider value={value}>
-      {children}
-    </PerformanceContext.Provider>
+    <PerformanceContext.Provider value={value}>{children}</PerformanceContext.Provider>
   );
 }
 
@@ -93,7 +134,7 @@ export function usePerformance() {
 }
 
 /**
- * Hook simplificado para verificar se deve usar modo leve
+ * Simplified hook to check if optimizations should be applied
  */
 export function useShouldOptimize(): boolean {
   const { lightMode, connectionQuality, saveData } = usePerformance();
