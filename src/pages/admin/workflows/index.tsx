@@ -1,8 +1,9 @@
-// PATCH 860: Type safety restored - using type assertions for dynamic tables
+// PATCH 860: Type safety restored - using dynamic table accessor
 "use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { smartWorkflowsTable } from "@/lib/supabase/dynamic-tables";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { WorkflowAIScoreCard } from "@/components/workflows";
+import { logger } from "@/lib/logger";
 
 interface SmartWorkflow {
   id: string;
@@ -36,16 +38,22 @@ export default function SmartWorkflowPage() {
   async function fetchWorkflows() {
     try {
       setIsLoading(true);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase as any)
-        .from("smart_workflows")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await smartWorkflowsTable.select("*");
       
       if (error) throw error;
-      setWorkflows((data as SmartWorkflow[]) || []);
+      setWorkflows((data || []).map(w => ({
+        id: w.id,
+        title: w.name,
+        description: w.description,
+        status: w.status,
+        created_at: w.created_at,
+        updated_at: w.updated_at,
+        created_by: w.created_by,
+        category: null,
+        tags: null
+      })));
     } catch (error) {
-      console.error("Error fetching workflows:", error);
+      logger.error("Error fetching workflows:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os fluxos de trabalho",
@@ -70,13 +78,10 @@ export default function SmartWorkflowPage() {
       setIsCreating(true);
       const { data: userData } = await supabase.auth.getUser();
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
-        .from("smart_workflows")
-        .insert({ 
-          title: newTitle,
-          created_by: userData.user?.id 
-        });
+      const { error } = await smartWorkflowsTable.insertNoSelect({ 
+        name: newTitle,
+        created_by: userData.user?.id 
+      });
       
       if (error) throw error;
       
@@ -87,7 +92,7 @@ export default function SmartWorkflowPage() {
       });
       fetchWorkflows();
     } catch (error) {
-      console.error("Error creating workflow:", error);
+      logger.error("Error creating workflow:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o fluxo de trabalho",
