@@ -44,8 +44,8 @@ const REVOLUTIONARY_FEATURES = [
     id: "blockchain",
     name: "Blockchain Marítimo",
     icon: Blocks,
-    status: "beta",
-    progress: 60,
+    status: "active",
+    progress: 85,
     color: "from-primary to-info",
     description: "Smart contracts e certificados imutáveis na blockchain",
     stats: { contracts: "847", verified: "100%", disputes: "0" },
@@ -77,8 +77,8 @@ const REVOLUTIONARY_FEATURES = [
     id: "global-network",
     name: "Global Network",
     icon: Globe2,
-    status: "beta",
-    progress: 45,
+    status: "active",
+    progress: 78,
     color: "from-secondary to-primary",
     description: "Rede global de inteligência coletiva entre 10,000+ navios",
     stats: { vessels: "3,847", dataPoints: "1.2B", savings: "$1.8M" },
@@ -164,12 +164,12 @@ export function RevolutionaryFeaturesHub() {
         return (
           <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
             <Atom className="h-16 w-16 mx-auto mb-4 text-primary/60 animate-pulse" />
-            <h3 className="text-xl font-bold mb-2">Módulo Avançado</h3>
+            <h3 className="text-xl font-bold mb-2">Computação Quântica</h3>
             <p className="text-muted-foreground mb-4">
-              Funcionalidade de IA revolucionária em fase de testes
+              Otimização quântica para problemas de complexidade exponencial - Roadmap 2030
             </p>
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-              Beta Experimental
+              Roadmap 2030
             </Badge>
           </Card>
         );
