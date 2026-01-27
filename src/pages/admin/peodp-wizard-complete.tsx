@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: peodp_plans table not in generated types
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -519,9 +519,9 @@ export default function PeoDpWizardComplete() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "pass": return <CheckCircle className="h-4 w-4 text-green-500" />;
-    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    case "fail": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "pass": return <CheckCircle className="h-4 w-4 text-success" />;
+    case "warning": return <AlertTriangle className="h-4 w-4 text-warning" />;
+    case "fail": return <AlertTriangle className="h-4 w-4 text-destructive" />;
     default: return null;
     }
   };
@@ -566,25 +566,25 @@ export default function PeoDpWizardComplete() {
           </CardHeader>
           <CardContent className="space-y-4">
             {inferenceResults.critical_findings && inferenceResults.critical_findings.length > 0 && (
-              <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg space-y-2">
-                <h3 className="font-semibold text-red-700 dark:text-red-300 flex items-center gap-2">
+              <div className="p-4 bg-destructive/10 rounded-lg space-y-2">
+                <h3 className="font-semibold text-destructive flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5" />
                   Achados Críticos
                 </h3>
                 <ul className="list-disc list-inside space-y-1">
                   {inferenceResults.critical_findings.map((finding: string, index: number) => (
-                    <li key={index} className="text-sm text-red-600 dark:text-red-400">{finding}</li>
+                    <li key={index} className="text-sm text-destructive/80">{finding}</li>
                   ))}
                 </ul>
               </div>
             )}
             
             {inferenceResults.recommendations && inferenceResults.recommendations.length > 0 && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg space-y-2">
-                <h3 className="font-semibold text-blue-700 dark:text-blue-300">Recomendações</h3>
+              <div className="p-4 bg-info/10 rounded-lg space-y-2">
+                <h3 className="font-semibold text-info">Recomendações</h3>
                 <ul className="list-disc list-inside space-y-1">
                   {inferenceResults.recommendations.slice(0, 3).map((rec: string, index: number) => (
-                    <li key={index} className="text-sm text-blue-600 dark:text-blue-400">{rec}</li>
+                    <li key={index} className="text-sm text-info/80">{rec}</li>
                   ))}
                 </ul>
               </div>

@@ -1,4 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: requires schema alignment for enabled_modules/business_rules JSON
+/**
+ * Organization Customization Component
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: sonar_readings, sonar_ai_predictions tables not in generated types
 /**
  * PATCH 457 - Sonar Data Persistence Service
  * Service for persisting sonar readings and AI predictions to database

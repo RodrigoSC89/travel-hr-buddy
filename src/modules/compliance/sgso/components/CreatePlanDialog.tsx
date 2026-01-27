@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: sgso_plans table not in generated types
 import React, { useState } from "react";
 import {
   Dialog,
