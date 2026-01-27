@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Target, TrendingUp, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface TacticOptimization {
   id: string;
@@ -73,7 +74,7 @@ export function Patch604Validation() {
         description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
       });
       
-      console.log("PATCH 604 ✅ Tactic optimizations:", newOpts);
+      logger.info("PATCH 604 ✅ Tactic optimizations", { optimizations: newOpts });
     }, 2000);
   };
 

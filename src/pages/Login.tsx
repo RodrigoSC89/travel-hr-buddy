@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { Anchor, Wifi, Loader2 } from "lucide-react";
+import { Anchor, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +37,7 @@ const Login = () => {
       setPassword("");
       toast.success("Sessão limpa com sucesso!");
     } catch (error) {
-      console.error("Erro ao limpar sessão:", error);
+      logger.error("Erro ao limpar sessão", error);
     }
   }, []);
 
@@ -50,7 +51,7 @@ const Login = () => {
     // PATCH iOS PWA v16: Sem verificação de conexão - não é confiável no iOS
 
     try {
-      console.log("🔐 Tentando login...");
+      logger.info("Tentando login...");
       
       // Login simples - sem retry complexo que pode causar race conditions
       const { error } = await signIn(email.toLowerCase().trim(), password);
@@ -157,7 +158,7 @@ const Login = () => {
                 </>
               ) : (
                 <>
-                  <Wifi className="h-4 w-4 mr-2" />
+                  <Anchor className="h-4 w-4 mr-2" />
                   Entrar
                 </>
               )}
