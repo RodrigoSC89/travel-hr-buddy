@@ -587,6 +587,332 @@ export interface OrganizationBrandingInsert {
 export const organizationBrandingTable = createTableAccessor<OrganizationBranding, OrganizationBrandingInsert>("organization_branding");
 
 // ============================================================================
+// MMI HISTORY - Used by historyService.ts
+// ============================================================================
+
+export interface MMIHistory {
+  id: string;
+  vessel_id?: string | null;
+  task_description: string;
+  system_name?: string | null;
+  component_name?: string | null;
+  status?: string | null;
+  priority?: string | null;
+  scheduled_date?: string | null;
+  completed_date?: string | null;
+  technician_id?: string | null;
+  ai_recommendation?: string | null;
+  maintenance_type?: string | null;
+  estimated_hours?: number | null;
+  actual_hours?: number | null;
+  notes?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+  executed_at?: string | null;
+  pdf_url?: string | null;
+}
+
+export interface MMIHistoryInsert {
+  vessel_id?: string | null;
+  task_description: string;
+  system_name?: string | null;
+  component_name?: string | null;
+  status?: string | null;
+  priority?: string | null;
+  scheduled_date?: string | null;
+  completed_date?: string | null;
+  technician_id?: string | null;
+  ai_recommendation?: string | null;
+  maintenance_type?: string | null;
+  estimated_hours?: number | null;
+  actual_hours?: number | null;
+  notes?: string | null;
+  metadata?: Json | null;
+  executed_at?: string | null;
+  pdf_url?: string | null;
+}
+
+export const mmiHistoryTable = createTableAccessor<MMIHistory, MMIHistoryInsert>("mmi_history");
+
+// ============================================================================
+// SATELLITES - Used by satellite-tracker.tsx
+// ============================================================================
+
+export interface Satellite {
+  id: string;
+  norad_id?: string | null;
+  name: string;
+  satellite_type?: string | null;
+  operator?: string | null;
+  launch_date?: string | null;
+  orbital_period_minutes?: number | null;
+  inclination_degrees?: number | null;
+  apogee_km?: number | null;
+  perigee_km?: number | null;
+  tle_line1?: string | null;
+  tle_line2?: string | null;
+  is_active?: boolean | null;
+  organization_id?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SatelliteInsert {
+  norad_id?: string | null;
+  name: string;
+  satellite_type?: string | null;
+  operator?: string | null;
+  launch_date?: string | null;
+  orbital_period_minutes?: number | null;
+  inclination_degrees?: number | null;
+  apogee_km?: number | null;
+  perigee_km?: number | null;
+  tle_line1?: string | null;
+  tle_line2?: string | null;
+  is_active?: boolean | null;
+  organization_id?: string | null;
+  metadata?: Json | null;
+}
+
+export const satellitesTable = createTableAccessor<Satellite, SatelliteInsert>("satellites");
+
+export interface SatellitePosition {
+  id: string;
+  satellite_id: string;
+  latitude: number;
+  longitude: number;
+  altitude_km: number;
+  velocity_km_s?: number | null;
+  timestamp: string;
+  created_at: string;
+}
+
+export interface SatellitePositionInsert {
+  satellite_id: string;
+  latitude: number;
+  longitude: number;
+  altitude_km: number;
+  velocity_km_s?: number | null;
+  timestamp?: string;
+}
+
+export const satellitePositionsTable = createTableAccessor<SatellitePosition, SatellitePositionInsert>("satellite_positions");
+
+export interface SatelliteAlert {
+  id: string;
+  satellite_id: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  is_resolved?: boolean | null;
+  resolved_at?: string | null;
+  created_at: string;
+}
+
+export interface SatelliteAlertInsert {
+  satellite_id: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  is_resolved?: boolean | null;
+  resolved_at?: string | null;
+}
+
+export const satelliteAlertsTable = createTableAccessor<SatelliteAlert, SatelliteAlertInsert>("satellite_alerts");
+
+// ============================================================================
+// PERFORMANCE MONITORING - Used by PerformanceMonitoringDashboard.tsx
+// ============================================================================
+
+export interface PerformanceMetric {
+  id: string;
+  metric_name: string;
+  metric_value: number;
+  metric_unit: string;
+  target_value?: number | null;
+  status: string;
+  category: string;
+  recorded_at: string;
+  created_at: string;
+  metric_type?: string | null;
+  component?: string | null;
+  page_url?: string | null;
+  user_id?: string | null;
+  session_id?: string | null;
+  device_type?: string | null;
+  browser?: string | null;
+  connection_type?: string | null;
+  metadata?: Json | null;
+  unit?: string | null;
+}
+
+export interface PerformanceMetricInsert {
+  metric_name: string;
+  metric_value: number;
+  metric_unit: string;
+  target_value?: number | null;
+  status: string;
+  category: string;
+  recorded_at?: string;
+  metric_type?: string | null;
+  component?: string | null;
+  page_url?: string | null;
+  user_id?: string | null;
+  session_id?: string | null;
+  device_type?: string | null;
+  browser?: string | null;
+  connection_type?: string | null;
+  metadata?: Json | null;
+  unit?: string | null;
+}
+
+export const performanceMetricsTable = createTableAccessor<PerformanceMetric, PerformanceMetricInsert>("performance_metrics");
+
+export interface PerformanceAlert {
+  id: string;
+  metric_id?: string | null;
+  alert_type: string;
+  severity: string;
+  message: string;
+  threshold_value?: number | null;
+  actual_value?: number | null;
+  is_resolved?: boolean | null;
+  resolved_at?: string | null;
+  created_at: string;
+}
+
+export interface PerformanceAlertInsert {
+  metric_id?: string | null;
+  alert_type: string;
+  severity: string;
+  message: string;
+  threshold_value?: number | null;
+  actual_value?: number | null;
+  is_resolved?: boolean | null;
+  resolved_at?: string | null;
+}
+
+export const performanceAlertsTable = createTableAccessor<PerformanceAlert, PerformanceAlertInsert>("performance_alerts");
+
+// ============================================================================
+// UNDERWATER DRONE - Used by underwaterMissionService.ts
+// ============================================================================
+
+export interface UnderwaterMission {
+  id: string;
+  user_id: string;
+  mission_name: string;
+  mission_type: string;
+  status: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  target_location?: Json | null;
+  depth_target?: number | null;
+  max_depth?: number | null;
+  battery_level?: number | null;
+  notes?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UnderwaterMissionInsert {
+  user_id: string;
+  mission_name: string;
+  mission_type: string;
+  status?: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  target_location?: Json | null;
+  depth_target?: number | null;
+  max_depth?: number | null;
+  battery_level?: number | null;
+  notes?: string | null;
+  metadata?: Json | null;
+}
+
+export const underwaterMissionsTable = createTableAccessor<UnderwaterMission, UnderwaterMissionInsert>("underwater_missions");
+
+export interface DroneTelemetry {
+  id: string;
+  mission_id: string;
+  latitude: number;
+  longitude: number;
+  depth: number;
+  heading?: number | null;
+  speed?: number | null;
+  battery_level?: number | null;
+  water_temperature?: number | null;
+  pressure?: number | null;
+  status: string;
+  timestamp: string;
+  created_at: string;
+}
+
+export interface DroneTelemetryInsert {
+  mission_id: string;
+  latitude: number;
+  longitude: number;
+  depth: number;
+  heading?: number | null;
+  speed?: number | null;
+  battery_level?: number | null;
+  water_temperature?: number | null;
+  pressure?: number | null;
+  status?: string;
+  timestamp?: string;
+}
+
+export const droneTelemetryTable = createTableAccessor<DroneTelemetry, DroneTelemetryInsert>("drone_telemetry");
+
+export interface MissionEvent {
+  id: string;
+  mission_id: string;
+  event_type: string;
+  severity?: string | null;
+  message: string;
+  event_data?: Json | null;
+  timestamp: string;
+  created_at: string;
+}
+
+export interface MissionEventInsert {
+  mission_id: string;
+  event_type: string;
+  severity?: string | null;
+  message: string;
+  event_data?: Json | null;
+  timestamp?: string;
+}
+
+export const missionEventsTable = createTableAccessor<MissionEvent, MissionEventInsert>("mission_events");
+
+// ============================================================================
+// CREW AI INSIGHTS - Used by advanced-crew-dossier-interaction.tsx
+// ============================================================================
+
+export interface CrewAIInsight {
+  id: string;
+  crew_member_id: string;
+  analysis_type: string;
+  insights_data: Json;
+  confidence_score: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CrewAIInsightInsert {
+  crew_member_id: string;
+  analysis_type: string;
+  insights_data: Json;
+  confidence_score: number;
+}
+
+export const crewAIInsightsTable = createTableAccessor<CrewAIInsight, CrewAIInsightInsert>("crew_ai_insights");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 
