@@ -65,22 +65,18 @@ export function FleetMapBox({
         const { data, error: fnError } = await supabase.functions.invoke("mapbox-token");
         
         if (fnError) {
-          console.error("[FleetMapBox] Mapbox token error:", fnError);
           setError("Erro ao carregar token do mapa");
           setLoading(false);
           return;
         }
         
         if (data?.token) {
-          console.log("[FleetMapBox] Token received successfully");
           setMapboxToken(data.token);
         } else {
-          console.warn("[FleetMapBox] No token returned from function");
           setError("Token do Mapbox não configurado");
           setLoading(false);
         }
-      } catch (err) {
-        console.error("[FleetMapBox] Failed to get Mapbox token:", err);
+      } catch {
         setError("Falha ao conectar com o serviço de mapas");
         setLoading(false);
       }

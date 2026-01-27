@@ -77,7 +77,6 @@ class SmartSyncManager {
       
       if (effectiveType === '2g' || effectiveType === 'slow-2g' || effectiveType === '3g') {
         this.config = SLOW_CONNECTION_CONFIG;
-        console.log('[SmartSync] Using slow connection config');
       }
 
       conn?.addEventListener('change', () => {

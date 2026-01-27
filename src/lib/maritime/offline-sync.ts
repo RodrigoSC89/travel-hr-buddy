@@ -338,15 +338,13 @@ class SyncManager {
         try {
           // Implement actual sync logic here
           // This would call Supabase with the pending operations
-          console.log('[Sync] Processing:', item.table, item.operation);
 
           // Simulate sync delay based on connection
           await new Promise(resolve => setTimeout(resolve, quality.isMaritime ? 500 : 100));
 
           await removeSyncedItem(item.id);
           synced++;
-        } catch (error) {
-          console.error('[Sync] Failed:', item.id, error);
+        } catch {
           await incrementRetryCount(item.id);
           failed++;
 
