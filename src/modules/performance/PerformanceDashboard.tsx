@@ -146,11 +146,7 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-      console.log("[Performance Dashboard] Data loaded successfully", {
-        metricsCount: Object.keys(simulatedMetrics).length,
-        aiConfidence: aiResponse.confidence,
-        status
-      });
+      // Data loaded successfully - metrics ready
 
       toast({
         title: "Dashboard Atualizado",
@@ -158,7 +154,7 @@ const PerformanceDashboard: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("[Performance Dashboard] Error loading data:", error);
+      // Error loading performance data - handled by toast
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",

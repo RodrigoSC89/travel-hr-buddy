@@ -28,6 +28,7 @@ import {
   Lightbulb
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { MaintenanceCopilotDialog, ReportsCopilotDialog, CrewPlanningCopilotDialog } from "@/components/copilot";
 
 interface Message {
   id: string;
@@ -63,6 +64,11 @@ const NautilusCopilotAdvanced: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState("chat");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Dialog states
+  const [maintenanceDialogOpen, setMaintenanceDialogOpen] = useState(false);
+  const [reportsDialogOpen, setReportsDialogOpen] = useState(false);
+  const [crewPlanningDialogOpen, setCrewPlanningDialogOpen] = useState(false);
 
   const capabilities: CopilotCapability[] = [
     {
@@ -255,27 +261,15 @@ What would you like assistance with today?`,
   };
 
   const handleScheduleMaintenance = () => {
-    toast({
-      title: "🔧 Agendar Manutenção",
-      description: "Abrindo sistema de agendamento de manutenção preventiva"
-    });
-    // TODO: Open maintenance scheduling dialog
+    setMaintenanceDialogOpen(true);
   };
 
   const handleGenerateReport = () => {
-    toast({
-      title: "📄 Gerar Relatório",
-      description: "Iniciando geração de relatório operacional"
-    });
-    // TODO: Open report generation dialog
+    setReportsDialogOpen(true);
   };
 
   const handleCrewPlanning = () => {
-    toast({
-      title: "👥 Planejamento de Tripulação",
-      description: "Abrindo ferramenta de planejamento e escalas de tripulação"
-    });
-    // TODO: Open crew planning interface
+    setCrewPlanningDialogOpen(true);
   };
 
   return (
@@ -542,6 +536,20 @@ What would you like assistance with today?`,
           </div>
         </TabsContent>
       </Tabs>
+      
+      {/* Copilot Dialogs */}
+      <MaintenanceCopilotDialog 
+        open={maintenanceDialogOpen} 
+        onOpenChange={setMaintenanceDialogOpen} 
+      />
+      <ReportsCopilotDialog 
+        open={reportsDialogOpen} 
+        onOpenChange={setReportsDialogOpen} 
+      />
+      <CrewPlanningCopilotDialog 
+        open={crewPlanningDialogOpen} 
+        onOpenChange={setCrewPlanningDialogOpen} 
+      />
     </div>
   );
 };
