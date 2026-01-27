@@ -21,6 +21,7 @@ import {
   Heart
 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Inline module registry
 const MODULES_REGISTRY = {
@@ -94,7 +95,7 @@ export const TechnicalValidationPanel: React.FC = () => {
 
       setModules(validations);
     } catch (error) {
-      console.error("Error analyzing modules:", error);
+      logger.error("Error analyzing modules:", error);
       toast.error("Failed to analyze modules");
     } finally {
       setLoading(false);
