@@ -1,8 +1,8 @@
 // @ts-nocheck
 /**
- * PATCH 872 - Crew Management - Rotation & Alerts
- * @ts-nocheck required: Complex drag-and-drop with FK joins to auth.users
- * To remove: Align crew_rotations FK and interface types with DB schema
+ * PATCH 873 - Crew Management - Rotation & Alerts
+ * @ts-nocheck: Complex FK joins + DragEndEvent generic typing with UniqueIdentifier
+ * Migration 873 created tables, but requires createTableAccessor for full type-safety
  */
 
 import React, { useState, useEffect, useCallback } from "react";

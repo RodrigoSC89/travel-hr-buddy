@@ -1,8 +1,8 @@
 // @ts-nocheck
 /**
- * PATCH 872: Document Template Library with PDF Generation
- * @ts-nocheck required: template_versions table not in generated types
- * To remove: Run supabase gen types after template_versions migration
+ * PATCH 873: Document Template Library with PDF Generation
+ * @ts-nocheck: template_versions table created but types not regenerated yet
+ * Requires: supabase gen types to update generated types
  */
 
 import React, { useState, useEffect } from "react";
@@ -40,11 +40,12 @@ interface Template {
 
 interface TemplateVersion {
   id: string;
-  template_id: string;
+  template_id: string | null;
   version_number: number;
   content: string;
-  change_summary?: string;
-  created_at: string;
+  change_notes?: string | null;
+  created_at: string | null;
+  is_active?: boolean | null;
 }
 
 export const TemplateLibrary: React.FC = () => {
