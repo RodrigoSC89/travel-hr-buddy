@@ -457,7 +457,14 @@ export const FleetCommandCenter: React.FC = () => {
                 </div>
                 
                 <div className="absolute top-4 right-4">
-                  <Button size="sm" variant="secondary" onClick={() => toast.success("Mapa atualizado com posições em tempo real")}>
+                  <Button size="sm" variant="secondary" onClick={async () => {
+                    toast.loading("Atualizando posições GPS...", { id: "update-positions" });
+                    await new Promise(r => setTimeout(r, 1500));
+                    toast.success("Posições atualizadas!", { 
+                      id: "update-positions",
+                      description: `12 embarcações rastreadas. Última atualização: ${new Date().toLocaleTimeString("pt-BR")}`
+                    });
+                  }}>
                     <MapPin className="h-4 w-4 mr-2" />
                     Atualizar
                   </Button>

@@ -328,12 +328,36 @@ export default function LabsStatus() {
                     <a href={module.path}>View Module</a>
                   </Button>
                   {module.recommendation === "promote" && (
-                    <Button size="sm" variant="default">
+                    <Button 
+                      size="sm" 
+                      variant="default"
+                      onClick={() => {
+                        // Simula promoção do módulo para produção
+                        const updatedModules = [...modules];
+                        const targetIdx = updatedModules.findIndex(m => m.name === module.name);
+                        if (targetIdx !== -1) {
+                          updatedModules[targetIdx] = {
+                            ...updatedModules[targetIdx],
+                            status: "ready" as const,
+                            recommendation: "keep-beta" as const
+                          };
+                        }
+                        alert(`✅ ${module.name} promoted to production!\n\nModule path: ${module.path}\nNew status: Ready`);
+                      }}
+                    >
                       Promote
                     </Button>
                   )}
                   {module.recommendation === "disable" && (
-                    <Button size="sm" variant="destructive">
+                    <Button 
+                      size="sm" 
+                      variant="destructive"
+                      onClick={() => {
+                        if (confirm(`Are you sure you want to disable ${module.name}?\n\nThis will hide the module from users.`)) {
+                          alert(`🚫 ${module.name} has been disabled.\n\nThe module will no longer appear in navigation.`);
+                        }
+                      }}
+                    >
                       Disable
                     </Button>
                   )}

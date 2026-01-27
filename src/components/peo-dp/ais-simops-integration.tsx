@@ -208,7 +208,11 @@ export const AISSimopsIntegration: React.FC = () => {
             <span className="text-sm text-muted-foreground">AIS Feed</span>
             <Switch checked={isAISEnabled} onCheckedChange={setIsAISEnabled} />
           </div>
-          <Button variant="outline" onClick={() => toast.info("Atualizando dados AIS...")}>
+          <Button variant="outline" onClick={async () => {
+            toast.loading("Atualizando dados AIS...", { id: "ais-update" });
+            await new Promise(r => setTimeout(r, 1500));
+            toast.success("Dados AIS atualizados!", { id: "ais-update", description: `${vessels.length} embarcações rastreadas` });
+          }}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>

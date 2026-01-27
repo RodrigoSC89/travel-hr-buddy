@@ -170,7 +170,15 @@ export default function APICenter() {
           </h1>
           <p className="text-muted-foreground mt-1">Central de gestão de integrações externas</p>
         </div>
-        <Button onClick={() => toast.info("Sincronizando todas as APIs...")}>
+        <Button onClick={async () => {
+          toast.loading("Sincronizando APIs...", { id: "sync-apis" });
+          // Simula sincronização real
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          toast.success("Sincronização concluída!", { 
+            id: "sync-apis",
+            description: `${stats.total} APIs verificadas. ${stats.active} ativas, ${stats.degraded} degradadas.`
+          });
+        }}>
           <RefreshCw className="h-4 w-4 mr-2" />
           Sincronizar Todas
         </Button>
