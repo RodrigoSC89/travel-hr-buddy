@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: vessel_sensors, maintenance_alerts tables not in generated types
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
@@ -388,7 +388,7 @@ export default function FleetTelemetryModule() {
             <CardContent>
               {alerts.length === 0 ? (
                 <div className="text-center py-12">
-                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                  <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
                   <p className="text-lg font-semibold">Nenhum alerta ativo</p>
                   <p className="text-sm text-muted-foreground">Todos os sistemas operando normalmente</p>
                 </div>

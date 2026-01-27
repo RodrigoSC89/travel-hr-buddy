@@ -145,18 +145,18 @@
 }
 
 .connection-indicator.fast {
-  background-color: rgba(34, 197, 94, 0.1);
-  color: rgb(34, 197, 94);
+  background-color: hsl(var(--success) / 0.1);
+  color: hsl(var(--success));
 }
 
 .connection-indicator.slow {
-  background-color: rgba(234, 179, 8, 0.1);
-  color: rgb(234, 179, 8);
+  background-color: hsl(var(--warning) / 0.1);
+  color: hsl(var(--warning));
 }
 
 .connection-indicator.offline {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: rgb(239, 68, 68);
+  background-color: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
 }
 
 /* Loading states optimization */

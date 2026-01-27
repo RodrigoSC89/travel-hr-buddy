@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Legacy: travel_reservations table not in generated types
 /**
  * PATCH 377: Travel Reservations & Group Management
  * Reservations synchronization, group travel, and enhanced exports
