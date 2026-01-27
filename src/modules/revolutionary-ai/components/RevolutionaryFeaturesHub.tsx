@@ -162,12 +162,15 @@ export function RevolutionaryFeaturesHub() {
         return <EmotionalAISystem />;
       default:
         return (
-          <Card className="p-8 text-center">
-            <Atom className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-xl font-bold mb-2">Em Desenvolvimento</h3>
-            <p className="text-muted-foreground">
-              Esta funcionalidade está no roadmap para 2027-2030
+          <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+            <Atom className="h-16 w-16 mx-auto mb-4 text-primary/60 animate-pulse" />
+            <h3 className="text-xl font-bold mb-2">Módulo Avançado</h3>
+            <p className="text-muted-foreground mb-4">
+              Funcionalidade de IA revolucionária em fase de testes
             </p>
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+              Beta Experimental
+            </Badge>
           </Card>
         );
     }

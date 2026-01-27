@@ -73,14 +73,14 @@ const ControlPanel = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Em Desenvolvimento</p>
-                    <p className="text-3xl font-bold text-warning">12</p>
+                    <p className="text-sm text-muted-foreground">Módulos Beta</p>
+                    <p className="text-3xl font-bold text-primary">12</p>
                   </div>
-                  <AlertCircle className="h-10 w-10 text-warning/50" />
+                  <AlertCircle className="h-10 w-10 text-primary/50" />
                 </div>
               </CardContent>
             </Card>
