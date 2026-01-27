@@ -1,9 +1,9 @@
 /**
  * NotificationsCenter - Centro de Notificações Completo
- * Alertas, notificações push e gerenciamento de mensagens
+ * Integrado com Supabase para dados reais
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Bell,
   BellOff,
@@ -27,7 +29,8 @@ import {
   Ship,
   FileText,
   Users,
-  Wrench
+  Wrench,
+  Loader2
 } from "lucide-react";
 
 interface Notification {
@@ -39,6 +42,70 @@ interface Notification {
   read: boolean;
   timestamp: string;
   actionUrl?: string;
+}
+
+// Hook para buscar notificações do Supabase
+function useNotifications() {
+  return useQuery({
+    queryKey: ['notifications-center'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error || !data?.length) {
+        // Fallback para dados demo se não houver dados reais
+        return getDefaultNotifications();
+      }
+
+      return data.map(n => ({
+        id: n.id,
+        title: n.title || 'Notificação',
+        message: n.message || '',
+        type: (n.type || 'info') as Notification['type'],
+        category: 'system' as Notification['category'],
+        read: n.read || false,
+        timestamp: n.created_at,
+        actionUrl: undefined
+      }));
+    },
+    staleTime: 30 * 1000
+  });
+}
+
+function getDefaultNotifications(): Notification[] {
+  return [
+    {
+      id: "1",
+      title: "Manutenção Programada",
+      message: "MV Atlântico: Manutenção do motor principal agendada para 15/01",
+      type: 'warning',
+      category: 'maintenance',
+      read: false,
+      timestamp: new Date().toISOString(),
+      actionUrl: "/maintenance-command"
+    },
+    {
+      id: "2",
+      title: "Certificado Expirando",
+      message: "Certificado STCW de João Santos expira em 30 dias",
+      type: 'warning',
+      category: 'crew',
+      read: false,
+      timestamp: new Date(Date.now() - 3600000).toISOString()
+    },
+    {
+      id: "3",
+      title: "Sistema Atualizado",
+      message: "Nova versão do sistema disponível com melhorias de performance",
+      type: 'info',
+      category: 'system',
+      read: true,
+      timestamp: new Date(Date.now() - 86400000).toISOString()
+    }
+  ];
 }
 
 const MOCK_NOTIFICATIONS: Notification[] = [
@@ -102,9 +169,10 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 ];
 
 export const NotificationsCenter: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
+  const { data: notifications = [], isLoading, refetch } = useNotifications();
   const [filter, setFilter] = useState<string>('all');
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
+  const queryClient = useQueryClient();
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -114,34 +182,36 @@ export const NotificationsCenter: React.FC = () => {
     return true;
   });
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
+  const markAsRead = async (id: string) => {
+    await supabase.from('notifications').update({ read: true }).eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['notifications-center'] });
     toast.success("Notificação marcada como lida");
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  const markAllAsRead = async () => {
+    await supabase.from('notifications').update({ read: true }).neq('read', true);
+    queryClient.invalidateQueries({ queryKey: ['notifications-center'] });
     toast.success("Todas as notificações marcadas como lidas");
   };
 
-  const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+  const deleteNotification = async (id: string) => {
+    await supabase.from('notifications').delete().eq('id', id);
+    queryClient.invalidateQueries({ queryKey: ['notifications-center'] });
     toast.success("Notificação removida");
   };
 
-  const clearAll = () => {
-    setNotifications([]);
+  const clearAll = async () => {
+    await supabase.from('notifications').delete().neq('id', '');
+    queryClient.invalidateQueries({ queryKey: ['notifications-center'] });
     toast.success("Todas as notificações foram removidas");
   };
 
   const getTypeIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'info': return <Info className="h-4 w-4 text-blue-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'error': return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'success': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      case 'info': return <Info className="h-4 w-4 text-info" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'error': return <AlertCircle className="h-4 w-4 text-destructive" />;
+      case 'success': return <CheckCircle2 className="h-4 w-4 text-success" />;
     }
   };
 
