@@ -15,7 +15,7 @@ export default function ExecutiveBIDashboard() {
           content="Dashboard executivo com KPIs estratégicos, métricas de performance e análise de negócios para gestão marítima" 
         />
         <meta name="keywords" content="BI, dashboard executivo, KPIs, analytics, gestão marítima" />
-        <link rel="canonical" href="/executive-bi" />
+        <link rel="canonical" href="/executive-dashboard" />
       </Helmet>
       <ExecutiveDashboard />
     </>

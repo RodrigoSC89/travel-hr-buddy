@@ -301,7 +301,7 @@ const NautilusCommandCenter = () => {
                   icon={<Ship className="h-5 w-5" />}
                   title="Frota"
                   subtitle={`${systemStatus.fleet.active} ativas`}
-                  path="/fleet"
+                  path="/fleet-command"
                   color="blue"
                   alerts={systemStatus.fleet.alerts}
                 />
@@ -309,7 +309,7 @@ const NautilusCommandCenter = () => {
                   icon={<Users className="h-5 w-5" />}
                   title="Tripulação"
                   subtitle={`${systemStatus.crew.onboard} a bordo`}
-                  path="/crew"
+                  path="/crew-management"
                   color="green"
                   alerts={systemStatus.crew.expiringCerts}
                 />
@@ -317,7 +317,7 @@ const NautilusCommandCenter = () => {
                   icon={<Package className="h-5 w-5" />}
                   title="Estoque"
                   subtitle={`${systemStatus.inventory.pendingOrders} pedidos`}
-                  path="/procurement-inventory"
+                  path="/procurement-command"
                   color="purple"
                   alerts={systemStatus.inventory.lowStock}
                 />

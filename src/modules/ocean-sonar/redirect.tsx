@@ -1,8 +1,8 @@
 /**
- * REDIRECT: ocean-sonar → subsea-operations
- * Este módulo foi fundido no Subsea Operations
+ * REDIRECT: ocean-sonar → /ocean-sonar (main route)
+ * Fallback redirect for legacy module references
  */
 import { Navigate } from "react-router-dom";
 export default function OceanSonarRedirect() {
-  return <Navigate to="/subsea-operations" replace />;
+  return <Navigate to="/ocean-sonar" replace />;
 }
