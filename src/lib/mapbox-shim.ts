@@ -215,16 +215,61 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
       mapboxInstance = wrapper;
       return wrapper;
     } else {
-      logger.warn('[mapbox-shim] Could not resolve Map from module');
+      logger.warn('[mapbox-shim] Could not resolve Map from npm module, trying CDN fallback');
     }
   } catch (error) {
-    logger.error('[mapbox-shim] Failed to load mapbox-gl', error);
+    logger.warn('[mapbox-shim] Failed to load mapbox-gl from npm, trying CDN:', error instanceof Error ? { message: error.message } : undefined);
+  }
+
+  // CDN Fallback: Load mapbox-gl from CDN if npm import fails
+  try {
+    await loadMapboxFromCDN();
+    if ((window as any).mapboxgl?.Map) {
+      const mapboxgl = (window as any).mapboxgl;
+      logger.debug('[mapbox-shim] Successfully loaded mapbox-gl from CDN');
+      
+      let _accessToken = '';
+      const wrapper: MapboxGLInterface = {
+        get accessToken() { return _accessToken; },
+        set accessToken(value: string) {
+          _accessToken = value;
+          mapboxgl.accessToken = value;
+        },
+        Map: mapboxgl.Map,
+        Marker: mapboxgl.Marker,
+        Popup: mapboxgl.Popup,
+        NavigationControl: mapboxgl.NavigationControl,
+        LngLatBounds: mapboxgl.LngLatBounds,
+        LngLat: mapboxgl.LngLat,
+      };
+      
+      mapboxInstance = wrapper;
+      return wrapper;
+    }
+  } catch (cdnError) {
+    logger.error('[mapbox-shim] CDN fallback also failed:', cdnError);
   }
   
   // Return mock as fallback
   logger.debug('[mapbox-shim] Using mock implementation');
   mapboxInstance = createMockMapbox();
   return mapboxInstance;
+};
+
+// Load mapbox-gl from CDN as fallback
+const loadMapboxFromCDN = (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if ((window as any).mapboxgl) {
+      resolve();
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load mapbox-gl from CDN'));
+    document.head.appendChild(script);
+  });
 };
 
 // Start loading immediately but don't block
