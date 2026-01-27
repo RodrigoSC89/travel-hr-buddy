@@ -103,7 +103,7 @@ class ModuleLoader {
       );
     }
     
-    console.log(`[ModuleLoader] Loading module: ${config.name}`);
+    // Module loading logged via unified logger if needed
     
     // Dynamic import based on path
     try {

@@ -14,7 +14,7 @@ import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, MessageSquare, Send, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
-import { useAuthProfile } from "@/hooks/use-auth-profile";
+import { useUserProfile } from "@/hooks";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 
@@ -39,7 +39,7 @@ interface DocumentComment {
 export default function DocumentViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profile } = useAuthProfile();
+  const { profile } = useUserProfile();
   const [doc, setDoc] = useState<Document | null>(null);
   const [comments, setComments] = useState<DocumentComment[]>([]);
   const [loading, setLoading] = useState(true);
