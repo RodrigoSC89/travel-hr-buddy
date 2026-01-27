@@ -313,7 +313,7 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate("/admin/documents")}
+            onClick={() => navigate("/documents")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar

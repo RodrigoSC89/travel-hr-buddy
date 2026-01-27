@@ -304,7 +304,7 @@ export default function DeploymentStatus() {
             </Button>
 
             <Button className="w-full h-24 flex flex-col gap-2" variant="outline" asChild>
-              <Link to="/admin/lighthouse-dashboard">
+              <Link to="/quality-dashboard">
                 <Zap className="h-6 w-6" />
                 <span className="text-sm">Performance Check</span>
                 <span className="text-xs text-muted-foreground">Final audit</span>

@@ -43,7 +43,7 @@ export async function sendCriticalAlertEmail(
       from: process.env.EMAIL_FROM || "alertas@nautilus.one",
       to: ["seguranca@empresa.com"],
       subject: `⚠️ Alerta Crítico - Auditoria ${auditoriaId}`,
-      html: `<h3>⚠️ Falha crítica detectada</h3><p><strong>Auditoria:</strong> ${auditoriaId}</p><pre>${descricao}</pre><p>Ver painel de alertas: <a href="https://nautilus.one/admin/alerts">Acessar</a></p>`,
+      html: `<h3>⚠️ Falha crítica detectada</h3><p><strong>Auditoria:</strong> ${auditoriaId}</p><pre>${descricao}</pre><p>Ver painel de alertas: <a href="https://nautilus.one/alerts-command">Acessar</a></p>`,
     });
 
     if (error) {
