@@ -37,17 +37,17 @@ interface SGSOIncident {
 }
 
 const SEVERITY_COLORS: Record<string, string> = {
-  low: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-  high: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-  critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+  low: "bg-success/10 text-success dark:bg-success/20",
+  medium: "bg-warning/10 text-warning dark:bg-warning/20",
+  high: "bg-warning/20 text-warning dark:bg-warning/30",
+  critical: "bg-destructive/10 text-destructive dark:bg-destructive/20",
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  open: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-  investigating: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-  resolved: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  closed: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
+  open: "bg-destructive/10 text-destructive dark:bg-destructive/20",
+  investigating: "bg-primary/10 text-primary dark:bg-primary/20",
+  resolved: "bg-success/10 text-success dark:bg-success/20",
+  closed: "bg-muted text-muted-foreground",
 };
 
 const TYPE_LABELS: Record<string, string> = {

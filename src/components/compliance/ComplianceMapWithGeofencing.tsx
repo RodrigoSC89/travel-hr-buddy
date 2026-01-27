@@ -394,7 +394,7 @@ export function ComplianceMapWithGeofencing({
           }
         });
       } catch (e) {
-        console.warn('Error adding geofence:', geofence.id, e);
+        logger.warn(`Error adding geofence ${geofence.id}`, { error: e });
       }
     });
   }

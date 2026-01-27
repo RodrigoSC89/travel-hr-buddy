@@ -191,7 +191,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   const speak = useCallback(async (text: string) => {
     if (!("speechSynthesis" in window)) {
-      console.warn("Speech synthesis not supported");
+      logger.warn("Speech synthesis not supported");
       return;
     }
 

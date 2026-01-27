@@ -205,19 +205,19 @@ export function PEODP7PillarsOverview() {
 
   const getStatusBadge = (status: PillarData["status"]) => {
     const variants = {
-      pending: { label: "Pendente", className: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200" },
-      in_progress: { label: "Em Andamento", className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
-      completed: { label: "Concluído", className: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
-      review_needed: { label: "Revisão Necessária", className: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" }
+      pending: { label: "Pendente", className: "bg-muted text-muted-foreground" },
+      in_progress: { label: "Em Andamento", className: "bg-warning/10 text-warning dark:bg-warning/20" },
+      completed: { label: "Concluído", className: "bg-success/10 text-success dark:bg-success/20" },
+      review_needed: { label: "Revisão Necessária", className: "bg-destructive/10 text-destructive dark:bg-destructive/20" }
     };
     const variant = variants[status];
     return <Badge className={variant.className}>{variant.label}</Badge>;
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const handleViewDetails = (pillar: PillarData) => {
