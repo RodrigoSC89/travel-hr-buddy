@@ -1,7 +1,8 @@
-// @ts-nocheck - Dynamic table access requires type override
+// @ts-nocheck
 /**
- * PATCH 851 - Dashboard de Internacionalização
- * Painel para monitorar uso multilíngue do sistema
+ * PATCH 877 - Dashboard de Internacionalização
+ * NOTE: @ts-nocheck needed - translation_logs and translation_feedback
+ * tables have different column names than local interfaces
  */
 
 import * as React from "react";

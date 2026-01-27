@@ -1,4 +1,9 @@
 // @ts-nocheck
+/**
+ * Logistics Hub - PATCH 877
+ * NOTE: @ts-nocheck needed - logistics_requests and inventory_items
+ * have different column names than local interfaces
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

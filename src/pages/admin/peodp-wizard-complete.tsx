@@ -1,4 +1,10 @@
-// @ts-nocheck - Legacy: peodp_plans table not in generated types
+// @ts-nocheck
+/**
+ * PEODP Wizard Complete - PATCH 877
+ * NOTE: @ts-nocheck needed - complex nested data structures with
+ * training.incidents, crew_training_records joins that don't match
+ * the generated types
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
