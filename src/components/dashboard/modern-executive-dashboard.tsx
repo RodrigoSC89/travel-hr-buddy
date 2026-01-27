@@ -45,16 +45,16 @@ const ModernKPICard: React.FC<KPICardProps> = ({
       badge: "bg-azure-100 text-azure-700 border-azure-200"
     },
     green: {
-      bg: "bg-gradient-to-br from-emerald-500 to-emerald-600",
-      icon: "bg-emerald-100 text-emerald-700",
-      text: "text-emerald-600",
-      badge: "bg-emerald-100 text-emerald-700 border-emerald-200"
+      bg: "bg-gradient-to-br from-success to-success/80",
+      icon: "bg-success/10 text-success",
+      text: "text-success",
+      badge: "bg-success/10 text-success border-success/20"
     },
     yellow: {
-      bg: "bg-gradient-to-br from-amber-500 to-orange-500",
-      icon: "bg-amber-100 text-amber-700",
-      text: "text-amber-600",
-      badge: "bg-amber-100 text-amber-700 border-amber-200"
+      bg: "bg-gradient-to-br from-warning to-warning/80",
+      icon: "bg-warning/10 text-warning",
+      text: "text-warning",
+      badge: "bg-warning/10 text-warning border-warning/20"
     },
     red: {
       bg: "bg-gradient-to-br from-red-500 to-red-600",

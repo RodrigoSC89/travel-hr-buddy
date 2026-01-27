@@ -74,8 +74,8 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
         maximumFractionDigits: 0
       }).format(totalAmount),
       icon: DollarSign,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-100 dark:bg-emerald-900/30"
+      color: "text-success",
+      bgColor: "bg-success/10 dark:bg-success/20"
     },
     {
       title: "Tripulantes",
@@ -88,15 +88,15 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
       title: "Canceladas",
       value: cancelledReservations,
       icon: XCircle,
-      color: "text-red-600",
-      bgColor: "bg-red-100 dark:bg-red-900/30"
+      color: "text-destructive",
+      bgColor: "bg-destructive/10 dark:bg-destructive/20"
     },
     {
       title: "Conflitos",
       value: conflictedReservations,
       icon: AlertTriangle,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100 dark:bg-orange-900/30"
+      color: "text-warning",
+      bgColor: "bg-warning/10 dark:bg-warning/20"
     }
   ];
 

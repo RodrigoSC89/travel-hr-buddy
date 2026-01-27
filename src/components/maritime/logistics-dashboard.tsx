@@ -188,9 +188,9 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "at_sea": return "text-primary bg-primary/10";
-    case "in_port": return "text-green-600 bg-green-100";
-    case "anchored": return "text-yellow-600 bg-yellow-100";
-    case "maintenance": return "text-orange-600 bg-orange-100";
+    case "in_port": return "text-success bg-success/10";
+    case "anchored": return "text-warning bg-warning/10";
+    case "maintenance": return "text-warning bg-warning/20";
     case "emergency": return "text-destructive bg-destructive/10";
     default: return "text-muted-foreground bg-muted";
     }

@@ -325,9 +325,9 @@ export default function OperationsCommandCenter() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
-      case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
-      default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
+      case "completed": return <Badge className="bg-success/10 text-success dark:bg-success/20">Concluído</Badge>;
+      case "in_progress": return <Badge className="bg-primary/10 text-primary dark:bg-primary/20">Em Progresso</Badge>;
+      default: return <Badge className="bg-warning/10 text-warning dark:bg-warning/20">Pendente</Badge>;
     }
   };
 
