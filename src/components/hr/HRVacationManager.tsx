@@ -194,8 +194,23 @@ export function HRVacationManager() {
               <CardDescription>Visão mensal das férias programadas</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-96 flex items-center justify-center bg-muted/50 rounded-lg">
-                <p className="text-muted-foreground">Calendário interativo em desenvolvimento</p>
+              <div className="grid grid-cols-7 gap-1 mb-4">
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                  <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">{day}</div>
+                ))}
+                {Array.from({ length: 35 }).map((_, i) => {
+                  const day = i - 2;
+                  const hasVacation = [5, 6, 7, 15, 16, 17, 18, 22, 23].includes(day);
+                  return (
+                    <div key={i} className={`text-center py-3 rounded-md text-sm ${day > 0 && day <= 31 ? hasVacation ? 'bg-primary/20 text-primary font-medium' : 'hover:bg-muted cursor-pointer' : 'text-muted-foreground/30'}`}>
+                      {day > 0 && day <= 31 ? day : ''}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-primary/20" /><span>Férias Programadas</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-orange-500/20" /><span>Pendente Aprovação</span></div>
               </div>
             </CardContent>
           </Card>

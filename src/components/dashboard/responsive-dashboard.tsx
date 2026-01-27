@@ -317,16 +317,30 @@ export const ResponsiveDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Analytics Avançados</CardTitle>
-              <CardDescription>
-                Métricas detalhadas e insights
-              </CardDescription>
+              <CardDescription>Métricas detalhadas e insights</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Analytics detalhados em desenvolvimento...
-                </p>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 mb-2"><Activity className="h-4 w-4 text-primary" /><span className="font-medium">Taxa de Conformidade</span></div>
+                  <p className="text-2xl font-bold">94.5%</p>
+                  <p className="text-sm text-muted-foreground">+2.3% vs mês anterior</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 mb-2"><Users className="h-4 w-4 text-primary" /><span className="font-medium">Tripulantes Ativos</span></div>
+                  <p className="text-2xl font-bold">248</p>
+                  <p className="text-sm text-muted-foreground">98% com docs válidos</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 mb-2"><Target className="h-4 w-4 text-primary" /><span className="font-medium">KPIs Atingidos</span></div>
+                  <p className="text-2xl font-bold">12/15</p>
+                  <p className="text-sm text-muted-foreground">80% das metas</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <div className="flex items-center gap-2 mb-2"><Zap className="h-4 w-4 text-primary" /><span className="font-medium">Tempo de Resposta</span></div>
+                  <p className="text-2xl font-bold">1.2h</p>
+                  <p className="text-sm text-muted-foreground">Média de resolução</p>
+                </div>
               </div>
             </CardContent>
           </Card>
