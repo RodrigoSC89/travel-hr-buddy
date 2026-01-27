@@ -40,26 +40,38 @@ export const WellbeingDashboard: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch calculated wellbeing score
-      const { data: scoreData } = await (supabase
-        .rpc("calculate_wellbeing_score" as any, { p_user_id: user.id, p_days: 7 }) as unknown as Promise<{ data: number | null }>);
+      // Fetch calculated wellbeing score with error handling
+      const { data: scoreData, error: scoreError } = await (supabase
+        .rpc("calculate_wellbeing_score" as any, { p_user_id: user.id, p_days: 7 }) as unknown as Promise<{ data: number | null; error: unknown }>);
 
-      // Fetch recent health check-ins
-      const { data: checkins } = await (supabase
+      if (scoreError) {
+        console.warn("Failed to fetch wellbeing score:", scoreError);
+      }
+
+      // Fetch recent health check-ins with error handling
+      const { data: checkins, error: checkinsError } = await (supabase
         .from("health_checkins" as any)
-        .select("*")
+        .select("energy_level, mood_rating, checkin_date")
         .eq("user_id", user.id)
         .order("checkin_date", { ascending: false })
-        .limit(7) as unknown as Promise<{ data: Array<{ energy_level?: number; mood_rating?: number }> | null }>);
+        .limit(7) as unknown as Promise<{ data: Array<{ energy_level?: number; mood_rating?: number }> | null; error: unknown }>);
 
-      // Fetch active alerts
-      const { data: alerts } = await (supabase
+      if (checkinsError) {
+        console.warn("Failed to fetch health checkins:", checkinsError);
+      }
+
+      // Fetch active alerts with error handling
+      const { data: alerts, error: alertsError } = await (supabase
         .from("wellbeing_alerts" as any)
-        .select("*")
+        .select("id, message, severity, created_at")
         .eq("user_id", user.id)
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(5) as unknown as Promise<{ data: WellbeingAlert[] | null }>);
+        .limit(5) as unknown as Promise<{ data: WellbeingAlert[] | null; error: unknown }>);
+
+      if (alertsError) {
+        console.warn("Failed to fetch wellbeing alerts:", alertsError);
+      }
 
       // Calculate scores
       const overallScore = scoreData || 7.0;
