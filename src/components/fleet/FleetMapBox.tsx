@@ -317,16 +317,20 @@ export function FleetMapBox({
 
   if (error && !mapboxToken) {
     return (
-      <Card className="h-full">
+      <Card className="h-full" style={{ minHeight: height }}>
         <CardContent className="h-full flex items-center justify-center">
           <div className="text-center space-y-4">
             <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground" />
             <div>
               <p className="font-medium">{error}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Configure MAPBOX_PUBLIC_TOKEN nas configurações
+                Verifique a configuração do Mapbox
               </p>
             </div>
+            <Button variant="outline" onClick={() => window.location.reload()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Recarregar
+            </Button>
           </div>
         </CardContent>
       </Card>

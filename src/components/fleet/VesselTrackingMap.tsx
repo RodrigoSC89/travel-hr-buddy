@@ -1,14 +1,15 @@
 /**
  * Vessel Tracking Map Component
  * Real-time AIS vessel positions on Mapbox
+ * Fixed version with proper async Mapbox loading
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import mapboxgl from '@/lib/mapbox-shim';
+import { getMapboxGLAsync, type MapboxGLInterface } from '@/lib/mapbox-shim';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Ship, RefreshCw, Loader2, Anchor, Navigation, Clock, Gauge } from 'lucide-react';
+import { Ship, RefreshCw, Loader2, Anchor, Navigation, Gauge, AlertCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -42,15 +43,17 @@ export function VesselTrackingMap({
   refreshInterval = 60000 
 }: VesselTrackingMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const mapRef = useRef<any>(null);
+  const mapboxRef = useRef<MapboxGLInterface | null>(null);
+  const markersRef = useRef<any[]>([]);
   
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [mapReady, setMapReady] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
-  const [source, setSource] = useState<'marinetraffic' | 'mock'>('mock');
+  const [source, setSource] = useState<'database' | 'mock'>('mock');
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -61,18 +64,22 @@ export function VesselTrackingMap({
         const { data, error: fnError } = await supabase.functions.invoke('mapbox-token');
         
         if (fnError) {
-          const envToken = import.meta.env.VITE_MAPBOX_TOKEN;
-          if (envToken) {
-            setMapboxToken(envToken);
-          } else {
-            throw new Error('Mapbox token not available');
-          }
-        } else if (data?.token) {
+          console.error('Mapbox token error:', fnError);
+          setError('Erro ao carregar token do mapa');
+          setLoading(false);
+          return;
+        }
+        
+        if (data?.token) {
           setMapboxToken(data.token);
+        } else {
+          setError('Token do Mapbox não configurado');
+          setLoading(false);
         }
       } catch (err) {
         console.error('Failed to get Mapbox token:', err);
-        setError('Mapbox token not configured');
+        setError('Falha ao conectar com o serviço de mapas');
+        setLoading(false);
       }
     };
 
@@ -89,7 +96,7 @@ export function VesselTrackingMap({
 
       if (fnError) throw fnError;
 
-      if (data?.vessels) {
+      if (data?.vessels && data.vessels.length > 0) {
         // Map API response to component format
         const mappedVessels = data.vessels.map((v: any) => ({
           mmsi: v.mmsi,
@@ -97,16 +104,16 @@ export function VesselTrackingMap({
           name: v.name,
           lat: v.latitude ?? v.lat,
           lon: v.longitude ?? v.lon,
-          speed: v.speed,
-          course: v.course,
-          heading: v.heading,
+          speed: v.speed || 0,
+          course: v.course || 0,
+          heading: v.heading || 0,
           destination: v.destination,
           eta: v.eta,
           status: v.navStatus || v.status || 'Unknown',
           timestamp: v.lastUpdate || v.timestamp,
         }));
         setVessels(mappedVessels);
-        setSource(data.source || 'mock');
+        setSource(data.source === 'database' || data.source === 'marinetraffic' ? 'database' : 'mock');
       }
     } catch (err) {
       console.error('Failed to fetch vessels:', err);
@@ -121,40 +128,86 @@ export function VesselTrackingMap({
     }
   }, [toast]);
 
-  // Initial fetch and auto-refresh
+  // Initial fetch when token is ready
   useEffect(() => {
-    fetchVessels();
-
-    if (autoRefresh) {
-      const interval = setInterval(fetchVessels, refreshInterval);
-      return () => clearInterval(interval);
+    if (mapboxToken) {
+      fetchVessels();
     }
-  }, [fetchVessels, autoRefresh, refreshInterval]);
+  }, [mapboxToken, fetchVessels]);
 
-  // Initialize map
+  // Auto-refresh interval
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
+    if (!autoRefresh || !mapboxToken) return;
+    
+    const interval = setInterval(fetchVessels, refreshInterval);
+    return () => clearInterval(interval);
+  }, [fetchVessels, autoRefresh, refreshInterval, mapboxToken]);
 
-    mapboxgl.accessToken = mapboxToken;
+  // Initialize map with async loader
+  useEffect(() => {
+    if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: [0, 20],
-      zoom: 2
-    });
+    let mounted = true;
 
-    map.current?.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    const initMap = async () => {
+      try {
+        const mapboxgl = await getMapboxGLAsync();
+        if (!mounted || !mapContainer.current) return;
+        
+        mapboxRef.current = mapboxgl;
+        mapboxgl.accessToken = mapboxToken;
+
+        const mapInstance = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [-45, -20], // Center on Brazil
+          zoom: 4,
+          pitch: 0,
+        });
+
+        mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        mapInstance.on('load', () => {
+          if (mounted) {
+            setMapReady(true);
+            setLoading(false);
+          }
+        });
+
+        mapInstance.on('error', (e: any) => {
+          console.error('Mapbox error:', e);
+          if (mounted) {
+            setError('Erro ao carregar o mapa');
+            setLoading(false);
+          }
+        });
+
+        mapRef.current = mapInstance;
+      } catch (err) {
+        console.error('Failed to initialize map:', err);
+        if (mounted) {
+          setError('Falha ao inicializar o mapa');
+          setLoading(false);
+        }
+      }
+    };
+
+    initMap();
 
     return () => {
-      map.current?.remove();
+      mounted = false;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
   }, [mapboxToken]);
 
   // Update markers when vessels change
   useEffect(() => {
-    const mapInstance = map.current;
-    if (!mapInstance || !vessels.length) return;
+    const mapInstance = mapRef.current;
+    const mapboxgl = mapboxRef.current;
+    if (!mapInstance || !mapboxgl || !mapReady || vessels.length === 0) return;
 
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
@@ -162,15 +215,18 @@ export function VesselTrackingMap({
 
     // Add new markers
     vessels.forEach(vessel => {
+      if (!vessel.lat || !vessel.lon) return;
+      
       const el = document.createElement('div');
       el.className = 'vessel-marker';
       
       const isMoving = vessel.speed > 0.5;
-      const color = isMoving ? '#3b82f6' : '#10b981';
+      const isSelected = selectedVessel?.mmsi === vessel.mmsi;
+      const color = isSelected ? '#f97316' : isMoving ? '#3b82f6' : '#10b981';
       
       el.style.cssText = `
-        width: 32px;
-        height: 32px;
+        width: ${isSelected ? '40px' : '32px'};
+        height: ${isSelected ? '40px' : '32px'};
         background: ${color};
         border: 3px solid white;
         border-radius: 50%;
@@ -180,34 +236,34 @@ export function VesselTrackingMap({
         cursor: pointer;
         box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         transform: rotate(${vessel.heading}deg);
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
+        z-index: ${isSelected ? 100 : 1};
       `;
       
-      // SVG ship icon
       el.innerHTML = `
         <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
           <path d="M12 2L4 12h3v7h10v-7h3L12 2z"/>
         </svg>
       `;
 
+      const popup = new mapboxgl.Popup({ offset: 25, closeButton: true })
+        .setHTML(`
+          <div style="padding: 12px; min-width: 200px; font-family: system-ui, sans-serif;">
+            <h3 style="font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #1f2937;">${vessel.name}</h3>
+            <div style="font-size: 12px; color: #6b7280; line-height: 1.6;">
+              <p><strong>MMSI:</strong> ${vessel.mmsi}</p>
+              <p><strong>Status:</strong> ${vessel.status}</p>
+              <p><strong>Velocidade:</strong> ${vessel.speed.toFixed(1)} kn</p>
+              <p><strong>Rumo:</strong> ${vessel.course.toFixed(0)}°</p>
+              <p><strong>Destino:</strong> ${vessel.destination || 'N/A'}</p>
+              ${vessel.eta ? `<p><strong>ETA:</strong> ${new Date(vessel.eta).toLocaleDateString('pt-BR')}</p>` : ''}
+            </div>
+          </div>
+        `);
+
       const marker = new mapboxgl.Marker(el)
         .setLngLat([vessel.lon, vessel.lat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 })
-            .setHTML(`
-              <div style="padding: 12px; min-width: 200px;">
-                <h3 style="font-weight: bold; margin-bottom: 8px;">${vessel.name}</h3>
-                <div style="font-size: 12px; color: #666;">
-                  <p><strong>MMSI:</strong> ${vessel.mmsi}</p>
-                  <p><strong>Status:</strong> ${vessel.status}</p>
-                  <p><strong>Speed:</strong> ${vessel.speed.toFixed(1)} kn</p>
-                  <p><strong>Course:</strong> ${vessel.course.toFixed(0)}°</p>
-                  <p><strong>Destination:</strong> ${vessel.destination || 'N/A'}</p>
-                  ${vessel.eta ? `<p><strong>ETA:</strong> ${new Date(vessel.eta).toLocaleDateString()}</p>` : ''}
-                </div>
-              </div>
-            `)
-        )
+        .setPopup(popup)
         .addTo(mapInstance);
 
       el.addEventListener('click', () => {
@@ -221,24 +277,33 @@ export function VesselTrackingMap({
     // Fit bounds to show all vessels
     if (vessels.length > 1) {
       const bounds = new mapboxgl.LngLatBounds();
-      vessels.forEach(v => bounds.extend([v.lon, v.lat]));
-      mapInstance.fitBounds(bounds, { padding: 50 });
-    } else if (vessels.length === 1) {
+      vessels.forEach(v => {
+        if (v.lat && v.lon) {
+          bounds.extend([v.lon, v.lat]);
+        }
+      });
+      mapInstance.fitBounds(bounds, { padding: 60, maxZoom: 10 });
+    } else if (vessels.length === 1 && vessels[0].lat && vessels[0].lon) {
       mapInstance.flyTo({ center: [vessels[0].lon, vessels[0].lat], zoom: 8 });
     }
-  }, [vessels, onVesselSelect]);
+  }, [vessels, selectedVessel, onVesselSelect, mapReady]);
 
+  // Loading state
   if (loading && !mapboxToken) {
     return (
       <Card>
         <CardContent className="flex items-center justify-center h-[500px]">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+            <p className="text-muted-foreground">Carregando mapa...</p>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
-  if (error || !mapboxToken) {
+  // Error state
+  if (error && !mapboxToken) {
     return (
       <Card>
         <CardHeader>
@@ -247,10 +312,19 @@ export function VesselTrackingMap({
             Rastreamento AIS
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-center h-[400px] text-muted-foreground">
-          <div className="text-center">
-            <Ship className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Configure MAPBOX_PUBLIC_TOKEN para visualizar o mapa</p>
+        <CardContent className="flex items-center justify-center h-[400px]">
+          <div className="text-center space-y-4">
+            <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground" />
+            <div>
+              <p className="font-medium">{error}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Verifique a configuração do Mapbox
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => window.location.reload()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Recarregar
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -268,7 +342,7 @@ export function VesselTrackingMap({
             </CardTitle>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs">
-                {source === 'marinetraffic' ? '📡 API Real' : '🔧 Mock'}
+                {source === 'database' ? '📡 Dados Reais' : '🔧 Mock'}
               </Badge>
               <Badge variant="secondary" className="text-xs">
                 {vessels.length} embarcações
@@ -285,7 +359,12 @@ export function VesselTrackingMap({
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-0 relative">
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          )}
           <div ref={mapContainer} className="h-[500px] rounded-b-lg" />
         </CardContent>
       </Card>
@@ -297,12 +376,14 @@ export function VesselTrackingMap({
             key={vessel.mmsi}
             className={cn(
               "cursor-pointer transition-all hover:border-primary/50",
-              selectedVessel?.mmsi === vessel.mmsi && "border-primary"
+              selectedVessel?.mmsi === vessel.mmsi && "border-primary ring-2 ring-primary/20"
             )}
             onClick={() => {
               setSelectedVessel(vessel);
               onVesselSelect?.(vessel);
-              map.current?.flyTo({ center: [vessel.lon, vessel.lat], zoom: 10 });
+              if (mapRef.current && vessel.lat && vessel.lon) {
+                mapRef.current.flyTo({ center: [vessel.lon, vessel.lat], zoom: 10 });
+              }
             }}
           >
             <CardContent className="p-4">
