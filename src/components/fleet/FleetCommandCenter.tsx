@@ -58,33 +58,18 @@ export const FleetCommandCenter: React.FC = () => {
   const { data: vessels, isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
     queryKey: ["fleet-vessels", filterStatus],
     queryFn: async (): Promise<VesselWithMission[]> => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let data: any[] | null = null;
-      let error: Error | null = null;
+      const query = supabase.from("vessels").select("*").order("name");
+      
+      const result = filterStatus !== "all" 
+        ? await query.eq("status", filterStatus)
+        : await query;
 
-      if (filterStatus !== "all") {
-        const result = await supabase
-          .from("vessels")
-          .select("*")
-          .eq("status", filterStatus)
-          .order("name");
-        data = result.data;
-        error = result.error;
-      } else {
-        const result = await supabase
-          .from("vessels")
-          .select("*")
-          .order("name");
-        data = result.data;
-        error = result.error;
+      if (result.error) {
+        logger.error("Error fetching vessels:", result.error);
+        throw result.error;
       }
 
-      if (error) {
-        logger.error("Error fetching vessels:", error);
-        throw error;
-      }
-
-      return (data ?? []) as VesselWithMission[];
+      return (result.data || []) as VesselWithMission[];
     },
     refetchInterval: autoRefresh ? 30000 : false,
   });
@@ -435,7 +420,7 @@ export const FleetCommandCenter: React.FC = () => {
               <CardDescription>Real-time vessel positions</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-96 bg-gradient-to-br from-blue-900 to-blue-950 rounded-lg relative overflow-hidden">
+              <div className="h-96 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg relative overflow-hidden">
                 {/* Simulated map with vessel markers */}
                 <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMzAgMzBtLTI4IDBhMjgsMjggMCAxLDAgNTYsMGEyOCwyOCAwIDEsMCAtNTYsMCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')]"></div>
                 
@@ -452,21 +437,21 @@ export const FleetCommandCenter: React.FC = () => {
                     style={{ left: `${vessel.x}%`, top: `${vessel.y}%` }}
                     onClick={() => toast.info(`${vessel.name} - Status: ${vessel.status}`)}
                   >
-                    <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-success' : 'bg-warning'} animate-pulse`}></div>
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-background/80 text-foreground text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border">
                       {vessel.name}
                     </div>
                   </div>
                 ))}
                 
                 {/* Legend */}
-                <div className="absolute bottom-4 left-4 bg-black/60 text-white p-3 rounded-lg text-sm">
+                <div className="absolute bottom-4 left-4 bg-background/60 text-foreground p-3 rounded-lg text-sm border">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-success"></div>
                     <span>Embarcação Ativa</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-warning"></div>
                     <span>Em Manutenção</span>
                   </div>
                 </div>

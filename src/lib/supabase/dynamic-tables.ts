@@ -205,7 +205,7 @@ type TableName = "organizations"; // Type bypass - any table from the schema wor
 /**
  * Creates a type-safe accessor for dynamic tables
  */
-function createTableAccessor<T, TInsert = Partial<T>>(tableName: string) {
+export function createTableAccessor<T, TInsert = Partial<T>>(tableName: string) {
   return {
     async select(columns = "*") {
       const { data, error } = await supabase
