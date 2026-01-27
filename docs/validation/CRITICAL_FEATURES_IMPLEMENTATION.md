@@ -34,7 +34,7 @@
 ### 1️⃣ CONTRATO DO BARCO + IA PARA DOWNTIME
 
 **Rota:** `/vessel-contracts`  
-**Arquivo:** `src/pages/VesselContracts.tsx`  
+**Arquivo:** `src/pages/VesselContractsUnified.tsx` → `VesselContractsV2.tsx`  
 **Edge Function:** `supabase/functions/vessel-downtime-ai/`
 
 **Funcionalidades:**
