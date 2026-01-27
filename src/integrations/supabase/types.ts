@@ -996,38 +996,65 @@ export type Database = {
       }
       ai_documents: {
         Row: {
+          category: string | null
+          confidence_score: number | null
           created_at: string
+          description: string | null
+          extracted_keywords: Json | null
           file_name: string
           file_size: number | null
+          file_size_bytes: number | null
           file_type: string
+          file_url: string | null
           id: string
+          ocr_completed_at: string | null
           ocr_status: string
+          ocr_text: string | null
           organization_id: string | null
           storage_path: string
+          title: string | null
           updated_at: string
           uploaded_by: string | null
         }
         Insert: {
+          category?: string | null
+          confidence_score?: number | null
           created_at?: string
+          description?: string | null
+          extracted_keywords?: Json | null
           file_name: string
           file_size?: number | null
+          file_size_bytes?: number | null
           file_type: string
+          file_url?: string | null
           id?: string
+          ocr_completed_at?: string | null
           ocr_status?: string
+          ocr_text?: string | null
           organization_id?: string | null
           storage_path: string
+          title?: string | null
           updated_at?: string
           uploaded_by?: string | null
         }
         Update: {
+          category?: string | null
+          confidence_score?: number | null
           created_at?: string
+          description?: string | null
+          extracted_keywords?: Json | null
           file_name?: string
           file_size?: number | null
+          file_size_bytes?: number | null
           file_type?: string
+          file_url?: string | null
           id?: string
+          ocr_completed_at?: string | null
           ocr_status?: string
+          ocr_text?: string | null
           organization_id?: string | null
           storage_path?: string
+          title?: string | null
           updated_at?: string
           uploaded_by?: string | null
         }
@@ -10118,6 +10145,38 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_keywords: {
+        Row: {
+          created_at: string | null
+          document_id: string | null
+          id: string
+          keyword: string
+          relevance_score: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_id?: string | null
+          id?: string
+          keyword: string
+          relevance_score?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          document_id?: string | null
+          id?: string
+          keyword?: string
+          relevance_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_keywords_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "ai_documents"
             referencedColumns: ["id"]
           },
         ]
@@ -29289,6 +29348,68 @@ export type Database = {
           },
         ]
       }
+      sonar_ai_predictions: {
+        Row: {
+          ai_model: string | null
+          confidence: number
+          created_at: string | null
+          depth_range: Json | null
+          description: string | null
+          detected_objects: Json | null
+          id: string
+          location: Json
+          prediction_type: string
+          processed_at: string | null
+          reading_id: string | null
+          safe_route_recommendation: Json | null
+          updated_at: string | null
+          user_id: string
+          warnings: string[] | null
+        }
+        Insert: {
+          ai_model?: string | null
+          confidence?: number
+          created_at?: string | null
+          depth_range?: Json | null
+          description?: string | null
+          detected_objects?: Json | null
+          id?: string
+          location?: Json
+          prediction_type: string
+          processed_at?: string | null
+          reading_id?: string | null
+          safe_route_recommendation?: Json | null
+          updated_at?: string | null
+          user_id: string
+          warnings?: string[] | null
+        }
+        Update: {
+          ai_model?: string | null
+          confidence?: number
+          created_at?: string | null
+          depth_range?: Json | null
+          description?: string | null
+          detected_objects?: Json | null
+          id?: string
+          location?: Json
+          prediction_type?: string
+          processed_at?: string | null
+          reading_id?: string | null
+          safe_route_recommendation?: Json | null
+          updated_at?: string | null
+          user_id?: string
+          warnings?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sonar_ai_predictions_reading_id_fkey"
+            columns: ["reading_id"]
+            isOneToOne: false
+            referencedRelation: "sonar_readings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sonar_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -29680,6 +29801,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sonar_readings: {
+        Row: {
+          created_at: string | null
+          depth: number
+          id: string
+          location: Json
+          metadata: Json | null
+          mission_id: string | null
+          pressure: number | null
+          reading_data: Json | null
+          risk_level: string
+          temperature: number | null
+          terrain_type: string
+          timestamp: string | null
+          updated_at: string | null
+          user_id: string
+          visibility: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          depth: number
+          id?: string
+          location?: Json
+          metadata?: Json | null
+          mission_id?: string | null
+          pressure?: number | null
+          reading_data?: Json | null
+          risk_level: string
+          temperature?: number | null
+          terrain_type: string
+          timestamp?: string | null
+          updated_at?: string | null
+          user_id: string
+          visibility?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          depth?: number
+          id?: string
+          location?: Json
+          metadata?: Json | null
+          mission_id?: string | null
+          pressure?: number | null
+          reading_data?: Json | null
+          risk_level?: string
+          temperature?: number | null
+          terrain_type?: string
+          timestamp?: string | null
+          updated_at?: string | null
+          user_id?: string
+          visibility?: number | null
+        }
+        Relationships: []
       }
       starfix_inspections: {
         Row: {
@@ -36368,6 +36543,16 @@ export type Database = {
           p_response_time_ms?: number
           p_status_code?: number
           p_success?: boolean
+        }
+        Returns: string
+      }
+      log_document_analysis: {
+        Args: {
+          p_analysis_type: string
+          p_document_id: string
+          p_error?: string
+          p_results?: Json
+          p_status: string
         }
         Returns: string
       }
