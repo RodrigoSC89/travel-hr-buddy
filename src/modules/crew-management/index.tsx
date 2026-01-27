@@ -166,6 +166,7 @@ const CrewManagement = () => {
                 onViewMember={setSelectedMember}
                 onAddMember={() => setShowAddDialog(true)}
                 onExport={handleExport}
+                onRefresh={loadData}
               />
             </TabsContent>
 

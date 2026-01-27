@@ -135,7 +135,7 @@ const FleetModule = () => {
             </TabsList>
 
             <TabsContent value="vessels">
-              <VesselGrid vessels={vessels} onViewDetails={setSelectedVessel} isLoading={loading} />
+              <VesselGrid vessels={vessels} onViewDetails={setSelectedVessel} onRefresh={loadData} isLoading={loading} />
             </TabsContent>
 
             <TabsContent value="maintenance">

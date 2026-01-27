@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { 
   Ship, 
   MapPin, 
@@ -11,11 +12,12 @@ import {
   Activity, 
   Eye,
   MoreHorizontal,
-  Anchor,
-  Navigation
+  Edit,
+  Trash2
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { EditVesselDialog } from "./EditVesselDialog";
 
 interface Vessel {
   id: string;
@@ -36,6 +38,8 @@ interface Vessel {
 interface VesselGridProps {
   vessels: Vessel[];
   onViewDetails: (vessel: Vessel) => void;
+  onEditVessel?: (vessel: Vessel) => void;
+  onRefresh?: () => void;
   isLoading?: boolean;
 }
 
@@ -48,9 +52,15 @@ const statusConfig: Record<string, { color: string; label: string; bgColor: stri
   inactive: { color: "text-gray-500", label: "Inativo", bgColor: "bg-gray-500" },
 };
 
-const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void; index: number }> = ({
+const VesselCard: React.FC<{ 
+  vessel: Vessel; 
+  onViewDetails: (v: Vessel) => void; 
+  onEdit: (v: Vessel) => void;
+  index: number;
+}> = ({
   vessel,
   onViewDetails,
+  onEdit,
   index
 }) => {
   const status = statusConfig[vessel.status] || statusConfig.inactive;
@@ -142,9 +152,31 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
               <Eye className="h-4 w-4 mr-2" />
               Detalhes
             </Button>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onViewDetails(vessel)}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Ver Detalhes
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onEdit(vessel)}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Editar
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => onEdit(vessel)}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Remover
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardContent>
       </Card>
@@ -152,7 +184,21 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
   );
 };
 
-export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, isLoading }) => {
+export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, onRefresh, isLoading }) => {
+  const [editVessel, setEditVessel] = useState<Vessel | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
+  const handleEdit = useCallback((vessel: Vessel) => {
+    setEditVessel(vessel);
+    setShowEditDialog(true);
+  }, []);
+
+  const handleEditSuccess = useCallback(() => {
+    setShowEditDialog(false);
+    setEditVessel(null);
+    onRefresh?.();
+  }, [onRefresh]);
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -194,15 +240,24 @@ export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, 
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {vessels.map((vessel, index) => (
-        <VesselCard
-          key={vessel.id}
-          vessel={vessel}
-          onViewDetails={onViewDetails}
-          index={index}
-        />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {vessels.map((vessel, index) => (
+          <VesselCard
+            key={vessel.id}
+            vessel={vessel}
+            onViewDetails={onViewDetails}
+            onEdit={handleEdit}
+            index={index}
+          />
+        ))}
+      </div>
+      <EditVesselDialog
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        vessel={editVessel}
+        onSuccess={handleEditSuccess}
+      />
+    </>
   );
 };
