@@ -85,7 +85,7 @@ export const WebhookBuilder: React.FC = () => {
     }
   });
 
-  const [webhooks] = useState<WebhookConfig[]>([
+  const [webhooks, setWebhooks] = useState<WebhookConfig[]>([
     {
       id: "1",
       name: "Slack Notifications",
@@ -529,7 +529,15 @@ export const WebhookBuilder: React.FC = () => {
                     </div>
                     <Switch 
                       checked={webhook.isActive}
-                      onCheckedChange={() => {}}
+                      onCheckedChange={(checked) => {
+                        setWebhooks(prev => prev.map(w => 
+                          w.id === webhook.id ? { ...w, isActive: checked } : w
+                        ));
+                        toast({
+                          title: checked ? "Webhook Ativado" : "Webhook Desativado",
+                          description: `${webhook.name} foi ${checked ? 'ativado' : 'desativado'}.`
+                        });
+                      }}
                     />
                   </div>
                 </CardHeader>

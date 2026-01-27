@@ -1,9 +1,9 @@
 /**
- * WhistleblowerV2 - Canal de Denúncias
- * Canal seguro com classificação IA
+ * WhistleblowerV2 - Canal de Denúncias PRODUCTION
+ * Canal seguro com classificação IA e persistência real
  */
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { PageLayoutV2, CardV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,9 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/utils/production-logger";
 import { 
   Flag, Brain, Shield, Lock, AlertTriangle, CheckCircle, 
-  Eye, Send, MessageSquare
+  Eye, Send, MessageSquare, Loader2
 } from "lucide-react";
 
 interface Report {
@@ -53,7 +55,7 @@ export default function WhistleblowerV2() {
     { id: "WB-003", category: "harassment", severity: "high", submitted_at: "2024-12-28", status: "new", anonymous: false },
   ]);
 
-  const [newReport, setNewReport] = useState({ category: '', description: '' });
+  const [newReport, setNewReport] = useState({ category: '', description: '', severity: 'medium' });
 
   const total = reports.length;
   const newReports = reports.filter(r => r.status === 'new').length;
@@ -149,7 +151,34 @@ export default function WhistleblowerV2() {
                   />
                 </div>
                 
-                <Button className="w-full" onClick={() => toast.success("Denúncia registrada com sucesso! Protocolo: WB-" + Date.now().toString().slice(-6))}>
+                <Button 
+                  className="w-full" 
+                  onClick={async () => {
+                    if (!newReport.description?.trim()) {
+                      toast.error("Por favor, descreva a denúncia");
+                      return;
+                    }
+                    const protocol = "WB-" + Date.now().toString().slice(-6);
+                    try {
+                      const { error } = await supabase.from('incidents').insert({
+                        incident_type: newReport.category || 'whistleblower',
+                        title: `Denúncia Anônima - ${newReport.category || 'Geral'}`,
+                        description: newReport.description,
+                        status: 'open',
+                        reported_by: 'anonymous',
+                        location: 'Canal de Denúncias',
+                        reported_at: new Date().toISOString()
+                      });
+                      if (error) throw error;
+                      toast.success(`Denúncia registrada! Protocolo: ${protocol}`);
+                      setNewReport({ category: '', severity: 'medium', description: '' });
+                      logger.info("Whistleblower report submitted", { protocol });
+                    } catch (err) {
+                      logger.error("Failed to submit whistleblower report", err);
+                      toast.error("Erro ao registrar denúncia. Tente novamente.");
+                    }
+                  }}
+                >
                   <Send className="h-4 w-4 mr-2" />
                   Enviar Denúncia Anônima
                 </Button>
