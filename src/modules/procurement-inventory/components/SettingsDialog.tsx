@@ -51,9 +51,15 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
     webhooksEnabled: false,
   });
 
-  const handleSave = () => {
-    toast.success("Configurações salvas com sucesso!");
-    onOpenChange(false);
+  const handleSave = async () => {
+    try {
+      // Save settings to localStorage for UI preferences
+      localStorage.setItem("procurement-settings", JSON.stringify(settings));
+      toast.success("Configurações salvas com sucesso!");
+      onOpenChange(false);
+    } catch {
+      toast.error("Erro ao salvar configurações");
+    }
   };
 
   return (

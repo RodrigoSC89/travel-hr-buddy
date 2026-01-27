@@ -97,7 +97,7 @@ class AuditProtocol {
         }
       }
     } catch (error) {
-      console.warn('Failed to load audit log:', error);
+      // Silently handle - this is expected on first load
       this.entries = [];
     }
   }
@@ -114,8 +114,8 @@ class AuditProtocol {
       } else {
         localStorage.setItem(STORAGE_KEY, data);
       }
-    } catch (error) {
-      console.warn('Failed to save audit log:', error);
+    } catch {
+      // Storage might be full or unavailable - silently ignore
     }
   }
 
