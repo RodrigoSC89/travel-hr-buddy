@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * Performance Monitor
- * Legacy: performance_metrics table has category as required column
+ * PATCH 871: Full type-safety - aligned with performance_metrics schema
  */
 import React, { useEffect, useState, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,10 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+// Use DB types
+type PerformanceMetricRow = Database["public"]["Tables"]["performance_metrics"]["Row"];
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -113,24 +117,29 @@ export const PerformanceMonitor: React.FC = () => {
 
   const persistMetrics = async (newMetrics: PerformanceMetrics) => {
     try {
+      // performance_metrics requires: category, metric_name, metric_unit, metric_value, status
       const { error } = await supabase
         .from("performance_metrics")
         .insert({
+          category: "frontend",
+          metric_name: "page_performance",
+          metric_unit: "score",
+          metric_value: newMetrics.score,
+          status: newMetrics.score >= 70 ? "good" : "warning",
           load_time: newMetrics.loadTime,
           memory_usage: newMetrics.memoryUsage,
           network_latency: newMetrics.networkLatency,
           score: newMetrics.score,
-          measured_at: new Date().toISOString()
+          measured_at: new Date().toISOString(),
         });
 
       if (error) {
-        console.error("Error persisting metrics:", error);
+        logger.error("Error persisting metrics", error);
       }
     } catch (error) {
-      console.error("Error in persistMetrics:", error);
+      logger.error("Error in persistMetrics", error as Error);
     }
   };
-
   const loadHistoricalData = async () => {
     try {
       const { data, error } = await supabase
@@ -221,12 +230,14 @@ export const PerformanceMonitor: React.FC = () => {
     });
   };
 
-  const exportToPDF = () => {
-    const doc = new jsPDF();
+  const exportToPDF = async () => {
+    try {
+      const JsPDF = await loadJsPDF();
+      const doc = new JsPDF();
 
-    // Title
-    doc.setFontSize(18);
-    doc.text("Performance Monitoring Report", 14, 20);
+      // Title
+      doc.setFontSize(18);
+      doc.text("Performance Monitoring Report", 14, 20);
 
     // Date
     doc.setFontSize(10);
@@ -286,6 +297,14 @@ export const PerformanceMonitor: React.FC = () => {
       title: "PDF exported",
       description: "Performance report has been downloaded",
     });
+    } catch (error) {
+      logger.error("Error exporting PDF", error as Error);
+      toast({
+        title: "Export failed",
+        description: "Failed to generate PDF",
+        variant: "destructive",
+      });
+    }
   };
 
   const getChartData = () => {
