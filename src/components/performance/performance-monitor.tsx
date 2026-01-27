@@ -1,5 +1,5 @@
-// @ts-nocheck
-import React, { useEffect, useState, useCallback } from "react";
+// @ts-nocheck - Legacy: performance_metrics schema uses different column names
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

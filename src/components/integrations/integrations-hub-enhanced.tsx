@@ -1,4 +1,4 @@
-// @ts-nocheck - Legacy file: DB schema uses different column names (integration_name vs provider_name, etc.)
+// @ts-nocheck - Legacy: oauth_integrations table has different schema (integration_name vs provider_name)
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-// main.tsx - PATCH 851 - React singleton initialization
+// main.tsx - PATCH 869 - Ultra Startup Optimizer + React singleton initialization
 // Import React singleton FIRST to ensure single instance
 import "@/lib/react-singleton";
 import * as React from "react";
@@ -6,7 +6,12 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+import "@/styles/low-bandwidth.css";
 import { logger } from "@/lib/logger";
+import { ultraStartupOptimizer } from "@/lib/performance/ultra-startup-optimizer";
+
+// Initialize ultra startup optimizer immediately
+ultraStartupOptimizer.init();
 
 // Initialize i18n
 import "@/i18n";
@@ -194,4 +199,9 @@ if (container) {
       </HelmetProvider>
     </React.StrictMode>
   );
+  
+  // Mark Time to Interactive after render
+  requestAnimationFrame(() => {
+    ultraStartupOptimizer.markTTI();
+  });
 }

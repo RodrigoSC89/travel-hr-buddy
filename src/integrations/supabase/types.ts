@@ -17051,6 +17051,68 @@ export type Database = {
         }
         Relationships: []
       }
+      integrations: {
+        Row: {
+          access_token: string | null
+          connection_status: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          integration_type: string
+          last_sync_at: string | null
+          metadata: Json | null
+          organization_id: string | null
+          provider_name: string
+          refresh_token: string | null
+          scopes: string[] | null
+          token_expires_at: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          connection_status?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          integration_type: string
+          last_sync_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          provider_name: string
+          refresh_token?: string | null
+          scopes?: string[] | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          connection_status?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          integration_type?: string
+          last_sync_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          provider_name?: string
+          refresh_token?: string | null
+          scopes?: string[] | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integrations_registry: {
         Row: {
           config: Json | null
@@ -23829,13 +23891,18 @@ export type Database = {
           created_at: string
           device_type: string | null
           id: string
+          load_time: number | null
+          measured_at: string | null
+          memory_usage: number | null
           metadata: Json | null
           metric_name: string
           metric_type: string | null
           metric_unit: string
           metric_value: number
+          network_latency: number | null
           page_url: string | null
           recorded_at: string
+          score: number | null
           session_id: string | null
           status: string
           target_value: number | null
@@ -23850,13 +23917,18 @@ export type Database = {
           created_at?: string
           device_type?: string | null
           id?: string
+          load_time?: number | null
+          measured_at?: string | null
+          memory_usage?: number | null
           metadata?: Json | null
           metric_name: string
           metric_type?: string | null
           metric_unit: string
           metric_value: number
+          network_latency?: number | null
           page_url?: string | null
           recorded_at?: string
+          score?: number | null
           session_id?: string | null
           status: string
           target_value?: number | null
@@ -23871,13 +23943,18 @@ export type Database = {
           created_at?: string
           device_type?: string | null
           id?: string
+          load_time?: number | null
+          measured_at?: string | null
+          memory_usage?: number | null
           metadata?: Json | null
           metric_name?: string
           metric_type?: string | null
           metric_unit?: string
           metric_value?: number
+          network_latency?: number | null
           page_url?: string | null
           recorded_at?: string
+          score?: number | null
           session_id?: string | null
           status?: string
           target_value?: number | null
@@ -35156,6 +35233,7 @@ export type Database = {
           id: string
           metadata: Json | null
           resolution_action: string | null
+          resolved: boolean | null
           resolved_at: string | null
           severity: string
         }
@@ -35171,6 +35249,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           resolution_action?: string | null
+          resolved?: boolean | null
           resolved_at?: string | null
           severity: string
         }
@@ -35186,6 +35265,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           resolution_action?: string | null
+          resolved?: boolean | null
           resolved_at?: string | null
           severity?: string
         }
