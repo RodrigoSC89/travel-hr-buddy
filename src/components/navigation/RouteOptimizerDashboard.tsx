@@ -503,7 +503,7 @@ export function RouteOptimizerDashboard() {
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-muted-foreground">Custo Total</span>
-                    <span className="text-xl font-bold text-emerald-600">
+                    <span className="text-xl font-bold text-success">
                       ${selectedRoute.fuelCost.toLocaleString()}
                     </span>
                   </div>

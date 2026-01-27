@@ -490,11 +490,11 @@ const EnhancedUnifiedDashboard = () => {
                 <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50/50 to-transparent border border-emerald-100/50">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-muted-foreground">Margem Bruta</span>
-                    <Badge className="bg-emerald-100 text-emerald-700 border-0">
+                    <Badge className="bg-success/10 text-success border-0">
                       Alto
                     </Badge>
                   </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent">
                     {dashboardData.financialMetrics.grossMargin}%
                   </div>
                   <Progress value={dashboardData.financialMetrics.grossMargin} className="h-2" />

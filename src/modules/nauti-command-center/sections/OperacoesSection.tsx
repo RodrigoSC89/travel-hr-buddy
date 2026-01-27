@@ -159,14 +159,14 @@ export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionPr
       {/* Status Board */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background">
+          <Card className="border-success/20 bg-gradient-to-br from-success/10 to-white dark:from-success/10 dark:to-background">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Sistemas Operacionais</p>
-                  <p className="text-3xl font-bold text-emerald-600">{statusCounts.operational}</p>
+                  <p className="text-3xl font-bold text-success">{statusCounts.operational}</p>
                 </div>
-                <CheckCircle className="h-10 w-10 text-emerald-500 opacity-50" />
+                <CheckCircle className="h-10 w-10 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
