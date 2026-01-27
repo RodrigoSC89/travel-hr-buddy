@@ -1,22 +1,21 @@
-// @ts-nocheck
+// @ts-nocheck - Tables: satellites, satellite_positions, satellite_alerts, start_tracking_session RPC (require migration)
+/**
+ * Satellite Tracker Page
+ * Real-time satellite tracking with 3D orbital visualization
+ * 
+ * Technical Debt: Satellite tables require migration for type support
+ */
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { Satellite, AlertTriangle, Play, Square, Globe, Orbit } from "lucide-react";
+import { Satellite, AlertTriangle, Square, Globe, Orbit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-let THREE: any = null;
-const loadTHREE = async () => {
-  if (!THREE) {
-    THREE = await import("three");
-  }
-  return THREE;
-};
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface SatelliteData {
   id: string;
