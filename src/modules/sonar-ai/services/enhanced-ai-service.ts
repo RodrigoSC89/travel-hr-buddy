@@ -1,10 +1,9 @@
+// @ts-nocheck
 /**
- * PATCH 479: Enhanced Sonar AI Service with ONNX Classification
- * Provides AI-powered sonar data analysis and risk assessment
- * @ts-nocheck - Required: sonar_events/sonar_risks tables use dynamic schemas not in generated types
+ * PATCH 877: Enhanced Sonar AI Service with ONNX Classification
+ * @ts-nocheck: sonar_events table uses string but interface expects literal unions
  */
 
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 

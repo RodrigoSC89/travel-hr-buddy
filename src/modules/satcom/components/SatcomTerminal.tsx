@@ -1,10 +1,7 @@
 // @ts-nocheck
 /**
- * PATCH 420: Satcom Interactive Terminal
- * Terminal interface for sending and receiving satellite communications
- * 
- * @ts-nocheck reason: Uses satcom_logs table which was added in PATCH 865.
- * After types regeneration, this can be removed.
+ * PATCH 877: Satcom Interactive Terminal
+ * @ts-nocheck: satcom_logs schema null vs undefined + catch chain issue
  */
 
 import React, { useState, useEffect, useRef } from "react";

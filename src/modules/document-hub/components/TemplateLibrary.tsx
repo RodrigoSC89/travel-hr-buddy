@@ -1,8 +1,7 @@
 // @ts-nocheck
 /**
- * PATCH 873: Document Template Library with PDF Generation
- * @ts-nocheck: template_versions table created but types not regenerated yet
- * Requires: supabase gen types to update generated types
+ * PATCH 877: Document Template Library with PDF Generation
+ * @ts-nocheck: jsPDF dynamic import + template_versions schema mismatch
  */
 
 import React, { useState, useEffect } from "react";

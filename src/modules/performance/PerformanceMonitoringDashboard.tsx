@@ -1,7 +1,7 @@
-// @ts-nocheck - Complex type relationships with performance_alerts require full alignment
+// @ts-nocheck
 /**
- * Performance Monitoring Dashboard
- * Real-time system monitoring with threshold-based alerts
+ * PATCH 877 - Performance Monitoring Dashboard
+ * @ts-nocheck: performance_metrics DB schema has different columns than local interface
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

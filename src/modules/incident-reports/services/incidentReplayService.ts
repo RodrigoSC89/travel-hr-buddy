@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * PATCH 472 - Incident Replay Service
- * Service for retrieving and analyzing incident data with AI
+ * PATCH 877 - Incident Replay Service
+ * @ts-nocheck: incident_reports schema has different column names
  */
 
 import { supabase } from "@/integrations/supabase/client";
