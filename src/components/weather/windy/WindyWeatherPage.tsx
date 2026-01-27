@@ -415,10 +415,7 @@ export const WindyWeatherPage: React.FC = () => {
               <Button
                 variant={isChatOpen ? "default" : "outline"}
                 size="sm"
-                onClick={() => {
-                  console.log('[WeatherChat] Toggle chat:', !isChatOpen);
-                  setIsChatOpen(!isChatOpen);
-                }}
+                onClick={() => setIsChatOpen(!isChatOpen)}
                 className={`transition-all duration-200 ${isChatOpen ? "bg-primary ring-2 ring-primary/50" : "border-white/20 text-white hover:bg-white/10"}`}
               >
                 <MessageSquare className={`h-4 w-4 mr-2 ${isChatOpen ? "animate-pulse" : ""}`} />
@@ -686,10 +683,7 @@ export const WindyWeatherPage: React.FC = () => {
               forecast={dailyForecast}
               marine={marineData}
               isOpen={isChatOpen}
-              onClose={() => {
-                console.log('[WeatherChat] Closing desktop chat');
-                setIsChatOpen(false);
-              }}
+              onClose={() => setIsChatOpen(false)}
             />
           </div>
         )}
@@ -699,10 +693,7 @@ export const WindyWeatherPage: React.FC = () => {
           <div className="fixed inset-0 z-50 md:hidden animate-in fade-in duration-200">
             <div 
               className="absolute inset-0 bg-black/70 backdrop-blur-sm" 
-              onClick={() => {
-                console.log('[WeatherChat] Closing mobile chat via overlay');
-                setIsChatOpen(false);
-              }} 
+              onClick={() => setIsChatOpen(false)} 
             />
             <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm animate-in slide-in-from-right duration-300 shadow-2xl">
               <WeatherChat
@@ -711,10 +702,7 @@ export const WindyWeatherPage: React.FC = () => {
                 forecast={dailyForecast}
                 marine={marineData}
                 isOpen={isChatOpen}
-                onClose={() => {
-                  console.log('[WeatherChat] Closing mobile chat');
-                  setIsChatOpen(false);
-                }}
+                onClose={() => setIsChatOpen(false)}
               />
             </div>
           </div>

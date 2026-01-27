@@ -1,4 +1,6 @@
-// @ts-nocheck
+/**
+ * AI Suggestions Panel - Production-ready AI-powered suggestions
+ */
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,21 @@ interface AISuggestion {
   created_at: string;
   valid_until?: string;
 }
+
+// Map database schema to component interface
+const mapDbToSuggestion = (row: Record<string, unknown>): AISuggestion => ({
+  id: String(row.id || ''),
+  type: (row.suggestion_type as AISuggestion['type']) || 'insight',
+  title: String(row.suggestion_text || row.issue_description || ''),
+  description: String(row.issue_description || row.suggestion_text || ''),
+  priority: row.severity === 'critical' ? 5 : row.severity === 'high' ? 4 : row.severity === 'medium' ? 3 : 2,
+  action_data: (row.metadata as ActionData) || {},
+  is_read: Boolean(row.applied_at),
+  is_dismissed: row.status === 'rejected',
+  is_acted_upon: row.status === 'applied',
+  created_at: String(row.created_at || new Date().toISOString()),
+  valid_until: row.expires_at ? String(row.expires_at) : undefined,
+});
 
 // Mock suggestions to use when API fails or no data
 const MOCK_SUGGESTIONS: AISuggestion[] = [
@@ -110,8 +127,7 @@ export const AISuggestionsPanel: React.FC = () => {
       const { data, error } = await supabase
         .from("ai_suggestions")
         .select("*")
-        .eq("is_dismissed", false)
-        .order("priority", { ascending: false })
+        .neq("status", "rejected")
         .order("created_at", { ascending: false })
         .limit(20);
 
@@ -123,7 +139,7 @@ export const AISuggestionsPanel: React.FC = () => {
       }
 
       if (data && data.length > 0) {
-        setSuggestions(data as AISuggestion[]);
+        setSuggestions(data.map(mapDbToSuggestion));
       } else {
         // If no data in DB, use mock suggestions
         setSuggestions(MOCK_SUGGESTIONS);
@@ -220,12 +236,11 @@ export const AISuggestionsPanel: React.FC = () => {
         await supabase
           .from("ai_suggestions")
           .update({
-            is_read: true,
-            ...(actionType === "accept" && { is_acted_upon: true }),
-            ...(actionType === "dismiss" && { is_dismissed: true })
+            status: actionType === "accept" ? 'applied' : actionType === "dismiss" ? 'rejected' : 'pending',
+            applied_at: actionType === "accept" ? new Date().toISOString() : null
           })
           .eq("id", suggestion.id);
-      } catch (error) {
+      } catch {
         // Silent fail - non-blocking operation
       }
     }
