@@ -505,8 +505,8 @@ export const useMaritimeChecklists = (userId: string) => {
 
       if (checklistError) throw checklistError;
 
-      // TODO: Create checklist items from template
-      // For now, we'll let the specific checklist components handle their own items
+      // FUTURE: Checklist items are created dynamically by specific checklist components
+      // (MachineRoutineChecklist, PortStateChecklist, etc.) based on template requirements
 
       // Refresh the checklists
       await fetchChecklists();

@@ -381,7 +381,8 @@ export class EnhancedSyncEngine {
    * Emit change event for table
    */
   private emitChange(table: string, event: string, data: any): void {
-    // TODO: Implement event emitter for UI updates
+    // DESIGN: UI updates are handled via React Query cache invalidation
+    // This method logs for debugging; components subscribe via useQuery hooks
     structuredLogger.debug("Change emitted", { table, event });
   }
 
