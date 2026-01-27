@@ -77,18 +77,18 @@ export function BehavioralEvolutionDashboard() {
 
   const fetchSystemStatus = async () => {
     try {
-      // Fetch active alerts
+      // Fetch active alerts - use auto_resolved column (actual schema)
       const { data: alerts, error: alertsError } = await supabase
         .from("watchdog_behavior_alerts")
         .select("*")
-        .eq("resolved", false);
+        .eq("auto_resolved", false);
 
       if (alertsError) throw alertsError;
 
-      // Fetch performance data
+      // Fetch performance data from ai_behavior_snapshots (has precision/recall)
       const { data: perfData, error: perfError } = await supabase
-        .from("ia_performance_log")
-        .select("module_name, precision_score, recall_score")
+        .from("ai_behavior_snapshots")
+        .select("module_name, precision_score, recall_score, accuracy_score, f1_score")
         .order("created_at", { ascending: false })
         .limit(100);
 

@@ -1,7 +1,10 @@
-// @ts-nocheck - Legacy: performance_metrics schema uses different column names
+// @ts-nocheck
+/**
+ * Performance Monitor
+ * Legacy: performance_metrics table has category as required column
+ */
 import React, { useEffect, useState, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -10,6 +13,7 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {

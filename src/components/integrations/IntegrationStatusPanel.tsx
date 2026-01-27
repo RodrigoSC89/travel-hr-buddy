@@ -133,7 +133,7 @@ export function IntegrationStatusPanel() {
     switch (status) {
       case "connected":
         return (
-          <Badge variant="default" className="bg-green-500/20 text-green-400 border-green-500/30">
+          <Badge variant="default" className="bg-success/20 text-success border-success/30">
             <CheckCircle2 className="w-3 h-3 mr-1" />
             Conectado
           </Badge>
@@ -198,7 +198,7 @@ export function IntegrationStatusPanel() {
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
                       integration.status === "connected" 
-                        ? "bg-green-500/10 text-green-500" 
+                        ? "bg-success/10 text-success" 
                         : "bg-muted text-muted-foreground"
                     }`}>
                       {getIcon(integration.name)}
@@ -255,13 +255,13 @@ export function IntegrationStatusPanel() {
                         key={`${result.integration}-${result.timestamp}-${index}`}
                         className={`flex items-center justify-between p-2 rounded-lg text-sm ${
                           result.success 
-                            ? "bg-green-500/10 border border-green-500/20" 
+                            ? "bg-success/10 border border-success/20" 
                             : "bg-destructive/10 border border-destructive/20"
                         }`}
                       >
                         <div className="flex items-center gap-2">
                           {result.success ? (
-                            <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            <CheckCircle2 className="w-4 h-4 text-success" />
                           ) : (
                             <XCircle className="w-4 h-4 text-destructive" />
                           )}
