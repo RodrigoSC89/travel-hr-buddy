@@ -1,4 +1,10 @@
-// @ts-nocheck
+// @ts-nocheck 
+// Legacy: Uses extended ai_documents schema with document_entities. 
+// Schema alignment required: file_name vs document_name, ocr_status vs processing_status
+/**
+ * AI Documents Analyzer
+ * PATCH 865: Documented @ts-nocheck reason - requires schema migration
+ */
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +21,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Tesseract from "tesseract.js";
+import { logger } from "@/lib/logger";
 
 interface DocumentEntity {
   id: string;
