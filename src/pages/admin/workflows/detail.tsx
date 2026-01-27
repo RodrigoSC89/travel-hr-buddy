@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * Workflow Detail Page - PATCH 874
- * @ts-nocheck: smart_workflow_steps has complex FK and JSON columns
+ * Workflow Detail Page - PATCH 877
+ * @ts-nocheck: smart_workflow_steps schema mismatch with local WorkflowStep interface
  */
 "use client";
 

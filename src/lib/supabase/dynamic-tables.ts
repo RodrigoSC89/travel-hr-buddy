@@ -1269,6 +1269,644 @@ export interface TaskDependencyInsertDB {
 export const taskDependenciesTable = createTableAccessor<TaskDependencyDB, TaskDependencyInsertDB>("task_dependencies");
 
 // ============================================================================
+// MISSIONS - Used by mission-control-service.ts
+// ============================================================================
+
+export interface MissionDB {
+  id: string;
+  name: string;
+  code?: string | null;
+  type: string;
+  status: string;
+  priority: string;
+  description?: string | null;
+  objectives?: Json | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  assigned_to?: string | null;
+  created_by?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MissionInsertDB {
+  name: string;
+  code?: string | null;
+  type: string;
+  status?: string;
+  priority?: string;
+  description?: string | null;
+  objectives?: Json | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  assigned_to?: string | null;
+  created_by?: string | null;
+  metadata?: Json | null;
+}
+
+export const missionsTable = createTableAccessor<MissionDB, MissionInsertDB>("missions");
+
+export interface MissionTaskDB {
+  id: string;
+  mission_id: string;
+  name: string;
+  description?: string | null;
+  type: string;
+  status: string;
+  priority: string;
+  assigned_to?: string | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  estimated_duration?: number | null;
+  dependencies?: Json | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MissionTaskInsertDB {
+  mission_id: string;
+  name: string;
+  description?: string | null;
+  type: string;
+  status?: string;
+  priority?: string;
+  assigned_to?: string | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  estimated_duration?: number | null;
+  dependencies?: Json | null;
+  metadata?: Json | null;
+}
+
+export const missionTasksTable = createTableAccessor<MissionTaskDB, MissionTaskInsertDB>("mission_tasks");
+
+export interface MissionLogDB {
+  id: string;
+  mission_id: string;
+  user_id?: string | null;
+  event_type: string;
+  severity: string;
+  message?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+}
+
+export interface MissionLogInsertDB {
+  mission_id: string;
+  user_id?: string | null;
+  event_type: string;
+  severity?: string;
+  message?: string | null;
+  metadata?: Json | null;
+}
+
+export const missionLogsTable = createTableAccessor<MissionLogDB, MissionLogInsertDB>("mission_logs");
+
+// ============================================================================
+// JOINT TASKING - Used by jointTasking.ts
+// ============================================================================
+
+export interface JointMissionDB {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  priority: string;
+  tasks: Json;
+  external_entities: Json;
+  internal_systems: Json;
+  commander?: string | null;
+  participants?: Json | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  estimated_duration_hours?: number | null;
+  actual_duration_hours?: number | null;
+  completion_percentage: number;
+  sync_status: string;
+  sync_errors?: Json | null;
+  last_sync_at?: string | null;
+  mission_data?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JointMissionInsertDB {
+  name: string;
+  type: string;
+  status?: string;
+  priority?: string;
+  tasks?: Json;
+  external_entities?: Json;
+  internal_systems?: Json;
+  commander?: string | null;
+  participants?: Json | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  estimated_duration_hours?: number | null;
+  mission_data?: Json | null;
+}
+
+export const jointMissionsTable = createTableAccessor<JointMissionDB, JointMissionInsertDB>("joint_missions");
+
+// ============================================================================
+// DRONE MISSIONS - Used by droneMissionService.ts
+// ============================================================================
+
+export interface DroneMissionDB {
+  id: string;
+  mission_name: string;
+  drone_id: string;
+  mission_type: string;
+  planned_waypoints: Json;
+  actual_trajectory?: Json | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  max_depth_meters?: number | null;
+  mission_objectives?: string | null;
+  status: string;
+  completion_percentage: number;
+  user_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DroneMissionInsertDB {
+  mission_name: string;
+  drone_id: string;
+  mission_type: string;
+  planned_waypoints: Json;
+  actual_trajectory?: Json | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  max_depth_meters?: number | null;
+  mission_objectives?: string | null;
+  status?: string;
+  completion_percentage?: number;
+  user_id?: string | null;
+}
+
+export const droneMissionsTable = createTableAccessor<DroneMissionDB, DroneMissionInsertDB>("drone_missions");
+
+export interface DroneTelemetryDB {
+  id: string;
+  mission_id?: string | null;
+  drone_id: string;
+  latitude: number;
+  longitude: number;
+  depth: number;
+  heading?: number | null;
+  pitch?: number | null;
+  roll?: number | null;
+  battery?: number | null;
+  water_temperature?: number | null;
+  pressure?: number | null;
+  velocity?: number | null;
+  camera_status?: string | null;
+  sonar_status?: string | null;
+  system_health?: string | null;
+  alerts?: Json | null;
+  timestamp: string;
+  created_at: string;
+}
+
+export interface DroneTelemetryInsertDB {
+  mission_id?: string | null;
+  drone_id: string;
+  latitude: number;
+  longitude: number;
+  depth: number;
+  heading?: number | null;
+  pitch?: number | null;
+  roll?: number | null;
+  battery?: number | null;
+  water_temperature?: number | null;
+  pressure?: number | null;
+  velocity?: number | null;
+  camera_status?: string | null;
+  sonar_status?: string | null;
+  system_health?: string | null;
+  alerts?: Json | null;
+  timestamp?: string;
+}
+
+export const droneTelemetryDBTable = createTableAccessor<DroneTelemetryDB, DroneTelemetryInsertDB>("drone_telemetry");
+
+// ============================================================================
+// SONAR AI - Used by enhanced-ai-service.ts
+// ============================================================================
+
+export interface SonarEventDB {
+  id: string;
+  vessel_id?: string | null;
+  event_type: string;
+  detection_type?: string | null;
+  confidence_score: number;
+  distance_meters: number;
+  depth_meters: number;
+  bearing_degrees: number;
+  frequency_khz: number;
+  amplitude_db: number;
+  classification: string;
+  ai_model_version: string;
+  raw_data?: Json | null;
+  metadata?: Json | null;
+  detected_at: string;
+  created_at: string;
+}
+
+export interface SonarEventInsertDB {
+  vessel_id?: string | null;
+  event_type: string;
+  detection_type?: string | null;
+  confidence_score: number;
+  distance_meters: number;
+  depth_meters: number;
+  bearing_degrees: number;
+  frequency_khz: number;
+  amplitude_db: number;
+  classification: string;
+  ai_model_version: string;
+  raw_data?: Json | null;
+  metadata?: Json | null;
+  detected_at?: string;
+}
+
+export const sonarEventsTable = createTableAccessor<SonarEventDB, SonarEventInsertDB>("sonar_events");
+
+export interface SonarRiskDB {
+  id: string;
+  event_id?: string | null;
+  vessel_id?: string | null;
+  risk_level: string;
+  risk_type: string;
+  risk_score: number;
+  description: string;
+  recommended_action: string;
+  urgency: string;
+  status: string;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SonarRiskInsertDB {
+  event_id?: string | null;
+  vessel_id?: string | null;
+  risk_level: string;
+  risk_type: string;
+  risk_score: number;
+  description: string;
+  recommended_action: string;
+  urgency: string;
+  status?: string;
+  metadata?: Json | null;
+}
+
+export const sonarRisksTable = createTableAccessor<SonarRiskDB, SonarRiskInsertDB>("sonar_risks");
+
+// ============================================================================
+// SATCOM - Used by SatcomTerminal.tsx
+// ============================================================================
+
+export interface SatcomLogDB {
+  id: string;
+  vessel_id?: string | null;
+  message_type: string;
+  content: string;
+  provider: string;
+  status: string;
+  signal_strength?: number | null;
+  latency_ms?: number | null;
+  direction: string;
+  created_at: string;
+}
+
+export interface SatcomLogInsertDB {
+  vessel_id?: string | null;
+  message_type: string;
+  content: string;
+  provider: string;
+  status?: string;
+  signal_strength?: number | null;
+  latency_ms?: number | null;
+  direction?: string;
+}
+
+export const satcomLogsTable = createTableAccessor<SatcomLogDB, SatcomLogInsertDB>("satcom_logs");
+
+// Note: MMIHistoryDB type is now defined at line ~620 as MMIHistory
+
+// ============================================================================
+// WORKFLOW NODES - Used by workflow-visual/index.tsx
+// ============================================================================
+
+export interface WorkflowNodeDB {
+  id: string;
+  workflow_id: string;
+  node_type: string;
+  node_name: string;
+  description?: string | null;
+  position_x: number;
+  position_y: number;
+  config: Json;
+  status: string;
+  connections: Json;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WorkflowNodeInsertDB {
+  workflow_id: string;
+  node_type: string;
+  node_name: string;
+  description?: string | null;
+  position_x: number;
+  position_y: number;
+  config?: Json;
+  status?: string;
+  connections?: Json;
+  metadata?: Json | null;
+}
+
+export const workflowNodesTable = createTableAccessor<WorkflowNodeDB, WorkflowNodeInsertDB>("workflow_nodes");
+
+// ============================================================================
+// CALENDAR EVENTS - Used by operational-calendar/index.tsx
+// ============================================================================
+
+export interface CalendarEventDB {
+  id: string;
+  title: string;
+  description?: string | null;
+  event_type: string;
+  start_date: string;
+  end_date: string;
+  all_day: boolean;
+  recurrence?: Json | null;
+  vessel_id?: string | null;
+  crew_members?: Json | null;
+  color?: string | null;
+  status: string;
+  priority: string;
+  metadata?: Json | null;
+  created_by?: string | null;
+  organization_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CalendarEventInsertDB {
+  title: string;
+  description?: string | null;
+  event_type: string;
+  start_date: string;
+  end_date: string;
+  all_day?: boolean;
+  recurrence?: Json | null;
+  vessel_id?: string | null;
+  crew_members?: Json | null;
+  color?: string | null;
+  status?: string;
+  priority?: string;
+  metadata?: Json | null;
+  created_by?: string | null;
+  organization_id?: string | null;
+}
+
+export const calendarEventsTable = createTableAccessor<CalendarEventDB, CalendarEventInsertDB>("calendar_events");
+
+// ============================================================================
+// LOGISTICS - Used by logistics-hub.tsx
+// ============================================================================
+
+export interface LogisticsRequestDB {
+  id: string;
+  request_type: string;
+  title: string;
+  description?: string | null;
+  status: string;
+  priority: string;
+  vessel_id?: string | null;
+  requested_by?: string | null;
+  assigned_to?: string | null;
+  due_date?: string | null;
+  items: Json;
+  metadata?: Json | null;
+  organization_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LogisticsRequestInsertDB {
+  request_type: string;
+  title: string;
+  description?: string | null;
+  status?: string;
+  priority?: string;
+  vessel_id?: string | null;
+  requested_by?: string | null;
+  assigned_to?: string | null;
+  due_date?: string | null;
+  items?: Json;
+  metadata?: Json | null;
+  organization_id?: string | null;
+}
+
+export const logisticsRequestsTable = createTableAccessor<LogisticsRequestDB, LogisticsRequestInsertDB>("logistics_requests");
+
+export interface InventoryItemDB {
+  id: string;
+  item_name: string;
+  item_code: string;
+  category: string;
+  quantity: number;
+  unit: string;
+  min_stock_level?: number | null;
+  max_stock_level?: number | null;
+  location?: string | null;
+  vessel_id?: string | null;
+  status: string;
+  last_restock_date?: string | null;
+  metadata?: Json | null;
+  organization_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InventoryItemInsertDB {
+  item_name: string;
+  item_code: string;
+  category: string;
+  quantity?: number;
+  unit: string;
+  min_stock_level?: number | null;
+  max_stock_level?: number | null;
+  location?: string | null;
+  vessel_id?: string | null;
+  status?: string;
+  last_restock_date?: string | null;
+  metadata?: Json | null;
+  organization_id?: string | null;
+}
+
+export const inventoryItemsTable = createTableAccessor<InventoryItemDB, InventoryItemInsertDB>("inventory_items");
+
+// ============================================================================
+// RESTORE LOGS - Used by logs.tsx
+// ============================================================================
+
+export interface RestoreLogDB {
+  id: string;
+  executed_at: string;
+  status: string;
+  message?: string | null;
+  error_details?: string | null;
+  triggered_by: string;
+  created_at: string;
+}
+
+export interface RestoreLogInsertDB {
+  executed_at?: string;
+  status: string;
+  message?: string | null;
+  error_details?: string | null;
+  triggered_by: string;
+}
+
+export const restoreLogsTable = createTableAccessor<RestoreLogDB, RestoreLogInsertDB>("restore_report_logs");
+
+// ============================================================================
+// TRANSLATION LOGS - Used by i18n.tsx
+// ============================================================================
+
+export interface TranslationLogDB {
+  id: string;
+  source_lang: string;
+  target_lang: string;
+  key: string;
+  source_type: string;
+  success: boolean;
+  response_time_ms: number;
+  created_at: string;
+}
+
+export interface TranslationLogInsertDB {
+  source_lang: string;
+  target_lang: string;
+  key: string;
+  source_type: string;
+  success: boolean;
+  response_time_ms: number;
+}
+
+export const translationLogsTable = createTableAccessor<TranslationLogDB, TranslationLogInsertDB>("translation_logs");
+
+export interface TranslationFeedbackDB {
+  id: string;
+  original_translation: string;
+  suggested_translation: string;
+  rating: number;
+  comment?: string | null;
+  status: string;
+  created_at: string;
+}
+
+export interface TranslationFeedbackInsertDB {
+  original_translation: string;
+  suggested_translation: string;
+  rating: number;
+  comment?: string | null;
+  status?: string;
+}
+
+export const translationFeedbackTable = createTableAccessor<TranslationFeedbackDB, TranslationFeedbackInsertDB>("translation_feedback");
+
+// Note: VesselSensor, MaintenanceAlert, and PeodpPlan types are defined earlier in this file
+
+// ============================================================================
+// INCIDENT SNAPSHOTS - Used by incidentReplayService.ts
+// ============================================================================
+
+export interface IncidentSnapshotDB {
+  id: string;
+  incident_id: string;
+  snapshot_time: string;
+  vessel_state: Json;
+  environmental_conditions: Json;
+  crew_positions: Json;
+  system_statuses: Json;
+  ai_analysis?: Json | null;
+  metadata?: Json | null;
+  created_at: string;
+}
+
+export interface IncidentSnapshotInsertDB {
+  incident_id: string;
+  snapshot_time: string;
+  vessel_state: Json;
+  environmental_conditions: Json;
+  crew_positions: Json;
+  system_statuses: Json;
+  ai_analysis?: Json | null;
+  metadata?: Json | null;
+}
+
+export const incidentSnapshotsTable = createTableAccessor<IncidentSnapshotDB, IncidentSnapshotInsertDB>("incident_snapshots");
+
+// ============================================================================
+// DOCUMENT VERSIONS - Used by DocumentEditor.tsx
+// ============================================================================
+
+export interface DocumentVersionDB {
+  id: string;
+  document_id: string;
+  version_number: number;
+  content: string;
+  changes_summary?: string | null;
+  created_by?: string | null;
+  created_at: string;
+}
+
+export interface DocumentVersionInsertDB {
+  document_id: string;
+  version_number: number;
+  content: string;
+  changes_summary?: string | null;
+  created_by?: string | null;
+}
+
+export const documentVersionsTable = createTableAccessor<DocumentVersionDB, DocumentVersionInsertDB>("document_versions");
+
+// ============================================================================
+// TEMPLATE VERSIONS - Used by TemplateLibrary.tsx
+// ============================================================================
+
+export interface TemplateVersionDB {
+  id: string;
+  template_id: string;
+  version_number: number;
+  content: Json;
+  variables?: Json | null;
+  changes?: string | null;
+  created_by?: string | null;
+  created_at: string;
+}
+
+export interface TemplateVersionInsertDB {
+  template_id: string;
+  version_number: number;
+  content: Json;
+  variables?: Json | null;
+  changes?: string | null;
+  created_by?: string | null;
+}
+
+export const templateVersionsTable = createTableAccessor<TemplateVersionDB, TemplateVersionInsertDB>("template_versions");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 

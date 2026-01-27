@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * MMI History Service - PATCH 874
- * @ts-nocheck: vessel_id null vs undefined, vessel join types
+ * PATCH 877 - MMI History Service
+ * @ts-nocheck: vessel_id null vs undefined in join result
  */
 
 import { supabase } from "@/integrations/supabase/client";

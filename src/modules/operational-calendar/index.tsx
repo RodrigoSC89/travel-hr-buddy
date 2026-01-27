@@ -1,8 +1,7 @@
 // @ts-nocheck
 /**
- * CALENDÁRIO OPERACIONAL UNIFICADO
- * Eventos integrados por embarcação/unidade com IA para reorganização
- * Melhoria Lovable #5
+ * PATCH 877 - CALENDÁRIO OPERACIONAL UNIFICADO
+ * @ts-nocheck: react-big-calendar types + CalendarEvent type coercion
  */
 
 import React, { useState, useEffect, useMemo } from "react";

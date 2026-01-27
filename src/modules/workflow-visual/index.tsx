@@ -1,8 +1,7 @@
 // @ts-nocheck
 /**
- * WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
- * Visualização interativa de fluxos com sugestões IA em tempo real
- * Melhoria Lovable #1 - ENHANCED
+ * PATCH 877 - WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
+ * @ts-nocheck: ReactFlow BackgroundVariant type mismatch
  */
 
 import React, { useState, useCallback, useEffect } from "react";
