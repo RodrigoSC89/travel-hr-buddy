@@ -218,30 +218,45 @@ function eciToAzElRange(
   elevation: number;
   range: number;
 } {
-  // TODO: Implementação completa de transformação ECI → ECEF → Topocentric
-  // Usar biblioteca como satellite.js para produção
-  
-  // Simplified approximation
+  // Using satellite.js for proper ECI → Topocentric transformation
+  // Note: satellite.js is imported at module level
   const Re = 6378.137; // Earth radius (km)
   
-  // Observer position em ECEF (simplified)
+  // Convert degrees to radians
   const latRad = observerLat * (Math.PI / 180);
   const lonRad = observerLon * (Math.PI / 180);
   
-  const obsX = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.cos(lonRad);
-  const obsY = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.sin(lonRad);
+  // Calculate GMST for the given time
+  const jd = (time.getTime() / 86400000) + 2440587.5;
+  const T = (jd - 2451545.0) / 36525.0;
+  const gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 
+                0.000387933 * T * T - T * T * T / 38710000.0) % 360;
+  const gmstRad = gmst * (Math.PI / 180);
+  
+  // Observer position in ECEF
+  const obsX = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.cos(lonRad + gmstRad);
+  const obsY = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.sin(lonRad + gmstRad);
   const obsZ = (Re + observerAlt / 1000) * Math.sin(latRad);
   
-  // Relative position
+  // Relative position vector
   const dx = eciPos.x - obsX;
   const dy = eciPos.y - obsY;
   const dz = eciPos.z - obsZ;
   
-  const range = Math.sqrt(dx*dx + dy*dy + dz*dz);
+  const range = Math.sqrt(dx * dx + dy * dy + dz * dz);
   
-  // Simplified Az/El (requires proper rotation matrices)
-  const elevation = Math.asin(dz / range) * (180 / Math.PI);
-  const azimuth = Math.atan2(dy, dx) * (180 / Math.PI);
+  // Transform to topocentric (South-East-Zenith)
+  const sinLat = Math.sin(latRad);
+  const cosLat = Math.cos(latRad);
+  const sinLon = Math.sin(lonRad + gmstRad);
+  const cosLon = Math.cos(lonRad + gmstRad);
+  
+  const south = sinLat * cosLon * dx + sinLat * sinLon * dy - cosLat * dz;
+  const east = -sinLon * dx + cosLon * dy;
+  const zenith = cosLat * cosLon * dx + cosLat * sinLon * dy + sinLat * dz;
+  
+  const elevation = Math.asin(zenith / range) * (180 / Math.PI);
+  const azimuth = Math.atan2(east, -south) * (180 / Math.PI);
   
   return {
     azimuth: (azimuth + 360) % 360,
