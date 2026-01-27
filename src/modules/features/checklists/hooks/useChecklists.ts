@@ -46,13 +46,27 @@ export function useChecklists(userId: string) {
   // Create checklist with AI
   const createChecklistWithAI = async (prompt: string) => {
     try {
-      // Generate items with AI
+      // Generate items with AI (returns string[])
       const items = await AIChecklistService.generateChecklistItems(prompt);
       
-      // Create the checklist
-      await ChecklistService.createChecklist(prompt, userId);
+      // Create the checklist and get the returned data
+      const checklist = await ChecklistService.createChecklist(prompt, userId) as { id: string };
       
-      // TODO: Add items to the checklist
+      // Add AI-generated items to the checklist
+      if (checklist?.id && items.length > 0) {
+        const { supabase } = await import("@/integrations/supabase/client");
+        
+        const itemsToInsert = items.map((itemText, index) => ({
+          checklist_id: checklist.id,
+          title: itemText,
+          description: "",
+          required: true,
+          order_index: index,
+          completed: false,
+        }));
+        
+        await supabase.from("checklist_items").insert(itemsToInsert);
+      }
       
       toast.success(`Checklist created with ${items.length} AI-generated items`);
       await fetchChecklists();
