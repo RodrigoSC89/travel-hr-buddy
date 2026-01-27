@@ -167,16 +167,16 @@ export class HybridSpaceWeatherService {
           this.cache.set(cacheKey, status, this.config.cache_ttl_ms);
           return { ...status, data_source: 'DP_ASOG' };
         } catch (error) {
-          console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
+          // Silent fallback - no console logging in production
           
           if (!this.config.enable_fallback) {
             throw error;
           }
           
-          console.log('[HybridSpaceWeather] Falling back to TypeScript implementation');
+          // Fallback silently to TypeScript implementation
         }
       } else {
-        console.log('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
+        // DP ASOG unavailable, using TypeScript fallback
       }
     }
 

@@ -220,10 +220,10 @@ export const AdvancedFleetAnalytics = () => {
 
   const getImpactColor = (impact: PredictiveInsight["impact"]) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+    case "high": return "text-destructive bg-destructive/10";
+    case "medium": return "text-warning bg-warning/10";
+    case "low": return "text-success bg-success/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
