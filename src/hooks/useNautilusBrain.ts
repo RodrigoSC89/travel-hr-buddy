@@ -166,7 +166,9 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
         }
       }
     } catch (error) {
-      console.error('Nautilus Brain error:', error);
+      // Use structured logger instead of console.error
+      const { logger } = await import("@/lib/utils/production-logger");
+      logger.error('Nautilus Brain error', error);
       if (!assistantContent) {
         setMessages(prev => [...prev, { 
           role: 'assistant', 

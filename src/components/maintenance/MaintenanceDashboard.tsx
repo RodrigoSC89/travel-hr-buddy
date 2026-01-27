@@ -45,7 +45,9 @@ export default function MaintenanceDashboard() {
       const result = await runMaintenanceOrchestrator(telemetry);
       setStatus(result);
     } catch (error) {
-      console.error("Failed to fetch maintenance status:", error);
+      // Use logger instead of console.error
+      const { logger } = await import("@/lib/utils/production-logger");
+      logger.error("Failed to fetch maintenance status", error);
     } finally {
       setLoading(false);
     }
