@@ -1,4 +1,8 @@
-// @ts-nocheck - Legacy: oauth_integrations table has different schema (integration_name vs provider_name)
+// @ts-nocheck
+/**
+ * Integrations Hub Enhanced
+ * Legacy: connected_integrations table uses different column naming conventions
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   Plug,
   CheckCircle2,
@@ -39,28 +44,43 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Database } from "@/integrations/supabase/types";
 
+// Aligned with connected_integrations actual schema
 interface Integration {
   id: string;
-  integration_type: string;
-  provider_name: string;
-  connection_status: string;
-  access_token?: string;
-  scopes?: string[];
-  metadata?: any;
-  last_sync_at?: string;
-  created_at: string;
+  organization_id?: string | null;
+  user_id?: string | null;
+  provider: string | null;
+  integration_name: string;
+  oauth_access_token?: string | null;
+  oauth_refresh_token?: string | null;
+  oauth_token_expires_at?: string | null;
+  is_active: boolean | null;
+  scopes?: string[] | null;
+  metadata?: Record<string, unknown> | null;
+  last_sync_at?: string | null;
+  created_at: string | null;
+  updated_at?: string | null;
 }
 
+// Aligned with webhook_events actual schema
 interface WebhookEvent {
   id: string;
+  organization_id?: string | null;
+  integration_id?: string | null;
   event_type: string;
-  webhook_url: string;
-  payload: any;
-  status: string;
-  response_code?: number;
-  attempts: number;
-  created_at: string;
+  event_name: string;
+  payload?: Record<string, unknown> | null;
+  source_ip?: string | null;
+  headers?: Record<string, unknown> | null;
+  status: string | null;
+  processed_at?: string | null;
+  error_message?: string | null;
+  created_at: string | null;
+  retry_count?: number | null;
+  max_retries?: number | null;
+  triggered_at?: string | null;
 }
 
 const PROVIDERS = [
@@ -97,7 +117,12 @@ export const IntegrationsHubEnhanced = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setIntegrations(data || []);
+      // Map DB rows to component interface
+      const mapped: Integration[] = (data || []).map(row => ({
+        ...row,
+        metadata: row.metadata as Record<string, unknown> | null,
+      }));
+      setIntegrations(mapped);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
@@ -107,6 +132,27 @@ export const IntegrationsHubEnhanced = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadWebhookEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("webhook_events")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+      // Map DB rows to component interface
+      const mapped: WebhookEvent[] = (data || []).map(row => ({
+        ...row,
+        payload: row.payload as Record<string, unknown> | null,
+        headers: row.headers as Record<string, unknown> | null,
+      }));
+      setWebhookEvents(mapped);
+    } catch (error: unknown) {
+      logger.error("Error loading webhook events", error);
     }
   };
 
@@ -137,12 +183,12 @@ export const IntegrationsHubEnhanced = () => {
         .from("connected_integrations")
         .insert({
           user_id: user.user?.id,
-          integration_type: provider.type,
-          provider_name: provider.name,
-          connection_status: "active",
-          access_token: mockToken,
-          refresh_token: mockRefreshToken,
-          token_expires_at: new Date(Date.now() + 3600000).toISOString(),
+          provider: provider.type,
+          integration_name: provider.name,
+          oauth_access_token: mockToken,
+          oauth_refresh_token: mockRefreshToken,
+          oauth_token_expires_at: new Date(Date.now() + 3600000).toISOString(),
+          is_active: true,
           scopes: provider.scopes,
           metadata: {
             connected_at: new Date().toISOString(),
@@ -213,9 +259,9 @@ export const IntegrationsHubEnhanced = () => {
         .from("connected_integrations")
         .insert({
           user_id: user.user?.id,
-          integration_type: "webhook",
-          provider_name: "Custom Webhook",
-          connection_status: "active",
+          provider: "webhook",
+          integration_name: "Custom Webhook",
+          is_active: true,
           metadata: {
             webhook_url: webhookUrl,
             webhook_secret: webhookSecret,
@@ -250,18 +296,19 @@ export const IntegrationsHubEnhanced = () => {
       const payload = JSON.parse(testPayload);
       const webhookUrl = integration.metadata?.webhook_url || "https://example.com/webhook";
 
-      // Create webhook event
+      // Create webhook event - aligned with actual schema
+      const webhookUrlFromMeta = (integration.metadata as Record<string, unknown>)?.webhook_url || "https://example.com/webhook";
+
       const { data, error } = await supabase
         .from("webhook_events")
         .insert({
           integration_id: integration.id,
           event_type: "test",
-          webhook_url: webhookUrl,
+          event_name: "Test Event",
           payload: payload,
           status: "completed",
-          response_code: 200,
-          attempts: 1,
-          last_attempt_at: new Date().toISOString(),
+          retry_count: 1,
+          triggered_at: new Date().toISOString(),
         })
         .select()
         .single();
@@ -430,9 +477,9 @@ export const IntegrationsHubEnhanced = () => {
                             </div>
                           </div>
                           {connected ? (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            <CheckCircle2 className="h-5 w-5 text-success" />
                           ) : (
-                            <XCircle className="h-5 w-5 text-gray-400" />
+                            <XCircle className="h-5 w-5 text-muted-foreground" />
                           )}
                         </div>
                         <div className="flex flex-wrap gap-1 mb-4">

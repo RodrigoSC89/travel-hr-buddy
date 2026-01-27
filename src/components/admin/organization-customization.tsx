@@ -1,6 +1,7 @@
-// @ts-nocheck - Legacy: organization_branding JSON fields need proper type coercion
+// @ts-nocheck
 /**
  * Organization Customization Component
+ * Legacy: organization_branding JSON fields require complex type coercion
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +24,14 @@ import {
   Eye,
   RefreshCw
 } from "lucide-react";
+
+interface BusinessRules {
+  max_reservations?: string;
+  min_advance_hours?: string;
+  custom_alert_types?: string;
+  integration_settings?: string;
+  [key: string]: unknown;
+}
 
 interface BusinessRules {
   max_reservations?: string;
