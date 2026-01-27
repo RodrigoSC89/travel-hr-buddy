@@ -1,8 +1,11 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Requires tables: finance_transactions, finance_categories, finance_budgets - not in schema
 /**
- * PATCH 384: Finance Hub - CRUD + Reports Service
+ * PATCH 876: Finance Hub - CRUD + Reports Service
  * Complete financial management with transactions, budgets, and reporting
+ * 
+ * PATCH 876 NOTE: @ts-nocheck retained - finance_transactions, finance_categories, 
+ * finance_budgets tables exist in DB but use different column sets than local interfaces.
+ * Full alignment requires interface refactoring to match DB schema exactly.
  */
 
 import { supabase } from "@/integrations/supabase/client";

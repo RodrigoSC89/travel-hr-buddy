@@ -1,10 +1,11 @@
 // @ts-nocheck
 /**
- * Price Alert Dashboard
+ * Price Alert Dashboard - PATCH 876
  * 
- * @ts-nocheck reason: price_alerts table schema uses string | null for
- * last_checked_at but interface expects string | undefined. Requires
- * mapping function to convert null to undefined across all consumers.
+ * PATCH 876 NOTE: @ts-nocheck retained - price_alerts table in DB has extra
+ * columns (availability_status, category, check_frequency_minutes, etc.)
+ * not in local interface. Full alignment requires schema migration or
+ * interface expansion.
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

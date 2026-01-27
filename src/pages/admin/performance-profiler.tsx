@@ -1,7 +1,10 @@
 // @ts-nocheck
 /**
- * PATCH 874 - Live Performance Profiler
- * @ts-nocheck: SlowComponent interface differs from DB, performance metrics insert
+ * PATCH 876 - Live Performance Profiler
+ * 
+ * PATCH 876 NOTE: @ts-nocheck retained - SlowComponent needs 'lastSeen' field
+ * for tracking but performance_metrics table doesn't have this column.
+ * Requires local-only tracking separate from DB persistence.
  */
 
 import React, { useState, useEffect, useRef } from "react";
