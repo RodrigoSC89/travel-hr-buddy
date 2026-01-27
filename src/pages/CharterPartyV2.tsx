@@ -163,9 +163,8 @@ export default function CharterPartyV2() {
     vessel_name: string;
     notes?: string;
   }) => {
-    // Would save to Supabase in production
+    // TODO: Integrate with Supabase to persist off-hire data
     toast.success('Período de off-hire registrado com sucesso!');
-    console.log('Off-hire data:', data);
   };
 
   const calculateHire = () => {

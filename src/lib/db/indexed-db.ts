@@ -30,7 +30,6 @@ export const offlineDB = {
       indexedDBSync.init(),
       indexedDBCache.initialize(),
     ]);
-    console.log('✅ Offline DB initialized');
   },
 
   // ============ GENERIC CRUD ============
