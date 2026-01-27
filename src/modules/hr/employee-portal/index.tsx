@@ -175,7 +175,15 @@ const PortalFuncionarioModule = () => {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground mb-3">Prazo: 15 Jan 2025</p>
-                      <Button className="w-full" onClick={() => toast.success("Formulário de autoavaliação aberto")}>
+                      <Button className="w-full" onClick={() => {
+                        toast.loading("Carregando formulário...", { id: "self-eval" });
+                        setTimeout(() => {
+                          toast.success("Formulário de autoavaliação aberto", { 
+                            id: "self-eval",
+                            description: "Complete até 15 Jan 2025. Campos obrigatórios: Metas atingidas, Pontos fortes, Áreas de melhoria."
+                          });
+                        }, 500);
+                      }}>
                         Iniciar Autoavaliação
                       </Button>
                     </CardContent>
@@ -186,7 +194,15 @@ const PortalFuncionarioModule = () => {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground mb-3">Anônimo e confidencial</p>
-                      <Button variant="outline" className="w-full" onClick={() => toast.success("Formulário de feedback aberto")}>
+                      <Button variant="outline" className="w-full" onClick={() => {
+                        toast.loading("Preparando formulário...", { id: "feedback" });
+                        setTimeout(() => {
+                          toast.success("Formulário de feedback aberto", { 
+                            id: "feedback",
+                            description: "Seu feedback é 100% anônimo. Escolha entre liderança, comunicação, ambiente de trabalho."
+                          });
+                        }, 500);
+                      }}>
                         Enviar Feedback
                       </Button>
                     </CardContent>
