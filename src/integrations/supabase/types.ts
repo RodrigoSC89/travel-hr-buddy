@@ -33501,6 +33501,74 @@ export type Database = {
           },
         ]
       }
+      vessel_positions: {
+        Row: {
+          course: number | null
+          created_at: string
+          destination: string | null
+          eta: string | null
+          heading: number | null
+          id: string
+          imo: string | null
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          mmsi: string | null
+          nav_status: string | null
+          recorded_at: string
+          source: string | null
+          speed: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          course?: number | null
+          created_at?: string
+          destination?: string | null
+          eta?: string | null
+          heading?: number | null
+          id?: string
+          imo?: string | null
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          mmsi?: string | null
+          nav_status?: string | null
+          recorded_at?: string
+          source?: string | null
+          speed?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          course?: number | null
+          created_at?: string
+          destination?: string | null
+          eta?: string | null
+          heading?: number | null
+          id?: string
+          imo?: string | null
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          mmsi?: string | null
+          nav_status?: string | null
+          recorded_at?: string
+          source?: string | null
+          speed?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_positions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_speeds: {
         Row: {
           created_at: string | null
