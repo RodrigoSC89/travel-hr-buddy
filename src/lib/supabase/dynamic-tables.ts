@@ -913,6 +913,289 @@ export interface CrewAIInsightInsert {
 export const crewAIInsightsTable = createTableAccessor<CrewAIInsight, CrewAIInsightInsert>("crew_ai_insights");
 
 // ============================================================================
+// COORDINATION AI - Used by coordinationAIService.ts
+// ============================================================================
+
+export interface CoordinationAgent {
+  id: string;
+  agent_name: string;
+  agent_type: string;
+  capabilities: Json;
+  status: string;
+  priority_level: number;
+  max_concurrent_tasks: number;
+  current_task_count: number;
+  metadata: Json | null;
+  last_heartbeat: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CoordinationAgentInsert {
+  agent_name: string;
+  agent_type: string;
+  capabilities?: Json;
+  status?: string;
+  priority_level?: number;
+  max_concurrent_tasks?: number;
+  metadata?: Json | null;
+}
+
+export const coordinationAgentsTable = createTableAccessor<CoordinationAgent, CoordinationAgentInsert>("coordination_agents");
+
+export interface CoordinationTask {
+  id: string;
+  task_name: string;
+  task_type: string;
+  description: string | null;
+  priority: number;
+  status: string;
+  assigned_agent_id: string | null;
+  input_data: Json | null;
+  output_data: Json | null;
+  dependencies: string[] | null;
+  deadline: string | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+export interface CoordinationTaskInsert {
+  task_name: string;
+  task_type: string;
+  description?: string | null;
+  priority?: number;
+  status?: string;
+  assigned_agent_id?: string | null;
+  input_data?: Json | null;
+  dependencies?: string[] | null;
+  deadline?: string | null;
+}
+
+export const coordinationTasksTable = createTableAccessor<CoordinationTask, CoordinationTaskInsert>("coordination_tasks");
+
+export interface CoordinationDecision {
+  id: string;
+  decision_type: string;
+  context: Json;
+  agents_involved: string[];
+  consensus_result: Json | null;
+  final_decision: string;
+  confidence_score: number;
+  rationale: string | null;
+  created_at: string;
+}
+
+export interface CoordinationDecisionInsert {
+  decision_type: string;
+  context: Json;
+  agents_involved: string[];
+  consensus_result?: Json | null;
+  final_decision: string;
+  confidence_score: number;
+  rationale?: string | null;
+}
+
+export const coordinationDecisionsTable = createTableAccessor<CoordinationDecision, CoordinationDecisionInsert>("coordination_decisions");
+
+// ============================================================================
+// FINANCE HUB - Used by finance-hub.service.ts
+// ============================================================================
+
+export interface FinanceTransaction {
+  id: string;
+  transaction_id: string;
+  type: "income" | "expense" | "transfer";
+  category_id: string | null;
+  amount: number;
+  currency: string;
+  description: string | null;
+  date: string;
+  payment_method: string | null;
+  reference_number: string | null;
+  vendor: string | null;
+  project_id: string | null;
+  department: string | null;
+  status: "pending" | "completed" | "cancelled";
+  created_by: string | null;
+  organization_id: string | null;
+  created_at: string;
+  updated_at: string;
+  metadata: Json | null;
+}
+
+export interface FinanceTransactionInsert {
+  transaction_id?: string;
+  type: "income" | "expense" | "transfer";
+  category_id?: string | null;
+  amount: number;
+  currency?: string;
+  description?: string | null;
+  date: string;
+  payment_method?: string | null;
+  reference_number?: string | null;
+  vendor?: string | null;
+  project_id?: string | null;
+  department?: string | null;
+  status?: "pending" | "completed" | "cancelled";
+  created_by?: string | null;
+  organization_id?: string | null;
+  metadata?: Json | null;
+}
+
+export const financeTransactionsTable = createTableAccessor<FinanceTransaction, FinanceTransactionInsert>("finance_transactions");
+
+export interface FinanceCategory {
+  id: string;
+  name: string;
+  type: "income" | "expense";
+  parent_category_id: string | null;
+  color: string | null;
+  icon: string | null;
+  budget_limit: number | null;
+  is_active: boolean;
+  organization_id: string | null;
+  created_at: string;
+}
+
+export interface FinanceCategoryInsert {
+  name: string;
+  type: "income" | "expense";
+  parent_category_id?: string | null;
+  color?: string | null;
+  icon?: string | null;
+  budget_limit?: number | null;
+  is_active?: boolean;
+  organization_id?: string | null;
+}
+
+export const financeCategoriesTable = createTableAccessor<FinanceCategory, FinanceCategoryInsert>("finance_categories");
+
+export interface FinanceBudget {
+  id: string;
+  name: string;
+  category_id: string | null;
+  amount: number;
+  spent: number;
+  remaining: number;
+  period: "monthly" | "quarterly" | "yearly" | "custom";
+  start_date: string;
+  end_date: string;
+  status: "active" | "completed" | "exceeded";
+  alert_threshold: number | null;
+  created_by: string | null;
+  organization_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FinanceBudgetInsert {
+  name: string;
+  category_id?: string | null;
+  amount: number;
+  spent?: number;
+  remaining?: number;
+  period?: "monthly" | "quarterly" | "yearly" | "custom";
+  start_date: string;
+  end_date: string;
+  status?: "active" | "completed" | "exceeded";
+  alert_threshold?: number | null;
+  created_by?: string | null;
+  organization_id?: string | null;
+}
+
+export const financeBudgetsTable = createTableAccessor<FinanceBudget, FinanceBudgetInsert>("finance_budgets");
+
+// ============================================================================
+// PRICE ALERTS - Used by price-alert-dashboard.tsx
+// ============================================================================
+
+export interface PriceAlert {
+  id: string;
+  product_name: string;
+  current_price: number | null;
+  target_price: number;
+  product_url: string;
+  is_active: boolean;
+  created_at: string;
+  last_checked_at: string | null;
+  user_id: string;
+}
+
+export interface PriceAlertInsert {
+  product_name: string;
+  current_price?: number | null;
+  target_price: number;
+  product_url: string;
+  is_active?: boolean;
+  user_id: string;
+}
+
+export const priceAlertsTable = createTableAccessor<PriceAlert, PriceAlertInsert>("price_alerts");
+
+export interface PriceHistory {
+  id: string;
+  alert_id: string;
+  price: number;
+  checked_at: string;
+}
+
+export interface PriceHistoryInsert {
+  alert_id: string;
+  price: number;
+  checked_at?: string;
+}
+
+export const priceHistoryTable = createTableAccessor<PriceHistory, PriceHistoryInsert>("price_history");
+
+export interface PriceNotification {
+  id: string;
+  alert_id: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface PriceNotificationInsert {
+  alert_id: string;
+  message: string;
+  is_read?: boolean;
+}
+
+export const priceNotificationsTable = createTableAccessor<PriceNotification, PriceNotificationInsert>("price_notifications");
+
+// ============================================================================
+// PERFORMANCE METRICS - Used by performance-profiler.tsx
+// ============================================================================
+
+export interface PerformanceSnapshot {
+  id: string;
+  timestamp: string;
+  cpu_usage: number;
+  memory_usage: number;
+  fps: number;
+  slow_components: Json;
+  page_load_time: number | null;
+  network_latency: number | null;
+  user_id: string | null;
+  organization_id: string | null;
+  created_at: string;
+}
+
+export interface PerformanceSnapshotInsert {
+  cpu_usage: number;
+  memory_usage: number;
+  fps: number;
+  slow_components?: Json;
+  page_load_time?: number | null;
+  network_latency?: number | null;
+  user_id?: string | null;
+  organization_id?: string | null;
+}
+
+export const performanceSnapshotsTable = createTableAccessor<PerformanceSnapshot, PerformanceSnapshotInsert>("performance_snapshots");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 

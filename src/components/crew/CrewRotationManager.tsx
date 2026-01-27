@@ -1,8 +1,9 @@
 // @ts-nocheck
 /**
- * PATCH 873 - Crew Management - Rotation & Alerts
- * @ts-nocheck: Complex FK joins + DragEndEvent generic typing with UniqueIdentifier
- * Migration 873 created tables, but requires createTableAccessor for full type-safety
+ * PATCH 876 - Crew Management - Rotation & Alerts
+ * 
+ * PATCH 876 NOTE: @ts-nocheck retained - DnD-kit UniqueIdentifier type
+ * conflicts with string ID expectations. Requires type assertion wrapper.
  */
 
 import React, { useState, useEffect, useCallback } from "react";
