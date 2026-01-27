@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+/**
+ * Enhanced Alert Management - Price Alert System
+ * Integrates with Supabase for persistent alert storage
+ */
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,10 +22,12 @@ import {
   BarChart3,
   AlertTriangle,
   CheckCircle,
-  History
+  History,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 interface PriceAlert {
   id: string;
   productName: string;
