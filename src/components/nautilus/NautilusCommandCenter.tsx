@@ -257,7 +257,7 @@ export function NautilusCommandCenter() {
               onMarkAllRead={handleMarkAllRead}
               onDismiss={handleDismissNotification}
               onSettingsClick={() => setSettingsOpen(true)}
-              onFilterClick={() => {}}
+              onFilterClick={() => toast.info("Filtros de notificação disponíveis nas configurações")}
             />
           </TabsContent>
 

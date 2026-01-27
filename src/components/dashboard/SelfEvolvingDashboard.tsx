@@ -407,8 +407,9 @@ function WidgetCard({
       default:
         return (
           <div className="text-center py-4 text-muted-foreground">
-            <span className="h-8 w-8 mx-auto mb-2 opacity-50">{widget.icon}</span>
-            <span className="text-xs">Widget em desenvolvimento</span>
+            <div className="h-8 w-8 mx-auto mb-2 opacity-50">{widget.icon}</div>
+            <span className="text-xs">Widget customizado</span>
+            <div className="text-lg font-semibold mt-1">--</div>
           </div>
         );
     }

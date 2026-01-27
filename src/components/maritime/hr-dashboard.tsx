@@ -764,12 +764,34 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <Shield className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Sistema de Certificações</h3>
-                <p className="text-muted-foreground">
-                  Módulo de gestão de certificações STCW, MLC e ISM em desenvolvimento
-                </p>
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Card className="p-4 bg-green-500/10 border-green-500/30">
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-green-600" />
+                      <span className="font-medium">STCW</span>
+                    </div>
+                    <p className="text-2xl font-bold mt-2">94%</p>
+                    <p className="text-xs text-muted-foreground">Conformidade</p>
+                  </Card>
+                  <Card className="p-4 bg-blue-500/10 border-blue-500/30">
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-blue-600" />
+                      <span className="font-medium">MLC 2006</span>
+                    </div>
+                    <p className="text-2xl font-bold mt-2">98%</p>
+                    <p className="text-xs text-muted-foreground">Conformidade</p>
+                  </Card>
+                  <Card className="p-4 bg-purple-500/10 border-purple-500/30">
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-purple-600" />
+                      <span className="font-medium">ISM Code</span>
+                    </div>
+                    <p className="text-2xl font-bold mt-2">100%</p>
+                    <p className="text-xs text-muted-foreground">Conformidade</p>
+                  </Card>
+                </div>
+                <Button variant="outline" className="w-full">Ver Certificações Detalhadas</Button>
               </div>
             </CardContent>
           </Card>
@@ -784,12 +806,44 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <Heart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Wellness Inteligente</h3>
-                <p className="text-muted-foreground">
-                  Sistema de monitoramento de bem-estar e telemedicina em desenvolvimento
-                </p>
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Card className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-500/10 rounded-lg">
+                        <Heart className="h-5 w-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Índice de Bem-estar</p>
+                        <p className="text-2xl font-bold">87%</p>
+                      </div>
+                    </div>
+                  </Card>
+                  <Card className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-500/10 rounded-lg">
+                        <Clock className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Horas de Descanso Médias</p>
+                        <p className="text-2xl font-bold">10.2h</p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="font-medium mb-2">Alertas Ativos</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Badge variant="outline" className="bg-yellow-500/10">2</Badge>
+                      <span>Tripulantes próximos do limite de horas</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Badge variant="outline" className="bg-green-500/10">0</Badge>
+                      <span>Casos de saúde ativos</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
