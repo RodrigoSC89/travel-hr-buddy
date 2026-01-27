@@ -15,6 +15,35 @@ interface UseVoiceNLUOptions {
   speakResponses?: boolean;
 }
 
+// Speech Recognition types for cross-browser compatibility
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+  onresult: ((event: { 
+    results: { 
+      length: number;
+      [index: number]: { 
+        isFinal: boolean;
+        [index: number]: { transcript: string; confidence: number };
+      };
+    };
+  }) => void) | null;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+}
+
+// Get the Speech Recognition constructor safely
+function getSpeechRecognitionAPI(): (new () => SpeechRecognitionInstance) | null {
+  if (typeof window === 'undefined') return null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
+}
+
 export function useVoiceNLU(options: UseVoiceNLUOptions = {}) {
   const { 
     language = 'pt', 
@@ -32,15 +61,15 @@ export function useVoiceNLU(options: UseVoiceNLUOptions = {}) {
   const [lastResult, setLastResult] = useState<NLUResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const nluEngine = getNLUEngine(language);
-  const synthesisRef = useRef<SpeechSynthesis>(window.speechSynthesis);
+  const synthesisRef = useRef<SpeechSynthesis | null>(
+    typeof window !== 'undefined' ? window.speechSynthesis : null
+  );
 
   // Initialize speech recognition
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
 
     if (!SpeechRecognitionAPI) {
       setError('Speech recognition not supported');
@@ -61,14 +90,12 @@ export function useVoiceNLU(options: UseVoiceNLUOptions = {}) {
       setIsListening(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognition.onerror = (event: any) => {
-      setError(event.error);
+    recognition.onerror = (event) => {
+      setError(String(event.error));
       setIsListening(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognition.onresult = async (event: any) => {
+    recognition.onresult = async (event) => {
       const last = event.results.length - 1;
       const text = event.results[last][0].transcript;
       setTranscript(text);
@@ -128,7 +155,7 @@ export function useVoiceNLU(options: UseVoiceNLUOptions = {}) {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       recognitionRef.current.start();
-    } catch (err) {
+    } catch {
       setError('Microphone access denied');
     }
   }, []);
