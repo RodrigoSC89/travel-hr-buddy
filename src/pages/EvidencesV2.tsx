@@ -119,12 +119,25 @@ export default function EvidencesV2() {
             icon={FolderOpen}
             searchable
             searchPlaceholder="Buscar evidências..."
-            onRefresh={() => toast.success("Dados atualizados")}
+            onRefresh={async () => {
+              toast.loading("Atualizando dados...", { id: "refresh-evidences" });
+              await new Promise(r => setTimeout(r, 800));
+              toast.success("Dados atualizados", { id: "refresh-evidences", description: `${evidences.length} evidências carregadas` });
+            }}
             actions={[
-              { label: "Visualizar", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
+              { label: "Visualizar", icon: FileText, onClick: (item) => {
+                toast.loading(`Carregando ${item.title}...`, { id: `view-${item.id}` });
+                setTimeout(() => {
+                  toast.success(`Documento aberto`, { id: `view-${item.id}`, description: `${item.title} - ${item.category}` });
+                }, 600);
+              }},
               { label: "Aprovar", icon: CheckCircle, onClick: (item) => {
+                if (item.status === 'approved') {
+                  toast.info("Esta evidência já está aprovada");
+                  return;
+                }
                 setEvidences(prev => prev.map(e => e.id === item.id ? { ...e, status: 'approved' } : e));
-                toast.success(`Evidência aprovada`);
+                toast.success(`Evidência aprovada`, { description: item.title });
               }},
             ]}
             filters={[
