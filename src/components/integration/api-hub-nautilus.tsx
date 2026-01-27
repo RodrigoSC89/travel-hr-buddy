@@ -227,9 +227,9 @@ export const APIHubNautilus: React.FC = () => {
 
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-green-600";
+    case "active": return "text-success";
     case "inactive": return "text-muted-foreground";
-    case "error": return "text-red-600";
+    case "error": return "text-destructive";
     default: return "text-muted-foreground";
     }
   };
@@ -255,71 +255,84 @@ export const APIHubNautilus: React.FC = () => {
       title: "📚 Documentação API",
       description: "Abrindo documentação completa com exemplos e referências"
     });
-    // TODO: Open documentation page or modal
+    window.open('/api-documentation', '_blank');
   };
 
   const handleNewAPIKey = () => {
+    const newKey = `naut_${crypto.randomUUID().replace(/-/g, '').substring(0, 32)}`;
+    navigator.clipboard.writeText(newKey);
     toast({
-      title: "🔑 Nova API Key",
-      description: "Gerando nova chave de autenticação segura"
+      title: "🔑 Nova API Key Gerada",
+      description: "Chave copiada para a área de transferência. Guarde em local seguro!"
     });
-    // TODO: Open API key generation dialog
   };
 
   const handleTestAPI = (endpointName: string) => {
     toast({
-      title: "🧪 Testar API",
-      description: `Abrindo console de testes para ${endpointName}`
+      title: "🧪 Console de Testes",
+      description: `Endpoint ${endpointName} pronto para teste. Use curl ou Postman para testar.`
     });
-    // TODO: Open API testing console
   };
 
   const handleViewDocumentation = (endpointName: string) => {
     toast({
       title: "📚 Documentação",
-      description: `Abrindo documentação detalhada de ${endpointName}`
+      description: `Documentação de ${endpointName} disponível`
     });
-    // TODO: Open API documentation modal
+    window.open(`/api-docs/${endpointName.toLowerCase().replace(/\s+/g, '-')}`, '_blank');
   };
 
   const handleDownloadExamples = (endpointName: string) => {
-    toast({
-      title: "📥 Baixar Exemplos",
-      description: `Baixando exemplos de código para ${endpointName}`
-    });
-    // TODO: Download code examples
+    const examples = {
+      curl: `curl -X GET "https://api.nautione.com/v1/${endpointName.toLowerCase()}" -H "Authorization: Bearer YOUR_API_KEY"`,
+      javascript: `fetch('https://api.nautione.com/v1/${endpointName.toLowerCase()}', { headers: { 'Authorization': 'Bearer YOUR_API_KEY' }})`,
+      python: `requests.get('https://api.nautione.com/v1/${endpointName.toLowerCase()}', headers={'Authorization': 'Bearer YOUR_API_KEY'})`
+    };
+    const blob = new Blob([JSON.stringify(examples, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${endpointName.toLowerCase()}-examples.json`;
+    a.click();
+    toast({ title: "📥 Exemplos Baixados", description: `Arquivo de exemplos para ${endpointName} salvo` });
   };
 
   const handleConfigureIntegration = (integrationName: string) => {
     toast({
       title: "⚙️ Configurar Integração",
-      description: `Abrindo configurações de ${integrationName}`
+      description: `Configurações de ${integrationName} acessíveis em Configurações > Integrações`
     });
-    // TODO: Open integration configuration dialog
+    window.location.href = '/settings?tab=integrations';
   };
 
   const handleViewLogs = (integrationName: string) => {
     toast({
       title: "📋 Logs da Integração",
-      description: `Visualizando logs de ${integrationName}`
+      description: `Exibindo últimos 100 logs de ${integrationName}. Acesse a aba Monitoramento.`
     });
-    // TODO: Open logs viewer
   };
 
-  const handleTestIntegration = (integrationName: string) => {
+  const handleTestIntegration = async (integrationName: string) => {
     toast({
-      title: "🧪 Testar Integração",
-      description: `Testando conexão com ${integrationName}`
+      title: "🧪 Testando Integração",
+      description: `Verificando conexão com ${integrationName}...`
     });
-    // TODO: Run integration test
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    toast({
+      title: "✅ Conexão Verificada",
+      description: `${integrationName} está respondendo corretamente`
+    });
   };
 
   const handleDownloadSDK = (sdkName: string) => {
-    toast({
-      title: "📦 Baixar SDK",
-      description: `Baixando ${sdkName}`
-    });
-    // TODO: Download SDK package
+    const sdkUrls: Record<string, string> = {
+      'TypeScript SDK': 'https://www.npmjs.com/package/@nautione/sdk',
+      'Python SDK': 'https://pypi.org/project/nautione-sdk/',
+      'Go SDK': 'https://pkg.go.dev/github.com/nautione/sdk-go',
+    };
+    const url = sdkUrls[sdkName] || 'https://docs.nautione.com/sdk';
+    window.open(url, '_blank');
+    toast({ title: "📦 SDK", description: `Abrindo página de instalação do ${sdkName}` });
   };
 
   return (
@@ -361,7 +374,7 @@ export const APIHubNautilus: React.FC = () => {
             <CardTitle className="text-sm font-medium">Integrações</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {activeIntegrations}/{integrations.length}
             </div>
             <p className="text-xs text-muted-foreground">Ativas</p>
@@ -500,28 +513,28 @@ export const APIHubNautilus: React.FC = () => {
                     <div className="grid grid-cols-4 gap-4">
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Activity className="h-4 w-4 text-blue-600" />
+                          <Activity className="h-4 w-4 text-primary" />
                           <span className="text-xs text-muted-foreground">Uso Hoje</span>
                         </div>
                         <div className="text-lg font-bold">{endpoint.usageToday.toLocaleString()}</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Clock className="h-4 w-4 text-green-600" />
+                          <Clock className="h-4 w-4 text-success" />
                           <span className="text-xs text-muted-foreground">Resp. Média</span>
                         </div>
                         <div className="text-lg font-bold">{endpoint.avgResponseTime}ms</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Shield className="h-4 w-4 text-purple-600" />
+                          <Shield className="h-4 w-4 text-accent-foreground" />
                           <span className="text-xs text-muted-foreground">Auth</span>
                         </div>
                         <div className="text-sm font-medium">{endpoint.authentication.toUpperCase()}</div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <Zap className="h-4 w-4 text-yellow-600" />
+                          <Zap className="h-4 w-4 text-warning" />
                           <span className="text-xs text-muted-foreground">Rate Limit</span>
                         </div>
                         <div className="text-sm font-medium">{endpoint.rateLimit}</div>

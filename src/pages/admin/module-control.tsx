@@ -90,7 +90,10 @@ export const ModuleControl: React.FC = () => {
 
   const handleViewHistory = (id: string) => {
     logger.info(`Viewing module history`, { moduleId: id });
-    // TODO: Implement history view
+    const module = modules.find(m => m.id === id);
+    if (module) {
+      navigate(`/admin/module-history/${id}`, { state: { moduleName: module.name } });
+    }
   };
 
   const renderModuleGrid = (moduleList: typeof modules) => {

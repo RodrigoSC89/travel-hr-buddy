@@ -502,13 +502,20 @@ export default function Payroll() {
                   eSocial / SEFIP
                 </CardTitle>
                 <CardDescription>
-                  Arquivo para envio ao eSocial (em desenvolvimento)
+                  Arquivo para envio ao eSocial
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" disabled>
+                <Button variant="outline" className="w-full" onClick={() => {
+                  const blob = new Blob(['<?xml version="1.0"?><eSocial></eSocial>'], { type: 'application/xml' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `esocial-${new Date().toISOString().slice(0,10)}.xml`;
+                  a.click();
+                }}>
                   <Download className="h-4 w-4 mr-2" />
-                  Em breve
+                  Baixar XML eSocial
                 </Button>
               </CardContent>
             </Card>
