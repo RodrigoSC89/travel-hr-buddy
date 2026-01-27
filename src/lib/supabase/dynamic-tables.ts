@@ -1196,6 +1196,79 @@ export interface PerformanceSnapshotInsert {
 export const performanceSnapshotsTable = createTableAccessor<PerformanceSnapshot, PerformanceSnapshotInsert>("performance_snapshots");
 
 // ============================================================================
+// BETA FEEDBACK - Used by QualityDashboard.tsx
+// ============================================================================
+
+export interface BetaFeedback {
+  id: string;
+  user_id: string | null;
+  rating: number;
+  feedback_text: string | null;
+  module_name: string | null;
+  feature_name: string | null;
+  created_at: string;
+}
+
+export interface BetaFeedbackInsert {
+  user_id?: string | null;
+  rating: number;
+  feedback_text?: string | null;
+  module_name?: string | null;
+  feature_name?: string | null;
+}
+
+export const betaFeedbackTable = createTableAccessor<BetaFeedback, BetaFeedbackInsert>("beta_feedback");
+
+// ============================================================================
+// PROJECT TASKS - Used by project-timeline.tsx
+// ============================================================================
+
+export interface ProjectTaskDB {
+  id: string;
+  project_id: string;
+  task_name: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  assigned_to: string | null;
+  start_date: string;
+  end_date: string;
+  progress: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectTaskInsertDB {
+  project_id: string;
+  task_name: string;
+  description?: string | null;
+  status?: string;
+  priority?: string;
+  assigned_to?: string | null;
+  start_date: string;
+  end_date: string;
+  progress?: number;
+}
+
+export const projectTasksTable = createTableAccessor<ProjectTaskDB, ProjectTaskInsertDB>("project_tasks");
+
+export interface TaskDependencyDB {
+  id: string;
+  task_id: string;
+  depends_on_task_id: string;
+  dependency_type: string;
+  created_at: string;
+}
+
+export interface TaskDependencyInsertDB {
+  task_id: string;
+  depends_on_task_id: string;
+  dependency_type?: string;
+}
+
+export const taskDependenciesTable = createTableAccessor<TaskDependencyDB, TaskDependencyInsertDB>("task_dependencies");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 

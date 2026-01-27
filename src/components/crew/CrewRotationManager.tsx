@@ -1,9 +1,10 @@
 // @ts-nocheck
 /**
- * PATCH 876 - Crew Management - Rotation & Alerts
+ * PATCH 873 - Crew Management - Rotation & Alerts
  * 
- * PATCH 876 NOTE: @ts-nocheck retained - DnD-kit UniqueIdentifier type
- * conflicts with string ID expectations. Requires type assertion wrapper.
+ * NOTE: @ts-nocheck required - crew_rotations insert expects array,
+ * status variants don't match, and onDrop callback typing conflicts.
+ * Requires refactoring of insert patterns to use .insert([{...}]).
  */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -278,8 +279,9 @@ export const CrewRotationManager: React.FC = () => {
 
     if (!over) return;
 
-    const [date, rotationType] = over.id.toString().split("-");
-    const crewMemberId = active.id;
+    const overId = String(over.id);
+    const [date, rotationType] = overId.split("-");
+    const crewMemberId = String(active.id);
 
     try {
       const { error } = await supabase

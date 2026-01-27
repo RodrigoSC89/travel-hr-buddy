@@ -3,10 +3,11 @@
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution
  * 
- * PATCH 876 NOTE: @ts-nocheck retained - requires alignment between:
- * - src/types/patches-536-540.ts (local interfaces)
- * - dynamic-tables.ts (DB schema types)
- * - coordination_agents, coordination_tasks, coordination_decisions tables
+ * NOTE: @ts-nocheck required due to complex type mismatches between:
+ * - Local interfaces (AgentType = specific literals)
+ * - DB schema (agent_type = string)
+ * - JSONB columns (capabilities, payload, decision_data)
+ * Full resolution requires schema migration to use enums in DB.
  */
 
 import { supabase } from "@/integrations/supabase/client";
