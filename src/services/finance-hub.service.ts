@@ -1,11 +1,11 @@
 // @ts-nocheck
 /**
- * PATCH 876: Finance Hub - CRUD + Reports Service
+ * PATCH 384: Finance Hub - CRUD + Reports Service
  * Complete financial management with transactions, budgets, and reporting
  * 
- * PATCH 876 NOTE: @ts-nocheck retained - finance_transactions, finance_categories, 
- * finance_budgets tables exist in DB but use different column sets than local interfaces.
- * Full alignment requires interface refactoring to match DB schema exactly.
+ * NOTE: @ts-nocheck required - finance_transactions table has 40+ columns
+ * while local Transaction interface has subset. Type instantiation depth
+ * exceeded when trying to map all columns. Requires interface alignment.
  */
 
 import { supabase } from "@/integrations/supabase/client";

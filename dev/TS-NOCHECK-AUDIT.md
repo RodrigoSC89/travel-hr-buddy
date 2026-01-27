@@ -1,53 +1,44 @@
 # Technical Debt: @ts-nocheck Files
 
-> **Updated:** 2026-01-27 | PATCH 876
+> **Updated:** 2026-01-27 | PATCH 877
 
 ## Summary
-- **Total @ts-nocheck files in src/**: ~45 files (documented with specific reasons)
+- **Total @ts-nocheck files in src/**: 45 files (documented with specific reasons)
 - **Edge Functions (supabase/functions/)**: ~50 files (Deno environment - acceptable)
 - **Test files (src/tests/, tests/)**: ~100 files (by design)
 
 ---
 
-## PATCH 876 Status
+## PATCH 877 Updates
 
-All @ts-nocheck files have been audited and documented with specific reasons in their headers explaining:
-- What specific type issue exists
-- What would be needed to fix it
-- Why removal is not trivial
+Added new type-safe accessors to `dynamic-tables.ts`:
+- `BetaFeedback` / `betaFeedbackTable` - for QualityDashboard
+- `ProjectTaskDB` / `projectTasksTable` - for project-timeline
+- `TaskDependencyDB` / `taskDependenciesTable` - for task dependencies
 
-### Infrastructure Created
-1. **`src/lib/supabase/dynamic-tables.ts`** - 50+ type-safe table accessors
-2. **`src/types/supabase-aliases.ts`** - JSONB helpers (castJson, getJsonField)
+**Already available** (from previous patches):
+- `VesselSensor` / `vesselSensorsTable`
+- `MaintenanceAlert` / `maintenanceAlertsTable`
+- `PeodpPlan` / `peodpPlansTable`
+- `PerformanceSnapshot` / `performanceSnapshotsTable`
 
 ---
 
-## Common Reasons for @ts-nocheck
+## Why @ts-nocheck Persists
 
-| Reason | Count | Solution |
+Most remaining files have @ts-nocheck for these reasons:
+
+| Reason | Count | Fixable? |
 |--------|-------|----------|
-| JSONB columns → local interfaces | ~15 | Use `castJson<T>()` helper |
-| Tables not in generated types | ~10 | Use `createTableAccessor<T>()` |
-| Third-party lib conflicts (DnD, jsPDF, Chart.js) | ~8 | Create typed wrappers |
-| null vs undefined mismatches | ~7 | Add null coalescing |
-| Complex FK joins | ~5 | Simplify or create views |
+| **DB literal types ≠ local enums** (e.g., `agent_type: string` vs `AgentType`) | ~15 | Needs DB enum migration |
+| **JSONB columns** with complex nested structures | ~10 | Use `castJson<T>()` |
+| **Dynamic imports** (jsPDF, XLSX) with `any` types | ~8 | Create type declarations |
+| **Third-party libs** (DnD-kit, Chart.js, Tiptap) | ~5 | Wrap with typed adapters |
+| **null vs undefined** mismatches | ~7 | Add null coalescing |
 
 ---
 
-## File Categories
-
-### Category 1: Coordination & AI Services
-| File | Reason |
-|------|--------|
-| `src/services/coordinationAIService.ts` | coordination_agents/tasks/decisions JSONB types |
-| `src/services/finance-hub.service.ts` | finance_transactions/categories/budgets schema |
-| `src/ai/reporting/executive-summary.tsx` | AI report generation with dynamic data |
-
-### Category 2: Crew & DnD Operations
-| File | Reason |
-|------|--------|
-| `src/components/crew/CrewRotationManager.tsx` | DnD-kit UniqueIdentifier ≠ string |
-| `src/components/crew/advanced-crew-dossier-interaction.tsx` | crew_ai_insights table |
+## Files with @ts-nocheck (45 total)
 
 ### Category 3: Performance & Monitoring
 | File | Reason |
