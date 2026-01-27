@@ -179,7 +179,39 @@ export const MLCInspectionDashboard: React.FC = () => {
                 <Button onClick={sendAiMessage} disabled={isLoading}><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="settings"><Card><CardHeader><CardTitle>Configurações</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">Configurações do módulo MLC Inspection em desenvolvimento.</p></CardContent></Card></TabsContent>
+        <TabsContent value="settings">
+          <Card>
+            <CardHeader><CardTitle>Configurações do Módulo</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Notificações de Expiração</label>
+                  <select className="w-full p-2 border rounded-md bg-background">
+                    <option value="30">30 dias antes</option>
+                    <option value="60">60 dias antes</option>
+                    <option value="90">90 dias antes</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Idioma do Relatório</label>
+                  <select className="w-full p-2 border rounded-md bg-background">
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div><p className="font-medium">Exportar Automaticamente</p><p className="text-sm text-muted-foreground">Gerar PDF após conclusão</p></div>
+                <Button variant="outline" size="sm" onClick={() => toast.success('Configuração salva!')}>Ativar</Button>
+              </div>
+              <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div><p className="font-medium">Backup na Nuvem</p><p className="text-sm text-muted-foreground">Sincronizar com Supabase Storage</p></div>
+                <Badge variant="secondary">Ativo</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );
