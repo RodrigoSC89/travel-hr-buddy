@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -156,11 +157,11 @@ export function VoiceAssistantWithHotword({
     recognition.onresult = (event: any) => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript.toLowerCase().trim();
-        console.log('[HotwordDetector] Heard:', transcript);
+        logger.debug('[HotwordDetector] Heard:', transcript);
         
         for (const pattern of HOTWORD_PATTERNS) {
           if (transcript.includes(pattern)) {
-            console.log('[HotwordDetector] 🎙️ HOTWORD DETECTED!');
+            logger.info('[HotwordDetector] 🎙️ HOTWORD DETECTED!');
             handleHotwordActivation();
             return;
           }
@@ -170,7 +171,7 @@ export function VoiceAssistantWithHotword({
 
     recognition.onerror = (event: any) => {
       if (event.error !== 'no-speech' && event.error !== 'aborted') {
-        console.error('[HotwordDetector] Error:', event.error);
+        logger.error('[HotwordDetector] Error:', event.error);
       }
     };
 
@@ -240,12 +241,12 @@ export function VoiceAssistantWithHotword({
 
     recognition.onresult = (event: any) => {
       const command = event.results[0][0].transcript;
-      console.log('[VoiceAssistant] Command:', command);
+      logger.debug('[VoiceAssistant] Command:', command);
       handleUserCommand(command);
     };
 
     recognition.onerror = (event: any) => {
-      console.error('[VoiceAssistant] Command error:', event.error);
+      logger.error('[VoiceAssistant] Command error:', event.error);
       setIsListeningForCommand(false);
       if (event.error !== 'no-speech') {
         toast.error('Erro no reconhecimento');
@@ -346,7 +347,7 @@ export function VoiceAssistantWithHotword({
       if (error) throw error;
       if (data?.response) return data.response;
     } catch (error) {
-      console.log('[VoiceAssistant] AI fallback to local processing');
+      logger.debug('[VoiceAssistant] AI fallback to local processing');
     }
 
     // Local fallback responses
@@ -407,8 +408,8 @@ export function VoiceAssistantWithHotword({
             return;
           }
         }
-      } catch (error) {
-        console.log('[ARIA] ElevenLabs failed, using fallback:', error);
+      } catch (err) {
+        logger.debug('[ARIA] ElevenLabs failed, using fallback', { error: String(err) });
       }
       setIsSpeaking(false);
     }

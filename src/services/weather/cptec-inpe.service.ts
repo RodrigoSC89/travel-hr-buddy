@@ -7,6 +7,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface PrevisaoCPTEC {
   dia: string;
@@ -85,13 +86,13 @@ export async function fetchCPTECData(
   if (!forceRefresh) {
     const cached = cptecCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      console.log("[CPTEC] Using cached data");
+      logger.debug("[CPTEC] Using cached data");
       return cached.data;
     }
   }
 
   try {
-    console.log(`[CPTEC] Fetching ${type} data...`);
+    logger.debug(`[CPTEC] Fetching ${type} data...`);
     
     const { data, error } = await supabase.functions.invoke("cptec-inpe", {
       body: { type, cidade, cidadeId, lat, lon, dias }
@@ -182,7 +183,7 @@ export async function getPrevisaoEstendida(
  */
 export function clearCPTECCache(): void {
   cptecCache.clear();
-  console.log("[CPTEC] Cache cleared");
+  logger.debug("[CPTEC] Cache cleared");
 }
 
 /**
