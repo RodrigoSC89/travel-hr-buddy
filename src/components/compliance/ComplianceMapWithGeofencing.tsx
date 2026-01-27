@@ -15,6 +15,7 @@ import {
   Ship, MapPin, AlertTriangle, RefreshCw, Filter, Radio, Target, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface VesselInspection {
   id: string;
@@ -289,12 +290,12 @@ export function ComplianceMapWithGeofencing({
           setIsLoading(false);
         });
 
-        mapInstance.on('error', (e: any) => {
-          console.warn('Map error:', e);
+        mapInstance.on('error', (e: mapboxgl.ErrorEvent) => {
+          logger.warn('Map error:', { error: e.error?.message || 'Unknown map error' });
         });
 
       } catch (err) {
-        console.error('Failed to initialize map:', err);
+        logger.error('Failed to initialize map:', err);
         if (isMounted) {
           setError('Erro ao carregar mapa');
           setIsLoading(false);

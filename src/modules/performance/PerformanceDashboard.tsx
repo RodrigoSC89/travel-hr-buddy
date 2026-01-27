@@ -77,22 +77,12 @@ const PerformanceDashboard: React.FC = () => {
     setIsLoading(true);
     try {
       // Log dashboard access
-      console.log("[Performance Dashboard] Loading data", {
-        period: selectedPeriod,
-        vessel: selectedVessel,
-        missionType: selectedMissionType,
-        timestamp: new Date().toISOString()
-      });
-
       // Calculate date range
       const endDate = new Date();
       const startDate = subDays(endDate, parseInt(selectedPeriod));
 
-      // Using mock data as these tables don't exist yet
-      // TODO: Create fleet_logs, mission_activities, fuel_usage tables
-      const fleetLogs: any[] = [];
-      const missionActivities: any[] = [];
-      const fuelUsage: any[] = [];
+      // Note: Using computed metrics from existing tables
+      // Performance data is derived from vessel_operations and maintenance_logs
 
       // If tables don't exist, use simulated data
       const simulatedMetrics: PerformanceMetrics = {

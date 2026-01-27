@@ -197,37 +197,37 @@ export const FleetCommandCenter: React.FC = () => {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-green-600">Active</CardTitle>
+            <CardTitle className="text-sm font-medium text-success">Active</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{fleetStats.active}</div>
+            <div className="text-2xl font-bold text-success">{fleetStats.active}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-yellow-600">Maintenance</CardTitle>
+            <CardTitle className="text-sm font-medium text-warning">Maintenance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{fleetStats.maintenance}</div>
+            <div className="text-2xl font-bold text-warning">{fleetStats.maintenance}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-red-600">Critical</CardTitle>
+            <CardTitle className="text-sm font-medium text-destructive">Critical</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{fleetStats.critical}</div>
+            <div className="text-2xl font-bold text-destructive">{fleetStats.critical}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-blue-600">Active Missions</CardTitle>
+            <CardTitle className="text-sm font-medium text-primary">Active Missions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{fleetStats.missions}</div>
+            <div className="text-2xl font-bold text-primary">{fleetStats.missions}</div>
           </CardContent>
         </Card>
       </div>
@@ -377,7 +377,7 @@ export const FleetCommandCenter: React.FC = () => {
                 <CardTitle>Active Missions</CardTitle>
                 <Button size="sm" onClick={() => {
                   logger.info("Creating new mission");
-                  // TODO: Open create mission dialog
+                  window.location.href = "/mission-control?action=create";
                 }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create Mission
