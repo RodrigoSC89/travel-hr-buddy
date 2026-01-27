@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   Workflow, Play, Pause, RotateCcw, CheckCircle, 
   AlertCircle, Clock, Loader2, Plus, Trash2 
@@ -60,7 +61,7 @@ const WorkflowEngine = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error loading workflows:", error);
+      logger.error("Error loading workflows:", error);
     } else {
       setWorkflows((data || []) as any);
     }

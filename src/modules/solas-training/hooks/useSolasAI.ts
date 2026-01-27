@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 interface AIContext {
   drills?: any[];
@@ -57,7 +58,7 @@ export function useSOLASAI(): UseSOLASAIReturn {
 
       return data.response;
     } catch (error) {
-      console.error('SOLAS AI error:', error);
+      logger.error('SOLAS AI error:', error);
       toast({
         title: 'Erro na IA',
         description: 'Não foi possível processar sua solicitação.',

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { createSafeHTML } from "@/lib/utils/safe-html";
@@ -146,7 +147,7 @@ export const CompleteTemplateEditor: React.FC = () => {
 
       setTemplates(data || []);
     } catch (error) {
-      console.error("Error loading templates:", error);
+      logger.error("Error loading templates:", error);
       toast.error("Failed to load templates");
     } finally {
       setIsLoading(false);
@@ -201,7 +202,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       setShowSaveDialog(false);
       loadTemplates();
     } catch (error) {
-      console.error("Error saving template:", error);
+      logger.error("Error saving template:", error);
       toast.error("Failed to save template");
     }
   };
@@ -223,7 +224,7 @@ export const CompleteTemplateEditor: React.FC = () => {
         editor?.commands.setContent("<p>Start typing or select a template...</p>");
       }
     } catch (error) {
-      console.error("Error deleting template:", error);
+      logger.error("Error deleting template:", error);
       toast.error("Failed to delete template");
     }
   };
@@ -269,7 +270,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       
       toast.success("PDF exported successfully");
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast.error("Failed to export PDF");
     }
   };
@@ -292,7 +293,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       
       toast.success("HTML exported successfully");
     } catch (error) {
-      console.error("Error exporting HTML:", error);
+      logger.error("Error exporting HTML:", error);
       toast.error("Failed to export HTML");
     }
   };
@@ -325,7 +326,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       
       toast.success("Word document exported successfully");
     } catch (error) {
-      console.error("Error exporting Word:", error);
+      logger.error("Error exporting Word:", error);
       toast.error("Failed to export Word document");
     }
   };
@@ -364,10 +365,10 @@ export const CompleteTemplateEditor: React.FC = () => {
         });
       
       if (error) {
-        console.error("Error saving export history:", error);
+        logger.error("Error saving export history:", error);
       }
     } catch (error) {
-      console.error("Error saving export history:", error);
+      logger.error("Error saving export history:", error);
     }
   };
 

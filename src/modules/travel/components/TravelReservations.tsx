@@ -17,6 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Hotel, Plus } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface Reservation {
   id: string;
@@ -80,7 +81,7 @@ export const TravelReservations: React.FC = () => {
       if (error) throw error;
       setReservations(data || []);
     } catch (error) {
-      console.error("Error loading reservations:", error);
+      logger.error("Error loading reservations:", error);
       toast({
         title: "Error",
         description: "Failed to load reservations",
@@ -122,7 +123,7 @@ export const TravelReservations: React.FC = () => {
       resetForm();
       loadReservations();
     } catch (error) {
-      console.error("Error creating reservation:", error);
+      logger.error("Error creating reservation:", error);
       toast({
         title: "Error",
         description: "Failed to create reservation",
