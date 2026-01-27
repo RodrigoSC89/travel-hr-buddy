@@ -2,6 +2,9 @@
 /**
  * PATCH 420: Satcom Interactive Terminal
  * Terminal interface for sending and receiving satellite communications
+ * 
+ * @ts-nocheck reason: Uses satcom_logs table which was added in PATCH 865.
+ * After types regeneration, this can be removed.
  */
 
 import React, { useState, useEffect, useRef } from "react";

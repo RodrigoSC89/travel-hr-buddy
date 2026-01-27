@@ -3,7 +3,8 @@
  * MMI History Service
  * Service layer for MMI maintenance history operations
  * 
- * NOTE: @ts-nocheck required until mmi_history table is added to Supabase types
+ * @ts-nocheck reason: MMIHistory interface expects string status values but
+ * database returns string | null. Full alignment requires updating all consumers.
  */
 
 import { supabase } from "@/integrations/supabase/client";
