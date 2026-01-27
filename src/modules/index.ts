@@ -10,7 +10,7 @@
 // ============================================
 // CORE MODULES
 // ============================================
-export { default as Dashboard } from "@/pages/Dashboard";
+export { default as Dashboard } from "@/pages/CentralComando";
 export { default as SystemWatchdog } from "./system-watchdog/SystemWatchdog";
 
 // ============================================
@@ -35,8 +35,9 @@ export { default as MissionControl } from "./mission-control";
 // ============================================
 // VOYAGE & ROUTES (UNIFIED → NAUTILUS VOYAGE)
 // ============================================
-export { default as NautilusVoyage } from "./nauti-voyage";
-export { default as VoyagePlanner } from "./voyage-planner";
+// NautilusVoyage and VoyagePlanner moved to VoyageCommandCenter
+// export { default as NautilusVoyage } from "./nauti-voyage";
+// export { default as VoyagePlanner } from "./voyage-planner";
 
 // ============================================
 // COMMUNICATION & CONNECTIVITY (UNIFIED → SATCOM & NAUTILUS COMMS)

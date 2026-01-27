@@ -7,7 +7,7 @@ import { logger } from "@/lib/logger";
 
 // Critical routes to prefetch (in order of priority)
 const CRITICAL_ROUTES = [
-  () => import("@/pages/Dashboard"),
+  () => import("@/pages/CentralComando"),
   () => import("@/pages/Index"),
   () => import("@/pages/NautilusCommand"),
   () => import("@/pages/MaintenanceCommandCenter"),

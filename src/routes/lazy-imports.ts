@@ -6,7 +6,7 @@ import { lazy } from "react";
 
 // ============= CORE PAGES =============
 export const Index = lazy(() => import(/* webpackChunkName: "page-index" */ "@/pages/Index"));
-export const Dashboard = lazy(() => import(/* webpackChunkName: "page-dashboard" */ "@/pages/Dashboard"));
+export const Dashboard = lazy(() => import(/* webpackChunkName: "page-dashboard" */ "@/pages/CentralComando"));
 export const Admin = lazy(() => import(/* webpackChunkName: "page-admin" */ "@/pages/Admin"));
 export const Settings = lazy(() => import(/* webpackChunkName: "page-settings" */ "@/pages/Settings"));
 export const HealthCheck = lazy(() => import(/* webpackChunkName: "page-health" */ "@/pages/HealthCheck"));
@@ -19,7 +19,7 @@ export const Billing = lazy(() => import(/* webpackChunkName: "page-billing" */ 
 export const IoTHistoryPage = lazy(() => import(/* webpackChunkName: "page-iot-history" */ "@/pages/IoTHistoryPage"));
 
 // ============= AI MODULES =============
-export const RevolutionaryAI = lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
+export const RevolutionaryAI = lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/AICommandCenter"));
 export const AIEnhancedModules = lazy(() => import(/* webpackChunkName: "page-ai-modules" */ "@/pages/AIEnhancedModules"));
 export const AIOperationsCenter = lazy(() => import(/* webpackChunkName: "page-ai-ops" */ "@/pages/AIOperationsCenter"));
 export const AIObservabilityDashboard = lazy(() => import(/* webpackChunkName: "page-ai-observability" */ "@/pages/AIObservabilityDashboard"));

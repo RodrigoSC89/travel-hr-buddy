@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { useProfile } from "@/hooks/use-profile";
+import { useUserProfile as useProfile } from "@/hooks/unified/useUserProfile";
 import { TwoFactorSettings } from "@/components/auth/two-factor-settings";
 
 export const SettingsModule: React.FC = () => {

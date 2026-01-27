@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useProfile } from "@/hooks/use-profile";
+import { useUserProfile as useProfile } from "@/hooks/unified/useUserProfile";
 import { WelcomeCard } from "./welcome-card";
 import { 
   TrendingUp, 

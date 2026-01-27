@@ -85,7 +85,7 @@ const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 // IA & AUTOMAÇÃO
 // ============================================
 const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
-const RevolutionaryAI = lazy(() => import("@/pages/RevolutionaryAI"));
+// RevolutionaryAI moved to AICommandCenter
 const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
 const AIHubPage = lazy(() => import("@/pages/AIHubPage"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
@@ -134,7 +134,7 @@ const VoiceTranscriber = lazy(() => import("@/pages/VoiceTranscriber"));
 const ReportsCommandCenter = lazy(() => import("@/pages/ReportsCommandCenter"));
 const Documents = lazy(() => import("@/pages/Documents"));
 const Templates = lazy(() => import("@/pages/Templates"));
-const MaritimeChecklists = lazy(() => import("@/pages/MaritimeChecklists"));
+// MaritimeChecklists moved to MaritimeCommandCenter
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
 const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
@@ -183,7 +183,7 @@ const DiagnosticReportsPage = lazy(() => import("@/pages/DiagnosticReportsPage")
 // ============================================
 // RH & PESSOAS (HR/DP MODULE)
 // ============================================
-const CrewManagement = lazy(() => import("@/pages/CrewManagement"));
+// CrewManagement moved to MaritimeCommandCenter
 const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
 const Users = lazy(() => import("@/pages/Users"));
 
@@ -245,9 +245,7 @@ const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 // ADMIN & DASHBOARDS
 // ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
-const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
-const Analytics = lazy(() => import("@/pages/Analytics"));
+// Dashboard, ExecutiveDashboard, Analytics → CentralComando/AnalyticsCommandCenter
 
 // Query client
 const queryClient = new QueryClient({
@@ -423,7 +421,7 @@ const AppRoutes = () => (
       {/* IA & AUTOMAÇÃO */}
       {/* ============================================ */}
       <Route path="/nauti-command" element={<NautilusCommand />} />
-      <Route path="/revolutionary-ai" element={<RevolutionaryAI />} />
+      <Route path="/revolutionary-ai" element={<AICommandCenter />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
@@ -484,7 +482,7 @@ const AppRoutes = () => (
       <Route path="/reports" element={<ReportsCommandCenter />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/templates" element={<Templates />} />
-      <Route path="/admin/checklists" element={<MaritimeChecklists />} />
+      <Route path="/admin/checklists" element={<MaritimeCommandCenter />} />
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
@@ -547,8 +545,8 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* RH & PESSOAS (HR/DP MODULE) */}
       {/* ============================================ */}
-      <Route path="/nautilus-people" element={<CrewManagement />} />
-      <Route path="/crew-management" element={<CrewManagement />} />
+      <Route path="/nautilus-people" element={<MaritimeCommandCenter />} />
+      <Route path="/crew-management" element={<MaritimeCommandCenter />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
       <Route path="/recruitment" element={<RecruitmentPage />} />
@@ -629,20 +627,20 @@ const AppRoutes = () => (
       <Route path="/iot" element={<IoT />} />
       <Route path="/gamification" element={<Gamification />} />
       <Route path="/roadmap" element={<Roadmap />} />
-      <Route path="/qa/preview" element={<Dashboard />} />
+      <Route path="/qa/preview" element={<CentralComando />} />
       <Route path="/production-deploy" element={<ProductionDeploy />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
       {/* ============================================ */}
       <Route path="/admin" element={<Admin />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
-      <Route path="/system-overview" element={<Dashboard />} />
-      <Route path="/analytics" element={<Analytics />} />
+      <Route path="/dashboard" element={<CentralComando />} />
+      <Route path="/executive-dashboard" element={<CentralComando />} />
+      <Route path="/system-overview" element={<CentralComando />} />
+      <Route path="/analytics" element={<AnalyticsCommandCenter />} />
       <Route path="/backup-audit" element={<SecurityAuditCenter />} />
-      <Route path="/testing" element={<Dashboard />} />
-      <Route path="/feedback" element={<Dashboard />} />
+      <Route path="/testing" element={<CentralComando />} />
+      <Route path="/feedback" element={<CentralComando />} />
       <Route path="/saas-manager" element={<Admin />} />
       
       {/* DEV ONLY - Route Dashboard */}

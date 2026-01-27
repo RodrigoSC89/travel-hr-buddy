@@ -82,8 +82,8 @@ export function preloadComponent(
  */
 export const LazyModules = {
   // Dashboard modules
-  Dashboard: lazyWithRetry(() => import('@/pages/Dashboard'), { chunkName: 'Dashboard' }),
-  Analytics: lazyWithRetry(() => import('@/pages/Analytics'), { chunkName: 'Analytics' }),
+  Dashboard: lazyWithRetry(() => import('@/pages/CentralComando'), { chunkName: 'CentralComando' }),
+  Analytics: lazyWithRetry(() => import('@/pages/AnalyticsCommandCenter'), { chunkName: 'AnalyticsCommandCenter' }),
   
   // Admin modules
   Admin: lazyWithRetry(() => import('@/pages/Admin'), { chunkName: 'Admin' }),
