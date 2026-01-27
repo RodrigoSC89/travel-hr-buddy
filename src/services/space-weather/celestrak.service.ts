@@ -455,28 +455,36 @@ export function calculateDOP(
     };
   }
   
-  // TODO: Implementar cálculo real de DOP usando matriz de geometria
-  // Por ora, aproximação baseada em número e distribuição de satélites
+  // Cálculo DOP usando geometria de satélites (matriz H simplificada)
+  // Baseado em: H = [cos(el)cos(az), cos(el)sin(az), sin(el), 1] para cada satélite
   
   const n = visibleSats.length;
   
-  // Rough approximation: DOP inversely proportional to sqrt(n)
-  // e melhorado por distribuição uniforme
-  const baseDOP = 6 / Math.sqrt(n);
+  // Construir matriz de geometria simplificada
+  let sumCosElCosAz2 = 0, sumCosElSinAz2 = 0, sumSinEl2 = 0;
+  let sumCosElCosAzSinAz = 0, sumCosElCosAzSinEl = 0, sumCosElSinAzSinEl = 0;
   
-  // Check azimuth distribution (queremos satélites em todas as direções)
-  const azBuckets = new Array(8).fill(0); // 8 sectors de 45°
   for (const sat of visibleSats) {
-    const bucket = Math.floor(sat.azimuth / 45);
-    azBuckets[bucket]++;
+    const elRad = (sat.elevation * Math.PI) / 180;
+    const azRad = (sat.azimuth * Math.PI) / 180;
+    const cosEl = Math.cos(elRad);
+    const sinEl = Math.sin(elRad);
+    const cosAz = Math.cos(azRad);
+    const sinAz = Math.sin(azRad);
+    
+    sumCosElCosAz2 += cosEl * cosEl * cosAz * cosAz;
+    sumCosElSinAz2 += cosEl * cosEl * sinAz * sinAz;
+    sumSinEl2 += sinEl * sinEl;
+    sumCosElCosAzSinAz += cosEl * cosEl * cosAz * sinAz;
+    sumCosElCosAzSinEl += cosEl * sinEl * cosAz;
+    sumCosElSinAzSinEl += cosEl * sinEl * sinAz;
   }
-  const azUniformity = Math.min(...azBuckets) / Math.max(...azBuckets);
-  const geometryFactor = 0.5 + 0.5 * azUniformity; // 0.5-1.0
   
-  const pdop = baseDOP / geometryFactor;
-  const hdop = pdop * 0.7; // Aproximação: HDOP ~70% de PDOP
-  const vdop = pdop * 1.2; // VDOP tipicamente pior que HDOP
-  const tdop = pdop * 0.5; // Time DOP geralmente melhor
+  // Aproximação diagonal da matriz (H'H)^-1
+  const hdop = Math.sqrt(1 / (sumCosElCosAz2 + sumCosElSinAz2 + 0.01));
+  const vdop = Math.sqrt(1 / (sumSinEl2 + 0.01));
+  const pdop = Math.sqrt(hdop * hdop + vdop * vdop);
+  const tdop = 1 / Math.sqrt(n); // Time DOP proporcional ao número de satélites
   const gdop = Math.sqrt(pdop * pdop + tdop * tdop);
   
   return {

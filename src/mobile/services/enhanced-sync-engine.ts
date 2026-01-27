@@ -277,7 +277,7 @@ export class EnhancedSyncEngine {
       case "remote":
         // Accept remote changes, discard local
         structuredLogger.debug("Conflict: accepting remote changes");
-        // TODO: Update local storage with remote data
+        await this.updateLocalStorage(table, newRecord);
         break;
       case "latest":
         // Use timestamp to determine winner
@@ -285,7 +285,7 @@ export class EnhancedSyncEngine {
         const remoteTimestamp = newRecord.updated_at;
         if (remoteTimestamp > localTimestamp) {
           structuredLogger.debug("Conflict: remote is newer");
-          // TODO: Update local storage with remote data
+          await this.updateLocalStorage(table, newRecord);
         }
         break;
       }
@@ -296,10 +296,39 @@ export class EnhancedSyncEngine {
   }
 
   /**
+   * Update local storage with remote data
+   */
+  private async updateLocalStorage(table: string, record: any): Promise<void> {
+    try {
+      const key = `sync_${table}_${record.id}`;
+      localStorage.setItem(key, JSON.stringify({
+        ...record,
+        _synced_at: new Date().toISOString()
+      }));
+      structuredLogger.debug(`Local storage updated for ${table}:${record.id}`);
+    } catch (error) {
+      structuredLogger.error(`Failed to update local storage`, { table, error });
+    }
+  }
+
+  /**
    * Handle remote delete
    */
   private async handleRemoteDelete(table: string, record: any): Promise<void> {
-    // TODO: Update local storage to mark as deleted
+    try {
+      const key = `sync_${table}_${record.id}`;
+      const existing = localStorage.getItem(key);
+      if (existing) {
+        const parsed = JSON.parse(existing);
+        localStorage.setItem(key, JSON.stringify({
+          ...parsed,
+          _deleted: true,
+          _deleted_at: new Date().toISOString()
+        }));
+      }
+    } catch (error) {
+      structuredLogger.error(`Failed to mark as deleted in local storage`, { table, error });
+    }
     this.emitChange(table, "delete", record);
   }
 

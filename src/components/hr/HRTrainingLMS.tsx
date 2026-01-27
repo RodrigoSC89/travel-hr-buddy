@@ -484,10 +484,10 @@ export function HRTrainingLMS() {
                   <p className="text-sm font-medium mt-1">Veloz</p>
                   <p className="text-xs text-muted-foreground">3 cursos/mês</p>
                 </div>
-                <div className="p-4 bg-muted rounded-lg opacity-50">
+                <div className="p-4 bg-gradient-to-br from-warning/10 to-primary/10 rounded-lg border border-warning/20">
                   <div className="text-2xl">🏆</div>
                   <p className="text-sm font-medium mt-1">Master</p>
-                  <p className="text-xs text-muted-foreground">Em breve</p>
+                  <p className="text-xs text-muted-foreground">5+ cursos/mês</p>
                 </div>
               </div>
             </CardContent>
