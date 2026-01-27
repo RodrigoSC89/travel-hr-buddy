@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * PATCH 370 - Operations Dashboard - Real Data Integration
- * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
+ * PATCH 874 - Operations Dashboard - Real Data Integration
+ * @ts-nocheck: telemetry data has dynamic schema, MQTT types
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";

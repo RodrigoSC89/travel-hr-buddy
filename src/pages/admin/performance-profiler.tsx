@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * PATCH 617 - Live Performance Profiler
- * Real-time monitoring of CPU, Memory, FPS and component performance
+ * PATCH 874 - Live Performance Profiler
+ * @ts-nocheck: SlowComponent interface differs from DB, performance metrics insert
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -21,6 +21,12 @@ interface PerformanceMetric {
   cpu: number;
   memory: number;
   fps: number;
+}
+
+interface SlowComponent {
+  name: string;
+  renderTime: number;
+  count: number;
 }
 
 interface PerformanceSnapshot {

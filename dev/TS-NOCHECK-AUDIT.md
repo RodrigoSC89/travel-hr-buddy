@@ -1,17 +1,24 @@
 # Technical Debt: @ts-nocheck Files
 
-> Updated: 2026-01-27 | PATCH 873
+> Updated: 2026-01-27 | PATCH 874
 
 ## Summary
-- **Total @ts-nocheck files in src/**: ~40 files (reduced after migrations)
+- **Total @ts-nocheck files in src/**: ~40 files (documented with specific reasons)
 - **Edge Functions (supabase/functions/)**: ~50 files (Deno environment - acceptable)
 - **Test files (src/tests/, tests/)**: ~100 files (by design)
 
-## PATCH 873 Actions
-1. ✅ Created missing tables: template_versions, workflow_nodes, satcom_messages, etc.
-2. ✅ Added columns: system_name, is_resolved to performance_alerts
-3. ✅ Created type-mappers utility: src/lib/supabase/type-mappers.ts
-4. ⚠️ Types need regeneration via `supabase gen types` to fully remove @ts-nocheck
+## PATCH 874 Status
+All @ts-nocheck files now have documented reasons in their headers explaining:
+- What specific type issue exists
+- What would be needed to fix it
+
+### Common Reasons for @ts-nocheck
+1. **JSONB columns** - DB stores JSON but TS expects specific types
+2. **FK joins** - Supabase joins return SelectQueryError when relations don't exist
+3. **RPC functions** - Custom RPCs not in generated types
+4. **Dynamic table access** - Some tables accessed dynamically
+5. **Third-party libs** - jsPDF, html2pdf, Chart.js have complex option types
+6. **null vs undefined** - DB returns null, interfaces expect undefined
 
 | File | Reason | Fix Required |
 |------|--------|--------------|

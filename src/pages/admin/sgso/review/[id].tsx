@@ -1,4 +1,8 @@
 // @ts-nocheck
+/**
+ * SGSO Audit Review Page - PATCH 874
+ * @ts-nocheck: FK joins to vessels/users, html2pdf options
+ */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -17,9 +21,9 @@ interface AuditItem {
   id: string
   requirement_number: number
   requirement_title: string
-  compliance_status: "compliant" | "partial" | "non-compliant"
-  evidence: string
-  comment: string
+  compliance_status: string
+  evidence: string | null
+  comment: string | null
 }
 
 interface Audit {
@@ -94,8 +98,22 @@ export default function SGSOAuditReviewPage() {
             variant: "destructive"
           });
         } else if (data) {
-          setAudit(data as Audit);
-          setItems((data.sgso_audit_items || []).sort((a, b) => a.requirement_number - b.requirement_number));
+          // Map to local interface
+          const mappedAudit: Audit = {
+            id: data.id,
+            audit_date: data.audit_date,
+            vessel_id: data.vessel_id ?? "",
+            auditor_id: data.auditor_id ?? "",
+            vessels: data.vessels && typeof data.vessels === 'object' && !('message' in data.vessels)
+              ? data.vessels as { name: string }
+              : undefined,
+            users: data.users && typeof data.users === 'object' && !('message' in data.users)
+              ? data.users as { full_name: string }
+              : undefined,
+            sgso_audit_items: (data.sgso_audit_items || []) as AuditItem[],
+          };
+          setAudit(mappedAudit);
+          setItems((data.sgso_audit_items || []).sort((a: AuditItem, b: AuditItem) => a.requirement_number - b.requirement_number) as AuditItem[]);
         }
       } catch (err) {
         console.error("Error:", err);

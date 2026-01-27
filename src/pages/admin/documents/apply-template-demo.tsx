@@ -1,5 +1,8 @@
 // @ts-nocheck
-import { useState, useEffect } from "react";
+/**
+ * Apply Template Demo - PATCH 874
+ * @ts-nocheck: templates table content is JSONB
+ */
 import { supabase } from "@/integrations/supabase/client";
 import ApplyTemplate from "./apply-template";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

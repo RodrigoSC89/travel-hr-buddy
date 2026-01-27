@@ -1,13 +1,9 @@
 // @ts-nocheck
 /**
- * PATCH 565 - Dashboard Final de Qualidade
+ * PATCH 874 - Dashboard Final de Qualidade
+ * @ts-nocheck: beta_feedback table has different columns than expected
  * 
- * Executive quality dashboard displaying:
- * - Automated test results
- * - Module coverage metrics
- * - User feedback aggregation
- * - Health, risk, and confidence metrics
- * - Real-time updates via WebSocket
+ * Executive quality dashboard displaying test results, coverage, feedback
  */
 
 import React, { useEffect, useState } from "react";

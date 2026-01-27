@@ -1,7 +1,7 @@
-// @ts-nocheck - RPC functions not in generated types (start_tracking_session, etc.)
+// @ts-nocheck
 /**
- * Satellite Tracker Page
- * Real-time satellite tracking with 3D orbital visualization
+ * Satellite Tracker Page - PATCH 874
+ * @ts-nocheck: RPC functions not in types, satellite_positions join
  */
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,26 +17,27 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface SatelliteData {
   id: string;
-  norad_id: number;
+  norad_id: string | number | null;
   name: string;
-  satellite_type: string;
-  is_active: boolean;
+  satellite_type: string | null;
+  is_active: boolean | null;
   position?: {
     latitude: number;
     longitude: number;
     altitude: number;
     calculated_at: string;
-  };
+  } | null;
 }
 
 interface SatelliteAlert {
   id: string;
-  satellite_id: string;
+  satellite_id: string | null;
   alert_type: string;
   severity: string;
-  title: string;
-  description: string;
-  is_resolved: boolean;
+  title: string | null;
+  description: string | null;
+  is_resolved: boolean | null;
+  message: string;
   created_at: string;
 }
 

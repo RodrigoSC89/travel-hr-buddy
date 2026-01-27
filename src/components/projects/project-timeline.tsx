@@ -1,4 +1,8 @@
 // @ts-nocheck
+/**
+ * Project Timeline - PATCH 874
+ * @ts-nocheck: jsPDF lazy load, formData typing, XLSX dynamic import
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,7 +81,23 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const [viewMode, setViewMode] = useState<"gantt" | "list">("gantt");
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
+  // Lazy load jsPDF
+  const loadJsPDFLocal = async () => {
+    const { default: jsPDF } = await import("jspdf");
+    return jsPDF;
+  };
+
+  const [formData, setFormData] = useState<{
+    project_name: string;
+    task_name: string;
+    description: string;
+    status: string;
+    priority: string;
+    assigned_to: string;
+    start_date: string;
+    end_date: string;
+    progress: number;
+  }>({
     project_name: "",
     task_name: "",
     description: "",

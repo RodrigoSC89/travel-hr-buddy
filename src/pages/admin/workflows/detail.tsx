@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * Workflow Detail Page
- * Kanban-style workflow step management
+ * Workflow Detail Page - PATCH 874
+ * @ts-nocheck: smart_workflow_steps has complex FK and JSON columns
  */
 "use client";
 
@@ -201,7 +201,29 @@ export default function WorkflowDetailPage() {
         .order("position", { ascending: true });
       
       if (error) throw error;
-      setSteps(data || []);
+      // Map to local interface
+      const mappedSteps: WorkflowStep[] = (data || []).map(step => ({
+        id: step.id,
+        workflow_id: step.workflow_id,
+        name: step.name ?? step.title,
+        title: step.title,
+        description: step.description,
+        status: step.status,
+        step_number: step.step_number ?? step.position,
+        position: step.position,
+        assigned_to: step.assigned_to,
+        due_date: step.due_date,
+        priority: step.priority,
+        created_at: step.created_at,
+        updated_at: step.updated_at,
+        created_by: step.created_by,
+        tags: step.tags,
+        metadata: step.metadata as Record<string, unknown> | null,
+        profiles: step.profiles && typeof step.profiles === 'object' && !('message' in step.profiles) 
+          ? step.profiles as { full_name: string | null } 
+          : null,
+      }));
+      setSteps(mappedSteps);
     } catch (error) {
       console.error("Error fetching steps:", error);
       toast({
