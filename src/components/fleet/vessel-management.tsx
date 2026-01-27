@@ -1,5 +1,7 @@
-// @ts-nocheck
-// PATCH 862 - @ts-nocheck mantido temporariamente - mock data incompatível com schema completo
+/**
+ * Vessel Management - Fleet Operations
+ * Production-ready with Supabase integration
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,15 +28,15 @@ import {
 interface Vessel {
   id: string;
   name: string;
-  imo_number?: string;
+  imo_number?: string | null;
   vessel_type: string;
-  flag_state: string;
-  status: string;
-  current_location?: string;
-  next_port?: string;
-  eta?: string;
-  created_at: string;
-  organization_id?: string;
+  flag_state: string | null;
+  status: string | null;
+  current_location?: string | null;
+  next_port?: string | null;
+  eta?: string | null;
+  created_at: string | null;
+  organization_id?: string | null;
 }
 
 const VesselManagement: React.FC = () => {
@@ -184,16 +186,16 @@ const VesselManagement: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
-    case "active": return "bg-green-500 text-azure-50";
-    case "maintenance": return "bg-yellow-500 text-azure-900";
-    case "inactive": return "bg-red-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+    case "active": return "bg-success text-success-foreground";
+    case "maintenance": return "bg-warning text-warning-foreground";
+    case "inactive": return "bg-destructive text-destructive-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string | null) => {
     switch (status) {
     case "active": return "Ativa";
     case "maintenance": return "Manutenção";
