@@ -1,7 +1,7 @@
-// @ts-nocheck - Complex type relationships with vessel joins require full type alignment
+// @ts-nocheck
 /**
- * MMI History Service
- * Service layer for MMI maintenance history operations
+ * MMI History Service - PATCH 874
+ * @ts-nocheck: vessel_id null vs undefined, vessel join types
  */
 
 import { supabase } from "@/integrations/supabase/client";

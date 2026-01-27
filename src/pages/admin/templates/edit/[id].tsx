@@ -1,4 +1,8 @@
 // @ts-nocheck
+/**
+ * Edit Template Page - PATCH 874
+ * @ts-nocheck: templates.content is JSONB, id param may be undefined
+ */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -45,14 +49,15 @@ export default function EditTemplatePage() {
       const { data, error } = await supabase
         .from("templates")
         .select("*")
-        .eq("id", id)
+        .eq("id", id ?? "")
         .single();
 
       if (error) throw error;
 
       if (data) {
         setTitle(data.title);
-        setContent(data.content);
+        // Content is JSONB, convert to string
+        setContent(typeof data.content === 'string' ? data.content : JSON.stringify(data.content, null, 2));
       } else {
         toast({
           title: "Template não encontrado",

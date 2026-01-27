@@ -1,7 +1,8 @@
 // @ts-nocheck
-// ✅ Comprehensive Restore Audit Dashboard
-// Path: /admin/documents/restore-dashboard
-// Features: Interactive charts, CSV/PDF export, email reports, public view mode
+/**
+ * Comprehensive Restore Audit Dashboard - PATCH 874
+ * @ts-nocheck: Chart.js types, jsPDF types, dynamic table access
+ */
 
 "use client";
 
