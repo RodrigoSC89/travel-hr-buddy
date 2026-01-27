@@ -308,7 +308,7 @@ export const SessionManagementCompact: React.FC = () => {
         </div>
       </div>
       <Button variant="outline" size="sm" asChild>
-        <Link to="/settings/sessions">Gerenciar</Link>
+        <Link to="/settings">Gerenciar</Link>
       </Button>
     </div>
   );

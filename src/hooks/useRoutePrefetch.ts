@@ -23,7 +23,7 @@ const PREFETCH_CONFIG: PrefetchConfig = {
 };
 
 // Routes that are commonly visited - always prefetch these after initial load
-const COMMON_ROUTES = ['/dashboard', '/settings', '/notifications-center'];
+const COMMON_ROUTES = ['/central-comando', '/settings', '/alerts-command'];
 
 export const useRoutePrefetch = () => {
   const location = useLocation();

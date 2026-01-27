@@ -198,7 +198,7 @@ const ControlPanel = () => {
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Link to="/admin/api-tester">
+                    <Link to="/api-documentation">
                       <Button variant="outline" className="w-full justify-between">
                         <span className="flex items-center gap-2">
                           <Zap className="h-4 w-4" />
