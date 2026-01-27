@@ -12,6 +12,7 @@ import { Mic, MicOff, Volume2, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import type { SpeechRecognition as SpeechRecognitionType, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from "@/types/speech-recognition";
 
 interface VoiceCommandResult {
   command: string;
@@ -44,19 +45,20 @@ export function GlobalVoiceButton() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showPanel, setShowPanel] = useState(false);
-  const [recognition, setRecognition] = useState<any>(null);
+  const [recognition, setRecognition] = useState<SpeechRecognitionType | null>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
-    if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (typeof window !== "undefined" && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
+      const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognitionClass) return;
       const recognitionInstance = new SpeechRecognitionClass();
       
       recognitionInstance.continuous = false;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "pt-BR";
 
-      recognitionInstance.onresult = (event: any) => {
+      recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
         const current = event.resultIndex;
         const transcriptText = event.results[current][0].transcript;
         setTranscript(transcriptText);
@@ -66,8 +68,7 @@ export function GlobalVoiceButton() {
         }
       };
 
-      recognitionInstance.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
+      recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
         setIsListening(false);
         if (event.error === "not-allowed") {
           toast.error("Permissão de microfone negada");
