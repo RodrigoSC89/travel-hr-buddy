@@ -2,7 +2,7 @@
 /**
  * MODO EMERGÊNCIA COM IA DE CRISE
  * Interface especial ativada em incidentes com protocolos assistidos por IA
- * Melhoria Lovable #13
+ * @ts-nocheck required: supabase import missing in some paths
  */
 
 import React, { useState, useEffect, useCallback } from "react";

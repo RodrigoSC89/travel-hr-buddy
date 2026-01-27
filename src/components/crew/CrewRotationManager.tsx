@@ -1,15 +1,14 @@
 // @ts-nocheck
 /**
- * PATCH 366 - Crew Management - Rotation & Alerts
- * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration
- * 
- * @ts-nocheck reason: crew_rotations table was extended in PATCH 865 with new columns:
- * rotation_type, scheduled_date, departure_port, arrival_port, documentation_status,
- * medical_clearance, visa_status. After types regeneration, this can be removed.
+ * PATCH 872 - Crew Management - Rotation & Alerts
+ * @ts-nocheck required: Complex drag-and-drop with FK joins to auth.users
+ * To remove: Align crew_rotations FK and interface types with DB schema
  */
 
 import React, { useState, useEffect, useCallback } from "react";
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from "@dnd-kit/core";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -41,8 +40,30 @@ import { toast } from "sonner";
 import { format, parseISO, addDays, isBefore, isAfter } from "date-fns";
 import type { Database } from "@/integrations/supabase/types";
 
-type CrewEmbarkationRow = Database["public"]["Tables"]["crew_embarkations"]["Row"];
+type CrewRotationRow = Database["public"]["Tables"]["crew_rotations"]["Row"];
 type VesselRow = Database["public"]["Tables"]["vessels"]["Row"];
+
+// Helper to map DB row to UI interface
+function mapRotationRow(row: CrewRotationRow): CrewRotation {
+  return {
+    id: row.id,
+    crew_member_id: row.crew_member_id || "",
+    vessel_id: row.vessel_id,
+    rotation_type: (row.rotation_type as CrewRotation["rotation_type"]) || "rotation",
+    scheduled_date: row.scheduled_date || new Date().toISOString().split("T")[0],
+    actual_date: row.actual_date,
+    status: (row.status as CrewRotation["status"]) || "scheduled",
+    departure_port: row.departure_port,
+    arrival_port: row.arrival_port,
+    transportation_method: row.transportation_method,
+    flight_details: row.flight_details as Record<string, unknown> | null,
+    accommodation_details: row.accommodation_details as Record<string, unknown> | null,
+    documentation_status: (row.documentation_status as CrewRotation["documentation_status"]) || "pending",
+    medical_clearance: row.medical_clearance ?? false,
+    visa_status: row.visa_status,
+    notes: row.notes,
+  };
+}
 
 interface CrewMember {
   id: string;
@@ -174,13 +195,10 @@ export const CrewRotationManager: React.FC = () => {
     try {
       setLoading(true);
       
-      // Load rotations with crew member details
+      // Load rotations (without the problematic join)
       const { data: rotationsData, error: rotationsError } = await supabase
         .from("crew_rotations")
-        .select(`
-          *,
-          crew_member:auth.users!crew_rotations_crew_member_id_fkey(id, raw_user_meta_data)
-        `)
+        .select("*")
         .order("scheduled_date", { ascending: true });
 
       if (rotationsError) throw rotationsError;
@@ -193,11 +211,13 @@ export const CrewRotationManager: React.FC = () => {
 
       if (vesselsError) throw vesselsError;
 
-      setRotations(rotationsData || []);
+      // Map to UI types
+      const mappedRotations: CrewRotation[] = (rotationsData || []).map(mapRotationRow);
+      setRotations(mappedRotations);
       setVessels(vesselsData || []);
       
       // Detect conflicts
-      detectConflicts(rotationsData || []);
+      detectConflicts(mappedRotations);
     } catch (error) {
       console.error("Error loading data:", error);
       toast.error("Failed to load crew rotation data");

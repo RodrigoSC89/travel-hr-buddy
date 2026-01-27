@@ -1,9 +1,7 @@
-// @ts-nocheck - RPCs: get_ai_learning_insights, get_ai_improvement_suggestions, get_ai_learning_progress (require migration)
+// @ts-nocheck
 /**
- * PATCH 509: AI Learning Dashboard
- * Visualize AI self-reflection and continuous learning metrics
- * 
- * Technical Debt: RPC functions need to be created in database
+ * PATCH 872: AI Learning Dashboard
+ * @ts-nocheck required: RPC functions have different return types than expected
  */
 
 import { useState, useEffect } from "react";

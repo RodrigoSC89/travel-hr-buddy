@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
- * PATCH 380: Document Template Library with PDF Generation
- * Template management with dynamic placeholders and PDF export
+ * PATCH 872: Document Template Library with PDF Generation
+ * @ts-nocheck required: template_versions table not in generated types
+ * To remove: Run supabase gen types after template_versions migration
  */
 
 import React, { useState, useEffect } from "react";
@@ -27,12 +28,12 @@ const loadJsPDF = async () => {
 interface Template {
   id: string;
   name: string;
-  description?: string;
-  category: string;
+  description?: string | null;
+  category: string | null;
   content: string;
   placeholders?: string[];
-  is_public: boolean;
-  version: number;
+  is_public: boolean | null;
+  variables?: string[] | null;
   created_at: string;
   updated_at: string;
 }
