@@ -252,11 +252,24 @@ export const InteractiveDashboard: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Analytics detalhados em desenvolvimento...
-                </p>
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center p-3 bg-success/10 rounded-lg">
+                    <p className="text-2xl font-bold text-success">94%</p>
+                    <p className="text-xs text-muted-foreground">Eficiência</p>
+                  </div>
+                  <div className="text-center p-3 bg-primary/10 rounded-lg">
+                    <p className="text-2xl font-bold text-primary">127</p>
+                    <p className="text-xs text-muted-foreground">Operações</p>
+                  </div>
+                  <div className="text-center p-3 bg-warning/10 rounded-lg">
+                    <p className="text-2xl font-bold text-warning">3</p>
+                    <p className="text-xs text-muted-foreground">Alertas</p>
+                  </div>
+                </div>
+                <div className="h-32 bg-muted/30 rounded-lg flex items-center justify-center">
+                  <Activity className="h-8 w-8 text-primary animate-pulse" />
+                </div>
               </div>
             </CardContent>
           </Card>
