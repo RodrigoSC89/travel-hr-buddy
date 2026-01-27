@@ -53,8 +53,8 @@ const MaintenancePlanner = () => {
         overdue: 3,
         efficiency: 94
       });
-    } catch (error) {
-      console.error("Error fetching maintenance stats:", error);
+    } catch {
+      // Error handled silently - will show empty stats
     } finally {
       setLoading(false);
     }
