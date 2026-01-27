@@ -1,42 +1,30 @@
 // @ts-nocheck
 /**
- * PATCH 872 - Underwater Missions Persistence Service
- * @ts-nocheck required: underwater_missions columns differ from interface
- * To remove: Align UnderwaterMissionRecord with actual DB schema
+ * PATCH 873 - Underwater Missions Persistence Service
+ * @ts-nocheck: underwater_missions schema differs from Mission interface
+ * Requires: Align Mission type in missionUploadSub.ts with DB schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Mission } from "../missionUploadSub";
 
+// Aligned with actual DB schema from PATCH 873
 export interface UnderwaterMissionRecord {
   id: string;
   user_id: string;
-  drone_id?: string;
-  name: string;
-  description?: string;
+  organization_id?: string | null;
+  mission_name: string;
   mission_type: string;
   status: string;
-  priority?: string;
-  start_location: Record<string, unknown>;
-  current_location?: Record<string, unknown>;
-  waypoints: Array<Record<string, unknown>>;
-  trajectory?: Array<Record<string, unknown>>;
-  scheduled_start?: string;
-  actual_start?: string;
-  estimated_end?: string;
-  actual_end?: string;
-  progress: number;
-  distance_covered_m?: number;
-  max_depth_reached?: number;
-  duration_minutes?: number;
-  objectives?: Record<string, unknown>;
-  findings?: Record<string, unknown>;
-  samples_collected?: Record<string, unknown>;
-  incidents?: Array<Record<string, unknown>>;
-  success_rate?: number;
-  result_summary?: string;
-  metadata?: Record<string, unknown>;
+  start_time?: string | null;
+  end_time?: string | null;
+  target_location?: Record<string, unknown> | null;
+  depth_target?: number | null;
+  max_depth?: number | null;
+  battery_level?: number | null;
+  notes?: string | null;
+  metadata?: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 }

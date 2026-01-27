@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
- * PATCH 872: AI Learning Dashboard
- * @ts-nocheck required: RPC functions have different return types than expected
+ * PATCH 873: AI Learning Dashboard
+ * @ts-nocheck: RPC functions return types need alignment
+ * Requires: Create matching RPC functions or use direct table queries
  */
 
 import { useState, useEffect } from "react";

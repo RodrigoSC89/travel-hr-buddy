@@ -1,8 +1,8 @@
 // @ts-nocheck
 /**
- * MODO EMERGÊNCIA COM IA DE CRISE
+ * MODO EMERGÊNCIA COM IA DE CRISE - PATCH 873
  * Interface especial ativada em incidentes com protocolos assistidos por IA
- * @ts-nocheck required: supabase import missing in some paths
+ * @ts-nocheck: Edge function types need alignment
  */
 
 import React, { useState, useEffect, useCallback } from "react";

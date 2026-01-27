@@ -4545,6 +4545,84 @@ export type Database = {
           },
         ]
       }
+      calendar_events: {
+        Row: {
+          all_day: boolean | null
+          attendees: Json | null
+          color: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          event_type: string | null
+          id: string
+          location: string | null
+          metadata: Json | null
+          organization_id: string | null
+          recurrence_rule: string | null
+          reminder_minutes: number | null
+          start_date: string
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          all_day?: boolean | null
+          attendees?: Json | null
+          color?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recurrence_rule?: string | null
+          reminder_minutes?: number | null
+          start_date: string
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          all_day?: boolean | null
+          attendees?: Json | null
+          color?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recurrence_rule?: string | null
+          reminder_minutes?: number | null
+          start_date?: string
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cargo_operations: {
         Row: {
           ai_optimized: boolean | null
@@ -16697,6 +16775,47 @@ export type Database = {
           },
         ]
       }
+      incident_snapshots: {
+        Row: {
+          created_at: string | null
+          crew_status: Json | null
+          id: string
+          incident_id: string | null
+          snapshot_data: Json
+          snapshot_time: string | null
+          vessel_position: Json | null
+          weather_conditions: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          crew_status?: Json | null
+          id?: string
+          incident_id?: string | null
+          snapshot_data: Json
+          snapshot_time?: string | null
+          vessel_position?: Json | null
+          weather_conditions?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          crew_status?: Json | null
+          id?: string
+          incident_id?: string | null
+          snapshot_data?: Json
+          snapshot_time?: string | null
+          vessel_position?: Json | null
+          weather_conditions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_snapshots_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incident_timeline: {
         Row: {
           created_at: string | null
@@ -17820,6 +17939,56 @@ export type Database = {
           },
         ]
       }
+      joint_missions: {
+        Row: {
+          communication_channel: string | null
+          coordination_status: string | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          mission_id: string | null
+          notes: string | null
+          partner_organization: string | null
+          shared_resources: Json | null
+          start_date: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          communication_channel?: string | null
+          coordination_status?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          mission_id?: string | null
+          notes?: string | null
+          partner_organization?: string | null
+          shared_resources?: Json | null
+          start_date?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          communication_channel?: string | null
+          coordination_status?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          mission_id?: string | null
+          notes?: string | null
+          partner_organization?: string | null
+          shared_resources?: Json | null
+          start_date?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "joint_missions_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_base: {
         Row: {
           author_id: string | null
@@ -18046,6 +18215,81 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_operations: {
+        Row: {
+          actual_arrival: string | null
+          actual_cost: number | null
+          actual_departure: string | null
+          cargo_details: Json | null
+          cost_estimate: number | null
+          created_at: string | null
+          destination_port: string | null
+          estimated_arrival: string | null
+          estimated_departure: string | null
+          id: string
+          notes: string | null
+          operation_type: string
+          organization_id: string | null
+          origin_port: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_arrival?: string | null
+          actual_cost?: number | null
+          actual_departure?: string | null
+          cargo_details?: Json | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          destination_port?: string | null
+          estimated_arrival?: string | null
+          estimated_departure?: string | null
+          id?: string
+          notes?: string | null
+          operation_type: string
+          organization_id?: string | null
+          origin_port?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_arrival?: string | null
+          actual_cost?: number | null
+          actual_departure?: string | null
+          cargo_details?: Json | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          destination_port?: string | null
+          estimated_arrival?: string | null
+          estimated_departure?: string | null
+          id?: string
+          notes?: string | null
+          operation_type?: string
+          organization_id?: string | null
+          origin_port?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_operations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "logistics_operations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -23828,14 +24072,17 @@ export type Database = {
           created_at: string | null
           current_value: number | null
           id: string
+          is_resolved: boolean | null
           message: string | null
           metadata: Json | null
           metric_name: string | null
           module_name: string | null
           organization_id: string | null
           resolved_at: string | null
+          resolved_by: string | null
           severity: string | null
           status: string | null
+          system_name: string | null
           threshold_value: number | null
         }
         Insert: {
@@ -23845,14 +24092,17 @@ export type Database = {
           created_at?: string | null
           current_value?: number | null
           id?: string
+          is_resolved?: boolean | null
           message?: string | null
           metadata?: Json | null
           metric_name?: string | null
           module_name?: string | null
           organization_id?: string | null
           resolved_at?: string | null
+          resolved_by?: string | null
           severity?: string | null
           status?: string | null
+          system_name?: string | null
           threshold_value?: number | null
         }
         Update: {
@@ -23862,14 +24112,17 @@ export type Database = {
           created_at?: string | null
           current_value?: number | null
           id?: string
+          is_resolved?: boolean | null
           message?: string | null
           metadata?: Json | null
           metric_name?: string | null
           module_name?: string | null
           organization_id?: string | null
           resolved_at?: string | null
+          resolved_by?: string | null
           severity?: string | null
           status?: string | null
+          system_name?: string | null
           threshold_value?: number | null
         }
         Relationships: [
@@ -25003,6 +25256,54 @@ export type Database = {
           },
         ]
       }
+      profiler_sessions: {
+        Row: {
+          browser: string | null
+          created_at: string | null
+          device_type: string | null
+          duration_ms: number | null
+          end_time: string | null
+          flame_graph_data: Json | null
+          id: string
+          memory_samples: Json | null
+          metrics: Json | null
+          page_url: string | null
+          session_id: string
+          start_time: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          duration_ms?: number | null
+          end_time?: string | null
+          flame_graph_data?: Json | null
+          id?: string
+          memory_samples?: Json | null
+          metrics?: Json | null
+          page_url?: string | null
+          session_id: string
+          start_time?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          duration_ms?: number | null
+          end_time?: string | null
+          flame_graph_data?: Json | null
+          id?: string
+          memory_samples?: Json | null
+          metrics?: Json | null
+          page_url?: string | null
+          session_id?: string
+          start_time?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -25287,6 +25588,69 @@ export type Database = {
           },
           {
             foreignKeyName: "psc_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quality_metrics: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          measured_at: string | null
+          metadata: Json | null
+          metric_name: string
+          metric_type: string | null
+          metric_value: number | null
+          organization_id: string | null
+          status: string | null
+          threshold_max: number | null
+          threshold_min: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          measured_at?: string | null
+          metadata?: Json | null
+          metric_name: string
+          metric_type?: string | null
+          metric_value?: number | null
+          organization_id?: string | null
+          status?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          measured_at?: string | null
+          metadata?: Json | null
+          metric_name?: string
+          metric_type?: string | null
+          metric_value?: number | null
+          organization_id?: string | null
+          status?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quality_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quality_metrics_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -25894,6 +26258,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      restore_reports: {
+        Row: {
+          created_at: string | null
+          document_id: string | null
+          id: string
+          new_content: string | null
+          previous_content: string | null
+          restore_reason: string | null
+          restored_by: string | null
+          status: string | null
+          version_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_id?: string | null
+          id?: string
+          new_content?: string | null
+          previous_content?: string | null
+          restore_reason?: string | null
+          restored_by?: string | null
+          status?: string | null
+          version_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_id?: string | null
+          id?: string
+          new_content?: string | null
+          previous_content?: string | null
+          restore_reason?: string | null
+          restored_by?: string | null
+          status?: string | null
+          version_id?: string | null
+        }
+        Relationships: []
       }
       rfq_quotations: {
         Row: {
@@ -27216,6 +27616,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "satcom_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      satcom_messages: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          direction: string | null
+          id: string
+          message_type: string
+          metadata: Json | null
+          priority: string | null
+          received_at: string | null
+          satellite_provider: string | null
+          status: string | null
+          transmission_time: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          direction?: string | null
+          id?: string
+          message_type: string
+          metadata?: Json | null
+          priority?: string | null
+          received_at?: string | null
+          satellite_provider?: string | null
+          status?: string | null
+          transmission_time?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          direction?: string | null
+          id?: string
+          message_type?: string
+          metadata?: Json | null
+          priority?: string | null
+          received_at?: string | null
+          satellite_provider?: string | null
+          status?: string | null
+          transmission_time?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_messages_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -31226,6 +31679,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "template_variables_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      template_versions: {
+        Row: {
+          change_notes: string | null
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          template_id: string | null
+          variables: Json | null
+          version_number: number
+        }
+        Insert: {
+          change_notes?: string | null
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          template_id?: string | null
+          variables?: Json | null
+          version_number?: number
+        }
+        Update: {
+          change_notes?: string | null
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          template_id?: string | null
+          variables?: Json | null
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_versions_template_id_fkey"
             columns: ["template_id"]
             isOneToOne: false
             referencedRelation: "document_templates"
@@ -35950,6 +36447,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workflow_nodes: {
+        Row: {
+          config: Json | null
+          connections: Json | null
+          created_at: string | null
+          id: string
+          node_name: string | null
+          node_type: string
+          position_x: number | null
+          position_y: number | null
+          updated_at: string | null
+          workflow_id: string | null
+        }
+        Insert: {
+          config?: Json | null
+          connections?: Json | null
+          created_at?: string | null
+          id?: string
+          node_name?: string | null
+          node_type: string
+          position_x?: number | null
+          position_y?: number | null
+          updated_at?: string | null
+          workflow_id?: string | null
+        }
+        Update: {
+          config?: Json | null
+          connections?: Json | null
+          created_at?: string | null
+          id?: string
+          node_name?: string | null
+          node_type?: string
+          position_x?: number | null
+          position_y?: number | null
+          updated_at?: string | null
+          workflow_id?: string | null
+        }
+        Relationships: []
       }
       workflow_steps: {
         Row: {

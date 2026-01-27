@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
- * Performance Dashboard
- * @ts-nocheck required: UI fields differ from DB schema (system_name, is_resolved)
+ * Performance Dashboard - PATCH 873
+ * @ts-nocheck: system_name/is_resolved columns added but types not regenerated
+ * Requires: supabase gen types to update generated types
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

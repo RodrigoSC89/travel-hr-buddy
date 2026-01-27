@@ -1,15 +1,17 @@
 # Technical Debt: @ts-nocheck Files
 
-> Generated: 2026-01-27 | PATCH 872
+> Updated: 2026-01-27 | PATCH 873
 
 ## Summary
-- **Total @ts-nocheck files in src/**: ~40 files
+- **Total @ts-nocheck files in src/**: ~40 files (reduced after migrations)
 - **Edge Functions (supabase/functions/)**: ~50 files (Deno environment - acceptable)
 - **Test files (src/tests/, tests/)**: ~100 files (by design)
 
-## Production Files with @ts-nocheck (Requiring Schema Alignment)
-
-### Priority 1 - Core Functionality
+## PATCH 873 Actions
+1. ✅ Created missing tables: template_versions, workflow_nodes, satcom_messages, etc.
+2. ✅ Added columns: system_name, is_resolved to performance_alerts
+3. ✅ Created type-mappers utility: src/lib/supabase/type-mappers.ts
+4. ⚠️ Types need regeneration via `supabase gen types` to fully remove @ts-nocheck
 
 | File | Reason | Fix Required |
 |------|--------|--------------|
