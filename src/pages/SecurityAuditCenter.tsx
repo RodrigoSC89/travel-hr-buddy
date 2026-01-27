@@ -15,7 +15,7 @@ export default function SecurityAuditCenterPage() {
           content="Centro de auditoria de segurança com logs, compliance, detecção de ameaças e relatórios de conformidade" 
         />
         <meta name="keywords" content="segurança, auditoria, compliance, GDPR, MLC 2006, ISO 27001" />
-        <link rel="canonical" href="/security-audit" />
+        <link rel="canonical" href="/backup-audit" />
       </Helmet>
       <SecurityAuditCenter />
     </>

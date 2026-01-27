@@ -56,7 +56,7 @@ export default function SGSOAuditHistoryPage() {
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-foreground">Histórico de Auditorias SGSO</h1>
-        <Link to="/admin/sgso">
+        <Link to="/sgso">
           <Button variant="outline" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
