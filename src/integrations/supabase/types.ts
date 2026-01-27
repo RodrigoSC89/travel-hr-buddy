@@ -19481,6 +19481,47 @@ export type Database = {
           },
         ]
       }
+      mission_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          message: string
+          mission_id: string | null
+          severity: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          message: string
+          mission_id?: string | null
+          severity?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          message?: string
+          mission_id?: string | null
+          severity?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mission_events_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "underwater_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mission_logs: {
         Row: {
           created_at: string
@@ -32689,6 +32730,71 @@ export type Database = {
           },
         ]
       }
+      underwater_missions: {
+        Row: {
+          battery_level: number | null
+          created_at: string | null
+          depth_target: number | null
+          end_time: string | null
+          id: string
+          max_depth: number | null
+          metadata: Json | null
+          mission_name: string
+          mission_type: string
+          notes: string | null
+          organization_id: string | null
+          start_time: string | null
+          status: string
+          target_location: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          battery_level?: number | null
+          created_at?: string | null
+          depth_target?: number | null
+          end_time?: string | null
+          id?: string
+          max_depth?: number | null
+          metadata?: Json | null
+          mission_name: string
+          mission_type?: string
+          notes?: string | null
+          organization_id?: string | null
+          start_time?: string | null
+          status?: string
+          target_location?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          battery_level?: number | null
+          created_at?: string | null
+          depth_target?: number | null
+          end_time?: string | null
+          id?: string
+          max_depth?: number | null
+          metadata?: Json | null
+          mission_name?: string
+          mission_type?: string
+          notes?: string | null
+          organization_id?: string | null
+          start_time?: string | null
+          status?: string
+          target_location?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "underwater_missions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       usage_events: {
         Row: {
           event_category: string | null
@@ -36389,6 +36495,38 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_ai_accuracy_metrics: {
+        Args: { p_days_back?: number; p_module_name?: string }
+        Returns: {
+          accuracy_rate: number
+          avg_confidence: number
+          correct_decisions: number
+          module: string
+          total_decisions: number
+          trend: string
+        }[]
+      }
+      get_ai_behavior_analysis: {
+        Args: { p_limit?: number; p_module_name?: string }
+        Returns: {
+          behavior_type: string
+          learning_rate: number
+          metrics: Json
+          module: string
+          snapshot_date: string
+        }[]
+      }
+      get_ai_learning_insights: {
+        Args: { p_days_back?: number; p_limit?: number }
+        Returns: {
+          confidence_score: number
+          created_at: string
+          id: string
+          insight_data: Json
+          insight_type: string
+          module_name: string
+        }[]
+      }
       get_current_organization_id: { Args: never; Returns: string }
       get_current_tenant_id: { Args: never; Returns: string }
       get_drill_statistics: {
@@ -36643,6 +36781,10 @@ export type Database = {
           p_ttl_minutes?: number
         }
         Returns: undefined
+      }
+      start_tracking_session: {
+        Args: { p_satellite_id: string; p_session_name?: string }
+        Returns: Json
       }
       update_satellite_position: {
         Args: {
