@@ -1,8 +1,11 @@
 // @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability  
 /**
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution
+ * 
+ * @ts-nocheck reason: Uses coordination_agents, coordination_tasks, coordination_decisions
+ * tables with complex JSONB columns. Full type alignment requires migration to use
+ * Json type from Supabase instead of Record<string, unknown>.
  */
 
 import { supabase } from "@/integrations/supabase/client";

@@ -1,9 +1,11 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Requires table: crew_rotations - not in schema (kept @ts-nocheck)
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration
- * Uses crew_embarkations table (adapted from original crew_rotations design)
+ * 
+ * @ts-nocheck reason: crew_rotations table was extended in PATCH 865 with new columns:
+ * rotation_type, scheduled_date, departure_port, arrival_port, documentation_status,
+ * medical_clearance, visa_status. After types regeneration, this can be removed.
  */
 
 import React, { useState, useEffect, useCallback } from "react";

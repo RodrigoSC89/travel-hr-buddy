@@ -7304,6 +7304,7 @@ export type Database = {
           outcome: string | null
           reasoning: string | null
           task_id: string | null
+          timestamp: string | null
         }
         Insert: {
           agent_id?: string | null
@@ -7316,6 +7317,7 @@ export type Database = {
           outcome?: string | null
           reasoning?: string | null
           task_id?: string | null
+          timestamp?: string | null
         }
         Update: {
           agent_id?: string | null
@@ -7328,6 +7330,7 @@ export type Database = {
           outcome?: string | null
           reasoning?: string | null
           task_id?: string | null
+          timestamp?: string | null
         }
         Relationships: [
           {
@@ -7346,11 +7349,50 @@ export type Database = {
           },
         ]
       }
+      coordination_mission_links: {
+        Row: {
+          coordination_task_id: string | null
+          created_at: string | null
+          id: string
+          integration_status: string
+          mission_id: string | null
+          sync_data: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          coordination_task_id?: string | null
+          created_at?: string | null
+          id?: string
+          integration_status?: string
+          mission_id?: string | null
+          sync_data?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          coordination_task_id?: string | null
+          created_at?: string | null
+          id?: string
+          integration_status?: string
+          mission_id?: string | null
+          sync_data?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coordination_mission_links_coordination_task_id_fkey"
+            columns: ["coordination_task_id"]
+            isOneToOne: false
+            referencedRelation: "coordination_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coordination_tasks: {
         Row: {
           assigned_agent_id: string | null
           completed_at: string | null
           created_at: string
+          created_by: string | null
           deadline: string | null
           dependencies: string[] | null
           description: string | null
@@ -7360,18 +7402,23 @@ export type Database = {
           max_retries: number | null
           metadata: Json | null
           output_data: Json | null
+          payload: Json | null
           priority: number | null
+          required_capabilities: string[] | null
+          result: Json | null
           retry_count: number | null
           started_at: string | null
           status: string | null
           task_name: string
           task_type: string
+          timeout_seconds: number | null
           updated_at: string
         }
         Insert: {
           assigned_agent_id?: string | null
           completed_at?: string | null
           created_at?: string
+          created_by?: string | null
           deadline?: string | null
           dependencies?: string[] | null
           description?: string | null
@@ -7381,18 +7428,23 @@ export type Database = {
           max_retries?: number | null
           metadata?: Json | null
           output_data?: Json | null
+          payload?: Json | null
           priority?: number | null
+          required_capabilities?: string[] | null
+          result?: Json | null
           retry_count?: number | null
           started_at?: string | null
           status?: string | null
           task_name: string
           task_type: string
+          timeout_seconds?: number | null
           updated_at?: string
         }
         Update: {
           assigned_agent_id?: string | null
           completed_at?: string | null
           created_at?: string
+          created_by?: string | null
           deadline?: string | null
           dependencies?: string[] | null
           description?: string | null
@@ -7402,12 +7454,16 @@ export type Database = {
           max_retries?: number | null
           metadata?: Json | null
           output_data?: Json | null
+          payload?: Json | null
           priority?: number | null
+          required_capabilities?: string[] | null
+          result?: Json | null
           retry_count?: number | null
           started_at?: string | null
           status?: string | null
           task_name?: string
           task_type?: string
+          timeout_seconds?: number | null
           updated_at?: string
         }
         Relationships: [
@@ -9113,45 +9169,122 @@ export type Database = {
           },
         ]
       }
+      crew_rotation_logs: {
+        Row: {
+          changed_by: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          log_type: string
+          metadata: Json | null
+          new_status: string | null
+          previous_status: string | null
+          rotation_id: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          log_type?: string
+          metadata?: Json | null
+          new_status?: string | null
+          previous_status?: string | null
+          rotation_id?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          log_type?: string
+          metadata?: Json | null
+          new_status?: string | null
+          previous_status?: string | null
+          rotation_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_rotation_logs_rotation_id_fkey"
+            columns: ["rotation_id"]
+            isOneToOne: false
+            referencedRelation: "crew_rotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_rotations: {
         Row: {
+          accommodation_details: Json | null
+          actual_date: string | null
+          arrival_port: string | null
           created_at: string | null
           crew_member_id: string | null
+          departure_port: string | null
           disembark_date: string | null
+          documentation_status: string | null
           embark_date: string
+          flight_details: Json | null
           id: string
+          medical_clearance: boolean | null
           notes: string | null
           organization_id: string | null
           position: string | null
+          rotation_type: string | null
+          scheduled_date: string | null
           status: string | null
+          transportation_method: string | null
           updated_at: string | null
           vessel_id: string | null
+          visa_status: string | null
         }
         Insert: {
+          accommodation_details?: Json | null
+          actual_date?: string | null
+          arrival_port?: string | null
           created_at?: string | null
           crew_member_id?: string | null
+          departure_port?: string | null
           disembark_date?: string | null
+          documentation_status?: string | null
           embark_date: string
+          flight_details?: Json | null
           id?: string
+          medical_clearance?: boolean | null
           notes?: string | null
           organization_id?: string | null
           position?: string | null
+          rotation_type?: string | null
+          scheduled_date?: string | null
           status?: string | null
+          transportation_method?: string | null
           updated_at?: string | null
           vessel_id?: string | null
+          visa_status?: string | null
         }
         Update: {
+          accommodation_details?: Json | null
+          actual_date?: string | null
+          arrival_port?: string | null
           created_at?: string | null
           crew_member_id?: string | null
+          departure_port?: string | null
           disembark_date?: string | null
+          documentation_status?: string | null
           embark_date?: string
+          flight_details?: Json | null
           id?: string
+          medical_clearance?: boolean | null
           notes?: string | null
           organization_id?: string | null
           position?: string | null
+          rotation_type?: string | null
+          scheduled_date?: string | null
           status?: string | null
+          transportation_method?: string | null
           updated_at?: string | null
           vessel_id?: string | null
+          visa_status?: string | null
         }
         Relationships: [
           {
@@ -20120,10 +20253,12 @@ export type Database = {
           component_name: string | null
           created_at: string
           estimated_hours: number | null
+          executed_at: string | null
           id: string
           maintenance_type: string | null
           metadata: Json | null
           notes: string | null
+          pdf_url: string | null
           priority: string | null
           scheduled_date: string | null
           status: string | null
@@ -20140,10 +20275,12 @@ export type Database = {
           component_name?: string | null
           created_at?: string
           estimated_hours?: number | null
+          executed_at?: string | null
           id?: string
           maintenance_type?: string | null
           metadata?: Json | null
           notes?: string | null
+          pdf_url?: string | null
           priority?: string | null
           scheduled_date?: string | null
           status?: string | null
@@ -20160,10 +20297,12 @@ export type Database = {
           component_name?: string | null
           created_at?: string
           estimated_hours?: number | null
+          executed_at?: string | null
           id?: string
           maintenance_type?: string | null
           metadata?: Json | null
           notes?: string | null
+          pdf_url?: string | null
           priority?: string | null
           scheduled_date?: string | null
           status?: string | null
@@ -26641,6 +26780,147 @@ export type Database = {
           },
           {
             foreignKeyName: "safety_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      satcom_communication_logs: {
+        Row: {
+          created_at: string | null
+          direction: string
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          link_used: string | null
+          message_type: string | null
+          metadata: Json | null
+          payload_size_bytes: number | null
+          status: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          direction?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          link_used?: string | null
+          message_type?: string | null
+          metadata?: Json | null
+          payload_size_bytes?: number | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          direction?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          link_used?: string | null
+          message_type?: string | null
+          metadata?: Json | null
+          payload_size_bytes?: number | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_communication_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      satcom_connection_status: {
+        Row: {
+          bandwidth_available_kbps: number | null
+          created_at: string | null
+          id: string
+          is_connected: boolean | null
+          last_check_at: string | null
+          latency_ms: number | null
+          link_id: string | null
+          signal_quality: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          bandwidth_available_kbps?: number | null
+          created_at?: string | null
+          id?: string
+          is_connected?: boolean | null
+          last_check_at?: string | null
+          latency_ms?: number | null
+          link_id?: string | null
+          signal_quality?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          bandwidth_available_kbps?: number | null
+          created_at?: string | null
+          id?: string
+          is_connected?: boolean | null
+          last_check_at?: string | null
+          latency_ms?: number | null
+          link_id?: string | null
+          signal_quality?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_connection_status_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      satcom_failover_logs: {
+        Row: {
+          created_at: string | null
+          failover_time_ms: number | null
+          from_link_id: string | null
+          id: string
+          metadata: Json | null
+          reason: string | null
+          success: boolean | null
+          to_link_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          failover_time_ms?: number | null
+          from_link_id?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          success?: boolean | null
+          to_link_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          failover_time_ms?: number | null
+          from_link_id?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          success?: boolean | null
+          to_link_id?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_failover_logs_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"

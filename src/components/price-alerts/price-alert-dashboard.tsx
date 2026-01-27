@@ -1,4 +1,11 @@
 // @ts-nocheck
+/**
+ * Price Alert Dashboard
+ * 
+ * @ts-nocheck reason: price_alerts table schema uses string | null for
+ * last_checked_at but interface expects string | undefined. Requires
+ * mapping function to convert null to undefined across all consumers.
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedAlertManagement } from "./enhanced-alert-management";
@@ -10,9 +17,8 @@ import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, 
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase as supabaseClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-const supabase: unknown = supabaseClient;
 
 
 interface PriceAlert {
