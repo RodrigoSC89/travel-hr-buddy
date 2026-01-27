@@ -1,4 +1,17 @@
-// @ts-nocheck - Dynamic table access requires type override
+// @ts-nocheck
+/**
+ * Restore Report Logs Page - PATCH 877
+ * NOTE: @ts-nocheck needed - restore_report_logs table schema
+ * doesn't match RestoreReportLog interface
+ * 
+ * Features:
+ * - Infinite scroll pagination (20 records per page)
+ * - Auto-applying filters
+ * - Real-time total count display
+ * - Enhanced CSV/PDF export with notifications
+ * 
+ * Supports public view mode via ?public=1 query parameter
+ */
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -27,6 +40,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
+
 interface RestoreReportLog {
   id: string;
   executed_at: string;
@@ -35,23 +49,6 @@ interface RestoreReportLog {
   error_details: string | null;
   triggered_by: string;
 }
-
-// @ts-nocheck - Dynamic table access requires type override
-/**
- * Restore Report Logs Page
- * Displays audit logs of automated restore report executions with infinite scroll
- * 
- * Features:
- * - Infinite scroll pagination (20 records per page)
- * - Auto-applying filters
- * - Real-time total count display
- * - Enhanced CSV/PDF export with notifications
- * 
- * Supports public view mode via ?public=1 query parameter
- * - Public mode hides navigation and action buttons
- * - Shows read-only indicator at bottom
- * - Perfect for TV monitors and public displays
- */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

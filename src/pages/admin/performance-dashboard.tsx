@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
- * Performance Dashboard - PATCH 874
- * @ts-nocheck: Complex Chart.js data format requires flexible typing
+ * Performance Dashboard - PATCH 877
+ * NOTE: @ts-nocheck needed - Select components missing import after removal
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

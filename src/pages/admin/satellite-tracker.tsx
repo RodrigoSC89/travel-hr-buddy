@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
- * Satellite Tracker Page - PATCH 874
- * @ts-nocheck: RPC functions not in types, satellite_positions join
+ * Satellite Tracker Page - PATCH 877
+ * NOTE: @ts-nocheck needed - satellite_positions join returns
+ * null for calculated_at but interface expects string
  */
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

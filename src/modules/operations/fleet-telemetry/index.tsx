@@ -1,7 +1,10 @@
-// @ts-nocheck - Legacy: vessel_sensors, maintenance_alerts tables not in generated types
+// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
+ * 
+ * NOTE: @ts-nocheck needed - fleet_sensors table not in generated types,
+ * maintenance_alerts has different schema than local interface
  */
 
 import React, { useState, useEffect } from "react";

@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
- * Project Timeline - PATCH 874
- * @ts-nocheck: jsPDF lazy load, formData typing, XLSX dynamic import
+ * Project Timeline - PATCH 877
+ * NOTE: @ts-nocheck needed - jsPDF/XLSX dynamic imports return
+ * untyped modules, and DB columns don't match local interfaces
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +29,7 @@ import {
   Users,
   FileText
 } from "lucide-react";
+
 let XLSX: any = null;
 const loadXLSX = async () => {
   if (!XLSX) {
