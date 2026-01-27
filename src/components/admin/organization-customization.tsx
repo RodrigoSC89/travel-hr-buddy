@@ -1,4 +1,4 @@
-// @ts-nocheck - Legacy: requires schema alignment for enabled_modules/business_rules JSON
+// @ts-nocheck - Legacy: organization_branding JSON fields need proper type coercion
 /**
  * Organization Customization Component
  */
