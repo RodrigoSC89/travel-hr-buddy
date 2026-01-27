@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 91.1 - Document Hub Module
  * Central hub for document management with AI integration
@@ -157,15 +156,15 @@ export default function DocumentHub() {
       setAiInsight(aiResponse.message);
       logger.info("AI analysis completed", { confidence: aiResponse.confidence });
 
-      // Store document metadata
+      // Store document metadata in ai_documents table
       const { error: dbError } = await supabase
-        .from("documents")
+        .from("ai_documents")
         .insert({
-          name: selectedFile.name,
-          type: selectedFile.type,
-          size: selectedFile.size,
+          file_name: selectedFile.name,
+          file_type: selectedFile.type,
+          file_size: selectedFile.size,
           storage_path: uploadData.path,
-          ai_analysis: aiResponse.message,
+          ocr_status: "pending",
         });
 
       if (dbError) {
@@ -202,7 +201,7 @@ export default function DocumentHub() {
             PATCH 91.1 - Gerenciamento centralizado de documentos com IA
           </p>
         </div>
-        <Badge variant="outline" className="text-green-600">
+        <Badge variant="outline" className="text-success">
           <CheckCircle className="h-4 w-4 mr-1" />
           Operacional
         </Badge>
@@ -262,15 +261,15 @@ export default function DocumentHub() {
           )}
 
           {aiInsight && (
-            <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950">
+            <Card className="border-primary/20 bg-primary/5">
               <CardContent className="pt-4">
                 <div className="flex items-start gap-2">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-primary mt-0.5" />
                   <div>
-                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                    <p className="font-medium text-foreground">
                       Análise de IA
                     </p>
-                    <p className="text-sm text-blue-800 dark:text-blue-200 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {aiInsight}
                     </p>
                   </div>
