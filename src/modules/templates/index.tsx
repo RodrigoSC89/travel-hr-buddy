@@ -1,7 +1,9 @@
 // @ts-nocheck
+// Legacy: Uses extended ai_document_templates schema with placeholders field
+// Schema alignment required: placeholders not in generated types
 /**
  * PATCH 463 - Complete Template Editor
- * Enhanced drag-and-drop editor with dynamic placeholders and PDF export
+ * PATCH 865: Documented @ts-nocheck reason - requires schema migration
  */
 
 import React, { useState, useEffect } from "react";

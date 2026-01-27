@@ -1,8 +1,9 @@
 // @ts-nocheck
+// Legacy: Uses extended travel_itineraries schema with legs relation
+// Schema alignment required: itinerary_number, departure_location, arrival_location not in generated types
 /**
  * PATCH 298: Travel Management Component
- * Multi-leg itinerary display with conflict detection and PDF export
- * PATCH 653 - Lazy loading for jsPDF
+ * PATCH 865: Documented @ts-nocheck reason - requires schema migration
  */
 
 import React, { useState, useEffect } from "react";
