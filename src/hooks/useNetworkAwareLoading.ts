@@ -38,12 +38,17 @@ export const useNetworkState = (): NetworkState => {
       });
     };
 
-    // PATCH v20: Apenas eventos de mudança de conexão, NÃO online/offline
-    const nav = navigator as Navigator & { connection?: { addEventListener: (type: string, cb: () => void) => void } };
+    // PATCH v21: Fixed memory leak - proper cleanup for connection listener
+    const nav = navigator as Navigator & { 
+      connection?: { 
+        addEventListener: (type: string, cb: () => void) => void;
+        removeEventListener: (type: string, cb: () => void) => void;
+      } 
+    };
     nav.connection?.addEventListener('change', updateState);
 
     return () => {
-      // PATCH v20: Cleanup apenas do connection change
+      nav.connection?.removeEventListener('change', updateState);
     };
   }, []);
 
