@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import mapboxgl from "@/lib/mapbox-shim";
+import { getMapboxGLAsync, type MapboxGLInterface } from "@/lib/mapbox-shim";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,8 +45,9 @@ export function FleetMapBox({
   showList = true
 }: FleetMapBoxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const mapRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
+  const mapboxRef = useRef<MapboxGLInterface | null>(null);
   
   const [mapboxToken, setMapboxToken] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,7 @@ export function FleetMapBox({
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [source, setSource] = useState<string>("loading");
+  const [mapReady, setMapReady] = useState(false);
 
   // Fetch Mapbox token
   useEffect(() => {
@@ -154,149 +156,164 @@ export function FleetMapBox({
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || map.current) return;
+    if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
-    mapboxgl.accessToken = mapboxToken;
+    let mounted = true;
 
-    const mapInstance = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/dark-v11",
-      center: [-45, -20], // Center on Brazil
-      zoom: 4,
-      pitch: 0,
-    });
+    const initMap = async () => {
+      try {
+        const mapboxgl = await getMapboxGLAsync();
+        if (!mounted || !mapContainer.current) return;
+        
+        mapboxRef.current = mapboxgl;
+        mapboxgl.accessToken = mapboxToken;
 
-    mapInstance.addControl(new mapboxgl.NavigationControl(), "top-right");
-    mapInstance.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+        const mapInstance = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: "mapbox://styles/mapbox/dark-v11",
+          center: [-45, -20], // Center on Brazil
+          zoom: 4,
+          pitch: 0,
+        });
 
-    map.current = mapInstance;
+        mapInstance.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+        mapInstance.on("load", () => {
+          if (mounted) {
+            setMapReady(true);
+          }
+        });
+
+        mapRef.current = mapInstance;
+      } catch (err) {
+        console.error("Failed to initialize map:", err);
+        setError("Falha ao inicializar o mapa");
+      }
+    };
+
+    initMap();
 
     return () => {
-      mapInstance.remove();
-      map.current = null;
+      mounted = false;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
   }, [mapboxToken]);
 
   // Update markers when vessels change
   useEffect(() => {
-    const mapInstance = map.current;
-    if (!mapInstance || vessels.length === 0) return;
+    const mapInstance = mapRef.current;
+    const mapboxgl = mapboxRef.current;
+    if (!mapInstance || !mapboxgl || !mapReady || vessels.length === 0) return;
 
-    // Wait for map to be ready
-    const updateMarkers = () => {
-      // Clear existing markers
-      markersRef.current.forEach(marker => marker.remove());
-      markersRef.current = [];
+    // Clear existing markers
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
 
-      // Add new markers
-      vessels.forEach(vessel => {
-        if (!vessel.latitude || !vessel.longitude) return;
+    // Add new markers
+    vessels.forEach(vessel => {
+      if (!vessel.latitude || !vessel.longitude) return;
 
-        const el = document.createElement("div");
-        el.className = "vessel-marker";
-        
-        const isMoving = vessel.speed > 0.5;
-        const isSelected = selectedVessel?.id === vessel.vesselId || selectedVessel?.name === vessel.name;
-        const color = isSelected ? "#f97316" : isMoving ? "#3b82f6" : "#10b981";
-        
-        el.style.cssText = `
-          width: ${isSelected ? "40px" : "32px"};
-          height: ${isSelected ? "40px" : "32px"};
-          background: ${color};
-          border: 3px solid white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-          transform: rotate(${vessel.heading}deg);
-          transition: all 0.3s ease;
-          z-index: ${isSelected ? 100 : 1};
-        `;
-        
-        el.innerHTML = `
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
-            <path d="M12 2L4 12h3v7h10v-7h3L12 2z"/>
-          </svg>
-        `;
+      const el = document.createElement("div");
+      el.className = "vessel-marker";
+      
+      const isMoving = vessel.speed > 0.5;
+      const isSelected = selectedVessel?.id === vessel.vesselId || selectedVessel?.name === vessel.name;
+      const color = isSelected ? "#f97316" : isMoving ? "#3b82f6" : "#10b981";
+      
+      el.style.cssText = `
+        width: ${isSelected ? "40px" : "32px"};
+        height: ${isSelected ? "40px" : "32px"};
+        background: ${color};
+        border: 3px solid white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        transform: rotate(${vessel.heading}deg);
+        transition: all 0.3s ease;
+        z-index: ${isSelected ? 100 : 1};
+      `;
+      
+      el.innerHTML = `
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
+          <path d="M12 2L4 12h3v7h10v-7h3L12 2z"/>
+        </svg>
+      `;
 
-        const popup = new mapboxgl.Popup({ offset: 25, closeButton: true })
-          .setHTML(`
-            <div style="padding: 12px; min-width: 220px; font-family: system-ui, sans-serif;">
-              <h3 style="font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #1f2937;">${vessel.name}</h3>
-              <div style="font-size: 12px; color: #6b7280; line-height: 1.6;">
-                <p><strong>MMSI:</strong> ${vessel.mmsi}</p>
-                <p><strong>Status:</strong> ${vessel.navStatus}</p>
-                <p><strong>Velocidade:</strong> ${vessel.speed.toFixed(1)} kn</p>
-                <p><strong>Rumo:</strong> ${vessel.course.toFixed(0)}°</p>
-                <p><strong>Tipo:</strong> ${vessel.shipType}</p>
-                ${vessel.destination ? `<p><strong>Destino:</strong> ${vessel.destination}</p>` : ""}
-              </div>
-              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af;">
-                Atualizado: ${new Date(vessel.lastUpdate).toLocaleString("pt-BR")}
-              </div>
+      const popup = new mapboxgl.Popup({ offset: 25, closeButton: true })
+        .setHTML(`
+          <div style="padding: 12px; min-width: 220px; font-family: system-ui, sans-serif;">
+            <h3 style="font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #1f2937;">${vessel.name}</h3>
+            <div style="font-size: 12px; color: #6b7280; line-height: 1.6;">
+              <p><strong>MMSI:</strong> ${vessel.mmsi}</p>
+              <p><strong>Status:</strong> ${vessel.navStatus}</p>
+              <p><strong>Velocidade:</strong> ${vessel.speed.toFixed(1)} kn</p>
+              <p><strong>Rumo:</strong> ${vessel.course.toFixed(0)}°</p>
+              <p><strong>Tipo:</strong> ${vessel.shipType}</p>
+              ${vessel.destination ? `<p><strong>Destino:</strong> ${vessel.destination}</p>` : ""}
             </div>
-          `);
+            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af;">
+              Atualizado: ${new Date(vessel.lastUpdate).toLocaleString("pt-BR")}
+            </div>
+          </div>
+        `);
 
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat([vessel.longitude, vessel.latitude])
-          .setPopup(popup)
-          .addTo(mapInstance);
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([vessel.longitude, vessel.latitude])
+        .setPopup(popup)
+        .addTo(mapInstance);
 
-        el.addEventListener("click", () => {
-          onSelectVessel?.({
-            id: vessel.vesselId,
-            name: vessel.name,
-            mmsi: vessel.mmsi,
-            speed: vessel.speed,
-            course: vessel.course,
-            status: vessel.speed > 0.5 ? "active" : "moored",
-            latitude: vessel.latitude,
-            longitude: vessel.longitude,
-          });
+      el.addEventListener("click", () => {
+        onSelectVessel?.({
+          id: vessel.vesselId,
+          name: vessel.name,
+          mmsi: vessel.mmsi,
+          speed: vessel.speed,
+          course: vessel.course,
+          status: vessel.speed > 0.5 ? "active" : "moored",
+          latitude: vessel.latitude,
+          longitude: vessel.longitude,
         });
-
-        markersRef.current.push(marker);
       });
 
-      // Fit bounds to show all vessels
-      if (vessels.length > 1) {
-        const bounds = new mapboxgl.LngLatBounds();
-        vessels.forEach(v => {
-          if (v.latitude && v.longitude) {
-            bounds.extend([v.longitude, v.latitude]);
-          }
-        });
-        mapInstance.fitBounds(bounds, { padding: 60, maxZoom: 10 });
-      } else if (vessels.length === 1 && vessels[0].latitude && vessels[0].longitude) {
-        mapInstance.flyTo({ center: [vessels[0].longitude, vessels[0].latitude], zoom: 8 });
-      }
-    };
+      markersRef.current.push(marker);
+    });
 
-    if (mapInstance.isStyleLoaded()) {
-      updateMarkers();
-    } else {
-      mapInstance.on("load", updateMarkers);
+    // Fit bounds to show all vessels
+    if (vessels.length > 1) {
+      const bounds = new mapboxgl.LngLatBounds();
+      vessels.forEach(v => {
+        if (v.latitude && v.longitude) {
+          bounds.extend([v.longitude, v.latitude]);
+        }
+      });
+      mapInstance.fitBounds(bounds, { padding: 60, maxZoom: 10 });
+    } else if (vessels.length === 1 && vessels[0].latitude && vessels[0].longitude) {
+      mapInstance.flyTo({ center: [vessels[0].longitude, vessels[0].latitude], zoom: 8 });
     }
-  }, [vessels, selectedVessel, onSelectVessel]);
+  }, [vessels, selectedVessel, onSelectVessel, mapReady]);
 
   // Fly to selected vessel
   useEffect(() => {
-    if (!map.current || !selectedVessel) return;
+    if (!mapRef.current || !selectedVessel || !mapReady) return;
     
     const vessel = vessels.find(v => 
       v.vesselId === selectedVessel.id || v.name === selectedVessel.name
     );
     
     if (vessel?.latitude && vessel?.longitude) {
-      map.current.flyTo({
+      mapRef.current.flyTo({
         center: [vessel.longitude, vessel.latitude],
         zoom: 10,
         duration: 1500
       });
     }
-  }, [selectedVessel, vessels]);
+  }, [selectedVessel, vessels, mapReady]);
 
   if (error && !mapboxToken) {
     return (
@@ -396,11 +413,11 @@ export function FleetMapBox({
         <Card className="h-full overflow-hidden">
           <CardContent className="h-full p-0 relative">
             {loading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : null}
-            <div ref={mapContainer} className="h-full w-full rounded-lg" />
+            <div ref={mapContainer} className="h-full w-full rounded-lg" style={{ minHeight: "400px" }} />
             
             {/* Refresh Button */}
             <div className="absolute top-4 left-4 z-10">
