@@ -9,7 +9,7 @@ import { Download, Smartphone, Wifi, WifiOff, Check, ArrowRight } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePWAStatus } from '@/hooks/usePWAStatus';
-import { LanguageSelector } from '@/components/LanguageSelector';
+import { LanguageSelector } from '@/components/i18n/LanguageSelector';
 
 function getInstallInstructions(platform: string): string {
   if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {

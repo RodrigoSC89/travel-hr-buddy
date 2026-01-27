@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Activity, Zap, Clock, BarChart3, Wifi, HardDrive } from "lucide-react";
 import { useWebVitals } from "@/hooks/useWebVitals";
 import { getCacheSize } from "@/lib/service-worker-register";
-import { staggerContainer, staggerItem } from "./PageTransition";
+import { staggerContainer, staggerItem } from "./ui/page-transition";
 
 interface MetricCardProps {
   title: string;
