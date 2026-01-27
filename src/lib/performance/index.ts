@@ -264,3 +264,32 @@ export {
   calculateInWorker 
 } from './dashboard-optimizer';
 export { moduleLoader, useModuleLoader } from './module-loader';
+
+// PATCH v4.0: Performance validation & React optimizations
+export { 
+  PERFORMANCE_TARGETS,
+  webVitalsCollector,
+  getMemoryInfo,
+  generatePerformanceReport,
+  usePerformanceValidation,
+  type PerformanceTargets,
+  type PerformanceReport,
+} from './validation';
+
+// Re-export React optimizations (aliased to avoid conflicts)
+export {
+  smartMemo,
+  useDebounce as useReactDebounce,
+  useThrottle as useReactThrottle,
+  useDebouncedCallback as useReactDebouncedCallback,
+  useThrottledCallback as useReactThrottledCallback,
+  useStableCallback,
+  useLazyValue,
+  usePrevious,
+  useIntersectionObserver as useReactIntersectionObserver,
+  useWindowSize,
+  useAsyncEffect,
+  useForceUpdate,
+  useIsMounted,
+  useSafeState,
+} from '@/lib/react-optimizations';

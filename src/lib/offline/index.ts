@@ -78,3 +78,13 @@ export {
   sanitizeForSync,
   type IntegrityCheck,
 } from './data-integrity';
+
+// PATCH v4.0: Enhanced IndexedDB-based manager
+export { 
+  enhancedOfflineManager,
+  useEnhancedOffline,
+  useOfflineCache,
+} from './enhanced-offline-manager';
+
+// Original OfflineManager
+export { offlineManager } from './OfflineManager';
