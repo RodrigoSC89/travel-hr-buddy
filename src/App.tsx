@@ -247,10 +247,23 @@ const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 const Admin = lazy(() => import("@/pages/Admin"));
 // Dashboard, ExecutiveDashboard, Analytics → CentralComando/AnalyticsCommandCenter
 
-// Query client
+// Query client - otimizado para conexões lentas/satélite
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 1000 * 60 * 5, retry: 1 },
+    queries: { 
+      staleTime: 1000 * 60 * 5, // 5 minutos - evita refetch desnecessário
+      gcTime: 1000 * 60 * 30, // 30 minutos de cache
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      refetchOnWindowFocus: false, // Desabilitado para economizar dados
+      refetchOnReconnect: 'always',
+      networkMode: 'offlineFirst', // Prioriza cache em conexões lentas
+    },
+    mutations: {
+      retry: 2,
+      retryDelay: 1000,
+      networkMode: 'offlineFirst',
+    },
   },
 });
 
