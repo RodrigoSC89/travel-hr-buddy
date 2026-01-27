@@ -157,8 +157,6 @@ export function HotwordDetector({
           const transcript = results[i][0].transcript.toLowerCase().trim();
           const confidence = results[i][0].confidence;
 
-          console.log('[HotwordDetector] Transcript:', transcript, 'Confidence:', confidence);
-
           // Check for hotword patterns with sensitivity threshold
           const adjustedThreshold = DETECTION_THRESHOLD * (1 - sensitivity * 0.3);
           
@@ -179,7 +177,6 @@ export function HotwordDetector({
           // Ignore no-speech errors, just restart
           return;
         }
-        console.error('[HotwordDetector] Recognition error:', event.error);
         
         if (event.error === 'not-allowed') {
           toast.error('Permissão de microfone negada');
@@ -200,15 +197,12 @@ export function HotwordDetector({
 
       recognitionRef.current = recognition;
       return true;
-    } catch (error) {
-      console.error('[HotwordDetector] Failed to initialize speech recognition:', error);
+    } catch {
       return false;
     }
   };
 
   const handleHotwordDetected = useCallback(() => {
-    console.log('[HotwordDetector] 🎙️ Hotword "Hey Nauti" detected!');
-    
     setState(prev => ({
       ...prev,
       lastDetection: new Date(),

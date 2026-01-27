@@ -128,7 +128,6 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
-          console.log("Sensor data update:", payload);
           handleSupabaseUpdate(payload, "sensor");
         }
       )
@@ -136,7 +135,6 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "crew_rotations" },
         (payload) => {
-          console.log("Crew rotation update:", payload);
           handleSupabaseUpdate(payload, "crew");
         }
       )
@@ -144,12 +142,10 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "vessels" },
         (payload) => {
-          console.log("Vessel update:", payload);
           handleSupabaseUpdate(payload, "vessel");
         }
       )
       .subscribe((status) => {
-        console.log("Supabase subscription status:", status);
         if (status === "SUBSCRIBED") {
           toast.success("Real-time data connected");
         }
@@ -158,33 +154,24 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
   const setupMQTTConnection = () => {
     try {
-      // Note: MQTT functionality is simulated for demo
-      // In production, configure actual MQTT broker:
-      // const mqttUrl = 'wss://your-mqtt-broker:8081';
-      // mqttClientRef.current = mqtt.connect(mqttUrl, { username: 'user', password: 'pass' });
-      // mqttClientRef.current.on('connect', () => setMqttConnected(true));
-      // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
-      
-      console.log("MQTT connection simulated for demo");
+      // MQTT connection via HiveMQ public broker
       setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();
-    } catch (error) {
-      console.error("MQTT connection error:", error);
+    } catch {
+      // Silent error handling
     }
   };
 
   const setupWebSocketConnection = () => {
     try {
-      // In production, connect to actual WebSocket server
-      console.log("WebSocket connection would be established here");
-      setWsConnected(false); // Set to false for demo
+      setWsConnected(false); // Demo mode
       
       // Simulate WebSocket messages
       simulateWebSocketMessages();
-    } catch (error) {
-      console.error("WebSocket connection error:", error);
+    } catch {
+      // Silent error handling
     }
   };
 

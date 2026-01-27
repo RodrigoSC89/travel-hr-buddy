@@ -210,8 +210,7 @@ export const PeoDpManager: React.FC = () => {
     setActiveView("audits");
   };
 
-  const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
-    console.log("Audit saved:", { items, score });
+  const handleAuditSave = (_items: PEODPAuditItem[], _score: number) => {
     toast.success("Auditoria salva como rascunho");
   };
 
@@ -238,9 +237,9 @@ export const PeoDpManager: React.FC = () => {
     toast.success(`Auditoria concluída com score ${score}%`);
   };
 
-  const handleChecklistSave = (version: PEODPChecklistVersion) => {
-    console.log("Checklist saved:", version);
+  const handleChecklistSave = (_version: PEODPChecklistVersion) => {
     setIsChecklistEditorOpen(false);
+    toast.success("Checklist salvo com sucesso");
   };
 
   const getStatusBadge = (status: DPPlan["status"]) => {

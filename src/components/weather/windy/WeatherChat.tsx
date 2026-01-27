@@ -170,7 +170,6 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
-      console.log('[WeatherChat] Welcome message set');
     }
   }, [weather, location.name, messages.length]);
 

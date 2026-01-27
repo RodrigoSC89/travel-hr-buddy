@@ -71,13 +71,12 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
-      console.log("[AIReportGenerator] Starting report generation:", { reportType, format, dateRange });
-      
-      const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-ai-report", {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ai-report`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
+          "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || "",
+          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ""}`,
         },
         body: JSON.stringify({
           type: reportType,
@@ -88,11 +87,8 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         })
       });
 
-      console.log("[AIReportGenerator] Response status:", response.status);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[AIReportGenerator] Error response:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -104,7 +100,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       }
 
       const data = await response.json();
-      console.log("[AIReportGenerator] Response data:", { success: data.success, hasReport: !!data.report });
 
       if (data.success && data.report) {
         setLastReport(data.report);
