@@ -5,7 +5,6 @@
 import { lazy, Suspense } from "react";
 import { Route } from "react-router-dom";
 import {
-  RevolutionaryAI,
   AIEnhancedModules,
   AIOperationsCenter,
   AIObservabilityDashboard,
@@ -18,6 +17,9 @@ import {
   AutonomousCommandCenter,
 } from "./lazy-imports";
 
+// Lazy load AI Command Center (replaces RevolutionaryAI)
+const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
+
 // Lazy load new AI pages
 const NautiBrainPage = lazy(() => import("@/pages/ai/NautiBrainPage"));
 
@@ -29,7 +31,7 @@ const LoadingFallback = () => (
 
 export const aiRoutes = (
   <>
-    <Route path="revolutionary-ai/*" element={<RevolutionaryAI />} />
+    <Route path="revolutionary-ai/*" element={<AICommandCenter />} />
     <Route path="ai-modules" element={<AIEnhancedModules />} />
     <Route path="ai-operations-center" element={<AIOperationsCenter />} />
     <Route path="ai-observability" element={<AIObservabilityDashboard />} />
