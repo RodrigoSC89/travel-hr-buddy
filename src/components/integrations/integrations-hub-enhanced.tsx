@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
  * Integrations Hub Enhanced
- * Legacy: connected_integrations table uses different column naming conventions
+ * PATCH 871: Full type-safety aligned with connected_integrations and webhook_events schemas
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,42 +44,19 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Database } from "@/integrations/supabase/types";
+import type { Json } from "@/integrations/supabase/types";
 
-// Aligned with connected_integrations actual schema
-interface Integration {
-  id: string;
-  organization_id?: string | null;
-  user_id?: string | null;
-  provider: string | null;
-  integration_name: string;
-  oauth_access_token?: string | null;
-  oauth_refresh_token?: string | null;
-  oauth_token_expires_at?: string | null;
-  is_active: boolean | null;
-  scopes?: string[] | null;
-  metadata?: Record<string, unknown> | null;
-  last_sync_at?: string | null;
-  created_at: string | null;
-  updated_at?: string | null;
-}
+// Use exact DB types from Supabase
+type ConnectedIntegrationRow = Database["public"]["Tables"]["connected_integrations"]["Row"];
+type WebhookEventRow = Database["public"]["Tables"]["webhook_events"]["Row"];
 
-// Aligned with webhook_events actual schema
-interface WebhookEvent {
-  id: string;
-  organization_id?: string | null;
-  integration_id?: string | null;
-  event_type: string;
-  event_name: string;
-  payload?: Record<string, unknown> | null;
-  source_ip?: string | null;
-  headers?: Record<string, unknown> | null;
-  status: string | null;
-  processed_at?: string | null;
-  error_message?: string | null;
-  created_at: string | null;
-  retry_count?: number | null;
-  max_retries?: number | null;
-  triggered_at?: string | null;
+// Helper to safely extract JSON as Record
+function jsonToRecord(json: Json | null | undefined): Record<string, unknown> {
+  if (json === null || json === undefined) return {};
+  if (typeof json === "object" && !Array.isArray(json)) {
+    return json as Record<string, unknown>;
+  }
+  return {};
 }
 
 const PROVIDERS = [
@@ -92,16 +68,24 @@ const PROVIDERS = [
   { name: "Dropbox", type: "oauth", icon: "📦", scopes: ["files.content.read"] },
 ];
 
+// Status config type-safe
+const STATUS_CONFIG: Record<string, { variant: "default" | "secondary" | "destructive"; icon: React.ReactNode }> = {
+  active: { variant: "default", icon: <CheckCircle2 className="h-3 w-3" /> },
+  true: { variant: "default", icon: <CheckCircle2 className="h-3 w-3" /> },
+  inactive: { variant: "secondary", icon: <XCircle className="h-3 w-3" /> },
+  false: { variant: "secondary", icon: <XCircle className="h-3 w-3" /> },
+  error: { variant: "destructive", icon: <XCircle className="h-3 w-3" /> },
+};
+
 export const IntegrationsHubEnhanced = () => {
   const { toast } = useToast();
-  const [integrations, setIntegrations] = useState<Integration[]>([]);
-  const [webhookEvents, setWebhookEvents] = useState<WebhookEvent[]>([]);
+  const [integrations, setIntegrations] = useState<ConnectedIntegrationRow[]>([]);
+  const [webhookEvents, setWebhookEvents] = useState<WebhookEventRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState(null);
   const [webhookUrl, setWebhookUrl] = useState("");
   const [webhookSecret, setWebhookSecret] = useState("");
   const [testPayload, setTestPayload] = useState("{\n  \"event\": \"test\",\n  \"data\": {}\n}");
-  const [selectedEvent, setSelectedEvent] = useState<WebhookEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<WebhookEventRow | null>(null);
 
   useEffect(() => {
     loadIntegrations();
@@ -117,12 +101,7 @@ export const IntegrationsHubEnhanced = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      // Map DB rows to component interface
-      const mapped: Integration[] = (data || []).map(row => ({
-        ...row,
-        metadata: row.metadata as Record<string, unknown> | null,
-      }));
-      setIntegrations(mapped);
+      setIntegrations(data || []);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
@@ -144,42 +123,20 @@ export const IntegrationsHubEnhanced = () => {
         .limit(50);
 
       if (error) throw error;
-      // Map DB rows to component interface
-      const mapped: WebhookEvent[] = (data || []).map(row => ({
-        ...row,
-        payload: row.payload as Record<string, unknown> | null,
-        headers: row.headers as Record<string, unknown> | null,
-      }));
-      setWebhookEvents(mapped);
-    } catch (error: unknown) {
-      logger.error("Error loading webhook events", error);
-    }
-  };
-
-  const loadWebhookEvents = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("webhook_events")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
       setWebhookEvents(data || []);
     } catch (error: unknown) {
       logger.error("Error loading webhook events", error);
     }
   };
 
-  const connectOAuth = async (provider: any) => {
+  const connectOAuth = async (provider: typeof PROVIDERS[number]) => {
     try {
-      // Simulate OAuth flow
       const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
       const mockRefreshToken = `mock_refresh_${Date.now()}`;
 
       const { data: user } = await supabase.auth.getUser();
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("connected_integrations")
         .insert({
           user_id: user.user?.id,
@@ -194,9 +151,7 @@ export const IntegrationsHubEnhanced = () => {
             connected_at: new Date().toISOString(),
             simulated: true,
           },
-        })
-        .select()
-        .single();
+        });
 
       if (error) throw error;
 
@@ -216,25 +171,22 @@ export const IntegrationsHubEnhanced = () => {
     }
   };
 
-  const disconnectIntegration = async (integrationId: string) => {
+  const disconnectIntegration = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from("connected_integrations")
-        .delete()
-        .eq("id", integrationId);
+      const { error } = await supabase.from("connected_integrations").delete().eq("id", id);
 
       if (error) throw error;
 
       toast({
         title: "Integration disconnected",
-        description: "Integration has been removed",
+        description: "The integration has been removed",
       });
 
       await loadIntegrations();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
-        title: "Error disconnecting",
+        title: "Disconnect failed",
         description: errorMessage,
         variant: "destructive",
       });
@@ -242,20 +194,19 @@ export const IntegrationsHubEnhanced = () => {
   };
 
   const createWebhook = async () => {
-    if (!webhookUrl) {
-      toast({
-        title: "URL required",
-        description: "Please enter a webhook URL",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
+      if (!webhookUrl) {
+        toast({
+          title: "Validation Error",
+          description: "Please provide a webhook URL",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data: user } = await supabase.auth.getUser();
 
-      // Create webhook integration
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("connected_integrations")
         .insert({
           user_id: user.user?.id,
@@ -267,9 +218,7 @@ export const IntegrationsHubEnhanced = () => {
             webhook_secret: webhookSecret,
             created_at: new Date().toISOString(),
           },
-        })
-        .select()
-        .single();
+        });
 
       if (error) throw error;
 
@@ -291,15 +240,13 @@ export const IntegrationsHubEnhanced = () => {
     }
   };
 
-  const testWebhook = async (integration: Integration) => {
+  const testWebhook = async (integration: ConnectedIntegrationRow) => {
     try {
       const payload = JSON.parse(testPayload);
-      const webhookUrl = integration.metadata?.webhook_url || "https://example.com/webhook";
+      const metadata = jsonToRecord(integration.metadata);
+      const webhookUrlFromMeta = (metadata.webhook_url as string) || "https://example.com/webhook";
 
-      // Create webhook event - aligned with actual schema
-      const webhookUrlFromMeta = (integration.metadata as Record<string, unknown>)?.webhook_url || "https://example.com/webhook";
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("webhook_events")
         .insert({
           integration_id: integration.id,
@@ -309,9 +256,7 @@ export const IntegrationsHubEnhanced = () => {
           status: "completed",
           retry_count: 1,
           triggered_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+        });
 
       if (error) throw error;
 
@@ -340,9 +285,7 @@ export const IntegrationsHubEnhanced = () => {
         .from("webhook_events")
         .update({
           status: "completed",
-          response_code: 200,
-          attempts: event.attempts + 1,
-          last_attempt_at: new Date().toISOString(),
+          retry_count: (event.retry_count ?? 0) + 1,
         })
         .eq("id", eventId);
 
@@ -364,19 +307,14 @@ export const IntegrationsHubEnhanced = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const config = {
-      active: { variant: "default", icon: <CheckCircle2 className="h-3 w-3" /> },
-      inactive: { variant: "secondary", icon: <XCircle className="h-3 w-3" /> },
-      error: { variant: "destructive", icon: <XCircle className="h-3 w-3" /> },
-    };
-
-    const { variant, icon } = config[status] || config.inactive;
+  const getStatusBadge = (isActive: boolean | null) => {
+    const status = isActive ? "active" : "inactive";
+    const config = STATUS_CONFIG[status] || STATUS_CONFIG.inactive;
 
     return (
-      <Badge variant={variant} className="flex items-center gap-1 w-fit">
-        {icon}
-        {status}
+      <Badge variant={config.variant} className="flex items-center gap-1 w-fit">
+        {config.icon}
+        {isActive ? "Active" : "Inactive"}
       </Badge>
     );
   };
@@ -403,7 +341,7 @@ export const IntegrationsHubEnhanced = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {integrations.filter((i) => i.connection_status === "active").length}
+              {integrations.filter((i) => i.is_active === true).length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Active integrations</p>
           </CardContent>
@@ -415,7 +353,7 @@ export const IntegrationsHubEnhanced = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {integrations.filter((i) => i.integration_type === "oauth").length}
+              {integrations.filter((i) => i.provider === "oauth").length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">OAuth connections</p>
           </CardContent>
@@ -427,7 +365,7 @@ export const IntegrationsHubEnhanced = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {integrations.filter((i) => i.integration_type === "webhook").length}
+              {integrations.filter((i) => i.provider === "webhook").length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Custom webhooks</p>
           </CardContent>
@@ -462,7 +400,7 @@ export const IntegrationsHubEnhanced = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {PROVIDERS.map((provider) => {
                   const connected = integrations.find(
-                    (i) => i.provider_name === provider.name && i.connection_status === "active"
+                    (i) => i.integration_name === provider.name && i.is_active === true
                   );
 
                   return (
@@ -539,11 +477,11 @@ export const IntegrationsHubEnhanced = () => {
                   <TableBody>
                     {integrations.map((integration) => (
                       <TableRow key={integration.id}>
-                        <TableCell className="font-medium">{integration.provider_name}</TableCell>
+                        <TableCell className="font-medium">{integration.integration_name}</TableCell>
                         <TableCell>
-                          <Badge variant="outline">{integration.integration_type}</Badge>
+                          <Badge variant="outline">{integration.provider}</Badge>
                         </TableCell>
-                        <TableCell>{getStatusBadge(integration.connection_status)}</TableCell>
+                        <TableCell>{getStatusBadge(integration.is_active)}</TableCell>
                         <TableCell>
                           {integration.scopes?.slice(0, 2).join(", ")}
                           {integration.scopes && integration.scopes.length > 2 && (
@@ -554,11 +492,11 @@ export const IntegrationsHubEnhanced = () => {
                           )}
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground">
-                          {new Date(integration.created_at).toLocaleDateString()}
+                          {integration.created_at ? new Date(integration.created_at).toLocaleDateString() : "N/A"}
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            {integration.integration_type === "webhook" && (
+                            {integration.provider === "webhook" && (
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -643,76 +581,76 @@ export const IntegrationsHubEnhanced = () => {
             <CardContent>
               {webhookEvents.length > 0 ? (
                 <div className="space-y-2">
-                  {webhookEvents.map((event) => (
-                    <Card key={event.id} className="border-l-4 border-l-blue-500">
-                      <CardContent className="pt-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge
-                                variant={event.status === "completed" ? "default" : "destructive"}
-                              >
-                                {event.status}
-                              </Badge>
-                              <span className="font-medium">{event.event_type}</span>
-                              {event.response_code && (
-                                <Badge variant="outline">{event.response_code}</Badge>
+                  {webhookEvents.map((event) => {
+                    const metadata = jsonToRecord(event.payload);
+                    return (
+                      <Card key={event.id} className="border-l-4 border-l-primary">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Badge
+                                  variant={event.status === "completed" ? "default" : "destructive"}
+                                >
+                                  {event.status}
+                                </Badge>
+                                <span className="font-medium">{event.event_type}</span>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">{event.event_name}</p>
+                              <div className="text-xs text-muted-foreground">
+                                Attempts: {event.retry_count ?? 0} |{" "}
+                                {event.created_at ? new Date(event.created_at).toLocaleString() : "N/A"}
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button size="sm" variant="outline" onClick={() => setSelectedEvent(event)}>
+                                    <Eye className="h-3 w-3" />
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-2xl">
+                                  <DialogHeader>
+                                    <DialogTitle>Event Payload</DialogTitle>
+                                    <DialogDescription>
+                                      Webhook payload and response details
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <div>
+                                      <Label>Payload</Label>
+                                      <pre className="bg-muted p-4 rounded-lg text-xs overflow-auto max-h-60">
+                                        {JSON.stringify(event.payload, null, 2)}
+                                      </pre>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <Label>Status</Label>
+                                        <p className="text-sm">{event.status}</p>
+                                      </div>
+                                      <div>
+                                        <Label>Retry Count</Label>
+                                        <p className="text-sm">{event.retry_count ?? 0}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                              {event.status === "failed" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => retryWebhook(event.id)}
+                                >
+                                  <Send className="h-3 w-3" />
+                                </Button>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">{event.webhook_url}</p>
-                            <div className="text-xs text-muted-foreground">
-                              Attempts: {event.attempts} |{" "}
-                              {new Date(event.created_at).toLocaleString()}
-                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" onClick={() => setSelectedEvent(event)}>
-                                  <Eye className="h-3 w-3" />
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="max-w-2xl">
-                                <DialogHeader>
-                                  <DialogTitle>Event Payload</DialogTitle>
-                                  <DialogDescription>
-                                    Webhook payload and response details
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                  <div>
-                                    <Label>Payload</Label>
-                                    <pre className="bg-muted p-4 rounded-lg text-xs overflow-auto max-h-60">
-                                      {JSON.stringify(event.payload, null, 2)}
-                                    </pre>
-                                  </div>
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <Label>Status</Label>
-                                      <p className="text-sm">{event.status}</p>
-                                    </div>
-                                    <div>
-                                      <Label>Response Code</Label>
-                                      <p className="text-sm">{event.response_code || "N/A"}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                            {event.status === "failed" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => retryWebhook(event.id)}
-                              >
-                                <Send className="h-3 w-3" />
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-center text-muted-foreground py-8">No webhook events yet</p>

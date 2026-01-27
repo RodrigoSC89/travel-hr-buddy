@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
  * Organization Customization Component
- * Legacy: organization_branding JSON fields require complex type coercion
+ * PATCH 871: Full type-safety - JSON fields properly typed with helpers
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,13 +23,20 @@ import {
   Eye,
   RefreshCw
 } from "lucide-react";
+import type { Json } from "@/integrations/supabase/types";
 
-interface BusinessRules {
-  max_reservations?: string;
-  min_advance_hours?: string;
-  custom_alert_types?: string;
-  integration_settings?: string;
-  [key: string]: unknown;
+// Type-safe JSON extraction helper
+function jsonToRecord(json: Json | null | undefined): Record<string, unknown> {
+  if (json === null || json === undefined) return {};
+  if (typeof json === "object" && !Array.isArray(json)) {
+    return json as Record<string, unknown>;
+  }
+  return {};
+}
+
+// Convert Record back to Json for DB operations
+function recordToJson(record: Record<string, unknown>): Json {
+  return record as Json;
 }
 
 interface BusinessRules {
@@ -95,12 +101,10 @@ export const OrganizationCustomization: React.FC = () => {
         default_language: currentBranding.default_language || "pt-BR",
         default_currency: currentBranding.default_currency || "BRL",
         timezone: currentBranding.timezone || "America/Sao_Paulo",
-        custom_fields: currentBranding.custom_fields || {},
-        business_rules: currentBranding.business_rules || {},
-        enabled_modules: typeof currentBranding.enabled_modules === "object" && !Array.isArray(currentBranding.enabled_modules)
-          ? currentBranding.enabled_modules
-          : {},
-        module_settings: currentBranding.module_settings || {}
+        custom_fields: jsonToRecord(currentBranding.custom_fields),
+        business_rules: jsonToRecord(currentBranding.business_rules),
+        enabled_modules: jsonToRecord(currentBranding.enabled_modules),
+        module_settings: jsonToRecord(currentBranding.module_settings),
       });
     }
   }, [currentBranding]);
@@ -199,8 +203,10 @@ export const OrganizationCustomization: React.FC = () => {
       setIsLoading(true);
       await updateBranding({
         ...customization,
-        enabled_modules: customization.enabled_modules,
-        business_rules: customization.business_rules
+        enabled_modules: recordToJson(customization.enabled_modules),
+        business_rules: recordToJson(customization.business_rules),
+        custom_fields: recordToJson(customization.custom_fields),
+        module_settings: recordToJson(customization.module_settings),
       });
       
       toast({
