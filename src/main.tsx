@@ -1,4 +1,4 @@
-// main.tsx - PATCH 880 - Lighthouse 98+ Performance Optimization
+// main.tsx - PATCH APEX v1.0 - Lighthouse 100 Target
 // Import React singleton FIRST to ensure single instance
 import "@/lib/react-singleton";
 import * as React from "react";
@@ -7,11 +7,14 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import "@/styles/low-bandwidth.css";
+import "@/styles/extreme-performance.css"; // APEX: Extreme performance styles
 import { logger } from "@/lib/logger";
 import { ultraStartupOptimizer } from "@/lib/performance/ultra-startup-optimizer";
+import { initExtremePerformance } from "@/lib/performance/extreme-performance"; // APEX
 
-// Initialize performance optimizations IMMEDIATELY
+// Initialize BOTH performance optimizations IMMEDIATELY
 ultraStartupOptimizer.init();
+initExtremePerformance();
 
 // Lazy import performance init for non-blocking startup
 const initPerformanceAsync = async () => {
