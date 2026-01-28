@@ -1,39 +1,41 @@
 /**
- * PATCH: Reabastecimento Logístico Inteligente
- * Sistema de gestão de suprimentos com IA preditiva
+ * Smart Logistics Module
+ * PATCH: Integrated with Supabase logistics_inventory table
  */
 
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Package, 
-  Brain, 
+  AlertTriangle, 
   TrendingUp, 
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Truck,
   ShoppingCart,
-  BarChart3,
+  Brain,
   Fuel,
   Droplets,
   Utensils,
   Wrench,
   Pill,
+  Sparkles,
   RefreshCw,
-  Sparkles
+  Plus,
+  CheckCircle2,
+  Truck,
+  Clock
 } from "lucide-react";
 import { toast } from "sonner";
 
 interface SupplyItem {
   id: string;
   name: string;
-  category: "fuel" | "water" | "food" | "parts" | "medical" | "safety";
+  category: string;
   currentStock: number;
   maxCapacity: number;
   unit: string;
@@ -55,9 +57,10 @@ interface AIRecommendation {
   action?: string;
 }
 
-const mockSupplies: SupplyItem[] = [
+// Fallback data when database is empty
+const getFallbackSupplies = (): SupplyItem[] => [
   {
-    id: "1",
+    id: "demo-1",
     name: "Diesel Marítimo",
     category: "fuel",
     currentStock: 45000,
@@ -71,7 +74,7 @@ const mockSupplies: SupplyItem[] = [
     status: "ok"
   },
   {
-    id: "2",
+    id: "demo-2",
     name: "Água Potável",
     category: "water",
     currentStock: 8000,
@@ -84,91 +87,79 @@ const mockSupplies: SupplyItem[] = [
     predictedNeed: new Date(Date.now() + 1036800000),
     status: "low"
   },
-  {
-    id: "3",
-    name: "Alimentos Secos",
-    category: "food",
-    currentStock: 120,
-    maxCapacity: 500,
-    unit: "kg",
-    consumptionRate: 8,
-    daysUntilEmpty: 15,
-    reorderPoint: 150,
-    lastRestock: new Date(Date.now() - 864000000),
-    predictedNeed: new Date(Date.now() + 950400000),
-    status: "low"
-  },
-  {
-    id: "4",
-    name: "Peças Motor Principal",
-    category: "parts",
-    currentStock: 45,
-    maxCapacity: 100,
-    unit: "unidades",
-    consumptionRate: 0.5,
-    daysUntilEmpty: 90,
-    reorderPoint: 20,
-    lastRestock: new Date(Date.now() - 2592000000),
-    predictedNeed: new Date(Date.now() + 7776000000),
-    status: "ok"
-  },
-  {
-    id: "5",
-    name: "Kit Primeiros Socorros",
-    category: "medical",
-    currentStock: 3,
-    maxCapacity: 10,
-    unit: "kits",
-    consumptionRate: 0.1,
-    daysUntilEmpty: 30,
-    reorderPoint: 5,
-    lastRestock: new Date(Date.now() - 1728000000),
-    predictedNeed: new Date(Date.now() + 2592000000),
-    status: "critical"
-  },
-];
-
-const mockRecommendations: AIRecommendation[] = [
-  {
-    id: "1",
-    type: "reorder",
-    title: "Reabastecer Água Potável",
-    description: "Estoque abaixo do ponto de reabastecimento. Consumo atual indica necessidade em 16 dias.",
-    impact: "Evita risco de desabastecimento",
-    confidence: 95,
-    action: "Gerar Pedido"
-  },
-  {
-    id: "2",
-    type: "optimization",
-    title: "Otimizar Rota para Economia de Combustível",
-    description: "Rota alternativa pode reduzir consumo de diesel em 8% baseado em condições climáticas.",
-    impact: "Economia de ~3.600 litros",
-    confidence: 87
-  },
-  {
-    id: "3",
-    type: "alert",
-    title: "Kit Médico em Nível Crítico",
-    description: "Estoque de kits de primeiros socorros abaixo do mínimo regulatório.",
-    impact: "Conformidade SOLAS",
-    confidence: 100,
-    action: "Pedido Urgente"
-  },
-  {
-    id: "4",
-    type: "savings",
-    title: "Oportunidade de Compra Consolidada",
-    description: "Próxima escala em Santos permite consolidar pedidos com 12% de economia.",
-    impact: "Economia estimada: R$ 15.000",
-    confidence: 82
-  },
 ];
 
 export default function SmartLogistics() {
-  const [supplies, setSupplies] = useState<SupplyItem[]>(mockSupplies);
-  const [recommendations, setRecommendations] = useState<AIRecommendation[]>(mockRecommendations);
+  const queryClient = useQueryClient();
+  const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Fetch inventory from Supabase
+  const { data: inventoryData, isLoading } = useQuery({
+    queryKey: ['logistics-inventory'],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from('logistics_inventory')
+        .select('*')
+        .order('item_name');
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Transform DB data to UI format
+  const supplies: SupplyItem[] = inventoryData?.length 
+    ? inventoryData.map((item: any) => ({
+        id: item.id,
+        name: item.item_name,
+        category: item.category || 'parts',
+        currentStock: item.quantity || 0,
+        maxCapacity: (item.min_stock_level || 10) * 5,
+        unit: item.unit || 'unidades',
+        consumptionRate: 10,
+        daysUntilEmpty: Math.floor((item.quantity || 0) / 10),
+        reorderPoint: item.min_stock_level || 10,
+        lastRestock: new Date(item.last_restocked_at || Date.now()),
+        predictedNeed: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        status: (item.quantity || 0) <= (item.min_stock_level || 10) 
+          ? 'critical' 
+          : (item.quantity || 0) <= (item.min_stock_level || 10) * 2 
+            ? 'low' 
+            : 'ok'
+      }))
+    : getFallbackSupplies();
+
+  // Create order mutation
+  const createOrderMutation = useMutation({
+    mutationFn: async (itemId: string) => {
+      const item = supplies.find(s => s.id === itemId);
+      if (!item) throw new Error('Item not found');
+
+      const { data, error } = await (supabase as any)
+        .from('logistics_supply_orders')
+        .insert({
+          item_id: itemId,
+          quantity: item.reorderPoint,
+          status: 'pending',
+          priority: item.status === 'critical' ? 'high' : 'medium',
+          notes: `Auto-generated order for ${item.name}`,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_, itemId) => {
+      const item = supplies.find(s => s.id === itemId);
+      toast.success(`Pedido gerado para ${item?.name || 'item'}`);
+      queryClient.invalidateQueries({ queryKey: ['logistics-inventory'] });
+    },
+    onError: (error) => {
+      toast.error(`Erro ao criar pedido: ${error.message}`);
+    },
+  });
 
   const runAIAnalysis = () => {
     setIsAnalyzing(true);
@@ -191,13 +182,7 @@ export default function SmartLogistics() {
   };
 
   const generateOrder = (itemId: string) => {
-    const item = supplies.find(s => s.id === itemId);
-    if (!item) return;
-    
-    setSupplies(prev => prev.map(s => 
-      s.id === itemId ? { ...s, status: "ordered" as const } : s
-    ));
-    toast.success(`Pedido gerado para ${item.name}`);
+    createOrderMutation.mutate(itemId);
   };
 
   const getCategoryIcon = (category: string) => {
