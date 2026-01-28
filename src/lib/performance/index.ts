@@ -300,3 +300,12 @@ export {
 
 // PATCH 867: Ultra startup optimizer for 2G/Satellite
 export { ultraStartupOptimizer, useStartupMetrics } from './ultra-startup-optimizer';
+
+// PATCH 900: Ultra performance config
+export { 
+  default as ultraPerformanceConfig,
+  getConnectionQuality,
+  getAdaptiveTimeout,
+  shouldReduceAnimations,
+  getOptimizedImageParams 
+} from './ultra-performance-config';
