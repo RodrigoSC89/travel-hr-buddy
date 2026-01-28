@@ -71,7 +71,7 @@ export default defineConfig(({ mode }) => ({
     target: "es2015",
     chunkSizeWarningLimit: 500,
     cssCodeSplit: true,
-    cssMinify: "lightningcss",
+    cssMinify: true, // Use default esbuild minifier (lightningcss not installed)
     modulePreload: { polyfill: true },
     reportCompressedSize: true,
     assetsInlineLimit: 4096, // Inline assets < 4KB as base64
