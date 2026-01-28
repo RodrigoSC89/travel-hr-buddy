@@ -5,6 +5,30 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
+    <!-- CRITICAL: Inline Critical CSS for FCP -->
+    <style id="critical-css">
+      *,*::before,*::after{box-sizing:border-box}
+      html{-webkit-text-size-adjust:100%;line-height:1.5;scroll-behavior:smooth}
+      body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+      #root{min-height:100vh;display:flex;flex-direction:column}
+      .min-h-screen{min-height:100vh}
+      .flex{display:flex}
+      .items-center{align-items:center}
+      .justify-center{justify-content:center}
+      .bg-background{background-color:#fff}
+      .text-foreground{color:#0a0e1a}
+      .animate-spin{animation:spin 1s linear infinite}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .border-primary{border-color:#0ea5e9}
+      .border-t-transparent{border-top-color:transparent}
+      .rounded-full{border-radius:9999px}
+      .h-12{height:3rem}.w-12{width:3rem}.border-4{border-width:4px}
+      @media(prefers-color-scheme:dark){
+        .bg-background{background-color:#0f172a}
+        .text-foreground{color:#f1f5f9}
+      }
+    </style>
+    
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
@@ -19,13 +43,20 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     
-    <!-- Font Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     
-    <!-- Asset Preload -->
-    <link rel="preload" as="image" href="/icons/nauti-one-logo.png" type="image/png" />
+    <!-- Font Preconnect - Critical for LCP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    
+    <!-- Async Font Loading - Non-blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
+    
+    <!-- Logo Preload - Critical for LCP -->
+    <link rel="preload" as="image" href="/icons/nauti-one-logo.png" type="image/png" fetchpriority="high" />
     
     <title>Nauti One - Sistema de Gestão Marítima</title>
     <meta name="description" content="Nauti One - Sistema revolucionário de gestão marítima com IA integrada. Tripulação, Documentos, Compliance, Operações e muito mais." />
@@ -43,7 +74,14 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <!-- Initial Loading State - Prevents blank screen -->
+    <div id="root">
+      <div class="min-h-screen flex items-center justify-center bg-background">
+        <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    </div>
+    
+    <!-- Main Application Bundle -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-// main.tsx - PATCH 869 - Ultra Startup Optimizer + React singleton initialization
+// main.tsx - PATCH 880 - Lighthouse 98+ Performance Optimization
 // Import React singleton FIRST to ensure single instance
 import "@/lib/react-singleton";
 import * as React from "react";
@@ -10,8 +10,14 @@ import "@/styles/low-bandwidth.css";
 import { logger } from "@/lib/logger";
 import { ultraStartupOptimizer } from "@/lib/performance/ultra-startup-optimizer";
 
-// Initialize ultra startup optimizer immediately
+// Initialize performance optimizations IMMEDIATELY
 ultraStartupOptimizer.init();
+
+// Lazy import performance init for non-blocking startup
+const initPerformanceAsync = async () => {
+  const { initPerformance } = await import("@/lib/performance/performance-init");
+  initPerformance();
+};
 
 // Initialize i18n
 import "@/i18n";
