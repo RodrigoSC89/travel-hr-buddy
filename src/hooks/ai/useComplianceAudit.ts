@@ -12,11 +12,21 @@ import {
 } from '@/lib/ai/engines/compliance-audit';
 import { toast } from 'sonner';
 
+interface AuditData {
+  crewRecords: unknown[];
+  certifications: unknown[];
+  drillRecords: unknown[];
+  restHourRecords: unknown[];
+  contracts: unknown[];
+  incidents: unknown[];
+  maintenanceRecords: unknown[];
+}
+
 interface UseComplianceAuditReturn {
   isLoading: boolean;
   auditResult: AuditResult | null;
   vesselStatus: VesselComplianceStatus | null;
-  runAudit: (vesselId: string, checks: ComplianceCheck[]) => Promise<AuditResult | null>;
+  runAudit: (vesselId: string, data: AuditData) => Promise<AuditResult | null>;
   clearAudit: () => void;
 }
 
@@ -27,11 +37,19 @@ export function useComplianceAudit(): UseComplianceAuditReturn {
 
   const runAudit = useCallback(async (
     vesselId: string,
-    checks: ComplianceCheck[]
+    data: {
+      crewRecords: unknown[];
+      certifications: unknown[];
+      drillRecords: unknown[];
+      restHourRecords: unknown[];
+      contracts: unknown[];
+      incidents: unknown[];
+      maintenanceRecords: unknown[];
+    }
   ): Promise<AuditResult | null> => {
     setIsLoading(true);
     try {
-      const result = await complianceAuditEngine.runComplianceAudit(vesselId, checks);
+      const result = await complianceAuditEngine.runFullAudit(vesselId, data);
       setAuditResult(result);
       
       toast.success(`Auditoria concluída: ${result.overallScore.toFixed(0)}% compliance`);
