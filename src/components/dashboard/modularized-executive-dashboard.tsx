@@ -88,7 +88,7 @@ export function ModularizedExecutiveDashboard() {
    * PATCH 626: Auto-heal function
    */
   const handleAutoHeal = () => {
-    console.log("[Dashboard] Auto-heal triggered, forcing re-render");
+    logger.info("[Dashboard] Auto-heal triggered, forcing re-render");
     setRefreshKey(prev => prev + 1);
   };
 

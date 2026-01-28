@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -193,7 +194,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
   };
 
   const handleMessage = useCallback((event: RealtimeMessage) => {
-    console.log('Realtime message:', event.type);
+    logger.debug('Realtime message', { type: event.type });
     
     // Update listening state
     if (event.type === 'input_audio_buffer.speech_started') {
