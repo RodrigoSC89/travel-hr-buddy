@@ -300,7 +300,7 @@ export async function getWeatherForecast(
       icon: item.icon,
     }));
   } catch (error) {
-    console.error("[Weather] Forecast fetch failed:", error);
+    logger.error("[Weather] Forecast fetch failed", error);
     return [];
   }
 }

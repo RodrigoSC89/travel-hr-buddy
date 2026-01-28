@@ -3,6 +3,8 @@
  * Fetches weather data from external APIs (OpenWeather, etc.)
  */
 
+import { logger } from "@/lib/utils/production-logger";
+
 interface WeatherData {
   location: {
     lat: number;
@@ -86,7 +88,7 @@ export async function fetchMaritimeWeather(locations: Array<{ lat: number; lon: 
   const weatherPromises = locations.map(loc => 
     fetchWeather(loc.lat, loc.lon)
       .catch(error => {
-        console.error(`Failed to fetch weather for ${loc.name}:`, error);
+        logger.error(`Failed to fetch weather for ${loc.name}`, error);
         return null;
       })
   );

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getTidalData } from "./weather-fallback.service";
 import { addDays, parseISO, differenceInHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface TideAlert {
   id: string;
@@ -122,7 +123,7 @@ export async function checkAllPortsForAlerts(): Promise<TideAlert[]> {
       const portAlerts = await checkPortForAlerts(port);
       alerts.push(...portAlerts);
     } catch (error) {
-      console.error(`[TideAlerts] Error checking ${port.name}:`, error);
+      logger.error(`[TideAlerts] Error checking ${port.name}`, error);
     }
   }
   
@@ -152,7 +153,7 @@ export async function checkPortForAlerts(port: PortConfig): Promise<TideAlert[]>
       }
     }
   } catch (error) {
-    console.error(`[TideAlerts] Failed to get tidal data for ${port.name}:`, error);
+    logger.error(`[TideAlerts] Failed to get tidal data for ${port.name}`, error);
   }
   
   return alerts;
@@ -208,8 +209,8 @@ function evaluateTideAlert(
  */
 export async function sendTideAlertsToNOC(alerts: TideAlert[]): Promise<void> {
   for (const alert of alerts) {
-    // Log alerts to console (can be extended to database when table is created)
-    console.log(`[TideAlerts] NOC Alert: ${alert.severity.toUpperCase()} - ${alert.message}`);
+    // Log alerts using structured logger (can be extended to database when table is created)
+    logger.info(`[TideAlerts] NOC Alert: ${alert.severity.toUpperCase()} - ${alert.message}`);
     
     // Store in localStorage for NOC dashboard to read
     const existingAlerts = JSON.parse(localStorage.getItem('noc_tide_alerts') || '[]');

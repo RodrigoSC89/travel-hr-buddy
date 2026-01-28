@@ -99,7 +99,7 @@ export async function fetchCPTECData(
     });
 
     if (error) {
-      console.error("[CPTEC] Edge Function error:", error);
+      logger.error("[CPTEC] Edge Function error", error);
       throw error;
     }
 
@@ -111,7 +111,7 @@ export async function fetchCPTECData(
 
     return data;
   } catch (error) {
-    console.error("[CPTEC] Fetch failed:", error);
+    logger.error("[CPTEC] Fetch failed", error);
     
     // Return cached data even if expired
     const cached = cptecCache.get(cacheKey);
