@@ -13558,6 +13558,66 @@ export type Database = {
           },
         ]
       }
+      fleet_sensors: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          sensor_type: string
+          status: string | null
+          threshold_max: number | null
+          threshold_min: number | null
+          timestamp: string
+          unit: string | null
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          sensor_type: string
+          status?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          timestamp?: string
+          unit?: string | null
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          sensor_type?: string
+          status?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          timestamp?: string
+          unit?: string | null
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_sensors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fleet_sensors_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       flight_price_history: {
         Row: {
           airline_code: string
@@ -25338,19 +25398,25 @@ export type Database = {
           created_at: string
           current_price: number | null
           description: string | null
+          destination: string | null
           discount_percentage: number | null
+          email_notifications: boolean | null
           frequency: string | null
           id: string
           image_url: string | null
           is_active: boolean
           last_checked_at: string | null
           organization_id: string | null
+          origin: string | null
           product_name: string
           product_url: string
+          route: string | null
           store_name: string | null
           target_price: number
+          threshold_type: string | null
           updated_at: string
           user_id: string
+          visual_notifications: boolean | null
         }
         Insert: {
           availability_status?: string | null
@@ -25359,19 +25425,25 @@ export type Database = {
           created_at?: string
           current_price?: number | null
           description?: string | null
+          destination?: string | null
           discount_percentage?: number | null
+          email_notifications?: boolean | null
           frequency?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean
           last_checked_at?: string | null
           organization_id?: string | null
+          origin?: string | null
           product_name: string
           product_url: string
+          route?: string | null
           store_name?: string | null
           target_price: number
+          threshold_type?: string | null
           updated_at?: string
           user_id: string
+          visual_notifications?: boolean | null
         }
         Update: {
           availability_status?: string | null
@@ -25380,19 +25452,25 @@ export type Database = {
           created_at?: string
           current_price?: number | null
           description?: string | null
+          destination?: string | null
           discount_percentage?: number | null
+          email_notifications?: boolean | null
           frequency?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean
           last_checked_at?: string | null
           organization_id?: string | null
+          origin?: string | null
           product_name?: string
           product_url?: string
+          route?: string | null
           store_name?: string | null
           target_price?: number
+          threshold_type?: string | null
           updated_at?: string
           user_id?: string
+          visual_notifications?: boolean | null
         }
         Relationships: [
           {
@@ -33674,6 +33752,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      travel_price_history: {
+        Row: {
+          alert_id: string
+          checked_at: string
+          id: string
+          metadata: Json | null
+          price: number
+        }
+        Insert: {
+          alert_id: string
+          checked_at?: string
+          id?: string
+          metadata?: Json | null
+          price: number
+        }
+        Update: {
+          alert_id?: string
+          checked_at?: string
+          id?: string
+          metadata?: Json | null
+          price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_price_history_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       travel_recommendations: {
         Row: {

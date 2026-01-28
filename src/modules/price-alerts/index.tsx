@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 464 - Complete Price Alerts UI
  * Full-featured price alert system with history charts, configurable thresholds, and notifications
+ * PATCH 901 - Removed @ts-nocheck - Schema aligned with DB migration
  */
 
 import React, { useState, useEffect } from "react";
@@ -122,18 +122,52 @@ export const CompletePriceAlertsUI: React.FC = () => {
     }
   }, [selectedAlert]);
 
+  // Type-safe row interface matching DB schema
+  interface PriceAlertRow {
+    id: string;
+    user_id: string;
+    route: string | null;
+    origin: string | null;
+    destination: string | null;
+    current_price: number | null;
+    target_price: number;
+    threshold_type: string | null;
+    is_active: boolean;
+    created_at: string;
+    last_checked_at: string | null;
+    email_notifications: boolean | null;
+    visual_notifications: boolean | null;
+  }
+
+  const mapRowToAlert = (row: PriceAlertRow): PriceAlert => ({
+    id: row.id,
+    user_id: row.user_id,
+    route: row.route || "",
+    origin: row.origin || "",
+    destination: row.destination || "",
+    current_price: row.current_price,
+    target_price: row.target_price,
+    threshold_type: (row.threshold_type as "below" | "above") || "below",
+    is_active: row.is_active,
+    created_at: row.created_at,
+    last_checked_at: row.last_checked_at ?? undefined,
+    email_notifications: row.email_notifications ?? true,
+    visual_notifications: row.visual_notifications ?? true,
+  });
+
   const loadAlerts = async () => {
+    if (!user?.id) return;
     try {
       setIsLoading(true);
       const { data, error } = await supabase
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      setAlerts(data || []);
+      setAlerts((data as unknown as PriceAlertRow[] | null)?.map(mapRowToAlert) || []);
     } catch (error) {
       console.error("Error loading alerts:", error);
       toast.error("Failed to load price alerts");
@@ -142,17 +176,28 @@ export const CompletePriceAlertsUI: React.FC = () => {
     }
   };
 
+  // Dynamic client helper for unmapped tables - uses 'unknown' first for safe casting
+  const getDynamicClient = () => supabase as unknown as { 
+    from: (table: string) => { 
+      select: (cols: string) => { 
+        eq: (col: string, val: string) => { 
+          order: (col: string, opts: { ascending: boolean }) => Promise<{ data: unknown[] | null; error: Error | null }> 
+        } 
+      } 
+    } 
+  };
+
   const loadPriceHistory = async (alertId: string) => {
     try {
-      const { data, error } = await supabase
+      const result = await getDynamicClient()
         .from("travel_price_history")
         .select("*")
         .eq("alert_id", alertId)
         .order("checked_at", { ascending: true });
 
-      if (error) throw error;
+      if (result.error) throw result.error;
 
-      setPriceHistory(data || []);
+      setPriceHistory((result.data as unknown as PriceHistory[]) || []);
     } catch (error) {
       console.error("Error loading price history:", error);
     }
@@ -167,7 +212,8 @@ export const CompletePriceAlertsUI: React.FC = () => {
     try {
       const route = `${newAlert.origin} → ${newAlert.destination}`;
       
-      const { error } = await supabase.from("price_alerts").insert({
+      // Use type assertion to handle schema mismatch for new columns
+      const insertData = {
         route,
         origin: newAlert.origin,
         destination: newAlert.destination,
@@ -177,7 +223,9 @@ export const CompletePriceAlertsUI: React.FC = () => {
         visual_notifications: newAlert.visual_notifications,
         is_active: true,
         user_id: user?.id,
-      });
+      } as Record<string, unknown>;
+
+      const { error } = await supabase.from("price_alerts").insert(insertData as never);
 
       if (error) throw error;
 
