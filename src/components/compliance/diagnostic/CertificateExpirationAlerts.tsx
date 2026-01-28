@@ -166,63 +166,52 @@ function useCertificates() {
   });
 }
 
-// Mock data para demonstração (fallback)
-const MOCK_CERTIFICATES: Certificate[] = [
-  {
-    id: '1',
-    holder_name: 'João Silva',
-    holder_id: 'crew-001',
-    certificate_type: 'STCW - Básico de Segurança',
-    certificate_number: 'STCW-2024-001',
-    issue_date: '2020-02-15',
-    expiry_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'DPC - Marinha do Brasil',
-    vessel_name: 'Navio Alpha',
-    status: 'expiring_soon',
-    days_until_expiry: 5,
-    alert_sent: true,
-    last_alert_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '2',
-    holder_name: 'Maria Santos',
-    holder_id: 'crew-002',
-    certificate_type: 'Certificado de Competência - Oficial de Máquinas',
-    certificate_number: 'COM-2023-045',
-    issue_date: '2019-08-20',
-    expiry_date: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'DPC - Marinha do Brasil',
-    vessel_name: 'Navio Beta',
-    status: 'expiring_soon',
-    days_until_expiry: 25,
-    alert_sent: true,
-    last_alert_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-  }
-];
-
-const MOCK_ALERT_HISTORY: AlertHistory[] = [
-  {
-    id: 'hist-1',
-    certificate_id: '1',
-    certificate_type: 'STCW - Básico de Segurança',
-    holder_name: 'João Silva',
-    alert_type: 'Alerta Urgente (7 dias)',
-    sent_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    channel: 'email',
-    status: 'sent'
-  }
-];
+// Hook para buscar histórico de alertas do Supabase
+function useAlertHistory() {
+  return useQuery({
+    queryKey: ['certificate-alert-history'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('id, user_id, title, message, type, read, created_at')
+        .eq('type', 'certificate_expiration')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      
+      if (error) return [];
+      
+      return (data || []).map(n => ({
+        id: n.id,
+        certificate_id: n.user_id || '',
+        certificate_type: 'Certificado',
+        holder_name: n.title || 'Tripulante',
+        alert_type: 'Alerta Automático',
+        sent_at: n.created_at,
+        channel: 'system',
+        status: 'sent' as const
+      }));
+    }
+  });
+}
 
 export function CertificateExpirationAlerts() {
   const { data: realCertificates, isLoading } = useCertificates();
-  const certificates = realCertificates?.length ? realCertificates : MOCK_CERTIFICATES;
+  const { data: realAlertHistory } = useAlertHistory();
+  const certificates = realCertificates?.length ? realCertificates : [];
   
   const [alertConfigs, setAlertConfigs] = useState<AlertConfig[]>(DEFAULT_ALERT_CONFIGS);
-  const [alertHistory, setAlertHistory] = useState<AlertHistory[]>(MOCK_ALERT_HISTORY);
+  const [alertHistory, setAlertHistory] = useState<AlertHistory[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedConfig, setSelectedConfig] = useState<AlertConfig | null>(null);
   const queryClient = useQueryClient();
+
+  // Sync alert history from DB
+  useEffect(() => {
+    if (realAlertHistory?.length) {
+      setAlertHistory(realAlertHistory);
+    }
+  }, [realAlertHistory]);
 
   // Calcular métricas
   const metrics = useMemo(() => {
