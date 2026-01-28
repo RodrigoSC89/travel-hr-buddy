@@ -1,55 +1,157 @@
 /**
  * Consolidated AI Engines Export
  * Central export for all advanced AI engines
- * v4.3.0 - 27 AI Engines Complete
+ * v5.0 - Complete Maritime AI Suite
  */
 
-// Predictive Maintenance (ONNX)
-export * from './predictive-maintenance-onnx';
+// === OPERATIONS & FLEET ===
 
-// Route Optimization
+// ONNX Predictive Maintenance
+export {
+  onnxPredictiveMaintenanceEngine,
+  type TelemetryReading,
+  type FailurePrediction,
+  type MaintenanceSchedule
+} from './onnx-predictive-maintenance';
+
+// Real-time Route Optimization
+export {
+  realtimeRouteOptimizer,
+  type VesselPosition,
+  type WeatherData as RouteWeatherData,
+  type OptimizedRoute,
+  type RouteWaypoint,
+  type RouteAlert,
+  type VesselSpecs
+} from './realtime-route-optimizer';
+
+// Route Optimization (existing)
 export * from './route-optimization';
-
-// Crew Turnover Prediction
-export * from './turnover-prediction';
-
-// Compliance Audit
-export * from './compliance-audit';
-
-// Fraud Detection
-export * from './fraud-detection';
-
-// Multi-Agent Orchestrator
-export * from './multi-agent-orchestrator';
-
-// Wellbeing NLP Analysis
-export * from './wellbeing-nlp';
-
-// Cost Forecasting
-export * from './cost-forecasting';
 
 // IoT Anomaly Detection
 export * from './anomaly-detection-iot';
 
-// NEW v4.3.0 Engines
+// === HR & CREW ===
+
+// Turnover Prediction
+export * from './turnover-prediction';
 
 // Crew Matching
 export * from './crew-matching';
 
-// Adaptive Training
-export * from './adaptive-training';
+// Wellbeing NLP
+export * from './wellbeing-nlp';
 
-// Risk Scoring
-export * from './risk-scoring';
+// Adaptive Training
+export {
+  adaptiveTrainingEngine,
+  type CrewCompetency,
+  type CompetencyScore,
+  type PersonalizedLearningPath,
+  type ModuleRecommendation,
+  type TrainingModule
+} from './adaptive-training';
+
+// === COMPLIANCE & SECURITY ===
+
+// Compliance Audit
+export * from './compliance-audit';
+
+// Dynamic Risk Scoring
+export {
+  dynamicRiskScoringEngine,
+  type RiskInput,
+  type RiskScore,
+  type CategoryScore,
+  type RiskRecommendation,
+  type ProtocolAdjustment
+} from './risk-scoring';
 
 // Access Anomaly Detection
-export * from './access-anomaly';
+export {
+  accessAnomalyEngine,
+  type AccessEvent,
+  type AccessAnomaly,
+  type AnomalyType,
+  type UserBehaviorProfile,
+  type AccessSecurityReport
+} from './access-anomaly';
 
-// Non-Conformity Prediction
-export * from './nc-prediction';
+// NC Prediction
+export {
+  ncPredictionEngine,
+  type InspectionHistory,
+  type InspectionFinding,
+  type VesselProfile,
+  type NCPrediction,
+  type RiskArea,
+  type PreparationAction
+} from './nc-prediction';
+
+// === FINANCIAL & COSTS ===
+
+// OPEX Forecasting
+export {
+  opexForecastingEngine,
+  type HistoricalExpense,
+  type ForecastResult,
+  type CategoryForecast,
+  type OPEXForecast,
+  type BudgetRecommendation
+} from './opex-forecasting';
+
+// Bunker Optimization
+export {
+  bunkerOptimizationEngine,
+  type BunkerPort,
+  type VesselFuelRequirement,
+  type BunkerRecommendation,
+  type BunkerPlan,
+  type MarketAnalysis
+} from './bunker-optimization';
 
 // Contract Analysis NLP
-export * from './contract-analysis';
+export {
+  contractAnalysisEngine,
+  type ContractDocument,
+  type ContractAnalysis,
+  type RiskClause,
+  type NegotiationOpportunity,
+  type ContractRecommendation
+} from './contract-analysis';
+
+// Fraud Detection
+export * from './fraud-detection';
+
+// Cost Forecasting
+export * from './cost-forecasting';
+
+// === ADVANCED AGENTIC AI ===
+
+// Multi-Agent Orchestrator
+export * from './multi-agent-orchestrator';
+
+// Self-Healing System
+export {
+  selfHealingSystemEngine,
+  type SystemComponent,
+  type ComponentMetrics,
+  type HealthIssue,
+  type HealingAttempt,
+  type SystemHealth,
+  type HealingRule,
+  type HealingReport
+} from './self-healing-system';
 
 // Blockchain Audit Trail
-export * from './blockchain-audit';
+export {
+  blockchainAuditEngine,
+  type AuditBlock,
+  type AuditData,
+  type ChainValidation,
+  type AuditReport,
+  type AuditQuery
+} from './blockchain-audit';
+
+// === LEGACY EXPORTS ===
+export * from './predictive-maintenance-onnx';
