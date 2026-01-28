@@ -88,7 +88,7 @@ export interface ContractRecord {
   terminationReason?: string;
 }
 
-export interface VesselPosition {
+export interface CrewVesselPosition {
   positionId: string;
   vesselId: string;
   vesselName: string;
@@ -169,7 +169,7 @@ class CrewMatchingEngine {
   private readonly LANGUAGE_WEIGHT = 0.05;
 
   findBestMatches(
-    position: VesselPosition,
+    position: CrewVesselPosition,
     candidates: CrewCandidate[],
     existingCrew: string[] = []
   ): MatchResult[] {
@@ -187,7 +187,7 @@ class CrewMatchingEngine {
 
   evaluateMatch(
     candidate: CrewCandidate,
-    position: VesselPosition,
+    position: CrewVesselPosition,
     existingCrew: string[]
   ): MatchResult {
     const breakdown = this.calculateMatchBreakdown(candidate, position, existingCrew);
@@ -212,7 +212,7 @@ class CrewMatchingEngine {
 
   private calculateMatchBreakdown(
     candidate: CrewCandidate,
-    position: VesselPosition,
+    position: CrewVesselPosition,
     existingCrew: string[]
   ): MatchBreakdown {
     return {
@@ -238,12 +238,12 @@ class CrewMatchingEngine {
     );
   }
 
-  private scoreCertifications(candidate: CrewCandidate, position: VesselPosition): number {
+  private scoreCertifications(candidate: CrewCandidate, position: CrewVesselPosition): number {
     const required = position.requiredCertifications;
     if (required.length === 0) return 100;
 
     const validCerts = candidate.certifications.filter(c => c.status === 'valid');
-    const matchedCerts = required.filter(req =>
+    const matchedCerts = required.filter((req: string) =>
       validCerts.some(cert => cert.code === req || cert.type.includes(req))
     );
 
@@ -257,7 +257,7 @@ class CrewMatchingEngine {
     return Math.max(0, baseScore - expiringPenalty);
   }
 
-  private scoreExperience(candidate: CrewCandidate, position: VesselPosition): number {
+  private scoreExperience(candidate: CrewCandidate, position: CrewVesselPosition): number {
     const relevantExperience = candidate.experience.filter(
       exp => exp.vesselType === position.vesselType || exp.position === position.position
     );
@@ -271,7 +271,7 @@ class CrewMatchingEngine {
     return Math.max(0, (totalMonths / requiredMonths) * 50);
   }
 
-  private scoreAvailability(candidate: CrewCandidate, position: VesselPosition): number {
+  private scoreAvailability(candidate: CrewCandidate, position: CrewVesselPosition): number {
     const posStart = new Date(position.startDate);
     const availFrom = new Date(candidate.availability.availableFrom);
     const availUntil = new Date(candidate.availability.availableUntil);
@@ -292,7 +292,7 @@ class CrewMatchingEngine {
     return 70;
   }
 
-  private scorePreferences(candidate: CrewCandidate, position: VesselPosition): number {
+  private scorePreferences(candidate: CrewCandidate, position: CrewVesselPosition): number {
     let score = 100;
 
     // Vessel type preference
@@ -345,7 +345,7 @@ class CrewMatchingEngine {
     return 75;
   }
 
-  private scoreLanguages(candidate: CrewCandidate, position: VesselPosition): number {
+  private scoreLanguages(candidate: CrewCandidate, position: CrewVesselPosition): number {
     const required = position.requiredLanguages;
     if (required.length === 0) return 100;
 
@@ -355,7 +355,7 @@ class CrewMatchingEngine {
 
     if (!hasEnglish) return 50;
 
-    const matchedLanguages = required.filter(req =>
+    const matchedLanguages = required.filter((req: string) =>
       candidate.languageSkills.some(l => 
         l.language.toLowerCase() === req.toLowerCase() && 
         ['intermediate', 'fluent', 'native'].includes(l.level)
@@ -367,7 +367,7 @@ class CrewMatchingEngine {
 
   private identifyCompatibilityFactors(
     candidate: CrewCandidate,
-    position: VesselPosition
+    position: CrewVesselPosition
   ): CompatibilityFactor[] {
     const factors: CompatibilityFactor[] = [];
 
@@ -414,7 +414,7 @@ class CrewMatchingEngine {
     return factors;
   }
 
-  private identifyRisks(candidate: CrewCandidate, position: VesselPosition): MatchRisk[] {
+  private identifyRisks(candidate: CrewCandidate, position: CrewVesselPosition): MatchRisk[] {
     const risks: MatchRisk[] = [];
 
     // Certification expiry risk
@@ -467,7 +467,7 @@ class CrewMatchingEngine {
 
   private estimateRetention(
     candidate: CrewCandidate,
-    position: VesselPosition,
+    position: CrewVesselPosition,
     matchScore: number
   ): number {
     let retention = 70; // Base retention
@@ -489,7 +489,7 @@ class CrewMatchingEngine {
   }
 
   buildOptimalRoster(
-    vessel: { id: string; name: string; positions: VesselPosition[] },
+    vessel: { id: string; name: string; positions: CrewVesselPosition[] },
     candidates: CrewCandidate[]
   ): RosterSuggestion {
     const roster: RosterPosition[] = [];
@@ -497,8 +497,8 @@ class CrewMatchingEngine {
 
     // Sort positions by priority
     const sortedPositions = [...vessel.positions].sort((a, b) => {
-      const priorityOrder = { critical: 0, high: 1, normal: 2 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
+      const priorityOrder: Record<'critical' | 'high' | 'normal', number> = { critical: 0, high: 1, normal: 2 };
+      return (priorityOrder[a.priority] ?? 2) - (priorityOrder[b.priority] ?? 2);
     });
 
     for (const position of sortedPositions) {
@@ -554,7 +554,7 @@ class CrewMatchingEngine {
     return Math.round(avgTeamScore);
   }
 
-  private estimateRosterCost(roster: RosterPosition[], positions: VesselPosition[]): number {
+  private estimateRosterCost(roster: RosterPosition[], positions: CrewVesselPosition[]): number {
     return positions.reduce((sum, pos) => sum + pos.salaryRange.min, 0) * 12;
   }
 

@@ -99,7 +99,7 @@ export interface AnomalyDetectionResult {
   timestamp: Date;
   userId: string;
   userName: string;
-  anomalyType: AnomalyType;
+  anomalyType: AccessAnomalyType;
   severity: 'low' | 'medium' | 'high' | 'critical';
   confidence: number;
   description: string;
@@ -111,7 +111,7 @@ export interface AnomalyDetectionResult {
   relatedEvents: string[];
 }
 
-export type AnomalyType = 
+export type AccessAnomalyType = 
   | 'unusual_time'
   | 'unusual_location'
   | 'unusual_device'
@@ -161,7 +161,7 @@ export interface AccessAnalytics {
   totalEvents: number;
   anomaliesDetected: number;
   blockedSessions: number;
-  topAnomalyTypes: Array<{ type: AnomalyType; count: number }>;
+  topAnomalyTypes: Array<{ type: AccessAnomalyType; count: number }>;
   highRiskUsers: Array<{ userId: string; userName: string; riskScore: number }>;
   geographicAnomalies: number;
   afterHoursAccess: number;
@@ -188,7 +188,7 @@ class AccessAnomalyEngine {
     
     const anomalies: AnomalyIndicator[] = [];
     let maxSeverity: AnomalyDetectionResult['severity'] = 'low';
-    let anomalyType: AnomalyType | null = null;
+    let anomalyType: AccessAnomalyType | null = null;
 
     // Check for unusual login time
     const timeAnomaly = this.checkTimeAnomaly(event, profile);
@@ -558,8 +558,8 @@ class AccessAnomalyEngine {
     return Math.min(0.99, baseConfidence + indicatorBonus + deviationBonus);
   }
 
-  private generateDescription(anomalyType: AnomalyType, anomalies: AnomalyIndicator[]): string {
-    const descriptions: Record<AnomalyType, string> = {
+  private generateDescription(anomalyType: AccessAnomalyType, anomalies: AnomalyIndicator[]): string {
+    const descriptions: Record<AccessAnomalyType, string> = {
       unusual_time: 'Acesso em horário fora do padrão normal do usuário',
       unusual_location: 'Acesso de localização geográfica não habitual',
       unusual_device: 'Acesso de dispositivo não reconhecido',
@@ -577,7 +577,7 @@ class AccessAnomalyEngine {
   }
 
   private generateRecommendation(
-    anomalyType: AnomalyType,
+    anomalyType: AccessAnomalyType,
     severity: AnomalyDetectionResult['severity']
   ): RecommendedAction {
     if (severity === 'critical') {
@@ -607,7 +607,7 @@ class AccessAnomalyEngine {
   }
 
   private determineAutoAction(
-    anomalyType: AnomalyType,
+    anomalyType: AccessAnomalyType,
     severity: AnomalyDetectionResult['severity'],
     riskScore: number
   ): AutoAction | null {
@@ -733,8 +733,8 @@ class AccessAnomalyEngine {
     };
   }
 
-  private countAnomalyTypes(anomalies: AnomalyDetectionResult[]): Array<{ type: AnomalyType; count: number }> {
-    const counts = new Map<AnomalyType, number>();
+  private countAnomalyTypes(anomalies: AnomalyDetectionResult[]): Array<{ type: AccessAnomalyType; count: number }> {
+    const counts = new Map<AccessAnomalyType, number>();
     for (const a of anomalies) {
       counts.set(a.anomalyType, (counts.get(a.anomalyType) || 0) + 1);
     }
