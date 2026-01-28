@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { sendNotification, AlertNotification, getNotificationPreferences } from "./push-notification-service";
 import * as Sentry from "@sentry/react";
+import { logger } from "@/lib/logger";
 
 // ===============================
 // Types & Configuration
@@ -262,7 +263,7 @@ export function processAndNotifyAlerts(alerts: WeatherAlert[]): void {
     const alertKey = `${alert.type}-${alert.severity}`;
     
     if (!canSendAlert(alertKey)) {
-      console.log(`[WeatherAlert] Skipping ${alertKey} - cooldown active`);
+      logger.debug(`[WeatherAlert] Skipping ${alertKey} - cooldown active`);
       continue;
     }
 
@@ -297,7 +298,7 @@ export function processAndNotifyAlerts(alerts: WeatherAlert[]): void {
       // PostHog not available
     }
 
-    console.log(`[WeatherAlert] Notification sent: ${alert.title}`);
+    logger.debug(`[WeatherAlert] Notification sent: ${alert.title}`);
   }
 }
 
@@ -413,13 +414,13 @@ export function startWeatherMonitoring(
 
   const check = async () => {
     try {
-      console.log("[WeatherMonitor] Checking conditions...");
+      logger.debug("[WeatherMonitor] Checking conditions...");
       
       const weatherData = await fetchWeatherFn(config.latitude, config.longitude);
       const alerts = checkWeatherConditions(weatherData, config.thresholds);
 
       if (alerts.length > 0) {
-        console.log(`[WeatherMonitor] ${alerts.length} alerts detected`);
+        logger.debug(`[WeatherMonitor] ${alerts.length} alerts detected`);
         
         // Send push notifications
         processAndNotifyAlerts(alerts);
@@ -437,7 +438,7 @@ export function startWeatherMonitoring(
         }
       }
     } catch (err) {
-      console.error("[WeatherMonitor] Check failed:", err);
+      logger.error("[WeatherMonitor] Check failed", err);
     }
   };
 
@@ -446,7 +447,7 @@ export function startWeatherMonitoring(
 
   // Start interval
   monitoringInterval = setInterval(check, checkInterval);
-  console.log(`[WeatherMonitor] Started with ${checkInterval / 1000}s interval`);
+  logger.debug(`[WeatherMonitor] Started with ${checkInterval / 1000}s interval`);
 }
 
 /**
@@ -456,7 +457,7 @@ export function stopWeatherMonitoring(): void {
   if (monitoringInterval) {
     clearInterval(monitoringInterval);
     monitoringInterval = null;
-    console.log("[WeatherMonitor] Stopped");
+    logger.debug("[WeatherMonitor] Stopped");
   }
 }
 
