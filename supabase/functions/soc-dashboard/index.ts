@@ -1,4 +1,8 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+/**
+ * SOC Dashboard Edge Function
+ * Provides real-time operations center data and alert management
+ */
+
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 interface Alert { id: string; severity: string; alert_type: string; is_acknowledged: boolean; resolved_at: string | null; }
@@ -9,12 +13,13 @@ interface Transmission { id: string; status: string; }
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -24,7 +29,10 @@ serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      throw new Error("Authorization required");
+      return new Response(
+        JSON.stringify({ success: false, error: "Authorization required" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
@@ -32,7 +40,10 @@ serve(async (req) => {
     );
 
     if (authError || !user) {
-      throw new Error("Invalid authentication");
+      return new Response(
+        JSON.stringify({ success: false, error: "Invalid authentication" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const { operation, payload } = await req.json();
@@ -43,10 +54,13 @@ serve(async (req) => {
       .select("organization_id")
       .eq("user_id", user.id)
       .eq("status", "active")
-      .single();
+      .maybeSingle();
 
     if (!orgUser) {
-      throw new Error("User not associated with any organization");
+      return new Response(
+        JSON.stringify({ success: false, error: "User not associated with any organization" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const organizationId = orgUser.organization_id;
@@ -276,28 +290,26 @@ serve(async (req) => {
         // Get upcoming compliance deadlines
         const { data: certificates } = await supabase
           .from("maritime_certificates")
-          .select("id, certificate_type, expiry_date, crew_member_id, crew_members(name)")
+          .select("id, certificate_type, expiry_date, crew_member_id")
           .eq("organization_id", organizationId)
           .gte("expiry_date", new Date().toISOString())
           .lte("expiry_date", new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString())
           .order("expiry_date", { ascending: true })
           .limit(20);
 
-        const deadlines = (certificates || []).map((cert: any) => ({
-          id: cert.id,
-          type: "certificate",
-          description: `${cert.certificate_type} - ${cert.crew_members?.name || "Unknown"}`,
-          expiry_date: cert.expiry_date,
-          days_until_expiry: Math.ceil(
+        const deadlines = (certificates || []).map((cert: { id: string; certificate_type: string; expiry_date: string; crew_member_id?: string }) => {
+          const daysUntilExpiry = Math.ceil(
             (new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-          ),
-          severity:
-            Math.ceil((new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) <= 7
-              ? "critical"
-              : Math.ceil((new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) <= 30
-              ? "high"
-              : "medium",
-        }));
+          );
+          return {
+            id: cert.id,
+            type: "certificate",
+            description: cert.certificate_type,
+            expiry_date: cert.expiry_date,
+            days_until_expiry: daysUntilExpiry,
+            severity: daysUntilExpiry <= 7 ? "critical" : daysUntilExpiry <= 30 ? "high" : "medium",
+          };
+        });
 
         return new Response(
           JSON.stringify({
@@ -319,7 +331,7 @@ serve(async (req) => {
           .order("due_date", { ascending: true })
           .limit(20);
 
-        const maintenanceAlerts = (maintenanceItems || []).map((item: any) => ({
+        const maintenanceAlerts = (maintenanceItems || []).map((item: { id: string; title?: string; description?: string; vessel_id?: string; status: string; due_date?: string; priority?: string }) => ({
           id: item.id,
           title: item.title || item.description,
           vessel_id: item.vessel_id,
@@ -342,7 +354,10 @@ serve(async (req) => {
       }
 
       default:
-        throw new Error(`Unknown operation: ${operation}`);
+        return new Response(
+          JSON.stringify({ success: false, error: `Unknown operation: ${operation}` }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
     }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
