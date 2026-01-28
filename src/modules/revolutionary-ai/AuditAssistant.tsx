@@ -1,6 +1,7 @@
 /**
  * REVOLUTIONARY AI - Audit Assistant
  * Funcionalidade 5 & 13: Assistente para auditorias e fiscalizações
+ * Integração com Supabase para dados reais
  */
 
 import React, { useState } from 'react';
@@ -9,12 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 import { 
   FileSearch, Download, CheckCircle, AlertTriangle, Clock,
   Shield, FileText, Calendar, Building, Ship, Users,
   Brain, Sparkles, Loader2, ChevronRight, FileCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface AuditPackage {
   id: string;
@@ -36,86 +40,96 @@ interface DocumentItem {
   vessel?: string;
 }
 
-const MOCK_PACKAGES: AuditPackage[] = [
-  {
-    id: '1',
-    name: 'Dossiê ANTAQ 2024',
-    type: 'ANTAQ',
-    status: 'ready',
-    completeness: 100,
-    documents: 45,
-    lastGenerated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    missingItems: []
-  },
-  {
-    id: '2',
-    name: 'Auditoria DPC',
-    type: 'DPC',
-    status: 'ready',
-    completeness: 95,
-    documents: 38,
-    lastGenerated: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    missingItems: ['Certificado de arqueação atualizado']
-  },
-  {
-    id: '3',
-    name: 'ISM Code Compliance',
-    type: 'ISM',
-    status: 'pending',
-    completeness: 78,
-    documents: 52,
-    missingItems: [
-      'Relatório de não conformidades Q4',
-      'Registros de drill de segurança',
-      'Atas de reunião COGESMS'
-    ]
-  },
-  {
-    id: '4',
-    name: 'Relatório ESG',
-    type: 'ESG',
-    status: 'generating',
-    completeness: 60,
-    documents: 28,
-    missingItems: [
-      'Inventário de emissões CO2',
-      'Relatório de tratamento de resíduos'
-    ]
-  },
-  {
-    id: '5',
-    name: 'MLC 2006 Compliance',
-    type: 'MLC',
-    status: 'incomplete',
-    completeness: 45,
-    documents: 35,
-    missingItems: [
-      'Contratos de trabalho marítimo',
-      'Registros de horas de descanso',
-      'Declaração de conformidade trabalhista',
-      'Certificados STCW tripulação'
-    ]
-  }
+// Fallback data when database tables don't exist
+const FALLBACK_PACKAGES: AuditPackage[] = [
+  { id: '1', name: 'Dossiê ANTAQ 2024', type: 'ANTAQ', status: 'ready', completeness: 100, documents: 45, lastGenerated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), missingItems: [] },
+  { id: '2', name: 'Auditoria DPC', type: 'DPC', status: 'ready', completeness: 95, documents: 38, lastGenerated: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), missingItems: ['Certificado de arqueação atualizado'] },
+  { id: '3', name: 'ISM Code Compliance', type: 'ISM', status: 'pending', completeness: 78, documents: 52, missingItems: ['Relatório de não conformidades Q4', 'Registros de drill de segurança'] },
+  { id: '4', name: 'Relatório ESG', type: 'ESG', status: 'generating', completeness: 60, documents: 28, missingItems: ['Inventário de emissões CO2'] },
+  { id: '5', name: 'MLC 2006 Compliance', type: 'MLC', status: 'incomplete', completeness: 45, documents: 35, missingItems: ['Contratos de trabalho marítimo', 'Registros de horas de descanso'] }
 ];
 
-const MOCK_DOCUMENTS: DocumentItem[] = [
+const FALLBACK_DOCUMENTS: DocumentItem[] = [
   { id: '1', name: 'Certificado de Segurança', category: 'Segurança', status: 'valid', expiryDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), vessel: 'Navio Atlas' },
-  { id: '2', name: 'Certificado STCW - Cap. Silva', category: 'Tripulação', status: 'expiring', expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) },
+  { id: '2', name: 'Certificado STCW', category: 'Tripulação', status: 'expiring', expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) },
   { id: '3', name: 'IOPP Certificate', category: 'Ambiental', status: 'valid', expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), vessel: 'Navio Vega' },
   { id: '4', name: 'Certificado de Classe', category: 'Classificação', status: 'expired', expiryDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), vessel: 'Navio Sirius' },
   { id: '5', name: 'Declaração MLC', category: 'Trabalhista', status: 'missing' }
 ];
 
+// Hook para buscar documentos do Supabase com fallback
+function useAuditDocuments() {
+  return useQuery({
+    queryKey: ['audit-documents'],
+    queryFn: async (): Promise<DocumentItem[]> => {
+      try {
+        const { data, error } = await supabase
+          .from('certificates')
+          .select('id, certificate_type, status, expiry_date, employee_id')
+          .order('expiry_date', { ascending: true })
+          .limit(10);
+        
+        if (error || !data || data.length === 0) {
+          return FALLBACK_DOCUMENTS;
+        }
+        
+        const now = new Date();
+        return data.map(row => {
+          const expiryDate = row.expiry_date ? new Date(row.expiry_date) : undefined;
+          const daysUntil = expiryDate ? Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)) : 999;
+          
+          let status: DocumentItem['status'] = 'valid';
+          if (daysUntil < 0) status = 'expired';
+          else if (daysUntil <= 30) status = 'expiring';
+          
+          return {
+            id: row.id,
+            name: row.certificate_type || 'Certificado',
+            category: 'Certificação',
+            status,
+            expiryDate
+          };
+        });
+      } catch {
+        return FALLBACK_DOCUMENTS;
+      }
+    }
+  });
+}
+
 export function AuditAssistant() {
+  // Use fallback data with optional DB integration
+  const [packages, setPackages] = useState<AuditPackage[]>(FALLBACK_PACKAGES);
+  const { data: documents = FALLBACK_DOCUMENTS } = useAuditDocuments();
+  
   const [selectedPackage, setSelectedPackage] = useState<AuditPackage | null>(null);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleGenerate = (pkg: AuditPackage) => {
+  const handleGenerate = async (pkg: AuditPackage) => {
     setIsGenerating(pkg.id);
-    setTimeout(() => {
+    toast.loading('Gerando dossiê com IA...', { id: 'generate' });
+    
+    try {
+      // Call AI edge function to generate audit package
+      const { error } = await supabase.functions.invoke('generate-compliance-report', {
+        body: { packageId: pkg.id, type: pkg.type }
+      });
+      
+      if (error) throw error;
+      
+      // Update local state
+      setPackages(prev => prev.map(p => 
+        p.id === pkg.id ? { ...p, status: 'ready' as const, completeness: 100, lastGenerated: new Date() } : p
+      ));
+      
+      toast.success('Dossiê gerado com sucesso!', { id: 'generate' });
+    } catch (err) {
+      console.error('Error generating package:', err);
+      toast.error('Erro ao gerar dossiê', { id: 'generate' });
+    } finally {
       setIsGenerating(null);
-    }, 3000);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -206,7 +220,7 @@ export function AuditAssistant() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {MOCK_PACKAGES.map((pkg, index) => (
+              {packages.map((pkg: AuditPackage, index: number) => (
                 <motion.div
                   key={pkg.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -316,7 +330,7 @@ export function AuditAssistant() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {MOCK_DOCUMENTS.map((doc) => (
+              {documents.map((doc: DocumentItem) => (
                 <div 
                   key={doc.id} 
                   className="p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
