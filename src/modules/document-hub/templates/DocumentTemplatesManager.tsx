@@ -1,9 +1,6 @@
-// @ts-nocheck
-// Technical Debt: Local Template interface uses different fields (template_code, format, current_version)
-// than Supabase document_templates table (which lacks these columns). Schema mismatch requires @ts-nocheck.
 /**
- * PATCH 299: Document Templates Manager
- * Enhanced with database integration, variable substitution, and PDF/Word export
+ * PATCH 881: Document Templates Manager
+ * Type-safe using interfaces aligned with actual document_templates schema
  */
 
 import React, { useState, useEffect } from "react";
@@ -13,60 +10,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   FileText, 
   Plus, 
-  Save, 
   Download, 
   Eye, 
-  Edit, 
   Trash2,
   Code,
   FileType,
-  History,
-  CheckCircle2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Document, Packer, Paragraph, TextRun } from "docx";
-import { createSafeHTML } from "@/lib/utils/safe-html";
-
-// Lazy load jsPDF
-const loadJsPDF = async () => {
-  const { default: jsPDF } = await import("jspdf");
-  return jsPDF;
-};
 import { saveAs } from "file-saver";
 
+// Local Template interface aligned with actual schema
 interface Template {
   id: string;
-  template_code: string;
   name: string;
-  description: string;
-  category: string;
+  description: string | null;
+  category: string | null;
   content: string;
-  format: string;
-  current_version: number;
-  status: string;
   tags: string[];
   created_at: string;
   variables?: string[];
 }
 
-interface TemplateVersion {
-  id: string;
-  version_number: number;
-  content: string;
-  change_summary: string;
-  created_at: string;
-}
-
 const DocumentTemplatesManager = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [versions, setVersions] = useState<TemplateVersion[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [loading, setLoading] = useState(true);
   const [showNewTemplate, setShowNewTemplate] = useState(false);
@@ -79,7 +52,6 @@ const DocumentTemplatesManager = () => {
     description: "",
     category: "report",
     content: "",
-    format: "html",
     tags: ""
   });
 
@@ -115,11 +87,20 @@ const DocumentTemplatesManager = () => {
 
       if (error) throw error;
       
-      // Extract variables from content for each template
-      const templatesWithVars = (data || []).map(template => ({
-        ...template,
-        variables: extractVariables(template.content)
-      }));
+      // Map to local Template interface with safe defaults
+      const templatesWithVars: Template[] = (data || []).map(row => {
+        const contentStr = typeof row.content === "string" ? row.content : JSON.stringify(row.content || "");
+        return {
+          id: row.id,
+          name: row.name || "Untitled",
+          description: row.description,
+          category: row.category,
+          content: contentStr,
+          tags: (row.tags as string[]) || [],
+          created_at: row.created_at || new Date().toISOString(),
+          variables: extractVariables(contentStr)
+        };
+      });
       
       setTemplates(templatesWithVars);
     } catch (error: unknown) {
@@ -131,22 +112,6 @@ const DocumentTemplatesManager = () => {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const loadVersions = async (templateId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("template_versions")
-        .select("*")
-        .eq("template_id", templateId)
-        .order("version_number", { ascending: false });
-
-      if (error) throw error;
-      setVersions(data || []);
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading versions:", errorMessage);
     }
   };
 
@@ -172,20 +137,16 @@ const DocumentTemplatesManager = () => {
 
   const createTemplate = async () => {
     try {
-      const templateCode = `TPL-${Date.now()}`;
       const tags = formData.tags.split(",").map(tag => tag.trim()).filter(tag => tag);
       
       const { error } = await supabase
         .from("document_templates")
         .insert({
-          template_code: templateCode,
           name: formData.name,
           description: formData.description,
           category: formData.category,
           content: formData.content,
-          format: formData.format,
           tags,
-          status: "active"
         });
 
       if (error) throw error;
@@ -201,7 +162,6 @@ const DocumentTemplatesManager = () => {
         description: "",
         category: "report",
         content: "",
-        format: "html",
         tags: ""
       });
       loadTemplates();
@@ -215,93 +175,64 @@ const DocumentTemplatesManager = () => {
     }
   };
 
-  const updateTemplate = async (templateId: string, newContent: string) => {
-    try {
-      const { error } = await supabase
-        .from("document_templates")
-        .update({ content: newContent })
-        .eq("id", templateId);
-
-      if (error) throw error;
-
-      toast({
-        title: "✅ Template Updated",
-        description: "Template has been updated and versioned",
-      });
-
-      loadTemplates();
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      toast({
-        title: "Error updating template",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    }
-  };
-
   const deleteTemplate = async (templateId: string) => {
     try {
       const { error } = await supabase
         .from("document_templates")
-        .update({ status: "archived" })
+        .delete()
         .eq("id", templateId);
 
       if (error) throw error;
 
       toast({
-        title: "Template Archived",
-        description: "Template has been archived",
+        title: "Template Deleted",
+        description: "Template has been deleted",
       });
 
       loadTemplates();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
-        title: "Error archiving template",
+        title: "Error deleting template",
         description: errorMessage,
         variant: "destructive",
       });
     }
   };
 
-  const exportToPDF = (template: Template, variables: Record<string, string>) => {
-    const startTime = Date.now();
-    const doc = new jsPDF();
-    const content = substituteVariables(template.content, variables);
-    
-    // Simple HTML to text conversion
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = content;
-    const textContent = tempDiv.textContent || tempDiv.innerText || "";
-    
-    doc.setFontSize(12);
-    const lines = doc.splitTextToSize(textContent, 180);
-    doc.text(lines, 14, 20);
-    
-    const fileName = `${template.template_code}.pdf`;
-    doc.save(fileName);
-    
-    const processingTime = Date.now() - startTime;
-    
-    // Log usage
-    supabase.from("template_usage_log").insert({
-      template_id: template.id,
-      version_number: template.current_version,
-      output_format: "pdf",
-      variables_used: variables,
-      generation_time_ms: processingTime,
-      success: true
-    });
-    
-    toast({
-      title: "✅ PDF Exported",
-      description: `Template exported to ${fileName}`,
-    });
+  const exportToPDF = async (template: Template, variables: Record<string, string>) => {
+    try {
+      const { default: jsPDF } = await import("jspdf");
+      const doc = new jsPDF();
+      const content = substituteVariables(template.content, variables);
+      
+      // Simple HTML to text conversion
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = content;
+      const textContent = tempDiv.textContent || tempDiv.innerText || "";
+      
+      doc.setFontSize(12);
+      const lines = doc.splitTextToSize(textContent, 180);
+      doc.text(lines, 14, 20);
+      
+      const fileName = `${template.name.replace(/\s+/g, "-")}.pdf`;
+      doc.save(fileName);
+      
+      toast({
+        title: "✅ PDF Exported",
+        description: `Template exported to ${fileName}`,
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Error exporting PDF",
+        description: "Failed to export PDF",
+        variant: "destructive",
+      });
+    }
   };
 
   const exportToWord = async (template: Template, variables: Record<string, string>) => {
-    const startTime = Date.now();
     const content = substituteVariables(template.content, variables);
     
     // Simple HTML to text conversion
@@ -323,20 +254,8 @@ const DocumentTemplatesManager = () => {
     });
     
     const blob = await Packer.toBlob(doc);
-    const fileName = `${template.template_code}.docx`;
+    const fileName = `${template.name.replace(/\s+/g, "-")}.docx`;
     saveAs(blob, fileName);
-    
-    const processingTime = Date.now() - startTime;
-    
-    // Log usage
-    supabase.from("template_usage_log").insert({
-      template_id: template.id,
-      version_number: template.current_version,
-      output_format: "docx",
-      variables_used: variables,
-      generation_time_ms: processingTime,
-      success: true
-    });
     
     toast({
       title: "✅ Word Document Exported",
@@ -344,18 +263,18 @@ const DocumentTemplatesManager = () => {
     });
   };
 
-  const getCategoryBadge = (category: string) => {
+  const getCategoryBadge = (category: string | null) => {
     switch (category) {
     case "contract":
-      return <Badge className="bg-purple-500">Contract</Badge>;
+      return <Badge className="bg-primary/80">Contract</Badge>;
     case "report":
-      return <Badge className="bg-blue-500">Report</Badge>;
+      return <Badge className="bg-primary">Report</Badge>;
     case "certificate":
-      return <Badge className="bg-green-500">Certificate</Badge>;
+      return <Badge className="bg-green-600">Certificate</Badge>;
     case "invoice":
-      return <Badge className="bg-yellow-500">Invoice</Badge>;
+      return <Badge className="bg-amber-500">Invoice</Badge>;
     default:
-      return <Badge variant="outline">{category}</Badge>;
+      return <Badge variant="outline">{category || "Other"}</Badge>;
     }
   };
 
@@ -478,84 +397,73 @@ const DocumentTemplatesManager = () => {
           <div className="space-y-3">
             {loading ? (
               <p>Loading templates...</p>
-            ) : templates.filter(t => t.status === "active").length === 0 ? (
+            ) : templates.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
                 No templates found. Create your first template!
               </p>
             ) : (
-              templates.filter(t => t.status === "active").map((template) => (
-                <Card key={template.id} className="border-l-4 border-l-blue-500">
+              templates.map((template) => (
+                <Card key={template.id} className="border-l-4 border-l-primary">
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">
-                        <FileText className="h-5 w-5 text-blue-500" />
+                        <FileText className="h-5 w-5 text-primary" />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <span className="font-semibold">{template.name}</span>
                             {getCategoryBadge(template.category)}
-                            <Badge variant="outline">v{template.current_version}</Badge>
-                            <Badge variant="secondary">{template.format}</Badge>
                           </div>
                           <p className="text-sm text-muted-foreground mb-2">
-                            {template.description}
+                            {template.description || "No description"}
                           </p>
                           {template.variables && template.variables.length > 0 && (
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs text-muted-foreground">Variables:</span>
-                              {template.variables.map((variable, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
-                                  {variable}
+                            <div className="flex flex-wrap gap-1 mb-2">
+                              {template.variables.map((v, i) => (
+                                <Badge key={i} variant="outline" className="text-xs">
+                                  <Code className="h-3 w-3 mr-1" />
+                                  {v}
                                 </Badge>
                               ))}
                             </div>
                           )}
-                          {template.tags && template.tags.length > 0 && (
-                            <div className="flex items-center gap-2 flex-wrap mt-2">
-                              <span className="text-xs text-muted-foreground">Tags:</span>
-                              {template.tags.map((tag, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
+                          <div className="flex gap-2 mt-3">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedTemplate(template);
+                                setPreviewVariables({});
+                                setShowPreview(true);
+                              }}
+                            >
+                              <Eye className="h-4 w-4 mr-1" />
+                              Preview
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => exportToPDF(template, previewVariables)}
+                            >
+                              <Download className="h-4 w-4 mr-1" />
+                              PDF
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => exportToWord(template, previewVariables)}
+                            >
+                              <FileType className="h-4 w-4 mr-1" />
+                              Word
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => deleteTemplate(template.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedTemplate(template);
-                            loadVersions(template.id);
-                          }}
-                        >
-                          <History className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedTemplate(template);
-                            setShowPreview(true);
-                            // Initialize preview variables
-                            const vars: Record<string, string> = {};
-                            template.variables?.forEach(v => {
-                              vars[v] = "";
-                            });
-                            setPreviewVariables(vars);
-                          }}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          Use
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => deleteTemplate(template.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -566,66 +474,52 @@ const DocumentTemplatesManager = () => {
         </CardContent>
       </Card>
 
-      {/* Preview and Export Dialog */}
+      {/* Preview Dialog */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Fill Template Variables</DialogTitle>
-            <DialogDescription>
-              Fill in the variables and export to PDF or Word
-            </DialogDescription>
+            <DialogTitle>Template Preview: {selectedTemplate?.name}</DialogTitle>
           </DialogHeader>
           {selectedTemplate && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                {selectedTemplate.variables?.map((variable) => (
-                  <div key={variable}>
-                    <Label htmlFor={variable}>{variable}</Label>
-                    <Input
-                      id={variable}
-                      value={previewVariables[variable] || ""}
-                      onChange={(e) => setPreviewVariables({
-                        ...previewVariables,
-                        [variable]: e.target.value
-                      })}
-                      placeholder={`Enter ${variable}`}
-                    />
-                  </div>
-                ))}
+              {selectedTemplate.variables && selectedTemplate.variables.length > 0 && (
+                <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
+                  <h4 className="col-span-2 font-semibold">Fill Variables</h4>
+                  {selectedTemplate.variables.map((v) => (
+                    <div key={v}>
+                      <Label htmlFor={v}>{v}</Label>
+                      <Input
+                        id={v}
+                        value={previewVariables[v] || ""}
+                        onChange={(e) =>
+                          setPreviewVariables({ ...previewVariables, [v]: e.target.value })
+                        }
+                        placeholder={`Enter ${v}...`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="p-4 border rounded-lg bg-background">
+                <pre className="whitespace-pre-wrap text-sm">
+                  {substituteVariables(selectedTemplate.content, previewVariables)}
+                </pre>
               </div>
-              <div className="border rounded-md p-4 bg-muted">
-                <Label>Preview</Label>
-                <div 
-                  className="mt-2 prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={createSafeHTML(
-                    substituteVariables(selectedTemplate.content, previewVariables)
-                  )}
-                />
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPreview(false)}>
-              Close
-            </Button>
-            {selectedTemplate && (
-              <>
+              <div className="flex justify-end gap-2">
                 <Button
                   variant="outline"
                   onClick={() => exportToPDF(selectedTemplate, previewVariables)}
                 >
-                  <Download className="h-4 w-4 mr-1" />
+                  <Download className="h-4 w-4 mr-2" />
                   Export PDF
                 </Button>
-                <Button
-                  onClick={() => exportToWord(selectedTemplate, previewVariables)}
-                >
-                  <Download className="h-4 w-4 mr-1" />
+                <Button onClick={() => exportToWord(selectedTemplate, previewVariables)}>
+                  <FileType className="h-4 w-4 mr-2" />
                   Export Word
                 </Button>
-              </>
-            )}
-          </DialogFooter>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
