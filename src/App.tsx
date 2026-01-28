@@ -87,6 +87,7 @@ const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
 // RevolutionaryAI moved to AICommandCenter
 const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
+const AICommandCenterPage = lazy(() => import("@/pages/AICommandCenterPage"));
 const AIHubPage = lazy(() => import("@/pages/AIHubPage"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
 const RevolutionaryFeaturesPage = lazy(() => import("@/pages/RevolutionaryFeaturesPage"));
@@ -444,6 +445,7 @@ const AppRoutes = () => (
       <Route path="/nauti-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<AICommandCenter />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
+      <Route path="/ai-command-center" element={<AICommandCenterPage />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
       <Route path="/revolutionary-features" element={<RevolutionaryFeaturesPage />} />
