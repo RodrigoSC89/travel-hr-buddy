@@ -2,9 +2,6 @@
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
- * 
- * NOTE: @ts-nocheck needed - fleet_sensors table not in generated types,
- * maintenance_alerts has different schema than local interface
  */
 
 import React, { useState, useEffect } from "react";
@@ -80,8 +77,11 @@ export default function FleetTelemetryModule() {
   const loadTelemetryData = async () => {
     setLoading(true);
     try {
+      // Use dynamic table access for unmapped tables
+      const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+      
       // Load sensor data
-      const { data: sensors, error: sensorError } = await supabase
+      const { data: sensors, error: sensorError } = await client
         .from("fleet_sensors")
         .select("*, vessel:vessels(name)")
         .order("timestamp", { ascending: false })
@@ -98,29 +98,42 @@ export default function FleetTelemetryModule() {
 
       if (alertsError) throw alertsError;
 
-      setSensorData(sensors?.map(s => ({
+      // Type-safe mapping with proper null handling
+      interface SensorRow {
+        id: string;
+        vessel_id: string | null;
+        vessel?: { name: string } | null;
+        sensor_type: string;
+        value: number;
+        unit: string | null;
+        threshold_min?: number | null;
+        threshold_max?: number | null;
+        timestamp: string;
+      }
+
+      setSensorData((sensors as unknown as SensorRow[] | null)?.map(s => ({
         id: s.id,
-        vessel_id: s.vessel_id,
+        vessel_id: s.vessel_id || "",
         vessel_name: s.vessel?.name || "Unknown",
         sensor_type: s.sensor_type,
         value: s.value,
-        unit: s.unit,
-        threshold_min: s.threshold_min,
-        threshold_max: s.threshold_max,
-        status: determineStatus(s.value, s.threshold_min, s.threshold_max),
+        unit: s.unit || "",
+        threshold_min: s.threshold_min ?? undefined,
+        threshold_max: s.threshold_max ?? undefined,
+        status: determineStatus(s.value, s.threshold_min ?? undefined, s.threshold_max ?? undefined),
         timestamp: s.timestamp
       })) || []);
 
       setAlerts(maintenanceAlerts?.map(a => ({
         id: a.id,
-        vessel_id: a.vessel_id,
-        vessel_name: a.vessel?.name || "Unknown",
-        alert_type: a.alert_type,
-        component: a.component,
-        severity: a.severity,
-        message: a.message,
-        predicted_failure_date: a.predicted_failure_date,
-        created_at: a.created_at
+        vessel_id: a.vessel_id || "",
+        vessel_name: (a.vessel as { name: string } | null)?.name || "Unknown",
+        alert_type: (a.alert_type || "scheduled") as "predictive" | "scheduled" | "emergency",
+        component: a.component || "",
+        severity: (a.severity || "medium") as "low" | "medium" | "high" | "critical",
+        message: a.description || "",
+        predicted_failure_date: a.due_date ?? undefined,
+        created_at: a.created_at || new Date().toISOString()
       })) || []);
 
     } catch (error) {

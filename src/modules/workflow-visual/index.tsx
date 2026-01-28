@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 877 - WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
- * @ts-nocheck: ReactFlow BackgroundVariant type mismatch
+ * PATCH 900 - Removed @ts-nocheck, using proper ReactFlow types
  */
 
 import React, { useState, useCallback, useEffect } from "react";
@@ -415,7 +414,7 @@ const WorkflowVisual = () => {
                 >
                   <Controls />
                   <MiniMap />
-                  <Background variant="dots" gap={12} size={1} />
+                  <Background gap={12} size={1} />
                   
                   <Panel position="top-left" className="bg-background/80 backdrop-blur p-2 rounded-lg">
                     <div className="flex gap-2">
