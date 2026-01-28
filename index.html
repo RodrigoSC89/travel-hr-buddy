@@ -23,10 +23,17 @@
       .border-t-transparent{border-top-color:transparent}
       .rounded-full{border-radius:9999px}
       .h-12{height:3rem}.w-12{width:3rem}.border-4{border-width:4px}
+      /* APEX: GPU acceleration and containment */
+      .gpu-layer{transform:translateZ(0);will-change:transform;backface-visibility:hidden}
+      .lazy-render{content-visibility:auto;contain-intrinsic-size:0 200px}
+      .skeleton-shimmer{background:linear-gradient(90deg,#e5e7eb 0%,#f3f4f6 50%,#e5e7eb 100%);background-size:300% 100%;animation:shimmer 1s linear infinite}
+      @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
       @media(prefers-color-scheme:dark){
         .bg-background{background-color:#0f172a}
         .text-foreground{color:#f1f5f9}
+        .skeleton-shimmer{background:linear-gradient(90deg,#1e293b 0%,#334155 50%,#1e293b 100%);background-size:300% 100%}
       }
+      @media(prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
     </style>
     
     <!-- PWA Manifest -->
