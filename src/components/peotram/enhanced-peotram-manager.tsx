@@ -550,8 +550,8 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="13-elements" className="space-y-0">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando 13 Elementos...</div>}>
             <Peotram13ElementsTabs 
-              onElementSelect={(num) => console.log('Element selected:', num)}
-              onItemSelect={(elemNum, itemId) => console.log('Item selected:', elemNum, itemId)}
+              onElementSelect={() => {}}
+              onItemSelect={() => {}}
             />
           </Suspense>
         </TabsContent>

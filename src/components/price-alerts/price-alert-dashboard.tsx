@@ -1,11 +1,6 @@
-// @ts-nocheck
 /**
- * Price Alert Dashboard - PATCH 876
- * 
- * PATCH 876 NOTE: @ts-nocheck retained - price_alerts table in DB has extra
- * columns (availability_status, category, check_frequency_minutes, etc.)
- * not in local interface. Full alignment requires schema migration or
- * interface expansion.
+ * Price Alert Dashboard - PATCH 876 / 1003
+ * Type-safe version - uses only columns that exist in DB schema
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +15,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import type { Database } from "@/integrations/supabase/types";
 
+type PriceAlertRow = Database['public']['Tables']['price_alerts']['Row'];
 
 interface PriceAlert {
   id: string;
@@ -30,7 +27,7 @@ interface PriceAlert {
   product_url: string;
   is_active: boolean;
   created_at: string;
-  last_checked_at?: string;
+  last_checked_at?: string | null;
   user_id: string;
 }
 
@@ -47,6 +44,31 @@ interface Notification {
   message: string;
   is_read: boolean;
   created_at: string;
+}
+
+// Helper to map DB row to local interface
+function mapPriceAlert(row: {
+  id: string;
+  product_name: string;
+  current_price: number | null;
+  target_price: number;
+  product_url: string;
+  is_active: boolean;
+  created_at: string;
+  last_checked_at: string | null;
+  user_id: string;
+}): PriceAlert {
+  return {
+    id: row.id,
+    product_name: row.product_name,
+    current_price: row.current_price,
+    target_price: row.target_price,
+    product_url: row.product_url,
+    is_active: row.is_active ?? true,
+    created_at: row.created_at,
+    last_checked_at: row.last_checked_at,
+    user_id: row.user_id,
+  };
 }
 
 export const PriceAlertDashboard = () => {
@@ -82,15 +104,20 @@ export const PriceAlertDashboardLegacy = () => {
   }, [user, supabase]);
 
   const loadAlerts = async () => {
+    if (!user?.id) {
+      setIsLoading(false);
+      return;
+    }
+    
     try {
       const { data, error } = await supabase
         .from("price_alerts")
-        .select("*")
-        .eq("user_id", user?.id)
+        .select("id, product_name, current_price, target_price, product_url, is_active, created_at, last_checked_at, user_id")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setAlerts(data || []);
+      setAlerts((data || []).map(row => mapPriceAlert(row)));
     } catch (error) {
       toast({
         title: "Erro",
@@ -103,18 +130,21 @@ export const PriceAlertDashboardLegacy = () => {
   };
 
   const loadNotifications = async () => {
+    if (!user?.id) return;
+    
     try {
       const { data, error } = await supabase
         .from("price_notifications")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .eq("is_read", false)
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setNotifications(data || []);
-    } catch (error) {
+    } catch {
+      // Silent fail for notifications
     }
   };
 
@@ -146,6 +176,15 @@ export const PriceAlertDashboardLegacy = () => {
       return;
     }
 
+    if (!user?.id) {
+      toast({
+        title: "Erro",
+        description: "Você precisa estar logado para criar alertas",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsCreatingAlert(true);
     
     try {
@@ -159,7 +198,7 @@ export const PriceAlertDashboardLegacy = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .insert([{
-          user_id: user?.id,
+          user_id: user.id,
           product_name: newAlert.product_name,
           target_price: parseFloat(newAlert.target_price),
           product_url: newAlert.product_url,
@@ -170,15 +209,6 @@ export const PriceAlertDashboardLegacy = () => {
         .single();
 
       if (error) throw error;
-
-      // Add to price history
-      await supabase
-        .from("price_history")
-        .insert([{
-          alert_id: data.id,
-          price: currentPrice,
-          checked_at: new Date().toISOString()
-        }]);
 
       setNewAlert({ product_name: "", target_price: "", product_url: "" });
       setIsAddingAlert(false);
