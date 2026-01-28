@@ -266,6 +266,9 @@ const APIDocs = lazy(() => import("@/pages/admin/APIDocs"));
 const ExternalIntegrationsHub = lazy(() => import("@/pages/admin/ExternalIntegrationsHub"));
 const NotificationCenterPage = lazy(() => import("@/pages/NotificationCenterPage"));
 
+// AI Intelligence Suite v6.0
+const AIIntelligenceSuitePage = lazy(() => import("@/pages/AIIntelligenceSuitePage"));
+
 // Query client - otimizado para conexões lentas/satélite
 const queryClient = new QueryClient({
   defaultOptions: {
