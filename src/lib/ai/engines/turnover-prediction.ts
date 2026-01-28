@@ -14,40 +14,26 @@ export interface CrewMemberProfile {
   age: number;
   nationality: string;
   yearsOfExperience: number;
-  currentVesselTenure: number; // months
-  totalTenure: number; // months with company
-  performanceScores: number[]; // last 6 reviews (0-100)
-  trainingCompletionRate: number; // percentage
+  currentVesselTenure: number;
+  totalTenure: number;
+  performanceScores: number[];
+  trainingCompletionRate: number;
   certificationStatus: 'valid' | 'expiring_soon' | 'expired';
   lastPromotionDate: Date | null;
   salaryBand: 'below_market' | 'market_rate' | 'above_market';
-  overtimeHours: number; // monthly average
-  restViolations: number; // last 12 months
-  incidentInvolvement: number; // last 12 months
-  feedbackSentiment: number; // -1 to 1
-  engagementScore: number; // 0-100
-  absenceRate: number; // percentage
+  overtimeHours: number;
+  restViolations: number;
+  incidentInvolvement: number;
+  feedbackSentiment: number;
+  engagementScore: number;
+  absenceRate: number;
   familyStatus: 'single' | 'married' | 'with_children';
   homeDistance: 'local' | 'domestic' | 'international';
 }
 
-export interface TurnoverPrediction {
-  crewMemberId: string;
-  crewMemberName: string;
-  position: string;
-  turnoverRisk: number; // 0-100
-  riskLevel: 'low' | 'moderate' | 'high' | 'critical';
-  predictedDepartureWindow: string;
-  topRiskFactors: RiskFactor[];
-  retentionRecommendations: RetentionAction[];
-  estimatedReplacementCost: number;
-  confidence: number;
-  lastUpdated: Date;
-}
-
 export interface RiskFactor {
   factor: string;
-  impact: number; // 0-100
+  impact: number;
   category: 'compensation' | 'workload' | 'career' | 'personal' | 'engagement' | 'compliance';
   description: string;
   trend: 'improving' | 'stable' | 'worsening';
@@ -58,9 +44,23 @@ export interface RetentionAction {
   category: 'compensation' | 'development' | 'worklife' | 'recognition' | 'career';
   priority: 'immediate' | 'short_term' | 'medium_term';
   estimatedCost: number;
-  expectedImpact: number; // percentage reduction in turnover risk
+  expectedImpact: number;
   implementationTime: string;
   responsibleDepartment: string;
+}
+
+export interface TurnoverPrediction {
+  crewMemberId: string;
+  crewMemberName: string;
+  position: string;
+  turnoverRisk: number;
+  riskLevel: 'low' | 'moderate' | 'high' | 'critical';
+  predictedDepartureWindow: string;
+  topRiskFactors: RiskFactor[];
+  retentionRecommendations: RetentionAction[];
+  estimatedReplacementCost: number;
+  confidence: number;
+  lastUpdated: Date;
 }
 
 export interface TeamTurnoverAnalysis {
@@ -68,7 +68,7 @@ export interface TeamTurnoverAnalysis {
   totalCrew: number;
   atRiskCount: number;
   averageRiskScore: number;
-  predictedTurnoverRate: number; // percentage next 12 months
+  predictedTurnoverRate: number;
   topRiskFactors: string[];
   recommendations: string[];
   estimatedImpact: {
@@ -79,7 +79,7 @@ export interface TeamTurnoverAnalysis {
 }
 
 class TurnoverPredictionEngine {
-  private readonly REPLACEMENT_COST_MULTIPLIER = 1.5; // 1.5x annual salary
+  private readonly REPLACEMENT_COST_MULTIPLIER = 1.5;
   private readonly BASE_SALARY_BY_POSITION: Record<string, number> = {
     'captain': 120000,
     'chief_officer': 90000,
@@ -132,8 +132,12 @@ class TurnoverPredictionEngine {
       .slice(0, 5)
       .map(([factor]) => factor);
 
-    const avgRisk = predictions.reduce((sum, p) => sum + p.turnoverRisk, 0) / predictions.length;
-    const predictedTurnover = (atRiskPredictions.length / filtered.length) * 100;
+    const avgRisk = predictions.length > 0 
+      ? predictions.reduce((sum, p) => sum + p.turnoverRisk, 0) / predictions.length
+      : 0;
+    const predictedTurnover = filtered.length > 0 
+      ? (atRiskPredictions.length / filtered.length) * 100
+      : 0;
 
     return {
       department: department || 'All Departments',
@@ -154,7 +158,6 @@ class TurnoverPredictionEngine {
   private analyzeRiskFactors(profile: CrewMemberProfile): RiskFactor[] {
     const factors: RiskFactor[] = [];
 
-    // Compensation factors
     if (profile.salaryBand === 'below_market') {
       factors.push({
         factor: 'Salário abaixo do mercado',
@@ -165,7 +168,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Workload factors
     if (profile.overtimeHours > 60) {
       factors.push({
         factor: 'Carga de trabalho excessiva',
@@ -186,7 +188,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Career factors
     const monthsSincePromotion = profile.lastPromotionDate
       ? this.monthsBetween(profile.lastPromotionDate, new Date())
       : profile.totalTenure;
@@ -211,7 +212,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Engagement factors
     if (profile.engagementScore < 50) {
       factors.push({
         factor: 'Baixo engajamento',
@@ -232,7 +232,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Personal factors
     if (profile.familyStatus === 'with_children' && profile.homeDistance === 'international') {
       factors.push({
         factor: 'Distância familiar',
@@ -243,7 +242,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Contract factors
     const monthsToContractEnd = this.monthsBetween(new Date(), profile.contractEndDate);
     if (monthsToContractEnd <= 3) {
       factors.push({
@@ -255,7 +253,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Tenure factors
     if (profile.totalTenure >= 12 && profile.totalTenure <= 24) {
       factors.push({
         factor: 'Período crítico de tenure',
@@ -266,7 +263,6 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Performance decline
     if (profile.performanceScores.length >= 3) {
       const recent = profile.performanceScores.slice(-3);
       const earlier = profile.performanceScores.slice(0, -3);
@@ -286,7 +282,6 @@ class TurnoverPredictionEngine {
       }
     }
 
-    // Absence rate
     if (profile.absenceRate > 5) {
       factors.push({
         factor: 'Taxa de ausência elevada',
@@ -297,23 +292,20 @@ class TurnoverPredictionEngine {
       });
     }
 
-    // Sort by impact
     return factors.sort((a, b) => b.impact - a.impact);
   }
 
   private calculateTurnoverRisk(factors: RiskFactor[]): number {
     if (factors.length === 0) return 10;
 
-    // Weighted sum with diminishing returns
     let totalRisk = 0;
     let weight = 1;
 
     for (const factor of factors) {
       totalRisk += factor.impact * weight;
-      weight *= 0.75; // Diminishing weight for additional factors
+      weight *= 0.75;
     }
 
-    // Normalize to 0-100
     return Math.min(100, Math.round(totalRisk));
   }
 
@@ -404,7 +396,6 @@ class TurnoverPredictionEngine {
       }
     }
 
-    // Always suggest stay interview for high-risk
     if (factors.length > 0 && this.calculateTurnoverRisk(factors) >= 50) {
       actions.unshift({
         action: 'Stay interview com liderança imediata',
@@ -422,7 +413,7 @@ class TurnoverPredictionEngine {
 
   private calculateReplacementCost(profile: CrewMemberProfile): number {
     const baseSalary = this.getBaseSalary(profile.position);
-    const tenureMultiplier = Math.min(2, 1 + profile.totalTenure / 60); // Max 2x for 5+ years
+    const tenureMultiplier = Math.min(2, 1 + profile.totalTenure / 60);
     return Math.round(baseSalary * this.REPLACEMENT_COST_MULTIPLIER * tenureMultiplier);
   }
 
@@ -433,13 +424,12 @@ class TurnoverPredictionEngine {
   }
 
   private calculateConfidence(profile: CrewMemberProfile): number {
-    let confidence = 0.75; // Base confidence
+    let confidence = 0.75;
 
-    // More data = higher confidence
     if (profile.performanceScores.length >= 6) confidence += 0.1;
     if (profile.totalTenure > 12) confidence += 0.05;
-    if (profile.feedbackSentiment !== 0) confidence += 0.05; // Has sentiment data
-    if (profile.engagementScore > 0) confidence += 0.05; // Has engagement data
+    if (profile.feedbackSentiment !== 0) confidence += 0.05;
+    if (profile.engagementScore > 0) confidence += 0.05;
 
     return Math.min(0.95, confidence);
   }
@@ -483,10 +473,7 @@ class TurnoverPredictionEngine {
   }
 
   private assessKnowledgeLoss(predictions: TurnoverPrediction[]): 'low' | 'medium' | 'high' {
-    const highTenure = predictions.filter(p => {
-      // Assuming high tenure based on replacement cost
-      return p.estimatedReplacementCost > 100000;
-    });
+    const highTenure = predictions.filter(p => p.estimatedReplacementCost > 100000);
 
     if (highTenure.length >= 3) return 'high';
     if (highTenure.length >= 1) return 'medium';
