@@ -49,7 +49,7 @@ export interface Decision {
   humanApprovalBy: string | null;
   executedAt: Date | null;
   outcome: DecisionOutcome | null;
-  auditTrail: AuditEntry[];
+  auditTrail: AgentAuditEntry[];
   createdAt: Date;
 }
 
@@ -106,7 +106,7 @@ export interface DecisionOutcome {
   feedbackIncorporated: boolean;
 }
 
-export interface AuditEntry {
+export interface AgentAuditEntry {
   timestamp: Date;
   action: string;
   agent: AgentRole | 'system' | 'human';
@@ -590,7 +590,7 @@ class MultiAgentOrchestrator {
     action: string,
     agent: AgentRole | 'system' | 'human',
     details: string
-  ): AuditEntry {
+  ): AgentAuditEntry {
     const entry = {
       timestamp: new Date(),
       action,
