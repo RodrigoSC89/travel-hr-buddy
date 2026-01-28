@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "환영합니다",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "create": "생성",
+    "search": "검색",
+    "filter": "필터",
+    "export": "내보내기",
+    "import": "가져오기",
+    "close": "닫기",
+    "confirm": "확인",
+    "back": "뒤로",
+    "next": "다음",
+    "submit": "제출",
+    "clear": "지우기"
+  },
+  "navigation": {
+    "dashboard": "대시보드",
+    "reports": "보고서",
+    "settings": "설정",
+    "profile": "프로필",
+    "logout": "로그아웃",
+    "help": "도움말"
+  },
+  "ai": {
+    "cognitive_feedback": "인지 피드백",
+    "weekly_report": "주간 보고서",
+    "insights": "인사이트",
+    "patterns": "패턴",
+    "acceptance_rate": "수락률",
+    "rejection_rate": "거부율",
+    "module_performance": "모듈 성능"
+  },
+  "maritime": {
+    "vessel": "선박",
+    "fleet": "선단",
+    "compliance": "규정 준수",
+    "mission_control": "미션 컨트롤",
+    "logs_center": "로그 센터",
+    "notifications": "알림"
+  },
+  "units": {
+    "distance": "거리",
+    "temperature": "온도",
+    "volume": "부피",
+    "kilometers": "킬로미터",
+    "miles": "마일",
+    "celsius": "섭씨",
+    "fahrenheit": "화씨",
+    "liters": "리터",
+    "gallons": "갤런"
+  },
+  "time": {
+    "timezone": "시간대",
+    "date": "날짜",
+    "time": "시간",
+    "datetime": "날짜 및 시간"
+  }
+}
