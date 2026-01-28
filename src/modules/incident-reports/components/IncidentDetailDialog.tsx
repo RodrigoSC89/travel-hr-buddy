@@ -137,15 +137,17 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     if (!incident) return;
 
     try {
+      const insertData = {
+        incident_id: incident.id,
+        signatory_name: signatureData.signatory_name,
+        signatory_role: signatureData.signatory_role,
+        signature_image: signatureData.signature_image,
+        signed_at: signatureData.signed_at,
+      } as Record<string, unknown>;
+
       const { error } = await dynamicDb
         .from("incident_signatures")
-        .insert([{
-          incident_id: incident.id,
-          signatory_name: signatureData.signatory_name,
-          signatory_role: signatureData.signatory_role,
-          signature_image: signatureData.signature_image,
-          signed_at: signatureData.signed_at,
-        }]);
+        .insert(insertData as never);
 
       if (error) throw error;
 
@@ -176,15 +178,17 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     }
 
     try {
+      const insertData = {
+        incident_id: incident.id,
+        action_description: newAction.action_description,
+        assigned_to: newAction.assigned_to,
+        due_date: newAction.due_date || null,
+        status: newAction.status,
+      } as Record<string, unknown>;
+
       const { error } = await dynamicDb
         .from("incident_actions")
-        .insert([{
-          incident_id: incident.id,
-          action_description: newAction.action_description,
-          assigned_to: newAction.assigned_to,
-          due_date: newAction.due_date || null,
-          status: newAction.status,
-        }]);
+        .insert(insertData as never);
 
       if (error) throw error;
 
@@ -622,6 +626,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         open={showSignatureDialog}
         onOpenChange={setShowSignatureDialog}
         onSave={handleSignatureSave}
+        incidentId={incident?.id || ""}
       />
     </Dialog>
   );

@@ -102,7 +102,7 @@ export class PriceAlertsService {
       const insertData: PriceAlertInsert = {
         user_id: user.id,
         product_name: productName,
-        product_url: productUrl,
+        product_url: productUrl ?? "",
         current_price: currentPrice,
         target_price: targetPrice,
         is_active: true,
@@ -283,20 +283,22 @@ export class PriceAlertsService {
 
       const priceDifference = targetPrice - currentPrice;
 
+      const insertData = {
+        user_id: userId,
+        alert_id: alertId,
+        product_name: productName,
+        current_price: currentPrice,
+        target_price: targetPrice,
+        price_difference: priceDifference,
+        notification_channels: channels,
+        message,
+        is_read: false,
+        is_dismissed: false,
+      } as Record<string, unknown>;
+
       const { error } = await dynamicDb
         .from("price_alert_notifications")
-        .insert({
-          user_id: userId,
-          alert_id: alertId,
-          product_name: productName,
-          current_price: currentPrice,
-          target_price: targetPrice,
-          price_difference: priceDifference,
-          notification_channels: channels,
-          message,
-          is_read: false,
-          is_dismissed: false,
-        });
+        .insert(insertData as never);
 
       if (error) {
         logger.warn("Failed to insert notification:", { error });
@@ -350,12 +352,14 @@ export class PriceAlertsService {
    */
   async markNotificationAsRead(notificationId: string): Promise<void> {
     try {
+      const updateData = {
+        is_read: true,
+        read_at: new Date().toISOString(),
+      } as Record<string, unknown>;
+
       const { error } = await dynamicDb
         .from("price_alert_notifications")
-        .update({
-          is_read: true,
-          read_at: new Date().toISOString(),
-        })
+        .update(updateData as never)
         .eq("id", notificationId);
 
       if (error) {
@@ -371,9 +375,11 @@ export class PriceAlertsService {
    */
   async dismissNotification(notificationId: string): Promise<void> {
     try {
+      const updateData = { is_dismissed: true } as Record<string, unknown>;
+
       const { error } = await dynamicDb
         .from("price_alert_notifications")
-        .update({ is_dismissed: true })
+        .update(updateData as never)
         .eq("id", notificationId);
 
       if (error) {

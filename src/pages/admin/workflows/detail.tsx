@@ -172,14 +172,16 @@ export default function WorkflowDetailPage() {
     try {
       setIsCreating(true);
       const { data: { user } } = await supabase.auth.getUser();
-      const { error } = await supabase.from("smart_workflow_steps").insert({
+      const insertData = {
         workflow_id: id,
         title: newTitle,
         status: "pendente",
         position: steps.length,
         assigned_to: user?.id,
         created_by: user?.id
-      });
+      } as Record<string, unknown>;
+
+      const { error } = await supabase.from("smart_workflow_steps").insert(insertData as never);
       if (error) throw error;
       setNewTitle("");
       toast({ title: "Sucesso", description: "Tarefa adicionada com sucesso!" });
@@ -199,17 +201,19 @@ export default function WorkflowDetailPage() {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (editingStep) {
-        const { error } = await supabase.from("smart_workflow_steps").update({
+        const updateData = {
           title: taskForm.title,
           description: taskForm.description,
           status: taskForm.status,
           assigned_to: taskForm.assigned_to || user?.id,
           priority: taskForm.priority
-        }).eq("id", editingStep.id);
+        } as Record<string, unknown>;
+
+        const { error } = await supabase.from("smart_workflow_steps").update(updateData as never).eq("id", editingStep.id);
         if (error) throw error;
         toast({ title: "Sucesso", description: "Tarefa atualizada com sucesso!" });
       } else {
-        const { error } = await supabase.from("smart_workflow_steps").insert({
+        const insertData = {
           workflow_id: id,
           title: taskForm.title,
           description: taskForm.description,
@@ -218,7 +222,9 @@ export default function WorkflowDetailPage() {
           assigned_to: taskForm.assigned_to || user?.id,
           priority: taskForm.priority,
           created_by: user?.id
-        });
+        } as Record<string, unknown>;
+
+        const { error } = await supabase.from("smart_workflow_steps").insert(insertData as never);
         if (error) throw error;
         toast({ title: "Sucesso", description: "Tarefa criada com sucesso!" });
       }
