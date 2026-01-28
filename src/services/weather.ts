@@ -451,7 +451,7 @@ export async function getWeatherData(
  */
 export function clearWeatherCache(): void {
   weatherCache.clear();
-  console.log("[Weather] Cache cleared");
+  logger.debug("[Weather] Cache cleared");
 }
 
 /**
