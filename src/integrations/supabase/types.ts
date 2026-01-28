@@ -455,6 +455,71 @@ export type Database = {
           },
         ]
       }
+      ai_access_anomalies: {
+        Row: {
+          anomaly_type: string
+          auto_action_taken: Json | null
+          confidence: number
+          created_at: string
+          description: string | null
+          event_id: string
+          evidence: Json | null
+          id: string
+          organization_id: string | null
+          recommendation: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          anomaly_type: string
+          auto_action_taken?: Json | null
+          confidence: number
+          created_at?: string
+          description?: string | null
+          event_id: string
+          evidence?: Json | null
+          id?: string
+          organization_id?: string | null
+          recommendation?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          anomaly_type?: string
+          auto_action_taken?: Json | null
+          confidence?: number
+          created_at?: string
+          description?: string | null
+          event_id?: string
+          evidence?: Json | null
+          id?: string
+          organization_id?: string | null
+          recommendation?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_access_anomalies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_audit_logs: {
         Row: {
           ai_response: string | null
@@ -642,6 +707,86 @@ export type Database = {
           },
         ]
       }
+      ai_blockchain_audit: {
+        Row: {
+          action_description: string
+          action_type: string
+          agent_id: string
+          agent_name: string
+          block_number: number
+          confidence: number | null
+          created_at: string
+          hash: string
+          human_override: boolean | null
+          id: string
+          module: string
+          organization_id: string | null
+          override_by: string | null
+          override_reason: string | null
+          parameters: Json | null
+          previous_hash: string
+          reasoning: string | null
+          resource: string | null
+          resource_id: string | null
+          result: Json | null
+          timestamp: string
+        }
+        Insert: {
+          action_description: string
+          action_type: string
+          agent_id: string
+          agent_name: string
+          block_number: number
+          confidence?: number | null
+          created_at?: string
+          hash: string
+          human_override?: boolean | null
+          id?: string
+          module: string
+          organization_id?: string | null
+          override_by?: string | null
+          override_reason?: string | null
+          parameters?: Json | null
+          previous_hash: string
+          reasoning?: string | null
+          resource?: string | null
+          resource_id?: string | null
+          result?: Json | null
+          timestamp?: string
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          agent_id?: string
+          agent_name?: string
+          block_number?: number
+          confidence?: number | null
+          created_at?: string
+          hash?: string
+          human_override?: boolean | null
+          id?: string
+          module?: string
+          organization_id?: string | null
+          override_by?: string | null
+          override_reason?: string | null
+          parameters?: Json | null
+          previous_hash?: string
+          reasoning?: string | null
+          resource?: string | null
+          resource_id?: string | null
+          result?: Json | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_blockchain_audit_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_chat_conversations: {
         Row: {
           created_at: string
@@ -793,6 +938,125 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: []
+      }
+      ai_contract_analysis: {
+        Row: {
+          analysis_duration_ms: number | null
+          contract_type: string
+          created_at: string
+          document_id: string | null
+          financial_terms: Json | null
+          id: string
+          key_dates: Json | null
+          model_version: string | null
+          negotiation_opportunities: Json | null
+          organization_id: string | null
+          overall_risk_score: number | null
+          parties: Json | null
+          risk_clauses: Json | null
+          total_potential_savings: number | null
+        }
+        Insert: {
+          analysis_duration_ms?: number | null
+          contract_type: string
+          created_at?: string
+          document_id?: string | null
+          financial_terms?: Json | null
+          id?: string
+          key_dates?: Json | null
+          model_version?: string | null
+          negotiation_opportunities?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          parties?: Json | null
+          risk_clauses?: Json | null
+          total_potential_savings?: number | null
+        }
+        Update: {
+          analysis_duration_ms?: number | null
+          contract_type?: string
+          created_at?: string
+          document_id?: string | null
+          financial_terms?: Json | null
+          id?: string
+          key_dates?: Json | null
+          model_version?: string | null
+          negotiation_opportunities?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          parties?: Json | null
+          risk_clauses?: Json | null
+          total_potential_savings?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_contract_analysis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_crew_matches: {
+        Row: {
+          candidate_id: string | null
+          compatibility_factors: Json | null
+          created_at: string
+          id: string
+          match_score: number
+          organization_id: string | null
+          position_id: string
+          recommendation: string | null
+          risks: Json | null
+          score_breakdown: Json | null
+          status: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          candidate_id?: string | null
+          compatibility_factors?: Json | null
+          created_at?: string
+          id?: string
+          match_score: number
+          organization_id?: string | null
+          position_id: string
+          recommendation?: string | null
+          risks?: Json | null
+          score_breakdown?: Json | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          candidate_id?: string | null
+          compatibility_factors?: Json | null
+          created_at?: string
+          id?: string
+          match_score?: number
+          organization_id?: string | null
+          position_id?: string
+          recommendation?: string | null
+          risks?: Json | null
+          score_breakdown?: Json | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_crew_matches_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_crew_matches_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_decisions: {
         Row: {
@@ -1348,6 +1612,69 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_maintenance_predictions: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          equipment_id: string
+          equipment_name: string
+          failure_probability: number
+          id: string
+          organization_id: string | null
+          predicted_failure_date: string | null
+          recommended_action: string | null
+          risk_factors: Json | null
+          status: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          equipment_id: string
+          equipment_name: string
+          failure_probability: number
+          id?: string
+          organization_id?: string | null
+          predicted_failure_date?: string | null
+          recommended_action?: string | null
+          risk_factors?: Json | null
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          equipment_id?: string
+          equipment_name?: string
+          failure_probability?: number
+          id?: string
+          organization_id?: string | null
+          predicted_failure_date?: string | null
+          recommended_action?: string | null
+          risk_factors?: Json | null
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_maintenance_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_maintenance_predictions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_memory: {
         Row: {
           content: Json
@@ -1433,6 +1760,72 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      ai_nc_predictions: {
+        Row: {
+          area_code: string
+          area_name: string
+          created_at: string
+          historical_occurrences: number | null
+          id: string
+          inspection_date: string | null
+          inspection_type: string
+          organization_id: string | null
+          preparation_status: string | null
+          probability: number
+          recommendation: string | null
+          severity: string
+          target_port: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          area_code: string
+          area_name: string
+          created_at?: string
+          historical_occurrences?: number | null
+          id?: string
+          inspection_date?: string | null
+          inspection_type: string
+          organization_id?: string | null
+          preparation_status?: string | null
+          probability: number
+          recommendation?: string | null
+          severity: string
+          target_port?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          area_code?: string
+          area_name?: string
+          created_at?: string
+          historical_occurrences?: number | null
+          id?: string
+          inspection_date?: string | null
+          inspection_type?: string
+          organization_id?: string | null
+          preparation_status?: string | null
+          probability?: number
+          recommendation?: string | null
+          severity?: string
+          target_port?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_nc_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_nc_predictions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_performance_metrics: {
         Row: {
@@ -1584,6 +1977,72 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_risk_assessments: {
+        Row: {
+          assessed_at: string
+          created_by: string | null
+          crew_fatigue_data: Json | null
+          decision: string
+          factors: Json | null
+          id: string
+          mitigations: Json | null
+          organization_id: string | null
+          overall_score: number
+          risk_level: string
+          valid_until: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          weather_data: Json | null
+        }
+        Insert: {
+          assessed_at?: string
+          created_by?: string | null
+          crew_fatigue_data?: Json | null
+          decision: string
+          factors?: Json | null
+          id?: string
+          mitigations?: Json | null
+          organization_id?: string | null
+          overall_score: number
+          risk_level: string
+          valid_until?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_data?: Json | null
+        }
+        Update: {
+          assessed_at?: string
+          created_by?: string | null
+          crew_fatigue_data?: Json | null
+          decision?: string
+          factors?: Json | null
+          id?: string
+          mitigations?: Json | null
+          organization_id?: string | null
+          overall_score?: number
+          risk_level?: string
+          valid_until?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_risk_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_risk_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_self_healing_logs: {
         Row: {
           action_result: string | null
@@ -1709,6 +2168,66 @@ export type Database = {
           vessel_id?: string | null
         }
         Relationships: []
+      }
+      ai_telemetry_data: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          metadata: Json | null
+          organization_id: string | null
+          recorded_at: string
+          sensor_id: string
+          sensor_type: string
+          status: string | null
+          unit: string | null
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recorded_at?: string
+          sensor_id: string
+          sensor_type: string
+          status?: string | null
+          unit?: string | null
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recorded_at?: string
+          sensor_id?: string
+          sensor_type?: string
+          status?: string | null
+          unit?: string | null
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_telemetry_data_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_telemetry_data_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ai_training_history: {
         Row: {
