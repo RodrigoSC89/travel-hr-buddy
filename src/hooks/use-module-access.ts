@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { useAuth } from './useAuth';
+import { useOrganization } from '@/contexts/OrganizationContext';
 import {
   checkModuleAccess,
   getAccessibleModules,
@@ -22,7 +22,8 @@ import {
  * Hook to check if user has access to a specific module
  */
 export function useModuleAccess(moduleSlug: ModuleSlug | string) {
-  const { organizationId } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
   
   return useQuery({
     queryKey: ['module-access', organizationId, moduleSlug],
@@ -40,7 +41,8 @@ export function useModuleAccess(moduleSlug: ModuleSlug | string) {
  * Hook to get all accessible modules for the current organization
  */
 export function useAccessibleModules() {
-  const { organizationId } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
   
   return useQuery({
     queryKey: ['accessible-modules', organizationId],
@@ -58,7 +60,8 @@ export function useAccessibleModules() {
  * Hook to get current organization subscription
  */
 export function useSubscription() {
-  const { organizationId } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
   
   return useQuery({
     queryKey: ['subscription', organizationId],
@@ -100,7 +103,8 @@ export function useAllModules() {
  * Hook for tracking module usage
  */
 export function useModuleTracking() {
-  const { organizationId } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
   
   return {
     trackUsage: async (
@@ -119,7 +123,8 @@ export function useModuleTracking() {
  * Hook to check multiple module accesses at once
  */
 export function useMultipleModuleAccess(moduleSlugs: string[]) {
-  const { organizationId } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
   
   return useQuery({
     queryKey: ['module-access-multiple', organizationId, moduleSlugs.join(',')],

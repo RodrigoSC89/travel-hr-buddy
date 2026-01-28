@@ -209,7 +209,7 @@ export default function VesselDigitalTwinPage() {
 
         <TabsContent value="overview">
           <Suspense fallback={<TabSkeleton />}>
-            <VesselOverview vessel={vessel} specifications={specifications} />
+            <VesselOverview vessel={vessel} specifications={specifications ?? null} />
           </Suspense>
         </TabsContent>
 
@@ -251,7 +251,7 @@ export default function VesselDigitalTwinPage() {
 
         <TabsContent value="ai">
           <Suspense fallback={<TabSkeleton />}>
-            <VesselAIAssistant vesselId={vesselId!} vessel={vessel} />
+            <VesselAIAssistant vesselId={vesselId!} />
           </Suspense>
         </TabsContent>
       </Tabs>

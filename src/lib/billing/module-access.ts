@@ -272,7 +272,7 @@ export async function trackModuleUsage(
     
     const { data: { user } } = await supabase.auth.getUser();
     
-    await supabase.from('module_usage').insert({
+    await (supabase as any).from('module_usage').insert({
       organization_id: organizationId,
       module_id: module.id,
       user_id: user?.id,
