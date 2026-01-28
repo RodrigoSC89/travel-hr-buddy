@@ -1,16 +1,21 @@
-// @ts-nocheck
 /**
- * PATCH 874 - Logistics Hub Dashboard
- * @ts-nocheck: logistics_shipments table access with dynamic typing
+ * PATCH 878 - Logistics Hub Dashboard
+ * Type-safe using Supabase generated types
  */
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Package, Truck, Users, BarChart3, Map } from "lucide-react";
 import { InventoryManagement } from "./inventory-management";
 import { ShipmentTracking } from "./shipment-tracking";
 import { SupplyOrdersManagement } from "./supply-orders-management";
 import { DeliveryMap } from "./DeliveryMap";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import type { Database } from "@/integrations/supabase/types";
+
+type LogisticsShipment = Database["public"]["Tables"]["logistics_shipments"]["Row"];
 
 interface LocalDeliveryLocation {
   id: string;
@@ -26,20 +31,6 @@ interface LocalDeliveryLocation {
   };
 }
 
-interface ShipmentData {
-  id: string;
-  shipment_number: string;
-  origin: string;
-  destination: string;
-  status: string;
-  estimated_arrival: string | null;
-}
-
-// Dynamic DB access for tables not in schema - using any to bypass strict typing
-const dynamicDb = {
-  from: (table: string) => supabase.from(table as "vessels")
-};
-
 const LogisticsHubDashboard = () => {
   const [deliveryLocations, setDeliveryLocations] = React.useState<LocalDeliveryLocation[]>([]);
 
@@ -48,21 +39,24 @@ const LogisticsHubDashboard = () => {
   }, []);
 
   const loadDeliveryData = async () => {
-    // Load shipment data and transform to map format
-    const { data: shipments } = await dynamicDb
+    const { data: shipments, error } = await supabase
       .from("logistics_shipments")
       .select("*")
       .in("status", ["in_transit", "delivered"]);
 
+    if (error) {
+      console.error("Error loading shipments:", error);
+      return;
+    }
+
     if (shipments) {
-      // Transform shipments to delivery locations with mock coordinates
-      const locations: LocalDeliveryLocation[] = (shipments as ShipmentData[]).map((shipment, idx) => ({
+      const locations: LocalDeliveryLocation[] = shipments.map((shipment: LogisticsShipment, idx: number) => ({
         id: shipment.id,
-        shipment_number: shipment.shipment_number,
+        shipment_number: shipment.tracking_number,
         origin: shipment.origin,
         destination: shipment.destination,
         status: shipment.status,
-        estimated_arrival: shipment.estimated_arrival,
+        estimated_arrival: shipment.estimated_delivery,
         coordinates: {
           origin: [-47 - (idx * 2), -10 - (idx * 1.5)] as [number, number],
           destination: [-43 + (idx * 2), -8 + (idx * 1)] as [number, number],

@@ -136,6 +136,7 @@
     "@tiptap/starter-kit": "^2.26.3",
     "@types/qrcode": "^1.5.6",
     "@types/qrcode.react": "^1.0.5",
+    "@types/react-big-calendar": "^1.16.3",
     "@types/react-signature-canvas": "^1.0.7",
     "@types/react-window": "^1.8.8",
     "ai": "^5.0.76",
