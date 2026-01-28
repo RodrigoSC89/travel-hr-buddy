@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   MessageSquare,
   Inbox,
@@ -93,14 +95,14 @@ interface Channel {
   lastMessageTime?: string;
 }
 
-// Mock Data
-const MOCK_MESSAGES: Message[] = [
+// Fallback data
+const FALLBACK_MESSAGES: Message[] = [
   {
     id: "1",
     senderId: "system",
     senderName: "Sistema Nautilus",
     senderRole: "Sistema",
-    content: "Bem-vindo ao novo centro de comunicação! Todas as mensagens estão organizadas e prontas para uso.",
+    content: "Bem-vindo ao centro de comunicação! Todas as mensagens estão organizadas.",
     timestamp: new Date().toISOString(),
     priority: "normal",
     category: "system",
@@ -113,7 +115,7 @@ const MOCK_MESSAGES: Message[] = [
     senderId: "hr-001",
     senderName: "Ana Silva",
     senderRole: "Gerente de RH",
-    content: "Lembre-se de atualizar seu dossiê até o final desta semana. Os certificados STCW estão próximos do vencimento.",
+    content: "Lembre-se de atualizar seu dossiê até o final desta semana.",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     priority: "high",
     category: "hr",
@@ -123,23 +125,10 @@ const MOCK_MESSAGES: Message[] = [
   },
   {
     id: "3",
-    senderId: "ops-001",
-    senderName: "Carlos Mendes",
-    senderRole: "Coordenador de Operações",
-    content: "Novo embarque programado para 15/02. Favor confirmar disponibilidade até amanhã.",
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    priority: "high",
-    category: "operations",
-    status: "delivered",
-    isUrgent: true,
-    isBroadcast: false,
-  },
-  {
-    id: "4",
     senderId: "ai-assistant",
     senderName: "Assistente IA",
     senderRole: "Inteligência Artificial",
-    content: "Detectei 3 certificações expirando nos próximos 30 dias. Deseja que eu ajude a programar as renovações?",
+    content: "Detectei 3 certificações expirando nos próximos 30 dias. Deseja ajuda?",
     timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
     priority: "normal",
     category: "ai",
@@ -149,11 +138,11 @@ const MOCK_MESSAGES: Message[] = [
     isAI: true,
   },
   {
-    id: "5",
+    id: "4",
     senderId: "emergency",
     senderName: "Central de Emergência",
     senderRole: "Sistema de Emergência",
-    content: "ALERTA: Condições meteorológicas adversas previstas para amanhã. Todas as embarcações devem revisar procedimentos.",
+    content: "ALERTA: Condições meteorológicas adversas previstas. Revisar procedimentos.",
     timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
     priority: "critical",
     category: "emergency",
@@ -163,14 +152,81 @@ const MOCK_MESSAGES: Message[] = [
   },
 ];
 
-const MOCK_CHANNELS: Channel[] = [
-  { id: "1", name: "Geral", description: "Canal geral de comunicação", type: "broadcast", isPublic: true, memberCount: 156, unreadCount: 5, lastMessage: "Bom dia a todos!", lastMessageTime: "10:45" },
-  { id: "2", name: "RH - Recursos Humanos", description: "Comunicações oficiais do RH", type: "department", isPublic: true, memberCount: 89, unreadCount: 2, lastMessage: "Nova política de férias", lastMessageTime: "09:30" },
-  { id: "3", name: "Operações Marítimas", description: "Coordenação de operações", type: "department", isPublic: false, memberCount: 34, unreadCount: 0, lastMessage: "Embarque confirmado", lastMessageTime: "08:15" },
+const FALLBACK_CHANNELS: Channel[] = [
+  { id: "1", name: "Geral", description: "Canal geral de comunicação", type: "broadcast", isPublic: true, memberCount: 156, unreadCount: 5, lastMessage: "Bom dia!", lastMessageTime: "10:45" },
+  { id: "2", name: "RH", description: "Comunicações do RH", type: "department", isPublic: true, memberCount: 89, unreadCount: 2, lastMessage: "Nova política", lastMessageTime: "09:30" },
+  { id: "3", name: "Operações", description: "Coordenação de operações", type: "department", isPublic: false, memberCount: 34, unreadCount: 0, lastMessage: "Embarque confirmado", lastMessageTime: "08:15" },
   { id: "4", name: "Emergência", description: "Canal de emergência", type: "emergency", isPublic: true, memberCount: 78, unreadCount: 1, lastMessage: "Simulado amanhã", lastMessageTime: "Ontem" },
-  { id: "5", name: "DPO Team", description: "Grupo DPO Officers", type: "group", isPublic: false, memberCount: 12, unreadCount: 0, lastMessage: "Reunião às 14h", lastMessageTime: "Ontem" },
-  { id: "6", name: "Engenharia", description: "Canal de engenharia", type: "department", isPublic: false, memberCount: 28, unreadCount: 3, lastMessage: "Manutenção programada", lastMessageTime: "2d" },
 ];
+
+// Hook para buscar mensagens com fallback
+function useMessages() {
+  return useQuery({
+    queryKey: ['communication-messages'],
+    queryFn: async (): Promise<Message[]> => {
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .select('id, content, sender_id, created_at, message_type')
+          .order('created_at', { ascending: false })
+          .limit(50);
+        
+        if (error || !data || data.length === 0) {
+          return FALLBACK_MESSAGES;
+        }
+        
+        return data.map(row => ({
+          id: row.id,
+          senderId: row.sender_id || 'system',
+          senderName: 'Usuário',
+          senderRole: 'Membro',
+          content: row.content || '',
+          timestamp: row.created_at || new Date().toISOString(),
+          priority: 'normal' as const,
+          category: 'general' as const,
+          status: 'delivered' as const,
+          isUrgent: false,
+          isBroadcast: false
+        }));
+      } catch {
+        return FALLBACK_MESSAGES;
+      }
+    }
+  });
+}
+
+// Hook para buscar canais com fallback
+function useChannels() {
+  return useQuery({
+    queryKey: ['communication-channels'],
+    queryFn: async (): Promise<Channel[]> => {
+      try {
+        const { data, error } = await supabase
+          .from('communication_channels')
+          .select('id, name, description, is_public, member_count')
+          .order('name');
+        
+        if (error || !data || data.length === 0) {
+          return FALLBACK_CHANNELS;
+        }
+        
+        return data.map(row => ({
+          id: row.id,
+          name: row.name || 'Canal',
+          description: row.description || '',
+          type: 'group' as const,
+          isPublic: row.is_public ?? true,
+          memberCount: row.member_count || 0,
+          unreadCount: 0,
+          lastMessage: '',
+          lastMessageTime: ''
+        }));
+      } catch {
+        return FALLBACK_CHANNELS;
+      }
+    }
+  });
+}
 
 // Utility functions
 const formatTimeAgo = (timestamp: string) => {
@@ -237,8 +293,15 @@ const StatCard: React.FC<{ icon: React.ElementType; label: string; value: number
 
 export const CommunicationCenterProfessional: React.FC = () => {
   const [activeTab, setActiveTab] = useState("inbox");
-  const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
-  const [channels] = useState<Channel[]>(MOCK_CHANNELS);
+  const { data: messagesData } = useMessages();
+  const { data: channelsData } = useChannels();
+  const [messages, setMessages] = useState<Message[]>(FALLBACK_MESSAGES);
+  const [channels] = useState<Channel[]>(FALLBACK_CHANNELS);
+  
+  useEffect(() => {
+    if (messagesData) setMessages(messagesData);
+  }, [messagesData]);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriority, setSelectedPriority] = useState("all");
