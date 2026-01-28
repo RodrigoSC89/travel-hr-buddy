@@ -1,6 +1,6 @@
 /**
  * Native App Bridge - PROMPT 6
- * Ponte para recursos nativos mobile
+ * Ponte para recursos nativos mobile via Capacitor
  */
 
 import { Capacitor } from '@capacitor/core';
@@ -45,66 +45,125 @@ export interface NotificationOptions {
   attachments?: Array<{
     id: string;
     url: string;
-    options?: any;
+    options?: unknown;
   }>;
 }
 
-class NativeAppBridge {
+export interface PhotoResult {
+  success: boolean;
+  imageUrl?: string;
+  base64?: string;
+  error?: string;
+}
+
+export interface DeviceInfo {
+  platform: string;
+  version: string;
+  model: string;
+  manufacturer: string;
+  isNative: boolean;
+}
+
+export class NativeAppBridge {
+  private initialized = false;
   private capabilities: NativeCapabilities | null = null;
 
   /**
-   * Initialize native capabilities
+   * Initialize the native bridge
    */
   async initialize(): Promise<NativeCapabilities> {
-    if (!Capacitor.isNativePlatform()) {
-      return this.getWebCapabilities();
+    if (this.initialized && this.capabilities) {
+      return this.capabilities;
     }
 
-    const capabilities: NativeCapabilities = {
-      camera: await this.checkCameraCapability(),
-      haptics: await this.checkHapticsCapability(),
-      push_notifications: await this.checkPushNotificationsCapability(),
-      local_notifications: await this.checkLocalNotificationsCapability(),
-      device_info: { available: true, supported: true, initialized: true },
-      network: { available: true, supported: true, initialized: true },
-      geolocation: await this.checkGeolocationCapability()
+    const isNative = Capacitor.isNativePlatform();
+    const platform = Capacitor.getPlatform();
+
+    this.capabilities = {
+      camera: {
+        available: isNative && Capacitor.isPluginAvailable('Camera'),
+        supported: platform === 'ios' || platform === 'android',
+        initialized: false
+      },
+      haptics: {
+        available: isNative && Capacitor.isPluginAvailable('Haptics'),
+        supported: platform === 'ios' || platform === 'android',
+        initialized: false
+      },
+      push_notifications: {
+        available: isNative && Capacitor.isPluginAvailable('PushNotifications'),
+        supported: platform === 'ios' || platform === 'android',
+        initialized: false
+      },
+      local_notifications: {
+        available: isNative && Capacitor.isPluginAvailable('LocalNotifications'),
+        supported: platform === 'ios' || platform === 'android',
+        initialized: false
+      },
+      device_info: {
+        available: isNative,
+        supported: true,
+        initialized: false
+      },
+      network: {
+        available: isNative,
+        supported: true,
+        initialized: false
+      },
+      geolocation: {
+        available: isNative,
+        supported: platform === 'ios' || platform === 'android',
+        initialized: false
+      }
     };
 
-    this.capabilities = capabilities;
-    return capabilities;
+    this.initialized = true;
+    return this.capabilities;
   }
 
   /**
-   * Take photo using native camera
+   * Take a photo using the device camera
    */
-  async takePhoto(options: CameraOptions = {
-    source: 'camera',
-    quality: 90,
-    resultType: 'uri'
-  }): Promise<{ success: true; imageUrl: string } | { success: false; error: string }> {
+  async takePhoto(options: Partial<CameraOptions> = {}): Promise<PhotoResult> {
+    const caps = await this.initialize();
+    
+    if (!caps.camera.available) {
+      return {
+        success: false,
+        error: 'Camera not available on this device'
+      };
+    }
+
+    const config = {
+      source: options.source || 'camera',
+      quality: options.quality || 90,
+      allowEditing: options.allowEditing ?? false,
+      resultType: options.resultType || 'uri'
+    };
+
     try {
-      if (!this.capabilities?.camera.available) {
-        return { success: false, error: 'Camera not available' };
-      }
+      const cameraSource = config.source === 'gallery' 
+        ? CameraSource.Photos 
+        : config.source === 'prompt'
+          ? CameraSource.Prompt
+          : CameraSource.Camera;
 
       const image = await Camera.getPhoto({
-        source: options.source === 'camera' ? CameraSource.Camera : 
-                options.source === 'gallery' ? CameraSource.Photos : CameraSource.Prompt,
-        quality: options.quality,
-        allowEditing: options.allowEditing || false,
-        resultType: options.resultType === 'base64' ? CameraResultType.Base64 : CameraResultType.Uri
+        quality: config.quality,
+        allowEditing: config.allowEditing,
+        resultType: config.resultType === 'base64' ? CameraResultType.Base64 : CameraResultType.Uri,
+        source: cameraSource
       });
 
       return {
         success: true,
-        imageUrl: options.resultType === 'base64' 
-          ? `data:image/jpeg;base64,${image.base64String}`
-          : image.webPath || image.path || ''
+        imageUrl: image.webPath,
+        base64: image.base64String
       };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown camera error'
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to capture photo'
       };
     }
   }
@@ -112,45 +171,67 @@ class NativeAppBridge {
   /**
    * Trigger haptic feedback
    */
-  async triggerHaptic(
-    style: 'light' | 'medium' | 'heavy' = 'medium'
-  ): Promise<void> {
-    if (!this.capabilities?.haptics.available) return;
+  async triggerHaptic(style: 'light' | 'medium' | 'heavy' = 'medium'): Promise<void> {
+    const caps = await this.initialize();
+    
+    if (!caps.haptics.available) {
+      return;
+    }
+
+    const impactStyle = style === 'light' 
+      ? ImpactStyle.Light 
+      : style === 'heavy' 
+        ? ImpactStyle.Heavy 
+        : ImpactStyle.Medium;
 
     try {
-      const impactStyle = style === 'light' ? ImpactStyle.Light :
-                         style === 'medium' ? ImpactStyle.Medium : ImpactStyle.Heavy;
       await Haptics.impact({ style: impactStyle });
-    } catch (error) {
-      console.warn('Haptics failed:', error);
+    } catch {
+      // Silently fail if haptics not supported
     }
   }
 
   /**
-   * Schedule local notification
+   * Schedule a local notification
    */
-  async scheduleNotification(options: NotificationOptions): Promise<{ success: boolean; error?: string }> {
-    try {
-      if (!this.capabilities?.local_notifications.available) {
-        return { success: false, error: 'Local notifications not available' };
-      }
+  async scheduleLocalNotification(options: NotificationOptions): Promise<{
+    success: boolean;
+    notificationId?: number;
+    error?: string;
+  }> {
+    const caps = await this.initialize();
+    
+    if (!caps.local_notifications.available) {
+      return {
+        success: false,
+        error: 'Local notifications not available'
+      };
+    }
 
+    try {
+      const notificationId = options.id || Math.floor(Math.random() * 100000);
+      
       await LocalNotifications.schedule({
         notifications: [{
-          id: options.id || Math.floor(Math.random() * 1000000),
           title: options.title,
           body: options.body,
-          schedule: options.schedule,
+          id: notificationId,
+          schedule: options.schedule as never,
           sound: options.sound,
-          attachments: options.attachments
+          attachments: options.attachments as never,
+          actionTypeId: '',
+          extra: null
         }]
       });
 
-      return { success: true };
+      return {
+        success: true,
+        notificationId
+      };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Notification scheduling failed'
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to schedule notification'
       };
     }
   }
@@ -158,44 +239,63 @@ class NativeAppBridge {
   /**
    * Register for push notifications
    */
-  async registerPushNotifications(): Promise<{ success: boolean; token?: string; error?: string }> {
-    try {
-      if (!this.capabilities?.push_notifications.available) {
-        return { success: false, error: 'Push notifications not available' };
-      }
+  async registerPushNotifications(): Promise<{
+    success: boolean;
+    token?: string;
+    error?: string;
+  }> {
+    const caps = await this.initialize();
+    
+    if (!caps.push_notifications.available) {
+      return {
+        success: false,
+        error: 'Push notifications not available'
+      };
+    }
 
-      // Request permissions
+    try {
       let permStatus = await PushNotifications.checkPermissions();
-      
+
       if (permStatus.receive === 'prompt') {
         permStatus = await PushNotifications.requestPermissions();
       }
-      
+
       if (permStatus.receive !== 'granted') {
-        return { success: false, error: 'Push notification permission denied' };
+        return {
+          success: false,
+          error: 'Push notification permission denied'
+        };
       }
 
-      // Register with FCM/APNS
       await PushNotifications.register();
 
       return new Promise((resolve) => {
         PushNotifications.addListener('registration', (token) => {
-          resolve({ success: true, token: token.value });
+          resolve({
+            success: true,
+            token: token.value
+          });
         });
 
         PushNotifications.addListener('registrationError', (error) => {
-          resolve({ success: false, error: error.error });
+          resolve({
+            success: false,
+            error: error.error
+          });
         });
 
         // Timeout after 10 seconds
         setTimeout(() => {
-          resolve({ success: false, error: 'Registration timeout' });
+          resolve({
+            success: false,
+            error: 'Registration timeout'
+          });
         }, 10000);
       });
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Push notification registration failed'
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to register push notifications'
       };
     }
   }
@@ -203,43 +303,26 @@ class NativeAppBridge {
   /**
    * Get device information
    */
-  async getDeviceInfo(): Promise<{
-    platform: string;
-    version: string;
-    model: string;
-    manufacturer: string;
-    isNative: boolean;
-  }> {
+  async getDeviceInfo(): Promise<DeviceInfo> {
+    // Web fallback
     if (!Capacitor.isNativePlatform()) {
       return {
         platform: 'web',
         version: navigator.userAgent,
-        model: 'Unknown',
-        manufacturer: 'Unknown',
+        model: 'browser',
+        manufacturer: 'unknown',
         isNative: false
       };
     }
 
-    try {
-      const { Device } = await import('@capacitor/device');
-      const info = await Device.getInfo();
-      
-      return {
-        platform: info.platform,
-        version: info.osVersion,
-        model: info.model,
-        manufacturer: info.manufacturer,
-        isNative: true
-      };
-    } catch (error) {
-      return {
-        platform: 'unknown',
-        version: 'unknown',
-        model: 'unknown',
-        manufacturer: 'unknown',
-        isNative: Capacitor.isNativePlatform()
-      };
-    }
+    // Return basic info available from Capacitor core
+    return {
+      platform: Capacitor.getPlatform(),
+      version: 'unknown',
+      model: 'unknown',
+      manufacturer: 'unknown',
+      isNative: true
+    };
   }
 
   /**
@@ -250,161 +333,147 @@ class NativeAppBridge {
     connectionType: string;
     cellular: boolean;
   }> {
-    try {
-      const { Network } = await import('@capacitor/network');
-      const status = await Network.getStatus();
-      
-      return {
-        connected: status.connected,
-        connectionType: status.connectionType,
-        cellular: status.connectionType === 'cellular'
-      };
-    } catch (error) {
-      // Fallback to web API
-      return {
-        connected: navigator.onLine,
-        connectionType: 'unknown',
-        cellular: false
-      };
-    }
+    // Use web API as fallback
+    return {
+      connected: navigator.onLine,
+      connectionType: 'unknown',
+      cellular: false
+    };
   }
 
   /**
-   * Get current position
+   * Get current position using web Geolocation API
    */
   async getCurrentPosition(): Promise<{
     success: boolean;
     coordinates?: { latitude: number; longitude: number; accuracy: number };
     error?: string;
   }> {
-    try {
-      const { Geolocation } = await import('@capacitor/geolocation');
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 10000
-      });
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        resolve({
+          success: false,
+          error: 'Geolocation not supported'
+        });
+        return;
+      }
 
-      return {
-        success: true,
-        coordinates: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            success: true,
+            coordinates: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              accuracy: position.coords.accuracy
+            }
+          });
+        },
+        (error) => {
+          resolve({
+            success: false,
+            error: error.message
+          });
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
         }
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Geolocation failed'
-      };
-    }
+      );
+    });
   }
 
   /**
-   * Share content using native share
+   * Share content using native share or Web Share API
    */
   async shareContent(content: {
     title?: string;
     text?: string;
     url?: string;
   }): Promise<{ success: boolean; error?: string }> {
-    try {
-      const { Share } = await import('@capacitor/share');
-      await Share.share(content);
-      return { success: true };
-    } catch (error) {
-      // Fallback to Web Share API
-      if (navigator.share) {
-        try {
-          await navigator.share(content);
-          return { success: true };
-        } catch (shareError) {
-          return { 
-            success: false, 
-            error: shareError instanceof Error ? shareError.message : 'Share failed'
-          };
+    // Use Web Share API
+    if (navigator.share) {
+      try {
+        await navigator.share(content);
+        return { success: true };
+      } catch (error) {
+        if ((error as Error).name === 'AbortError') {
+          return { success: false, error: 'Share cancelled' };
         }
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Share failed'
+        };
       }
-      
-      return { 
-        success: false, 
-        error: 'Share not supported on this platform'
-      };
     }
-  }
 
-  private async checkCameraCapability(): Promise<NativeFeature> {
-    try {
-      const permissions = await Camera.checkPermissions();
-      return {
-        available: permissions.camera !== 'denied',
-        supported: true,
-        initialized: true
-      };
-    } catch (error) {
-      return { available: false, supported: false, initialized: false };
-    }
-  }
-
-  private async checkHapticsCapability(): Promise<NativeFeature> {
-    try {
-      await Haptics.impact({ style: ImpactStyle.Light });
-      return { available: true, supported: true, initialized: true };
-    } catch (error) {
-      return { available: false, supported: true, initialized: false };
-    }
-  }
-
-  private async checkPushNotificationsCapability(): Promise<NativeFeature> {
-    try {
-      const permissions = await PushNotifications.checkPermissions();
-      return {
-        available: permissions.receive !== 'denied',
-        supported: true,
-        initialized: true
-      };
-    } catch (error) {
-      return { available: false, supported: false, initialized: false };
-    }
-  }
-
-  private async checkLocalNotificationsCapability(): Promise<NativeFeature> {
-    try {
-      const permissions = await LocalNotifications.checkPermissions();
-      return {
-        available: permissions.display !== 'denied',
-        supported: true,
-        initialized: true
-      };
-    } catch (error) {
-      return { available: false, supported: false, initialized: false };
-    }
-  }
-
-  private async checkGeolocationCapability(): Promise<NativeFeature> {
-    try {
-      const { Geolocation } = await import('@capacitor/geolocation');
-      const permissions = await Geolocation.checkPermissions();
-      return {
-        available: permissions.location !== 'denied',
-        supported: true,
-        initialized: true
-      };
-    } catch (error) {
-      return { available: false, supported: false, initialized: false };
-    }
-  }
-
-  private getWebCapabilities(): NativeCapabilities {
     return {
-      camera: { available: 'mediaDevices' in navigator, supported: true, initialized: true },
-      haptics: { available: 'vibrate' in navigator, supported: true, initialized: true },
-      push_notifications: { available: 'serviceWorker' in navigator, supported: true, initialized: true },
-      local_notifications: { available: 'Notification' in window, supported: true, initialized: true },
-      device_info: { available: true, supported: true, initialized: true },
-      network: { available: 'onLine' in navigator, supported: true, initialized: true },
-      geolocation: { available: 'geolocation' in navigator, supported: true, initialized: true }
+      success: false,
+      error: 'Share not supported on this device'
     };
+  }
+
+  /**
+   * Check if running on native platform
+   */
+  isNative(): boolean {
+    return Capacitor.isNativePlatform();
+  }
+
+  /**
+   * Get current platform
+   */
+  getPlatform(): 'ios' | 'android' | 'web' {
+    const platform = Capacitor.getPlatform();
+    if (platform === 'ios') return 'ios';
+    if (platform === 'android') return 'android';
+    return 'web';
+  }
+
+  /**
+   * Get capabilities
+   */
+  getCapabilities(): NativeCapabilities | null {
+    return this.capabilities;
+  }
+
+  /**
+   * Watch position changes
+   */
+  watchPosition(
+    callback: (position: { latitude: number; longitude: number; accuracy: number }) => void,
+    errorCallback?: (error: string) => void
+  ): number | null {
+    if (!navigator.geolocation) {
+      errorCallback?.('Geolocation not supported');
+      return null;
+    }
+
+    return navigator.geolocation.watchPosition(
+      (position) => {
+        callback({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
+      },
+      (error) => {
+        errorCallback?.(error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  }
+
+  /**
+   * Clear position watch
+   */
+  clearPositionWatch(watchId: number): void {
+    navigator.geolocation.clearWatch(watchId);
   }
 }
 

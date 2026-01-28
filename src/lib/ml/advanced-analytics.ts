@@ -251,32 +251,34 @@ class AdvancedAnalyticsEngine {
    */
   calculatePerformanceMetrics(vesselId?: string): PerformanceMetrics {
     // In production, this would aggregate real metrics from various sources
-    const baseMetrics = {
-      operational_efficiency: 85,
-      fuel_efficiency: 92,
-      crew_utilization: 88,
-      maintenance_efficiency: 78,
-      safety_score: 95,
-      compliance_score: 94
-    };
-
-    // Add some variance for simulation
-    const metrics: PerformanceMetrics = Object.entries(baseMetrics).reduce((acc, [key, value]) => {
-      acc[key as keyof Omit<PerformanceMetrics, 'overall_kpi'>] = Math.round((value + (Math.random() - 0.5) * 10) * 100) / 100;
-      return acc;
-    }, {} as Omit<PerformanceMetrics, 'overall_kpi'>);
+    const addVariance = (base: number) => Math.round((base + (Math.random() - 0.5) * 10) * 100) / 100;
+    
+    const operational_efficiency = addVariance(85);
+    const fuel_efficiency = addVariance(92);
+    const crew_utilization = addVariance(88);
+    const maintenance_efficiency = addVariance(78);
+    const safety_score = addVariance(95);
+    const compliance_score = addVariance(94);
 
     // Calculate overall KPI
-    metrics.overall_kpi = Math.round(
-      (metrics.operational_efficiency * 0.25 +
-       metrics.fuel_efficiency * 0.20 +
-       metrics.crew_utilization * 0.15 +
-       metrics.maintenance_efficiency * 0.15 +
-       metrics.safety_score * 0.15 +
-       metrics.compliance_score * 0.10) * 100
+    const overall_kpi = Math.round(
+      (operational_efficiency * 0.25 +
+       fuel_efficiency * 0.20 +
+       crew_utilization * 0.15 +
+       maintenance_efficiency * 0.15 +
+       safety_score * 0.15 +
+       compliance_score * 0.10) * 100
     ) / 100;
 
-    return metrics as PerformanceMetrics;
+    return {
+      operational_efficiency,
+      fuel_efficiency,
+      crew_utilization,
+      maintenance_efficiency,
+      safety_score,
+      compliance_score,
+      overall_kpi
+    };
   }
 
   private analyzeRevenue(data: AnalyticsDataPoint[], timeRange: any): RevenueAnalytics {
