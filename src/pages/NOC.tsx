@@ -143,8 +143,8 @@ export default function NOC() {
   // Voice commands
   const { isListening, isSupported, transcript, toggleVoice } = useVoiceCommands({
     onCommand: (command) => {
-      console.log("NOC Voice Command:", command);
-      // Process voice commands here
+      // Voice commands are processed by the voice command system
+      // Additional NOC-specific commands can be handled here
     }
   });
 

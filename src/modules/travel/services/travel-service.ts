@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface TravelItinerary {
   id?: string;
@@ -76,7 +77,7 @@ export class TravelService {
 
       return this.mapToItinerary(data);
     } catch (error) {
-      console.error("Error creating itinerary:", error);
+      logger.error("Error creating itinerary", { error });
       throw error;
     }
   }
@@ -108,7 +109,7 @@ export class TravelService {
 
       return this.mapToItinerary(data);
     } catch (error) {
-      console.error("Error updating itinerary:", error);
+      logger.error("Error updating itinerary", { error });
       throw error;
     }
   }
@@ -122,7 +123,7 @@ export class TravelService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting itinerary:", error);
+      logger.error("Error deleting itinerary", { error });
       throw error;
     }
   }
@@ -137,7 +138,7 @@ export class TravelService {
       if (error) throw error;
       return (data || []).map(this.mapToItinerary);
     } catch (error) {
-      console.error("Error fetching itineraries:", error);
+      logger.error("Error fetching itineraries", { error });
       return [];
     }
   }
@@ -162,7 +163,7 @@ export class TravelService {
       if (error) throw error;
       return this.mapToPriceAlert(data);
     } catch (error) {
-      console.error("Error creating price alert:", error);
+      logger.error("Error creating price alert", { error });
       throw error;
     }
   }
@@ -177,7 +178,7 @@ export class TravelService {
       if (error) throw error;
       return (data || []).map(this.mapToPriceAlert);
     } catch (error) {
-      console.error("Error fetching price alerts:", error);
+      logger.error("Error fetching price alerts", { error });
       return [];
     }
   }
@@ -192,7 +193,7 @@ export class TravelService {
           event_data: eventData
         });
     } catch (error) {
-      console.error("Error logging travel event:", error);
+      // Silent failure for event logging - non-critical
     }
   }
 

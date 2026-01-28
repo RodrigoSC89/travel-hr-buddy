@@ -354,8 +354,8 @@ class SatelliteOrbitService {
    * Save satellite orbit data to database
    */
   async saveSatelliteOrbit(data: SatelliteOrbitData): Promise<void> {
-    // In production, save to Supabase satellite_orbits table
-    console.log("Saving satellite orbit data:", data);
+    // Implementation pending - will save to satellite_orbits table
+    // This is a placeholder for future satellite tracking integration
   }
 
   /**

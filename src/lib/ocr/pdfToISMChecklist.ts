@@ -5,22 +5,29 @@
 
 import Tesseract from "tesseract.js";
 import type { ISMAuditItem } from "../../types/ism-audit";
+import { logger } from "@/lib/logger";
 
 export interface OCRResult {
   text: string;
   confidence: number;
 }
 
+// Progress callback type for OCR operations
+export type OCRProgressCallback = (progress: number) => void;
+
 /**
  * Extract text from PDF using OCR (Tesseract.js)
  * Note: This converts PDF to images first, then runs OCR
  */
-export async function extractTextFromPDF(file: File): Promise<OCRResult> {
+export async function extractTextFromPDF(
+  file: File, 
+  onProgress?: OCRProgressCallback
+): Promise<OCRResult> {
   try {
     const result = await Tesseract.recognize(file, "eng", {
       logger: (m) => {
         if (m.status === "recognizing text") {
-          console.log(`OCR Progress: ${Math.round(m.progress * 100)}%`);
+          onProgress?.(Math.round(m.progress * 100));
         }
       },
     });
@@ -30,7 +37,7 @@ export async function extractTextFromPDF(file: File): Promise<OCRResult> {
       confidence: result.data.confidence / 100,
     };
   } catch (error) {
-    console.error("OCR Error:", error);
+    logger.error("OCR extraction failed", { error });
     throw new Error("Failed to extract text from PDF");
   }
 }
@@ -89,17 +96,16 @@ export function parseTextToISMItems(text: string, defaultCategory: string = "Gen
 /**
  * Main function to extract ISM checklist from PDF
  */
-export async function extractISMChecklistFromPDF(file: File): Promise<ISMAuditItem[]> {
+export async function extractISMChecklistFromPDF(
+  file: File,
+  onProgress?: OCRProgressCallback
+): Promise<ISMAuditItem[]> {
   try {
-    console.log("Starting OCR extraction from PDF...");
-    
     // Extract text using OCR
-    const ocrResult = await extractTextFromPDF(file);
-    console.log(`OCR completed with ${ocrResult.confidence * 100}% confidence`);
+    const ocrResult = await extractTextFromPDF(file, onProgress);
     
     // Parse text into structured items
     const items = parseTextToISMItems(ocrResult.text);
-    console.log(`Extracted ${items.length} checklist items`);
     
     if (items.length === 0) {
       throw new Error("No checklist items found in PDF. Please verify the document format.");
@@ -107,7 +113,7 @@ export async function extractISMChecklistFromPDF(file: File): Promise<ISMAuditIt
     
     return items;
   } catch (error) {
-    console.error("Error extracting ISM checklist from PDF:", error);
+    logger.error("ISM checklist extraction failed", { error });
     throw error;
   }
 }

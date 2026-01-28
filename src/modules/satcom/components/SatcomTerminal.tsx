@@ -90,8 +90,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         }));
         setMessages(logs);
       }
-    } catch (error) {
-      console.error("Error loading logs:", error);
+    } catch {
+      // Silent failure for log loading
     }
   };
 
@@ -144,8 +144,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         metadata: { simulated: true }
       };
       await supabase.from("satcom_logs").insert(insertData);
-    } catch (error) {
-      console.error("Error logging transmission:", error);
+    } catch {
+      // Silent failure for transmission logging
     }
 
     setMessages(prev => [...prev, newMessage]);
@@ -224,8 +224,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
     (async () => {
       try {
         await supabase.from("satcom_logs").insert(insertData);
-      } catch (err) {
-        console.error("Error logging receive:", err);
+      } catch {
+        // Silent failure for receive logging
       }
     })();
   };
