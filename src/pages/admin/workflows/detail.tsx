@@ -1,6 +1,6 @@
 // @ts-nocheck
-// Technical Debt: smart_workflow_steps schema mismatch with local WorkflowStep interface
-// (fields: name, title, step_number, position not aligned)
+// Technical Debt: smart_workflow_steps schema fields (due_date, updated_at, workflow_id) 
+// need DB migration to match local WorkflowStep interface
 /**
  * Workflow Detail Page - PATCH 877
  */
