@@ -290,8 +290,9 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
     } catch (err) {
       logger.warn("Goal suggestions failed:", { error: err });
       toast({
-        title: "Sugestão de metas",
-        description: "Funcionalidade disponível em breve.",
+        title: "Erro ao gerar sugestões",
+        description: "Não foi possível gerar metas. Tente novamente.",
+        variant: "destructive",
       });
     }
   };

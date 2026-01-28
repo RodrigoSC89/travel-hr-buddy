@@ -310,7 +310,6 @@ export async function getWeatherForecast(
  */
 export function clearWeatherCache(): void {
   weatherCache.clear();
-  console.log("[Weather] Cache cleared");
 }
 
 /**

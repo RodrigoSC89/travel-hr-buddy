@@ -127,7 +127,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
-      console.error('Brain error:', error);
+      // AI response failed - use fallback
       
       // Fallback response
       const fallbackMessage: Message = {

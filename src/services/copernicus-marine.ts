@@ -39,7 +39,6 @@ class CopernicusService {
     const cached = this.cache.get(cacheKey);
 
     if (cached && Date.now() - cached.timestamp < this.cacheDuration) {
-      console.log("[Copernicus] Returning cached data");
       return cached.data;
     }
 
