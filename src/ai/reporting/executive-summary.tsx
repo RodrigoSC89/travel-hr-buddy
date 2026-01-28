@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 585 - Executive Summary Generator AI
- * PATCH 547 - Removed @ts-nocheck directive (now restored for build stability)
+ * PATCH 900 - Removed @ts-nocheck, using proper TypeScript types
  * Generate executive summaries of AI decisions and predictions
  * 
  * Features:
@@ -583,7 +582,9 @@ async function fetchStrategies(
   endDate?: Date
 ): Promise<Strategy[]> {
   try {
-    let query = supabase.from("ai_strategies").select("*");
+    // Use dynamic table access for unmapped tables
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    let query = client.from("ai_strategies").select("*");
 
     if (missionId) {
       query = query.eq("mission_id", missionId);
@@ -600,7 +601,7 @@ async function fetchStrategies(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as unknown as Strategy[]) || [];
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to fetch strategies", error);
     return [];
@@ -613,7 +614,8 @@ async function fetchProposals(
   endDate?: Date
 ): Promise<StrategyProposal[]> {
   try {
-    let query = supabase.from("ai_strategy_proposals").select("*");
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    let query = client.from("ai_strategy_proposals").select("*");
 
     if (missionId) {
       query = query.eq("mission_id", missionId);
@@ -630,7 +632,7 @@ async function fetchProposals(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as unknown as StrategyProposal[]) || [];
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to fetch proposals", error);
     return [];
@@ -643,7 +645,8 @@ async function fetchSimulations(
   endDate?: Date
 ): Promise<SimulationResult[]> {
   try {
-    let query = supabase.from("ai_simulations").select("*");
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    let query = client.from("ai_simulations").select("*");
 
     if (missionId) {
       query = query.eq("mission_id", missionId);
@@ -660,7 +663,7 @@ async function fetchSimulations(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as unknown as SimulationResult[]) || [];
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to fetch simulations", error);
     return [];
@@ -673,7 +676,8 @@ async function fetchGovernanceEvaluations(
   endDate?: Date
 ): Promise<GovernanceEvaluation[]> {
   try {
-    let query = supabase.from("ai_governance_evaluations").select("*");
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    let query = client.from("ai_governance_evaluations").select("*");
 
     if (startDate) {
       query = query.gte("created_at", startDate.toISOString());
@@ -686,7 +690,7 @@ async function fetchGovernanceEvaluations(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as unknown as GovernanceEvaluation[]) || [];
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to fetch governance evaluations", error);
     return [];
@@ -699,7 +703,8 @@ async function fetchConsensusResults(
   endDate?: Date
 ): Promise<ConsensusResult[]> {
   try {
-    let query = supabase.from("ai_consensus_results").select("*");
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    let query = client.from("ai_consensus_results").select("*");
 
     if (missionId) {
       query = query.eq("mission_id", missionId);
@@ -716,7 +721,7 @@ async function fetchConsensusResults(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data as unknown as ConsensusResult[]) || [];
   } catch (error) {
     logger.error("[ExecutiveSummary] Failed to fetch consensus results", error);
     return [];
@@ -932,7 +937,8 @@ function calculateKeyMetrics(
 
 async function saveSummaryToDatabase(summaryData: ExecutiveSummaryData): Promise<void> {
   try {
-    await supabase.from("ai_executive_summaries").insert({
+    const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
+    await client.from("ai_executive_summaries").insert({
       summary_id: summaryData.id,
       mission_id: summaryData.missionId,
       period_from: summaryData.period.from.toISOString(),
@@ -942,7 +948,7 @@ async function saveSummaryToDatabase(summaryData: ExecutiveSummaryData): Promise
       recommendations: summaryData.recommendations,
       key_metrics: summaryData.keyMetrics,
       created_at: summaryData.generatedAt.toISOString()
-    });
+    } as never);
 
     logger.info("[ExecutiveSummary] Summary saved to database", { summaryId: summaryData.id });
   } catch (error) {

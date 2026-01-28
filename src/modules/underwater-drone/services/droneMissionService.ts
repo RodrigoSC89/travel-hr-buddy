@@ -1,11 +1,14 @@
-// @ts-nocheck
 /**
  * Drone Mission Service - PATCH 450
+ * PATCH 900 - Removed @ts-nocheck, using dynamic table access
  * Manages underwater drone missions and telemetry data persistence
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+
+// Dynamic table access for unmapped tables
+const getDynamicClient = () => supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
 
 export interface DroneMission {
   id?: string;
@@ -44,7 +47,7 @@ export interface DroneTelemetryData extends DroneTelemetryPoint {
   cameraStatus?: string;
   sonarStatus?: string;
   systemHealth?: string;
-  alerts?: any[];
+  alerts?: unknown[];
 }
 
 class DroneMissionService {
@@ -55,7 +58,8 @@ class DroneMissionService {
     try {
       logger.info("Creating drone mission", { missionName: mission.missionName });
 
-      const { data, error } = await supabase
+      const client = getDynamicClient();
+      const { data, error } = await client
         .from("drone_missions")
         .insert({
           mission_name: mission.missionName,
@@ -70,13 +74,13 @@ class DroneMissionService {
           status: mission.status || "planned",
           completion_percentage: mission.completionPercentage || 0,
           user_id: mission.userId,
-        })
+        } as never)
         .select()
         .single();
 
       if (error) throw error;
 
-      return this.mapMissionFromDB(data);
+      return this.mapMissionFromDB(data as Record<string, unknown>);
     } catch (error) {
       logger.error("Failed to create mission", error);
       throw error;
@@ -91,7 +95,7 @@ class DroneMissionService {
     updates: Partial<DroneMission>
   ): Promise<void> {
     try {
-      const dbUpdates: any = {};
+      const dbUpdates: Record<string, unknown> = {};
       
       if (updates.status) dbUpdates.status = updates.status;
       if (updates.completionPercentage !== undefined) {
@@ -100,9 +104,10 @@ class DroneMissionService {
       if (updates.actualTrajectory) dbUpdates.actual_trajectory = updates.actualTrajectory;
       if (updates.endTime) dbUpdates.end_time = updates.endTime;
 
-      const { error } = await supabase
+      const client = getDynamicClient();
+      const { error } = await client
         .from("drone_missions")
-        .update(dbUpdates)
+        .update(dbUpdates as never)
         .eq("id", missionId);
 
       if (error) throw error;
@@ -119,7 +124,8 @@ class DroneMissionService {
    */
   async getActiveMissions(userId?: string): Promise<DroneMission[]> {
     try {
-      let query = supabase
+      const client = getDynamicClient();
+      let query = client
         .from("drone_missions")
         .select("*")
         .in("status", ["planned", "in_progress"])
@@ -133,7 +139,7 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapMissionFromDB);
+      return ((data as unknown as Record<string, unknown>[]) || []).map((row) => this.mapMissionFromDB(row));
     } catch (error) {
       logger.error("Failed to get active missions", error);
       return [];
@@ -145,7 +151,8 @@ class DroneMissionService {
    */
   async getMission(missionId: string): Promise<DroneMission | null> {
     try {
-      const { data, error } = await supabase
+      const client = getDynamicClient();
+      const { data, error } = await client
         .from("drone_missions")
         .select("*")
         .eq("id", missionId)
@@ -153,7 +160,7 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return this.mapMissionFromDB(data);
+      return this.mapMissionFromDB(data as Record<string, unknown>);
     } catch (error) {
       logger.error("Failed to get mission", error);
       return null;
@@ -165,7 +172,8 @@ class DroneMissionService {
    */
   async logTelemetry(telemetry: DroneTelemetryData): Promise<void> {
     try {
-      const { error } = await supabase.from("drone_telemetry").insert({
+      const client = getDynamicClient();
+      const { error } = await client.from("drone_telemetry").insert({
         mission_id: telemetry.missionId,
         drone_id: telemetry.droneId,
         timestamp: telemetry.timestamp || new Date().toISOString(),
@@ -184,7 +192,7 @@ class DroneMissionService {
         sonar_status: telemetry.sonarStatus,
         system_health: telemetry.systemHealth,
         alerts: telemetry.alerts,
-      });
+      } as never);
 
       if (error) throw error;
     } catch (error) {
@@ -201,7 +209,8 @@ class DroneMissionService {
     limit = 1000
   ): Promise<DroneTelemetryData[]> {
     try {
-      const { data, error } = await supabase
+      const client = getDynamicClient();
+      const { data, error } = await client
         .from("drone_telemetry")
         .select("*")
         .eq("mission_id", missionId)
@@ -210,7 +219,7 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapTelemetryFromDB);
+      return ((data as unknown as Record<string, unknown>[]) || []).map((row) => this.mapTelemetryFromDB(row));
     } catch (error) {
       logger.error("Failed to get mission telemetry", error);
       return [];
@@ -225,7 +234,8 @@ class DroneMissionService {
     limit = 100
   ): Promise<DroneTelemetryData[]> {
     try {
-      const { data, error } = await supabase
+      const client = getDynamicClient();
+      const { data, error } = await client
         .from("drone_telemetry")
         .select("*")
         .eq("drone_id", droneId)
@@ -234,7 +244,7 @@ class DroneMissionService {
 
       if (error) throw error;
 
-      return data.map(this.mapTelemetryFromDB);
+      return ((data as unknown as Record<string, unknown>[]) || []).map((row) => this.mapTelemetryFromDB(row));
     } catch (error) {
       logger.error("Failed to get recent telemetry", error);
       return [];
@@ -246,12 +256,13 @@ class DroneMissionService {
    */
   async startMission(missionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const client = getDynamicClient();
+      const { error } = await client
         .from("drone_missions")
         .update({
           status: "in_progress",
           start_time: new Date().toISOString(),
-        })
+        } as never)
         .eq("id", missionId);
 
       if (error) throw error;
@@ -268,13 +279,14 @@ class DroneMissionService {
    */
   async completeMission(missionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const client = getDynamicClient();
+      const { error } = await client
         .from("drone_missions")
         .update({
           status: "completed",
           end_time: new Date().toISOString(),
           completion_percentage: 100,
-        })
+        } as never)
         .eq("id", missionId);
 
       if (error) throw error;
@@ -289,47 +301,47 @@ class DroneMissionService {
   /**
    * Map database record to DroneMission
    */
-  private mapMissionFromDB(data: any): DroneMission {
+  private mapMissionFromDB(data: Record<string, unknown>): DroneMission {
     return {
-      id: data.id,
-      missionName: data.mission_name,
-      droneId: data.drone_id,
-      missionType: data.mission_type,
-      plannedWaypoints: data.planned_waypoints,
-      actualTrajectory: data.actual_trajectory,
-      startTime: data.start_time,
-      endTime: data.end_time,
-      maxDepthMeters: data.max_depth_meters,
-      missionObjectives: data.mission_objectives,
-      status: data.status,
-      completionPercentage: data.completion_percentage,
-      userId: data.user_id,
+      id: data.id as string,
+      missionName: data.mission_name as string,
+      droneId: data.drone_id as string,
+      missionType: data.mission_type as DroneMission["missionType"],
+      plannedWaypoints: data.planned_waypoints as DroneTelemetryPoint[],
+      actualTrajectory: data.actual_trajectory as DroneTelemetryPoint[] | undefined,
+      startTime: data.start_time as string | undefined,
+      endTime: data.end_time as string | undefined,
+      maxDepthMeters: data.max_depth_meters as number | undefined,
+      missionObjectives: data.mission_objectives as string | undefined,
+      status: data.status as DroneMission["status"],
+      completionPercentage: data.completion_percentage as number | undefined,
+      userId: data.user_id as string | undefined,
     };
   }
 
   /**
    * Map database record to DroneTelemetryData
    */
-  private mapTelemetryFromDB(data: any): DroneTelemetryData {
+  private mapTelemetryFromDB(data: Record<string, unknown>): DroneTelemetryData {
     return {
-      missionId: data.mission_id,
-      droneId: data.drone_id,
-      timestamp: data.timestamp,
-      x: data.position_x,
-      y: data.position_y,
-      z: data.position_z,
-      depth: data.depth_meters,
-      heading: data.heading_degrees,
-      pitch: data.pitch_degrees,
-      roll: data.roll_degrees,
-      battery: data.battery_percentage,
-      waterTemperature: data.water_temperature_celsius,
-      pressure: data.pressure_bar,
-      velocity: data.velocity_mps,
-      cameraStatus: data.camera_status,
-      sonarStatus: data.sonar_status,
-      systemHealth: data.system_health,
-      alerts: data.alerts,
+      missionId: data.mission_id as string | undefined,
+      droneId: data.drone_id as string,
+      timestamp: data.timestamp as string | undefined,
+      x: data.position_x as number | undefined,
+      y: data.position_y as number | undefined,
+      z: data.position_z as number | undefined,
+      depth: data.depth_meters as number | undefined,
+      heading: data.heading_degrees as number | undefined,
+      pitch: data.pitch_degrees as number | undefined,
+      roll: data.roll_degrees as number | undefined,
+      battery: data.battery_percentage as number | undefined,
+      waterTemperature: data.water_temperature_celsius as number | undefined,
+      pressure: data.pressure_bar as number | undefined,
+      velocity: data.velocity_mps as number | undefined,
+      cameraStatus: data.camera_status as string | undefined,
+      sonarStatus: data.sonar_status as string | undefined,
+      systemHealth: data.system_health as string | undefined,
+      alerts: data.alerts as unknown[] | undefined,
     };
   }
 }
