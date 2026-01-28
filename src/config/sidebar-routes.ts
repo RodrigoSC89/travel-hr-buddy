@@ -124,6 +124,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
       { label: "Histórico de Embarcação", path: "/vessel-history", icon: Activity, emoji: "📊" },
       { label: "Digital Twin", path: "/digital-twin", icon: Cpu, emoji: "🎮", badge: "v4.0", status: "new" },
+      { label: "Vessel Digital Twin", path: "/vessel-digital-twin", icon: Ship, emoji: "🚢", badge: "3D AI", status: "new" },
       { label: "Logistics Command", path: "/logistics-command", icon: Truck, emoji: "📦", badge: "v4.0", status: "new" },
     ],
   },
