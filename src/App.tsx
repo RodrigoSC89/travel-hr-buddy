@@ -257,6 +257,15 @@ const QATestingDashboard = lazy(() => import("@/pages/admin/QATestingDashboard")
 const AdminDocumentationHub = lazy(() => import("@/pages/admin/DocumentationHub"));
 const AdminSupportCenter = lazy(() => import("@/pages/admin/SupportCenter"));
 
+// Admin - API & Integrations v4.0
+const APIKeysManagement = lazy(() => import("@/pages/admin/APIKeysManagement"));
+const WebhooksManagement = lazy(() => import("@/pages/admin/WebhooksManagement"));
+const APIDocs = lazy(() => import("@/pages/admin/APIDocs"));
+
+// Integrations Hub
+const ExternalIntegrationsHub = lazy(() => import("@/pages/admin/ExternalIntegrationsHub"));
+const NotificationCenterPage = lazy(() => import("@/pages/NotificationCenterPage"));
+
 // Query client - otimizado para conexões lentas/satélite
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -677,6 +686,15 @@ const AppRoutes = () => (
       <Route path="/admin/qa-testing" element={<QATestingDashboard />} />
       <Route path="/admin/documentation" element={<AdminDocumentationHub />} />
       <Route path="/admin/support" element={<AdminSupportCenter />} />
+      
+      {/* ============================================ */}
+      {/* ADMIN - API & INTEGRAÇÕES v4.0 */}
+      {/* ============================================ */}
+      <Route path="/admin/api-keys" element={<APIKeysManagement />} />
+      <Route path="/admin/webhooks" element={<WebhooksManagement />} />
+      <Route path="/admin/api-docs" element={<APIDocs />} />
+      <Route path="/admin/external-integrations" element={<ExternalIntegrationsHub />} />
+      <Route path="/notifications-center" element={<NotificationCenterPage />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
