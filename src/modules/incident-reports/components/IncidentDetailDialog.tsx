@@ -1,6 +1,9 @@
 // @ts-nocheck
-// PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
-// PATCH 653 - Lazy loading for jsPDF
+/**
+ * Incident Detail Dialog - PATCH 393 / 653
+ * Enhanced with signatures, corrective actions, and PDF export
+ * @ts-nocheck: incident_signatures, incident_actions tables not in generated types
+ */
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
