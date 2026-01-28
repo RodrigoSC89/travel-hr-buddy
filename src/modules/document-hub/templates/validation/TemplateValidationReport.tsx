@@ -1,22 +1,23 @@
-// @ts-nocheck
 /**
- * VALIDAÇÃO COMPLETA - Editor de Templates
- * Relatório de validação de todas as funcionalidades
+ * PATCH 878 - Template Validation Report
+ * Type-safe implementation
  */
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, AlertCircle, FileText, Download, Database, Variable } from "lucide-react";
+import { Check, X, AlertCircle, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { templateVariablesService } from "@/modules/document-hub/templates/services/template-variables-service";
 import html2pdf from "html2pdf.js";
 
+type ValidationStatus = "passed" | "failed" | "warning";
+
 interface ValidationResult {
   test: string;
-  status: "passed" | "failed" | "warning";
+  status: ValidationStatus;
   message: string;
   details?: string;
 }
@@ -40,7 +41,7 @@ export default function TemplateValidationReport() {
           : "Editor disponível mas não montado nesta página",
         details: "Componente TemplateEditor.tsx com rich text editing completo"
       });
-    } catch (error) {
+    } catch {
       testResults.push({
         test: "Editor Funcional",
         status: "warning",
@@ -104,12 +105,12 @@ export default function TemplateValidationReport() {
           : "Biblioteca html2pdf.js não disponível",
         details: "Suporta exportação com variáveis resolvidas"
       });
-    } catch (error) {
+    } catch {
       testResults.push({
         test: "Exportação PDF",
         status: "failed",
         message: "Erro ao verificar exportação PDF",
-        details: error instanceof Error ? error.message : "Erro desconhecido"
+        details: "Não foi possível verificar a disponibilidade"
       });
     }
 
@@ -138,7 +139,7 @@ export default function TemplateValidationReport() {
 
     // TEST 6: Database Connection
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("templates")
         .select("id")
         .limit(1);
@@ -172,7 +173,6 @@ export default function TemplateValidationReport() {
           details: "Faça login para testar o salvamento de templates"
         });
       } else {
-        // Try to insert a test template (will rollback)
         const testTemplate = {
           title: "[VALIDATION_TEST]",
           content: "Test content {{variable}}",
@@ -187,7 +187,6 @@ export default function TemplateValidationReport() {
           .select();
 
         if (!error) {
-          // Delete the test template
           await supabase
             .from("templates")
             .delete()
@@ -267,7 +266,6 @@ export default function TemplateValidationReport() {
     setResults(testResults);
     setIsRunning(false);
 
-    // Show summary toast
     const passed = testResults.filter(r => r.status === "passed").length;
     const total = testResults.length;
     
@@ -282,7 +280,7 @@ export default function TemplateValidationReport() {
     runValidation();
   }, []);
 
-  const getStatusIcon = (status: ValidationResult["status"]) => {
+  const getStatusIcon = (status: ValidationStatus) => {
     switch (status) {
     case "passed":
       return <Check className="h-5 w-5 text-success" />;
@@ -293,7 +291,7 @@ export default function TemplateValidationReport() {
     }
   };
 
-  const getStatusBadge = (status: ValidationResult["status"]) => {
+  const getStatusBadge = (status: ValidationStatus) => {
     switch (status) {
     case "passed":
       return <Badge variant="default" className="bg-success">Aprovado</Badge>;

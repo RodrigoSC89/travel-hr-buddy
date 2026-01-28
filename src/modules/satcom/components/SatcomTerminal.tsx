@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
- * PATCH 877: Satcom Interactive Terminal
- * @ts-nocheck: satcom_logs schema null vs undefined + catch chain issue
+ * PATCH 878: Satcom Interactive Terminal
+ * Type-safe implementation
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -12,13 +11,19 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Terminal, Activity, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
+
+type SatcomLogRow = Database["public"]["Tables"]["satcom_logs"]["Row"];
+type SatcomLogInsert = Database["public"]["Tables"]["satcom_logs"]["Insert"];
+type MessageStatus = "success" | "failed" | "degraded" | "timeout";
+type MessageType = "send" | "receive" | "system";
 
 interface TerminalMessage {
   id: string;
-  type: "send" | "receive" | "system";
+  type: MessageType;
   content: string;
   timestamp: Date;
-  status: "success" | "failed" | "degraded" | "timeout";
+  status: MessageStatus;
   provider: string;
   signalStrength?: number;
   latency?: number;
@@ -52,16 +57,12 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
   }, [messages]);
 
   useEffect(() => {
-    // Load recent logs from database
     loadRecentLogs();
-
-    // Simulate incoming messages
     const interval = setInterval(() => {
       if (Math.random() > 0.7) {
         receiveMessage();
       }
     }, 15000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -77,15 +78,15 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       if (error) throw error;
 
       if (data) {
-        const logs = data.reverse().map(log => ({
+        const logs: TerminalMessage[] = data.reverse().map((log: SatcomLogRow) => ({
           id: log.id,
-          type: log.transmission_type as "send" | "receive" | "system",
+          type: (log.transmission_type as MessageType) || "system",
           content: log.message_content || "",
-          timestamp: new Date(log.created_at),
-          status: log.status as "success" | "failed" | "degraded" | "timeout",
-          provider: log.provider,
-          signalStrength: log.signal_strength,
-          latency: log.latency_ms
+          timestamp: new Date(log.created_at || Date.now()),
+          status: (log.status as MessageStatus) || "success",
+          provider: log.provider || "Unknown",
+          signalStrength: log.signal_strength ?? undefined,
+          latency: log.latency_ms ?? undefined
         }));
         setMessages(logs);
       }
@@ -94,10 +95,9 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
     }
   };
 
-  const simulateTransmission = () => {
-    // Simulate signal loss, latency, degradation
+  const simulateTransmission = (): { status: MessageStatus; latency: number } => {
     const random = Math.random();
-    let status: "success" | "failed" | "degraded" | "timeout" = "success";
+    let status: MessageStatus = "success";
     let actualLatency = 600 + Math.random() * 400;
 
     if (signalStrength < 30) {
@@ -132,9 +132,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       latency
     };
 
-    // Log to database
     try {
-      await supabase.from("satcom_logs").insert({
+      const insertData: SatcomLogInsert = {
         vessel_id: vesselId,
         transmission_type: "send",
         provider: activeProvider,
@@ -143,7 +142,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         latency_ms: latency,
         status,
         metadata: { simulated: true }
-      });
+      };
+      await supabase.from("satcom_logs").insert(insertData);
     } catch (error) {
       console.error("Error logging transmission:", error);
     }
@@ -155,7 +155,6 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       onTransmit(inputMessage);
     }
 
-    // Show toast based on status
     if (status === "success") {
       toast({
         title: "Message Sent",
@@ -185,7 +184,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
   };
 
   const receiveMessage = () => {
-    const messages = [
+    const systemMessages = [
       "Weather update: Clear skies ahead",
       "Navigation: Course correction advised",
       "System check: All systems nominal",
@@ -194,7 +193,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       "Fuel consumption: Within normal range"
     ];
 
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    const randomMessage = systemMessages[Math.floor(Math.random() * systemMessages.length)];
     const { status, latency } = simulateTransmission();
 
     const newMessage: TerminalMessage = {
@@ -210,8 +209,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
 
     setMessages(prev => [...prev, newMessage]);
 
-    // Log to database
-    supabase.from("satcom_logs").insert({
+    const insertData: SatcomLogInsert = {
       vessel_id: vesselId,
       transmission_type: "receive",
       provider: activeProvider,
@@ -220,7 +218,16 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       latency_ms: latency,
       status,
       metadata: { simulated: true, auto_generated: true }
-    }).then(() => {}).catch(console.error);
+    };
+    
+    // Fire and forget - log asynchronously
+    (async () => {
+      try {
+        await supabase.from("satcom_logs").insert(insertData);
+      } catch (err) {
+        console.error("Error logging receive:", err);
+      }
+    })();
   };
 
   const getStatusColor = (status: string) => {
@@ -245,7 +252,6 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
-        {/* Messages Area */}
         <div className="flex-1 overflow-y-auto bg-background rounded-lg p-4 font-mono text-sm space-y-2">
           {messages.length === 0 && (
             <div className="text-muted-foreground text-center py-8">
@@ -291,7 +297,6 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
         <div className="flex-shrink-0 flex gap-2">
           <Input
             value={inputMessage}
