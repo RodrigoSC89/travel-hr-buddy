@@ -1,7 +1,8 @@
 /**
- * Ultra Startup Optimizer v4.2
- * PATCH 867: Maximum performance for slow connections (2G/Satellite)
+ * Ultra Startup Optimizer v4.3
+ * PATCH 870: Maximum performance for slow connections (2G/Satellite)
  * Consolidates all startup optimizations into a single initialization point
+ * Includes ultra-low-bandwidth mode for maritime satellite connections
  */
 
 import { logger } from "@/lib/logger";
@@ -132,14 +133,29 @@ class UltraStartupOptimizer {
    * Apply bandwidth-based optimizations
    */
   private applyBandwidthOptimizations(): void {
-    const isLowBandwidth = ['2g', 'slow-2g'].includes(this.metrics.connectionType || '4g');
+    const connectionType = this.metrics.connectionType || '4g';
+    const isLowBandwidth = ['2g', 'slow-2g'].includes(connectionType);
+    const isUltraLowBandwidth = connectionType === 'slow-2g';
+    const connection = (navigator as any).connection;
     
-    if (isLowBandwidth) {
+    // Check for satellite/very slow connections (< 0.5 Mbps)
+    const isSatellite = connection?.downlink !== undefined && connection.downlink < 0.5;
+    
+    if (isSatellite) {
+      document.documentElement.classList.add('ultra-low-bandwidth', 'satellite-mode');
+      document.documentElement.style.setProperty('--image-quality', '30');
+      document.documentElement.style.setProperty('--prefetch-enabled', 'false');
+      logger.info("Satellite mode activated", { downlink: connection.downlink });
+    } else if (isUltraLowBandwidth) {
+      document.documentElement.classList.add('ultra-low-bandwidth', 'low-bandwidth');
+      document.documentElement.style.setProperty('--image-quality', '40');
+      document.documentElement.style.setProperty('--prefetch-enabled', 'false');
+    } else if (isLowBandwidth) {
       document.documentElement.classList.add('low-bandwidth');
       document.documentElement.style.setProperty('--image-quality', '50');
       document.documentElement.style.setProperty('--prefetch-enabled', 'false');
     } else {
-      document.documentElement.classList.remove('low-bandwidth');
+      document.documentElement.classList.remove('low-bandwidth', 'ultra-low-bandwidth', 'satellite-mode');
       document.documentElement.style.setProperty('--image-quality', '85');
       document.documentElement.style.setProperty('--prefetch-enabled', 'true');
     }
