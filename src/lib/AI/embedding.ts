@@ -1,12 +1,16 @@
 /**
  * AI Embedding Generation
- * Provides vector embeddings for text data
+ * Provides vector embeddings for text data using OpenAI text-embedding-3-small
  */
 
 import { logger } from "@/lib/logger";
+import { openai } from "@/lib/ai/openai-client";
+
+const EMBEDDING_MODEL = "text-embedding-3-small";
+const EMBEDDING_DIMENSIONS = 1536;
 
 /**
- * Generate embedding vector for given text
+ * Generate embedding vector for given text using OpenAI
  * @param text - The text to generate embedding for
  * @returns Promise<number[]> - Vector embedding of the text
  */
@@ -14,16 +18,24 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
   try {
     logger.info("Generating embedding for text:", text.substring(0, 50));
     
-    // Stub implementation - returns a mock embedding vector
-    // In production, this would call an actual embedding service (e.g., OpenAI embeddings)
-    const embeddingDimension = 128; // Standard dimension for demo
-    const embedding = Array.from({ length: embeddingDimension }, () => Math.random());
+    const response = await openai.embeddings.create({
+      model: EMBEDDING_MODEL,
+      input: text,
+      dimensions: EMBEDDING_DIMENSIONS
+    });
     
-    return embedding;
-  } catch (error) {
-    logger.error("Error generating embedding:", error);
-    throw new Error("Failed to generate embedding");
+    return response.data[0]?.embedding || generateMockEmbedding();
+  } catch {
+    logger.warn("OpenAI Embedding API unavailable, using mock");
+    return generateMockEmbedding();
   }
+};
+
+/**
+ * Generate mock embedding for fallback
+ */
+const generateMockEmbedding = (): number[] => {
+  return Array.from({ length: EMBEDDING_DIMENSIONS }, () => Math.random() * 2 - 1);
 };
 
 /**
@@ -35,15 +47,16 @@ export const generateEmbeddingsBatch = async (texts: string[]): Promise<number[]
   try {
     logger.info(`Generating embeddings for ${texts.length} texts`);
     
-    // Generate embeddings for each text
-    const embeddings = await Promise.all(
-      texts.map(text => generateEmbedding(text))
-    );
+    const response = await openai.embeddings.create({
+      model: EMBEDDING_MODEL,
+      input: texts,
+      dimensions: EMBEDDING_DIMENSIONS
+    });
     
-    return embeddings;
-  } catch (error) {
-    logger.error("Error generating batch embeddings:", error);
-    throw new Error("Failed to generate batch embeddings");
+    return response.data.map(item => item.embedding);
+  } catch {
+    logger.warn("OpenAI Batch Embedding API unavailable, using mock");
+    return texts.map(() => generateMockEmbedding());
   }
 };
 

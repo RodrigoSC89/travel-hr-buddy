@@ -411,16 +411,16 @@ const LandingPage = () => {
               <div>
                 <h4 className="font-semibold mb-4">Empresa</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><a href="#" className="hover:text-foreground">Sobre</a></li>
-                  <li><a href="#" className="hover:text-foreground">Blog</a></li>
-                  <li><a href="#" className="hover:text-foreground">Contato</a></li>
+                  <li><a href="mailto:contato@nautione.com" className="hover:text-foreground">Sobre</a></li>
+                  <li><a href="https://blog.nautione.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">Blog</a></li>
+                  <li><a href="mailto:suporte@nautione.com" className="hover:text-foreground">Contato</a></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-4">Legal</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><a href="#" className="hover:text-foreground">Termos de Uso</a></li>
-                  <li><a href="#" className="hover:text-foreground">Privacidade (LGPD)</a></li>
+                  <li><Link to="/terms" className="hover:text-foreground">Termos de Uso</Link></li>
+                  <li><Link to="/privacy" className="hover:text-foreground">Privacidade (LGPD)</Link></li>
                 </ul>
               </div>
             </div>
