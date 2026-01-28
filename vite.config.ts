@@ -71,20 +71,28 @@ export default defineConfig(({ mode }) => ({
     target: "es2015",
     chunkSizeWarningLimit: 500,
     cssCodeSplit: true,
+    cssMinify: "lightningcss",
     modulePreload: { polyfill: true },
     reportCompressedSize: true,
+    assetsInlineLimit: 4096, // Inline assets < 4KB as base64
     terserOptions: {
       compress: {
         drop_console: mode === "production",
         drop_debugger: true,
-        pure_funcs: mode === "production" ? ["console.log", "console.info", "console.debug"] : [],
-        passes: 2,
+        pure_funcs: mode === "production" ? ["console.log", "console.info", "console.debug", "console.warn", "console.table"] : [],
+        passes: 3, // More passes = better compression
+        dead_code: true,
+        unused: true,
+        conditionals: true,
+        evaluate: true,
       },
       mangle: {
         safari10: true,
+        toplevel: true,
       },
       format: {
         comments: false,
+        ascii_only: true,
       },
     },
     rollupOptions: {
