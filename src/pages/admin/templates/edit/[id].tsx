@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
- * Edit Template Page - PATCH 874
- * @ts-nocheck: templates.content is JSONB, id param may be undefined
+ * Edit Template Page - PATCH 878
+ * Type-safe implementation
  */
 "use client";
 
@@ -22,9 +21,13 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type TemplateRow = Database["public"]["Tables"]["templates"]["Row"];
 
 export default function EditTemplatePage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id;
   const navigate = useNavigate();
   
   const [loading, setLoading] = useState(true);
@@ -36,28 +39,42 @@ export default function EditTemplatePage() {
   const [content, setContent] = useState("");
   const [prompt, setPrompt] = useState("");
 
-  // Load template data
   useEffect(() => {
     if (id) {
       loadTemplate();
+    } else {
+      setLoading(false);
     }
   }, [id]);
 
   const loadTemplate = async () => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from("templates")
         .select("*")
-        .eq("id", id ?? "")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
 
       if (data) {
-        setTitle(data.title);
+        const templateData = data as TemplateRow;
+        setTitle(templateData.title);
         // Content is JSONB, convert to string
-        setContent(typeof data.content === 'string' ? data.content : JSON.stringify(data.content, null, 2));
+        const contentValue = templateData.content;
+        if (typeof contentValue === "string") {
+          setContent(contentValue);
+        } else if (contentValue !== null && contentValue !== undefined) {
+          setContent(JSON.stringify(contentValue, null, 2));
+        } else {
+          setContent("");
+        }
       } else {
         toast({
           title: "Template não encontrado",
@@ -79,7 +96,6 @@ export default function EditTemplatePage() {
     }
   };
 
-  // Generate content with AI
   const generateWithAI = async () => {
     if (!title.trim()) {
       toast({
@@ -117,7 +133,6 @@ export default function EditTemplatePage() {
     }
   };
 
-  // Rewrite content with AI
   const rewriteContent = async () => {
     if (!content) {
       toast({
@@ -153,7 +168,6 @@ export default function EditTemplatePage() {
     }
   };
 
-  // Auto-suggest title from content
   const suggestTitle = async () => {
     if (!content) {
       toast({
@@ -189,12 +203,20 @@ export default function EditTemplatePage() {
     }
   };
 
-  // Update template
   const updateTemplate = async () => {
     if (!title.trim() || !content.trim()) {
       toast({
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!id) {
+      toast({
+        title: "ID não encontrado",
+        description: "Não foi possível identificar o template.",
         variant: "destructive",
       });
       return;
