@@ -68,7 +68,13 @@ serve(async (req) => {
   }
 
   try {
-    const { question, context, conversationHistory = [] }: RequestBody = await req.json();
+    const body = await req.json();
+    const question = body.question || body.prompt || "";
+    const context: VesselContext = body.context || { 
+      vesselId: body.vessel_id || "unknown", 
+      vesselName: body.vessel_name || "Embarcação" 
+    };
+    const conversationHistory: ConversationMessage[] = body.conversationHistory || body.history || [];
 
     if (!question) {
       throw new Error("Question is required");

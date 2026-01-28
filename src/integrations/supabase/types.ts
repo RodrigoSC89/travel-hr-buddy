@@ -4902,6 +4902,63 @@ export type Database = {
         }
         Relationships: []
       }
+      billing_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          organization_id: string | null
+          plan_id: string | null
+          status: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          organization_id?: string | null
+          plan_id?: string | null
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          organization_id?: string | null
+          plan_id?: string | null
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "billing_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "billing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blockchain_ledger: {
         Row: {
           block_number: number
@@ -21711,6 +21768,51 @@ export type Database = {
           },
         ]
       }
+      modular_billing_config: {
+        Row: {
+          base_price: number | null
+          created_at: string | null
+          description: string | null
+          display_name: string
+          id: string
+          is_addon: boolean | null
+          module_key: string
+          price_per_unit: number | null
+          requires_modules: string[] | null
+          stripe_price_id: string | null
+          unit_type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          base_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          display_name: string
+          id?: string
+          is_addon?: boolean | null
+          module_key: string
+          price_per_unit?: number | null
+          requires_modules?: string[] | null
+          stripe_price_id?: string | null
+          unit_type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          base_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          display_name?: string
+          id?: string
+          is_addon?: boolean | null
+          module_key?: string
+          price_per_unit?: number | null
+          requires_modules?: string[] | null
+          stripe_price_id?: string | null
+          unit_type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       module_health: {
         Row: {
           cpu_usage: number | null
@@ -23030,6 +23132,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "organization_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_modules: {
+        Row: {
+          created_at: string | null
+          current_usage: number | null
+          disabled_at: string | null
+          enabled_at: string | null
+          id: string
+          is_enabled: boolean | null
+          module_key: string
+          organization_id: string | null
+          usage_limit: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_usage?: number | null
+          disabled_at?: string | null
+          enabled_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          module_key: string
+          organization_id?: string | null
+          usage_limit?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          current_usage?: number | null
+          disabled_at?: string | null
+          enabled_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          module_key?: string
+          organization_id?: string | null
+          usage_limit?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_modules_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -35000,6 +35146,66 @@ export type Database = {
         }
         Relationships: []
       }
+      vessel_3d_models: {
+        Row: {
+          created_at: string | null
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          updated_at: string | null
+          version: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          updated_at?: string | null
+          version?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          updated_at?: string | null
+          version?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_3d_models_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_3d_models_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_ai_contexts: {
         Row: {
           context_id: string
@@ -35349,6 +35555,81 @@ export type Database = {
           },
         ]
       }
+      vessel_components: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          documents: Json | null
+          id: string
+          installation_date: string | null
+          location: string | null
+          manufacturer: string | null
+          model: string | null
+          name: string
+          organization_id: string | null
+          part_number: string | null
+          serial_number: string | null
+          specifications: Json | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          warranty_expiry: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          installation_date?: string | null
+          location?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          name: string
+          organization_id?: string | null
+          part_number?: string | null
+          serial_number?: string | null
+          specifications?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          warranty_expiry?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          installation_date?: string | null
+          location?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          name?: string
+          organization_id?: string | null
+          part_number?: string | null
+          serial_number?: string | null
+          specifications?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          warranty_expiry?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_components_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_components_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_contracts: {
         Row: {
           client_name: string
@@ -35414,6 +35695,60 @@ export type Database = {
           },
           {
             foreignKeyName: "vessel_contracts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_digital_twins: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_sync_at: string | null
+          metadata: Json | null
+          model_url: string | null
+          model_version: string | null
+          organization_id: string | null
+          sync_status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_sync_at?: string | null
+          metadata?: Json | null
+          model_url?: string | null
+          model_version?: string | null
+          organization_id?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_sync_at?: string | null
+          metadata?: Json | null
+          model_url?: string | null
+          model_version?: string | null
+          organization_id?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_digital_twins_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_digital_twins_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -35654,6 +35989,82 @@ export type Database = {
           },
           {
             foreignKeyName: "vessel_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_maintenance_plans: {
+        Row: {
+          assigned_to: string | null
+          component_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          interval_days: number | null
+          interval_hours: number | null
+          last_performed_at: string | null
+          next_due_at: string | null
+          organization_id: string | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          component_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          interval_days?: number | null
+          interval_hours?: number | null
+          last_performed_at?: string | null
+          next_due_at?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          component_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          interval_days?: number | null
+          interval_hours?: number | null
+          last_performed_at?: string | null
+          next_due_at?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_maintenance_plans_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_components"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_maintenance_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_maintenance_plans_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -36178,6 +36589,50 @@ export type Database = {
           },
         ]
       }
+      vessel_sensor_data: {
+        Row: {
+          id: string
+          metadata: Json | null
+          recorded_at: string | null
+          sensor_name: string | null
+          sensor_type: string
+          status: string | null
+          unit: string | null
+          value: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          recorded_at?: string | null
+          sensor_name?: string | null
+          sensor_type: string
+          status?: string | null
+          unit?: string | null
+          value?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          recorded_at?: string | null
+          sensor_name?: string | null
+          sensor_type?: string
+          status?: string | null
+          unit?: string | null
+          value?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_sensor_data_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_sensor_readings: {
         Row: {
           id: string
@@ -36564,6 +37019,60 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "vessel_status_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_timeline_events: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          event_date: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          title: string
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          event_date: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          title: string
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          title?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_timeline_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_timeline_events_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -39012,6 +39521,7 @@ export type Database = {
             }[]
           }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
+      get_user_org_ids: { Args: { user_uuid: string }; Returns: string[] }
       get_user_organization:
         | { Args: never; Returns: string }
         | { Args: { _user_id: string }; Returns: string }
