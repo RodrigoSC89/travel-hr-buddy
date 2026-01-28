@@ -1234,3 +1234,24 @@ comment = "CTS/STCW AI assistant for crew certification compliance queries"
 [functions.cts-generate-evidence]
 verify_jwt = false
 comment = "Generate CTS compliance evidence for non-conformities"
+
+# ============================================
+# VESSEL DIGITAL TWIN & MODULAR BILLING - Added 2026-01-28
+# 3D Vessel Visualization, AI Assistant, Subscription Management
+# ============================================
+
+[functions.vessel-ai-assistant]
+verify_jwt = false
+comment = "AI assistant for vessel digital twin with technical manuals and maintenance context"
+
+[functions.create-subscription]
+verify_jwt = false
+comment = "Create Stripe checkout session for modular subscription"
+
+[functions.check-subscription]
+verify_jwt = false
+comment = "Check active subscription status from Stripe"
+
+[functions.customer-portal]
+verify_jwt = false
+comment = "Create Stripe customer portal session for subscription management"
