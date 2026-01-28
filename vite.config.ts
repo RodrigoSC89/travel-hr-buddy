@@ -68,68 +68,113 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist",
     sourcemap: false,
     minify: "terser",
-    target: "es2015",
-    chunkSizeWarningLimit: 500,
+    target: "es2020", // Modern target for better optimization
+    chunkSizeWarningLimit: 300, // Stricter limit for Lighthouse
     cssCodeSplit: true,
-    cssMinify: true, // Use default esbuild minifier (lightningcss not installed)
+    cssMinify: true,
     modulePreload: { polyfill: true },
     reportCompressedSize: true,
-    assetsInlineLimit: 4096, // Inline assets < 4KB as base64
+    assetsInlineLimit: 4096,
     terserOptions: {
       compress: {
         drop_console: mode === "production",
         drop_debugger: true,
-        pure_funcs: mode === "production" ? ["console.log", "console.info", "console.debug", "console.warn", "console.table"] : [],
-        passes: 3, // More passes = better compression
+        pure_funcs: mode === "production" 
+          ? ["console.log", "console.info", "console.debug", "console.warn", "console.table", "console.time", "console.timeEnd"]
+          : [],
+        passes: 3,
         dead_code: true,
         unused: true,
         conditionals: true,
         evaluate: true,
+        collapse_vars: true,
+        reduce_vars: true,
+        hoist_funs: true,
+        hoist_vars: false,
+        join_vars: true,
+        sequences: true,
       },
       mangle: {
         safari10: true,
         toplevel: true,
+        properties: false, // Don't mangle properties to avoid breaking
       },
       format: {
         comments: false,
         ascii_only: true,
+        ecma: 2020,
       },
     },
     rollupOptions: {
       output: {
-        // PATCH v26: Advanced chunk splitting for optimal bundle size
-        manualChunks: {
-          // Core React - cached indefinitely
-          "react-vendor": ["react", "react-dom", "react-dom/client"],
-
-          // Query & State management
-          "query-vendor": ["@tanstack/react-query"],
-
-          // UI Components - shared across app
-          "ui-vendor": [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-popover",
-            "@radix-ui/react-tooltip",
-            "@radix-ui/react-tabs",
-            "@radix-ui/react-select",
-            "@radix-ui/react-checkbox",
-          ],
-
-          // Animation - loaded when needed
-          "animation-vendor": ["framer-motion"],
-
-          // Charts - lazy loaded for dashboards
-          "charts-vendor": ["recharts", "chart.js", "react-chartjs-2"],
-
-          // Date utilities
-          "date-vendor": ["date-fns"],
-
-          // Form handling
-          "form-vendor": ["react-hook-form", "@hookform/resolvers", "zod"],
-
-          // Supabase client
-          "supabase-vendor": ["@supabase/supabase-js", "@supabase/ssr"],
+        // PATCH 880: Optimized chunk splitting for Lighthouse 98+
+        manualChunks: (id) => {
+          // Node modules chunking strategy
+          if (id.includes("node_modules")) {
+            // Core React - smallest, cached longest
+            if (id.includes("react-dom") || id.includes("react/")) {
+              return "react-core";
+            }
+            
+            // React Router
+            if (id.includes("react-router")) {
+              return "router";
+            }
+            
+            // TanStack Query
+            if (id.includes("@tanstack/react-query")) {
+              return "query";
+            }
+            
+            // Radix UI - shared UI primitives
+            if (id.includes("@radix-ui")) {
+              return "ui-primitives";
+            }
+            
+            // Animation - lazy load
+            if (id.includes("framer-motion")) {
+              return "animation";
+            }
+            
+            // Charts - lazy load
+            if (id.includes("recharts") || id.includes("chart.js") || id.includes("d3-")) {
+              return "charts";
+            }
+            
+            // Supabase
+            if (id.includes("@supabase")) {
+              return "supabase";
+            }
+            
+            // Forms
+            if (id.includes("react-hook-form") || id.includes("zod") || id.includes("@hookform")) {
+              return "forms";
+            }
+            
+            // Date utilities
+            if (id.includes("date-fns")) {
+              return "date-utils";
+            }
+            
+            // Icons
+            if (id.includes("lucide-react")) {
+              return "icons";
+            }
+            
+            // Heavy libs - separate chunk
+            if (
+              id.includes("three") || 
+              id.includes("@react-three") ||
+              id.includes("mapbox") ||
+              id.includes("tensorflow") ||
+              id.includes("tesseract")
+            ) {
+              return "heavy-libs";
+            }
+            
+            // Remaining vendor code
+            return "vendor";
+          }
         },
         // Ensure consistent chunk naming for caching
         chunkFileNames: (chunkInfo) => {

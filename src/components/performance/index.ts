@@ -59,3 +59,12 @@ export { ResilienceIndicator, ResilienceBadge } from './ResilienceIndicator';
 // System Health Dashboard (PATCH 970)
 export { SystemHealthDashboard } from './SystemHealthDashboard';
 
+// Lazy Section (PATCH 880)
+export { LazySection, ContentVisibility, useIntersection } from './LazySection';
+
+// Virtual List (PATCH 880)
+export { VirtualList, DynamicVirtualList } from './VirtualList';
+
+// Critical Image (PATCH 880)
+export { CriticalImage, ResponsiveImage } from './CriticalImage';
+
