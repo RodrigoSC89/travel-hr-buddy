@@ -174,6 +174,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
       { label: "🎯 Agent Orchestration", path: "/agent-orchestration", icon: Brain, emoji: "🎯", badge: "v4.0", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
+      { label: "🚀 AI Command Center v4", path: "/ai-command-center", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
       { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
       { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
