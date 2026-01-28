@@ -195,13 +195,46 @@ All services now use the centralized `logger` utility:
 
 ---
 
+## 8. Logging Standardization (PATCH 2026-01-28)
+
+All weather services have been migrated to use the centralized `logger` utility:
+
+| File | Status | Previous | Current |
+|------|--------|----------|---------|
+| `src/integrations/weather/api.ts` | ✅ Migrated | `console.error` | `logger.error` |
+| `src/services/weather/unified-weather.service.ts` | ✅ Migrated | `console.error` | `logger.error` |
+| `src/services/weather/tide-alerts.service.ts` | ✅ Migrated | `console.log/error` | `logger.info/error` |
+| `src/services/weather/marinha-brasil.service.ts` | ✅ Migrated | `console.log/error` | `logger.debug/error` |
+| `src/services/weather/cptec-inpe.service.ts` | ✅ Migrated | `console.error` | `logger.error` |
+
+### Logger Benefits:
+- **Structured Output:** JSON format in production for log aggregation
+- **Environment Aware:** Console output in development, structured in production
+- **Sentry Integration:** Automatic error tracking for `logger.error` calls
+- **Performance Utilities:** Built-in timing functions via `logger.startTimer()`
+
+### Logger Import Pattern:
+```typescript
+import { logger } from "@/lib/utils/production-logger";
+
+// Usage
+logger.debug("[Service] Debug message", { context: "data" });
+logger.info("[Service] Info message");
+logger.warn("[Service] Warning message");
+logger.error("[Service] Error message", error);
+```
+
+---
+
 ## Recommendations
 
 1. **Continue monitoring** Edge Function logs in Supabase dashboard
 2. **Run E2E tests** before major releases
 3. **Keep module registry** updated when adding new features
 4. **Review RLS policies** periodically for security
+5. **Use centralized logger** for all new services (no raw console.log)
 
 ---
 
+**Updated:** 2026-01-28T20:20:00Z  
 **Status:** ✅ **SYSTEM FULLY INTEGRATED - PRODUCTION READY**
