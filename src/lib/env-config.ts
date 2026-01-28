@@ -232,15 +232,19 @@ export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boole
 export function printConfigSummary(): void {
   const config = getConfig();
   
-  console.log('\n📋 CONFIGURATION SUMMARY:\n');
-  console.log(`  Environment: ${config.nodeEnv}`);
-  console.log(`  App URL: ${config.appUrl}`);
-  console.log(`  Supabase: ${config.supabaseUrl}`);
-  console.log(`  OpenAI Model: ${config.openaiModel}`);
-  console.log(`  StarFix Integration: ${isFeatureEnabled('starfix') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log(`  Terrastar Integration: ${isFeatureEnabled('terrastar') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log(`  AI Features: ${isFeatureEnabled('ai') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log('');
+  // Only log in development mode
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.info('📋 CONFIGURATION SUMMARY:', {
+      environment: config.nodeEnv,
+      appUrl: config.appUrl,
+      supabase: config.supabaseUrl,
+      openaiModel: config.openaiModel,
+      starfix: isFeatureEnabled('starfix'),
+      terrastar: isFeatureEnabled('terrastar'),
+      aiFeatures: isFeatureEnabled('ai'),
+    });
+  }
 }
 
 // Auto-validate on import (apenas em produção ou quando explicitamente configurado)

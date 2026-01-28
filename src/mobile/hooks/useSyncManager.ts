@@ -8,6 +8,7 @@ import { syncQueue } from "../services/syncQueue";
 import { networkDetector } from "../services/networkDetector";
 import { NetworkStatus } from "../types";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface SyncManagerState {
   isOnline: boolean;
@@ -215,7 +216,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       const currentQueueSize = await syncQueue.getQueueSize();
       
       if (state.isOnline && state.networkQuality === "good" && currentQueueSize > 0) {
-        console.log("Auto-sync check: syncing pending changes...");
+        logger.debug("Auto-sync check: syncing pending changes...");
         await syncNow();
       }
     }, 5 * 60 * 1000); // 5 minutes

@@ -4,6 +4,8 @@
  * QAOA-inspired para encontrar ótimos globais, não locais
  */
 
+import { logger } from "@/lib/logger";
+
 export interface RouteWaypoint {
   id: string;
   name: string;
@@ -97,7 +99,7 @@ export class QuantumMaritimeRouter {
     vesselSpecs: VesselSpecs,
     iterations: number = 5000
   ): Promise<OptimizedRoute> {
-    console.log(`[QuantumRouter] Starting QAOA-inspired optimization with ${iterations} iterations`);
+    logger.debug(`[QuantumRouter] Starting QAOA-inspired optimization with ${iterations} iterations`);
 
     // Initialize quantum state superposition
     const allWaypoints = [origin, ...availablePorts, destination];

@@ -17,6 +17,7 @@ import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from './dp-asog-client
 import type { DPASOGStatusResponse, DPASOGPDOPResponse } from './dp-asog-client.service';
 import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from './space-weather-monitoring.service';
 import type { SpaceWeatherStatus, SpaceWeatherThresholds } from '@/types/space-weather.types';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // Configuration
@@ -153,7 +154,7 @@ export class HybridSpaceWeatherService {
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached) {
-      console.log('[HybridSpaceWeather] Using cached data');
+      logger.debug('[HybridSpaceWeather] Using cached data');
       return { ...cached, data_source: 'CACHED' };
     }
 
