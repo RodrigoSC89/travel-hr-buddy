@@ -1,13 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution
- * 
- * NOTE: @ts-nocheck required due to complex type mismatches between:
- * - Local interfaces (AgentType = specific literals)
- * - DB schema (agent_type = string)
- * - JSONB columns (capabilities, payload, decision_data)
- * Full resolution requires schema migration to use enums in DB.
+ * Type-safe implementation using DB adapters
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +14,85 @@ import type {
   AgentStatus,
   TaskStatus,
 } from "@/types/patches-536-540";
+import type { Json } from "@/integrations/supabase/types";
+
+// Type adapters for DB <-> Local type conversion
+type DbAgent = {
+  id: string;
+  agent_name: string;
+  agent_type: string;
+  capabilities: Json;
+  status: string;
+  priority_level: number;
+  max_concurrent_tasks: number;
+  current_task_count: number;
+  metadata: Json;
+  last_heartbeat: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type DbTask = {
+  id: string;
+  task_name: string;
+  task_type: string;
+  priority: number;
+  required_capabilities: Json;
+  status: string;
+  assigned_agent_id: string | null;
+  payload: Json;
+  result: Json | null;
+  error_message: string | null;
+  timeout_seconds: number;
+  started_at: string | null;
+  completed_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type DbDecision = {
+  id: string;
+  task_id: string | null;
+  agent_id: string | null;
+  decision_type: string;
+  decision_data: Json;
+  reasoning: string | null;
+  confidence_score: number | null;
+  timestamp: string;
+};
+
+// Adapters
+const toAgent = (db: DbAgent): CoordinationAgent => ({
+  ...db,
+  agent_type: db.agent_type as AgentType,
+  capabilities: (db.capabilities as string[]) || [],
+  status: db.status as AgentStatus,
+  metadata: (db.metadata as Record<string, unknown>) || {},
+  last_heartbeat: db.last_heartbeat || new Date().toISOString(),
+});
+
+const toTask = (db: DbTask): CoordinationTask => ({
+  ...db,
+  status: db.status as TaskStatus,
+  required_capabilities: (db.required_capabilities as string[]) || [],
+  payload: (db.payload as Record<string, unknown>) || {},
+  result: db.result as Record<string, unknown> | undefined,
+  error_message: db.error_message || undefined,
+  assigned_agent_id: db.assigned_agent_id || undefined,
+  started_at: db.started_at || undefined,
+  completed_at: db.completed_at || undefined,
+  created_by: db.created_by || undefined,
+});
+
+const toDecision = (db: DbDecision): CoordinationDecision => ({
+  ...db,
+  task_id: db.task_id || undefined,
+  agent_id: db.agent_id || undefined,
+  decision_data: (db.decision_data as Record<string, unknown>) || {},
+  reasoning: db.reasoning || undefined,
+  confidence_score: db.confidence_score || undefined,
+});
 
 class CoordinationAIService {
   /**
@@ -45,7 +118,7 @@ class CoordinationAIService {
       return null;
     }
 
-    return data;
+    return data ? toAgent(data as unknown as DbAgent) : null;
   }
 
   /**
@@ -69,7 +142,7 @@ class CoordinationAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((d) => toAgent(d as unknown as DbAgent));
   }
 
   /**
@@ -121,7 +194,7 @@ class CoordinationAIService {
     // Auto-assign task to available agent
     await this.assignTask(data.id);
 
-    return data;
+    return data ? toTask(data as unknown as DbTask) : null;
   }
 
   /**
@@ -145,7 +218,7 @@ class CoordinationAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((d) => toTask(d as unknown as DbTask));
   }
 
   /**
@@ -165,20 +238,22 @@ class CoordinationAIService {
     }
 
     // Find best agent
-    const { data: agents } = await supabase
+    const { data: agentsRaw } = await supabase
       .from("coordination_agents")
       .select("*")
       .in("status", ["idle", "active"])
       .order("priority_level", { ascending: false });
 
-    if (!agents || agents.length === 0) {
+    if (!agentsRaw || agentsRaw.length === 0) {
       logger.info("No available agents", { taskId });
       return false;
     }
 
+    const agents = agentsRaw.map((d) => toAgent(d as unknown as DbAgent));
+
     // Filter agents by capabilities
-    const capableAgents = agents.filter((agent: CoordinationAgent) => {
-      const requiredCaps = task.required_capabilities || [];
+    const capableAgents = agents.filter((agent) => {
+      const requiredCaps = (task.required_capabilities as string[]) || [];
       const agentCaps = agent.capabilities || [];
       return requiredCaps.every((cap: string) => agentCaps.includes(cap));
     });
@@ -189,7 +264,7 @@ class CoordinationAIService {
     }
 
     // Select agent with lowest current task count
-    const bestAgent = capableAgents.reduce((prev: CoordinationAgent, curr: CoordinationAgent) => {
+    const bestAgent = capableAgents.reduce((prev, curr) => {
       if (curr.current_task_count < curr.max_concurrent_tasks) {
         return (curr.current_task_count < prev.current_task_count) ? curr : prev;
       }
@@ -216,7 +291,7 @@ class CoordinationAIService {
     await supabase
       .from("coordination_agents")
       .update({
-        current_task_count: bestAgent.current_task_count + 1,
+        current_task_count: (bestAgent.current_task_count || 0) + 1,
         status: "busy",
         updated_at: new Date().toISOString(),
       })
@@ -279,14 +354,15 @@ class CoordinationAIService {
 
     // If task is completed or failed, update agent task count
     if ((status === "completed" || status === "failed") && task.assigned_agent_id) {
-      const { data: agent } = await supabase
+      const { data: agentRaw } = await supabase
         .from("coordination_agents")
         .select("*")
         .eq("id", task.assigned_agent_id)
         .single();
 
-      if (agent) {
-        const newCount = Math.max(0, agent.current_task_count - 1);
+      if (agentRaw) {
+        const agent = toAgent(agentRaw as unknown as DbAgent);
+        const newCount = Math.max(0, (agent.current_task_count || 0) - 1);
         await supabase
           .from("coordination_agents")
           .update({
@@ -339,7 +415,7 @@ class CoordinationAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((d) => toDecision(d as unknown as DbDecision));
   }
 
   /**
@@ -357,7 +433,7 @@ class CoordinationAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((d) => toDecision(d as unknown as DbDecision));
   }
 
   /**
