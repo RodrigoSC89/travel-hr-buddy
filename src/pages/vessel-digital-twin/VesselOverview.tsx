@@ -25,36 +25,41 @@ interface VesselOverviewProps {
   specifications: VesselSpecifications | null;
 }
 
+// Type-safe specs accessor
+type SpecsType = VesselSpecifications | Record<string, never>;
+
 export default function VesselOverview({ vessel, specifications }: VesselOverviewProps) {
-  const specs = specifications || {};
+  const specs: SpecsType = specifications || {} as Record<string, never>;
+  
+  const s = specs as VesselSpecifications;
   
   const dimensionItems = [
-    { label: 'Comprimento Total', value: specs.length_overall, unit: 'm', icon: Ruler },
-    { label: 'Boca', value: specs.beam, unit: 'm', icon: Ruler },
-    { label: 'Calado', value: specs.draft, unit: 'm', icon: Anchor },
-    { label: 'Pontal', value: specs.depth, unit: 'm', icon: Ruler },
+    { label: 'Comprimento Total', value: s.length_overall, unit: 'm', icon: Ruler },
+    { label: 'Boca', value: s.beam, unit: 'm', icon: Ruler },
+    { label: 'Calado', value: s.draft, unit: 'm', icon: Anchor },
+    { label: 'Pontal', value: s.depth, unit: 'm', icon: Ruler },
   ];
 
   const capacityItems = [
-    { label: 'Arqueação Bruta (GT)', value: specs.gross_tonnage, icon: Anchor },
-    { label: 'Arqueação Líquida (NT)', value: specs.net_tonnage, icon: Anchor },
-    { label: 'Porte Bruto (DWT)', value: specs.deadweight, icon: Anchor },
-    { label: 'Capacidade de Carga', value: specs.cargo_capacity, unit: 't', icon: Anchor },
+    { label: 'Arqueação Bruta (GT)', value: s.gross_tonnage, icon: Anchor },
+    { label: 'Arqueação Líquida (NT)', value: s.net_tonnage, icon: Anchor },
+    { label: 'Porte Bruto (DWT)', value: s.deadweight, icon: Anchor },
+    { label: 'Capacidade de Carga', value: s.cargo_capacity, unit: 't', icon: Anchor },
   ];
 
   const propulsionItems = [
-    { label: 'Tipo de Propulsão', value: specs.propulsion_type, icon: Navigation },
-    { label: 'Motor Principal', value: specs.main_engine_type, icon: Gauge },
-    { label: 'Potência', value: specs.main_engine_power, icon: Gauge },
-    { label: 'Velocidade Máxima', value: specs.speed_max, unit: 'kn', icon: Gauge },
-    { label: 'Velocidade de Serviço', value: specs.speed_service, unit: 'kn', icon: Gauge },
-    { label: 'Autonomia', value: specs.range_nautical_miles, unit: 'NM', icon: Navigation },
+    { label: 'Tipo de Propulsão', value: s.propulsion_type, icon: Navigation },
+    { label: 'Motor Principal', value: s.main_engine_type, icon: Gauge },
+    { label: 'Potência', value: s.main_engine_power, icon: Gauge },
+    { label: 'Velocidade Máxima', value: s.speed_max, unit: 'kn', icon: Gauge },
+    { label: 'Velocidade de Serviço', value: s.speed_service, unit: 'kn', icon: Gauge },
+    { label: 'Autonomia', value: s.range_nautical_miles, unit: 'NM', icon: Navigation },
   ];
 
   const tankItems = [
-    { label: 'Combustível', value: specs.fuel_capacity, unit: 'm³', icon: Fuel },
-    { label: 'Água Doce', value: specs.fresh_water_capacity, unit: 'm³', icon: Fuel },
-    { label: 'Lastro', value: specs.ballast_capacity, unit: 'm³', icon: Fuel },
+    { label: 'Combustível', value: s.fuel_capacity, unit: 'm³', icon: Fuel },
+    { label: 'Água Doce', value: s.fresh_water_capacity, unit: 'm³', icon: Fuel },
+    { label: 'Lastro', value: s.ballast_capacity, unit: 'm³', icon: Fuel },
   ];
 
   return (
@@ -83,15 +88,15 @@ export default function VesselOverview({ vessel, specifications }: VesselOvervie
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Ano de Construção</p>
-              <p className="font-medium">{specs.build_year || 'N/A'}</p>
+              <p className="font-medium">{s.build_year || 'N/A'}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Estaleiro</p>
-              <p className="font-medium">{specs.builder || 'N/A'}</p>
+              <p className="font-medium">{s.builder || 'N/A'}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Material do Casco</p>
-              <p className="font-medium">{specs.hull_material || 'N/A'}</p>
+              <p className="font-medium">{s.hull_material || 'N/A'}</p>
             </div>
           </div>
           
@@ -104,11 +109,11 @@ export default function VesselOverview({ vessel, specifications }: VesselOvervie
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Sociedade</p>
-                <p className="font-medium">{specs.classification_society || 'N/A'}</p>
+                <p className="font-medium">{s.classification_society || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Notação</p>
-                <p className="font-medium">{specs.class_notation || 'N/A'}</p>
+                <p className="font-medium">{s.class_notation || 'N/A'}</p>
               </div>
             </div>
           </div>
@@ -172,11 +177,11 @@ export default function VesselOverview({ vessel, specifications }: VesselOvervie
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Capacidade Tripulação</p>
-                <p className="font-medium">{specs.crew_capacity || 'N/A'}</p>
+                <p className="font-medium">{s.crew_capacity || 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Capacidade Passageiros</p>
-                <p className="font-medium">{specs.passenger_capacity || 'N/A'}</p>
+                <p className="font-medium">{s.passenger_capacity || 'N/A'}</p>
               </div>
             </div>
           </div>
@@ -243,21 +248,21 @@ export default function VesselOverview({ vessel, specifications }: VesselOvervie
             <div>
               <p className="text-sm text-muted-foreground">Última Docagem</p>
               <p className="font-medium">
-                {specs.last_dry_dock 
-                  ? new Date(specs.last_dry_dock).toLocaleDateString('pt-BR')
+                {s.last_dry_dock 
+                  ? new Date(s.last_dry_dock).toLocaleDateString('pt-BR')
                   : 'N/A'}
               </p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Próxima Docagem</p>
               <p className="font-medium">
-                {specs.next_dry_dock 
-                  ? new Date(specs.next_dry_dock).toLocaleDateString('pt-BR')
+                {s.next_dry_dock 
+                  ? new Date(s.next_dry_dock).toLocaleDateString('pt-BR')
                   : 'N/A'}
               </p>
-              {specs.next_dry_dock && (
+              {s.next_dry_dock && (
                 <Badge variant="outline" className="mt-1">
-                  Em {Math.ceil((new Date(specs.next_dry_dock).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dias
+                  Em {Math.ceil((new Date(s.next_dry_dock).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dias
                 </Badge>
               )}
             </div>

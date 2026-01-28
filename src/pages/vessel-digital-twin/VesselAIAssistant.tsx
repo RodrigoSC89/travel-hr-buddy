@@ -173,7 +173,7 @@ Como posso ajudar você hoje?`,
       setMessages(prev => [...prev, assistantMessage]);
 
       // Store conversation - using correct column names from database
-      await supabase.from("vessel_ai_conversations").insert({
+      await (supabase as any).from("vessel_ai_conversations").insert({
         vessel_id: vesselId,
         title: messageText.substring(0, 100),
         context: {

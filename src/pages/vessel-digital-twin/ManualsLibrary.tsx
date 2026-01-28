@@ -195,7 +195,7 @@ export default function ManualsLibrary({ vesselId }: ManualsLibraryProps) {
                   >
                     {manual.document_type}
                   </Badge>
-                  {manual.ai_indexed && (
+                  {manual.ocr_status === 'completed' && (
                     <Badge variant="outline" className="gap-1">
                       <Sparkles className="h-3 w-3" />
                       IA
