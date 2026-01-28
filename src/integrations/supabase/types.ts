@@ -4836,6 +4836,72 @@ export type Database = {
         }
         Relationships: []
       }
+      billing_plans: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          is_enterprise: boolean | null
+          max_users: number | null
+          max_vessels: number | null
+          name: string
+          price_monthly_brl: number
+          price_monthly_eur: number
+          price_monthly_usd: number
+          slug: string
+          sort_order: number | null
+          stripe_price_id_brl: string | null
+          stripe_price_id_eur: string | null
+          stripe_price_id_usd: string | null
+          trial_days: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_enterprise?: boolean | null
+          max_users?: number | null
+          max_vessels?: number | null
+          name: string
+          price_monthly_brl?: number
+          price_monthly_eur?: number
+          price_monthly_usd?: number
+          slug: string
+          sort_order?: number | null
+          stripe_price_id_brl?: string | null
+          stripe_price_id_eur?: string | null
+          stripe_price_id_usd?: string | null
+          trial_days?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_enterprise?: boolean | null
+          max_users?: number | null
+          max_vessels?: number | null
+          name?: string
+          price_monthly_brl?: number
+          price_monthly_eur?: number
+          price_monthly_usd?: number
+          slug?: string
+          sort_order?: number | null
+          stripe_price_id_brl?: string | null
+          stripe_price_id_eur?: string | null
+          stripe_price_id_usd?: string | null
+          trial_days?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blockchain_ledger: {
         Row: {
           block_number: number
@@ -21726,6 +21792,54 @@ export type Database = {
         }
         Relationships: []
       }
+      module_usage: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          module_id: string
+          organization_id: string
+          route: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_id: string
+          organization_id: string
+          route?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_id?: string
+          organization_id?: string
+          route?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_usage_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "system_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "module_usage_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modules: {
         Row: {
           active: boolean | null
@@ -22633,6 +22747,54 @@ export type Database = {
         }
         Relationships: []
       }
+      organization_addons: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          module_id: string
+          organization_id: string
+          purchased_at: string | null
+          status: string | null
+          stripe_subscription_item_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          module_id: string
+          organization_id: string
+          purchased_at?: string | null
+          status?: string | null
+          stripe_subscription_item_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          module_id?: string
+          organization_id?: string
+          purchased_at?: string | null
+          status?: string | null
+          stripe_subscription_item_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_addons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "system_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_addons_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_billing: {
         Row: {
           base_amount: number
@@ -22915,6 +23077,75 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: true
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          canceled_at: string | null
+          created_at: string | null
+          currency: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          plan_id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          trial_ends_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          plan_id: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          plan_id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "billing_plans"
             referencedColumns: ["id"]
           },
         ]
@@ -25010,6 +25241,42 @@ export type Database = {
           trend?: string | null
         }
         Relationships: []
+      }
+      plan_modules: {
+        Row: {
+          created_at: string | null
+          id: string
+          module_id: string | null
+          plan_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          module_id?: string | null
+          plan_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          module_id?: string | null
+          plan_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_modules_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "system_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plan_modules_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "billing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       port_calls: {
         Row: {
@@ -31960,6 +32227,63 @@ export type Database = {
         }
         Relationships: []
       }
+      system_modules: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          features: Json | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          is_core: boolean | null
+          name: string
+          price_addon_brl: number | null
+          price_addon_usd: number | null
+          routes: Json | null
+          slug: string
+          sort_order: number | null
+          stripe_price_id_addon: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_core?: boolean | null
+          name: string
+          price_addon_brl?: number | null
+          price_addon_usd?: number | null
+          routes?: Json | null
+          slug: string
+          sort_order?: number | null
+          stripe_price_id_addon?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_core?: boolean | null
+          name?: string
+          price_addon_brl?: number | null
+          price_addon_usd?: number | null
+          routes?: Json | null
+          slug?: string
+          sort_order?: number | null
+          stripe_price_id_addon?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       system_observations: {
         Row: {
           created_at: string | null
@@ -34715,6 +35039,104 @@ export type Database = {
         }
         Relationships: []
       }
+      vessel_ai_conversations: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          id: string
+          last_message_at: string | null
+          message_count: number | null
+          organization_id: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          vessel_id: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          message_count?: number | null
+          organization_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+          vessel_id: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          last_message_at?: string | null
+          message_count?: number | null
+          organization_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_ai_conversations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_ai_conversations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_ai_messages: {
+        Row: {
+          confidence: number | null
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          model: string | null
+          role: string
+          sources: Json | null
+          tokens_used: number | null
+        }
+        Insert: {
+          confidence?: number | null
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          model?: string | null
+          role: string
+          sources?: Json | null
+          tokens_used?: number | null
+        }
+        Update: {
+          confidence?: number | null
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          model?: string | null
+          role?: string
+          sources?: Json | null
+          tokens_used?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_ai_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_ai_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_alert_notifications: {
         Row: {
           alert_id: string | null
@@ -35311,6 +35733,145 @@ export type Database = {
           },
         ]
       }
+      vessel_parts: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          criticality: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          installation_date: string | null
+          last_maintenance: string | null
+          lifespan_years: number | null
+          location_compartment: string | null
+          location_coordinates: Json | null
+          location_deck: string | null
+          maintenance_interval_days: number | null
+          maintenance_interval_hours: number | null
+          manufacturer: string | null
+          metadata: Json | null
+          model: string | null
+          model_3d_url: string | null
+          name: string
+          name_pt: string | null
+          next_maintenance: string | null
+          operating_hours: number | null
+          organization_id: string | null
+          parent_id: string | null
+          part_number: string
+          qr_code: string | null
+          related_manuals: string[] | null
+          replacement_cost: number | null
+          serial_number: string | null
+          spare_parts: Json | null
+          specifications: Json | null
+          status: string | null
+          subcategory: string | null
+          updated_at: string | null
+          vessel_id: string
+          warranty_expires: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          criticality?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          installation_date?: string | null
+          last_maintenance?: string | null
+          lifespan_years?: number | null
+          location_compartment?: string | null
+          location_coordinates?: Json | null
+          location_deck?: string | null
+          maintenance_interval_days?: number | null
+          maintenance_interval_hours?: number | null
+          manufacturer?: string | null
+          metadata?: Json | null
+          model?: string | null
+          model_3d_url?: string | null
+          name: string
+          name_pt?: string | null
+          next_maintenance?: string | null
+          operating_hours?: number | null
+          organization_id?: string | null
+          parent_id?: string | null
+          part_number: string
+          qr_code?: string | null
+          related_manuals?: string[] | null
+          replacement_cost?: number | null
+          serial_number?: string | null
+          spare_parts?: Json | null
+          specifications?: Json | null
+          status?: string | null
+          subcategory?: string | null
+          updated_at?: string | null
+          vessel_id: string
+          warranty_expires?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          criticality?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          installation_date?: string | null
+          last_maintenance?: string | null
+          lifespan_years?: number | null
+          location_compartment?: string | null
+          location_coordinates?: Json | null
+          location_deck?: string | null
+          maintenance_interval_days?: number | null
+          maintenance_interval_hours?: number | null
+          manufacturer?: string | null
+          metadata?: Json | null
+          model?: string | null
+          model_3d_url?: string | null
+          name?: string
+          name_pt?: string | null
+          next_maintenance?: string | null
+          operating_hours?: number | null
+          organization_id?: string | null
+          parent_id?: string | null
+          part_number?: string
+          qr_code?: string | null
+          related_manuals?: string[] | null
+          replacement_cost?: number | null
+          serial_number?: string | null
+          spare_parts?: Json | null
+          specifications?: Json | null
+          status?: string | null
+          subcategory?: string | null
+          updated_at?: string | null
+          vessel_id?: string
+          warranty_expires?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_parts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_parts_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_parts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_performance: {
         Row: {
           created_at: string
@@ -35430,6 +35991,81 @@ export type Database = {
           },
         ]
       }
+      vessel_plans: {
+        Row: {
+          approved_by: string | null
+          created_at: string | null
+          deck_level: string | null
+          file_type: string | null
+          file_url: string
+          id: string
+          interactive_data: Json | null
+          name: string
+          notes: string | null
+          organization_id: string | null
+          plan_type: string
+          revision: string | null
+          revision_date: string | null
+          scale: string | null
+          thumbnail_url: string | null
+          updated_at: string | null
+          vessel_id: string
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string | null
+          deck_level?: string | null
+          file_type?: string | null
+          file_url: string
+          id?: string
+          interactive_data?: Json | null
+          name: string
+          notes?: string | null
+          organization_id?: string | null
+          plan_type: string
+          revision?: string | null
+          revision_date?: string | null
+          scale?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          vessel_id: string
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string | null
+          deck_level?: string | null
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          interactive_data?: Json | null
+          name?: string
+          notes?: string | null
+          organization_id?: string | null
+          plan_type?: string
+          revision?: string | null
+          revision_date?: string | null
+          scale?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_plans_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_positions: {
         Row: {
           course: number | null
@@ -35493,6 +36129,328 @@ export type Database = {
             foreignKeyName: "vessel_positions_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_qr_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          id: string
+          last_scanned_at: string | null
+          scan_count: number | null
+          short_url: string | null
+          target_id: string
+          target_type: string
+          vessel_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          id?: string
+          last_scanned_at?: string | null
+          scan_count?: number | null
+          short_url?: string | null
+          target_id: string
+          target_type: string
+          vessel_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          id?: string
+          last_scanned_at?: string | null
+          scan_count?: number | null
+          short_url?: string | null
+          target_id?: string
+          target_type?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_qr_codes_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_sensor_readings: {
+        Row: {
+          id: string
+          latitude: number | null
+          longitude: number | null
+          recorded_at: string
+          sensor_id: string
+          status: string | null
+          unit: string | null
+          value: number
+          vessel_id: string
+        }
+        Insert: {
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          recorded_at?: string
+          sensor_id: string
+          status?: string | null
+          unit?: string | null
+          value: number
+          vessel_id: string
+        }
+        Update: {
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          recorded_at?: string
+          sensor_id?: string
+          status?: string | null
+          unit?: string | null
+          value?: number
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_sensor_readings_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_sensors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_sensors: {
+        Row: {
+          calibration_date: string | null
+          calibration_due: string | null
+          created_at: string | null
+          critical_threshold_high: number | null
+          critical_threshold_low: number | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          manufacturer: string | null
+          max_value: number | null
+          metadata: Json | null
+          min_value: number | null
+          model: string | null
+          mqtt_topic: string | null
+          name: string
+          organization_id: string | null
+          part_id: string | null
+          polling_interval_seconds: number | null
+          sensor_type: string
+          serial_number: string | null
+          unit: string
+          updated_at: string | null
+          vessel_id: string
+          warning_threshold_high: number | null
+          warning_threshold_low: number | null
+        }
+        Insert: {
+          calibration_date?: string | null
+          calibration_due?: string | null
+          created_at?: string | null
+          critical_threshold_high?: number | null
+          critical_threshold_low?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          manufacturer?: string | null
+          max_value?: number | null
+          metadata?: Json | null
+          min_value?: number | null
+          model?: string | null
+          mqtt_topic?: string | null
+          name: string
+          organization_id?: string | null
+          part_id?: string | null
+          polling_interval_seconds?: number | null
+          sensor_type: string
+          serial_number?: string | null
+          unit: string
+          updated_at?: string | null
+          vessel_id: string
+          warning_threshold_high?: number | null
+          warning_threshold_low?: number | null
+        }
+        Update: {
+          calibration_date?: string | null
+          calibration_due?: string | null
+          created_at?: string | null
+          critical_threshold_high?: number | null
+          critical_threshold_low?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          manufacturer?: string | null
+          max_value?: number | null
+          metadata?: Json | null
+          min_value?: number | null
+          model?: string | null
+          mqtt_topic?: string | null
+          name?: string
+          organization_id?: string | null
+          part_id?: string | null
+          polling_interval_seconds?: number | null
+          sensor_type?: string
+          serial_number?: string | null
+          unit?: string
+          updated_at?: string | null
+          vessel_id?: string
+          warning_threshold_high?: number | null
+          warning_threshold_low?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_sensors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_sensors_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_sensors_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_specifications: {
+        Row: {
+          auxiliary_engines: Json | null
+          ballast_capacity: number | null
+          beam: number | null
+          build_year: number | null
+          builder: string | null
+          cargo_capacity: number | null
+          certifications: Json | null
+          class_notation: string | null
+          classification_society: string | null
+          communication_equipment: Json | null
+          created_at: string | null
+          crew_capacity: number | null
+          deadweight: number | null
+          depth: number | null
+          draft: number | null
+          fresh_water_capacity: number | null
+          fuel_capacity: number | null
+          gross_tonnage: number | null
+          hull_material: string | null
+          id: string
+          last_dry_dock: string | null
+          length_overall: number | null
+          main_engine_power: string | null
+          main_engine_type: string | null
+          navigation_equipment: Json | null
+          net_tonnage: number | null
+          next_dry_dock: string | null
+          passenger_capacity: number | null
+          propulsion_type: string | null
+          range_nautical_miles: number | null
+          safety_equipment: Json | null
+          special_features: Json | null
+          speed_economic: number | null
+          speed_max: number | null
+          speed_service: number | null
+          updated_at: string | null
+          vessel_id: string
+        }
+        Insert: {
+          auxiliary_engines?: Json | null
+          ballast_capacity?: number | null
+          beam?: number | null
+          build_year?: number | null
+          builder?: string | null
+          cargo_capacity?: number | null
+          certifications?: Json | null
+          class_notation?: string | null
+          classification_society?: string | null
+          communication_equipment?: Json | null
+          created_at?: string | null
+          crew_capacity?: number | null
+          deadweight?: number | null
+          depth?: number | null
+          draft?: number | null
+          fresh_water_capacity?: number | null
+          fuel_capacity?: number | null
+          gross_tonnage?: number | null
+          hull_material?: string | null
+          id?: string
+          last_dry_dock?: string | null
+          length_overall?: number | null
+          main_engine_power?: string | null
+          main_engine_type?: string | null
+          navigation_equipment?: Json | null
+          net_tonnage?: number | null
+          next_dry_dock?: string | null
+          passenger_capacity?: number | null
+          propulsion_type?: string | null
+          range_nautical_miles?: number | null
+          safety_equipment?: Json | null
+          special_features?: Json | null
+          speed_economic?: number | null
+          speed_max?: number | null
+          speed_service?: number | null
+          updated_at?: string | null
+          vessel_id: string
+        }
+        Update: {
+          auxiliary_engines?: Json | null
+          ballast_capacity?: number | null
+          beam?: number | null
+          build_year?: number | null
+          builder?: string | null
+          cargo_capacity?: number | null
+          certifications?: Json | null
+          class_notation?: string | null
+          classification_society?: string | null
+          communication_equipment?: Json | null
+          created_at?: string | null
+          crew_capacity?: number | null
+          deadweight?: number | null
+          depth?: number | null
+          draft?: number | null
+          fresh_water_capacity?: number | null
+          fuel_capacity?: number | null
+          gross_tonnage?: number | null
+          hull_material?: string | null
+          id?: string
+          last_dry_dock?: string | null
+          length_overall?: number | null
+          main_engine_power?: string | null
+          main_engine_type?: string | null
+          navigation_equipment?: Json | null
+          net_tonnage?: number | null
+          next_dry_dock?: string | null
+          passenger_capacity?: number | null
+          propulsion_type?: string | null
+          range_nautical_miles?: number | null
+          safety_equipment?: Json | null
+          special_features?: Json | null
+          speed_economic?: number | null
+          speed_max?: number | null
+          speed_service?: number | null
+          updated_at?: string | null
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_specifications_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: true
             referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
@@ -38102,6 +39060,10 @@ export type Database = {
         Returns: boolean
       }
       has_finance_access: { Args: { _user_id: string }; Returns: boolean }
+      has_module_access: {
+        Args: { p_module_slug: string; p_organization_id: string }
+        Returns: boolean
+      }
       has_permission: {
         Args: {
           permission_name: string
