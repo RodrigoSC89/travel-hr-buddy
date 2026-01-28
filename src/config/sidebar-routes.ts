@@ -440,6 +440,23 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Production Deploy", path: "/production-deploy", icon: Zap, emoji: "🚀" },
     ],
   },
+  
+  // ============================================
+  // 🛠️ ADMINISTRAÇÃO & INFRAESTRUTURA (v4.0)
+  // ============================================
+  {
+    title: "🛠️ Admin & Infraestrutura",
+    defaultOpen: false,
+    requiredRoles: ['admin'],
+    items: [
+      { label: "🚀 DevOps Dashboard", path: "/admin/devops", icon: Server, emoji: "🚀", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
+      { label: "🧠 ML & Analytics", path: "/admin/ml-analytics", icon: Brain, emoji: "🧠", badge: "ML", status: "new", requiredRoles: ['admin'] },
+      { label: "⚡ Scaling & Load", path: "/admin/scaling", icon: Zap, emoji: "⚡", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
+      { label: "🧪 QA & Testing", path: "/admin/qa-testing", icon: Target, emoji: "🧪", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
+      { label: "📚 Documentation Hub", path: "/admin/documentation", icon: BookOpen, emoji: "📚", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
+      { label: "🎧 Support Center", path: "/admin/support", icon: MessageSquare, emoji: "🎧", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
+    ],
+  },
 ];
 
 /**

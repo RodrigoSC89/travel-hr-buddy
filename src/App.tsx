@@ -247,6 +247,14 @@ const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 const Admin = lazy(() => import("@/pages/Admin"));
 // Dashboard, ExecutiveDashboard, Analytics → CentralComando/AnalyticsCommandCenter
 
+// Admin Dashboards - Infraestrutura v4.0
+const DevOpsDashboard = lazy(() => import("@/pages/admin/DevOpsDashboard"));
+const MLAnalyticsDashboard = lazy(() => import("@/pages/admin/MLAnalyticsDashboard"));
+const ScalingDashboard = lazy(() => import("@/pages/admin/ScalingDashboard"));
+const QATestingDashboard = lazy(() => import("@/pages/admin/QATestingDashboard"));
+const AdminDocumentationHub = lazy(() => import("@/pages/admin/DocumentationHub"));
+const AdminSupportCenter = lazy(() => import("@/pages/admin/SupportCenter"));
+
 // Query client - otimizado para conexões lentas/satélite
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -655,6 +663,16 @@ const AppRoutes = () => (
       <Route path="/testing" element={<CentralComando />} />
       <Route path="/feedback" element={<CentralComando />} />
       <Route path="/saas-manager" element={<Admin />} />
+      
+      {/* ============================================ */}
+      {/* ADMIN - INFRAESTRUTURA v4.0 */}
+      {/* ============================================ */}
+      <Route path="/admin/devops" element={<DevOpsDashboard />} />
+      <Route path="/admin/ml-analytics" element={<MLAnalyticsDashboard />} />
+      <Route path="/admin/scaling" element={<ScalingDashboard />} />
+      <Route path="/admin/qa-testing" element={<QATestingDashboard />} />
+      <Route path="/admin/documentation" element={<AdminDocumentationHub />} />
+      <Route path="/admin/support" element={<AdminSupportCenter />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
