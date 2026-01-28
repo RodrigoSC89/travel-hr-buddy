@@ -90,21 +90,18 @@ export class BlockchainAuditTrail {
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 
-      const insertPayload = {
-        user_id: user?.id || null,
-        action_type: params.action_type,
-        resource_type: params.resource_type,
-        resource_id: params.resource_id || null,
-        previous_hash: previousHash,
-        current_hash: currentHash,
-        changes: params.changes || null,
-        metadata: params.metadata || null,
-      };
-
-      // @ts-expect-error - dynamic insert based on schema
       const { data: insertedData, error } = await supabase
         .from("security_audit_chain")
-        .insert([insertPayload])
+        .insert({
+          user_id: user?.id || null,
+          action_type: params.action_type,
+          resource_type: params.resource_type,
+          resource_id: params.resource_id || null,
+          previous_hash: previousHash,
+          current_hash: currentHash,
+          changes: (params.changes || null) as import("@/integrations/supabase/types").Json,
+          metadata: (params.metadata || null) as import("@/integrations/supabase/types").Json,
+        })
         .select("id")
         .single();
 
