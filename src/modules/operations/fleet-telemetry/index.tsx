@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
+ * PATCH 901 - Removed @ts-nocheck - fleet_sensors table created
  */
 
 import React, { useState, useEffect } from "react";

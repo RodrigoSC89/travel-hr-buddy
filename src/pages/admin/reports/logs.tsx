@@ -1,8 +1,6 @@
-// @ts-nocheck
 /**
  * Restore Report Logs Page - PATCH 877
- * NOTE: @ts-nocheck needed - restore_report_logs table schema
- * doesn't match RestoreReportLog interface
+ * PATCH 901 - Removed @ts-nocheck - Uses type casting for dynamic tables
  * 
  * Features:
  * - Infinite scroll pagination (20 records per page)
@@ -89,34 +87,48 @@ export default function RestoreReportLogsPage() {
       const from = pageToFetch * 20;
       const to = from + 19;
 
-      // Use type assertion for tables not in generated types yet
-      let query = (supabase
-        .from("restore_report_logs" as never) as ReturnType<typeof supabase.from>)
-        .select("*", { count: "exact" });
+      // Use dynamic client helper for unmapped tables
+      const dynamicClient = supabase as unknown as { 
+        from: (table: string) => { 
+          select: (cols: string, opts?: { count: string }) => unknown 
+        } 
+      };
+
+      // Build query with proper chaining
+      const baseQuery = dynamicClient.from("restore_report_logs").select("*", { count: "exact" });
+      
+      // Apply filters using type assertion - chain operations
+      let queryBuilder = baseQuery as unknown as {
+        eq: (col: string, val: string) => unknown;
+        gte: (col: string, val: string) => unknown;
+        lte: (col: string, val: string) => unknown;
+        order: (col: string, opts: { ascending: boolean }) => unknown;
+        range: (from: number, to: number) => Promise<{ data: unknown[] | null; error: Error | null; count: number | null }>;
+      };
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
-        query = query.eq("status", statusFilter);
+        queryBuilder = queryBuilder.eq("status", statusFilter) as typeof queryBuilder;
       }
 
       // Apply date range filters
       if (startDate) {
-        query = query.gte("executed_at", new Date(startDate).toISOString());
+        queryBuilder = queryBuilder.gte("executed_at", new Date(startDate).toISOString()) as typeof queryBuilder;
       }
       if (endDate) {
         // Add one day to include the entire end date
         const endDateTime = new Date(endDate);
         endDateTime.setHours(23, 59, 59, 999);
-        query = query.lte("executed_at", endDateTime.toISOString());
+        queryBuilder = queryBuilder.lte("executed_at", endDateTime.toISOString()) as typeof queryBuilder;
       }
 
-      const { data, error: fetchError, count } = await query
-        .order("executed_at", { ascending: false })
+      const result = await (queryBuilder
+        .order("executed_at", { ascending: false }) as typeof queryBuilder)
         .range(from, to);
 
-      if (fetchError) throw fetchError;
+      if (result.error) throw result.error;
       
-      const newLogs = (data as RestoreReportLog[]) || [];
+      const newLogs = (result.data as unknown as RestoreReportLog[]) || [];
       
       if (reset) {
         setLogs(newLogs);
@@ -124,7 +136,7 @@ export default function RestoreReportLogsPage() {
         setLogs((prev) => [...prev, ...newLogs]);
       }
       
-      setTotalCount(count || 0);
+      setTotalCount(result.count || 0);
       setHasMore(newLogs.length === 20);
       
       if (!reset) {
