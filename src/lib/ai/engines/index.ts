@@ -48,8 +48,10 @@ export { smartOCREngine } from './smart-ocr-engine';
 // AGENTIC AI
 export { multiAgentOrchestrator } from './multi-agent-orchestrator';
 export type { Agent, AgentRole, Decision, DecisionType, Situation } from './multi-agent-orchestrator';
-export { selfHealingSystemEngine, type SystemComponent, type SystemHealth, type HealingReport } from './self-healing-system';
+export { selfHealingSystemEngine } from './self-healing-system';
+export type { SystemComponent, SystemHealth, HealingReport, HealingRule, HealthIssue } from './self-healing-system';
 export { blockchainAuditEngine } from './blockchain-audit';
+export type { AuditBlock, AuditEntry, AuditEntryType } from './blockchain-audit';
 
 // ENGINE REGISTRY
 export interface AIEngineInfo {

@@ -471,6 +471,8 @@ const AppRoutes = () => (
       <Route path="/ai-audit" element={<AIAudit />} />
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
       <Route path="/assistant/voice" element={<VoiceAssistant />} />
+      <Route path="/ai-intelligence-suite" element={<AIIntelligenceSuitePage />} />
+      <Route path="/ai-suite" element={<AIIntelligenceSuitePage />} />
       
       {/* ============================================ */}
       {/* INTELIGÊNCIA AVANÇADA */}
