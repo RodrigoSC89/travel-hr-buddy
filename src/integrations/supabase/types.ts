@@ -6866,6 +6866,65 @@ export type Database = {
         }
         Relationships: []
       }
+      collective_knowledge: {
+        Row: {
+          category: string
+          confidence: number | null
+          created_at: string | null
+          id: string
+          instance_id: string | null
+          is_replicated: boolean | null
+          is_validated: boolean | null
+          key: string
+          metadata: Json | null
+          organization_id: string | null
+          source_instance_id: string | null
+          updated_at: string | null
+          value: Json
+          version: number | null
+        }
+        Insert: {
+          category: string
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          instance_id?: string | null
+          is_replicated?: boolean | null
+          is_validated?: boolean | null
+          key: string
+          metadata?: Json | null
+          organization_id?: string | null
+          source_instance_id?: string | null
+          updated_at?: string | null
+          value?: Json
+          version?: number | null
+        }
+        Update: {
+          category?: string
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          instance_id?: string | null
+          is_replicated?: boolean | null
+          is_validated?: boolean | null
+          key?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          source_instance_id?: string | null
+          updated_at?: string | null
+          value?: Json
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collective_knowledge_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communication_channels: {
         Row: {
           created_at: string
@@ -9637,6 +9696,72 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      crew_health_records: {
+        Row: {
+          created_at: string | null
+          crew_member_id: string | null
+          health_status: string | null
+          id: string
+          metadata: Json | null
+          next_checkup_date: string | null
+          notes: string | null
+          organization_id: string | null
+          recommendations: Json | null
+          record_date: string
+          record_type: string
+          recorded_by: string | null
+          updated_at: string | null
+          vitals: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          crew_member_id?: string | null
+          health_status?: string | null
+          id?: string
+          metadata?: Json | null
+          next_checkup_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          record_date?: string
+          record_type?: string
+          recorded_by?: string | null
+          updated_at?: string | null
+          vitals?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          crew_member_id?: string | null
+          health_status?: string | null
+          id?: string
+          metadata?: Json | null
+          next_checkup_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          record_date?: string
+          record_type?: string
+          recorded_by?: string | null
+          updated_at?: string | null
+          vitals?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_health_records_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_health_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crew_learning_progress: {
         Row: {
@@ -24064,6 +24189,59 @@ export type Database = {
         }
         Relationships: []
       }
+      page_analytics: {
+        Row: {
+          avg_time_on_page: number | null
+          bounce_rate: number | null
+          conversions: number | null
+          created_at: string | null
+          exit_rate: number | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          page_path: string
+          period_end: string
+          period_start: string
+          sessions_count: number | null
+        }
+        Insert: {
+          avg_time_on_page?: number | null
+          bounce_rate?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          exit_rate?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          page_path: string
+          period_end: string
+          period_start: string
+          sessions_count?: number | null
+        }
+        Update: {
+          avg_time_on_page?: number | null
+          bounce_rate?: number | null
+          conversions?: number | null
+          created_at?: string | null
+          exit_rate?: number | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          page_path?: string
+          period_end?: string
+          period_start?: string
+          sessions_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_analytics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parameter_adjustments: {
         Row: {
           adjusted_by: string | null
@@ -25756,6 +25934,62 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      performance_metrics_web: {
+        Row: {
+          connection_type: string | null
+          created_at: string | null
+          cumulative_layout_shift: number | null
+          device_type: string | null
+          first_contentful_paint_ms: number | null
+          first_input_delay_ms: number | null
+          id: string
+          largest_contentful_paint_ms: number | null
+          metadata: Json | null
+          organization_id: string | null
+          page_load_ms: number | null
+          recorded_at: string | null
+          time_to_interactive_ms: number | null
+        }
+        Insert: {
+          connection_type?: string | null
+          created_at?: string | null
+          cumulative_layout_shift?: number | null
+          device_type?: string | null
+          first_contentful_paint_ms?: number | null
+          first_input_delay_ms?: number | null
+          id?: string
+          largest_contentful_paint_ms?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          page_load_ms?: number | null
+          recorded_at?: string | null
+          time_to_interactive_ms?: number | null
+        }
+        Update: {
+          connection_type?: string | null
+          created_at?: string | null
+          cumulative_layout_shift?: number | null
+          device_type?: string | null
+          first_contentful_paint_ms?: number | null
+          first_input_delay_ms?: number | null
+          id?: string
+          largest_contentful_paint_ms?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          page_load_ms?: number | null
+          recorded_at?: string | null
+          time_to_interactive_ms?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_metrics_web_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       performance_outliers: {
         Row: {
@@ -35728,6 +35962,74 @@ export type Database = {
         }
         Relationships: []
       }
+      user_sessions_analytics: {
+        Row: {
+          actions_count: number | null
+          browser: string | null
+          country_code: string | null
+          created_at: string | null
+          device_type: string | null
+          duration_seconds: number | null
+          end_time: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          metadata: Json | null
+          organization_id: string | null
+          os: string | null
+          pages_viewed: number | null
+          session_id: string | null
+          start_time: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actions_count?: number | null
+          browser?: string | null
+          country_code?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          duration_seconds?: number | null
+          end_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          os?: string | null
+          pages_viewed?: number | null
+          session_id?: string | null
+          start_time?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actions_count?: number | null
+          browser?: string | null
+          country_code?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          duration_seconds?: number | null
+          end_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          os?: string | null
+          pages_viewed?: number | null
+          session_id?: string | null
+          start_time?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_sessions_analytics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_settings: {
         Row: {
           created_at: string
@@ -39453,6 +39755,72 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "webhooks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellbeing_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          crew_member_id: string | null
+          description: string | null
+          detected_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          description?: string | null
+          detected_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          description?: string | null
+          detected_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          status?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellbeing_alerts_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellbeing_alerts_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
