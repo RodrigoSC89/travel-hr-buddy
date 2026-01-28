@@ -1,10 +1,8 @@
 // @ts-nocheck
+// Technical Debt: crew_rotations insert type expects array, status variants mismatch,
+// and DnD onDrop callback typing conflicts. Requires refactor to .insert([{...}]).
 /**
  * PATCH 873 - Crew Management - Rotation & Alerts
- * 
- * NOTE: @ts-nocheck required - crew_rotations insert expects array,
- * status variants don't match, and onDrop callback typing conflicts.
- * Requires refactoring of insert patterns to use .insert([{...}]).
  */
 
 import React, { useState, useEffect, useCallback } from "react";

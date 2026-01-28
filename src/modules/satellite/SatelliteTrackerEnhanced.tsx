@@ -1,10 +1,8 @@
 // @ts-nocheck
+// Technical Debt: satellite_tracks and satellite_coverage_events tables exist in migrations
+// but are not in auto-generated Supabase types. Requires schema regeneration.
 /**
  * SatelliteTrackerEnhanced - Real-time satellite tracking module
- * 
- * @ts-nocheck: Required due to unmapped tables (satellite_coverage_events, satellite_tracks)
- * These tables exist in migrations but are not included in the auto-generated Supabase types.
- * TODO: Add types to dynamic-tables.ts or wait for next schema regeneration.
  */
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

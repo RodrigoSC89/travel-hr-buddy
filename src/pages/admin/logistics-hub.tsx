@@ -1,8 +1,9 @@
 // @ts-nocheck
+// Technical Debt: logistics_requests and logistics_inventory tables have schema differences
+// (columns: material_name, stock_status, reorder_level missing in auto-generated types)
 /**
  * Logistics Hub - PATCH 877
- * NOTE: @ts-nocheck needed - logistics_requests and inventory_items
- * have different column names than local interfaces
+ * Logistics requests and inventory management
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

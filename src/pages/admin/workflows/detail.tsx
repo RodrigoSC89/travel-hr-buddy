@@ -1,7 +1,8 @@
 // @ts-nocheck
+// Technical Debt: smart_workflow_steps schema mismatch with local WorkflowStep interface
+// (fields: name, title, step_number, position not aligned)
 /**
  * Workflow Detail Page - PATCH 877
- * @ts-nocheck: smart_workflow_steps schema mismatch with local WorkflowStep interface
  */
 "use client";
 
