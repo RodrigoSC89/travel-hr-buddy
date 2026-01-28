@@ -89,7 +89,9 @@ export function VoiceAssistantWithHotword({
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
-      } catch (e) {}
+      } catch {
+        // Speech recognition already stopped - ignore
+      }
       recognitionRef.current = null;
     }
     if (audioContextRef.current) {
@@ -180,7 +182,9 @@ export function VoiceAssistantWithHotword({
       if (isListeningForHotword && !isActive && recognitionRef.current) {
         try {
           recognitionRef.current.start();
-        } catch (e) {}
+        } catch {
+          // Recognition already started or unavailable - ignore
+        }
       }
     };
 
@@ -222,7 +226,9 @@ export function VoiceAssistantWithHotword({
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
       osc.start();
       osc.stop(ctx.currentTime + 0.3);
-    } catch (e) {}
+    } catch {
+      // AudioContext not available (likely server-side or unsupported browser)
+    }
   };
 
   const startCommandListening = async () => {
@@ -266,7 +272,9 @@ export function VoiceAssistantWithHotword({
     setTimeout(() => {
       try {
         if (recognitionRef.current) recognitionRef.current.stop();
-      } catch (e) {}
+      } catch {
+        // Recognition already stopped - ignore
+      }
     }, 10000);
   };
 

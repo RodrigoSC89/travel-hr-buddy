@@ -1,12 +1,8 @@
 /**
  * Hook to fetch restore logs summary data
  * 
- * DISABLED: Requires database tables that don't exist yet:
- * - document_restore_logs table
- * - get_restore_summary RPC function
- * - get_restore_count_by_day_with_email RPC function
- * 
- * TODO: Create proper database schema before enabling this hook
+ * Note: Requires document_restore_logs table and related RPCs.
+ * Returns mock data until database schema is fully configured.
  */
 
 interface RestoreSummary {
