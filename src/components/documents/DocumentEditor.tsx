@@ -1,8 +1,7 @@
 /**
- * PATCH 851 - Document Editor Component
- * @ts-nocheck - Required: document_versions table uses dynamic schema
+ * PATCH 879 - Document Editor Component
+ * Type-safe document editor with auto-save
  */
-// @ts-nocheck
 "use client";
 
 import * as React from "react";
@@ -27,11 +26,6 @@ interface Version {
   content: string;
   saved_at: string;
 }
-
-// Dynamic DB access for tables not in schema - using any to bypass strict typing
-const dynamicDb = {
-  from: (table: string) => supabase.from(table as "ai_generated_documents")
-};
 
 export function DocumentEditor({ 
   documentId, 
@@ -74,27 +68,34 @@ export function DocumentEditor({
     setSaving(true);
     try {
       // Save to main documents table
-      const { error: docError } = await dynamicDb
+      const { error: docError } = await supabase
         .from("ai_generated_documents")
-        .upsert({
-          id: documentId,
+        .update({
           content: contentToSave,
           title,
-          updated_by: user.id,
-        });
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", documentId);
 
       if (docError) throw docError;
 
-      // Save to version history
-      const { error: versionError } = await dynamicDb
+      // Save to version history using the correct schema
+      // document_versions requires: file_path (required), version (required)
+      const versionNumber = versionRef.current.length + 1;
+      const { error: versionError } = await supabase
         .from("document_versions")
         .insert({
+          file_path: `documents/${documentId}/v${versionNumber}`,
+          version: versionNumber,
           document_id: documentId,
-          content: contentToSave,
-          updated_by: user.id,
+          change_summary: "Auto-save",
+          changed_by: user.id,
+          document_snapshot: { content: contentToSave, title },
         });
 
-      if (versionError) throw versionError;
+      if (versionError) {
+        logger.warn("Version save failed:", versionError);
+      }
 
       // Track version locally
       versionRef.current.push({ 
@@ -145,26 +146,28 @@ export function DocumentEditor({
 
       if (!currentDocId) {
         // Create new document
-        const { data, error } = await dynamicDb
+        const { data, error } = await supabase
           .from("ai_generated_documents")
           .insert({
             title: title.trim(),
             content,
-            generated_by: user.id,
+            document_type: "manual",
+            status: "draft",
+            created_by: user.id,
           })
           .select()
           .single();
 
         if (error) throw error;
-        currentDocId = (data as { id: string }).id;
+        currentDocId = data.id;
       } else {
         // Update existing document
-        const { error: docError } = await dynamicDb
+        const { error: docError } = await supabase
           .from("ai_generated_documents")
           .update({
             title: title.trim(),
             content,
-            updated_by: user.id,
+            updated_at: new Date().toISOString(),
           })
           .eq("id", currentDocId);
 
@@ -172,15 +175,21 @@ export function DocumentEditor({
       }
 
       // Save to version history
-      const { error: versionError } = await dynamicDb
+      const versionNumber = versionRef.current.length + 1;
+      const { error: versionError } = await supabase
         .from("document_versions")
         .insert({
+          file_path: `documents/${currentDocId}/v${versionNumber}`,
+          version: versionNumber,
           document_id: currentDocId,
-          content,
-          updated_by: user.id,
+          change_summary: "Manual save",
+          changed_by: user.id,
+          document_snapshot: { content, title: title.trim() },
         });
 
-      if (versionError) throw versionError;
+      if (versionError) {
+        logger.warn("Version save failed:", versionError);
+      }
 
       // Track version locally
       versionRef.current.push({ 
