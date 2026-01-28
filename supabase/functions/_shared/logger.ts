@@ -183,3 +183,14 @@ export function log(
       console.log(output);
   }
 }
+
+/**
+ * Singleton edge logger for simple use cases
+ * Pre-configured for quick logging without creating a new instance
+ */
+export const edgeLogger = {
+  debug: (message: string, data?: Record<string, unknown>) => log('debug', 'edge-function', message, data),
+  info: (message: string, data?: Record<string, unknown>) => log('info', 'edge-function', message, data),
+  warn: (message: string, data?: Record<string, unknown>) => log('warn', 'edge-function', message, data),
+  error: (message: string, data?: Record<string, unknown>) => log('error', 'edge-function', message, data),
+};

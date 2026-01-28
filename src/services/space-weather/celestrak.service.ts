@@ -401,6 +401,13 @@ export function calculateVisibility(
     else if (element.OBJECT_NAME.includes('GLONASS')) constellation = 'GLONASS';
     else if (element.OBJECT_NAME.includes('BEIDOU')) constellation = 'BEIDOU';
     
+    // Calculate Doppler shift from velocity (simplified formula)
+    // Doppler = (v_radial / c) * frequency, approximated in Hz/km
+    const radialVelocity = state.velocity 
+      ? Math.sqrt(state.velocity.x ** 2 + state.velocity.y ** 2 + state.velocity.z ** 2) * Math.cos(aer.elevation * Math.PI / 180)
+      : 0;
+    const dopplerShift = radialVelocity * 5.25; // Approximation for L1 band (1575.42 MHz)
+    
     visibility.push({
       satellite_id: element.NORAD_CAT_ID.toString(),
       satellite_name: element.OBJECT_NAME,
@@ -408,7 +415,7 @@ export function calculateVisibility(
       elevation: aer.elevation,
       azimuth: aer.azimuth,
       range: aer.range,
-      doppler: 0, // TODO: Calculate from velocity
+      doppler: Math.round(dopplerShift),
       visible: aer.elevation >= maskAngle,
       timestamp: time.toISOString(),
     });
