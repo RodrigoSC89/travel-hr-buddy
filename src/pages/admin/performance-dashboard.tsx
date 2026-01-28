@@ -1,8 +1,6 @@
-// @ts-nocheck
-// Technical Debt: Type mismatch between PerformanceMetric local interface and PerformanceMetricRow
-// from Supabase. Fields like 'status', 'metric_unit' need alignment.
 /**
- * Performance Dashboard - PATCH 877
+ * Performance Dashboard - PATCH 879
+ * Type-safe with proper Supabase schema alignment
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Activity, AlertTriangle, TrendingUp, TrendingDown, Monitor, Bell } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Activity, AlertTriangle, TrendingUp, Monitor, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
@@ -46,7 +45,7 @@ interface PerformanceAlert {
   created_at: string | null;
 }
 
-// Mapper functions
+// Type-safe mapper functions
 function mapMetricRow(row: PerformanceMetricRow): PerformanceMetric {
   return {
     id: row.id,
@@ -77,9 +76,9 @@ function mapAlertRow(row: PerformanceAlertRow): PerformanceAlert {
 // Severity color helper using design tokens
 const getSeverityBadge = (severity: string | null): "default" | "secondary" | "destructive" | "outline" => {
   switch (severity) {
-    case "critical": return "destructive";
-    case "warning": return "secondary";
-    default: return "outline";
+  case "critical": return "destructive";
+  case "warning": return "secondary";
+  default: return "outline";
   }
 };
 
@@ -194,7 +193,7 @@ export default function PerformanceDashboard() {
     return true;
   });
 
-  const uniquePages = [...new Set(metrics.map(m => m.page_url).filter(Boolean))];
+  const uniquePages = [...new Set(metrics.map(m => m.page_url).filter(Boolean))] as string[];
   const uniqueMetricNames = [...new Set(metrics.map(m => m.metric_name))];
   const unresolvedAlerts = alerts.filter(a => !a.is_resolved);
 
@@ -267,7 +266,7 @@ export default function PerformanceDashboard() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-warning" />
+              <AlertTriangle className="h-5 w-5 text-yellow-500" />
               <div>
                 <p className="text-2xl font-bold">{unresolvedAlerts.length}</p>
                 <p className="text-xs text-muted-foreground">Active Alerts</p>
@@ -278,7 +277,7 @@ export default function PerformanceDashboard() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-success" />
+              <TrendingUp className="h-5 w-5 text-green-500" />
               <div>
                 <p className="text-2xl font-bold">{uniquePages.length}</p>
                 <p className="text-xs text-muted-foreground">Pages Tracked</p>
@@ -324,8 +323,8 @@ export default function PerformanceDashboard() {
                     <SelectContent>
                       <SelectItem value="all">All Pages</SelectItem>
                       {uniquePages.map(page => (
-                        <SelectItem key={page} value={page ?? "unknown"}>
-                          {page?.replace(/^\//, "") || "Home"}
+                        <SelectItem key={page} value={page}>
+                          {page.replace(/^\//, "") || "Home"}
                         </SelectItem>
                       ))}
                     </SelectContent>
