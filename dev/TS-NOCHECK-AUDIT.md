@@ -1,11 +1,16 @@
 # Technical Debt: @ts-nocheck Files
 
-> **Updated:** 2026-01-27 | PATCH 877
+> **Updated:** 2026-01-28 | PATCH 878
 
 ## Summary
-- **Total @ts-nocheck files in src/**: 45 files (documented with specific reasons)
+- **Total @ts-nocheck files in src/**: 42 files (-3 resolved)
 - **Edge Functions (supabase/functions/)**: ~50 files (Deno environment - acceptable)
 - **Test files (src/tests/, tests/)**: ~100 files (by design)
+
+## PATCH 878 Updates - Files Fixed
+- `src/components/logistics/logistics-hub-dashboard.tsx` - Using Database types directly
+- `src/modules/operational-calendar/index.tsx` - Added proper typing for calendar events
+- `src/modules/incident-reports/services/incidentReplayService.ts` - Using Database types directly
 
 ---
 

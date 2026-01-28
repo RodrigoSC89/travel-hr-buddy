@@ -1,12 +1,11 @@
-// @ts-nocheck
 /**
- * PATCH 877 - CALENDÁRIO OPERACIONAL UNIFICADO
- * @ts-nocheck: react-big-calendar types + CalendarEvent type coercion
+ * PATCH 878 - CALENDÁRIO OPERACIONAL UNIFICADO
+ * Type-safe implementation
  */
 
-import React, { useState, useEffect, useMemo } from "react";
-import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay, addDays, addHours, isSameDay } from "date-fns";
+import React, { useState, useMemo } from "react";
+import { Calendar, dateFnsLocalizer, Views, type View } from "react-big-calendar";
+import { format, parse, startOfWeek, getDay, addDays, addHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -32,7 +31,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 import {
   CalendarDays,
   Ship,
@@ -51,6 +49,7 @@ import {
   CheckCircle,
   XCircle
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const locales = { "pt-BR": ptBR };
 const localizer = dateFnsLocalizer({
@@ -61,16 +60,20 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+type EventType = "maintenance" | "inspection" | "crew" | "voyage" | "compliance" | "training" | "other";
+type EventPriority = "high" | "medium" | "low";
+type EventStatus = "scheduled" | "in_progress" | "completed" | "cancelled";
+
 interface CalendarEvent {
   id: string;
   title: string;
   start: Date;
   end: Date;
-  type: "maintenance" | "inspection" | "crew" | "voyage" | "compliance" | "training" | "other";
+  type: EventType;
   vessel?: string;
   description?: string;
-  priority: "high" | "medium" | "low";
-  status: "scheduled" | "in_progress" | "completed" | "cancelled";
+  priority: EventPriority;
+  status: EventStatus;
   aiSuggested?: boolean;
   conflict?: boolean;
 }
@@ -179,12 +182,20 @@ const OperationalCalendar = () => {
   const [filterVessel, setFilterVessel] = useState<string>("all");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
-  const [newEvent, setNewEvent] = useState({
+  const [newEvent, setNewEvent] = useState<{
+    title: string;
+    type: EventType;
+    vessel: string;
+    description: string;
+    priority: EventPriority;
+    start: Date;
+    end: Date;
+  }>({
     title: "",
-    type: "other",
+    type: "other" as EventType,
     vessel: "",
     description: "",
-    priority: "medium",
+    priority: "medium" as EventPriority,
     start: new Date(),
     end: addHours(new Date(), 2),
   });
@@ -266,10 +277,10 @@ const OperationalCalendar = () => {
     setShowNewEventDialog(false);
     setNewEvent({
       title: "",
-      type: "other",
+      type: "other" as EventType,
       vessel: "",
       description: "",
-      priority: "medium",
+      priority: "medium" as EventPriority,
       start: new Date(),
       end: addHours(new Date(), 2),
     });
@@ -522,7 +533,7 @@ const OperationalCalendar = () => {
                   <Label>Tipo</Label>
                   <Select 
                     value={newEvent.type} 
-                    onValueChange={(v) => setNewEvent(prev => ({ ...prev, type: v }))}
+                    onValueChange={(v) => setNewEvent(prev => ({ ...prev, type: v as EventType }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -538,7 +549,7 @@ const OperationalCalendar = () => {
                   <Label>Prioridade</Label>
                   <Select 
                     value={newEvent.priority} 
-                    onValueChange={(v) => setNewEvent(prev => ({ ...prev, priority: v }))}
+                    onValueChange={(v) => setNewEvent(prev => ({ ...prev, priority: v as EventPriority }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
