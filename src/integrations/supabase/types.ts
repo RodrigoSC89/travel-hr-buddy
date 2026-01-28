@@ -283,39 +283,48 @@ export type Database = {
       active_sessions: {
         Row: {
           created_at: string
+          device_fingerprint: string | null
           device_info: Json | null
           expires_at: string
           id: string
           ip_address: unknown
           is_active: boolean | null
           last_activity: string
+          mfa_verified: boolean | null
           refresh_token: string | null
+          security_level: string | null
           session_token: string
           user_agent: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
+          device_fingerprint?: string | null
           device_info?: Json | null
           expires_at: string
           id?: string
           ip_address?: unknown
           is_active?: boolean | null
           last_activity?: string
+          mfa_verified?: boolean | null
           refresh_token?: string | null
+          security_level?: string | null
           session_token: string
           user_agent?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
+          device_fingerprint?: string | null
           device_info?: Json | null
           expires_at?: string
           id?: string
           ip_address?: unknown
           is_active?: boolean | null
           last_activity?: string
+          mfa_verified?: boolean | null
           refresh_token?: string | null
+          security_level?: string | null
           session_token?: string
           user_agent?: string | null
           user_id?: string
@@ -3513,6 +3522,56 @@ export type Database = {
           },
         ]
       }
+      api_key_rotations: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string
+          id: string
+          key_hash: string
+          last_used_at: string | null
+          metadata: Json | null
+          organization_id: string
+          revoked_at: string | null
+          revoked_by: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at: string
+          id?: string
+          key_hash: string
+          last_used_at?: string | null
+          metadata?: Json | null
+          organization_id: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string
+          id?: string
+          key_hash?: string
+          last_used_at?: string | null
+          metadata?: Json | null
+          organization_id?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_key_rotations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_keys: {
         Row: {
           allowed_endpoints: string[] | null
@@ -4861,6 +4920,53 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blocked_entities: {
+        Row: {
+          attempt_count: number | null
+          blocked_at: string
+          created_by: string | null
+          entity_type: string
+          expires_at: string
+          id: string
+          identifier: string
+          metadata: Json | null
+          organization_id: string | null
+          reason: string
+        }
+        Insert: {
+          attempt_count?: number | null
+          blocked_at?: string
+          created_by?: string | null
+          entity_type: string
+          expires_at: string
+          id?: string
+          identifier: string
+          metadata?: Json | null
+          organization_id?: string | null
+          reason: string
+        }
+        Update: {
+          attempt_count?: number | null
+          blocked_at?: string
+          created_by?: string | null
+          entity_type?: string
+          expires_at?: string
+          id?: string
+          identifier?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocked_entities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -29018,6 +29124,65 @@ export type Database = {
           },
         ]
       }
+      security_audit_chain: {
+        Row: {
+          action_type: string
+          block_number: number
+          changes: Json | null
+          current_hash: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          organization_id: string | null
+          previous_hash: string | null
+          resource_id: string | null
+          resource_type: string
+          timestamp: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          block_number?: number
+          changes?: Json | null
+          current_hash: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          organization_id?: string | null
+          previous_hash?: string | null
+          resource_id?: string | null
+          resource_type: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          block_number?: number
+          changes?: Json | null
+          current_hash?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          organization_id?: string | null
+          previous_hash?: string | null
+          resource_id?: string | null
+          resource_type?: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_audit_chain_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       security_audit_logs: {
         Row: {
           action: string
@@ -36878,6 +37043,59 @@ export type Database = {
           },
         ]
       }
+      webhook_signatures: {
+        Row: {
+          algorithm: string | null
+          created_at: string
+          endpoint_url: string
+          expires_at: string | null
+          failure_count: number | null
+          id: string
+          is_active: boolean | null
+          last_used_at: string | null
+          metadata: Json | null
+          organization_id: string
+          secret_hash: string
+          success_count: number | null
+        }
+        Insert: {
+          algorithm?: string | null
+          created_at?: string
+          endpoint_url: string
+          expires_at?: string | null
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          organization_id: string
+          secret_hash: string
+          success_count?: number | null
+        }
+        Update: {
+          algorithm?: string | null
+          created_at?: string
+          endpoint_url?: string
+          expires_at?: string | null
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          organization_id?: string
+          secret_hash?: string
+          success_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_signatures_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wellness_plans: {
         Row: {
           created_at: string | null
@@ -37582,6 +37800,17 @@ export type Database = {
           },
         ]
       }
+      security_metrics: {
+        Row: {
+          active_blocks: number | null
+          active_sessions: number | null
+          audit_entries_24h: number | null
+          critical_events_24h: number | null
+          failed_logins_24h: number | null
+          successful_logins_24h: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       approve_autonomous_task: {
@@ -37589,6 +37818,16 @@ export type Database = {
         Returns: boolean
       }
       auto_mark_overdue_tasks: { Args: never; Returns: undefined }
+      calculate_audit_hash: {
+        Args: {
+          p_action_type: string
+          p_previous_hash: string
+          p_resource_type: string
+          p_timestamp: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       calculate_checklist_compliance_score: {
         Args: { checklist_items: Json }
         Returns: number
@@ -37627,6 +37866,7 @@ export type Database = {
         Args: { target_employee_id: string; user_uuid?: string }
         Returns: boolean
       }
+      can_insert_audit_record: { Args: never; Returns: boolean }
       can_manage_tenant: {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
@@ -38081,6 +38321,15 @@ export type Database = {
       validate_webhook_signature: {
         Args: { payload: string; secret: string; signature: string }
         Returns: boolean
+      }
+      verify_audit_chain_integrity: {
+        Args: never
+        Returns: {
+          broken_at_block: number
+          broken_at_id: string
+          is_valid: boolean
+          message: string
+        }[]
       }
     }
     Enums: {
