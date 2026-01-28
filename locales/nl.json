@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "Welkom",
+    "loading": "Laden...",
+    "error": "Fout",
+    "success": "Succes",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "create": "Maken",
+    "search": "Zoeken",
+    "filter": "Filteren",
+    "export": "Exporteren",
+    "import": "Importeren",
+    "close": "Sluiten",
+    "confirm": "Bevestigen",
+    "back": "Terug",
+    "next": "Volgende",
+    "submit": "Verzenden",
+    "clear": "Wissen"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "reports": "Rapporten",
+    "settings": "Instellingen",
+    "profile": "Profiel",
+    "logout": "Uitloggen",
+    "help": "Hulp"
+  },
+  "ai": {
+    "cognitive_feedback": "Cognitieve Feedback",
+    "weekly_report": "Wekelijks Rapport",
+    "insights": "Inzichten",
+    "patterns": "Patronen",
+    "acceptance_rate": "Acceptatiepercentage",
+    "rejection_rate": "Afwijzingspercentage",
+    "module_performance": "Moduleprestaties"
+  },
+  "maritime": {
+    "vessel": "Schip",
+    "fleet": "Vloot",
+    "compliance": "Naleving",
+    "mission_control": "Missiecontrole",
+    "logs_center": "Logboekcentrum",
+    "notifications": "Meldingen"
+  },
+  "units": {
+    "distance": "Afstand",
+    "temperature": "Temperatuur",
+    "volume": "Volume",
+    "kilometers": "Kilometers",
+    "miles": "Mijlen",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "liters": "Liters",
+    "gallons": "Gallons"
+  },
+  "time": {
+    "timezone": "Tijdzone",
+    "date": "Datum",
+    "time": "Tijd",
+    "datetime": "Datum & Tijd"
+  }
+}

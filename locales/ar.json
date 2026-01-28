@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "مرحباً",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "search": "بحث",
+    "filter": "تصفية",
+    "export": "تصدير",
+    "import": "استيراد",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "submit": "إرسال",
+    "clear": "مسح"
+  },
+  "navigation": {
+    "dashboard": "لوحة التحكم",
+    "reports": "التقارير",
+    "settings": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "help": "مساعدة"
+  },
+  "ai": {
+    "cognitive_feedback": "التغذية الراجعة المعرفية",
+    "weekly_report": "التقرير الأسبوعي",
+    "insights": "رؤى",
+    "patterns": "أنماط",
+    "acceptance_rate": "معدل القبول",
+    "rejection_rate": "معدل الرفض",
+    "module_performance": "أداء الوحدة"
+  },
+  "maritime": {
+    "vessel": "سفينة",
+    "fleet": "أسطول",
+    "compliance": "الامتثال",
+    "mission_control": "التحكم بالمهمة",
+    "logs_center": "مركز السجلات",
+    "notifications": "إشعارات"
+  },
+  "units": {
+    "distance": "المسافة",
+    "temperature": "درجة الحرارة",
+    "volume": "الحجم",
+    "kilometers": "كيلومترات",
+    "miles": "أميال",
+    "celsius": "مئوية",
+    "fahrenheit": "فهرنهايت",
+    "liters": "لترات",
+    "gallons": "جالونات"
+  },
+  "time": {
+    "timezone": "المنطقة الزمنية",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "datetime": "التاريخ والوقت"
+  }
+}
