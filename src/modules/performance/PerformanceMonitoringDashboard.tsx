@@ -1,7 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 877 - Performance Monitoring Dashboard
- * @ts-nocheck: performance_metrics DB schema has different columns than local interface
+ * Removed @ts-nocheck: Using dynamic-tables accessor for type-safe DB access
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,8 +16,14 @@ import {
   Gauge
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  performanceMetricsTable, 
+  performanceAlertsTable,
+  type PerformanceMetric as DBPerformanceMetric,
+  type PerformanceAlert as DBPerformanceAlert
+} from "@/lib/supabase/dynamic-tables";
+import { logger } from "@/lib/logger";
 
 interface PerformanceMetric {
   id: string;
@@ -39,6 +44,29 @@ interface AlertData {
   created_at: string;
 }
 
+function mapDbMetricToLocal(dbMetric: DBPerformanceMetric): PerformanceMetric {
+  return {
+    id: dbMetric.id,
+    system_name: dbMetric.category || 'system',
+    metric_name: dbMetric.metric_name,
+    metric_value: dbMetric.metric_value,
+    metric_unit: dbMetric.metric_unit || dbMetric.unit || '',
+    status: dbMetric.status,
+    created_at: dbMetric.created_at,
+  };
+}
+
+function mapDbAlertToLocal(dbAlert: DBPerformanceAlert): AlertData {
+  return {
+    id: dbAlert.id,
+    system_name: dbAlert.alert_type || 'system',
+    severity: dbAlert.severity,
+    message: dbAlert.message,
+    is_resolved: dbAlert.is_resolved ?? false,
+    created_at: dbAlert.created_at,
+  };
+}
+
 export const PerformanceMonitoringDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [alerts, setAlerts] = useState<AlertData[]>([]);
@@ -54,29 +82,34 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      // Fetch recent metrics
-      const { data: metricsData, error: metricsError } = await supabase
-        .from("performance_metrics")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
+      // Fetch recent metrics using type-safe accessor
+      const { data: metricsData, error: metricsError } = await performanceMetricsTable.select("*");
 
       if (metricsError) throw metricsError;
 
-      // Fetch active alerts
-      const { data: alertsData, error: alertsError } = await supabase
-        .from("performance_alerts")
-        .select("*")
-        .eq("is_resolved", false)
-        .order("created_at", { ascending: false });
+      // Fetch active alerts using type-safe accessor
+      const { data: alertsData, error: alertsError } = await performanceAlertsTable.selectWithFilter(
+        "*",
+        [{ column: "is_resolved", operator: "eq", value: false }]
+      );
 
       if (alertsError) throw alertsError;
 
-      setMetrics(metricsData || []);
-      setAlerts(alertsData || []);
+      // Map DB types to local types
+      const mappedMetrics = (metricsData || [])
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 100)
+        .map(mapDbMetricToLocal);
+      
+      const mappedAlerts = (alertsData || [])
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .map(mapDbAlertToLocal);
+
+      setMetrics(mappedMetrics);
+      setAlerts(mappedAlerts);
 
       // Show toast for new critical alerts
-      const criticalAlerts = alertsData?.filter((a) => a.severity === "critical") || [];
+      const criticalAlerts = mappedAlerts.filter((a) => a.severity === "critical");
       if (criticalAlerts.length > 0) {
         toast({
           title: "Critical Alert",
@@ -85,7 +118,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching performance data:", error);
+      logger.error("Error fetching performance data:", error);
     } finally {
       setLoading(false);
     }
