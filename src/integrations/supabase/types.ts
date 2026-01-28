@@ -13921,6 +13921,72 @@ export type Database = {
         }
         Relationships: []
       }
+      fleet_anomalies: {
+        Row: {
+          anomaly_type: string
+          created_at: string | null
+          description: string | null
+          detected_at: string | null
+          id: string
+          organization_id: string | null
+          resolution_notes: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          sensor_data: Json | null
+          severity: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          anomaly_type: string
+          created_at?: string | null
+          description?: string | null
+          detected_at?: string | null
+          id?: string
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          sensor_data?: Json | null
+          severity?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          anomaly_type?: string
+          created_at?: string | null
+          description?: string | null
+          detected_at?: string | null
+          id?: string
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          sensor_data?: Json | null
+          severity?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_anomalies_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fleet_anomalies_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fleet_logs: {
         Row: {
           created_at: string | null
@@ -17509,6 +17575,74 @@ export type Database = {
           },
         ]
       }
+      incident_actions: {
+        Row: {
+          action_type: string
+          assigned_to: string | null
+          assigned_to_name: string | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          evidence_files: Json | null
+          id: string
+          incident_id: string
+          notes: string | null
+          organization_id: string | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          action_type?: string
+          assigned_to?: string | null
+          assigned_to_name?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: Json | null
+          id?: string
+          incident_id: string
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          action_type?: string
+          assigned_to?: string | null
+          assigned_to_name?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: Json | null
+          id?: string
+          incident_id?: string
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_actions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incident_comments: {
         Row: {
           attachments: Json | null
@@ -17754,6 +17888,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "incident_runbooks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incident_signatures: {
+        Row: {
+          created_at: string | null
+          id: string
+          incident_id: string
+          ip_address: string | null
+          organization_id: string | null
+          signature_data: string | null
+          signed_at: string | null
+          signer_name: string
+          signer_role: string | null
+          user_agent: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          incident_id: string
+          ip_address?: string | null
+          organization_id?: string | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signer_name: string
+          signer_role?: string | null
+          user_agent?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          incident_id?: string
+          ip_address?: string | null
+          organization_id?: string | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signer_name?: string
+          signer_role?: string | null
+          user_agent?: string | null
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_signatures_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -30854,6 +31038,166 @@ export type Database = {
           },
           {
             foreignKeyName: "shipments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      simulation_decision_log: {
+        Row: {
+          created_at: string | null
+          decision_data: Json | null
+          decision_type: string
+          exercise_id: string | null
+          feedback: string | null
+          id: string
+          made_by: string | null
+          outcome: string | null
+          score: number | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          decision_data?: Json | null
+          decision_type: string
+          exercise_id?: string | null
+          feedback?: string | null
+          id?: string
+          made_by?: string | null
+          outcome?: string | null
+          score?: number | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          decision_data?: Json | null
+          decision_type?: string
+          exercise_id?: string | null
+          feedback?: string | null
+          id?: string
+          made_by?: string | null
+          outcome?: string | null
+          score?: number | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_decision_log_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "simulation_exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      simulation_event_log: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          event_id: string
+          event_type: string
+          exercise_id: string | null
+          id: string
+          severity: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          event_id: string
+          event_type: string
+          exercise_id?: string | null
+          id?: string
+          severity?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          event_id?: string
+          event_type?: string
+          exercise_id?: string | null
+          id?: string
+          severity?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_event_log_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "simulation_exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      simulation_exercises: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          exercise_type: string
+          frequency_days: number | null
+          id: string
+          last_executed: string | null
+          next_due: string | null
+          organization_id: string | null
+          participants: Json | null
+          results: Json | null
+          scenario: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          exercise_type?: string
+          frequency_days?: number | null
+          id?: string
+          last_executed?: string | null
+          next_due?: string | null
+          organization_id?: string | null
+          participants?: Json | null
+          results?: Json | null
+          scenario?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          exercise_type?: string
+          frequency_days?: number | null
+          id?: string
+          last_executed?: string | null
+          next_due?: string | null
+          organization_id?: string | null
+          participants?: Json | null
+          results?: Json | null
+          scenario?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_exercises_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "simulation_exercises_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
