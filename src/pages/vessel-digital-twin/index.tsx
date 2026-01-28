@@ -72,16 +72,65 @@ export default function VesselDigitalTwinPage() {
     );
   }
 
+  // Demo mode when no vessel selected
+  if (!vessel && !vesselId) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+          <CardHeader className="text-center">
+            <Ship className="h-20 w-20 mx-auto text-primary mb-4" />
+            <CardTitle className="text-2xl">Vessel Digital Twin</CardTitle>
+            <CardDescription className="text-lg">
+              Visualização 3D completa, manuais técnicos, sensores IoT e assistente IA
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <Package className="h-8 w-8 mx-auto text-primary mb-2" />
+                <p className="text-sm font-medium">Catálogo de Peças</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <FileText className="h-8 w-8 mx-auto text-primary mb-2" />
+                <p className="text-sm font-medium">Manuais Técnicos</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <Gauge className="h-8 w-8 mx-auto text-primary mb-2" />
+                <p className="text-sm font-medium">Sensores IoT</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <Bot className="h-8 w-8 mx-auto text-primary mb-2" />
+                <p className="text-sm font-medium">Assistente IA</p>
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              Selecione uma embarcação no menu lateral ou acesse via <code className="bg-muted px-2 py-1 rounded">/vessel-digital-twin/:vesselId</code>
+            </p>
+            <Button size="lg" asChild>
+              <a href="/fleet">
+                <Ship className="h-5 w-5 mr-2" />
+                Ir para Frota
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (!vessel) {
     return (
       <div className="container mx-auto p-6">
         <Card className="border-destructive">
           <CardContent className="pt-6 text-center">
-            <Ship className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+            <AlertTriangle className="h-16 w-16 mx-auto text-destructive mb-4" />
             <h2 className="text-xl font-semibold mb-2">Embarcação não encontrada</h2>
-            <p className="text-muted-foreground">
-              Selecione uma embarcação válida para visualizar o Digital Twin
+            <p className="text-muted-foreground mb-4">
+              A embarcação com ID <code className="bg-muted px-2 py-1 rounded">{vesselId}</code> não existe ou você não tem permissão para acessá-la.
             </p>
+            <Button variant="outline" asChild>
+              <a href="/fleet">Voltar para Frota</a>
+            </Button>
           </CardContent>
         </Card>
       </div>
