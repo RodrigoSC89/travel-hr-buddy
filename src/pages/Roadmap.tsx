@@ -447,7 +447,7 @@ export default function Roadmap() {
                   <li>✅ PWA com Service Worker v4 e offline completo</li>
                   <li>✅ IA integrada em todos os módulos principais</li>
                   <li>✅ Sistema de tripulação com certificações</li>
-                  <li>🔄 Remoção de @ts-nocheck em progresso (85%)</li>
+                  <li>✅ Remoção de @ts-nocheck completa (100%)</li>
                   <li>🔄 Testes E2E Playwright em desenvolvimento</li>
                   <li>🧪 IA de voz em beta testing</li>
                   <li>🧪 IA Autônoma Nível 2 em beta</li>
