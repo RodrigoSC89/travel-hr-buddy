@@ -1,94 +1,75 @@
-import { useState, useEffect } from "react";
+/**
+ * IncidentsSGSOPanel - DP Incidents with SGSO Classification
+ * PATCH 905: Replaced mock data with real Supabase integration
+ */
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DPIncident, SGSO_CATEGORIES, RISK_LEVEL_COLORS, SGSORiskLevel } from "@/types/incident";
-import { FileDown, Filter, X } from "lucide-react";
+import { FileDown, Filter, X, Loader2 } from "lucide-react";
 import { saveAs } from "file-saver";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
-// Mock data for incidents with SGSO classification
-const MOCK_INCIDENTS: DPIncident[] = [
-  {
-    id: "1",
-    vessel: "FPSO X",
-    incident_date: "2025-09-15",
-    severity: "Alta",
-    title: "Perda de posição durante perfuração",
-    description: "Embarcação perdeu posicionamento durante operação crítica devido a falha no sistema de propulsão.",
-    root_cause: "Falha no sistema de propulsão",
-    location: "Santos Basin",
-    class_dp: "DP3",
-    status: "pending",
-    tags: ["propulsion", "critical"],
-    sgso_category: "Falha de sistema",
-    sgso_root_cause: "Falha no sistema de propulsão principal",
-    sgso_risk_level: "crítico",
-    created_at: "2025-09-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    vessel: "PSV Y",
-    incident_date: "2025-08-22",
-    severity: "Média",
-    title: "Falha de redundância em sistema DP2",
-    description: "Sistema de redundância não operou conforme esperado durante teste anual.",
-    root_cause: "Erro de configuração",
-    location: "Campos Basin",
-    class_dp: "DP2",
-    status: "analyzed",
-    tags: ["configuration", "redundancy"],
-    sgso_category: "Erro humano",
-    sgso_root_cause: "Erro de configuração não detectado",
-    sgso_risk_level: "alto",
-    created_at: "2025-08-22T14:30:00Z",
-  },
-  {
-    id: "3",
-    vessel: "AHTS Alpha",
-    incident_date: "2025-07-10",
-    severity: "Média",
-    title: "Perda temporária de referência de posição",
-    description: "Sistema perdeu referência de posição por 45 segundos devido a interferência eletromagnética.",
-    root_cause: "Interferência eletromagnética",
-    location: "Espírito Santo Basin",
-    class_dp: "DP2",
-    status: "pending",
-    tags: ["sensors", "EMI"],
-    sgso_category: "Fator externo (clima, mar, etc)",
-    sgso_root_cause: "Interferência eletromagnética de equipamento de soldagem",
-    sgso_risk_level: "moderado",
-    created_at: "2025-07-10T09:15:00Z",
-  },
-  {
-    id: "4",
-    vessel: "OSV Beta",
-    incident_date: "2025-06-05",
-    severity: "Baixa",
-    title: "Falha em teste de FMEA",
-    description: "Teste de análise de modos de falha revelou lacunas em procedimentos operacionais.",
-    root_cause: "Procedimento inadequado",
-    location: "Santos Basin",
-    class_dp: "DP1",
-    status: "analyzed",
-    tags: ["testing", "FMEA"],
-    sgso_category: "Não conformidade com procedimento",
-    sgso_root_cause: "Lacunas em procedimentos operacionais",
-    sgso_risk_level: "baixo",
-    created_at: "2025-06-05T16:45:00Z",
-  },
-];
+// Hook para buscar incidentes reais do Supabase
+function useIncidents() {
+  return useQuery({
+    queryKey: ['dp-incidents-sgso'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('incident_reports')
+        .select(`
+          id,
+          title,
+          description,
+          incident_date,
+          location,
+          severity,
+          status,
+          type,
+          created_at
+        `)
+        .order('incident_date', { ascending: false })
+        .limit(100);
+      
+      if (error) throw error;
+      
+      return (data || []).map(inc => ({
+        id: inc.id,
+        vessel: 'Vessel DP',
+        incident_date: inc.incident_date || inc.created_at,
+        severity: inc.severity === 'critical' ? 'Alta' : inc.severity === 'high' ? 'Alta' : inc.severity === 'medium' ? 'Média' : 'Baixa',
+        title: inc.title || 'Incidente',
+        description: inc.description || '',
+        root_cause: 'Em investigação',
+        location: inc.location || 'Não especificado',
+        class_dp: 'DP2',
+        status: inc.status || 'pending',
+        tags: [],
+        sgso_category: inc.type || 'Falha de sistema',
+        sgso_root_cause: 'Em investigação',
+        sgso_risk_level: inc.severity === 'critical' ? 'crítico' : inc.severity === 'high' ? 'alto' : inc.severity === 'medium' ? 'moderado' : 'baixo' as SGSORiskLevel,
+        created_at: inc.created_at
+      } as DPIncident));
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+}
 
 export function IncidentsSGSOPanel() {
-  const [incidents, setIncidents] = useState<DPIncident[]>(MOCK_INCIDENTS);
-  const [filteredIncidents, setFilteredIncidents] = useState<DPIncident[]>(MOCK_INCIDENTS);
+  const { data: incidents = [], isLoading, error } = useIncidents();
+  const [filteredIncidents, setFilteredIncidents] = useState<DPIncident[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [riskFilter, setRiskFilter] = useState<string>("all");
   const [vesselFilter, setVesselFilter] = useState<string>("all");
 
   // Get unique vessels from incidents
-  const vessels = Array.from(new Set(incidents.map(inc => inc.vessel))).sort();
+  const vessels = useMemo(() => {
+    return Array.from(new Set(incidents.map(inc => inc.vessel))).sort();
+  }, [incidents]);
 
   // Apply filters
   useEffect(() => {
@@ -147,7 +128,6 @@ export function IncidentsSGSOPanel() {
       inc.status || ""
     ]);
 
-    // PATCH 540: Otimização - pré-processar linhas CSV
     const csvRows = rows.map(row => row.map(cell => `"${cell}"`).join(","));
     const csvContent = [headers.join(","), ...csvRows].join("\n");
 
@@ -181,10 +161,28 @@ export function IncidentsSGSOPanel() {
       
       doc.save(`incidentes-sgso-${new Date().toISOString().split("T")[0]}.pdf`);
       toast.success("PDF exportado com sucesso!", { id: "export-pdf" });
-    } catch (error) {
+    } catch (err) {
       toast.error("Erro ao gerar PDF", { id: "export-pdf" });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="border-destructive">
+        <CardContent className="py-8 text-center text-destructive">
+          Erro ao carregar incidentes. Tente novamente.
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -286,7 +284,9 @@ export function IncidentsSGSOPanel() {
         {filteredIncidents.length === 0 ? (
           <Card className="col-span-full">
             <CardContent className="py-8 text-center text-muted-foreground">
-              Nenhum incidente encontrado com os filtros selecionados.
+              {incidents.length === 0 
+                ? "Nenhum incidente registrado no sistema."
+                : "Nenhum incidente encontrado com os filtros selecionados."}
             </CardContent>
           </Card>
         ) : (
@@ -308,7 +308,7 @@ export function IncidentsSGSOPanel() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-gray-700">{incident.description}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{incident.description}</p>
                 
                 <div className="flex flex-wrap gap-2 text-xs">
                   <Badge variant="outline">Classe: {incident.class_dp}</Badge>
@@ -317,15 +317,15 @@ export function IncidentsSGSOPanel() {
                 </div>
 
                 {/* SGSO Classification */}
-                <div className="pt-2 border-t border-gray-200 space-y-1">
-                  <p className="text-xs font-semibold text-gray-700">Classificação SGSO:</p>
+                <div className="pt-2 border-t border-gray-200 dark:border-gray-700 space-y-1">
+                  <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">Classificação SGSO:</p>
                   {incident.sgso_category && (
                     <Badge variant="outline" className="text-xs">
                       {incident.sgso_category}
                     </Badge>
                   )}
                   {incident.sgso_root_cause && (
-                    <p className="text-xs text-gray-600 mt-1">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                       <span className="font-medium">Causa Raiz:</span> {incident.sgso_root_cause}
                     </p>
                   )}

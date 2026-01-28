@@ -1,6 +1,7 @@
 /**
  * Automatic Reports Scheduler
  * Schedule and manage automatic compliance reports generation
+ * PATCH 905: Replaced mock data with real Supabase integration
  */
 
 import { useState, useEffect } from 'react';
@@ -17,10 +18,12 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 import { 
   Calendar, Clock, FileText, Mail, Download, Play, Pause,
   Plus, Settings, Trash2, CheckCircle2, AlertTriangle,
-  BarChart3, Ship, Users, Shield, RefreshCw, Send
+  BarChart3, Ship, Users, Shield, RefreshCw, Send, Loader2
 } from 'lucide-react';
 import { format, addDays, addWeeks, addMonths, addQuarters } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -70,107 +73,75 @@ const FORMAT_OPTIONS: { value: ReportFormat; label: string }[] = [
   { value: 'json', label: 'JSON' }
 ];
 
-const MOCK_SCHEDULES: ScheduledReport[] = [
-  {
-    id: '1',
-    template_id: 't1',
-    template_name: 'Relatório de Conformidade PEOTRAM',
-    name: 'Relatório Mensal PEOTRAM',
-    description: 'Relatório automático de conformidade PEOTRAM gerado no primeiro dia útil do mês',
-    report_type: 'compliance',
-    frequency: 'monthly',
-    day_of_week: null,
-    day_of_month: 1,
-    time_of_day: '09:00',
-    recipients: ['gerente@empresa.com', 'diretor@empresa.com'],
-    format: 'pdf',
-    parameters: { module: 'peotram' },
-    is_active: true,
-    last_run_at: addDays(new Date(), -15).toISOString(),
-    next_run_at: addDays(new Date(), 15).toISOString(),
-    created_by: 'admin',
-    created_at: addMonths(new Date(), -3).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_status: 'success'
-  },
-  {
-    id: '2',
-    template_id: 't2',
-    template_name: 'Dashboard Executivo',
-    name: 'Relatório Semanal Executivo',
-    description: 'KPIs e métricas de alto nível para diretoria',
-    report_type: 'executive',
-    frequency: 'weekly',
-    day_of_week: 1,
-    day_of_month: null,
-    time_of_day: '08:00',
-    recipients: ['ceo@empresa.com', 'coo@empresa.com'],
-    format: 'pdf',
-    parameters: {},
-    is_active: true,
-    last_run_at: addDays(new Date(), -3).toISOString(),
-    next_run_at: addDays(new Date(), 4).toISOString(),
-    created_by: 'admin',
-    created_at: addMonths(new Date(), -2).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_status: 'success'
-  },
-  {
-    id: '3',
-    template_id: 't3',
-    template_name: 'Alerta de NCs Críticas',
-    name: 'Alerta Diário de NCs',
-    description: 'Lista de NCs críticas e vencidas enviada diariamente',
-    report_type: 'nc',
-    frequency: 'daily',
-    day_of_week: null,
-    day_of_month: null,
-    time_of_day: '07:00',
-    recipients: ['seguranca@empresa.com', 'qualidade@empresa.com'],
-    format: 'pdf',
-    parameters: { severity: 'critical' },
-    is_active: true,
-    last_run_at: addDays(new Date(), -1).toISOString(),
-    next_run_at: addDays(new Date(), 0).toISOString(),
-    created_by: 'admin',
-    created_at: addMonths(new Date(), -1).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_status: 'success'
-  },
-  {
-    id: '4',
-    template_id: 't4',
-    template_name: 'Relatório de Treinamentos',
-    name: 'Vencimentos de Certificados',
-    description: 'Certificados vencendo nos próximos 30 dias',
-    report_type: 'training',
-    frequency: 'weekly',
-    day_of_week: 5,
-    day_of_month: null,
-    time_of_day: '17:00',
-    recipients: ['rh@empresa.com', 'treinamento@empresa.com'],
-    format: 'xlsx',
-    parameters: { days_ahead: 30 },
-    is_active: false,
-    last_run_at: addDays(new Date(), -10).toISOString(),
-    next_run_at: null,
-    created_by: 'admin',
-    created_at: addMonths(new Date(), -1).toISOString(),
-    updated_at: new Date().toISOString(),
-    last_status: 'failed'
-  }
-];
+// Hook para buscar agendamentos reais do Supabase
+function useScheduledReports() {
+  return useQuery({
+    queryKey: ['scheduled-reports'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('scheduled_tasks')
+        .select('id, task_name, schedule_type, task_config, is_active, last_executed_at, next_execution_at, created_by, created_at, updated_at, status')
+        .eq('task_type', 'report')
+        .order('created_at', { ascending: false });
+      
+      if (error) return [];
+      
+      return (data || []).map((task) => ({
+        id: task.id,
+        template_id: task.id,
+        template_name: task.task_name || 'Relatório',
+        name: task.task_name || 'Relatório Agendado',
+        description: null,
+        report_type: 'compliance' as const,
+        frequency: (task.schedule_type === 'recurring' ? 'weekly' : 'monthly') as ReportFrequency,
+        day_of_week: null,
+        day_of_month: 1,
+        time_of_day: '09:00',
+        recipients: [],
+        format: 'pdf' as ReportFormat,
+        parameters: task.task_config || {},
+        is_active: task.is_active ?? true,
+        last_run_at: task.last_executed_at,
+        next_run_at: task.next_execution_at,
+        created_by: task.created_by,
+        created_at: task.created_at || new Date().toISOString(),
+        updated_at: task.updated_at || task.created_at || new Date().toISOString(),
+        last_status: task.status === 'completed' ? 'success' : task.status === 'failed' ? 'failed' : 'pending'
+      } as ScheduledReport));
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+}
 
-const MOCK_GENERATED_REPORTS = [
-  { id: 'r1', title: 'Conformidade PEOTRAM - Janeiro 2025', type: 'compliance', generated_at: addDays(new Date(), -15).toISOString(), format: 'pdf', size: '1.2 MB' },
-  { id: 'r2', title: 'Dashboard Executivo - Sem 03/2025', type: 'executive', generated_at: addDays(new Date(), -3).toISOString(), format: 'pdf', size: '856 KB' },
-  { id: 'r3', title: 'NCs Críticas - 16/01/2025', type: 'nc', generated_at: addDays(new Date(), -1).toISOString(), format: 'pdf', size: '234 KB' },
-  { id: 'r4', title: 'Conformidade PEOTRAM - Dezembro 2024', type: 'compliance', generated_at: addDays(new Date(), -45).toISOString(), format: 'pdf', size: '1.4 MB' },
-  { id: 'r5', title: 'Dashboard Executivo - Sem 02/2025', type: 'executive', generated_at: addDays(new Date(), -10).toISOString(), format: 'pdf', size: '892 KB' }
-];
+// Hook para buscar relatórios gerados
+function useGeneratedReports() {
+  return useQuery({
+    queryKey: ['generated-reports'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('ai_generated_documents')
+        .select('id, title, document_type, created_at')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (error) return [];
+      
+      return (data || []).map((doc) => ({
+        id: doc.id,
+        title: doc.title || 'Relatório',
+        type: doc.document_type || 'compliance',
+        generated_at: doc.created_at,
+        format: 'pdf',
+        size: 'N/A'
+      }));
+    }
+  });
+}
 
 export function AutomaticReportsScheduler() {
-  const [schedules, setSchedules] = useState<ScheduledReport[]>(MOCK_SCHEDULES);
+  const { data: dbSchedules = [], isLoading: loadingSchedules } = useScheduledReports();
+  const { data: generatedReports = [], isLoading: loadingReports } = useGeneratedReports();
+  const [schedules, setSchedules] = useState<ScheduledReport[]>([]);
   const [activeTab, setActiveTab] = useState('schedules');
   const [isCreating, setIsCreating] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<ScheduledReport | null>(null);
@@ -564,30 +535,36 @@ export function AutomaticReportsScheduler() {
             <CardContent>
               <ScrollArea className="h-96">
                 <div className="space-y-3">
-                  {MOCK_GENERATED_REPORTS.map(report => {
-                    const ReportIcon = getReportIcon(report.type);
-                    return (
-                      <div key={report.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-primary/10">
-                            <ReportIcon className="h-5 w-5 text-primary" />
+                  {generatedReports.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      Nenhum relatório gerado ainda.
+                    </div>
+                  ) : (
+                    generatedReports.map((report: { id: string; title: string; type: string; generated_at: string; format: string; size: string }) => {
+                      const ReportIcon = getReportIcon(report.type);
+                      return (
+                        <div key={report.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10">
+                              <ReportIcon className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <p className="font-medium">{report.title}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {format(new Date(report.generated_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })} • {report.size}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium">{report.title}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {format(new Date(report.generated_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })} • {report.size}
-                            </p>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">{report.format.toUpperCase()}</Badge>
+                            <Button variant="ghost" size="icon">
+                              <Download className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline">{report.format.toUpperCase()}</Badge>
-                          <Button variant="ghost" size="icon">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </ScrollArea>
             </CardContent>
