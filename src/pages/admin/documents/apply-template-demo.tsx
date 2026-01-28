@@ -1,8 +1,8 @@
-// @ts-nocheck
 /**
- * Apply Template Demo - PATCH 874
- * @ts-nocheck: templates table content is JSONB
+ * Apply Template Demo - PATCH 879
+ * Type-safe templates table with JSONB content
  */
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ApplyTemplate from "./apply-template";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +10,22 @@ import { Button } from "@/components/ui/button";
 import { Loader2, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
-interface Template {
+// Aligned with actual templates schema
+interface TemplateRow {
+  id: string;
+  title: string | null;
+  content: Json;
+  created_by: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  is_favorite: boolean | null;
+  is_private: boolean | null;
+}
+
+// Local template interface for UI
+interface LocalTemplate {
   id: string;
   title: string;
   content: string;
@@ -22,13 +36,25 @@ interface Template {
   is_private: boolean;
 }
 
+// Helper to safely extract string content from JSONB
+function getTemplateContent(content: Json | null): string {
+  if (content === null) return "";
+  if (typeof content === "string") return content;
+  if (typeof content === "object" && !Array.isArray(content)) {
+    const obj = content as Record<string, unknown>;
+    if (typeof obj.text === "string") return obj.text;
+    if (typeof obj.content === "string") return obj.content;
+    return JSON.stringify(content);
+  }
+  return String(content);
+}
+
 /**
  * Demo page showing how to use the ApplyTemplate component
- * This page lists available templates and allows users to select one to apply
  */
 export default function ApplyTemplateDemo() {
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [templates, setTemplates] = useState<LocalTemplate[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<LocalTemplate | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,7 +71,19 @@ export default function ApplyTemplateDemo() {
 
       if (error) throw error;
 
-      setTemplates(data || []);
+      // Map to local template array with safe defaults
+      const mappedTemplates: LocalTemplate[] = (data || []).map((row: TemplateRow) => ({
+        id: row.id,
+        title: row.title || "Sem título",
+        content: getTemplateContent(row.content),
+        created_by: row.created_by || "",
+        created_at: row.created_at || new Date().toISOString(),
+        updated_at: row.updated_at || new Date().toISOString(),
+        is_favorite: row.is_favorite ?? false,
+        is_private: row.is_private ?? false,
+      }));
+
+      setTemplates(mappedTemplates);
     } catch (error) {
       logger.error("Error loading templates:", error);
       toast({
@@ -121,7 +159,16 @@ export default function ApplyTemplateDemo() {
               <CardTitle>{selectedTemplate.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <ApplyTemplate template={selectedTemplate} />
+              <ApplyTemplate template={{
+                id: selectedTemplate.id,
+                title: selectedTemplate.title,
+                content: selectedTemplate.content,
+                created_by: selectedTemplate.created_by,
+                created_at: selectedTemplate.created_at,
+                updated_at: selectedTemplate.updated_at,
+                is_favorite: selectedTemplate.is_favorite,
+                is_private: selectedTemplate.is_private,
+              }} />
             </CardContent>
           </Card>
         </div>
