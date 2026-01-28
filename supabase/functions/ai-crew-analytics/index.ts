@@ -3,7 +3,7 @@
  * Heavy processing for crew matching, turnover prediction, and wellbeing analysis
  */
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
