@@ -1,4 +1,6 @@
 // @ts-nocheck
+// Technical Debt: Local Template interface uses different fields (template_code, format, current_version)
+// than Supabase document_templates table (which lacks these columns). Schema mismatch requires @ts-nocheck.
 /**
  * PATCH 299: Document Templates Manager
  * Enhanced with database integration, variable substitution, and PDF/Word export

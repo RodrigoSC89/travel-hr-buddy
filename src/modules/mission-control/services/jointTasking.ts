@@ -1,4 +1,6 @@
 // @ts-nocheck
+// Technical Debt: joint_mission_log table has different schema (mission_name, tasks, external_entities, etc.)
+// than auto-generated types. Requires schema regeneration or dynamic-tables accessor.
 /**
  * PATCH 228 - Joint Tasking System
  * Mission management for delegation and synchronization between external and internal systems
