@@ -167,23 +167,25 @@ class CICDPipelineEngine {
     if (!pipeline) throw new Error(`Pipeline ${pipelineId} not found`);
 
     pipeline.status = 'running';
+    let hasFailed = false;
 
     for (const stage of pipeline.stages) {
       stage.status = 'running';
       stage.startedAt = new Date().toISOString();
       stage.logs.push(`[${new Date().toISOString()}] Starting ${stage.name}...`);
 
-      // Simulate stage execution
-      await this.executeStage(stage);
+      // Simulate stage execution and get result
+      const stageResult = await this.executeStage(stage);
 
-      const currentStageStatus = stage.status;
-      if (currentStageStatus === 'failed') {
+      // Check if stage failed after execution
+      if (stageResult === 'failed') {
+        hasFailed = true;
         pipeline.status = 'failed';
         break;
       }
     }
 
-    if (pipeline.status === 'running') {
+    if (!hasFailed) {
       pipeline.status = 'success';
     }
 
@@ -191,7 +193,7 @@ class CICDPipelineEngine {
     return pipeline;
   }
 
-  private async executeStage(stage: PipelineStage): Promise<void> {
+  private async executeStage(stage: PipelineStage): Promise<'success' | 'failed'> {
     // Simulate execution time
     const executionTime = Math.random() * 30 + 5;
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -203,9 +205,11 @@ class CICDPipelineEngine {
     if (Math.random() > 0.05) {
       stage.status = 'success';
       stage.logs.push(`[${new Date().toISOString()}] ✅ ${stage.name} completed successfully`);
+      return 'success';
     } else {
       stage.status = 'failed';
       stage.logs.push(`[${new Date().toISOString()}] ❌ ${stage.name} failed`);
+      return 'failed';
     }
   }
 
