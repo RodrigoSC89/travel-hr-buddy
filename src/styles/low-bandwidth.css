@@ -177,3 +177,153 @@
   will-change: auto;
   transform: translateZ(0);
 }
+
+/* ========================================
+   PATCH: Ultra Low Bandwidth Mode (2G/Satellite)
+   ======================================== */
+
+/* Force GPU acceleration for smooth scrolling */
+.ultra-low-bandwidth {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Disable all animations completely */
+.ultra-low-bandwidth * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Simplify all cards */
+.ultra-low-bandwidth .card,
+.ultra-low-bandwidth [class*="Card"] {
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Remove all gradients */
+.ultra-low-bandwidth [class*="gradient"],
+.ultra-low-bandwidth [style*="gradient"] {
+  background-image: none !important;
+  background: hsl(var(--background)) !important;
+}
+
+/* Simplify buttons */
+.ultra-low-bandwidth button,
+.ultra-low-bandwidth .btn {
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Hide all icons except essential */
+.ultra-low-bandwidth .icon-decorative {
+  display: none !important;
+}
+
+/* Reduce padding/margin */
+.ultra-low-bandwidth {
+  --spacing-unit: 0.5rem;
+}
+
+.ultra-low-bandwidth .p-4 { padding: 0.5rem !important; }
+.ultra-low-bandwidth .p-6 { padding: 0.75rem !important; }
+.ultra-low-bandwidth .p-8 { padding: 1rem !important; }
+.ultra-low-bandwidth .m-4 { margin: 0.5rem !important; }
+.ultra-low-bandwidth .m-6 { margin: 0.75rem !important; }
+.ultra-low-bandwidth .gap-4 { gap: 0.5rem !important; }
+.ultra-low-bandwidth .gap-6 { gap: 0.75rem !important; }
+
+/* Optimize fonts */
+.ultra-low-bandwidth {
+  font-family: system-ui, -apple-system, sans-serif !important;
+  -webkit-font-smoothing: auto !important;
+  font-synthesis: none;
+}
+
+/* Hide charts and complex visualizations */
+.ultra-low-bandwidth .chart-container,
+.ultra-low-bandwidth [class*="recharts"],
+.ultra-low-bandwidth canvas {
+  display: none !important;
+}
+
+.ultra-low-bandwidth .chart-container::after {
+  content: "Gráfico oculto (modo economia)";
+  display: block;
+  padding: 1rem;
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+/* Lazy load images with placeholder */
+.ultra-low-bandwidth img:not([loading="eager"]) {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ultra-low-bandwidth img:not([loading="eager"]).loaded {
+  opacity: 1;
+}
+
+/* Virtualization hints */
+.ultra-low-bandwidth .virtual-list {
+  contain: strict;
+  will-change: scroll-position;
+}
+
+/* Reduce z-index stacking */
+.ultra-low-bandwidth [class*="z-50"] { z-index: 10 !important; }
+.ultra-low-bandwidth [class*="z-40"] { z-index: 8 !important; }
+.ultra-low-bandwidth [class*="z-30"] { z-index: 6 !important; }
+
+/* Critical path optimization */
+.ultra-low-bandwidth .above-fold {
+  contain: none;
+  content-visibility: visible;
+}
+
+.ultra-low-bandwidth .below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Network-aware image loading */
+@media (prefers-reduced-data: reduce) {
+  img:not([data-essential="true"]) {
+    display: none !important;
+  }
+  
+  img[data-essential="true"] {
+    filter: grayscale(100%);
+  }
+}
+
+/* Satellite connection mode */
+.satellite-mode {
+  /* Maximum simplification */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+  }
+  
+  /* Show only text content */
+  img:not([data-critical="true"]),
+  video,
+  iframe,
+  svg:not([data-icon="true"]) {
+    display: none !important;
+  }
+  
+  /* Minimal styling */
+  .card,
+  .btn,
+  button {
+    background: transparent !important;
+    border: 1px solid currentColor !important;
+  }
+}

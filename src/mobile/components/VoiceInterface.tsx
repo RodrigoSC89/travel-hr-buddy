@@ -317,10 +317,11 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </Button>
 
           <Button
-            onClick={isSpeaking ? stopSpeaking : () => {}}
+            onClick={stopSpeaking}
             variant={isSpeaking ? "destructive" : "outline"}
             disabled={!isSpeaking}
             size="lg"
+            aria-label={isSpeaking ? "Parar áudio" : "Sem áudio ativo"}
           >
             {isSpeaking ? (
               <VolumeX className="h-5 w-5" />
