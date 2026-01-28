@@ -276,6 +276,10 @@ export {
   type PerformanceReport,
 } from './validation';
 
+// PATCH v4.1: Bundle & API Optimizer
+export { BundleOptimizer, bundleOptimizer, type BundleAnalysis, type ChunkInfo, type DependencyInfo } from './bundle-optimizer';
+export { APIOptimizer, apiOptimizer, type CacheConfig, type BatchConfig, type RequestMetrics } from './api-optimizer';
+
 // Re-export React optimizations (aliased to avoid conflicts)
 export {
   smartMemo,
