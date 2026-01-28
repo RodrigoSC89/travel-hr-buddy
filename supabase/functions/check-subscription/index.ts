@@ -1,13 +1,18 @@
 // @ts-nocheck
+/**
+ * Check Subscription Edge Function
+ * Verifies user subscription status from Stripe
+ */
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const logStep = (step: string, details?: unknown) => {
+const logStep = (step, details) => {
   const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
   console.log(`[CHECK-SUBSCRIPTION] ${step}${detailsStr}`);
 };
@@ -62,21 +67,39 @@ serve(async (req) => {
     let productId = null;
     let subscriptionEnd = null;
     let planName = null;
+    let planFeatures = [];
 
     if (hasActiveSub) {
       const subscription = subscriptions.data[0];
       subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
-      productId = subscription.items.data[0].price.product as string;
+      productId = subscription.items.data[0].price.product;
       
-      // Map product IDs to plan names (includes legacy and new IDs)
-      const productNames: Record<string, string> = {
-        'prod_TlCZjXi65mykUJ': 'starter',
-        'prod_TlCZGV0R8q7gd4': 'professional',
-        'prod_Tj7IL3o2MMqFUv': 'starter',
-        'prod_Tj7J2F7AKu9anZ': 'professional',
-        'prod_Tj7LaAvHIWE95C': 'enterprise',
+      // Map product IDs to plan names and features
+      const productConfig = {
+        'prod_TlCZjXi65mykUJ': { 
+          name: 'starter', 
+          features: ['5 vessels', 'Basic monitoring', 'Email support']
+        },
+        'prod_TlCZGV0R8q7gd4': { 
+          name: 'professional', 
+          features: ['25 vessels', 'Full monitoring', 'AI assistant', 'Priority support']
+        },
+        'prod_Tj7IL3o2MMqFUv': { 
+          name: 'starter', 
+          features: ['5 vessels', 'Basic monitoring', 'Email support']
+        },
+        'prod_Tj7J2F7AKu9anZ': { 
+          name: 'professional', 
+          features: ['25 vessels', 'Full monitoring', 'AI assistant', 'Priority support']
+        },
+        'prod_Tj7LaAvHIWE95C': { 
+          name: 'enterprise', 
+          features: ['Unlimited vessels', 'Custom AI', 'Dedicated support', 'On-premise option']
+        },
       };
-      planName = productNames[productId] || 'unknown';
+      const config = productConfig[productId];
+      planName = config?.name || 'unknown';
+      planFeatures = config?.features || [];
       logStep("Active subscription found", { planName, subscriptionEnd });
     }
 
@@ -84,6 +107,7 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       product_id: productId,
       plan_name: planName,
+      plan_features: planFeatures,
       subscription_end: subscriptionEnd
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
