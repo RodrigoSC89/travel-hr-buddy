@@ -141,7 +141,13 @@ const Auth: React.FC = () => {
         const errorMsg = error.message.toLowerCase();
         console.error('[Auth] Login error:', error.message, error.status);
         
-        if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
+        if (errorMsg.includes('captcha')) {
+          // CAPTCHA está habilitado no Supabase mas não implementado no frontend
+          toast.error("Configuração pendente", { 
+            description: "Desabilite o CAPTCHA no Supabase Dashboard: Authentication → Settings → CAPTCHA protection → Disabled"
+          });
+          setShowTroubleshooting(true);
+        } else if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
         } else if (errorMsg.includes('email not confirmed')) {
           toast.error("Email não confirmado", { description: "Verifique seu email para confirmar a conta." });
