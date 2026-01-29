@@ -76,8 +76,10 @@ export function useWellnessReport() {
   return useQuery<WellnessReport>({
     queryKey: ['wellness-report'],
     queryFn: () => wellnessMonitor.monitorCrewWellness(),
-    staleTime: 15 * 60 * 1000,
-    refetchInterval: 30 * 60 * 1000, // Refresh every 30 minutes
+    staleTime: 1000 * 60 * 15, // 15 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
 

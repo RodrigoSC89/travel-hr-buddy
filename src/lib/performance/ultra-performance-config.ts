@@ -9,7 +9,7 @@ export const PERFORMANCE_CONFIG = {
   cache: {
     staleTime: 5 * 60 * 1000, // 5 min
     gcTime: 30 * 60 * 1000, // 30 min
-    refetchInterval: 10 * 60 * 1000, // 10 min
+    refetchInterval: false, // DISABLED - prevent infinite loading
   },
 
   // Network thresholds

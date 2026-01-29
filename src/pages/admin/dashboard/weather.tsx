@@ -33,8 +33,10 @@ export default function WeatherDashboard() {
   const { data: weatherData, isLoading, error } = useQuery({
     queryKey: ["maritime-weather"],
     queryFn: () => fetchMaritimeWeather(MARITIME_LOCATIONS),
-    refetchInterval: 60 * 60 * 1000, // Refetch every hour
-    staleTime: 30 * 60 * 1000, // Consider data stale after 30 minutes
+    staleTime: 1000 * 60 * 30, // 30 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   if (isLoading) {
