@@ -33,7 +33,8 @@ export function VisionAIAnalyzer() {
     analyzeImage, 
     isAnalyzing, 
     result, 
-    error, 
+    error,
+    usingMock,
     reset 
   } = useVisionAI();
 
@@ -87,7 +88,7 @@ export function VisionAIAnalyzer() {
             <div>
               <CardTitle className="text-lg">Nauti Vision AI</CardTitle>
               <p className="text-xs text-muted-foreground">
-                Gemini Pro Vision • Análise Inteligente
+                {usingMock ? 'Modo Local • Análise Simulada' : 'Gemini Pro Vision • Análise Inteligente'}
               </p>
             </div>
           </div>
