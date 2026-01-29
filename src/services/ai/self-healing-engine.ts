@@ -126,11 +126,14 @@ class SelfHealingEngine {
           break;
 
         case "api-gateway":
-          // Check if edge functions are reachable
+          // Check if edge functions are reachable using hardcoded production URL
           try {
-            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/`, {
+            const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+            const response = await fetch(`${supabaseUrl}/functions/v1/`, {
               method: "HEAD",
-              headers: { "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "" }
+              headers: { 
+                "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE"
+              }
             });
             if (!response.ok && response.status !== 404) {
               issues.push(`API Gateway returned ${response.status}`);
