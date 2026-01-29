@@ -62,6 +62,22 @@
   background: hsl(var(--muted));
 }
 
+.skeleton-ultra {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted-foreground) / 0.15) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-wave 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
@@ -76,6 +92,23 @@
 @keyframes skeleton-shimmer-fast {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* ===== Fade In Animation ===== */
+.fade-in {
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== GPU Accelerated Elements ===== */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* ===== Low Bandwidth Mode Overrides ===== */

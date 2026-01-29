@@ -125,3 +125,86 @@ export function SkeletonDashboard() {
     </div>
   );
 }
+
+/**
+ * Page skeleton for full page loading
+ */
+export function PageSkeleton() {
+  return (
+    <div 
+      className="p-4 md:p-6 space-y-6"
+      style={{ contain: "layout paint" }}
+    >
+      {/* Header skeleton */}
+      <div className="flex items-center justify-between">
+        <OptimizedSkeleton width={200} height={32} />
+        <div className="flex gap-2">
+          <OptimizedSkeleton width={96} height={36} className="rounded-md" />
+          <OptimizedSkeleton width={96} height={36} className="rounded-md" />
+        </div>
+      </div>
+
+      {/* Stats cards skeleton */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="p-4 rounded-lg border bg-card">
+            <OptimizedSkeleton width={80} height={16} className="mb-2" />
+            <OptimizedSkeleton width={64} height={32} />
+          </div>
+        ))}
+      </div>
+
+      {/* Content skeleton */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="p-4 rounded-lg border bg-card space-y-4">
+          <OptimizedSkeleton width={128} height={24} />
+          <OptimizedSkeleton height={192} />
+        </div>
+        <div className="p-4 rounded-lg border bg-card space-y-4">
+          <OptimizedSkeleton width={128} height={24} />
+          <OptimizedSkeleton height={192} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Compact skeleton for modals/dialogs
+ */
+export function CompactSkeleton() {
+  return (
+    <div className="space-y-4" style={{ contain: "layout paint" }}>
+      <OptimizedSkeleton width="75%" height={24} />
+      <OptimizedSkeleton height={16} />
+      <OptimizedSkeleton width="66%" height={16} />
+      <OptimizedSkeleton height={40} className="mt-4" />
+    </div>
+  );
+}
+
+/**
+ * Table skeleton for data grids
+ */
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+  return (
+    <div className="space-y-2" style={{ contain: "layout paint" }}>
+      {/* Header */}
+      <div className="flex gap-4 p-3 border-b">
+        <OptimizedSkeleton width={32} height={16} />
+        <OptimizedSkeleton height={16} className="flex-1" />
+        <OptimizedSkeleton width={96} height={16} />
+        <OptimizedSkeleton width={80} height={16} />
+      </div>
+      {/* Rows */}
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex gap-4 p-3 border-b border-muted/50">
+          <OptimizedSkeleton width={32} height={16} />
+          <OptimizedSkeleton height={16} className="flex-1" />
+          <OptimizedSkeleton width={96} height={16} />
+          <OptimizedSkeleton width={80} height={16} />
+        </div>
+      ))}
+    </div>
+  );
+}
