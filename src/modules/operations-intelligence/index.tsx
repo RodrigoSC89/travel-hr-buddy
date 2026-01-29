@@ -6,7 +6,10 @@
  * real-time monitoring, and intelligent route planning
  */
 
+// Components
 export { OperationsDashboard3D } from './components/OperationsDashboard3D';
+
+// AI Engine
 export { 
   operationalIntelligenceEngine, 
   type VoyageOptimization, 
@@ -14,5 +17,9 @@ export {
   type RouteWaypoint 
 } from './ai/OperationalIntelligenceEngine';
 
+// React Hooks
+export { useOperationsIntelligence, type UseOperationsIntelligenceOptions } from './hooks';
+
 // Re-export component as default for lazy loading
 export { default } from './components/OperationsDashboard3D';
+

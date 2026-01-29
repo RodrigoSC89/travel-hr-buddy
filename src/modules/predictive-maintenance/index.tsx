@@ -6,7 +6,10 @@
  * Weibull distribution analysis, and real-time sensor data
  */
 
+// Components
 export { MaintenanceDashboardML } from './components/MaintenanceDashboardML';
+
+// AI Engine
 export { 
   predictiveMaintenanceMLEngine,
   type FailurePrediction,
@@ -15,5 +18,9 @@ export {
   type SensorReading
 } from './ai/PredictiveMaintenanceEngine';
 
+// React Hooks
+export { usePredictiveMaintenance, type UsePredictiveMaintenanceOptions } from './hooks';
+
 // Re-export component as default for lazy loading
 export { default } from './components/MaintenanceDashboardML';
+
