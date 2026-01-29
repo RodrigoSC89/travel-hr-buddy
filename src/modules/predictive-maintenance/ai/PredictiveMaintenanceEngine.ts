@@ -667,17 +667,22 @@ class PredictiveMaintenanceMLEngine {
     const readings: SensorReading[] = [];
     const now = Date.now();
 
+    // Deterministic sensor readings using sine/cosine for realistic patterns
     for (let i = 0; i < 24; i++) {
+      const hourFactor = i / 24;
+      const sinFactor = Math.sin(i * 0.5);
+      const cosFactor = Math.cos(i * 0.3);
+      
       readings.push({
         equipmentId: 'demo',
         timestamp: new Date(now - (24 - i) * 60 * 60 * 1000),
-        vibration: 2 + Math.random() * 3 + (i / 24) * 0.5,
-        temperature: 65 + Math.random() * 15 + (i / 24) * 5,
-        pressure: 30 + Math.random() * 10,
-        oilLevel: 80 - Math.random() * 10 - (i / 24) * 5,
-        rpm: 1800 + Math.random() * 400,
-        loadFactor: 60 + Math.random() * 25,
-        noise: 70 + Math.random() * 15
+        vibration: 3.5 + sinFactor * 1.5 + hourFactor * 0.5,
+        temperature: 72 + cosFactor * 8 + hourFactor * 5,
+        pressure: 35 + sinFactor * 5,
+        oilLevel: 75 - Math.abs(cosFactor) * 5 - hourFactor * 5,
+        rpm: 2000 + sinFactor * 200,
+        loadFactor: 72 + cosFactor * 12,
+        noise: 77 + sinFactor * 8
       });
     }
 

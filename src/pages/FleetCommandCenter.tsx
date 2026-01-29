@@ -296,15 +296,19 @@ export default function FleetCommandCenter() {
         .order("name")
         .limit(50);
       
-      // Enriquecer dados com campos simulados
-      const enrichedVessels = (vesselsData || []).map(v => ({
-        ...v,
-        speed: Math.floor(Math.random() * 20),
-        fuel: Math.floor(70 + Math.random() * 30),
-        efficiency: Math.floor(85 + Math.random() * 15),
-        crew_count: Math.floor(15 + Math.random() * 15),
-        course: Math.floor(Math.random() * 360)
-      }));
+      // Enriquecer dados com campos determinísticos baseados no vessel ID
+      const enrichedVessels = (vesselsData || []).map((v, index) => {
+        // Use vessel ID hash for deterministic values
+        const idHash = v.id ? v.id.charCodeAt(0) + (v.id.charCodeAt(1) || 0) : index;
+        return {
+          ...v,
+          speed: 10 + (idHash % 15),
+          fuel: 75 + (idHash % 25),
+          efficiency: 88 + (idHash % 12),
+          crew_count: 18 + (idHash % 12),
+          course: (idHash * 17) % 360
+        };
+      });
       setVessels(enrichedVessels);
 
       const { data: maintenanceData } = await supabase

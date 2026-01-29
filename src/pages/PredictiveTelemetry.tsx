@@ -129,8 +129,15 @@ const generateSensorData = (hours: number = 24): SensorReading[] => {
 
   for (let i = hours; i >= 0; i--) {
     sensorTypes.forEach((sensor, idx) => {
-      const value = sensor.base + (Math.random() - 0.5) * sensor.variance * 2;
-      const status = Math.random() > 0.95 ? "critical" : Math.random() > 0.85 ? "warning" : "normal";
+      // Deterministic values using sine waves
+      const timeOffset = i * 0.2 + idx * 0.5;
+      const sinFactor = Math.sin(timeOffset);
+      const cosFactor = Math.cos(timeOffset * 0.7);
+      
+      const value = sensor.base + sinFactor * sensor.variance;
+      // Deterministic status based on value thresholds
+      const normalizedValue = (value - sensor.base) / sensor.variance;
+      const status = normalizedValue > 0.9 ? "critical" : normalizedValue > 0.7 ? "warning" : "normal";
       
       data.push({
         id: `reading_${i}_${idx}`,
