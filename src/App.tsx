@@ -16,6 +16,8 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 import { ProductOnboardingTour } from "./components/onboarding/ProductOnboardingTour";
+import { UserFeedbackWidget } from "./components/feedback/UserFeedbackWidget";
+import { usageTracker } from "./lib/analytics/usage-tracker";
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -328,6 +330,11 @@ const queryClient = new QueryClient({
   },
 });
 
+// Inicializar Analytics Tracker
+if (typeof window !== 'undefined') {
+  usageTracker.init();
+}
+
 // Ultra-optimized loader with instant skeleton display
 const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
@@ -405,6 +412,9 @@ const AuthenticatedLayout = () => {
         
         {/* Onboarding Tour for new users */}
         <ProductOnboardingTour />
+        
+        {/* User Feedback Widget */}
+        <UserFeedbackWidget position="bottom-right" />
         
         {/* Toast Notifications */}
         <Toaster />
