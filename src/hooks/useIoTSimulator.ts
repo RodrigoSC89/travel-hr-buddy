@@ -73,12 +73,12 @@ export function useIoTSimulator(): UseIoTSimulatorReturn {
 
       // Use query params for bulk operation
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/iot-sensor-simulator?action=bulk&count=${count}&anomaly=${configRef.current.anomalyChance}`,
+        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/iot-sensor-simulator?action=bulk&count=${count}&anomaly=${configRef.current.anomalyChance}`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE',
           },
         }
       );

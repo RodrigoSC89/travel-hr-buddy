@@ -197,9 +197,17 @@ class UsageTracker {
       try {
         const { data: { user } } = await supabase.auth.getUser();
 
+        // Skip flush if user is not authenticated (prevents 401 errors)
+        if (!user) {
+          // Re-queue events for later (when user logs in)
+          const toRequeue = events.slice(0, Math.max(0, 20 - this.eventsQueue.length));
+          this.eventsQueue = [...this.eventsQueue, ...toRequeue];
+          return;
+        }
+
         const { error } = await supabase.from('analytics_events').insert(
           events.map(event => ({
-            user_id: user?.id || null,
+            user_id: user.id,
             session_id: this.sessionId,
             event_category: event.event_type,
             event_name: event.event_name,
@@ -252,7 +260,7 @@ class UsageTracker {
       // This will work even during page unload
       if (navigator.sendBeacon) {
         navigator.sendBeacon(
-          `${import.meta.env.VITE_SUPABASE_URL || 'https://vnbptmixvwropvanyhdb.supabase.co'}/rest/v1/analytics_events`,
+          'https://vnbptmixvwropvanyhdb.supabase.co/rest/v1/analytics_events',
           payload
         );
       }

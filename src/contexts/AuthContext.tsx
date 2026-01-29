@@ -119,70 +119,63 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Safety timeout - reduced to 5s for faster UX
+    // Safety timeout - 3s max wait for auth
     const safetyTimeout = setTimeout(() => {
-      if (mounted) {
-        logger.info("[AuthContext] Safety timeout (5s) - ready state");
+      if (mounted && isLoading) {
+        logger.info("[AuthContext] Safety timeout (3s) - forcing ready state");
         setIsLoading(false);
       }
-    }, 5000);
+    }, 3000);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
+    // STEP 1: Fetch initial session FIRST (controls isLoading)
     const initializeAuth = async () => {
       try {
-        // Set up auth state listener FIRST (critical for session detection)
-        const { data } = supabase.auth.onAuthStateChange(
-          (event, currentSession) => {
-            if (!mounted) return;
-            
-            // Update state synchronously - NEVER async here
-            setSession(currentSession);
-            setUser(currentSession?.user ?? null);
-            setIsLoading(false);
-            
-            // Defer toasts to prevent deadlock
-            if (event === "SIGNED_IN") {
-              setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
-            } else if (event === "SIGNED_OUT") {
-              setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
-            } else if (event === "TOKEN_REFRESHED") {
-              // Token refreshed - silent success
-            }
-          }
-        );
-        
-        subscription = data.subscription;
+        const { data: sessionData, error } = await supabase.auth.getSession();
 
-        // THEN check for existing session
-        try {
-          const { data: sessionData, error } = await supabase.auth.getSession();
-
-          if (!mounted) return;
-
-          if (error) {
-            logger.warn("[AuthContext] Error getting session", { error: error.message });
-            // Clear potentially corrupted session
-            clearCorruptedTokens();
-          }
-          
-          setSession(sessionData?.session ?? null);
-          setUser(sessionData?.session?.user ?? null);
-        } catch (fetchError) {
-          logger.warn("[AuthContext] Failed to fetch session (network issue)");
-        } finally {
-          if (mounted) {
-            setIsLoading(false);
-          }
-        }
-      } catch (error) {
         if (!mounted) return;
-        logger.warn("[AuthContext] Error initializing auth", { error });
-        setIsLoading(false);
+
+        if (error) {
+          logger.warn("[AuthContext] Error getting session", { error: error.message });
+          clearCorruptedTokens();
+        }
+        
+        setSession(sessionData?.session ?? null);
+        setUser(sessionData?.session?.user ?? null);
+      } catch (fetchError) {
+        logger.warn("[AuthContext] Failed to fetch session (network issue)");
+      } finally {
+        // CRITICAL: Set loading false ONLY after initial fetch completes
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
+    // STEP 2: Set up listener for ONGOING changes (does NOT control isLoading)
+    const { data } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
+        if (!mounted) return;
+        
+        // Update state synchronously - NEVER async here
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        // NOTE: Do NOT set isLoading here - that's only for initial load
+        
+        // Defer toasts to prevent deadlock
+        if (event === "SIGNED_IN") {
+          setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
+        } else if (event === "SIGNED_OUT") {
+          setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
+        }
+      }
+    );
+    
+    subscription = data.subscription;
+
+    // Start initial auth check
     initializeAuth();
 
     return () => {

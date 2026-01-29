@@ -99,7 +99,7 @@ export default function PersonalRestoreDashboard() {
 
       // Call the Supabase Edge Function
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-restore-dashboard`,
+        'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/send-restore-dashboard',
         {
           method: "POST",
           headers: {
