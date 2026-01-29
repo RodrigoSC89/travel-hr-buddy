@@ -64,15 +64,12 @@ const DEFAULT_CONFIG: Required<OpenAIConfig> = {
 
 /**
  * Get OpenAI API key from environment
+ * PATCH: VITE_* não funciona no Lovable - retorna null para usar Edge Functions
  */
 export function getOpenAIApiKey(): string | null {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
-  if (!apiKey || apiKey === "your_openai_api_key_here") {
-    return null;
-  }
-  
-  return apiKey;
+  // VITE_* não está disponível em produção Lovable
+  // OpenAI API deve ser usada via Edge Functions com secrets configurados
+  return null;
 }
 
 /**

@@ -22,10 +22,10 @@ interface TestResult {
   workflow_name?: string;
 }
 
-// Environment variables for integrations
-const SLACK_WEBHOOK_URL = import.meta.env.VITE_SLACK_WEBHOOK_URL || "";
-const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
-const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
+// PATCH: VITE_* não funciona no Lovable - integrations via Edge Functions
+const SLACK_WEBHOOK_URL = "";
+const TELEGRAM_BOT_TOKEN = "";
+const TELEGRAM_CHAT_ID = "";
 
 export default function AdminWallPage() {
   const [data, setData] = useState<TestResult[]>([]);
@@ -37,18 +37,11 @@ export default function AdminWallPage() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        // PATCH: Hardcoded Supabase URLs - VITE_* não funciona no Lovable
+        const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
-        if (!supabaseUrl || !supabaseKey) {
-          logger.error("Supabase credentials not configured");
-          const cached = localStorage.getItem("ci-wall-data");
-          if (cached) {
-            setData(JSON.parse(cached));
-            setOffline(true);
-          }
-          return;
-        }
+        // Credentials are always configured with hardcoded values
 
         const res = await fetch(`${supabaseUrl}/rest/v1/test_results?select=*&order=created_at.desc&limit=50`, {
           headers: {

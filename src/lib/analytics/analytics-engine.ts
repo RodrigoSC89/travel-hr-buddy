@@ -188,6 +188,13 @@ class AnalyticsEngine {
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
+      // Skip if not authenticated (prevents 401 errors)
+      if (!user) {
+        // Re-add events for later (when user logs in)
+        this.events = [...eventsToSend.slice(0, 50), ...this.events];
+        return;
+      }
+
       // Batch insert events
       const formattedEvents = eventsToSend.map(event => ({
         event_type: event.category,
@@ -198,15 +205,14 @@ class AnalyticsEngine {
           metadata: event.metadata,
           sessionId: event.sessionId,
         },
-        user_id: user?.id,
+        user_id: user.id,
         created_at: new Date(event.timestamp).toISOString(),
       }));
 
       await supabase.from("analytics_events").insert(formattedEvents);
-    } catch (error) {
-      // Re-add events on failure
-      this.events = [...eventsToSend, ...this.events];
-      logger.error("Failed to flush analytics", { error });
+    } catch {
+      // Re-add events on failure (max 50)
+      this.events = [...eventsToSend.slice(0, 50), ...this.events];
     }
   }
 

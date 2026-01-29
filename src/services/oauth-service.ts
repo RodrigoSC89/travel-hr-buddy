@@ -39,11 +39,11 @@ interface IntegrationCredential {
   scope: string;
 }
 
-// OAuth Provider Configurations
+// OAuth Provider Configurations - PATCH: OAuth deve ser via Edge Functions
 const OAUTH_PROVIDERS: OAuthProvider = {
   google_drive: {
-    clientId: process.env.VITE_GOOGLE_CLIENT_ID || "",
-    clientSecret: process.env.VITE_GOOGLE_CLIENT_SECRET || "",
+    clientId: "", // Configure via Edge Function
+    clientSecret: "", // Configure via Edge Function
     redirectUri: `${window.location.origin}/auth/callback/google`,
     scope: [
       "https://www.googleapis.com/auth/drive.file",
@@ -53,8 +53,8 @@ const OAUTH_PROVIDERS: OAuthProvider = {
     tokenUrl: "https://oauth2.googleapis.com/token"
   },
   outlook: {
-    clientId: process.env.VITE_OUTLOOK_CLIENT_ID || "",
-    clientSecret: process.env.VITE_OUTLOOK_CLIENT_SECRET || "",
+    clientId: "", // Configure via Edge Function
+    clientSecret: "", // Configure via Edge Function
     redirectUri: `${window.location.origin}/auth/callback/outlook`,
     scope: [
       "https://graph.microsoft.com/Mail.Read",
@@ -65,8 +65,8 @@ const OAUTH_PROVIDERS: OAuthProvider = {
     tokenUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
   },
   slack: {
-    clientId: process.env.VITE_SLACK_CLIENT_ID || "",
-    clientSecret: process.env.VITE_SLACK_CLIENT_SECRET || "",
+    clientId: "", // Configure via Edge Function
+    clientSecret: "", // Configure via Edge Function
     redirectUri: `${window.location.origin}/auth/callback/slack`,
     scope: [
       "channels:read",
