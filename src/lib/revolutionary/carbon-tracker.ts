@@ -488,5 +488,3 @@ class CarbonTracker {
 }
 
 export const carbonTracker = new CarbonTracker();
-
-export const carbonTracker = new CarbonTracker();

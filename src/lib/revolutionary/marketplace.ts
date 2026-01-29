@@ -3,9 +3,9 @@
  * PATCH REVOLUTION v2.0
  * 
  * Loja de integrações e plugins de terceiros
+ * Versão simplificada sem dependências de banco de dados
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface MarketplaceApp {
@@ -13,60 +13,27 @@ export interface MarketplaceApp {
   name: string;
   slug: string;
   description: string;
-  longDescription: string;
   category: AppCategory;
-  developer: {
-    id: string;
-    name: string;
-    website: string;
-    verified: boolean;
-  };
-  
-  // Visuals
+  developer: { id: string; name: string; verified: boolean };
   icon: string;
-  screenshots: string[];
-  
-  // Pricing
   pricing: AppPricing;
-  
-  // Stats
   rating: number;
   reviewCount: number;
   installCount: number;
-  
-  // Technical
   version: string;
-  lastUpdated: Date;
-  permissions: string[];
-  integrations: string[];
-  
-  // Status
   isVerified: boolean;
   isFeatured: boolean;
-  isNew: boolean;
 }
 
 export type AppCategory = 
-  | 'operations'
-  | 'safety'
-  | 'compliance'
-  | 'hr'
-  | 'finance'
-  | 'analytics'
-  | 'communication'
-  | 'maintenance'
-  | 'navigation'
-  | 'iot'
-  | 'ai'
-  | 'other';
+  | 'operations' | 'safety' | 'compliance' | 'hr' 
+  | 'finance' | 'analytics' | 'navigation' | 'ai';
 
 export interface AppPricing {
   type: 'free' | 'freemium' | 'paid' | 'subscription';
   price?: number;
   currency?: string;
-  billingPeriod?: 'monthly' | 'yearly' | 'one_time';
-  trialDays?: number;
-  features?: string[];
+  billingPeriod?: 'monthly' | 'yearly';
 }
 
 export interface AppReview {
@@ -79,638 +46,230 @@ export interface AppReview {
   content: string;
   createdAt: Date;
   helpful: number;
-  response?: {
-    content: string;
-    respondedAt: Date;
-  };
 }
 
 export interface InstalledApp {
   id: string;
   appId: string;
   organizationId: string;
-  installedBy: string;
   installedAt: Date;
-  status: 'active' | 'disabled' | 'pending_setup';
+  status: 'active' | 'disabled';
   configuration: Record<string, unknown>;
-  subscription?: {
-    plan: string;
-    expiresAt: Date;
-    autoRenew: boolean;
-  };
 }
 
-export interface WebhookEndpoint {
-  id: string;
-  appId: string;
-  organizationId: string;
-  url: string;
-  events: string[];
-  secret: string;
-  isActive: boolean;
-  lastTriggered?: Date;
-  failureCount: number;
-}
-
-// Featured marketplace apps (mock data - in production would come from DB)
-const MARKETPLACE_APPS: MarketplaceApp[] = [
+// Mock apps catalog
+const MOCK_APPS: MarketplaceApp[] = [
   {
-    id: 'stormglass-weather',
-    name: 'StormGlass Weather Pro',
-    slug: 'stormglass-weather',
-    description: 'Previsões meteorológicas precisas para rotas marítimas',
-    longDescription: `
-      Integre previsões meteorológicas de alta precisão diretamente em suas operações.
-      - Previsões de 10 dias para qualquer coordenada
-      - Dados de ondas, vento, temperatura e precipitação
-      - Alertas automáticos de condições adversas
-      - API de weather routing para otimização de rotas
-    `,
-    category: 'navigation',
-    developer: {
-      id: 'stormglass',
-      name: 'Storm Glass AB',
-      website: 'https://stormglass.io',
-      verified: true,
-    },
-    icon: '🌊',
-    screenshots: ['/screenshots/stormglass-1.png', '/screenshots/stormglass-2.png'],
-    pricing: {
-      type: 'freemium',
-      price: 99,
-      currency: 'USD',
-      billingPeriod: 'monthly',
-      trialDays: 14,
-      features: ['500 API calls/day', 'Weather alerts', 'Route optimization'],
-    },
+    id: 'port-analytics',
+    name: 'Port Analytics Pro',
+    slug: 'port-analytics-pro',
+    description: 'Análise avançada de performance portuária com IA',
+    category: 'analytics',
+    developer: { id: 'dev1', name: 'Maritime Labs', verified: true },
+    icon: '📊',
+    pricing: { type: 'subscription', price: 299, currency: 'USD', billingPeriod: 'monthly' },
     rating: 4.8,
-    reviewCount: 127,
-    installCount: 2450,
-    version: '2.3.1',
-    lastUpdated: new Date('2024-01-15'),
-    permissions: ['read:vessels', 'read:voyages', 'write:alerts'],
-    integrations: ['Voyage Planning', 'Fleet Tracking'],
+    reviewCount: 234,
+    installCount: 1250,
+    version: '2.4.1',
     isVerified: true,
     isFeatured: true,
-    isNew: false,
   },
   {
-    id: 'marinetraffic-ais',
-    name: 'MarineTraffic AIS',
-    slug: 'marinetraffic-ais',
-    description: 'Tracking AIS em tempo real para toda sua frota',
-    longDescription: `
-      Monitore a posição de todas as suas embarcações em tempo real.
-      - Dados AIS atualizados a cada minuto
-      - Histórico de posições por 12 meses
-      - ETA automático baseado em velocidade
-      - Detecção de desvios de rota
-    `,
-    category: 'operations',
-    developer: {
-      id: 'marinetraffic',
-      name: 'MarineTraffic',
-      website: 'https://marinetraffic.com',
-      verified: true,
-    },
-    icon: '📡',
-    screenshots: [],
-    pricing: {
-      type: 'subscription',
-      price: 249,
-      currency: 'USD',
-      billingPeriod: 'monthly',
-    },
-    rating: 4.9,
-    reviewCount: 312,
-    installCount: 5200,
-    version: '4.1.0',
-    lastUpdated: new Date('2024-02-01'),
-    permissions: ['read:vessels', 'write:positions', 'read:voyages'],
-    integrations: ['Fleet Command', 'Digital Twin'],
-    isVerified: true,
-    isFeatured: true,
-    isNew: false,
-  },
-  {
-    id: 'dnv-compliance',
-    name: 'DNV Compliance Suite',
-    slug: 'dnv-compliance',
-    description: 'Gestão automatizada de certificações e auditorias DNV',
-    longDescription: `
-      Mantenha todas as certificações DNV em conformidade.
-      - Tracking de validade de certificados
-      - Checklists de auditoria integrados
-      - Notificações de renovação
-      - Relatórios de conformidade
-    `,
-    category: 'compliance',
-    developer: {
-      id: 'dnv',
-      name: 'DNV GL',
-      website: 'https://dnv.com',
-      verified: true,
-    },
-    icon: '✅',
-    screenshots: [],
-    pricing: {
-      type: 'paid',
-      price: 5000,
-      currency: 'USD',
-      billingPeriod: 'yearly',
-    },
-    rating: 4.7,
-    reviewCount: 89,
-    installCount: 890,
-    version: '3.0.2',
-    lastUpdated: new Date('2024-01-20'),
-    permissions: ['read:vessels', 'read:certificates', 'write:audits'],
-    integrations: ['PEOTRAM', 'Document Management'],
-    isVerified: true,
-    isFeatured: true,
-    isNew: false,
-  },
-  {
-    id: 'bunker-index',
-    name: 'Bunker Index Pro',
-    slug: 'bunker-index',
-    description: 'Preços de bunker em tempo real de 400+ portos',
-    longDescription: `
-      Otimize seus custos de combustível com dados de mercado em tempo real.
-      - Preços atualizados diariamente
-      - Comparativo entre portos
-      - Alertas de preço
-      - Histórico e tendências
-    `,
-    category: 'operations',
-    developer: {
-      id: 'shipandbuker',
-      name: 'Ship & Bunker',
-      website: 'https://shipandbunker.com',
-      verified: true,
-    },
-    icon: '⛽',
-    screenshots: [],
-    pricing: {
-      type: 'subscription',
-      price: 149,
-      currency: 'USD',
-      billingPeriod: 'monthly',
-    },
+    id: 'crew-scheduler',
+    name: 'Crew Scheduler AI',
+    slug: 'crew-scheduler-ai',
+    description: 'Otimização inteligente de escalas de tripulação',
+    category: 'hr',
+    developer: { id: 'dev2', name: 'CrewTech Solutions', verified: true },
+    icon: '👥',
+    pricing: { type: 'subscription', price: 199, currency: 'USD', billingPeriod: 'monthly' },
     rating: 4.6,
     reviewCount: 156,
-    installCount: 1890,
-    version: '2.5.0',
-    lastUpdated: new Date('2024-01-25'),
-    permissions: ['read:vessels', 'read:voyages'],
-    integrations: ['Bunker Planning', 'Market Oracle'],
-    isVerified: true,
-    isFeatured: false,
-    isNew: false,
-  },
-  {
-    id: 'crew-wellness-ai',
-    name: 'Crew Wellness AI',
-    slug: 'crew-wellness-ai',
-    description: 'Monitoramento de bem-estar da tripulação com IA',
-    longDescription: `
-      Cuide da saúde mental e física da sua tripulação.
-      - Análise de padrões de comportamento
-      - Alertas de fadiga e estresse
-      - Recomendações personalizadas
-      - Integração com wearables
-    `,
-    category: 'hr',
-    developer: {
-      id: 'maritime-wellbeing',
-      name: 'Maritime Wellbeing Co.',
-      website: 'https://maritimewellbeing.com',
-      verified: true,
-    },
-    icon: '💚',
-    screenshots: [],
-    pricing: {
-      type: 'subscription',
-      price: 5,
-      currency: 'USD',
-      billingPeriod: 'monthly',
-      features: ['Per crew member pricing'],
-    },
-    rating: 4.8,
-    reviewCount: 78,
-    installCount: 670,
-    version: '1.8.0',
-    lastUpdated: new Date('2024-02-05'),
-    permissions: ['read:crew', 'write:wellness', 'read:schedules'],
-    integrations: ['Wellness Predictor', 'Gamification'],
-    isVerified: true,
-    isFeatured: true,
-    isNew: true,
-  },
-  {
-    id: 'carbon-credits',
-    name: 'Carbon Credits Exchange',
-    slug: 'carbon-credits',
-    description: 'Compra e gestão de créditos de carbono',
-    longDescription: `
-      Compense suas emissões com créditos verificados.
-      - Marketplace de créditos certificados
-      - Cálculo automático de compensação
-      - Certificados Verra e Gold Standard
-      - Relatórios ESG automatizados
-    `,
-    category: 'compliance',
-    developer: {
-      id: 'green-maritime',
-      name: 'Green Maritime Solutions',
-      website: 'https://greenmaritime.io',
-      verified: true,
-    },
-    icon: '🌱',
-    screenshots: [],
-    pricing: {
-      type: 'free',
-      features: ['Platform fee on transactions'],
-    },
-    rating: 4.4,
-    reviewCount: 45,
-    installCount: 320,
-    version: '1.2.0',
-    lastUpdated: new Date('2024-01-10'),
-    permissions: ['read:vessels', 'read:emissions', 'write:offsets'],
-    integrations: ['Carbon AI', 'ESG Reports'],
-    isVerified: true,
-    isFeatured: false,
-    isNew: true,
-  },
-  {
-    id: 'slack-integration',
-    name: 'Slack Integration',
-    slug: 'slack-integration',
-    description: 'Notificações e comandos no Slack',
-    longDescription: `
-      Receba alertas e controle o sistema via Slack.
-      - Notificações em tempo real
-      - Comandos slash para consultas
-      - Integração com canais específicos
-      - Bot inteligente com IA
-    `,
-    category: 'communication',
-    developer: {
-      id: 'nauti-integrations',
-      name: 'Nauti Integrations',
-      website: 'https://nautione.com.br',
-      verified: true,
-    },
-    icon: '💬',
-    screenshots: [],
-    pricing: {
-      type: 'free',
-    },
-    rating: 4.5,
-    reviewCount: 234,
-    installCount: 3100,
-    version: '2.0.0',
-    lastUpdated: new Date('2024-02-10'),
-    permissions: ['read:alerts', 'read:vessels', 'read:crew'],
-    integrations: ['Notifications', 'Voice AI'],
-    isVerified: true,
-    isFeatured: false,
-    isNew: false,
-  },
-  {
-    id: 'predictive-maintenance',
-    name: 'Predictive Maintenance AI',
-    slug: 'predictive-maintenance',
-    description: 'Previsão de falhas com machine learning',
-    longDescription: `
-      Antecipe problemas antes que aconteçam.
-      - Modelos de ML treinados para equipamentos marítimos
-      - Análise de sensores IoT
-      - Recomendações de manutenção
-      - ROI comprovado de 300%+
-    `,
-    category: 'maintenance',
-    developer: {
-      id: 'maritime-ai',
-      name: 'Maritime AI Labs',
-      website: 'https://maritimeai.com',
-      verified: true,
-    },
-    icon: '🔧',
-    screenshots: [],
-    pricing: {
-      type: 'subscription',
-      price: 399,
-      currency: 'USD',
-      billingPeriod: 'monthly',
-      trialDays: 30,
-    },
-    rating: 4.9,
-    reviewCount: 67,
-    installCount: 450,
+    installCount: 890,
     version: '3.1.0',
-    lastUpdated: new Date('2024-02-08'),
-    permissions: ['read:vessels', 'read:sensors', 'write:maintenance'],
-    integrations: ['IoT Connector', 'Digital Twin'],
     isVerified: true,
     isFeatured: true,
-    isNew: false,
+  },
+  {
+    id: 'weather-routing',
+    name: 'Weather Routing Plus',
+    slug: 'weather-routing-plus',
+    description: 'Otimização de rotas baseada em condições climáticas',
+    category: 'navigation',
+    developer: { id: 'dev3', name: 'NaviWeather', verified: true },
+    icon: '🌤️',
+    pricing: { type: 'subscription', price: 399, currency: 'USD', billingPeriod: 'monthly' },
+    rating: 4.9,
+    reviewCount: 312,
+    installCount: 2100,
+    version: '4.0.2',
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    id: 'compliance-checker',
+    name: 'Compliance Checker',
+    slug: 'compliance-checker',
+    description: 'Verificação automática de conformidade regulatória',
+    category: 'compliance',
+    developer: { id: 'dev4', name: 'RegTech Maritime', verified: true },
+    icon: '✅',
+    pricing: { type: 'freemium' },
+    rating: 4.5,
+    reviewCount: 89,
+    installCount: 650,
+    version: '1.8.3',
+    isVerified: true,
+    isFeatured: false,
+  },
+  {
+    id: 'fuel-optimizer',
+    name: 'Fuel Optimizer',
+    slug: 'fuel-optimizer',
+    description: 'Otimização de consumo de combustível',
+    category: 'operations',
+    developer: { id: 'dev5', name: 'EcoMarine', verified: true },
+    icon: '⛽',
+    pricing: { type: 'subscription', price: 449, currency: 'USD', billingPeriod: 'monthly' },
+    rating: 4.7,
+    reviewCount: 178,
+    installCount: 980,
+    version: '2.2.0',
+    isVerified: true,
+    isFeatured: false,
+  },
+  {
+    id: 'safety-inspector',
+    name: 'Safety Inspector AI',
+    slug: 'safety-inspector-ai',
+    description: 'Inspeções de segurança com visão computacional',
+    category: 'safety',
+    developer: { id: 'dev6', name: 'SafetyFirst Tech', verified: true },
+    icon: '🛡️',
+    pricing: { type: 'paid', price: 2499, currency: 'USD' },
+    rating: 4.4,
+    reviewCount: 67,
+    installCount: 320,
+    version: '1.5.0',
+    isVerified: true,
+    isFeatured: false,
+  },
+];
+
+const MOCK_INSTALLED: InstalledApp[] = [
+  {
+    id: 'inst-1',
+    appId: 'port-analytics',
+    organizationId: 'org-1',
+    installedAt: new Date('2024-01-15'),
+    status: 'active',
+    configuration: {},
+  },
+  {
+    id: 'inst-2',
+    appId: 'weather-routing',
+    organizationId: 'org-1',
+    installedAt: new Date('2024-02-20'),
+    status: 'active',
+    configuration: {},
   },
 ];
 
 class MarketplaceEngine {
-  
-  // Get all apps
-  getAllApps(): MarketplaceApp[] {
-    return MARKETPLACE_APPS;
-  }
-
-  // Get featured apps
-  getFeaturedApps(): MarketplaceApp[] {
-    return MARKETPLACE_APPS.filter(app => app.isFeatured);
-  }
-
-  // Get new apps
-  getNewApps(): MarketplaceApp[] {
-    return MARKETPLACE_APPS.filter(app => app.isNew);
-  }
-
-  // Get apps by category
-  getAppsByCategory(category: AppCategory): MarketplaceApp[] {
-    return MARKETPLACE_APPS.filter(app => app.category === category);
-  }
-
   // Search apps
-  searchApps(query: string): MarketplaceApp[] {
-    const q = query.toLowerCase();
-    return MARKETPLACE_APPS.filter(app => 
-      app.name.toLowerCase().includes(q) ||
-      app.description.toLowerCase().includes(q) ||
-      app.category.includes(q) ||
-      app.developer.name.toLowerCase().includes(q)
+  async searchApps(query: string): Promise<MarketplaceApp[]> {
+    const lowerQuery = query.toLowerCase();
+    return MOCK_APPS.filter(
+      app => 
+        app.name.toLowerCase().includes(lowerQuery) ||
+        app.description.toLowerCase().includes(lowerQuery)
     );
   }
 
-  // Get app by ID
-  getAppById(appId: string): MarketplaceApp | undefined {
-    return MARKETPLACE_APPS.find(app => app.id === appId);
+  // Get apps by category
+  async getAppsByCategory(category: AppCategory): Promise<MarketplaceApp[]> {
+    return MOCK_APPS.filter(app => app.category === category);
   }
 
-  // Get app by slug
-  getAppBySlug(slug: string): MarketplaceApp | undefined {
-    return MARKETPLACE_APPS.find(app => app.slug === slug);
+  // Get featured apps
+  async getFeaturedApps(): Promise<MarketplaceApp[]> {
+    return MOCK_APPS.filter(app => app.isFeatured);
+  }
+
+  // Get all apps
+  async getAllApps(): Promise<MarketplaceApp[]> {
+    return MOCK_APPS;
+  }
+
+  // Get app by ID
+  async getAppById(appId: string): Promise<MarketplaceApp | null> {
+    return MOCK_APPS.find(app => app.id === appId) || null;
+  }
+
+  // Get installed apps
+  async getInstalledApps(): Promise<InstalledApp[]> {
+    return MOCK_INSTALLED;
   }
 
   // Install app
-  async installApp(
-    appId: string,
-    organizationId: string,
-    userId: string,
-    configuration?: Record<string, unknown>
-  ): Promise<InstalledApp> {
-    const app = this.getAppById(appId);
-    if (!app) {
-      throw new Error('App not found');
-    }
+  async installApp(appId: string): Promise<InstalledApp> {
+    const app = MOCK_APPS.find(a => a.id === appId);
+    if (!app) throw new Error('App not found');
 
-    const installedApp: InstalledApp = {
-      id: crypto.randomUUID(),
+    const installed: InstalledApp = {
+      id: `inst-${Date.now()}`,
       appId,
-      organizationId,
-      installedBy: userId,
+      organizationId: 'org-1',
       installedAt: new Date(),
-      status: 'pending_setup',
-      configuration: configuration || {},
+      status: 'active',
+      configuration: {},
     };
 
-    try {
-      await supabase.from('installed_apps').insert({
-        id: installedApp.id,
-        app_id: appId,
-        organization_id: organizationId,
-        installed_by: userId,
-        installed_at: installedApp.installedAt.toISOString(),
-        status: installedApp.status,
-        configuration: installedApp.configuration,
-      });
-
-      logger.info('App installed', { appId, organizationId });
-    } catch (error) {
-      logger.error('Failed to install app', error as Error);
-      throw error;
-    }
-
-    return installedApp;
+    MOCK_INSTALLED.push(installed);
+    logger.info('App installed', { appId });
+    return installed;
   }
 
   // Uninstall app
-  async uninstallApp(
-    appId: string,
-    organizationId: string
-  ): Promise<void> {
-    try {
-      await supabase
-        .from('installed_apps')
-        .delete()
-        .eq('app_id', appId)
-        .eq('organization_id', organizationId);
-
-      // Also remove webhooks
-      await supabase
-        .from('app_webhooks')
-        .delete()
-        .eq('app_id', appId)
-        .eq('organization_id', organizationId);
-
-      logger.info('App uninstalled', { appId, organizationId });
-    } catch (error) {
-      logger.error('Failed to uninstall app', error as Error);
-      throw error;
+  async uninstallApp(installedAppId: string): Promise<void> {
+    const index = MOCK_INSTALLED.findIndex(a => a.id === installedAppId);
+    if (index >= 0) {
+      MOCK_INSTALLED.splice(index, 1);
+      logger.info('App uninstalled', { installedAppId });
     }
   }
 
-  // Get installed apps for organization
-  async getInstalledApps(organizationId: string): Promise<InstalledApp[]> {
-    const { data } = await supabase
-      .from('installed_apps')
-      .select('*')
-      .eq('organization_id', organizationId);
-
-    return (data || []).map(d => ({
-      id: d.id,
-      appId: d.app_id,
-      organizationId: d.organization_id,
-      installedBy: d.installed_by,
-      installedAt: new Date(d.installed_at),
-      status: d.status,
-      configuration: d.configuration,
-      subscription: d.subscription,
-    }));
-  }
-
-  // Check if app is installed
-  async isAppInstalled(appId: string, organizationId: string): Promise<boolean> {
-    const { count } = await supabase
-      .from('installed_apps')
-      .select('*', { count: 'exact', head: true })
-      .eq('app_id', appId)
-      .eq('organization_id', organizationId);
-
-    return (count || 0) > 0;
-  }
-
-  // Update app configuration
-  async updateAppConfiguration(
-    appId: string,
-    organizationId: string,
-    configuration: Record<string, unknown>
-  ): Promise<void> {
-    await supabase
-      .from('installed_apps')
-      .update({
-        configuration,
-        status: 'active',
-      })
-      .eq('app_id', appId)
-      .eq('organization_id', organizationId);
-  }
-
-  // Get app reviews
-  async getAppReviews(appId: string): Promise<AppReview[]> {
-    const { data } = await supabase
-      .from('app_reviews')
-      .select('*')
-      .eq('app_id', appId)
-      .order('created_at', { ascending: false });
-
-    return (data || []).map(d => ({
-      id: d.id,
-      appId: d.app_id,
-      userId: d.user_id,
-      userName: d.user_name,
-      rating: d.rating,
-      title: d.title,
-      content: d.content,
-      createdAt: new Date(d.created_at),
-      helpful: d.helpful,
-      response: d.response,
-    }));
-  }
-
-  // Submit review
-  async submitReview(
-    appId: string,
-    userId: string,
-    userName: string,
-    rating: number,
-    title: string,
-    content: string
-  ): Promise<AppReview> {
-    const review: AppReview = {
-      id: crypto.randomUUID(),
-      appId,
-      userId,
-      userName,
-      rating,
-      title,
-      content,
-      createdAt: new Date(),
-      helpful: 0,
-    };
-
-    await supabase.from('app_reviews').insert({
-      id: review.id,
-      app_id: appId,
-      user_id: userId,
-      user_name: userName,
-      rating,
-      title,
-      content,
-      created_at: review.createdAt.toISOString(),
-      helpful: 0,
-    });
-
-    return review;
-  }
-
-  // Register webhook
-  async registerWebhook(
-    appId: string,
-    organizationId: string,
-    url: string,
-    events: string[]
-  ): Promise<WebhookEndpoint> {
-    // Generate secret for HMAC signing
-    const secretBytes = crypto.getRandomValues(new Uint8Array(32));
-    const secret = Array.from(secretBytes)
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-
-    const webhook: WebhookEndpoint = {
-      id: crypto.randomUUID(),
-      appId,
-      organizationId,
-      url,
-      events,
-      secret,
-      isActive: true,
-      failureCount: 0,
-    };
-
-    await supabase.from('app_webhooks').insert({
-      id: webhook.id,
-      app_id: appId,
-      organization_id: organizationId,
-      url,
-      events,
-      secret,
-      is_active: true,
-      failure_count: 0,
-    });
-
-    return webhook;
-  }
-
-  // Get available categories
-  getCategories(): Array<{ id: AppCategory; name: string; icon: string; count: number }> {
-    const categories: Array<{ id: AppCategory; name: string; icon: string }> = [
-      { id: 'operations', name: 'Operações', icon: '⚓' },
+  // Get categories
+  getCategories(): Array<{ id: AppCategory; name: string; icon: string }> {
+    return [
+      { id: 'operations', name: 'Operações', icon: '⚙️' },
       { id: 'safety', name: 'Segurança', icon: '🛡️' },
       { id: 'compliance', name: 'Compliance', icon: '✅' },
-      { id: 'hr', name: 'RH & Tripulação', icon: '👥' },
+      { id: 'hr', name: 'RH', icon: '👥' },
       { id: 'finance', name: 'Financeiro', icon: '💰' },
       { id: 'analytics', name: 'Analytics', icon: '📊' },
-      { id: 'communication', name: 'Comunicação', icon: '💬' },
-      { id: 'maintenance', name: 'Manutenção', icon: '🔧' },
       { id: 'navigation', name: 'Navegação', icon: '🧭' },
-      { id: 'iot', name: 'IoT & Sensores', icon: '📡' },
-      { id: 'ai', name: 'Inteligência Artificial', icon: '🤖' },
-      { id: 'other', name: 'Outros', icon: '📦' },
+      { id: 'ai', name: 'IA', icon: '🤖' },
     ];
-
-    return categories.map(cat => ({
-      ...cat,
-      count: MARKETPLACE_APPS.filter(app => app.category === cat.id).length,
-    }));
   }
 
-  // Get marketplace stats
-  getMarketplaceStats(): {
+  // Get app statistics
+  async getMarketplaceStats(): Promise<{
     totalApps: number;
     totalInstalls: number;
-    avgRating: number;
-    verifiedApps: number;
     categories: number;
-  } {
-    const apps = MARKETPLACE_APPS;
-    
+    avgRating: number;
+  }> {
+    const totalApps = MOCK_APPS.length;
+    const totalInstalls = MOCK_APPS.reduce((sum, app) => sum + app.installCount, 0);
+    const avgRating = MOCK_APPS.reduce((sum, app) => sum + app.rating, 0) / totalApps;
+
     return {
-      totalApps: apps.length,
-      totalInstalls: apps.reduce((sum, app) => sum + app.installCount, 0),
-      avgRating: apps.reduce((sum, app) => sum + app.rating, 0) / apps.length,
-      verifiedApps: apps.filter(app => app.isVerified).length,
-      categories: new Set(apps.map(app => app.category)).size,
+      totalApps,
+      totalInstalls,
+      categories: 8,
+      avgRating: Math.round(avgRating * 10) / 10,
     };
   }
 }
