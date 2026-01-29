@@ -1907,6 +1907,173 @@ export interface TemplateVersionInsertDB {
 export const templateVersionsTable = createTableAccessor<TemplateVersionDB, TemplateVersionInsertDB>("template_versions");
 
 // ============================================================================
+// WELLNESS & SCENARIO SIMULATION TABLES
+// ============================================================================
+
+/** Crew Wellness Metrics - Used by WellnessPredictor */
+export interface CrewWellnessMetricDB {
+  id: string;
+  crew_member_id: string;
+  organization_id: string | null;
+  date: string;
+  wellness_score: number | null;
+  fatigue_index: number | null;
+  stress_level: number | null;
+  sleep_hours: number | null;
+  sleep_quality: number | null;
+  recovery_score: number | null;
+  hours_on_duty: number | null;
+  sentiment_score: number | null;
+  heart_rate_avg: number | null;
+  heart_rate_variability: number | null;
+  step_count: number | null;
+  active_minutes: number | null;
+  breaks_taken: number | null;
+  tasks_completed: number | null;
+  incidents_reported: number | null;
+  message_volume: number | null;
+  response_time_avg: number | null;
+  alert_count: number | null;
+  wearable_source: string | null;
+  metadata: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CrewWellnessMetricInsertDB {
+  crew_member_id: string;
+  organization_id?: string | null;
+  date?: string;
+  wellness_score?: number | null;
+  fatigue_index?: number | null;
+  stress_level?: number | null;
+  sleep_hours?: number | null;
+  sleep_quality?: number | null;
+  recovery_score?: number | null;
+  hours_on_duty?: number | null;
+  sentiment_score?: number | null;
+  heart_rate_avg?: number | null;
+  heart_rate_variability?: number | null;
+  step_count?: number | null;
+  active_minutes?: number | null;
+  breaks_taken?: number | null;
+  tasks_completed?: number | null;
+  incidents_reported?: number | null;
+  message_volume?: number | null;
+  response_time_avg?: number | null;
+  alert_count?: number | null;
+  wearable_source?: string | null;
+  metadata?: Json | null;
+}
+
+export const crewWellnessMetricsTable = createTableAccessor<CrewWellnessMetricDB, CrewWellnessMetricInsertDB>("crew_wellness_metrics");
+
+/** Wellness Alerts - Used by WellnessPredictor */
+export interface WellnessAlertDB {
+  id: string;
+  crew_member_id: string;
+  organization_id: string | null;
+  alert_type: string;
+  severity: string;
+  title: string;
+  description: string | null;
+  recommendation: string | null;
+  is_active: boolean;
+  acknowledged_at: string | null;
+  acknowledged_by: string | null;
+  resolved_at: string | null;
+  resolved_by: string | null;
+  resolution_notes: string | null;
+  metadata: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WellnessAlertInsertDB {
+  crew_member_id: string;
+  organization_id?: string | null;
+  alert_type: string;
+  severity: string;
+  title: string;
+  description?: string | null;
+  recommendation?: string | null;
+  is_active?: boolean;
+  metadata?: Json | null;
+}
+
+export const wellnessAlertsTable = createTableAccessor<WellnessAlertDB, WellnessAlertInsertDB>("wellness_alerts");
+
+/** Scenario Simulations - Used by WhatIfSimulator */
+export interface ScenarioSimulationDB {
+  id: string;
+  organization_id: string | null;
+  user_id: string | null;
+  scenario_name: string;
+  parameters: Json;
+  impacts: Json;
+  recommendations: Json | null;
+  risk_score: number | null;
+  confidence_level: number | null;
+  projected_savings: number | null;
+  projected_costs: number | null;
+  time_horizon: string | null;
+  execution_time_ms: number | null;
+  metadata: Json | null;
+  created_at: string;
+}
+
+export interface ScenarioSimulationInsertDB {
+  organization_id?: string | null;
+  user_id?: string | null;
+  scenario_name: string;
+  parameters: Json;
+  impacts: Json;
+  recommendations?: Json | null;
+  risk_score?: number | null;
+  confidence_level?: number | null;
+  projected_savings?: number | null;
+  projected_costs?: number | null;
+  time_horizon?: string | null;
+  execution_time_ms?: number | null;
+  metadata?: Json | null;
+}
+
+export const scenarioSimulationsTable = createTableAccessor<ScenarioSimulationDB, ScenarioSimulationInsertDB>("scenario_simulations");
+
+/** Saved Scenarios - Used by WhatIfSimulator */
+export interface SavedScenarioDB {
+  id: string;
+  organization_id: string | null;
+  name: string;
+  description: string | null;
+  parameters: Json;
+  is_template: boolean;
+  is_public: boolean;
+  created_by: string | null;
+  updated_by: string | null;
+  usage_count: number;
+  last_used_at: string | null;
+  tags: string[] | null;
+  metadata: Json | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SavedScenarioInsertDB {
+  organization_id?: string | null;
+  name: string;
+  description?: string | null;
+  parameters: Json;
+  is_template?: boolean;
+  is_public?: boolean;
+  created_by?: string | null;
+  tags?: string[] | null;
+  metadata?: Json | null;
+}
+
+export const savedScenariosTable = createTableAccessor<SavedScenarioDB, SavedScenarioInsertDB>("saved_scenarios");
+
+// ============================================================================
 // LEGACY SUPPORT - Generic dynamic accessor
 // ============================================================================
 
