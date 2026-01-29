@@ -44,33 +44,44 @@ class UsageTracker {
   }
 
   /**
-   * Initialize tracker
+   * Initialize tracker - SAFE: Only runs after DOM is ready
    */
   init(): void {
     if (this.isInitialized) return;
+    
+    // Ensure we're in browser environment with ready DOM
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+    
     this.isInitialized = true;
 
-    // Track page views on navigation
-    this.trackPageView(window.location.pathname);
+    // Defer initial tracking to avoid blocking render
+    requestAnimationFrame(() => {
+      try {
+        // Track initial page view
+        this.trackPageView(window.location.pathname);
 
-    // Flush events every 30 seconds
-    this.flushInterval = setInterval(() => {
-      this.flush();
-    }, 30000);
+        // Flush events every 30 seconds
+        this.flushInterval = setInterval(() => {
+          this.flush();
+        }, 30000);
 
-    // Flush on page unload
-    window.addEventListener('beforeunload', () => {
-      this.flush();
-    });
+        // Flush on page unload
+        window.addEventListener('beforeunload', () => {
+          this.flush();
+        });
 
-    // Track visibility changes
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        this.flush();
+        // Track visibility changes
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            this.flush();
+          }
+        });
+      } catch (e) {
+        console.warn('[UsageTracker] Init error:', e);
       }
     });
-
-    console.log('[UsageTracker] Initialized', { sessionId: this.sessionId });
   }
 
   /**

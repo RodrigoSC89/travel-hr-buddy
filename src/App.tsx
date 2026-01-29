@@ -330,10 +330,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Inicializar Analytics Tracker
-if (typeof window !== 'undefined') {
-  usageTracker.init();
-}
+// Analytics Tracker inicializado via useEffect no AppInitializer
 
 // Ultra-optimized loader with instant skeleton display
 const Loader = React.memo(() => {
@@ -799,6 +796,20 @@ const AppRoutes = () => (
 );
 
 function App() {
+  // Initialize analytics safely after component mount
+  React.useEffect(() => {
+    // Defer to avoid blocking initial render
+    const timer = setTimeout(() => {
+      try {
+        usageTracker.init();
+      } catch (e) {
+        console.warn('[App] Analytics init failed:', e);
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
