@@ -463,6 +463,21 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🎧 Support Center", path: "/admin/support", icon: MessageSquare, emoji: "🎧", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
     ],
   },
+
+  // ============================================
+  // 🛠️ FERRAMENTAS AVANÇADAS (17/17)
+  // PWA, Analytics, i18n, E2E Tests
+  // ============================================
+  {
+    title: "🛠️ Ferramentas Avançadas",
+    defaultOpen: false,
+    items: [
+      { label: "📱 PWA & Offline", path: "/pwa-settings", icon: HardDrive, emoji: "📱", badge: "NEW", status: "new" },
+      { label: "📊 Analytics Avançado", path: "/advanced-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
+      { label: "🌐 Idiomas & Região", path: "/language-settings", icon: Globe, emoji: "🌐", badge: "11 langs", status: "new" },
+      { label: "🧪 Suite de Testes E2E", path: "/test-suite", icon: Target, emoji: "🧪", badge: "Playwright", status: "new" },
+    ],
+  },
 ];
 
 /**
