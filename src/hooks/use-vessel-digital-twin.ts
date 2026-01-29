@@ -360,8 +360,10 @@ export function useVesselSensors(vesselId: string) {
       })) as VesselSensor[];
     },
     enabled: !!vesselId,
-    staleTime: 30 * 1000, // Refresh more frequently
-    refetchInterval: 60 * 1000, // Auto-refresh every minute
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
 

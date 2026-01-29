@@ -185,6 +185,9 @@ export function useTrackingStats() {
         lastUpdate: logs[0]?.recorded_at || new Date().toISOString(),
       };
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }

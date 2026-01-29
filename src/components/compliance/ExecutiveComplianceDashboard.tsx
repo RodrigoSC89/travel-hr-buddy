@@ -252,7 +252,10 @@ const useExecutiveKPIs = () => {
       
       return { modules, metrics, trends };
     },
-    refetchInterval: 60000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };
 

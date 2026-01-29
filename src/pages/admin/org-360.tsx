@@ -43,7 +43,10 @@ export default function Org360Dashboard() {
         storage: 94,
       };
     },
-    refetchInterval: 30000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   const { data: userEngagement, isLoading: loadingEngagement } = useQuery({

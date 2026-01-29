@@ -91,7 +91,10 @@ export function useIoTReadings(sensorIds?: string[]) {
         recorded_at: row.recorded_at || new Date().toISOString(),
       }));
     },
-    refetchInterval: 5000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 }
 

@@ -75,7 +75,10 @@ export function useAIFleetIntelligence() {
       if (error) return getMockPositions();
       return data?.length ? data : getMockPositions();
     },
-    refetchInterval: 30000, // Atualizar a cada 30s
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   // Query: Anomalias detectadas
@@ -91,7 +94,10 @@ export function useAIFleetIntelligence() {
       if (error) return getMockAnomalies();
       return data || [];
     },
-    refetchInterval: 60000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   // Mutation: Predição de rota com IA
