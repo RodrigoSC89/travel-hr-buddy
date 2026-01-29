@@ -42,10 +42,7 @@ interface SmartSidebarProps {
 }
 
 export function SmartSidebar({ className }: SmartSidebarProps) {
-  const [openSection, setOpenSection] = useState<string | null>(() => {
-    const defaultSection = SIDEBAR_ROUTES.find(g => g.defaultOpen);
-    return defaultSection?.title || null;
-  });
+  const [openSection, setOpenSection] = useState<string | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -213,12 +210,8 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
     const currentGroup = findGroupByPath(location.pathname);
     if (currentGroup) {
       setOpenSection(currentGroup.title);
-    } else {
-      const defaultSection = SIDEBAR_ROUTES.find(g => g.defaultOpen);
-      if (defaultSection && !openSection) {
-        setOpenSection(defaultSection.title);
-      }
     }
+    // Removed auto-expand for defaultOpen groups - all sections start collapsed
   }, [location.pathname, openSection]);
 
   // Render label with emoji
