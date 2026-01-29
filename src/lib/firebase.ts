@@ -14,18 +14,19 @@ import {
 import { logger } from "@/lib/logger";
 
 // Firebase configuration - should be moved to environment variables in production
+const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
 const firebaseConfig: FirebaseOptions = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || ""
+  apiKey: safeEnv.VITE_FIREBASE_API_KEY || "",
+  authDomain: safeEnv.VITE_FIREBASE_AUTH_DOMAIN || "",
+  projectId: safeEnv.VITE_FIREBASE_PROJECT_ID || "",
+  storageBucket: safeEnv.VITE_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: safeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: safeEnv.VITE_FIREBASE_APP_ID || "",
+  measurementId: safeEnv.VITE_FIREBASE_MEASUREMENT_ID || ""
 };
 
 // VAPID key for web push - should be in environment variables
-const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY || "";
+const VAPID_KEY = safeEnv.VITE_FIREBASE_VAPID_KEY || "";
 
 let app: FirebaseApp | null = null;
 let messaging: Messaging | null = null;

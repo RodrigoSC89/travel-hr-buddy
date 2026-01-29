@@ -45,8 +45,9 @@ class MQTTClientManager {
       this.config = { ...this.config, ...config };
     }
 
-    // Get MQTT URL from env or config
-    const mqttUrl = this.config.url || import.meta.env.VITE_MQTT_URL;
+    // Get MQTT URL from env or config with safe access
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const mqttUrl = this.config.url || safeEnv.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
     
     if (!mqttUrl) {
       Logger.warn("MQTT URL não configurada. Defina VITE_MQTT_URL no .env", undefined, "MQTTClient");

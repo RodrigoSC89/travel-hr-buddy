@@ -124,7 +124,8 @@ function classifyRisk(value: number): RiskClassification {
  */
 function publishForecastAlert(risk: RiskClassification): void {
   try {
-    const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "ws://localhost:1883");
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const client = mqtt.connect(safeEnv.VITE_MQTT_URL || "ws://localhost:1883");
     
     client.on("connect", () => {
       const alertData = {

@@ -84,7 +84,8 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
       try {
         const { data, error } = await supabase.functions.invoke('mapbox-token');
         if (error) {
-          const envToken = import.meta.env.VITE_MAPBOX_TOKEN;
+          const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+          const envToken = safeEnv.VITE_MAPBOX_TOKEN || "";
           if (envToken) setMapboxToken(envToken);
         } else if (data?.token) {
           setMapboxToken(data.token);

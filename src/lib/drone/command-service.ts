@@ -6,7 +6,8 @@
 import mqtt, { MqttClient } from "mqtt";
 import { logger } from "@/lib/logger";
 
-const MQTT_URL = import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
+const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+const MQTT_URL = safeEnv.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
 const DRONE_TOPIC_PREFIX = "nautilus/drones";
 
 export type DroneCommand = 

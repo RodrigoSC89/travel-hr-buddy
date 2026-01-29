@@ -102,6 +102,7 @@ function isConfigured(...keys: (string | undefined)[]): boolean {
  */
 export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const results: APIKeyStatus[] = [];
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
   
   logger.info("🔍 Starting API Key Validation...\n");
 
@@ -113,7 +114,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "OpenAI",
     key: "VITE_OPENAI_API_KEY",
     status: openAIStatus,
-    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
+    configured: isConfigured(safeEnv.VITE_OPENAI_API_KEY),
     responseTime: openAIResult.responseTime,
     message: openAIResult.message,
     error: openAIResult.error,
@@ -130,8 +131,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_MAPBOX_ACCESS_TOKEN / VITE_MAPBOX_TOKEN",
     status: mapboxStatus,
     configured: isConfigured(
-      import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
-      import.meta.env.VITE_MAPBOX_TOKEN
+      safeEnv.VITE_MAPBOX_ACCESS_TOKEN,
+      safeEnv.VITE_MAPBOX_TOKEN
     ),
     responseTime: mapboxResult.responseTime,
     message: mapboxResult.message,
@@ -256,7 +257,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "Whisper (OpenAI Audio)",
     key: "VITE_OPENAI_API_KEY",
     status: whisperStatus,
-    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
+    configured: isConfigured(safeEnv.VITE_OPENAI_API_KEY),
     responseTime: whisperResult.responseTime,
     message: whisperResult.message,
     error: whisperResult.error,
