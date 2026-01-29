@@ -112,7 +112,7 @@ class UltraStartupOptimizer {
    */
   private addResourceHints(): void {
     const hints = [
-      { rel: 'preconnect', href: import.meta.env.VITE_SUPABASE_URL, crossOrigin: 'anonymous' },
+      { rel: 'preconnect', href: 'https://vnbptmixvwropvanyhdb.supabase.co', crossOrigin: 'anonymous' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
       { rel: 'dns-prefetch', href: 'https://ai.gateway.lovable.dev' },

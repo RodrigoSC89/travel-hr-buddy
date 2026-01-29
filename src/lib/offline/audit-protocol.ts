@@ -50,8 +50,8 @@ export interface AuditReport {
 const STORAGE_KEY = 'nautilus_audit_log';
 const MAX_ENTRIES = 10000;
 const RETENTION_DAYS = 90;
-// SECURITY: Password should be configured via environment, not hardcoded
-const getAuditPassword = () => import.meta.env.VITE_AUDIT_KEY || crypto.randomUUID();
+// SECURITY: Password is dynamically generated per session
+const getAuditPassword = () => crypto.randomUUID();
 
 class AuditProtocol {
   private entries: AuditEntry[] = [];
