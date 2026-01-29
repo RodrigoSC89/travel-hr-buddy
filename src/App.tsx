@@ -201,6 +201,12 @@ const HRChatbotPage = lazy(() => import("@/pages/HRChatbotPage"));
 const HRDocumentOCRPage = lazy(() => import("@/pages/HRDocumentOCRPage"));
 const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPredictionPage"));
 
+// ===== REVOLUTIONARY AI MODULES =====
+const CrewAICopilotPage = lazy(() => import("@/pages/CrewAICopilotPage"));
+const AdvancedFinanceAIPage = lazy(() => import("@/pages/AdvancedFinanceAIPage"));
+const SmartAuditEnginePage = lazy(() => import("@/pages/SmartAuditEnginePage"));
+const AdvancedTrainingAIPage = lazy(() => import("@/pages/AdvancedTrainingAIPage"));
+
 // ============================================
 // TREINAMENTOS
 // ============================================
@@ -548,6 +554,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* AUDITORIAS & COMPLIANCE */}
       {/* ============================================ */}
+      <Route path="/smart-audit-engine" element={<SmartAuditEnginePage />} />
       <Route path="/audit-ai-chat" element={<AuditAIChatPage />} />
       <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
@@ -594,6 +601,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* RH & PESSOAS (HR/DP MODULE) */}
       {/* ============================================ */}
+      <Route path="/crew-ai-copilot" element={<CrewAICopilotPage />} />
       <Route path="/nautilus-people" element={<MaritimeCommandCenter />} />
       <Route path="/crew-management" element={<MaritimeCommandCenter />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
@@ -640,6 +648,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* TREINAMENTOS */}
       {/* ============================================ */}
+      <Route path="/advanced-training-ai" element={<AdvancedTrainingAIPage />} />
       <Route path="/nautilus-academy" element={<AITraining />} />
       <Route path="/solas-isps-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
@@ -648,6 +657,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* FINANÇAS & PROCUREMENT */}
       {/* ============================================ */}
+      <Route path="/advanced-finance-ai" element={<AdvancedFinanceAIPage />} />
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
