@@ -332,29 +332,17 @@ const queryClient = new QueryClient({
 
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
-// Ultra-optimized loader with instant skeleton display
-// PATCH: Emergency timeout to break infinite loading loops
+// Ultra-optimized loader - NO AUTOMATIC REDIRECT to prevent loops
+// PATCH v28: Removed force redirect that was causing infinite loops
 const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
   
   React.useEffect(() => {
-    // Show retry after 3s only
-    const retryTimeout = setTimeout(() => setShowRetry(true), 3000);
-    
-    // CRITICAL: Force redirect to auth after 5s to break ANY loading loop
-    const forceTimeout = setTimeout(() => {
-      // Clear storage and redirect
-      try {
-        Object.keys(localStorage)
-          .filter(k => k.includes('supabase') || k.includes('sb-'))
-          .forEach(k => localStorage.removeItem(k));
-      } catch {}
-      window.location.href = '/auth';
-    }, 5000);
+    // Show retry after 2s only - user can manually fix
+    const retryTimeout = setTimeout(() => setShowRetry(true), 2000);
     
     return () => {
       clearTimeout(retryTimeout);
-      clearTimeout(forceTimeout);
     };
   }, []);
   
@@ -364,7 +352,8 @@ const Loader = React.memo(() => {
         .filter(k => k.includes('supabase') || k.includes('sb-'))
         .forEach(k => localStorage.removeItem(k));
     } catch {}
-    window.location.href = '/auth';
+    // Reload current page instead of redirecting to auth
+    window.location.reload();
   };
   
   return (
@@ -387,7 +376,7 @@ const Loader = React.memo(() => {
               onClick={handleRetry}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
             >
-              Ir para login
+              Tentar novamente
             </button>
           </div>
         )}

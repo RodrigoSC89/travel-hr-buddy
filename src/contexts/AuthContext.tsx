@@ -119,13 +119,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // CRITICAL: Force loading false IMMEDIATELY after 800ms
+    // CRITICAL v28: Force loading false IMMEDIATELY after 300ms
     // This is the PRIMARY defense against infinite loading
     const immediateTimeout = setTimeout(() => {
       if (mounted) {
         setIsLoading(false);
       }
-    }, 800);
+    }, 300);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
@@ -133,18 +133,22 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     // Initialize auth - simplified and bulletproof
     const initializeAuth = async () => {
       try {
-        // Use AbortController for timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 1500);
+        // Quick timeout - 1s max
+        const timeoutPromise = new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error('timeout')), 1000)
+        );
         
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
-        clearTimeout(timeoutId);
+        const sessionPromise = supabase.auth.getSession();
+        
+        const result = await Promise.race([sessionPromise, timeoutPromise]);
         
         if (!mounted) return;
-
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-      } catch (error) {
+        
+        if (result && 'data' in result) {
+          setSession(result.data.session);
+          setUser(result.data.session?.user ?? null);
+        }
+      } catch {
         // On ANY error, just continue without session
         logger.warn("[AuthContext] Session fetch failed, continuing without auth");
       } finally {
