@@ -102,20 +102,27 @@ export function FleetMapBox({
       } else {
         // If no positions from API, use external vessels with mock coordinates
         if (externalVessels && externalVessels.length > 0) {
-          const mappedVessels = externalVessels.map((v, i) => ({
-            vesselId: v.id,
-            mmsi: v.mmsi || `710${100000 + i}`,
-            name: v.name,
-            latitude: v.latitude || -23.9619 + (Math.random() * 3 - 1.5),
-            longitude: v.longitude || -46.3121 + (Math.random() * 3 - 1.5),
-            speed: v.speed || Math.floor(Math.random() * 15),
-            course: v.course || Math.floor(Math.random() * 360),
-            heading: v.heading || Math.floor(Math.random() * 360),
-            navStatus: v.status === "active" ? "Under way using engine" : "Moored",
-            shipType: v.vessel_type || "Cargo",
-            destination: v.current_location || v.destination,
-            lastUpdate: new Date().toISOString(),
-          }));
+          const mappedVessels = externalVessels.map((v, i) => {
+            // Deterministic position based on ID hash
+            const idHash = v.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+            const latOffset = ((idHash % 300) / 100) - 1.5;
+            const lngOffset = (((idHash + 50) % 300) / 100) - 1.5;
+            
+            return {
+              vesselId: v.id,
+              mmsi: v.mmsi || `710${100000 + i}`,
+              name: v.name,
+              latitude: v.latitude || -23.9619 + latOffset,
+              longitude: v.longitude || -46.3121 + lngOffset,
+              speed: v.speed || 5 + (idHash % 10),
+              course: v.course || idHash % 360,
+              heading: v.heading || (idHash + 30) % 360,
+              navStatus: v.status === "active" ? "Under way using engine" : "Moored",
+              shipType: v.vessel_type || "Cargo",
+              destination: v.current_location || v.destination,
+              lastUpdate: new Date().toISOString(),
+            };
+          });
           setVessels(mappedVessels);
           setSource("enriched");
         }

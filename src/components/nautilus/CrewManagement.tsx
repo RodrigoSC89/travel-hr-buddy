@@ -54,27 +54,35 @@ export function CrewManagement() {
       }
 
       if (data && data.length > 0) {
-        const mappedCrew: CrewMember[] = data.map((c: any) => ({
-          id: c.id,
-          name: c.full_name || "Tripulante",
-          position: c.position || "Marinheiro",
-          vessel: c.vessels?.name || "Sem embarcação",
-          certifications: [
-            { 
-              name: "STCW", 
-              expiryDate: new Date(Date.now() + Math.random() * 180 * 86400000).toISOString(),
-              status: Math.random() > 0.7 ? "expiring" : "valid" as const
-            },
-            { 
-              name: "GMDSS", 
-              expiryDate: new Date(Date.now() + Math.random() * 365 * 86400000).toISOString(),
-              status: "valid" as const
-            },
-          ],
-          hoursWorked: Math.floor(Math.random() * 12),
-          restHours: Math.floor(Math.random() * 10) + 6,
-          performance: 70 + Math.random() * 30,
-        }));
+        const mappedCrew: CrewMember[] = data.map((c: any, idx: number) => {
+          // Deterministic values based on ID hash
+          const idHash = c.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+          const stcwDays = 90 + (idHash % 180);
+          const gmdssDays = 180 + (idHash % 365);
+          const isExpiring = idHash % 10 > 6;
+          
+          return {
+            id: c.id,
+            name: c.full_name || "Tripulante",
+            position: c.position || "Marinheiro",
+            vessel: c.vessels?.name || "Sem embarcação",
+            certifications: [
+              { 
+                name: "STCW", 
+                expiryDate: new Date(Date.now() + stcwDays * 86400000).toISOString(),
+                status: isExpiring ? "expiring" : "valid" as const
+              },
+              { 
+                name: "GMDSS", 
+                expiryDate: new Date(Date.now() + gmdssDays * 86400000).toISOString(),
+                status: "valid" as const
+              },
+            ],
+            hoursWorked: 6 + (idHash % 6),
+            restHours: 10 + (idHash % 6),
+            performance: 75 + (idHash % 20),
+          };
+        });
         setCrew(mappedCrew);
       } else {
         setCrew(getDemoCrew());

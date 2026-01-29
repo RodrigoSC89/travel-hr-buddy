@@ -56,17 +56,21 @@ function useEquipmentData() {
       if (error) throw error;
       
       // Transform to equipment format
-      return (maintenance || []).map(task => ({
-        id: task.id,
-        name: task.title || task.component_name || 'Equipamento',
-        type: 'Motor Diesel',
-        vesselName: 'Embarcação',
-        temperature: 70 + Math.random() * 20,
-        vibration: 3 + Math.random() * 4,
-        pressure: 45 + Math.random() * 15,
-        runningHours: Math.floor(Math.random() * 15000),
-        lastMaintenance: task.completed_date || task.created_at
-      } as EquipmentData));
+      return (maintenance || []).map((task, idx) => {
+        // Deterministic values based on ID hash
+        const idHash = task.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+        return {
+          id: task.id,
+          name: task.title || task.component_name || 'Equipamento',
+          type: 'Motor Diesel',
+          vesselName: 'Embarcação',
+          temperature: 72 + (idHash % 18),
+          vibration: 4 + (idHash % 3),
+          pressure: 48 + (idHash % 12),
+          runningHours: 5000 + (idHash % 10000),
+          lastMaintenance: task.completed_date || task.created_at
+        } as EquipmentData;
+      });
     },
     staleTime: 5 * 60 * 1000
   });
@@ -77,16 +81,18 @@ function useHistoricalData(equipmentId: string | null) {
   return useQuery({
     queryKey: ['predictive-history', equipmentId],
     queryFn: async () => {
-      // Generate realistic historical data
+      // Generate deterministic historical data
       const history: HistoricalReading[] = [];
       for (let i = 29; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
+        // Deterministic values based on day offset
+        const dayFactor = Math.sin(i * 0.3) * 0.5 + 0.5;
         history.push({
           date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }),
-          temperature: 70 + Math.random() * 15 + (i < 10 ? i * 0.3 : 0),
-          vibration: 4 + Math.random() * 2 + (i < 10 ? i * 0.08 : 0),
-          pressure: 45 + Math.random() * 10
+          temperature: 72 + dayFactor * 13 + (i < 10 ? i * 0.3 : 0),
+          vibration: 4.5 + dayFactor * 1.5 + (i < 10 ? i * 0.08 : 0),
+          pressure: 47 + dayFactor * 8
         });
       }
       return history;

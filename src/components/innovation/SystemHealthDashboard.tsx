@@ -90,9 +90,11 @@ export const SystemHealthDashboard = () => {
       }
     ]);
 
-    // Simulate real-time updates
+    // Deterministic updates based on time
     const interval = setInterval(() => {
-      setSystemLoad(prev => Math.max(30, Math.min(95, prev + (Math.random() - 0.5) * 10)));
+      const secondsElapsed = Math.floor(Date.now() / 1000);
+      const sineWave = Math.sin(secondsElapsed * 0.1);
+      setSystemLoad(prev => Math.max(45, Math.min(85, 65 + sineWave * 15)));
     }, 3000);
 
     return () => clearInterval(interval);
