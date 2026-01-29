@@ -90,6 +90,74 @@ export {
 } from './training-lxp';
 
 // ============================================
+// PREDICTIVE AUDIT MODULE
+// AI/ML-powered audit predictions with 3D visualization
+// ============================================
+export {
+  ExecutiveAuditDashboard,
+  AuditTimeline3D,
+  predictiveAuditEngine,
+  auditRiskAnalyzer,
+  useAuditPrediction,
+  useFleetPredictions,
+  useRiskPrediction,
+  useCustomRiskPrediction,
+  useRefreshPredictions,
+  type AuditPrediction,
+  type Issue,
+  type Action,
+  type Pattern,
+  type RiskPrediction,
+  type FeatureImpact,
+  type Recommendation,
+  type VesselRiskData,
+  type TimelineEvent
+} from './audits';
+
+// ============================================
+// FINANCE AI MODULE
+// Predictive accounting, fraud detection, budget optimization
+// ============================================
+export {
+  FinanceHub,
+  predictiveAccountingEngine,
+  useFinanceAI,
+  useCashFlowPrediction,
+  useFinancialMetrics,
+  useFinancialRisk,
+  useFraudDetection,
+  useBudgetOptimization,
+  useRefreshFinanceData,
+  type CashFlowPrediction,
+  type FraudAlert,
+  type BudgetOptimization,
+  type FinancialRiskAssessment,
+  type FinancialMetrics,
+  type UseFinanceAIOptions
+} from './finance';
+
+// ============================================
+// SMART LOGISTICS MODULE
+// Autonomous supply chain, predictive inventory
+// ============================================
+export {
+  autonomousLogisticsEngine,
+  useLogisticsAI,
+  useInventoryPrediction,
+  useSupplyChainOptimization,
+  useDemandForecast,
+  useLogisticsMetrics,
+  useAutoOrderGeneration,
+  useRefreshLogisticsData,
+  type InventoryPrediction,
+  type SupplyChainOptimization,
+  type DemandForecast,
+  type AutoOrderRecommendation,
+  type LogisticsMetrics,
+  type UseLogisticsAIOptions
+} from './smart-logistics';
+
+// ============================================
 // MODULE SUMMARY
 // ============================================
 export const REVOLUTIONARY_MODULES = {
@@ -97,26 +165,54 @@ export const REVOLUTIONARY_MODULES = {
     name: 'HR Intelligence',
     path: '/hr-intelligence',
     description: 'AI-powered talent matching, career development, wellness monitoring',
-    engines: ['TalentMatchingEngine', 'CareerPathEngine', 'WellnessMonitor']
+    engines: ['TalentMatchingEngine', 'CareerPathEngine', 'WellnessMonitor'],
+    badge: 'TALENT AI'
   },
   operationsIntelligence: {
     name: 'Operations Intelligence',
     path: '/operations-intelligence',
     description: 'AI-powered voyage optimization with 3D fleet visualization',
-    engines: ['OperationalIntelligenceEngine']
+    engines: ['OperationalIntelligenceEngine'],
+    badge: 'AI+3D'
   },
   predictiveMaintenance: {
     name: 'Predictive Maintenance ML',
     path: '/predictive-maintenance-ml',
     description: 'TensorFlow.js ML-powered failure prediction and maintenance planning',
-    engines: ['PredictiveMaintenanceMLEngine']
+    engines: ['PredictiveMaintenanceMLEngine'],
+    badge: 'TensorFlow.js'
   },
   trainingLXP: {
     name: 'Training LXP',
     path: '/training-lxp',
     description: 'Gamified adaptive learning with XP, badges, and personalized curriculum',
-    engines: ['AdaptiveLearningEngine', 'MicroLearningEngine']
+    engines: ['AdaptiveLearningEngine', 'MicroLearningEngine'],
+    badge: 'GAMIFICATION'
+  },
+  predictiveAudit: {
+    name: 'Predictive Audit',
+    path: '/predictive-audit',
+    description: 'AI predictions for audits with ML risk analysis and 3D timeline',
+    engines: ['PredictiveAuditEngine', 'RiskAnalysisModel'],
+    badge: 'AI+ML+3D'
+  },
+  financeAI: {
+    name: 'Finance AI',
+    path: '/finance-hub',
+    description: 'Predictive accounting, fraud detection, budget optimization',
+    engines: ['PredictiveAccountingEngine'],
+    badge: 'PREDICTIVE'
+  },
+  smartLogistics: {
+    name: 'Smart Logistics',
+    path: '/smart-logistics',
+    description: 'Autonomous supply chain with predictive inventory management',
+    engines: ['AutonomousLogisticsEngine'],
+    badge: 'AUTONOMOUS'
   }
 } as const;
 
 export type RevolutionaryModuleKey = keyof typeof REVOLUTIONARY_MODULES;
+
+// Total count of revolutionary modules
+export const REVOLUTIONARY_MODULES_COUNT = Object.keys(REVOLUTIONARY_MODULES).length;
