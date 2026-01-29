@@ -92,12 +92,8 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
-  // Initialize with sections that have defaultOpen
-  const [openItems, setOpenItems] = useState<string[]>(() => {
-    return SIDEBAR_ROUTES
-      .filter(group => group.defaultOpen)
-      .map(group => group.title);
-  });
+  // Initialize with all sections collapsed
+  const [openItems, setOpenItems] = useState<string[]>([]);
   
   // All hooks must be called unconditionally at the top
   const { state, isMobile, setOpenMobile } = useSidebar();
