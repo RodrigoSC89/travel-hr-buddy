@@ -328,19 +328,18 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loader com timeout de segurança para prevenir loading infinito
-const Loader = () => {
+// Ultra-optimized loader with instant skeleton display
+const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
   
   React.useEffect(() => {
-    // Se ficar mais de 15s no loader, mostrar botão de retry
-    const timeout = setTimeout(() => setShowRetry(true), 15000);
+    // Show retry after 10s (reduced from 15s)
+    const timeout = setTimeout(() => setShowRetry(true), 10000);
     return () => clearTimeout(timeout);
   }, []);
   
   const handleRetry = async () => {
     try {
-      // Limpar caches do SW
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
@@ -350,17 +349,22 @@ const Loader = () => {
         await Promise.all(regs.map(r => r.unregister()));
       }
     } catch {}
-    // Hard reload
     window.location.href = window.location.origin + '/?_sw=' + Date.now();
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div 
+      className="min-h-screen flex items-center justify-center bg-background fade-in"
+      style={{ contain: "layout paint" }}
+    >
       <div className="text-center space-y-4">
-        <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-        <p className="text-foreground">Carregando Nautilus One...</p>
+        <div 
+          className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin gpu-accelerated"
+          style={{ contain: "strict" }}
+        />
+        <p className="text-foreground font-medium">Carregando Nautilus One...</p>
         {showRetry && (
-          <div className="space-y-2 pt-4">
+          <div className="space-y-2 pt-4 fade-in">
             <p className="text-sm text-muted-foreground">
               O carregamento está demorando mais que o normal.
             </p>
@@ -375,7 +379,7 @@ const Loader = () => {
       </div>
     </div>
   );
-};
+});
 
 // Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
