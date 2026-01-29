@@ -76,35 +76,44 @@ const Auth: React.FC = () => {
     defaultValues: { email: "" }
   });
 
-  // Cleanup corrupted tokens on mount
+  // Cleanup corrupted tokens on mount - only once
   useEffect(() => {
-    const cleanup = async () => {
-      try {
-        const keys = Object.keys(localStorage).filter(
-          k => k.includes('supabase') || k.includes('sb-')
-        );
-        
-        for (const key of keys) {
-          try {
-            const value = localStorage.getItem(key);
-            if (value) {
-              const parsed = JSON.parse(value);
-              if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
-                localStorage.removeItem(key);
-              }
+    try {
+      const keys = Object.keys(localStorage).filter(
+        k => k.includes('supabase') || k.includes('sb-')
+      );
+      
+      for (const key of keys) {
+        try {
+          const value = localStorage.getItem(key);
+          if (value) {
+            const parsed = JSON.parse(value);
+            if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
+              localStorage.removeItem(key);
             }
-          } catch {
-            localStorage.removeItem(key);
           }
+        } catch {
+          localStorage.removeItem(key);
         }
-      } catch {
-        // Ignore cleanup errors
       }
-    };
-    cleanup();
+    } catch {
+      // Ignore cleanup errors
+    }
   }, []);
 
-  // Redirect after all hooks
+  // Show loading spinner while auth is being checked
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+          <p className="text-muted-foreground">Verificando sessão...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if already logged in
   if (user) {
     return <Navigate to="/" replace />;
   }
