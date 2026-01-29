@@ -9822,6 +9822,7 @@ export type Database = {
       }
       crew_members: {
         Row: {
+          auth_user_id: string | null
           contract_end: string | null
           contract_start: string | null
           created_at: string | null
@@ -9845,6 +9846,7 @@ export type Database = {
           vessel_id: string | null
         }
         Insert: {
+          auth_user_id?: string | null
           contract_end?: string | null
           contract_start?: string | null
           created_at?: string | null
@@ -9868,6 +9870,7 @@ export type Database = {
           vessel_id?: string | null
         }
         Update: {
+          auth_user_id?: string | null
           contract_end?: string | null
           contract_start?: string | null
           created_at?: string | null
@@ -36322,6 +36325,53 @@ export type Database = {
         }
         Relationships: []
       }
+      user_vessel_access: {
+        Row: {
+          access_level: string
+          created_at: string | null
+          expires_at: string | null
+          granted_at: string | null
+          granted_by: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+          user_id: string
+          vessel_id: string
+        }
+        Insert: {
+          access_level?: string
+          created_at?: string | null
+          expires_at?: string | null
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          user_id: string
+          vessel_id: string
+        }
+        Update: {
+          access_level?: string
+          created_at?: string | null
+          expires_at?: string | null
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_vessel_access_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ux_metrics: {
         Row: {
           category: string
@@ -41129,6 +41179,7 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: string
       }
+      get_user_vessel_ids: { Args: { _user_id: string }; Returns: string[] }
       get_weather_cache: {
         Args: { p_api_source?: string; p_lat: number; p_lng: number }
         Returns: Json
@@ -41142,6 +41193,7 @@ export type Database = {
         Returns: boolean
       }
       has_finance_access: { Args: { _user_id: string }; Returns: boolean }
+      has_global_access: { Args: { _user_id: string }; Returns: boolean }
       has_module_access: {
         Args: { p_module_slug: string; p_organization_id: string }
         Returns: boolean
@@ -41163,6 +41215,10 @@ export type Database = {
             }
             Returns: boolean
           }
+      has_vessel_access: {
+        Args: { _user_id: string; _vessel_id: string }
+        Returns: boolean
+      }
       increment_api_rate_limit: {
         Args: { p_api_key_id: string; p_window_type: string }
         Returns: boolean
@@ -41435,6 +41491,13 @@ export type Database = {
         | "supervisor"
         | "coordinator"
         | "auditor"
+        | "legal"
+        | "finance"
+        | "purchasing"
+        | "operations"
+        | "crew_member"
+        | "captain"
+        | "officer"
       validation_status: "pending" | "approved" | "requires_review" | "rejected"
     }
     CompositeTypes: {
@@ -41627,6 +41690,13 @@ export const Constants = {
         "supervisor",
         "coordinator",
         "auditor",
+        "legal",
+        "finance",
+        "purchasing",
+        "operations",
+        "crew_member",
+        "captain",
+        "officer",
       ],
       validation_status: ["pending", "approved", "requires_review", "rejected"],
     },
