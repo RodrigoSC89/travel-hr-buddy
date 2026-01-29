@@ -40,7 +40,7 @@ import {
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
   ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar, Clock
+  Radar, Clock, Navigation
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -424,7 +424,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
+      { label: "🚀 Travel AI Engine", path: "/travel-ai-engine", icon: Brain, emoji: "🚀", badge: "IA", status: "new" },
       { label: "Weather Command", path: "/weather-command", icon: Cloud, emoji: "🌤️" },
+      { label: "🌊 Weather Route Planner", path: "/weather-route-planner", icon: Navigation, emoji: "🌊", badge: "IA", status: "new" },
     ],
   },
 
