@@ -101,8 +101,21 @@ const Auth: React.FC = () => {
     }
   }, []);
 
-  // Show loading spinner while auth is being checked
-  if (authLoading) {
+  // Show loading spinner while auth is being checked - with timeout
+  const [authTimeout, setAuthTimeout] = useState(false);
+  
+  useEffect(() => {
+    // Force show auth form after 2s even if authLoading is stuck
+    const timer = setTimeout(() => {
+      if (authLoading) {
+        setAuthTimeout(true);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [authLoading]);
+  
+  // Show loading ONLY if auth is loading AND we haven't timed out
+  if (authLoading && !authTimeout) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
