@@ -110,6 +110,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🚢 Operações Marítimas",
     defaultOpen: false,
     items: [
+      { label: "🧠 Maritime AI Command", path: "/maritime-ai-command", icon: Brain, emoji: "🧠", badge: "NEURAL v4.1", status: "new" },
       { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
       { label: "Fleet Command Center", path: "/fleet-command", icon: Ship, emoji: "🚢" },
       { label: "Voyage Command", path: "/voyage-command", icon: Map, emoji: "🗺️" },
@@ -137,6 +138,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔧 Manutenção",
     defaultOpen: false,
     items: [
+      { label: "🧠 Maintenance AI Command", path: "/maintenance-ai-command", icon: Brain, emoji: "🧠", badge: "PREDICTIVE v4.1", status: "new" },
       { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
       { label: "Manutenção Preditiva ML", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML", status: "new" },
       { label: "Saúde da Frota", path: "/maintenance-command?tab=health", icon: Activity, emoji: "💚" },
@@ -335,7 +337,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "👥 RH & Pessoas",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: CREW AI COPILOT =====
+      { label: "🎯 HR Command Center", path: "/hr-command-center", icon: Brain, emoji: "🎯", badge: "PEOPLE AI v4.1", status: "new" },
       { label: "🚀 Crew AI Copilot", path: "/crew-ai-copilot", icon: Brain, emoji: "🚀", badge: "MLC+FATIGUE+ML", status: "new" },
       { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
       { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
@@ -423,6 +425,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "✈️ Viagens & Logística",
     defaultOpen: false,
     items: [
+      { label: "📦 Logistics AI Hub", path: "/logistics-ai-hub", icon: Brain, emoji: "📦", badge: "SMART SUPPLY v4.1", status: "new" },
       { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
       { label: "🚀 Travel AI Engine", path: "/travel-ai-engine", icon: Brain, emoji: "🚀", badge: "IA", status: "new" },
       { label: "Weather Command", path: "/weather-command", icon: Cloud, emoji: "🌤️" },

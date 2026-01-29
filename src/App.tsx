@@ -207,6 +207,12 @@ const AdvancedFinanceAIPage = lazy(() => import("@/pages/AdvancedFinanceAIPage")
 const SmartAuditEnginePage = lazy(() => import("@/pages/SmartAuditEnginePage"));
 const AdvancedTrainingAIPage = lazy(() => import("@/pages/AdvancedTrainingAIPage"));
 
+// ===== NEW REVOLUTIONARY MODULES v4.1 =====
+const MaritimeAICommandPage = lazy(() => import("@/pages/MaritimeAICommandPage"));
+const MaintenanceAICommandPage = lazy(() => import("@/pages/MaintenanceAICommandPage"));
+const LogisticsAIHubPage = lazy(() => import("@/pages/LogisticsAIHubPage"));
+const HRCommandCenterPage = lazy(() => import("@/pages/HRCommandCenterPage"));
+
 // ============================================
 // TREINAMENTOS
 // ============================================
@@ -461,6 +467,10 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
+      <Route path="/maintenance-ai-command" element={<MaintenanceAICommandPage />} />
+      <Route path="/maritime-ai-command" element={<MaritimeAICommandPage />} />
+      <Route path="/logistics-ai-hub" element={<LogisticsAIHubPage />} />
+      <Route path="/hr-command-center" element={<HRCommandCenterPage />} />
       
       {/* ============================================ */}
       {/* OPERAÇÕES SUBMARINAS */}
