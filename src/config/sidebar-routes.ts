@@ -286,6 +286,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // ===== REVOLUCIONÁRIO: PREDICTIVE AUDIT AI =====
+      { label: "🔮 Auditoria Preditiva AI", path: "/predictive-audit", icon: Brain, emoji: "🔮", badge: "AI+ML+3D", status: "new" },
       // ===== REVOLUCIONÁRIO: SMART AUDIT ENGINE =====
       { label: "🧠 Smart Audit Engine", path: "/smart-audit-engine", icon: Brain, emoji: "🧠", badge: "AI+BLOCKCHAIN", status: "new" },
       // ===== DIAGNÓSTICO RÁPIDO - 5 SOLUÇÕES =====
