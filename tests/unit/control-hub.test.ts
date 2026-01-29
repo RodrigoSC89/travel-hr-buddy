@@ -1,5 +1,8 @@
-// @ts-nocheck - Mock type compatibility
-import { describe, it, expect, vi, beforeEach } from "vitest";
+/**
+ * Control Hub Unit Tests - Type-safe implementation
+ * Tests control panel functionality, system management, and real-time monitoring
+ */
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 
 /**
  * Control Hub Unit Tests
