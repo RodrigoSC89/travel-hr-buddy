@@ -75,7 +75,8 @@ interface BookingSearchResponse {
  */
 export async function testBookingConnection(): Promise<BookingTestResult> {
   const startTime = Date.now();
-  const apiKey = import.meta.env.VITE_RAPIDAPI_KEY || import.meta.env.VITE_BOOKING_API_KEY;
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+  const apiKey = safeEnv.VITE_RAPIDAPI_KEY || safeEnv.VITE_BOOKING_API_KEY || "";
 
   if (!apiKey) {
     return {
@@ -143,7 +144,8 @@ export async function testBookingConnection(): Promise<BookingTestResult> {
  * Implements caching to avoid rate limits
  */
 export async function searchHotels(params: HotelSearchParams): Promise<HotelSearchResult> {
-  const apiKey = import.meta.env.VITE_RAPIDAPI_KEY || import.meta.env.VITE_BOOKING_API_KEY;
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+  const apiKey = safeEnv.VITE_RAPIDAPI_KEY || safeEnv.VITE_BOOKING_API_KEY || "";
 
   if (!apiKey) {
     return {

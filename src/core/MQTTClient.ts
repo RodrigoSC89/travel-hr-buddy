@@ -263,10 +263,11 @@ class MQTTClientManager {
    * Obtém status da conexão
    */
   getStatus() {
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
     return {
       connected: this.client?.connected || false,
       connecting: this.isConnecting,
-      url: this.config.url || import.meta.env.VITE_MQTT_URL,
+      url: this.config.url || safeEnv.VITE_MQTT_URL || "",
       topics: this.config.topics || []
     };
   }

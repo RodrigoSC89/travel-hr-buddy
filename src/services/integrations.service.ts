@@ -264,9 +264,10 @@ export class IntegrationsService {
     return urls[provider] || "";
   }
 
-  // PATCH 385: Enhanced OAuth Flows (Google, Slack, Notion)
+  // PATCH 385: Enhanced OAuth Flows (Google, Slack, Notion) - Safe env access
   static async initiateGoogleOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const clientId = safeEnv.VITE_GOOGLE_CLIENT_ID || "";
     const scope = [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -278,7 +279,8 @@ export class IntegrationsService {
   }
 
   static async initiateSlackOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_SLACK_CLIENT_ID || "";
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const clientId = safeEnv.VITE_SLACK_CLIENT_ID || "";
     const scope = [
       "channels:read",
       "chat:write",
@@ -290,7 +292,8 @@ export class IntegrationsService {
   }
 
   static async initiateNotionOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_NOTION_CLIENT_ID || "";
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const clientId = safeEnv.VITE_NOTION_CLIENT_ID || "";
     const state = Math.random().toString(36).substring(7);
     
     return `https://api.notion.com/v1/oauth/authorize?client_id=${clientId}&response_type=code&owner=user&redirect_uri=${redirectUri}&state=${state}`;

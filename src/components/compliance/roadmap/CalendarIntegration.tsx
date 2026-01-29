@@ -98,11 +98,12 @@ export const CalendarIntegration = () => {
     const state = btoa(JSON.stringify({ provider, userId: user?.id }));
     
     let authUrl: string;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
     
     if (provider === "google") {
       // Google Calendar OAuth2
       const params = new URLSearchParams({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',
+        client_id: safeEnv.VITE_GOOGLE_CLIENT_ID || '',
         redirect_uri: redirectUri,
         response_type: 'code',
         scope: 'https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events',
@@ -114,7 +115,7 @@ export const CalendarIntegration = () => {
     } else {
       // Microsoft Graph OAuth2
       const params = new URLSearchParams({
-        client_id: import.meta.env.VITE_MICROSOFT_CLIENT_ID || '',
+        client_id: safeEnv.VITE_MICROSOFT_CLIENT_ID || '',
         redirect_uri: redirectUri,
         response_type: 'code',
         scope: 'Calendars.ReadWrite offline_access',
@@ -124,8 +125,8 @@ export const CalendarIntegration = () => {
     }
 
     // Check if client IDs are configured
-    if ((provider === "google" && !import.meta.env.VITE_GOOGLE_CLIENT_ID) ||
-        (provider === "outlook" && !import.meta.env.VITE_MICROSOFT_CLIENT_ID)) {
+    if ((provider === "google" && !safeEnv.VITE_GOOGLE_CLIENT_ID) ||
+        (provider === "outlook" && !safeEnv.VITE_MICROSOFT_CLIENT_ID)) {
       // Simulate connection for demo
       await new Promise(resolve => setTimeout(resolve, 1500));
       
