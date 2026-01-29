@@ -255,6 +255,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "📁 Relatórios & Documentos",
     defaultOpen: false,
     items: [
+      { label: "🏢 Central Enterprise EDMS", path: "/enterprise-documents", icon: FileText, emoji: "🏢", badge: "ENTERPRISE", status: "new" },
       { label: "Reports Command", path: "/reports-command", icon: BarChart3, emoji: "📊" },
       { label: "Documentos IA", path: "/documents", icon: FileText, emoji: "📄" },
       { label: "Templates", path: "/templates", icon: FileText, emoji: "📋" },
@@ -384,6 +385,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       // ===== REVOLUCIONÁRIO: TRAINING LXP =====
       { label: "🎮 Training LXP", path: "/training-lxp", icon: Gamepad2, emoji: "🎮", badge: "GAMIFICATION", status: "new" },
       { label: "🎯 Training AI Avançado", path: "/advanced-training-ai", icon: Brain, emoji: "🎯", badge: "ADAPTIVE+VR", status: "new" },
+      { label: "📄 Documentos de Treinamento", path: "/training-documents", icon: FileText, emoji: "📄", badge: "UPLOAD", status: "new" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
       { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", icon: Award, emoji: "📚" },
       { label: "Mentor DP", path: "/mentor-dp", icon: Users, emoji: "🧑‍🏫" },
@@ -477,6 +479,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     requiredRoles: ['admin'],
     items: [
+      { label: "🚢 Gestão de Acesso Embarcações", path: "/vessel-access-management", icon: Ship, emoji: "🚢", badge: "RLS", status: "new", requiredRoles: ['admin', 'hr_manager'] },
       { label: "🚀 DevOps Dashboard", path: "/admin/devops", icon: Server, emoji: "🚀", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
       { label: "🧠 ML & Analytics", path: "/admin/ml-analytics", icon: Brain, emoji: "🧠", badge: "ML", status: "new", requiredRoles: ['admin'] },
       { label: "⚡ Scaling & Load", path: "/admin/scaling", icon: Zap, emoji: "⚡", badge: "v4.0", status: "new", requiredRoles: ['admin'] },

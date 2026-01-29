@@ -152,6 +152,9 @@ const Templates = lazy(() => import("@/pages/Templates"));
 // MaritimeChecklists moved to MaritimeCommandCenter
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
+const EnterpriseDocumentCenterPage = lazy(() => import("@/pages/EnterpriseDocumentCenterPage"));
+const TrainingDocumentsPage = lazy(() => import("@/pages/TrainingDocumentsPage"));
+const VesselAccessManagementPage = lazy(() => import("@/pages/VesselAccessManagementPage"));
 const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
 
 // ============================================
@@ -572,6 +575,11 @@ const AppRoutes = () => (
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
       <Route path="/documentation" element={<Documents />} />
+      {/* Enterprise Document Management System */}
+      <Route path="/enterprise-documents" element={<EnterpriseDocumentCenterPage />} />
+      <Route path="/document-center" element={<EnterpriseDocumentCenterPage />} />
+      <Route path="/training-documents" element={<TrainingDocumentsPage />} />
+      <Route path="/vessel-access-management" element={<VesselAccessManagementPage />} />
       
       {/* ============================================ */}
       {/* COMUNICAÇÃO & ALERTAS */}
