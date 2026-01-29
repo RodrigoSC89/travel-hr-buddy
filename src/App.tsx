@@ -74,6 +74,7 @@ const IoTIntegrationPage = lazy(() => import("@/pages/IoTIntegrationPage"));
 const OperationsIntelligencePage = lazy(() => import("@/pages/OperationsIntelligencePage"));
 const HRIntelligencePage = lazy(() => import("@/pages/HRIntelligencePage"));
 const PredictiveMaintenanceMLPage = lazy(() => import("@/pages/PredictiveMaintenanceMLPage"));
+const PredictiveAuditPage = lazy(() => import("@/pages/PredictiveAuditPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -581,6 +582,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* AUDITORIAS & COMPLIANCE */}
       {/* ============================================ */}
+      <Route path="/predictive-audit" element={<PredictiveAuditPage />} />
       <Route path="/smart-audit-engine" element={<SmartAuditEnginePage />} />
       <Route path="/audit-ai-chat" element={<AuditAIChatPage />} />
       <Route path="/peo-dp" element={<PEODP />} />
