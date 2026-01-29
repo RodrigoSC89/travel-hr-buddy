@@ -62,7 +62,8 @@ export async function runComplianceAudit(data: any) {
 
   // Optional MQTT publishing
   try {
-    const mqttUrl = import.meta.env.VITE_MQTT_URL;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const mqttUrl = safeEnv.VITE_MQTT_URL || "";
     if (mqttUrl) {
       const client = mqtt.connect(mqttUrl);
       client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));

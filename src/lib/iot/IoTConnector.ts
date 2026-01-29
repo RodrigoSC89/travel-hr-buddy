@@ -96,7 +96,8 @@ class IoTConnectorService {
    * Connect to MQTT broker for real sensor data
    */
   private async connectMQTT(vesselId: string): Promise<boolean> {
-    const mqttUrl = import.meta.env.VITE_MQTT_URL;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const mqttUrl = safeEnv.VITE_MQTT_URL || "";
     
     if (!mqttUrl) {
       logger.debug('[IoT] MQTT URL not configured, skipping MQTT connection');
