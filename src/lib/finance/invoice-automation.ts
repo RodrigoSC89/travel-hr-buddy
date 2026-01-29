@@ -376,21 +376,26 @@ export class InvoiceAutomationEngine {
 
     // Try to save as expense if approved
     if (decision.action === 'auto_approve') {
-      const { data: expense } = await supabase
-        .from('expenses')
-        .insert({
-          amount: data.total,
-          category: 'invoice',
-          description: `Invoice ${data.invoice_number} from ${data.vendor_name}`,
-          date: data.invoice_date,
-          status: 'approved',
-          notes: `Auto-approved with ${(decision.confidence * 100).toFixed(0)}% confidence`
-        })
-        .select()
-        .single();
+      try {
+        const { data: savedExpense } = await supabase
+          .from('expenses')
+          .insert([{
+            user_id: crypto.randomUUID(),
+            amount: data.total,
+            category: 'invoice',
+            description: `Invoice ${data.invoice_number} from ${data.vendor_name}`,
+            date: data.invoice_date,
+            status: 'approved',
+            notes: `Auto-approved with ${(decision.confidence * 100).toFixed(0)}% confidence`
+          }])
+          .select()
+          .single();
 
-      if (expense) {
-        invoiceRecord.id = (expense as any).id;
+        if (savedExpense) {
+          invoiceRecord.id = (savedExpense as any).id;
+        }
+      } catch (err) {
+        console.warn('Could not save invoice as expense', err);
       }
     }
 
@@ -414,9 +419,9 @@ export class InvoiceAutomationEngine {
     const autoApproved = policyCompliant && ocrData.amount < 500;
 
     // 5. Create expense record in database
-    let expenseId = crypto.randomUUID();
+    let finalExpenseId = crypto.randomUUID();
     try {
-      const { data: expense } = await supabase
+      const { data: createdExpense } = await supabase
         .from('expenses')
         .insert([{
           user_id: userId,
@@ -430,17 +435,15 @@ export class InvoiceAutomationEngine {
         .select()
         .single();
       
-      if (expense) {
-        expenseId = (expense as any).id;
+      if (createdExpense) {
+        finalExpenseId = (createdExpense as any).id;
       }
     } catch (err) {
       console.warn('Could not save expense to database', err);
     }
 
-    const expenseId = (expense as any)?.id || crypto.randomUUID();
-
     return {
-      expense_id: expenseId,
+      expense_id: finalExpenseId,
       classification,
       policy_compliant: policyCompliant,
       auto_approved: autoApproved
