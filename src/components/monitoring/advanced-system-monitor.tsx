@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+/**
+ * Advanced System Monitor - Real Data Integration
+ * Uses useSystemHealth hook for real-time database metrics
+ */
+import React, { useState } from "react";
+import { useSystemHealth, useSystemHealthHistory } from "@/hooks/useSystemHealthData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,117 +44,89 @@ interface PerformanceData {
 }
 
 const AdvancedSystemMonitor: React.FC = () => {
-  const [metrics, setMetrics] = useState<SystemMetric[]>([]);
-  const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(30); // segundos
-  const { toast } = useToast();
+  const [refreshInterval, setRefreshInterval] = useState(30);
+  const { metrics: healthMetrics, alerts, isLoading, refetch } = useSystemHealth();
+  const { data: historyData } = useSystemHealthHistory(24);
 
-  // Métricas simuladas para demonstração
-  const generateMockMetrics = (): SystemMetric[] => [
-    {
-      id: "cpu",
-      name: "CPU Usage",
-      value: Math.random() * 100,
-      unit: "%",
-      status: "good",
-      threshold: 80,
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: "memory",
-      name: "Memory Usage",
-      value: Math.random() * 100,
-      unit: "%",
-      status: "good",
-      threshold: 85,
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: "database",
-      name: "Database Connections",
-      value: Math.floor(Math.random() * 50),
-      unit: "connections",
-      status: "good",
-      threshold: 100,
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: "response_time",
-      name: "Average Response Time",
-      value: Math.random() * 1000,
-      unit: "ms",
-      status: "good",
-      threshold: 500,
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: "error_rate",
-      name: "Error Rate",
-      value: Math.random() * 5,
-      unit: "%",
-      status: "good",
-      threshold: 2,
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: "active_users",
-      name: "Active Users",
-      value: Math.floor(Math.random() * 200),
-      unit: "users",
-      status: "good",
-      threshold: 500,
-      lastUpdated: new Date().toISOString()
-    }
-  ];
-
-  const generatePerformanceData = (): PerformanceData[] => {
-    const data: PerformanceData[] = [];
-    const now = new Date();
-    
-    for (let i = 23; i >= 0; i--) {
-      const timestamp = new Date(now.getTime() - i * 60 * 60 * 1000);
-      data.push({
-        timestamp: timestamp.toISOString(),
-        cpu: Math.random() * 100,
-        memory: Math.random() * 100,
-        database: Math.random() * 50,
-        requests: Math.floor(Math.random() * 1000)
-      });
-    }
-    
-    return data;
+  // Convert health metrics to display format
+  const getMetrics = (): SystemMetric[] => {
+    const now = new Date().toISOString();
+    return [
+      {
+        id: "cpu",
+        name: "CPU Usage",
+        value: healthMetrics.cpu,
+        unit: "%",
+        status: healthMetrics.cpu > 80 ? "critical" : healthMetrics.cpu > 60 ? "warning" : "good",
+        threshold: 80,
+        lastUpdated: now
+      },
+      {
+        id: "memory",
+        name: "Memory Usage",
+        value: healthMetrics.memory,
+        unit: "%",
+        status: healthMetrics.memory > 85 ? "critical" : healthMetrics.memory > 70 ? "warning" : "good",
+        threshold: 85,
+        lastUpdated: now
+      },
+      {
+        id: "database",
+        name: "Database Health",
+        value: healthMetrics.database,
+        unit: "%",
+        status: healthMetrics.database < 50 ? "critical" : healthMetrics.database < 80 ? "warning" : "good",
+        threshold: 80,
+        lastUpdated: now
+      },
+      {
+        id: "response_time",
+        name: "Response Time",
+        value: healthMetrics.responseTime,
+        unit: "ms",
+        status: healthMetrics.responseTime > 500 ? "critical" : healthMetrics.responseTime > 200 ? "warning" : "good",
+        threshold: 500,
+        lastUpdated: now
+      },
+      {
+        id: "network",
+        name: "Network Status",
+        value: healthMetrics.network,
+        unit: "%",
+        status: healthMetrics.network < 50 ? "critical" : healthMetrics.network < 80 ? "warning" : "good",
+        threshold: 80,
+        lastUpdated: now
+      },
+      {
+        id: "active_users",
+        name: "Active Users",
+        value: healthMetrics.activeUsers,
+        unit: "users",
+        status: "good",
+        threshold: 500,
+        lastUpdated: now
+      }
+    ];
   };
 
-  const loadSystemMetrics = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Em um sistema real, isso viria de um endpoint de monitoramento
-      // Por agora, usamos dados simulados
-      const mockMetrics = generateMockMetrics();
-      const mockPerformance = generatePerformanceData();
-      
-      // Atualizar status baseado nos thresholds
-      const updatedMetrics = mockMetrics.map(metric => ({
-        ...metric,
-        status: (metric.value > metric.threshold ? "critical" : 
-          metric.value > metric.threshold * 0.8 ? "warning" : "good") as "good" | "warning" | "critical"
-      }));
-      
-      setMetrics(updatedMetrics);
-      setPerformanceData(mockPerformance);
-      
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Falha ao carregar métricas do sistema",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
+  // Convert history data to chart format
+  const getPerformanceData = (): PerformanceData[] => {
+    if (!historyData || historyData.length === 0) {
+      // Return empty state with single point for chart
+      return [{ timestamp: new Date().toISOString(), cpu: 0, memory: 0, database: 100, requests: 0 }];
     }
+
+    return historyData.map(h => ({
+      timestamp: h.recorded_at,
+      cpu: h.cpu_usage ?? 0,
+      memory: h.memory_usage ?? 0,
+      database: 100 - Math.min((h.database_latency_ms ?? 0) / 10, 100),
+      requests: h.active_users ?? 0
+    }));
   };
+
+  const metrics = getMetrics();
+  const performanceData = getPerformanceData();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -204,13 +179,8 @@ const AdvancedSystemMonitor: React.FC = () => {
     return `${Math.floor(value)} ${unit}`;
   };
 
-  useEffect(() => {
-    loadSystemMetrics();
-    
-    const interval = setInterval(loadSystemMetrics, refreshInterval * 1000);
-    
-    return () => clearInterval(interval);
-  }, [refreshInterval]);
+  const criticalCount = metrics.filter(m => m.status === "critical").length;
+  const warningCount = metrics.filter(m => m.status === "warning").length;
 
   if (isLoading) {
     return (
@@ -228,9 +198,6 @@ const AdvancedSystemMonitor: React.FC = () => {
       </Card>
     );
   }
-
-  const criticalCount = metrics.filter(m => m.status === "critical").length;
-  const warningCount = metrics.filter(m => m.status === "warning").length;
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
@@ -260,7 +227,7 @@ const AdvancedSystemMonitor: React.FC = () => {
                 />
                 <span className="text-sm text-muted-foreground">segundos</span>
               </div>
-              <Button onClick={loadSystemMetrics} variant="outline">
+              <Button onClick={() => refetch()} variant="outline">
                 <Activity className="w-4 h-4 mr-2" />
                 Atualizar
               </Button>
