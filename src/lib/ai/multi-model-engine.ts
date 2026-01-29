@@ -201,7 +201,7 @@ async function callLovableGateway(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${import.meta.env.VITE_LOVABLE_API_KEY || ''}`,
+      // Note: This endpoint requires a Lovable API key configured as secret
     },
     body: JSON.stringify({
       model,

@@ -24,7 +24,8 @@ export interface SystemContext {
   compliance: { score: number; pendingAudits: number; expiringDocs: number };
 }
 
-const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
+const COMMAND_URL = 'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nautilus-command';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE';
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 1000;
 
@@ -69,11 +70,13 @@ export function useNautilusCommandAI() {
         { role: "user" as const, content }
       ];
 
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const resp = await fetch(COMMAND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          "Authorization": `Bearer ${session?.access_token || SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({ 
           messages: messagesToSend,
