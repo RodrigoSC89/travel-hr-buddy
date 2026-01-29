@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { FileText, Download, Loader2, Sparkles, Users, Settings, BarChart3, Target } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AIReportGeneratorProps {
   onReportGenerated?: (report: GeneratedReport) => void;
@@ -71,37 +72,27 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ai-report`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || "",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ""}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-ai-report', {
+        body: {
           type: reportType,
           dateRange,
           modules: selectedModules,
           format,
           customPrompt: customPrompt || undefined
-        })
+        }
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        
-        if (response.status === 429) {
+      if (error) {
+        if (error.message?.includes('429')) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
         }
-        if (response.status === 402) {
+        if (error.message?.includes('402')) {
           throw new Error("Créditos de IA insuficientes. Adicione créditos ao workspace.");
         }
-        throw new Error(`Erro ${response.status}: ${errorText || "Falha ao gerar relatório"}`);
+        throw error;
       }
 
-      const data = await response.json();
-
-      if (data.success && data.report) {
+      if (data?.success && data?.report) {
         setLastReport(data.report);
         onReportGenerated?.(data.report);
         
@@ -109,8 +100,16 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           title: "Relatório Gerado",
           description: "Relatório criado com sucesso usando IA generativa",
         });
+      } else if (data?.report) {
+        // Direct report format
+        setLastReport(data.report);
+        onReportGenerated?.(data.report);
+        toast({
+          title: "Relatório Gerado",
+          description: "Relatório criado com sucesso",
+        });
       } else {
-        throw new Error(data.error || "Erro ao gerar relatório");
+        throw new Error(data?.error || "Erro ao gerar relatório");
       }
     } catch (error) {
       console.error("[AIReportGenerator] Error:", error);
