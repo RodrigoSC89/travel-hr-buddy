@@ -69,6 +69,13 @@ const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
 const IoTIntegrationPage = lazy(() => import("@/pages/IoTIntegrationPage"));
 
 // ============================================
+// REVOLUTIONARY MODULES v6.0
+// ============================================
+const OperationsIntelligencePage = lazy(() => import("@/pages/OperationsIntelligencePage"));
+const HRIntelligencePage = lazy(() => import("@/pages/HRIntelligencePage"));
+const PredictiveMaintenanceMLPage = lazy(() => import("@/pages/PredictiveMaintenanceMLPage"));
+
+// ============================================
 // MANUTENÇÃO
 // ============================================
 const MaintenanceCommandCenter = lazy(() => import("@/pages/MaintenanceCommandCenter"));
@@ -471,8 +478,11 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
+      <Route path="/predictive-maintenance-ml" element={<PredictiveMaintenanceMLPage />} />
       <Route path="/maintenance-ai-command" element={<MaintenanceAICommandPage />} />
       <Route path="/maritime-ai-command" element={<MaritimeAICommandPage />} />
+      <Route path="/operations-intelligence" element={<OperationsIntelligencePage />} />
+      <Route path="/hr-intelligence" element={<HRIntelligencePage />} />
       <Route path="/logistics-ai-hub" element={<LogisticsAIHubPage />} />
       <Route path="/hr-command-center" element={<HRCommandCenterPage />} />
       

@@ -111,6 +111,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "🧠 Maritime AI Command", path: "/maritime-ai-command", icon: Brain, emoji: "🧠", badge: "NEURAL v4.1", status: "new" },
+      { label: "🚀 Operations Intelligence 3D", path: "/operations-intelligence", icon: Navigation, emoji: "🚀", badge: "AI+3D", status: "new" },
       { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
       { label: "Fleet Command Center", path: "/fleet-command", icon: Ship, emoji: "🚢" },
       { label: "Voyage Command", path: "/voyage-command", icon: Map, emoji: "🗺️" },
@@ -139,8 +140,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "🧠 Maintenance AI Command", path: "/maintenance-ai-command", icon: Brain, emoji: "🧠", badge: "PREDICTIVE v4.1", status: "new" },
+      { label: "🔮 Manutenção Preditiva ML", path: "/predictive-maintenance-ml", icon: Brain, emoji: "🔮", badge: "TensorFlow.js", status: "new" },
       { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
-      { label: "Manutenção Preditiva ML", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML", status: "new" },
+      { label: "Manutenção Preditiva", path: "/predictive-maintenance", icon: Activity, emoji: "📊" },
       { label: "Saúde da Frota", path: "/maintenance-command?tab=health", icon: Activity, emoji: "💚" },
       { label: "IA Copilot", path: "/maintenance-command?tab=copilot", icon: Brain, emoji: "🤖" },
       { label: "Jobs & Ordens", path: "/maintenance-command?tab=jobs", icon: Briefcase, emoji: "📋" },
@@ -339,6 +341,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "🎯 HR Command Center", path: "/hr-command-center", icon: Brain, emoji: "🎯", badge: "PEOPLE AI v4.1", status: "new" },
+      { label: "🌟 HR Intelligence", path: "/hr-intelligence", icon: Brain, emoji: "🌟", badge: "TALENT AI", status: "new" },
       { label: "🚀 Crew AI Copilot", path: "/crew-ai-copilot", icon: Brain, emoji: "🚀", badge: "MLC+FATIGUE+ML", status: "new" },
       { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
       { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
