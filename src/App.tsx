@@ -633,6 +633,10 @@ const AppRoutes = () => (
       <Route path="/hr/turnover-prediction" element={<HRTurnoverPredictionPage />} />
       <Route path="/predicao-turnover" element={<HRTurnoverPredictionPage />} />
       
+      {/* HR Payroll & Time Tracking */}
+      <Route path="/hr-payroll" element={<Payroll />} />
+      <Route path="/hr-time-tracking" element={<TimeTracking />} />
+      
       {/* ============================================ */}
       {/* TREINAMENTOS */}
       {/* ============================================ */}
