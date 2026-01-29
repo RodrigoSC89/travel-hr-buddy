@@ -20,15 +20,9 @@ import {
   Clock,
   CheckCircle,
   Users,
-  Ship,
-  Anchor,
-  Navigation,
-  Zap,
-  Phone,
-  Mail,
   Satellite,
   MapPin,
-  Bell
+  Loader2,
 } from "lucide-react";
 
 interface MaritimeCommunication {
@@ -55,9 +49,15 @@ interface CommunicationChannel {
   last_activity: string;
 }
 
+interface Vessel {
+  id: string;
+  name: string;
+}
+
 export const MaritimeCommunicationCenter = () => {
   const [communications, setCommunications] = useState<MaritimeCommunication[]>([]);
   const [channels, setChannels] = useState<CommunicationChannel[]>([]);
+  const [vessels, setVessels] = useState<Vessel[]>([]);
   const [activeTab, setActiveTab] = useState("messages");
   const [selectedChannel, setSelectedChannel] = useState<string>("all");
   const [newMessage, setNewMessage] = useState({
@@ -72,148 +72,112 @@ export const MaritimeCommunicationCenter = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    loadCommunications();
-    loadChannels();
+    loadData();
     const cleanup = setupRealTimeUpdates();
     return () => {
       cleanup();
     };
   }, []);
 
+  const loadData = async () => {
+    setLoading(true);
+    await Promise.all([loadCommunications(), loadChannels(), loadVessels()]);
+    setLoading(false);
+  };
+
   const loadCommunications = async () => {
     try {
-      setLoading(true);
-      
-      // Mock communications data
-      const mockCommunications: MaritimeCommunication[] = [
-        {
-          id: "1",
-          vessel_id: "mv-atlantic-001",
-          vessel_name: "MV Atlantic Explorer",
-          message_type: "emergency",
-          content: "Vazamento no compartimento de máquinas. Solicitando assistência imediata.",
-          priority: "critical",
-          status: "acknowledged",
-          sent_at: "2024-01-20T14:30:00Z",
-          acknowledged_at: "2024-01-20T14:32:00Z",
-          coordinates: { latitude: -23.5505, longitude: -46.6333 },
-          sender_role: "captain",
-          response_required: true
-        },
-        {
-          id: "2",
-          vessel_id: "ms-ocean-002",
-          vessel_name: "MS Ocean Pioneer",
-          message_type: "weather_alert",
-          content: "Tempestade se aproximando. Ventos de 45 nós. Alterando rota para sudeste.",
-          priority: "high",
-          status: "delivered",
-          sent_at: "2024-01-20T12:15:00Z",
-          coordinates: { latitude: -25.4284, longitude: -48.6732 },
-          sender_role: "first_officer",
-          response_required: false
-        },
-        {
-          id: "3",
-          vessel_id: "mv-pacific-003",
-          vessel_name: "MV Pacific Star",
-          message_type: "navigation",
-          content: "Aproximando do Porto de Santos. ETA 16:30. Solicitando atracação no cais 5.",
-          priority: "normal",
-          status: "sent",
-          sent_at: "2024-01-20T10:45:00Z",
-          coordinates: { latitude: -23.9618, longitude: -46.3322 },
-          sender_role: "captain",
-          response_required: true
-        },
-        {
-          id: "4",
-          vessel_id: "ms-baltic-004",
-          vessel_name: "MS Baltic Wind",
-          message_type: "maintenance",
-          content: "Motor auxiliar apresentando ruídos anômalos. Programando inspeção no próximo porto.",
-          priority: "normal",
-          status: "delivered",
-          sent_at: "2024-01-20T08:30:00Z",
-          sender_role: "engineer",
-          response_required: false
-        },
-        {
-          id: "5",
-          vessel_id: "mv-nordic-005",
-          vessel_name: "MV Nordic Crown",
-          message_type: "general",
-          content: "Tripulação em boa saúde. Operações normais. Próximo relatório em 6 horas.",
-          priority: "low",
-          status: "delivered",
-          sent_at: "2024-01-20T06:00:00Z",
-          sender_role: "captain",
-          response_required: false
-        }
-      ];
+      const { data, error } = await supabase
+        .from('maritime_communications')
+        .select('*')
+        .order('sent_at', { ascending: false })
+        .limit(50);
 
-      setCommunications(mockCommunications);
+      if (error) {
+        logger.error('Failed to load communications', { error });
+        return;
+      }
+
+      const mapped: MaritimeCommunication[] = (data || []).map((c) => ({
+        id: c.id,
+        vessel_id: c.vessel_id || '',
+        vessel_name: c.vessel_name,
+        message_type: c.message_type as MaritimeCommunication['message_type'],
+        content: c.content,
+        priority: c.priority as MaritimeCommunication['priority'],
+        status: c.status as MaritimeCommunication['status'],
+        sent_at: c.sent_at,
+        acknowledged_at: c.acknowledged_at || undefined,
+        coordinates: c.latitude && c.longitude 
+          ? { latitude: Number(c.latitude), longitude: Number(c.longitude) } 
+          : undefined,
+        sender_role: c.sender_role || 'unknown',
+        response_required: c.response_required || false,
+      }));
+
+      setCommunications(mapped);
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar comunicações",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
+      logger.error('Error loading communications', { error });
     }
   };
 
   const loadChannels = async () => {
     try {
-      const mockChannels: CommunicationChannel[] = [
-        {
-          id: "vhf-16",
-          name: "VHF Canal 16 (Emergência)",
-          type: "emergency",
-          status: "active",
-          participants: ["Todas as embarcações", "Guarda Costeira"],
-          last_activity: "2024-01-20T14:30:00Z"
-        },
-        {
-          id: "vhf-68",
-          name: "VHF Canal 68 (Operações)",
-          type: "vhf",
-          status: "active",
-          participants: ["Frota Nautilus", "Porto de Santos"],
-          last_activity: "2024-01-20T12:15:00Z"
-        },
-        {
-          id: "sat-primary",
-          name: "Satélite Principal",
-          type: "satellite",
-          status: "active",
-          participants: ["Todas as embarcações", "Centro de Controle"],
-          last_activity: "2024-01-20T10:45:00Z"
-        },
-        {
-          id: "internal-ops",
-          name: "Operações Internas",
-          type: "internal",
-          status: "active",
-          participants: ["Gestão de Frota", "Capitães"],
-          last_activity: "2024-01-20T08:30:00Z"
-        }
-      ];
+      const { data, error } = await supabase
+        .from('communication_channels')
+        .select('*')
+        .order('last_activity', { ascending: false });
 
-      setChannels(mockChannels);
+      if (error) {
+        logger.error('Failed to load channels', { error });
+        return;
+      }
+
+      const mapped: CommunicationChannel[] = (data || []).map((c) => ({
+        id: c.id,
+        name: c.name,
+        type: c.channel_type as CommunicationChannel['type'],
+        status: c.status as CommunicationChannel['status'],
+        participants: Array.isArray(c.participants) ? c.participants : [],
+        last_activity: c.last_activity,
+      }));
+
+      setChannels(mapped);
     } catch (error) {
-      logger.error("Failed to load channels:", error);
+      logger.error('Error loading channels', { error });
+    }
+  };
+
+  const loadVessels = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('id, name')
+        .order('name');
+
+      if (error) {
+        logger.error('Failed to load vessels', { error });
+        return;
+      }
+
+      setVessels(data || []);
+    } catch (error) {
+      logger.error('Error loading vessels', { error });
     }
   };
 
   const setupRealTimeUpdates = useCallback(() => {
-    // Set up real-time communication updates with cleanup tracking
-    const interval = setInterval(() => {
-      // Checking for new communications
-    }, 30000);
+    const channel = supabase
+      .channel('maritime-communications')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'maritime_communications' },
+        () => loadCommunications()
+      )
+      .subscribe();
 
-    return () => clearInterval(interval);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const sendMessage = async () => {
@@ -227,16 +191,21 @@ export const MaritimeCommunicationCenter = () => {
         return;
       }
 
-      // Call the maritime communication edge function
-      const { data, error } = await supabase.functions.invoke("maritime-communication", {
-        body: {
+      const vessel = vessels.find(v => v.id === newMessage.vessel_id);
+
+      const { error } = await supabase
+        .from('maritime_communications')
+        .insert([{
           vessel_id: newMessage.vessel_id,
+          vessel_name: vessel?.name || 'Unknown Vessel',
           message_type: newMessage.message_type,
           content: newMessage.content,
           priority: newMessage.priority,
-          coordinates: newMessage.coordinates
-        }
-      });
+          latitude: newMessage.coordinates.latitude || null,
+          longitude: newMessage.coordinates.longitude || null,
+          sender_role: 'operator',
+          response_required: newMessage.priority === 'critical' || newMessage.priority === 'high',
+        }]);
 
       if (error) {
         throw error;
@@ -247,7 +216,6 @@ export const MaritimeCommunicationCenter = () => {
         description: "Mensagem enviada com sucesso",
       });
 
-      // Reset form and close dialog
       setNewMessage({
         vessel_id: "",
         message_type: "general",
@@ -256,10 +224,9 @@ export const MaritimeCommunicationCenter = () => {
         coordinates: { latitude: 0, longitude: 0 }
       });
       setIsNewMessageOpen(false);
-
-      // Reload communications
       loadCommunications();
     } catch (error) {
+      logger.error('Failed to send message', { error });
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",
@@ -316,7 +283,6 @@ export const MaritimeCommunicationCenter = () => {
     switch (type) {
     case "vhf": return Radio;
     case "satellite": return Satellite;
-    case "email": return Mail;
     case "emergency": return AlertTriangle;
     case "internal": return MessageSquare;
     default: return Radio;
@@ -333,7 +299,8 @@ export const MaritimeCommunicationCenter = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando comunicações...</span>
       </div>
     );
   }
@@ -377,11 +344,11 @@ export const MaritimeCommunicationCenter = () => {
                         <SelectValue placeholder="Selecionar embarcação" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="mv-atlantic-001">MV Atlantic Explorer</SelectItem>
-                        <SelectItem value="ms-ocean-002">MS Ocean Pioneer</SelectItem>
-                        <SelectItem value="mv-pacific-003">MV Pacific Star</SelectItem>
-                        <SelectItem value="ms-baltic-004">MS Baltic Wind</SelectItem>
-                        <SelectItem value="mv-nordic-005">MV Nordic Crown</SelectItem>
+                        {vessels.map((vessel) => (
+                          <SelectItem key={vessel.id} value={vessel.id}>
+                            {vessel.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -441,7 +408,7 @@ export const MaritimeCommunicationCenter = () => {
                       value={newMessage.coordinates.latitude}
                       onChange={(e) => setNewMessage(prev => ({ 
                         ...prev, 
-                        coordinates: { ...prev.coordinates, latitude: parseFloat(e.target.value) }
+                        coordinates: { ...prev.coordinates, latitude: parseFloat(e.target.value) || 0 }
                       }))}
                     />
                   </div>
@@ -453,7 +420,7 @@ export const MaritimeCommunicationCenter = () => {
                       value={newMessage.coordinates.longitude}
                       onChange={(e) => setNewMessage(prev => ({ 
                         ...prev, 
-                        coordinates: { ...prev.coordinates, longitude: parseFloat(e.target.value) }
+                        coordinates: { ...prev.coordinates, longitude: parseFloat(e.target.value) || 0 }
                       }))}
                     />
                   </div>
@@ -490,7 +457,7 @@ export const MaritimeCommunicationCenter = () => {
           <CardContent className="p-4 text-center">
             <MessageSquare className="h-8 w-8 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{communications.length}</div>
-            <div className="text-sm text-muted-foreground">Mensagens Hoje</div>
+            <div className="text-sm text-muted-foreground">Mensagens</div>
           </CardContent>
         </Card>
         
@@ -530,7 +497,7 @@ export const MaritimeCommunicationCenter = () => {
           {/* Message Filters */}
           <Card>
             <CardContent className="pt-6">
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <Button 
                   variant={selectedChannel === "all" ? "default" : "outline"} 
                   size="sm"
@@ -572,123 +539,141 @@ export const MaritimeCommunicationCenter = () => {
 
           {/* Messages List */}
           <div className="space-y-4">
-            {filteredCommunications.map((comm) => {
-              const StatusIcon = getStatusIcon(comm.status);
-              
-              return (
-                <Card key={comm.id} className={`border-l-4 ${
-                  comm.message_type === "emergency" ? "border-red-500 bg-red-50" :
-                    comm.priority === "high" ? "border-orange-500 bg-orange-50" :
-                      "border-border"
-                }`}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="flex-shrink-0">
-                          <StatusIcon className="h-6 w-6" />
+            {filteredCommunications.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground">Nenhuma mensagem encontrada</p>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredCommunications.map((comm) => {
+                const StatusIcon = getStatusIcon(comm.status);
+                
+                return (
+                  <Card key={comm.id} className={`border-l-4 ${
+                    comm.message_type === "emergency" ? "border-red-500 bg-red-50" :
+                      comm.priority === "high" ? "border-orange-500 bg-orange-50" :
+                        "border-border"
+                  }`}>
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3 flex-1">
+                          <div className="flex-shrink-0">
+                            <StatusIcon className="h-6 w-6" />
+                          </div>
+                          
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <h3 className="font-semibold">{comm.vessel_name}</h3>
+                              <Badge className={`${getMessageTypeColor(comm.message_type)} text-card-foreground`}>
+                                {getMessageTypeText(comm.message_type)}
+                              </Badge>
+                              <Badge className={getPriorityColor(comm.priority)}>
+                                {comm.priority === "critical" ? "Crítica" :
+                                  comm.priority === "high" ? "Alta" :
+                                    comm.priority === "normal" ? "Normal" : "Baixa"}
+                              </Badge>
+                              {comm.response_required && (
+                                <Badge variant="outline">Resposta Necessária</Badge>
+                              )}
+                            </div>
+                            
+                            <p className="text-sm mb-3">{comm.content}</p>
+                            
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {new Date(comm.sent_at).toLocaleString()}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Users className="h-3 w-3" />
+                                {comm.sender_role}
+                              </div>
+                              {comm.coordinates && (
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {comm.coordinates.latitude.toFixed(4)}, {comm.coordinates.longitude.toFixed(4)}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-semibold">{comm.vessel_name}</h3>
-                            <Badge className={`${getMessageTypeColor(comm.message_type)} text-card-foreground`}>
-                              {getMessageTypeText(comm.message_type)}
-                            </Badge>
-                            <Badge className={getPriorityColor(comm.priority)}>
-                              {comm.priority === "critical" ? "Crítica" :
-                                comm.priority === "high" ? "Alta" :
-                                  comm.priority === "normal" ? "Normal" : "Baixa"}
-                            </Badge>
-                            {comm.response_required && (
-                              <Badge variant="outline">Resposta Necessária</Badge>
-                            )}
-                          </div>
-                          
-                          <p className="text-sm mb-3">{comm.content}</p>
-                          
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {new Date(comm.sent_at).toLocaleString()}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Users className="h-3 w-3" />
-                              {comm.sender_role}
-                            </div>
-                            {comm.coordinates && (
-                              <div className="flex items-center gap-1">
-                                <MapPin className="h-3 w-3" />
-                                {comm.coordinates.latitude.toFixed(4)}, {comm.coordinates.longitude.toFixed(4)}
-                              </div>
-                            )}
-                          </div>
+                        <div className="flex gap-2">
+                          {comm.response_required && comm.status !== "resolved" && (
+                            <Button size="sm">
+                              Responder
+                            </Button>
+                          )}
+                          {comm.status === "sent" && (
+                            <Button size="sm" variant="outline">
+                              Confirmar
+                            </Button>
+                          )}
                         </div>
                       </div>
-                      
-                      <div className="flex gap-2">
-                        {comm.response_required && comm.status !== "resolved" && (
-                          <Button size="sm">
-                            Responder
-                          </Button>
-                        )}
-                        {comm.status === "sent" && (
-                          <Button size="sm" variant="outline">
-                            Confirmar
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                    </CardContent>
+                  </Card>
+                );
+              })
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="channels" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {channels.map((channel) => {
-              const ChannelIcon = getChannelIcon(channel.type);
-              
-              return (
-                <Card key={channel.id}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <ChannelIcon className="h-5 w-5 text-primary" />
+          {channels.length === 0 ? (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <Radio className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground">Nenhum canal configurado</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {channels.map((channel) => {
+                const ChannelIcon = getChannelIcon(channel.type);
+                
+                return (
+                  <Card key={channel.id}>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <ChannelIcon className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{channel.name}</h3>
+                            <Badge className={
+                              channel.status === "active" ? "bg-status-active text-status-active-foreground" :
+                                channel.status === "maintenance" ? "bg-warning text-warning-foreground" :
+                                  "bg-status-inactive text-status-inactive-foreground"
+                            }>
+                              {channel.status === "active" ? "Ativo" :
+                                channel.status === "maintenance" ? "Manutenção" : "Inativo"}
+                            </Badge>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold">{channel.name}</h3>
-                          <Badge className={
-                            channel.status === "active" ? "bg-status-active text-status-active-foreground" :
-                              channel.status === "maintenance" ? "bg-warning text-warning-foreground" :
-                                "bg-status-inactive text-status-inactive-foreground"
-                          }>
-                            {channel.status === "active" ? "Ativo" :
-                              channel.status === "maintenance" ? "Manutenção" : "Inativo"}
-                          </Badge>
-                        </div>
+                        
+                        <Button variant="outline" size="sm">
+                          Conectar
+                        </Button>
                       </div>
                       
-                      <Button variant="outline" size="sm">
-                        Conectar
-                      </Button>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="text-sm text-muted-foreground">
-                        <strong>Participantes:</strong> {channel.participants.join(", ")}
+                      <div className="space-y-2">
+                        <div className="text-sm text-muted-foreground">
+                          <strong>Participantes:</strong> {channel.participants.join(", ") || "Nenhum"}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Última atividade: {new Date(channel.last_activity).toLocaleString()}
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        Última atividade: {new Date(channel.last_activity).toLocaleString()}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="emergency" className="space-y-6">
