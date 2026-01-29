@@ -100,6 +100,8 @@ const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
+const SupportCenterPage = lazy(() => import("@/pages/SupportCenterPage"));
+const SubscriptionPlansPage = lazy(() => import("@/pages/SubscriptionPlansPage"));
 
 // ============================================
 // INTELIGÊNCIA AVANÇADA
@@ -725,6 +727,8 @@ const AppRoutes = () => (
       <Route path="/testing" element={<CentralComando />} />
       <Route path="/feedback" element={<CentralComando />} />
       <Route path="/saas-manager" element={<Admin />} />
+      <Route path="/support-center" element={<SupportCenterPage />} />
+      <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
       
       {/* ============================================ */}
       {/* ADMIN - INFRAESTRUTURA v4.0 */}
