@@ -212,13 +212,15 @@ export class ComplianceRegulatoryEngine {
   }
 
   private checkRequirement(vesselId: string, req: ComplianceRequirement): RequirementStatus {
-    const hasEvidence = Math.random() > 0.2;
+    // Deterministic check based on requirement ID and vessel ID for consistency
+    const hash = `${vesselId}-${req.id}`.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hasEvidence = hash % 5 !== 0; // 80% compliance rate deterministically
     return {
       requirementId: req.id,
       code: req.code,
       title: req.title,
       status: hasEvidence ? 'met' : 'not_met',
-      evidence: hasEvidence ? [{ id: crypto.randomUUID(), type: 'document', title: 'Certificate', uploadDate: new Date(), verified: true }] : [],
+      evidence: hasEvidence ? [{ id: `ev-${req.id}`, type: 'document', title: 'Certificate', uploadDate: new Date(), verified: true }] : [],
       lastVerified: new Date(),
       notes: '',
     };

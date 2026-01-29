@@ -60,11 +60,17 @@ export const MaritimeCommunicationCenter = () => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [activeTab, setActiveTab] = useState("messages");
   const [selectedChannel, setSelectedChannel] = useState<string>("all");
-  const [newMessage, setNewMessage] = useState({
+  const [newMessage, setNewMessage] = useState<{
+    vessel_id: string;
+    message_type: "general" | "navigation" | "maintenance" | "weather_alert" | "emergency" | "port_authority";
+    content: string;
+    priority: "low" | "normal" | "high" | "critical";
+    coordinates: { latitude: number; longitude: number };
+  }>({
     vessel_id: "",
-    message_type: "general" as const,
+    message_type: "general",
     content: "",
-    priority: "normal" as const,
+    priority: "normal",
     coordinates: { latitude: 0, longitude: 0 }
   });
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -126,21 +132,29 @@ export const MaritimeCommunicationCenter = () => {
       const { data, error } = await supabase
         .from('communication_channels')
         .select('*')
-        .order('last_activity', { ascending: false });
+        .order('updated_at', { ascending: false });
 
       if (error) {
         logger.error('Failed to load channels', { error });
         return;
       }
 
-      const mapped: CommunicationChannel[] = (data || []).map((c) => ({
-        id: c.id,
-        name: c.name,
-        type: c.channel_type as CommunicationChannel['type'],
-        status: c.status as CommunicationChannel['status'],
-        participants: Array.isArray(c.participants) ? c.participants : [],
-        last_activity: c.last_activity,
-      }));
+      const mapped: CommunicationChannel[] = (data || []).map((c) => {
+        // Safely extract participants from JSONB
+        let participants: string[] = [];
+        if (Array.isArray(c.participants)) {
+          participants = c.participants.filter((p): p is string => typeof p === 'string');
+        }
+        
+        return {
+          id: c.id,
+          name: c.name,
+          type: (c.channel_type || 'internal') as CommunicationChannel['type'],
+          status: (c.status || 'active') as CommunicationChannel['status'],
+          participants,
+          last_activity: c.last_activity || c.updated_at || new Date().toISOString(),
+        };
+      });
 
       setChannels(mapped);
     } catch (error) {
@@ -193,6 +207,9 @@ export const MaritimeCommunicationCenter = () => {
 
       const vessel = vessels.find(v => v.id === newMessage.vessel_id);
 
+      const priorityValue = newMessage.priority;
+      const isUrgent = priorityValue === 'critical' || priorityValue === 'high';
+      
       const { error } = await supabase
         .from('maritime_communications')
         .insert([{
@@ -200,11 +217,11 @@ export const MaritimeCommunicationCenter = () => {
           vessel_name: vessel?.name || 'Unknown Vessel',
           message_type: newMessage.message_type,
           content: newMessage.content,
-          priority: newMessage.priority,
+          priority: priorityValue,
           latitude: newMessage.coordinates.latitude || null,
           longitude: newMessage.coordinates.longitude || null,
           sender_role: 'operator',
-          response_required: newMessage.priority === 'critical' || newMessage.priority === 'high',
+          response_required: isUrgent,
         }]);
 
       if (error) {
