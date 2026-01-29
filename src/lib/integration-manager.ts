@@ -43,7 +43,8 @@ export class IntegrationManager {
     }
 
     // Mapbox
-    const mapboxKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const mapboxKey = safeEnv.VITE_MAPBOX_ACCESS_TOKEN || "";
     if (mapboxKey) {
       this.services.set("mapbox", {
         name: "Mapbox",

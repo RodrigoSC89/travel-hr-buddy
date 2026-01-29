@@ -38,8 +38,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Mapbox token from environment
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x0OHFqMjVvMDVvYTJrcXRqNXkxNmF5NiJ9.XkO2Cc9_HKIbM9azT9Ifjw";
+// Mapbox token from environment with fallback
+const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+const MAPBOX_TOKEN = safeEnv.VITE_MAPBOX_TOKEN || "pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x0OHFqMjVvMDVvYTJrcXRqNXkxNmF5NiJ9.XkO2Cc9_HKIbM9azT9Ifjw";
 
 type MapStyle = "dark" | "satellite" | "navigation" | "ocean";
 

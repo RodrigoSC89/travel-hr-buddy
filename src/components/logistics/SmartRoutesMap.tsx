@@ -96,7 +96,8 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
   const [isOptimizing, setIsOptimizing] = useState(false);
 
   // Use environment variable if no token provided
-  const token = mapboxToken || import.meta.env.VITE_MAPBOX_TOKEN || '';
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+  const token = mapboxToken || safeEnv.VITE_MAPBOX_TOKEN || '';
 
   useEffect(() => {
     if (!mapContainer.current || !token) {

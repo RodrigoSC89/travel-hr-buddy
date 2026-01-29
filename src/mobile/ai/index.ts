@@ -35,7 +35,8 @@ class MobileAICore {
    * Initialize OpenAI client
    */
   private initialize(): void {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
     
     if (apiKey) {
       this.openai = new OpenAI({
