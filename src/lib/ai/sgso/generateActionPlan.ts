@@ -30,8 +30,20 @@ export interface SGSOActionPlan {
 export async function generateSGSOActionPlan(
   incident: SGSOIncident
 ): Promise<SGSOActionPlan | null> {
+  // Safe getter for env vars
+  const getEnv = (key: string): string | undefined => {
+    try {
+      if (typeof import.meta !== 'undefined' && import.meta.env) {
+        return import.meta.env[key] as string | undefined;
+      }
+    } catch {
+      return undefined;
+    }
+    return undefined;
+  };
+
   // Check if API key is available
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = getEnv('VITE_OPENAI_API_KEY');
   const hasValidKey = apiKey && apiKey !== "your_openai_api_key_here" && apiKey !== "";
 
   // Mock mode when API key is not available
