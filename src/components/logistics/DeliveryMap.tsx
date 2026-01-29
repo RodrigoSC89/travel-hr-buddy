@@ -6,8 +6,9 @@ import { MapPin, Truck, Package } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { logger } from "@/lib/logger";
 
-// Set your Mapbox access token (should be in environment variables)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
+// Set your Mapbox access token with safe fallback
+const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+const MAPBOX_TOKEN = safeEnv.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 if (!MAPBOX_TOKEN) {
   logger.warn("Mapbox token not configured. Map functionality will be limited.");

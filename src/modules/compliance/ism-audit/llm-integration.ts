@@ -197,7 +197,8 @@ Format your response as JSON with keys: overall_assessment, section_insights (ob
 async function callLLMAPI(prompt: string): Promise<string | null> {
   try {
     // Check if OpenAI API is available
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
     
     if (!apiKey) {
       Logger.warn("OpenAI API key not configured, using fallback");

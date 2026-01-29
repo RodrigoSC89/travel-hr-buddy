@@ -59,10 +59,11 @@ interface ComplianceNotification {
   metadata?: Record<string, any>;
 }
 
-// Check for missing OAuth keys
+// Check for missing OAuth keys with safe access
+const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
 const MISSING_KEYS = {
-  VITE_GOOGLE_CLIENT_ID: !import.meta.env.VITE_GOOGLE_CLIENT_ID,
-  VITE_MICROSOFT_CLIENT_ID: !import.meta.env.VITE_MICROSOFT_CLIENT_ID,
+  VITE_GOOGLE_CLIENT_ID: !safeEnv.VITE_GOOGLE_CLIENT_ID,
+  VITE_MICROSOFT_CLIENT_ID: !safeEnv.VITE_MICROSOFT_CLIENT_ID,
 };
 
 export const SmartNotifications = () => {

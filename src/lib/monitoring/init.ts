@@ -17,7 +17,8 @@ export function initializeMonitoring() {
   }
 
   // Only enable heavy monitoring if explicitly requested
-  const enableHeavyMonitoring = import.meta.env.VITE_ENABLE_HEAVY_MONITORING === "true";
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+  const enableHeavyMonitoring = safeEnv.VITE_ENABLE_HEAVY_MONITORING === "true";
   
   if (enableHeavyMonitoring) {
     Logger.info("Starting heavy monitoring (enabled via env)", undefined, "MonitoringInit");

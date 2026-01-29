@@ -26,7 +26,8 @@ class MetricsDaemon {
 
   start() {
     // Disabled by default to prevent memory issues
-    const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const ENABLE = safeEnv.VITE_ENABLE_CLIENT_METRICS === "true";
     if (!ENABLE) {
       Logger.info("MetricsDaemon disabled", undefined, "MetricsDaemon");
       return;

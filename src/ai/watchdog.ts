@@ -25,7 +25,8 @@ class SystemWatchdog {
 
   start() {
     // Disabled by default to prevent performance issues
-    const ENABLE = import.meta.env.VITE_ENABLE_WATCHDOG === "true";
+    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+    const ENABLE = safeEnv.VITE_ENABLE_WATCHDOG === "true";
     if (!ENABLE) {
       Logger.info("Watchdog disabled", undefined, "Watchdog");
       return;

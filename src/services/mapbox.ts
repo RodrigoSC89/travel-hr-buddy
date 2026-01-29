@@ -16,7 +16,8 @@ export interface MapboxTestResult {
  */
 export async function testMapboxConnection(): Promise<MapboxTestResult> {
   const startTime = Date.now();
-  const apiKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN;
+  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
+  const apiKey = safeEnv.VITE_MAPBOX_ACCESS_TOKEN || safeEnv.VITE_MAPBOX_TOKEN || "";
 
   if (!apiKey) {
     return {
