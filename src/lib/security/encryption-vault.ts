@@ -118,8 +118,7 @@ class EncryptionVault {
     }
 
     const encoder = new TextEncoder();
-    const ivArray = crypto.getRandomValues(new Uint8Array(12));
-    const iv = new Uint8Array(ivArray.buffer);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
 
     const ciphertext = await crypto.subtle.encrypt(
       { name: this.ALGORITHM, iv },
@@ -128,7 +127,7 @@ class EncryptionVault {
     );
 
     return {
-      iv: this.arrayBufferToBase64(iv),
+      iv: this.arrayBufferToBase64(iv.buffer),
       ciphertext: this.arrayBufferToBase64(ciphertext),
       algorithm: this.ALGORITHM
     };
