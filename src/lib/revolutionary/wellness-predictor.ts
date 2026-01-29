@@ -1,11 +1,11 @@
 /**
  * 💚 Wellness Prediction Engine - Crew Health & Wellbeing AI
- * PATCH REVOLUTION v2.0
+ * PATCH REVOLUTION v2.1
  * 
  * Análise de fadiga/stress via wearables e padrões de comunicação
+ * REFACTORED: Removed database dependencies, uses simulated data
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface WellnessMetrics {
@@ -136,6 +136,32 @@ const ALERT_THRESHOLDS = {
   heartRateVariability: { low: 30, critical: 20 },
 };
 
+// Simulated crew wellness data
+const SIMULATED_CREW_PROFILES: Record<string, CrewWellnessProfile> = {
+  'default': {
+    crewMemberId: 'crew-001',
+    name: 'João Silva',
+    position: 'Capitão',
+    vessel: 'MV Atlantic Star',
+    overallWellnessScore: 78,
+    currentStatus: 'good',
+    wellnessTrend: 'stable',
+    trendDays: 7,
+    physicalScore: 82,
+    mentalScore: 75,
+    socialScore: 80,
+    workLifeBalanceScore: 72,
+    riskFactors: [],
+    priorityRecommendations: ['Manter rotinas atuais - indicadores positivos'],
+    lastAssessmentDate: new Date(),
+    consecutiveDaysAtSea: 45,
+  }
+};
+
+// Stored wellness data (in-memory simulation)
+const wellnessDataStore: Map<string, WellnessMetrics[]> = new Map();
+const alertsStore: WellnessAlert[] = [];
+
 class WellnessPredictor {
   
   // Analyze metrics and predict wellness state
@@ -252,8 +278,11 @@ class WellnessPredictor {
       predictions.push('Tripulante em excelente condição. Manter práticas atuais.');
     }
 
-    // Store wellness data
-    await this.storeWellnessData(crewMemberId, metrics, wellnessScore, alerts.length);
+    // Store wellness data (in-memory)
+    this.storeWellnessData(crewMemberId, metrics, wellnessScore, alerts.length);
+
+    // Store alerts
+    alerts.forEach(alert => alertsStore.push(alert));
 
     return { wellnessScore, alerts, predictions };
   }
@@ -362,137 +391,55 @@ class WellnessPredictor {
     };
   }
 
-  // Store wellness data
-  private async storeWellnessData(
+  // Store wellness data (in-memory)
+  private storeWellnessData(
     crewMemberId: string,
     metrics: WellnessMetrics,
-    wellnessScore: number,
-    alertCount: number
-  ): Promise<void> {
-    try {
-      await supabase.from('crew_wellness_metrics').insert({
-        crew_member_id: crewMemberId,
-        date: metrics.date.toISOString(),
-        wellness_score: wellnessScore,
-        fatigue_index: metrics.fatigueIndex,
-        stress_level: metrics.stressLevel,
-        sleep_hours: metrics.sleepHours,
-        sleep_quality: metrics.sleepQuality,
-        recovery_score: metrics.recoveryScore,
-        hours_on_duty: metrics.hoursOnDuty,
-        sentiment_score: metrics.sentimentScore,
-        alert_count: alertCount,
-        created_at: new Date().toISOString(),
-      });
-    } catch (error) {
-      logger.warn('Failed to store wellness data', { error });
-    }
+    _wellnessScore: number,
+    _alertCount: number
+  ): void {
+    const existing = wellnessDataStore.get(crewMemberId) || [];
+    existing.push(metrics);
+    wellnessDataStore.set(crewMemberId, existing.slice(-30)); // Keep last 30 records
+    logger.info('Wellness data stored', { crewMemberId });
   }
 
-  // Get crew wellness profile
+  // Get crew wellness profile (simulated)
   async getCrewProfile(crewMemberId: string): Promise<CrewWellnessProfile | null> {
     try {
-      // Get crew member info
-      const { data: crewMember } = await supabase
-        .from('crew_members')
-        .select('full_name, position, vessels(name)')
-        .eq('id', crewMemberId)
-        .maybeSingle();
-
-      if (!crewMember) return null;
-
-      // Get recent wellness metrics
-      const { data: metrics } = await supabase
-        .from('crew_wellness_metrics')
-        .select('*')
-        .eq('crew_member_id', crewMemberId)
-        .order('date', { ascending: false })
-        .limit(30);
-
-      const recentMetrics = metrics || [];
-      const latestMetric = recentMetrics[0];
-
-      // Calculate trend
-      const trend = this.calculateTrend(recentMetrics);
-
-      // Get days at sea
-      const { data: seaTime } = await supabase
-        .from('crew_rotations')
-        .select('embarked_at')
-        .eq('crew_member_id', crewMemberId)
-        .eq('status', 'active')
-        .maybeSingle();
-
-      const daysAtSea = seaTime?.embarked_at 
-        ? Math.floor((Date.now() - new Date(seaTime.embarked_at).getTime()) / (1000 * 60 * 60 * 24))
-        : 0;
-
-      // Determine risk factors
-      const riskFactors: string[] = [];
-      if (daysAtSea > ALERT_THRESHOLDS.daysAtSea.warning) {
-        riskFactors.push(`${daysAtSea} dias consecutivos no mar`);
+      // Return simulated profile with some randomization
+      const baseProfile = SIMULATED_CREW_PROFILES['default'];
+      
+      // Check if we have stored metrics
+      const storedMetrics = wellnessDataStore.get(crewMemberId);
+      
+      if (storedMetrics && storedMetrics.length > 0) {
+        const latest = storedMetrics[storedMetrics.length - 1];
+        const physicalScore = this.calculatePhysicalScore(latest);
+        const mentalScore = this.calculateMentalScore(latest);
+        const workLifeScore = this.calculateWorkLifeScore(latest);
+        const overallScore = Math.round(physicalScore * 0.35 + mentalScore * 0.35 + workLifeScore * 0.30);
+        
+        return {
+          ...baseProfile,
+          crewMemberId,
+          overallWellnessScore: overallScore,
+          currentStatus: this.getStatusFromScore(overallScore),
+          physicalScore: Math.round(physicalScore),
+          mentalScore: Math.round(mentalScore),
+          workLifeBalanceScore: Math.round(workLifeScore),
+          lastAssessmentDate: latest.date,
+        };
       }
-      if (latestMetric?.fatigue_index > 60) {
-        riskFactors.push('Fadiga elevada persistente');
-      }
-      if (latestMetric?.stress_level > 60) {
-        riskFactors.push('Níveis de estresse preocupantes');
-      }
-      if (latestMetric?.sleep_quality < 50) {
-        riskFactors.push('Qualidade de sono inadequada');
-      }
-
-      // Generate recommendations
-      const recommendations = this.generateRecommendations(latestMetric, daysAtSea, riskFactors);
-
-      // Calculate overall score
-      const overallScore = latestMetric?.wellness_score || 75;
-
+      
       return {
+        ...baseProfile,
         crewMemberId,
-        name: crewMember.full_name,
-        position: crewMember.position || 'N/A',
-        vessel: (crewMember.vessels as unknown as { name: string })?.name || 'N/A',
-        overallWellnessScore: overallScore,
-        currentStatus: this.getStatusFromScore(overallScore),
-        wellnessTrend: trend.direction,
-        trendDays: trend.days,
-        physicalScore: Math.round((latestMetric?.recovery_score || 75) * 0.5 + (latestMetric?.sleep_quality || 75) * 0.5),
-        mentalScore: Math.round(100 - (latestMetric?.stress_level || 25)),
-        socialScore: Math.round((latestMetric?.sentiment_score || 0) * 50 + 50),
-        workLifeBalanceScore: Math.round(100 - (((latestMetric?.hours_on_duty || 8) - 8) * 10)),
-        riskFactors,
-        priorityRecommendations: recommendations,
-        lastAssessmentDate: latestMetric?.date ? new Date(latestMetric.date) : new Date(),
-        consecutiveDaysAtSea: daysAtSea,
       };
     } catch (error) {
       logger.error('Failed to get crew profile', error as Error);
       return null;
     }
-  }
-
-  // Calculate wellness trend
-  private calculateTrend(
-    metrics: Array<{ wellness_score: number; date: string }>
-  ): { direction: 'improving' | 'stable' | 'declining'; days: number } {
-    if (metrics.length < 7) {
-      return { direction: 'stable', days: metrics.length };
-    }
-
-    const recent = metrics.slice(0, 7);
-    const older = metrics.slice(7, 14);
-
-    const recentAvg = recent.reduce((sum, m) => sum + m.wellness_score, 0) / recent.length;
-    const olderAvg = older.length > 0 
-      ? older.reduce((sum, m) => sum + m.wellness_score, 0) / older.length 
-      : recentAvg;
-
-    const diff = recentAvg - olderAvg;
-
-    if (diff > 5) return { direction: 'improving', days: 7 };
-    if (diff < -5) return { direction: 'declining', days: 7 };
-    return { direction: 'stable', days: 7 };
   }
 
   // Get status label from score
@@ -513,7 +460,7 @@ class WellnessPredictor {
       sleep_hours?: number;
     } | null,
     daysAtSea: number,
-    riskFactors: string[]
+    _riskFactors: string[]
   ): string[] {
     const recommendations: string[] = [];
 
@@ -551,96 +498,32 @@ class WellnessPredictor {
     return recommendations.slice(0, 4);
   }
 
-  // Get vessel wellness report
+  // Get vessel wellness report (simulated)
   async getVesselReport(vesselId: string): Promise<VesselWellnessReport | null> {
     try {
-      // Get vessel info
-      const { data: vessel } = await supabase
-        .from('vessels')
-        .select('name')
-        .eq('id', vesselId)
-        .maybeSingle();
-
-      if (!vessel) return null;
-
-      // Get all crew members on vessel
-      const { data: crewMembers } = await supabase
-        .from('crew_members')
-        .select('id')
-        .eq('vessel_id', vesselId);
-
-      if (!crewMembers || crewMembers.length === 0) {
-        return {
-          vesselId,
-          vesselName: vessel.name,
-          reportDate: new Date(),
-          avgWellnessScore: 0,
-          avgStressLevel: 0,
-          avgFatigueIndex: 0,
-          excellentCount: 0,
-          goodCount: 0,
-          fairCount: 0,
-          concerningCount: 0,
-          criticalCount: 0,
-          activeAlerts: 0,
-          highPriorityAlerts: 0,
-          vesselRecommendations: ['Nenhum tripulante registrado na embarcação'],
-        };
-      }
-
-      const crewIds = crewMembers.map(c => c.id);
-
-      // Get latest metrics for each crew member
-      const { data: metrics } = await supabase
-        .from('crew_wellness_metrics')
-        .select('*')
-        .in('crew_member_id', crewIds)
-        .order('date', { ascending: false });
-
-      // Get unique latest metrics per crew member
-      const latestMetrics = new Map();
-      metrics?.forEach(m => {
-        if (!latestMetrics.has(m.crew_member_id)) {
-          latestMetrics.set(m.crew_member_id, m);
-        }
-      });
-
-      const metricsArray = Array.from(latestMetrics.values());
-
-      // Calculate aggregates
-      const avgWellness = metricsArray.reduce((sum, m) => sum + m.wellness_score, 0) / (metricsArray.length || 1);
-      const avgStress = metricsArray.reduce((sum, m) => sum + m.stress_level, 0) / (metricsArray.length || 1);
-      const avgFatigue = metricsArray.reduce((sum, m) => sum + m.fatigue_index, 0) / (metricsArray.length || 1);
-
-      // Count by status
-      const statusCounts = {
-        excellent: 0,
-        good: 0,
-        fair: 0,
-        concerning: 0,
-        critical: 0,
+      // Simulated vessel report
+      const vesselNames: Record<string, string> = {
+        'vessel-001': 'MV Atlantic Star',
+        'vessel-002': 'MV Pacific Explorer',
+        'vessel-003': 'MV Caribbean Queen',
       };
 
-      metricsArray.forEach(m => {
-        const status = this.getStatusFromScore(m.wellness_score);
-        statusCounts[status]++;
-      });
+      const vesselName = vesselNames[vesselId] || `Vessel ${vesselId.slice(-4)}`;
 
-      // Get active alerts
-      const { count: alertCount } = await supabase
-        .from('wellness_alerts')
-        .select('*', { count: 'exact', head: true })
-        .in('crew_member_id', crewIds)
-        .is('acknowledged_at', null);
+      // Generate simulated metrics
+      const crewCount = 15 + Math.floor(Math.random() * 10);
+      const avgWellness = 65 + Math.floor(Math.random() * 25);
+      const avgStress = 30 + Math.floor(Math.random() * 30);
+      const avgFatigue = 25 + Math.floor(Math.random() * 35);
 
-      const { count: highAlertCount } = await supabase
-        .from('wellness_alerts')
-        .select('*', { count: 'exact', head: true })
-        .in('crew_member_id', crewIds)
-        .is('acknowledged_at', null)
-        .in('severity', ['high', 'critical']);
+      // Distribute crew across status categories
+      const excellent = Math.floor(crewCount * 0.2);
+      const good = Math.floor(crewCount * 0.4);
+      const fair = Math.floor(crewCount * 0.25);
+      const concerning = Math.floor(crewCount * 0.1);
+      const critical = crewCount - excellent - good - fair - concerning;
 
-      // Generate vessel-level recommendations
+      // Generate recommendations
       const recommendations: string[] = [];
       
       if (avgStress > 50) {
@@ -649,7 +532,7 @@ class WellnessPredictor {
       if (avgFatigue > 50) {
         recommendations.push('Revisar escalas de trabalho - níveis de fadiga elevados');
       }
-      if (statusCounts.concerning + statusCounts.critical > metricsArray.length * 0.2) {
+      if (concerning + critical > crewCount * 0.2) {
         recommendations.push('ATENÇÃO: Mais de 20% da tripulação com bem-estar comprometido');
       }
       if (recommendations.length === 0) {
@@ -658,18 +541,18 @@ class WellnessPredictor {
 
       return {
         vesselId,
-        vesselName: vessel.name,
+        vesselName,
         reportDate: new Date(),
-        avgWellnessScore: Math.round(avgWellness),
-        avgStressLevel: Math.round(avgStress),
-        avgFatigueIndex: Math.round(avgFatigue),
-        excellentCount: statusCounts.excellent,
-        goodCount: statusCounts.good,
-        fairCount: statusCounts.fair,
-        concerningCount: statusCounts.concerning,
-        criticalCount: statusCounts.critical,
-        activeAlerts: alertCount || 0,
-        highPriorityAlerts: highAlertCount || 0,
+        avgWellnessScore: avgWellness,
+        avgStressLevel: avgStress,
+        avgFatigueIndex: avgFatigue,
+        excellentCount: excellent,
+        goodCount: good,
+        fairCount: fair,
+        concerningCount: concerning,
+        criticalCount: Math.max(0, critical),
+        activeAlerts: alertsStore.filter(a => !a.acknowledgedAt).length,
+        highPriorityAlerts: alertsStore.filter(a => !a.acknowledgedAt && ['high', 'critical'].includes(a.severity)).length,
         vesselRecommendations: recommendations,
       };
     } catch (error) {
@@ -709,24 +592,31 @@ class WellnessPredictor {
       // Analyze the synced data
       const analysis = await this.analyzeCrewWellness(crewMemberId, metrics);
 
-      // Store any generated alerts
-      for (const alert of analysis.alerts) {
-        await supabase.from('wellness_alerts').insert({
-          crew_member_id: alert.crewMemberId,
-          alert_type: alert.alertType,
-          severity: alert.severity,
-          title: alert.title,
-          description: alert.description,
-          recommendation: alert.recommendation,
-          created_at: alert.createdAt.toISOString(),
-        });
-      }
-
       logger.info('Wearable data synced', { crewMemberId, wearableType, alertCount: analysis.alerts.length });
     } catch (error) {
       logger.error('Failed to sync wearable data', error as Error);
       throw error;
     }
+  }
+
+  // Get active alerts
+  getActiveAlerts(crewMemberId?: string): WellnessAlert[] {
+    const active = alertsStore.filter(a => !a.acknowledgedAt);
+    if (crewMemberId) {
+      return active.filter(a => a.crewMemberId === crewMemberId);
+    }
+    return active;
+  }
+
+  // Acknowledge alert
+  acknowledgeAlert(alertId: string, acknowledgedBy: string): boolean {
+    const alert = alertsStore.find(a => a.id === alertId);
+    if (alert) {
+      alert.acknowledgedAt = new Date();
+      alert.acknowledgedBy = acknowledgedBy;
+      return true;
+    }
+    return false;
   }
 }
 
