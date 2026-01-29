@@ -75,6 +75,8 @@ const OperationsIntelligencePage = lazy(() => import("@/pages/OperationsIntellig
 const HRIntelligencePage = lazy(() => import("@/pages/HRIntelligencePage"));
 const PredictiveMaintenanceMLPage = lazy(() => import("@/pages/PredictiveMaintenanceMLPage"));
 const PredictiveAuditPage = lazy(() => import("@/pages/PredictiveAuditPage"));
+const FinanceHubAIPage = lazy(() => import("@/pages/FinanceHubAIPage"));
+const SmartLogisticsAIPage = lazy(() => import("@/pages/SmartLogisticsAIPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -688,6 +690,7 @@ const AppRoutes = () => (
       {/* FINANÇAS & PROCUREMENT */}
       {/* ============================================ */}
       <Route path="/advanced-finance-ai" element={<AdvancedFinanceAIPage />} />
+      <Route path="/finance-hub-ai" element={<FinanceHubAIPage />} />
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
@@ -705,6 +708,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* VIAGENS & LOGÍSTICA */}
       {/* ============================================ */}
+      <Route path="/smart-logistics-ai" element={<SmartLogisticsAIPage />} />
       <Route path="/travel-command" element={<TravelCommandCenter />} />
       <Route path="/travel-ai-engine" element={<TravelAIEnginePage />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />

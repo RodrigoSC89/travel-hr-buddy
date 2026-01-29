@@ -198,14 +198,14 @@ export const REVOLUTIONARY_MODULES = {
   },
   financeAI: {
     name: 'Finance AI',
-    path: '/finance-hub',
+    path: '/finance-hub-ai',
     description: 'Predictive accounting, fraud detection, budget optimization',
     engines: ['PredictiveAccountingEngine'],
-    badge: 'PREDICTIVE'
+    badge: 'ML+PREDICT'
   },
   smartLogistics: {
     name: 'Smart Logistics',
-    path: '/smart-logistics',
+    path: '/smart-logistics-ai',
     description: 'Autonomous supply chain with predictive inventory management',
     engines: ['AutonomousLogisticsEngine'],
     badge: 'AUTONOMOUS'
