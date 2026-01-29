@@ -52,47 +52,15 @@ export const MLCInspectionDashboard: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-assistant`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: [...aiMessages, userMessage] }),
+      const { data, error } = await supabase.functions.invoke('mlc-assistant', {
+        body: { messages: [...aiMessages, userMessage] },
       });
 
-      if (!response.ok) throw new Error('AI request failed');
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantContent = '';
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
-          for (const line of lines) {
-            if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-              try {
-                const json = JSON.parse(line.slice(6));
-                const content = json.choices?.[0]?.delta?.content;
-                if (content) {
-                  assistantContent += content;
-                  setAiMessages(prev => {
-                    const last = prev[prev.length - 1];
-                    if (last?.role === 'assistant') {
-                      return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantContent } : m);
-                    }
-                    return [...prev, { role: 'assistant', content: assistantContent }];
-                  });
-                }
-              } catch {}
-            }
-          }
-        }
-      }
+      if (error) throw error;
+      
+      // Handle response from edge function
+      const responseContent = data?.content || data?.response || (typeof data === 'string' ? data : JSON.stringify(data));
+      setAiMessages(prev => [...prev, { role: 'assistant', content: responseContent }]);
     } catch (error) {
       toast.error('Erro ao conectar com assistente IA');
     } finally {
