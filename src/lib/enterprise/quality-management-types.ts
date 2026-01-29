@@ -11,12 +11,12 @@ export interface NonConformity {
   severity: 'minor' | 'major' | 'critical';
   status: 'open' | 'investigating' | 'action_required' | 'closed';
   rootCause?: string;
-  correctiveActions: CorrectiveAction[];
+  correctiveActions: QualityCorrectiveAction[];
   createdAt: Date;
   closedAt?: Date;
 }
 
-export interface CorrectiveAction {
+export interface QualityCorrectiveAction {
   id: string;
   description: string;
   assignedTo: string;
