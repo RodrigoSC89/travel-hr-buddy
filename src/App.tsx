@@ -333,14 +333,40 @@ const queryClient = new QueryClient({
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
 // Ultra-optimized loader with instant skeleton display
+// PATCH: Emergency timeout to break infinite loading loops
 const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
+  const [forceNavigate, setForceNavigate] = React.useState(false);
   
   React.useEffect(() => {
-    // Show retry after 10s (reduced from 15s)
-    const timeout = setTimeout(() => setShowRetry(true), 10000);
-    return () => clearTimeout(timeout);
+    // Show retry after 5s (reduced from 10s)
+    const retryTimeout = setTimeout(() => setShowRetry(true), 5000);
+    
+    // Force navigation to auth after 8s to break any loading loop
+    const forceTimeout = setTimeout(() => {
+      setForceNavigate(true);
+    }, 8000);
+    
+    return () => {
+      clearTimeout(retryTimeout);
+      clearTimeout(forceTimeout);
+    };
   }, []);
+  
+  // Emergency redirect if stuck too long
+  React.useEffect(() => {
+    if (forceNavigate) {
+      // Clear any potential blocking caches
+      try {
+        Object.keys(localStorage)
+          .filter(k => k.includes('supabase') || k.includes('sb-'))
+          .forEach(k => localStorage.removeItem(k));
+      } catch {}
+      
+      // Navigate to auth page
+      window.location.href = '/auth';
+    }
+  }, [forceNavigate]);
   
   const handleRetry = async () => {
     try {
@@ -353,7 +379,7 @@ const Loader = React.memo(() => {
         await Promise.all(regs.map(r => r.unregister()));
       }
     } catch {}
-    window.location.href = window.location.origin + '/?_sw=' + Date.now();
+    window.location.href = window.location.origin + '/auth?_sw=' + Date.now();
   };
   
   return (
@@ -366,7 +392,7 @@ const Loader = React.memo(() => {
           className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin gpu-accelerated"
           style={{ contain: "strict" }}
         />
-        <p className="text-foreground font-medium">Carregando Nautilus One...</p>
+        <p className="text-foreground font-medium">Carregando...</p>
         {showRetry && (
           <div className="space-y-2 pt-4 fade-in">
             <p className="text-sm text-muted-foreground">

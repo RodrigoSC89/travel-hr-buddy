@@ -78,91 +78,39 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: Force SW cleanup on boot v16 - iOS PWA ULTIMATE FIX
-// Estratégia: Limpar caches e sincronizar versões
+// CRITICAL: Simplified SW cleanup - prevent infinite boot loops
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v16-ios-pwa-ultimate'; // SYNC com public/sw.js
-  const RELOAD_KEY = 'nautilus_reload_count';
+  const CURRENT_VERSION = 'v17-fix-loading'; // New version to force cache clear
   
   try {
-    // Detectar loop de reload (> 2 reloads em 30 segundos)
-    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
-    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_time') || '0', 10);
-    const now = Date.now();
-    
-    if (now - reloadTime < 30000 && reloadCount > 2) {
-      logger.warn('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
-      
-      // Limpar TUDO - SW causando problemas
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          await reg.unregister();
-        }
-      }
-      
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-      }
-      
-      // Limpar tokens de auth corrompidos
-      Object.keys(localStorage)
-        .filter(k => k.includes('supabase') || k.includes('sb-'))
-        .forEach(k => localStorage.removeItem(k));
-      
-      localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      
-      logger.info('[Boot v16] Emergency cleanup complete');
-      return true;
-    }
-    
-    // Incrementar contador de reload
-    localStorage.setItem(RELOAD_KEY, String(reloadCount + 1));
-    localStorage.setItem(RELOAD_KEY + '_time', String(now));
-    
-    // Limpar contador após 30 segundos de estabilidade
-    setTimeout(() => {
-      localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-    }, 30000);
-    
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
     
-    // Sempre limpar caches se versão diferente
+    // Always clean on version mismatch or first load
     if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
+      logger.info('[Boot v17] Version mismatch, cleaning...');
       
-      // Limpar TODOS os caches
+      // Clear ALL caches
       if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-        logger.info('[Boot v16] Caches cleared', { count: keys.length });
+        try {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        } catch {}
       }
       
-      // Atualizar SW se existir
+      // Unregister service workers
       if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          if (reg.waiting) {
-            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-          }
-          await reg.update();
-        }
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(r => r.unregister()));
+        } catch {}
       }
       
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      localStorage.removeItem('nautilus_sw_disabled');
     }
-    
-    return true;
-  } catch (error) {
-    logger.error('[Boot v16] Error during update check', error);
-    return true;
+  } catch (e) {
+    logger.warn('[Boot v17] Error during update check', e instanceof Error ? { message: e.message } : undefined);
   }
 };
 
@@ -170,9 +118,8 @@ const forceUpdateIfNeeded = async () => {
 const initServiceWorker = async () => {
   if (!('serviceWorker' in navigator)) return;
   
-  // Em desenvolvimento, não registrar SW
+  // Skip SW in development
   if (!import.meta.env.PROD) {
-    logger.info('[Boot v16] Dev mode - skipping SW registration');
     return;
   }
 
@@ -180,9 +127,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    logger.info('[Boot v16] Minimal SW registered', { scope: registration.scope });
+    logger.info('[Boot v17] SW registered', { scope: registration.scope });
   } catch (error) {
-    logger.warn('[Boot v16] SW registration failed (not critical)', error instanceof Error ? { message: error.message } : undefined);
+    logger.warn('[Boot v17] SW registration failed', error instanceof Error ? { message: error.message } : undefined);
   }
 };
 

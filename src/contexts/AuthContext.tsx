@@ -119,35 +119,44 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Safety timeout - 3s max wait for auth
+    // IMMEDIATE - Force loading false after 1.5s to prevent infinite loading
+    // This is CRITICAL for production stability
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        logger.info("[AuthContext] Safety timeout (3s) - forcing ready state");
+        logger.info("[AuthContext] Safety timeout (1.5s) - forcing ready state");
         setIsLoading(false);
       }
-    }, 3000);
+    }, 1500);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
-    // STEP 1: Fetch initial session FIRST (controls isLoading)
+    // STEP 1: Fetch initial session with aggressive timeout
     const initializeAuth = async () => {
       try {
-        const { data: sessionData, error } = await supabase.auth.getSession();
-
+        // Create a race between session fetch and timeout
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise<null>((resolve) => 
+          setTimeout(() => resolve(null), 2000)
+        );
+        
+        const result = await Promise.race([sessionPromise, timeoutPromise]);
+        
         if (!mounted) return;
 
-        if (error) {
-          logger.warn("[AuthContext] Error getting session", { error: error.message });
-          clearCorruptedTokens();
+        if (result && 'data' in result) {
+          const { data: sessionData, error } = result;
+          if (error) {
+            logger.warn("[AuthContext] Error getting session", { error: error.message });
+            clearCorruptedTokens();
+          }
+          setSession(sessionData?.session ?? null);
+          setUser(sessionData?.session?.user ?? null);
         }
-        
-        setSession(sessionData?.session ?? null);
-        setUser(sessionData?.session?.user ?? null);
       } catch (fetchError) {
         logger.warn("[AuthContext] Failed to fetch session (network issue)");
       } finally {
-        // CRITICAL: Set loading false ONLY after initial fetch completes
+        // CRITICAL: Always set loading false
         if (mounted) {
           setIsLoading(false);
         }
