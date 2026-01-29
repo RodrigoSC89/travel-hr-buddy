@@ -486,12 +486,13 @@ class ContractLifecycleManager {
 
       for (const reg of regulations) {
         const regulationCheckFn = regulationChecks[reg];
-        const isCompliant = regulationCheckFn ? regulationCheckFn(contract) : false;
+        const hasCheckFn = typeof regulationCheckFn === "function";
+        const isCompliant = hasCheckFn ? regulationCheckFn(contract) : false;
         checks.push({
           regulation: reg,
           status: isCompliant ? "compliant" : "pending_review",
           checkedAt: new Date(),
-          notes: regulationCheckFn ? undefined : "Manual review required"
+          notes: hasCheckFn ? undefined : "Manual review required"
         });
       }
 
