@@ -398,7 +398,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "💰 Finanças & Procurement",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: ADVANCED FINANCE AI =====
+      // ===== REVOLUCIONÁRIO: FINANCE AI =====
+      { label: "🤖 Finance Hub AI", path: "/finance-hub-ai", icon: Brain, emoji: "🤖", badge: "ML+PREDICT", status: "new" },
       { label: "💹 Finance AI Avançado", path: "/advanced-finance-ai", icon: Brain, emoji: "💹", badge: "ML+FRAUD+ROI", status: "new" },
       { label: "Finance Command", path: "/finance-command", icon: DollarSign, emoji: "💰" },
       { label: "Voyage Accounting", path: "/voyage-accounting", icon: DollarSign, emoji: "📊", badge: "NEW" },
@@ -432,6 +433,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "✈️ Viagens & Logística",
     defaultOpen: false,
     items: [
+      { label: "🤖 Smart Logistics AI", path: "/smart-logistics-ai", icon: Brain, emoji: "🤖", badge: "AUTONOMOUS", status: "new" },
       { label: "📦 Logistics AI Hub", path: "/logistics-ai-hub", icon: Brain, emoji: "📦", badge: "SMART SUPPLY v4.1", status: "new" },
       { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
       { label: "🚀 Travel AI Engine", path: "/travel-ai-engine", icon: Brain, emoji: "🚀", badge: "IA", status: "new" },
