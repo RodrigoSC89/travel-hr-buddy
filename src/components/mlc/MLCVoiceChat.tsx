@@ -135,28 +135,20 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
       const words = text.split(/\s+/);
       const limitedText = words.slice(0, 60).join(' ') + (words.length > 60 ? '...' : '');
       
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-voice-tts`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ text: limitedText }),
-        }
-      );
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: response, error } = await supabase.functions.invoke("mlc-voice-tts", {
+        body: { text: limitedText },
+      });
 
-      if (!response.ok) {
-        throw new Error('TTS request failed');
+      if (error) {
+        throw error;
       }
 
-      const data = await response.json();
+      const ttsData = response;
       
-      if (data.audioContent) {
+      if (ttsData?.audioContent) {
         // Play audio using data URI
-        const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+        const audioUrl = `data:audio/mpeg;base64,${ttsData.audioContent}`;
         
         if (audioRef.current) {
           audioRef.current.pause();
@@ -229,65 +221,31 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-assistant`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: responseData, error } = await supabase.functions.invoke("mlc-assistant", {
+        body: {
           messages: [...messages, userMessage].map(m => ({
             role: m.role,
             content: m.content
           }))
-        }),
+        },
       });
 
-      if (!response.ok) throw new Error('AI request failed');
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantContent = '';
-      let assistantId = `assistant_${Date.now()}`;
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
-          
-          for (const line of lines) {
-            if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-              try {
-                const json = JSON.parse(line.slice(6));
-                const content = json.choices?.[0]?.delta?.content;
-                if (content) {
-                  assistantContent += content;
-                  
-                  setMessages(prev => {
-                    const last = prev[prev.length - 1];
-                    if (last?.role === 'assistant' && last.id === assistantId) {
-                      return prev.map((m, i) => 
-                        i === prev.length - 1 
-                          ? { ...m, content: assistantContent } 
-                          : m
-                      );
-                    }
-                    return [...prev, {
-                      id: assistantId,
-                      role: 'assistant',
-                      content: assistantContent,
-                      timestamp: new Date()
-                    }];
-                  });
-                }
-              } catch {}
-            }
-          }
-        }
+      if (error) {
+        throw error;
       }
+
+      // Handle response from edge function (non-streaming)
+      const assistantContent = responseData?.content || responseData?.message || 
+        "Desculpe, não consegui processar sua pergunta. Por favor, tente novamente.";
+      const assistantId = `assistant_${Date.now()}`;
+
+      setMessages(prev => [...prev, {
+        id: assistantId,
+        role: 'assistant',
+        content: assistantContent,
+        timestamp: new Date()
+      }]);
 
       // Speak response if voice enabled (use ElevenLabs or browser TTS)
       if (voiceEnabled && assistantContent) {

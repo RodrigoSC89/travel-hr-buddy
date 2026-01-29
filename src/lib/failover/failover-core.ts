@@ -8,7 +8,8 @@ let lastHeartbeat = Date.now();
 let connected = false;
 
 export function initFailoverSystem() {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  // Use default public broker - no VITE_ env vars supported
+  const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
 
   client.on("connect", () => {
     connected = true;

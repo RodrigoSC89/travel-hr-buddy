@@ -65,7 +65,8 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
  * Generate AI recommendation with GPT-4 based on job and historical context
  */
 export const getAIRecommendation = async (jobDescription: string): Promise<AIRecommendation> => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  // OpenAI API key must be used via edge functions, not frontend
+  const apiKey = "";
   
   // Generate embedding for similarity search
   const embedding = await generateEmbedding(jobDescription);
@@ -183,12 +184,8 @@ export const streamCopilotSuggestions = async (
   try {
     // Get the function URL from Supabase
     const { data: { session } } = await supabase.auth.getSession();
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    
-    if (!supabaseUrl) {
-      throw new Error("Supabase URL not configured");
-    }
+    const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
     const functionUrl = `${supabaseUrl}/functions/v1/mmi-copilot`;
     

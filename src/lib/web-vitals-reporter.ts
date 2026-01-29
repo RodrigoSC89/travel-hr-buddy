@@ -107,8 +107,8 @@ const flushVitals = async () => {
       timestamp: Date.now(),
     });
     
-    // If we have a Supabase edge function for analytics
-    const analyticsUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analytics`;
+    // Use hardcoded Supabase URL for edge function
+    const analyticsUrl = "https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/analytics";
     
     if (navigator.sendBeacon) {
       navigator.sendBeacon(analyticsUrl, data);
