@@ -76,6 +76,9 @@ const RealTimeTracking: React.FC = () => {
           'maintenance': 'docked'
         };
         
+        // Deterministic values based on ID hash and index
+        const idHash = v.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+        
         return {
           id: v.id,
           name: v.name,
@@ -84,25 +87,25 @@ const RealTimeTracking: React.FC = () => {
             lng: v.location?.lng || -46.33 + index * 0.3
           },
           status: statusMap[v.status] || 'sailing',
-          speed: v.speed || 12 + Math.random() * 8,
-          heading: v.heading || Math.floor(Math.random() * 360),
+          speed: v.speed || 12 + (idHash % 8),
+          heading: v.heading || (idHash % 360),
           destination: v.route?.destination || 'Santos',
           eta: v.eta || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
           lastUpdate: v.lastUpdate || new Date().toISOString(),
           weather: {
-            windSpeed: 8 + Math.floor(Math.random() * 12),
-            waveHeight: 0.8 + Math.random() * 2,
-            temperature: 24 + Math.floor(Math.random() * 8),
-            visibility: 10 + Math.floor(Math.random() * 10)
+            windSpeed: 8 + (idHash % 12),
+            waveHeight: 0.8 + ((idHash % 20) / 10),
+            temperature: 24 + (idHash % 8),
+            visibility: 10 + (idHash % 10)
           },
           fuel: {
-            current: v.fuel?.current || 800 + Math.floor(Math.random() * 400),
+            current: v.fuel?.current || 800 + (idHash % 400),
             capacity: v.fuel?.capacity || 1500,
-            consumption: v.fuel?.consumption || 12 + Math.random() * 8
+            consumption: v.fuel?.consumption || 12 + (idHash % 8)
           },
-          crew: v.crew?.onboard || 20 + Math.floor(Math.random() * 8),
+          crew: v.crew?.onboard || 20 + (idHash % 8),
           cargo: {
-            current: v.cargo?.current_load || 8000 + Math.floor(Math.random() * 4000),
+            current: v.cargo?.current_load || 8000 + (idHash % 4000),
             capacity: v.cargo?.capacity || 15000
           }
         };
@@ -119,15 +122,22 @@ const RealTimeTracking: React.FC = () => {
   }, [vesselData, queryLoading, selectedVessel]);
 
   const updateVesselPositions = () => {
-    setVessels(prev => prev.map(vessel => ({
-      ...vessel,
-      coordinates: {
-        lat: vessel.coordinates.lat + (Math.random() - 0.5) * 0.01,
-        lng: vessel.coordinates.lng + (Math.random() - 0.5) * 0.01
-      },
-      speed: vessel.status === "sailing" ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
-      lastUpdate: new Date().toISOString()
-    })));
+    setVessels(prev => prev.map((vessel, idx) => {
+      // Deterministic movement based on time
+      const timeComponent = Date.now() / 60000;
+      const latDelta = Math.sin(timeComponent + idx) * 0.005;
+      const lngDelta = Math.cos(timeComponent + idx) * 0.005;
+      
+      return {
+        ...vessel,
+        coordinates: {
+          lat: vessel.coordinates.lat + latDelta,
+          lng: vessel.coordinates.lng + lngDelta
+        },
+        speed: vessel.status === "sailing" ? vessel.speed : 0,
+        lastUpdate: new Date().toISOString()
+      };
+    }));
   };
 
   // Real-time updates with optimized polling

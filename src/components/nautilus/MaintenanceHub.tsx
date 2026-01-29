@@ -89,28 +89,37 @@ export function MaintenanceHub() {
         .limit(10);
 
       if (vesselsData && vesselsData.length > 0) {
-        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any) => [
-          {
-            id: `${v.id}-engine`,
-            name: "Motor Principal",
-            vessel: v.name,
-            health: 70 + Math.random() * 25,
-            temperature: 60 + Math.random() * 30,
-            vibration: 5 + Math.random() * 15,
-            predictedLifespan: 2000 + Math.random() * 3000,
-            lastMaintenance: new Date(Date.now() - Math.random() * 90 * 86400000).toISOString().split("T")[0],
-          },
-          {
-            id: `${v.id}-generator`,
-            name: "Gerador",
-            vessel: v.name,
-            health: 75 + Math.random() * 20,
-            temperature: 50 + Math.random() * 20,
-            vibration: 3 + Math.random() * 10,
-            predictedLifespan: 3000 + Math.random() * 4000,
-            lastMaintenance: new Date(Date.now() - Math.random() * 60 * 86400000).toISOString().split("T")[0],
-          },
-        ]);
+        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any) => {
+          // Deterministic values based on ID hash
+          const idHash = v.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+          const engineHealth = 75 + (idHash % 20);
+          const generatorHealth = 78 + ((idHash + 25) % 18);
+          const engineMaintenanceDays = 30 + (idHash % 60);
+          const generatorMaintenanceDays = 20 + ((idHash + 10) % 40);
+          
+          return [
+            {
+              id: `${v.id}-engine`,
+              name: "Motor Principal",
+              vessel: v.name,
+              health: engineHealth,
+              temperature: 65 + (idHash % 25),
+              vibration: 8 + (idHash % 10),
+              predictedLifespan: 2500 + (idHash % 2500),
+              lastMaintenance: new Date(Date.now() - engineMaintenanceDays * 86400000).toISOString().split("T")[0],
+            },
+            {
+              id: `${v.id}-generator`,
+              name: "Gerador",
+              vessel: v.name,
+              health: generatorHealth,
+              temperature: 52 + ((idHash + 15) % 18),
+              vibration: 5 + ((idHash + 5) % 8),
+              predictedLifespan: 3500 + ((idHash + 30) % 3500),
+              lastMaintenance: new Date(Date.now() - generatorMaintenanceDays * 86400000).toISOString().split("T")[0],
+            },
+          ];
+        });
         setComponents(healthData);
       } else {
         setComponents(getDemoComponents());

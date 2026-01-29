@@ -49,117 +49,111 @@ interface IoTSensorMonitorProps {
   onAnomalyDetected?: (sensor: IoTSensor, anomaly: string) => void;
 }
 
-// Simulate real-time sensor data
-const generateSensorData = (): IoTSensor[] => [
-  {
-    id: "vib-me1",
-    name: "Vibração Motor Principal BB",
-    type: "vibration",
-    equipmentId: "601.0001.01",
-    equipmentName: "Motor Principal BB",
-    value: 2.4 + Math.random() * 0.8,
-    unit: "mm/s",
-    minThreshold: 0,
-    maxThreshold: 4.5,
-    status: "normal",
-    trend: "stable",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 2.2 + Math.random() * 0.6
-    }))
-  },
-  {
-    id: "temp-me1",
-    name: "Temperatura Motor Principal BB",
-    type: "temperature",
-    equipmentId: "601.0001.01",
-    equipmentName: "Motor Principal BB",
-    value: 78 + Math.random() * 8,
-    unit: "°C",
-    minThreshold: 40,
-    maxThreshold: 95,
-    status: "normal",
-    trend: "up",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 75 + Math.random() * 10
-    }))
-  },
-  {
-    id: "press-hyd1",
-    name: "Pressão Sistema Hidráulico",
-    type: "pressure",
-    equipmentId: "603.0004.02",
-    equipmentName: "Bomba Hidráulica Popa",
-    value: 185 + Math.random() * 30,
-    unit: "bar",
-    minThreshold: 150,
-    maxThreshold: 250,
-    status: Math.random() > 0.7 ? "warning" : "normal",
-    trend: "down",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 195 + Math.random() * 25
-    }))
-  },
-  {
-    id: "rpm-gen1",
-    name: "RPM Gerador 1",
-    type: "rpm",
-    equipmentId: "604.0002.01",
-    equipmentName: "Gerador Diesel 1",
-    value: 1500 + Math.random() * 20,
-    unit: "RPM",
-    minThreshold: 1450,
-    maxThreshold: 1550,
-    status: "normal",
-    trend: "stable",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 1498 + Math.random() * 15
-    }))
-  },
-  {
-    id: "vib-thr1",
-    name: "Vibração Thruster Bow",
-    type: "vibration",
-    equipmentId: "602.0003.01",
-    equipmentName: "Thruster de Proa",
-    value: 1.8 + Math.random() * 2.5,
-    unit: "mm/s",
-    minThreshold: 0,
-    maxThreshold: 4.0,
-    status: Math.random() > 0.6 ? "warning" : "normal",
-    trend: "up",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 1.5 + Math.random() * 2
-    }))
-  },
-  {
-    id: "temp-exc1",
-    name: "Temperatura Exaustão",
-    type: "temperature",
-    equipmentId: "601.0001.01",
-    equipmentName: "Motor Principal BB",
-    value: 380 + Math.random() * 50,
-    unit: "°C",
-    minThreshold: 300,
-    maxThreshold: 450,
-    status: Math.random() > 0.8 ? "critical" : "normal",
-    trend: "up",
-    lastUpdate: new Date(),
-    history: Array.from({ length: 24 }, (_, i) => ({
-      timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 370 + Math.random() * 60
-    }))
-  }
-];
+// Deterministic sensor data generation
+const generateSensorData = (): IoTSensor[] => {
+  // Base timestamp for deterministic history
+  const baseTime = Math.floor(Date.now() / 3600000) * 3600000;
+  
+  const generateHistory = (baseValue: number, variation: number): Array<{timestamp: Date; value: number}> => {
+    return Array.from({ length: 24 }, (_, i) => ({
+      timestamp: new Date(baseTime - (23 - i) * 3600000),
+      value: baseValue + Math.sin(i * 0.5) * variation
+    }));
+  };
+
+  return [
+    {
+      id: "vib-me1",
+      name: "Vibração Motor Principal BB",
+      type: "vibration",
+      equipmentId: "601.0001.01",
+      equipmentName: "Motor Principal BB",
+      value: 2.7,
+      unit: "mm/s",
+      minThreshold: 0,
+      maxThreshold: 4.5,
+      status: "normal",
+      trend: "stable",
+      lastUpdate: new Date(),
+      history: generateHistory(2.4, 0.4)
+    },
+    {
+      id: "temp-me1",
+      name: "Temperatura Motor Principal BB",
+      type: "temperature",
+      equipmentId: "601.0001.01",
+      equipmentName: "Motor Principal BB",
+      value: 82,
+      unit: "°C",
+      minThreshold: 40,
+      maxThreshold: 95,
+      status: "normal",
+      trend: "up",
+      lastUpdate: new Date(),
+      history: generateHistory(78, 6)
+    },
+    {
+      id: "press-hyd1",
+      name: "Pressão Sistema Hidráulico",
+      type: "pressure",
+      equipmentId: "603.0004.02",
+      equipmentName: "Bomba Hidráulica Popa",
+      value: 198,
+      unit: "bar",
+      minThreshold: 150,
+      maxThreshold: 250,
+      status: "normal",
+      trend: "down",
+      lastUpdate: new Date(),
+      history: generateHistory(195, 15)
+    },
+    {
+      id: "rpm-gen1",
+      name: "RPM Gerador 1",
+      type: "rpm",
+      equipmentId: "604.0002.01",
+      equipmentName: "Gerador Diesel 1",
+      value: 1508,
+      unit: "RPM",
+      minThreshold: 1450,
+      maxThreshold: 1550,
+      status: "normal",
+      trend: "stable",
+      lastUpdate: new Date(),
+      history: generateHistory(1502, 8)
+    },
+    {
+      id: "vib-thr1",
+      name: "Vibração Thruster Bow",
+      type: "vibration",
+      equipmentId: "602.0003.01",
+      equipmentName: "Thruster de Proa",
+      value: 2.8,
+      unit: "mm/s",
+      minThreshold: 0,
+      maxThreshold: 4.0,
+      status: "warning",
+      trend: "up",
+      lastUpdate: new Date(),
+      history: generateHistory(2.2, 1.0)
+    },
+    {
+      id: "temp-exc1",
+      name: "Temperatura Exaustão",
+      type: "temperature",
+      equipmentId: "601.0001.01",
+      equipmentName: "Motor Principal BB",
+      value: 405,
+      unit: "°C",
+      minThreshold: 300,
+      maxThreshold: 450,
+      status: "normal",
+      trend: "up",
+      lastUpdate: new Date(),
+      history: generateHistory(390, 30)
+    }
+  ];
+};
 
 export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonitorProps) {
   const [sensors, setSensors] = useState<IoTSensor[]>([]);
@@ -167,18 +161,24 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
   const [selectedSensor, setSelectedSensor] = useState<IoTSensor | null>(null);
   const [refreshInterval, setRefreshInterval] = useState(5000);
 
-  // Simulate real-time updates
+  // Deterministic real-time updates based on time
   useEffect(() => {
     setSensors(generateSensorData());
     
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
-        ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * (sensor.maxThreshold - sensor.minThreshold) * 0.05,
-        lastUpdate: new Date(),
-        status: determineStatus(sensor),
-        history: [...sensor.history.slice(1), { timestamp: new Date(), value: sensor.value }]
-      })));
+      setSensors(prev => prev.map((sensor, idx) => {
+        // Deterministic variation based on time and index
+        const timeComponent = Math.sin(Date.now() / 10000 + idx);
+        const variation = (sensor.maxThreshold - sensor.minThreshold) * 0.02 * timeComponent;
+        
+        return {
+          ...sensor,
+          value: sensor.value + variation,
+          lastUpdate: new Date(),
+          status: determineStatus(sensor),
+          history: [...sensor.history.slice(1), { timestamp: new Date(), value: sensor.value }]
+        };
+      }));
     }, refreshInterval);
 
     return () => clearInterval(interval);

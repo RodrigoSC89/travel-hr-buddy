@@ -53,21 +53,29 @@ export function FleetIntelligence() {
       }
 
       if (data && data.length > 0) {
-        const mappedVessels: VesselStatus[] = data.map((v) => ({
-          id: v.id,
-          name: v.name || "Embarcação",
-          status: mapVesselStatus(v.status),
-          fuelLevel: v.current_fuel_level ? Math.min(100, (v.current_fuel_level / 15)) : 50 + Math.random() * 40,
-          speed: v.status === "active" ? 8 + Math.random() * 12 : 0,
-          position: {
-            lat: -23.5505 + Math.random() * 5, 
-            lng: -46.6333 + Math.random() * 5 
-          },
-          nextPort: v.current_location || "Santos, BR",
-          eta: new Date(Date.now() + Math.random() * 86400000 * 3).toISOString(),
-          alerts: Math.floor(Math.random() * 3),
-          efficiency: 75 + Math.random() * 20,
-        }));
+        const mappedVessels: VesselStatus[] = data.map((v, idx) => {
+          // Deterministic values based on ID hash
+          const idHash = v.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const latOffset = ((idHash % 100) / 100) * 5;
+          const lngOffset = (((idHash + 50) % 100) / 100) * 5;
+          const etaDays = (idHash % 3) + 1;
+          
+          return {
+            id: v.id,
+            name: v.name || "Embarcação",
+            status: mapVesselStatus(v.status),
+            fuelLevel: v.current_fuel_level ? Math.min(100, (v.current_fuel_level / 15)) : 65 + (idHash % 30),
+            speed: v.status === "active" ? 10 + (idHash % 10) : 0,
+            position: {
+              lat: -23.5505 + latOffset, 
+              lng: -46.6333 + lngOffset 
+            },
+            nextPort: v.current_location || "Santos, BR",
+            eta: new Date(Date.now() + etaDays * 86400000).toISOString(),
+            alerts: idHash % 3,
+            efficiency: 80 + (idHash % 15),
+          };
+        });
         setVessels(mappedVessels);
       } else {
         setVessels(getDemoVessels());
