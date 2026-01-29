@@ -10256,8 +10256,10 @@ export type Database = {
           crew_member_id: string | null
           departure_port: string | null
           disembark_date: string | null
+          disembarked_at: string | null
           documentation_status: string | null
           embark_date: string
+          embarked_at: string | null
           flight_details: Json | null
           id: string
           medical_clearance: boolean | null
@@ -10280,8 +10282,10 @@ export type Database = {
           crew_member_id?: string | null
           departure_port?: string | null
           disembark_date?: string | null
+          disembarked_at?: string | null
           documentation_status?: string | null
           embark_date: string
+          embarked_at?: string | null
           flight_details?: Json | null
           id?: string
           medical_clearance?: boolean | null
@@ -10304,8 +10308,10 @@ export type Database = {
           crew_member_id?: string | null
           departure_port?: string | null
           disembark_date?: string | null
+          disembarked_at?: string | null
           documentation_status?: string | null
           embark_date?: string
+          embarked_at?: string | null
           flight_details?: Json | null
           id?: string
           medical_clearance?: boolean | null
@@ -10554,6 +10560,108 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_wellness_metrics: {
+        Row: {
+          active_minutes: number | null
+          alert_count: number | null
+          breaks_taken: number | null
+          created_at: string | null
+          crew_member_id: string
+          date: string
+          fatigue_index: number | null
+          heart_rate_avg: number | null
+          heart_rate_variability: number | null
+          hours_on_duty: number | null
+          id: string
+          incidents_reported: number | null
+          message_volume: number | null
+          metadata: Json | null
+          organization_id: string | null
+          recovery_score: number | null
+          response_time_avg: number | null
+          sentiment_score: number | null
+          sleep_hours: number | null
+          sleep_quality: number | null
+          step_count: number | null
+          stress_level: number | null
+          tasks_completed: number | null
+          updated_at: string | null
+          wearable_source: string | null
+          wellness_score: number | null
+        }
+        Insert: {
+          active_minutes?: number | null
+          alert_count?: number | null
+          breaks_taken?: number | null
+          created_at?: string | null
+          crew_member_id: string
+          date?: string
+          fatigue_index?: number | null
+          heart_rate_avg?: number | null
+          heart_rate_variability?: number | null
+          hours_on_duty?: number | null
+          id?: string
+          incidents_reported?: number | null
+          message_volume?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recovery_score?: number | null
+          response_time_avg?: number | null
+          sentiment_score?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          step_count?: number | null
+          stress_level?: number | null
+          tasks_completed?: number | null
+          updated_at?: string | null
+          wearable_source?: string | null
+          wellness_score?: number | null
+        }
+        Update: {
+          active_minutes?: number | null
+          alert_count?: number | null
+          breaks_taken?: number | null
+          created_at?: string | null
+          crew_member_id?: string
+          date?: string
+          fatigue_index?: number | null
+          heart_rate_avg?: number | null
+          heart_rate_variability?: number | null
+          hours_on_duty?: number | null
+          id?: string
+          incidents_reported?: number | null
+          message_volume?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recovery_score?: number | null
+          response_time_avg?: number | null
+          sentiment_score?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          step_count?: number | null
+          stress_level?: number | null
+          tasks_completed?: number | null
+          updated_at?: string | null
+          wearable_source?: string | null
+          wellness_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_wellness_metrics_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_wellness_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -30137,6 +30245,130 @@ export type Database = {
           },
         ]
       }
+      saved_scenarios: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          is_template: boolean | null
+          last_used_at: string | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          parameters: Json
+          tags: string[] | null
+          updated_at: string | null
+          updated_by: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_template?: boolean | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          parameters?: Json
+          tags?: string[] | null
+          updated_at?: string | null
+          updated_by?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_template?: boolean | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          parameters?: Json
+          tags?: string[] | null
+          updated_at?: string | null
+          updated_by?: string | null
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_scenarios_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scenario_simulations: {
+        Row: {
+          confidence_level: number | null
+          created_at: string | null
+          execution_time_ms: number | null
+          id: string
+          impacts: Json
+          metadata: Json | null
+          organization_id: string | null
+          parameters: Json
+          projected_costs: number | null
+          projected_savings: number | null
+          recommendations: Json | null
+          risk_score: number | null
+          scenario_name: string
+          time_horizon: string | null
+          user_id: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          impacts?: Json
+          metadata?: Json | null
+          organization_id?: string | null
+          parameters?: Json
+          projected_costs?: number | null
+          projected_savings?: number | null
+          recommendations?: Json | null
+          risk_score?: number | null
+          scenario_name: string
+          time_horizon?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          impacts?: Json
+          metadata?: Json | null
+          organization_id?: string | null
+          parameters?: Json
+          projected_costs?: number | null
+          projected_savings?: number | null
+          recommendations?: Json | null
+          risk_score?: number | null
+          scenario_name?: string
+          time_horizon?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scenario_simulations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scheduled_notifications: {
         Row: {
           channels: string[]
@@ -39821,6 +40053,81 @@ export type Database = {
           },
           {
             foreignKeyName: "wellbeing_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          crew_member_id: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          organization_id: string | null
+          recommendation: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          crew_member_id: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recommendation?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          crew_member_id?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          recommendation?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_alerts_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_alerts_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"

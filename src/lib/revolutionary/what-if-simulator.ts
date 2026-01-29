@@ -1,10 +1,9 @@
 /**
  * 🧠 What-If Simulator - AI-Powered Scenario Planning
- * PATCH REVOLUTION v2.1
+ * PATCH REVOLUTION v2.3
  * 
- * Simulação de cenários com IA
- * "E se o combustível subir 20%?"
- * REFACTORED: Removed database dependencies, uses in-memory storage
+ * Simulação de cenários com IA - "E se o combustível subir 20%?"
+ * NOTE: Uses in-memory storage pending DB types regeneration
  */
 
 import { logger } from "@/lib/logger";
@@ -22,14 +21,7 @@ export interface ScenarioParameter {
   options?: string[];
 }
 
-export type ParameterCategory = 
-  | 'fuel'
-  | 'crew'
-  | 'maintenance'
-  | 'market'
-  | 'weather'
-  | 'regulatory'
-  | 'operational';
+export type ParameterCategory = 'fuel' | 'crew' | 'maintenance' | 'market' | 'weather' | 'regulatory' | 'operational';
 
 export interface ScenarioResult {
   id: string;
@@ -65,643 +57,148 @@ export interface SavedScenario {
   isTemplate: boolean;
 }
 
-// In-memory storage for simulations and scenarios
 const simulationsStore: ScenarioResult[] = [];
-const savedScenariosStore: SavedScenario[] = [];
+const savedScenariosStore: SavedScenario[] = [
+  { id: 'tpl-1', name: 'Crise de Combustível', description: 'Aumento de 30% no preço', parameters: [], createdBy: 'system', createdAt: new Date(), isTemplate: true },
+  { id: 'tpl-2', name: 'Taxa de Carbono', description: 'Nova taxa de $100/ton', parameters: [], createdBy: 'system', createdAt: new Date(), isTemplate: true },
+];
 
-// Initialize with some template scenarios
-const initializeTemplates = () => {
-  if (savedScenariosStore.length === 0) {
-    savedScenariosStore.push(
-      {
-        id: 'template-fuel-crisis',
-        name: 'Crise de Combustível',
-        description: 'Simula impacto de aumento significativo no preço do combustível',
-        parameters: getDefaultParametersWithChanges({ fuel_price: 30 }),
-        createdBy: 'system',
-        createdAt: new Date('2024-01-01'),
-        isTemplate: true,
-      },
-      {
-        id: 'template-carbon-tax',
-        name: 'Nova Taxa de Carbono',
-        description: 'Simula implementação de taxa de carbono de $100/ton',
-        parameters: getDefaultParametersWithChanges({ carbon_tax: 100 }),
-        createdBy: 'system',
-        createdAt: new Date('2024-01-01'),
-        isTemplate: true,
-      },
-      {
-        id: 'template-market-boom',
-        name: 'Boom de Mercado',
-        description: 'Cenário otimista com aumento de demanda e taxas',
-        parameters: getDefaultParametersWithChanges({ charter_rates: 25, cargo_demand: 30 }),
-        createdBy: 'system',
-        createdAt: new Date('2024-01-01'),
-        isTemplate: true,
-      }
-    );
-  }
-};
-
-// Helper to create parameters with specific changes
-function getDefaultParametersWithChanges(changes: Record<string, number>): ScenarioParameter[] {
-  const params = JSON.parse(JSON.stringify(DEFAULT_PARAMETERS));
-  for (const param of params) {
-    if (changes[param.id] !== undefined) {
-      param.simulatedValue = changes[param.id];
-    }
-  }
-  return params;
-}
-
-// Default parameter templates
 const DEFAULT_PARAMETERS: ScenarioParameter[] = [
-  // Fuel
-  {
-    id: 'fuel_price',
-    name: 'Preço do Combustível',
-    type: 'percentage',
-    category: 'fuel',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -50,
-    max: 100,
-  },
-  {
-    id: 'fuel_consumption',
-    name: 'Consumo de Combustível',
-    type: 'percentage',
-    category: 'fuel',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -30,
-    max: 50,
-  },
-  
-  // Crew
-  {
-    id: 'crew_size',
-    name: 'Tamanho da Tripulação',
-    type: 'percentage',
-    category: 'crew',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -20,
-    max: 30,
-  },
-  {
-    id: 'crew_salary',
-    name: 'Custos Salariais',
-    type: 'percentage',
-    category: 'crew',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -10,
-    max: 30,
-  },
-  {
-    id: 'crew_turnover',
-    name: 'Rotatividade de Tripulação',
-    type: 'percentage',
-    category: 'crew',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -50,
-    max: 100,
-  },
-  
-  // Maintenance
-  {
-    id: 'maintenance_frequency',
-    name: 'Frequência de Manutenção',
-    type: 'percentage',
-    category: 'maintenance',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -30,
-    max: 50,
-  },
-  {
-    id: 'equipment_age',
-    name: 'Idade Média dos Equipamentos',
-    type: 'absolute',
-    category: 'maintenance',
-    currentValue: 5,
-    simulatedValue: 5,
-    unit: 'anos',
-    min: 1,
-    max: 20,
-  },
-  
-  // Market
-  {
-    id: 'charter_rates',
-    name: 'Taxas de Afretamento',
-    type: 'percentage',
-    category: 'market',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -40,
-    max: 60,
-  },
-  {
-    id: 'cargo_demand',
-    name: 'Demanda de Carga',
-    type: 'percentage',
-    category: 'market',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -50,
-    max: 100,
-  },
-  
-  // Weather
-  {
-    id: 'severe_weather_days',
-    name: 'Dias de Clima Severo',
-    type: 'absolute',
-    category: 'weather',
-    currentValue: 15,
-    simulatedValue: 15,
-    unit: 'dias/ano',
-    min: 0,
-    max: 100,
-  },
-  
-  // Regulatory
-  {
-    id: 'emission_regulations',
-    name: 'Rigor das Regulações de Emissões',
-    type: 'select',
-    category: 'regulatory',
-    currentValue: 'moderate',
-    simulatedValue: 'moderate',
-    options: ['relaxed', 'moderate', 'strict', 'very_strict'],
-  },
-  {
-    id: 'carbon_tax',
-    name: 'Taxa de Carbono',
-    type: 'absolute',
-    category: 'regulatory',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: 'USD/ton',
-    min: 0,
-    max: 200,
-  },
-  
-  // Operational
-  {
-    id: 'port_delays',
-    name: 'Atrasos em Portos',
-    type: 'percentage',
-    category: 'operational',
-    currentValue: 0,
-    simulatedValue: 0,
-    unit: '%',
-    min: -50,
-    max: 100,
-  },
-  {
-    id: 'vessel_utilization',
-    name: 'Utilização da Embarcação',
-    type: 'percentage',
-    category: 'operational',
-    currentValue: 85,
-    simulatedValue: 85,
-    unit: '%',
-    min: 50,
-    max: 100,
-  },
+  { id: 'fuel_price', name: 'Preço do Combustível', type: 'percentage', category: 'fuel', currentValue: 0, simulatedValue: 0, unit: '%', min: -50, max: 100 },
+  { id: 'crew_size', name: 'Tamanho da Tripulação', type: 'percentage', category: 'crew', currentValue: 0, simulatedValue: 0, unit: '%', min: -20, max: 30 },
+  { id: 'charter_rates', name: 'Taxas de Afretamento', type: 'percentage', category: 'market', currentValue: 0, simulatedValue: 0, unit: '%', min: -40, max: 60 },
+  { id: 'carbon_tax', name: 'Taxa de Carbono', type: 'absolute', category: 'regulatory', currentValue: 0, simulatedValue: 0, unit: 'USD/ton', min: 0, max: 200 },
+  { id: 'vessel_utilization', name: 'Utilização da Embarcação', type: 'percentage', category: 'operational', currentValue: 85, simulatedValue: 85, unit: '%', min: 50, max: 100 },
 ];
 
 class WhatIfSimulator {
-  
-  constructor() {
-    initializeTemplates();
-  }
-  
-  // Get default parameters
   getDefaultParameters(): ScenarioParameter[] {
     return JSON.parse(JSON.stringify(DEFAULT_PARAMETERS));
   }
 
-  // Run simulation with given parameters
-  async runSimulation(
-    scenarioName: string,
-    parameters: ScenarioParameter[],
-    timeHorizon: '1m' | '3m' | '6m' | '1y' | '3y' = '1y'
-  ): Promise<ScenarioResult> {
-    const startTime = performance.now();
+  async runSimulation(scenarioName: string, parameters: ScenarioParameter[], timeHorizon: '1m' | '3m' | '6m' | '1y' | '3y' = '1y'): Promise<ScenarioResult> {
+    const impacts = this.calculateImpacts(parameters, timeHorizon);
+    const recommendations = this.generateRecommendations(parameters, impacts);
+    const riskScore = this.calculateRiskScore(impacts);
+    const { savings, costs } = this.calculateFinancials(impacts, timeHorizon);
     
-    try {
-      // Calculate impacts based on parameter changes
-      const impacts = this.calculateImpacts(parameters, timeHorizon);
-      
-      // Generate AI-powered recommendations
-      const recommendations = await this.generateRecommendations(parameters, impacts);
-      
-      // Calculate overall risk score
-      const riskScore = this.calculateRiskScore(impacts);
-      
-      // Calculate financial projections
-      const { savings, costs } = this.calculateFinancials(impacts, timeHorizon);
-      
-      const result: ScenarioResult = {
-        id: crypto.randomUUID(),
-        scenarioName,
-        parameters,
-        impacts,
-        recommendations,
-        riskScore,
-        confidenceLevel: this.calculateConfidence(parameters),
-        projectedSavings: savings,
-        projectedCosts: costs,
-        timeHorizon: this.getTimeHorizonLabel(timeHorizon),
-        generatedAt: new Date(),
-      };
+    const result: ScenarioResult = {
+      id: crypto.randomUUID(), scenarioName, parameters, impacts, recommendations, riskScore,
+      confidenceLevel: this.calculateConfidence(parameters),
+      projectedSavings: savings, projectedCosts: costs,
+      timeHorizon: this.getTimeHorizonLabel(timeHorizon), generatedAt: new Date(),
+    };
 
-      // Log simulation for analytics (in-memory)
-      this.logSimulation(result);
-
-      logger.info('Simulation completed', {
-        scenarioName,
-        duration: performance.now() - startTime,
-        impactCount: impacts.length,
-      });
-
-      return result;
-    } catch (error) {
-      logger.error('Simulation failed', error as Error);
-      throw error;
-    }
+    simulationsStore.push(result);
+    if (simulationsStore.length > 100) simulationsStore.shift();
+    
+    logger.info('Simulation completed', { scenarioName, impactCount: impacts.length });
+    return result;
   }
 
-  // Calculate impacts from parameter changes
-  private calculateImpacts(
-    parameters: ScenarioParameter[],
-    timeHorizon: string
-  ): ScenarioImpact[] {
+  private calculateImpacts(parameters: ScenarioParameter[], timeHorizon: string): ScenarioImpact[] {
     const impacts: ScenarioImpact[] = [];
     const timeMultiplier = this.getTimeMultiplier(timeHorizon);
-
-    // Find changed parameters
     const changedParams = parameters.filter(p => p.simulatedValue !== p.currentValue);
 
     for (const param of changedParams) {
-      const change = typeof param.simulatedValue === 'number' && typeof param.currentValue === 'number'
-        ? param.simulatedValue - param.currentValue
-        : 0;
+      const change = typeof param.simulatedValue === 'number' && typeof param.currentValue === 'number' 
+        ? param.simulatedValue - param.currentValue : 0;
 
-      switch (param.id) {
-        case 'fuel_price':
-          impacts.push({
-            area: 'Custos Operacionais',
-            metric: 'OPEX Combustível',
-            currentValue: 1000000,
-            projectedValue: 1000000 * (1 + (change / 100) * 0.35),
-            changePercent: change * 0.35,
-            severity: change > 15 ? 'critical' : change > 5 ? 'negative' : 'neutral',
-            explanation: `Aumento de ${change}% no preço do combustível impacta ~35% dos custos operacionais`,
-          });
-          impacts.push({
-            area: 'Margem de Lucro',
-            metric: 'EBITDA',
-            currentValue: 500000,
-            projectedValue: 500000 * (1 - (change / 100) * 0.2),
-            changePercent: -change * 0.2,
-            severity: change > 10 ? 'negative' : 'neutral',
-            explanation: 'Impacto direto na margem operacional',
-          });
-          break;
-
-        case 'crew_size':
-          impacts.push({
-            area: 'Custos de Pessoal',
-            metric: 'Folha de Pagamento',
-            currentValue: 2000000,
-            projectedValue: 2000000 * (1 + change / 100),
-            changePercent: change,
-            severity: change > 10 ? 'negative' : change < -10 ? 'positive' : 'neutral',
-            explanation: 'Ajuste proporcional nos custos de tripulação',
-          });
-          impacts.push({
-            area: 'Operacional',
-            metric: 'Eficiência Operacional',
-            currentValue: 92,
-            projectedValue: Math.min(100, 92 + change * 0.3),
-            changePercent: change * 0.3,
-            severity: change > 0 ? 'positive' : 'negative',
-            explanation: 'Mais tripulantes aumentam redundância e eficiência',
-          });
-          break;
-
-        case 'charter_rates':
-          impacts.push({
-            area: 'Receita',
-            metric: 'Receita de Afretamento',
-            currentValue: 5000000,
-            projectedValue: 5000000 * (1 + change / 100) * timeMultiplier,
-            changePercent: change,
-            severity: change > 10 ? 'positive' : change < -10 ? 'critical' : 'neutral',
-            explanation: 'Impacto direto na receita principal',
-          });
-          break;
-
-        case 'maintenance_frequency':
-          impacts.push({
-            area: 'Manutenção',
-            metric: 'Custos de Manutenção',
-            currentValue: 300000,
-            projectedValue: 300000 * (1 + change / 100),
-            changePercent: change,
-            severity: change > 20 ? 'negative' : 'neutral',
-            explanation: 'Manutenção mais frequente aumenta custos mas reduz falhas',
-          });
-          impacts.push({
-            area: 'Disponibilidade',
-            metric: 'Uptime da Embarcação',
-            currentValue: 95,
-            projectedValue: Math.min(99, 95 + change * 0.1),
-            changePercent: change * 0.1,
-            severity: 'positive',
-            explanation: 'Manutenção preventiva melhora disponibilidade',
-          });
-          break;
-
-        case 'carbon_tax':
-          const carbonCost = (param.simulatedValue as number) * 1000; // Estimated annual tons
-          impacts.push({
-            area: 'Custos Regulatórios',
-            metric: 'Taxa de Carbono',
-            currentValue: (param.currentValue as number) * 1000,
-            projectedValue: carbonCost,
-            changePercent: param.currentValue ? ((carbonCost / ((param.currentValue as number) * 1000)) - 1) * 100 : 100,
-            severity: (param.simulatedValue as number) > 50 ? 'critical' : (param.simulatedValue as number) > 25 ? 'negative' : 'neutral',
-            explanation: `Nova taxa de carbono de $${param.simulatedValue}/ton`,
-          });
-          break;
-
-        case 'vessel_utilization':
-          const utilizationChange = (param.simulatedValue as number) - (param.currentValue as number);
-          impacts.push({
-            area: 'Receita',
-            metric: 'Receita por Utilização',
-            currentValue: 5000000 * ((param.currentValue as number) / 100),
-            projectedValue: 5000000 * ((param.simulatedValue as number) / 100),
-            changePercent: utilizationChange,
-            severity: utilizationChange > 5 ? 'positive' : utilizationChange < -5 ? 'negative' : 'neutral',
-            explanation: 'Maior utilização gera mais receita',
-          });
-          break;
+      if (param.id === 'fuel_price') {
+        impacts.push({ area: 'Custos Operacionais', metric: 'OPEX Combustível', currentValue: 1000000,
+          projectedValue: 1000000 * (1 + (change / 100) * 0.35), changePercent: change * 0.35,
+          severity: change > 15 ? 'critical' : change > 5 ? 'negative' : 'neutral',
+          explanation: `Aumento de ${change}% no preço do combustível` });
+      }
+      if (param.id === 'charter_rates') {
+        impacts.push({ area: 'Receita', metric: 'Receita de Afretamento', currentValue: 5000000,
+          projectedValue: 5000000 * (1 + change / 100) * timeMultiplier, changePercent: change,
+          severity: change > 10 ? 'positive' : change < -10 ? 'critical' : 'neutral',
+          explanation: 'Impacto direto na receita principal' });
+      }
+      if (param.id === 'carbon_tax') {
+        const carbonCost = (param.simulatedValue as number) * 1000;
+        impacts.push({ area: 'Custos Regulatórios', metric: 'Taxa de Carbono', 
+          currentValue: (param.currentValue as number) * 1000, projectedValue: carbonCost,
+          changePercent: param.currentValue ? ((carbonCost / ((param.currentValue as number) * 1000)) - 1) * 100 : 100,
+          severity: (param.simulatedValue as number) > 50 ? 'critical' : 'neutral',
+          explanation: `Nova taxa de carbono de $${param.simulatedValue}/ton` });
       }
     }
-
-    // Add compound effects
-    if (impacts.length > 2) {
-      const avgChange = impacts.reduce((sum, i) => sum + Math.abs(i.changePercent), 0) / impacts.length;
-      impacts.push({
-        area: 'Efeito Composto',
-        metric: 'Volatilidade Total',
-        currentValue: 5,
-        projectedValue: 5 + avgChange * 0.3,
-        changePercent: avgChange * 0.3,
-        severity: avgChange > 20 ? 'critical' : avgChange > 10 ? 'negative' : 'neutral',
-        explanation: 'Múltiplas mudanças simultâneas aumentam incerteza',
-      });
-    }
-
     return impacts;
   }
 
-  // Generate AI recommendations
-  private async generateRecommendations(
-    parameters: ScenarioParameter[],
-    impacts: ScenarioImpact[]
-  ): Promise<string[]> {
+  private generateRecommendations(parameters: ScenarioParameter[], impacts: ScenarioImpact[]): string[] {
     const recommendations: string[] = [];
-
-    // Fuel-related recommendations
-    const fuelPriceChange = parameters.find(p => p.id === 'fuel_price');
-    if (fuelPriceChange && (fuelPriceChange.simulatedValue as number) > 10) {
-      recommendations.push('Considere renegociar contratos de fornecimento de combustível com hedge de preço');
-      recommendations.push('Avalie otimização de rotas para reduzir consumo em 5-10%');
-      recommendations.push('Implemente slow steaming em rotas não críticas');
+    const fuelChange = parameters.find(p => p.id === 'fuel_price');
+    if (fuelChange && (fuelChange.simulatedValue as number) > 10) {
+      recommendations.push('Renegociar contratos de combustível com hedge de preço');
+      recommendations.push('Otimizar rotas para reduzir consumo');
     }
-
-    // Crew recommendations
-    const crewChange = parameters.find(p => p.id === 'crew_salary');
-    if (crewChange && (crewChange.simulatedValue as number) > 15) {
-      recommendations.push('Revise a estrutura de benefícios não-monetários para reter talentos');
-      recommendations.push('Considere programas de capacitação interna para reduzir dependência de contratações');
-    }
-
-    // Market recommendations
-    const charterChange = parameters.find(p => p.id === 'charter_rates');
-    if (charterChange && (charterChange.simulatedValue as number) < -20) {
-      recommendations.push('Diversifique tipos de cargas e rotas para reduzir exposição ao mercado spot');
-      recommendations.push('Negocie contratos de longo prazo com desconto para garantir receita');
-    }
-
-    // Regulatory recommendations
-    const carbonTax = parameters.find(p => p.id === 'carbon_tax');
-    if (carbonTax && (carbonTax.simulatedValue as number) > 50) {
-      recommendations.push('Acelere investimentos em tecnologias de baixo carbono (scrubbers, LNG)');
-      recommendations.push('Implemente sistema de monitoramento de emissões em tempo real');
-      recommendations.push('Explore créditos de carbono e certificações de sustentabilidade');
-    }
-
-    // Critical impact recommendations
     const criticalImpacts = impacts.filter(i => i.severity === 'critical');
     if (criticalImpacts.length > 0) {
-      recommendations.push('⚠️ AÇÃO URGENTE: Cenário apresenta riscos críticos - desenvolva plano de contingência');
+      recommendations.push('⚠️ AÇÃO URGENTE: Cenário apresenta riscos críticos');
     }
-
-    // General recommendations
-    if (impacts.some(i => i.area === 'Efeito Composto' && i.changePercent > 15)) {
-      recommendations.push('Considere implementar mudanças de forma gradual para reduzir volatilidade');
-    }
-
-    return recommendations.length > 0 ? recommendations : [
-      'Cenário apresenta impacto moderado - mantenha monitoramento contínuo',
-    ];
+    return recommendations.length > 0 ? recommendations : ['Cenário apresenta impacto moderado'];
   }
 
-  // Calculate overall risk score (0-100)
   private calculateRiskScore(impacts: ScenarioImpact[]): number {
     if (impacts.length === 0) return 0;
-
-    const weights = {
-      positive: -10,
-      neutral: 0,
-      negative: 25,
-      critical: 50,
-    };
-
-    const rawScore = impacts.reduce((sum, impact) => {
-      const severityScore = weights[impact.severity];
-      const magnitudeScore = Math.abs(impact.changePercent) * 0.5;
-      return sum + severityScore + magnitudeScore;
-    }, 0);
-
+    const weights = { positive: -10, neutral: 0, negative: 25, critical: 50 };
+    const rawScore = impacts.reduce((sum, i) => sum + weights[i.severity] + Math.abs(i.changePercent) * 0.5, 0);
     return Math.min(100, Math.max(0, rawScore / impacts.length * 2));
   }
 
-  // Calculate confidence level based on parameter complexity
   private calculateConfidence(parameters: ScenarioParameter[]): number {
     const changedParams = parameters.filter(p => p.simulatedValue !== p.currentValue);
-    
-    // Base confidence
-    let confidence = 85;
-    
-    // Reduce confidence for many simultaneous changes
-    confidence -= changedParams.length * 3;
-    
-    // Reduce for extreme changes
-    changedParams.forEach(p => {
-      if (typeof p.simulatedValue === 'number' && typeof p.currentValue === 'number') {
-        const change = Math.abs(p.simulatedValue - p.currentValue);
-        if (change > 30) confidence -= 5;
-        if (change > 50) confidence -= 10;
-      }
-    });
-
+    let confidence = 85 - changedParams.length * 3;
     return Math.min(95, Math.max(40, confidence));
   }
 
-  // Calculate financial projections
-  private calculateFinancials(
-    impacts: ScenarioImpact[],
-    timeHorizon: string
-  ): { savings: number; costs: number } {
-    let savings = 0;
-    let costs = 0;
-
-    impacts.forEach(impact => {
-      const diff = impact.projectedValue - impact.currentValue;
-      
-      if (impact.area === 'Receita' || impact.severity === 'positive') {
-        if (diff > 0) savings += diff;
-      } else {
-        if (diff > 0) costs += diff;
-        else savings += Math.abs(diff);
-      }
+  private calculateFinancials(impacts: ScenarioImpact[], timeHorizon: string): { savings: number; costs: number } {
+    let savings = 0, costs = 0;
+    impacts.forEach(i => {
+      const diff = i.projectedValue - i.currentValue;
+      if (i.severity === 'positive' || i.area === 'Receita') { if (diff > 0) savings += diff; }
+      else { if (diff > 0) costs += diff; else savings += Math.abs(diff); }
     });
-
     const multiplier = this.getTimeMultiplier(timeHorizon);
-    
-    return {
-      savings: Math.round(savings * multiplier),
-      costs: Math.round(costs * multiplier),
-    };
+    return { savings: Math.round(savings * multiplier), costs: Math.round(costs * multiplier) };
   }
 
-  // Get time multiplier for projections
-  private getTimeMultiplier(timeHorizon: string): number {
-    switch (timeHorizon) {
-      case '1m': return 1 / 12;
-      case '3m': return 3 / 12;
-      case '6m': return 0.5;
-      case '1y': return 1;
-      case '3y': return 3;
-      default: return 1;
-    }
+  private getTimeMultiplier(h: string): number {
+    return { '1m': 1/12, '3m': 0.25, '6m': 0.5, '1y': 1, '3y': 3 }[h] || 1;
   }
 
-  // Get time horizon label
-  private getTimeHorizonLabel(timeHorizon: string): string {
-    switch (timeHorizon) {
-      case '1m': return '1 mês';
-      case '3m': return '3 meses';
-      case '6m': return '6 meses';
-      case '1y': return '1 ano';
-      case '3y': return '3 anos';
-      default: return timeHorizon;
-    }
+  private getTimeHorizonLabel(h: string): string {
+    return { '1m': '1 mês', '3m': '3 meses', '6m': '6 meses', '1y': '1 ano', '3y': '3 anos' }[h] || h;
   }
 
-  // Log simulation for analytics (in-memory)
-  private logSimulation(result: ScenarioResult): void {
-    simulationsStore.push(result);
-    // Keep only last 100 simulations
-    if (simulationsStore.length > 100) {
-      simulationsStore.shift();
-    }
-    logger.info('Simulation logged', { id: result.id, name: result.scenarioName });
-  }
-
-  // Save scenario as template
-  async saveScenario(
-    name: string,
-    description: string,
-    parameters: ScenarioParameter[],
-    createdBy: string,
-    isTemplate: boolean = false
-  ): Promise<string> {
-    const scenario: SavedScenario = {
-      id: crypto.randomUUID(),
-      name,
-      description,
-      parameters,
-      createdBy,
-      createdAt: new Date(),
-      isTemplate,
-    };
-    
+  async saveScenario(name: string, description: string, parameters: ScenarioParameter[], isTemplate = false): Promise<string> {
+    const scenario: SavedScenario = { id: crypto.randomUUID(), name, description, parameters, createdBy: 'user', createdAt: new Date(), isTemplate };
     savedScenariosStore.push(scenario);
-    logger.info('Scenario saved', { id: scenario.id, name });
-    
     return scenario.id;
   }
 
-  // Load saved scenarios
-  async getSavedScenarios(userId: string): Promise<SavedScenario[]> {
-    return savedScenariosStore.filter(s => 
-      s.createdBy === userId || s.isTemplate
-    ).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  async getSavedScenarios(): Promise<SavedScenario[]> {
+    return [...savedScenariosStore].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  // Get simulation history
-  getSimulationHistory(limit: number = 20): ScenarioResult[] {
+  getSimulationHistory(limit = 20): ScenarioResult[] {
     return simulationsStore.slice(-limit).reverse();
   }
 
-  // Compare multiple scenarios
-  compareScenarios(scenarios: ScenarioResult[]): {
-    bestCase: ScenarioResult;
-    worstCase: ScenarioResult;
-    comparison: Array<{
-      scenarioName: string;
-      riskScore: number;
-      netFinancialImpact: number;
-    }>;
-  } {
-    const comparison = scenarios.map(s => ({
-      scenarioName: s.scenarioName,
-      riskScore: s.riskScore,
-      netFinancialImpact: (s.projectedSavings || 0) - (s.projectedCosts || 0),
-    }));
+  compareScenarios(scenarios: ScenarioResult[]) {
+    const comparison = scenarios.map(s => ({ scenarioName: s.scenarioName, riskScore: s.riskScore, netFinancialImpact: (s.projectedSavings || 0) - (s.projectedCosts || 0) }));
+    const sorted = [...scenarios].sort((a, b) => ((b.projectedSavings || 0) - (b.projectedCosts || 0)) - ((a.projectedSavings || 0) - (a.projectedCosts || 0)));
+    return { bestCase: sorted[0], worstCase: sorted[sorted.length - 1], comparison: comparison.sort((a, b) => b.netFinancialImpact - a.netFinancialImpact) };
+  }
 
-    const sorted = [...scenarios].sort((a, b) => {
-      const netA = (a.projectedSavings || 0) - (a.projectedCosts || 0);
-      const netB = (b.projectedSavings || 0) - (b.projectedCosts || 0);
-      return netB - netA;
-    });
-
-    return {
-      bestCase: sorted[0],
-      worstCase: sorted[sorted.length - 1],
-      comparison: comparison.sort((a, b) => b.netFinancialImpact - a.netFinancialImpact),
-    };
+  async deleteScenario(scenarioId: string): Promise<boolean> {
+    const idx = savedScenariosStore.findIndex(s => s.id === scenarioId);
+    if (idx >= 0) { savedScenariosStore.splice(idx, 1); return true; }
+    return false;
   }
 }
 
