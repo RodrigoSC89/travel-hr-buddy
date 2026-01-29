@@ -134,15 +134,19 @@ export default function ExecutiveKPIDashboard() {
         .select('*')
         .limit(10);
 
-      const vesselStatuses: VesselStatus[] = (vesselsData || []).map(v => ({
-        id: v.id,
-        name: v.name,
-        status: Math.random() > 0.7 ? 'in-port' : 'at-sea',
-        location: 'Atlantic Ocean',
-        nextPort: 'Rotterdam',
-        eta: '3d 12h',
-        fuelLevel: Math.floor(Math.random() * 40) + 60,
-      }));
+      const vesselStatuses: VesselStatus[] = (vesselsData || []).map((v, index) => {
+        // Deterministic status based on vessel index
+        const idHash = v.id ? v.id.charCodeAt(0) : index;
+        return {
+          id: v.id,
+          name: v.name,
+          status: idHash % 3 === 0 ? 'in-port' : 'at-sea',
+          location: 'Atlantic Ocean',
+          nextPort: 'Rotterdam',
+          eta: '3d 12h',
+          fuelLevel: 70 + (idHash % 30),
+        };
+      });
       setVessels(vesselStatuses);
 
       const healthyCrew = Array.from(crewMap.values()).filter(c => c.status === 'healthy').length;

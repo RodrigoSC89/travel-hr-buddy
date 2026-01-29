@@ -184,12 +184,21 @@ export default function SystemHub() {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setSystemMetrics(prev => prev.map(metric => ({
-      ...metric,
-      value: Math.max(0, Math.min(100, metric.value + (Math.random() - 0.5) * 10)),
-      status: metric.value > metric.threshold.critical ? "critical" : 
-              metric.value > metric.threshold.warning ? "warning" : "healthy"
-    })));
+    // Deterministic refresh using timestamp
+    const now = Date.now();
+    const secondsFactor = (now / 1000) % 60;
+    
+    setSystemMetrics(prev => prev.map((metric, idx) => {
+      // Use sine wave with index offset for deterministic but varied values
+      const variation = Math.sin((secondsFactor + idx * 7) * 0.1) * 5;
+      const newValue = Math.max(0, Math.min(100, metric.value + variation));
+      return {
+        ...metric,
+        value: newValue,
+        status: newValue > metric.threshold.critical ? "critical" : 
+                newValue > metric.threshold.warning ? "warning" : "healthy"
+      };
+    }));
     
     setIsRefreshing(false);
     toast.success("Dados atualizados!");

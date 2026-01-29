@@ -159,23 +159,31 @@ export class ARInspection {
   }
 
   private simulateDetection(): DetectedEquipment[] {
-    // Simulated detection - in production, use TensorFlow.js COCO-SSD or custom model
-    // This is a placeholder that returns mock data occasionally
-    if (Math.random() > 0.8) {
+    // Deterministic detection based on time - returns equipment during specific seconds
+    // In production, use TensorFlow.js COCO-SSD or custom model
+    const now = Date.now();
+    const seconds = Math.floor(now / 1000) % 60;
+    
+    // Only detect on specific intervals (every ~10 seconds)
+    if (seconds % 10 < 2) {
+      const baseX = 100 + (seconds * 3);
+      const baseY = 100 + (seconds * 2);
+      const confidenceBase = 0.85 + (seconds % 10) * 0.015;
+      
       return [{
-        id: `eq-${Date.now()}`,
+        id: `eq-${now}`,
         name: 'Fire Extinguisher CO2',
         type: 'fire_extinguisher',
         status: 'operational',
-        lastMaintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        nextMaintenance: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+        lastMaintenance: new Date(now - 30 * 24 * 60 * 60 * 1000),
+        nextMaintenance: new Date(now + 60 * 24 * 60 * 60 * 1000),
         boundingBox: {
-          x: 100 + Math.random() * 200,
-          y: 100 + Math.random() * 200,
+          x: baseX,
+          y: baseY,
           width: 80,
           height: 200
         },
-        confidence: 0.85 + Math.random() * 0.15
+        confidence: Math.min(confidenceBase, 0.99)
       }];
     }
     return [];

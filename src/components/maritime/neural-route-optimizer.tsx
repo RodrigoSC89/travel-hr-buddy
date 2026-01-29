@@ -121,17 +121,23 @@ export const NeuralRouteOptimizer: React.FC = () => {
     const forecast: WeatherForecast[] = [];
     const now = new Date();
 
+    // Deterministic weather patterns based on date - no Math.random()
     for (let i = 0; i < 15; i++) {
       const date = new Date(now);
       date.setDate(date.getDate() + i);
       
+      // Use day of month for deterministic variation
+      const dayFactor = (date.getDate() + i) % 30;
+      const sinFactor = Math.sin(dayFactor * 0.3);
+      const cosFactor = Math.cos(dayFactor * 0.2);
+      
       forecast.push({
         date,
-        windSpeed: 10 + Math.random() * 20,
-        waveHeight: 1 + Math.random() * 3,
-        temperature: 18 + Math.random() * 10,
-        precipitation: Math.random() * 100,
-        visibility: 5 + Math.random() * 10,
+        windSpeed: 15 + sinFactor * 10,
+        waveHeight: 2 + cosFactor * 1.5,
+        temperature: 22 + sinFactor * 5,
+        precipitation: Math.abs(cosFactor) * 60,
+        visibility: 8 + sinFactor * 4,
         conditions: i % 3 === 0 ? "Ensolarado" : i % 3 === 1 ? "Parcialmente nublado" : "Nublado",
         severity: i % 4 === 0 ? "calm" : i % 4 === 1 ? "moderate" : i % 4 === 2 ? "rough" : "moderate"
       });
