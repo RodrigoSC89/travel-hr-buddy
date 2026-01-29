@@ -1,21 +1,24 @@
 /**
  * Hook para Nauti Brain com Streaming SSE
- * Renderização token-by-token em tempo real
+ * Com fallback automático para Mock AI quando API não disponível
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { mockAI } from '@/services/mock-ai-service';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
   isStreaming?: boolean;
+  isMock?: boolean;
 }
 
 interface UseNautiBrainStreamOptions {
   onError?: (error: Error) => void;
   onStreamStart?: () => void;
   onStreamEnd?: () => void;
+  forceMock?: boolean;
 }
 
 const CHAT_URL = `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-brain-stream`;
@@ -24,7 +27,69 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [usingMock, setUsingMock] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  /**
+   * Simula streaming de texto (para modo mock)
+   */
+  const simulateStreaming = async (text: string): Promise<void> => {
+    const words = text.split(' ');
+    let accumulated = '';
+
+    for (let i = 0; i < words.length; i++) {
+      accumulated += (i === 0 ? '' : ' ') + words[i];
+      
+      setMessages(prev => {
+        const newMessages = [...prev];
+        const lastIndex = newMessages.length - 1;
+        if (lastIndex >= 0 && newMessages[lastIndex].role === 'assistant') {
+          newMessages[lastIndex] = {
+            ...newMessages[lastIndex],
+            content: accumulated,
+          };
+        }
+        return newMessages;
+      });
+
+      // Delay entre palavras para efeito de streaming
+      await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 20));
+    }
+  };
+
+  /**
+   * Fallback para Mock AI
+   */
+  const useMockAI = async (content: string): Promise<void> => {
+    setUsingMock(true);
+    
+    // Adiciona mensagem inicial do assistente
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+      isStreaming: true,
+      isMock: true,
+    }]);
+
+    try {
+      const response = await mockAI.chat(content);
+      await simulateStreaming(response.response + '\n\n_[Modo Local - Configure API para IA real]_');
+    } finally {
+      // Marca streaming como completo
+      setMessages(prev => {
+        const newMessages = [...prev];
+        const lastIndex = newMessages.length - 1;
+        if (lastIndex >= 0 && newMessages[lastIndex].role === 'assistant') {
+          newMessages[lastIndex] = {
+            ...newMessages[lastIndex],
+            isStreaming: false,
+          };
+        }
+        return newMessages;
+      });
+    }
+  };
 
   const sendMessage = useCallback(async (content: string) => {
     if (!content.trim() || isLoading) return;
@@ -41,6 +106,17 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
     };
     setMessages(prev => [...prev, userMessage]);
 
+    // Se forçar mock, usa diretamente
+    if (options.forceMock) {
+      try {
+        await useMockAI(content);
+      } finally {
+        setIsLoading(false);
+        options.onStreamEnd?.();
+      }
+      return;
+    }
+
     // Create abort controller for cancellation
     abortControllerRef.current = new AbortController();
 
@@ -51,8 +127,8 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ''}`,
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`,
         },
         body: JSON.stringify({
           messages: [...messages, userMessage].map(m => ({
@@ -65,14 +141,14 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Request failed: ${response.status}`);
+        throw new Error(`API unavailable: ${response.status}`);
       }
 
       if (!response.body) {
         throw new Error('No response body');
       }
 
+      setUsingMock(false);
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
@@ -83,6 +159,7 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
         content: '',
         timestamp: new Date(),
         isStreaming: true,
+        isMock: false,
       }]);
 
       while (true) {
@@ -149,9 +226,9 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
       if (err instanceof Error && err.name === 'AbortError') {
         console.log('[useNautiBrainStream] Request aborted');
       } else {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(errorMessage);
-        options.onError?.(err instanceof Error ? err : new Error(errorMessage));
+        console.warn('[useNautiBrainStream] API failed, using mock:', err);
+        // Fallback para Mock AI
+        await useMockAI(content);
       }
     } finally {
       setIsLoading(false);
@@ -168,12 +245,14 @@ export function useNautiBrainStream(options: UseNautiBrainStreamOptions = {}) {
   const clearMessages = useCallback(() => {
     setMessages([]);
     setError(null);
+    setUsingMock(false);
   }, []);
 
   return {
     messages,
     isLoading,
     error,
+    usingMock,
     sendMessage,
     cancelStream,
     clearMessages,

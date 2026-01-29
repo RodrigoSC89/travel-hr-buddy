@@ -23,7 +23,8 @@ export function NautiBrainPro() {
   const { 
     messages, 
     isLoading, 
-    error, 
+    error,
+    usingMock,
     sendMessage, 
     cancelStream, 
     clearMessages 
@@ -80,11 +81,16 @@ export function NautiBrainPro() {
                 <Sparkles className="w-4 h-4 text-amber-500" />
               </CardTitle>
               <p className="text-xs text-muted-foreground">
-                Gemini 3 Flash • Streaming
+                {usingMock ? 'Modo Local • Mock AI' : 'Gemini 3 Flash • Streaming'}
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
+            {usingMock && (
+              <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">
+                Local
+              </Badge>
+            )}
             <Badge variant="secondary" className="text-xs">
               {messages.length} mensagens
             </Badge>

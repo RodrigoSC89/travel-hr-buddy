@@ -1,9 +1,11 @@
 /**
  * Hook para análise de imagens com IA Vision
+ * Com fallback automático para Mock quando API não disponível
  */
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { mockVision } from '@/services/mock-vision-service';
 
 interface VisionAnalysisResult {
   success: boolean;
@@ -11,6 +13,10 @@ interface VisionAnalysisResult {
   analysisType: string;
   timestamp: string;
   error?: string;
+  isMock?: boolean;
+  confidence?: number;
+  tags?: string[];
+  recommendations?: string[];
 }
 
 type AnalysisType = 
@@ -24,12 +30,42 @@ type AnalysisType =
 interface UseVisionAIOptions {
   onSuccess?: (result: VisionAnalysisResult) => void;
   onError?: (error: Error) => void;
+  forceMock?: boolean;
 }
 
 export function useVisionAI(options: UseVisionAIOptions = {}) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<VisionAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [usingMock, setUsingMock] = useState(false);
+
+  /**
+   * Fallback para Mock Vision
+   */
+  const useMockAnalysis = async (
+    image: File | string,
+    analysisType: AnalysisType,
+    customPrompt?: string
+  ): Promise<VisionAnalysisResult> => {
+    setUsingMock(true);
+    
+    const file = typeof image === 'string' 
+      ? new File([], 'image.jpg') // Dummy file for URL
+      : image;
+    
+    const mockResult = await mockVision.analyzeImage(file, analysisType, customPrompt);
+    
+    return {
+      success: true,
+      analysis: mockResult.analysis,
+      analysisType: mockResult.analysisType,
+      timestamp: mockResult.timestamp,
+      isMock: true,
+      confidence: mockResult.confidence,
+      tags: mockResult.tags,
+      recommendations: mockResult.recommendations,
+    };
+  };
 
   const analyzeImage = useCallback(async (
     image: File | string,
@@ -39,6 +75,19 @@ export function useVisionAI(options: UseVisionAIOptions = {}) {
     setIsAnalyzing(true);
     setError(null);
     setResult(null);
+    setUsingMock(false);
+
+    // Se forçar mock, usa diretamente
+    if (options.forceMock) {
+      try {
+        const mockResult = await useMockAnalysis(image, analysisType, customPrompt);
+        setResult(mockResult);
+        options.onSuccess?.(mockResult);
+        return mockResult;
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }
 
     try {
       let imageUrl: string | undefined;
@@ -77,15 +126,26 @@ export function useVisionAI(options: UseVisionAIOptions = {}) {
         throw new Error(data.error || 'Analysis failed');
       }
 
-      setResult(data);
-      options.onSuccess?.(data);
-      return data;
+      const resultWithFlag = { ...data, isMock: false };
+      setResult(resultWithFlag);
+      options.onSuccess?.(resultWithFlag);
+      return resultWithFlag;
 
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to analyze image';
-      setError(errorMessage);
-      options.onError?.(err instanceof Error ? err : new Error(errorMessage));
-      return null;
+      console.warn('[useVisionAI] API failed, using mock:', err);
+      
+      // Fallback para Mock
+      try {
+        const mockResult = await useMockAnalysis(image, analysisType, customPrompt);
+        setResult(mockResult);
+        options.onSuccess?.(mockResult);
+        return mockResult;
+      } catch (mockErr) {
+        const errorMessage = mockErr instanceof Error ? mockErr.message : 'Failed to analyze image';
+        setError(errorMessage);
+        options.onError?.(mockErr instanceof Error ? mockErr : new Error(errorMessage));
+        return null;
+      }
     } finally {
       setIsAnalyzing(false);
     }
@@ -110,6 +170,7 @@ export function useVisionAI(options: UseVisionAIOptions = {}) {
   const reset = useCallback(() => {
     setResult(null);
     setError(null);
+    setUsingMock(false);
   }, []);
 
   return {
@@ -121,6 +182,7 @@ export function useVisionAI(options: UseVisionAIOptions = {}) {
     isAnalyzing,
     result,
     error,
+    usingMock,
     reset,
   };
 }
