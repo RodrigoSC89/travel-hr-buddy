@@ -233,7 +233,9 @@ const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePa
 // VIAGENS & LOGÍSTICA
 // ============================================
 const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandCenter"));
+const TravelAIEnginePage = lazy(() => import("@/pages/TravelAIEnginePage"));
 const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
+const WeatherRoutePlannerPage = lazy(() => import("@/pages/WeatherRoutePlannerPage"));
 
 // ============================================
 // SISTEMA & CONFIGURAÇÕES
@@ -676,7 +678,9 @@ const AppRoutes = () => (
       {/* VIAGENS & LOGÍSTICA */}
       {/* ============================================ */}
       <Route path="/travel-command" element={<TravelCommandCenter />} />
+      <Route path="/travel-ai-engine" element={<TravelAIEnginePage />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />
+      <Route path="/weather-route-planner" element={<WeatherRoutePlannerPage />} />
       
       {/* ============================================ */}
       {/* SISTEMA & CONFIGURAÇÕES */}
