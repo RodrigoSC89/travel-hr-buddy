@@ -336,16 +336,21 @@ const queryClient = new QueryClient({
 // PATCH: Emergency timeout to break infinite loading loops
 const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
-  const [forceNavigate, setForceNavigate] = React.useState(false);
   
   React.useEffect(() => {
-    // Show retry after 5s (reduced from 10s)
-    const retryTimeout = setTimeout(() => setShowRetry(true), 5000);
+    // Show retry after 3s only
+    const retryTimeout = setTimeout(() => setShowRetry(true), 3000);
     
-    // Force navigation to auth after 8s to break any loading loop
+    // CRITICAL: Force redirect to auth after 5s to break ANY loading loop
     const forceTimeout = setTimeout(() => {
-      setForceNavigate(true);
-    }, 8000);
+      // Clear storage and redirect
+      try {
+        Object.keys(localStorage)
+          .filter(k => k.includes('supabase') || k.includes('sb-'))
+          .forEach(k => localStorage.removeItem(k));
+      } catch {}
+      window.location.href = '/auth';
+    }, 5000);
     
     return () => {
       clearTimeout(retryTimeout);
@@ -353,56 +358,36 @@ const Loader = React.memo(() => {
     };
   }, []);
   
-  // Emergency redirect if stuck too long
-  React.useEffect(() => {
-    if (forceNavigate) {
-      // Clear any potential blocking caches
-      try {
-        Object.keys(localStorage)
-          .filter(k => k.includes('supabase') || k.includes('sb-'))
-          .forEach(k => localStorage.removeItem(k));
-      } catch {}
-      
-      // Navigate to auth page
-      window.location.href = '/auth';
-    }
-  }, [forceNavigate]);
-  
-  const handleRetry = async () => {
+  const handleRetry = () => {
     try {
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-      }
-      if ('serviceWorker' in navigator) {
-        const regs = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(regs.map(r => r.unregister()));
-      }
+      Object.keys(localStorage)
+        .filter(k => k.includes('supabase') || k.includes('sb-'))
+        .forEach(k => localStorage.removeItem(k));
     } catch {}
-    window.location.href = window.location.origin + '/auth?_sw=' + Date.now();
+    window.location.href = '/auth';
   };
   
   return (
     <div 
-      className="min-h-screen flex items-center justify-center bg-background fade-in"
+      className="min-h-screen flex items-center justify-center bg-background"
       style={{ contain: "layout paint" }}
     >
       <div className="text-center space-y-4">
         <div 
-          className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin gpu-accelerated"
+          className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin"
           style={{ contain: "strict" }}
         />
         <p className="text-foreground font-medium">Carregando...</p>
         {showRetry && (
-          <div className="space-y-2 pt-4 fade-in">
+          <div className="space-y-2 pt-4">
             <p className="text-sm text-muted-foreground">
-              O carregamento está demorando mais que o normal.
+              Carregamento lento detectado.
             </p>
             <button
               onClick={handleRetry}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
             >
-              Limpar cache e recarregar
+              Ir para login
             </button>
           </div>
         )}

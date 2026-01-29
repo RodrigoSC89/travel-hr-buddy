@@ -119,51 +119,43 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // IMMEDIATE - Force loading false after 1.5s to prevent infinite loading
-    // This is CRITICAL for production stability
-    const safetyTimeout = setTimeout(() => {
-      if (mounted && isLoading) {
-        logger.info("[AuthContext] Safety timeout (1.5s) - forcing ready state");
+    // CRITICAL: Force loading false IMMEDIATELY after 800ms
+    // This is the PRIMARY defense against infinite loading
+    const immediateTimeout = setTimeout(() => {
+      if (mounted) {
         setIsLoading(false);
       }
-    }, 1500);
+    }, 800);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
-    // STEP 1: Fetch initial session with aggressive timeout
+    // Initialize auth - simplified and bulletproof
     const initializeAuth = async () => {
       try {
-        // Create a race between session fetch and timeout
-        const sessionPromise = supabase.auth.getSession();
-        const timeoutPromise = new Promise<null>((resolve) => 
-          setTimeout(() => resolve(null), 2000)
-        );
+        // Use AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
         
-        const result = await Promise.race([sessionPromise, timeoutPromise]);
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        clearTimeout(timeoutId);
         
         if (!mounted) return;
 
-        if (result && 'data' in result) {
-          const { data: sessionData, error } = result;
-          if (error) {
-            logger.warn("[AuthContext] Error getting session", { error: error.message });
-            clearCorruptedTokens();
-          }
-          setSession(sessionData?.session ?? null);
-          setUser(sessionData?.session?.user ?? null);
-        }
-      } catch (fetchError) {
-        logger.warn("[AuthContext] Failed to fetch session (network issue)");
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+      } catch (error) {
+        // On ANY error, just continue without session
+        logger.warn("[AuthContext] Session fetch failed, continuing without auth");
       } finally {
-        // CRITICAL: Always set loading false
+        // ALWAYS set loading false
         if (mounted) {
           setIsLoading(false);
         }
       }
     };
 
-    // STEP 2: Set up listener for ONGOING changes (does NOT control isLoading)
+    // Set up listener for auth changes (does NOT control isLoading)
     const { data } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         if (!mounted) return;
@@ -171,7 +163,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         // Update state synchronously - NEVER async here
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
-        // NOTE: Do NOT set isLoading here - that's only for initial load
         
         // Defer toasts to prevent deadlock
         if (event === "SIGNED_IN") {
@@ -189,7 +180,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     return () => {
       mounted = false;
-      clearTimeout(safetyTimeout);
+      clearTimeout(immediateTimeout);
       if (subscription) {
         subscription.unsubscribe();
       }
