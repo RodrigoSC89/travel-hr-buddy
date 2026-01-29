@@ -11146,6 +11146,103 @@ export type Database = {
         }
         Relationships: []
       }
+      document_access_logs: {
+        Row: {
+          action: string
+          action_details: Json | null
+          created_at: string | null
+          device_info: Json | null
+          document_id: string | null
+          id: string
+          ip_address: unknown
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          action_details?: Json | null
+          created_at?: string | null
+          device_info?: Json | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          action_details?: Json | null
+          created_at?: string | null
+          device_info?: Json | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_access_logs_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_acknowledgements: {
+        Row: {
+          acknowledged_at: string | null
+          comments: string | null
+          created_at: string | null
+          deadline: string | null
+          device_info: Json | null
+          document_id: string | null
+          id: string
+          ip_address: unknown
+          is_mandatory: boolean | null
+          reminder_sent_at: string | null
+          signature_data: Json | null
+          user_id: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          comments?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          device_info?: Json | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          is_mandatory?: boolean | null
+          reminder_sent_at?: string | null
+          signature_data?: Json | null
+          user_id: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          comments?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          device_info?: Json | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          is_mandatory?: boolean | null
+          reminder_sent_at?: string | null
+          signature_data?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_acknowledgements_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_approvals: {
         Row: {
           approver_id: string | null
@@ -11204,6 +11301,66 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_categories: {
+        Row: {
+          color: string | null
+          created_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_system: boolean | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          parent_id: string | null
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          parent_id?: string | null
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          parent_id?: string | null
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_categories_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "document_categories"
             referencedColumns: ["id"]
           },
         ]
@@ -11486,6 +11643,71 @@ export type Database = {
           },
         ]
       }
+      document_revisions: {
+        Row: {
+          change_summary: string | null
+          change_type: string | null
+          changed_sections: string[] | null
+          created_at: string | null
+          created_by: string | null
+          document_id: string | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          metadata: Json | null
+          review_status: string | null
+          status: string | null
+          storage_path: string | null
+          version: string
+          version_number: number
+        }
+        Insert: {
+          change_summary?: string | null
+          change_type?: string | null
+          changed_sections?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          document_id?: string | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          review_status?: string | null
+          status?: string | null
+          storage_path?: string | null
+          version: string
+          version_number: number
+        }
+        Update: {
+          change_summary?: string | null
+          change_type?: string | null
+          changed_sections?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          document_id?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          review_status?: string | null
+          status?: string | null
+          storage_path?: string | null
+          version?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_revisions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_template_versions: {
         Row: {
           change_description: string | null
@@ -11592,6 +11814,93 @@ export type Database = {
           },
         ]
       }
+      document_templates_enterprise: {
+        Row: {
+          auto_numbering: boolean | null
+          category_id: string | null
+          content_html: string | null
+          content_json: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_system: boolean | null
+          last_used_at: string | null
+          name: string
+          numbering_format: string | null
+          numbering_prefix: string | null
+          organization_id: string | null
+          requires_approval: boolean | null
+          template_fields: Json | null
+          template_type: string
+          updated_at: string | null
+          updated_by: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          auto_numbering?: boolean | null
+          category_id?: string | null
+          content_html?: string | null
+          content_json?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_system?: boolean | null
+          last_used_at?: string | null
+          name: string
+          numbering_format?: string | null
+          numbering_prefix?: string | null
+          organization_id?: string | null
+          requires_approval?: boolean | null
+          template_fields?: Json | null
+          template_type: string
+          updated_at?: string | null
+          updated_by?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          auto_numbering?: boolean | null
+          category_id?: string | null
+          content_html?: string | null
+          content_json?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_system?: boolean | null
+          last_used_at?: string | null
+          name?: string
+          numbering_format?: string | null
+          numbering_prefix?: string | null
+          organization_id?: string | null
+          requires_approval?: boolean | null
+          template_fields?: Json | null
+          template_type?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_templates_enterprise_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "document_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_templates_enterprise_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_versions: {
         Row: {
           change_summary: string | null
@@ -11635,6 +11944,137 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_workflow_steps: {
+        Row: {
+          assignee_id: string | null
+          assignee_role: string | null
+          comments: string | null
+          completed_at: string | null
+          created_at: string | null
+          decision: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          signature_data: Json | null
+          status: string | null
+          step_name: string | null
+          step_number: number
+          step_type: string
+          workflow_id: string | null
+        }
+        Insert: {
+          assignee_id?: string | null
+          assignee_role?: string | null
+          comments?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          decision?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          signature_data?: Json | null
+          status?: string | null
+          step_name?: string | null
+          step_number: number
+          step_type: string
+          workflow_id?: string | null
+        }
+        Update: {
+          assignee_id?: string | null
+          assignee_role?: string | null
+          comments?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          decision?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          signature_data?: Json | null
+          status?: string | null
+          step_name?: string | null
+          step_number?: number
+          step_type?: string
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_workflow_steps_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "document_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_workflows: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          current_step: number | null
+          document_id: string | null
+          due_date: string | null
+          id: string
+          initiated_by: string | null
+          metadata: Json | null
+          organization_id: string | null
+          started_at: string | null
+          status: string | null
+          total_steps: number | null
+          updated_at: string | null
+          workflow_name: string | null
+          workflow_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          document_id?: string | null
+          due_date?: string | null
+          id?: string
+          initiated_by?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          total_steps?: number | null
+          updated_at?: string | null
+          workflow_name?: string | null
+          workflow_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          document_id?: string | null
+          due_date?: string | null
+          id?: string
+          initiated_by?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          total_steps?: number | null
+          updated_at?: string | null
+          workflow_name?: string | null
+          workflow_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_workflows_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_workflows_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -13451,6 +13891,297 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enterprise_checklists: {
+        Row: {
+          assigned_to: string | null
+          attachments: Json | null
+          checklist_type: string
+          completed_at: string | null
+          completed_by: string | null
+          completed_items: number | null
+          completion_percentage: number | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          is_mandatory: boolean | null
+          items: Json
+          metadata: Json | null
+          organization_id: string | null
+          regulatory_reference: string | null
+          scheduled_date: string | null
+          signature_data: Json | null
+          signature_required: boolean | null
+          status: string | null
+          template_id: string | null
+          title: string
+          total_items: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          attachments?: Json | null
+          checklist_type: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completed_items?: number | null
+          completion_percentage?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          items?: Json
+          metadata?: Json | null
+          organization_id?: string | null
+          regulatory_reference?: string | null
+          scheduled_date?: string | null
+          signature_data?: Json | null
+          signature_required?: boolean | null
+          status?: string | null
+          template_id?: string | null
+          title: string
+          total_items?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          attachments?: Json | null
+          checklist_type?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completed_items?: number | null
+          completion_percentage?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          items?: Json
+          metadata?: Json | null
+          organization_id?: string | null
+          regulatory_reference?: string | null
+          scheduled_date?: string | null
+          signature_data?: Json | null
+          signature_required?: boolean | null
+          status?: string | null
+          template_id?: string | null
+          title?: string
+          total_items?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enterprise_checklists_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enterprise_checklists_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates_enterprise"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enterprise_checklists_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enterprise_documents: {
+        Row: {
+          access_level: string | null
+          ai_classification: string | null
+          ai_confidence: number | null
+          ai_keywords: string[] | null
+          ai_summary: string | null
+          approval_date: string | null
+          approved_by: string | null
+          category_id: string | null
+          compliance_category: string | null
+          created_at: string | null
+          created_by: string | null
+          custom_fields: Json | null
+          deleted_at: string | null
+          department_access: string[] | null
+          description: string | null
+          document_code: string | null
+          document_type: string
+          download_count: number | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_latest: boolean | null
+          is_template: boolean | null
+          language: string | null
+          ocr_status: string | null
+          ocr_text: string | null
+          organization_id: string | null
+          page_count: number | null
+          parent_document_id: string | null
+          regulatory_reference: string[] | null
+          review_date: string | null
+          review_frequency: string | null
+          review_status: string | null
+          status: string | null
+          storage_path: string | null
+          tags: string[] | null
+          template_fields: Json | null
+          title: string
+          updated_at: string | null
+          updated_by: string | null
+          valid_from: string | null
+          valid_until: string | null
+          version: string | null
+          version_number: number | null
+          vessel_id: string | null
+          view_count: number | null
+        }
+        Insert: {
+          access_level?: string | null
+          ai_classification?: string | null
+          ai_confidence?: number | null
+          ai_keywords?: string[] | null
+          ai_summary?: string | null
+          approval_date?: string | null
+          approved_by?: string | null
+          category_id?: string | null
+          compliance_category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          custom_fields?: Json | null
+          deleted_at?: string | null
+          department_access?: string[] | null
+          description?: string | null
+          document_code?: string | null
+          document_type: string
+          download_count?: number | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_latest?: boolean | null
+          is_template?: boolean | null
+          language?: string | null
+          ocr_status?: string | null
+          ocr_text?: string | null
+          organization_id?: string | null
+          page_count?: number | null
+          parent_document_id?: string | null
+          regulatory_reference?: string[] | null
+          review_date?: string | null
+          review_frequency?: string | null
+          review_status?: string | null
+          status?: string | null
+          storage_path?: string | null
+          tags?: string[] | null
+          template_fields?: Json | null
+          title: string
+          updated_at?: string | null
+          updated_by?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+          version?: string | null
+          version_number?: number | null
+          vessel_id?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          access_level?: string | null
+          ai_classification?: string | null
+          ai_confidence?: number | null
+          ai_keywords?: string[] | null
+          ai_summary?: string | null
+          approval_date?: string | null
+          approved_by?: string | null
+          category_id?: string | null
+          compliance_category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          custom_fields?: Json | null
+          deleted_at?: string | null
+          department_access?: string[] | null
+          description?: string | null
+          document_code?: string | null
+          document_type?: string
+          download_count?: number | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_latest?: boolean | null
+          is_template?: boolean | null
+          language?: string | null
+          ocr_status?: string | null
+          ocr_text?: string | null
+          organization_id?: string | null
+          page_count?: number | null
+          parent_document_id?: string | null
+          regulatory_reference?: string[] | null
+          review_date?: string | null
+          review_frequency?: string | null
+          review_status?: string | null
+          status?: string | null
+          storage_path?: string | null
+          tags?: string[] | null
+          template_fields?: Json | null
+          title?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          valid_from?: string | null
+          valid_until?: string | null
+          version?: string | null
+          version_number?: number | null
+          vessel_id?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enterprise_documents_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "document_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enterprise_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enterprise_documents_parent_document_id_fkey"
+            columns: ["parent_document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enterprise_documents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -35115,6 +35846,94 @@ export type Database = {
           tenant_id?: string | null
         }
         Relationships: []
+      }
+      training_documents: {
+        Row: {
+          completion_required: boolean | null
+          course_id: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          document_id: string | null
+          document_type: string
+          duration_minutes: number | null
+          file_name: string | null
+          file_size: number | null
+          file_type: string | null
+          id: string
+          is_mandatory: boolean | null
+          language: string | null
+          module_number: number | null
+          organization_id: string | null
+          storage_path: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          completion_required?: boolean | null
+          course_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_id?: string | null
+          document_type: string
+          duration_minutes?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          language?: string | null
+          module_number?: number | null
+          organization_id?: string | null
+          storage_path?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          completion_required?: boolean | null
+          course_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_id?: string | null
+          document_type?: string
+          duration_minutes?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          language?: string | null
+          module_number?: number | null
+          organization_id?: string | null
+          storage_path?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_documents_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "training_documents_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "training_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       training_learning_paths: {
         Row: {
