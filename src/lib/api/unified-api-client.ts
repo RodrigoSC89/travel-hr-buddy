@@ -330,8 +330,9 @@ class UnifiedAPIClient {
   ): Promise<APIResponse<T>> {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      // Hardcoded values - NEVER use VITE_* vars
+      const baseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+      const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
       
       let url = `${baseUrl}/rest/v1/${table}`;
       let method = 'POST';
