@@ -24,7 +24,9 @@ export interface AIInsight {
   actions?: string[];
 }
 
-const AI_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
+// Hardcoded for production stability
+const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
+const AI_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/nauti-command`;
 
 export function useUnifiedCommandAI() {
   const [messages, setMessages] = useState<AIMessage[]>([]);

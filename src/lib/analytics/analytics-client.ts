@@ -164,10 +164,12 @@ class AnalyticsClient {
     };
 
     try {
+      // Hardcoded URL for production stability
+      const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
       if (sync && navigator.sendBeacon) {
         // Use sendBeacon for synchronous sends (on page unload)
         navigator.sendBeacon(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-analytics`,
+          `${SUPABASE_URL}/functions/v1/track-analytics`,
           JSON.stringify({ events, metadata })
         );
       } else {
