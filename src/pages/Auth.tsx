@@ -101,30 +101,8 @@ const Auth: React.FC = () => {
     }
   }, []);
 
-  // Show loading spinner while auth is being checked - with timeout
-  const [authTimeout, setAuthTimeout] = useState(false);
-  
-  useEffect(() => {
-    // Force show auth form after 2s even if authLoading is stuck
-    const timer = setTimeout(() => {
-      if (authLoading) {
-        setAuthTimeout(true);
-      }
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [authLoading]);
-  
-  // Show loading ONLY if auth is loading AND we haven't timed out
-  if (authLoading && !authTimeout) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
-          <p className="text-muted-foreground">Verificando sessão...</p>
-        </div>
-      </div>
-    );
-  }
+  // NEVER block render - show form immediately, auth check happens in background
+  // This eliminates infinite loading on the Auth page completely
 
   // Redirect if already logged in
   if (user) {
