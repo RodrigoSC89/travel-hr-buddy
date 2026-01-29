@@ -167,6 +167,16 @@ class SmartContractsEngine {
   async createContract(data: Partial<SmartCharterContract>): Promise<SmartCharterContract> {
     const contractHash = `0x${crypto.randomUUID().replace(/-/g, '')}`;
     
+    // Cast conditions to JSON-compatible format
+    const conditionsJson = (data.conditions || []).map(c => ({
+      id: c.id,
+      type: c.type,
+      description: c.description,
+      triggerEvent: c.triggerEvent,
+      action: c.action,
+      isActive: c.isActive,
+    }));
+    
     const { data: created, error } = await supabase
       .from('smart_contracts')
       .insert([{
@@ -180,7 +190,7 @@ class SmartContractsEngine {
         end_date: data.endDate ? new Date(data.endDate).toISOString().split('T')[0] : null,
         rate_value: data.rateValue || 0,
         currency: data.currency || 'USD',
-        conditions: data.conditions || [],
+        conditions: conditionsJson as unknown as undefined,
         status: 'draft',
         signed_by_owner: false,
         signed_by_charterer: false,

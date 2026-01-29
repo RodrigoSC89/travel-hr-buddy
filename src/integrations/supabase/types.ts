@@ -6927,49 +6927,61 @@ export type Database = {
       }
       communication_channels: {
         Row: {
+          channel_type: string | null
           created_at: string
           created_by: string
           description: string | null
           id: string
           is_active: boolean
           is_public: boolean
+          last_activity: string | null
           last_message_at: string | null
           member_count: number
           name: string
           organization_id: string | null
+          participants: Json | null
           settings: Json | null
+          status: string | null
           tenant_id: string | null
           type: string
           updated_at: string
         }
         Insert: {
+          channel_type?: string | null
           created_at?: string
           created_by: string
           description?: string | null
           id?: string
           is_active?: boolean
           is_public?: boolean
+          last_activity?: string | null
           last_message_at?: string | null
           member_count?: number
           name: string
           organization_id?: string | null
+          participants?: Json | null
           settings?: Json | null
+          status?: string | null
           tenant_id?: string | null
           type?: string
           updated_at?: string
         }
         Update: {
+          channel_type?: string | null
           created_at?: string
           created_by?: string
           description?: string | null
           id?: string
           is_active?: boolean
           is_public?: boolean
+          last_activity?: string | null
           last_message_at?: string | null
           member_count?: number
           name?: string
           organization_id?: string | null
+          participants?: Json | null
           settings?: Json | null
+          status?: string | null
           tenant_id?: string | null
           type?: string
           updated_at?: string
