@@ -1,12 +1,12 @@
 /**
  * 🧠 What-If Simulator - AI-Powered Scenario Planning
- * PATCH REVOLUTION v2.0
+ * PATCH REVOLUTION v2.1
  * 
  * Simulação de cenários com IA
  * "E se o combustível subir 20%?"
+ * REFACTORED: Removed database dependencies, uses in-memory storage
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface ScenarioParameter {
@@ -63,6 +63,56 @@ export interface SavedScenario {
   createdBy: string;
   createdAt: Date;
   isTemplate: boolean;
+}
+
+// In-memory storage for simulations and scenarios
+const simulationsStore: ScenarioResult[] = [];
+const savedScenariosStore: SavedScenario[] = [];
+
+// Initialize with some template scenarios
+const initializeTemplates = () => {
+  if (savedScenariosStore.length === 0) {
+    savedScenariosStore.push(
+      {
+        id: 'template-fuel-crisis',
+        name: 'Crise de Combustível',
+        description: 'Simula impacto de aumento significativo no preço do combustível',
+        parameters: getDefaultParametersWithChanges({ fuel_price: 30 }),
+        createdBy: 'system',
+        createdAt: new Date('2024-01-01'),
+        isTemplate: true,
+      },
+      {
+        id: 'template-carbon-tax',
+        name: 'Nova Taxa de Carbono',
+        description: 'Simula implementação de taxa de carbono de $100/ton',
+        parameters: getDefaultParametersWithChanges({ carbon_tax: 100 }),
+        createdBy: 'system',
+        createdAt: new Date('2024-01-01'),
+        isTemplate: true,
+      },
+      {
+        id: 'template-market-boom',
+        name: 'Boom de Mercado',
+        description: 'Cenário otimista com aumento de demanda e taxas',
+        parameters: getDefaultParametersWithChanges({ charter_rates: 25, cargo_demand: 30 }),
+        createdBy: 'system',
+        createdAt: new Date('2024-01-01'),
+        isTemplate: true,
+      }
+    );
+  }
+};
+
+// Helper to create parameters with specific changes
+function getDefaultParametersWithChanges(changes: Record<string, number>): ScenarioParameter[] {
+  const params = JSON.parse(JSON.stringify(DEFAULT_PARAMETERS));
+  for (const param of params) {
+    if (changes[param.id] !== undefined) {
+      param.simulatedValue = changes[param.id];
+    }
+  }
+  return params;
 }
 
 // Default parameter templates
@@ -236,6 +286,10 @@ const DEFAULT_PARAMETERS: ScenarioParameter[] = [
 
 class WhatIfSimulator {
   
+  constructor() {
+    initializeTemplates();
+  }
+  
   // Get default parameters
   getDefaultParameters(): ScenarioParameter[] {
     return JSON.parse(JSON.stringify(DEFAULT_PARAMETERS));
@@ -276,8 +330,8 @@ class WhatIfSimulator {
         generatedAt: new Date(),
       };
 
-      // Log simulation for analytics
-      await this.logSimulation(result);
+      // Log simulation for analytics (in-memory)
+      this.logSimulation(result);
 
       logger.info('Simulation completed', {
         scenarioName,
@@ -575,24 +629,14 @@ class WhatIfSimulator {
     }
   }
 
-  // Log simulation for analytics
-  private async logSimulation(result: ScenarioResult): Promise<void> {
-    try {
-      await supabase.from('scenario_simulations').insert({
-        scenario_name: result.scenarioName,
-        parameters: result.parameters,
-        impacts: result.impacts,
-        risk_score: result.riskScore,
-        confidence_level: result.confidenceLevel,
-        projected_savings: result.projectedSavings,
-        projected_costs: result.projectedCosts,
-        time_horizon: result.timeHorizon,
-        created_at: result.generatedAt.toISOString(),
-      });
-    } catch (error) {
-      // Non-critical error, just log
-      logger.warn('Failed to log simulation', { error });
+  // Log simulation for analytics (in-memory)
+  private logSimulation(result: ScenarioResult): void {
+    simulationsStore.push(result);
+    // Keep only last 100 simulations
+    if (simulationsStore.length > 100) {
+      simulationsStore.shift();
     }
+    logger.info('Simulation logged', { id: result.id, name: result.scenarioName });
   }
 
   // Save scenario as template
@@ -603,40 +647,32 @@ class WhatIfSimulator {
     createdBy: string,
     isTemplate: boolean = false
   ): Promise<string> {
-    const { data, error } = await supabase
-      .from('saved_scenarios')
-      .insert({
-        name,
-        description,
-        parameters,
-        created_by: createdBy,
-        is_template: isTemplate,
-        created_at: new Date().toISOString(),
-      })
-      .select('id')
-      .single();
-
-    if (error) throw error;
-    return data.id;
+    const scenario: SavedScenario = {
+      id: crypto.randomUUID(),
+      name,
+      description,
+      parameters,
+      createdBy,
+      createdAt: new Date(),
+      isTemplate,
+    };
+    
+    savedScenariosStore.push(scenario);
+    logger.info('Scenario saved', { id: scenario.id, name });
+    
+    return scenario.id;
   }
 
   // Load saved scenarios
   async getSavedScenarios(userId: string): Promise<SavedScenario[]> {
-    const { data } = await supabase
-      .from('saved_scenarios')
-      .select('*')
-      .or(`created_by.eq.${userId},is_template.eq.true`)
-      .order('created_at', { ascending: false });
+    return savedScenariosStore.filter(s => 
+      s.createdBy === userId || s.isTemplate
+    ).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
 
-    return (data || []).map(s => ({
-      id: s.id,
-      name: s.name,
-      description: s.description,
-      parameters: s.parameters,
-      createdBy: s.created_by,
-      createdAt: new Date(s.created_at),
-      isTemplate: s.is_template,
-    }));
+  // Get simulation history
+  getSimulationHistory(limit: number = 20): ScenarioResult[] {
+    return simulationsStore.slice(-limit).reverse();
   }
 
   // Compare multiple scenarios
