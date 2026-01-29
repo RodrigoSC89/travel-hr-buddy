@@ -277,7 +277,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         const errorMsg = error.message.toLowerCase();
         let userMessage = "Verifique suas credenciais e tente novamente.";
         
-        if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid') || errorMsg.includes('credentials')) {
+        if (errorMsg.includes('captcha')) {
+          // CAPTCHA enabled in Supabase but not implemented in frontend
+          userMessage = "CAPTCHA habilitado no Supabase. Desabilite em Authentication → Settings → CAPTCHA protection → Disabled";
+        } else if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid') || errorMsg.includes('credentials')) {
           userMessage = "Email ou senha incorretos.";
         } else if (errorMsg.includes('email not confirmed')) {
           userMessage = "Confirme seu email antes de entrar. Verifique sua caixa de entrada.";
