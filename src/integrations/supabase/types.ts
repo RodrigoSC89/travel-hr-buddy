@@ -15010,6 +15010,59 @@ export type Database = {
           },
         ]
       }
+      fleet_realtime_data: {
+        Row: {
+          crew_count: number | null
+          engine_hours: number | null
+          fuel_level_percent: number | null
+          heading_degrees: number | null
+          id: string
+          last_communication_at: string | null
+          position_lat: number | null
+          position_lon: number | null
+          recorded_at: string | null
+          speed_knots: number | null
+          status: string | null
+          vessel_id: string
+        }
+        Insert: {
+          crew_count?: number | null
+          engine_hours?: number | null
+          fuel_level_percent?: number | null
+          heading_degrees?: number | null
+          id?: string
+          last_communication_at?: string | null
+          position_lat?: number | null
+          position_lon?: number | null
+          recorded_at?: string | null
+          speed_knots?: number | null
+          status?: string | null
+          vessel_id: string
+        }
+        Update: {
+          crew_count?: number | null
+          engine_hours?: number | null
+          fuel_level_percent?: number | null
+          heading_degrees?: number | null
+          id?: string
+          last_communication_at?: string | null
+          position_lat?: number | null
+          position_lon?: number | null
+          recorded_at?: string | null
+          speed_knots?: number | null
+          status?: string | null
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_realtime_data_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fleet_sensors: {
         Row: {
           created_at: string
@@ -19827,6 +19880,53 @@ export type Database = {
           },
         ]
       }
+      iot_sensor_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          id: string
+          message: string
+          resolved_at: string | null
+          sensor_id: string
+          severity: string
+          value_at_alert: number | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          message: string
+          resolved_at?: string | null
+          sensor_id: string
+          severity: string
+          value_at_alert?: number | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          message?: string
+          resolved_at?: string | null
+          sensor_id?: string
+          severity?: string
+          value_at_alert?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_sensor_alerts_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "iot_sensors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       iot_sensor_data: {
         Row: {
           created_at: string
@@ -19876,6 +19976,41 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      iot_sensor_readings: {
+        Row: {
+          id: string
+          recorded_at: string | null
+          sensor_id: string
+          status: string | null
+          trend: string | null
+          value: number
+        }
+        Insert: {
+          id?: string
+          recorded_at?: string | null
+          sensor_id: string
+          status?: string | null
+          trend?: string | null
+          value: number
+        }
+        Update: {
+          id?: string
+          recorded_at?: string | null
+          sensor_id?: string
+          status?: string | null
+          trend?: string | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_sensor_readings_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "iot_sensors"
             referencedColumns: ["id"]
           },
         ]
@@ -34725,6 +34860,53 @@ export type Database = {
         }
         Relationships: []
       }
+      system_health_metrics: {
+        Row: {
+          active_users: number | null
+          cpu_usage: number | null
+          database_latency_ms: number | null
+          id: string
+          memory_usage: number | null
+          network_status: string | null
+          organization_id: string | null
+          recorded_at: string | null
+          response_time_ms: number | null
+          uptime_seconds: number | null
+        }
+        Insert: {
+          active_users?: number | null
+          cpu_usage?: number | null
+          database_latency_ms?: number | null
+          id?: string
+          memory_usage?: number | null
+          network_status?: string | null
+          organization_id?: string | null
+          recorded_at?: string | null
+          response_time_ms?: number | null
+          uptime_seconds?: number | null
+        }
+        Update: {
+          active_users?: number | null
+          cpu_usage?: number | null
+          database_latency_ms?: number | null
+          id?: string
+          memory_usage?: number | null
+          network_status?: string | null
+          organization_id?: string | null
+          recorded_at?: string | null
+          response_time_ms?: number | null
+          uptime_seconds?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "system_health_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_logs: {
         Row: {
           action: string
@@ -40941,6 +41123,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      weather_forecast_cache: {
+        Row: {
+          expires_at: string | null
+          fetched_at: string | null
+          forecast_data: Json
+          forecast_type: string
+          id: string
+          location_lat: number
+          location_lon: number
+          port_id: string | null
+          source: string | null
+        }
+        Insert: {
+          expires_at?: string | null
+          fetched_at?: string | null
+          forecast_data: Json
+          forecast_type: string
+          id?: string
+          location_lat: number
+          location_lon: number
+          port_id?: string | null
+          source?: string | null
+        }
+        Update: {
+          expires_at?: string | null
+          fetched_at?: string | null
+          forecast_data?: Json
+          forecast_type?: string
+          id?: string
+          location_lat?: number
+          location_lon?: number
+          port_id?: string | null
+          source?: string | null
+        }
+        Relationships: []
       }
       weather_logs: {
         Row: {
