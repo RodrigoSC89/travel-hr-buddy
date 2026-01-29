@@ -1,8 +1,10 @@
 /**
  * 📊 BUDGET FORECAST ENGINE
  * AI-powered budget creation and real-time monitoring
+ * Uses REAL Supabase data
  */
 
+import { supabase } from '@/integrations/supabase/client';
 import type { Budget, CostPrediction } from './types';
 
 interface AnnualBudget {
@@ -68,20 +70,23 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Create annual budget with AI predictions
+   * Create annual budget with AI predictions using REAL data
    */
   async createAnnualBudget(year: number): Promise<AnnualBudget> {
-    // Get historical data (mock for now)
+    // Get REAL historical data
     const historicalBudgets = await this.getHistoricalBudgets(year - 3, year - 1);
     
     // Calculate base budget using trend analysis
     const baseBudget = this.calculateBaseBudget(historicalBudgets);
     
-    // Generate category budgets
-    const byCategory = this.generateCategoryBudgets(baseBudget);
+    // Get REAL expenses by category
+    const categoryData = await this.getCategoryExpenses();
+    
+    // Generate category budgets with real data
+    const byCategory = this.generateCategoryBudgets(baseBudget, categoryData);
     
     // Generate monthly distribution
-    const byMonth = this.generateMonthlyBudgets(baseBudget, year);
+    const byMonth = await this.generateMonthlyBudgets(baseBudget, year);
     
     // Identify risks
     const risks = this.identifyBudgetRisks(byCategory);
@@ -107,17 +112,26 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Monitor budget in real-time and detect variances
+   * Monitor budget in real-time and detect variances using REAL data
    */
   async monitorBudgetRealtime(): Promise<VarianceAlert[]> {
     const alerts: VarianceAlert[] = [];
     
-    // Get current budget vs actual (mock data)
-    const categories = ['fuel', 'maintenance', 'crew', 'port', 'insurance', 'other'];
+    // Get REAL category expenses
+    const categoryData = await this.getCategoryExpenses();
     
-    for (const category of categories) {
-      const budgeted = this.getMockBudgetedAmount(category);
-      const actual = this.getMockActualAmount(category);
+    // Get budget allocations (or use defaults)
+    const defaultBudgets: Record<string, number> = {
+      fuel: 700000,
+      maintenance: 400000,
+      crew: 500000,
+      port: 200000,
+      insurance: 100000,
+      other: 100000
+    };
+
+    for (const [category, actual] of Object.entries(categoryData)) {
+      const budgeted = defaultBudgets[category] || 100000;
       const variance = actual - budgeted;
       const variancePercentage = (variance / budgeted) * 100;
 
@@ -142,12 +156,12 @@ export class BudgetForecastEngine {
    * Update forecast based on current actuals
    */
   async updateForecast(currentMonth: number): Promise<CostPrediction> {
-    // Calculate year-to-date actual
-    const ytdActual = this.calculateYTDActual(currentMonth);
+    // Get YTD actuals from database
+    const ytdActual = await this.calculateYTDActual(currentMonth);
     
     // Extrapolate to year-end
     const remainingMonths = 12 - currentMonth;
-    const avgMonthly = ytdActual / currentMonth;
+    const avgMonthly = ytdActual / Math.max(currentMonth, 1);
     const projected = ytdActual + (avgMonthly * remainingMonths);
 
     // Apply adjustments based on known factors
@@ -161,7 +175,7 @@ export class BudgetForecastEngine {
       insurance: adjustedProjection * 0.05,
       other: adjustedProjection * 0.05,
       total: adjustedProjection,
-      confidence: 0.85 - (remainingMonths * 0.02), // Confidence decreases further into future
+      confidence: 0.85 - (remainingMonths * 0.02),
       factors: [
         {
           name: 'Year-to-Date Trend',
@@ -174,28 +188,142 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Get historical budgets
+   * Get REAL historical budgets from database
    */
   private async getHistoricalBudgets(startYear: number, endYear: number): Promise<Budget[]> {
-    // Return mock historical data
+    // Try to get from expenses table aggregated by year
+    const { data: expenses } = await supabase
+      .from('expenses')
+      .select('amount, date')
+      .order('date', { ascending: true });
+
+    if (expenses && expenses.length > 0) {
+      // Aggregate by year
+      const yearlyTotals: Record<number, number> = {};
+      (expenses as any[]).forEach(exp => {
+        const year = new Date(exp.date).getFullYear();
+        if (year >= startYear && year <= endYear) {
+          yearlyTotals[year] = (yearlyTotals[year] || 0) + (exp.amount || 0);
+        }
+      });
+
+      return Object.entries(yearlyTotals).map(([year, total]) => ({
+        id: crypto.randomUUID(),
+        year: parseInt(year),
+        category: 'total',
+        allocated_amount: total * 1.1, // Add 10% buffer
+        spent_amount: total,
+        committed_amount: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }));
+    }
+
+    // Try crew payroll as fallback
+    const { data: payroll } = await supabase
+      .from('crew_payroll')
+      .select('total_earnings, payment_date')
+      .order('payment_date', { ascending: true });
+
+    if (payroll && payroll.length > 0) {
+      const yearlyTotals: Record<number, number> = {};
+      (payroll as any[]).forEach(pay => {
+        const year = new Date(pay.payment_date).getFullYear();
+        if (year >= startYear && year <= endYear) {
+          yearlyTotals[year] = (yearlyTotals[year] || 0) + (pay.total_earnings || 0);
+        }
+      });
+
+      // Crew is ~25% of total budget
+      return Object.entries(yearlyTotals).map(([year, crewTotal]) => ({
+        id: crypto.randomUUID(),
+        year: parseInt(year),
+        category: 'total',
+        allocated_amount: crewTotal * 4 * 1.1,
+        spent_amount: crewTotal * 4,
+        committed_amount: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }));
+    }
+
+    // Return industry baseline
     const budgets: Budget[] = [];
-    
     for (let year = startYear; year <= endYear; year++) {
-      const baseAmount = 1500000 * (1 + (year - startYear) * 0.05); // 5% annual increase
-      
+      const baseAmount = 2000000 * (1 + (year - startYear) * 0.05);
       budgets.push({
         id: crypto.randomUUID(),
         year,
         category: 'total',
         allocated_amount: baseAmount,
-        spent_amount: baseAmount * (0.9 + Math.random() * 0.15),
+        spent_amount: baseAmount * 0.95,
         committed_amount: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });
     }
-    
     return budgets;
+  }
+
+  /**
+   * Get REAL category expenses from database
+   */
+  private async getCategoryExpenses(): Promise<Record<string, number>> {
+    const currentYear = new Date().getFullYear();
+    const startOfYear = `${currentYear}-01-01`;
+
+    const { data: expenses } = await supabase
+      .from('expenses')
+      .select('amount, category')
+      .gte('date', startOfYear);
+
+    const result: Record<string, number> = {
+      fuel: 0,
+      maintenance: 0,
+      crew: 0,
+      port: 0,
+      insurance: 0,
+      other: 0
+    };
+
+    if (expenses && expenses.length > 0) {
+      (expenses as any[]).forEach(exp => {
+        const category = String(exp.category || 'other').toLowerCase();
+        const mappedCategory = this.mapCategory(category);
+        result[mappedCategory] += Number(exp.amount) || 0;
+      });
+    }
+
+    // Add crew payroll if available
+    const { data: payroll } = await supabase
+      .from('crew_payroll')
+      .select('total_earnings')
+      .gte('payment_date', startOfYear);
+
+    if (payroll) {
+      result.crew += (payroll as any[]).reduce((sum, p) => sum + (p.total_earnings || 0), 0);
+    }
+
+    return result;
+  }
+
+  /**
+   * Map category to standard categories
+   */
+  private mapCategory(category: string): string {
+    const mapping: Record<string, string> = {
+      fuel: 'fuel',
+      bunker: 'fuel',
+      maintenance: 'maintenance',
+      repair: 'maintenance',
+      crew: 'crew',
+      salary: 'crew',
+      wages: 'crew',
+      port: 'port',
+      harbor: 'port',
+      insurance: 'insurance'
+    };
+    return mapping[category] || 'other';
   }
 
   /**
@@ -203,7 +331,7 @@ export class BudgetForecastEngine {
    */
   private calculateBaseBudget(historical: Budget[]): { total: number; growth: number } {
     if (historical.length === 0) {
-      return { total: 2000000, growth: 0.05 }; // Default
+      return { total: 2000000, growth: 0.05 };
     }
 
     const sorted = historical.sort((a, b) => a.year - b.year);
@@ -224,9 +352,12 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Generate category budgets
+   * Generate category budgets with real data
    */
-  private generateCategoryBudgets(baseBudget: { total: number }): Record<string, CategoryBudget> {
+  private generateCategoryBudgets(
+    baseBudget: { total: number },
+    categoryData: Record<string, number>
+  ): Record<string, CategoryBudget> {
     const allocations: Record<string, number> = {
       fuel: 0.35,
       maintenance: 0.20,
@@ -240,8 +371,8 @@ export class BudgetForecastEngine {
 
     for (const [category, allocation] of Object.entries(allocations)) {
       const allocated = baseBudget.total * allocation;
-      const spent = allocated * (0.3 + Math.random() * 0.4); // 30-70% spent so far
-      const committed = allocated * 0.1; // 10% committed
+      const spent = categoryData[category] || 0;
+      const committed = allocated * 0.1;
       const forecast = spent + committed + (allocated - spent - committed) * 0.9;
       const variance = forecast - allocated;
 
@@ -251,7 +382,7 @@ export class BudgetForecastEngine {
         committed,
         forecast,
         variance,
-        variancePercentage: (variance / allocated) * 100
+        variancePercentage: allocated > 0 ? (variance / allocated) * 100 : 0
       };
     }
 
@@ -259,28 +390,40 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Generate monthly budget distribution
+   * Generate monthly budget distribution with REAL data
    */
-  private generateMonthlyBudgets(baseBudget: { total: number }, year: number): MonthlyBudget[] {
+  private async generateMonthlyBudgets(baseBudget: { total: number }, year: number): Promise<MonthlyBudget[]> {
     const monthlyBudgets: MonthlyBudget[] = [];
     const monthlyBase = baseBudget.total / 12;
 
-    // Seasonal adjustments (higher in summer months)
+    // Get REAL monthly expenses
+    const { data: expenses } = await supabase
+      .from('expenses')
+      .select('amount, date')
+      .gte('date', `${year}-01-01`)
+      .lte('date', `${year}-12-31`);
+
+    const monthlyActuals: Record<string, number> = {};
+    if (expenses) {
+      (expenses as any[]).forEach(exp => {
+        const month = String(exp.date).substring(0, 7);
+        monthlyActuals[month] = (monthlyActuals[month] || 0) + (exp.amount || 0);
+      });
+    }
+
+    // Seasonal adjustments
     const seasonalFactors = [0.9, 0.85, 0.95, 1.0, 1.05, 1.1, 1.15, 1.1, 1.05, 1.0, 0.95, 0.9];
 
     for (let i = 0; i < 12; i++) {
-      const month = new Date(year, i, 1).toISOString().substring(0, 7);
+      const month = `${year}-${String(i + 1).padStart(2, '0')}`;
       const allocated = monthlyBase * seasonalFactors[i];
-      
-      // For past months, generate actual data
-      const now = new Date();
-      const isHistorical = new Date(year, i, 1) < now;
+      const actual = monthlyActuals[month] || 0;
       
       monthlyBudgets.push({
         month,
         allocated,
         forecast: allocated * (1 + (Math.random() - 0.5) * 0.1),
-        actual: isHistorical ? allocated * (0.9 + Math.random() * 0.2) : 0
+        actual
       });
     }
 
@@ -383,34 +526,24 @@ export class BudgetForecastEngine {
   }
 
   /**
-   * Get mock budgeted amount
+   * Calculate YTD actual from REAL data
    */
-  private getMockBudgetedAmount(category: string): number {
-    const amounts: Record<string, number> = {
-      fuel: 700000,
-      maintenance: 400000,
-      crew: 500000,
-      port: 200000,
-      insurance: 100000,
-      other: 100000
-    };
-    return amounts[category] || 100000;
-  }
+  private async calculateYTDActual(currentMonth: number): Promise<number> {
+    const currentYear = new Date().getFullYear();
+    const endDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-31`;
 
-  /**
-   * Get mock actual amount
-   */
-  private getMockActualAmount(category: string): number {
-    const budgeted = this.getMockBudgetedAmount(category);
-    return budgeted * (0.85 + Math.random() * 0.3); // -15% to +15% variance
-  }
+    const { data: expenses } = await supabase
+      .from('expenses')
+      .select('amount')
+      .gte('date', `${currentYear}-01-01`)
+      .lte('date', endDate);
 
-  /**
-   * Calculate year-to-date actual
-   */
-  private calculateYTDActual(currentMonth: number): number {
-    const monthlyAverage = 166667; // ~$2M annual / 12
-    return monthlyAverage * currentMonth * (0.95 + Math.random() * 0.1);
+    if (expenses && expenses.length > 0) {
+      return (expenses as any[]).reduce((sum, e) => sum + (e.amount || 0), 0);
+    }
+
+    // Fallback to estimate
+    return 166667 * currentMonth;
   }
 
   /**
