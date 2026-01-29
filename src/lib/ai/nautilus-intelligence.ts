@@ -129,7 +129,7 @@ export async function predictTrends(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "predict",
@@ -158,7 +158,7 @@ export async function detectAnomalies(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "anomaly",
@@ -187,7 +187,7 @@ export async function generateInsights(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "insight",
@@ -216,7 +216,7 @@ export async function getCopilotSuggestions(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "copilot",
@@ -250,7 +250,7 @@ export async function simulateScenario(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "scenario",
@@ -286,7 +286,7 @@ export async function streamChat(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
     },
     body: JSON.stringify({
       operation: "chat",
