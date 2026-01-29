@@ -114,8 +114,15 @@ class UsageTracker {
     this.queueEvent(eventName, properties);
   }
 
-  private queueEvent(eventName: string, properties?: Record<string, unknown>): void {
+  private async queueEvent(eventName: string, properties?: Record<string, unknown>): Promise<void> {
     try {
+      // Check auth status before queueing to avoid 401 errors
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // Don't queue events for unauthenticated users
+        return;
+      }
+
       const event: TrackingEvent = {
         event_type: this.getEventType(eventName),
         event_name: eventName,

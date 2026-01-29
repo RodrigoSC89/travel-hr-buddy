@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,26 +20,6 @@ const Login = () => {
   
   const { signIn } = useAuth();
 
-  // Limpar sessão corrompida
-  const handleClearSession = useCallback(() => {
-    try {
-      localStorage.removeItem('sb-auth-token');
-      localStorage.removeItem('supabase.auth.token');
-      
-      // Limpar todos os itens do Supabase
-      Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('sb-') || key.includes('supabase')) {
-          localStorage.removeItem(key);
-        }
-      });
-      
-      setErrorMessage("");
-      setPassword("");
-      toast.success("Sessão limpa com sucesso!");
-    } catch (error) {
-      logger.error("Erro ao limpar sessão", error);
-    }
-  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

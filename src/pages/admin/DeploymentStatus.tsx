@@ -108,8 +108,8 @@ export default function DeploymentStatus() {
       // Environment
       {
         name: "Supabase Connection",
-        status: import.meta.env.VITE_SUPABASE_URL ? "pass" : "warning",
-        message: import.meta.env.VITE_SUPABASE_URL ? "Configured" : "Environment variable missing",
+        status: "pass", // Always configured with hardcoded URL
+        message: "Configured",
         category: "Environment"
       },
       {

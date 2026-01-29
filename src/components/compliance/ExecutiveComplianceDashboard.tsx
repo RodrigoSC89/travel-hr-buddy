@@ -79,14 +79,12 @@ interface OAuthStatus {
   microsoftConfigured: boolean;
 }
 
-// OAuth Status Check
+// OAuth Status Check - PATCH: VITE_* não funciona no Lovable
 const useOAuthStatus = (): OAuthStatus => {
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const microsoftClientId = import.meta.env.VITE_MICROSOFT_CLIENT_ID;
-  
+  // OAuth deve ser configurado via Edge Functions/secrets
   return {
-    googleConfigured: !!googleClientId && googleClientId !== 'PENDING',
-    microsoftConfigured: !!microsoftClientId && microsoftClientId !== 'PENDING',
+    googleConfigured: false,
+    microsoftConfigured: false,
   };
 };
 

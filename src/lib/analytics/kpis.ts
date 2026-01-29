@@ -353,7 +353,10 @@ export class KPITracker {
    */
   async trackEngagement(event: 'session_start' | 'session_end' | 'feature_use', metadata: Record<string, unknown>): Promise<void> {
     const { data: session } = await supabase.auth.getSession();
-    const userId = session?.session?.user?.id ?? 'anonymous';
+    const userId = session?.session?.user?.id;
+    
+    // Skip if not authenticated (prevents 401 errors)
+    if (!userId) return;
 
     await supabase.from('analytics_events' as any).insert({
       event_name: event,
