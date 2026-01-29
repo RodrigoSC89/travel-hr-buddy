@@ -16,7 +16,19 @@ interface ProtectedRouteProps {
 }
 
 // Feature flag for enabling authentication protection
-const AUTH_PROTECTION_ENABLED = import.meta.env.VITE_ENABLE_AUTH_PROTECTION === "true";
+// Safe getter for env vars
+const getEnv = (key: string): string | undefined => {
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+      return import.meta.env[key] as string | undefined;
+    }
+  } catch {
+    return undefined;
+  }
+  return undefined;
+};
+
+const AUTH_PROTECTION_ENABLED = getEnv('VITE_ENABLE_AUTH_PROTECTION') === "true";
 
 export const ProtectedRoute: FC<ProtectedRouteProps> = ({ 
   children,

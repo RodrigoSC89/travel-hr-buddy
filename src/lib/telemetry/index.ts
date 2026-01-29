@@ -8,9 +8,21 @@ import type { TelemetryEvent, TelemetryEventName } from "./events";
 import { ConsentManager } from "./consent";
 import { OfflineQueue } from "./offline-queue";
 
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
-const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === "true";
+// Safe getter for env vars
+const getEnv = (key: string): string | undefined => {
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+      return import.meta.env[key] as string | undefined;
+    }
+  } catch {
+    return undefined;
+  }
+  return undefined;
+};
+
+const POSTHOG_KEY = getEnv('VITE_POSTHOG_KEY') || "";
+const POSTHOG_HOST = getEnv('VITE_POSTHOG_HOST') || "https://app.posthog.com";
+const TELEMETRY_ENABLED = getEnv('VITE_TELEMETRY_ENABLED') === "true";
 
 class TelemetryService {
   private initialized = false;

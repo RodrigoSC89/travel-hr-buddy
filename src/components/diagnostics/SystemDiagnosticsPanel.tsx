@@ -88,7 +88,8 @@ export function SystemDiagnosticsPanel() {
     // Check Edge Functions
     const efStart = performance.now();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/system-validation`, {
+      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+      const response = await fetch(`${supabaseUrl}/functions/v1/system-validation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ test: true }),

@@ -145,8 +145,9 @@ export default function AssistantReportLogsPage() {
         return;
       }
 
+      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/assistant-report-logs?${params.toString()}`,
+        `${supabaseUrl}/functions/v1/assistant-report-logs?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${session.access_token}`,
