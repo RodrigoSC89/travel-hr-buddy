@@ -119,13 +119,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Safety timeout - reduced to 8s for faster UX
+    // Safety timeout - reduced to 5s for faster UX
     const safetyTimeout = setTimeout(() => {
-      if (mounted && isLoading) {
-        logger.info("[AuthContext] Safety timeout (8s) - ready state");
+      if (mounted) {
+        logger.info("[AuthContext] Safety timeout (5s) - ready state");
         setIsLoading(false);
       }
-    }, 8000);
+    }, 5000);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();

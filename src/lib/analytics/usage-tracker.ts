@@ -1,6 +1,6 @@
 /**
  * Usage Tracker - Sistema de Analytics de Uso
- * PATCH 901: Métricas de adoção e comportamento
+ * PATCH 902: Corrigido para evitar carregamento infinito
  */
 
 import { supabase } from '@/integrations/supabase/client';
@@ -12,13 +12,6 @@ interface TrackingEvent {
   timestamp?: string;
 }
 
-interface PageView {
-  path: string;
-  title?: string;
-  referrer?: string;
-  duration_ms?: number;
-}
-
 interface UserSession {
   session_id: string;
   started_at: string;
@@ -27,109 +20,125 @@ interface UserSession {
 }
 
 class UsageTracker {
-  private sessionId: string;
-  private sessionStart: number;
+  private sessionId: string = '';
+  private sessionStart: number = 0;
   private pageEnterTime: number = 0;
   private eventsQueue: TrackingEvent[] = [];
-  private flushInterval: NodeJS.Timeout | null = null;
+  private flushInterval: ReturnType<typeof setInterval> | null = null;
   private isInitialized = false;
-
-  constructor() {
-    this.sessionId = this.generateSessionId();
-    this.sessionStart = Date.now();
-  }
+  private flushPromise: Promise<void> | null = null;
 
   private generateSessionId(): string {
-    return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `sess_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   /**
    * Initialize tracker - SAFE: Only runs after DOM is ready
    */
   init(): void {
+    // Early exit if already initialized or not in browser
     if (this.isInitialized) return;
-    
-    // Ensure we're in browser environment with ready DOM
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
-      return;
-    }
-    
-    this.isInitialized = true;
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-    // Defer initial tracking to avoid blocking render
-    requestAnimationFrame(() => {
+    this.isInitialized = true;
+    this.sessionId = this.generateSessionId();
+    this.sessionStart = Date.now();
+
+    // Use requestIdleCallback for non-blocking init
+    const initCallback = () => {
       try {
         // Track initial page view
         this.trackPageView(window.location.pathname);
 
         // Flush events every 30 seconds
         this.flushInterval = setInterval(() => {
-          this.flush();
+          this.flush().catch(() => {});
         }, 30000);
 
-        // Flush on page unload
+        // Flush on page unload - use sendBeacon for reliability
         window.addEventListener('beforeunload', () => {
-          this.flush();
+          this.flushSync();
         });
 
         // Track visibility changes
         document.addEventListener('visibilitychange', () => {
           if (document.hidden) {
-            this.flush();
+            this.flush().catch(() => {});
           }
         });
       } catch (e) {
-        console.warn('[UsageTracker] Init error:', e);
+        // Silent fail - analytics should never break the app
       }
-    });
+    };
+
+    // Defer initialization to avoid blocking
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(initCallback, { timeout: 2000 });
+    } else {
+      setTimeout(initCallback, 100);
+    }
   }
 
   /**
    * Track page view
    */
   trackPageView(path: string, title?: string): void {
-    // Calculate time on previous page
-    const now = Date.now();
-    if (this.pageEnterTime > 0) {
-      const duration = now - this.pageEnterTime;
-      this.trackEvent('page_exit', {
-        duration_ms: duration,
-        path: window.location.pathname,
-      });
-    }
-    this.pageEnterTime = now;
+    if (!this.isInitialized) return;
+    
+    try {
+      const now = Date.now();
+      if (this.pageEnterTime > 0) {
+        const duration = now - this.pageEnterTime;
+        this.queueEvent('page_exit', {
+          duration_ms: duration,
+          path: window.location.pathname,
+        });
+      }
+      this.pageEnterTime = now;
 
-    this.trackEvent('page_view', {
-      path,
-      title: title || document.title,
-      referrer: document.referrer,
-    });
+      this.queueEvent('page_view', {
+        path,
+        title: title || document.title,
+        referrer: document.referrer,
+      });
+    } catch {
+      // Silent fail
+    }
   }
 
   /**
    * Track custom event
    */
   trackEvent(eventName: string, properties?: Record<string, unknown>): void {
-    const event: TrackingEvent = {
-      event_type: this.getEventType(eventName),
-      event_name: eventName,
-      properties: {
-        ...properties,
-        session_id: this.sessionId,
-        url: window.location.href,
-        user_agent: navigator.userAgent,
-        screen_width: window.innerWidth,
-        screen_height: window.innerHeight,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      },
-      timestamp: new Date().toISOString(),
-    };
+    if (!this.isInitialized) return;
+    this.queueEvent(eventName, properties);
+  }
 
-    this.eventsQueue.push(event);
+  private queueEvent(eventName: string, properties?: Record<string, unknown>): void {
+    try {
+      const event: TrackingEvent = {
+        event_type: this.getEventType(eventName),
+        event_name: eventName,
+        properties: {
+          ...properties,
+          session_id: this.sessionId,
+          url: window.location.href,
+          user_agent: navigator.userAgent,
+          screen_width: window.innerWidth,
+          screen_height: window.innerHeight,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        },
+        timestamp: new Date().toISOString(),
+      };
 
-    // Auto-flush if queue is large
-    if (this.eventsQueue.length >= 10) {
-      this.flush();
+      this.eventsQueue.push(event);
+
+      // Auto-flush if queue is large
+      if (this.eventsQueue.length >= 10) {
+        this.flush().catch(() => {});
+      }
+    } catch {
+      // Silent fail
     }
   }
 
@@ -146,10 +155,7 @@ class UsageTracker {
    * Track feature usage
    */
   trackFeature(featureName: string, action: string, metadata?: Record<string, unknown>): void {
-    this.trackEvent(`feature_${action}`, {
-      feature_name: featureName,
-      ...metadata,
-    });
+    this.trackEvent(`feature_${action}`, { feature_name: featureName, ...metadata });
   }
 
   /**
@@ -163,10 +169,7 @@ class UsageTracker {
    * Track form submission
    */
   trackForm(formName: string, action: 'start' | 'complete' | 'error', metadata?: Record<string, unknown>): void {
-    this.trackEvent(`form_${action}`, {
-      form_name: formName,
-      ...metadata,
-    });
+    this.trackEvent(`form_${action}`, { form_name: formName, ...metadata });
   }
 
   /**
@@ -181,40 +184,80 @@ class UsageTracker {
   }
 
   /**
-   * Flush events to database
+   * Flush events to database (async)
    */
   async flush(): Promise<void> {
     if (this.eventsQueue.length === 0) return;
+    if (this.flushPromise) return this.flushPromise;
 
     const events = [...this.eventsQueue];
     this.eventsQueue = [];
 
+    this.flushPromise = (async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        const { error } = await supabase.from('analytics_events').insert(
+          events.map(event => ({
+            user_id: user?.id || null,
+            session_id: this.sessionId,
+            event_category: event.event_type,
+            event_name: event.event_name,
+            properties: event.properties as unknown as Record<string, unknown>,
+            page_url: window.location.href,
+            user_agent: navigator.userAgent,
+            timestamp: event.timestamp,
+          } as any))
+        );
+
+        if (error) {
+          // Re-queue events on error (max 50 to prevent memory issues)
+          const toRequeue = events.slice(0, Math.max(0, 50 - this.eventsQueue.length));
+          this.eventsQueue = [...toRequeue, ...this.eventsQueue];
+        }
+      } catch {
+        // Re-queue some events on error
+        const toRequeue = events.slice(0, Math.max(0, 50 - this.eventsQueue.length));
+        this.eventsQueue = [...toRequeue, ...this.eventsQueue];
+      } finally {
+        this.flushPromise = null;
+      }
+    })();
+
+    return this.flushPromise;
+  }
+
+  /**
+   * Synchronous flush for beforeunload (uses sendBeacon)
+   */
+  private flushSync(): void {
+    if (this.eventsQueue.length === 0) return;
+
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // Batch insert events usando tabela analytics_events existente
-      const { error } = await supabase.from('analytics_events').insert(
-        events.map(event => ({
-          user_id: user?.id,
+      const events = this.eventsQueue.slice(0, 20); // Limit for beacon
+      this.eventsQueue = [];
+
+      // Use sendBeacon for reliable delivery on page unload
+      const payload = JSON.stringify({
+        events: events.map(event => ({
           session_id: this.sessionId,
           event_category: event.event_type,
           event_name: event.event_name,
           properties: event.properties,
           page_url: window.location.href,
-          user_agent: navigator.userAgent,
           timestamp: event.timestamp,
-        } as any))
-      );
+        })),
+      });
 
-      if (error) {
-        // Re-queue events on error
-        this.eventsQueue = [...events, ...this.eventsQueue];
-        console.warn('[UsageTracker] Flush failed:', error);
+      // This will work even during page unload
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(
+          `${import.meta.env.VITE_SUPABASE_URL || 'https://vnbptmixvwropvanyhdb.supabase.co'}/rest/v1/analytics_events`,
+          payload
+        );
       }
-    } catch (err) {
-      // Re-queue events on error
-      this.eventsQueue = [...events, ...this.eventsQueue];
-      console.warn('[UsageTracker] Flush error:', err);
+    } catch {
+      // Silent fail
     }
   }
 
@@ -236,13 +279,14 @@ class UsageTracker {
   destroy(): void {
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
+      this.flushInterval = null;
     }
-    this.flush();
+    this.flush().catch(() => {});
     this.isInitialized = false;
   }
 }
 
-// Singleton instance
+// Singleton instance - initialized lazily
 export const usageTracker = new UsageTracker();
 
 /**
