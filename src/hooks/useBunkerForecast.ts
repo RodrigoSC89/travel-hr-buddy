@@ -56,8 +56,10 @@ export function useBunkerForecast(options: UseBunkerForecastOptions = {}) {
       }
     },
     enabled,
-    staleTime: 15 * 60 * 1000, // 15 minutes
-    refetchInterval: 30 * 60 * 1000, // 30 minutes
+    staleTime: 1000 * 60 * 15, // 15 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   // Get best opportunity (cheapest port with downward trend)

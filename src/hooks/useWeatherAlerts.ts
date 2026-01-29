@@ -101,8 +101,10 @@ export function useWeatherAlerts(options?: {
 
       return alerts;
     },
-    staleTime: 60 * 1000,
-    refetchInterval: 2 * 60 * 1000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   const statsQuery = useQuery({

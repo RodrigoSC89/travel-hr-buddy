@@ -92,7 +92,10 @@ export function useFinanceAnalytics() {
   const varianceAlerts = useQuery({
     queryKey: ['finance', 'variance-alerts'],
     queryFn: () => budgetForecastEngine.monitorBudgetRealtime(),
-    refetchInterval: 1000 * 60 * 5, // Refresh every 5 minutes
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   // REAL Pending Invoices
