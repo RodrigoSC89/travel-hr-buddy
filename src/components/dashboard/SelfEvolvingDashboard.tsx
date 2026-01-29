@@ -112,7 +112,10 @@ export function SelfEvolvingDashboard() {
         },
       };
     },
-    refetchInterval: 60000,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    refetchInterval: false, // DISABLED - prevent infinite loading
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   // Track widget usage

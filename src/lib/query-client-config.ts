@@ -50,10 +50,10 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       },
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       
-      // Reduce background refetches on slow connections
-      refetchOnWindowFocus: !isSlowConnection(),
-      refetchOnReconnect: true,
-      refetchOnMount: true,
+      // CRITICAL: Disable aggressive refetching to prevent infinite loops
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
       
       // Network mode - always fetch but use cache while loading
       networkMode: 'offlineFirst',
