@@ -1,5 +1,22 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+# ============================================
+# ENTERPRISE EXCELLENCE v6.0 - Advanced Features
+# Nauti Brain Stream, Vision AI, Voice Pro, Realtime
+# ============================================
+
+[functions.nauti-brain-stream]
+verify_jwt = false
+comment = "Nauti Brain with SSE streaming via Lovable AI Gateway"
+
+[functions.nauti-vision]
+verify_jwt = false
+comment = "Vision AI for equipment, document, vessel and safety image analysis"
+
+[functions.voice-assistant-pro]
+verify_jwt = false
+comment = "Voice Assistant Pro with ElevenLabs TTS and STT"
+
 [functions.contract-predict-downtime]
 verify_jwt = false
 
