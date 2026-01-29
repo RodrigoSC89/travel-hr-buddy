@@ -18,7 +18,7 @@ Este documento define o plano de implementação para todas as 10 áreas priorit
 | 4 | 🔁 Offline-First/Conflitos | ALTA | ✅ Concluído |
 | 5 | 🤖 IA com RAG + HITL | MÉDIA | ✅ Concluído |
 | 6 | 🧩 Fusão de Componentes | MÉDIA | ✅ Concluído |
-| 7 | 📡 Integração IoT | MÉDIA | ⏳ Pendente |
+| 7 | 📡 Integração IoT | MÉDIA | ✅ Concluído |
 | 8 | 🌐 Internacionalização | MÉDIA | ✅ Concluído |
 | 9 | 🚨 Modo Emergência | MÉDIA | ✅ Concluído |
 | 10 | 📦 Prontidão Deploy | ALTA | ✅ Concluído |
@@ -222,13 +222,21 @@ tests/
 
 ---
 
-## 7. 📡 Integração IoT
+## 7. 📡 Integração IoT ✅ CONCLUÍDO
 
-### Camada de Ingestão
-- Collector local (edge device)
-- Protocolo MQTT
-- Armazenamento temporal
-- Auto-preenchimento de Noon Reports
+### Funcionalidades Implementadas
+- **IoT Connector**: MQTT + Supabase Realtime com fallback automático
+- **Noon Report Auto-Fill**: Geração automática de Noon Reports com dados IoT (INÉDITO MUNDIAL)
+- **Predictive IoT Analytics**: Detecção de anomalias com Z-Score e previsão EWMA
+- **Vessel Health Score**: Cálculo de saúde do navio em tempo real
+- **Central IoT**: Dashboard unificado em `/iot-integration`
+
+### Arquivos
+- `src/lib/iot/IoTConnector.ts`
+- `src/lib/iot/NoonReportAutoFill.ts`
+- `src/lib/iot/PredictiveIoTAnalytics.ts`
+- `src/components/iot/IoTNoonReportPanel.tsx`
+- `src/pages/IoTIntegrationPage.tsx`
 
 ---
 

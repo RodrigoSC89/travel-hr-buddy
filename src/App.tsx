@@ -66,6 +66,7 @@ const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
 const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
 const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
+const IoTIntegrationPage = lazy(() => import("@/pages/IoTIntegrationPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -516,6 +517,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* TELEMETRIA & MONITORAMENTO */}
       {/* ============================================ */}
+      <Route path="/iot-integration" element={<IoTIntegrationPage />} />
       <Route path="/telemetria" element={<TelemetriaCommand />} />
       <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />

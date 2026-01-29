@@ -212,6 +212,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "📊 Telemetria & Monitoramento",
     defaultOpen: true,
     items: [
+      { label: "🛰️ Central IoT", path: "/iot-integration", icon: Cpu, emoji: "🛰️", badge: "INÉDITO", status: "new" },
       { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
       { label: "Otimização Satélite", path: "/satellite-optimizer", icon: Satellite, emoji: "📡", badge: "NEW", status: "new" },
