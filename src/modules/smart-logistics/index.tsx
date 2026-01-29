@@ -1,6 +1,12 @@
 /**
- * Smart Logistics Module
- * PATCH: Integrated with Supabase logistics_inventory table
+ * 🚚 Smart Logistics Module
+ * NAUTILUS ONE v6.0 - AI-Powered Supply Chain Intelligence
+ * 
+ * Features:
+ * - Predictive inventory management
+ * - Autonomous reordering with AI
+ * - Supply chain optimization
+ * - Demand forecasting with ML
  */
 
 import { useState } from "react";
@@ -10,27 +16,42 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  Package, 
-  AlertTriangle, 
-  TrendingUp, 
-  ShoppingCart,
-  Brain,
-  Fuel,
-  Droplets,
-  Utensils,
-  Wrench,
-  Pill,
-  Sparkles,
-  RefreshCw,
-  Plus,
-  CheckCircle2,
-  Truck,
-  Clock
+  Package, AlertTriangle, TrendingUp, ShoppingCart, Brain, Fuel,
+  Droplets, Utensils, Wrench, Pill, Sparkles, CheckCircle2, Truck, Clock
 } from "lucide-react";
 import { toast } from "sonner";
+
+// ============================================
+// RE-EXPORTS FOR MODULE API
+// ============================================
+
+// AI Engines
+export {
+  autonomousLogisticsEngine,
+  type InventoryPrediction,
+  type SupplyChainOptimization,
+  type DemandForecast,
+  type AutoOrderRecommendation,
+  type LogisticsMetrics
+} from './ai/AutonomousLogisticsEngine';
+
+// React Hooks
+export {
+  useLogisticsAI,
+  useInventoryPrediction,
+  useSupplyChainOptimization,
+  useDemandForecast,
+  useLogisticsMetrics,
+  useAutoOrderGeneration,
+  useRefreshLogisticsData,
+  type UseLogisticsAIOptions
+} from './hooks';
+
+// ============================================
+// COMPONENT IMPLEMENTATION
+// ============================================
 
 interface SupplyItem {
   id: string;
@@ -57,7 +78,6 @@ interface AIRecommendation {
   action?: string;
 }
 
-// Fallback data when database is empty
 const getFallbackSupplies = (): SupplyItem[] => [
   {
     id: "demo-1",
@@ -94,7 +114,6 @@ export default function SmartLogistics() {
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // Fetch inventory from Supabase
   const { data: inventoryData, isLoading } = useQuery({
     queryKey: ['logistics-inventory'],
     queryFn: async () => {
@@ -102,13 +121,11 @@ export default function SmartLogistics() {
         .from('logistics_inventory')
         .select('*')
         .order('item_name');
-      
       if (error) throw error;
       return data;
     },
   });
 
-  // Transform DB data to UI format
   const supplies: SupplyItem[] = inventoryData?.length 
     ? inventoryData.map((item: any) => ({
         id: item.id,
@@ -130,7 +147,6 @@ export default function SmartLogistics() {
       }))
     : getFallbackSupplies();
 
-  // Create order mutation
   const createOrderMutation = useMutation({
     mutationFn: async (itemId: string) => {
       const item = supplies.find(s => s.id === itemId);
@@ -157,7 +173,7 @@ export default function SmartLogistics() {
       queryClient.invalidateQueries({ queryKey: ['logistics-inventory'] });
     },
     onError: (error) => {
-      toast.error(`Erro ao criar pedido: ${error.message}`);
+      toast.error(`Erro ao criar pedido: ${(error as Error).message}`);
     },
   });
 
@@ -179,10 +195,6 @@ export default function SmartLogistics() {
       setIsAnalyzing(false);
       toast.success("Análise concluída!");
     }, 2000);
-  };
-
-  const generateOrder = (itemId: string) => {
-    createOrderMutation.mutate(itemId);
   };
 
   const getCategoryIcon = (category: string) => {
@@ -242,7 +254,6 @@ export default function SmartLogistics() {
         </div>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
@@ -299,12 +310,11 @@ export default function SmartLogistics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Supplies List */}
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Inventário de Suprimentos</CardTitle>
-              <CardDescription>Monitoramento em tempo real</CardDescription>
+              <CardDescription>Monitoramento em tempo real com IA</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[500px]">
@@ -365,7 +375,7 @@ export default function SmartLogistics() {
                           <Button 
                             size="sm" 
                             variant={item.status === "critical" ? "destructive" : "outline"}
-                            onClick={() => generateOrder(item.id)}
+                            onClick={() => createOrderMutation.mutate(item.id)}
                           >
                             <ShoppingCart className="h-3 w-3 mr-1" />
                             Reabastecer
@@ -380,7 +390,6 @@ export default function SmartLogistics() {
           </Card>
         </div>
 
-        {/* AI Recommendations */}
         <div>
           <Card>
             <CardHeader>
@@ -410,16 +419,6 @@ export default function SmartLogistics() {
                             </Badge>
                             <span className="text-xs text-green-400">{rec.impact}</span>
                           </div>
-                          {rec.action && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="mt-3 w-full"
-                              onClick={() => toast.success(`Ação executada: ${rec.action}`)}
-                            >
-                              {rec.action}
-                            </Button>
-                          )}
                         </div>
                       </div>
                     </div>
