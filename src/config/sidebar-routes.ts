@@ -281,6 +281,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // ===== REVOLUCIONÁRIO: SMART AUDIT ENGINE =====
+      { label: "🧠 Smart Audit Engine", path: "/smart-audit-engine", icon: Brain, emoji: "🧠", badge: "AI+BLOCKCHAIN", status: "new" },
       // ===== DIAGNÓSTICO RÁPIDO - 5 SOLUÇÕES =====
       { label: "🔔 Alertas Certificados", path: "/diagnostic-certificates", icon: Bell, emoji: "🔔", badge: "NEW", status: "new" },
       { label: "📊 Dashboard Compliance", path: "/diagnostic-dashboard", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
@@ -333,6 +335,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "👥 RH & Pessoas",
     defaultOpen: false,
     items: [
+      // ===== REVOLUCIONÁRIO: CREW AI COPILOT =====
+      { label: "🚀 Crew AI Copilot", path: "/crew-ai-copilot", icon: Brain, emoji: "🚀", badge: "MLC+FATIGUE+ML", status: "new" },
       { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
       { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
       { label: "👤 Portal Colaborador", path: "/employee-portal", icon: Users, emoji: "👤", badge: "NEW", status: "new" },
@@ -369,6 +373,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🎓 Treinamentos",
     defaultOpen: false,
     items: [
+      // ===== REVOLUCIONÁRIO: ADVANCED TRAINING AI =====
+      { label: "🎯 Training AI Avançado", path: "/advanced-training-ai", icon: Brain, emoji: "🎯", badge: "ADAPTIVE+VR", status: "new" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
       { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", icon: Award, emoji: "📚" },
       { label: "Mentor DP", path: "/mentor-dp", icon: Users, emoji: "🧑‍🏫" },
@@ -383,6 +389,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "💰 Finanças & Procurement",
     defaultOpen: false,
     items: [
+      // ===== REVOLUCIONÁRIO: ADVANCED FINANCE AI =====
+      { label: "💹 Finance AI Avançado", path: "/advanced-finance-ai", icon: Brain, emoji: "💹", badge: "ML+FRAUD+ROI", status: "new" },
       { label: "Finance Command", path: "/finance-command", icon: DollarSign, emoji: "💰" },
       { label: "Voyage Accounting", path: "/voyage-accounting", icon: DollarSign, emoji: "📊", badge: "NEW" },
       { label: "Analytics Command", path: "/analytics-command", icon: BarChart3, emoji: "📊" },
