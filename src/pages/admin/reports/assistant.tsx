@@ -182,8 +182,9 @@ export default function AssistantReportLogsPage() {
         return;
       }
 
+      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cron-status`,
+        `${supabaseUrl}/functions/v1/cron-status`,
         {
           headers: {
             Authorization: `Bearer ${session.access_token}`,

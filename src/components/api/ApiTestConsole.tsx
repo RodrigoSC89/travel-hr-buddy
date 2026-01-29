@@ -107,7 +107,7 @@ export function ApiTestConsole({
 
     try {
       // Build the full URL
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
+      const baseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
       const fullUrl = `${baseUrl}/functions/v1/public-api${endpoint}`;
 
       // Parse headers
@@ -202,7 +202,7 @@ export function ApiTestConsole({
   };
 
   const generateCurl = () => {
-    const baseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
+    const baseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
     let curl = `curl -X ${method} "${baseUrl}/functions/v1/public-api${endpoint}"`;
     
     if (apiKey) {

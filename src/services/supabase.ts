@@ -18,16 +18,8 @@ export interface SupabaseTestResult {
  */
 export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   const startTime = Date.now();
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return {
-      success: false,
-      message: "Supabase credentials not configured",
-      error: "Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY",
-    };
-  }
+  const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
   try {
     // Test 1: Check if we can get session (should not crash)

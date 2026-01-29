@@ -61,8 +61,7 @@ class DeltaSyncService {
         this.worker.onmessage = this.handleWorkerMessage.bind(this);
         
         // Configure worker
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
-          "https://vnbptmixvwropvanyhdb.supabase.co";
+        const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
         const { data: { session } } = await supabase.auth.getSession();
         
         this.worker.postMessage({

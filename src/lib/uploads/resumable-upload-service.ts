@@ -96,8 +96,7 @@ class ResumableUploadService {
       throw new Error("User must be authenticated to upload files");
     }
 
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
-      "https://vnbptmixvwropvanyhdb.supabase.co";
+    const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
     const tusEndpoint = `${supabaseUrl}/storage/v1/upload/resumable`;
 
     return new Promise((resolve, reject) => {

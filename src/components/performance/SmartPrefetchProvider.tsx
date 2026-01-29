@@ -17,10 +17,8 @@ const PrefetchInitializer = memo(() => {
     try {
       resourceHints.initializeCommonHints();
       
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      if (supabaseUrl) {
-        resourceHints.preconnect(supabaseUrl);
-      }
+      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+      resourceHints.preconnect(supabaseUrl);
       
       setInitialized(true);
     } catch (error) {
