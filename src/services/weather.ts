@@ -58,7 +58,7 @@ interface CacheEntry {
 
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const REQUEST_TIMEOUT = 10000; // 10 seconds
-const ENABLE_LOGS = import.meta.env.VITE_ENABLE_WEATHER_LOGS === "true";
+const ENABLE_LOGS = localStorage.getItem("nautilus_weather_logs") === "true";
 
 const weatherCache = new Map<string, CacheEntry>();
 
