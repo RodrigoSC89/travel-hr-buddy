@@ -428,6 +428,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
+      { label: "📱 PWA & Offline", path: "/pwa-settings", icon: HardDrive, emoji: "📱", badge: "NEW", status: "new" },
+      { label: "📊 Analytics Avançado", path: "/advanced-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
+      { label: "🌐 Idioma & Região", path: "/language-settings", icon: Globe, emoji: "🌐", badge: "i18n", status: "new" },
+      { label: "🧪 Testes E2E", path: "/test-suite", icon: Target, emoji: "🧪", badge: "QA", status: "new" },
       { label: "Hub de Integrações", path: "/integrations", icon: Link, emoji: "🔗" },
       { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
       { label: "Colaboração", path: "/collaboration", icon: Users, emoji: "🤝" },

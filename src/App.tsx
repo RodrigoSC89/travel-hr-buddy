@@ -240,6 +240,12 @@ const IoT = lazy(() => import("@/pages/IoT"));
 const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
+
+// NEW: PWA, Analytics, i18n, Tests
+const PWASettingsPage = lazy(() => import("@/pages/PWASettingsPage"));
+const AdvancedAnalyticsPage = lazy(() => import("@/pages/AdvancedAnalyticsPage"));
+const LanguageSettingsPage = lazy(() => import("@/pages/LanguageSettingsPage"));
+const TestSuitePage = lazy(() => import("@/pages/TestSuitePage"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
@@ -664,6 +670,10 @@ const AppRoutes = () => (
       <Route path="/quality-dashboard" element={<QualityDashboard />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/settings/security" element={<SecuritySettings />} />
+      <Route path="/pwa-settings" element={<PWASettingsPage />} />
+      <Route path="/advanced-analytics" element={<AdvancedAnalyticsPage />} />
+      <Route path="/language-settings" element={<LanguageSettingsPage />} />
+      <Route path="/test-suite" element={<TestSuitePage />} />
       <Route path="/integrations" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
       <Route path="/collaboration" element={<Collaboration />} />
