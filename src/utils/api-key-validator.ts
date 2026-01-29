@@ -150,8 +150,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_AMADEUS_API_KEY / VITE_AMADEUS_API_SECRET",
     status: amadeusStatus,
     configured: isConfigured(
-      import.meta.env.VITE_AMADEUS_API_KEY,
-      import.meta.env.VITE_AMADEUS_API_SECRET
+      safeEnv.VITE_AMADEUS_API_KEY,
+      safeEnv.VITE_AMADEUS_API_SECRET
     ),
     responseTime: amadeusResult.responseTime,
     message: amadeusResult.message,
@@ -185,8 +185,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_WINDY_API_KEY / VITE_OPENWEATHER_API_KEY",
     status: windyStatus,
     configured: isConfigured(
-      import.meta.env.VITE_WINDY_API_KEY,
-      import.meta.env.VITE_OPENWEATHER_API_KEY
+      safeEnv.VITE_WINDY_API_KEY,
+      safeEnv.VITE_OPENWEATHER_API_KEY
     ),
     responseTime: windyResult.responseTime,
     message: windyResult.message,
@@ -204,8 +204,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_SKYSCANNER_API_KEY / VITE_RAPIDAPI_KEY",
     status: skyscannerStatus,
     configured: isConfigured(
-      import.meta.env.VITE_SKYSCANNER_API_KEY,
-      import.meta.env.VITE_RAPIDAPI_KEY
+      safeEnv.VITE_SKYSCANNER_API_KEY,
+      safeEnv.VITE_RAPIDAPI_KEY
     ),
     responseTime: skyscannerResult.responseTime,
     message: skyscannerResult.message,
@@ -223,8 +223,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_BOOKING_API_KEY / VITE_RAPIDAPI_KEY",
     status: bookingStatus,
     configured: isConfigured(
-      import.meta.env.VITE_BOOKING_API_KEY,
-      import.meta.env.VITE_RAPIDAPI_KEY
+      safeEnv.VITE_BOOKING_API_KEY,
+      safeEnv.VITE_RAPIDAPI_KEY
     ),
     responseTime: bookingResult.responseTime,
     message: bookingResult.message,
@@ -241,7 +241,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "MarineTraffic",
     key: "VITE_MARINETRAFFIC_API_KEY",
     status: marineTrafficStatus,
-    configured: isConfigured(import.meta.env.VITE_MARINETRAFFIC_API_KEY),
+    configured: isConfigured(safeEnv.VITE_MARINETRAFFIC_API_KEY),
     responseTime: marineTrafficResult.responseTime,
     message: marineTrafficResult.message,
     error: marineTrafficResult.error,

@@ -177,10 +177,11 @@ export function usePushNotifications() {
     try {
       const registration = await navigator.serviceWorker.ready;
       
+      const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(
-          import.meta.env.VITE_VAPID_PUBLIC_KEY || ""
+          safeEnv.VITE_VAPID_PUBLIC_KEY || ""
         ),
       });
 
