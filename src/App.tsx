@@ -219,6 +219,7 @@ const HRCommandCenterPage = lazy(() => import("@/pages/HRCommandCenterPage"));
 // ============================================
 // TREINAMENTOS
 // ============================================
+const TrainingLXPPage = lazy(() => import("@/pages/TrainingLXPPage"));
 const AITraining = lazy(() => import("@/pages/AITraining"));
 const MentorDP = lazy(() => import("@/pages/MentorDP"));
 const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
@@ -664,6 +665,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* TREINAMENTOS */}
       {/* ============================================ */}
+      <Route path="/training-lxp" element={<TrainingLXPPage />} />
       <Route path="/advanced-training-ai" element={<AdvancedTrainingAIPage />} />
       <Route path="/nautilus-academy" element={<AITraining />} />
       <Route path="/solas-isps-training" element={<AITraining />} />

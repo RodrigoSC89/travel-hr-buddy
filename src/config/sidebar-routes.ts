@@ -376,7 +376,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🎓 Treinamentos",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: ADVANCED TRAINING AI =====
+      // ===== REVOLUCIONÁRIO: TRAINING LXP =====
+      { label: "🎮 Training LXP", path: "/training-lxp", icon: Gamepad2, emoji: "🎮", badge: "GAMIFICATION", status: "new" },
       { label: "🎯 Training AI Avançado", path: "/advanced-training-ai", icon: Brain, emoji: "🎯", badge: "ADAPTIVE+VR", status: "new" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
       { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", icon: Award, emoji: "📚" },
