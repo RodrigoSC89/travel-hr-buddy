@@ -19590,6 +19590,72 @@ export type Database = {
           },
         ]
       }
+      inventory_transactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          item_id: string
+          metadata: Json | null
+          organization_id: string | null
+          performed_at: string | null
+          performed_by: string | null
+          purchase_order_id: string | null
+          quantity: number
+          reason: string | null
+          reference_number: string | null
+          transaction_type: string
+          vessel_id: string | null
+          work_order_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          item_id: string
+          metadata?: Json | null
+          organization_id?: string | null
+          performed_at?: string | null
+          performed_by?: string | null
+          purchase_order_id?: string | null
+          quantity: number
+          reason?: string | null
+          reference_number?: string | null
+          transaction_type: string
+          vessel_id?: string | null
+          work_order_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          item_id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          performed_at?: string | null
+          performed_by?: string | null
+          purchase_order_id?: string | null
+          quantity?: number
+          reason?: string | null
+          reference_number?: string | null
+          transaction_type?: string
+          vessel_id?: string | null
+          work_order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_transactions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_transactions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_items: {
         Row: {
           amount: number
@@ -21306,6 +21372,93 @@ export type Database = {
           },
           {
             foreignKeyName: "maritime_checklists_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maritime_communications: {
+        Row: {
+          acknowledged_at: string | null
+          content: string
+          created_at: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          message_type: string
+          metadata: Json | null
+          organization_id: string | null
+          priority: string
+          responded_at: string | null
+          responded_by: string | null
+          response_required: boolean | null
+          response_text: string | null
+          sender_id: string | null
+          sender_role: string | null
+          sent_at: string
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message_type: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response_required?: boolean | null
+          response_text?: string | null
+          sender_id?: string | null
+          sender_role?: string | null
+          sent_at?: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message_type?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response_required?: boolean | null
+          response_text?: string | null
+          sender_id?: string | null
+          sender_role?: string | null
+          sent_at?: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maritime_communications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maritime_communications_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -28266,6 +28419,84 @@ export type Database = {
           },
         ]
       }
+      purchase_orders: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          delivery_date: string | null
+          delivery_port: string | null
+          id: string
+          items: Json
+          notes: string | null
+          organization_id: string | null
+          po_number: string
+          status: string | null
+          supplier_id: string | null
+          supplier_name: string
+          total_amount: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          organization_id?: string | null
+          po_number: string
+          status?: string | null
+          supplier_id?: string | null
+          supplier_name: string
+          total_amount?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          organization_id?: string | null
+          po_number?: string
+          status?: string | null
+          supplier_id?: string | null
+          supplier_name?: string
+          total_amount?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_orders_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       push_subscriptions: {
         Row: {
           auth: string
@@ -29977,6 +30208,90 @@ export type Database = {
           },
           {
             foreignKeyName: "safety_briefings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      safety_drills: {
+        Row: {
+          competencies: Json | null
+          conducted_by: string | null
+          conducted_date: string | null
+          created_at: string | null
+          deficiencies: Json | null
+          drill_type: string
+          id: string
+          improvements: Json | null
+          metadata: Json | null
+          musters_time_minutes: number | null
+          objectives: Json | null
+          organization_id: string | null
+          participants: Json | null
+          reviewed_by: string | null
+          scenario: string | null
+          scheduled_date: string
+          score: number | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          competencies?: Json | null
+          conducted_by?: string | null
+          conducted_date?: string | null
+          created_at?: string | null
+          deficiencies?: Json | null
+          drill_type: string
+          id?: string
+          improvements?: Json | null
+          metadata?: Json | null
+          musters_time_minutes?: number | null
+          objectives?: Json | null
+          organization_id?: string | null
+          participants?: Json | null
+          reviewed_by?: string | null
+          scenario?: string | null
+          scheduled_date: string
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          competencies?: Json | null
+          conducted_by?: string | null
+          conducted_date?: string | null
+          created_at?: string | null
+          deficiencies?: Json | null
+          drill_type?: string
+          id?: string
+          improvements?: Json | null
+          metadata?: Json | null
+          musters_time_minutes?: number | null
+          objectives?: Json | null
+          organization_id?: string | null
+          participants?: Json | null
+          reviewed_by?: string | null
+          scenario?: string | null
+          scheduled_date?: string
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "safety_drills_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "safety_drills_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -32087,6 +32402,81 @@ export type Database = {
           },
         ]
       }
+      sgso_risk_assessments: {
+        Row: {
+          assessment_date: string
+          assessor_id: string | null
+          assessor_name: string | null
+          categories: Json | null
+          created_at: string | null
+          failures_by_month: Json | null
+          id: string
+          metadata: Json | null
+          next_review_date: string | null
+          organization_id: string | null
+          recommendations: Json | null
+          risk_level: string
+          status: string | null
+          total_failures: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          assessment_date?: string
+          assessor_id?: string | null
+          assessor_name?: string | null
+          categories?: Json | null
+          created_at?: string | null
+          failures_by_month?: Json | null
+          id?: string
+          metadata?: Json | null
+          next_review_date?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level: string
+          status?: string | null
+          total_failures?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          assessment_date?: string
+          assessor_id?: string | null
+          assessor_name?: string | null
+          categories?: Json | null
+          created_at?: string | null
+          failures_by_month?: Json | null
+          id?: string
+          metadata?: Json | null
+          next_review_date?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level?: string
+          status?: string | null
+          total_failures?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_risk_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_risk_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shared_alerts: {
         Row: {
           alert_id: string
@@ -32517,6 +32907,99 @@ export type Database = {
           },
           {
             foreignKeyName: "siscomex_transmissions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_contracts: {
+        Row: {
+          blockchain_tx_id: string | null
+          charter_type: string
+          charterer_name: string
+          conditions: Json | null
+          contract_hash: string
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          end_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          owner_name: string
+          rate_value: number
+          signed_by_charterer: boolean | null
+          signed_by_owner: boolean | null
+          start_date: string
+          status: string
+          total_due: number | null
+          total_paid: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          blockchain_tx_id?: string | null
+          charter_type: string
+          charterer_name: string
+          conditions?: Json | null
+          contract_hash: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          owner_name: string
+          rate_value: number
+          signed_by_charterer?: boolean | null
+          signed_by_owner?: boolean | null
+          start_date: string
+          status?: string
+          total_due?: number | null
+          total_paid?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          blockchain_tx_id?: string | null
+          charter_type?: string
+          charterer_name?: string
+          conditions?: Json | null
+          contract_hash?: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          owner_name?: string
+          rate_value?: number
+          signed_by_charterer?: boolean | null
+          signed_by_owner?: boolean | null
+          start_date?: string
+          status?: string
+          total_due?: number | null
+          total_paid?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_contracts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_contracts_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"

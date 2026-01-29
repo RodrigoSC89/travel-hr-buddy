@@ -3,9 +3,10 @@
  * PATCH REVOLUTION v2.0
  * 
  * Contratos inteligentes blockchain para chartering automático
- * Versão simplificada com dados simulados
+ * Integrado com Supabase para persistência real
  */
 
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface SmartCharterContract {
@@ -55,154 +56,211 @@ export interface PaymentSchedule {
   paidAt?: Date;
 }
 
-// Mock contracts
-const MOCK_CONTRACTS: SmartCharterContract[] = [
-  {
-    id: 'sc-001',
-    contractHash: '0x7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t',
-    ownerName: 'Pacific Shipping Ltd',
-    chartererName: 'Global Cargo Inc',
-    vesselId: 'v-001',
-    vesselName: 'MV Atlantic Star',
-    charterType: 'time',
-    startDate: new Date('2024-01-01'),
-    endDate: new Date('2024-12-31'),
-    rateValue: 35000,
-    currency: 'USD',
-    conditions: [
-      { id: 'c-1', type: 'payment_due', description: 'Pagamento mensal', triggerEvent: 'monthly', action: 'auto_invoice', isActive: true },
-      { id: 'c-2', type: 'performance_bonus', description: 'Bônus por eficiência', triggerEvent: 'fuel_savings > 10%', action: 'add_bonus', isActive: true },
-    ],
-    status: 'active',
-    signedByOwner: true,
-    signedByCharterer: true,
-    totalPaid: 280000,
-    totalDue: 35000,
-    createdAt: new Date('2023-12-15'),
-  },
-  {
-    id: 'sc-002',
-    contractHash: '0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t',
-    ownerName: 'Atlantic Maritime Co',
-    chartererName: 'Euro Bulk Transport',
-    vesselId: 'v-002',
-    vesselName: 'MV Pacific Wind',
-    charterType: 'voyage',
-    startDate: new Date('2024-06-01'),
-    rateValue: 890000,
-    currency: 'USD',
-    conditions: [
-      { id: 'c-3', type: 'delivery_confirmation', description: 'Confirmação de entrega', triggerEvent: 'arrival_at_port', action: 'release_payment', isActive: true },
-      { id: 'c-4', type: 'delay_penalty', description: 'Penalidade por atraso', triggerEvent: 'delay > 48h', action: 'deduct_penalty', isActive: true },
-    ],
-    status: 'pending_signatures',
-    signedByOwner: true,
-    signedByCharterer: false,
-    totalPaid: 0,
-    totalDue: 890000,
-    createdAt: new Date('2024-05-20'),
-  },
-  {
-    id: 'sc-003',
-    contractHash: '0x9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i1h0g',
-    ownerName: 'Nordic Vessel Group',
-    chartererName: 'Asian Trade LLC',
-    vesselId: 'v-003',
-    vesselName: 'MV Northern Light',
-    charterType: 'time',
-    startDate: new Date('2023-06-01'),
-    endDate: new Date('2024-05-31'),
-    rateValue: 42000,
-    currency: 'USD',
-    conditions: [],
-    status: 'completed',
-    signedByOwner: true,
-    signedByCharterer: true,
-    totalPaid: 504000,
-    totalDue: 0,
-    createdAt: new Date('2023-05-15'),
-  },
-];
+// Type for database row - allows nullable fields from DB
+interface SmartContractRow {
+  id: string;
+  contract_hash: string;
+  owner_name: string;
+  charterer_name: string;
+  vessel_id: string | null;
+  vessel_name: string;
+  charter_type: string;
+  start_date: string;
+  end_date: string | null;
+  rate_value: number;
+  currency: string | null;
+  conditions: unknown;
+  status: string;
+  signed_by_owner: boolean | null;
+  signed_by_charterer: boolean | null;
+  total_paid: number | null;
+  total_due: number | null;
+  created_at: string | null;
+}
+
+function mapRowToContract(row: SmartContractRow): SmartCharterContract {
+  const conditions = Array.isArray(row.conditions) ? row.conditions as ContractCondition[] : [];
+  return {
+    id: row.id,
+    contractHash: row.contract_hash,
+    ownerName: row.owner_name,
+    chartererName: row.charterer_name,
+    vesselId: row.vessel_id || '',
+    vesselName: row.vessel_name,
+    charterType: row.charter_type as SmartCharterContract['charterType'],
+    startDate: new Date(row.start_date),
+    endDate: row.end_date ? new Date(row.end_date) : undefined,
+    rateValue: row.rate_value,
+    currency: row.currency || 'USD',
+    conditions,
+    status: row.status as ContractStatus,
+    signedByOwner: row.signed_by_owner ?? false,
+    signedByCharterer: row.signed_by_charterer ?? false,
+    totalPaid: row.total_paid ?? 0,
+    totalDue: row.total_due ?? 0,
+    createdAt: new Date(row.created_at || Date.now()),
+  };
+}
+
 
 class SmartContractsEngine {
-  // Get all contracts
+  // Get all contracts from database
   async getContracts(): Promise<SmartCharterContract[]> {
-    return MOCK_CONTRACTS;
+    try {
+      const { data, error } = await supabase
+        .from('smart_contracts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        logger.error('Failed to fetch contracts', { error });
+        return [];
+      }
+
+      return (data || []).map(mapRowToContract);
+    } catch (error) {
+      logger.error('Error fetching contracts', { error });
+      return [];
+    }
   }
 
   // Get contract by ID
   async getContractById(contractId: string): Promise<SmartCharterContract | null> {
-    return MOCK_CONTRACTS.find(c => c.id === contractId) || null;
+    try {
+      const { data, error } = await supabase
+        .from('smart_contracts')
+        .select('*')
+        .eq('id', contractId)
+        .maybeSingle();
+
+      if (error || !data) return null;
+      return mapRowToContract(data);
+    } catch (error) {
+      logger.error('Error fetching contract', { error, contractId });
+      return null;
+    }
   }
 
   // Get contracts by status
   async getContractsByStatus(status: ContractStatus): Promise<SmartCharterContract[]> {
-    return MOCK_CONTRACTS.filter(c => c.status === status);
+    try {
+      const { data, error } = await supabase
+        .from('smart_contracts')
+        .select('*')
+        .eq('status', status)
+        .order('created_at', { ascending: false });
+
+      if (error) return [];
+      return (data || []).map(mapRowToContract);
+    } catch (error) {
+      logger.error('Error fetching contracts by status', { error, status });
+      return [];
+    }
   }
 
   // Get active contracts
   async getActiveContracts(): Promise<SmartCharterContract[]> {
-    return MOCK_CONTRACTS.filter(c => c.status === 'active');
+    return this.getContractsByStatus('active');
   }
 
   // Create new contract (draft)
   async createContract(data: Partial<SmartCharterContract>): Promise<SmartCharterContract> {
-    const newContract: SmartCharterContract = {
-      id: `sc-${Date.now()}`,
-      contractHash: `0x${Math.random().toString(16).slice(2)}`,
-      ownerName: data.ownerName || '',
-      chartererName: data.chartererName || '',
-      vesselId: data.vesselId || '',
-      vesselName: data.vesselName || '',
-      charterType: data.charterType || 'time',
-      startDate: data.startDate || new Date(),
-      endDate: data.endDate,
-      rateValue: data.rateValue || 0,
-      currency: data.currency || 'USD',
-      conditions: data.conditions || [],
-      status: 'draft',
-      signedByOwner: false,
-      signedByCharterer: false,
-      totalPaid: 0,
-      totalDue: data.rateValue || 0,
-      createdAt: new Date(),
-    };
+    const contractHash = `0x${crypto.randomUUID().replace(/-/g, '')}`;
+    
+    const { data: created, error } = await supabase
+      .from('smart_contracts')
+      .insert([{
+        contract_hash: contractHash,
+        owner_name: data.ownerName || '',
+        charterer_name: data.chartererName || '',
+        vessel_id: data.vesselId || null,
+        vessel_name: data.vesselName || '',
+        charter_type: data.charterType || 'time',
+        start_date: data.startDate ? new Date(data.startDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        end_date: data.endDate ? new Date(data.endDate).toISOString().split('T')[0] : null,
+        rate_value: data.rateValue || 0,
+        currency: data.currency || 'USD',
+        conditions: data.conditions || [],
+        status: 'draft',
+        signed_by_owner: false,
+        signed_by_charterer: false,
+        total_paid: 0,
+        total_due: data.rateValue || 0,
+      }])
+      .select()
+      .single();
 
-    MOCK_CONTRACTS.push(newContract);
-    logger.info('Smart contract created', { id: newContract.id });
-    return newContract;
+    if (error) {
+      logger.error('Failed to create contract', { error });
+      throw new Error('Failed to create contract');
+    }
+
+    logger.info('Smart contract created', { id: created.id });
+    return mapRowToContract(created);
   }
 
   // Sign contract
   async signContract(contractId: string, party: 'owner' | 'charterer'): Promise<SmartCharterContract> {
-    const contract = MOCK_CONTRACTS.find(c => c.id === contractId);
+    const contract = await this.getContractById(contractId);
     if (!contract) throw new Error('Contract not found');
 
+    const updates: Record<string, unknown> = {};
+    
     if (party === 'owner') {
-      contract.signedByOwner = true;
+      updates.signed_by_owner = true;
     } else {
-      contract.signedByCharterer = true;
+      updates.signed_by_charterer = true;
     }
 
-    if (contract.signedByOwner && contract.signedByCharterer) {
-      contract.status = 'active';
-    } else if (contract.signedByOwner || contract.signedByCharterer) {
-      contract.status = 'pending_signatures';
+    // Check if both parties have signed
+    const willBeSigned = party === 'owner' 
+      ? (true && contract.signedByCharterer)
+      : (contract.signedByOwner && true);
+    
+    if (willBeSigned) {
+      updates.status = 'active';
+    } else if (!contract.signedByOwner && !contract.signedByCharterer) {
+      updates.status = 'pending_signatures';
+    }
+
+    const { data, error } = await supabase
+      .from('smart_contracts')
+      .update(updates)
+      .eq('id', contractId)
+      .select()
+      .single();
+
+    if (error) {
+      logger.error('Failed to sign contract', { error });
+      throw new Error('Failed to sign contract');
     }
 
     logger.info('Contract signed', { contractId, party });
-    return contract;
+    return mapRowToContract(data);
   }
 
   // Execute payment
   async executePayment(contractId: string, amount: number): Promise<{ success: boolean; transactionHash: string }> {
-    const contract = MOCK_CONTRACTS.find(c => c.id === contractId);
+    const contract = await this.getContractById(contractId);
     if (!contract) throw new Error('Contract not found');
 
-    contract.totalPaid += amount;
-    contract.totalDue = Math.max(0, contract.totalDue - amount);
+    const newTotalPaid = contract.totalPaid + amount;
+    const newTotalDue = Math.max(0, contract.totalDue - amount);
 
-    const transactionHash = `0x${Math.random().toString(16).slice(2)}`;
+    const { error } = await supabase
+      .from('smart_contracts')
+      .update({
+        total_paid: newTotalPaid,
+        total_due: newTotalDue,
+      })
+      .eq('id', contractId);
+
+    if (error) {
+      logger.error('Failed to execute payment', { error });
+      throw new Error('Failed to execute payment');
+    }
+
+    const transactionHash = `0x${crypto.randomUUID().replace(/-/g, '')}`;
     logger.info('Payment executed', { contractId, amount, transactionHash });
 
     return { success: true, transactionHash };
@@ -216,13 +274,27 @@ class SmartContractsEngine {
     completed: number;
     totalValue: number;
   }> {
-    return {
-      total: MOCK_CONTRACTS.length,
-      active: MOCK_CONTRACTS.filter(c => c.status === 'active').length,
-      pending: MOCK_CONTRACTS.filter(c => c.status === 'pending_signatures').length,
-      completed: MOCK_CONTRACTS.filter(c => c.status === 'completed').length,
-      totalValue: MOCK_CONTRACTS.reduce((sum, c) => sum + c.rateValue, 0),
-    };
+    try {
+      const { data, error } = await supabase
+        .from('smart_contracts')
+        .select('status, rate_value');
+
+      if (error) {
+        return { total: 0, active: 0, pending: 0, completed: 0, totalValue: 0 };
+      }
+
+      const contracts = data || [];
+      return {
+        total: contracts.length,
+        active: contracts.filter(c => c.status === 'active').length,
+        pending: contracts.filter(c => c.status === 'pending_signatures').length,
+        completed: contracts.filter(c => c.status === 'completed').length,
+        totalValue: contracts.reduce((sum, c) => sum + (c.rate_value || 0), 0),
+      };
+    } catch (error) {
+      logger.error('Error fetching contract stats', { error });
+      return { total: 0, active: 0, pending: 0, completed: 0, totalValue: 0 };
+    }
   }
 
   // Generate contract hash
