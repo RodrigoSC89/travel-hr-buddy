@@ -229,12 +229,11 @@ class AdvancedPWAEngine {
     this.syncQueue.forEach(item => store.put(item));
   }
 
+  // PATCH v35: Removido navigator.onLine - sempre tenta sync
   private startBackgroundSync(): void {
     // Process sync queue every 30 seconds
     this.syncInterval = setInterval(() => {
-      if (navigator.onLine) {
-        this.processSyncQueue();
-      }
+      this.processSyncQueue();
     }, 30000);
 
     // Also sync on online event

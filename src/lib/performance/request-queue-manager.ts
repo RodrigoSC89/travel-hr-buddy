@@ -134,10 +134,8 @@ class RequestQueueManager {
     this.saveToStorage();
     this.notifyListeners();
 
-    // Try to process immediately if online
-    if (navigator.onLine) {
-      this.processQueue();
-    }
+    // PATCH v35: Sempre tenta processar - navigator.onLine não é confiável
+    this.processQueue();
 
     return request.id;
   }
@@ -257,7 +255,7 @@ class RequestQueueManager {
       pending: requests.filter((r) => r.status === 'pending').length,
       processing: requests.filter((r) => r.status === 'processing').length,
       failed: requests.filter((r) => r.status === 'failed').length,
-      isOnline: navigator.onLine,
+      isOnline: true, // PATCH v35: Sempre true - navigator.onLine não é confiável
     };
   }
 
