@@ -82,7 +82,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v49-auth-loading-fix'; // PATCH v49: Fix isLoading default true causing infinite load
+  const CURRENT_VERSION = 'v50-production-fix'; // PATCH v50: Force production cache clear
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
