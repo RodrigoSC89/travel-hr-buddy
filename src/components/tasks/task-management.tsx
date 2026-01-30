@@ -233,8 +233,8 @@ export const TaskManagement: React.FC = () => {
                   <Label htmlFor="assigned">Responsável</Label>
                   <Input
                     id="assigned"
-                    value={newTask.assigned_to}
-                    onChange={(e) => setNewTask({ ...newTask, assigned_to: e.target.value })}
+                    value={newTask.assigned_to_name}
+                    onChange={(e) => setNewTask({ ...newTask, assigned_to_name: e.target.value })}
                     placeholder="Nome do responsável"
                   />
                 </div>
@@ -248,40 +248,7 @@ export const TaskManagement: React.FC = () => {
                   onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="vessel">Embarcação Relacionada</Label>
-                  <Select 
-                    value={newTask.related_vessel} 
-                    onValueChange={(value) => setNewTask({ ...newTask, related_vessel: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a embarcação" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MV Atlântico">MV Atlântico</SelectItem>
-                      <SelectItem value="MV Pacífico">MV Pacífico</SelectItem>
-                      <SelectItem value="MV Índico">MV Índico</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="crew">Tripulante Relacionado</Label>
-                  <Select 
-                    value={newTask.related_crew} 
-                    onValueChange={(value) => setNewTask({ ...newTask, related_crew: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tripulante" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Carlos Silva">Carlos Silva</SelectItem>
-                      <SelectItem value="Ana Costa">Ana Costa</SelectItem>
-                      <SelectItem value="João Santos">João Santos</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              {/* Vessel ID pode ser adicionado futuramente com dados reais */}
             </div>
             <div className="flex gap-2 mt-4">
               <Button onClick={handleAddTask} className="flex-1">
@@ -412,7 +379,7 @@ export const TaskManagement: React.FC = () => {
                             <div className="flex items-center gap-4 text-xs text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <User className="h-3 w-3" />
-                                {task.assigned_to || "Não atribuído"}
+                                {task.assigned_to_name || "Não atribuído"}
                               </div>
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
@@ -434,7 +401,7 @@ export const TaskManagement: React.FC = () => {
                                   variant="outline"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    updateTaskStatus(task.id, task.status === "pending" ? "in_progress" : "completed");
+                                    handleUpdateTaskStatus(task.id, task.status === "pending" ? "in_progress" : "completed");
                                   }}
                                 >
                                   {task.status === "pending" ? "Iniciar" : "Concluir"}
@@ -478,11 +445,13 @@ export const TaskManagement: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Responsável:</span>
-                        <span className="text-sm font-medium">{selectedTask.assigned_to || "Não atribuído"}</span>
+                        <span className="text-sm font-medium">{selectedTask.assigned_to_name || "Não atribuído"}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm">Criado por:</span>
-                        <span className="text-sm font-medium">{selectedTask.created_by}</span>
+                        <span className="text-sm">Criado em:</span>
+                        <span className="text-sm font-medium">
+                          {selectedTask.created_at ? new Date(selectedTask.created_at).toLocaleDateString("pt-BR") : "-"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Vencimento:</span>
@@ -490,38 +459,19 @@ export const TaskManagement: React.FC = () => {
                           {selectedTask.due_date ? new Date(selectedTask.due_date).toLocaleDateString("pt-BR") : "Sem prazo"}
                         </span>
                       </div>
-                      {selectedTask.related_vessel && (
+                      {selectedTask.vessel_name && (
                         <div className="flex justify-between">
                           <span className="text-sm">Embarcação:</span>
-                          <span className="text-sm font-medium">{selectedTask.related_vessel}</span>
-                        </div>
-                      )}
-                      {selectedTask.related_crew && (
-                        <div className="flex justify-between">
-                          <span className="text-sm">Tripulante:</span>
-                          <span className="text-sm font-medium">{selectedTask.related_crew}</span>
+                          <span className="text-sm font-medium">{selectedTask.vessel_name}</span>
                         </div>
                       )}
                     </div>
-
-                    {selectedTask.tags.length > 0 && (
-                      <div>
-                        <p className="text-sm font-medium mb-2">Tags</p>
-                        <div className="flex gap-1 flex-wrap">
-                          {selectedTask.tags.map((tag, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
 
                     <div className="pt-4 space-y-2">
                       {selectedTask.status === "pending" && (
                         <Button 
                           className="w-full"
-                          onClick={() => updateTaskStatus(selectedTask.id, "in_progress")}
+                          onClick={() => handleUpdateTaskStatus(selectedTask.id, "in_progress")}
                         >
                           Iniciar Tarefa
                         </Button>
@@ -529,7 +479,7 @@ export const TaskManagement: React.FC = () => {
                       {selectedTask.status === "in_progress" && (
                         <Button 
                           className="w-full"
-                          onClick={() => updateTaskStatus(selectedTask.id, "completed")}
+                          onClick={() => handleUpdateTaskStatus(selectedTask.id, "completed")}
                         >
                           Marcar como Concluída
                         </Button>
@@ -557,7 +507,7 @@ export const TaskManagement: React.FC = () => {
         <TabsContent value="kanban">
           <TaskKanbanBoard 
             tasks={filteredTasks}
-            onUpdateTaskStatus={updateTaskStatus}
+            onUpdateTaskStatus={handleUpdateTaskStatus}
             onSelectTask={setSelectedTask}
           />
         </TabsContent>

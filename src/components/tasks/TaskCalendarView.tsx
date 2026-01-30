@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Task } from "@/hooks/useTaskManagementData";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -17,22 +18,6 @@ import {
   CheckCircle2,
   Play
 } from "lucide-react";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  priority: "low" | "medium" | "high";
-  status: "pending" | "in_progress" | "completed" | "cancelled";
-  assigned_to?: string;
-  created_by: string;
-  due_date?: string;
-  completed_at?: string;
-  tags: string[];
-  related_vessel?: string;
-  related_crew?: string;
-  created_at: string;
-}
 
 interface TaskCalendarViewProps {
   tasks: Task[];
@@ -45,10 +30,11 @@ const MONTHS = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-const priorityColors = {
+const priorityColors: Record<string, string> = {
   low: "bg-green-500",
   medium: "bg-yellow-500",
   high: "bg-red-500",
+  urgent: "bg-red-600",
 };
 
 const statusIcons: Record<Task["status"], React.ReactNode> = {
@@ -268,9 +254,9 @@ export const TaskCalendarView: React.FC<TaskCalendarViewProps> = ({
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-medium text-sm line-clamp-2">{task.title}</h4>
-                          {task.assigned_to && (
+                          {task.assigned_to_name && (
                             <p className="text-xs text-muted-foreground mt-1">
-                              Responsável: {task.assigned_to}
+                              Responsável: {task.assigned_to_name}
                             </p>
                           )}
                         </div>
@@ -282,9 +268,9 @@ export const TaskCalendarView: React.FC<TaskCalendarViewProps> = ({
                           {task.status === "completed" && "Concluída"}
                           {task.status === "cancelled" && "Cancelada"}
                         </Badge>
-                        {task.related_vessel && (
+                        {task.vessel_name && (
                           <Badge variant="secondary" className="text-xs">
-                            {task.related_vessel}
+                            {task.vessel_name}
                           </Badge>
                         )}
                       </div>

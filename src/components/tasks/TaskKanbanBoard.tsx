@@ -6,9 +6,9 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { Task } from "@/hooks/useTaskManagementData";
 import {
   Clock,
   User,
@@ -20,22 +20,6 @@ import {
   GripVertical,
   Calendar
 } from "lucide-react";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  priority: "low" | "medium" | "high";
-  status: "pending" | "in_progress" | "completed" | "cancelled";
-  assigned_to?: string;
-  created_by: string;
-  due_date?: string;
-  completed_at?: string;
-  tags: string[];
-  related_vessel?: string;
-  related_crew?: string;
-  created_at: string;
-}
 
 interface TaskKanbanBoardProps {
   tasks: Task[];
@@ -50,16 +34,18 @@ const COLUMNS: { id: Task["status"]; title: string; color: string; icon: React.R
   { id: "cancelled", title: "Canceladas", color: "bg-gray-500", icon: <Pause className="h-4 w-4" /> },
 ];
 
-const priorityColors = {
+const priorityColors: Record<string, string> = {
   low: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   medium: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
   high: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  urgent: "bg-red-200 text-red-800 dark:bg-red-900/50 dark:text-red-300",
 };
 
-const priorityLabels = {
+const priorityLabels: Record<string, string> = {
   low: "Baixa",
   medium: "Média",
   high: "Alta",
+  urgent: "Urgente",
 };
 
 export const TaskKanbanBoard: React.FC<TaskKanbanBoardProps> = ({
@@ -186,16 +172,16 @@ export const TaskKanbanBoard: React.FC<TaskKanbanBoardProps> = ({
                         
                         <div className="flex items-center justify-between text-xs text-muted-foreground ml-6">
                           <div className="flex items-center gap-2">
-                            {task.assigned_to && (
+                            {task.assigned_to_name && (
                               <span className="flex items-center gap-1">
                                 <User className="h-3 w-3" />
-                                {task.assigned_to.split(" ")[0]}
+                                {task.assigned_to_name.split(" ")[0]}
                               </span>
                             )}
-                            {task.related_vessel && (
+                            {task.vessel_name && (
                               <span className="flex items-center gap-1">
                                 <Ship className="h-3 w-3" />
-                                {task.related_vessel.replace("MV ", "")}
+                                {task.vessel_name.replace("MV ", "")}
                               </span>
                             )}
                           </div>
