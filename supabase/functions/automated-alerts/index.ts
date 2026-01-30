@@ -93,18 +93,19 @@ serve(async (req) => {
         
         const priority = daysUntilExpiry <= 7 ? "urgent" : daysUntilExpiry <= 15 ? "high" : "normal";
         
-        // Create notification
+        // Create notification using correct schema
         await supabase.from("user_notifications").insert({
           user_id: crewMember.auth_user_id,
+          organization_id: crewMember.organization_id,
           title: `Certificado ${cert.certificate_type} expira em ${daysUntilExpiry} dias`,
           message: `Seu certificado ${cert.certificate_number} expira em ${new Date(cert.expiry_date).toLocaleDateString("pt-BR")}. Providencie a renovação.`,
-          type: priority === "urgent" ? "error" : "warning",
-          category: "certificates",
-          priority,
+          category: "compliance",
+          priority: priority,
+          resource_type: "certificate",
+          resource_id: cert.id,
           action_url: `/certificates/${cert.id}`,
+          action_label: "Ver Certificado",
           metadata: { 
-            reference_id: cert.id, 
-            reference_type: "certificate",
             threshold_days: threshold,
             expiry_date: cert.expiry_date
           }
@@ -123,16 +124,17 @@ serve(async (req) => {
           for (const admin of admins || []) {
             await supabase.from("user_notifications").insert({
               user_id: admin.user_id,
+              organization_id: crewMember.organization_id,
               title: `Certificado de ${crewMember.full_name} expira em ${daysUntilExpiry} dias`,
               message: `O certificado ${cert.certificate_type} (${cert.certificate_number}) de ${crewMember.full_name} expira em breve.`,
-              type: "warning",
               category: "crew",
               priority: "high",
+              resource_type: "certificate",
+              resource_id: cert.id,
               action_url: `/crew/${crewMember.id}/certificates`,
+              action_label: "Ver Certificados",
               metadata: { 
-                reference_id: cert.id,
-                crew_member_id: crewMember.id,
-                reference_type: "certificate_admin_alert"
+                crew_member_id: crewMember.id
               }
             });
           }
@@ -171,13 +173,13 @@ serve(async (req) => {
               user_id: task.assigned_to,
               title: `Manutenção: ${task.title}`,
               message: `Tarefa de manutenção vence em ${daysUntilDue} dias. ${task.description || ""}`.trim(),
-              type: daysUntilDue <= 3 ? "warning" : "info",
               category: "maintenance",
               priority: daysUntilDue <= 3 ? "high" : "normal",
+              resource_type: "maintenance_task",
+              resource_id: task.id,
               action_url: `/maintenance/${task.id}`,
+              action_label: "Ver Tarefa",
               metadata: { 
-                reference_id: task.id,
-                reference_type: "maintenance",
                 vessel_id: task.vessel_id
               }
             });
@@ -228,14 +230,13 @@ serve(async (req) => {
             user_id: crewMember.auth_user_id,
             title: `Contrato termina em ${daysUntilEnd} dias`,
             message: `Seu contrato ${contract.contract_type} termina em ${new Date(contract.end_date).toLocaleDateString("pt-BR")}.`,
-            type: daysUntilEnd <= 14 ? "warning" : "info",
-            category: "contracts",
+            category: "crew",
             priority: daysUntilEnd <= 14 ? "high" : "normal",
+            resource_type: "contract",
+            resource_id: contract.id,
             action_url: `/contracts/${contract.id}`,
-            metadata: { 
-              reference_id: contract.id,
-              reference_type: "contract"
-            }
+            action_label: "Ver Contrato",
+            metadata: {}
           });
           
           results.contracts++;
@@ -280,14 +281,13 @@ serve(async (req) => {
             user_id: crewMember.auth_user_id,
             title: `Treinamento ${training.training_type} obrigatório`,
             message: `Você precisa completar o treinamento ${training.training_type} até ${new Date(training.due_date).toLocaleDateString("pt-BR")}.`,
-            type: "info",
-            category: "training",
+            category: "crew",
             priority: daysUntilDue <= 7 ? "high" : "normal",
+            resource_type: "training",
+            resource_id: training.id,
             action_url: `/training`,
-            metadata: { 
-              reference_id: training.id,
-              reference_type: "training"
-            }
+            action_label: "Acessar Treinamento",
+            metadata: {}
           });
           
           results.training++;
