@@ -37,7 +37,8 @@ export const OrganizationHealthCheck: React.FC = () => {
   const { currentOrganization, currentBranding } = useOrganization();
   const navigate = useNavigate();
   const [healthChecks, setHealthChecks] = useState<HealthCheck[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v44: Iniciar com isLoading=false para NUNCA bloquear renderização
+  const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState({
     users: 0,
     vessels: 0,

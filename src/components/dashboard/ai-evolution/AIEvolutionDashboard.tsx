@@ -40,7 +40,8 @@ ChartJS.register(
 export const AIEvolutionDashboard: React.FC = () => {
   const [snapshots, setSnapshots] = useState<ModelSnapshot[]>([]);
   const [currentMetrics, setCurrentMetrics] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadData();

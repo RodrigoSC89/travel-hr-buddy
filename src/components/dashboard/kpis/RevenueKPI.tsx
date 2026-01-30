@@ -10,7 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function RevenueKPI() {
   const [revenue, setRevenue] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
