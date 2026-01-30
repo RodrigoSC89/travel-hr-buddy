@@ -259,6 +259,32 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
+  // 🚀 MÓDULOS AVANÇADOS EXTRAORDINÁRIOS (NEW!)
+  // 12 ferramentas revolucionárias de nova geração
+  // ============================================
+  {
+    title: "🚀 Módulos Avançados",
+    defaultOpen: false,
+    items: [
+      // OPERAÇÕES & ENGENHARIA
+      { label: "🚢 Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Ship, emoji: "🚢", badge: "3D IoT", status: "new" },
+      { label: "🌊 Weather Intelligence", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌊", badge: "AI ROUTE", status: "new" },
+      { label: "⛽ Bunker Optimization", path: "/advanced/bunker-optimization", icon: Zap, emoji: "⛽", badge: "ML", status: "new" },
+      { label: "📦 Cargo Planning AI", path: "/advanced/cargo-planning", icon: Ship, emoji: "📦", badge: "STABILITY", status: "new" },
+      // COMPLIANCE & SEGURANÇA
+      { label: "🛡️ PSC Readiness AI", path: "/advanced/psc-readiness", icon: Shield, emoji: "🛡️", badge: "INSPECT", status: "new" },
+      { label: "🌍 MARPOL Tracker", path: "/advanced/marpol-tracker", icon: Leaf, emoji: "🌍", badge: "ENV", status: "new" },
+      { label: "🔗 Blockchain Certificates", path: "/advanced/blockchain-certificates", icon: Database, emoji: "🔗", badge: "QR", status: "new" },
+      { label: "🔍 Incident Investigation AI", path: "/advanced/incident-investigation", icon: Target, emoji: "🔍", badge: "RCA", status: "new" },
+      // TREINAMENTO & EXPERIÊNCIA
+      { label: "🎮 VR/AR Training", path: "/advanced/vr-training", icon: Gamepad2, emoji: "🎮", badge: "IMMERSIVE", status: "new" },
+      { label: "🎤 ARIA Voice Commands", path: "/advanced/voice-commands", icon: Mic, emoji: "🎤", badge: "NLU", status: "new" },
+      { label: "💚 Crew Wellness AI", path: "/advanced/crew-wellness-ai", icon: Heart, emoji: "💚", badge: "PREDICT", status: "new" },
+      { label: "📊 Executive Dashboard", path: "/advanced/executive-dashboard", icon: BarChart3, emoji: "📊", badge: "BI", status: "new" },
+    ],
+  },
+
+  // ============================================
   // 📊 TELEMETRIA & MONITORAMENTO
   // ============================================
   {
