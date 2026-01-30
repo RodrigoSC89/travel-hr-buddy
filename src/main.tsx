@@ -82,24 +82,24 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v43-final-loading-fix'; // PATCH v43: Force cache clear
+  const CURRENT_VERSION = 'v44-loading-fix-final'; // PATCH v44: Correção completa de loading
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
     
     // Always clean on version mismatch or first load
     if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v43] Version mismatch, forcing full cleanup...');
-      console.log('[Boot v43] Cleaning caches and service workers...');
+      logger.info('[Boot v44] Version mismatch, forcing full cleanup...');
+      console.log('[Boot v44] Cleaning caches and service workers...');
       
       // Clear ALL caches aggressively
       if ('caches' in window) {
         try {
           const keys = await caches.keys();
           await Promise.all(keys.map(k => caches.delete(k)));
-          console.log('[Boot v43] Caches cleared:', keys.length);
+          console.log('[Boot v44] Caches cleared:', keys.length);
         } catch (e) {
-          console.warn('[Boot v43] Cache clear failed:', e);
+          console.warn('[Boot v44] Cache clear failed:', e);
         }
       }
       
@@ -108,17 +108,17 @@ const forceUpdateIfNeeded = async () => {
         try {
           const registrations = await navigator.serviceWorker.getRegistrations();
           await Promise.all(registrations.map(r => r.unregister()));
-          console.log('[Boot v43] Service workers unregistered:', registrations.length);
+          console.log('[Boot v44] Service workers unregistered:', registrations.length);
         } catch (e) {
-          console.warn('[Boot v43] SW unregister failed:', e);
+          console.warn('[Boot v44] SW unregister failed:', e);
         }
       }
       
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      console.log('[Boot v43] Cleanup complete, version stored:', CURRENT_VERSION);
+      console.log('[Boot v44] Cleanup complete, version stored:', CURRENT_VERSION);
     }
   } catch (e) {
-    logger.warn('[Boot v43] Error during update check', e instanceof Error ? { message: e.message } : undefined);
+    logger.warn('[Boot v44] Error during update check', e instanceof Error ? { message: e.message } : undefined);
   }
 };
 
@@ -135,9 +135,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v43] SW registered', { scope: registration.scope });
+    console.log('[Boot v44] SW registered', { scope: registration.scope });
   } catch (error) {
-    console.warn('[Boot v43] SW registration failed (non-critical)', error);
+    console.warn('[Boot v44] SW registration failed (non-critical)', error);
   }
 };
 

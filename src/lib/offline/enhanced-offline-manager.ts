@@ -447,7 +447,8 @@ export function useOfflineCache<T>(
   ttlMs: number = 3600000
 ) {
   const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [isStale, setIsStale] = useState(false);
 

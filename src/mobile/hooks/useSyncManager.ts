@@ -32,8 +32,10 @@ interface SyncManagerActions {
 }
 
 export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
+  // PATCH v44 iOS PWA: SEMPRE inicializar como online
+  // navigator.onLine NÃO é confiável no iOS Safari PWA - causa falsos positivos
   const [state, setState] = useState<SyncManagerState>({
-    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+    isOnline: true, // CRÍTICO: Nunca usar navigator.onLine aqui
     isSyncing: false,
     queueSize: 0,
     lastSyncTime: null,

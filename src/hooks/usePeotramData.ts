@@ -45,7 +45,9 @@ export function usePeotramData() {
   const [elements, setElements] = useState<PeotramElementDB[]>([]);
   const [items, setItems] = useState<PeotramItemDB[]>([]);
   const [audits, setAudits] = useState<PeotramAuditDB[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
+  // O loading será setado para true apenas quando o fetch iniciar
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(true);
 
