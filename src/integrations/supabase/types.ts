@@ -7468,6 +7468,81 @@ export type Database = {
           },
         ]
       }
+      compliance_predictions: {
+        Row: {
+          actual_ncs: Json | null
+          actual_outcome: string | null
+          confidence_score: number | null
+          created_at: string | null
+          estimated_prep_time_hours: number | null
+          historical_patterns: Json | null
+          id: string
+          inspection_type: string
+          organization_id: string | null
+          predicted_ncs: Json | null
+          predicted_outcome: string | null
+          prediction_accuracy: number | null
+          preparation_checklist: Json | null
+          preparation_progress: number | null
+          preparation_status: string | null
+          priority_actions: Json | null
+          risk_areas: Json | null
+          similar_inspections: Json | null
+          target_date: string | null
+          target_port: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_ncs?: Json | null
+          actual_outcome?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          estimated_prep_time_hours?: number | null
+          historical_patterns?: Json | null
+          id?: string
+          inspection_type: string
+          organization_id?: string | null
+          predicted_ncs?: Json | null
+          predicted_outcome?: string | null
+          prediction_accuracy?: number | null
+          preparation_checklist?: Json | null
+          preparation_progress?: number | null
+          preparation_status?: string | null
+          priority_actions?: Json | null
+          risk_areas?: Json | null
+          similar_inspections?: Json | null
+          target_date?: string | null
+          target_port?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_ncs?: Json | null
+          actual_outcome?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          estimated_prep_time_hours?: number | null
+          historical_patterns?: Json | null
+          id?: string
+          inspection_type?: string
+          organization_id?: string | null
+          predicted_ncs?: Json | null
+          predicted_outcome?: string | null
+          prediction_accuracy?: number | null
+          preparation_checklist?: Json | null
+          preparation_progress?: number | null
+          preparation_status?: string | null
+          priority_actions?: Json | null
+          risk_areas?: Json | null
+          similar_inspections?: Json | null
+          target_date?: string | null
+          target_port?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       compliance_reports: {
         Row: {
           assigned_to: string | null
@@ -8175,6 +8250,84 @@ export type Database = {
           success?: boolean | null
           sync_duration_ms?: number | null
           target_modules?: string[] | null
+        }
+        Relationships: []
+      }
+      contract_ai_analyses: {
+        Row: {
+          ai_recommendations: Json | null
+          analysis_confidence: number | null
+          analysis_model: string | null
+          analysis_status: string | null
+          analyzed_at: string | null
+          benchmark_score: number | null
+          contract_name: string
+          contract_type: string | null
+          created_at: string | null
+          created_by: string | null
+          document_id: string | null
+          extracted_clauses: Json | null
+          financial_terms: Json | null
+          id: string
+          key_dates: Json | null
+          market_comparison: Json | null
+          negotiation_opportunities: Json | null
+          organization_id: string | null
+          overall_risk_score: number | null
+          parties: Json | null
+          potential_savings: number | null
+          risk_categories: Json | null
+          risk_clauses: Json | null
+        }
+        Insert: {
+          ai_recommendations?: Json | null
+          analysis_confidence?: number | null
+          analysis_model?: string | null
+          analysis_status?: string | null
+          analyzed_at?: string | null
+          benchmark_score?: number | null
+          contract_name: string
+          contract_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          document_id?: string | null
+          extracted_clauses?: Json | null
+          financial_terms?: Json | null
+          id?: string
+          key_dates?: Json | null
+          market_comparison?: Json | null
+          negotiation_opportunities?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          parties?: Json | null
+          potential_savings?: number | null
+          risk_categories?: Json | null
+          risk_clauses?: Json | null
+        }
+        Update: {
+          ai_recommendations?: Json | null
+          analysis_confidence?: number | null
+          analysis_model?: string | null
+          analysis_status?: string | null
+          analyzed_at?: string | null
+          benchmark_score?: number | null
+          contract_name?: string
+          contract_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          document_id?: string | null
+          extracted_clauses?: Json | null
+          financial_terms?: Json | null
+          id?: string
+          key_dates?: Json | null
+          market_comparison?: Json | null
+          negotiation_opportunities?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          parties?: Json | null
+          potential_savings?: number | null
+          risk_categories?: Json | null
+          risk_clauses?: Json | null
         }
         Relationships: []
       }
@@ -9641,6 +9794,78 @@ export type Database = {
           },
         ]
       }
+      crew_fatigue_records: {
+        Row: {
+          ai_recommendations: Json | null
+          continuous_rest_hours: number | null
+          created_at: string | null
+          crew_member_id: string
+          fatigue_factors: Json | null
+          fatigue_risk_level: string | null
+          fatigue_risk_score: number | null
+          id: string
+          intervention_notes: string | null
+          intervention_required: boolean | null
+          intervention_type: string | null
+          mlc_compliant: boolean | null
+          mlc_violations: Json | null
+          organization_id: string | null
+          predicted_performance_impact: number | null
+          record_date: string
+          rest_hours_24h: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          work_hours_24h: number | null
+          work_hours_7d: number | null
+        }
+        Insert: {
+          ai_recommendations?: Json | null
+          continuous_rest_hours?: number | null
+          created_at?: string | null
+          crew_member_id: string
+          fatigue_factors?: Json | null
+          fatigue_risk_level?: string | null
+          fatigue_risk_score?: number | null
+          id?: string
+          intervention_notes?: string | null
+          intervention_required?: boolean | null
+          intervention_type?: string | null
+          mlc_compliant?: boolean | null
+          mlc_violations?: Json | null
+          organization_id?: string | null
+          predicted_performance_impact?: number | null
+          record_date: string
+          rest_hours_24h?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          work_hours_24h?: number | null
+          work_hours_7d?: number | null
+        }
+        Update: {
+          ai_recommendations?: Json | null
+          continuous_rest_hours?: number | null
+          created_at?: string | null
+          crew_member_id?: string
+          fatigue_factors?: Json | null
+          fatigue_risk_level?: string | null
+          fatigue_risk_score?: number | null
+          id?: string
+          intervention_notes?: string | null
+          intervention_required?: boolean | null
+          intervention_type?: string | null
+          mlc_compliant?: boolean | null
+          mlc_violations?: Json | null
+          organization_id?: string | null
+          predicted_performance_impact?: number | null
+          record_date?: string
+          rest_hours_24h?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          work_hours_24h?: number | null
+          work_hours_7d?: number | null
+        }
+        Relationships: []
+      }
       crew_gamification_profiles: {
         Row: {
           achievements: Json | null
@@ -9951,6 +10176,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crew_matching_analyses: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          candidates_analyzed: Json
+          created_at: string | null
+          created_by: string | null
+          id: string
+          identified_risks: Json | null
+          match_factors: Json | null
+          match_score: number | null
+          mission_type: string | null
+          mitigation_suggestions: Json | null
+          organization_id: string | null
+          position_requirements: Json
+          recommended_crew_id: string | null
+          status: string | null
+          team_compatibility_score: number | null
+          team_dynamics_analysis: Json | null
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          candidates_analyzed?: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          identified_risks?: Json | null
+          match_factors?: Json | null
+          match_score?: number | null
+          mission_type?: string | null
+          mitigation_suggestions?: Json | null
+          organization_id?: string | null
+          position_requirements?: Json
+          recommended_crew_id?: string | null
+          status?: string | null
+          team_compatibility_score?: number | null
+          team_dynamics_analysis?: Json | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          candidates_analyzed?: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          identified_risks?: Json | null
+          match_factors?: Json | null
+          match_score?: number | null
+          mission_type?: string | null
+          mitigation_suggestions?: Json | null
+          organization_id?: string | null
+          position_requirements?: Json
+          recommended_crew_id?: string | null
+          status?: string | null
+          team_compatibility_score?: number | null
+          team_dynamics_analysis?: Json | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: []
       }
       crew_members: {
         Row: {
@@ -14166,6 +14457,59 @@ export type Database = {
           },
         ]
       }
+      enterprise_document_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          content_tokens: number | null
+          created_at: string | null
+          document_id: string
+          embedding: string | null
+          embedding_model: string | null
+          id: string
+          metadata: Json | null
+          page_number: number | null
+          paragraph_index: number | null
+          section_title: string | null
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          content_tokens?: number | null
+          created_at?: string | null
+          document_id: string
+          embedding?: string | null
+          embedding_model?: string | null
+          id?: string
+          metadata?: Json | null
+          page_number?: number | null
+          paragraph_index?: number | null
+          section_title?: string | null
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          content_tokens?: number | null
+          created_at?: string | null
+          document_id?: string
+          embedding?: string | null
+          embedding_model?: string | null
+          id?: string
+          metadata?: Json | null
+          page_number?: number | null
+          paragraph_index?: number | null
+          section_title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enterprise_document_chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_knowledge_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enterprise_documents: {
         Row: {
           access_level: string | null
@@ -14347,6 +14691,347 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      enterprise_form_submissions: {
+        Row: {
+          attachments: Json | null
+          calculated_score: number | null
+          completed_at: string | null
+          created_at: string | null
+          device_info: Json | null
+          id: string
+          latitude: number | null
+          location_name: string | null
+          longitude: number | null
+          mission_id: string | null
+          offline_sync_status: string | null
+          organization_id: string | null
+          pass_fail_status: string | null
+          photos: Json | null
+          responses: Json
+          review_comments: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          score_percentage: number | null
+          signatures: Json | null
+          started_at: string | null
+          status: string | null
+          submitted_at: string | null
+          submitted_by: string | null
+          template_id: string
+          time_spent_seconds: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          calculated_score?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          device_info?: Json | null
+          id?: string
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          mission_id?: string | null
+          offline_sync_status?: string | null
+          organization_id?: string | null
+          pass_fail_status?: string | null
+          photos?: Json | null
+          responses?: Json
+          review_comments?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score_percentage?: number | null
+          signatures?: Json | null
+          started_at?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          submitted_by?: string | null
+          template_id: string
+          time_spent_seconds?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          calculated_score?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          device_info?: Json | null
+          id?: string
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          mission_id?: string | null
+          offline_sync_status?: string | null
+          organization_id?: string | null
+          pass_fail_status?: string | null
+          photos?: Json | null
+          responses?: Json
+          review_comments?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score_percentage?: number | null
+          signatures?: Json | null
+          started_at?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          submitted_by?: string | null
+          template_id?: string
+          time_spent_seconds?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enterprise_form_submissions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_form_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enterprise_form_templates: {
+        Row: {
+          approval_workflow: Json | null
+          category: string | null
+          code: string | null
+          compliance_standards: string[] | null
+          conditional_logic: Json | null
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          departments: string[] | null
+          description: string | null
+          form_schema: Json
+          form_type: string
+          id: string
+          max_score: number | null
+          name: string
+          organization_id: string | null
+          passing_score: number | null
+          published_at: string | null
+          regulatory_reference: string | null
+          requires_approval: boolean | null
+          requires_signature: boolean | null
+          revision_number: number | null
+          scoring_enabled: boolean | null
+          scoring_rules: Json | null
+          status: string | null
+          tags: string[] | null
+          updated_at: string | null
+          vessel_types: string[] | null
+        }
+        Insert: {
+          approval_workflow?: Json | null
+          category?: string | null
+          code?: string | null
+          compliance_standards?: string[] | null
+          conditional_logic?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          departments?: string[] | null
+          description?: string | null
+          form_schema?: Json
+          form_type?: string
+          id?: string
+          max_score?: number | null
+          name: string
+          organization_id?: string | null
+          passing_score?: number | null
+          published_at?: string | null
+          regulatory_reference?: string | null
+          requires_approval?: boolean | null
+          requires_signature?: boolean | null
+          revision_number?: number | null
+          scoring_enabled?: boolean | null
+          scoring_rules?: Json | null
+          status?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Update: {
+          approval_workflow?: Json | null
+          category?: string | null
+          code?: string | null
+          compliance_standards?: string[] | null
+          conditional_logic?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          departments?: string[] | null
+          description?: string | null
+          form_schema?: Json
+          form_type?: string
+          id?: string
+          max_score?: number | null
+          name?: string
+          organization_id?: string | null
+          passing_score?: number | null
+          published_at?: string | null
+          regulatory_reference?: string | null
+          requires_approval?: boolean | null
+          requires_signature?: boolean | null
+          revision_number?: number | null
+          scoring_enabled?: boolean | null
+          scoring_rules?: Json | null
+          status?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Relationships: []
+      }
+      enterprise_knowledge_documents: {
+        Row: {
+          access_level: string | null
+          ai_classification: string | null
+          ai_classification_confidence: number | null
+          ai_extracted_entities: Json | null
+          ai_keywords: string[] | null
+          ai_suggested_categories: string[] | null
+          ai_summary: string | null
+          approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
+          category: string | null
+          chunk_count: number | null
+          compliance_standards: string[] | null
+          created_at: string | null
+          created_by: string | null
+          deleted_at: string | null
+          department: string | null
+          description: string | null
+          document_type: string
+          embedding_model: string | null
+          embedding_status: string | null
+          expiry_date: string | null
+          file_name: string
+          file_size_bytes: number | null
+          file_type: string
+          file_url: string | null
+          id: string
+          is_latest_version: boolean | null
+          ocr_confidence_scores: Json | null
+          ocr_consensus_text: string | null
+          ocr_engines_used: Json | null
+          ocr_processed_at: string | null
+          ocr_raw_results: Json | null
+          ocr_status: string | null
+          organization_id: string | null
+          parent_document_id: string | null
+          review_date: string | null
+          storage_path: string
+          subcategory: string | null
+          tags: string[] | null
+          title: string
+          total_tokens: number | null
+          updated_at: string | null
+          version: string | null
+          vessel_ids: string[] | null
+        }
+        Insert: {
+          access_level?: string | null
+          ai_classification?: string | null
+          ai_classification_confidence?: number | null
+          ai_extracted_entities?: Json | null
+          ai_keywords?: string[] | null
+          ai_suggested_categories?: string[] | null
+          ai_summary?: string | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string | null
+          chunk_count?: number | null
+          compliance_standards?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          department?: string | null
+          description?: string | null
+          document_type?: string
+          embedding_model?: string | null
+          embedding_status?: string | null
+          expiry_date?: string | null
+          file_name: string
+          file_size_bytes?: number | null
+          file_type: string
+          file_url?: string | null
+          id?: string
+          is_latest_version?: boolean | null
+          ocr_confidence_scores?: Json | null
+          ocr_consensus_text?: string | null
+          ocr_engines_used?: Json | null
+          ocr_processed_at?: string | null
+          ocr_raw_results?: Json | null
+          ocr_status?: string | null
+          organization_id?: string | null
+          parent_document_id?: string | null
+          review_date?: string | null
+          storage_path: string
+          subcategory?: string | null
+          tags?: string[] | null
+          title: string
+          total_tokens?: number | null
+          updated_at?: string | null
+          version?: string | null
+          vessel_ids?: string[] | null
+        }
+        Update: {
+          access_level?: string | null
+          ai_classification?: string | null
+          ai_classification_confidence?: number | null
+          ai_extracted_entities?: Json | null
+          ai_keywords?: string[] | null
+          ai_suggested_categories?: string[] | null
+          ai_summary?: string | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string | null
+          chunk_count?: number | null
+          compliance_standards?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          deleted_at?: string | null
+          department?: string | null
+          description?: string | null
+          document_type?: string
+          embedding_model?: string | null
+          embedding_status?: string | null
+          expiry_date?: string | null
+          file_name?: string
+          file_size_bytes?: number | null
+          file_type?: string
+          file_url?: string | null
+          id?: string
+          is_latest_version?: boolean | null
+          ocr_confidence_scores?: Json | null
+          ocr_consensus_text?: string | null
+          ocr_engines_used?: Json | null
+          ocr_processed_at?: string | null
+          ocr_raw_results?: Json | null
+          ocr_status?: string | null
+          organization_id?: string | null
+          parent_document_id?: string | null
+          review_date?: string | null
+          storage_path?: string
+          subcategory?: string | null
+          tags?: string[] | null
+          title?: string
+          total_tokens?: number | null
+          updated_at?: string | null
+          version?: string | null
+          vessel_ids?: string[] | null
+        }
+        Relationships: []
       }
       equipment_sensors: {
         Row: {
@@ -24953,6 +25638,90 @@ export type Database = {
           },
         ]
       }
+      ocimf_self_assessments: {
+        Row: {
+          action_items: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          assessment_type: string
+          assessment_version: string | null
+          completed_at: string | null
+          compliance_percentage: number | null
+          created_at: string | null
+          created_by: string | null
+          evidence_documents: Json | null
+          findings: Json | null
+          gap_analysis: Json | null
+          id: string
+          improvement_plan: Json | null
+          observations: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sections: Json
+          started_at: string | null
+          status: string | null
+          target_completion_date: string | null
+          updated_at: string | null
+          vessel_id: string
+        }
+        Insert: {
+          action_items?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assessment_type?: string
+          assessment_version?: string | null
+          completed_at?: string | null
+          compliance_percentage?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          evidence_documents?: Json | null
+          findings?: Json | null
+          gap_analysis?: Json | null
+          id?: string
+          improvement_plan?: Json | null
+          observations?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sections?: Json
+          started_at?: string | null
+          status?: string | null
+          target_completion_date?: string | null
+          updated_at?: string | null
+          vessel_id: string
+        }
+        Update: {
+          action_items?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assessment_type?: string
+          assessment_version?: string | null
+          completed_at?: string | null
+          compliance_percentage?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          evidence_documents?: Json | null
+          findings?: Json | null
+          gap_analysis?: Json | null
+          id?: string
+          improvement_plan?: Json | null
+          observations?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sections?: Json
+          started_at?: string | null
+          status?: string | null
+          target_completion_date?: string | null
+          updated_at?: string | null
+          vessel_id?: string
+        }
+        Relationships: []
+      }
       onboarding_progress: {
         Row: {
           company_profile: Json | null
@@ -29496,6 +30265,89 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rag_conversations: {
+        Row: {
+          context_type: string | null
+          created_at: string | null
+          id: string
+          message_count: number | null
+          metadata: Json | null
+          organization_id: string | null
+          title: string | null
+          total_tokens_used: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          context_type?: string | null
+          created_at?: string | null
+          id?: string
+          message_count?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          title?: string | null
+          total_tokens_used?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          context_type?: string | null
+          created_at?: string | null
+          id?: string
+          message_count?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          title?: string | null
+          total_tokens_used?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      rag_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          model_used: string | null
+          response_time_ms: number | null
+          role: string
+          sources: Json | null
+          tokens_used: number | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          model_used?: string | null
+          response_time_ms?: number | null
+          role: string
+          sources?: Json | null
+          tokens_used?: number | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          model_used?: string | null
+          response_time_ms?: number | null
+          role?: string
+          sources?: Json | null
+          tokens_used?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rag_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "rag_conversations"
             referencedColumns: ["id"]
           },
         ]
