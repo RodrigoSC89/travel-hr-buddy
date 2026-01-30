@@ -168,7 +168,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🧠 IA & Automação",
     defaultOpen: false,
     items: [
-      { label: "🌟 AI Hub Central", path: "/ai-hub", icon: Brain, emoji: "🌟", badge: "REVOLUTION", status: "new" },
+      { label: "🌟 AI Modules Hub", path: "/ai-modules-hub", icon: Brain, emoji: "🌟", badge: "11 IAs", status: "new" },
+      { label: "🚀 AI Hub Central", path: "/ai-hub", icon: Brain, emoji: "🚀", badge: "REVOLUTION", status: "new" },
       { label: "📊 AI Analytics", path: "/ai-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
       { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
       { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
@@ -181,6 +182,28 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Auditoria de IA", path: "/ai-audit", icon: Brain, emoji: "🔍" },
       { label: "Voice Assistant IA", path: "/voice-assistant", icon: Mic, emoji: "🎙️" },
       { label: "Assistente de Voz", path: "/assistant/voice", icon: Mic, emoji: "🗣️" },
+    ],
+  },
+
+  // ============================================
+  // 🤖 AI ENTERPRISE ENGINES - 11 Módulos Especializados
+  // ============================================
+  {
+    title: "🤖 AI Enterprise Engines",
+    defaultOpen: false,
+    items: [
+      { label: "🗺️ Voyage & Logistics AI", path: "/ai/voyage-logistics", icon: Ship, emoji: "🗺️", badge: "AI", status: "new" },
+      { label: "⚠️ Safety & Incident AI", path: "/ai/safety-incident", icon: AlertTriangle, emoji: "⚠️", badge: "AI", status: "new" },
+      { label: "📦 Inventory & Spares AI", path: "/ai/inventory-spares", icon: HardDrive, emoji: "📦", badge: "AI", status: "new" },
+      { label: "💰 Finance & Procurement AI", path: "/finance-procurement-ai", icon: DollarSign, emoji: "💰", badge: "AI", status: "new" },
+      { label: "🛡️ Compliance AI", path: "/compliance-ai", icon: Shield, emoji: "🛡️", badge: "AI", status: "new" },
+      { label: "🌱 Environmental AI", path: "/environmental-ai", icon: Leaf, emoji: "🌱", badge: "AI", status: "new" },
+      { label: "📋 Quality Management AI", path: "/quality-ai", icon: ClipboardList, emoji: "📋", badge: "AI", status: "new" },
+      { label: "📝 Contract & Legal AI", path: "/contract-legal-ai", icon: FileText, emoji: "📝", badge: "AI", status: "new" },
+      { label: "❤️ Insurance & Claims AI", path: "/insurance-claims-ai", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
+      { label: "👥 Crewing & Payroll AI", path: "/crewing-payroll-ai", icon: Users, emoji: "👥", badge: "AI", status: "new" },
+      { label: "📊 Reporting & Analytics AI", path: "/reporting-analytics-ai", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
+      { label: "📱 Mobile & Offline AI", path: "/mobile-offline-ai", icon: HardDrive, emoji: "📱", badge: "AI", status: "new" },
     ],
   },
 

@@ -248,6 +248,14 @@ const AIModulesHubPage = lazy(() => import("@/pages/ai/AIModulesHubPage"));
 const VoyageLogisticsAIPage = lazy(() => import("@/pages/ai/VoyageLogisticsAIPage"));
 const SafetyIncidentAIPage = lazy(() => import("@/pages/ai/SafetyIncidentAIPage"));
 const InventorySparesAIPage = lazy(() => import("@/pages/ai/InventorySparesAIPage"));
+const ComplianceAIPage = lazy(() => import("@/pages/ai/ComplianceAIPage"));
+const EnvironmentalAIPage = lazy(() => import("@/pages/ai/EnvironmentalAIPage"));
+const QualityManagementAIPage = lazy(() => import("@/pages/ai/QualityManagementAIPage"));
+const ContractLegalAIPage = lazy(() => import("@/pages/ai/ContractLegalAIPage"));
+const InsuranceClaimsAIPage = lazy(() => import("@/pages/ai/InsuranceClaimsAIPage"));
+const CrewingPayrollAIPage = lazy(() => import("@/pages/ai/CrewingPayrollAIPage"));
+const ReportingAnalyticsAIPage = lazy(() => import("@/pages/ai/ReportingAnalyticsAIPage"));
+const MobileOfflineAIPage = lazy(() => import("@/pages/ai/MobileOfflineAIPage"));
 
 // ============================================
 // ADMIN & DASHBOARDS
@@ -449,6 +457,14 @@ const AppRoutes = () => (
       <Route path="/ai/voyage-logistics" element={<VoyageLogisticsAIPage />} />
       <Route path="/ai/safety-incident" element={<SafetyIncidentAIPage />} />
       <Route path="/ai/inventory-spares" element={<InventorySparesAIPage />} />
+      <Route path="/compliance-ai" element={<ComplianceAIPage />} />
+      <Route path="/environmental-ai" element={<EnvironmentalAIPage />} />
+      <Route path="/quality-ai" element={<QualityManagementAIPage />} />
+      <Route path="/contract-legal-ai" element={<ContractLegalAIPage />} />
+      <Route path="/insurance-claims-ai" element={<InsuranceClaimsAIPage />} />
+      <Route path="/crewing-payroll-ai" element={<CrewingPayrollAIPage />} />
+      <Route path="/reporting-analytics-ai" element={<ReportingAnalyticsAIPage />} />
+      <Route path="/mobile-offline-ai" element={<MobileOfflineAIPage />} />
       
       {/* ============================================ */}
       {/* INTELIGÊNCIA AVANÇADA */}
