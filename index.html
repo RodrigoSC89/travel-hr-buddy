@@ -104,44 +104,59 @@
       </div>
     </div>
     
-    <!-- Minimal Recovery Script (only for critical failures) -->
+    <!-- PATCH v50: Aggressive Recovery Script -->
     <script>
       window.__NAUTI_APP_LOADED__ = false;
       
       function clearCacheAndReload() {
         try {
+          // Clear Supabase auth tokens
           Object.keys(localStorage).filter(function(k) {
-            return k.includes('supabase') || k.includes('sb-');
+            return k.includes('supabase') || k.includes('sb-') || k.includes('nautilus');
           }).forEach(function(k) { localStorage.removeItem(k); });
-          if ('caches' in window) caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
-          if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(r) { r.forEach(function(x) { x.unregister(); }); });
-        } catch(e) {}
+          
+          // Clear all caches
+          if ('caches' in window) {
+            caches.keys().then(function(keys) { 
+              keys.forEach(function(k) { caches.delete(k); }); 
+            });
+          }
+          
+          // Unregister all service workers
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(regs) { 
+              regs.forEach(function(r) { r.unregister(); }); 
+            });
+          }
+        } catch(e) { console.warn('Cache clear error:', e); }
+        
+        // Hard reload with cache bust
         location.href = location.href.split('?')[0] + '?bust=' + Date.now();
       }
       
-      // Update loading text after 3s (just informative, not recovery)
+      // Update loading text after 3s
       setTimeout(function() {
         if (!window.__NAUTI_APP_LOADED__) {
           var text = document.getElementById('loading-text');
-          if (text) text.textContent = 'Carregando módulos... (primeira visita pode demorar)';
+          if (text) text.textContent = 'Carregando módulos...';
         }
       }, 3000);
       
-      // Only show recovery after 15 seconds of true failure
+      // PATCH v50: Show recovery after 8 seconds (reduced from 15)
       setTimeout(function() {
         if (!window.__NAUTI_APP_LOADED__) {
           var loader = document.getElementById('initial-loader');
           if (loader) {
             loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
-              '<div class="text-lg font-semibold text-foreground">Problema ao carregar</div>' +
-              '<p class="text-sm text-muted">Tente recarregar a página.</p>' +
+              '<div class="text-lg font-semibold text-foreground">Sistema não carregou</div>' +
+              '<p class="text-sm text-muted">Clique para limpar cache e tentar novamente.</p>' +
               '<div class="flex flex-col gap-2">' +
               '<button onclick="clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
-              '<button onclick="location.reload()" class="btn btn-secondary mt-2">Recarregar</button>' +
+              '<button onclick="location.reload()" class="btn btn-secondary mt-2">Tentar novamente</button>' +
               '</div></div>';
           }
         }
-      }, 15000);
+      }, 8000);
     </script>
     
     <!-- Main Application Bundle -->
