@@ -20687,6 +20687,469 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_checklist_executions: {
+        Row: {
+          checklist_id: string
+          completed_at: string | null
+          completed_items: number | null
+          completion_percent: number | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          non_conformities: Json | null
+          organization_id: string | null
+          responses: Json
+          signature_data: Json | null
+          signed_at: string | null
+          signed_by: string | null
+          started_at: string | null
+          status: string | null
+          total_items: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          checklist_id: string
+          completed_at?: string | null
+          completed_items?: number | null
+          completion_percent?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          non_conformities?: Json | null
+          organization_id?: string | null
+          responses?: Json
+          signature_data?: Json | null
+          signed_at?: string | null
+          signed_by?: string | null
+          started_at?: string | null
+          status?: string | null
+          total_items?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          checklist_id?: string
+          completed_at?: string | null
+          completed_items?: number | null
+          completion_percent?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          non_conformities?: Json | null
+          organization_id?: string | null
+          responses?: Json
+          signature_data?: Json | null
+          signed_at?: string | null
+          signed_by?: string | null
+          started_at?: string | null
+          status?: string | null
+          total_items?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_checklist_executions_checklist_id_fkey"
+            columns: ["checklist_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_checklists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_checklist_executions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_checklist_executions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_checklists: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          frequency: string | null
+          id: string
+          is_template: boolean | null
+          items: Json
+          organization_id: string | null
+          parent_template_id: string | null
+          responsible_role: string | null
+          source_document_id: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+          total_items: number | null
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          frequency?: string | null
+          id?: string
+          is_template?: boolean | null
+          items?: Json
+          organization_id?: string | null
+          parent_template_id?: string | null
+          responsible_role?: string | null
+          source_document_id?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          total_items?: number | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          frequency?: string | null
+          id?: string
+          is_template?: boolean | null
+          items?: Json
+          organization_id?: string | null
+          parent_template_id?: string | null
+          responsible_role?: string | null
+          source_document_id?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          total_items?: number | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_checklists_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_checklists_parent_template_id_fkey"
+            columns: ["parent_template_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_checklists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_checklists_source_document_id_fkey"
+            columns: ["source_document_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_documents: {
+        Row: {
+          access_level: string | null
+          ai_status: string | null
+          allowed_roles: string[] | null
+          allowed_vessels: string[] | null
+          category: string
+          chapters: Json | null
+          checklists_extracted: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          document_type: string
+          expiry_date: string | null
+          extracted_text: string | null
+          file_name: string
+          file_size: number | null
+          file_url: string
+          forms_extracted: Json | null
+          id: string
+          key_entities: Json | null
+          keywords: string[] | null
+          language: string | null
+          mime_type: string | null
+          organization_id: string | null
+          page_count: number | null
+          procedures_extracted: Json | null
+          regulatory_references: Json | null
+          review_date: string | null
+          revision_history: Json | null
+          subcategory: string | null
+          summary: string | null
+          tables_extracted: Json | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string | null
+          version: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          ai_status?: string | null
+          allowed_roles?: string[] | null
+          allowed_vessels?: string[] | null
+          category?: string
+          chapters?: Json | null
+          checklists_extracted?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_type?: string
+          expiry_date?: string | null
+          extracted_text?: string | null
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          forms_extracted?: Json | null
+          id?: string
+          key_entities?: Json | null
+          keywords?: string[] | null
+          language?: string | null
+          mime_type?: string | null
+          organization_id?: string | null
+          page_count?: number | null
+          procedures_extracted?: Json | null
+          regulatory_references?: Json | null
+          review_date?: string | null
+          revision_history?: Json | null
+          subcategory?: string | null
+          summary?: string | null
+          tables_extracted?: Json | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string | null
+          version?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          ai_status?: string | null
+          allowed_roles?: string[] | null
+          allowed_vessels?: string[] | null
+          category?: string
+          chapters?: Json | null
+          checklists_extracted?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_type?: string
+          expiry_date?: string | null
+          extracted_text?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          forms_extracted?: Json | null
+          id?: string
+          key_entities?: Json | null
+          keywords?: string[] | null
+          language?: string | null
+          mime_type?: string | null
+          organization_id?: string | null
+          page_count?: number | null
+          procedures_extracted?: Json | null
+          regulatory_references?: Json | null
+          review_date?: string | null
+          revision_history?: Json | null
+          subcategory?: string | null
+          summary?: string | null
+          tables_extracted?: Json | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string | null
+          version?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_documents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_form_submissions: {
+        Row: {
+          approval_notes: string | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          created_by: string | null
+          digital_signature: Json | null
+          form_id: string
+          id: string
+          organization_id: string | null
+          responses: Json
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approval_notes?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          digital_signature?: Json | null
+          form_id: string
+          id?: string
+          organization_id?: string | null
+          responses?: Json
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approval_notes?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          digital_signature?: Json | null
+          form_id?: string
+          id?: string
+          organization_id?: string | null
+          responses?: Json
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_form_submissions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_form_submissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_form_submissions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_forms: {
+        Row: {
+          approval_workflow: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          fields: Json
+          form_code: string | null
+          id: string
+          instructions: string | null
+          is_template: boolean | null
+          organization_id: string | null
+          parent_template_id: string | null
+          requires_approval: boolean | null
+          sections: Json | null
+          source_document_id: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          approval_workflow?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          fields?: Json
+          form_code?: string | null
+          id?: string
+          instructions?: string | null
+          is_template?: boolean | null
+          organization_id?: string | null
+          parent_template_id?: string | null
+          requires_approval?: boolean | null
+          sections?: Json | null
+          source_document_id?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          approval_workflow?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          fields?: Json
+          form_code?: string | null
+          id?: string
+          instructions?: string | null
+          is_template?: boolean | null
+          organization_id?: string | null
+          parent_template_id?: string | null
+          requires_approval?: boolean | null
+          sections?: Json | null
+          source_document_id?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_forms_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_forms_parent_template_id_fkey"
+            columns: ["parent_template_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_forms_source_document_id_fkey"
+            columns: ["source_document_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       learning_adjustments: {
         Row: {
           applied_by: string | null
