@@ -99,12 +99,12 @@
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p id="loading-text" class="text-muted text-sm">Carregando v55...</p>
+          <p id="loading-text" class="text-muted text-sm">Carregando v56...</p>
         </div>
       </div>
     </div>
     
-    <!-- PATCH v53: Simplified boot - NO automatic cache clear (causes loops) -->
+    <!-- PATCH v56: Boot with EXTENDED timeout and better recovery -->
     <script>
       (function() {
         'use strict';
@@ -114,7 +114,7 @@
         
         // Manual cache clear function (only for user-triggered recovery)
         window.clearCacheAndReload = function() {
-          console.log('[Boot v53] Manual cache clear triggered');
+          console.log('[Boot v56] Manual cache clear triggered');
           try { localStorage.clear(); } catch(e) {}
           try { sessionStorage.clear(); } catch(e) {}
           if ('caches' in window) {
@@ -128,26 +128,26 @@
             }).catch(function() {});
           }
           setTimeout(function() {
-            location.replace(location.origin + '?nocache=' + Date.now());
+            location.replace(location.origin + '/auth?nocache=' + Date.now());
           }, 300);
         };
         
-        // Recovery UI - shown after 8 seconds if app hasn't loaded (was 4s, increased to avoid false positives)
+        // Recovery UI - shown after 15 seconds (increased from 8s for slow networks)
+        // But only if loader is still visible (React should hide it immediately)
         setTimeout(function() {
-          if (!window.__NAUTI_APP_LOADED__) {
-            console.log('[Boot v53] App not loaded after 8s, showing recovery');
-            var loader = document.getElementById('initial-loader');
-            if (loader) {
-              loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
-                '<div class="text-lg font-semibold text-foreground">Carregamento lento</div>' +
-                '<p class="text-sm text-muted">O aplicativo está demorando para carregar.</p>' +
-                '<div class="flex flex-col gap-2">' +
-                '<button onclick="location.reload()" class="btn btn-secondary">Tentar novamente</button>' +
-                '<button onclick="clearCacheAndReload()" class="btn mt-2">Limpar cache</button>' +
-                '</div></div>';
-            }
+          var loader = document.getElementById('initial-loader');
+          // Only show recovery if loader still exists AND is visible
+          if (!window.__NAUTI_APP_LOADED__ && loader && loader.style.display !== 'none') {
+            console.log('[Boot v56] App not loaded after 15s, showing recovery');
+            loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
+              '<div class="text-lg font-semibold text-foreground">Carregamento lento</div>' +
+              '<p class="text-sm text-muted">O aplicativo está demorando para carregar.</p>' +
+              '<div class="flex flex-col gap-2">' +
+              '<button onclick="location.href=\'/auth\'" class="btn">Ir para Login</button>' +
+              '<button onclick="clearCacheAndReload()" class="btn btn-secondary mt-2">Limpar cache</button>' +
+              '</div></div>';
           }
-        }, 8000);
+        }, 15000);
       })();
     </script>
     

@@ -111,17 +111,28 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app
+// Render the app - PATCH v56 Boot Guarantee
 const container = document.getElementById("root");
 if (container) {
-  // CRITICAL: Mark app as loaded to prevent emergency recovery UI
+  // CRITICAL v56: Mark app as loaded IMMEDIATELY to prevent recovery UI
+  // This MUST happen before any async work
   (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
   
-  // Clear the initial loading spinner from index.html
-  const initialLoader = document.getElementById("initial-loader");
-  const recoveryUi = document.getElementById("recovery-ui");
-  if (initialLoader) initialLoader.remove();
-  if (recoveryUi) recoveryUi.remove();
+  // CRITICAL v56: Clear HTML loader SYNCHRONOUSLY before React even starts
+  // This guarantees no "Carregamento lento" appears
+  try {
+    const initialLoader = document.getElementById("initial-loader");
+    const recoveryUi = document.getElementById("recovery-ui");
+    if (initialLoader) initialLoader.style.display = 'none';
+    if (recoveryUi) recoveryUi.style.display = 'none';
+    
+    // Clear root content before mounting
+    container.innerHTML = '';
+  } catch (e) {
+    console.warn('[Boot v56] Loader clear failed:', e);
+  }
+  
+  console.log('[Boot v56] React starting...');
   
   createRoot(container).render(
     <React.StrictMode>
@@ -130,6 +141,8 @@ if (container) {
       </HelmetProvider>
     </React.StrictMode>
   );
+  
+  console.log('[Boot v56] React mounted successfully');
   
   // Mark Time to Interactive after render
   requestAnimationFrame(() => {
