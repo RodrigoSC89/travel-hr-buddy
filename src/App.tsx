@@ -138,6 +138,7 @@ const Templates = lazy(() => import("@/pages/Templates"));
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
 const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
+const KnowledgeHubPage = lazy(() => import("@/modules/knowledge-hub/pages/KnowledgeHubPage"));
 
 // ============================================
 // COMUNICAÇÃO & ALERTAS
@@ -517,6 +518,7 @@ const AppRoutes = () => (
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
+      <Route path="/knowledge-hub" element={<KnowledgeHubPage />} />
       <Route path="/documentation" element={<Documents />} />
       
       {/* ============================================ */}
