@@ -78,48 +78,9 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: PATCH v42 - Aggressive SW cleanup to prevent infinite boot loops
+// PATCH v52: Simplified boot - cache clearing now in index.html
+// This just handles SW registration after app loads
 // ============================================
-const forceUpdateIfNeeded = async () => {
-  const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v51-infinite-loop-fix'; // PATCH v51: Eliminate ALL infinite loading
-  
-  try {
-    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
-    
-    // Always clean on version mismatch or first load
-    if (storedVersion !== CURRENT_VERSION) {
-      console.log('[Boot v47] Version mismatch, forcing full cleanup...');
-      
-      // Clear ALL caches aggressively
-      if ('caches' in window) {
-        try {
-          const keys = await caches.keys();
-          await Promise.all(keys.map(k => caches.delete(k)));
-          console.log('[Boot v47] Caches cleared:', keys.length);
-        } catch (e) {
-          console.warn('[Boot v47] Cache clear failed:', e);
-        }
-      }
-      
-      // Unregister ALL service workers
-      if ('serviceWorker' in navigator) {
-        try {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map(r => r.unregister()));
-          console.log('[Boot v47] Service workers unregistered:', registrations.length);
-        } catch (e) {
-          console.warn('[Boot v47] SW unregister failed:', e);
-        }
-      }
-      
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      console.log('[Boot v47] Cleanup complete, version stored:', CURRENT_VERSION);
-    }
-  } catch (e) {
-    console.warn('[Boot v47] Error during update check', e);
-  }
-};
 
 // Register minimal service worker (only for push notifications)
 const initServiceWorker = async () => {
@@ -140,10 +101,8 @@ const initServiceWorker = async () => {
   }
 };
 
-// Execute cleanup on load
-forceUpdateIfNeeded().then(() => {
-  window.addEventListener("load", initServiceWorker);
-});
+// PATCH v52: SW init happens on load event
+window.addEventListener("load", initServiceWorker);
 
 // Initialize optional features after render
 if (typeof requestIdleCallback !== "undefined") {
