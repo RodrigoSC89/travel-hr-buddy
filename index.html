@@ -94,94 +94,57 @@
   </head>
 
   <body>
-    <!-- Initial Loading State with Emergency Recovery -->
+    <!-- Initial Loading State - Simple spinner, no recovery UI -->
     <div id="root">
-      <!-- Loading Spinner -->
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p id="loading-text" class="text-muted text-sm">Carregando...</p>
-        </div>
-      </div>
-      
-      <!-- Emergency Recovery UI (hidden by default, shown after 5s timeout) -->
-      <div id="recovery-ui" class="hidden min-h-screen flex items-center justify-center bg-background">
-        <div class="text-center space-y-4 p-6 max-w-sm">
-          <div class="text-lg font-semibold text-foreground">Carregamento lento detectado</div>
-          <p class="text-sm text-muted">
-            A aplicação está demorando para carregar. Isso pode acontecer na primeira visita ou com conexão lenta.
-          </p>
-          <div class="flex flex-col gap-2">
-            <button onclick="clearCacheAndReload()" class="btn">
-              Limpar cache e recarregar
-            </button>
-            <button onclick="location.reload()" class="btn btn-secondary mt-2">
-              Tentar novamente
-            </button>
-          </div>
+          <p id="loading-text" class="text-muted text-sm">Carregando NAUTI ONE...</p>
         </div>
       </div>
     </div>
     
-    <!-- Emergency Recovery Script (runs BEFORE React) -->
+    <!-- Minimal Recovery Script (only for critical failures) -->
     <script>
-      // Mark app as loaded when React takes over
       window.__NAUTI_APP_LOADED__ = false;
       
-      // Clear cache helper
       function clearCacheAndReload() {
         try {
-          // Clear localStorage auth tokens
           Object.keys(localStorage).filter(function(k) {
             return k.includes('supabase') || k.includes('sb-');
-          }).forEach(function(k) {
-            localStorage.removeItem(k);
-          });
-          
-          // Clear caches
-          if ('caches' in window) {
-            caches.keys().then(function(keys) {
-              keys.forEach(function(k) { caches.delete(k); });
-            });
-          }
-          
-          // Unregister service workers
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-              registrations.forEach(function(r) { r.unregister(); });
-            });
-          }
+          }).forEach(function(k) { localStorage.removeItem(k); });
+          if ('caches' in window) caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
+          if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(r) { r.forEach(function(x) { x.unregister(); }); });
         } catch(e) {}
-        
-        // Force reload without cache
-        location.href = location.href.split('?')[0] + '?cache_bust=' + Date.now();
+        location.href = location.href.split('?')[0] + '?bust=' + Date.now();
       }
       
-      // Emergency timeout - show recovery UI after 5 seconds if app hasn't loaded
-      setTimeout(function() {
-        if (!window.__NAUTI_APP_LOADED__) {
-          var loader = document.getElementById('initial-loader');
-          var recovery = document.getElementById('recovery-ui');
-          if (loader) loader.classList.add('hidden');
-          if (recovery) recovery.classList.remove('hidden');
-        }
-      }, 5000);
-      
-      // Update loading text after 2 seconds
+      // Update loading text after 3s (just informative, not recovery)
       setTimeout(function() {
         if (!window.__NAUTI_APP_LOADED__) {
           var text = document.getElementById('loading-text');
-          if (text) text.textContent = 'Carregando módulos...';
+          if (text) text.textContent = 'Carregando módulos... (primeira visita pode demorar)';
         }
-      }, 2000);
+      }, 3000);
+      
+      // Only show recovery after 15 seconds of true failure
+      setTimeout(function() {
+        if (!window.__NAUTI_APP_LOADED__) {
+          var loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
+              '<div class="text-lg font-semibold text-foreground">Problema ao carregar</div>' +
+              '<p class="text-sm text-muted">Tente recarregar a página.</p>' +
+              '<div class="flex flex-col gap-2">' +
+              '<button onclick="clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
+              '<button onclick="location.reload()" class="btn btn-secondary mt-2">Recarregar</button>' +
+              '</div></div>';
+          }
+        }
+      }, 15000);
     </script>
     
     <!-- Main Application Bundle -->
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Mark app as loaded when script executes -->
-    <script type="module">
-      window.__NAUTI_APP_LOADED__ = true;
-    </script>
   </body>
 </html>
