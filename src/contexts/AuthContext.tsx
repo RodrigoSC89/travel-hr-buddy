@@ -23,11 +23,12 @@ interface AuthContextType {
   clearSession: () => Promise<void>;
 }
 
-// Default context value to prevent null errors
+// PATCH v49: Default context MUST have isLoading: FALSE
+// This is CRITICAL - if true, entire app blocks forever waiting for context
 const defaultAuthValue: AuthContextType = {
   user: null,
   session: null,
-  isLoading: true,
+  isLoading: false, // CRITICAL v49: NEVER true - prevents infinite loading
   signUp: async () => ({ error: null }),
   signIn: async () => ({ error: null }),
   signInWithOAuth: async () => ({ error: null }),

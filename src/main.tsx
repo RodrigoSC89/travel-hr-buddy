@@ -82,7 +82,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v48-loop-fix-final'; // PATCH v48: Fix all useEffect dependency loops
+  const CURRENT_VERSION = 'v49-auth-loading-fix'; // PATCH v49: Fix isLoading default true causing infinite load
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
