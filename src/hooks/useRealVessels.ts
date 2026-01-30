@@ -84,8 +84,10 @@ export function useRealVessels() {
         };
       });
     },
-    staleTime: 30000, // 30 seconds
-    refetchInterval: 60000, // Refetch every minute
+    staleTime: 1000 * 60 * 5, // 5 min cache - PATCH v41
+    refetchInterval: false, // DISABLED - prevent background refetch issues
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -121,8 +123,10 @@ export function useVesselPositions(vesselIds?: string[]) {
         recordedAt: pos.recorded_at,
       }));
     },
-    staleTime: 30000,
-    refetchInterval: 60000,
+    staleTime: 1000 * 60 * 5, // 5 min cache - PATCH v41
+    refetchInterval: false, // DISABLED - prevent background refetch issues
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
