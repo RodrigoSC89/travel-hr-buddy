@@ -101,8 +101,8 @@ export default function VesselDigitalTwinPage() {
             title="Sensores"
             value={stats.totalSensors}
             icon={Gauge}
-            subtitle={`${stats.sensorsOnline} online`}
-            variant={stats.sensorsCritical > 0 ? 'destructive' : 'default'}
+            subtitle={`${stats.sensorsOnline} ativos`}
+            variant="default"
           />
           <StatsCard
             title="Status Geral"
@@ -325,14 +325,14 @@ export default function VesselDigitalTwinPage() {
                         <CardContent className="pt-6">
                           <div className="flex items-center justify-between mb-2">
                             <p className="font-medium">{sensor.name}</p>
-                            <Badge variant={sensor.status === 'online' ? 'default' : 'destructive'}>
-                              {sensor.status}
+                            <Badge variant={sensor.is_active ? 'default' : 'secondary'}>
+                              {sensor.is_active ? 'Ativo' : 'Inativo'}
                             </Badge>
                           </div>
                           <p className="text-2xl font-bold">
-                            {sensor.current_value ?? 'N/A'} {sensor.unit || ''}
+                            {sensor.sensor_type || 'N/A'} {sensor.unit || ''}
                           </p>
-                          <p className="text-sm text-muted-foreground">{sensor.location}</p>
+                          <p className="text-sm text-muted-foreground">Tipo: {sensor.sensor_type}</p>
                         </CardContent>
                       </Card>
                     ))}

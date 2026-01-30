@@ -5,7 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/use-auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 export interface VesselPart {
@@ -15,12 +15,10 @@ export interface VesselPart {
   part_number: string | null;
   name: string;
   description: string | null;
-  part_type: string | null;
   manufacturer: string | null;
   model: string | null;
   serial_number: string | null;
-  location: string | null;
-  specifications: Record<string, any> | null;
+  specifications: Record<string, unknown> | null;
   criticality: string | null;
   status: string | null;
   children?: VesselPart[];
@@ -30,7 +28,6 @@ export interface VesselManual {
   id: string;
   vessel_id: string | null;
   title: string;
-  description: string | null;
   manual_type: string;
   file_path: string;
   file_size: number | null;
@@ -53,14 +50,10 @@ export interface VesselSensor {
   name: string;
   sensor_type: string | null;
   unit: string | null;
-  location: string | null;
-  current_value: number | null;
-  status: string | null;
   is_active: boolean | null;
 }
 
 export function useVesselDigitalTwin(vesselId: string | null) {
-  const { organizationId } = useAuth();
   const queryClient = useQueryClient();
   
   // Fetch vessel parts
@@ -147,9 +140,7 @@ export function useVesselDigitalTwin(vesselId: string | null) {
     totalManuals: manuals.length,
     manualsWithOCR: manuals.filter(m => m.ocr_processed).length,
     totalSensors: sensors.length,
-    sensorsOnline: sensors.filter(s => s.status === 'online').length,
-    sensorsWarning: sensors.filter(s => s.status === 'warning').length,
-    sensorsCritical: sensors.filter(s => s.status === 'critical').length,
+    sensorsOnline: sensors.filter(s => s.is_active).length,
   };
   
   return {
