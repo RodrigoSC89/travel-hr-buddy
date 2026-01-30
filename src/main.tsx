@@ -111,32 +111,67 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v58 FINAL FIX
+// Render the app - PATCH v59 DEFINITIVE FIX
+// Update boot status helper
+const updateStatus = (msg: string) => {
+  const win = window as { __updateBootStatus?: (msg: string) => void };
+  if (win.__updateBootStatus) {
+    win.__updateBootStatus(msg);
+  } else {
+    console.log('[Boot v59]', msg);
+  }
+};
+
+updateStatus('Bundle carregado');
+
 const container = document.getElementById("root");
 if (container) {
-  // CRITICAL v58: Remove HTML loader BEFORE React render starts
+  updateStatus('Container encontrado');
+  
+  // Mark app as loaded FIRST to prevent recovery UI
+  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+  
+  // Remove HTML loader
   const initialLoader = document.getElementById("initial-loader");
   if (initialLoader) {
     initialLoader.remove();
+    updateStatus('Loader removido');
   }
   
-  // Mark app as loaded
-  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+  console.log('[Boot v59] React mounting...');
+  updateStatus('Montando React...');
   
-  console.log('[Boot v58] React mounting...');
-  
-  createRoot(container).render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </React.StrictMode>
-  );
-  
-  console.log('[Boot v58] React mounted OK');
+  try {
+    createRoot(container).render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
+      </React.StrictMode>
+    );
+    
+    console.log('[Boot v59] React mounted OK');
+    updateStatus('React OK');
+  } catch (error) {
+    console.error('[Boot v59] React mount FAILED:', error);
+    updateStatus('ERRO: ' + (error instanceof Error ? error.message : 'Unknown'));
+    
+    // Show error in UI
+    container.innerHTML = `
+      <div class="min-h-screen flex items-center justify-center bg-background p-4">
+        <div class="text-center space-y-4 max-w-sm">
+          <p class="text-foreground text-lg font-semibold">Erro ao carregar</p>
+          <p class="text-muted text-sm">${error instanceof Error ? error.message : 'Erro desconhecido'}</p>
+          <button onclick="window.clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>
+        </div>
+      </div>
+    `;
+  }
   
   // Mark TTI after render
   requestAnimationFrame(() => {
     ultraStartupOptimizer.markTTI();
   });
+} else {
+  console.error('[Boot v59] CRITICAL: #root container not found!');
 }
