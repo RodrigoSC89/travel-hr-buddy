@@ -333,75 +333,17 @@ const queryClient = new QueryClient({
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
 // ============================================
-// LOADER v54 - Com timeout de segurança para evitar loading infinito
-// Se demorar mais de 10s, mostra opção de recarregar
+// LOADER v57 - Simple spinner ONLY, NO recovery UI
+// Recovery is ONLY in index.html - prevents duplicate recovery screens
 // ============================================
-const Loader = React.memo(() => {
-  const [showRecovery, setShowRecovery] = React.useState(false);
-
-  React.useEffect(() => {
-    // Timeout de 10 segundos - se ainda estiver carregando, mostra recovery
-    const timer = setTimeout(() => {
-      setShowRecovery(true);
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (showRecovery) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4 p-6 max-w-sm">
-          <div className="text-amber-500 text-4xl mb-2">⚠️</div>
-          <h2 className="text-lg font-semibold text-foreground">Carregamento lento</h2>
-          <p className="text-sm text-muted-foreground">
-            O aplicativo está demorando para carregar. Isso pode ser devido a uma conexão lenta ou problema de cache.
-          </p>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={() => window.location.reload()}
-              className="w-full px-4 py-2 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors"
-            >
-              Tentar novamente
-            </button>
-            <button
-              onClick={() => {
-                try {
-                  localStorage.clear();
-                  sessionStorage.clear();
-                  if ('caches' in window) {
-                    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-                  }
-                } catch {}
-                setTimeout(() => {
-                  window.location.replace(window.location.origin + '?v=' + Date.now());
-                }, 300);
-              }}
-              className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-            >
-              Limpar cache e recarregar
-            </button>
-            <button
-              onClick={() => window.location.href = '/auth'}
-              className="w-full px-4 py-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
-            >
-              Ir para login
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center space-y-3">
-        <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-        <p className="text-muted-foreground text-sm">Carregando v56...</p>
-      </div>
+const Loader = React.memo(() => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="text-center space-y-3">
+      <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
+      <p className="text-muted-foreground text-sm">Carregando...</p>
     </div>
-  );
-});
+  </div>
+));
 
 // ============================================
 // PROTECTED ROUTE v51 - INSTANT decision, ZERO loading states
