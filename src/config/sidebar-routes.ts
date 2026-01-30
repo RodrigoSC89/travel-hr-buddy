@@ -278,6 +278,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Workflow Documentos ISM/MLC", path: "/document-workflow", icon: FileText, emoji: "📄" },
       { label: "Centro de Exportação", path: "/export-center", icon: BarChart3, emoji: "📤", badge: "NEW" },
       { label: "Busca Avançada", path: "/advanced-search", icon: Target, emoji: "🔍", badge: "NEW" },
+      { label: "🧠 Knowledge Hub IA", path: "/knowledge-hub", icon: Brain, emoji: "🧠", badge: "ENTERPRISE", status: "new" },
     ],
   },
 
