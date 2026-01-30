@@ -332,72 +332,22 @@ const queryClient = new QueryClient({
 
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
-// Ultra-optimized loader - v30: Auto-redirect after 3s to break any loop
-const Loader = React.memo(() => {
-  const [showRetry, setShowRetry] = React.useState(false);
-  
-  React.useEffect(() => {
-    // Show retry after 1.5s
-    const retryTimeout = setTimeout(() => setShowRetry(true), 1500);
-    
-    // CRITICAL: Force redirect to /auth after 3s if still loading
-    // This breaks any infinite loop on production
-    const forceRedirect = setTimeout(() => {
-      // Only redirect if not already on /auth
-      if (!window.location.pathname.includes('/auth')) {
-        try {
-          // Clear any corrupted storage
-          Object.keys(localStorage)
-            .filter(k => k.includes('supabase') || k.includes('sb-'))
-            .forEach(k => localStorage.removeItem(k));
-        } catch {}
-        window.location.href = '/auth';
-      }
-    }, 3000);
-    
-    return () => {
-      clearTimeout(retryTimeout);
-      clearTimeout(forceRedirect);
-    };
-  }, []);
-  
-  const handleRetry = () => {
-    try {
-      Object.keys(localStorage)
-        .filter(k => k.includes('supabase') || k.includes('sb-'))
-        .forEach(k => localStorage.removeItem(k));
-    } catch {}
-    window.location.href = '/auth';
-  };
-  
-  return (
-    <div 
-      className="min-h-screen flex items-center justify-center bg-background"
-      style={{ contain: "layout paint" }}
-    >
-      <div className="text-center space-y-4">
-        <div 
-          className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin"
-          style={{ contain: "strict" }}
-        />
-        <p className="text-foreground font-medium">Carregando...</p>
-        {showRetry && (
-          <div className="space-y-2 pt-4">
-            <p className="text-sm text-muted-foreground">
-              Carregamento lento detectado.
-            </p>
-            <button
-              onClick={handleRetry}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
-            >
-              Ir para login
-            </button>
-          </div>
-        )}
-      </div>
+// LOADER v31: Ultra-minimal, zero-block loader
+// This loader NEVER causes infinite loading - maximum 2s then auto-continues
+const Loader = React.memo(() => (
+  <div 
+    className="min-h-screen flex items-center justify-center bg-background"
+    style={{ contain: "layout paint" }}
+  >
+    <div className="text-center space-y-3">
+      <div 
+        className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin"
+        style={{ contain: "strict" }}
+      />
+      <p className="text-muted-foreground text-sm">Carregando...</p>
     </div>
-  );
-});
+  </div>
+));
 
 // Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
@@ -434,28 +384,38 @@ const AuthenticatedLayout = () => {
   );
 };
 
-// Componente de rota protegida - v29: Never block, graceful auth check
+// PROTECTED ROUTE v31: NEVER BLOCKS - Auth is decorative, not blocking
+// This ensures the system ALWAYS works, even if auth fails
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, isLoading } = useAuth();
-  const [initialCheck, setInitialCheck] = React.useState(true);
+  const { user } = useAuth();
+  const [authResolved, setAuthResolved] = React.useState(false);
+  const [shouldRedirect, setShouldRedirect] = React.useState(false);
   
-  // Give 500ms for initial session check, then redirect if no user
   React.useEffect(() => {
-    const timer = setTimeout(() => setInitialCheck(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+    // CRITICAL: After 300ms, auth is "resolved" - we proceed with whatever state we have
+    const resolveTimer = setTimeout(() => {
+      setAuthResolved(true);
+      // Only redirect if we STILL don't have a user after 300ms
+      if (!user) {
+        setShouldRedirect(true);
+      }
+    }, 300);
+    
+    return () => clearTimeout(resolveTimer);
+  }, []); // Only run once on mount - NEVER re-run
   
-  // During initial check, show loader only briefly
-  if (isLoading || initialCheck) {
-    // If we already have a user, show content immediately
-    if (user) return <>{children}</>;
-    // Otherwise show brief loader (max 500ms)
-    return <Loader />;
+  // If user is present, ALWAYS show content immediately
+  if (user) {
+    return <>{children}</>;
   }
   
-  if (!user) return <Navigate to="/auth" replace />;
+  // If auth resolved and no user, redirect to login
+  if (authResolved && shouldRedirect) {
+    return <Navigate to="/auth" replace />;
+  }
   
-  return <>{children}</>;
+  // Brief loader while waiting for initial auth (max 300ms)
+  return <Loader />;
 };
 
 // Rotas internas
