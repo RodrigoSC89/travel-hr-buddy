@@ -94,36 +94,36 @@
   </head>
 
   <body>
-    <!-- PATCH v60: Full fallback with cache-bust support -->
+    <!-- PATCH v61: Force fresh deploy with anti-cache -->
     <div id="root">
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p id="boot-status" class="text-muted text-sm">v60: Iniciando...</p>
-          <p id="boot-debug" class="text-muted text-xs hidden"></p>
+          <p id="boot-status" class="text-muted text-sm">v61: Iniciando...</p>
         </div>
       </div>
     </div>
     
-    <!-- PATCH v60: Minimal boot sequence - trust the build -->
+    <!-- PATCH v61: Robust boot sequence with error detection -->
     <script>
       (function() {
         'use strict';
         window.__NAUTI_APP_LOADED__ = false;
+        window.__BOOT_VERSION__ = 'v61';
         var status = document.getElementById('boot-status');
         var startTime = Date.now();
         
         // Progress tracking
         window.__updateBootStatus = function(msg) {
           var elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          if (status) status.textContent = 'v60: ' + msg + ' (' + elapsed + 's)';
-          console.log('[Boot v60] ' + msg + ' @ ' + elapsed + 's');
+          if (status) status.textContent = 'v61: ' + msg + ' (' + elapsed + 's)';
+          console.log('[Boot v61] ' + msg + ' @ ' + elapsed + 's');
         };
         
-        // Show recovery ONLY after 15s AND only if bundle completely failed
+        // Show recovery after 20s if bundle completely failed
         setTimeout(function() {
           if (!window.__NAUTI_APP_LOADED__) {
-            console.error('[Boot v60] Bundle failed to mount after 15s');
+            console.error('[Boot v61] Bundle failed to mount after 20s');
             var loader = document.getElementById('initial-loader');
             if (loader) {
               loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
@@ -133,11 +133,11 @@
                 '</div>';
             }
           }
-        }, 15000);
+        }, 20000);
         
         // Manual cache clear utility
         window.clearCacheAndReload = function() {
-          console.log('[Boot v59] Clearing all caches...');
+          console.log('[Boot v61] Clearing all caches...');
           try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
           if ('caches' in window) {
             caches.keys().then(function(k) { 
@@ -151,14 +151,14 @@
           }
           setTimeout(function() { 
             location.replace(location.origin + '/auth?nocache=' + Date.now()); 
-          }, 200);
+          }, 300);
         };
         
         window.__updateBootStatus('HTML pronto');
       })();
     </script>
     
-    <!-- Main Application Bundle -->
+    <!-- Main Application Bundle - Vite transforms this during build -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
