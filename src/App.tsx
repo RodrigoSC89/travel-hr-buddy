@@ -797,6 +797,25 @@ const AppRoutes = () => (
 );
 
 function App() {
+  // PATCH v42: Debug logging for production issues
+  React.useEffect(() => {
+    console.log('[App v42] React app mounting...');
+    
+    // Mark app as loaded immediately
+    (window as any).__NAUTI_APP_LOADED__ = true;
+    
+    // Remove any lingering loading states from index.html
+    const initialLoader = document.getElementById('initial-loader');
+    if (initialLoader) {
+      console.log('[App v42] Removing initial loader');
+      initialLoader.remove();
+    }
+    
+    return () => {
+      console.log('[App v42] React app unmounting');
+    };
+  }, []);
+
   // ============================================
   // CRITICAL v33: Global unhandledrejection handler
   // Prevents async errors from crashing the app / causing infinite loops
