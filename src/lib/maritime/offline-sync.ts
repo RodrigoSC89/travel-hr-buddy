@@ -88,7 +88,7 @@ export function detectConnectionQuality(): ConnectionQuality {
     downlink: connection?.downlink || 10,
     rtt: connection?.rtt || 100,
     saveData: connection?.saveData || false,
-    isOnline: navigator.onLine,
+    isOnline: true, // PATCH v43 iOS PWA: Sempre true - navigator.onLine não confiável
     isMaritime: false,
   };
 

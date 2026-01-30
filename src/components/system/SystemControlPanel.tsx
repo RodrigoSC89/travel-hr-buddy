@@ -54,7 +54,7 @@ const useSystemMetrics = () => {
     setMetrics({
       cpu: Math.random() * 30 + 10,
       memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
-      network: navigator.onLine ? 'online' : 'offline',
+      network: 'online', // PATCH v43 iOS PWA: Sempre online - navigator.onLine não confiável
       latency: Math.round((navigator as any).connection?.rtt || 50),
       fps: 60,
       cacheHit: 92,
