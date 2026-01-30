@@ -95,9 +95,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v47] SW registered', { scope: registration.scope });
+    console.log('[Boot v53] SW registered', { scope: registration.scope });
   } catch (error) {
-    console.warn('[Boot v47] SW registration failed (non-critical)', error);
+    console.warn('[Boot v53] SW registration failed (non-critical)', error);
   }
 };
 
