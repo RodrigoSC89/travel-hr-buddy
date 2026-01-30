@@ -1259,3 +1259,27 @@ comment = "Talent matching, career paths, wellness analysis with AI"
 [functions.training-lxp-ai]
 verify_jwt = false
 comment = "Adaptive learning, microlearning, VR training with gamification"
+
+# ============================================
+# 12 MÓDULOS COMPLETOS - FASE 5-7 (Added 2026-01-30)
+# ============================================
+
+[functions.finance-procurement-ai]
+verify_jwt = false
+comment = "Cash flow prediction, fraud detection, budget optimization, supplier analysis"
+
+[functions.voyage-logistics-ai]
+verify_jwt = false
+comment = "Route optimization, ETA prediction, weather routing, bunker optimization"
+
+[functions.compliance-regulatory-ai]
+verify_jwt = false
+comment = "Compliance check, PSC preparation, certificate tracking, regulatory updates"
+
+[functions.safety-incident-ai]
+verify_jwt = false
+comment = "Incident analysis, root cause analysis, safety KPIs, risk matrix"
+
+[functions.inventory-spares-ai]
+verify_jwt = false
+comment = "Inventory status, demand forecast, reorder optimization, critical spares"
