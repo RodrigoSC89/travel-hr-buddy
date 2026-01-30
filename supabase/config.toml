@@ -1283,3 +1283,36 @@ comment = "Incident analysis, root cause analysis, safety KPIs, risk matrix"
 [functions.inventory-spares-ai]
 verify_jwt = false
 comment = "Inventory status, demand forecast, reorder optimization, critical spares"
+
+# ============================================
+# NAUTI ONE v5.0 - 12 MODULES COMPLETE
+# Environmental, Quality, Contract, Insurance, Crewing, Reporting, Mobile
+# ============================================
+
+[functions.environmental-ai]
+verify_jwt = false
+comment = "Emissions tracking, CII rating, decarbonization roadmap, ballast compliance, waste management"
+
+[functions.quality-management-ai]
+verify_jwt = false
+comment = "NCR analysis, CAPA generation, quality KPIs, internal audits, continuous improvement"
+
+[functions.contract-legal-ai]
+verify_jwt = false
+comment = "Contract analysis, obligation tracking, renewal alerts, risk assessment, clause extraction"
+
+[functions.insurance-claims-ai]
+verify_jwt = false
+comment = "Policy overview, claim submission, coverage analysis, renewal optimization"
+
+[functions.crewing-payroll-ai]
+verify_jwt = false
+comment = "Payroll calculation, rotation planning, leave management, visa tracking, crew costs"
+
+[functions.reporting-analytics-ai]
+verify_jwt = false
+comment = "Report generation, custom builder, executive dashboard, scheduled reports, AI insights"
+
+[functions.mobile-offline-ai]
+verify_jwt = false
+comment = "Offline sync, voice commands, camera OCR, geolocation tracking, offline packages"
