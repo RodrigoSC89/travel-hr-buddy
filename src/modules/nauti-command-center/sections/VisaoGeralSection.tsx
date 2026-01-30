@@ -1,9 +1,9 @@
 /**
  * Seção: Visão Geral - Dashboard Principal
- * Integrado com dados reais do Supabase (IoT, Wellness, AIS, Bunker)
+ * REFATORADO: 100% dados reais do Supabase via useDashboardRealData
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,12 +11,12 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import {
   Ship, Users, Wrench, Package, Shield, DollarSign,
   TrendingUp, TrendingDown, AlertTriangle, Activity, Clock,
   ArrowRight, BarChart3, Fuel, Anchor, Thermometer, Heart,
-  MapPin, Gauge, ExternalLink, FileText, Bell, Loader2, Sparkles
+  MapPin, Gauge, ExternalLink, FileText, Bell, Loader2, Sparkles,
+  Database
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -28,6 +28,7 @@ import { NotificationSettings } from "@/components/notifications/NotificationSet
 import { downloadExecutiveReport } from "@/lib/reports/executive-pdf-generator";
 import { useToast } from "@/hooks/use-toast";
 import { BunkerPriceWidget } from "@/components/bunker/BunkerPriceWidget";
+import { useDashboardRealData } from "@/hooks/useDashboardRealData";
 
 interface VisaoGeralSectionProps {
   systemStatus: SystemStatus;
@@ -35,49 +36,29 @@ interface VisaoGeralSectionProps {
   onNavigate: (tab: string) => void;
 }
 
-interface RealTimeStats {
-  iotAnomalies: number;
-  iotCritical: number;
-  sensorHealth: number;
-  crewAtRisk: number;
-  avgWellness: number;
-  vesselsTracking: number;
-}
-
-// Sample data for charts
-const operationsData = [
-  { time: "00:00", operacoes: 45, eficiencia: 92 },
-  { time: "04:00", operacoes: 38, eficiencia: 89 },
-  { time: "08:00", operacoes: 67, eficiencia: 95 },
-  { time: "12:00", operacoes: 82, eficiencia: 94 },
-  { time: "16:00", operacoes: 75, eficiencia: 91 },
-  { time: "20:00", operacoes: 58, eficiencia: 93 },
-  { time: "Agora", operacoes: 62, eficiencia: 96 }
-];
-
-const resourceDistribution = [
-  { name: "Navegação", value: 35, color: "#3B82F6" },
-  { name: "Manutenção", value: 25, color: "#10B981" },
-  { name: "Tripulação", value: 20, color: "#8B5CF6" },
-  { name: "Logística", value: 12, color: "#F59E0B" },
-  { name: "Compliance", value: 8, color: "#EF4444" }
-];
-
-export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: VisaoGeralSectionProps) {
+export function VisaoGeralSection({ systemStatus, isLoading: parentLoading, onNavigate }: VisaoGeralSectionProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [realTimeStats, setRealTimeStats] = useState<RealTimeStats>({
-    iotAnomalies: 0,
-    iotCritical: 0,
-    sensorHealth: 100,
-    crewAtRisk: 0,
-    avgWellness: 0,
-    vesselsTracking: 0
-  });
-  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  
+  // Hook centralizado para todos os dados reais
+  const {
+    fleet,
+    crew,
+    sensors,
+    alerts,
+    compliance,
+    operations: operationsData,
+    resources: resourceDistribution,
+    activities: recentActivities,
+    isLoading: dataLoading,
+    lastSync
+  } = useDashboardRealData();
+
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [showAIChat, setShowAIChat] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+
+  const isLoading = parentLoading || dataLoading;
 
   const handleDownloadPDF = async () => {
     setIsGeneratingPDF(true);
@@ -98,150 +79,42 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
     }
   };
 
-  // Fetch real-time stats from Supabase
-  useEffect(() => {
-    async function fetchRealTimeStats() {
-      try {
-        // Fetch IoT sensor anomalies
-        const { data: sensors } = await supabase
-          .from('equipment_sensors')
-          .select('*')
-          .order('recorded_at', { ascending: false })
-          .limit(100);
-
-        const anomalies = sensors?.filter(s => s.is_anomaly) || [];
-        // Critical = value exceeds max_threshold by 20%+
-        const critical = anomalies.filter(s => s.value && s.max_threshold && s.value > s.max_threshold * 1.2);
-        const healthySensors = sensors?.filter(s => !s.is_anomaly).length || 0;
-        const totalSensors = sensors?.length || 1;
-
-        // Fetch crew wellness data
-        const { data: wellness } = await supabase
-          .from('crew_health_checkins')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        // At risk = stress_level >= 4 or energy_level <= 2
-        const atRisk = wellness?.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2) || [];
-        // Calculate overall wellness from mood, energy, sleep (1-5 scale average)
-        const avgWellnessScore = wellness?.length 
-          ? wellness.reduce((acc, w) => acc + ((w.mood + w.energy_level + w.sleep_quality) / 3), 0) / wellness.length 
-          : 3;
-
-        setRealTimeStats({
-          iotAnomalies: anomalies.length,
-          iotCritical: critical.length,
-          sensorHealth: Math.round((healthySensors / totalSensors) * 100),
-          crewAtRisk: atRisk.length,
-          avgWellness: Math.round(avgWellnessScore * 20), // Convert 1-5 to percentage
-          vesselsTracking: 5 // Mock - would come from AIS
-        });
-
-        // Build recent activities from real data
-        const activities: any[] = [];
-        
-        if (critical.length > 0) {
-          activities.push({
-            id: 'iot-critical',
-            action: `${critical.length} alerta(s) crítico(s) em sensores IoT`,
-            time: 'Tempo real',
-            type: 'alert',
-            icon: AlertTriangle,
-            urgent: true
-          });
-        }
-
-        if (atRisk.length > 0) {
-          activities.push({
-            id: 'crew-risk',
-            action: `${atRisk.length} tripulante(s) com stress/fadiga elevado`,
-            time: 'Última hora',
-            type: 'crew',
-            icon: Heart,
-            urgent: true
-          });
-        }
-
-        // Add recent sensor readings
-        sensors?.slice(0, 2).forEach((s, i) => {
-          activities.push({
-            id: `sensor-${i}`,
-            action: `Sensor ${s.equipment_name}: ${s.value?.toFixed(1)} ${s.unit || ''} (${s.sensor_type})`,
-            time: new Date(s.recorded_at || '').toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-            type: 'sensor',
-            icon: Thermometer
-          });
-        });
-
-        // Add wellness check-ins
-        wellness?.slice(0, 2).forEach((w, i) => {
-          const avgScore = ((w.mood + w.energy_level + w.sleep_quality) / 3).toFixed(1);
-          activities.push({
-            id: `wellness-${i}`,
-            action: `Check-in: ${w.crew_member_name || 'Tripulante'} - Bem-estar ${avgScore}/5`,
-            time: new Date(w.created_at || '').toLocaleDateString('pt-BR'),
-            type: 'wellness',
-            icon: Users
-          });
-        });
-
-        setRecentActivities(activities.slice(0, 6));
-      } catch (error) {
-        console.error('Error fetching real-time stats:', error);
-      }
-    }
-
-    fetchRealTimeStats();
-
-    // Set up realtime subscription
-    const channel = supabase
-      .channel('command-center-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, fetchRealTimeStats)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, fetchRealTimeStats)
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
   const metrics = [
     {
       title: "Frota Ativa",
-      value: `${systemStatus.fleet.active}/${systemStatus.fleet.total}`,
+      value: `${fleet.active}/${fleet.total}`,
       subtitle: "Embarcações em operação",
-      trend: "+2 este mês",
+      trend: fleet.total > 0 ? `${fleet.maintenance} em manutenção` : "Sem dados",
       icon: Ship,
       color: "from-blue-500 to-blue-600",
-      status: "up"
+      status: "up" as const
     },
     {
       title: "Sensores IoT",
-      value: `${realTimeStats.sensorHealth}%`,
-      subtitle: `${realTimeStats.iotCritical} alertas críticos`,
-      trend: realTimeStats.iotAnomalies > 0 ? `${realTimeStats.iotAnomalies} anomalias` : "Tudo normal",
+      value: `${sensors.healthPercent}%`,
+      subtitle: `${sensors.critical} alertas críticos`,
+      trend: sensors.anomalies > 0 ? `${sensors.anomalies} anomalias` : "Tudo normal",
       icon: Gauge,
-      color: realTimeStats.iotCritical > 0 ? "from-red-500 to-red-600" : "from-emerald-500 to-emerald-600",
-      status: realTimeStats.iotCritical > 0 ? "down" : "up"
+      color: sensors.critical > 0 ? "from-red-500 to-red-600" : "from-emerald-500 to-emerald-600",
+      status: sensors.critical > 0 ? "down" as const : "up" as const
     },
     {
       title: "Tripulação",
-      value: `${realTimeStats.avgWellness}%`,
-      subtitle: `${realTimeStats.crewAtRisk} em risco`,
-      trend: realTimeStats.crewAtRisk > 0 ? "Atenção necessária" : "Bem-estar OK",
+      value: `${crew.avgWellness}%`,
+      subtitle: `${crew.atRisk} em risco`,
+      trend: crew.atRisk > 0 ? "Atenção necessária" : "Bem-estar OK",
       icon: Heart,
-      color: realTimeStats.crewAtRisk > 0 ? "from-amber-500 to-amber-600" : "from-purple-500 to-purple-600",
-      status: realTimeStats.crewAtRisk > 0 ? "down" : "up"
+      color: crew.atRisk > 0 ? "from-amber-500 to-amber-600" : "from-purple-500 to-purple-600",
+      status: crew.atRisk > 0 ? "down" as const : "up" as const
     },
     {
       title: "Alertas",
-      value: String(systemStatus.fleet.alerts + realTimeStats.iotCritical),
+      value: String(alerts.total),
       subtitle: "Pendentes de ação",
-      trend: "-3 vs ontem",
+      trend: `${alerts.critical} críticos`,
       icon: AlertTriangle,
       color: "from-amber-500 to-amber-600",
-      status: "down"
+      status: "down" as const
     }
   ];
 
@@ -577,17 +450,17 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                   <span className="text-sm">IoT Sensors</span>
                   <Badge 
                     variant="outline" 
-                    className={realTimeStats.iotCritical > 0 
+                    className={sensors.critical > 0 
                       ? "bg-red-50 text-red-700 border-red-200" 
                       : "bg-emerald-50 text-emerald-700 border-emerald-200"
                     }
                   >
-                    {realTimeStats.iotCritical > 0 ? 'Alerta' : 'OK'}
+                    {sensors.critical > 0 ? 'Alerta' : 'OK'}
                   </Badge>
                 </div>
-                <Progress value={realTimeStats.sensorHealth} className="h-2" />
+                <Progress value={sensors.healthPercent} className="h-2" />
                 <p className="text-xs text-muted-foreground">
-                  {realTimeStats.iotAnomalies} anomalias detectadas
+                  {sensors.anomalies} anomalias detectadas
                 </p>
               </div>
 
@@ -596,17 +469,17 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                   <span className="text-sm">Crew Wellness</span>
                   <Badge 
                     variant="outline" 
-                    className={realTimeStats.crewAtRisk > 0 
+                    className={crew.atRisk > 0 
                       ? "bg-amber-50 text-amber-700 border-amber-200" 
                       : "bg-emerald-50 text-emerald-700 border-emerald-200"
                     }
                   >
-                    {realTimeStats.crewAtRisk > 0 ? 'Atenção' : 'OK'}
+                    {crew.atRisk > 0 ? 'Atenção' : 'OK'}
                   </Badge>
                 </div>
-                <Progress value={realTimeStats.avgWellness} className="h-2" />
+                <Progress value={crew.avgWellness} className="h-2" />
                 <p className="text-xs text-muted-foreground">
-                  {realTimeStats.crewAtRisk} tripulantes em risco
+                  {crew.atRisk} tripulantes em risco
                 </p>
               </div>
 
@@ -614,12 +487,12 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Compliance</span>
                   <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                    Excelente
+                    {compliance.score >= 90 ? 'Excelente' : compliance.score >= 70 ? 'Bom' : 'Atenção'}
                   </Badge>
                 </div>
-                <Progress value={systemStatus.compliance.score} className="h-2" />
+                <Progress value={compliance.score} className="h-2" />
                 <p className="text-xs text-muted-foreground">
-                  Score: {systemStatus.compliance.score}%
+                  Score: {compliance.score}%
                 </p>
               </div>
             </div>
@@ -630,10 +503,13 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Atividades Recentes</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Database className="h-4 w-4" />
+                Atividades Recentes
+              </CardTitle>
               <Badge variant="outline" className="text-xs">
                 <Activity className="h-3 w-3 mr-1" />
-                Live
+                Dados em tempo real
               </Badge>
             </div>
           </CardHeader>
@@ -643,7 +519,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                 {recentActivities.length > 0 ? recentActivities.map((activity) => (
                   <div key={activity.id} className={`flex items-start gap-3 ${activity.urgent ? 'bg-red-50 dark:bg-red-950/20 -mx-2 px-2 py-1 rounded-lg' : ''}`}>
                     <div className={`p-1.5 rounded-lg ${activity.urgent ? 'bg-red-100 dark:bg-red-900/30' : 'bg-muted'}`}>
-                      <activity.icon className={`h-4 w-4 ${activity.urgent ? 'text-red-600' : 'text-muted-foreground'}`} />
+                      <Activity className={`h-4 w-4 ${activity.urgent ? 'text-red-600' : 'text-muted-foreground'}`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm truncate ${activity.urgent ? 'font-medium text-red-700 dark:text-red-400' : ''}`}>
