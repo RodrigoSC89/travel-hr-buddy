@@ -61,7 +61,7 @@ export function useTranslation(
   const [language, setLanguageState] = useState<SupportedLanguage>(
     getInitialLanguage()
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [translationCache] = useState<Map<string, string>>(new Map());
 
   // Inicializar tradutor

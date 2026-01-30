@@ -57,7 +57,7 @@ export function useUserProfile(options: UseUserProfileOptions = {}): UseUserProf
   const { toast } = useToast();
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchProfile = useCallback(async () => {

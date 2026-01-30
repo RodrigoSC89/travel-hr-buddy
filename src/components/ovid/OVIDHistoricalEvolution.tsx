@@ -29,7 +29,7 @@ export const OVIDHistoricalEvolution: React.FC<OVIDHistoricalEvolutionProps> = (
   const [inspections, setInspections] = useState<OVIDInspection[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string>(initialVessel || 'all');
   const [periodFilter, setPeriodFilter] = useState<PeriodFilter>('1y');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { loadHistory } = useOVIDInspection();
 
   useEffect(() => {

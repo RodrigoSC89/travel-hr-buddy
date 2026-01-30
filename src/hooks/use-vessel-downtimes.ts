@@ -42,7 +42,7 @@ export interface CreateDowntimeData {
 
 export function useVesselDowntimes(vesselId?: string) {
   const [downtimes, setDowntimes] = useState<VesselDowntime[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchDowntimes = useCallback(async () => {

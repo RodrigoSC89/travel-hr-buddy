@@ -60,7 +60,7 @@ export function useVesselAccess(): UseVesselAccessReturn {
   const { user } = useAuth();
   const [accessibleVessels, setAccessibleVessels] = useState<VesselAccess[]>([]);
   const [hasGlobalAccess, setHasGlobalAccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchVesselAccess = useCallback(async () => {

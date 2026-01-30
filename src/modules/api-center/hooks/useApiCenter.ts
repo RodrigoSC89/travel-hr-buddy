@@ -25,7 +25,7 @@ export function useApiCenter(): UseApiCenterReturn {
   const [apis, setApis] = useState<ApiIntegration[]>([]);
   const [logs, setLogs] = useState<ApiLog[]>([]);
   const [quotas, setQuotas] = useState<Map<string, ApiQuota>>(new Map());
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
