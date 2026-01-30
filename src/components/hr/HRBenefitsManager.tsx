@@ -1,6 +1,7 @@
 /**
  * HR Benefits Manager Component
  * Gestão de Benefícios Flexíveis com IA
+ * MIGRATED: Uses real Supabase data with fallback
  */
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   CreditCard, 
   Utensils, 
@@ -16,95 +18,26 @@ import {
   Heart, 
   GraduationCap,
   Dumbbell,
-  Baby,
   Sparkles,
   Brain,
   Wallet,
   TrendingUp,
   Gift,
-  Settings
+  Settings,
+  Database
 } from "lucide-react";
+import { useHRBenefits } from "@/hooks/useHRRealData";
 
-interface Benefit {
-  id: string;
-  name: string;
-  icon: React.ReactNode;
-  category: string;
-  monthly_value: number;
-  current_balance: number;
-  usage_percent: number;
-  is_flex: boolean;
-  description: string;
-}
-
-const mockBenefits: Benefit[] = [
-  {
-    id: "1",
-    name: "Vale Refeição",
-    icon: <Utensils className="h-5 w-5" />,
-    category: "Alimentação",
-    monthly_value: 880,
-    current_balance: 642.50,
-    usage_percent: 27,
-    is_flex: true,
-    description: "Aceito em restaurantes e apps de delivery",
-  },
-  {
-    id: "2",
-    name: "Vale Alimentação",
-    icon: <CreditCard className="h-5 w-5" />,
-    category: "Alimentação",
-    monthly_value: 450,
-    current_balance: 312.80,
-    usage_percent: 30,
-    is_flex: true,
-    description: "Aceito em supermercados e mercearias",
-  },
-  {
-    id: "3",
-    name: "Vale Transporte",
-    icon: <Bus className="h-5 w-5" />,
-    category: "Mobilidade",
-    monthly_value: 220,
-    current_balance: 88.00,
-    usage_percent: 60,
-    is_flex: false,
-    description: "Transporte público e apps de mobilidade",
-  },
-  {
-    id: "4",
-    name: "Plano de Saúde",
-    icon: <Heart className="h-5 w-5" />,
-    category: "Saúde",
-    monthly_value: 850,
-    current_balance: 0,
-    usage_percent: 100,
-    is_flex: false,
-    description: "Bradesco Saúde - Cobertura Nacional",
-  },
-  {
-    id: "5",
-    name: "Wellhub (Gympass)",
-    icon: <Dumbbell className="h-5 w-5" />,
-    category: "Bem-estar",
-    monthly_value: 150,
-    current_balance: 0,
-    usage_percent: 0,
-    is_flex: true,
-    description: "Acesso a +50.000 academias e apps de saúde",
-  },
-  {
-    id: "6",
-    name: "Auxílio Educação",
-    icon: <GraduationCap className="h-5 w-5" />,
-    category: "Desenvolvimento",
-    monthly_value: 500,
-    current_balance: 1500,
-    usage_percent: 0,
-    is_flex: true,
-    description: "Cursos, MBA, idiomas e certificações",
-  },
-];
+const getIcon = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'alimentação': return <Utensils className="h-5 w-5" />;
+    case 'mobilidade': return <Bus className="h-5 w-5" />;
+    case 'saúde': return <Heart className="h-5 w-5" />;
+    case 'desenvolvimento': return <GraduationCap className="h-5 w-5" />;
+    case 'bem-estar': return <Dumbbell className="h-5 w-5" />;
+    default: return <CreditCard className="h-5 w-5" />;
+  }
+};
 
 const flexDistribution = [
   { name: "Vale Refeição", value: 40, color: "bg-orange-500" },
@@ -114,6 +47,7 @@ const flexDistribution = [
 ];
 
 export function HRBenefitsManager() {
+  const { data: benefits = [], isLoading } = useHRBenefits();
   const [activeTab, setActiveTab] = useState("overview");
   const [flexValues, setFlexValues] = useState({
     vr: 40,
@@ -122,8 +56,27 @@ export function HRBenefitsManager() {
     edu: 20,
   });
 
-  const totalBenefits = mockBenefits.reduce((sum, b) => sum + b.monthly_value, 0);
-  const totalBalance = mockBenefits.reduce((sum, b) => sum + b.current_balance, 0);
+  const totalBenefits = benefits.reduce((sum, b) => sum + b.monthly_value, 0);
+  const totalBalance = benefits.reduce((sum, b) => sum + b.current_balance, 0);
+  const flexCount = benefits.filter(b => b.is_flex).length;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-64 mt-2" />
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {[1, 2, 3, 4].map(i => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -232,13 +185,13 @@ export function HRBenefitsManager() {
 
           {/* Benefits Grid */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {mockBenefits.map(benefit => (
+            {benefits.map(benefit => (
               <Card key={benefit.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-primary/10 rounded-lg">
-                        {benefit.icon}
+                        {getIcon(benefit.category)}
                       </div>
                       <div>
                         <CardTitle className="text-base">{benefit.name}</CardTitle>

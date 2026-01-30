@@ -1,6 +1,7 @@
 /**
  * HR Training LMS Component
  * Sistema de Gestão de Aprendizagem com IA
+ * MIGRATED: Uses real Supabase data
  */
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   BookOpen, 
   Play, 
@@ -24,88 +26,10 @@ import {
   CheckCircle2,
   Video,
   FileText,
-  Trophy
+  Trophy,
+  Database
 } from "lucide-react";
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  duration_hours: number;
-  progress: number;
-  rating: number;
-  students: number;
-  thumbnail?: string;
-  instructor: string;
-  level: "beginner" | "intermediate" | "advanced";
-  modules: number;
-  is_mandatory: boolean;
-  ai_recommended: boolean;
-}
-
-const mockCourses: Course[] = [
-  {
-    id: "1",
-    title: "Liderança e Gestão de Equipes",
-    description: "Desenvolva habilidades essenciais para liderar times de alta performance",
-    category: "Liderança",
-    duration_hours: 8,
-    progress: 65,
-    rating: 4.8,
-    students: 234,
-    instructor: "Ana Oliveira",
-    level: "intermediate",
-    modules: 12,
-    is_mandatory: false,
-    ai_recommended: true,
-  },
-  {
-    id: "2",
-    title: "Segurança Marítima - STCW",
-    description: "Certificação obrigatória em segurança e procedimentos marítimos",
-    category: "Compliance",
-    duration_hours: 16,
-    progress: 100,
-    rating: 4.5,
-    students: 456,
-    instructor: "Carlos Santos",
-    level: "beginner",
-    modules: 20,
-    is_mandatory: true,
-    ai_recommended: false,
-  },
-  {
-    id: "3",
-    title: "Comunicação Não-Violenta",
-    description: "Técnicas de comunicação empática para resolver conflitos",
-    category: "Soft Skills",
-    duration_hours: 4,
-    progress: 0,
-    rating: 4.9,
-    students: 189,
-    instructor: "Maria Costa",
-    level: "beginner",
-    modules: 6,
-    is_mandatory: false,
-    ai_recommended: true,
-  },
-  {
-    id: "4",
-    title: "Excel Avançado para RH",
-    description: "Domine fórmulas, tabelas dinâmicas e automação para RH",
-    category: "Ferramentas",
-    duration_hours: 12,
-    progress: 30,
-    rating: 4.6,
-    students: 312,
-    instructor: "Pedro Lima",
-    level: "advanced",
-    modules: 15,
-    is_mandatory: false,
-    ai_recommended: false,
-  },
-];
+import { useHRTraining, useHRStats } from "@/hooks/useHRRealData";
 
 const leaderboard = [
   { name: "João Silva", points: 2450, avatar: "", badge: "🥇" },
@@ -116,6 +40,8 @@ const leaderboard = [
 ];
 
 export function HRTrainingLMS() {
+  const { data: courses = [], isLoading } = useHRTraining();
+  const { data: stats } = useHRStats();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("catalog");
 
@@ -137,10 +63,32 @@ export function HRTrainingLMS() {
     }
   };
 
-  const filteredCourses = mockCourses.filter(course =>
+  const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     course.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const hasRealData = courses.length > 0;
+  const totalHours = courses.reduce((sum, c) => sum + c.duration_hours, 0);
+  const completedCourses = courses.filter(c => c.progress === 100).length;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-64 mt-2" />
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {[1, 2, 3, 4].map(i => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -249,10 +197,10 @@ export function HRTrainingLMS() {
                       <CardTitle className="text-base line-clamp-1">{course.title}</CardTitle>
                       <CardDescription className="line-clamp-2">{course.description}</CardDescription>
                     </div>
-                    {course.ai_recommended && (
+                    {course.is_mandatory && (
                       <Badge variant="secondary" className="ml-2 shrink-0">
                         <Sparkles className="h-3 w-3 mr-1" />
-                        IA
+                        Obrigatório
                       </Badge>
                     )}
                   </div>
@@ -320,7 +268,7 @@ export function HRTrainingLMS() {
 
         <TabsContent value="my-courses" className="space-y-4 mt-4">
           <div className="grid gap-4">
-            {mockCourses.filter(c => c.progress > 0).map(course => (
+            {filteredCourses.filter(c => c.progress > 0).map(course => (
               <Card key={course.id}>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
@@ -398,7 +346,7 @@ export function HRTrainingLMS() {
           </Card>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {mockCourses.filter(c => c.ai_recommended).map(course => (
+            {filteredCourses.filter(c => c.is_mandatory).map(course => (
               <Card key={course.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
