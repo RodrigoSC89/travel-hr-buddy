@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertTriangle,
   Bell,
@@ -26,79 +27,13 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface Alert {
-  id: string;
-  title: string;
-  description: string;
-  severity: "critical" | "warning" | "info";
-  timestamp: string;
-  acknowledged: boolean;
-  source: string;
-}
+import { useDPAlertsRealData } from "@/hooks/useDPAlertsRealData";
 
 interface FilterState {
   severity: string[];
   source: string[];
   acknowledged: boolean | null;
 }
-
-const alerts: Alert[] = [
-  {
-    id: "1",
-    title: "Gyro Drift Elevado",
-    description: "Gyro #2 apresentando drift acima do limite (0.08°/min). Verificar calibração.",
-    severity: "warning",
-    timestamp: "2024-12-06 15:42",
-    acknowledged: false,
-    source: "Gyro System",
-  },
-  {
-    id: "2",
-    title: "Thruster #4 - Temperatura Alta",
-    description: "Temperatura do motor acima de 85°C. Monitorar continuamente.",
-    severity: "warning",
-    timestamp: "2024-12-06 14:30",
-    acknowledged: true,
-    source: "Thruster Control",
-  },
-  {
-    id: "3",
-    title: "DGPS Backup Offline",
-    description: "DGPS secundário perdeu conexão. Operando apenas com DGPS primário.",
-    severity: "critical",
-    timestamp: "2024-12-06 13:15",
-    acknowledged: false,
-    source: "Reference System",
-  },
-  {
-    id: "4",
-    title: "Vento Forte Detectado",
-    description: "Velocidade do vento atingiu 28 knots. Capability plot atualizado.",
-    severity: "info",
-    timestamp: "2024-12-06 12:00",
-    acknowledged: true,
-    source: "Weather System",
-  },
-  {
-    id: "5",
-    title: "Manutenção Programada",
-    description: "Lembrete: Manutenção preventiva do HPR System em 48 horas.",
-    severity: "info",
-    timestamp: "2024-12-06 08:00",
-    acknowledged: true,
-    source: "Maintenance",
-  },
-];
-
-const alertConfig = [
-  { name: "Falha de Thruster", enabled: true, sound: true },
-  { name: "Perda de Referência", enabled: true, sound: true },
-  { name: "Drift Excessivo", enabled: true, sound: true },
-  { name: "Condições Ambientais", enabled: true, sound: false },
-  { name: "Manutenção", enabled: true, sound: false },
-  { name: "Power Management", enabled: true, sound: true },
-];
 
 const severityOptions = [
   { value: "critical", label: "Crítico" },
@@ -107,7 +42,7 @@ const severityOptions = [
 ];
 
 export default function DPAlerts() {
-  const [activeAlerts, setActiveAlerts] = useState(alerts);
+  const { alerts, stats, alertConfig, isLoading, acknowledgeAlert } = useDPAlertsRealData();
   const [config, setConfig] = useState(alertConfig);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
@@ -118,13 +53,13 @@ export default function DPAlerts() {
 
   const sources = useMemo(() => 
     [...new Set(alerts.map(a => a.source))],
-    []
+    [alerts]
   );
 
   const hasActiveFilters = filters.severity.length > 0 || filters.source.length > 0 || filters.acknowledged !== null;
 
   const filteredAlerts = useMemo(() => {
-    return activeAlerts.filter(alert => {
+    return alerts.filter(alert => {
       if (filters.severity.length > 0 && !filters.severity.includes(alert.severity)) {
         return false;
       }
@@ -136,7 +71,7 @@ export default function DPAlerts() {
       }
       return true;
     });
-  }, [activeAlerts, filters]);
+  }, [alerts, filters]);
 
   const pendingFilteredAlerts = filteredAlerts.filter(a => !a.acknowledged);
 
@@ -194,14 +129,6 @@ export default function DPAlerts() {
     }
   };
 
-  const acknowledgeAlert = (id: string) => {
-    setActiveAlerts(prev =>
-      prev.map(alert =>
-        alert.id === id ? { ...alert, acknowledged: true } : alert
-      )
-    );
-  };
-
   const toggleConfig = (index: number, field: "enabled" | "sound") => {
     setConfig(prev =>
       prev.map((item, i) =>
@@ -210,8 +137,18 @@ export default function DPAlerts() {
     );
   };
 
-  const unacknowledgedCount = activeAlerts.filter(a => !a.acknowledged).length;
-  const criticalCount = activeAlerts.filter(a => a.severity === "critical" && !a.acknowledged).length;
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -222,7 +159,7 @@ export default function DPAlerts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
-                <p className="text-3xl font-bold">{unacknowledgedCount}</p>
+                <p className="text-3xl font-bold">{stats.unacknowledged}</p>
               </div>
               <Bell className="h-8 w-8 text-primary" />
             </div>
@@ -233,7 +170,7 @@ export default function DPAlerts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Críticos</p>
-                <p className="text-3xl font-bold text-red-500">{criticalCount}</p>
+                <p className="text-3xl font-bold text-red-500">{stats.critical}</p>
               </div>
               <XCircle className="h-8 w-8 text-red-500" />
             </div>
@@ -244,9 +181,7 @@ export default function DPAlerts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Reconhecidos</p>
-                <p className="text-3xl font-bold text-emerald-500">
-                  {activeAlerts.filter(a => a.acknowledged).length}
-                </p>
+                <p className="text-3xl font-bold text-emerald-500">{stats.acknowledged}</p>
               </div>
               <CheckCircle2 className="h-8 w-8 text-emerald-500" />
             </div>
@@ -257,7 +192,7 @@ export default function DPAlerts() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Último Alerta</p>
-                <p className="text-lg font-bold">15:42</p>
+                <p className="text-lg font-bold">{stats.lastAlertTime}</p>
               </div>
               <Clock className="h-8 w-8 text-muted-foreground" />
             </div>
