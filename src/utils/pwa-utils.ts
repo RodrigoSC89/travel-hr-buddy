@@ -208,16 +208,12 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
   // Initial status
   updateStatus();
 
-  // Listen for changes
-  window.addEventListener("online", updateStatus);
-  window.addEventListener("offline", updateStatus);
-
+  // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
+  // Apenas escutar mudanças de qualidade da conexão
   (navigator as NavigatorWithExtensions).connection?.addEventListener?.("change", updateStatus);
 
   // Return cleanup function
   return () => {
-    window.removeEventListener("online", updateStatus);
-    window.removeEventListener("offline", updateStatus);
     (navigator as NavigatorWithExtensions).connection?.removeEventListener?.("change", updateStatus);
   };
 }

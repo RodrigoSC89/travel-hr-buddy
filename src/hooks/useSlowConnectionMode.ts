@@ -85,15 +85,12 @@ export function useSlowConnectionMode() {
       connection.addEventListener("change", detectConnection);
     }
 
-    window.addEventListener("online", detectConnection);
-    window.addEventListener("offline", detectConnection);
+    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
 
     return () => {
       if (connection) {
         connection.removeEventListener("change", detectConnection);
       }
-      window.removeEventListener("online", detectConnection);
-      window.removeEventListener("offline", detectConnection);
     };
   }, [detectConnection]);
 

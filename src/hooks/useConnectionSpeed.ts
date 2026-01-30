@@ -71,7 +71,8 @@ export function useConnectionSpeed(): ConnectionInfo {
       downlink: connection?.downlink || 10,
       rtt,
       saveData: connection?.saveData || false,
-      isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+      // PATCH v37: Sempre true - navigator.onLine não é confiável no iOS PWA
+      isOnline: true,
     });
   }, []);
 
@@ -81,24 +82,16 @@ export function useConnectionSpeed(): ConnectionInfo {
     
     const connection = getConnection();
     
-    // Listen for connection changes
+    // Listen for connection changes only (not online/offline)
     if (connection?.addEventListener) {
       connection.addEventListener("change", updateConnectionInfo);
     }
     
-    // Listen for online/offline events
-    if (typeof window !== "undefined") {
-      window.addEventListener("online", updateConnectionInfo);
-      window.addEventListener("offline", updateConnectionInfo);
-    }
+    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
     
     return () => {
       if (connection?.removeEventListener) {
         connection.removeEventListener("change", updateConnectionInfo);
-      }
-      if (typeof window !== "undefined") {
-        window.removeEventListener("online", updateConnectionInfo);
-        window.removeEventListener("offline", updateConnectionInfo);
       }
     };
   }, [updateConnectionInfo]);

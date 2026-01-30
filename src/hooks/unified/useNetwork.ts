@@ -165,24 +165,17 @@ export function useNetwork(): NetworkStatus & {
       }));
     };
 
+    // PATCH v37: REMOVIDO listener offline - causa falsos positivos no iOS PWA
+    // Apenas manter o listener 'online' para trigger de sincronização
     const handleOnline = async () => {
       logger.info("Network: Online event received");
-      // Atualizar wasOffline e tentar sincronizar
       setStatus(prev => ({ ...prev, wasOffline: false }));
       updateStatus();
       await updatePendingCount();
     };
 
-    const handleOffline = () => {
-      // PATCH iOS PWA: Apenas marcar wasOffline para UI informativa
-      // NÃO definir online = false porque navigator.onLine não é confiável
-      logger.info("Network: Offline event received (will NOT block functionality)");
-      setStatus(prev => ({ ...prev, wasOffline: true }));
-      // NÃO chamar updateStatus aqui para evitar definir online = false
-    };
-
     window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    // PATCH v37: REMOVIDO window.addEventListener("offline", ...)
     
     if (connection?.addEventListener) {
       connection.addEventListener("change", updateStatus);
@@ -200,7 +193,6 @@ export function useNetwork(): NetworkStatus & {
 
     return () => {
       window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
       
       if (connection?.removeEventListener) {
         connection.removeEventListener("change", updateStatus);
