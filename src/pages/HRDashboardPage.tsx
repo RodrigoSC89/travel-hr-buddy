@@ -1,6 +1,6 @@
 /**
  * HR Dashboard - Central de Gestão de RH
- * Sistema completo de RH/DP com IA
+ * Sistema completo de RH/DP com dados reais do Supabase
  */
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -9,11 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Users, UserPlus, DollarSign, Calendar, Clock, 
   TrendingUp, AlertTriangle, FileText, MessageSquare,
   Brain, Target, Award, HeartPulse, Search, Plus,
-  Building2, BarChart3, Briefcase, GraduationCap, Gift, ThermometerSun
+  Building2, BarChart3, Briefcase, GraduationCap, Gift, ThermometerSun,
+  Database
 } from 'lucide-react';
 import { HREmployeeList } from '@/components/hr/HREmployeeList';
 import { HRPayrollDashboard } from '@/components/hr/HRPayrollDashboard';
@@ -26,23 +28,25 @@ import { HRTrainingLMS } from '@/components/hr/HRTrainingLMS';
 import { HROKRsManager } from '@/components/hr/HROKRsManager';
 import { HRBenefitsManager } from '@/components/hr/HRBenefitsManager';
 import { HRClimateSurvey } from '@/components/hr/HRClimatesurvey';
+import { useHRStats } from '@/hooks/useHRRealData';
 
 export default function HRDashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Real data from Supabase
+  const { data: stats, isLoading: statsLoading } = useHRStats();
 
-  // Mock data for overview
-  const stats = {
-    totalEmployees: 347,
-    activeEmployees: 338,
-    onLeave: 9,
-    newHires: 12,
-    turnoverRate: 1.8,
-    avgSalary: 5420,
-    pendingVacations: 23,
-    expiringDocs: 8,
-    highRiskEmployees: 5,
-    pendingAdmissions: 4,
+  // Fallback stats when loading or no data
+  const displayStats = stats || {
+    totalEmployees: 0,
+    activeEmployees: 0,
+    onLeave: 0,
+    inTraining: 0,
+    available: 0,
+    pendingVacations: 0,
+    expiringCertificates: 0,
+    turnoverRate: 0,
   };
 
   return (
@@ -69,6 +73,14 @@ export default function HRDashboardPage() {
         </div>
       </div>
 
+      {/* Data Source Indicator */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Database className="h-4 w-4" />
+        <span>
+          {statsLoading ? 'Carregando dados...' : `Dados em tempo real do Supabase`}
+        </span>
+      </div>
+
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
@@ -78,7 +90,11 @@ export default function HRDashboardPage() {
                 <Users className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.totalEmployees}</p>
+                {statsLoading ? (
+                  <Skeleton className="h-8 w-12" />
+                ) : (
+                  <p className="text-2xl font-bold">{displayStats.totalEmployees}</p>
+                )}
                 <p className="text-xs text-muted-foreground">Colaboradores</p>
               </div>
             </div>
@@ -92,8 +108,12 @@ export default function HRDashboardPage() {
                 <UserPlus className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.newHires}</p>
-                <p className="text-xs text-muted-foreground">Admissões/mês</p>
+                {statsLoading ? (
+                  <Skeleton className="h-8 w-12" />
+                ) : (
+                  <p className="text-2xl font-bold">{displayStats.activeEmployees}</p>
+                )}
+                <p className="text-xs text-muted-foreground">Embarcados</p>
               </div>
             </div>
           </CardContent>
@@ -106,7 +126,11 @@ export default function HRDashboardPage() {
                 <TrendingUp className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.turnoverRate}%</p>
+                {statsLoading ? (
+                  <Skeleton className="h-8 w-12" />
+                ) : (
+                  <p className="text-2xl font-bold">{displayStats.turnoverRate}%</p>
+                )}
                 <p className="text-xs text-muted-foreground">Turnover</p>
               </div>
             </div>
@@ -120,8 +144,12 @@ export default function HRDashboardPage() {
                 <AlertTriangle className="h-5 w-5 text-red-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.highRiskEmployees}</p>
-                <p className="text-xs text-muted-foreground">Risco de Saída</p>
+                {statsLoading ? (
+                  <Skeleton className="h-8 w-12" />
+                ) : (
+                  <p className="text-2xl font-bold">{displayStats.expiringCertificates}</p>
+                )}
+                <p className="text-xs text-muted-foreground">Cert. Expirando</p>
               </div>
             </div>
           </CardContent>
@@ -134,7 +162,11 @@ export default function HRDashboardPage() {
                 <Calendar className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{stats.pendingVacations}</p>
+                {statsLoading ? (
+                  <Skeleton className="h-8 w-12" />
+                ) : (
+                  <p className="text-2xl font-bold">{displayStats.pendingVacations}</p>
+                )}
                 <p className="text-xs text-muted-foreground">Férias Pendentes</p>
               </div>
             </div>
@@ -142,23 +174,41 @@ export default function HRDashboardPage() {
         </Card>
       </div>
 
-      {/* AI Alerts */}
-      {stats.highRiskEmployees > 0 && (
-        <Card className="border-red-500/30 bg-red-500/5">
+      {/* AI Alerts - Only show if there are expiring certificates or issues */}
+      {displayStats.expiringCertificates > 0 && (
+        <Card className="border-amber-500/30 bg-amber-500/5">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Brain className="h-5 w-5 text-red-500" />
+              <Brain className="h-5 w-5 text-amber-500" />
               <div className="flex-1">
-                <p className="font-medium text-red-500">
-                  IA detectou {stats.highRiskEmployees} colaboradores com alto risco de turnover
+                <p className="font-medium text-amber-500">
+                  {displayStats.expiringCertificates} certificados expirando nos próximos 30 dias
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Ação recomendada: revisar salários e agendar 1-on-1 urgente
+                  Ação recomendada: renovar certificações antes do vencimento
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="border-red-500/30 text-red-500 hover:bg-red-500/10">
+              <Button variant="outline" size="sm" className="border-amber-500/30 text-amber-500 hover:bg-amber-500/10">
                 Ver Detalhes
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
+      {displayStats.totalEmployees === 0 && !statsLoading && (
+        <Card className="border-blue-500/30 bg-blue-500/5">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Database className="h-5 w-5 text-blue-500" />
+              <div className="flex-1">
+                <p className="font-medium text-blue-500">
+                  Nenhum funcionário cadastrado no sistema
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Adicione funcionários na aba "Colaboradores" para começar
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
