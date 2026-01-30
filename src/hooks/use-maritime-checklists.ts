@@ -352,9 +352,12 @@ export const useMaritimeChecklists = (userId: string) => {
       })) || [];
 
       setChecklists(transformedChecklists);
+      setError(null);
     } catch (err) {
+      console.error("Erro ao carregar checklists:", err);
       setError("Erro ao carregar checklists");
-      toast.error("Erro ao carregar checklists");
+      // Keep templates available even with checklist error
+      setChecklists([]);
     } finally {
       setLoading(false);
     }
