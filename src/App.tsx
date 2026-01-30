@@ -797,9 +797,9 @@ const AppRoutes = () => (
 );
 
 function App() {
-  // PATCH v42: Debug logging for production issues
+  // PATCH v43: Debug logging for production issues
   React.useEffect(() => {
-    console.log('[App v42] React app mounting...');
+    console.log('[App v43] React app mounting...');
     
     // Mark app as loaded immediately
     (window as any).__NAUTI_APP_LOADED__ = true;
@@ -807,12 +807,19 @@ function App() {
     // Remove any lingering loading states from index.html
     const initialLoader = document.getElementById('initial-loader');
     if (initialLoader) {
-      console.log('[App v42] Removing initial loader');
+      console.log('[App v43] Removing initial loader');
       initialLoader.remove();
     }
     
+    // Also remove recovery UI if present
+    const recoveryUi = document.getElementById('recovery-ui');
+    if (recoveryUi) {
+      console.log('[App v43] Removing recovery UI');
+      recoveryUi.remove();
+    }
+    
     return () => {
-      console.log('[App v42] React app unmounting');
+      console.log('[App v43] React app unmounting');
     };
   }, []);
 

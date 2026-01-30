@@ -20,7 +20,8 @@ export function useBridgeLinkData(): UseBridgeLinkDataReturn {
   const [dpEvents, setDpEvents] = useState<DPEvent[]>([]);
   const [riskAlerts, setRiskAlerts] = useState<RiskAlert[]>([]);
   const [systemStatus, setSystemStatus] = useState<string>("Normal");
-  const [loading, setLoading] = useState<boolean>(true);
+  // PATCH v43: Start with loading=false to never block render
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchData = async () => {

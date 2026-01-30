@@ -145,6 +145,7 @@ interface TenantContextType {
 }
 
 // Default context value to prevent null errors
+// PATCH v43: Default values with isLoading=FALSE to never block UI
 const defaultTenantValue: TenantContextType = {
   currentTenant: null,
   currentBranding: null,
@@ -152,7 +153,7 @@ const defaultTenantValue: TenantContextType = {
   tenantPlans: [],
   tenantUsage: null,
   availableTenants: [],
-  isLoading: true,
+  isLoading: false, // CRITICAL: Must be false to never block UI
   error: null,
   switchTenant: async () => {},
   updateBranding: async () => {},
