@@ -28,13 +28,12 @@ export function useNetworkQuality(): NetworkInfo {
     const updateNetworkInfo = () => {
       const connection = (navigator as any).connection;
 
-      if (!navigator.onLine) {
-        setNetworkInfo({ quality: "offline" });
-        return;
-      }
+      // PATCH v34 iOS PWA: REMOVIDO navigator.onLine check
+      // navigator.onLine não é confiável no iOS Safari PWA - causa falsos "offline"
+      // Em vez de bloquear, assumimos "medium" e deixamos o retry lidar com erros reais
 
       if (!connection) {
-        setNetworkInfo({ quality: "fast" });
+        setNetworkInfo({ quality: "medium" }); // PATCH: era "fast", agora "medium" como fallback seguro
         return;
       }
 

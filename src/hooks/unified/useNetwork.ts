@@ -245,7 +245,8 @@ export function useNetwork(): NetworkStatus & {
  */
 export function useLightMode(): boolean {
   const { quality, saveData } = useNetwork();
-  return quality === "slow" || quality === "offline" || saveData;
+  // PATCH v34: Removido "offline" - nunca consideramos offline no iOS PWA
+  return quality === "slow" || saveData;
 }
 
 /**

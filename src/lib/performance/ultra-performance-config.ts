@@ -64,9 +64,8 @@ export const PERFORMANCE_CONFIG = {
 } as const;
 
 // Connection quality detection
+// PATCH v34 iOS PWA: Removido navigator.onLine check - não é confiável no iOS Safari
 export function getConnectionQuality(): 'fast' | 'medium' | 'slow' | 'offline' {
-  if (!navigator.onLine) return 'offline';
-  
   const connection = (navigator as Navigator & { 
     connection?: { 
       effectiveType?: string; 
