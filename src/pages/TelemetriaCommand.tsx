@@ -68,7 +68,8 @@ interface TelemetryAlert {
 
 export default function TelemetriaCommand() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [loading, setLoading] = useState(true);
+  // PATCH v48: Start with loading=false to NEVER block render
+  const [loading, setLoading] = useState(false);
   const [sensors, setSensors] = useState<TelemetryLog[]>([]);
   const [alerts, setAlerts] = useState<TelemetryAlert[]>([]);
   const [chartData, setChartData] = useState<any[]>([]);
@@ -117,13 +118,14 @@ export default function TelemetriaCommand() {
     }
   }, []);
 
+  // PATCH v48: Empty dependency array to prevent loops
   useEffect(() => {
     fetchData();
     
-    // Auto-refresh every 30 seconds
-    const interval = autoRefresh ? setInterval(fetchData, 30000) : null;
+    // Auto-refresh every 2 minutes (was 30s)
+    const interval = autoRefresh ? setInterval(fetchData, 120000) : null;
     return () => { if (interval) clearInterval(interval); };
-  }, [fetchData, autoRefresh]);
+  }, [autoRefresh]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Run AI analysis
   const runAnalysis = async () => {

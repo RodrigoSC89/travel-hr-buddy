@@ -82,7 +82,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v47-extreme-zero-block'; // PATCH v47: Extreme performance + Zero block
+  const CURRENT_VERSION = 'v48-loop-fix-final'; // PATCH v48: Fix all useEffect dependency loops
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);

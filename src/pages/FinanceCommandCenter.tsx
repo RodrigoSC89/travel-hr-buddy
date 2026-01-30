@@ -159,7 +159,8 @@ const sampleRouteCosts: RouteCost[] = [
 
 const FinanceCommandCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v48: Start with isLoading=false to NEVER block render
+  const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
