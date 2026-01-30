@@ -5349,6 +5349,69 @@ export type Database = {
           },
         ]
       }
+      budgets: {
+        Row: {
+          ai_prediction: Json | null
+          ai_recommendations: Json | null
+          allocated_amount: number
+          category: string
+          committed_amount: number | null
+          created_at: string
+          forecast_amount: number | null
+          id: string
+          organization_id: string | null
+          spent_amount: number | null
+          updated_at: string
+          vessel_id: string | null
+          year: number
+        }
+        Insert: {
+          ai_prediction?: Json | null
+          ai_recommendations?: Json | null
+          allocated_amount: number
+          category: string
+          committed_amount?: number | null
+          created_at?: string
+          forecast_amount?: number | null
+          id?: string
+          organization_id?: string | null
+          spent_amount?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year: number
+        }
+        Update: {
+          ai_prediction?: Json | null
+          ai_recommendations?: Json | null
+          allocated_amount?: number
+          category?: string
+          committed_amount?: number | null
+          created_at?: string
+          forecast_amount?: number | null
+          id?: string
+          organization_id?: string | null
+          spent_amount?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           all_day: boolean | null
@@ -8566,6 +8629,63 @@ export type Database = {
         }
         Relationships: []
       }
+      cost_predictions: {
+        Row: {
+          accuracy_score: number | null
+          actual_costs: Json | null
+          confidence: number | null
+          created_at: string
+          id: string
+          model_version: string | null
+          organization_id: string | null
+          predicted_costs: Json
+          prediction_date: string
+          prediction_for_month: string
+          vessel_id: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          actual_costs?: Json | null
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          model_version?: string | null
+          organization_id?: string | null
+          predicted_costs: Json
+          prediction_date?: string
+          prediction_for_month: string
+          vessel_id?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          actual_costs?: Json | null
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          model_version?: string | null
+          organization_id?: string | null
+          predicted_costs?: Json
+          prediction_date?: string
+          prediction_for_month?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cost_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cost_predictions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_ai_insights: {
         Row: {
           analysis_type: string
@@ -10864,6 +10984,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      currency_rates: {
+        Row: {
+          base_currency: string
+          created_at: string
+          id: string
+          rate: number
+          rate_date: string
+          source: string | null
+          target_currency: string
+        }
+        Insert: {
+          base_currency?: string
+          created_at?: string
+          id?: string
+          rate: number
+          rate_date?: string
+          source?: string | null
+          target_currency: string
+        }
+        Update: {
+          base_currency?: string
+          created_at?: string
+          id?: string
+          rate?: number
+          rate_date?: string
+          source?: string | null
+          target_currency?: string
+        }
+        Relationships: []
       }
       customer_health_metrics: {
         Row: {
@@ -14798,6 +14948,62 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      financial_forecasts: {
+        Row: {
+          assumptions: Json | null
+          confidence_level: number | null
+          created_at: string
+          created_by: string | null
+          expense_forecast: number | null
+          forecast_type: string
+          id: string
+          model_parameters: Json | null
+          organization_id: string | null
+          period_end: string
+          period_start: string
+          profit_forecast: number | null
+          revenue_forecast: number | null
+        }
+        Insert: {
+          assumptions?: Json | null
+          confidence_level?: number | null
+          created_at?: string
+          created_by?: string | null
+          expense_forecast?: number | null
+          forecast_type: string
+          id?: string
+          model_parameters?: Json | null
+          organization_id?: string | null
+          period_end: string
+          period_start: string
+          profit_forecast?: number | null
+          revenue_forecast?: number | null
+        }
+        Update: {
+          assumptions?: Json | null
+          confidence_level?: number | null
+          created_at?: string
+          created_by?: string | null
+          expense_forecast?: number | null
+          forecast_type?: string
+          id?: string
+          model_parameters?: Json | null
+          organization_id?: string | null
+          period_end?: string
+          period_start?: string
+          profit_forecast?: number | null
+          revenue_forecast?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_forecasts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       financial_transactions: {
         Row: {
@@ -19876,6 +20082,91 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices_processing: {
+        Row: {
+          ai_decision: string | null
+          ai_extracted_data: Json | null
+          ai_validation: Json | null
+          amount: number
+          created_at: string
+          currency: string | null
+          due_date: string
+          file_url: string | null
+          id: string
+          invoice_date: string
+          invoice_number: string
+          ocr_data: Json | null
+          organization_id: string | null
+          paid_at: string | null
+          po_id: string | null
+          status: string | null
+          updated_at: string
+          vendor_id: string | null
+        }
+        Insert: {
+          ai_decision?: string | null
+          ai_extracted_data?: Json | null
+          ai_validation?: Json | null
+          amount: number
+          created_at?: string
+          currency?: string | null
+          due_date: string
+          file_url?: string | null
+          id?: string
+          invoice_date: string
+          invoice_number: string
+          ocr_data?: Json | null
+          organization_id?: string | null
+          paid_at?: string | null
+          po_id?: string | null
+          status?: string | null
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          ai_decision?: string | null
+          ai_extracted_data?: Json | null
+          ai_validation?: Json | null
+          amount?: number
+          created_at?: string
+          currency?: string | null
+          due_date?: string
+          file_url?: string | null
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          ocr_data?: Json | null
+          organization_id?: string | null
+          paid_at?: string | null
+          po_id?: string | null
+          status?: string | null
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_processing_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_processing_po_id_fkey"
+            columns: ["po_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_processing_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -31503,6 +31794,68 @@ export type Database = {
           },
         ]
       }
+      savings_opportunities: {
+        Row: {
+          actual_savings: number | null
+          category: string
+          created_at: string
+          current_cost: number | null
+          id: string
+          implementation_effort: string | null
+          implementation_timeline: string | null
+          implemented_at: string | null
+          organization_id: string | null
+          potential_savings: number | null
+          recommended_actions: Json | null
+          savings_percentage: number | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actual_savings?: number | null
+          category: string
+          created_at?: string
+          current_cost?: number | null
+          id?: string
+          implementation_effort?: string | null
+          implementation_timeline?: string | null
+          implemented_at?: string | null
+          organization_id?: string | null
+          potential_savings?: number | null
+          recommended_actions?: Json | null
+          savings_percentage?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actual_savings?: number | null
+          category?: string
+          created_at?: string
+          current_cost?: number | null
+          id?: string
+          implementation_effort?: string | null
+          implementation_timeline?: string | null
+          implemented_at?: string | null
+          organization_id?: string | null
+          potential_savings?: number | null
+          recommended_actions?: Json | null
+          savings_percentage?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "savings_opportunities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scenario_simulations: {
         Row: {
           confidence_level: number | null
@@ -38107,6 +38460,77 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      vendors: {
+        Row: {
+          address: string | null
+          ai_reliability_score: number | null
+          contact_person: string | null
+          created_at: string
+          email: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          on_time_delivery: number | null
+          organization_id: string | null
+          payment_terms: string | null
+          performance_score: number | null
+          phone: string | null
+          quality_score: number | null
+          rating: number | null
+          total_orders: number | null
+          total_value: number | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          ai_reliability_score?: number | null
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          on_time_delivery?: number | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          quality_score?: number | null
+          rating?: number | null
+          total_orders?: number | null
+          total_value?: number | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          ai_reliability_score?: number | null
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          on_time_delivery?: number | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          quality_score?: number | null
+          rating?: number | null
+          total_orders?: number | null
+          total_value?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vessel_3d_models: {
         Row: {
