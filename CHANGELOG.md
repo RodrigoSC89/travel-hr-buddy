@@ -48,6 +48,9 @@
 - 36 secrets configurados
 - Score de qualidade: 9.2/10
 - Score de conformidade: 98.5%
+- **711 tabelas** auditadas (superou meta de 565)
+- 2145 políticas RLS configuradas
+- 1936 índices otimizados
 
 ---
 
