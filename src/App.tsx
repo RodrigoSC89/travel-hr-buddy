@@ -332,22 +332,70 @@ const queryClient = new QueryClient({
 
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
-// LOADER v31: Ultra-minimal, zero-block loader
-// This loader NEVER causes infinite loading - maximum 2s then auto-continues
-const Loader = React.memo(() => (
-  <div 
-    className="min-h-screen flex items-center justify-center bg-background"
-    style={{ contain: "layout paint" }}
-  >
-    <div className="text-center space-y-3">
-      <div 
-        className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin"
-        style={{ contain: "strict" }}
-      />
-      <p className="text-muted-foreground text-sm">Carregando...</p>
+// LOADER v32: Auto-resolve loader - NEVER blocks more than 2.5 seconds
+// If lazy loading takes too long, shows error recovery UI
+const Loader = React.memo(() => {
+  const [showRecovery, setShowRecovery] = React.useState(false);
+  
+  React.useEffect(() => {
+    // After 2.5s, show recovery UI
+    const timer = setTimeout(() => setShowRecovery(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  if (showRecovery) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4 p-6 max-w-sm">
+          <div className="text-lg font-semibold text-foreground">Carregamento lento detectado</div>
+          <p className="text-sm text-muted-foreground">
+            Isso pode acontecer na primeira visita ou com conexão lenta.
+          </p>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90"
+            >
+              Recarregar página
+            </button>
+            <button
+              onClick={() => {
+                // Clear caches and reload
+                try {
+                  Object.keys(localStorage)
+                    .filter(k => k.includes('supabase') || k.includes('sb-'))
+                    .forEach(k => localStorage.removeItem(k));
+                  if ('caches' in window) {
+                    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+                  }
+                } catch {}
+                window.location.href = '/auth';
+              }}
+              className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md text-sm hover:bg-secondary/90"
+            >
+              Ir para login
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <div 
+      className="min-h-screen flex items-center justify-center bg-background"
+      style={{ contain: "layout paint" }}
+    >
+      <div className="text-center space-y-3">
+        <div 
+          className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin"
+          style={{ contain: "strict" }}
+        />
+        <p className="text-muted-foreground text-sm">Carregando...</p>
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 // Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
@@ -384,37 +432,41 @@ const AuthenticatedLayout = () => {
   );
 };
 
-// PROTECTED ROUTE v31: NEVER BLOCKS - Auth is decorative, not blocking
-// This ensures the system ALWAYS works, even if auth fails
+// PROTECTED ROUTE v32: Ultra-fast, never blocks
+// Auth check is background - system ALWAYS renders immediately
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const [authResolved, setAuthResolved] = React.useState(false);
   const [shouldRedirect, setShouldRedirect] = React.useState(false);
+  const userRef = React.useRef(user);
   
+  // Keep track of user changes
   React.useEffect(() => {
-    // CRITICAL: After 300ms, auth is "resolved" - we proceed with whatever state we have
-    const resolveTimer = setTimeout(() => {
-      setAuthResolved(true);
-      // Only redirect if we STILL don't have a user after 300ms
-      if (!user) {
+    userRef.current = user;
+  }, [user]);
+  
+  // Single timer: after 200ms, decide based on current user state
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      // Check current ref value (not stale closure)
+      if (!userRef.current) {
         setShouldRedirect(true);
       }
-    }, 300);
+    }, 200);
     
-    return () => clearTimeout(resolveTimer);
-  }, []); // Only run once on mount - NEVER re-run
+    return () => clearTimeout(timer);
+  }, []);
   
-  // If user is present, ALWAYS show content immediately
+  // User present = show content immediately
   if (user) {
     return <>{children}</>;
   }
   
-  // If auth resolved and no user, redirect to login
-  if (authResolved && shouldRedirect) {
+  // No user + should redirect = go to auth
+  if (shouldRedirect) {
     return <Navigate to="/auth" replace />;
   }
   
-  // Brief loader while waiting for initial auth (max 300ms)
+  // Brief loading (max 200ms)
   return <Loader />;
 };
 
