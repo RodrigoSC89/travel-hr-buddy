@@ -333,67 +333,16 @@ const queryClient = new QueryClient({
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
 // ============================================
-// LOADER v33 DEFINITIVO - NUNCA bloqueia mais de 1.5s
+// LOADER v34 - Spinner simples, SEM timeout/redirect
+// O Suspense fallback é apenas visual enquanto JS carrega
+// NÃO deve ter lógica de redirect - isso causa loops
 // ============================================
 const Loader = React.memo(() => {
-  const [phase, setPhase] = React.useState<'loading' | 'slow' | 'redirect'>('loading');
-  
-  React.useEffect(() => {
-    // Fase 1: Após 1.5s, mostra UI de recuperação
-    const slowTimer = setTimeout(() => setPhase('slow'), 1500);
-    // Fase 2: Após 4s, redireciona automaticamente para /auth
-    const redirectTimer = setTimeout(() => setPhase('redirect'), 4000);
-    
-    return () => {
-      clearTimeout(slowTimer);
-      clearTimeout(redirectTimer);
-    };
-  }, []);
-  
-  // Auto-redirect após 4s de loading
-  if (phase === 'redirect') {
-    // Limpa cache e vai para login
-    try {
-      Object.keys(localStorage)
-        .filter(k => k.includes('supabase') || k.includes('sb-'))
-        .forEach(k => localStorage.removeItem(k));
-    } catch {}
-    window.location.replace('/auth');
-    return null;
-  }
-  
-  if (phase === 'slow') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4 p-6 max-w-sm">
-          <div className="text-lg font-semibold text-foreground">Carregamento lento</div>
-          <p className="text-sm text-muted-foreground">
-            Redirecionando para login em alguns segundos...
-          </p>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={() => window.location.replace('/auth')}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90"
-            >
-              Ir para login agora
-            </button>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md text-sm hover:bg-secondary/90"
-            >
-              Tentar novamente
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-3">
         <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-        <p className="text-muted-foreground text-sm">Carregando...</p>
+        <p className="text-muted-foreground text-sm">Carregando NAUTI ONE...</p>
       </div>
     </div>
   );
