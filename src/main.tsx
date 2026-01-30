@@ -111,18 +111,18 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v59 DEFINITIVE FIX
+// Render the app - PATCH v61 FORCE DEPLOY
 // Update boot status helper
 const updateStatus = (msg: string) => {
   const win = window as { __updateBootStatus?: (msg: string) => void };
   if (win.__updateBootStatus) {
     win.__updateBootStatus(msg);
   } else {
-    console.log('[Boot v60]', msg);
+    console.log('[Boot v61]', msg);
   }
 };
 
-console.log('[Boot v60] JavaScript bundle loaded');
+console.log('[Boot v61] JavaScript bundle loaded - build timestamp:', Date.now());
 updateStatus('Bundle carregado');
 
 const container = document.getElementById("root");
@@ -139,7 +139,7 @@ if (container) {
     updateStatus('Loader removido');
   }
   
-  console.log('[Boot v60] React mounting...');
+  console.log('[Boot v61] React mounting...');
   updateStatus('Montando React...');
   
   try {
@@ -151,10 +151,10 @@ if (container) {
       </React.StrictMode>
     );
     
-    console.log('[Boot v60] React mounted OK');
+    console.log('[Boot v61] React mounted OK');
     updateStatus('React OK');
   } catch (error) {
-    console.error('[Boot v60] React mount FAILED:', error);
+    console.error('[Boot v61] React mount FAILED:', error);
     updateStatus('ERRO: ' + (error instanceof Error ? error.message : 'Unknown'));
     
     // Show error in UI
@@ -174,5 +174,5 @@ if (container) {
     ultraStartupOptimizer.markTTI();
   });
 } else {
-  console.error('[Boot v60] CRITICAL: #root container not found!');
+  console.error('[Boot v61] CRITICAL: #root container not found!');
 }
