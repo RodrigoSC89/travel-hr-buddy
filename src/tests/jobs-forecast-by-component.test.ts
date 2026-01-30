@@ -48,10 +48,10 @@ describe("jobs-forecast-by-component Edge Function", () => {
   describe("Database Query Logic", () => {
     it("should calculate 180 days ago correctly", () => {
       const today = new Date();
-      const date180DaysAgo = new Date();
+      const date180DaysAgo = new Date(today);
       date180DaysAgo.setDate(date180DaysAgo.getDate() - 180);
 
-      const daysDiff = Math.floor((today.getTime() - date180DaysAgo.getTime()) / (1000 * 60 * 60 * 24));
+      const daysDiff = Math.round((today.getTime() - date180DaysAgo.getTime()) / (1000 * 60 * 60 * 24));
       
       expect(daysDiff).toBe(180);
     });
