@@ -53,7 +53,9 @@ type SignUpFormData = z.infer<typeof signUpSchema>;
 type ResetFormData = z.infer<typeof resetSchema>;
 
 const Auth: React.FC = () => {
-  const { user, isLoading: authLoading, clearSession } = useAuth();
+  // PATCH v49: Ignore authLoading from context - we NEVER block the Auth page
+  // The form should always render immediately for users to login
+  const { user, clearSession } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -522,7 +524,7 @@ const Auth: React.FC = () => {
                       </Button>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoading || authLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Entrar
                     </Button>
