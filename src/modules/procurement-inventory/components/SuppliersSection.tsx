@@ -36,132 +36,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
-
-interface Supplier {
-  id: string;
-  name: string;
-  cnpj: string;
-  category: string[];
-  status: "active" | "preferred" | "suspended" | "pending";
-  rating: number;
-  deliveryRate: number;
-  avgLeadTime: number;
-  totalOrders: number;
-  totalValue: number;
-  contact: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  address: {
-    city: string;
-    state: string;
-    country: string;
-  };
-  paymentTerms: string;
-  createdAt: string;
-  lastOrderDate: string;
-  qualityScore: number;
-  priceCompetitiveness: number;
-}
-
-const mockSuppliers: Supplier[] = [
-  {
-    id: "1",
-    name: "HidroMar Componentes",
-    cnpj: "12.345.678/0001-90",
-    category: ["Manutenção", "Hidráulica"],
-    status: "preferred",
-    rating: 4.8,
-    deliveryRate: 97,
-    avgLeadTime: 5,
-    totalOrders: 234,
-    totalValue: 312000,
-    contact: { name: "Carlos Mendes", email: "carlos@hidromar.com", phone: "(11) 98765-4321" },
-    address: { city: "São Paulo", state: "SP", country: "Brasil" },
-    paymentTerms: "30 dias",
-    createdAt: "2022-03-15",
-    lastOrderDate: "2024-01-20",
-    qualityScore: 95,
-    priceCompetitiveness: 88,
-  },
-  {
-    id: "2",
-    name: "NavTech Solutions",
-    cnpj: "23.456.789/0001-01",
-    category: ["DP System", "Eletrônica"],
-    status: "preferred",
-    rating: 4.9,
-    deliveryRate: 99,
-    avgLeadTime: 7,
-    totalOrders: 156,
-    totalValue: 245000,
-    contact: { name: "Pedro Costa", email: "pedro@navtech.com", phone: "(21) 99876-5432" },
-    address: { city: "Rio de Janeiro", state: "RJ", country: "Brasil" },
-    paymentTerms: "60 dias",
-    createdAt: "2021-08-20",
-    lastOrderDate: "2024-01-10",
-    qualityScore: 98,
-    priceCompetitiveness: 82,
-  },
-  {
-    id: "3",
-    name: "SafetyFirst EPIs",
-    cnpj: "34.567.890/0001-12",
-    category: ["Segurança", "EPIs"],
-    status: "active",
-    rating: 4.2,
-    deliveryRate: 85,
-    avgLeadTime: 8,
-    totalOrders: 89,
-    totalValue: 78000,
-    contact: { name: "Maria Lima", email: "maria@safetyfirst.com", phone: "(11) 97654-3210" },
-    address: { city: "Campinas", state: "SP", country: "Brasil" },
-    paymentTerms: "45 dias",
-    createdAt: "2023-01-10",
-    lastOrderDate: "2024-01-18",
-    qualityScore: 85,
-    priceCompetitiveness: 92,
-  },
-  {
-    id: "4",
-    name: "PetroLub Industrial",
-    cnpj: "45.678.901/0001-23",
-    category: ["Consumíveis", "Lubrificantes"],
-    status: "preferred",
-    rating: 4.6,
-    deliveryRate: 94,
-    avgLeadTime: 4,
-    totalOrders: 312,
-    totalValue: 189000,
-    contact: { name: "João Santos", email: "joao@petrolub.com", phone: "(13) 98765-1234" },
-    address: { city: "Santos", state: "SP", country: "Brasil" },
-    paymentTerms: "30 dias",
-    createdAt: "2020-06-05",
-    lastOrderDate: "2024-01-15",
-    qualityScore: 90,
-    priceCompetitiveness: 95,
-  },
-  {
-    id: "5",
-    name: "SealMaster Components",
-    cnpj: "56.789.012/0001-34",
-    category: ["Manutenção", "Vedações"],
-    status: "suspended",
-    rating: 3.5,
-    deliveryRate: 72,
-    avgLeadTime: 12,
-    totalOrders: 45,
-    totalValue: 32000,
-    contact: { name: "Ana Paula", email: "ana@sealmaster.com", phone: "(11) 96543-2109" },
-    address: { city: "Guarulhos", state: "SP", country: "Brasil" },
-    paymentTerms: "30 dias",
-    createdAt: "2023-06-20",
-    lastOrderDate: "2023-11-30",
-    qualityScore: 65,
-    priceCompetitiveness: 85,
-  },
-];
+import { useSuppliers, useSuppliersStats, type Supplier } from "@/hooks/useSuppliersRealData";
 
 const performanceHistory = [
   { month: "Jul", onTime: 92, quality: 88 },
@@ -177,7 +52,9 @@ interface SuppliersSectionProps {
 }
 
 export default function SuppliersSection({ searchQuery }: SuppliersSectionProps) {
-  const [suppliers, setSuppliers] = useState(mockSuppliers);
+  const { data: suppliers = [], isLoading } = useSuppliers();
+  const { total, preferred: preferredCount, active: activeCount, avgRating } = useSuppliersStats();
+  
   const [showAddSupplier, setShowAddSupplier] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
@@ -195,9 +72,13 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
-  const preferredCount = suppliers.filter(s => s.status === "preferred").length;
-  const activeCount = suppliers.filter(s => s.status === "active").length;
-  const avgRating = (suppliers.reduce((sum, s) => sum + s.rating, 0) / suppliers.length).toFixed(1);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -208,7 +89,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Fornecedores</p>
-                <p className="text-2xl font-bold">{suppliers.length}</p>
+                <p className="text-2xl font-bold">{total}</p>
               </div>
               <Building2 className="h-8 w-8 text-primary opacity-60" />
             </div>

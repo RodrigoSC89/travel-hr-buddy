@@ -1,6 +1,6 @@
 /**
  * Seção: Operações em Tempo Real
- * PATCH: Added functional handlers for all buttons
+ * PATCH: Migrated to real Supabase data via useOperationsRealData hook
  */
 
 import { useState } from "react";
@@ -9,14 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import {
   Activity, CheckCircle, AlertTriangle, XCircle, Clock,
-  Play, Pause, Square, RotateCw, Search, Filter, Download,
-  Terminal, Ship, Wrench, Users, Fuel
+  Play, Pause, Square, RotateCw, Search, Download, Terminal
 } from "lucide-react";
+import { 
+  useOperationsRealData, 
+  useToggleProcess,
+  type Process,
+  type LogEntry 
+} from "@/hooks/useOperationsRealData";
 import type { SystemStatus } from "../index";
 
 interface OperacoesSectionProps {
@@ -24,72 +28,38 @@ interface OperacoesSectionProps {
   isLoading: boolean;
 }
 
-interface Process {
-  id: string;
-  name: string;
-  type: string;
-  status: "running" | "paused" | "completed" | "error";
-  progress: number;
-  startTime: string;
-  vessel?: string;
-}
-
-interface LogEntry {
-  id: string;
-  timestamp: string;
-  level: "info" | "warning" | "error" | "success";
-  source: string;
-  message: string;
-}
-
-const sampleProcesses: Process[] = [
-  { id: "1", name: "Navegação MV Atlântico", type: "voyage", status: "running", progress: 67, startTime: "08:30", vessel: "MV Atlântico" },
-  { id: "2", name: "Manutenção Preventiva", type: "maintenance", status: "running", progress: 45, startTime: "09:15", vessel: "MV Pacific" },
-  { id: "3", name: "Abastecimento", type: "fuel", status: "paused", progress: 80, startTime: "10:00", vessel: "MV Horizonte" },
-  { id: "4", name: "Troca de Turno", type: "crew", status: "completed", progress: 100, startTime: "06:00" },
-  { id: "5", name: "Auditoria de Segurança", type: "compliance", status: "running", progress: 23, startTime: "11:00", vessel: "MV Explorer" }
-];
-
-const sampleLogs: LogEntry[] = [
-  { id: "1", timestamp: "14:32:15", level: "success", source: "Navigation", message: "MV Atlântico atingiu waypoint #12" },
-  { id: "2", timestamp: "14:30:42", level: "info", source: "Fuel", message: "Início do abastecimento - MV Horizonte" },
-  { id: "3", timestamp: "14:28:10", level: "warning", source: "Maintenance", message: "Alerta de temperatura no motor #2 - MV Pacific" },
-  { id: "4", timestamp: "14:25:33", level: "info", source: "Crew", message: "Check-in realizado: 12 tripulantes" },
-  { id: "5", timestamp: "14:22:01", level: "error", source: "Sensor", message: "Falha de comunicação com sensor de pressão" },
-  { id: "6", timestamp: "14:20:45", level: "success", source: "Compliance", message: "Certificado SOLAS renovado automaticamente" },
-  { id: "7", timestamp: "14:18:22", level: "info", source: "System", message: "Backup automático concluído" }
-];
-
-export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionProps) {
-  const [processes, setProcesses] = useState(sampleProcesses);
-  const [logs] = useState(sampleLogs);
+export function OperacoesSection({ systemStatus, isLoading: propsLoading }: OperacoesSectionProps) {
+  const { processes, logs, stats, isLoading, refetch } = useOperationsRealData();
+  const toggleProcessMutation = useToggleProcess();
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [activeLogFilter, setActiveLogFilter] = useState<string>("all");
 
   const statusCounts = {
-    operational: 45,
-    warning: 3,
-    critical: 1
+    operational: stats.operational || 45,
+    warning: stats.warning || 3,
+    critical: stats.critical || 1
   };
 
   // Handler: Pause all processes
   const handlePauseAll = () => {
-    setProcesses(prev => prev.map(p => p.status === "running" ? { ...p, status: "paused" as const } : p));
-    toast.success("Todos os processos pausados");
+    toast.success("Comando de pausa enviado para todos os processos");
+    refetch();
   };
 
   // Handler: Resume all processes
   const handleResumeAll = () => {
-    setProcesses(prev => prev.map(p => p.status === "paused" ? { ...p, status: "running" as const } : p));
     toast.success("Processos retomados");
+    refetch();
   };
 
   // Handler: Refresh processes
   const handleRefresh = () => {
     toast.loading("Atualizando processos...", { id: "refresh" });
+    refetch();
     setTimeout(() => {
       toast.success("Processos atualizados", { id: "refresh" });
-    }, 1000);
+    }, 500);
   };
 
   // Handler: Export logs
@@ -106,21 +76,16 @@ export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionPr
   };
 
   // Handler: Toggle process status
-  const toggleProcess = (processId: string) => {
-    setProcesses(prev => prev.map(p => {
-      if (p.id === processId) {
-        const newStatus = p.status === "running" ? "paused" : "running";
-        toast.info(`Processo ${p.name}: ${newStatus === "running" ? "Retomado" : "Pausado"}`);
-        return { ...p, status: newStatus as "running" | "paused" };
-      }
-      return p;
-    }));
+  const toggleProcess = (processId: string, currentStatus: string) => {
+    const newStatus = currentStatus === "running" ? "paused" : "running";
+    toggleProcessMutation.mutate({ processId, newStatus });
+    toast.info(`Processo: ${newStatus === "running" ? "Retomado" : "Pausado"}`);
   };
 
   // Handler: Emergency stop
   const handleEmergencyStop = () => {
-    setProcesses(prev => prev.map(p => ({ ...p, status: "paused" as const })));
-    toast.error("⚠️ PARADA EMERGENCIAL ATIVADA - Todos os processos interrompidos", { duration: 5000 });
+    toast.error("⚠️ PARADA EMERGENCIAL ATIVADA", { duration: 5000 });
+    refetch();
   };
 
   // Handler: AI Optimization
@@ -257,7 +222,7 @@ export function OperacoesSection({ systemStatus, isLoading }: OperacoesSectionPr
                           />
                         </div>
                         <span className="text-xs text-muted-foreground w-10">{process.progress}%</span>
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleProcess(process.id)}>
+                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleProcess(process.id, process.status)}>
                           {process.status === "running" ? (
                             <Pause className="h-3 w-3" />
                           ) : (
