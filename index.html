@@ -94,54 +94,46 @@
   </head>
 
   <body>
-    <!-- PATCH v59: Self-debugging loader with progressive status -->
+    <!-- PATCH v60: Full fallback with cache-bust support -->
     <div id="root">
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p id="boot-status" class="text-muted text-sm">v59: Iniciando...</p>
+          <p id="boot-status" class="text-muted text-sm">v60: Iniciando...</p>
           <p id="boot-debug" class="text-muted text-xs hidden"></p>
         </div>
       </div>
     </div>
     
-    <!-- PATCH v59: Self-debugging boot sequence -->
+    <!-- PATCH v60: Minimal boot sequence - trust the build -->
     <script>
       (function() {
         'use strict';
         window.__NAUTI_APP_LOADED__ = false;
         var status = document.getElementById('boot-status');
-        var debug = document.getElementById('boot-debug');
         var startTime = Date.now();
         
         // Progress tracking
         window.__updateBootStatus = function(msg) {
           var elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          if (status) status.textContent = 'v59: ' + msg + ' (' + elapsed + 's)';
-          console.log('[Boot v59] ' + msg + ' @ ' + elapsed + 's');
+          if (status) status.textContent = 'v60: ' + msg + ' (' + elapsed + 's)';
+          console.log('[Boot v60] ' + msg + ' @ ' + elapsed + 's');
         };
         
-        // Show debug info after 5s
-        setTimeout(function() {
-          if (!window.__NAUTI_APP_LOADED__ && debug) {
-            debug.classList.remove('hidden');
-            debug.textContent = 'Bundle loading...';
-          }
-        }, 5000);
-        
-        // Show error recovery after 12s (only if still loading)
+        // Show recovery ONLY after 15s AND only if bundle completely failed
         setTimeout(function() {
           if (!window.__NAUTI_APP_LOADED__) {
+            console.error('[Boot v60] Bundle failed to mount after 15s');
             var loader = document.getElementById('initial-loader');
             if (loader) {
               loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
                 '<p class="text-foreground text-lg font-semibold">Carregamento lento</p>' +
-                '<p class="text-muted text-sm">O aplicativo demorou para carregar. Isso pode ser causado por cache desatualizado.</p>' +
+                '<p class="text-muted text-sm">O aplicativo demorou para carregar. Limpe o cache para atualizar.</p>' +
                 '<button onclick="window.clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
                 '</div>';
             }
           }
-        }, 12000);
+        }, 15000);
         
         // Manual cache clear utility
         window.clearCacheAndReload = function() {
