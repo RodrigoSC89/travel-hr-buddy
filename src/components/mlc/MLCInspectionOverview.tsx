@@ -188,7 +188,7 @@ export function MLCInspectionOverview({
         height="h-80"
         showControls={true}
         onVesselClick={(vessel) => {
-          console.log('Vessel clicked:', vessel);
+          // Vessel click handler - can be extended for navigation
         }}
       />
 

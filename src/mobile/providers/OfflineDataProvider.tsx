@@ -149,7 +149,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
-        console.log("Sync queued for later:", e);
+        // Sync queued for later
       }
     }
   }, [isOnline]);
@@ -173,7 +173,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
-        console.log("Delete queued for later:", e);
+        // Delete queued for later
       }
     }
   }, [isOnline]);

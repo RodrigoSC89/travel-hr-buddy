@@ -482,15 +482,15 @@ export const EmergencyResponse: React.FC = () => {
       <NewEmergencyPlanDialog 
         open={newPlanOpen} 
         onOpenChange={setNewPlanOpen}
-        onPlanCreated={(plan) => {
-          console.log("New plan created:", plan);
+        onPlanCreated={(_plan) => {
+          // Plan creation handled - refresh list
         }}
       />
       <ScheduleDrillDialog 
         open={scheduleDrillOpen} 
         onOpenChange={setScheduleDrillOpen}
-        onDrillScheduled={(drill) => {
-          console.log("Drill scheduled:", drill);
+        onDrillScheduled={(_drill) => {
+          // Drill scheduled - refresh list
         }}
       />
       <EmergencyReportDialog 

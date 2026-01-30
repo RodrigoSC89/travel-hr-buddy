@@ -175,7 +175,7 @@ export function GlobalVoiceButton() {
         }
       }
     } catch (error) {
-      console.log("ElevenLabs TTS failed, falling back to Web Speech API:", error);
+      // ElevenLabs TTS failed, fallback to Web Speech API
     }
 
     // Fallback to Web Speech API

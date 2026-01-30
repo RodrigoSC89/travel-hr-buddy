@@ -62,7 +62,7 @@ export default function DPAIAnalyzer() {
     setAnalysis(null);
 
     try {
-      console.log("Starting DP analysis:", type, telemetry);
+      // Starting DP analysis
       
       const response = await fetch(
         `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,

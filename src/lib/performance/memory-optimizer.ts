@@ -118,7 +118,7 @@ class MemoryOptimizer {
   }
 
   async performCleanup(): Promise<void> {
-    console.log('[MemoryOptimizer] Performing memory cleanup...');
+    // Memory cleanup in progress
     
     this.clearLocalStorageOld(3);
     this.clearUnusedImages();
