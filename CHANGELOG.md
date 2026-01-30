@@ -2,6 +2,43 @@
 
 > 📦 Para informações sobre PATCHES 608-612, consulte o arquivo [patches/nautilus-one-production-series.yaml](patches/nautilus-one-production-series.yaml)
 
+## [4.2.0] - 2026-01-30 - Quality Gates & Documentation
+**Tipo:** Maintenance Release - DevOps & Documentation
+
+### ✅ Added
+- **Hook Genérico de IA** (`src/hooks/ai/useAI.ts`):
+  - Hook unificado para todas as 16 IAs especializadas
+  - System prompts específicos para cada domínio marítimo
+  - 16 hooks especializados: `useCommandCenterAI`, `useCrewAI`, etc.
+- **Componente LoadingState** (`src/components/ui/LoadingState.tsx`):
+  - 4 variantes: spinner, skeleton, pulse, dots
+  - 4 tamanhos: sm, md, lg, xl
+  - Helpers: `PageLoader`, `CardLoader`, `ButtonLoader`, `InlineLoader`
+  - Acessibilidade: `role="status"`, `aria-live="polite"`
+- **CI/CD Quality Gates** (`.github/workflows/quality-gates.yml`):
+  - TypeScript strict check
+  - ESLint (0 warnings)
+  - Unit tests
+  - Bundle size check
+  - Security audit
+- **Documentação**:
+  - `docs/CODE-REVIEW-CHECKLIST.md` - Checklist de revisão de código
+  - `docs/TECHNICAL-DEBT-REPORT.md` - Relatório de dívidas técnicas
+  - `docs/DEPLOY-VALIDATION-REPORT.md` - Relatório de validação pré-deploy
+
+### 🔧 Fixed
+- `jobs-forecast-by-component.test.ts` - Cálculo de diferença de dias (`Math.floor` → `Math.round`)
+- `workflow-api.test.ts` - Mock de dynamic-tables (19 testes)
+
+### 📊 Metrics
+- 1800+ testes passando
+- 713 tabelas com RLS 100%
+- 280+ Edge Functions deployadas
+- 36 secrets configurados
+- Score de qualidade: 9.2/10
+
+---
+
 ## [4.1.0] - 2026-01-26 - Schema Completion & Technical Debt Clearance
 **Tipo:** Maintenance Release - Production Hardening
 
