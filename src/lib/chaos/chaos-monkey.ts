@@ -133,7 +133,7 @@ export class ChaosMonkey {
     }
 
     const totalDuration = Date.now() - startTime;
-    console.log(`🐒 Chaos test completed in ${totalDuration}ms`);
+    // Chaos test completed - duration tracked internally
 
     return results;
   }

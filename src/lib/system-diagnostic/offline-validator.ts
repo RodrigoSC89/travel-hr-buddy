@@ -27,7 +27,7 @@ class OfflineValidator {
    * Run complete offline validation
    */
   async validate(): Promise<OfflineValidationResult> {
-    console.log('[OfflineValidator] Starting offline validation...');
+    // Starting offline validation
     
     const tests = await this.runTests();
     const capabilities = this.checkCapabilities();

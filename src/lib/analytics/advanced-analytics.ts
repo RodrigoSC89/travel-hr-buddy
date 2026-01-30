@@ -129,9 +129,7 @@ class AdvancedAnalytics {
 
     this.eventQueue.push(event);
 
-    if (this.config.debug) {
-      console.log('[Analytics] Event:', event);
-    }
+    // Debug mode event tracking handled internally
 
     if (this.eventQueue.length >= this.config.batchSize) {
       this.flush();
