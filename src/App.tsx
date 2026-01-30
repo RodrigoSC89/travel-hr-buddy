@@ -259,6 +259,18 @@ const ReportingAnalyticsAIPage = lazy(() => import("@/pages/ai/ReportingAnalytic
 const MobileOfflineAIPage = lazy(() => import("@/pages/ai/MobileOfflineAIPage"));
 
 // ============================================
+// ENTERPRISE INTELLIGENCE SUITE
+// ============================================
+const RAGAssistantPage = lazy(() => import("@/pages/enterprise/RAGAssistantPage"));
+const OCRCenterPage = lazy(() => import("@/pages/enterprise/OCRCenterPage"));
+const FormsBuilderPage = lazy(() => import("@/pages/enterprise/FormsBuilderPage"));
+const OCIMFAssessmentPage = lazy(() => import("@/pages/enterprise/OCIMFAssessmentPage"));
+const FatigueRiskPage = lazy(() => import("@/pages/enterprise/FatigueRiskPage"));
+const CrewMatchingPage = lazy(() => import("@/pages/enterprise/CrewMatchingPage"));
+const ContractAnalysisPage = lazy(() => import("@/pages/enterprise/ContractAnalysisPage"));
+const CompliancePredictorPage = lazy(() => import("@/pages/enterprise/CompliancePredictorPage"));
+
+// ============================================
 // ADMIN & DASHBOARDS
 // ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
@@ -664,6 +676,25 @@ const AppRoutes = () => (
       <Route path="/roadmap" element={<Roadmap />} />
       <Route path="/qa/preview" element={<CentralComando />} />
       <Route path="/production-deploy" element={<ProductionDeploy />} />
+      
+      {/* ============================================ */}
+      {/* ENTERPRISE INTELLIGENCE SUITE */}
+      {/* ============================================ */}
+      <Route path="/enterprise/rag-assistant" element={<RAGAssistantPage />} />
+      <Route path="/enterprise/ocr-center" element={<OCRCenterPage />} />
+      <Route path="/enterprise/document-processor" element={<OCRCenterPage />} />
+      <Route path="/enterprise/forms-builder" element={<FormsBuilderPage />} />
+      <Route path="/enterprise/checklists-builder" element={<FormsBuilderPage />} />
+      <Route path="/enterprise/ocimf-assessment" element={<OCIMFAssessmentPage />} />
+      <Route path="/enterprise/tmsa-analytics" element={<OCIMFAssessmentPage />} />
+      <Route path="/enterprise/fatigue-risk" element={<FatigueRiskPage />} />
+      <Route path="/enterprise/mlc-hours" element={<FatigueRiskPage />} />
+      <Route path="/enterprise/crew-matching" element={<CrewMatchingPage />} />
+      <Route path="/enterprise/talent-pool" element={<CrewMatchingPage />} />
+      <Route path="/enterprise/contract-analysis" element={<ContractAnalysisPage />} />
+      <Route path="/enterprise/risk-clauses" element={<ContractAnalysisPage />} />
+      <Route path="/enterprise/compliance-predictor" element={<CompliancePredictorPage />} />
+      <Route path="/enterprise/nc-prediction" element={<CompliancePredictorPage />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}

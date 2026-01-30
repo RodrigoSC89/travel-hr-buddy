@@ -225,6 +225,40 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
+  // 🏢 ENTERPRISE INTELLIGENCE SUITE (NEW!)
+  // ============================================
+  {
+    title: "🏢 Enterprise Intelligence",
+    defaultOpen: false,
+    items: [
+      // RAG & Knowledge
+      { label: "🧠 Knowledge Hub IA", path: "/knowledge-hub", icon: Brain, emoji: "🧠", badge: "RAG", status: "new" },
+      { label: "💬 RAG Chatbot", path: "/enterprise/rag-assistant", icon: MessageSquare, emoji: "💬", badge: "AI", status: "new" },
+      // OCR Multi-Engine
+      { label: "📄 OCR Multi-Engine", path: "/enterprise/ocr-center", icon: Eye, emoji: "📄", badge: "3 ENGINES", status: "new" },
+      { label: "📤 Document Processor", path: "/enterprise/document-processor", icon: FileText, emoji: "📤", badge: "NEW", status: "new" },
+      // Forms & Checklists Builder
+      { label: "📋 Forms Builder", path: "/enterprise/forms-builder", icon: ClipboardList, emoji: "📋", badge: "BUILDER", status: "new" },
+      { label: "✅ Checklists Builder", path: "/enterprise/checklists-builder", icon: ClipboardList, emoji: "✅", badge: "AI", status: "new" },
+      // OCIMF Self-Assessment
+      { label: "🔍 OCIMF OVMSA", path: "/enterprise/ocimf-assessment", icon: Shield, emoji: "🔍", badge: "OCIMF", status: "new" },
+      { label: "📊 TMSA Analytics", path: "/enterprise/tmsa-analytics", icon: BarChart3, emoji: "📊", badge: "TMSA", status: "new" },
+      // Fatigue Risk AI
+      { label: "😴 Fatigue Risk Predictor", path: "/enterprise/fatigue-risk", icon: Activity, emoji: "😴", badge: "ML", status: "new" },
+      { label: "⏰ MLC Work Hours", path: "/enterprise/mlc-hours", icon: Clock, emoji: "⏰", badge: "MLC 2006", status: "new" },
+      // Crew Matching AI
+      { label: "🎯 Crew Matching AI", path: "/enterprise/crew-matching", icon: Users, emoji: "🎯", badge: "AI", status: "new" },
+      { label: "📈 Talent Pool", path: "/enterprise/talent-pool", icon: TrendingUp, emoji: "📈", badge: "NEW", status: "new" },
+      // Contract Analysis AI
+      { label: "📝 Contract Analysis AI", path: "/enterprise/contract-analysis", icon: FileText, emoji: "📝", badge: "AI", status: "new" },
+      { label: "⚠️ Risk Clause Detector", path: "/enterprise/risk-clauses", icon: AlertTriangle, emoji: "⚠️", badge: "AI", status: "new" },
+      // Compliance Predictor
+      { label: "🔮 Compliance Predictor", path: "/enterprise/compliance-predictor", icon: Brain, emoji: "🔮", badge: "ML", status: "new" },
+      { label: "📉 NC Prediction", path: "/enterprise/nc-prediction", icon: TrendingUp, emoji: "📉", badge: "AI", status: "new" },
+    ],
+  },
+
+  // ============================================
   // 📊 TELEMETRIA & MONITORAMENTO
   // ============================================
   {
