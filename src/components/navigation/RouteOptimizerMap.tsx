@@ -157,7 +157,14 @@ export function RouteOptimizerMap({
 
     const initMap = async () => {
       try {
-        const mapboxgl = (await import('mapbox-gl')).default;
+        const mapboxModule = await import('mapbox-gl');
+        const mapboxgl = mapboxModule.default || mapboxModule;
+        
+        // PATCH v39: Verificar se mapboxgl está definido antes de setar accessToken
+        if (!mapboxgl || typeof mapboxgl.Map !== 'function') {
+          throw new Error('Mapbox GL não carregado corretamente');
+        }
+        
         mapboxgl.accessToken = mapboxToken;
 
         // Calculate bounds from waypoints
@@ -625,8 +632,11 @@ export function RouteOptimizerMap({
   useEffect(() => {
     if (mapLoaded && map.current) {
       const loadMapbox = async () => {
-        const mapboxgl = (await import('mapbox-gl')).default;
-        addMapLayers(mapboxgl);
+        const mapboxModule = await import('mapbox-gl');
+        const mapboxgl = mapboxModule.default || mapboxModule;
+        if (mapboxgl) {
+          addMapLayers(mapboxgl);
+        }
       };
       loadMapbox();
     }
