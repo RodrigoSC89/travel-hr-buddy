@@ -332,17 +332,32 @@ const queryClient = new QueryClient({
 
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
-// Ultra-optimized loader - NO AUTOMATIC REDIRECT to prevent loops
-// PATCH v28: Removed force redirect that was causing infinite loops
+// Ultra-optimized loader - v30: Auto-redirect after 3s to break any loop
 const Loader = React.memo(() => {
   const [showRetry, setShowRetry] = React.useState(false);
   
   React.useEffect(() => {
-    // Show retry after 2s only - user can manually fix
-    const retryTimeout = setTimeout(() => setShowRetry(true), 2000);
+    // Show retry after 1.5s
+    const retryTimeout = setTimeout(() => setShowRetry(true), 1500);
+    
+    // CRITICAL: Force redirect to /auth after 3s if still loading
+    // This breaks any infinite loop on production
+    const forceRedirect = setTimeout(() => {
+      // Only redirect if not already on /auth
+      if (!window.location.pathname.includes('/auth')) {
+        try {
+          // Clear any corrupted storage
+          Object.keys(localStorage)
+            .filter(k => k.includes('supabase') || k.includes('sb-'))
+            .forEach(k => localStorage.removeItem(k));
+        } catch {}
+        window.location.href = '/auth';
+      }
+    }, 3000);
     
     return () => {
       clearTimeout(retryTimeout);
+      clearTimeout(forceRedirect);
     };
   }, []);
   
@@ -352,8 +367,7 @@ const Loader = React.memo(() => {
         .filter(k => k.includes('supabase') || k.includes('sb-'))
         .forEach(k => localStorage.removeItem(k));
     } catch {}
-    // Reload current page instead of redirecting to auth
-    window.location.reload();
+    window.location.href = '/auth';
   };
   
   return (
@@ -376,7 +390,7 @@ const Loader = React.memo(() => {
               onClick={handleRetry}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
             >
-              Tentar novamente
+              Ir para login
             </button>
           </div>
         )}
