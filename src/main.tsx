@@ -118,10 +118,11 @@ const updateStatus = (msg: string) => {
   if (win.__updateBootStatus) {
     win.__updateBootStatus(msg);
   } else {
-    console.log('[Boot v59]', msg);
+    console.log('[Boot v60]', msg);
   }
 };
 
+console.log('[Boot v60] JavaScript bundle loaded');
 updateStatus('Bundle carregado');
 
 const container = document.getElementById("root");
@@ -138,7 +139,7 @@ if (container) {
     updateStatus('Loader removido');
   }
   
-  console.log('[Boot v59] React mounting...');
+  console.log('[Boot v60] React mounting...');
   updateStatus('Montando React...');
   
   try {
@@ -150,10 +151,10 @@ if (container) {
       </React.StrictMode>
     );
     
-    console.log('[Boot v59] React mounted OK');
+    console.log('[Boot v60] React mounted OK');
     updateStatus('React OK');
   } catch (error) {
-    console.error('[Boot v59] React mount FAILED:', error);
+    console.error('[Boot v60] React mount FAILED:', error);
     updateStatus('ERRO: ' + (error instanceof Error ? error.message : 'Unknown'));
     
     // Show error in UI
@@ -173,5 +174,5 @@ if (container) {
     ultraStartupOptimizer.markTTI();
   });
 } else {
-  console.error('[Boot v59] CRITICAL: #root container not found!');
+  console.error('[Boot v60] CRITICAL: #root container not found!');
 }

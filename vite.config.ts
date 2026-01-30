@@ -188,7 +188,7 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: "assets/[name]-[hash].[ext]",
       },
       treeshake: {
-        moduleSideEffects: false,
+        moduleSideEffects: true, // CRITICAL v60: Keep side-effect imports (CSS, polyfills)
         propertyReadSideEffects: false,
       },
     },
