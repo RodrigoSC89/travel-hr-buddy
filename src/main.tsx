@@ -111,50 +111,56 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v62 SIMPLIFIED BOOT
+// Render the app - PATCH v63 ULTRA RELIABLE BOOT
 
-console.log('[Nauti v62] JavaScript bundle loaded - timestamp:', Date.now());
+console.log('[Nauti v63] Bundle loaded');
 
-// Remove loader immediately when JS loads
-const htmlLoader = document.getElementById("initial-loader");
-if (htmlLoader) htmlLoader.remove();
+// Remove loader ASAP
+try {
+  document.getElementById("initial-loader")?.remove();
+} catch {}
+
+// Mark app as loaded immediately to prevent recovery UI
+try {
+  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+} catch {}
 
 const container = document.getElementById("root");
 if (container) {
-  console.log('[Nauti v62] Container found, mounting React...');
-  
-  // Mark app as loaded to prevent recovery UI
-  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+  console.log('[Nauti v63] Mounting React...');
   
   try {
-    createRoot(container).render(
+    const root = createRoot(container);
+    root.render(
       <React.StrictMode>
         <HelmetProvider>
           <App />
         </HelmetProvider>
       </React.StrictMode>
     );
+    console.log('[Nauti v63] React mounted OK');
     
-    console.log('[Nauti v62] React mounted successfully');
+    // Mark TTI after render
+    requestAnimationFrame(() => {
+      try {
+        ultraStartupOptimizer.markTTI();
+      } catch {}
+    });
   } catch (error) {
-    console.error('[Nauti v62] React mount FAILED:', error);
-    
-    // Show error in UI
+    console.error('[Nauti v63] Mount error:', error);
     container.innerHTML = `
-      <div class="min-h-screen flex items-center justify-center bg-background p-4">
-        <div class="text-center space-y-4 max-w-sm">
-          <p class="text-foreground text-lg font-semibold">Erro ao carregar</p>
-          <p class="text-muted text-sm">${error instanceof Error ? error.message : 'Erro desconhecido'}</p>
-          <button onclick="localStorage.clear();sessionStorage.clear();location.reload(true)" class="btn">Limpar cache e recarregar</button>
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;padding:24px;">
+        <div style="text-align:center;max-width:320px;">
+          <p style="color:#f1f5f9;font-size:18px;font-weight:600;margin-bottom:16px;">Erro ao carregar</p>
+          <p style="color:#94a3b8;font-size:14px;margin-bottom:16px;">${error instanceof Error ? error.message : 'Erro'}</p>
+          <button onclick="localStorage.clear();location.reload()" 
+            style="background:#0ea5e9;color:white;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:14px;">
+            Recarregar
+          </button>
         </div>
       </div>
     `;
   }
-  
-  // Mark TTI after render
-  requestAnimationFrame(() => {
-    ultraStartupOptimizer.markTTI();
-  });
 } else {
-  console.error('[Nauti v62] CRITICAL: #root container not found!');
+  console.error('[Nauti v63] #root not found!');
 }
