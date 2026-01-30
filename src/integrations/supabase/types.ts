@@ -32031,6 +32031,58 @@ export type Database = {
           },
         ]
       }
+      sensor_readings: {
+        Row: {
+          id: string
+          organization_id: string
+          quality: string | null
+          recorded_at: string
+          sensor_id: string
+          value: number
+          vessel_id: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          quality?: string | null
+          recorded_at?: string
+          sensor_id: string
+          value: number
+          vessel_id: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          quality?: string | null
+          recorded_at?: string
+          sensor_id?: string
+          value?: number
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensor_readings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sensor_readings_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_sensors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sensor_readings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       session_tokens: {
         Row: {
           created_at: string
@@ -34570,6 +34622,54 @@ export type Database = {
           stcw_chapter?: string | null
           stcw_table?: string
           training_required?: boolean | null
+        }
+        Relationships: []
+      }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          max_users: number | null
+          max_vessels: number | null
+          name: string
+          price_monthly: number
+          stripe_price_id: string
+          stripe_product_id: string
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_users?: number | null
+          max_vessels?: number | null
+          name: string
+          price_monthly: number
+          stripe_price_id: string
+          stripe_product_id: string
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_users?: number | null
+          max_vessels?: number | null
+          name?: string
+          price_monthly?: number
+          stripe_price_id?: string
+          stripe_product_id?: string
+          tier?: string
+          updated_at?: string
         }
         Relationships: []
       }
