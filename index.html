@@ -5,6 +5,11 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
+    <!-- PATCH v62: Force cache invalidation -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    
     <!-- CRITICAL: Inline Critical CSS for FCP -->
     <style id="critical-css">
       *,*::before,*::after{box-sizing:border-box}
@@ -94,71 +99,37 @@
   </head>
 
   <body>
-    <!-- PATCH v61: Force fresh deploy with anti-cache -->
+    <!-- PATCH v62: Simplified reliable boot - timestamp 1706621280 -->
     <div id="root">
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p id="boot-status" class="text-muted text-sm">v61: Iniciando...</p>
+          <p id="boot-status" class="text-muted text-sm">Carregando Nauti One...</p>
         </div>
       </div>
     </div>
     
-    <!-- PATCH v61: Robust boot sequence with error detection -->
+    <!-- PATCH v62: Minimal reliable boot - no complex logic -->
     <script>
-      (function() {
-        'use strict';
-        window.__NAUTI_APP_LOADED__ = false;
-        window.__BOOT_VERSION__ = 'v61';
-        var status = document.getElementById('boot-status');
-        var startTime = Date.now();
-        
-        // Progress tracking
-        window.__updateBootStatus = function(msg) {
-          var elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-          if (status) status.textContent = 'v61: ' + msg + ' (' + elapsed + 's)';
-          console.log('[Boot v61] ' + msg + ' @ ' + elapsed + 's');
-        };
-        
-        // Show recovery after 20s if bundle completely failed
-        setTimeout(function() {
-          if (!window.__NAUTI_APP_LOADED__) {
-            console.error('[Boot v61] Bundle failed to mount after 20s');
-            var loader = document.getElementById('initial-loader');
-            if (loader) {
-              loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
-                '<p class="text-foreground text-lg font-semibold">Carregamento lento</p>' +
-                '<p class="text-muted text-sm">O aplicativo demorou para carregar. Limpe o cache para atualizar.</p>' +
-                '<button onclick="window.clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
-                '</div>';
-            }
-          }
-        }, 20000);
-        
-        // Manual cache clear utility
-        window.clearCacheAndReload = function() {
-          console.log('[Boot v61] Clearing all caches...');
-          try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
-          if ('caches' in window) {
-            caches.keys().then(function(k) { 
-              k.forEach(function(c) { caches.delete(c); }); 
-            });
-          }
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(r) { 
-              r.forEach(function(s) { s.unregister(); }); 
-            });
-          }
-          setTimeout(function() { 
-            location.replace(location.origin + '/auth?nocache=' + Date.now()); 
-          }, 300);
-        };
-        
-        window.__updateBootStatus('HTML pronto');
-      })();
+      // Version marker for debugging
+      console.log('[Nauti v62] Boot sequence started');
+      
+      // Simple fallback after 25 seconds
+      setTimeout(function() {
+        if (document.getElementById('initial-loader')) {
+          console.error('[Nauti v62] App failed to mount');
+          document.getElementById('initial-loader').innerHTML = 
+            '<div style="text-align:center;padding:24px;max-width:320px;">' +
+            '<p style="color:#f1f5f9;font-size:18px;font-weight:600;margin-bottom:16px;">Erro de Carregamento</p>' +
+            '<p style="color:#94a3b8;font-size:14px;margin-bottom:16px;">Tente limpar o cache do navegador</p>' +
+            '<button onclick="localStorage.clear();sessionStorage.clear();location.reload(true)" ' +
+            'style="background:#0ea5e9;color:white;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:14px;">' +
+            'Recarregar</button></div>';
+        }
+      }, 25000);
     </script>
     
-    <!-- Main Application Bundle - Vite transforms this during build -->
+    <!-- Main Application Bundle - Vite handles this -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
