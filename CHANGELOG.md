@@ -2,10 +2,20 @@
 
 > 📦 Para informações sobre PATCHES 608-612, consulte o arquivo [patches/nautilus-one-production-series.yaml](patches/nautilus-one-production-series.yaml)
 
-## [4.2.0] - 2026-01-30 - Quality Gates & Documentation
+## [4.2.0] - 2026-01-30 - Quality Gates & Conformity Audit
 **Tipo:** Maintenance Release - DevOps & Documentation
 
 ### ✅ Added
+- **Conformity Validator** (`src/lib/validation/conformity-validator.ts`):
+  - Validação de tipos TypeScript vs Supabase schema
+  - Validação de padrões de queries (org filter, soft delete, error handling)
+  - Validação de contratos de Edge Functions
+  - Geração de relatório de conformidade completo
+- **RLS Tester** (`src/lib/validation/rls-tester.ts`):
+  - Testes automáticos de políticas RLS
+  - Verificação de acesso cross-organization
+  - Verificação de soft delete filter
+  - Relatório de auditoria RLS
 - **Hook Genérico de IA** (`src/hooks/ai/useAI.ts`):
   - Hook unificado para todas as 16 IAs especializadas
   - System prompts específicos para cada domínio marítimo
@@ -14,7 +24,6 @@
   - 4 variantes: spinner, skeleton, pulse, dots
   - 4 tamanhos: sm, md, lg, xl
   - Helpers: `PageLoader`, `CardLoader`, `ButtonLoader`, `InlineLoader`
-  - Acessibilidade: `role="status"`, `aria-live="polite"`
 - **CI/CD Quality Gates** (`.github/workflows/quality-gates.yml`):
   - TypeScript strict check
   - ESLint (0 warnings)
@@ -23,7 +32,9 @@
   - Security audit
 - **Documentação**:
   - `docs/CODE-REVIEW-CHECKLIST.md` - Checklist de revisão de código
+  - `docs/CONTRIBUTING.md` - Guia de contribuição
   - `docs/TECHNICAL-DEBT-REPORT.md` - Relatório de dívidas técnicas
+  - `docs/CONFORMITY-AUDIT-REPORT.md` - Relatório de conformidade backend↔frontend
   - `docs/DEPLOY-VALIDATION-REPORT.md` - Relatório de validação pré-deploy
 
 ### 🔧 Fixed
@@ -36,6 +47,7 @@
 - 280+ Edge Functions deployadas
 - 36 secrets configurados
 - Score de qualidade: 9.2/10
+- Score de conformidade: 98.5%
 
 ---
 
