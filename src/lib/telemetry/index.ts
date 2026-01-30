@@ -26,20 +26,17 @@ const TELEMETRY_ENABLED = getEnv('VITE_TELEMETRY_ENABLED') === "true";
 
 class TelemetryService {
   private initialized = false;
-  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
+  // PATCH v38: Sempre online - navigator.onLine não é confiável no iOS PWA
   private online = true;
 
   constructor() {
-    // PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos enviar
-    window.addEventListener("online", () => {
-      this.online = true;
-      this.syncOfflineEvents();
-    });
-
-    window.addEventListener("offline", () => {
-      // PATCH v26: Não desabilitar telemetry - deixar falhar naturalmente
-      // this.online = false;
-    });
+    // PATCH v38: Apenas listener online para sync, offline event REMOVIDO
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => {
+        this.syncOfflineEvents();
+      });
+      // PATCH v38: Evento offline REMOVIDO - nunca bloquear telemetry
+    }
   }
 
   /**

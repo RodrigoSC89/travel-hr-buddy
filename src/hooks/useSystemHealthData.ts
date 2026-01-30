@@ -138,7 +138,7 @@ export function useSystemHealth() {
         cpu: browserMetrics.cpu,
         memory: browserMetrics.memory,
         disk: 0,
-        network: navigator.onLine ? 100 : 0,
+        network: 100, // PATCH v38: Sempre online - navigator.onLine não é confiável no iOS PWA
         database: 100,
         activeUsers: 1,
         responseTime: 0,
