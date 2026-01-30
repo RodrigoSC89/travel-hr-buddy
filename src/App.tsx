@@ -332,48 +332,56 @@ const queryClient = new QueryClient({
 
 // Analytics Tracker inicializado via useEffect no AppInitializer
 
-// LOADER v32: Auto-resolve loader - NEVER blocks more than 2.5 seconds
-// If lazy loading takes too long, shows error recovery UI
+// ============================================
+// LOADER v33 DEFINITIVO - NUNCA bloqueia mais de 1.5s
+// ============================================
 const Loader = React.memo(() => {
-  const [showRecovery, setShowRecovery] = React.useState(false);
+  const [phase, setPhase] = React.useState<'loading' | 'slow' | 'redirect'>('loading');
   
   React.useEffect(() => {
-    // After 2.5s, show recovery UI
-    const timer = setTimeout(() => setShowRecovery(true), 2500);
-    return () => clearTimeout(timer);
+    // Fase 1: Após 1.5s, mostra UI de recuperação
+    const slowTimer = setTimeout(() => setPhase('slow'), 1500);
+    // Fase 2: Após 4s, redireciona automaticamente para /auth
+    const redirectTimer = setTimeout(() => setPhase('redirect'), 4000);
+    
+    return () => {
+      clearTimeout(slowTimer);
+      clearTimeout(redirectTimer);
+    };
   }, []);
   
-  if (showRecovery) {
+  // Auto-redirect após 4s de loading
+  if (phase === 'redirect') {
+    // Limpa cache e vai para login
+    try {
+      Object.keys(localStorage)
+        .filter(k => k.includes('supabase') || k.includes('sb-'))
+        .forEach(k => localStorage.removeItem(k));
+    } catch {}
+    window.location.replace('/auth');
+    return null;
+  }
+  
+  if (phase === 'slow') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4 p-6 max-w-sm">
-          <div className="text-lg font-semibold text-foreground">Carregamento lento detectado</div>
+          <div className="text-lg font-semibold text-foreground">Carregamento lento</div>
           <p className="text-sm text-muted-foreground">
-            Isso pode acontecer na primeira visita ou com conexão lenta.
+            Redirecionando para login em alguns segundos...
           </p>
           <div className="flex flex-col gap-2">
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => window.location.replace('/auth')}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90"
             >
-              Recarregar página
+              Ir para login agora
             </button>
             <button
-              onClick={() => {
-                // Clear caches and reload
-                try {
-                  Object.keys(localStorage)
-                    .filter(k => k.includes('supabase') || k.includes('sb-'))
-                    .forEach(k => localStorage.removeItem(k));
-                  if ('caches' in window) {
-                    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-                  }
-                } catch {}
-                window.location.href = '/auth';
-              }}
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md text-sm hover:bg-secondary/90"
             >
-              Ir para login
+              Tentar novamente
             </button>
           </div>
         </div>
@@ -382,92 +390,71 @@ const Loader = React.memo(() => {
   }
   
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center bg-background"
-      style={{ contain: "layout paint" }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-3">
-        <div 
-          className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin"
-          style={{ contain: "strict" }}
-        />
+        <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
         <p className="text-muted-foreground text-sm">Carregando...</p>
       </div>
     </div>
   );
 });
 
-// Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
-const AuthenticatedLayout = () => {
-  return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
-        {/* Sidebar - renders as Sheet on mobile via SidebarProvider */}
-        <AppSidebar />
-        
-        {/* Main content area */}
-        <div className="flex-1 flex flex-col min-w-0 w-full">
-          {/* Header with mobile menu trigger */}
-          <Header />
-          
-          {/* Main content with padding for mobile bottom nav */}
-          <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
-            <Outlet />
-          </main>
-        </div>
-        
-        {/* Mobile Bottom Navigation - only shows on mobile */}
-        <MobileBottomNav />
-        
-        {/* Onboarding Tour for new users */}
-        <ProductOnboardingTour />
-        
-        {/* User Feedback Widget */}
-        <UserFeedbackWidget position="bottom-right" />
-        
-        {/* Toast Notifications */}
-        <Toaster />
-      </div>
-    </SidebarProvider>
-  );
-};
-
-// PROTECTED ROUTE v32: Ultra-fast, never blocks
-// Auth check is background - system ALWAYS renders immediately
+// ============================================
+// PROTECTED ROUTE v33 DEFINITIVO - Zero blocking
+// Auth é 100% background, NUNCA bloqueia UI
+// ============================================
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const [shouldRedirect, setShouldRedirect] = React.useState(false);
-  const userRef = React.useRef(user);
+  const [forceRedirect, setForceRedirect] = React.useState(false);
   
-  // Keep track of user changes
-  React.useEffect(() => {
-    userRef.current = user;
-  }, [user]);
-  
-  // Single timer: after 200ms, decide based on current user state
+  // Timeout de segurança: se não tiver user após 100ms, redireciona
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      // Check current ref value (not stale closure)
-      if (!userRef.current) {
-        setShouldRedirect(true);
+      if (!user) {
+        setForceRedirect(true);
       }
-    }, 200);
+    }, 100);
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [user]);
   
-  // User present = show content immediately
+  // User logado = mostra conteúdo
   if (user) {
     return <>{children}</>;
   }
   
-  // No user + should redirect = go to auth
-  if (shouldRedirect) {
+  // Sem user + timeout expirado = vai para auth
+  if (forceRedirect) {
     return <Navigate to="/auth" replace />;
   }
   
-  // Brief loading (max 200ms)
-  return <Loader />;
+  // Loading muito breve (máximo 100ms) - NÃO usa Loader component
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+};
+
+// Layout com Sidebar para rotas autenticadas
+const AuthenticatedLayout = () => {
+  return (
+    <SidebarProvider defaultOpen={true}>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <div className="flex-1 flex flex-col min-w-0 w-full">
+          <Header />
+          <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
+            <Outlet />
+          </main>
+        </div>
+        <MobileBottomNav />
+        <ProductOnboardingTour />
+        <UserFeedbackWidget position="bottom-right" />
+        <Toaster />
+      </div>
+    </SidebarProvider>
+  );
 };
 
 // Rotas internas
@@ -836,6 +823,34 @@ const AppRoutes = () => (
 );
 
 function App() {
+  // ============================================
+  // CRITICAL v33: Global unhandledrejection handler
+  // Prevents async errors from crashing the app / causing infinite loops
+  // ============================================
+  React.useEffect(() => {
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      console.warn('[App] Unhandled promise rejection caught:', event.reason);
+      event.preventDefault(); // Prevent default browser error handling
+      
+      // If it's an auth-related error, clear session and redirect
+      const reason = String(event.reason || '');
+      if (reason.includes('auth') || reason.includes('session') || reason.includes('token')) {
+        try {
+          Object.keys(localStorage)
+            .filter(k => k.includes('supabase') || k.includes('sb-'))
+            .forEach(k => localStorage.removeItem(k));
+        } catch {}
+        // Don't redirect here - let user continue
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleRejection);
+    
+    return () => {
+      window.removeEventListener('unhandledrejection', handleRejection);
+    };
+  }, []);
+
   // Initialize analytics safely after component mount
   React.useEffect(() => {
     // Defer to avoid blocking initial render
