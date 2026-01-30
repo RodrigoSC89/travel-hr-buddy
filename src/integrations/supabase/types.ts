@@ -42977,6 +42977,10 @@ export type Database = {
         Args: { checklist_items: Json }
         Returns: number
       }
+      calculate_compliance_score: {
+        Args: { p_vessel_id: string }
+        Returns: number
+      }
       calculate_crew_overall_performance: {
         Args: { crew_uuid: string }
         Returns: number
@@ -43006,6 +43010,10 @@ export type Database = {
       calculate_starfix_risk_rating: {
         Args: { p_period_days?: number; p_vessel_id: string }
         Returns: string
+      }
+      calculate_vessel_opex: {
+        Args: { p_end_date: string; p_start_date: string; p_vessel_id: string }
+        Returns: number
       }
       can_access_employee_data: {
         Args: { target_employee_id: string; user_uuid?: string }
@@ -43163,6 +43171,16 @@ export type Database = {
         Args: { p_organization_id: string }
         Returns: Json
       }
+      get_expiring_certificates_v2: {
+        Args: { p_days?: number }
+        Returns: {
+          certificate_type: string
+          crew_member_id: string
+          crew_member_name: string
+          days_remaining: number
+          expiry_date: string
+        }[]
+      }
       get_overdue_tasks: {
         Args: never
         Returns: {
@@ -43199,6 +43217,7 @@ export type Database = {
             }[]
           }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
+      get_user_org: { Args: never; Returns: string }
       get_user_org_ids: { Args: { user_uuid: string }; Returns: string[] }
       get_user_organization:
         | { Args: never; Returns: string }
@@ -43236,6 +43255,10 @@ export type Database = {
         Returns: string
       }
       get_user_vessel_ids: { Args: { _user_id: string }; Returns: string[] }
+      get_vessel_dashboard_stats: {
+        Args: { p_vessel_id: string }
+        Returns: Json
+      }
       get_weather_cache: {
         Args: { p_api_source?: string; p_lat: number; p_lng: number }
         Returns: Json
@@ -43426,6 +43449,10 @@ export type Database = {
       start_tracking_session: {
         Args: { p_satellite_id: string; p_session_name?: string }
         Returns: Json
+      }
+      suggest_maintenance_date: {
+        Args: { p_component: string; p_vessel_id: string }
+        Returns: string
       }
       update_satellite_position: {
         Args: {
