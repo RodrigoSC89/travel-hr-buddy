@@ -111,19 +111,19 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v57 DEFINITIVE FIX
+// Render the app - PATCH v58 FINAL FIX
 const container = document.getElementById("root");
 if (container) {
-  // CRITICAL v57: Mark loaded and clear HTML loader SYNCHRONOUSLY
-  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
-  
-  // Remove HTML loader completely - React takes over
+  // CRITICAL v58: Remove HTML loader BEFORE React render starts
   const initialLoader = document.getElementById("initial-loader");
   if (initialLoader) {
-    initialLoader.remove(); // REMOVE instead of hide - prevents any flash back
+    initialLoader.remove();
   }
   
-  console.log('[Boot v57] React mounting...');
+  // Mark app as loaded
+  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+  
+  console.log('[Boot v58] React mounting...');
   
   createRoot(container).render(
     <React.StrictMode>
@@ -133,9 +133,9 @@ if (container) {
     </React.StrictMode>
   );
   
-  console.log('[Boot v57] React mounted OK');
+  console.log('[Boot v58] React mounted OK');
   
-  // Mark TTI
+  // Mark TTI after render
   requestAnimationFrame(() => {
     ultraStartupOptimizer.markTTI();
   });
