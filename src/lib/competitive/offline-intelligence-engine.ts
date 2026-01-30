@@ -236,8 +236,10 @@ class OfflineIntelligenceEngine {
         this.triggerSync();
       });
       
+      // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
       window.addEventListener("offline", () => {
-        this.isOnline = false;
+        // this.isOnline = false; // REMOVIDO - nunca bloquear
+        console.log("[OfflineIntelligence] Offline event ignored");
       });
     }
   }

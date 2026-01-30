@@ -24,9 +24,10 @@ export interface CacheStatus {
 }
 
 export function usePWAFeatures() {
+  // PATCH v36: Sempre online - navigator.onLine não é confiável no iOS PWA
   const [status, setStatus] = useState<PWAStatus>({
     isInstalled: false,
-    isOnline: navigator.onLine,
+    isOnline: true, // PATCH v36: Sempre true
     canInstall: false,
     swVersion: null,
     pushEnabled: false,
@@ -44,25 +45,19 @@ export function usePWAFeatures() {
     setStatus(prev => ({ ...prev, isInstalled: isStandalone }));
   }, []);
 
-  // Listen for online/offline events
+  // PATCH v36: Event listeners de online/offline REMOVIDOS
+  // navigator.onLine não é confiável no iOS Safari PWA
+  // Apenas sincronizar quando restaurar conexão, sem bloquear UI
   useEffect(() => {
     const handleOnline = () => {
-      setStatus(prev => ({ ...prev, isOnline: true }));
-      toast.success('Conexão restaurada');
+      // Não mudar isOnline - sempre true
       triggerSync('sync-pending-data');
     };
 
-    const handleOffline = () => {
-      setStatus(prev => ({ ...prev, isOnline: false }));
-      toast.warning('Você está offline. Os dados serão sincronizados quando a conexão voltar.');
-    };
-
     window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
 
     return () => {
       window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 

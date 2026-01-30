@@ -333,9 +333,10 @@ export class NativeAppBridge {
     connectionType: string;
     cellular: boolean;
   }> {
-    // Use web API as fallback
+    // PATCH v36: Sempre retornar connected = true
+    // navigator.onLine não é confiável no iOS PWA
     return {
-      connected: navigator.onLine,
+      connected: true, // PATCH v36: Sempre online
       connectionType: 'unknown',
       cellular: false
     };

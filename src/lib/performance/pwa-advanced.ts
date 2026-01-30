@@ -128,8 +128,10 @@ class PWAManager {
       this.processSyncQueue();
     });
 
+    // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
     window.addEventListener('offline', () => {
-      this.isOnline = false;
+      // this.isOnline = false; // REMOVIDO - nunca bloquear
+      console.log('[PWA-Advanced] Offline event ignored - always online mode');
     });
   }
 
