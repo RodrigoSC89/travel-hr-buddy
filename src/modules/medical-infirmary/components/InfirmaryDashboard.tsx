@@ -4,59 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Stethoscope,
   Pill,
   AlertTriangle,
-  Users,
-  Calendar,
-  Clock,
   Brain,
   Sparkles,
   Send,
   FileText,
   Heart,
-  Thermometer,
-  Activity,
-  ShieldCheck,
   Package,
+  ShieldCheck,
 } from "lucide-react";
-
-interface MedicalSupply {
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  minStock: number;
-  expiryDate: string;
-  status: "ok" | "low" | "expiring" | "critical";
-}
-
-interface MedicalRecord {
-  id: string;
-  crewMember: string;
-  date: string;
-  type: string;
-  symptoms: string;
-  treatment: string;
-  status: "resolved" | "monitoring" | "referred";
-}
-
-const mockSupplies: MedicalSupply[] = [
-  { id: "1", name: "Paracetamol 500mg", category: "Analgésicos", quantity: 120, minStock: 50, expiryDate: "2025-06-15", status: "ok" },
-  { id: "2", name: "Dipirona 1g", category: "Analgésicos", quantity: 85, minStock: 40, expiryDate: "2024-03-20", status: "expiring" },
-  { id: "3", name: "Bandagem elástica", category: "Curativos", quantity: 15, minStock: 20, expiryDate: "2026-12-01", status: "low" },
-  { id: "4", name: "Soro fisiológico 500ml", category: "Soluções", quantity: 8, minStock: 15, expiryDate: "2024-08-10", status: "critical" },
-  { id: "5", name: "Omeprazol 20mg", category: "Gastrointestinal", quantity: 60, minStock: 30, expiryDate: "2025-11-30", status: "ok" },
-];
-
-const mockRecords: MedicalRecord[] = [
-  { id: "1", crewMember: "João Silva", date: "2024-01-15", type: "Consulta", symptoms: "Dor de cabeça, fadiga", treatment: "Paracetamol 500mg", status: "resolved" },
-  { id: "2", crewMember: "Maria Santos", date: "2024-01-14", type: "Emergência", symptoms: "Corte na mão", treatment: "Sutura + curativo", status: "monitoring" },
-  { id: "3", crewMember: "Carlos Lima", date: "2024-01-13", type: "Consulta", symptoms: "Enjoo, tontura", treatment: "Dramin + observação", status: "resolved" },
-];
+import { useInfirmaryRealData } from "@/hooks/useInfirmaryRealData";
 
 export default function InfirmaryDashboard() {
+  const { supplies, records, stats, isLoading } = useInfirmaryRealData();
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
     { role: "assistant", content: "Olá! Sou o assistente médico do Nautilus. Posso ajudar com triagem, medicamentos e protocolos de primeiros socorros. Como posso ajudar?" },
@@ -70,7 +34,7 @@ export default function InfirmaryDashboard() {
       const responses: Record<string, string> = {
         dor: "Para dor de cabeça leve a moderada: Paracetamol 500mg (1-2 comprimidos) ou Dipirona 1g. Máximo 4x ao dia. Se persistir por mais de 48h, considere avaliação médica via telemedicina.",
         corte: "Protocolo para cortes: 1) Lavar com soro fisiológico, 2) Aplicar antisséptico, 3) Curativo oclusivo. Se profundo (>2cm) ou sangramento intenso, considere sutura. Verificar vacina antitetânica.",
-        estoque: "Itens críticos: Soro fisiológico (8 un, mínimo 15). Próximos a vencer: Dipirona (mar/2024). Recomendo solicitar reposição imediata via módulo de Compras.",
+        estoque: `Itens em baixa quantidade: ${stats.lowStockItems}. Recomendo solicitar reposição imediata via módulo de Compras.`,
         default: "Entendi. Posso ajudar com triagem de sintomas, protocolos de primeiros socorros, verificar interações medicamentosas ou gerar relatórios de atendimento. O que precisa?",
       };
       
@@ -85,8 +49,21 @@ export default function InfirmaryDashboard() {
     setChatMessage("");
   };
 
-  const expiringItems = mockSupplies.filter(s => s.status === "expiring" || s.status === "critical").length;
-  const lowStockItems = mockSupplies.filter(s => s.status === "low" || s.status === "critical").length;
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96 lg:col-span-2" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -97,8 +74,8 @@ export default function InfirmaryDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Atendimentos (Mês)</p>
-                <p className="text-2xl font-bold">12</p>
-                <p className="text-xs text-muted-foreground">3 em monitoramento</p>
+                <p className="text-2xl font-bold">{stats.attendanceMonth}</p>
+                <p className="text-xs text-muted-foreground">{stats.monitoring} em monitoramento</p>
               </div>
               <Stethoscope className="h-8 w-8 text-primary opacity-80" />
             </div>
@@ -110,8 +87,8 @@ export default function InfirmaryDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulação Saudável</p>
-                <p className="text-2xl font-bold">98%</p>
-                <p className="text-xs text-green-600">24/24 aptos</p>
+                <p className="text-2xl font-bold">{stats.healthyPercentage}%</p>
+                <p className="text-xs text-green-600">{stats.healthyCrew}/{stats.totalCrew} aptos</p>
               </div>
               <Heart className="h-8 w-8 text-green-500 opacity-80" />
             </div>
@@ -123,7 +100,7 @@ export default function InfirmaryDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Medicamentos Vencendo</p>
-                <p className="text-2xl font-bold">{expiringItems}</p>
+                <p className="text-2xl font-bold">{stats.expiringItems}</p>
                 <p className="text-xs text-warning">Próximos 90 dias</p>
               </div>
               <Pill className="h-8 w-8 text-warning opacity-80" />
@@ -136,7 +113,7 @@ export default function InfirmaryDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Estoque Baixo</p>
-                <p className="text-2xl font-bold">{lowStockItems}</p>
+                <p className="text-2xl font-bold">{stats.lowStockItems}</p>
                 <p className="text-xs text-red-600">Reposição urgente</p>
               </div>
               <Package className="h-8 w-8 text-red-500 opacity-80" />
@@ -149,7 +126,7 @@ export default function InfirmaryDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conformidade MLC</p>
-                <p className="text-2xl font-bold">100%</p>
+                <p className="text-2xl font-bold">{stats.mlcCompliance}%</p>
                 <p className="text-xs text-blue-600">Certificado válido</p>
               </div>
               <ShieldCheck className="h-8 w-8 text-blue-500 opacity-80" />
@@ -223,7 +200,7 @@ export default function InfirmaryDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockRecords.map((record) => (
+              {records.map((record) => (
                 <div key={record.id} className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
@@ -266,7 +243,7 @@ export default function InfirmaryDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {mockSupplies.map((supply) => (
+            {supplies.map((supply) => (
               <div key={supply.id} className={`p-4 rounded-lg border ${
                 supply.status === "critical" ? "bg-red-500/10 border-red-500/30" :
                 supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
