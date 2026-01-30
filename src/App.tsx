@@ -337,7 +337,32 @@ const queryClient = new QueryClient({
 // O Suspense fallback é apenas visual enquanto JS carrega
 // NÃO deve ter lógica de redirect - isso causa loops
 // ============================================
+// PATCH v41: Loader with safety timeout - NEVER show for more than 3 seconds
 const Loader = React.memo(() => {
+  const [timedOut, setTimedOut] = React.useState(false);
+  
+  React.useEffect(() => {
+    const timer = setTimeout(() => setTimedOut(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  if (timedOut) {
+    // After 3s, show error recovery option
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">Carregamento lento detectado</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+          >
+            Recarregar página
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-3">
@@ -349,30 +374,37 @@ const Loader = React.memo(() => {
 });
 
 // ============================================
-// PROTECTED ROUTE v40 - NUNCA bloquear com spinner infinito
-// Auth é 100% background, redirect IMEDIATO se não autenticado
+// PROTECTED ROUTE v41 - ZERO tolerance for infinite loading
+// Auth check is ALWAYS non-blocking, redirect INSTANT
 // ============================================
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
+  const [forceShow, setForceShow] = React.useState(false);
+  
+  // PATCH v41: Safety timeout - NEVER show spinner for more than 500ms
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setForceShow(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
   
   // User logado = mostra conteúdo imediatamente
   if (user) {
     return <>{children}</>;
   }
   
-  // PATCH v40: Se isLoading = false e não há user, redirecionar IMEDIATAMENTE
-  // Não esperar timeout - isso causa spinner desnecessário
-  if (!isLoading && !user) {
+  // PATCH v41: Redirect imediato se não está carregando OU timeout expirou
+  if (!isLoading || forceShow) {
     return <Navigate to="/auth" replace />;
   }
   
-  // Loading MUITO breve enquanto verifica sessão existente (máximo 300ms na prática)
-  // Se passar de 300ms, o isLoading já será false e vai redirecionar
+  // Loading MUITO breve (máximo 500ms garantido)
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-3">
         <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-        <p className="text-muted-foreground text-sm">Verificando autenticação...</p>
+        <p className="text-muted-foreground text-sm">Verificando...</p>
       </div>
     </div>
   );

@@ -193,7 +193,8 @@ export const TenantProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [tenantPlans, setTenantPlans] = useState<SaasPlan[]>([]);
   const [tenantUsage, setTenantUsage] = useState<TenantUsage | null>(null);
   const [availableTenants, setAvailableTenants] = useState<SaasTenant[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v41: Start with FALSE to NEVER block UI - tenant loads in background
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Carregar dados iniciais

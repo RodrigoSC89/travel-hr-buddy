@@ -1,6 +1,8 @@
 /**
- * Protected Route Guard - Uses named imports to prevent multiple React instances
+ * Protected Route Guard - PATCH v41 - Zero infinite loading tolerance
+ * Uses named imports to prevent multiple React instances
  */
+import * as React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
@@ -38,14 +40,28 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({
   const location = useLocation();
   const { user, isLoading } = useAuth();
   const { hasAnyRole } = usePermissions();
+  const [forceAllow, setForceAllow] = React.useState(false);
+
+  // PATCH v41: Safety timeout - NEVER block for more than 500ms
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setForceAllow(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // If auth protection is disabled, allow access (development mode)
   if (!AUTH_PROTECTION_ENABLED) {
     return <>{children}</>;
   }
 
-  // Show loader while checking authentication
-  if (isLoading) {
+  // PATCH v41: If timeout expired, redirect to auth instead of infinite spinner
+  if (forceAllow && !user) {
+    return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
+
+  // Show loader while checking authentication (max 500ms)
+  if (isLoading && !forceAllow) {
     return <OffshoreLoader />;
   }
 

@@ -62,7 +62,8 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
   const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
   const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v41: Start with FALSE to NEVER block UI - org loads in background
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Carregar organização demo
@@ -72,7 +73,7 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
 
   const loadDemoOrganization = async () => {
     try {
-      setIsLoading(true);
+      // PATCH v41: Don't set loading true - prevents UI blocking
       setError(null);
 
       // Usar organização demo - cast to Organization with required fields
