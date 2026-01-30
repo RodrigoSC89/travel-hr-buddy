@@ -35,7 +35,7 @@ export default function SelfHealingLogs() {
     criticalEvents: 0,
     lastCheck: null as Date | null,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [engineRunning, setEngineRunning] = useState(false);
 
   useEffect(() => {

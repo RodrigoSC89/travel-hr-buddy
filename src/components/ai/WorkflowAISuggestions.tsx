@@ -81,7 +81,7 @@ export function WorkflowAISuggestions({
   onApplySuggestion 
 }: WorkflowAISuggestionsProps) {
   const [suggestions, setSuggestions] = useState<WorkflowSuggestion[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [stats, setStats] = useState({

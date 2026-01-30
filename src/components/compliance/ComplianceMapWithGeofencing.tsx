@@ -100,7 +100,7 @@ export function ComplianceMapWithGeofencing({
   const mapLoadedRef = useRef(false);
   
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [vessels, setVessels] = useState<VesselInspection[]>([]);
   const [geofences, setGeofences] = useState<Geofence[]>([]);

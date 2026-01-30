@@ -71,7 +71,7 @@ export const PeotramComplianceChecker: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>([]);
   const [complianceReport, setComplianceReport] = useState<ComplianceReport | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadComplianceData = async () => {
     setIsLoading(true);

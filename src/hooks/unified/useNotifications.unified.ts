@@ -125,7 +125,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   } = options;
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [permissionGranted, setPermissionGranted] = useState(false);
   

@@ -69,7 +69,7 @@ export function useTimeTracking() {
     onVacation: 0,
     totalBankHours: 0,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isClocking, setIsClocking] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<GeolocationData | null>(null);
 

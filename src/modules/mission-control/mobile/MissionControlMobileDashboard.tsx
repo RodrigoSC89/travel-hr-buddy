@@ -39,7 +39,7 @@ const priorityColors = {
 export const MissionControlMobileDashboard: React.FC = () => {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [networkStatus, setNetworkStatus] = useState<"online" | "offline" | "reconnecting">("online");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [stats, setStats] = useState({ totalMissions: 0, activeMissions: 0, pendingSync: 0, queueLength: 0 });
 

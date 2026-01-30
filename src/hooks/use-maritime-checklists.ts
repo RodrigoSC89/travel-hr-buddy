@@ -280,7 +280,7 @@ type ChecklistQueryResult = OperationalChecklistRow & {
 export const useMaritimeChecklists = (userId: string) => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [templates, setTemplates] = useState<ChecklistTemplate[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch checklists from Supabase

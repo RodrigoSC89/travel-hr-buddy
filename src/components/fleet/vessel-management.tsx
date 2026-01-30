@@ -43,7 +43,7 @@ const VesselManagement: React.FC = () => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { toast } = useToast();
 

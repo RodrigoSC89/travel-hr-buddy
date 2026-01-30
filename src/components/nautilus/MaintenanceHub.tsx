@@ -47,7 +47,7 @@ interface ComponentHealth {
 export function MaintenanceHub() {
   const [tasks, setTasks] = useState<MaintenanceTask[]>([]);
   const [components, setComponents] = useState<ComponentHealth[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("tasks");
 
   useEffect(() => {

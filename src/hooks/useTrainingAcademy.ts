@@ -75,7 +75,7 @@ export const useTrainingAcademy = () => {
   const [myProgress, setMyProgress] = useState<CourseProgress[]>([]);
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [trainingSessions, setTrainingSessions] = useState<TrainingSession[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState({
     totalCourses: 0,
     enrolledCourses: 0,

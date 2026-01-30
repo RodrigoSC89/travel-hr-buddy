@@ -75,7 +75,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     last_update: new Date().toISOString(),
   });
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<FilterConfig>({
     operation_type: "all",
     time_range: "24h",

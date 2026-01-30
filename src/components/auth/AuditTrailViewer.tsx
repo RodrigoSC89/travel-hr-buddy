@@ -57,7 +57,7 @@ const RESULT_CONFIG: Record<string, { label: string; icon: any; color: string }>
 
 export const AuditTrailViewer: React.FC = () => {
   const [logs, setLogs] = useState<AccessLog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
