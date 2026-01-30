@@ -62,20 +62,17 @@ export function useNetworkQuality(): NetworkInfo {
 
     updateNetworkInfo();
 
-    // Listen for changes
+    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
+    // Apenas escutar mudanças de qualidade da conexão
     const connection = (navigator as any).connection;
     if (connection) {
       connection.addEventListener("change", updateNetworkInfo);
     }
-    window.addEventListener("online", updateNetworkInfo);
-    window.addEventListener("offline", updateNetworkInfo);
 
     return () => {
       if (connection) {
         connection.removeEventListener("change", updateNetworkInfo);
       }
-      window.removeEventListener("online", updateNetworkInfo);
-      window.removeEventListener("offline", updateNetworkInfo);
     };
   }, []);
 
