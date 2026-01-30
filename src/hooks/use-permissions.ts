@@ -21,14 +21,15 @@ export const usePermissions = () => {
   const { user } = useAuth();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [permissions, setPermissions] = useState<RolePermission[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v41: Start with FALSE to NEVER block UI - permissions load in background
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserRoleAndPermissions = async () => {
       if (!user) {
         setUserRole(null);
         setPermissions([]);
-        setIsLoading(false);
+        // No need to set isLoading false - already false
         return;
       }
 
