@@ -56,30 +56,22 @@ const CommunicationCommandCenter = () => {
     urgentMessages: 0,
     todayMessages: 0
   });
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v48: Start with isLoading=false to NEVER block render
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Simulate loading stats
-    const loadStats = async () => {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setStats({
-        totalMessages: 156,
-        unreadMessages: 12,
-        totalChannels: 8,
-        activeChannels: 6,
-        totalNotifications: 24,
-        criticalNotifications: 2,
-        urgentMessages: 3,
-        todayMessages: 18
-      });
-      
-      setIsLoading(false);
-    };
-    
-    loadStats();
+    // Load stats without blocking
+    setStats({
+      totalMessages: 156,
+      unreadMessages: 12,
+      totalChannels: 8,
+      activeChannels: 6,
+      totalNotifications: 24,
+      criticalNotifications: 2,
+      urgentMessages: 3,
+      todayMessages: 18
+    });
   }, []);
 
   return (

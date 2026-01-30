@@ -40,11 +40,12 @@ export function ScalingDashboard() {
   } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // PATCH v48: Empty deps + longer interval to prevent loops
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30s
+    const interval = setInterval(loadData, 120000); // 2 minutes (was 30s)
     return () => clearInterval(interval);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadData = async () => {
     // Simular métricas (em produção viriam de monitoring real)

@@ -65,7 +65,8 @@ const EVIDENCE_FIELDS = [
 
 export default function CharterPartyV2() {
   const [contracts, setContracts] = useState<CharterContract[]>([]);
-  const [loading, setLoading] = useState(true);
+  // PATCH v48: Start with loading=false to NEVER block render
+  const [loading, setLoading] = useState(false);
   const [showNewContract, setShowNewContract] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
   const [showOffHireForm, setShowOffHireForm] = useState(false);

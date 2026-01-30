@@ -280,7 +280,8 @@ export default function FleetCommandCenter() {
   const { toast } = useToast();
   const [vessels, setVessels] = useState<any[]>([]);
   const [maintenance, setMaintenance] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // PATCH v48: Start with loading=false to NEVER block render
+  const [loading, setLoading] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showMissionDialog, setShowMissionDialog] = useState(false);
   const [selectedVessel, setSelectedVessel] = useState<any>(null);
@@ -324,7 +325,8 @@ export default function FleetCommandCenter() {
     }
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  // PATCH v48: Empty dependency array - NEVER causes infinite loops
+  useEffect(() => { loadData(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAddVessel = async () => {
     if (!newVessel.name.trim()) {
