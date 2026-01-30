@@ -433,7 +433,8 @@ export function useSlowConnectionFetch<T>(
   deps: any[] = []
 ) {
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [connection, setConnection] = useState(detectConnectionQuality);
   

@@ -111,14 +111,12 @@ export function useFeatureEnabled(key: FeatureFlagKey | string): {
   enabled: boolean;
   loading: boolean;
 } {
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
   const enabled = useFeatureFlag(key);
 
-  useEffect(() => {
-    // Small delay to ensure flags are loaded
-    const timer = setTimeout(() => setLoading(false), 50);
-    return () => clearTimeout(timer);
-  }, []);
+  // Não precisa de delay - retorna imediatamente
+  return { enabled, loading };
 
   return { enabled, loading };
 }
