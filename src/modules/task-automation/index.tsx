@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTaskAutomationData } from "@/hooks/useTaskAutomationData";
 import { 
   Zap, 
   Play, 
@@ -20,85 +21,43 @@ import {
   Plus,
   Workflow,
   Bot,
-  Calendar
+  Calendar,
+  Loader2
 } from "lucide-react";
-
-interface AutomatedTask {
-  id: string;
-  name: string;
-  trigger: string;
-  status: "active" | "paused" | "error";
-  lastRun: string;
-  nextRun: string;
-  successRate: number;
-}
-
-const mockTasks: AutomatedTask[] = [
-  {
-    id: "1",
-    name: "Daily Compliance Check",
-    trigger: "Cron: 00:00 UTC",
-    status: "active",
-    lastRun: "2 hours ago",
-    nextRun: "In 22 hours",
-    successRate: 98.5
-  },
-  {
-    id: "2",
-    name: "Document Expiry Alerts",
-    trigger: "30 days before expiry",
-    status: "active",
-    lastRun: "1 hour ago",
-    nextRun: "Continuous",
-    successRate: 100
-  },
-  {
-    id: "3",
-    name: "Crew Rotation Reminder",
-    trigger: "7 days before rotation",
-    status: "active",
-    lastRun: "Yesterday",
-    nextRun: "Tomorrow 09:00",
-    successRate: 95.2
-  },
-  {
-    id: "4",
-    name: "Maintenance Schedule Sync",
-    trigger: "On vessel position update",
-    status: "paused",
-    lastRun: "3 days ago",
-    nextRun: "Paused",
-    successRate: 87.3
-  },
-  {
-    id: "5",
-    name: "Safety Report Generation",
-    trigger: "Weekly on Sundays",
-    status: "active",
-    lastRun: "5 days ago",
-    nextRun: "In 2 days",
-    successRate: 99.1
-  }
-];
 
 const TaskAutomation = () => {
   const [activeTab, setActiveTab] = useState("automations");
-  const [tasks] = useState<AutomatedTask[]>(mockTasks);
+  const { tasks, stats, isLoading, toggleTaskStatus } = useTaskAutomationData();
 
-  const getStatusBadge = (status: AutomatedTask["status"]) => {
+  const getStatusBadge = (status: "active" | "paused" | "error" | "completed") => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-500/10 text-green-500">Active</Badge>;
+        return <Badge className="bg-success/10 text-success">Active</Badge>;
       case "paused":
-        return <Badge className="bg-yellow-500/10 text-yellow-500">Paused</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Paused</Badge>;
       case "error":
-        return <Badge className="bg-red-500/10 text-red-500">Error</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Error</Badge>;
+      case "completed":
+        return <Badge className="bg-info/10 text-info">Completed</Badge>;
     }
   };
 
-  const activeCount = tasks.filter(t => t.status === "active").length;
-  const pausedCount = tasks.filter(t => t.status === "paused").length;
-  const avgSuccessRate = tasks.reduce((sum, t) => sum + t.successRate, 0) / tasks.length;
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    try {
+      await toggleTaskStatus.mutateAsync({ id, isActive: currentStatus !== "active" });
+    } catch (error) {
+      console.error("Failed to toggle task status:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6 flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando automações...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -107,59 +66,50 @@ const TaskAutomation = () => {
           <Zap className="h-8 w-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold">Task Automation</h1>
-            <p className="text-muted-foreground">
-              Automated task management with AI-powered workflows
-            </p>
+            <p className="text-muted-foreground">Automated task management with AI-powered workflows</p>
           </div>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          New Automation
-        </Button>
+        <Button><Plus className="h-4 w-4 mr-2" />New Automation</Button>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Active Automations</CardTitle>
-            <Play className="h-4 w-4 text-green-500" />
+            <Play className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activeCount}</div>
+            <div className="text-2xl font-bold">{stats.active}</div>
             <p className="text-xs text-muted-foreground">Running smoothly</p>
           </CardContent>
         </Card>
-        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Paused</CardTitle>
-            <Pause className="h-4 w-4 text-yellow-500" />
+            <Pause className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{pausedCount}</div>
+            <div className="text-2xl font-bold">{stats.paused}</div>
             <p className="text-xs text-muted-foreground">Awaiting action</p>
           </CardContent>
         </Card>
-        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{avgSuccessRate.toFixed(1)}%</div>
+            <div className="text-2xl font-bold">{stats.avgSuccessRate.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">Average success</p>
           </CardContent>
         </Card>
-        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Executions Today</CardTitle>
-            <Clock className="h-4 w-4 text-blue-500" />
+            <CardTitle className="text-sm font-medium">Total Executions</CardTitle>
+            <Clock className="h-4 w-4 text-info" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">127</div>
+            <div className="text-2xl font-bold">{stats.totalRuns}</div>
             <p className="text-xs text-muted-foreground">Tasks completed</p>
           </CardContent>
         </Card>
@@ -175,21 +125,14 @@ const TaskAutomation = () => {
 
         <TabsContent value="automations" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Configured Automations</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle>Configured Automations</CardTitle></CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-4">
                   {tasks.map((task) => (
-                    <div 
-                      key={task.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                    >
+                    <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <Workflow className="h-5 w-5 text-primary" />
-                        </div>
+                        <div className="p-2 bg-primary/10 rounded-lg"><Workflow className="h-5 w-5 text-primary" /></div>
                         <div>
                           <h3 className="font-medium">{task.name}</h3>
                           <p className="text-sm text-muted-foreground">{task.trigger}</p>
@@ -197,20 +140,28 @@ const TaskAutomation = () => {
                       </div>
                       <div className="flex items-center gap-6">
                         <div className="text-right">
-                          <p className="text-sm">Last: {task.lastRun}</p>
-                          <p className="text-xs text-muted-foreground">Next: {task.nextRun}</p>
+                          <p className="text-sm">Last: {task.lastRun ? new Date(task.lastRun).toLocaleString("pt-BR") : "Never"}</p>
+                          <p className="text-xs text-muted-foreground">Next: {task.nextRun ? new Date(task.nextRun).toLocaleString("pt-BR") : "N/A"}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-medium">{task.successRate}%</p>
                           <p className="text-xs text-muted-foreground">Success</p>
                         </div>
                         {getStatusBadge(task.status)}
-                        <Button variant="ghost" size="icon">
-                          <Settings className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" onClick={() => handleToggleStatus(task.id, task.status)}>
+                          {task.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                         </Button>
+                        <Button variant="ghost" size="icon"><Settings className="h-4 w-4" /></Button>
                       </div>
                     </div>
                   ))}
+                  {tasks.length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Workflow className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>Nenhuma automação configurada</p>
+                      <Button className="mt-4" size="sm"><Plus className="h-4 w-4 mr-2" />Criar Automação</Button>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
             </CardContent>
@@ -230,9 +181,7 @@ const TaskAutomation = () => {
               <Card key={i} className="cursor-pointer hover:border-primary transition-colors">
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <template.icon className="h-5 w-5 text-primary" />
-                    </div>
+                    <div className="p-2 bg-primary/10 rounded-lg"><template.icon className="h-5 w-5 text-primary" /></div>
                     <h3 className="font-medium">{template.name}</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">{template.desc}</p>
@@ -243,28 +192,14 @@ const TaskAutomation = () => {
         </TabsContent>
 
         <TabsContent value="history">
-          <Card>
-            <CardHeader>
-              <CardTitle>Execution History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                View detailed execution history and logs for all automated tasks.
-              </p>
-            </CardContent>
+          <Card><CardHeader><CardTitle>Execution History</CardTitle></CardHeader>
+            <CardContent><p className="text-muted-foreground">View detailed execution history and logs for all automated tasks.</p></CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="settings">
-          <Card>
-            <CardHeader>
-              <CardTitle>Automation Settings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Configure global automation settings, notifications, and retry policies.
-              </p>
-            </CardContent>
+          <Card><CardHeader><CardTitle>Automation Settings</CardTitle></CardHeader>
+            <CardContent><p className="text-muted-foreground">Configure global automation settings, notifications, and retry policies.</p></CardContent>
           </Card>
         </TabsContent>
       </Tabs>

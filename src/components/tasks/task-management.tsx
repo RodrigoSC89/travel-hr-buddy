@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useTaskManagementData, Task } from "@/hooks/useTaskManagementData";
 import { TaskKanbanBoard } from "./TaskKanbanBoard";
 import { TaskCalendarView } from "./TaskCalendarView";
 import { 
@@ -22,150 +22,52 @@ import {
   Clock,
   CheckCircle2,
   Settings,
-  LayoutGrid
+  LayoutGrid,
+  Loader2
 } from "lucide-react";
 
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  priority: "low" | "medium" | "high";
-  status: "pending" | "in_progress" | "completed" | "cancelled";
-  assigned_to?: string;
-  created_by: string;
-  due_date?: string;
-  completed_at?: string;
-  tags: string[];
-  related_vessel?: string;
-  related_crew?: string;
-  created_at: string;
-}
-
 export const TaskManagement: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { tasks, stats, isLoading, createTask, updateTask } = useTaskManagementData();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   // Form state for new task
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
-    priority: "medium" as "low" | "medium" | "high",
-    assigned_to: "",
+    priority: "medium" as "low" | "medium" | "high" | "urgent",
+    assigned_to_name: "",
     due_date: "",
-    tags: [] as string[],
-    related_vessel: "",
-    related_crew: ""
+    vessel_id: ""
   });
-
-  useEffect(() => {
-    loadTasks();
-  }, []);
-
-  const loadTasks = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Using mock data for now - database integration will be added later
-      // Mock data
-      const mockTasks: Task[] = [
-        {
-          id: "1",
-          title: "Inspeção de Segurança - MV Atlântico",
-          description: "Realizar inspeção completa dos equipamentos de segurança",
-          priority: "high",
-          status: "pending",
-          assigned_to: "Carlos Silva",
-          created_by: "Admin",
-          due_date: "2024-01-20T10:00:00Z",
-          tags: ["segurança", "inspeção"],
-          related_vessel: "MV Atlântico",
-          created_at: "2024-01-10T09:00:00Z"
-        },
-        {
-          id: "2",
-          title: "Manutenção Preventiva - Motor Principal",
-          description: "Verificar óleo, filtros e componentes do motor principal",
-          priority: "medium",
-          status: "in_progress",
-          assigned_to: "João Santos",
-          created_by: "Admin",
-          due_date: "2024-01-18T14:00:00Z",
-          tags: ["manutenção", "motor"],
-          related_vessel: "MV Pacífico",
-          created_at: "2024-01-08T11:00:00Z"
-        },
-        {
-          id: "3",
-          title: "Renovação de Certificados STCW",
-          description: "Verificar e renovar certificados STCW da tripulação",
-          priority: "high",
-          status: "pending",
-          assigned_to: "Maria Oliveira",
-          created_by: "RH",
-          due_date: "2024-01-25T16:00:00Z",
-          tags: ["certificação", "rh"],
-          related_crew: "Ana Costa",
-          created_at: "2024-01-05T08:00:00Z"
-        },
-        {
-          id: "4",
-          title: "Abastecimento - Porto de Santos",
-          description: "Coordenar abastecimento de combustível e água potável",
-          priority: "medium",
-          status: "completed",
-          assigned_to: "Pedro Lima",
-          created_by: "Operações",
-          due_date: "2024-01-15T12:00:00Z",
-          completed_at: "2024-01-15T11:30:00Z",
-          tags: ["abastecimento", "porto"],
-          related_vessel: "MV Atlântico",
-          created_at: "2024-01-12T07:00:00Z"
-        }
-      ];
-        
-      setTasks(mockTasks);
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível carregar as tarefas",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleAddTask = async () => {
     try {
-      const task: Task = {
-        id: Math.random().toString(),
-        ...newTask,
-        status: "pending",
-        created_by: "Current User",
-        created_at: new Date().toISOString()
-      };
+      await createTask.mutateAsync({
+        title: newTask.title,
+        description: newTask.description,
+        priority: newTask.priority,
+        assigned_to_name: newTask.assigned_to_name,
+        due_date: newTask.due_date || undefined,
+        vessel_id: newTask.vessel_id || undefined,
+      });
       
-      setTasks([...tasks, task]);
       setNewTask({
         title: "",
         description: "",
         priority: "medium",
-        assigned_to: "",
+        assigned_to_name: "",
         due_date: "",
-        tags: [],
-        related_vessel: "",
-        related_crew: ""
+        vessel_id: ""
       });
       setShowAddDialog(false);
       
       toast({
         title: "Tarefa Criada",
-        description: `${task.title} foi criada com sucesso`
+        description: `${newTask.title} foi criada com sucesso`
       });
     } catch (error) {
       toast({
@@ -176,21 +78,21 @@ export const TaskManagement: React.FC = () => {
     }
   };
 
-  const updateTaskStatus = (taskId: string, newStatus: Task["status"]) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId 
-        ? { 
-          ...task, 
-          status: newStatus,
-          completed_at: newStatus === "completed" ? new Date().toISOString() : undefined
-        }
-        : task
-    ));
-    
-    toast({
-      title: "Status Atualizado",
-      description: "Status da tarefa foi atualizado com sucesso"
-    });
+  const handleUpdateTaskStatus = async (taskId: string, newStatus: Task["status"]) => {
+    try {
+      await updateTask.mutateAsync({ id: taskId, status: newStatus });
+      
+      toast({
+        title: "Status Atualizado",
+        description: "Status da tarefa foi atualizado com sucesso"
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível atualizar o status",
+        variant: "destructive"
+      });
+    }
   };
 
   const getPriorityColor = (priority: string) => {
@@ -244,7 +146,7 @@ export const TaskManagement: React.FC = () => {
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          task.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.assigned_to?.toLowerCase().includes(searchTerm.toLowerCase());
+                         task.assigned_to_name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || task.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -253,12 +155,17 @@ export const TaskManagement: React.FC = () => {
     pending: tasks.filter(t => t.status === "pending").length,
     in_progress: tasks.filter(t => t.status === "in_progress").length,
     completed: tasks.filter(t => t.status === "completed").length,
-    overdue: tasks.filter(t => 
-      t.status !== "completed" && 
-      t.due_date && 
-      new Date(t.due_date) < new Date()
-    ).length
+    overdue: stats?.overdue || 0
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando tarefas...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
