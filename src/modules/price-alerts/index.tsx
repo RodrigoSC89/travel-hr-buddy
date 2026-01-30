@@ -2,6 +2,7 @@
 /**
  * PATCH 464 - Complete Price Alerts UI
  * Full-featured price alert system with history charts, configurable thresholds, and notifications
+ * NOTE: @ts-nocheck required - interface fields don't match all DB columns
  */
 
 import React, { useState, useEffect } from "react";

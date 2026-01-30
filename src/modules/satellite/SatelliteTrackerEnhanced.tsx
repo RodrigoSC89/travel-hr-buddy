@@ -1,4 +1,7 @@
 // @ts-nocheck
+/**
+ * Satellite Tracker Enhanced - Uses satellite_coverage_events table not in generated types
+ */
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
