@@ -78,39 +78,47 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// CRITICAL: Simplified SW cleanup - prevent infinite boot loops
+// CRITICAL: PATCH v42 - Aggressive SW cleanup to prevent infinite boot loops
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v17-fix-loading'; // New version to force cache clear
+  const CURRENT_VERSION = 'v42-fix-loading-final'; // Force cache clear on version change
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);
     
     // Always clean on version mismatch or first load
     if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v17] Version mismatch, cleaning...');
+      logger.info('[Boot v42] Version mismatch, forcing full cleanup...');
+      console.log('[Boot v42] Cleaning caches and service workers...');
       
-      // Clear ALL caches
+      // Clear ALL caches aggressively
       if ('caches' in window) {
         try {
           const keys = await caches.keys();
           await Promise.all(keys.map(k => caches.delete(k)));
-        } catch {}
+          console.log('[Boot v42] Caches cleared:', keys.length);
+        } catch (e) {
+          console.warn('[Boot v42] Cache clear failed:', e);
+        }
       }
       
-      // Unregister service workers
+      // Unregister ALL service workers
       if ('serviceWorker' in navigator) {
         try {
           const registrations = await navigator.serviceWorker.getRegistrations();
           await Promise.all(registrations.map(r => r.unregister()));
-        } catch {}
+          console.log('[Boot v42] Service workers unregistered:', registrations.length);
+        } catch (e) {
+          console.warn('[Boot v42] SW unregister failed:', e);
+        }
       }
       
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      console.log('[Boot v42] Cleanup complete, version stored:', CURRENT_VERSION);
     }
   } catch (e) {
-    logger.warn('[Boot v17] Error during update check', e instanceof Error ? { message: e.message } : undefined);
+    logger.warn('[Boot v42] Error during update check', e instanceof Error ? { message: e.message } : undefined);
   }
 };
 
@@ -127,9 +135,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    logger.info('[Boot v17] SW registered', { scope: registration.scope });
+    console.log('[Boot v42] SW registered', { scope: registration.scope });
   } catch (error) {
-    logger.warn('[Boot v17] SW registration failed', error instanceof Error ? { message: error.message } : undefined);
+    console.warn('[Boot v42] SW registration failed (non-critical)', error);
   }
 };
 
