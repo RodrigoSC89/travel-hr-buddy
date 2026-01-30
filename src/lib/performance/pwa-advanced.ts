@@ -25,7 +25,8 @@ class PWAManager {
   private static instance: PWAManager;
   private swRegistration: ServiceWorkerRegistration | null = null;
   private syncQueue: SyncTask[] = [];
-  private isOnline = navigator.onLine;
+  // PATCH v34 iOS PWA: Sempre assume online - navigator.onLine não é confiável
+  private isOnline = true;
 
   private readonly cacheStrategies: CacheStrategy[] = [
     {

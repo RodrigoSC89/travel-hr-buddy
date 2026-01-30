@@ -179,13 +179,9 @@ function checkBrowserCapabilities(): HealthCheckResult {
 }
 
 function checkNetworkStatus(): HealthCheckResult {
-  if (!navigator.onLine) {
-    return {
-      module: 'Network',
-      status: 'error',
-      message: 'Device is offline'
-    };
-  }
+  // PATCH v34 iOS PWA: REMOVIDO navigator.onLine check
+  // navigator.onLine não é confiável no iOS Safari PWA - causa falsos "offline"
+  // Sempre retornar healthy para network - deixar o retry lidar com erros reais
 
   const quality = getConnectionQuality();
   if (quality === 'slow-2g' || quality === '2g') {
@@ -228,8 +224,9 @@ function getConnectionQuality(): string {
  */
 export function isSystemHealthy(): boolean {
   try {
-    // Basic checks
-    if (!navigator.onLine) return false;
+    // PATCH v34 iOS PWA: REMOVIDO navigator.onLine check
+    // navigator.onLine não é confiável no iOS Safari PWA
+    // Apenas verificar se window existe
     if (typeof window === 'undefined') return false;
     
     return true;
