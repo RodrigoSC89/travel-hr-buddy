@@ -48,7 +48,8 @@ interface TrendData {
 export function AIPredictiveAnalytics() {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [trends, setTrends] = useState<TrendData[]>([]);
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
 
   useEffect(() => {

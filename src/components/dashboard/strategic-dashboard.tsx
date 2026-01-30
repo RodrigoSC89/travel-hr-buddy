@@ -47,7 +47,8 @@ const StrategicDashboard: React.FC = () => {
   const { toast } = useToast();
 
   // State management
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v44: Iniciar com isLoading=false para NUNCA bloquear renderização
+  const [isLoading, setIsLoading] = useState(false);
   const [metrics, setMetrics] = useState<MetricCard[]>([]);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const [activities, setActivities] = useState<ActivityItem[]>([]);

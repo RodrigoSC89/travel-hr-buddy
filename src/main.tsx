@@ -82,7 +82,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v44-loading-fix-final'; // PATCH v44: Correção completa de loading
+  const CURRENT_VERSION = 'v44-deep-loading-fix'; // PATCH v44: Correção profunda de loading infinito
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);

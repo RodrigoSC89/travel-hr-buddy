@@ -36,7 +36,8 @@ interface AIInsight {
 
 export function AIInsightsPanel() {
   const [insights, setInsights] = useState<AIInsight[]>([]);
-  const [loading, setLoading] = useState(true);
+  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {

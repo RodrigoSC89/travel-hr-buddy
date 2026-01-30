@@ -67,7 +67,8 @@ const tabs = [
 
 export default function NautilusCommandCenter() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [isLoading, setIsLoading] = useState(true);
+  // PATCH v44: Iniciar com isLoading=false para NUNCA bloquear renderização
+  const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => 
     document.documentElement.classList.contains("dark")
