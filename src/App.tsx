@@ -271,6 +271,22 @@ const ContractAnalysisPage = lazy(() => import("@/pages/enterprise/ContractAnaly
 const CompliancePredictorPage = lazy(() => import("@/pages/enterprise/CompliancePredictorPage"));
 
 // ============================================
+// ADVANCED MARITIME MODULES - 12 REVOLUTIONARY FEATURES
+// ============================================
+const DigitalTwin3DPage = lazy(() => import("@/pages/advanced/DigitalTwin3DPage"));
+const WeatherIntelligencePage = lazy(() => import("@/pages/advanced/WeatherIntelligencePage"));
+const BunkerOptimizationPage = lazy(() => import("@/pages/advanced/BunkerOptimizationPage"));
+const CargoPlanningPage = lazy(() => import("@/pages/advanced/CargoPlanningPage"));
+const PSCReadinessPage = lazy(() => import("@/pages/advanced/PSCReadinessPage"));
+const MARPOLTrackerPage = lazy(() => import("@/pages/advanced/MARPOLTrackerPage"));
+const BlockchainCertificatesPage = lazy(() => import("@/pages/advanced/BlockchainCertificatesPage"));
+const IncidentInvestigationPage = lazy(() => import("@/pages/advanced/IncidentInvestigationPage"));
+const VRTrainingPage = lazy(() => import("@/pages/advanced/VRTrainingPage"));
+const VoiceCommandsPage = lazy(() => import("@/pages/advanced/VoiceCommandsPage"));
+const CrewWellnessAIAdvancedPage = lazy(() => import("@/pages/advanced/CrewWellnessAIPage"));
+const ExecutiveDashboardAdvancedPage = lazy(() => import("@/pages/advanced/ExecutiveDashboardPage"));
+
+// ============================================
 // ADMIN & DASHBOARDS
 // ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
@@ -695,6 +711,22 @@ const AppRoutes = () => (
       <Route path="/enterprise/risk-clauses" element={<ContractAnalysisPage />} />
       <Route path="/enterprise/compliance-predictor" element={<CompliancePredictorPage />} />
       <Route path="/enterprise/nc-prediction" element={<CompliancePredictorPage />} />
+      
+      {/* ============================================ */}
+      {/* ADVANCED MARITIME MODULES - 12 REVOLUTIONARY FEATURES */}
+      {/* ============================================ */}
+      <Route path="/advanced/digital-twin-3d" element={<DigitalTwin3DPage />} />
+      <Route path="/advanced/weather-intelligence" element={<WeatherIntelligencePage />} />
+      <Route path="/advanced/bunker-optimization" element={<BunkerOptimizationPage />} />
+      <Route path="/advanced/cargo-planning" element={<CargoPlanningPage />} />
+      <Route path="/advanced/psc-readiness" element={<PSCReadinessPage />} />
+      <Route path="/advanced/marpol-tracker" element={<MARPOLTrackerPage />} />
+      <Route path="/advanced/blockchain-certificates" element={<BlockchainCertificatesPage />} />
+      <Route path="/advanced/incident-investigation" element={<IncidentInvestigationPage />} />
+      <Route path="/advanced/vr-training" element={<VRTrainingPage />} />
+      <Route path="/advanced/voice-commands" element={<VoiceCommandsPage />} />
+      <Route path="/advanced/crew-wellness-ai" element={<CrewWellnessAIAdvancedPage />} />
+      <Route path="/advanced/executive-dashboard" element={<ExecutiveDashboardAdvancedPage />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
