@@ -135,24 +135,42 @@ export default function NautilusCommandCenter() {
     }
   }, []);
 
+  // PATCH v47: Single mount effect with throttled realtime - NEVER causes infinite loops
   useEffect(() => {
+    let mounted = true;
+    
+    // Background load on mount
     loadSystemData();
 
-    // Real-time subscriptions
+    // Throttled realtime - max once per 60 seconds
+    let lastUpdate = 0;
+    const throttledRefresh = () => {
+      const now = Date.now();
+      if (now - lastUpdate > 60000 && mounted) { // 60s minimum between updates
+        lastUpdate = now;
+        loadSystemData();
+      }
+    };
+
     const channel = supabase
-      .channel("command-center-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => loadSystemData())
-      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => loadSystemData())
+      .channel("command-center-v47")
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, throttledRefresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, throttledRefresh)
       .subscribe();
 
-    // Auto refresh every 30 seconds
-    const interval = setInterval(loadSystemData, 30000);
+    // Auto refresh every 2 minutes when tab is visible
+    const interval = setInterval(() => {
+      if (mounted && document.visibilityState === 'visible') {
+        loadSystemData();
+      }
+    }, 120000);
 
     return () => {
+      mounted = false;
       supabase.removeChannel(channel);
       clearInterval(interval);
     };
-  }, [loadSystemData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
