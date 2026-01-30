@@ -119,7 +119,14 @@ export const usePermissions = () => {
       coordinator: "Coordenador",
       manager: "Gerente",
       employee: "Funcionário",
-      auditor: "Auditor"
+      auditor: "Auditor",
+      captain: "Capitão",
+      crew_member: "Tripulante",
+      finance: "Financeiro",
+      legal: "Jurídico",
+      officer: "Oficial",
+      operations: "Operações",
+      purchasing: "Compras"
     };
     return roleNames[role] || "Funcionário";
   };

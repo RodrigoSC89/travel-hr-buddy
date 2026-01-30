@@ -50,13 +50,20 @@ interface RoleGuardProps {
  */
 const ROLE_HIERARCHY: Record<UserRole, number> = {
   admin: 100,
-  hr_manager: 80,
-  manager: 60,
-  hr_analyst: 55,
-  department_manager: 50,
-  coordinator: 40,
-  supervisor: 30,
-  auditor: 20,
+  hr_manager: 90,
+  manager: 80,
+  hr_analyst: 75,
+  department_manager: 70,
+  finance: 65,
+  legal: 65,
+  operations: 60,
+  purchasing: 55,
+  coordinator: 50,
+  supervisor: 45,
+  captain: 40,
+  officer: 35,
+  auditor: 30,
+  crew_member: 20,
   employee: 10,
 };
 
