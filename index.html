@@ -104,59 +104,59 @@
       </div>
     </div>
     
-    <!-- PATCH v50: Aggressive Recovery Script -->
+    <!-- PATCH v51: Ultra-Fast Recovery Script -->
     <script>
       window.__NAUTI_APP_LOADED__ = false;
       
       function clearCacheAndReload() {
         try {
-          // Clear Supabase auth tokens
-          Object.keys(localStorage).filter(function(k) {
-            return k.includes('supabase') || k.includes('sb-') || k.includes('nautilus');
-          }).forEach(function(k) { localStorage.removeItem(k); });
+          // Clear ALL localStorage keys related to the app
+          var keysToRemove = [];
+          for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && (k.includes('supabase') || k.includes('sb-') || k.includes('nautilus') || k.includes('nauti'))) {
+              keysToRemove.push(k);
+            }
+          }
+          keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
+          
+          // Clear sessionStorage too
+          sessionStorage.clear();
           
           // Clear all caches
           if ('caches' in window) {
             caches.keys().then(function(keys) { 
-              keys.forEach(function(k) { caches.delete(k); }); 
+              Promise.all(keys.map(function(k) { return caches.delete(k); }));
             });
           }
           
           // Unregister all service workers
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(regs) { 
-              regs.forEach(function(r) { r.unregister(); }); 
+              Promise.all(regs.map(function(r) { return r.unregister(); }));
             });
           }
         } catch(e) { console.warn('Cache clear error:', e); }
         
-        // Hard reload with cache bust
-        location.href = location.href.split('?')[0] + '?bust=' + Date.now();
+        // Hard reload bypassing cache
+        location.replace(location.href.split('?')[0] + '?v=' + Date.now());
       }
       
-      // Update loading text after 3s
-      setTimeout(function() {
-        if (!window.__NAUTI_APP_LOADED__) {
-          var text = document.getElementById('loading-text');
-          if (text) text.textContent = 'Carregando módulos...';
-        }
-      }, 3000);
-      
-      // PATCH v50: Show recovery after 8 seconds (reduced from 15)
+      // PATCH v51: Show recovery after 5 seconds (faster detection)
       setTimeout(function() {
         if (!window.__NAUTI_APP_LOADED__) {
           var loader = document.getElementById('initial-loader');
           if (loader) {
             loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
-              '<div class="text-lg font-semibold text-foreground">Sistema não carregou</div>' +
-              '<p class="text-sm text-muted">Clique para limpar cache e tentar novamente.</p>' +
+              '<div class="text-lg font-semibold text-foreground">Carregamento travado</div>' +
+              '<p class="text-sm text-muted">Cache antigo detectado. Limpe e tente novamente.</p>' +
               '<div class="flex flex-col gap-2">' +
               '<button onclick="clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
-              '<button onclick="location.reload()" class="btn btn-secondary mt-2">Tentar novamente</button>' +
+              '<button onclick="location.reload(true)" class="btn btn-secondary mt-2">Tentar novamente</button>' +
               '</div></div>';
           }
         }
-      }, 8000);
+      }, 5000);
     </script>
     
     <!-- Main Application Bundle -->

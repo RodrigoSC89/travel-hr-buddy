@@ -82,7 +82,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v50-production-fix'; // PATCH v50: Force production cache clear
+  const CURRENT_VERSION = 'v51-infinite-loop-fix'; // PATCH v51: Eliminate ALL infinite loading
   
   try {
     const storedVersion = localStorage.getItem(SW_VERSION_KEY);

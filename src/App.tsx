@@ -337,77 +337,37 @@ const queryClient = new QueryClient({
 // O Suspense fallback é apenas visual enquanto JS carrega
 // NÃO deve ter lógica de redirect - isso causa loops
 // ============================================
-// PATCH v41: Loader with safety timeout - NEVER show for more than 3 seconds
-const Loader = React.memo(() => {
-  const [timedOut, setTimedOut] = React.useState(false);
-  
-  React.useEffect(() => {
-    const timer = setTimeout(() => setTimedOut(true), 3000);
-    return () => clearTimeout(timer);
-  }, []);
-  
-  if (timedOut) {
-    // After 3s, show error recovery option
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <p className="text-muted-foreground">Carregamento lento detectado</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-          >
-            Recarregar página
-          </button>
-        </div>
-      </div>
-    );
-  }
-  
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center space-y-3">
-        <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-        <p className="text-muted-foreground text-sm">Carregando NAUTI ONE...</p>
-      </div>
+// PATCH v51: Loader ULTRA SIMPLES - Apenas visual, SEM timeout que causa loops
+// Qualquer lógica de timeout/recovery fica no index.html
+const Loader = React.memo(() => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="text-center space-y-3">
+      <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
+      <p className="text-muted-foreground text-sm">Carregando...</p>
     </div>
-  );
-});
+  </div>
+));
 
 // ============================================
-// PROTECTED ROUTE v41 - ZERO tolerance for infinite loading
-// Auth check is ALWAYS non-blocking, redirect INSTANT
+// PROTECTED ROUTE v51 - INSTANT decision, ZERO loading states
+// Auth context now starts with isLoading=false, so we can decide immediately
 // ============================================
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
-  const [forceShow, setForceShow] = React.useState(false);
   
-  // PATCH v41: Safety timeout - NEVER show spinner for more than 500ms
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setForceShow(true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // User logado = mostra conteúdo imediatamente
+  // PATCH v51: User logged in = show content IMMEDIATELY
   if (user) {
     return <>{children}</>;
   }
   
-  // PATCH v41: Redirect imediato se não está carregando OU timeout expirou
-  if (!isLoading || forceShow) {
+  // PATCH v51: If not loading OR no user = redirect INSTANTLY
+  // AuthContext now initializes with isLoading=false so this is immediate
+  if (!isLoading) {
     return <Navigate to="/auth" replace />;
   }
   
-  // Loading MUITO breve (máximo 500ms garantido)
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center space-y-3">
-        <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-        <p className="text-muted-foreground text-sm">Verificando...</p>
-      </div>
-    </div>
-  );
+  // Very brief loading (only while auth is actually checking - max 100ms in practice)
+  return <Loader />;
 };
 
 // Layout com Sidebar para rotas autenticadas
@@ -797,29 +757,28 @@ const AppRoutes = () => (
 );
 
 function App() {
-  // PATCH v43: Debug logging for production issues
-  React.useEffect(() => {
-    console.log('[App v43] React app mounting...');
-    
-    // Mark app as loaded immediately
+  // PATCH v51: Mark app as loaded IMMEDIATELY on function call
+  // This must happen as early as possible to prevent recovery UI from showing
+  if (typeof window !== 'undefined') {
     (window as any).__NAUTI_APP_LOADED__ = true;
     
-    // Remove any lingering loading states from index.html
-    const initialLoader = document.getElementById('initial-loader');
-    if (initialLoader) {
-      console.log('[App v43] Removing initial loader');
-      initialLoader.remove();
-    }
+    // Remove initial loader synchronously
+    const loader = document.getElementById('initial-loader');
+    if (loader) loader.style.display = 'none';
+  }
+
+  React.useEffect(() => {
+    console.log('[App v51] React app mounted');
     
-    // Also remove recovery UI if present
+    // Ensure loader is removed
+    const initialLoader = document.getElementById('initial-loader');
+    if (initialLoader) initialLoader.remove();
+    
     const recoveryUi = document.getElementById('recovery-ui');
-    if (recoveryUi) {
-      console.log('[App v43] Removing recovery UI');
-      recoveryUi.remove();
-    }
+    if (recoveryUi) recoveryUi.remove();
     
     return () => {
-      console.log('[App v43] React app unmounting');
+      console.log('[App v51] React app unmounting');
     };
   }, []);
 

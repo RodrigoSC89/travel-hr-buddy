@@ -1,15 +1,11 @@
 /**
- * LazyLoadErrorBoundary - Handles dynamic import failures
- * Automatically retries failed chunk loads by refreshing the page
- * This fixes "Failed to fetch dynamically imported module" errors
- * caused by stale Service Worker cache after deploys
- * 
- * v2: Integrado com sw-update-manager para limpeza mais robusta
+ * LazyLoadErrorBoundary - PATCH v51 - Simplified, No Auto-Reload
+ * Handles dynamic import failures WITHOUT causing reload loops
+ * Shows error UI and lets user decide to retry
  */
 import React, { Component, ReactNode } from 'react';
-import { Loader2, RefreshCw, AlertTriangle } from 'lucide-react';
+import { RefreshCw, AlertTriangle, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -18,175 +14,103 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  isChunkError: boolean;
-  retryCount: number;
+  errorMessage: string;
 }
-
-const MAX_AUTO_RETRIES = 2;
-const RETRY_KEY = 'chunk_error_retry_count';
-const LAST_ERROR_KEY = 'chunk_error_last_time';
 
 export class LazyLoadErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    
-    // Check if we've been retrying
-    const storedRetries = sessionStorage.getItem(RETRY_KEY);
-    const lastError = sessionStorage.getItem(LAST_ERROR_KEY);
-    
-    // Reset retry count if last error was more than 5 minutes ago
-    let retryCount = storedRetries ? parseInt(storedRetries, 10) : 0;
-    if (lastError) {
-      const elapsed = Date.now() - parseInt(lastError, 10);
-      if (elapsed > 5 * 60 * 1000) {
-        retryCount = 0;
-        sessionStorage.removeItem(RETRY_KEY);
-        sessionStorage.removeItem(LAST_ERROR_KEY);
-      }
-    }
-    
     this.state = {
       hasError: false,
-      isChunkError: false,
-      retryCount,
+      errorMessage: '',
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
-    // Detect chunk loading errors
-    const isChunkError = 
-      error.message.includes('Failed to fetch dynamically imported module') ||
-      error.message.includes('Loading chunk') ||
-      error.message.includes('ChunkLoadError') ||
-      error.message.includes('Loading CSS chunk') ||
-      error.message.includes('error loading dynamically imported module') ||
-      error.message.includes('Unable to preload CSS');
-    
-    return { hasError: true, isChunkError };
-  }
-
-  componentDidMount() {
-    // Clear retry count on successful mount
-    if (!this.state.hasError) {
-      sessionStorage.removeItem(RETRY_KEY);
-      sessionStorage.removeItem(LAST_ERROR_KEY);
-    }
+  static getDerivedStateFromError(error: Error): State {
+    return { 
+      hasError: true, 
+      errorMessage: error.message || 'Unknown error'
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('[LazyLoadErrorBoundary] Error caught:', error.message);
-    console.error('[LazyLoadErrorBoundary] Component stack:', errorInfo.componentStack);
-    
-    // Store error timestamp
-    sessionStorage.setItem(LAST_ERROR_KEY, Date.now().toString());
-    
-    if (this.state.isChunkError && this.state.retryCount < MAX_AUTO_RETRIES) {
-      // Store retry count and reload
-      const newCount = this.state.retryCount + 1;
-      sessionStorage.setItem(RETRY_KEY, newCount.toString());
-      
-      logger.info('[LazyLoadErrorBoundary] Auto-retry', { count: newCount, max: MAX_AUTO_RETRIES });
-      
-      // Clear caches and reload
-      this.clearCachesAndReload();
-    }
+    console.error('[LazyLoadErrorBoundary] Error:', error.message);
+    console.error('[LazyLoadErrorBoundary] Stack:', errorInfo.componentStack);
   }
 
-  clearCachesAndReload = async () => {
-    logger.info('[LazyLoadErrorBoundary] Starting cache clear...');
-    
+  handleClearAndReload = async () => {
     try {
-      // Use the centralized SW manager if available
-      try {
-        const { forceFullCacheClear } = await import('@/lib/sw-update-manager');
-        await forceFullCacheClear();
-      } catch {
-        // Fallback: manual cleanup
-        if ('serviceWorker' in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          for (const registration of registrations) {
-            if (registration.waiting) {
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            }
-            await registration.unregister();
-          }
-          logger.info('[LazyLoadErrorBoundary] Service workers unregistered');
-        }
-        
-        if ('caches' in window) {
-          const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map(name => caches.delete(name)));
-          logger.info('[LazyLoadErrorBoundary] All caches cleared');
+      // Clear session storage
+      sessionStorage.clear();
+      
+      // Clear localStorage keys related to app
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('chunk') || key.includes('retry') || key.includes('error'))) {
+          keysToRemove.push(key);
         }
       }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
       
+      // Clear caches
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      
+      // Unregister service workers
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      }
     } catch (e) {
-      console.error('[LazyLoadErrorBoundary] Cache clear error:', e);
+      console.warn('[LazyLoadErrorBoundary] Cleanup error:', e);
     }
     
-    // Force hard reload - bypass cache completely with cache-busting query
-    const url = new URL(window.location.href);
-    url.searchParams.set('_sw', Date.now().toString());
-    window.location.replace(url.toString());
+    // Reload with cache bust
+    window.location.replace(window.location.origin + '?v=' + Date.now());
   };
 
-  handleManualRetry = () => {
-    sessionStorage.removeItem(RETRY_KEY);
-    sessionStorage.removeItem(LAST_ERROR_KEY);
-    this.clearCachesAndReload();
+  handleGoHome = () => {
+    window.location.href = '/auth';
   };
 
   render() {
     if (this.state.hasError) {
+      // Check if it's a chunk/import error
+      const isChunkError = 
+        this.state.errorMessage.includes('chunk') ||
+        this.state.errorMessage.includes('import') ||
+        this.state.errorMessage.includes('module') ||
+        this.state.errorMessage.includes('CSS');
       
-      // If it's a chunk error and we're within auto-retry limit, show loading
-      if (this.state.isChunkError && this.state.retryCount < MAX_AUTO_RETRIES) {
-        return (
-          <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground text-center">
-              Atualizando aplicação...
-            </p>
-            <p className="text-xs text-muted-foreground/60 mt-2">
-              Tentativa {this.state.retryCount + 1} de {MAX_AUTO_RETRIES}
-            </p>
-          </div>
-        );
-      }
-      
-      // Max retries exceeded - show manual retry option
-      if (this.state.isChunkError) {
-        return (
-          <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-            <AlertTriangle className="h-12 w-12 text-amber-500 mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Atualização Necessária</h2>
-            <p className="text-muted-foreground text-center mb-6 max-w-md">
-              Uma nova versão do Nautilus One está disponível. 
-              Clique abaixo para atualizar.
-            </p>
-            <Button onClick={this.handleManualRetry} size="lg" className="gap-2">
-              <RefreshCw className="h-4 w-4" />
-              Atualizar Aplicação
-            </Button>
-            <p className="text-xs text-muted-foreground/60 mt-4 max-w-sm text-center">
-              Se o problema persistir, limpe o cache do navegador manualmente ou reinstale o app.
-            </p>
-          </div>
-        );
-      }
-      
-      // Non-chunk error - use custom fallback or default
-      return this.props.fallback || (
+      return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-          <AlertTriangle className="h-12 w-12 text-destructive mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Erro Inesperado</h2>
-          <p className="text-muted-foreground text-center mb-6">
-            Algo deu errado. Tente recarregar a página.
+          <AlertTriangle className="h-12 w-12 text-amber-500 mb-4" />
+          <h2 className="text-xl font-semibold mb-2">
+            {isChunkError ? 'Atualização Disponível' : 'Erro ao Carregar'}
+          </h2>
+          <p className="text-muted-foreground text-center mb-6 max-w-md">
+            {isChunkError 
+              ? 'Uma nova versão está disponível. Limpe o cache para continuar.'
+              : 'Ocorreu um erro. Tente limpar o cache e recarregar.'}
           </p>
-          <Button onClick={() => window.location.reload()} className="gap-2">
-            <RefreshCw className="h-4 w-4" />
-            Recarregar
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={this.handleClearAndReload} className="gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Limpar cache e recarregar
+            </Button>
+            <Button onClick={this.handleGoHome} variant="outline" className="gap-2">
+              <Home className="h-4 w-4" />
+              Ir para Login
+            </Button>
+          </div>
+          {!isChunkError && (
+            <p className="text-xs text-muted-foreground/60 mt-4 max-w-sm text-center">
+              Erro: {this.state.errorMessage.slice(0, 100)}
+            </p>
+          )}
         </div>
       );
     }
