@@ -757,7 +757,7 @@ const AppRoutes = () => (
 );
 
 function App() {
-  // PATCH v51: Mark app as loaded IMMEDIATELY on function call
+  // PATCH v52: Mark app as loaded IMMEDIATELY on function call
   // This must happen as early as possible to prevent recovery UI from showing
   if (typeof window !== 'undefined') {
     (window as any).__NAUTI_APP_LOADED__ = true;
@@ -768,17 +768,14 @@ function App() {
   }
 
   React.useEffect(() => {
-    console.log('[App v51] React app mounted');
+    console.log('[App v52] React app mounted successfully');
     
-    // Ensure loader is removed
+    // Ensure loader is completely removed (not just hidden)
     const initialLoader = document.getElementById('initial-loader');
     if (initialLoader) initialLoader.remove();
     
-    const recoveryUi = document.getElementById('recovery-ui');
-    if (recoveryUi) recoveryUi.remove();
-    
     return () => {
-      console.log('[App v51] React app unmounting');
+      console.log('[App v52] React app unmounting');
     };
   }, []);
 
