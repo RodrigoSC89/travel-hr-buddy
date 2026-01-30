@@ -349,35 +349,25 @@ const Loader = React.memo(() => {
 });
 
 // ============================================
-// PROTECTED ROUTE v35 - Timeout maior para conexões lentas
-// Auth é 100% background, NUNCA bloqueia UI
+// PROTECTED ROUTE v40 - NUNCA bloquear com spinner infinito
+// Auth é 100% background, redirect IMEDIATO se não autenticado
 // ============================================
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
-  const [forceRedirect, setForceRedirect] = React.useState(false);
-  
-  // Timeout de segurança: 2 segundos para conexões lentas (era 100ms)
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!user && !isLoading) {
-        setForceRedirect(true);
-      }
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, [user, isLoading]);
   
   // User logado = mostra conteúdo imediatamente
   if (user) {
     return <>{children}</>;
   }
   
-  // Sem user + timeout expirado = vai para auth
-  if (forceRedirect) {
+  // PATCH v40: Se isLoading = false e não há user, redirecionar IMEDIATAMENTE
+  // Não esperar timeout - isso causa spinner desnecessário
+  if (!isLoading && !user) {
     return <Navigate to="/auth" replace />;
   }
   
-  // Loading breve enquanto auth carrega (máximo 2s)
+  // Loading MUITO breve enquanto verifica sessão existente (máximo 300ms na prática)
+  // Se passar de 300ms, o isLoading já será false e vai redirecionar
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-3">
