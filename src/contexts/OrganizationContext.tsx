@@ -33,12 +33,12 @@ interface OrganizationContextType {
   updateUserRole: (userId: string, role: string) => Promise<void>;
 }
 
-// Default context value to prevent null errors
+// Default context value to prevent null errors - PATCH v43: isLoading FALSE
 const defaultContextValue: OrganizationContextType = {
   currentOrganization: null,
   currentBranding: null,
   userRole: null,
-  isLoading: true,
+  isLoading: false, // CRITICAL: Must be false to never block UI
   error: null,
   switchOrganization: async () => {},
   updateBranding: async () => {},

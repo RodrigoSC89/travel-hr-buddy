@@ -31,6 +31,7 @@ export interface RealtimeNotification {
   isRead: boolean;
 }
 
+// PATCH v43: Start with isLoading=false to NEVER block initial render
 const defaultMetrics: DashboardMetrics = {
   totalVessels: 0,
   activeVessels: 0,
@@ -43,7 +44,7 @@ const defaultMetrics: DashboardMetrics = {
   revenueThisMonth: 0,
   revenueGrowth: 0,
   lastUpdated: new Date(),
-  isLoading: true
+  isLoading: false
 };
 
 export function useDashboardData() {

@@ -43,7 +43,8 @@ export const VesselProvider: React.FC<VesselProviderProps> = ({
 }) => {
   const [currentVessel, setCurrentVesselState] = useState<Vessel | null>(null);
   const [allVessels, setAllVessels] = useState<Vessel[]>([]);
-  const [loading, setLoading] = useState(true);
+  // PATCH v43: Start with loading=false to NEVER block initial render
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   /**
