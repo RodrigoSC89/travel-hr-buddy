@@ -1234,3 +1234,28 @@ comment = "CTS/STCW AI assistant for crew certification compliance queries"
 [functions.cts-generate-evidence]
 verify_jwt = false
 comment = "Generate CTS compliance evidence for non-conformities"
+
+# ============================================
+# COMPETITIVE EDGE - NAUTI ONE v5.0 (Added 2026-01-30)
+# Superior features vs SoftExpert, Fluig, UniSea, TM Master
+# ============================================
+
+[functions.documents-intelligence]
+verify_jwt = false
+comment = "Multi-OCR + AI extraction + classification + compliance validation"
+
+[functions.predictive-bi]
+verify_jwt = false
+comment = "Predictive analytics with ML trends, anomaly detection, executive insights"
+
+[functions.predictive-audit]
+verify_jwt = false
+comment = "Predictive audit with AI risk analysis and preventive actions"
+
+[functions.hr-talent-ai]
+verify_jwt = false
+comment = "Talent matching, career paths, wellness analysis with AI"
+
+[functions.training-lxp-ai]
+verify_jwt = false
+comment = "Adaptive learning, microlearning, VR training with gamification"
