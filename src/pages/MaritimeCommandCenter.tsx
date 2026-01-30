@@ -92,6 +92,7 @@ export default function MaritimeCommandCenter() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [userId, setUserId] = useState<string>("");
   const [stats, setStats] = useState<MaritimeStats>({
     totalChecklists: 0,
     completedChecklists: 0,
@@ -106,6 +107,17 @@ export default function MaritimeCommandCenter() {
   });
   
   const { handleCreate, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+
+  // Get current user ID
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data?.user?.id) {
+        setUserId(data.user.id);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const loadData = useCallback(async () => {
     try {
