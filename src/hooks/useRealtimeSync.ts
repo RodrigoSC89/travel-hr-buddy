@@ -92,8 +92,9 @@ export function useRealtimeSync<T>({
       if (cachedData) {
         logger.debug(`[RealtimeSync] Using cached data for ${table}`);
         setData(cachedData);
+        // PATCH v36: Nunca definir isOnline = false
         setSyncState({
-          isOnline: false,
+          isOnline: true, // PATCH v36: Sempre true - usar isFromCache para indicar cache
           isFromCache: true,
           lastSync: null,
           retryCount
@@ -114,9 +115,10 @@ export function useRealtimeSync<T>({
         // No cache available
         setError(err as Error);
         setLoading(false);
+        // PATCH v36: Nunca definir isOnline = false
         setSyncState(prev => ({
           ...prev,
-          isOnline: false,
+          isOnline: true, // PATCH v36: Sempre true
           retryCount
         }));
 

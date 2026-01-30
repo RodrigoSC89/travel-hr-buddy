@@ -94,9 +94,12 @@ class OfflineManager {
       this.syncPendingRequests();
     });
 
+    // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
     window.addEventListener("offline", () => {
-      this.syncState.isOnline = false;
-      this.notifyListeners();
+      // PATCH v36: Nunca definir isOnline = false
+      // this.syncState.isOnline = false;
+      // this.notifyListeners();
+      console.log("[OfflineManager] Offline event ignored - always online mode");
     });
   }
 
