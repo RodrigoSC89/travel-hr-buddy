@@ -148,6 +148,15 @@ if (typeof requestIdleCallback !== "undefined") {
 // Render the app
 const container = document.getElementById("root");
 if (container) {
+  // CRITICAL: Mark app as loaded to prevent emergency recovery UI
+  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
+  
+  // Clear the initial loading spinner from index.html
+  const initialLoader = document.getElementById("initial-loader");
+  const recoveryUi = document.getElementById("recovery-ui");
+  if (initialLoader) initialLoader.remove();
+  if (recoveryUi) recoveryUi.remove();
+  
   createRoot(container).render(
     <React.StrictMode>
       <HelmetProvider>
