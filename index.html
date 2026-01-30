@@ -104,7 +104,7 @@
       </div>
     </div>
     
-    <!-- PATCH v52: Aggressive cache-busting and recovery -->
+    <!-- PATCH v53: Simplified boot - NO automatic cache clear (causes loops) -->
     <script>
       (function() {
         'use strict';
@@ -112,70 +112,42 @@
         // Flag set by React when app loads
         window.__NAUTI_APP_LOADED__ = false;
         
-        // Version for forced updates
-        var APP_VERSION = 'v52';
-        var VERSION_KEY = 'nauti_app_version';
-        
-        // Aggressive cache clear function
-        function nukeCache() {
-          console.log('[Boot v52] Nuking all caches...');
-          
-          // 1. Clear ALL localStorage
+        // Manual cache clear function (only for user-triggered recovery)
+        window.clearCacheAndReload = function() {
+          console.log('[Boot v53] Manual cache clear triggered');
           try { localStorage.clear(); } catch(e) {}
-          
-          // 2. Clear sessionStorage
           try { sessionStorage.clear(); } catch(e) {}
-          
-          // 3. Clear all caches
           if ('caches' in window) {
             caches.keys().then(function(keys) { 
               keys.forEach(function(k) { caches.delete(k); });
             }).catch(function() {});
           }
-          
-          // 4. Unregister all service workers
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(regs) { 
               regs.forEach(function(r) { r.unregister(); });
             }).catch(function() {});
           }
-        }
-        
-        // Check if version changed - force cache clear
-        var storedVersion = null;
-        try { storedVersion = localStorage.getItem(VERSION_KEY); } catch(e) {}
-        
-        if (storedVersion !== APP_VERSION) {
-          console.log('[Boot v52] Version mismatch, clearing cache');
-          nukeCache();
-          try { localStorage.setItem(VERSION_KEY, APP_VERSION); } catch(e) {}
-        }
-        
-        // Clear and reload function for recovery UI
-        window.clearCacheAndReload = function() {
-          nukeCache();
-          // Wait a bit then reload with cache bust
           setTimeout(function() {
             location.replace(location.origin + '?nocache=' + Date.now());
-          }, 500);
+          }, 300);
         };
         
-        // Recovery UI - shown after 4 seconds if app hasn't loaded
+        // Recovery UI - shown after 8 seconds if app hasn't loaded (was 4s, increased to avoid false positives)
         setTimeout(function() {
           if (!window.__NAUTI_APP_LOADED__) {
-            console.log('[Boot v52] App not loaded after 4s, showing recovery');
+            console.log('[Boot v53] App not loaded after 8s, showing recovery');
             var loader = document.getElementById('initial-loader');
             if (loader) {
               loader.innerHTML = '<div class="text-center space-y-4 p-6 max-w-sm">' +
                 '<div class="text-lg font-semibold text-foreground">Carregamento lento</div>' +
-                '<p class="text-sm text-muted">O aplicativo está demorando. Limpe o cache para forçar atualização.</p>' +
+                '<p class="text-sm text-muted">O aplicativo está demorando para carregar.</p>' +
                 '<div class="flex flex-col gap-2">' +
-                '<button onclick="clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>' +
-                '<button onclick="location.reload(true)" class="btn btn-secondary mt-2">Tentar novamente</button>' +
+                '<button onclick="location.reload()" class="btn btn-secondary">Tentar novamente</button>' +
+                '<button onclick="clearCacheAndReload()" class="btn mt-2">Limpar cache</button>' +
                 '</div></div>';
             }
           }
-        }, 4000);
+        }, 8000);
       })();
     </script>
     
