@@ -149,8 +149,10 @@ export function useNetworkStatus(): NetworkStatus {
       await updatePendingCount();
     };
 
-    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
-    // Apenas escutar mudanças de qualidade da conexão
+    // Event listeners - apenas para atualizar qualidade, não status online
+    window.addEventListener("online", updateStatus);
+    window.addEventListener("offline", updateStatus);
+    
     if (connection?.addEventListener) {
       connection.addEventListener("change", updateStatus);
     }
@@ -172,6 +174,9 @@ export function useNetworkStatus(): NetworkStatus {
     const interval = setInterval(updatePendingCount, 3000);
 
     return () => {
+      window.removeEventListener("online", updateStatus);
+      window.removeEventListener("offline", updateStatus);
+      
       if (connection?.removeEventListener) {
         connection.removeEventListener("change", updateStatus);
       }

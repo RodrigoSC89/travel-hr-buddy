@@ -36,7 +36,7 @@ export function useRealtimeSync<T>({
   retryDelay = 1000 // Initial delay in ms
 }: UseRealtimeSyncOptions<T>) {
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [syncState, setSyncState] = useState<SyncState>({
     isOnline: true,
@@ -92,9 +92,8 @@ export function useRealtimeSync<T>({
       if (cachedData) {
         logger.debug(`[RealtimeSync] Using cached data for ${table}`);
         setData(cachedData);
-        // PATCH v36: Nunca definir isOnline = false
         setSyncState({
-          isOnline: true, // PATCH v36: Sempre true - usar isFromCache para indicar cache
+          isOnline: false,
           isFromCache: true,
           lastSync: null,
           retryCount
@@ -115,10 +114,9 @@ export function useRealtimeSync<T>({
         // No cache available
         setError(err as Error);
         setLoading(false);
-        // PATCH v36: Nunca definir isOnline = false
         setSyncState(prev => ({
           ...prev,
-          isOnline: true, // PATCH v36: Sempre true
+          isOnline: false,
           retryCount
         }));
 

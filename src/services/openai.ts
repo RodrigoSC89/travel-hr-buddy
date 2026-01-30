@@ -18,8 +18,7 @@ export interface OpenAITestResult {
  * Used for AI Memory vector similarity search
  */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) {
     logger.error("OpenAI API key not configured");
@@ -63,8 +62,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
  */
 export async function testOpenAIConnection(): Promise<OpenAITestResult> {
   const startTime = Date.now();
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) {
     return {

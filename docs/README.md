@@ -63,14 +63,11 @@
 
 | Metric | Value |
 |--------|-------|
-| Pages | 127+ |
-| Components | 400+ |
-| Database Tables | 600+ |
-| Edge Functions | 300+ |
-| AI Modules | 16 |
+| Components | 200+ |
+| Database Tables | 80+ |
+| Edge Functions | 15+ |
 | Test Coverage | 85%+ |
-| Lighthouse Score | 96+ |
-| Certification | 100% ✅ |
+| Lighthouse Score | 92+ |
 
 ## 🎯 Key Features
 

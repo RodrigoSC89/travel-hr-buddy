@@ -8,6 +8,36 @@ import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message?: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  onstart: (() => void) | null;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
 interface VoiceInputProps {
   onTranscription: (text: string) => void;
   disabled?: boolean;
@@ -21,15 +51,14 @@ export function VoiceInput({
   language = "pt-BR",
   className = "",
 }: VoiceInputProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const [transcript, setTranscript] = useState("");
 
   useEffect(() => {
     const SpeechRecognitionAPI =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionAPI) {
       setIsSupported(false);
@@ -41,8 +70,7 @@ export function VoiceInput({
     recognition.interimResults = true;
     recognition.lang = language;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interimTranscript = "";
       let finalTranscript = "";
 
@@ -63,8 +91,8 @@ export function VoiceInput({
       }
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error("Speech recognition error:", event.error);
       setIsListening(false);
 
       if (event.error === "not-allowed") {
@@ -103,7 +131,8 @@ export function VoiceInput({
       try {
         recognitionRef.current.start();
         toast.info("Escutando... Fale sua pergunta");
-      } catch {
+      } catch (error) {
+        console.error("Failed to start recognition:", error);
         toast.error("Erro ao iniciar reconhecimento de voz");
       }
     }
@@ -145,7 +174,7 @@ export function VoiceInput({
           </>
         )}
         {isListening && (
-          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive animate-ping" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping" />
         )}
       </Button>
       {transcript && isListening && (

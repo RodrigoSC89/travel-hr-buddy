@@ -32,9 +32,8 @@ class AutonomyEngine {
   private readonly CHECK_INTERVAL_MS = 60000; // 1 minute (increased from 15s)
 
   start() {
-    // PATCH: Autonomy Engine desabilitado por padrão (VITE_* não funciona)
-    // Para habilitar, modifique este valor para true manualmente
-    const ENABLE = false;
+    // Disabled by default to prevent performance issues
+    const ENABLE = import.meta.env.VITE_ENABLE_AUTONOMY === "true";
     if (!ENABLE) {
       Logger.info("AutonomyEngine disabled", undefined, "AutonomyEngine");
       return;

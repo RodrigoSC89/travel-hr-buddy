@@ -108,8 +108,8 @@ export default function DeploymentStatus() {
       // Environment
       {
         name: "Supabase Connection",
-        status: "pass", // Always configured with hardcoded URL
-        message: "Configured",
+        status: import.meta.env.VITE_SUPABASE_URL ? "pass" : "warning",
+        message: import.meta.env.VITE_SUPABASE_URL ? "Configured" : "Environment variable missing",
         category: "Environment"
       },
       {
@@ -304,7 +304,7 @@ export default function DeploymentStatus() {
             </Button>
 
             <Button className="w-full h-24 flex flex-col gap-2" variant="outline" asChild>
-              <Link to="/quality-dashboard">
+              <Link to="/admin/lighthouse-dashboard">
                 <Zap className="h-6 w-6" />
                 <span className="text-sm">Performance Check</span>
                 <span className="text-xs text-muted-foreground">Final audit</span>

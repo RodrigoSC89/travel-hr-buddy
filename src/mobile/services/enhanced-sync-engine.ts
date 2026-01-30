@@ -277,7 +277,7 @@ export class EnhancedSyncEngine {
       case "remote":
         // Accept remote changes, discard local
         structuredLogger.debug("Conflict: accepting remote changes");
-        await this.updateLocalStorage(table, newRecord);
+        // TODO: Update local storage with remote data
         break;
       case "latest":
         // Use timestamp to determine winner
@@ -285,7 +285,7 @@ export class EnhancedSyncEngine {
         const remoteTimestamp = newRecord.updated_at;
         if (remoteTimestamp > localTimestamp) {
           structuredLogger.debug("Conflict: remote is newer");
-          await this.updateLocalStorage(table, newRecord);
+          // TODO: Update local storage with remote data
         }
         break;
       }
@@ -296,39 +296,10 @@ export class EnhancedSyncEngine {
   }
 
   /**
-   * Update local storage with remote data
-   */
-  private async updateLocalStorage(table: string, record: any): Promise<void> {
-    try {
-      const key = `sync_${table}_${record.id}`;
-      localStorage.setItem(key, JSON.stringify({
-        ...record,
-        _synced_at: new Date().toISOString()
-      }));
-      structuredLogger.debug(`Local storage updated for ${table}:${record.id}`);
-    } catch (error) {
-      structuredLogger.error(`Failed to update local storage`, { table, error });
-    }
-  }
-
-  /**
    * Handle remote delete
    */
   private async handleRemoteDelete(table: string, record: any): Promise<void> {
-    try {
-      const key = `sync_${table}_${record.id}`;
-      const existing = localStorage.getItem(key);
-      if (existing) {
-        const parsed = JSON.parse(existing);
-        localStorage.setItem(key, JSON.stringify({
-          ...parsed,
-          _deleted: true,
-          _deleted_at: new Date().toISOString()
-        }));
-      }
-    } catch (error) {
-      structuredLogger.error(`Failed to mark as deleted in local storage`, { table, error });
-    }
+    // TODO: Update local storage to mark as deleted
     this.emitChange(table, "delete", record);
   }
 
@@ -381,8 +352,7 @@ export class EnhancedSyncEngine {
    * Emit change event for table
    */
   private emitChange(table: string, event: string, data: any): void {
-    // DESIGN: UI updates are handled via React Query cache invalidation
-    // This method logs for debugging; components subscribe via useQuery hooks
+    // TODO: Implement event emitter for UI updates
     structuredLogger.debug("Change emitted", { table, event });
   }
 

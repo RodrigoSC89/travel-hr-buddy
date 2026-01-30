@@ -81,7 +81,7 @@ const RealTimeWorkspace: React.FC = () => {
   const [newMessage, setNewMessage] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("general");
   const [myStatus, setMyStatus] = useState<"online" | "busy" | "away">("online");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);

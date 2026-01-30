@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 import {
   Cpu,
   AlertTriangle,
@@ -63,7 +62,7 @@ export default function DPAIAnalyzer() {
     setAnalysis(null);
 
     try {
-      logger.debug("Starting DP analysis:", { type, telemetry });
+      console.log("Starting DP analysis:", type, telemetry);
       
       const response = await fetch(
         `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,

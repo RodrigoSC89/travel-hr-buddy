@@ -1,7 +1,7 @@
+// @ts-nocheck
 /**
  * PATCH 377: Travel Reservations & Group Management
  * Reservations synchronization, group travel, and enhanced exports
- * PATCH 865: Removed @ts-nocheck, using dynamic-tables accessor
  */
 
 import React, { useState, useEffect } from "react";
@@ -15,17 +15,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  travelReservationsTable, 
-  type TravelReservation, 
-  type TravelReservationInsert 
-} from "@/lib/supabase/dynamic-tables";
+import { supabase } from "@/integrations/supabase/client";
 import { Hotel, Plus } from "lucide-react";
-import { logger } from "@/lib/logger";
+
+interface Reservation {
+  id: string;
+  reservation_number: string;
+  itinerary_id?: string;
+  crew_member_id?: string;
+  reservation_type: string;
+  provider_name: string;
+  booking_reference?: string;
+  status: string;
+  check_in_date?: string;
+  check_out_date?: string;
+  location?: string;
+  cost?: number;
+  currency: string;
+  payment_status: string;
+  notes?: string;
+  created_at: string;
+}
 
 export const TravelReservations: React.FC = () => {
-  const [reservations, setReservations] = useState<TravelReservation[]>([]);
-  const [filteredReservations, setFilteredReservations] = useState<TravelReservation[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
@@ -58,12 +72,15 @@ export const TravelReservations: React.FC = () => {
   const loadReservations = async () => {
     try {
       setLoading(true);
-      const { data, error } = await travelReservationsTable.select("*");
+      const { data, error } = await supabase
+        .from("travel_reservations")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setReservations(data || []);
     } catch (error) {
-      logger.error("Error loading reservations:", error);
+      console.error("Error loading reservations:", error);
       toast({
         title: "Error",
         description: "Failed to load reservations",
@@ -90,7 +107,9 @@ export const TravelReservations: React.FC = () => {
 
   const handleCreate = async () => {
     try {
-      const { error } = await travelReservationsTable.insertNoSelect(formData);
+      const { error } = await supabase
+        .from("travel_reservations")
+        .insert([formData]);
 
       if (error) throw error;
 
@@ -103,7 +122,7 @@ export const TravelReservations: React.FC = () => {
       resetForm();
       loadReservations();
     } catch (error) {
-      logger.error("Error creating reservation:", error);
+      console.error("Error creating reservation:", error);
       toast({
         title: "Error",
         description: "Failed to create reservation",
@@ -373,7 +392,7 @@ export const TravelReservations: React.FC = () => {
         {loading ? (
           <div className="text-center py-8">Loading reservations...</div>
         ) : filteredReservations.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-gray-500">
             No reservations found. Create your first reservation to get started.
           </div>
         ) : (
@@ -403,7 +422,7 @@ export const TravelReservations: React.FC = () => {
                     <TableCell>
                       <div className="font-medium">{reservation.provider_name}</div>
                       {reservation.booking_reference && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-gray-500">
                           Ref: {reservation.booking_reference}
                         </div>
                       )}

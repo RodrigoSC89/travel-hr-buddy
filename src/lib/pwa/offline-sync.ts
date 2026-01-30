@@ -79,8 +79,10 @@ class OfflineSyncManager {
     await this.db!.put('syncQueue', syncItem);
     this.notifyListeners({ type: 'queued', item: syncItem });
 
-    // PATCH v35: Sempre tenta sync imediato - navigator.onLine não é confiável
-    this.processQueue();
+    // Try immediate sync if online
+    if (navigator.onLine) {
+      this.processQueue();
+    }
 
     return syncItem.id;
   }
@@ -231,10 +233,9 @@ class OfflineSyncManager {
     this.notifyListeners({ type: 'offline' });
   }
 
-  // PATCH v35: Removido navigator.onLine - sempre tenta sync
   private startPeriodicSync(): void {
     setInterval(() => {
-      if (!this.syncInProgress) {
+      if (navigator.onLine && !this.syncInProgress) {
         this.processQueue();
       }
     }, 30000); // Check every 30 seconds

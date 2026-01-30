@@ -1,13 +1,11 @@
-import { edgeLogger } from "../_shared/edge-logger.ts";
-
-const TAG = "BUNKER-AI";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-Deno.serve(async (req: Request): Promise<Response> => {
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -143,7 +141,7 @@ Carga transportada: ${data.cargo_transported_tons || 0} tons`;
         throw new Error(`Unknown action: ${action}`);
     }
 
-    edgeLogger.info(TAG, "Processing action", { action });
+    console.log(`Bunker AI - Action: ${action}`);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -193,7 +191,7 @@ Carga transportada: ${data.cargo_transported_tons || 0} tons`;
     });
 
   } catch (error: unknown) {
-    edgeLogger.error(TAG, "Error", error);
+    console.error("Error in bunker-ai:", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error" 
     }), {

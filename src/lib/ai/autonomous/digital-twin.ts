@@ -4,8 +4,6 @@
  * NAUTILUS ONE v4.0 - Autonomous Platform
  */
 
-import { logger } from "@/lib/logger";
-
 export interface VesselState {
   vesselId: string;
   vesselName: string;
@@ -148,7 +146,7 @@ export class VesselDigitalTwin {
       }
     };
 
-    logger.debug(`[DigitalTwin] Initialized for ${vesselName}`);
+    console.log(`[DigitalTwin] Initialized for ${vesselName}`);
     this.emit('initialized', this.state);
   }
 
@@ -164,7 +162,7 @@ export class VesselDigitalTwin {
       await this.simulationTick();
     }, intervalMs);
 
-    logger.debug('[DigitalTwin] Simulation started');
+    console.log('[DigitalTwin] Simulation started');
   }
 
   /**
@@ -175,7 +173,7 @@ export class VesselDigitalTwin {
       clearInterval(this.simulationInterval);
       this.simulationInterval = null;
     }
-    logger.debug('[DigitalTwin] Simulation stopped');
+    console.log('[DigitalTwin] Simulation stopped');
   }
 
   /**

@@ -12,8 +12,7 @@ export class OceanSonarAIService {
   private apiKey: string;
 
   constructor() {
-    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-    this.apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
+    this.apiKey = import.meta.env.VITE_OPENAI_API_KEY || "";
     if (!this.apiKey) {
       logger.warn("Missing OpenAI API key. Sonar AI analysis will use fallback mode.");
     }

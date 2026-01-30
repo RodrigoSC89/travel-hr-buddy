@@ -159,17 +159,19 @@ class SyncEngine {
     data: any,
     action: "create" | "update" | "delete" = "create"
   ): Promise<void> {
-    // PATCH v35: Sempre tenta salvar online primeiro - navigator.onLine não é confiável
-    try {
-      await this.syncRecord({ table, action, data, timestamp: Date.now(), synced: false });
-      return;
-    } catch (error) {
-      console.log("Online save failed, saving locally:", error);
+    // Try to save online first
+    if (navigator.onLine) {
+      try {
+        await this.syncRecord({ table, action, data, timestamp: Date.now(), synced: false });
+        return;
+      } catch (error) {
+        console.log("Online save failed, saving locally:", error);
+      }
     }
 
-    // Save locally if online save failed
+    // Save locally if offline or online save failed
     await localSync.saveLocally(data, table, action);
-    toast.info("Alterações salvas localmente. Sincronizará automaticamente.");
+    toast.info("Changes saved offline. Will sync when online.");
   }
 }
 
@@ -190,15 +192,16 @@ if (typeof window !== "undefined") {
 }
 
 /**
- * Periodic sync every 5 minutes
- * PATCH v35: Removido navigator.onLine - sempre tenta sync
+ * Periodic sync every 5 minutes if online
  */
 if (typeof window !== "undefined") {
   setInterval(async () => {
-    const hasPending = await syncEngine.hasPendingChanges();
-    if (hasPending) {
-      console.log("Periodic sync check: syncing pending changes...");
-      await syncEngine.pushLocalChanges();
+    if (navigator.onLine) {
+      const hasPending = await syncEngine.hasPendingChanges();
+      if (hasPending) {
+        console.log("Periodic sync check: syncing pending changes...");
+        await syncEngine.pushLocalChanges();
+      }
     }
   }, 5 * 60 * 1000); // 5 minutes
 }

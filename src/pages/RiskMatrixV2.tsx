@@ -112,27 +112,10 @@ export default function RiskMatrixV2() {
             title="Registro de Riscos"
             icon={AlertTriangle}
             searchable
-            onRefresh={async () => {
-              toast.loading("Recalculando matriz...", { id: "refresh-risks" });
-              await new Promise(r => setTimeout(r, 1000));
-              toast.success("Matriz atualizada", { id: "refresh-risks", description: `${risks.length} riscos analisados` });
-            }}
+            onRefresh={() => toast.success("Dados atualizados")}
             actions={[
-              { label: "Analisar IA", icon: Brain, onClick: async (item) => {
-                toast.loading(`Analisando ${item.title} com IA...`, { id: `ai-${item.id}` });
-                await new Promise(r => setTimeout(r, 2000));
-                const riskScore = item.probability * item.impact;
-                const aiInsight = riskScore >= 15 ? "CRÍTICO: Requer ação imediata" : 
-                                  riskScore >= 8 ? "MODERADO: Monitorar de perto" : 
-                                  "BAIXO: Manter controles atuais";
-                toast.success(`Análise concluída`, { id: `ai-${item.id}`, description: aiInsight });
-              }},
-              { label: "Mitigar", icon: Shield, onClick: (item) => {
-                toast.success(`Plano de mitigação`, { 
-                  description: item.mitigation || "Nenhum plano definido - clique para criar",
-                  duration: 5000
-                });
-              }},
+              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando ${item.title}`) },
+              { label: "Mitigar", icon: Shield, onClick: (item) => toast.info(`Plano: ${item.mitigation}`) },
             ]}
           />
         </TabsContent>

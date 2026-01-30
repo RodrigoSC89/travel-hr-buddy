@@ -280,9 +280,8 @@ export function validateEnvironment(): ValidationResult {
   const missing: string[] = [];
   const configured: string[] = [];
   
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
   requiredEnvVars.forEach(varName => {
-    const value = safeEnv[varName];
+    const value = import.meta.env[varName];
     if (!value || value === "") {
       missing.push(varName);
     } else {

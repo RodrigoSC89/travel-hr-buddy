@@ -60,19 +60,16 @@ class PrefetchManager {
       }
     }
     
-    // PATCH v34 iOS PWA: Sempre assume online - navigator.onLine não é confiável
-    this.isOffline = false;
+    this.isOffline = !navigator.onLine;
   }
-
+  
   private setupListeners(): void {
     window.addEventListener('online', () => {
       this.isOffline = false;
     });
     
-    // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
     window.addEventListener('offline', () => {
-      // this.isOffline = true; // REMOVIDO - nunca bloquear prefetch
-      console.log('[PrefetchManager] Offline event ignored');
+      this.isOffline = true;
     });
   }
   

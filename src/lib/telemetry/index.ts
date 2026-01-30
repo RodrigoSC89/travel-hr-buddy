@@ -8,35 +8,26 @@ import type { TelemetryEvent, TelemetryEventName } from "./events";
 import { ConsentManager } from "./consent";
 import { OfflineQueue } from "./offline-queue";
 
-// Safe getter for env vars
-const getEnv = (key: string): string | undefined => {
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      return import.meta.env[key] as string | undefined;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
-};
-
-const POSTHOG_KEY = getEnv('VITE_POSTHOG_KEY') || "";
-const POSTHOG_HOST = getEnv('VITE_POSTHOG_HOST') || "https://app.posthog.com";
-const TELEMETRY_ENABLED = getEnv('VITE_TELEMETRY_ENABLED') === "true";
+const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
+const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
+const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === "true";
 
 class TelemetryService {
   private initialized = false;
-  // PATCH v38: Sempre online - navigator.onLine não é confiável no iOS PWA
+  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
   private online = true;
 
   constructor() {
-    // PATCH v38: Apenas listener online para sync, offline event REMOVIDO
-    if (typeof window !== "undefined") {
-      window.addEventListener("online", () => {
-        this.syncOfflineEvents();
-      });
-      // PATCH v38: Evento offline REMOVIDO - nunca bloquear telemetry
-    }
+    // PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos enviar
+    window.addEventListener("online", () => {
+      this.online = true;
+      this.syncOfflineEvents();
+    });
+
+    window.addEventListener("offline", () => {
+      // PATCH v26: Não desabilitar telemetry - deixar falhar naturalmente
+      // this.online = false;
+    });
   }
 
   /**

@@ -98,7 +98,9 @@ export function DPOperationsMonitor({
     if (!status) return;
 
     if (previousStatus && previousStatus !== status.status) {
-      // Status changed - trigger alerts
+      // Status changed
+      console.log(`[DPMonitor] Status changed: ${previousStatus} → ${status.status}`);
+
       if (enableAudioAlerts) {
         if (status.status === 'RED') {
           playAlert('critical');

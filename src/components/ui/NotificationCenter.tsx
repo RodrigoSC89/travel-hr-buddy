@@ -66,8 +66,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const { toast } = useToast();
 

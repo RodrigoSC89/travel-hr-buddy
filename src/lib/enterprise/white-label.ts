@@ -5,8 +5,6 @@
  * Allows complete brand customization for enterprise clients
  */
 
-import { logger } from '@/lib/logger';
-
 export interface WhiteLabelBranding {
   // Logo & Identity
   logo_url: string;
@@ -149,7 +147,7 @@ export function applyWhiteLabelBranding(branding: Partial<WhiteLabelBranding>): 
     }
   }
   
-  logger.info('[White-Label] Branding applied');
+  console.log('[White-Label] Branding applied');
 }
 
 /**
@@ -164,7 +162,7 @@ export function resetToDefaultBranding(): void {
     customStyles.remove();
   }
   
-  logger.info('[White-Label] Reset to default branding');
+  console.log('[White-Label] Reset to default branding');
 }
 
 /**
@@ -200,7 +198,7 @@ export async function saveWhiteLabelConfig(
     }
     
     // In production, save to database
-    logger.info('[White-Label] Saving configuration', { organizationId });
+    console.log('[White-Label] Saving configuration:', { organizationId, config });
     
     // Apply branding immediately
     if (config.branding) {
@@ -209,7 +207,7 @@ export async function saveWhiteLabelConfig(
     
     return { success: true };
   } catch (error) {
-    logger.error('[White-Label] Save error:', error);
+    console.error('[White-Label] Save error:', error);
     return { success: false, error: 'Failed to save white-label configuration' };
   }
 }
@@ -239,7 +237,7 @@ export function previewBranding(branding: Partial<WhiteLabelBranding>): () => vo
         root.style.removeProperty(prop);
       }
     });
-    logger.debug('[White-Label] Preview reverted');
+    console.log('[White-Label] Preview reverted');
   };
 }
 

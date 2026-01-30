@@ -180,16 +180,14 @@ export function PeotramVoiceChat() {
     setIsSpeaking(true);
     
     try {
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/eleven-labs-voice`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/eleven-labs-voice`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
           },
           body: JSON.stringify({ 
             text, 

@@ -39,7 +39,8 @@ export const ManagerAlerts: React.FC = () => {
 
       if (error) throw error;
       setAlerts(data || []);
-    } catch {
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
       toast({
         title: "Error",
         description: "Failed to load wellbeing alerts",
@@ -68,7 +69,8 @@ export const ManagerAlerts: React.FC = () => {
       });
 
       fetchAlerts();
-    } catch {
+    } catch (error) {
+      console.error("Error acknowledging alert:", error);
       toast({
         title: "Error",
         description: "Failed to acknowledge alert",
@@ -95,7 +97,8 @@ export const ManagerAlerts: React.FC = () => {
       });
 
       fetchAlerts();
-    } catch {
+    } catch (error) {
+      console.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",

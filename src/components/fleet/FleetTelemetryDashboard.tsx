@@ -183,19 +183,15 @@ export const FleetTelemetryDashboard: React.FC = () => {
     const sensorTypes = ["temperature", "pressure", "vibration", "fuel_level", "engine_rpm"];
     const newReadings: Database["public"]["Tables"]["iot_sensor_data"]["Insert"][] = [];
 
-    vesselsData.forEach((vessel, vesselIdx) => {
-      sensorTypes.forEach((type, typeIdx) => {
+    vesselsData.forEach((vessel) => {
+      sensorTypes.forEach((type) => {
         const threshold = SENSOR_THRESHOLDS[type];
         const baseValue = (threshold.min + threshold.max) / 2;
         const variation = (threshold.max - threshold.min) * 0.2;
-        // Deterministic value based on vessel ID and sensor type
-        const idHash = vessel.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-        const timeComponent = Math.sin(Date.now() / 60000 + vesselIdx + typeIdx);
-        const value = baseValue + timeComponent * variation;
+        const value = baseValue + (Math.random() - 0.5) * variation;
         
-        // Deterministic anomaly check (only certain vessels/sensors)
-        const isAnomaly = (idHash + typeIdx) % 20 === 0;
-        const anomalyValue = isAnomaly ? threshold.critical : value;
+        // Occasionally generate anomalies
+        const anomalyValue = Math.random() > 0.95 ? threshold.critical : value;
 
         const status = 
           anomalyValue > threshold.critical ? "critical" :

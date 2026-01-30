@@ -295,7 +295,7 @@ export class AgentOrchestrator {
     }
 
     const duration = Date.now() - startTime;
-    this.emit('decision-complete', { decision, duration });
+    console.log(`[AgentOrchestrator] Decision made in ${duration}ms`);
     
     return decision;
   }

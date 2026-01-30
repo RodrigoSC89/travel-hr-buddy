@@ -102,7 +102,6 @@ function isConfigured(...keys: (string | undefined)[]): boolean {
  */
 export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const results: APIKeyStatus[] = [];
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
   
   logger.info("🔍 Starting API Key Validation...\n");
 
@@ -114,7 +113,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "OpenAI",
     key: "VITE_OPENAI_API_KEY",
     status: openAIStatus,
-    configured: isConfigured(safeEnv.VITE_OPENAI_API_KEY),
+    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
     responseTime: openAIResult.responseTime,
     message: openAIResult.message,
     error: openAIResult.error,
@@ -131,8 +130,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_MAPBOX_ACCESS_TOKEN / VITE_MAPBOX_TOKEN",
     status: mapboxStatus,
     configured: isConfigured(
-      safeEnv.VITE_MAPBOX_ACCESS_TOKEN,
-      safeEnv.VITE_MAPBOX_TOKEN
+      import.meta.env.VITE_MAPBOX_ACCESS_TOKEN,
+      import.meta.env.VITE_MAPBOX_TOKEN
     ),
     responseTime: mapboxResult.responseTime,
     message: mapboxResult.message,
@@ -150,8 +149,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_AMADEUS_API_KEY / VITE_AMADEUS_API_SECRET",
     status: amadeusStatus,
     configured: isConfigured(
-      safeEnv.VITE_AMADEUS_API_KEY,
-      safeEnv.VITE_AMADEUS_API_SECRET
+      import.meta.env.VITE_AMADEUS_API_KEY,
+      import.meta.env.VITE_AMADEUS_API_SECRET
     ),
     responseTime: amadeusResult.responseTime,
     message: amadeusResult.message,
@@ -168,7 +167,10 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "Supabase",
     key: "VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY",
     status: supabaseStatus,
-    configured: true, // Always configured with hardcoded fallbacks
+    configured: isConfigured(
+      import.meta.env.VITE_SUPABASE_URL,
+      import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+    ),
     responseTime: supabaseResult.responseTime,
     message: supabaseResult.message,
     error: supabaseResult.error,
@@ -185,8 +187,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_WINDY_API_KEY / VITE_OPENWEATHER_API_KEY",
     status: windyStatus,
     configured: isConfigured(
-      safeEnv.VITE_WINDY_API_KEY,
-      safeEnv.VITE_OPENWEATHER_API_KEY
+      import.meta.env.VITE_WINDY_API_KEY,
+      import.meta.env.VITE_OPENWEATHER_API_KEY
     ),
     responseTime: windyResult.responseTime,
     message: windyResult.message,
@@ -204,8 +206,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_SKYSCANNER_API_KEY / VITE_RAPIDAPI_KEY",
     status: skyscannerStatus,
     configured: isConfigured(
-      safeEnv.VITE_SKYSCANNER_API_KEY,
-      safeEnv.VITE_RAPIDAPI_KEY
+      import.meta.env.VITE_SKYSCANNER_API_KEY,
+      import.meta.env.VITE_RAPIDAPI_KEY
     ),
     responseTime: skyscannerResult.responseTime,
     message: skyscannerResult.message,
@@ -223,8 +225,8 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     key: "VITE_BOOKING_API_KEY / VITE_RAPIDAPI_KEY",
     status: bookingStatus,
     configured: isConfigured(
-      safeEnv.VITE_BOOKING_API_KEY,
-      safeEnv.VITE_RAPIDAPI_KEY
+      import.meta.env.VITE_BOOKING_API_KEY,
+      import.meta.env.VITE_RAPIDAPI_KEY
     ),
     responseTime: bookingResult.responseTime,
     message: bookingResult.message,
@@ -241,7 +243,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "MarineTraffic",
     key: "VITE_MARINETRAFFIC_API_KEY",
     status: marineTrafficStatus,
-    configured: isConfigured(safeEnv.VITE_MARINETRAFFIC_API_KEY),
+    configured: isConfigured(import.meta.env.VITE_MARINETRAFFIC_API_KEY),
     responseTime: marineTrafficResult.responseTime,
     message: marineTrafficResult.message,
     error: marineTrafficResult.error,
@@ -257,7 +259,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     name: "Whisper (OpenAI Audio)",
     key: "VITE_OPENAI_API_KEY",
     status: whisperStatus,
-    configured: isConfigured(safeEnv.VITE_OPENAI_API_KEY),
+    configured: isConfigured(import.meta.env.VITE_OPENAI_API_KEY),
     responseTime: whisperResult.responseTime,
     message: whisperResult.message,
     error: whisperResult.error,

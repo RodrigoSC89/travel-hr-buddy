@@ -51,8 +51,8 @@ interface N2YOSatellite {
 }
 
 class SatelliteOrbitService {
-  // PATCH 495: N2YO API configuration - safe env access
-  private n2yoApiKey = ((typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>).VITE_N2YO_API_KEY || "DEMO-KEY";
+  // PATCH 495: N2YO API configuration
+  private n2yoApiKey = import.meta.env.VITE_N2YO_API_KEY || "DEMO-KEY"; // Use environment variable
   private n2yoEndpoint = "https://api.n2yo.com/rest/v1/satellite";
   
   private celestrakEndpoint = "https://celestrak.org/NORAD/elements";
@@ -354,8 +354,8 @@ class SatelliteOrbitService {
    * Save satellite orbit data to database
    */
   async saveSatelliteOrbit(data: SatelliteOrbitData): Promise<void> {
-    // Implementation pending - will save to satellite_orbits table
-    // This is a placeholder for future satellite tracking integration
+    // In production, save to Supabase satellite_orbits table
+    console.log("Saving satellite orbit data:", data);
   }
 
   /**

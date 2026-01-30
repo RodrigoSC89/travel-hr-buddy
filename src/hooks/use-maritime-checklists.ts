@@ -280,7 +280,7 @@ type ChecklistQueryResult = OperationalChecklistRow & {
 export const useMaritimeChecklists = (userId: string) => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [templates, setTemplates] = useState<ChecklistTemplate[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch checklists from Supabase
@@ -505,8 +505,8 @@ export const useMaritimeChecklists = (userId: string) => {
 
       if (checklistError) throw checklistError;
 
-      // FUTURE: Checklist items are created dynamically by specific checklist components
-      // (MachineRoutineChecklist, PortStateChecklist, etc.) based on template requirements
+      // TODO: Create checklist items from template
+      // For now, we'll let the specific checklist components handle their own items
 
       // Refresh the checklists
       await fetchChecklists();

@@ -162,12 +162,12 @@ const DeepRiskAIPage: React.FC = () => {
 
   const getRiskLevelColor = (level: string): string => {
     const colors: Record<string, string> = {
-      low: "text-success bg-success/10 border-success/30",
-      medium: "text-warning bg-warning/10 border-warning/30",
-      high: "text-warning bg-warning/20 border-warning/50",
-      critical: "text-destructive bg-destructive/10 border-destructive/30",
+      low: "text-green-600 bg-green-100 border-green-300",
+      medium: "text-yellow-600 bg-yellow-100 border-yellow-300",
+      high: "text-orange-600 bg-orange-100 border-orange-300",
+      critical: "text-red-600 bg-red-100 border-red-300",
     };
-    return colors[level] || "text-muted-foreground bg-muted border-border";
+    return colors[level] || "text-gray-600 bg-gray-100 border-gray-300";
   };
 
   const getRiskIcon = (level: string) => {

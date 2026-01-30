@@ -17,7 +17,6 @@ import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from './dp-asog-client
 import type { DPASOGStatusResponse, DPASOGPDOPResponse } from './dp-asog-client.service';
 import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from './space-weather-monitoring.service';
 import type { SpaceWeatherStatus, SpaceWeatherThresholds } from '@/types/space-weather.types';
-import { logger } from '@/lib/logger';
 
 // ============================================================================
 // Configuration
@@ -154,7 +153,7 @@ export class HybridSpaceWeatherService {
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached) {
-      logger.debug('[HybridSpaceWeather] Using cached data');
+      console.log('[HybridSpaceWeather] Using cached data');
       return { ...cached, data_source: 'CACHED' };
     }
 
@@ -168,16 +167,16 @@ export class HybridSpaceWeatherService {
           this.cache.set(cacheKey, status, this.config.cache_ttl_ms);
           return { ...status, data_source: 'DP_ASOG' };
         } catch (error) {
-          // Silent fallback - no console logging in production
+          console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
           
           if (!this.config.enable_fallback) {
             throw error;
           }
           
-          // Fallback silently to TypeScript implementation
+          console.log('[HybridSpaceWeather] Falling back to TypeScript implementation');
         }
       } else {
-        // DP ASOG unavailable, using TypeScript fallback
+        console.log('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
       }
     }
 

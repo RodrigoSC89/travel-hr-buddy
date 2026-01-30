@@ -51,11 +51,10 @@ class PollingManager {
         this.resumeAll();
       });
 
-      // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
       window.addEventListener("offline", () => {
-        // this.online = false; // REMOVIDO - nunca bloquear polling
-        // this.pauseAll(); // REMOVIDO - deixar polling ativo
-        logger.info("Offline event ignored - polling continues");
+        this.online = false;
+        logger.info("Offline - pausing polling");
+        this.pauseAll();
       });
     }
   }

@@ -128,26 +128,12 @@ export const ModuleLLMHelper: React.FC = () => {
     });
   };
 
-  const handleSendToAI = async () => {
+  const handleSendToAI = () => {
+    // TODO: Implement API integration
     toast({
-      title: '🚀 Processando...',
-      description: 'Enviando prompt para análise',
+      title: 'Enviado para IA',
+      description: 'Prompt enviado para processamento',
     });
-    
-    try {
-      // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      toast({
-        title: '✅ Resposta Recebida',
-        description: 'Análise do prompt concluída. Verifique os resultados.',
-      });
-    } catch (error) {
-      toast({
-        title: '❌ Erro',
-        description: 'Falha ao processar prompt. Tente novamente.',
-        variant: 'destructive'
-      });
-    }
   };
 
   return (

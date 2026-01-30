@@ -187,8 +187,8 @@ export function MLCInspectionOverview({
       <ComplianceInspectionMap 
         height="h-80"
         showControls={true}
-        onVesselClick={() => {
-          // Vessel click handler - could open detail modal
+        onVesselClick={(vessel) => {
+          console.log('Vessel clicked:', vessel);
         }}
       />
 

@@ -91,18 +91,21 @@ export const PerformanceStatus = memo(function PerformanceStatus({
   useEffect(() => {
     const updateMetrics = () => setMetrics(getConnectionInfo());
     
-    // Listen for connection changes only (not online/offline)
+    // Listen for connection changes
     const connection = (navigator as any).connection;
     if (connection) {
       connection.addEventListener("change", updateMetrics);
     }
     
-    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
+    window.addEventListener("online", updateMetrics);
+    window.addEventListener("offline", updateMetrics);
     
     return () => {
       if (connection) {
         connection.removeEventListener("change", updateMetrics);
       }
+      window.removeEventListener("online", updateMetrics);
+      window.removeEventListener("offline", updateMetrics);
     };
   }, []);
 

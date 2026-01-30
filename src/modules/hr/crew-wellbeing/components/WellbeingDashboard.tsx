@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Activity, Heart, Brain, TrendingUp, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
+
 interface WellbeingScore {
   overall: number;
   physical: number;
@@ -40,38 +40,26 @@ export const WellbeingDashboard: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch calculated wellbeing score with error handling
-      const { data: scoreData, error: scoreError } = await (supabase
-        .rpc("calculate_wellbeing_score" as any, { p_user_id: user.id, p_days: 7 }) as unknown as Promise<{ data: number | null; error: unknown }>);
+      // Fetch calculated wellbeing score
+      const { data: scoreData } = await (supabase
+        .rpc("calculate_wellbeing_score" as any, { p_user_id: user.id, p_days: 7 }) as unknown as Promise<{ data: number | null }>);
 
-      if (scoreError) {
-        logger.warn("Failed to fetch wellbeing score", { error: scoreError });
-      }
-
-      // Fetch recent health check-ins with error handling
-      const { data: checkins, error: checkinsError } = await (supabase
+      // Fetch recent health check-ins
+      const { data: checkins } = await (supabase
         .from("health_checkins" as any)
-        .select("energy_level, mood_rating, checkin_date")
+        .select("*")
         .eq("user_id", user.id)
         .order("checkin_date", { ascending: false })
-        .limit(7) as unknown as Promise<{ data: Array<{ energy_level?: number; mood_rating?: number }> | null; error: unknown }>);
+        .limit(7) as unknown as Promise<{ data: Array<{ energy_level?: number; mood_rating?: number }> | null }>);
 
-      if (checkinsError) {
-        logger.warn("Failed to fetch health checkins", { error: checkinsError });
-      }
-
-      // Fetch active alerts with error handling
-      const { data: alerts, error: alertsError } = await (supabase
+      // Fetch active alerts
+      const { data: alerts } = await (supabase
         .from("wellbeing_alerts" as any)
-        .select("id, message, severity, created_at")
+        .select("*")
         .eq("user_id", user.id)
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(5) as unknown as Promise<{ data: WellbeingAlert[] | null; error: unknown }>);
-
-      if (alertsError) {
-        logger.warn("Failed to fetch wellbeing alerts", { error: alertsError });
-      }
+        .limit(5) as unknown as Promise<{ data: WellbeingAlert[] | null }>);
 
       // Calculate scores
       const overallScore = scoreData || 7.0;
@@ -103,9 +91,9 @@ export const WellbeingDashboard: React.FC = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 8) return "text-success";
-    if (score >= 6) return "text-warning";
-    return "text-destructive";
+    if (score >= 8) return "text-green-600";
+    if (score >= 6) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getScoreLabel = (score: number) => {
@@ -120,8 +108,8 @@ export const WellbeingDashboard: React.FC = () => {
       <Card>
         <CardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-muted rounded w-1/4"></div>
-            <div className="h-8 bg-muted rounded w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-8 bg-gray-200 rounded w-1/2"></div>
           </div>
         </CardContent>
       </Card>
@@ -208,7 +196,7 @@ export const WellbeingDashboard: React.FC = () => {
         <Card className="md:col-span-2 lg:col-span-4">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-warning" />
+              <AlertTriangle className="h-5 w-5 text-yellow-600" />
               Active Wellbeing Alerts
             </CardTitle>
             <CardDescription>

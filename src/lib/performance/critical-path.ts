@@ -230,8 +230,10 @@ export const setupSmartPrefetch = (routes: string[]): void => {
  */
 export const initCriticalPathOptimizer = (): void => {
   // Preconnect to critical origins
-  const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-  preconnect(supabaseUrl, true);
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  if (supabaseUrl) {
+    preconnect(supabaseUrl, true);
+  }
   preconnect('https://fonts.googleapis.com');
   preconnect('https://fonts.gstatic.com', true);
 

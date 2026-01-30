@@ -12,7 +12,6 @@ import {
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { logger } from '@/lib/logger';
 
 interface InspectionData {
   vesselName: string;
@@ -363,7 +362,7 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
       pdf.save(filename);
       toast.success('Relatório PDF gerado com sucesso!');
     } catch (error) {
-      logger.error('Error generating OVID report:', error);
+      console.error(error);
       toast.error('Erro ao gerar relatório');
     } finally {
       setIsGenerating(false);

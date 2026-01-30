@@ -19,8 +19,7 @@ let openaiClient: OpenAI | null = null;
 function getOpenAIClient(): OpenAI | null {
   if (openaiClient) return openaiClient;
 
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const apiKey = safeEnv.VITE_OPENAI_API_KEY || "";
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   if (!apiKey) {
     logger.warn("VITE_OPENAI_API_KEY not set, AI insights disabled");
     return null;

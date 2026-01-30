@@ -816,6 +816,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
               <GeofenceEditor 
                 geofences={[]}
                 onGeofencesChange={(zones) => {
+                  console.log('Geofences updated:', zones);
                   toast.success(`${zones.length} zonas de geofencing configuradas`);
                 }}
                 onSelectGeofence={(zone) => {

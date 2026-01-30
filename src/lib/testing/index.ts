@@ -26,21 +26,6 @@ export {
   type TestSuite,
 } from './e2e-test-suite';
 
-// Test Coverage Engine (aliased to avoid conflicts)
-export {
-  testCoverageEngine,
-  type TestSuite as CoverageTestSuite,
-  type Test as CoverageTest,
-  type CoverageReport,
-  type CoverageMetric,
-  type TestPlan,
-  type TestCase,
-  type TestStep,
-  type TestReport,
-  type TestSummary,
-  type TestTrend,
-} from './test-coverage';
-
 /**
  * E2E Test Files Reference (Playwright)
  * 

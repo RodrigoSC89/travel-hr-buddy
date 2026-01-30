@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mic, MicOff, Copy, Trash2, Volume2, StopCircle, Play, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import type { SpeechRecognition as SpeechRecognitionType, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from "@/types/speech-recognition";
 
 export default function VoiceTranscriber() {
   const [isRecording, setIsRecording] = useState(false);
@@ -15,18 +14,18 @@ export default function VoiceTranscriber() {
   const [isSupported, setIsSupported] = useState(true);
   const [language, setLanguage] = useState("pt-BR");
   
-  const recognitionRef = useRef<SpeechRecognitionType | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   const startRecording = useCallback(() => {
-    const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
-    if (!SpeechRecognitionClass) {
+    if (!SpeechRecognition) {
       setIsSupported(false);
       toast.error("Reconhecimento de voz não suportado neste navegador");
       return;
     }
 
-    const recognition = new SpeechRecognitionClass();
+    const recognition = new SpeechRecognition();
     recognition.lang = language;
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -36,7 +35,7 @@ export default function VoiceTranscriber() {
       toast.success("Gravação iniciada");
     };
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       let interim = "";
       let final = "";
 
@@ -55,7 +54,8 @@ export default function VoiceTranscriber() {
       setInterimTranscript(interim);
     };
 
-    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error:", event.error);
       if (event.error === "not-allowed") {
         toast.error("Permissão de microfone negada");
       } else {

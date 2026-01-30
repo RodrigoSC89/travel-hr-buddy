@@ -3,7 +3,6 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
 
 export interface TravelItinerary {
   id?: string;
@@ -77,7 +76,7 @@ export class TravelService {
 
       return this.mapToItinerary(data);
     } catch (error) {
-      logger.error("Error creating itinerary", { error });
+      console.error("Error creating itinerary:", error);
       throw error;
     }
   }
@@ -109,7 +108,7 @@ export class TravelService {
 
       return this.mapToItinerary(data);
     } catch (error) {
-      logger.error("Error updating itinerary", { error });
+      console.error("Error updating itinerary:", error);
       throw error;
     }
   }
@@ -123,7 +122,7 @@ export class TravelService {
 
       if (error) throw error;
     } catch (error) {
-      logger.error("Error deleting itinerary", { error });
+      console.error("Error deleting itinerary:", error);
       throw error;
     }
   }
@@ -138,7 +137,7 @@ export class TravelService {
       if (error) throw error;
       return (data || []).map(this.mapToItinerary);
     } catch (error) {
-      logger.error("Error fetching itineraries", { error });
+      console.error("Error fetching itineraries:", error);
       return [];
     }
   }
@@ -163,7 +162,7 @@ export class TravelService {
       if (error) throw error;
       return this.mapToPriceAlert(data);
     } catch (error) {
-      logger.error("Error creating price alert", { error });
+      console.error("Error creating price alert:", error);
       throw error;
     }
   }
@@ -178,7 +177,7 @@ export class TravelService {
       if (error) throw error;
       return (data || []).map(this.mapToPriceAlert);
     } catch (error) {
-      logger.error("Error fetching price alerts", { error });
+      console.error("Error fetching price alerts:", error);
       return [];
     }
   }
@@ -193,7 +192,7 @@ export class TravelService {
           event_data: eventData
         });
     } catch (error) {
-      // Silent failure for event logging - non-critical
+      console.error("Error logging travel event:", error);
     }
   }
 

@@ -1,7 +1,7 @@
+// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
- * PATCH 901 - Removed @ts-nocheck - fleet_sensors table created
  */
 
 import React, { useState, useEffect } from "react";
@@ -12,7 +12,6 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
 import { 
   Ship, 
   Activity, 
@@ -77,11 +76,8 @@ export default function FleetTelemetryModule() {
   const loadTelemetryData = async () => {
     setLoading(true);
     try {
-      // Use dynamic table access for unmapped tables
-      const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
-      
       // Load sensor data
-      const { data: sensors, error: sensorError } = await client
+      const { data: sensors, error: sensorError } = await supabase
         .from("fleet_sensors")
         .select("*, vessel:vessels(name)")
         .order("timestamp", { ascending: false })
@@ -98,46 +94,33 @@ export default function FleetTelemetryModule() {
 
       if (alertsError) throw alertsError;
 
-      // Type-safe mapping with proper null handling
-      interface SensorRow {
-        id: string;
-        vessel_id: string | null;
-        vessel?: { name: string } | null;
-        sensor_type: string;
-        value: number;
-        unit: string | null;
-        threshold_min?: number | null;
-        threshold_max?: number | null;
-        timestamp: string;
-      }
-
-      setSensorData((sensors as unknown as SensorRow[] | null)?.map(s => ({
+      setSensorData(sensors?.map(s => ({
         id: s.id,
-        vessel_id: s.vessel_id || "",
+        vessel_id: s.vessel_id,
         vessel_name: s.vessel?.name || "Unknown",
         sensor_type: s.sensor_type,
         value: s.value,
-        unit: s.unit || "",
-        threshold_min: s.threshold_min ?? undefined,
-        threshold_max: s.threshold_max ?? undefined,
-        status: determineStatus(s.value, s.threshold_min ?? undefined, s.threshold_max ?? undefined),
+        unit: s.unit,
+        threshold_min: s.threshold_min,
+        threshold_max: s.threshold_max,
+        status: determineStatus(s.value, s.threshold_min, s.threshold_max),
         timestamp: s.timestamp
       })) || []);
 
       setAlerts(maintenanceAlerts?.map(a => ({
         id: a.id,
-        vessel_id: a.vessel_id || "",
-        vessel_name: (a.vessel as { name: string } | null)?.name || "Unknown",
-        alert_type: (a.alert_type || "scheduled") as "predictive" | "scheduled" | "emergency",
-        component: a.component || "",
-        severity: (a.severity || "medium") as "low" | "medium" | "high" | "critical",
-        message: a.description || "",
-        predicted_failure_date: a.due_date ?? undefined,
-        created_at: a.created_at || new Date().toISOString()
+        vessel_id: a.vessel_id,
+        vessel_name: a.vessel?.name || "Unknown",
+        alert_type: a.alert_type,
+        component: a.component,
+        severity: a.severity,
+        message: a.message,
+        predicted_failure_date: a.predicted_failure_date,
+        created_at: a.created_at
       })) || []);
 
     } catch (error) {
-      logger.error("Error loading telemetry:", error);
+      console.error("Error loading telemetry:", error);
       toast({
         title: "Erro ao carregar telemetria",
         description: "Não foi possível carregar os dados dos sensores.",
@@ -159,7 +142,7 @@ export default function FleetTelemetryModule() {
           table: "fleet_sensors"
         },
         (payload) => {
-          logger.debug("New sensor data received", { payload_id: payload.new?.id });
+          console.log("New sensor data:", payload);
           loadTelemetryData();
         }
       )
@@ -171,7 +154,7 @@ export default function FleetTelemetryModule() {
           table: "maintenance_alerts"
         },
         (payload) => {
-          logger.info("New maintenance alert", { payload_id: payload.new?.id });
+          console.log("New maintenance alert:", payload);
           toast({
             title: "Novo alerta de manutenção",
             description: payload.new.message,
@@ -220,7 +203,7 @@ export default function FleetTelemetryModule() {
 
       if (error) throw error;
     } catch (error) {
-      logger.error("Error generating sensor data:", error);
+      console.error("Error generating sensor data:", error);
     }
   };
 
@@ -404,7 +387,7 @@ export default function FleetTelemetryModule() {
             <CardContent>
               {alerts.length === 0 ? (
                 <div className="text-center py-12">
-                  <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
+                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
                   <p className="text-lg font-semibold">Nenhum alerta ativo</p>
                   <p className="text-sm text-muted-foreground">Todos os sistemas operando normalmente</p>
                 </div>

@@ -136,10 +136,10 @@ export const EmployeeTrainingPortal: React.FC = () => {
 
   const getStatusColor = (status: Course['status']) => {
     switch (status) {
-      case 'completed': return 'bg-success/10 text-success dark:bg-success/20';
-      case 'in_progress': return 'bg-primary/10 text-primary dark:bg-primary/20';
-      case 'not_started': return 'bg-muted text-muted-foreground';
-      case 'locked': return 'bg-warning/10 text-warning dark:bg-warning/20';
+      case 'completed': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+      case 'in_progress': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'not_started': return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+      case 'locked': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
       default: return '';
     }
   };

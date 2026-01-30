@@ -433,8 +433,7 @@ export function useSlowConnectionFetch<T>(
   deps: any[] = []
 ) {
   const [data, setData] = useState<T | null>(null);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [connection, setConnection] = useState(detectConnectionQuality);
   
@@ -510,8 +509,11 @@ export function useConnectionQuality() {
     // Check periodically
     const interval = setInterval(updateMetrics, 10000);
     
-    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
-    // Listen for connection changes only
+    // Listen for online/offline events
+    window.addEventListener("online", updateMetrics);
+    window.addEventListener("offline", updateMetrics);
+    
+    // Listen for connection changes
     const conn = (navigator as any).connection;
     if (conn) {
       conn.addEventListener("change", updateMetrics);
@@ -519,6 +521,8 @@ export function useConnectionQuality() {
     
     return () => {
       clearInterval(interval);
+      window.removeEventListener("online", updateMetrics);
+      window.removeEventListener("offline", updateMetrics);
       if (conn) {
         conn.removeEventListener("change", updateMetrics);
       }

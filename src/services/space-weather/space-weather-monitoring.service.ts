@@ -215,14 +215,14 @@ export async function getSpaceWeatherStatus(
     kp_forecast_24h: noaaSummary.kp_max_24h || 0,
     active_alerts: noaaSummary.active_alerts,
     
-    // Solar Wind - density estimated from speed (empirical formula)
+    // Solar Wind
     solar_wind_speed: noaaSummary.solar_wind_speed || 0,
-    solar_wind_density: noaaSummary.solar_wind_speed ? Math.max(1, 8 - (noaaSummary.solar_wind_speed - 400) / 100) : 5,
+    solar_wind_density: 0, // TODO: Add from NOAA data
     bz_gsm: noaaSummary.bz_gsm || 0,
     
-    // Ionosphere - TEC estimated from Kp index (empirical correlation)
-    tec_current: (noaaSummary.kp_current ?? 0) ? 15 + (noaaSummary.kp_current ?? 0) * 3 : 20,
-    tec_anomaly: (noaaSummary.kp_current ?? 0) >= 5,
+    // Ionosphere
+    tec_current: 0, // TODO: Add Madrigal integration
+    tec_anomaly: false,
     scintillation_risk: scintillationRisk,
     
     // GNSS Performance

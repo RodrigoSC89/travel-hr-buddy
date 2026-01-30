@@ -52,15 +52,47 @@ export const MLCInspectionDashboard: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('mlc-assistant', {
-        body: { messages: [...aiMessages, userMessage] },
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-assistant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: [...aiMessages, userMessage] }),
       });
 
-      if (error) throw error;
-      
-      // Handle response from edge function
-      const responseContent = data?.content || data?.response || (typeof data === 'string' ? data : JSON.stringify(data));
-      setAiMessages(prev => [...prev, { role: 'assistant', content: responseContent }]);
+      if (!response.ok) throw new Error('AI request failed');
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = '';
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+              try {
+                const json = JSON.parse(line.slice(6));
+                const content = json.choices?.[0]?.delta?.content;
+                if (content) {
+                  assistantContent += content;
+                  setAiMessages(prev => {
+                    const last = prev[prev.length - 1];
+                    if (last?.role === 'assistant') {
+                      return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantContent } : m);
+                    }
+                    return [...prev, { role: 'assistant', content: assistantContent }];
+                  });
+                }
+              } catch {}
+            }
+          }
+        }
+      }
     } catch (error) {
       toast.error('Erro ao conectar com assistente IA');
     } finally {
@@ -147,39 +179,7 @@ export const MLCInspectionDashboard: React.FC = () => {
                 <Button onClick={sendAiMessage} disabled={isLoading}><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="settings">
-          <Card>
-            <CardHeader><CardTitle>Configurações do Módulo</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Notificações de Expiração</label>
-                  <select className="w-full p-2 border rounded-md bg-background">
-                    <option value="30">30 dias antes</option>
-                    <option value="60">60 dias antes</option>
-                    <option value="90">90 dias antes</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Idioma do Relatório</label>
-                  <select className="w-full p-2 border rounded-md bg-background">
-                    <option value="pt">Português</option>
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Exportar Automaticamente</p><p className="text-sm text-muted-foreground">Gerar PDF após conclusão</p></div>
-                <Button variant="outline" size="sm" onClick={() => toast.success('Configuração salva!')}>Ativar</Button>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Backup na Nuvem</p><p className="text-sm text-muted-foreground">Sincronizar com Supabase Storage</p></div>
-                <Badge variant="secondary">Ativo</Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <TabsContent value="settings"><Card><CardHeader><CardTitle>Configurações</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">Configurações do módulo MLC Inspection em desenvolvimento.</p></CardContent></Card></TabsContent>
       </Tabs>
     </div>
   );

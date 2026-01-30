@@ -1,53 +1,11 @@
+// @ts-nocheck
 /**
  * PATCH 452 - Mission Control Service
  * Consolidates all mission-related operations
- * Removed @ts-nocheck: Using proper type mapping for DB access
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Mission, MissionLog, MissionTask } from "../types";
-import { logger } from "@/lib/logger";
-
-// Type for raw database row
-interface MissionDbRow {
-  id: string;
-  code?: string | null;
-  name: string;
-  type?: string | null;
-  status: string;
-  priority?: string | null;
-  description?: string | null;
-  objectives?: string[] | null;
-  start_date?: string | null;
-  end_date?: string | null;
-  assigned_to?: string | null;
-  created_by?: string | null;
-  created_at: string;
-  metadata?: Record<string, unknown> | null;
-}
-
-interface MissionTaskDbRow {
-  id: string;
-  mission_id: string;
-  name: string;
-  description?: string | null;
-  status: string;
-  priority?: string | null;
-  assigned_to?: string | null;
-  due_date?: string | null;
-  created_at: string;
-  metadata?: Record<string, unknown> | null;
-}
-
-interface MissionLogDbRow {
-  id: string;
-  mission_id?: string | null;
-  event_type: string;
-  severity: string;
-  message: string;
-  timestamp: string;
-  metadata?: Record<string, unknown> | null;
-}
 
 export class MissionControlService {
   
@@ -71,9 +29,9 @@ export class MissionControlService {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map((row) => this.mapToMission(row as unknown as MissionDbRow));
+      return (data || []).map(this.mapToMission);
     } catch (error) {
-      logger.error("Error fetching missions:", error);
+      console.error("Error fetching missions:", error);
       return [];
     }
   }
@@ -87,9 +45,9 @@ export class MissionControlService {
         .single();
 
       if (error) throw error;
-      return data ? this.mapToMission(data as unknown as MissionDbRow) : null;
+      return data ? this.mapToMission(data) : null;
     } catch (error) {
-      logger.error("Error fetching mission:", error);
+      console.error("Error fetching mission:", error);
       return null;
     }
   }
@@ -102,17 +60,17 @@ export class MissionControlService {
         .from("missions")
         .insert({
           name: mission.name,
-          mission_type: mission.type,
+          type: mission.type,
           status: mission.status,
           priority: mission.priority,
           description: mission.description,
           objectives: mission.objectives || [],
           start_date: mission.startDate,
           end_date: mission.endDate,
-          assigned_vessel_id: mission.assignedTo,
+          assigned_to: mission.assignedTo,
           created_by: user?.id,
           metadata: mission.metadata || {}
-        } as never)
+        })
         .select()
         .single();
 
@@ -127,9 +85,9 @@ export class MissionControlService {
         metadata: {}
       });
 
-      return this.mapToMission(data as unknown as MissionDbRow);
+      return this.mapToMission(data);
     } catch (error) {
-      logger.error("Error creating mission:", error);
+      console.error("Error creating mission:", error);
       throw error;
     }
   }
@@ -208,17 +166,17 @@ export class MissionControlService {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map((row) => this.mapToTask(row as unknown as MissionTaskDbRow));
+      return (data || []).map(this.mapToTask);
     } catch (error) {
-      logger.error("Error fetching tasks:", error);
+      console.error("Error fetching tasks:", error);
       return [];
     }
   }
 
   async createTask(task: Omit<MissionTask, "id" | "createdAt">): Promise<MissionTask> {
     try {
-      const { data, error } = await supabase
-        .from("mission_tasks" as "action_items")
+      const { data, error } = await (supabase as any)
+        .from("mission_tasks")
         .insert({
           mission_id: task.missionId,
           name: task.name,
@@ -228,34 +186,34 @@ export class MissionControlService {
           assigned_to: task.assignedTo,
           due_date: task.dueDate,
           metadata: task.metadata || {}
-        } as never)
+        })
         .select()
         .single();
 
       if (error) throw error;
-      return this.mapToTask(data as unknown as MissionTaskDbRow);
+      return this.mapToTask(data);
     } catch (error) {
-      logger.error("Error creating task:", error);
+      console.error("Error creating task:", error);
       throw error;
     }
   }
 
   async updateTask(id: string, updates: Partial<MissionTask>): Promise<void> {
     try {
-      const updateData: Record<string, unknown> = {};
+      const updateData: any = {};
       if (updates.status) updateData.status = updates.status;
       if (updates.priority) updateData.priority = updates.priority;
       if (updates.description) updateData.description = updates.description;
       if (updates.dueDate) updateData.due_date = updates.dueDate;
 
-      const { error } = await supabase
-        .from("mission_tasks" as "action_items")
-        .update(updateData as never)
+      const { error } = await (supabase as any)
+        .from("mission_tasks")
+        .update(updateData)
         .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      logger.error("Error updating task:", error);
+      console.error("Error updating task:", error);
       throw error;
     }
   }
@@ -280,9 +238,9 @@ export class MissionControlService {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map((row) => this.mapToLog(row as unknown as MissionLogDbRow));
+      return (data || []).map(this.mapToLog);
     } catch (error) {
-      logger.error("Error fetching logs:", error);
+      console.error("Error fetching logs:", error);
       return [];
     }
   }
@@ -292,7 +250,7 @@ export class MissionControlService {
     eventType: string;
     severity: "info" | "warning" | "error" | "critical";
     message: string;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, any>;
   }): Promise<void> {
     try {
       const { error } = await supabase
@@ -303,60 +261,60 @@ export class MissionControlService {
           message: event.message,
           timestamp: new Date().toISOString(),
           metadata: event.metadata || {}
-        } as never);
+        });
 
       if (error) throw error;
     } catch (error) {
-      logger.error("Error logging event:", error);
+      console.error("Error logging event:", error);
       throw error;
     }
   }
 
   // ==================== Mappers ====================
 
-  private mapToMission(data: MissionDbRow): Mission {
+  private mapToMission(data: any): Mission {
     return {
       id: data.id,
-      code: data.code || data.id.slice(0, 8),
+      code: data.code,
       name: data.name,
-      type: (data.type as Mission['type']) || 'operation',
-      status: (data.status as Mission['status']) || 'planned',
-      priority: (data.priority as Mission['priority']) || 'medium',
-      description: data.description || '',
+      type: data.type,
+      status: data.status,
+      priority: data.priority,
+      description: data.description,
       objectives: data.objectives || [],
-      startDate: data.start_date || new Date().toISOString(),
-      endDate: data.end_date || new Date().toISOString(),
-      assignedTo: data.assigned_to ?? undefined,
-      createdBy: data.created_by || 'system',
+      startDate: data.start_date,
+      endDate: data.end_date,
+      assignedTo: data.assigned_to,
+      createdBy: data.created_by,
       createdAt: data.created_at,
-      metadata: (data.metadata as Record<string, unknown>) || {}
+      metadata: data.metadata || {}
     };
   }
 
-  private mapToTask(data: MissionTaskDbRow): MissionTask {
+  private mapToTask(data: any): MissionTask {
     return {
       id: data.id,
       missionId: data.mission_id,
       name: data.name,
-      description: data.description || '',
-      status: (data.status as MissionTask['status']) || 'pending',
-      priority: (data.priority as MissionTask['priority']) || 'medium',
-      assignedTo: data.assigned_to ?? undefined,
-      dueDate: data.due_date ?? undefined,
+      description: data.description,
+      status: data.status,
+      priority: data.priority,
+      assignedTo: data.assigned_to,
+      dueDate: data.due_date,
       createdAt: data.created_at,
-      metadata: (data.metadata as Record<string, unknown>) || {}
+      metadata: data.metadata || {}
     };
   }
 
-  private mapToLog(data: MissionLogDbRow): MissionLog {
+  private mapToLog(data: any): MissionLog {
     return {
       id: data.id,
-      missionId: data.mission_id || '',
+      missionId: data.mission_id,
       eventType: data.event_type,
-      severity: (data.severity as MissionLog['severity']) || 'info',
+      severity: data.severity,
       message: data.message,
       timestamp: data.timestamp,
-      metadata: (data.metadata as Record<string, unknown>) || {}
+      metadata: data.metadata || {}
     };
   }
 }

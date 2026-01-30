@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -484,14 +483,14 @@ export const EmergencyResponse: React.FC = () => {
         open={newPlanOpen} 
         onOpenChange={setNewPlanOpen}
         onPlanCreated={(plan) => {
-          logger.info("New emergency plan created", { planId: plan?.id });
+          console.log("New plan created:", plan);
         }}
       />
       <ScheduleDrillDialog 
         open={scheduleDrillOpen} 
         onOpenChange={setScheduleDrillOpen}
         onDrillScheduled={(drill) => {
-          logger.info("Drill scheduled", { drillId: drill?.id });
+          console.log("Drill scheduled:", drill);
         }}
       />
       <EmergencyReportDialog 

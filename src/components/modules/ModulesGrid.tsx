@@ -196,7 +196,7 @@ export default function ModulesGrid() {
                       disabled={isDisabled}
                       className="w-full"
                     >
-                      {isDisabled ? "Roadmap 2027" : "Acessar"}
+                      {isDisabled ? "Em Desenvolvimento" : "Acessar"}
                     </Button>
                   </CardContent>
                 </Card>

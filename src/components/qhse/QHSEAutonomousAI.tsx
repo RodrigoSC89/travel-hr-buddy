@@ -167,10 +167,10 @@ export function QHSEAutonomousAI() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant": return "bg-success";
-      case "partial": return "bg-warning";
-      case "non-compliant": return "bg-destructive";
-      default: return "bg-muted";
+      case "compliant": return "bg-green-500";
+      case "partial": return "bg-yellow-500";
+      case "non-compliant": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -190,13 +190,13 @@ export function QHSEAutonomousAI() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-success/20 to-success/10 rounded-xl">
-            <Shield className="h-6 w-6 text-success" />
+          <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl">
+            <Shield className="h-6 w-6 text-green-500" />
           </div>
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               QHSE Autônomo
-              <Badge className="bg-gradient-to-r from-success to-success/80">
+              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Compliance IA
               </Badge>
@@ -223,7 +223,7 @@ export function QHSEAutonomousAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-success" />
+              <Shield className="h-5 w-5 text-green-500" />
               <div>
                 <p className="text-2xl font-bold">{overallScore}%</p>
                 <p className="text-xs text-muted-foreground">Score Geral</p>
@@ -234,7 +234,7 @@ export function QHSEAutonomousAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-info" />
+              <CheckCircle className="h-5 w-5 text-blue-500" />
               <div>
                 <p className="text-2xl font-bold">
                   {complianceData.filter(c => c.status === "compliant").length}/{complianceData.length}
@@ -247,7 +247,7 @@ export function QHSEAutonomousAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-warning" />
+              <AlertTriangle className="h-5 w-5 text-orange-500" />
               <div>
                 <p className="text-2xl font-bold">
                   {complianceData.reduce((acc, c) => acc + c.gaps.length, 0)}
@@ -260,7 +260,7 @@ export function QHSEAutonomousAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
+              <Clock className="h-5 w-5 text-purple-500" />
               <div>
                 <p className="text-2xl font-bold">{vettingPreps.length}</p>
                 <p className="text-xs text-muted-foreground">Vettings Programados</p>
@@ -311,10 +311,10 @@ export function QHSEAutonomousAI() {
                           </div>
                           {item.gaps.length > 0 && (
                             <div className="space-y-1">
-                              <p className="text-xs font-medium text-warning">Gaps:</p>
+                              <p className="text-xs font-medium text-orange-500">Gaps:</p>
                               {item.gaps.map((gap, i) => (
                                 <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
-                                  <AlertCircle className="h-3 w-3 text-warning" />
+                                  <AlertCircle className="h-3 w-3 text-orange-500" />
                                   {gap}
                                 </p>
                               ))}
@@ -338,8 +338,8 @@ export function QHSEAutonomousAI() {
               {aiAnalysis && (
                 <div className="mt-4 p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Brain className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-primary">Análise IA</span>
+                    <Brain className="h-4 w-4 text-purple-500" />
+                    <span className="text-sm font-medium text-purple-600">Análise IA</span>
                   </div>
                   <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
                     {aiAnalysis}
@@ -381,7 +381,7 @@ export function QHSEAutonomousAI() {
                             <p className="text-sm font-medium">Recomendações IA:</p>
                             {prep.recommendations.map((rec, i) => (
                               <p key={i} className="text-xs text-muted-foreground flex items-center gap-1">
-                                <CheckCircle className="h-3 w-3 text-success" />
+                                <CheckCircle className="h-3 w-3 text-green-500" />
                                 {rec}
                               </p>
                             ))}

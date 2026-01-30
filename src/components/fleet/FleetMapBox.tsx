@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Ship, RefreshCw, Navigation, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
-import { logger } from "@/lib/logger";
 
 interface VesselPosition {
   vesselId?: string;
@@ -62,22 +61,26 @@ export function FleetMapBox({
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        logger.debug("[FleetMapBox] Fetching Mapbox token...");
+        console.log("[FleetMapBox] Fetching Mapbox token...");
         const { data, error: fnError } = await supabase.functions.invoke("mapbox-token");
         
         if (fnError) {
+          console.error("[FleetMapBox] Mapbox token error:", fnError);
           setError("Erro ao carregar token do mapa");
           setLoading(false);
           return;
         }
         
         if (data?.token) {
+          console.log("[FleetMapBox] Token received successfully");
           setMapboxToken(data.token);
         } else {
+          console.warn("[FleetMapBox] No token returned from function");
           setError("Token do Mapbox não configurado");
           setLoading(false);
         }
-      } catch {
+      } catch (err) {
+        console.error("[FleetMapBox] Failed to get Mapbox token:", err);
         setError("Falha ao conectar com o serviço de mapas");
         setLoading(false);
       }
@@ -102,27 +105,20 @@ export function FleetMapBox({
       } else {
         // If no positions from API, use external vessels with mock coordinates
         if (externalVessels && externalVessels.length > 0) {
-          const mappedVessels = externalVessels.map((v, i) => {
-            // Deterministic position based on ID hash
-            const idHash = v.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-            const latOffset = ((idHash % 300) / 100) - 1.5;
-            const lngOffset = (((idHash + 50) % 300) / 100) - 1.5;
-            
-            return {
-              vesselId: v.id,
-              mmsi: v.mmsi || `710${100000 + i}`,
-              name: v.name,
-              latitude: v.latitude || -23.9619 + latOffset,
-              longitude: v.longitude || -46.3121 + lngOffset,
-              speed: v.speed || 5 + (idHash % 10),
-              course: v.course || idHash % 360,
-              heading: v.heading || (idHash + 30) % 360,
-              navStatus: v.status === "active" ? "Under way using engine" : "Moored",
-              shipType: v.vessel_type || "Cargo",
-              destination: v.current_location || v.destination,
-              lastUpdate: new Date().toISOString(),
-            };
-          });
+          const mappedVessels = externalVessels.map((v, i) => ({
+            vesselId: v.id,
+            mmsi: v.mmsi || `710${100000 + i}`,
+            name: v.name,
+            latitude: v.latitude || -23.9619 + (Math.random() * 3 - 1.5),
+            longitude: v.longitude || -46.3121 + (Math.random() * 3 - 1.5),
+            speed: v.speed || Math.floor(Math.random() * 15),
+            course: v.course || Math.floor(Math.random() * 360),
+            heading: v.heading || Math.floor(Math.random() * 360),
+            navStatus: v.status === "active" ? "Under way using engine" : "Moored",
+            shipType: v.vessel_type || "Cargo",
+            destination: v.current_location || v.destination,
+            lastUpdate: new Date().toISOString(),
+          }));
           setVessels(mappedVessels);
           setSource("enriched");
         }
@@ -166,20 +162,20 @@ export function FleetMapBox({
     if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
     let mounted = true;
-    logger.debug("[FleetMapBox] Initializing map with token...");
+    console.log("[FleetMapBox] Initializing map with token...");
 
     const initMap = async () => {
       try {
         const mapboxgl = await getMapboxGLAsync();
         if (!mounted || !mapContainer.current) {
-          logger.debug("[FleetMapBox] Component unmounted before map init");
+          console.log("[FleetMapBox] Component unmounted before map init");
           return;
         }
         
         // Check if we got the real mapbox or mock
         const isRealMapbox = mapboxgl.Map.toString().includes('native code') || 
                              mapboxgl.Map.toString().length > 100;
-        logger.debug(`[FleetMapBox] Mapbox loaded: ${isRealMapbox ? "REAL" : "MOCK"}`);
+        console.log("[FleetMapBox] Mapbox loaded:", isRealMapbox ? "REAL" : "MOCK");
         
         mapboxRef.current = mapboxgl;
         mapboxgl.accessToken = mapboxToken;
@@ -196,14 +192,14 @@ export function FleetMapBox({
 
         mapInstance.on("load", () => {
           if (mounted) {
-            logger.debug("[FleetMapBox] Map loaded successfully");
+            console.log("[FleetMapBox] Map loaded successfully");
             setMapReady(true);
             setLoading(false);
           }
         });
 
         mapInstance.on("error", (e: any) => {
-          logger.error("[FleetMapBox] Mapbox error:", e);
+          console.error("[FleetMapBox] Mapbox error:", e);
           if (mounted) {
             setError("Erro ao carregar o mapa");
             setLoading(false);

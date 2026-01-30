@@ -23,9 +23,8 @@ export class APIManager {
   private retryDelay = 1000;
 
   constructor(baseURL?: string, apiKey?: string) {
-    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-    this.baseURL = baseURL || safeEnv.VITE_API_BASE_URL || "";
-    this.apiKey = apiKey || safeEnv.VITE_API_KEY || "";
+    this.baseURL = baseURL || import.meta.env.VITE_API_BASE_URL || "";
+    this.apiKey = apiKey || import.meta.env.VITE_API_KEY || "";
   }
 
   /**

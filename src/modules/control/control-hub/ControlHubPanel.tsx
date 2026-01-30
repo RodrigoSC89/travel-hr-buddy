@@ -191,16 +191,16 @@ export default function ControlHubPanel() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="bg-card rounded-lg p-4 border border-border h-64 overflow-y-auto font-mono text-sm">
+          <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 h-64 overflow-y-auto font-mono text-sm">
             {telemetryLogs.length === 0 ? (
-              <div className="text-muted-foreground text-center py-8">
+              <div className="text-slate-500 text-center py-8">
                 Aguardando eventos de telemetria...
               </div>
             ) : (
               <div className="space-y-1">
                 {telemetryLogs.map((log, index) => (
-                  <div key={index} className="text-success">
-                    <span className="text-muted-foreground">[{log.timestamp}]</span> {log.message}
+                  <div key={index} className="text-green-400">
+                    <span className="text-slate-500">[{log.timestamp}]</span> {log.message}
                   </div>
                 ))}
               </div>

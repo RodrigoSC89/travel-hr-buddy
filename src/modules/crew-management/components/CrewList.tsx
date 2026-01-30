@@ -4,10 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Download, UserPlus, Eye, Edit, MoreHorizontal, Trash2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Search, Download, UserPlus, Eye, Edit, MoreHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { EditCrewDialog } from "./EditCrewDialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface CrewMember {
   id: string;
@@ -27,7 +28,6 @@ interface CrewListProps {
   onViewMember: (member: CrewMember) => void;
   onAddMember: () => void;
   onExport: () => void;
-  onRefresh?: () => void;
 }
 
 const positionLabels: Record<string, { label: string; badge: string }> = {
@@ -58,23 +58,10 @@ const statusStyles: Record<string, { label: string; className: string }> = {
   embarked: { label: "Embarcado", className: "bg-primary/10 text-primary border-primary/20" },
 };
 
-function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport, onRefresh }: CrewListProps) {
+function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [positionFilter, setPositionFilter] = useState<string>("all");
-  const [editMember, setEditMember] = useState<CrewMember | null>(null);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-
-  const handleEditMember = useCallback((member: CrewMember) => {
-    setEditMember(member);
-    setShowEditDialog(true);
-  }, []);
-
-  const handleEditSuccess = useCallback(() => {
-    setShowEditDialog(false);
-    setEditMember(null);
-    onRefresh?.();
-  }, [onRefresh]);
 
   const filteredCrew = useMemo(() => crewMembers.filter(member => {
     const matchesSearch = 
@@ -231,17 +218,9 @@ function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport, o
                               <Eye className="h-4 w-4 mr-2" />
                               Ver Detalhes
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleEditMember(member)}>
+                            <DropdownMenuItem>
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem 
-                              onClick={() => handleEditMember(member)}
-                              className="text-destructive focus:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Remover
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -254,14 +233,6 @@ function CrewListComponent({ crewMembers, onViewMember, onAddMember, onExport, o
           </AnimatePresence>
         </div>
       </CardContent>
-
-      {/* Edit Dialog */}
-      <EditCrewDialog
-        open={showEditDialog}
-        onOpenChange={setShowEditDialog}
-        crewMember={editMember}
-        onSuccess={handleEditSuccess}
-      />
     </Card>
   );
 }

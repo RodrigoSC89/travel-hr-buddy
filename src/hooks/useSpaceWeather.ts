@@ -151,9 +151,9 @@ export function useSpaceWeather(options: UseSpaceWeatherOptions): UseSpaceWeathe
     onError,
   } = options;
 
-  // State - PATCH v43: Start with loading=false to never block render
+  // State
   const [status, setStatus] = useState<SpaceWeatherStatus | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
 

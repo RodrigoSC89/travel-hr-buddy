@@ -133,15 +133,14 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
     theme: "system",
     notifications: { push: true, email: true, slack: false }
   });
-  // PATCH v41: Start with FALSE to NEVER block UI - profile loads in background
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load user profile from database
   useEffect(() => {
     const loadProfile = async () => {
       if (!user?.id) {
         setRoleState("guest");
-        // No need to set isLoading false - already false
+        setIsLoading(false);
         return;
       }
 

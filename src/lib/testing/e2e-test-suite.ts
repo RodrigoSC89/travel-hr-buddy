@@ -134,9 +134,8 @@ export const offlineTests = {
     
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    // PATCH v36: navigator.onLine não é confiável - apenas log para teste
-    const isOffline = false; // Sempre assumir online
-    console.log('[E2E] Offline detection disabled (always online mode)');
+    const isOffline = !navigator.onLine;
+    console.log('[E2E] Offline detected:', isOffline);
     
     // Restore online
     networkSimulator.goOnline();
@@ -170,9 +169,9 @@ export const offlineTests = {
     networkSimulator.goOnline();
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    // PATCH v36: Sempre assumir sync disparado - navigator.onLine não é confiável
-    const syncTriggered = true;
-    console.log('[E2E] Sync always triggered (online mode)');
+    // Check if sync triggered
+    const syncTriggered = window.navigator.onLine;
+    console.log('[E2E] Sync triggered:', syncTriggered);
     
     return syncTriggered;
   },

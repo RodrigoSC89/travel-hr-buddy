@@ -10,8 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function EfficiencyKPI() {
   const [efficiency, setEfficiency] = useState<string | null>(null);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

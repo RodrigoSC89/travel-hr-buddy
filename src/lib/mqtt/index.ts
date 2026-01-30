@@ -9,22 +9,10 @@ import { logger } from "@/lib/logger";
 let mqttClientInstance: MqttClient | null = null;
 
 export function initMQTT(): MqttClient | null {
-  // Safe getter for env vars
-  const getEnv = (key: string): string | undefined => {
-    try {
-      if (typeof import.meta !== 'undefined' && import.meta.env) {
-        return import.meta.env[key] as string | undefined;
-      }
-    } catch {
-      return undefined;
-    }
-    return undefined;
-  };
-
-  const url = getEnv('VITE_MQTT_URL');
+  const url = import.meta.env.VITE_MQTT_URL;
   
   if (!url) {
-    // MQTT is optional - don't spam logs
+    logger.warn("VITE_MQTT_URL not set, MQTT disabled");
     return null;
   }
   
@@ -32,8 +20,8 @@ export function initMQTT(): MqttClient | null {
     return mqttClientInstance;
   }
   
-  const username = getEnv('VITE_MQTT_USER');
-  const password = getEnv('VITE_MQTT_PASS');
+  const username = import.meta.env.VITE_MQTT_USER;
+  const password = import.meta.env.VITE_MQTT_PASS;
   
   const options: {
     clean: boolean;

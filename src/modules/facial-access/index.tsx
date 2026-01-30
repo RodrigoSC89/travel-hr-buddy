@@ -391,14 +391,7 @@ export default function FacialAccess() {
                     </Button>
                   </div>
 
-                  <Button className="w-full" onClick={async () => {
-                    toast.loading("Processando biometria...", { id: "register-user" });
-                    await new Promise(r => setTimeout(r, 2000));
-                    toast.success("Usuário cadastrado com sucesso!", { 
-                      id: "register-user",
-                      description: "Novo usuário adicionado ao sistema de reconhecimento facial."
-                    });
-                  }}>
+                  <Button className="w-full" onClick={() => toast.success("Usuário cadastrado com sucesso!")}>
                     <UserPlus className="h-4 w-4 mr-2" />
                     Cadastrar Usuário
                   </Button>

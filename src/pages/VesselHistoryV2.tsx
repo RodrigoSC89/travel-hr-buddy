@@ -135,17 +135,9 @@ export default function VesselHistoryV2() {
               </div>
             </CardV2>
             <CardV2 icon={Search} title="Busca OCR" description="Pesquisa em documentos digitalizados" gradient="orange">
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Buscar texto em documentos..." className="flex-1 px-3 py-2 border rounded-md bg-background" />
-                  <Button size="sm" onClick={() => toast.success('Buscando documentos...')}>
-                    <Search className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <p>Busque por texto em certificados, relatórios e documentos digitalizados.</p>
-                  <p className="mt-1">Suporta: PDF, imagens, documentos escaneados</p>
-                </div>
+              <div className="text-center py-8 text-muted-foreground">
+                <Search className="h-12 w-12 mx-auto mb-4 opacity-30" />
+                <p>Busca OCR em desenvolvimento</p>
               </div>
             </CardV2>
           </div>

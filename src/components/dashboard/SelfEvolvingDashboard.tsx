@@ -112,10 +112,7 @@ export function SelfEvolvingDashboard() {
         },
       };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 60000,
   });
 
   // Track widget usage
@@ -410,9 +407,8 @@ function WidgetCard({
       default:
         return (
           <div className="text-center py-4 text-muted-foreground">
-            <div className="h-8 w-8 mx-auto mb-2 opacity-50">{widget.icon}</div>
-            <span className="text-xs">Widget customizado</span>
-            <div className="text-lg font-semibold mt-1">--</div>
+            <span className="h-8 w-8 mx-auto mb-2 opacity-50">{widget.icon}</span>
+            <span className="text-xs">Widget em desenvolvimento</span>
           </div>
         );
     }

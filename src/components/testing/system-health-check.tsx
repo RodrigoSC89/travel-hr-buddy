@@ -119,8 +119,7 @@ export const SystemHealthCheck: React.FC = () => {
         const start = Date.now();
         try {
           // Verificar se as APIs estão configuradas
-          const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-          const hasMapbox = !!safeEnv.VITE_MAPBOX_TOKEN;
+          const hasMapbox = !!import.meta.env.VITE_MAPBOX_TOKEN;
           const hasAmadeus = true; // Assumindo que está configurado no backend
           
           if (!hasMapbox) {

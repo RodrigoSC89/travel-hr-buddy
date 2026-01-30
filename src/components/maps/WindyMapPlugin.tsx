@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Cloud, Wind, Waves, Thermometer, Loader2, RefreshCw, Maximize2, MapPin, Map, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
 
 interface WindyMapPluginProps {
   latitude?: number;
@@ -95,7 +94,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
           setMapboxToken(data.token);
         }
       } catch (err) {
-        logger.warn("[WindyMapPlugin] Could not fetch Mapbox token for fallback");
+        console.warn('[WindyMapPlugin] Could not fetch Mapbox token for fallback');
       }
     };
     fetchToken();
@@ -111,7 +110,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
 
   // Handle iframe error - switch to fallback
   const handleIframeError = useCallback(() => {
-    logger.warn("[WindyMapPlugin] Iframe failed to load, switching to fallback");
+    console.warn('[WindyMapPlugin] Iframe failed to load, switching to fallback');
     if (mountedRef.current) {
       setUseFallback(true);
       setIsLoading(false);

@@ -110,7 +110,9 @@ export function useChurnPrediction() {
         });
 
       if (error) throw error;
-      // Outreach logged to analytics table successfully
+
+      // In real implementation, would send email via Edge Function
+      console.log(`Outreach sent to ${organizationId}: ${message}`);
     }
   });
 

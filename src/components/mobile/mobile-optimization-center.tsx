@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +41,6 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface UserSession {
@@ -89,114 +88,23 @@ export const MobileOptimizationCenter: React.FC = () => {
   const [dateRange, setDateRange] = useState("7d");
   const [deviceFilter, setDeviceFilter] = useState("all");
 
-  // Load real data from Supabase
-  const loadAnalyticsData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const daysBack = dateRange === "7d" ? 7 : dateRange === "30d" ? 30 : 1;
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - daysBack);
-
-      // Load sessions from Supabase
-      const { data: sessionsData, error: sessionsError } = await (supabase as any)
-        .from("user_sessions_analytics")
-        .select("*")
-        .gte("start_time", startDate.toISOString())
-        .order("start_time", { ascending: false })
-        .limit(100);
-
-      // Load page analytics
-      const { data: pageData, error: pageError } = await (supabase as any)
-        .from("page_analytics")
-        .select("*")
-        .gte("period_start", startDate.toISOString().split("T")[0])
-        .order("sessions_count", { ascending: false })
-        .limit(20);
-
-      // Load performance metrics
-      const { data: perfData, error: perfError } = await (supabase as any)
-        .from("performance_metrics_web")
-        .select("*")
-        .gte("recorded_at", startDate.toISOString())
-        .order("recorded_at", { ascending: true })
-        .limit(50);
-
-      // Transform sessions data
-      const transformedSessions: UserSession[] = (sessionsData || []).map((s: any) => ({
-        id: s.id,
-        userId: s.user_id || "anonymous",
-        device: (s.device_type as "mobile" | "tablet" | "desktop") || "desktop",
-        os: s.os || "Unknown",
-        browser: s.browser || "Unknown",
-        location: s.location || "Unknown",
-        startTime: new Date(s.start_time),
-        endTime: s.end_time ? new Date(s.end_time) : undefined,
-        duration: s.duration_seconds || 0,
-        pages: s.pages_viewed || 0,
-        actions: s.actions_count || 0,
-        isActive: s.is_active || false,
-      }));
-
-      // Transform behavior data
-      const transformedBehavior: UserBehavior[] = (pageData || []).map((p: any) => ({
-        page: p.page_path,
-        sessions: p.sessions_count || 0,
-        bounceRate: parseFloat(p.bounce_rate) || 0,
-        avgTimeOnPage: p.avg_time_on_page || 0,
-        conversions: p.conversions || 0,
-        exitRate: parseFloat(p.exit_rate) || 0,
-      }));
-
-      // Transform performance data
-      const transformedPerformance: PerformanceMetric[] = (perfData || []).map((p: any) => ({
-        timestamp: new Date(p.recorded_at),
-        pageLoad: parseFloat(p.page_load_ms) || 0,
-        firstContentfulPaint: parseFloat(p.first_contentful_paint_ms) || 0,
-        largestContentfulPaint: parseFloat(p.largest_contentful_paint_ms) || 0,
-        cumulativeLayoutShift: parseFloat(p.cumulative_layout_shift) || 0,
-        firstInputDelay: parseFloat(p.first_input_delay_ms) || 0,
-        timeToInteractive: parseFloat(p.time_to_interactive_ms) || 0,
-      }));
-
-      setSessions(transformedSessions.length > 0 ? transformedSessions : generateFallbackSessions());
-      setBehavior(transformedBehavior.length > 0 ? transformedBehavior : generateFallbackBehavior());
-      setPerformance(transformedPerformance.length > 0 ? transformedPerformance : generateFallbackPerformance());
-
-    } catch (error) {
-      console.error("Error loading analytics:", error);
-      // Fallback to generated data if DB is empty
-      setSessions(generateFallbackSessions());
-      setBehavior(generateFallbackBehavior());
-      setPerformance(generateFallbackPerformance());
-    } finally {
-      setIsLoading(false);
-    }
-  }, [dateRange]);
-
-  // Fallback generators for when DB is empty
-  const generateFallbackSessions = (): UserSession[] => 
-    Array.from({ length: 20 }, (_, i) => ({
+  // Dados simulados para demonstração
+  const generateMockData = () => {
+    const mockSessions: UserSession[] = Array.from({ length: 50 }, (_, i) => ({
       id: `session-${i}`,
       userId: `user-${Math.floor(Math.random() * 20)}`,
       device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as any,
       os: ["iOS", "Android", "Windows", "macOS"][Math.floor(Math.random() * 4)],
       browser: ["Chrome", "Safari", "Firefox", "Edge"][Math.floor(Math.random() * 4)],
-      location: ["São Paulo", "Rio de Janeiro", "Brasília"][Math.floor(Math.random() * 3)],
+      location: ["São Paulo", "Rio de Janeiro", "Brasília", "Recife"][Math.floor(Math.random() * 4)],
       startTime: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-      duration: Math.floor(Math.random() * 1800) + 60,
+      duration: Math.floor(Math.random() * 1800) + 60, // 1-31 minutos
       pages: Math.floor(Math.random() * 10) + 1,
       actions: Math.floor(Math.random() * 20) + 1,
       isActive: Math.random() > 0.7
     }));
 
-  const generateFallbackBehavior = (): UserBehavior[] => [
-    { page: "/dashboard", sessions: 342, bounceRate: 24, avgTimeOnPage: 180, conversions: 89, exitRate: 32 },
-    { page: "/hr", sessions: 156, bounceRate: 18, avgTimeOnPage: 240, conversions: 45, exitRate: 28 },
-    { page: "/analytics", sessions: 89, bounceRate: 31, avgTimeOnPage: 320, conversions: 23, exitRate: 41 },
-  ];
-
-  const generateFallbackPerformance = (): PerformanceMetric[] =>
-    Array.from({ length: 7 }, (_, i) => ({
+    const mockPerformance: PerformanceMetric[] = Array.from({ length: 7 }, (_, i) => ({
       timestamp: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000),
       pageLoad: Math.random() * 2000 + 500,
       firstContentfulPaint: Math.random() * 1000 + 200,
@@ -206,9 +114,25 @@ export const MobileOptimizationCenter: React.FC = () => {
       timeToInteractive: Math.random() * 3000 + 1000
     }));
 
+    const mockBehavior: UserBehavior[] = [
+      { page: "/dashboard", sessions: 342, bounceRate: 24, avgTimeOnPage: 180, conversions: 89, exitRate: 32 },
+      { page: "/hr", sessions: 156, bounceRate: 18, avgTimeOnPage: 240, conversions: 45, exitRate: 28 },
+      { page: "/analytics", sessions: 89, bounceRate: 31, avgTimeOnPage: 320, conversions: 23, exitRate: 41 },
+      { page: "/reports", sessions: 78, bounceRate: 29, avgTimeOnPage: 280, conversions: 34, exitRate: 38 },
+      { page: "/maritime", sessions: 67, bounceRate: 22, avgTimeOnPage: 200, conversions: 12, exitRate: 35 },
+      { page: "/travel", sessions: 54, bounceRate: 45, avgTimeOnPage: 120, conversions: 8, exitRate: 52 },
+      { page: "/settings", sessions: 43, bounceRate: 38, avgTimeOnPage: 90, conversions: 15, exitRate: 48 }
+    ];
+
+    setSessions(mockSessions);
+    setPerformance(mockPerformance);
+    setBehavior(mockBehavior);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    loadAnalyticsData();
-  }, [loadAnalyticsData]);
+    generateMockData();
+  }, [dateRange]);
 
   const getDeviceIcon = (device: string) => {
     switch (device) {

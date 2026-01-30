@@ -1,27 +1,44 @@
 /**
  * OpenAI Embedding Creation
- * NOTE: OpenAI API key must be used via edge functions, not frontend
- * This module provides a stub that throws an error directing to edge functions
+ * Generates vector embeddings using OpenAI API
  */
 
+import OpenAI from "openai";
 import { logger } from "@/lib/logger";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
+const EMBEDDING_DIMENSIONS = 1536;
 
 /**
  * Create embedding vector for text using OpenAI
  * @param text - Text to convert to embedding
  * @returns Vector embedding as number array
- * @throws Always throws - use edge function instead
  */
 export async function createEmbedding(text: string): Promise<number[]> {
-  logger.warn("createEmbedding called from frontend - should use edge function", {
-    textLength: text.length,
-    model: EMBEDDING_MODEL
-  });
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   
-  // OpenAI API key must be used via edge functions for security
-  throw new Error(
-    "OpenAI API key not available in frontend. Use the 'create-embedding' edge function instead."
-  );
+  if (!apiKey || apiKey === "your_openai_api_key_here") {
+    throw new Error("OpenAI API key not configured");
+  }
+
+  try {
+    const openai = new OpenAI({
+      apiKey,
+      dangerouslyAllowBrowser: true,
+    });
+
+    const response = await openai.embeddings.create({
+      model: EMBEDDING_MODEL,
+      input: text,
+      dimensions: EMBEDDING_DIMENSIONS,
+    });
+
+    return response.data[0].embedding;
+  } catch (error) {
+    logger.error("Error creating embedding", error as Error, { 
+      textLength: text.length,
+      model: EMBEDDING_MODEL 
+    });
+    throw error;
+  }
 }

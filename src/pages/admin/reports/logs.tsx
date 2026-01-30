@@ -1,15 +1,4 @@
-/**
- * Restore Report Logs Page - PATCH 877
- * PATCH 901 - Removed @ts-nocheck - Uses type casting for dynamic tables
- * 
- * Features:
- * - Infinite scroll pagination (20 records per page)
- * - Auto-applying filters
- * - Real-time total count display
- * - Enhanced CSV/PDF export with notifications
- * 
- * Supports public view mode via ?public=1 query parameter
- */
+// @ts-nocheck - Dynamic table access requires type override
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -38,7 +27,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
-
 interface RestoreReportLog {
   id: string;
   executed_at: string;
@@ -47,6 +35,23 @@ interface RestoreReportLog {
   error_details: string | null;
   triggered_by: string;
 }
+
+// @ts-nocheck - Dynamic table access requires type override
+/**
+ * Restore Report Logs Page
+ * Displays audit logs of automated restore report executions with infinite scroll
+ * 
+ * Features:
+ * - Infinite scroll pagination (20 records per page)
+ * - Auto-applying filters
+ * - Real-time total count display
+ * - Enhanced CSV/PDF export with notifications
+ * 
+ * Supports public view mode via ?public=1 query parameter
+ * - Public mode hides navigation and action buttons
+ * - Shows read-only indicator at bottom
+ * - Perfect for TV monitors and public displays
+ */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -87,48 +92,34 @@ export default function RestoreReportLogsPage() {
       const from = pageToFetch * 20;
       const to = from + 19;
 
-      // Use dynamic client helper for unmapped tables
-      const dynamicClient = supabase as unknown as { 
-        from: (table: string) => { 
-          select: (cols: string, opts?: { count: string }) => unknown 
-        } 
-      };
-
-      // Build query with proper chaining
-      const baseQuery = dynamicClient.from("restore_report_logs").select("*", { count: "exact" });
-      
-      // Apply filters using type assertion - chain operations
-      let queryBuilder = baseQuery as unknown as {
-        eq: (col: string, val: string) => unknown;
-        gte: (col: string, val: string) => unknown;
-        lte: (col: string, val: string) => unknown;
-        order: (col: string, opts: { ascending: boolean }) => unknown;
-        range: (from: number, to: number) => Promise<{ data: unknown[] | null; error: Error | null; count: number | null }>;
-      };
+      // Use type assertion for tables not in generated types yet
+      let query = (supabase
+        .from("restore_report_logs" as never) as ReturnType<typeof supabase.from>)
+        .select("*", { count: "exact" });
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
-        queryBuilder = queryBuilder.eq("status", statusFilter) as typeof queryBuilder;
+        query = query.eq("status", statusFilter);
       }
 
       // Apply date range filters
       if (startDate) {
-        queryBuilder = queryBuilder.gte("executed_at", new Date(startDate).toISOString()) as typeof queryBuilder;
+        query = query.gte("executed_at", new Date(startDate).toISOString());
       }
       if (endDate) {
         // Add one day to include the entire end date
         const endDateTime = new Date(endDate);
         endDateTime.setHours(23, 59, 59, 999);
-        queryBuilder = queryBuilder.lte("executed_at", endDateTime.toISOString()) as typeof queryBuilder;
+        query = query.lte("executed_at", endDateTime.toISOString());
       }
 
-      const result = await (queryBuilder
-        .order("executed_at", { ascending: false }) as typeof queryBuilder)
+      const { data, error: fetchError, count } = await query
+        .order("executed_at", { ascending: false })
         .range(from, to);
 
-      if (result.error) throw result.error;
+      if (fetchError) throw fetchError;
       
-      const newLogs = (result.data as unknown as RestoreReportLog[]) || [];
+      const newLogs = (data as RestoreReportLog[]) || [];
       
       if (reset) {
         setLogs(newLogs);
@@ -136,7 +127,7 @@ export default function RestoreReportLogsPage() {
         setLogs((prev) => [...prev, ...newLogs]);
       }
       
-      setTotalCount(result.count || 0);
+      setTotalCount(count || 0);
       setHasMore(newLogs.length === 20);
       
       if (!reset) {

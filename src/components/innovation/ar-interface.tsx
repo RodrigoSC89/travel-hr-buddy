@@ -211,11 +211,11 @@ export const ARInterface: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-success bg-success/10";
-    case "normal": return "text-primary bg-primary/10";
-    case "warning": return "text-warning bg-warning/10";
-    case "maintenance": return "text-destructive bg-destructive/10";
-    default: return "text-muted-foreground bg-muted";
+    case "active": return "text-green-600 bg-green-100";
+    case "normal": return "text-blue-600 bg-blue-100";
+    case "warning": return "text-yellow-600 bg-yellow-100";
+    case "maintenance": return "text-red-600 bg-red-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 

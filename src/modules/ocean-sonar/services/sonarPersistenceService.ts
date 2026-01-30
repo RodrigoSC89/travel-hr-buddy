@@ -1,50 +1,44 @@
+// @ts-nocheck
 /**
  * PATCH 457 - Sonar Data Persistence Service
  * Service for persisting sonar readings and AI predictions to database
- * PATCH 866: Removed @ts-nocheck - tables now exist in schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { BathymetricData, SonarReading } from "./sonarEngine";
-import { 
-  sonarReadingsTable, 
-  sonarAIPredictionsTable,
-  type SonarReading as SonarReadingType,
-  type SonarAIPrediction
-} from "@/lib/supabase/dynamic-tables";
 
 export interface SonarReadingRecord {
   id: string;
-  mission_id?: string | null;
+  mission_id?: string;
   user_id: string;
   location: { lat: number; lon: number };
   depth: number;
   timestamp: string;
   terrain_type: string;
   risk_level: string;
-  temperature?: number | null;
-  pressure?: number | null;
-  visibility?: number | null;
-  reading_data?: Record<string, unknown> | null;
-  metadata?: Record<string, unknown> | null;
+  temperature?: number;
+  pressure?: number;
+  visibility?: number;
+  reading_data?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
 
 export interface SonarAIPredictionRecord {
   id: string;
-  reading_id?: string | null;
+  reading_id?: string;
   user_id: string;
   prediction_type: string;
   confidence: number;
   location: { lat: number; lon: number };
-  depth_range?: { min: number; max: number } | null;
-  description?: string | null;
-  detected_objects?: Array<unknown> | null;
-  safe_route_recommendation?: Array<{ lat: number; lon: number }> | null;
-  warnings?: string[] | null;
-  ai_model?: string | null;
+  depth_range?: { min: number; max: number };
+  description?: string;
+  detected_objects?: Array<unknown>;
+  safe_route_recommendation?: Array<{ lat: number; lon: number }>;
+  warnings?: string[];
+  ai_model?: string;
   processed_at: string;
   created_at: string;
   updated_at: string;
@@ -70,18 +64,19 @@ class SonarPersistenceService {
       const readingsToInsert = data.readings.map((reading) => ({
         mission_id: missionId,
         user_id: user.id,
-        location: { lat: reading.latitude, lon: reading.longitude },
+        location: { lat: reading.lat, lon: reading.lon },
         depth: reading.depth,
         terrain_type: reading.terrain,
         risk_level: reading.riskLevel,
         reading_data: {
           id: reading.id,
-          obstacles: reading.obstacles,
+          frequency: reading.frequency,
         },
         metadata: {
-          minDepth: data.minDepth,
-          maxDepth: data.maxDepth,
-          avgDepth: data.avgDepth,
+          scanId: data.scanId,
+          centerLat: data.centerLat,
+          centerLon: data.centerLon,
+          radiusKm: data.radiusKm,
         },
       }));
 

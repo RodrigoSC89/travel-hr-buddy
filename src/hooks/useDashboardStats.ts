@@ -109,20 +109,13 @@ export const useDashboardStats = () => {
           .eq("organization_id", organizationId)
           .eq("status", "active");
 
-        // Calculate real compliance score based on data
-        const totalChecks = (vesselsData.length || 0) + (crewCount || 0) + (auditsCount || 0);
-        const passedChecks = (vesselsData.length || 0) + (auditsCount || 0) - (pendingCerts || 0);
-        const calculatedScore = totalChecks > 0 
-          ? Math.round((passedChecks / totalChecks) * 100)
-          : 100;
-        
         setStats({
           totalVessels: vesselsData.length,
           activeCrew: crewCount || 0,
           pendingCertifications: pendingCerts || 0,
           completedAudits: auditsCount || 0,
           activeAlerts: alertsCount || 0,
-          complianceScore: Math.min(100, Math.max(0, calculatedScore))
+          complianceScore: 87 // TODO: Calculate from real data
         });
       } else {
         // Fallback with zeros

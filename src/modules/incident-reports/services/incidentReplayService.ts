@@ -1,12 +1,10 @@
+// @ts-nocheck
 /**
- * PATCH 878 - Incident Replay Service
- * Type-safe using Supabase generated types
+ * PATCH 472 - Incident Replay Service
+ * Service for retrieving and analyzing incident data with AI
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Database, Json } from "@/integrations/supabase/types";
-
-type IncidentReportRow = Database["public"]["Tables"]["incident_reports"]["Row"];
 
 export interface IncidentData {
   id: string;
@@ -20,7 +18,7 @@ export interface IncidentData {
   reportedBy?: string;
   createdAt: string;
   updatedAt: string;
-  metadata?: Json;
+  metadata?: any;
 }
 
 export interface TimelineEvent {
@@ -29,7 +27,7 @@ export interface TimelineEvent {
   type: "creation" | "update" | "comment" | "status_change" | "escalation" | "resolution";
   actor: string;
   description: string;
-  data?: Record<string, unknown>;
+  data?: any;
 }
 
 export interface AIAnalysis {
@@ -47,23 +45,6 @@ export interface AIAnalysis {
   timestamp: string;
 }
 
-function mapIncidentRow(data: IncidentReportRow): IncidentData {
-  return {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    severity: (data.severity as IncidentData["severity"]) || "medium",
-    status: data.status,
-    incidentDate: data.incident_date || data.created_at || new Date().toISOString(),
-    location: data.location,
-    vesselId: undefined, // Not in schema
-    reportedBy: data.reported_by || undefined,
-    createdAt: data.created_at || new Date().toISOString(),
-    updatedAt: data.updated_at || data.created_at || new Date().toISOString(),
-    metadata: data.metadata,
-  };
-}
-
 class IncidentReplayService {
   /**
    * Get incident by ID
@@ -77,7 +58,23 @@ class IncidentReplayService {
         .single();
 
       if (error) throw error;
-      return data ? mapIncidentRow(data) : null;
+
+      return data
+        ? {
+          id: data.id,
+          title: data.title || "Untitled Incident",
+          description: data.description || "",
+          severity: data.severity || "medium",
+          status: data.status || "open",
+          incidentDate: data.incident_date || data.created_at,
+          location: data.location,
+          vesselId: data.vessel_id,
+          reportedBy: data.reported_by,
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+          metadata: data.metadata,
+        }
+        : null;
     } catch (error) {
       console.error("Failed to fetch incident:", error);
       return null;
@@ -96,7 +93,21 @@ class IncidentReplayService {
         .limit(limit);
 
       if (error) throw error;
-      return (data || []).map(mapIncidentRow);
+
+      return (data || []).map((item) => ({
+        id: item.id,
+        title: item.title || "Untitled Incident",
+        description: item.description || "",
+        severity: item.severity || "medium",
+        status: item.status || "open",
+        incidentDate: item.incident_date || item.created_at,
+        location: item.location,
+        vesselId: item.vessel_id,
+        reportedBy: item.reported_by,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+        metadata: item.metadata,
+      }));
     } catch (error) {
       console.error("Failed to fetch incidents:", error);
       return [];
@@ -110,6 +121,7 @@ class IncidentReplayService {
     const timeline: TimelineEvent[] = [];
 
     try {
+      // Get incident data
       const incident = await this.getIncident(incidentId);
       if (!incident) return timeline;
 
@@ -125,6 +137,26 @@ class IncidentReplayService {
           severity: incident.severity,
         },
       });
+
+      // Get comments/notes
+      const { data: comments } = await supabase
+        .from("incident_comments")
+        .select("*")
+        .eq("incident_id", incidentId)
+        .order("created_at", { ascending: true });
+
+      if (comments) {
+        comments.forEach((comment) => {
+          timeline.push({
+            id: comment.id,
+            timestamp: comment.created_at,
+            type: "comment",
+            actor: comment.user_id || "Usuário",
+            description: comment.comment || comment.text || "Comentário adicionado",
+            data: comment,
+          });
+        });
+      }
 
       // Add update event if updated
       if (incident.updatedAt !== incident.createdAt) {
@@ -156,6 +188,7 @@ class IncidentReplayService {
    * Analyze incident with AI to identify probable causes
    */
   async analyzeIncident(incident: IncidentData): Promise<AIAnalysis> {
+    // Simulate AI analysis (in production, this would call an AI service)
     const analysis: AIAnalysis = {
       id: `analysis-${incident.id}`,
       incidentId: incident.id,
@@ -166,6 +199,19 @@ class IncidentReplayService {
       timestamp: new Date().toISOString(),
     };
 
+    // Save analysis to database (optional)
+    try {
+      await supabase.from("incident_analysis").insert({
+        incident_id: incident.id,
+        probable_causes: analysis.probableCauses,
+        recommendations: analysis.recommendations,
+        risk_score: analysis.riskScore,
+        severity: analysis.severity,
+      });
+    } catch (error) {
+      console.error("Failed to save analysis:", error);
+    }
+
     return analysis;
   }
 
@@ -173,17 +219,22 @@ class IncidentReplayService {
    * Identify probable causes using AI patterns
    */
   private identifyProbableCauses(incident: IncidentData) {
-    const causes: AIAnalysis["probableCauses"] = [];
+    const causes = [];
     const description = (incident.description || "").toLowerCase();
     const title = (incident.title || "").toLowerCase();
     const combined = `${title} ${description}`;
 
+    // Pattern matching for common incident causes
     if (combined.includes("clima") || combined.includes("tempo") || combined.includes("weather")) {
       causes.push({
         cause: "Condições Climáticas Adversas",
         confidence: 85,
-        explanation: "Análise textual indica referências a condições meteorológicas.",
-        supportingData: ["Palavras-chave climáticas identificadas", "Período coincide com alerta meteorológico"],
+        explanation:
+          "Análise textual indica referências a condições meteorológicas. Dados históricos mostram correlação com eventos climáticos.",
+        supportingData: [
+          "Palavras-chave climáticas identificadas",
+          "Período coincide com alerta meteorológico",
+        ],
       });
     }
 
@@ -191,8 +242,12 @@ class IncidentReplayService {
       causes.push({
         cause: "Falha de Equipamento",
         confidence: 78,
-        explanation: "Descrição sugere problemas mecânicos ou de equipamento.",
-        supportingData: ["Menção a equipamentos no relatório", "Histórico de manutenção indica possível desgaste"],
+        explanation:
+          "Descrição sugere problemas mecânicos ou de equipamento. Padrão similar a incidentes anteriores relacionados a manutenção.",
+        supportingData: [
+          "Menção a equipamentos no relatório",
+          "Histórico de manutenção indica possível desgaste",
+        ],
       });
     }
 
@@ -200,8 +255,12 @@ class IncidentReplayService {
       causes.push({
         cause: "Erro Humano",
         confidence: 65,
-        explanation: "Análise sugere possível fator humano envolvido.",
-        supportingData: ["Indicadores de possível fator humano", "Horário do incidente coincide com troca de turno"],
+        explanation:
+          "Análise sugere possível fator humano envolvido. Recomenda-se revisão de procedimentos e treinamento.",
+        supportingData: [
+          "Indicadores de possível fator humano",
+          "Horário do incidente coincide com troca de turno",
+        ],
       });
     }
 
@@ -209,17 +268,26 @@ class IncidentReplayService {
       causes.push({
         cause: "Falha de Comunicação",
         confidence: 70,
-        explanation: "Evidências sugerem problemas na comunicação entre equipes.",
-        supportingData: ["Referências a problemas de comunicação", "Múltiplas equipes envolvidas"],
+        explanation:
+          "Evidências sugerem problemas na comunicação entre equipes ou sistemas.",
+        supportingData: [
+          "Referências a problemas de comunicação",
+          "Múltiplas equipes envolvidas",
+        ],
       });
     }
 
+    // If no specific patterns found, provide general causes
     if (causes.length === 0) {
       causes.push({
         cause: "Causa Múltipla ou Complexa",
         confidence: 50,
-        explanation: "O incidente pode ter múltiplas causas interrelacionadas.",
-        supportingData: ["Padrão não corresponde a causas comuns", "Contexto sugere cenário complexo"],
+        explanation:
+          "O incidente pode ter múltiplas causas interrelacionadas. Recomenda-se investigação mais aprofundada.",
+        supportingData: [
+          "Padrão não corresponde a causas comuns",
+          "Contexto sugere cenário complexo",
+        ],
       });
     }
 
@@ -230,28 +298,29 @@ class IncidentReplayService {
    * Generate AI recommendations
    */
   private generateRecommendations(incident: IncidentData): string[] {
-    const recommendations: string[] = [];
+    const recommendations = [];
 
     switch (incident.severity) {
-      case "critical":
-        recommendations.push("Ação imediata necessária - escalar para gestão superior");
-        recommendations.push("Implementar medidas de contenção urgentes");
-        recommendations.push("Notificar todas as partes interessadas");
-        break;
-      case "high":
-        recommendations.push("Priorizar resolução dentro de 24 horas");
-        recommendations.push("Alocar recursos dedicados para investigação");
-        recommendations.push("Implementar monitoramento contínuo");
-        break;
-      case "medium":
-        recommendations.push("Agendar investigação detalhada");
-        recommendations.push("Revisar procedimentos operacionais relacionados");
-        break;
-      default:
-        recommendations.push("Documentar lições aprendidas");
-        recommendations.push("Considerar medidas preventivas");
+    case "critical":
+      recommendations.push("Ação imediata necessária - escalar para gestão superior");
+      recommendations.push("Implementar medidas de contenção urgentes");
+      recommendations.push("Notificar todas as partes interessadas");
+      break;
+    case "high":
+      recommendations.push("Priorizar resolução dentro de 24 horas");
+      recommendations.push("Alocar recursos dedicados para investigação");
+      recommendations.push("Implementar monitoramento contínuo");
+      break;
+    case "medium":
+      recommendations.push("Agendar investigação detalhada");
+      recommendations.push("Revisar procedimentos operacionais relacionados");
+      break;
+    default:
+      recommendations.push("Documentar lições aprendidas");
+      recommendations.push("Considerar medidas preventivas");
     }
 
+    // Add general recommendations
     recommendations.push("Atualizar documentação de resposta a incidentes");
     recommendations.push("Agendar revisão pós-incidente com equipe");
     recommendations.push("Verificar se medidas corretivas foram implementadas");
@@ -265,7 +334,8 @@ class IncidentReplayService {
   private calculateRiskScore(incident: IncidentData): number {
     let score = 0;
 
-    const severityScores: Record<string, number> = {
+    // Severity contributes 40%
+    const severityScores = {
       critical: 40,
       high: 30,
       medium: 20,
@@ -273,6 +343,7 @@ class IncidentReplayService {
     };
     score += severityScores[incident.severity] || 10;
 
+    // Status contributes 30%
     if (incident.status === "open" || incident.status === "in_progress") {
       score += 30;
     } else if (incident.status === "investigating") {
@@ -281,6 +352,7 @@ class IncidentReplayService {
       score += 10;
     }
 
+    // Age contributes 30%
     const ageInDays = Math.floor(
       (Date.now() - new Date(incident.incidentDate).getTime()) / (1000 * 60 * 60 * 24)
     );

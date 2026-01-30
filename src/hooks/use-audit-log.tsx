@@ -105,13 +105,13 @@ export const useAuditLog = () => {
       });
 
       if (error) {
-        logger.error("Error logging action", { error });
+        console.error("Error logging action:", error);
         return null;
       }
 
       return data;
     } catch (error) {
-      logger.error("Error logging action", { error });
+      console.error("Error logging action:", error);
       return null;
     }
   }, [user, userContextDetails]);

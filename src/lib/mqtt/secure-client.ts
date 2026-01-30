@@ -7,8 +7,7 @@ import { mqttClient } from "@/utils/mqttClient";
 import { logger } from "@/lib/logger";
 
 export function initSecureMQTT() {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const url = safeEnv.VITE_MQTT_URL || "";
+  const url = import.meta.env.VITE_MQTT_URL;
   
   if (!url) {
     logger.warn("VITE_MQTT_URL not set, MQTT disabled");

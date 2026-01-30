@@ -370,25 +370,10 @@ export const SupplierPortal: React.FC = () => {
               <CardTitle>Request for Quotation</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div>
-                    <p className="font-medium">RFQ #2024-001</p>
-                    <p className="text-sm text-muted-foreground">Peças de Motor - 15 itens</p>
-                  </div>
-                  <Badge className="bg-warning/10 text-warning">Aguardando</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div>
-                    <p className="font-medium">RFQ #2024-002</p>
-                    <p className="text-sm text-muted-foreground">Equipamentos de Segurança - 8 itens</p>
-                  </div>
-                  <Badge className="bg-success/10 text-success">Cotado</Badge>
-                </div>
-                <Button className="w-full" variant="outline">
-                  <Package className="h-4 w-4 mr-2" />
-                  Nova Solicitação de Cotação
-                </Button>
+              <div className="text-center py-8 text-muted-foreground">
+                <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>RFQ management coming soon</p>
+                <p className="text-sm">Create and manage quotation requests from multiple suppliers</p>
               </div>
             </CardContent>
           </Card>

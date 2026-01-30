@@ -111,8 +111,7 @@ export async function handleIncidentReport(
 
   // Publish MQTT alert
   try {
-    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-    const mqttUrl = safeEnv.VITE_MQTT_URL || "";
+    const mqttUrl = import.meta.env.VITE_MQTT_URL;
     if (mqttUrl) {
       const client = mqtt.connect(mqttUrl);
       client.on("connect", () => {

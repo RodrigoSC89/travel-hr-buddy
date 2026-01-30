@@ -20,29 +20,21 @@ import { webhookManager } from "./services/webhook-manager";
 
 const ApiGateway = () => {
   const { toast } = useToast();
-  const [routes, setRoutes] = useState<any[]>([]);
+  const [routes, setRoutes] = useState(apiProxyRouter.getAllRoutes());
   const [rateLimits, setRateLimits] = useState(rateLimiter.getAllLimits());
   const [apiKeys, setApiKeys] = useState(apiKeyManager.getAllKeys());
   const [webhooks, setWebhooks] = useState(webhookManager.getAllWebhooks());
   const [stats, setStats] = useState(apiProxyRouter.getStats());
   const [newKeyName, setNewKeyName] = useState("");
-  const [newWebhookUrl, setNewWebhookUrl] = useState("");
   const [newWebhookName, setNewWebhookName] = useState("");
+  const [newWebhookUrl, setNewWebhookUrl] = useState("");
   const [selectedWebhook, setSelectedWebhook] = useState<string | null>(null);
   const [showCreateKeyDialog, setShowCreateKeyDialog] = useState(false);
   const [showCreateWebhookDialog, setShowCreateWebhookDialog] = useState(false);
 
-  // Load routes on mount
   useEffect(() => {
-    const loadRoutes = async () => {
-      const loadedRoutes = await apiProxyRouter.getAllRoutes();
-      setRoutes(loadedRoutes);
-    };
-    loadRoutes();
-
-    const interval = setInterval(async () => {
-      const updatedRoutes = await apiProxyRouter.getAllRoutes();
-      setRoutes(updatedRoutes);
+    const interval = setInterval(() => {
+      setRoutes(apiProxyRouter.getAllRoutes());
       setStats(apiProxyRouter.getStats());
       setRateLimits(rateLimiter.getAllLimits());
     }, 5000);

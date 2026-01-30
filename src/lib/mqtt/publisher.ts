@@ -1,9 +1,7 @@
 import mqtt from "mqtt";
 
 import { logger } from "@/lib/logger";
-
-// Use default public broker - no VITE_ env vars supported in Lovable
-const MQTT_URL = "wss://broker.hivemq.com:8884/mqtt";
+const MQTT_URL = import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
 
 // Cliente MQTT único global
 const client = mqtt.connect(MQTT_URL);

@@ -47,8 +47,10 @@ class StartupOptimizer {
 
   private preloadCriticalResources() {
     // Preload Supabase connection
-    const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-    this.addPreconnect(supabaseUrl);
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (supabaseUrl) {
+      this.addPreconnect(supabaseUrl);
+    }
 
     // Preload fonts
     this.addPreconnect('https://fonts.googleapis.com');

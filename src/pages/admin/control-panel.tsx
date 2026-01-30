@@ -73,14 +73,14 @@ const ControlPanel = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30">
+            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Módulos Avançados</p>
-                    <p className="text-3xl font-bold text-primary">12</p>
+                    <p className="text-sm text-muted-foreground">Em Desenvolvimento</p>
+                    <p className="text-3xl font-bold text-warning">12</p>
                   </div>
-                  <AlertCircle className="h-10 w-10 text-primary/50" />
+                  <AlertCircle className="h-10 w-10 text-warning/50" />
                 </div>
               </CardContent>
             </Card>
@@ -198,7 +198,7 @@ const ControlPanel = () => {
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Link to="/api-documentation">
+                    <Link to="/admin/api-tester">
                       <Button variant="outline" className="w-full justify-between">
                         <span className="flex items-center gap-2">
                           <Zap className="h-4 w-4" />

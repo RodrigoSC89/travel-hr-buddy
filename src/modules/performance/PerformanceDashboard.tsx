@@ -77,12 +77,22 @@ const PerformanceDashboard: React.FC = () => {
     setIsLoading(true);
     try {
       // Log dashboard access
+      console.log("[Performance Dashboard] Loading data", {
+        period: selectedPeriod,
+        vessel: selectedVessel,
+        missionType: selectedMissionType,
+        timestamp: new Date().toISOString()
+      });
+
       // Calculate date range
       const endDate = new Date();
       const startDate = subDays(endDate, parseInt(selectedPeriod));
 
-      // Note: Using computed metrics from existing tables
-      // Performance data is derived from vessel_operations and maintenance_logs
+      // Using mock data as these tables don't exist yet
+      // TODO: Create fleet_logs, mission_activities, fuel_usage tables
+      const fleetLogs: any[] = [];
+      const missionActivities: any[] = [];
+      const fuelUsage: any[] = [];
 
       // If tables don't exist, use simulated data
       const simulatedMetrics: PerformanceMetrics = {
@@ -136,7 +146,11 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-      // Data loaded successfully - metrics ready
+      console.log("[Performance Dashboard] Data loaded successfully", {
+        metricsCount: Object.keys(simulatedMetrics).length,
+        aiConfidence: aiResponse.confidence,
+        status
+      });
 
       toast({
         title: "Dashboard Atualizado",
@@ -144,7 +158,7 @@ const PerformanceDashboard: React.FC = () => {
       });
 
     } catch (error) {
-      // Error loading performance data - handled by toast
+      console.error("[Performance Dashboard] Error loading data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",

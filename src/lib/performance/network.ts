@@ -28,12 +28,13 @@ export function useNetworkQuality(): NetworkInfo {
     const updateNetworkInfo = () => {
       const connection = (navigator as any).connection;
 
-      // PATCH v34 iOS PWA: REMOVIDO navigator.onLine check
-      // navigator.onLine não é confiável no iOS Safari PWA - causa falsos "offline"
-      // Em vez de bloquear, assumimos "medium" e deixamos o retry lidar com erros reais
+      if (!navigator.onLine) {
+        setNetworkInfo({ quality: "offline" });
+        return;
+      }
 
       if (!connection) {
-        setNetworkInfo({ quality: "medium" }); // PATCH: era "fast", agora "medium" como fallback seguro
+        setNetworkInfo({ quality: "fast" });
         return;
       }
 
@@ -62,17 +63,20 @@ export function useNetworkQuality(): NetworkInfo {
 
     updateNetworkInfo();
 
-    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
-    // Apenas escutar mudanças de qualidade da conexão
+    // Listen for changes
     const connection = (navigator as any).connection;
     if (connection) {
       connection.addEventListener("change", updateNetworkInfo);
     }
+    window.addEventListener("online", updateNetworkInfo);
+    window.addEventListener("offline", updateNetworkInfo);
 
     return () => {
       if (connection) {
         connection.removeEventListener("change", updateNetworkInfo);
       }
+      window.removeEventListener("online", updateNetworkInfo);
+      window.removeEventListener("offline", updateNetworkInfo);
     };
   }, []);
 

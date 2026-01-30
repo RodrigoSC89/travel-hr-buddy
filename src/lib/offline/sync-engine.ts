@@ -124,8 +124,10 @@ export async function queueOperation(
 
   await database.add("pendingOperations", operation);
   
-  // PATCH v35: Sempre tenta sync - navigator.onLine não é confiável
-  syncPendingOperations();
+  // Try to sync if online
+  if (navigator.onLine) {
+    syncPendingOperations();
+  }
 
   return operation.id;
 }
@@ -327,9 +329,11 @@ async function generateChecksum(data: unknown): Promise<string> {
  * Hook for offline-aware data operations
  */
 export function useOfflineSync() {
-  // PATCH v35: Sempre tenta sync - navigator.onLine não é confiável
   const syncNow = async () => {
-    return syncPendingOperations();
+    if (navigator.onLine) {
+      return syncPendingOperations();
+    }
+    return { synced: 0, failed: 0, conflicts: 0 };
   };
 
   const queueInsert = async (table: string, data: unknown) => {

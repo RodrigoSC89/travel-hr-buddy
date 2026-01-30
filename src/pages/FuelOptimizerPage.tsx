@@ -810,18 +810,18 @@ const FuelOptimizerPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-success">
+                <CardTitle className="flex items-center gap-2 text-emerald-600">
                   <Leaf className="h-5 w-5" />
                   Impacto Ambiental
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-success/10 dark:bg-success/20 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg">
                   <div>
                     <p className="text-sm text-muted-foreground">Total CO₂ Reduzido</p>
-                    <p className="text-3xl font-bold text-success">{stats.co2Reduced.toFixed(1)}t</p>
+                    <p className="text-3xl font-bold text-emerald-600">{stats.co2Reduced.toFixed(1)}t</p>
                   </div>
-                  <Leaf className="h-12 w-12 text-success opacity-70" />
+                  <Leaf className="h-12 w-12 text-emerald-500" />
                 </div>
                 <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg">
                   <div>

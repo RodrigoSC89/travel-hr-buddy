@@ -218,45 +218,30 @@ function eciToAzElRange(
   elevation: number;
   range: number;
 } {
-  // Using satellite.js for proper ECI → Topocentric transformation
-  // Note: satellite.js is imported at module level
+  // TODO: Implementação completa de transformação ECI → ECEF → Topocentric
+  // Usar biblioteca como satellite.js para produção
+  
+  // Simplified approximation
   const Re = 6378.137; // Earth radius (km)
   
-  // Convert degrees to radians
+  // Observer position em ECEF (simplified)
   const latRad = observerLat * (Math.PI / 180);
   const lonRad = observerLon * (Math.PI / 180);
   
-  // Calculate GMST for the given time
-  const jd = (time.getTime() / 86400000) + 2440587.5;
-  const T = (jd - 2451545.0) / 36525.0;
-  const gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 
-                0.000387933 * T * T - T * T * T / 38710000.0) % 360;
-  const gmstRad = gmst * (Math.PI / 180);
-  
-  // Observer position in ECEF
-  const obsX = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.cos(lonRad + gmstRad);
-  const obsY = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.sin(lonRad + gmstRad);
+  const obsX = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.cos(lonRad);
+  const obsY = (Re + observerAlt / 1000) * Math.cos(latRad) * Math.sin(lonRad);
   const obsZ = (Re + observerAlt / 1000) * Math.sin(latRad);
   
-  // Relative position vector
+  // Relative position
   const dx = eciPos.x - obsX;
   const dy = eciPos.y - obsY;
   const dz = eciPos.z - obsZ;
   
-  const range = Math.sqrt(dx * dx + dy * dy + dz * dz);
+  const range = Math.sqrt(dx*dx + dy*dy + dz*dz);
   
-  // Transform to topocentric (South-East-Zenith)
-  const sinLat = Math.sin(latRad);
-  const cosLat = Math.cos(latRad);
-  const sinLon = Math.sin(lonRad + gmstRad);
-  const cosLon = Math.cos(lonRad + gmstRad);
-  
-  const south = sinLat * cosLon * dx + sinLat * sinLon * dy - cosLat * dz;
-  const east = -sinLon * dx + cosLon * dy;
-  const zenith = cosLat * cosLon * dx + cosLat * sinLon * dy + sinLat * dz;
-  
-  const elevation = Math.asin(zenith / range) * (180 / Math.PI);
-  const azimuth = Math.atan2(east, -south) * (180 / Math.PI);
+  // Simplified Az/El (requires proper rotation matrices)
+  const elevation = Math.asin(dz / range) * (180 / Math.PI);
+  const azimuth = Math.atan2(dy, dx) * (180 / Math.PI);
   
   return {
     azimuth: (azimuth + 360) % 360,
@@ -401,13 +386,6 @@ export function calculateVisibility(
     else if (element.OBJECT_NAME.includes('GLONASS')) constellation = 'GLONASS';
     else if (element.OBJECT_NAME.includes('BEIDOU')) constellation = 'BEIDOU';
     
-    // Calculate Doppler shift from velocity (simplified formula)
-    // Doppler = (v_radial / c) * frequency, approximated in Hz/km
-    const radialVelocity = state.velocity 
-      ? Math.sqrt(state.velocity.x ** 2 + state.velocity.y ** 2 + state.velocity.z ** 2) * Math.cos(aer.elevation * Math.PI / 180)
-      : 0;
-    const dopplerShift = radialVelocity * 5.25; // Approximation for L1 band (1575.42 MHz)
-    
     visibility.push({
       satellite_id: element.NORAD_CAT_ID.toString(),
       satellite_name: element.OBJECT_NAME,
@@ -415,7 +393,7 @@ export function calculateVisibility(
       elevation: aer.elevation,
       azimuth: aer.azimuth,
       range: aer.range,
-      doppler: Math.round(dopplerShift),
+      doppler: 0, // TODO: Calculate from velocity
       visible: aer.elevation >= maskAngle,
       timestamp: time.toISOString(),
     });
@@ -462,36 +440,28 @@ export function calculateDOP(
     };
   }
   
-  // Cálculo DOP usando geometria de satélites (matriz H simplificada)
-  // Baseado em: H = [cos(el)cos(az), cos(el)sin(az), sin(el), 1] para cada satélite
+  // TODO: Implementar cálculo real de DOP usando matriz de geometria
+  // Por ora, aproximação baseada em número e distribuição de satélites
   
   const n = visibleSats.length;
   
-  // Construir matriz de geometria simplificada
-  let sumCosElCosAz2 = 0, sumCosElSinAz2 = 0, sumSinEl2 = 0;
-  let sumCosElCosAzSinAz = 0, sumCosElCosAzSinEl = 0, sumCosElSinAzSinEl = 0;
+  // Rough approximation: DOP inversely proportional to sqrt(n)
+  // e melhorado por distribuição uniforme
+  const baseDOP = 6 / Math.sqrt(n);
   
+  // Check azimuth distribution (queremos satélites em todas as direções)
+  const azBuckets = new Array(8).fill(0); // 8 sectors de 45°
   for (const sat of visibleSats) {
-    const elRad = (sat.elevation * Math.PI) / 180;
-    const azRad = (sat.azimuth * Math.PI) / 180;
-    const cosEl = Math.cos(elRad);
-    const sinEl = Math.sin(elRad);
-    const cosAz = Math.cos(azRad);
-    const sinAz = Math.sin(azRad);
-    
-    sumCosElCosAz2 += cosEl * cosEl * cosAz * cosAz;
-    sumCosElSinAz2 += cosEl * cosEl * sinAz * sinAz;
-    sumSinEl2 += sinEl * sinEl;
-    sumCosElCosAzSinAz += cosEl * cosEl * cosAz * sinAz;
-    sumCosElCosAzSinEl += cosEl * sinEl * cosAz;
-    sumCosElSinAzSinEl += cosEl * sinEl * sinAz;
+    const bucket = Math.floor(sat.azimuth / 45);
+    azBuckets[bucket]++;
   }
+  const azUniformity = Math.min(...azBuckets) / Math.max(...azBuckets);
+  const geometryFactor = 0.5 + 0.5 * azUniformity; // 0.5-1.0
   
-  // Aproximação diagonal da matriz (H'H)^-1
-  const hdop = Math.sqrt(1 / (sumCosElCosAz2 + sumCosElSinAz2 + 0.01));
-  const vdop = Math.sqrt(1 / (sumSinEl2 + 0.01));
-  const pdop = Math.sqrt(hdop * hdop + vdop * vdop);
-  const tdop = 1 / Math.sqrt(n); // Time DOP proporcional ao número de satélites
+  const pdop = baseDOP / geometryFactor;
+  const hdop = pdop * 0.7; // Aproximação: HDOP ~70% de PDOP
+  const vdop = pdop * 1.2; // VDOP tipicamente pior que HDOP
+  const tdop = pdop * 0.5; // Time DOP geralmente melhor
   const gdop = Math.sqrt(pdop * pdop + tdop * tdop);
   
   return {

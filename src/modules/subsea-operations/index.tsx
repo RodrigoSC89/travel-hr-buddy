@@ -374,29 +374,11 @@ const SubseaOperations: React.FC = () => {
         <TabsContent value="map" className="mt-6">
           <Card className="bg-card/50 backdrop-blur border-border/50">
             <CardContent className="p-8">
-              <div className="aspect-video bg-gradient-to-b from-primary/10 to-primary/5 rounded-lg border border-primary/20 p-4">
-                <div className="grid grid-cols-3 gap-4 h-full">
-                  <div className="col-span-2 bg-muted/30 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <Map className="h-12 w-12 text-primary/50 mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground">Mapa Batimétrico</p>
-                      <p className="text-xs text-muted-foreground">Profundidade: 0-500m</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-xs text-muted-foreground">Área Mapeada</p>
-                      <p className="text-lg font-bold">12.4 km²</p>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-xs text-muted-foreground">Pontos de Dados</p>
-                      <p className="text-lg font-bold">847,231</p>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-xs text-muted-foreground">Precisão</p>
-                      <p className="text-lg font-bold text-success">98.7%</p>
-                    </div>
-                  </div>
+              <div className="aspect-video bg-gradient-to-b from-blue-900/20 to-blue-950/40 rounded-lg flex items-center justify-center border border-cyan-500/20">
+                <div className="text-center">
+                  <Map className="h-16 w-16 text-cyan-400/30 mx-auto mb-4" />
+                  <p className="text-muted-foreground">Visualização 3D do Fundo Oceânico</p>
+                  <p className="text-sm text-muted-foreground/70">Integração com batimetria em desenvolvimento</p>
                 </div>
               </div>
             </CardContent>

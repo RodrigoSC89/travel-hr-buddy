@@ -72,7 +72,6 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
   const [selectedBROA, setSelectedBROA] = useState<BROARecord | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showManualForm, setShowManualForm] = useState(false);
-  const [showSignatureDialog, setShowSignatureDialog] = useState(false);
   const [manualData, setManualData] = useState({
     vessel_name: '',
     occurrence_description: '',
@@ -470,7 +469,7 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
               <Download className="h-4 w-4 mr-2" />
               Exportar PDF
             </Button>
-            <Button onClick={() => setShowSignatureDialog(true)}>
+            <Button onClick={() => toast.info('Funcionalidade de assinatura em desenvolvimento')}>
               <Signature className="h-4 w-4 mr-2" />
               Assinar
             </Button>

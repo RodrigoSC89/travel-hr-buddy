@@ -641,19 +641,12 @@ export const IntelligentAlertSystem = () => {
 
         <TabsContent value="recommendations" className="space-y-6">
           <Card>
-            <CardContent className="pt-6 space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2"><Brain className="h-5 w-5 text-primary" />Recomendações da IA</h3>
-              <div className="space-y-3">
-                <div className="p-3 rounded-lg border bg-blue-500/5 border-blue-500/20">
-                  <div className="flex items-start gap-3"><div className="w-2 h-2 rounded-full bg-blue-500 mt-2" /><div><p className="font-medium">Otimizar Rotinas de Inspeção</p><p className="text-sm text-muted-foreground">Baseado nos padrões de alerta, sugerimos aumentar a frequência de inspeções no turno noturno.</p></div></div>
-                </div>
-                <div className="p-3 rounded-lg border bg-orange-500/5 border-orange-500/20">
-                  <div className="flex items-start gap-3"><div className="w-2 h-2 rounded-full bg-orange-500 mt-2" /><div><p className="font-medium">Revisar Thresholds de Temperatura</p><p className="text-sm text-muted-foreground">Os alertas de temperatura estão 15% acima da média. Considere ajustar os limites.</p></div></div>
-                </div>
-                <div className="p-3 rounded-lg border bg-green-500/5 border-green-500/20">
-                  <div className="flex items-start gap-3"><div className="w-2 h-2 rounded-full bg-green-500 mt-2" /><div><p className="font-medium">Performance Excelente</p><p className="text-sm text-muted-foreground">Taxa de resolução de 94% nos últimos 30 dias. Mantenha o padrão!</p></div></div>
-                </div>
-              </div>
+            <CardContent className="text-center py-12">
+              <Brain className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Recomendações Personalizadas</h3>
+              <p className="text-muted-foreground">
+                Sistema de recomendações baseado em IA em desenvolvimento
+              </p>
             </CardContent>
           </Card>
         </TabsContent>

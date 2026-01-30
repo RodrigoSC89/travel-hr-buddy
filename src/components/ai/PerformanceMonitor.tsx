@@ -39,7 +39,7 @@ export function PerformanceMonitor() {
   const [performanceData, setPerformanceData] = useState<PerformanceMetrics[]>([]);
   const [suggestionData, setSuggestionData] = useState<SuggestionMetrics[]>([]);
   const [watchdogAlerts, setWatchdogAlerts] = useState<WatchdogAlert[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const pageSize = 50;
 

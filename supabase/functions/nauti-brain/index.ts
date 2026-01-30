@@ -282,9 +282,7 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
 
         // Log successful decision
         const responseTime = Date.now() - startTime;
-        
-        // Log decision (non-blocking)
-        supabase.from('ai_decisions').insert({
+        await supabase.from('ai_decisions').insert({
           title: 'Nauti Brain Chat',
           description: `Chat response for action: ${action || 'general'}`,
           type: 'nauti_brain_chat',
@@ -295,8 +293,8 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
           justification_reasoning: `Processed ${Array.isArray(messages) ? messages.length : 0} messages with context`,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        }).then(() => {
-          edgeLogger.debug(TAG, "Decision logged");
+        }).catch((err: unknown) => {
+          edgeLogger.warn(TAG, "Decision logging skipped", { reason: err instanceof Error ? err.message : 'Unknown' });
         });
 
         edgeLogger.success(TAG, "Response successful", { durationMs: responseTime });

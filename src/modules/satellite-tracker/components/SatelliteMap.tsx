@@ -25,10 +25,9 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const marker = useRef<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Mapbox token should be stored in localStorage or fetched from edge function
-  const mapboxToken = localStorage.getItem("mapbox_token") || "";
+  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || "";
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;

@@ -1,4 +1,4 @@
-// main.tsx - PATCH APEX v1.0 - Lighthouse 100 Target
+// main.tsx - PATCH 851 - React singleton initialization
 // Import React singleton FIRST to ensure single instance
 import "@/lib/react-singleton";
 import * as React from "react";
@@ -6,21 +6,7 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
-import "@/styles/low-bandwidth.css";
-import "@/styles/extreme-performance.css"; // APEX: Extreme performance styles
 import { logger } from "@/lib/logger";
-import { ultraStartupOptimizer } from "@/lib/performance/ultra-startup-optimizer";
-import { initExtremePerformance } from "@/lib/performance/extreme-performance"; // APEX
-
-// Initialize BOTH performance optimizations IMMEDIATELY
-ultraStartupOptimizer.init();
-initExtremePerformance();
-
-// Lazy import performance init for non-blocking startup
-const initPerformanceAsync = async () => {
-  const { initPerformance } = await import("@/lib/performance/performance-init");
-  initPerformance();
-};
 
 // Initialize i18n
 import "@/i18n";
@@ -78,16 +64,101 @@ const initializeOptionalFeatures = async () => {
 };
 
 // ============================================
-// PATCH v52: Simplified boot - cache clearing now in index.html
-// This just handles SW registration after app loads
+// CRITICAL: Force SW cleanup on boot v16 - iOS PWA ULTIMATE FIX
+// Estratégia: Limpar caches e sincronizar versões
 // ============================================
+const forceUpdateIfNeeded = async () => {
+  const SW_VERSION_KEY = 'nautilus_sw_version';
+  const CURRENT_VERSION = 'v16-ios-pwa-ultimate'; // SYNC com public/sw.js
+  const RELOAD_KEY = 'nautilus_reload_count';
+  
+  try {
+    // Detectar loop de reload (> 2 reloads em 30 segundos)
+    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
+    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_time') || '0', 10);
+    const now = Date.now();
+    
+    if (now - reloadTime < 30000 && reloadCount > 2) {
+      logger.warn('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
+      
+      // Limpar TUDO - SW causando problemas
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+      
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      
+      // Limpar tokens de auth corrompidos
+      Object.keys(localStorage)
+        .filter(k => k.includes('supabase') || k.includes('sb-'))
+        .forEach(k => localStorage.removeItem(k));
+      
+      localStorage.removeItem(RELOAD_KEY);
+      localStorage.removeItem(RELOAD_KEY + '_time');
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      
+      logger.info('[Boot v16] Emergency cleanup complete');
+      return true;
+    }
+    
+    // Incrementar contador de reload
+    localStorage.setItem(RELOAD_KEY, String(reloadCount + 1));
+    localStorage.setItem(RELOAD_KEY + '_time', String(now));
+    
+    // Limpar contador após 30 segundos de estabilidade
+    setTimeout(() => {
+      localStorage.removeItem(RELOAD_KEY);
+      localStorage.removeItem(RELOAD_KEY + '_time');
+    }, 30000);
+    
+    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
+    
+    // Sempre limpar caches se versão diferente
+    if (storedVersion !== CURRENT_VERSION) {
+      logger.info('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
+      
+      // Limpar TODOS os caches
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+        logger.info('[Boot v16] Caches cleared', { count: keys.length });
+      }
+      
+      // Atualizar SW se existir
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          if (reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+          await reg.update();
+        }
+      }
+      
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+      localStorage.removeItem('nautilus_sw_disabled');
+    }
+    
+    return true;
+  } catch (error) {
+    logger.error('[Boot v16] Error during update check', error);
+    return true;
+  }
+};
 
 // Register minimal service worker (only for push notifications)
 const initServiceWorker = async () => {
   if (!('serviceWorker' in navigator)) return;
   
-  // Skip SW in development
+  // Em desenvolvimento, não registrar SW
   if (!import.meta.env.PROD) {
+    logger.info('[Boot v16] Dev mode - skipping SW registration');
     return;
   }
 
@@ -95,14 +166,16 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v53] SW registered', { scope: registration.scope });
+    logger.info('[Boot v16] Minimal SW registered', { scope: registration.scope });
   } catch (error) {
-    console.warn('[Boot v53] SW registration failed (non-critical)', error);
+    logger.warn('[Boot v16] SW registration failed (not critical)', error instanceof Error ? { message: error.message } : undefined);
   }
 };
 
-// PATCH v52: SW init happens on load event
-window.addEventListener("load", initServiceWorker);
+// Execute cleanup on load
+forceUpdateIfNeeded().then(() => {
+  window.addEventListener("load", initServiceWorker);
+});
 
 // Initialize optional features after render
 if (typeof requestIdleCallback !== "undefined") {
@@ -111,56 +184,14 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v63 ULTRA RELIABLE BOOT
-
-console.log('[Nauti v63] Bundle loaded');
-
-// Remove loader ASAP
-try {
-  document.getElementById("initial-loader")?.remove();
-} catch {}
-
-// Mark app as loaded immediately to prevent recovery UI
-try {
-  (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
-} catch {}
-
+// Render the app
 const container = document.getElementById("root");
 if (container) {
-  console.log('[Nauti v63] Mounting React...');
-  
-  try {
-    const root = createRoot(container);
-    root.render(
-      <React.StrictMode>
-        <HelmetProvider>
-          <App />
-        </HelmetProvider>
-      </React.StrictMode>
-    );
-    console.log('[Nauti v63] React mounted OK');
-    
-    // Mark TTI after render
-    requestAnimationFrame(() => {
-      try {
-        ultraStartupOptimizer.markTTI();
-      } catch {}
-    });
-  } catch (error) {
-    console.error('[Nauti v63] Mount error:', error);
-    container.innerHTML = `
-      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;padding:24px;">
-        <div style="text-align:center;max-width:320px;">
-          <p style="color:#f1f5f9;font-size:18px;font-weight:600;margin-bottom:16px;">Erro ao carregar</p>
-          <p style="color:#94a3b8;font-size:14px;margin-bottom:16px;">${error instanceof Error ? error.message : 'Erro'}</p>
-          <button onclick="localStorage.clear();location.reload()" 
-            style="background:#0ea5e9;color:white;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:14px;">
-            Recarregar
-          </button>
-        </div>
-      </div>
-    `;
-  }
-} else {
-  console.error('[Nauti v63] #root not found!');
+  createRoot(container).render(
+    <React.StrictMode>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    </React.StrictMode>
+  );
 }

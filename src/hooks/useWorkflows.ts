@@ -68,7 +68,7 @@ export const useWorkflows = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [automationRules, setAutomationRules] = useState<AutomationRule[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch workflows from database

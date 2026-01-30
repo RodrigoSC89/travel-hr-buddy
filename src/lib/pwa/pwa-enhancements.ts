@@ -290,27 +290,25 @@ export async function shareContent(data: ShareData): Promise<boolean> {
 
 /**
  * Check online status
- * PATCH v37: Sempre retorna true - navigator.onLine não é confiável no iOS PWA
  */
 export function isOnline(): boolean {
-  // PATCH v37: Sempre retornar true para evitar falsos positivos no iOS PWA
-  return true;
+  return navigator.onLine;
 }
 
 /**
  * Listen for online/offline events
- * PATCH v37: Apenas escuta 'online' - ignora 'offline' para evitar falsos positivos
  */
 export function onConnectionChange(callback: (online: boolean) => void): () => void {
   const handleOnline = () => callback(true);
-  // PATCH v37: REMOVIDO handleOffline - causaria falsos positivos no iOS PWA
+  const handleOffline = () => callback(false);
   
   window.addEventListener('online', handleOnline);
-  // PATCH v37: REMOVIDO listener offline
+  window.addEventListener('offline', handleOffline);
   
   // Return cleanup function
   return () => {
     window.removeEventListener('online', handleOnline);
+    window.removeEventListener('offline', handleOffline);
   };
 }
 

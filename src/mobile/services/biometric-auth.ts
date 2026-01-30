@@ -255,7 +255,7 @@ export class BiometricAuthService {
       return btoa(String.fromCharCode(...combined));
     } catch (error) {
       // Fallback to base64 if Web Crypto not available
-      structuredLogger.warn("[BiometricAuth] Crypto API unavailable, using fallback encoding");
+      console.warn('[BiometricAuth] Crypto API unavailable, using fallback encoding');
       const json = JSON.stringify(token);
       return btoa(json);
     }
@@ -288,7 +288,7 @@ export class BiometricAuthService {
       return JSON.parse(json);
     } catch (error) {
       // Fallback to base64 if decryption fails (legacy tokens)
-      structuredLogger.warn("[BiometricAuth] Decryption failed, trying fallback");
+      console.warn('[BiometricAuth] Decryption failed, trying fallback');
       const json = atob(encrypted);
       return JSON.parse(json);
     }

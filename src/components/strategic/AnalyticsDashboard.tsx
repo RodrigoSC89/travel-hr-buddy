@@ -305,16 +305,12 @@ export const AnalyticsDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {[{ label: 'Jan', value: 72 }, { label: 'Fev', value: 78 }, { label: 'Mar', value: 85 }, { label: 'Abr', value: 82 }, { label: 'Mai', value: 89 }, { label: 'Jun', value: 94 }].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="w-8 text-sm text-muted-foreground">{item.label}</span>
-                    <div className="flex-1 h-6 bg-muted/30 rounded-full overflow-hidden">
-                      <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${item.value}%` }} />
-                    </div>
-                    <span className="w-10 text-sm font-medium">{item.value}%</span>
-                  </div>
-                ))}
+              <div className="h-64 flex items-center justify-center bg-muted/20 rounded-lg">
+                <div className="text-center">
+                  <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-muted-foreground">Gráfico de séries temporais em desenvolvimento</p>
+                  <p className="text-sm text-muted-foreground">Integração com Recharts/Chart.js planejada</p>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -1,15 +1,15 @@
+// @ts-nocheck
 /**
- * PATCH 874: AI Learning Dashboard
- * Full type-safety using ai_behavior_snapshots table as fallback
+ * PATCH 509: AI Learning Dashboard
+ * Visualize AI self-reflection and continuous learning metrics
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -18,128 +18,73 @@ import {
   AlertCircle, 
   CheckCircle,
   RefreshCw,
-  Download,
-  Activity
+  Download
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { logger } from "@/lib/logger";
-import type { Database } from "@/integrations/supabase/types";
-
-type BehaviorSnapshotRow = Database["public"]["Tables"]["ai_behavior_snapshots"]["Row"];
 
 interface LearningInsight {
-  module_name: string;
+  action_type: string;
+  avg_composite_score: number;
   avg_accuracy: number;
-  avg_precision: number;
-  avg_recall: number;
-  avg_f1: number;
-  total_snapshots: number;
-  trend: "improving" | "stable" | "degrading";
+  avg_utility: number;
+  avg_user_rating: number;
+  total_actions: number;
+  improvement_trend: string;
+}
+
+interface ImprovementSuggestion {
+  action_type: string;
+  suggestion: string;
+  priority: number;
+  based_on_samples: number;
 }
 
 interface LearningProgress {
   date: string;
   avg_score: number;
-  count: number;
-}
-
-// Map DB row to insight
-function aggregateInsights(rows: BehaviorSnapshotRow[]): LearningInsight[] {
-  const byModule = new Map<string, BehaviorSnapshotRow[]>();
-  
-  rows.forEach(row => {
-    const module = row.module_name;
-    if (!byModule.has(module)) byModule.set(module, []);
-    byModule.get(module)!.push(row);
-  });
-
-  return Array.from(byModule.entries()).map(([module_name, snapshots]) => {
-    const avg = (key: keyof BehaviorSnapshotRow) => {
-      const values = snapshots.map(s => Number(s[key]) || 0);
-      return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-    };
-    
-    // Determine trend based on recent vs older snapshots
-    const sorted = [...snapshots].sort((a, b) => 
-      new Date(b.snapshot_date).getTime() - new Date(a.snapshot_date).getTime()
-    );
-    
-    let trend: "improving" | "stable" | "degrading" = "stable";
-    if (sorted.length >= 2) {
-      const recent = Number(sorted[0].accuracy_score) || 0;
-      const older = Number(sorted[sorted.length - 1].accuracy_score) || 0;
-      if (recent > older * 1.05) trend = "improving";
-      else if (recent < older * 0.95) trend = "degrading";
-    }
-
-    return {
-      module_name,
-      avg_accuracy: avg("accuracy_score"),
-      avg_precision: avg("precision_score"),
-      avg_recall: avg("recall_score"),
-      avg_f1: avg("f1_score"),
-      total_snapshots: snapshots.length,
-      trend,
-    };
-  });
-}
-
-// Aggregate progress by date
-function aggregateProgress(rows: BehaviorSnapshotRow[]): LearningProgress[] {
-  const byDate = new Map<string, number[]>();
-  
-  rows.forEach(row => {
-    const date = row.snapshot_date.split("T")[0];
-    if (!byDate.has(date)) byDate.set(date, []);
-    byDate.get(date)!.push(Number(row.accuracy_score) || 0);
-  });
-
-  return Array.from(byDate.entries())
-    .map(([date, scores]) => ({
-      date,
-      avg_score: scores.reduce((a, b) => a + b, 0) / scores.length,
-      count: scores.length,
-    }))
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-30); // Last 30 days
+  actions_count: number;
 }
 
 export default function AILearningDashboard() {
   const [insights, setInsights] = useState<LearningInsight[]>([]);
+  const [suggestions, setSuggestions] = useState<ImprovementSuggestion[]>([]);
   const [progress, setProgress] = useState<LearningProgress[]>([]);
   const [loading, setLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState("30");
+  const [timeRange, setTimeRange] = useState(30);
   const { toast } = useToast();
 
-  const loadData = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, [timeRange]);
+
+  const loadData = async () => {
     try {
       setLoading(true);
-      
-      const daysBack = parseInt(timeRange);
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - daysBack);
 
-      // Load from ai_behavior_snapshots table
-      const { data, error } = await supabase
-        .from("ai_behavior_snapshots")
-        .select("*")
-        .gte("snapshot_date", startDate.toISOString())
-        .order("snapshot_date", { ascending: false })
-        .limit(500);
+      // Load learning insights
+      const { data: insightsData, error: insightsError } = await supabase
+        .rpc("get_ai_learning_insights", { p_days: timeRange });
 
-      if (error) {
-        logger.error("Error loading AI snapshots:", error);
-        throw error;
-      }
+      if (insightsError) throw insightsError;
+      setInsights(insightsData || []);
 
-      const rows = data || [];
-      setInsights(aggregateInsights(rows));
-      setProgress(aggregateProgress(rows));
-      
+      // Load improvement suggestions
+      const { data: suggestionsData, error: suggestionsError } = await supabase
+        .rpc("get_ai_improvement_suggestions", { p_limit: 10 });
+
+      if (suggestionsError) throw suggestionsError;
+      setSuggestions(suggestionsData || []);
+
+      // Load learning progress
+      const { data: progressData, error: progressError } = await supabase
+        .rpc("get_ai_learning_progress", { p_days: timeRange });
+
+      if (progressError) throw progressError;
+      setProgress(progressData || []);
     } catch (error) {
-      logger.error("Error loading AI learning data:", error);
+      console.error("Error loading AI learning data:", error);
       toast({
         title: "Error",
         description: "Failed to load learning data",
@@ -148,230 +93,298 @@ export default function AILearningDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [timeRange, toast]);
+  };
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  const getTrendIcon = (trend: LearningInsight["trend"]) => {
+  const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "improving":
-        return <TrendingUp className="h-4 w-4 text-success" />;
-      case "degrading":
-        return <TrendingDown className="h-4 w-4 text-destructive" />;
-      default:
-        return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "excellent":
+    case "good":
+      return <TrendingUp className="w-4 h-4 text-green-600" />;
+    case "needs_improvement":
+      return <AlertCircle className="w-4 h-4 text-yellow-600" />;
+    case "poor":
+      return <TrendingDown className="w-4 h-4 text-red-600" />;
+    default:
+      return <Target className="w-4 h-4" />;
     }
   };
 
-  const getTrendBadge = (trend: LearningInsight["trend"]): "default" | "secondary" | "destructive" | "outline" => {
-    switch (trend) {
-      case "improving": return "default";
-      case "degrading": return "destructive";
-      default: return "secondary";
+  const getTrendBadge = (trend: string) => {
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
+      excellent: "default",
+      good: "default",
+      needs_improvement: "secondary",
+      poor: "destructive",
+    };
+    return <Badge variant={variants[trend] || "secondary"}>{trend.replace("_", " ")}</Badge>;
+  };
+
+  const getPriorityColor = (priority: number) => {
+    switch (priority) {
+    case 1:
+      return "text-red-600";
+    case 2:
+      return "text-yellow-600";
+    case 3:
+      return "text-blue-600";
+    default:
+      return "text-gray-600";
     }
   };
 
-  // Calculate overall stats
-  const overallAccuracy = insights.length > 0 
-    ? insights.reduce((sum, i) => sum + i.avg_accuracy, 0) / insights.length 
-    : 0;
-  const improvingCount = insights.filter(i => i.trend === "improving").length;
-  const totalSnapshots = insights.reduce((sum, i) => sum + i.total_snapshots, 0);
+  const exportLearningData = () => {
+    const data = {
+      insights,
+      suggestions,
+      progress,
+      exported_at: new Date().toISOString(),
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ai-learning-report-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Brain className="h-8 w-8 animate-pulse text-primary" />
-      </div>
-    );
-  }
+    toast({
+      title: "Success",
+      description: "Learning data exported successfully",
+    });
+  };
+
+  const calculateOverallScore = () => {
+    if (insights.length === 0) return 0;
+    const total = insights.reduce((sum, insight) => sum + insight.avg_composite_score, 0);
+    return (total / insights.length) * 100;
+  };
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto py-8 space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Brain className="h-6 w-6" />
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Brain className="w-8 h-8" />
             AI Learning Dashboard
           </h1>
-          <p className="text-muted-foreground">Monitor AI behavior and learning metrics</p>
+          <p className="text-muted-foreground">Self-reflection and continuous improvement metrics</p>
         </div>
         <div className="flex gap-2">
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7">Last 7 days</SelectItem>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={loadData} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <Button onClick={loadData} variant="outline" disabled={loading}>
+            <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
+          </Button>
+          <Button onClick={exportLearningData} variant="outline">
+            <Download className="w-4 h-4 mr-2" />
+            Export
           </Button>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-2xl font-bold">{(overallAccuracy * 100).toFixed(1)}%</p>
-                <p className="text-xs text-muted-foreground">Overall Accuracy</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-success" />
-              <div>
-                <p className="text-2xl font-bold">{improvingCount}</p>
-                <p className="text-xs text-muted-foreground">Improving Modules</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-2xl font-bold">{insights.length}</p>
-                <p className="text-xs text-muted-foreground">AI Modules</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="text-2xl font-bold">{totalSnapshots}</p>
-                <p className="text-xs text-muted-foreground">Total Snapshots</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Time Range Selector */}
+      <div className="flex gap-2">
+        {[7, 30, 90].map((days) => (
+          <Button
+            key={days}
+            variant={timeRange === days ? "default" : "outline"}
+            onClick={() => setTimeRange(days)}
+            size="sm"
+          >
+            Last {days} days
+          </Button>
+        ))}
       </div>
 
-      <Tabs defaultValue="insights">
+      {/* Overall Score Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Overall AI Performance</CardTitle>
+          <CardDescription>Composite score across all action types</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">Overall Score</span>
+              <span className="text-2xl font-bold">{calculateOverallScore().toFixed(1)}%</span>
+            </div>
+            <Progress value={calculateOverallScore()} className="h-2" />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Tabs defaultValue="insights" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="insights">Module Insights</TabsTrigger>
-          <TabsTrigger value="progress">Learning Progress</TabsTrigger>
+          <TabsTrigger value="insights">Learning Insights</TabsTrigger>
+          <TabsTrigger value="suggestions">Improvements</TabsTrigger>
+          <TabsTrigger value="progress">Progress Over Time</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="insights" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>AI Module Performance</CardTitle>
-              <CardDescription>Performance metrics by AI module</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {insights.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  No AI behavior data found for the selected period
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {insights.map((insight) => (
-                    <div key={insight.module_name} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <Brain className="h-5 w-5 text-primary" />
-                          <span className="font-medium">{insight.module_name}</span>
-                          <Badge variant={getTrendBadge(insight.trend)}>
-                            {getTrendIcon(insight.trend)}
-                            <span className="ml-1 capitalize">{insight.trend}</span>
-                          </Badge>
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          {insight.total_snapshots} snapshots
+        <TabsContent value="insights" className="space-y-4">
+          {loading ? (
+            <Card>
+              <CardContent className="py-8 text-center">
+                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2" />
+                <p>Loading insights...</p>
+              </CardContent>
+            </Card>
+          ) : insights.length === 0 ? (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                No learning data available yet. The AI will start collecting insights as it processes tasks.
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {insights.map((insight) => (
+                <Card key={insight.action_type}>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-lg capitalize">
+                        {insight.action_type.replace("_", " ")}
+                      </CardTitle>
+                      {getTrendBadge(insight.improvement_trend)}
+                    </div>
+                    <CardDescription>{insight.total_actions} actions analyzed</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Composite Score</span>
+                        <span className="font-semibold">
+                          {(insight.avg_composite_score * 100).toFixed(1)}%
                         </span>
                       </div>
-                      
-                      <div className="grid grid-cols-4 gap-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Accuracy</p>
-                          <Progress value={insight.avg_accuracy * 100} className="h-2 mt-1" />
-                          <p className="text-sm font-medium mt-1">{(insight.avg_accuracy * 100).toFixed(1)}%</p>
+                      <Progress value={insight.avg_composite_score * 100} />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <div className="text-muted-foreground">Accuracy</div>
+                        <div className="font-semibold">
+                          {(insight.avg_accuracy * 100).toFixed(0)}%
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Precision</p>
-                          <Progress value={insight.avg_precision * 100} className="h-2 mt-1" />
-                          <p className="text-sm font-medium mt-1">{(insight.avg_precision * 100).toFixed(1)}%</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Recall</p>
-                          <Progress value={insight.avg_recall * 100} className="h-2 mt-1" />
-                          <p className="text-sm font-medium mt-1">{(insight.avg_recall * 100).toFixed(1)}%</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">F1 Score</p>
-                          <Progress value={insight.avg_f1 * 100} className="h-2 mt-1" />
-                          <p className="text-sm font-medium mt-1">{(insight.avg_f1 * 100).toFixed(1)}%</p>
+                      </div>
+                      <div>
+                        <div className="text-muted-foreground">Utility</div>
+                        <div className="font-semibold">
+                          {(insight.avg_utility * 100).toFixed(0)}%
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+
+                    {insight.avg_user_rating > 0 && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">User Rating:</span>
+                        <span className="font-semibold">
+                          {insight.avg_user_rating.toFixed(1)} / 5.0
+                        </span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
-        <TabsContent value="progress" className="mt-4">
+        <TabsContent value="suggestions" className="space-y-4">
+          {loading ? (
+            <Card>
+              <CardContent className="py-8 text-center">
+                <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2" />
+                <p>Loading suggestions...</p>
+              </CardContent>
+            </Card>
+          ) : suggestions.length === 0 ? (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                No improvement suggestions available. Keep using the AI to generate insights.
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {suggestions.map((suggestion, idx) => (
+                <Card key={idx}>
+                  <CardContent className="py-4">
+                    <div className="flex items-start gap-4">
+                      <div className={`font-bold text-lg ${getPriorityColor(suggestion.priority)}`}>
+                        {suggestion.priority === 1 ? "!" : suggestion.priority === 2 ? "⚠" : "ℹ"}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold capitalize">
+                          {suggestion.action_type.replace("_", " ")}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {suggestion.suggestion}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Based on {suggestion.based_on_samples} samples
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="progress" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Learning Progress Over Time</CardTitle>
-              <CardDescription>AI accuracy trends</CardDescription>
+              <CardDescription>Track AI performance improvement</CardDescription>
             </CardHeader>
             <CardContent>
-              {progress.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  No progress data available
-                </p>
-              ) : (
-                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={progress}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis 
-                        dataKey="date" 
-                        tick={{ fontSize: 12 }}
-                        tickFormatter={(value) => value.split("-").slice(1).join("/")}
-                      />
-                      <YAxis 
-                        tick={{ fontSize: 12 }}
-                        domain={[0, 1]}
-                        tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
-                      />
-                      <Tooltip 
-                        formatter={(value: number) => [`${(value * 100).toFixed(1)}%`, "Accuracy"]}
-                        labelFormatter={(label) => `Date: ${label}`}
-                      />
-                      <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="avg_score" 
-                        stroke="hsl(var(--primary))" 
-                        strokeWidth={2}
-                        dot={false}
-                        name="Avg Accuracy"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+              {loading ? (
+                <div className="text-center py-8">
+                  <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-2" />
+                  <p>Loading progress data...</p>
                 </div>
+              ) : progress.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No progress data available yet.
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={progress.slice().reverse()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis domain={[0, 1]} />
+                    <Tooltip />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="avg_score" 
+                      stroke="#8884d8" 
+                      name="Average Score"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Daily Actions Count</CardTitle>
+              <CardDescription>Number of AI actions per day</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {progress.length > 0 && (
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={progress.slice().reverse()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="actions_count" fill="#82ca9d" name="Actions" />
+                  </BarChart>
+                </ResponsiveContainer>
               )}
             </CardContent>
           </Card>

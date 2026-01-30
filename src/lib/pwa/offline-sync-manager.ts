@@ -102,8 +102,10 @@ class OfflineSyncManager {
     await this.db!.put('pendingMutations', entry);
     this.notifyListeners({ pendingCount: await this.getPendingCount() });
 
-    // PATCH v35: Sempre tenta sync - navigator.onLine não é confiável
-    this.syncPendingMutations();
+    // Try to sync immediately if online
+    if (navigator.onLine) {
+      this.syncPendingMutations();
+    }
 
     return id;
   }

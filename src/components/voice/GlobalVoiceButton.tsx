@@ -12,7 +12,6 @@ import { Mic, MicOff, Volume2, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import type { SpeechRecognition as SpeechRecognitionType, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from "@/types/speech-recognition";
 
 interface VoiceCommandResult {
   command: string;
@@ -45,20 +44,19 @@ export function GlobalVoiceButton() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showPanel, setShowPanel] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognitionType | null>(null);
+  const [recognition, setRecognition] = useState<any>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
-    if (typeof window !== "undefined" && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
-      const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognitionClass) return;
+    if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
+      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognitionInstance = new SpeechRecognitionClass();
       
       recognitionInstance.continuous = false;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "pt-BR";
 
-      recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
+      recognitionInstance.onresult = (event: any) => {
         const current = event.resultIndex;
         const transcriptText = event.results[current][0].transcript;
         setTranscript(transcriptText);
@@ -68,7 +66,8 @@ export function GlobalVoiceButton() {
         }
       };
 
-      recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
+      recognitionInstance.onerror = (event: any) => {
+        console.error("Speech recognition error:", event.error);
         setIsListening(false);
         if (event.error === "not-allowed") {
           toast.error("Permissão de microfone negada");
@@ -141,19 +140,15 @@ export function GlobalVoiceButton() {
     setIsSpeaking(true);
 
     try {
-      // Hardcoded for production stability
-      const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
-      const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
-      
       // Use ElevenLabs via edge function
       const response = await fetch(
-        `${SUPABASE_URL}/functions/v1/elevenlabs-voice`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-voice`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             operation: "tts",
@@ -179,8 +174,8 @@ export function GlobalVoiceButton() {
           return;
         }
       }
-    } catch {
-      // Fallback silently to Web Speech API
+    } catch (error) {
+      console.log("ElevenLabs TTS failed, falling back to Web Speech API:", error);
     }
 
     // Fallback to Web Speech API

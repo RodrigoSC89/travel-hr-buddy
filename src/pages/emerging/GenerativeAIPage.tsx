@@ -122,22 +122,19 @@ Este documento foi gerado automaticamente pela IA Generativa do Nautilus One com
 
 ## Conteúdo Principal
 
-O documento solicitado foi processado pela nossa engine de IA Generativa, utilizando os modelos mais avançados disponíveis para geração de conteúdo marítimo especializado.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-### Seção 1: Análise
-- Contexto operacional identificado
-- Parâmetros de conformidade verificados
-- Requisitos regulatórios considerados
+### Seção 1
+- Ponto importante 1
+- Ponto importante 2
+- Ponto importante 3
 
-### Seção 2: Recomendações
-Baseado na análise do prompt fornecido, foram identificados os seguintes pontos de atenção para documentação marítima.
-
-### Seção 3: Detalhes Técnicos
-Especificações técnicas e referências normativas aplicáveis ao contexto da solicitação.
+### Seção 2
+Detalhamento adicional com informações relevantes para o contexto marítimo.
 
 ## Conclusão
 
-Este documento foi gerado automaticamente e deve ser revisado antes do uso oficial. Para versão completa com IA real, configure a chave da API OpenAI.
+Este documento foi gerado automaticamente e deve ser revisado antes do uso oficial.
 
 ---
 *Gerado por Nautilus One - IA Generativa*

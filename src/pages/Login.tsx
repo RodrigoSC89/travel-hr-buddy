@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,9 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { Anchor, Loader2 } from "lucide-react";
+import { Anchor, Wifi, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +19,26 @@ const Login = () => {
   
   const { signIn } = useAuth();
 
+  // Limpar sessão corrompida
+  const handleClearSession = useCallback(() => {
+    try {
+      localStorage.removeItem('sb-auth-token');
+      localStorage.removeItem('supabase.auth.token');
+      
+      // Limpar todos os itens do Supabase
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+      
+      setErrorMessage("");
+      setPassword("");
+      toast.success("Sessão limpa com sucesso!");
+    } catch (error) {
+      console.error("Erro ao limpar sessão:", error);
+    }
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,7 +50,7 @@ const Login = () => {
     // PATCH iOS PWA v16: Sem verificação de conexão - não é confiável no iOS
 
     try {
-      logger.info("Tentando login...");
+      console.log("🔐 Tentando login...");
       
       // Login simples - sem retry complexo que pode causar race conditions
       const { error } = await signIn(email.toLowerCase().trim(), password);
@@ -138,7 +157,7 @@ const Login = () => {
                 </>
               ) : (
                 <>
-                  <Anchor className="h-4 w-4 mr-2" />
+                  <Wifi className="h-4 w-4 mr-2" />
                   Entrar
                 </>
               )}

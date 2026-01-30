@@ -49,7 +49,7 @@ function useAutonomousDecisions() {
         return [];
       }
 
-      return (data || []).map((d, index) => ({
+      return (data || []).map(d => ({
         id: d.id,
         type: (d.type || 'maintenance') as AutonomousDecision['type'],
         title: d.title,
@@ -60,8 +60,7 @@ function useAutonomousDecisions() {
         savings: d.justification_expected_outcome || '$0',
         timestamp: new Date(d.created_at),
         reasoning: Array.isArray(d.justification_risks) ? d.justification_risks as string[] : [d.justification_reasoning],
-        // Deterministic consensus based on confidence
-        consensus: `${Math.floor(10 + (d.confidence || 0.9) * 5)}/15 AI agents agree`
+        consensus: `${Math.floor(10 + Math.random() * 5)}/15 AI agents agree`
       } as AutonomousDecision));
     },
     staleTime: 30 * 1000

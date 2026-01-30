@@ -38,7 +38,7 @@ export const StatisticsDashboard = () => {
     best_deal: null,
     categories: {},
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {

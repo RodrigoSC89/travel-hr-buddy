@@ -1,86 +1,47 @@
+// @ts-nocheck
 /**
- * Performance Dashboard - PATCH 879
- * Type-safe with proper Supabase schema alignment
+ * Performance Dashboard
+ * NOTE: @ts-nocheck required - component uses UI fields (page_url, rating, is_resolved)
+ * that don't match current performance_metrics/alerts DB schema.
+ * Needs schema alignment before removing @ts-nocheck.
+ * PATCH 850.5 - Migrated to LazyChart for bundle optimization
+ * PATCH 856 - Documented schema requirements
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Activity, AlertTriangle, TrendingUp, Monitor, Bell } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Activity, AlertTriangle, TrendingUp, TrendingDown, Monitor, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LazyLineChart } from "@/components/charts/LazyChart";
 import { logger } from "@/lib/logger";
-import type { Database } from "@/integrations/supabase/types";
 
-type PerformanceMetricRow = Database["public"]["Tables"]["performance_metrics"]["Row"];
-type PerformanceAlertRow = Database["public"]["Tables"]["performance_alerts"]["Row"];
-
-// UI Interface aligned with DB schema
 interface PerformanceMetric {
   id: string;
+  system_name: string;
   metric_name: string;
   metric_value: number;
   metric_unit: string;
-  status: string;
-  category: string;
-  component: string | null;
-  page_url: string | null;
+  status: "normal" | "warning" | "critical";
   metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
 interface PerformanceAlert {
   id: string;
-  system_name: string | null;
+  system_name: string;
   alert_type: string;
-  severity: string | null;
-  message: string | null;
-  is_resolved: boolean | null;
-  created_at: string | null;
+  severity: "info" | "warning" | "critical";
+  message: string;
+  is_resolved: boolean;
+  created_at: string;
 }
-
-// Type-safe mapper functions
-function mapMetricRow(row: PerformanceMetricRow): PerformanceMetric {
-  return {
-    id: row.id,
-    metric_name: row.metric_name,
-    metric_value: Number(row.metric_value),
-    metric_unit: row.metric_unit,
-    status: row.status,
-    category: row.category,
-    component: row.component,
-    page_url: row.page_url,
-    metadata: row.metadata as Record<string, unknown> | null,
-    created_at: row.created_at,
-  };
-}
-
-function mapAlertRow(row: PerformanceAlertRow): PerformanceAlert {
-  return {
-    id: row.id,
-    system_name: row.system_name,
-    alert_type: row.alert_type,
-    severity: row.severity,
-    message: row.message,
-    is_resolved: row.is_resolved,
-    created_at: row.created_at,
-  };
-}
-
-// Severity color helper using design tokens
-const getSeverityBadge = (severity: string | null): "default" | "secondary" | "destructive" | "outline" => {
-  switch (severity) {
-  case "critical": return "destructive";
-  case "warning": return "secondary";
-  default: return "outline";
-  }
-};
 
 export default function PerformanceDashboard() {
   const { toast } = useToast();
@@ -98,21 +59,20 @@ export default function PerformanceDashboard() {
     const metricsChannel = supabase
       .channel("performance-metrics-changes")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_metrics" }, (payload) => {
-        const newMetric = mapMetricRow(payload.new as PerformanceMetricRow);
-        setMetrics(prev => [newMetric, ...prev].slice(0, 100));
+        setMetrics(prev => [payload.new as PerformanceMetric, ...prev].slice(0, 100));
       })
       .subscribe();
 
     const alertsChannel = supabase
       .channel("performance-alerts-changes")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_alerts" }, (payload) => {
-        const newAlert = mapAlertRow(payload.new as PerformanceAlertRow);
+        const newAlert = payload.new as PerformanceAlert;
         setAlerts(prev => [newAlert, ...prev]);
         
         if (newAlert.severity === "critical") {
           toast({
             title: "⚠️ Performance Alert",
-            description: newAlert.message ?? "Critical alert detected",
+            description: newAlert.message,
             variant: "destructive"
           });
         }
@@ -123,7 +83,7 @@ export default function PerformanceDashboard() {
       supabase.removeChannel(metricsChannel);
       supabase.removeChannel(alertsChannel);
     };
-  }, [timeRange, toast]);
+  }, [timeRange]);
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -135,33 +95,29 @@ export default function PerformanceDashboard() {
         supabase
           .from("performance_metrics")
           .select("*")
+          .eq("system_name", "web_vitals")
           .gte("created_at", timeFilter)
           .order("created_at", { ascending: false })
           .limit(1000),
         supabase
           .from("performance_alerts")
           .select("*")
+          .eq("system_name", "web_vitals")
           .gte("created_at", timeFilter)
           .order("created_at", { ascending: false })
           .limit(100)
       ]);
 
-      if (metricsResult.error) {
-        logger.error("Error loading metrics:", metricsResult.error);
-      } else {
-        setMetrics((metricsResult.data || []).map(mapMetricRow));
-      }
+      if (metricsResult.error) throw metricsResult.error;
+      if (alertsResult.error) throw alertsResult.error;
 
-      if (alertsResult.error) {
-        logger.error("Error loading alerts:", alertsResult.error);
-      } else {
-        setAlerts((alertsResult.data || []).map(mapAlertRow));
-      }
+      setMetrics((metricsResult.data ?? []) as PerformanceMetric[]);
+      setAlerts((alertsResult.data ?? []) as PerformanceAlert[]);
     } catch (error) {
-      logger.error("Error loading dashboard data:", error);
+      logger.error("Error loading performance dashboard data", { error, timeRange });
       toast({
-        title: "Error",
-        description: "Failed to load performance data",
+        title: "Erro",
+        description: "Falha ao carregar dados de performance",
         variant: "destructive"
       });
     } finally {
@@ -169,67 +125,97 @@ export default function PerformanceDashboard() {
     }
   };
 
-  const resolveAlert = async (alertId: string) => {
-    try {
-      const { error } = await supabase
-        .from("performance_alerts")
-        .update({ is_resolved: true, resolved_at: new Date().toISOString() })
-        .eq("id", alertId);
+  const getFilteredMetrics = () => {
+    let filtered = metrics;
+    
+    if (selectedPage !== "all") {
+      filtered = filtered.filter(m => m.metadata?.page_url === selectedPage);
+    }
+    
+    if (selectedMetric !== "all") {
+      filtered = filtered.filter(m => m.metric_name === selectedMetric);
+    }
+    
+    return filtered;
+  };
 
-      if (error) throw error;
-      
-      setAlerts(prev => prev.map(a => a.id === alertId ? { ...a, is_resolved: true } : a));
-      toast({ title: "Alert resolved" });
-    } catch (error) {
-      logger.error("Error resolving alert:", error);
-      toast({ title: "Error", description: "Failed to resolve alert", variant: "destructive" });
+  const getUniquePages = () => {
+    const pages = new Set(metrics.map(m => m.metadata?.page_url).filter(Boolean));
+    return Array.from(pages);
+  };
+
+  const getMetricStats = (metricName: string) => {
+    const metricData = metrics.filter(m => m.metric_name === metricName);
+    if (metricData.length === 0) return null;
+
+    const values = metricData.map(m => m.metric_value);
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const latest = metricData[0];
+
+    return { avg, min, max, latest, count: values.length };
+  };
+
+  const getChartData = (metricName: string) => {
+    const metricData = metrics
+      .filter(m => m.metric_name === metricName)
+      .slice(0, 50)
+      .reverse();
+
+    return {
+      labels: metricData.map(m => new Date(m.created_at).toLocaleTimeString()),
+      datasets: [
+        {
+          label: metricName,
+          data: metricData.map(m => m.metric_value),
+          borderColor: "rgb(75, 192, 192)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          tension: 0.1
+        }
+      ]
+    };
+  };
+
+  const webVitalsMetrics = ["CLS", "FCP", "LCP", "TTFB", "INP"];
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+    case "critical":
+      return <Badge variant="destructive">Critical</Badge>;
+    case "warning":
+      return <Badge variant="secondary">Warning</Badge>;
+    default:
+      return <Badge variant="default">Normal</Badge>;
     }
   };
 
-  // Filter and aggregate metrics
-  const filteredMetrics = metrics.filter(m => {
-    if (selectedPage !== "all" && m.page_url !== selectedPage) return false;
-    if (selectedMetric !== "all" && m.metric_name !== selectedMetric) return false;
-    return true;
-  });
-
-  const uniquePages = [...new Set(metrics.map(m => m.page_url).filter(Boolean))] as string[];
-  const uniqueMetricNames = [...new Set(metrics.map(m => m.metric_name))];
-  const unresolvedAlerts = alerts.filter(a => !a.is_resolved);
-
-  // Aggregate by metric name for chart (Chart.js format)
-  const chartData = {
-    labels: uniqueMetricNames.slice(0, 5),
-    datasets: [{
-      label: "Average Value",
-      data: uniqueMetricNames.slice(0, 5).map(name => {
-        const metricValues = filteredMetrics.filter(m => m.metric_name === name);
-        const avg = metricValues.length > 0 
-          ? metricValues.reduce((sum, m) => sum + m.metric_value, 0) / metricValues.length 
-          : 0;
-        return Math.round(avg * 100) / 100;
-      }),
-      borderColor: "hsl(var(--primary))",
-      backgroundColor: "hsl(var(--primary) / 0.1)",
-      tension: 0.4,
-    }],
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) {
+    case "critical":
+      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-blue-500" />;
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Activity className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const unresolvedAlerts = alerts.filter(a => !a.is_resolved);
+  const criticalAlerts = unresolvedAlerts.filter(a => a.severity === "critical");
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Performance Dashboard</h1>
-          <p className="text-muted-foreground">Monitor system performance and alerts</p>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Monitor className="h-8 w-8" />
+            Performance Monitoring Dashboard
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Web Vitals e Métricas de Performance em Tempo Real
+          </p>
         </div>
         <div className="flex gap-2">
           <Select value={timeRange} onValueChange={setTimeRange}>
@@ -237,204 +223,193 @@ export default function PerformanceDashboard() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1h">Last Hour</SelectItem>
-              <SelectItem value="24h">Last 24h</SelectItem>
-              <SelectItem value="7d">Last 7 Days</SelectItem>
-              <SelectItem value="30d">Last 30 Days</SelectItem>
+              <SelectItem value="1h">Última Hora</SelectItem>
+              <SelectItem value="24h">24 Horas</SelectItem>
+              <SelectItem value="7d">7 Dias</SelectItem>
+              <SelectItem value="30d">30 Dias</SelectItem>
             </SelectContent>
           </Select>
           <Button onClick={loadDashboardData} variant="outline">
-            <Activity className="h-4 w-4 mr-2" />
-            Refresh
+            Atualizar
           </Button>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Monitor className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-2xl font-bold">{metrics.length}</p>
-                <p className="text-xs text-muted-foreground">Total Metrics</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              <div>
-                <p className="text-2xl font-bold">{unresolvedAlerts.length}</p>
-                <p className="text-xs text-muted-foreground">Active Alerts</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-500" />
-              <div>
-                <p className="text-2xl font-bold">{uniquePages.length}</p>
-                <p className="text-xs text-muted-foreground">Pages Tracked</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-destructive" />
-              <div>
-                <p className="text-2xl font-bold">
-                  {alerts.filter(a => a.severity === "critical" && !a.is_resolved).length}
-                </p>
-                <p className="text-xs text-muted-foreground">Critical Alerts</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="metrics">
-        <TabsList>
-          <TabsTrigger value="metrics">Metrics</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts ({unresolvedAlerts.length})</TabsTrigger>
-          <TabsTrigger value="chart">Charts</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="metrics" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Monitor className="h-5 w-5" />
-                Performance Metrics
-              </CardTitle>
-              <CardDescription>
-                <div className="flex gap-2 mt-2">
-                  <Select value={selectedPage} onValueChange={setSelectedPage}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue placeholder="Filter by page" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Pages</SelectItem>
-                      {uniquePages.map(page => (
-                        <SelectItem key={page} value={page}>
-                          {page.replace(/^\//, "") || "Home"}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedMetric} onValueChange={setSelectedMetric}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue placeholder="Filter by metric" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Metrics</SelectItem>
-                      {uniqueMetricNames.map(name => (
-                        <SelectItem key={name} value={name}>{name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-2">
-                  {filteredMetrics.slice(0, 50).map(metric => (
-                    <div key={metric.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{metric.metric_name}</span>
-                          <Badge variant={metric.status === "normal" ? "outline" : metric.status === "warning" ? "secondary" : "destructive"}>
-                            {metric.status}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {metric.page_url || metric.component || metric.category}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-mono text-lg">{metric.metric_value.toFixed(2)}</p>
-                        <p className="text-xs text-muted-foreground">{metric.metric_unit}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground ml-4">
-                        {formatDistanceToNow(new Date(metric.created_at), { addSuffix: true, locale: ptBR })}
+      {/* Alerts Summary */}
+      {unresolvedAlerts.length > 0 && (
+        <Card className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              Alertas Ativos ({unresolvedAlerts.length})
+              {criticalAlerts.length > 0 && (
+                <Badge variant="destructive">{criticalAlerts.length} Críticos</Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-32">
+              <div className="space-y-2">
+                {unresolvedAlerts.slice(0, 5).map(alert => (
+                  <div key={alert.id} className="flex items-start gap-2 p-2 bg-white dark:bg-gray-800 rounded">
+                    {getSeverityIcon(alert.severity)}
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{alert.message}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}
                       </p>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="alerts" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5" />
-                Active Alerts
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-2">
-                  {alerts.map(alert => (
-                    <div 
-                      key={alert.id} 
-                      className={`flex items-center justify-between p-3 border rounded-lg ${alert.is_resolved ? "opacity-50" : ""}`}
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{alert.alert_type}</span>
-                          <Badge variant={getSeverityBadge(alert.severity)}>
-                            {alert.severity || "info"}
-                          </Badge>
-                          {alert.is_resolved && <Badge variant="outline">Resolved</Badge>}
-                        </div>
-                        <p className="text-sm text-muted-foreground">{alert.message}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {alert.system_name || "System"} • {alert.created_at && formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}
-                        </p>
-                      </div>
-                      {!alert.is_resolved && (
-                        <Button size="sm" variant="outline" onClick={() => resolveAlert(alert.id)}>
-                          Resolve
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  {alerts.length === 0 && (
-                    <p className="text-center text-muted-foreground py-8">No alerts found</p>
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="chart" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Metrics Overview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[400px]">
-                <LazyLineChart 
-                  data={chartData} 
-                  height={350}
-                />
+                    {getStatusBadge(alert.severity)}
+                  </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Filters */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Filtros</CardTitle>
+        </CardHeader>
+        <CardContent className="flex gap-4">
+          <div className="flex-1">
+            <label className="text-sm font-medium">Página</label>
+            <Select value={selectedPage} onValueChange={setSelectedPage}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as Páginas</SelectItem>
+                {getUniquePages().map(page => (
+                  <SelectItem key={page} value={page}>{page}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
+            <label className="text-sm font-medium">Métrica</label>
+            <Select value={selectedMetric} onValueChange={setSelectedMetric}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as Métricas</SelectItem>
+                {webVitalsMetrics.map(metric => (
+                  <SelectItem key={metric} value={metric}>{metric}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Web Vitals Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {webVitalsMetrics.map(metric => {
+          const stats = getMetricStats(metric);
+          if (!stats) return null;
+
+          return (
+            <Card key={metric}>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  {metric}
+                  {getStatusBadge(stats.latest.status)}
+                </CardTitle>
+                <CardDescription>
+                  {stats.count} medições no período
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Atual:</span>
+                    <span className="font-bold">{stats.latest.metric_value.toFixed(2)} {stats.latest.metric_unit}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Média:</span>
+                    <span>{stats.avg.toFixed(2)} {stats.latest.metric_unit}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Min/Max:</span>
+                    <span>{stats.min.toFixed(2)} / {stats.max.toFixed(2)}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Charts */}
+      <Tabs defaultValue="CLS">
+        <TabsList className="grid w-full grid-cols-5">
+          {webVitalsMetrics.map(metric => (
+            <TabsTrigger key={metric} value={metric}>{metric}</TabsTrigger>
+          ))}
+        </TabsList>
+        {webVitalsMetrics.map(metric => (
+          <TabsContent key={metric} value={metric}>
+            <Card>
+              <CardHeader>
+                <CardTitle>{metric} - Histórico</CardTitle>
+                <CardDescription>Últimas 50 medições</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <LazyLineChart 
+                    data={getChartData(metric)} 
+                    height={256}
+                    options={{
+                      plugins: {
+                        legend: { display: false }
+                      }
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        ))}
       </Tabs>
+
+      {/* Recent Metrics Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Métricas Recentes</CardTitle>
+          <CardDescription>Últimas medições coletadas</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea className="h-96">
+            <div className="space-y-2">
+              {getFilteredMetrics().slice(0, 50).map(metric => (
+                <div key={metric.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">{metric.metric_name}</span>
+                      {getStatusBadge(metric.status)}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {metric.metadata?.page_url || "Unknown page"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(new Date(metric.created_at), { addSuffix: true, locale: ptBR })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold">{metric.metric_value.toFixed(2)} {metric.metric_unit}</p>
+                    {metric.metadata?.rating && (
+                      <p className="text-xs text-muted-foreground capitalize">{metric.metadata.rating}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
     </div>
   );
 }

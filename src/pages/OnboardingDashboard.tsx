@@ -453,15 +453,15 @@ export default function OnboardingDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/nautilus-academy')}>
+                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/docs')}>
                   <FileText className="h-4 w-4 mr-2" />
                   Guia do Usuário
                 </Button>
-                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/public-api')}>
+                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/docs/api')}>
                   <Zap className="h-4 w-4 mr-2" />
                   Documentação da API
                 </Button>
-                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/compliance-hub')}>
+                <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/docs/compliance')}>
                   <Shield className="h-4 w-4 mr-2" />
                   Guia de Compliance
                 </Button>

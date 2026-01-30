@@ -29,8 +29,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
   },
   supabase: {
     provider: "supabase",
-    baseUrl: "https://vnbptmixvwropvanyhdb.supabase.co",
-    enabled: true,
+    baseUrl: import.meta.env.VITE_SUPABASE_URL || "",
+    enabled: !!import.meta.env.VITE_SUPABASE_URL,
     transformations: {
       webp: true,
       avif: false,
@@ -40,8 +40,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
   },
   cloudflare: {
     provider: "cloudflare",
-    baseUrl: "",
-    enabled: false,
+    baseUrl: import.meta.env.VITE_CLOUDFLARE_CDN_URL || "",
+    enabled: !!import.meta.env.VITE_CLOUDFLARE_CDN_URL,
     transformations: {
       webp: true,
       avif: true,
@@ -51,8 +51,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
   },
   vercel: {
     provider: "vercel",
-    baseUrl: "",
-    enabled: false,
+    baseUrl: import.meta.env.VITE_VERCEL_URL || "",
+    enabled: !!import.meta.env.VITE_VERCEL_URL,
     transformations: {
       webp: true,
       avif: true,
@@ -60,18 +60,6 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
       progressive: true,
     },
   },
-};
-
-// Safe getter for env vars
-const getEnv = (key: string): string | undefined => {
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      return import.meta.env[key] as string | undefined;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
 };
 
 class CDNManager {
@@ -82,14 +70,16 @@ class CDNManager {
   }
 
   private detectProvider(): CDNConfig {
-    if (getEnv('VITE_CLOUDFLARE_CDN_URL')) {
-      return { ...CDN_CONFIGS.cloudflare, baseUrl: getEnv('VITE_CLOUDFLARE_CDN_URL')!, enabled: true };
+    if (import.meta.env.VITE_CLOUDFLARE_CDN_URL) {
+      return CDN_CONFIGS.cloudflare;
     }
-    if (getEnv('VITE_VERCEL_URL')) {
-      return { ...CDN_CONFIGS.vercel, baseUrl: getEnv('VITE_VERCEL_URL')!, enabled: true };
+    if (import.meta.env.VITE_VERCEL_URL) {
+      return CDN_CONFIGS.vercel;
     }
-    // Default to Supabase (always available)
-    return CDN_CONFIGS.supabase;
+    if (import.meta.env.VITE_SUPABASE_URL) {
+      return CDN_CONFIGS.supabase;
+    }
+    return CDN_CONFIGS.local;
   }
 
   getConfig(): CDNConfig {

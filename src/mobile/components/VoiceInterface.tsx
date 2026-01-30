@@ -11,7 +11,6 @@ import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { intentParser, Intent } from "../ai/intentParser";
 import { localMemory } from "../ai/localMemory";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 
 // Type declarations for Web Speech API - using any to avoid conflicts with browser types
 interface VoiceSpeechRecognition {
@@ -56,7 +55,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
-      logger.warn("Speech recognition not supported in this browser");
+      console.warn("Speech recognition not supported in this browser");
       return;
     }
 
@@ -67,7 +66,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-      logger.debug("Voice recognition started");
+      console.log("Voice recognition started");
     };
 
     recognition.onresult = (event: any) => {
@@ -191,7 +190,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   const speak = useCallback(async (text: string) => {
     if (!("speechSynthesis" in window)) {
-      logger.warn("Speech synthesis not supported");
+      console.warn("Speech synthesis not supported");
       return;
     }
 
@@ -317,11 +316,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </Button>
 
           <Button
-            onClick={stopSpeaking}
+            onClick={isSpeaking ? stopSpeaking : () => {}}
             variant={isSpeaking ? "destructive" : "outline"}
             disabled={!isSpeaking}
             size="lg"
-            aria-label={isSpeaking ? "Parar áudio" : "Sem áudio ativo"}
           >
             {isSpeaking ? (
               <VolumeX className="h-5 w-5" />

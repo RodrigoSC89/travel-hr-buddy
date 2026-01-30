@@ -212,9 +212,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
       observersRef.current.push(lcpObserver);
-    } catch {
-      // LCP observer not supported in this browser - silently ignore
-    }
+    } catch (e) {}
 
     // FID - First Input Delay
     try {
@@ -226,9 +224,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
       observersRef.current.push(fidObserver);
-    } catch {
-      // FID observer not supported in this browser - silently ignore
-    }
+    } catch (e) {}
 
     // CLS - Cumulative Layout Shift
     try {
@@ -243,9 +239,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
       observersRef.current.push(clsObserver);
-    } catch {
-      // CLS observer not supported in this browser - silently ignore
-    }
+    } catch (e) {}
 
     // Long Tasks
     try {
@@ -260,9 +254,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
         longTaskObserver.observe({ entryTypes: ['longtask'] });
         observersRef.current.push(longTaskObserver);
       }
-    } catch {
-      // Long task observer not supported in this browser - silently ignore
-    }
+    } catch (e) {}
 
     return cleanupObservers;
   }, [monitorVitals]);

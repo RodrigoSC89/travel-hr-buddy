@@ -36,7 +36,7 @@ const FleetModule = () => {
       const { data: crewData } = await supabase.from("crew_assignments" as any).select("*").limit(100);
       setCrewAssignments((crewData as any[]) || []);
     } catch (error) {
-      toast({ title: "Erro", description: "Falha ao carregar dados da frota", variant: "destructive" });
+      console.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
     }
@@ -135,7 +135,7 @@ const FleetModule = () => {
             </TabsList>
 
             <TabsContent value="vessels">
-              <VesselGrid vessels={vessels} onViewDetails={setSelectedVessel} onRefresh={loadData} isLoading={loading} />
+              <VesselGrid vessels={vessels} onViewDetails={setSelectedVessel} isLoading={loading} />
             </TabsContent>
 
             <TabsContent value="maintenance">
@@ -158,9 +158,7 @@ const FleetModule = () => {
 
         {/* AI Copilot Sidebar */}
         <div className="xl:col-span-1">
-          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => {
-            toast({ title: "Insight da IA", description: insight?.title || "Novo insight gerado" });
-          }} />
+          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => console.log("Insight:", insight)} />
         </div>
       </div>
     </div>

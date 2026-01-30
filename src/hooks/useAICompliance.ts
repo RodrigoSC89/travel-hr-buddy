@@ -69,10 +69,7 @@ export function useAICompliance(vesselId?: string) {
       if (error) return getMockComplianceStatus();
       return data?.length ? data : getMockComplianceStatus();
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 60000, // Verificar a cada minuto
   });
 
   // Query: Alertas ativos
@@ -89,10 +86,7 @@ export function useAICompliance(vesselId?: string) {
       if (error) return getMockAlerts();
       return data || getMockAlerts();
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 30000, // Verificar a cada 30s
   });
 
   // Query: Métricas gerais

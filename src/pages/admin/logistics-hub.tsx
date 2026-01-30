@@ -1,8 +1,4 @@
-/**
- * Logistics Hub - PATCH 877
- * PATCH 900 - Removed @ts-nocheck, using type-safe dynamic access
- * Logistics requests and inventory management
- */
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,13 +38,6 @@ interface InventoryItem {
   last_updated?: string;
 }
 
-// Type-safe dynamic DB access
-type DynamicSupabaseClient = {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
-
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
-
 export default function LogisticsHub() {
   const [requests, setRequests] = useState<MaterialRequest[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
@@ -83,64 +72,25 @@ export default function LogisticsHub() {
   };
 
   const loadRequests = async () => {
-    try {
-      const { data, error } = await dynamicDb
-        .from("logistics_requests")
-        .select("*")
-        .order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("logistics_requests")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      
-      // Map to interface with type safety
-      const mapped = (data || []).map((row: Record<string, unknown>) => ({
-        id: row.id as string,
-        material_name: (row.material_name as string) || "",
-        quantity: (row.quantity as number) || 0,
-        unit: (row.unit as string) || "units",
-        priority: (row.priority as MaterialRequest["priority"]) || "medium",
-        status: (row.status as MaterialRequest["status"]) || "pending",
-        requested_by: (row.requested_by as string) || "",
-        approved_by: row.approved_by as string | undefined,
-        notes: row.notes as string | undefined,
-        estimated_delivery: row.estimated_delivery as string | undefined,
-        created_at: row.created_at as string | undefined
-      }));
-      
-      setRequests(mapped);
-      logger.info("Material requests loaded", { count: mapped.length });
-    } catch (err) {
-      logger.warn("Logistics requests table may not exist", err instanceof Error ? err : undefined);
-      setRequests([]);
-    }
+    if (error) throw error;
+    setRequests(data || []);
+    logger.info("Material requests loaded", { count: data?.length });
   };
 
   const loadInventory = async () => {
-    try {
-      const { data, error } = await dynamicDb
-        .from("logistics_inventory")
-        .select("*")
-        .order("item_name" as never);
+    const { data, error } = await supabase
+      .from("logistics_inventory")
+      .select("*")
+      .order("item_name");
 
-      if (error) throw error;
-      
-      // Map to interface with type safety
-      const mapped = (data || []).map((row: Record<string, unknown>) => ({
-        id: row.id as string,
-        item_name: (row.item_name as string) || "",
-        quantity: (row.quantity as number) || 0,
-        unit: (row.unit as string) || "units",
-        stock_status: (row.stock_status as InventoryItem["stock_status"]) || "in_stock",
-        reorder_level: (row.reorder_level as number) || 0,
-        location: (row.location as string) || "",
-        last_updated: row.last_updated as string | undefined
-      }));
-      
-      setInventory(mapped);
-      logger.info("Inventory items loaded", { count: mapped.length });
-    } catch (err) {
-      logger.warn("Logistics inventory table may not exist", err instanceof Error ? err : undefined);
-      setInventory([]);
-    }
+    if (error) throw error;
+    setInventory(data || []);
+    logger.info("Inventory items loaded", { count: data?.length });
   };
 
   const handleRequestSubmit = async (e: React.FormEvent) => {
@@ -151,20 +101,10 @@ export default function LogisticsHub() {
       const eta = new Date();
       eta.setDate(eta.getDate() + 7);
 
-      const insertData = {
-        material_name: requestForm.material_name,
-        quantity: requestForm.quantity,
-        unit: requestForm.unit,
-        priority: requestForm.priority,
-        status: requestForm.status,
-        requested_by: requestForm.requested_by,
-        notes: requestForm.notes,
-        estimated_delivery: eta.toISOString()
-      };
-
-      const { error } = await dynamicDb
-        .from("logistics_requests")
-        .insert(insertData as never);
+      const { error } = await supabase.from("logistics_requests").insert({
+        ...requestForm,
+        estimated_delivery: eta.toISOString(),
+      });
 
       if (error) throw error;
 
@@ -187,14 +127,12 @@ export default function LogisticsHub() {
 
   const handleApproval = async (id: string, approved: boolean) => {
     try {
-      const updateData = {
-        status: approved ? "approved" : "rejected",
-        approved_by: "current_user"
-      };
-
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("logistics_requests")
-        .update(updateData as never)
+        .update({
+          status: approved ? "approved" : "rejected",
+          approved_by: "current_user", // In production, get from auth context
+        })
         .eq("id", id);
 
       if (error) throw error;
@@ -209,9 +147,9 @@ export default function LogisticsHub() {
 
   const handleDelivered = async (id: string) => {
     try {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("logistics_requests")
-        .update({ status: "delivered" } as never)
+        .update({ status: "delivered" })
         .eq("id", id);
 
       if (error) throw error;
@@ -225,13 +163,13 @@ export default function LogisticsHub() {
   };
 
   const getPriorityColor = (priority: string) => {
-    const colors: Record<string, string> = {
+    const colors = {
       low: "bg-gray-500",
       medium: "bg-blue-500",
       high: "bg-orange-500",
       urgent: "bg-red-500",
     };
-    return colors[priority] || "bg-gray-500";
+    return colors[priority as keyof typeof colors] || "bg-gray-500";
   };
 
   const getStatusIcon = (status: string) => {
@@ -250,12 +188,12 @@ export default function LogisticsHub() {
   };
 
   const getStockStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
+    const colors = {
       in_stock: "bg-green-500",
       low_stock: "bg-yellow-500",
       out_of_stock: "bg-red-500",
     };
-    return colors[status] || "bg-gray-500";
+    return colors[status as keyof typeof colors] || "bg-gray-500";
   };
 
   const calculateETA = (createdAt: string): number => {

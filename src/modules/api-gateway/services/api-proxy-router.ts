@@ -1,20 +1,8 @@
 /**
- * PATCH 100.1 - API Proxy Router Service
- * Uses database for route stats and health checks
+ * PATCH 100.0 - API Proxy Router Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { ApiRoute, MonitoringStats } from "../types";
-
-interface ApiEndpointRow {
-  id: string;
-  name: string;
-  url: string;
-  method: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-}
 
 class ApiProxyRouterService {
   private routes: Map<string, ApiRoute> = new Map();
@@ -25,64 +13,16 @@ class ApiProxyRouterService {
     activeConnections: 0,
     timestamp: new Date()
   };
-  private initialized: boolean = false;
 
-  async initialize(): Promise<void> {
-    if (this.initialized) return;
-
-    try {
-      // Load routes from database using actual table columns
-      const { data, error } = await supabase
-        .from("api_endpoints")
-        .select("id, path, method, summary, description, is_deprecated, is_public")
-        .eq("is_deprecated", false);
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        data.forEach((row) => {
-          // Extract service name from path (e.g., "/api/fleet" -> "fleet")
-          const pathParts = (row.path ?? "").split("/").filter(Boolean);
-          const serviceName = pathParts.length > 1 ? pathParts[1] : row.id;
-          
-          const route: ApiRoute = {
-            id: row.id,
-            service: serviceName,
-            path: row.path ?? "/api/unknown",
-            method: (row.method ?? "GET") as ApiRoute["method"],
-            status: row.is_deprecated ? "inactive" : "active",
-            requestCount: 0,
-            avgLatency: 100
-          };
-          this.routes.set(route.id, route);
-        });
-      } else {
-        // Fallback to default routes if database is empty
-        this.registerDefaultRoutes();
-      }
-
-      this.initialized = true;
-    } catch (err) {
-      console.error("Failed to load API routes from database:", err);
-      this.registerDefaultRoutes();
-      this.initialized = true;
-    }
-  }
-
-  private registerDefaultRoutes(): void {
-    const defaults = [
-      { service: "auth", path: "/api/auth", method: "POST" as const },
-      { service: "fleet", path: "/api/fleet", method: "GET" as const },
-      { service: "documents", path: "/api/documents", method: "POST" as const },
-      { service: "analytics", path: "/api/analytics", method: "GET" as const },
-      { service: "missions", path: "/api/missions", method: "GET" as const },
-      { service: "finance", path: "/api/finance", method: "GET" as const },
-      { service: "logs", path: "/api/logs", method: "GET" as const }
-    ];
-
-    defaults.forEach(d => {
-      this.registerRoute(d.service, d.path, d.method);
-    });
+  constructor() {
+    // Initialize with demo routes
+    this.registerRoute("auth", "/api/auth", "POST");
+    this.registerRoute("fleet", "/api/fleet", "GET");
+    this.registerRoute("documents", "/api/documents", "POST");
+    this.registerRoute("analytics", "/api/analytics", "GET");
+    this.registerRoute("missions", "/api/missions", "GET");
+    this.registerRoute("finance", "/api/finance", "GET");
+    this.registerRoute("logs", "/api/logs", "GET");
   }
 
   registerRoute(service: string, path: string, method: ApiRoute["method"]): ApiRoute {
@@ -92,8 +32,8 @@ class ApiProxyRouterService {
       path,
       method,
       status: "active",
-      requestCount: 0,
-      avgLatency: 100
+      requestCount: Math.floor(Math.random() * 10000),
+      avgLatency: Math.floor(Math.random() * 300) + 50
     };
 
     this.routes.set(route.id, route);
@@ -101,8 +41,6 @@ class ApiProxyRouterService {
   }
 
   async proxyRequest(service: string, endpoint: string, options?: RequestInit): Promise<Response> {
-    await this.initialize();
-
     const route = Array.from(this.routes.values()).find(r => r.service === service);
     
     if (!route) {
@@ -117,7 +55,8 @@ class ApiProxyRouterService {
     this.stats.activeConnections++;
 
     try {
-      const response = await this.executeApiCall(route, endpoint, options);
+      // Simulate API call
+      const response = await this.simulateApiCall(route, endpoint);
       
       const latency = Date.now() - startTime;
       this.updateRouteStats(route, latency, true);
@@ -134,23 +73,6 @@ class ApiProxyRouterService {
     }
   }
 
-  private async executeApiCall(route: ApiRoute, endpoint: string, options?: RequestInit): Promise<Response> {
-    // For internal API calls, use Supabase Edge Functions
-    if (route.path.startsWith("/api/")) {
-      const functionName = route.service;
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: options?.body ? JSON.parse(options.body as string) : undefined
-      });
-
-      if (error) throw error;
-      return new Response(JSON.stringify(data), { status: 200 });
-    }
-
-    // For external endpoints, make actual HTTP request
-    const fullUrl = `${route.path}${endpoint}`;
-    return fetch(fullUrl, options);
-  }
-
   async checkEndpointStatus(path: string): Promise<{
     status: "healthy" | "degraded" | "down";
     latency: number;
@@ -159,31 +81,16 @@ class ApiProxyRouterService {
     const startTime = Date.now();
 
     try {
-      // Query health from database
-      const { data, error } = await supabase
-        .from("system_health_metrics")
-        .select("response_time_ms, network_status")
-        .order("recorded_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
+      // Simulate health check
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 50));
+      
       const latency = Date.now() - startTime;
-
-      if (error) throw error;
-
-      if (!data) {
-        return { status: "healthy", latency };
+      
+      if (latency > 1000) {
+        return { status: "degraded", latency };
       }
-
-      if (data.network_status !== "online") {
-        return { status: "down", latency };
-      }
-
-      if ((data.response_time_ms ?? 0) > 1000) {
-        return { status: "degraded", latency: data.response_time_ms ?? latency };
-      }
-
-      return { status: "healthy", latency: data.response_time_ms ?? latency };
+      
+      return { status: "healthy", latency };
     } catch (error) {
       const latency = Date.now() - startTime;
       return {
@@ -194,10 +101,28 @@ class ApiProxyRouterService {
     }
   }
 
+  private async simulateApiCall(route: ApiRoute, endpoint: string): Promise<Response> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, route.avgLatency + Math.random() * 50));
+    
+    // Simulate occasional errors (5% chance)
+    if (Math.random() < 0.05) {
+      throw new Error("Internal Server Error");
+    }
+
+    return new Response(JSON.stringify({ success: true, data: {} }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
   private updateRouteStats(route: ApiRoute, latency: number, success: boolean): void {
     route.requestCount++;
+    
+    // Update average latency
     route.avgLatency = Math.round((route.avgLatency * (route.requestCount - 1) + latency) / route.requestCount);
 
+    // Update global stats
     this.stats.totalRequests++;
     this.stats.avgLatency = Math.round(
       (this.stats.avgLatency * (this.stats.totalRequests - 1) + latency) / this.stats.totalRequests
@@ -207,13 +132,13 @@ class ApiProxyRouterService {
       route.status = "error";
     }
 
+    // Calculate error rate
     const totalErrors = Array.from(this.routes.values()).filter(r => r.status === "error").length;
     this.stats.errorRate = (totalErrors / this.routes.size) * 100;
     this.stats.timestamp = new Date();
   }
 
-  async getAllRoutes(): Promise<ApiRoute[]> {
-    await this.initialize();
+  getAllRoutes(): ApiRoute[] {
     return Array.from(this.routes.values());
   }
 
@@ -226,7 +151,7 @@ class ApiProxyRouterService {
   }
 
   private generateId(): string {
-    return `route_${Date.now()}_${crypto.randomUUID().substring(0, 8)}`;
+    return `route_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
   }
 }
 

@@ -1,6 +1,7 @@
+// @ts-nocheck
 /**
- * PATCH 874 - Operations Dashboard - Real Data Integration
- * PATCH 900 - Removed @ts-nocheck, proper TypeScript types
+ * PATCH 370 - Operations Dashboard - Real Data Integration
+ * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -75,7 +76,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     last_update: new Date().toISOString(),
   });
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterConfig>({
     operation_type: "all",
     time_range: "24h",
@@ -127,6 +128,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
+          console.log("Sensor data update:", payload);
           handleSupabaseUpdate(payload, "sensor");
         }
       )
@@ -134,6 +136,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "crew_rotations" },
         (payload) => {
+          console.log("Crew rotation update:", payload);
           handleSupabaseUpdate(payload, "crew");
         }
       )
@@ -141,10 +144,12 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "vessels" },
         (payload) => {
+          console.log("Vessel update:", payload);
           handleSupabaseUpdate(payload, "vessel");
         }
       )
       .subscribe((status) => {
+        console.log("Supabase subscription status:", status);
         if (status === "SUBSCRIBED") {
           toast.success("Real-time data connected");
         }
@@ -153,24 +158,33 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
   const setupMQTTConnection = () => {
     try {
-      // MQTT connection via HiveMQ public broker
+      // Note: MQTT functionality is simulated for demo
+      // In production, configure actual MQTT broker:
+      // const mqttUrl = 'wss://your-mqtt-broker:8081';
+      // mqttClientRef.current = mqtt.connect(mqttUrl, { username: 'user', password: 'pass' });
+      // mqttClientRef.current.on('connect', () => setMqttConnected(true));
+      // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
+      
+      console.log("MQTT connection simulated for demo");
       setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();
-    } catch {
-      // Silent error handling
+    } catch (error) {
+      console.error("MQTT connection error:", error);
     }
   };
 
   const setupWebSocketConnection = () => {
     try {
-      setWsConnected(false); // Demo mode
+      // In production, connect to actual WebSocket server
+      console.log("WebSocket connection would be established here");
+      setWsConnected(false); // Set to false for demo
       
       // Simulate WebSocket messages
       simulateWebSocketMessages();
-    } catch {
-      // Silent error handling
+    } catch (error) {
+      console.error("WebSocket connection error:", error);
     }
   };
 
@@ -266,22 +280,17 @@ export const OperationsDashboardRealTime: React.FC = () => {
       // Build time filter
       const timeFilter = getTimeFilter(filter.time_range);
 
-      // Use dynamic table access for unmapped tables
-      const client = supabase as unknown as { from: (table: string) => ReturnType<typeof supabase.from> };
-
       // Load mission status data
-      const { data: missionData, error: missionError } = await client
+      const { data: missionData, error: missionError } = await supabase
         .from("voyage_plans")
         .select("status")
         .gte("created_at", timeFilter);
 
       if (missionError) throw missionError;
 
-      // Type-safe status accumulator
-      interface MissionRow { status: string }
-      const missionStatus = ((missionData as unknown as MissionRow[] | null) || []).reduce<Record<string, number>>((acc, item) => {
-        const status = item.status || "unknown";
-        acc[status] = (acc[status] || 0) + 1;
+      // Count by status
+      const missionStatus = (missionData || []).reduce((acc, item) => {
+        acc[item.status] = (acc[item.status] || 0) + 1;
         return acc;
       }, {});
 
@@ -308,11 +317,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
       if (sensorError) throw sensorError;
 
-      // Safe alerts aggregation using available fields
-      const alertsBySeverity = (sensorData || []).reduce<Record<string, number>>((acc, sensor) => {
-        const sensorStatus = sensor.status || "normal";
-        if (sensorStatus !== "normal") {
-          acc[sensorStatus] = (acc[sensorStatus] || 0) + 1;
+      const alertsBySeverity = (sensorData || []).reduce((acc, sensor) => {
+        if (sensor.is_alert) {
+          acc[sensor.status] = (acc[sensor.status] || 0) + 1;
         }
         return acc;
       }, {});
@@ -330,7 +337,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         vessel_health: vesselHealth,
         alerts_by_severity: alertsBySeverity,
         telemetry_data: sensorData || [],
-        active_operations: ((missionData as unknown as MissionRow[] | null) || []).filter((m) => m.status === "active").length,
+        active_operations: (missionData || []).filter((m) => m.status === "active").length,
         crew_availability: crewData?.length || 0,
         system_health: calculateSystemHealth(vesselHealth, alertsBySeverity),
         last_update: new Date().toISOString(),
@@ -359,8 +366,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }
   };
 
-  const calculateSystemHealth = (vesselHealth: Record<string, number>, alerts: Record<string, number>): number => {
-    const totalVessels = Object.values(vesselHealth).reduce((a, b) => a + b, 0);
+  const calculateSystemHealth = (vesselHealth: any, alerts: any): number => {
+    const totalVessels = Object.values(vesselHealth).reduce((a: any, b: any) => a + b, 0);
     const healthyVessels = vesselHealth.healthy || 0;
     const criticalAlerts = alerts.critical || 0;
 
@@ -410,8 +417,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     toast.success("Dashboard data exported");
   };
 
-  const getSeverityColor = (severity: string): string => {
-    const colors: Record<string, string> = {
+  const getSeverityColor = (severity: string) => {
+    const colors = {
       low: "text-blue-500",
       medium: "text-yellow-500",
       high: "text-orange-500",
@@ -421,7 +428,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, "secondary" | "default" | "destructive"> = {
+    const variants = {
       low: "secondary",
       medium: "default",
       high: "default",

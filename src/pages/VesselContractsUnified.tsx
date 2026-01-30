@@ -1,13 +1,16 @@
 /**
- * VesselContractsUnified - Unified Vessel Contracts Module
- * V2 only - V1 deprecated and removed
- * @since v4.0.0
+ * VesselContractsUnified - Wrapper para V1/V2
+ * Usa feature flag 'use-v2-modules' para alternar automaticamente
+ * 
+ * @deprecated V1 será removido em v4.0.0
  */
 
 import { lazy, Suspense } from "react";
+import { useFeatureFlag } from "@/lib/feature-flags";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// V2 only - V1 removed in v4.0.0
+// Lazy load both versions
+const VesselContractsV1 = lazy(() => import("./VesselContracts"));
 const VesselContractsV2 = lazy(() => import("./VesselContractsV2"));
 
 function LoadingFallback() {
@@ -25,9 +28,15 @@ function LoadingFallback() {
 }
 
 export default function VesselContractsUnified() {
+  // ALWAYS use V2 with AI features - V1 is deprecated
+  const useV2 = true; // Force V2 - useFeatureFlag('use-v2-modules');
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <VesselContractsV2 />
     </Suspense>
   );
 }
+
+// Export for type inference
+export type { default as VesselContractsUnifiedType } from "./VesselContractsUnified";

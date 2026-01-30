@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Activity, Users, TrendingUp, Brain, AlertCircle, MessageCircle, Calendar, Plus, Loader2 } from "lucide-react";
 import { HealthMetricsDashboard } from "./components/HealthMetricsDashboard";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
 
 interface WellbeingAlert {
   id: string;
@@ -73,7 +72,7 @@ const CrewWellbeing = () => {
         })));
       }
     } catch (error) {
-      logger.error("Error loading wellbeing data:", error);
+      console.error("Error loading wellbeing data:", error);
     } finally {
       setLoading(false);
     }

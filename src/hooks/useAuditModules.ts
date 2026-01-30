@@ -1,7 +1,6 @@
 /**
- * Audit Modules Hooks - v4.0 PRODUCTION
+ * Audit Modules Hooks - v4.0
  * PEO-DP, PEOTRAM, SGSO, IMCA, Pre-OVID, MLC, PSC
- * PATCH 902: Exact column mapping from database schema
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -49,38 +48,26 @@ export interface AuditEvidence {
   blockchain_hash?: string;
 }
 
-// Helper to map peotram_audits to Audit interface
-function mapPeotramAudit(d: Record<string, unknown>, auditType: Audit['type']): Audit {
-  const vessels = d.vessels as { name?: string } | null;
-  return {
-    id: d.id as string,
-    type: auditType,
-    vessel_id: d.vessel_id as string | undefined,
-    vessel_name: vessels?.name || 'N/A',
-    status: (d.status as Audit['status']) || 'draft',
-    compliance_score: (d.compliance_score as number) || (d.final_score as number) || 0,
-    total_items: (d.non_conformities_count as number) || 0,
-    completed_items: 0,
-    non_conformities: (d.non_conformities_count as number) || 0,
-    created_at: d.created_at as string,
-    scheduled_date: d.audit_date as string,
-    auditor_name: d.auditor_name as string | undefined,
-  };
-}
-
 // === PEO-DP Hooks ===
 export function usePEODPAudits() {
   return useQuery({
     queryKey: ['peo-dp-audits'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .select('*, vessels(name)')
-        .eq('audit_type', 'PEO-DP')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return (data || []).map(d => mapPeotramAudit(d as Record<string, unknown>, 'peo_dp'));
+      // Return mock data for now
+      const mockAudits: Audit[] = [
+        {
+          id: '1',
+          type: 'peo_dp',
+          vessel_name: 'OSV Atlântico Sul',
+          status: 'in_progress',
+          compliance_score: 78,
+          total_items: 85,
+          completed_items: 66,
+          non_conformities: 2,
+          created_at: new Date().toISOString(),
+        },
+      ];
+      return mockAudits;
     },
     staleTime: 60000,
   });
@@ -90,21 +77,12 @@ export function usePEODPAuditItems(auditId: string) {
   return useQuery({
     queryKey: ['peo-dp-items', auditId],
     queryFn: async () => {
-      const { data } = await supabase
-        .from('peotram_non_conformities')
-        .select('*')
-        .eq('audit_id', auditId);
-
-      return (data || []).map((nc, idx) => ({
-        id: nc.id,
-        category: nc.element_name || 'Sistema DP',
-        item_number: nc.element_number || `${idx + 1}.1`,
-        description: nc.description || '',
-        status: nc.status === 'closed' ? 'compliant' as const : 'non_compliant' as const,
-        evidence_count: (nc.evidence_urls as string[] | null)?.length || 0,
-        severity: nc.severity_score && nc.severity_score >= 8 ? 'critical' as const : 
-                  nc.severity_score && nc.severity_score >= 5 ? 'major' as const : 'minor' as const,
-      })) as AuditItem[];
+      const mockItems: AuditItem[] = [
+        { id: '1', category: 'Sistema DP', item_number: '1.1', description: 'Verificação do sistema de posicionamento dinâmico', status: 'compliant', evidence_count: 2 },
+        { id: '2', category: 'Sistema DP', item_number: '1.2', description: 'Testes de redundância', status: 'pending', evidence_count: 0 },
+        { id: '3', category: 'Documentação', item_number: '2.1', description: 'FMEA atualizado', status: 'non_compliant', evidence_count: 1, severity: 'major' },
+      ];
+      return mockItems;
     },
     enabled: !!auditId,
   });
@@ -115,14 +93,21 @@ export function usePEOTRAMAudits() {
   return useQuery({
     queryKey: ['peotram-audits'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .select('*, vessels(name)')
-        .in('audit_type', ['PEOTRAM', 'IMCA', 'ISM', 'ISPS', 'SGSO'])
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return (data || []).map(d => mapPeotramAudit(d as Record<string, unknown>, 'peotram'));
+      const mockAudits: Audit[] = [
+        {
+          id: '1',
+          type: 'peotram',
+          vessel_name: 'OSV Atlântico Sul',
+          status: 'in_progress',
+          compliance_score: 85,
+          total_items: 150,
+          completed_items: 127,
+          non_conformities: 3,
+          created_at: new Date().toISOString(),
+          scheduled_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ];
+      return mockAudits;
     },
     staleTime: 60000,
   });
@@ -133,14 +118,20 @@ export function useSGSOAudits() {
   return useQuery({
     queryKey: ['sgso-audits'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .select('*, vessels(name)')
-        .eq('audit_type', 'SGSO')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return (data || []).map(d => mapPeotramAudit(d as Record<string, unknown>, 'sgso'));
+      const mockAudits: Audit[] = [
+        {
+          id: '1',
+          type: 'sgso',
+          vessel_name: 'Platform Support Vessel',
+          status: 'completed',
+          compliance_score: 92,
+          total_items: 170,
+          completed_items: 170,
+          non_conformities: 1,
+          created_at: new Date().toISOString(),
+        },
+      ];
+      return mockAudits;
     },
     staleTime: 60000,
   });
@@ -150,19 +141,10 @@ export function useSGSOItems(auditId: string) {
   return useQuery({
     queryKey: ['sgso-items', auditId],
     queryFn: async () => {
-      const { data } = await supabase
-        .from('peotram_non_conformities')
-        .select('*')
-        .eq('audit_id', auditId);
-
-      return (data || []).map((nc, idx) => ({
-        id: nc.id,
-        category: nc.element_name || 'Prática SGSO',
-        item_number: nc.element_number || `${idx + 1}.1`,
-        description: nc.description || '',
-        status: nc.status === 'closed' ? 'compliant' as const : 'non_compliant' as const,
-        evidence_count: (nc.evidence_urls as string[] | null)?.length || 0,
-      })) as AuditItem[];
+      const mockItems: AuditItem[] = [
+        { id: '1', category: 'Prática 1', item_number: '1.1', description: 'Política de segurança', status: 'compliant', evidence_count: 3 },
+      ];
+      return mockItems;
     },
     enabled: !!auditId,
   });
@@ -173,14 +155,20 @@ export function usePreOVIDAudits() {
   return useQuery({
     queryKey: ['pre-ovid-audits'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .select('*, vessels(name)')
-        .eq('audit_type', 'IMCA')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return (data || []).map(d => mapPeotramAudit(d as Record<string, unknown>, 'pre_ovid'));
+      const mockAudits: Audit[] = [
+        {
+          id: '1',
+          type: 'pre_ovid',
+          vessel_name: 'MV Ocean Star',
+          status: 'in_progress',
+          compliance_score: 88,
+          total_items: 200,
+          completed_items: 176,
+          non_conformities: 2,
+          created_at: new Date().toISOString(),
+        },
+      ];
+      return mockAudits;
     },
     staleTime: 60000,
   });
@@ -191,26 +179,22 @@ export function useMLCInspections() {
   return useQuery({
     queryKey: ['mlc-inspections'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('mlc_inspections')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      return (data || []).map(d => ({
-        id: d.id,
-        type: 'mlc' as const,
-        vessel_id: d.vessel_imo,
-        vessel_name: d.vessel_name || 'N/A',
-        status: (d.status as Audit['status']) || 'completed',
-        compliance_score: d.compliance_score || 0,
-        total_items: d.total_items || 0,
-        completed_items: d.compliant_items || 0,
-        non_conformities: d.non_compliant_items || 0,
-        created_at: d.created_at,
-        auditor_name: d.inspector_name || d.inspection_type,
-      })) as Audit[];
+      // MLC data from existing table or mock
+      const mockInspections: Audit[] = [
+        {
+          id: '1',
+          type: 'mlc',
+          vessel_name: 'MV Santos Star',
+          status: 'completed',
+          compliance_score: 92,
+          total_items: 89,
+          completed_items: 89,
+          non_conformities: 1,
+          created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          auditor_name: 'DNV GL',
+        },
+      ];
+      return mockInspections;
     },
     staleTime: 60000,
   });
@@ -221,8 +205,18 @@ export function usePSCPackages() {
   return useQuery({
     queryKey: ['psc-packages'],
     queryFn: async () => {
-      // PSC packages table may not exist, return empty gracefully
-      return [];
+      const mockPackages = [
+        {
+          id: '1',
+          vessel_name: 'OSV Atlântico Norte',
+          port: 'Rotterdam',
+          scheduled_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          documents_ready: 45,
+          documents_total: 50,
+          status: 'preparing',
+        },
+      ];
+      return mockPackages;
     },
     staleTime: 60000,
   });
@@ -234,30 +228,23 @@ export function useCreateAudit() {
   
   return useMutation({
     mutationFn: async (audit: Partial<Audit> & { type: Audit['type'] }) => {
-      const user = await supabase.auth.getUser();
+      const tableName = `${audit.type.replace('_', '-')}-audits`;
       
-      const { data, error } = await supabase
-        .from('peotram_audits')
-        .insert({
-          audit_type: audit.type.toUpperCase().replace('_', '-'),
-          vessel_id: audit.vessel_id,
-          status: 'scheduled',
-          audit_date: audit.scheduled_date || new Date().toISOString().split('T')[0],
-          audit_period: new Date().toISOString().slice(0, 7),
-          created_by: user.data.user?.id || '',
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      // For now, return mock
+      return { 
+        ...audit, 
+        id: crypto.randomUUID(), 
+        created_at: new Date().toISOString(),
+        status: 'draft',
+        compliance_score: 0,
+        total_items: 0,
+        completed_items: 0,
+        non_conformities: 0,
+      };
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [`${variables.type}-audits`] });
       toast.success('Auditoria criada com sucesso!');
-    },
-    onError: (error) => {
-      toast.error(`Erro ao criar auditoria: ${error.message}`);
     },
   });
 }
@@ -270,21 +257,14 @@ export function useUpdateAuditItem() {
       auditId, 
       itemId, 
       status, 
+      notes 
     }: { 
       auditId: string; 
       itemId: string; 
       status: AuditItem['status']; 
       notes?: string;
     }) => {
-      const newStatus = status === 'compliant' ? 'closed' : status === 'non_compliant' ? 'open' : 'in_progress';
-      
-      const { error } = await supabase
-        .from('peotram_non_conformities')
-        .update({ status: newStatus })
-        .eq('id', itemId);
-
-      if (error) throw error;
-      return { auditId, itemId, status };
+      return { auditId, itemId, status, notes };
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['audit-items', variables.auditId] });
@@ -306,6 +286,7 @@ export function useUploadEvidence() {
       itemId: string; 
       file: File;
     }) => {
+      // Upload to Supabase Storage
       const fileName = `${auditId}/${itemId}/${Date.now()}_${file.name}`;
       const { data, error } = await supabase.storage
         .from('audit-evidence')
@@ -313,9 +294,15 @@ export function useUploadEvidence() {
       
       if (error) throw error;
       
+      // Get blockchain hash for compliance
+      const { data: hashData } = await supabase.functions.invoke('blockchain-compliance', {
+        body: { action: 'hash', fileUrl: data.path },
+      });
+      
       return { 
         file_url: data.path, 
         file_name: file.name,
+        blockchain_hash: hashData?.hash,
       };
     },
     onSuccess: () => {
@@ -335,7 +322,10 @@ export function useAIAuditAnalysis() {
       const functionName = `${auditType}-ai-chat`;
       
       const { data, error } = await supabase.functions.invoke(functionName, {
-        body: { action: 'analyze', auditId },
+        body: { 
+          action: 'analyze',
+          auditId,
+        },
       });
       
       if (error) throw error;

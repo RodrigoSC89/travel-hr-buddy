@@ -61,86 +61,26 @@ export default function AutonomousProcurement() {
           </TabsContent>
 
           <TabsContent value="orders">
-            <div className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Pedidos Ativos</p>
-                  <p className="text-2xl font-bold">12</p>
-                </div>
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Aguardando Entrega</p>
-                  <p className="text-2xl font-bold text-warning">8</p>
-                </div>
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Entregues Hoje</p>
-                  <p className="text-2xl font-bold text-success">4</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground text-center py-4">
-                Visualize detalhes completos no módulo Procurement & Inventory
-              </p>
+            <div className="text-center py-12 text-muted-foreground">
+              Lista completa de pedidos e requisições - Em desenvolvimento
             </div>
           </TabsContent>
 
           <TabsContent value="suppliers">
-            <div className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-4">
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Total Fornecedores</p>
-                  <p className="text-2xl font-bold">24</p>
-                </div>
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Preferenciais</p>
-                  <p className="text-2xl font-bold text-primary">8</p>
-                </div>
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Taxa Entrega</p>
-                  <p className="text-2xl font-bold">94%</p>
-                </div>
-                <div className="p-4 border rounded-lg bg-card">
-                  <p className="text-sm text-muted-foreground">Lead Time Médio</p>
-                  <p className="text-2xl font-bold">6d</p>
-                </div>
-              </div>
+            <div className="text-center py-12 text-muted-foreground">
+              Gestão de fornecedores e contratos - Em desenvolvimento
             </div>
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="p-6 border rounded-lg bg-card">
-                  <h3 className="font-semibold mb-2">Análise de Custos</h3>
-                  <p className="text-3xl font-bold text-primary">R$ 245K</p>
-                  <p className="text-sm text-success">↓ 12% vs mês anterior</p>
-                </div>
-                <div className="p-6 border rounded-lg bg-card">
-                  <h3 className="font-semibold mb-2">Previsão Lead Time</h3>
-                  <p className="text-3xl font-bold">5.2 dias</p>
-                  <p className="text-sm text-muted-foreground">Média preditiva IA</p>
-                </div>
-              </div>
+            <div className="text-center py-12 text-muted-foreground">
+              Analytics preditivo de custos e lead time - Em desenvolvimento
             </div>
           </TabsContent>
 
           <TabsContent value="reports">
-            <div className="space-y-4">
-              <div className="p-6 border rounded-lg bg-card">
-                <h3 className="font-semibold mb-4">Relatórios Disponíveis</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded">
-                    <span>Relatório de Compras - Janeiro 2026</span>
-                    <Badge>PDF</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded">
-                    <span>Auditoria de Fornecedores Q4</span>
-                    <Badge>PDF</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded">
-                    <span>Blockchain Transactions Log</span>
-                    <Badge variant="secondary">JSON</Badge>
-                  </div>
-                </div>
-              </div>
+            <div className="text-center py-12 text-muted-foreground">
+              Relatórios de auditoria e blockchain - Em desenvolvimento
             </div>
           </TabsContent>
         </Tabs>

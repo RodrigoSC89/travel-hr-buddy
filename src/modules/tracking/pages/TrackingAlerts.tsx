@@ -316,22 +316,10 @@ export default function TrackingAlerts() {
               </CardTitle>
               <CardDescription>Configure thresholds e notificações</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Limite de Velocidade</p><p className="text-sm text-muted-foreground">Alertar quando exceder 15 nós</p></div>
-                <Badge variant="secondary">Ativo</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Zona de Exclusão</p><p className="text-sm text-muted-foreground">Alertar ao entrar em área restrita</p></div>
-                <Badge variant="secondary">Ativo</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Parada Prolongada</p><p className="text-sm text-muted-foreground">Alertar após 4h sem movimento</p></div>
-                <Badge variant="outline">Configurar</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div><p className="font-medium">Desvio de Rota</p><p className="text-sm text-muted-foreground">Alertar se desviar mais de 5nm</p></div>
-                <Badge variant="secondary">Ativo</Badge>
+            <CardContent>
+              <div className="text-center py-8 text-muted-foreground">
+                <Settings className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p>Configuração de regras em desenvolvimento</p>
               </div>
             </CardContent>
           </Card>

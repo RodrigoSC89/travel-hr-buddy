@@ -64,7 +64,7 @@ const defaultConfig: SystemConfig = {
     multiLanguage: false,
   },
   api: {
-    baseUrl: ((typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>).VITE_API_URL || '',
+    baseUrl: import.meta.env.VITE_API_URL || '',
     timeout: 30000,
     retryAttempts: 3,
     cacheEnabled: true,

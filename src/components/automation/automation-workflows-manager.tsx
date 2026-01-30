@@ -1,7 +1,6 @@
 /**
  * Automation Workflows Manager
  * Fully functional with AI integration via edge function
- * PATCH: Using supabase.functions.invoke instead of VITE_ env vars
  */
 
 import { useState } from 'react';
@@ -28,7 +27,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
 
 interface WorkflowStep {
   id: string;
@@ -160,17 +158,25 @@ export const AutomationWorkflowsManager = () => {
     toast.info(`Executando workflow: ${workflow.name}...`);
     
     try {
-      // Call AI via supabase.functions.invoke
-      const { data, error } = await supabase.functions.invoke("automation-ai-copilot", {
-        body: { 
-          type: "execute_workflow",
-          data: {
-            name: workflow.name,
-            description: workflow.description,
-            steps: workflow.steps,
-          }
+      // Call AI to simulate execution
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ 
+            type: "execute_workflow",
+            data: {
+              name: workflow.name,
+              description: workflow.description,
+              steps: workflow.steps,
+            }
+          }),
         }
-      });
+      );
 
       // Simulate processing time
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -181,7 +187,7 @@ export const AutomationWorkflowsManager = () => {
           : w
       ));
       
-      if (!error) {
+      if (response.ok) {
         toast.success('Workflow executado com sucesso!', {
           description: `${workflow.steps.length} passos processados.`
         });
@@ -206,11 +212,20 @@ export const AutomationWorkflowsManager = () => {
     setAiSuggestion(null);
     
     try {
-      const { data, error } = await supabase.functions.invoke("automation-ai-copilot", {
-        body: { type: "workflow_suggestions" }
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ type: "workflow_suggestions" }),
+        }
+      );
 
-      if (!error && data) {
+      if (response.ok) {
+        const data = await response.json();
         try {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
@@ -244,16 +259,24 @@ export const AutomationWorkflowsManager = () => {
     toast.info('Otimizando workflow com IA...');
     
     try {
-      const { data, error } = await supabase.functions.invoke("automation-ai-copilot", {
-        body: { 
-          type: "optimize_workflow",
-          data: {
-            name: workflow.name,
-            description: workflow.description,
-            steps: workflow.steps,
-          }
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ 
+            type: "optimize_workflow",
+            data: {
+              name: workflow.name,
+              description: workflow.description,
+              steps: workflow.steps,
+            }
+          }),
         }
-      });
+      );
 
       // Simulate optimization time
       await new Promise(resolve => setTimeout(resolve, 2000));

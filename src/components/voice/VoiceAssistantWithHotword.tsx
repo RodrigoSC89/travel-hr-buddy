@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -89,9 +88,7 @@ export function VoiceAssistantWithHotword({
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
-      } catch {
-        // Speech recognition already stopped - ignore
-      }
+      } catch (e) {}
       recognitionRef.current = null;
     }
     if (audioContextRef.current) {
@@ -159,11 +156,11 @@ export function VoiceAssistantWithHotword({
     recognition.onresult = (event: any) => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript.toLowerCase().trim();
-        logger.debug('[HotwordDetector] Heard:', transcript);
+        console.log('[HotwordDetector] Heard:', transcript);
         
         for (const pattern of HOTWORD_PATTERNS) {
           if (transcript.includes(pattern)) {
-            logger.info('[HotwordDetector] 🎙️ HOTWORD DETECTED!');
+            console.log('[HotwordDetector] 🎙️ HOTWORD DETECTED!');
             handleHotwordActivation();
             return;
           }
@@ -173,7 +170,7 @@ export function VoiceAssistantWithHotword({
 
     recognition.onerror = (event: any) => {
       if (event.error !== 'no-speech' && event.error !== 'aborted') {
-        logger.error('[HotwordDetector] Error:', event.error);
+        console.error('[HotwordDetector] Error:', event.error);
       }
     };
 
@@ -182,9 +179,7 @@ export function VoiceAssistantWithHotword({
       if (isListeningForHotword && !isActive && recognitionRef.current) {
         try {
           recognitionRef.current.start();
-        } catch {
-          // Recognition already started or unavailable - ignore
-        }
+        } catch (e) {}
       }
     };
 
@@ -226,9 +221,7 @@ export function VoiceAssistantWithHotword({
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
       osc.start();
       osc.stop(ctx.currentTime + 0.3);
-    } catch {
-      // AudioContext not available (likely server-side or unsupported browser)
-    }
+    } catch (e) {}
   };
 
   const startCommandListening = async () => {
@@ -247,12 +240,12 @@ export function VoiceAssistantWithHotword({
 
     recognition.onresult = (event: any) => {
       const command = event.results[0][0].transcript;
-      logger.debug('[VoiceAssistant] Command:', command);
+      console.log('[VoiceAssistant] Command:', command);
       handleUserCommand(command);
     };
 
     recognition.onerror = (event: any) => {
-      logger.error('[VoiceAssistant] Command error:', event.error);
+      console.error('[VoiceAssistant] Command error:', event.error);
       setIsListeningForCommand(false);
       if (event.error !== 'no-speech') {
         toast.error('Erro no reconhecimento');
@@ -272,9 +265,7 @@ export function VoiceAssistantWithHotword({
     setTimeout(() => {
       try {
         if (recognitionRef.current) recognitionRef.current.stop();
-      } catch {
-        // Recognition already stopped - ignore
-      }
+      } catch (e) {}
     }, 10000);
   };
 
@@ -355,7 +346,7 @@ export function VoiceAssistantWithHotword({
       if (error) throw error;
       if (data?.response) return data.response;
     } catch (error) {
-      logger.debug('[VoiceAssistant] AI fallback to local processing');
+      console.log('[VoiceAssistant] AI fallback to local processing');
     }
 
     // Local fallback responses
@@ -416,8 +407,8 @@ export function VoiceAssistantWithHotword({
             return;
           }
         }
-      } catch (err) {
-        logger.debug('[ARIA] ElevenLabs failed, using fallback', { error: String(err) });
+      } catch (error) {
+        console.log('[ARIA] ElevenLabs failed, using fallback:', error);
       }
       setIsSpeaking(false);
     }

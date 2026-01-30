@@ -1,7 +1,4 @@
-/**
- * Create SGSO Plan Dialog
- * PATCH 865: Removed @ts-nocheck, using supabase-aliases types
- */
+// @ts-nocheck
 import React, { useState } from "react";
 import {
   Dialog,
@@ -24,7 +21,6 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { SgsoPlanInsert } from "@/types/supabase-aliases";
 
 interface CreatePlanDialogProps {
   open: boolean;
@@ -38,11 +34,11 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState({
-    plan_name: "",
+    title: "",
     description: "",
     status: "draft",
-    effective_date: "",
-    review_date: "",
+    start_date: "",
+    end_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -57,12 +53,9 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
 
       const { error } = await supabase.from("sgso_plans").insert([
         {
-          plan_name: formData.plan_name,
-          status: formData.status,
-          effective_date: formData.effective_date || null,
-          review_date: formData.review_date || null,
-          content: { description: formData.description },
+          ...formData,
           created_by: user.id,
+          owner_id: user.id,
         },
       ]);
 
@@ -74,11 +67,11 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       });
 
       setFormData({
-        plan_name: "",
+        title: "",
         description: "",
         status: "draft",
-        effective_date: "",
-        review_date: "",
+        start_date: "",
+        end_date: "",
       });
 
       onOpenChange(false);
@@ -107,11 +100,11 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="plan_name">Plan Name</Label>
+            <Label htmlFor="title">Plan Title</Label>
             <Input
-              id="plan_name"
-              value={formData.plan_name}
-              onChange={(e) => setFormData({ ...formData, plan_name: e.target.value })}
+              id="title"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Safety Management Plan 2025"
               required
             />
@@ -130,22 +123,22 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="effective_date">Effective Date</Label>
+              <Label htmlFor="start_date">Start Date</Label>
               <Input
-                id="effective_date"
+                id="start_date"
                 type="date"
-                value={formData.effective_date}
-                onChange={(e) => setFormData({ ...formData, effective_date: e.target.value })}
+                value={formData.start_date}
+                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="review_date">Review Date</Label>
+              <Label htmlFor="end_date">End Date</Label>
               <Input
-                id="review_date"
+                id="end_date"
                 type="date"
-                value={formData.review_date}
-                onChange={(e) => setFormData({ ...formData, review_date: e.target.value })}
+                value={formData.end_date}
+                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
               />
             </div>
           </div>

@@ -364,65 +364,24 @@ export const CrewManagementDashboard = () => {
 
         <TabsContent value="certificates" className="space-y-6">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5" />
-                Gestão de Certificações
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                {crewMembers.slice(0, 5).map((member: CrewMember) => (
-                  <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{member.full_name}</p>
-                      <p className="text-sm text-muted-foreground">{member.position}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="secondary">{member.certification_count} certificados</Badge>
-                      <Badge variant={member.certification_count >= 5 ? "default" : "outline"}>
-                        {member.certification_count >= 5 ? "Completo" : "Pendente"}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <CardContent className="text-center py-12">
+              <Award className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Gestão de Certificações</h3>
+              <p className="text-muted-foreground">
+                Módulo de certificações em desenvolvimento
+              </p>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-6">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertCircle className="h-5 w-5" />
-                Relatórios de Tripulação
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-3">
-                <Card className="p-4 bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Total Tripulantes</p>
-                  <p className="text-2xl font-bold">{crewMembers.length}</p>
-                </Card>
-                <Card className="p-4 bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Disponíveis</p>
-                  <p className="text-2xl font-bold text-success">
-                    {crewMembers.filter((c: CrewMember) => c.status === 'available').length}
-                  </p>
-                </Card>
-                <Card className="p-4 bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Em Missão</p>
-                  <p className="text-2xl font-bold text-primary">
-                    {crewMembers.filter((c: CrewMember) => c.status === 'assigned').length}
-                  </p>
-                </Card>
-              </div>
-              <div className="mt-4">
-                <Button variant="outline" className="w-full" onClick={() => toast({ title: "Sucesso", description: "Relatório exportado com sucesso!" })}>
-                  Exportar Relatório Completo
-                </Button>
-              </div>
+            <CardContent className="text-center py-12">
+              <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Relatórios de Tripulação</h3>
+              <p className="text-muted-foreground">
+                Relatórios detalhados em desenvolvimento
+              </p>
             </CardContent>
           </Card>
         </TabsContent>

@@ -1,103 +1,86 @@
+// @ts-nocheck
 /**
- * PATCH 878 - Underwater Missions Persistence Service
- * Type-safe using Supabase Database types
+ * PATCH 459 - Underwater Missions Persistence Service
+ * Service for persisting underwater drone missions, telemetry, and events to database
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { Database, Json } from "@/integrations/supabase/types";
-
-type UnderwaterMissionRow = Database["public"]["Tables"]["underwater_missions"]["Row"];
-type UnderwaterMissionInsert = Database["public"]["Tables"]["underwater_missions"]["Insert"];
-type DroneTelemetryInsert = Database["public"]["Tables"]["drone_telemetry"]["Insert"];
-type MissionEventInsert = Database["public"]["Tables"]["mission_events"]["Insert"];
-
-export interface Mission {
-  id?: string;
-  name: string;
-  description?: string;
-  missionType?: string;
-  status: string;
-  waypoints: Array<{
-    id: string;
-    position: { lat: number; lon: number; depth: number };
-    actions?: string[];
-    description?: string;
-    completed?: boolean;
-  }>;
-  progress?: number;
-  scheduledStart?: string;
-  objectives?: string[];
-}
+import type { Mission } from "../missionUploadSub";
 
 export interface UnderwaterMissionRecord {
   id: string;
   user_id: string;
-  organization_id?: string | null;
-  mission_name: string;
+  drone_id?: string;
+  name: string;
+  description?: string;
   mission_type: string;
   status: string;
-  start_time?: string | null;
-  end_time?: string | null;
-  target_location?: Json | null;
-  depth_target?: number | null;
-  max_depth?: number | null;
-  battery_level?: number | null;
-  notes?: string | null;
-  metadata?: Json | null;
+  priority?: string;
+  start_location: Record<string, unknown>;
+  current_location?: Record<string, unknown>;
+  waypoints: Array<Record<string, unknown>>;
+  trajectory?: Array<Record<string, unknown>>;
+  scheduled_start?: string;
+  actual_start?: string;
+  estimated_end?: string;
+  actual_end?: string;
+  progress: number;
+  distance_covered_m?: number;
+  max_depth_reached?: number;
+  duration_minutes?: number;
+  objectives?: Record<string, unknown>;
+  findings?: Record<string, unknown>;
+  samples_collected?: Record<string, unknown>;
+  incidents?: Array<Record<string, unknown>>;
+  success_rate?: number;
+  result_summary?: string;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
 
 export interface DroneTelemetryRecord {
   id: string;
-  drone_id: string;
-  mission_id?: string | null;
-  battery_percentage?: number | null;
-  signal_strength_dbm?: number | null;
-  depth_meters?: number | null;
-  water_temperature_celsius?: number | null;
-  pressure_bar?: number | null;
-  position_x?: number | null;
-  position_y?: number | null;
-  position_z?: number | null;
+  mission_id?: string;
+  drone_id?: string;
+  user_id: string;
+  position: Record<string, unknown>;
+  orientation?: Record<string, unknown>;
+  velocity?: Record<string, unknown>;
+  water_temperature?: number;
+  pressure?: number;
+  visibility?: number;
+  current_speed?: number;
+  current_direction?: number;
+  battery_level: number;
+  battery_time_remaining?: number;
+  signal_strength: number;
+  connection_type?: string;
+  thruster_status?: Record<string, unknown>;
+  sensor_status?: Record<string, unknown>;
+  system_alerts?: Array<Record<string, unknown>>;
   timestamp: string;
   created_at: string;
 }
 
 export interface MissionEventRecord {
   id: string;
-  mission_id?: string | null;
+  mission_id: string;
+  user_id: string;
   event_type: string;
-  severity?: string | null;
+  severity: string;
   message: string;
-  event_data?: Json | null;
-  timestamp?: string | null;
-  created_at?: string | null;
-}
-
-function mapRowToRecord(row: UnderwaterMissionRow): UnderwaterMissionRecord {
-  return {
-    id: row.id,
-    user_id: row.user_id,
-    organization_id: row.organization_id,
-    mission_name: row.mission_name,
-    mission_type: row.mission_type,
-    status: row.status,
-    start_time: row.start_time,
-    end_time: row.end_time,
-    target_location: row.target_location,
-    depth_target: row.depth_target,
-    max_depth: row.max_depth,
-    battery_level: row.battery_level,
-    notes: row.notes,
-    metadata: row.metadata,
-    created_at: row.created_at || new Date().toISOString(),
-    updated_at: row.updated_at || new Date().toISOString(),
-  };
+  location?: Record<string, unknown>;
+  details?: Record<string, unknown>;
+  timestamp: string;
+  created_at: string;
 }
 
 class UnderwaterMissionService {
+  /**
+   * Save underwater mission to database
+   */
   async saveMission(mission: Mission, userId?: string): Promise<UnderwaterMissionRecord | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -107,19 +90,27 @@ class UnderwaterMissionService {
         return null;
       }
 
-      const missionData: UnderwaterMissionInsert = {
+      const missionData = {
         user_id: userId || user.id,
-        mission_name: mission.name,
+        name: mission.name,
+        description: mission.description,
         mission_type: mission.missionType || "survey",
         status: mission.status,
-        target_location: mission.waypoints[0]?.position as unknown as Json || { lat: 0, lon: 0, depth: 0 },
-        notes: mission.description,
+        start_location: mission.waypoints[0]?.position || { lat: 0, lon: 0, depth: 0 },
+        waypoints: mission.waypoints.map(wp => ({
+          id: wp.id,
+          position: wp.position,
+          actions: wp.actions,
+          description: wp.description,
+          completed: wp.completed,
+        })),
+        progress: mission.progress,
+        scheduled_start: mission.scheduledStart,
+        objectives: mission.objectives,
         metadata: {
-          waypoints: mission.waypoints,
-          objectives: mission.objectives,
-          scheduledStart: mission.scheduledStart,
           createdAt: new Date().toISOString(),
-        } as Json,
+          waypointCount: mission.waypoints.length,
+        },
       };
 
       const { data, error } = await supabase
@@ -134,37 +125,45 @@ class UnderwaterMissionService {
       }
 
       logger.info("Underwater mission saved successfully:", data.id);
-      return mapRowToRecord(data);
+      return data as UnderwaterMissionRecord;
     } catch (error) {
       logger.error("Error saving underwater mission:", error);
       return null;
     }
   }
 
+  /**
+   * Save telemetry data
+   */
   async saveTelemetry(
     missionId: string | undefined,
-    droneId: string,
-    position: { x?: number; y?: number; z?: number },
+    position: Record<string, unknown>,
+    orientation: Record<string, unknown>,
     batteryLevel: number,
     signalStrength: number,
     environmentalData?: {
       temperature?: number;
       pressure?: number;
-      depth?: number;
+      visibility?: number;
     }
   ): Promise<DroneTelemetryRecord | null> {
     try {
-      const telemetryData: DroneTelemetryInsert = {
-        drone_id: droneId,
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        return null;
+      }
+
+      const telemetryData = {
         mission_id: missionId,
-        position_x: position.x,
-        position_y: position.y,
-        position_z: position.z,
-        battery_percentage: batteryLevel,
-        signal_strength_dbm: signalStrength,
-        water_temperature_celsius: environmentalData?.temperature,
-        pressure_bar: environmentalData?.pressure,
-        depth_meters: environmentalData?.depth,
+        user_id: user.id,
+        position,
+        orientation,
+        battery_level: batteryLevel,
+        signal_strength: signalStrength,
+        water_temperature: environmentalData?.temperature,
+        pressure: environmentalData?.pressure,
+        visibility: environmentalData?.visibility,
         timestamp: new Date().toISOString(),
       };
 
@@ -179,33 +178,43 @@ class UnderwaterMissionService {
         return null;
       }
 
-      return data as unknown as DroneTelemetryRecord;
+      return data as DroneTelemetryRecord;
     } catch (error) {
       logger.error("Error saving telemetry:", error);
       return null;
     }
   }
 
+  /**
+   * Save mission event
+   */
   async saveMissionEvent(
     missionId: string,
     eventType: string,
     severity: string,
     message: string,
-    eventData?: Record<string, unknown>
+    location?: Record<string, unknown>
   ): Promise<MissionEventRecord | null> {
     try {
-      const eventInsert: MissionEventInsert = {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        return null;
+      }
+
+      const eventData = {
         mission_id: missionId,
+        user_id: user.id,
         event_type: eventType,
         severity,
         message,
-        event_data: eventData as Json,
+        location,
         timestamp: new Date().toISOString(),
       };
 
       const { data, error } = await supabase
         .from("mission_events")
-        .insert(eventInsert)
+        .insert(eventData)
         .select()
         .single();
 
@@ -214,13 +223,16 @@ class UnderwaterMissionService {
         return null;
       }
 
-      return data as unknown as MissionEventRecord;
+      return data as MissionEventRecord;
     } catch (error) {
       logger.error("Error saving mission event:", error);
       return null;
     }
   }
 
+  /**
+   * Get user's missions
+   */
   async getUserMissions(limit: number = 50): Promise<UnderwaterMissionRecord[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -241,18 +253,23 @@ class UnderwaterMissionService {
         return [];
       }
 
-      return (data || []).map(mapRowToRecord);
+      return (data as UnderwaterMissionRecord[]) || [];
     } catch (error) {
       logger.error("Error fetching missions:", error);
       return [];
     }
   }
 
+  /**
+   * Get mission statistics
+   */
   async getMissionStats(): Promise<{
     totalMissions: number;
     completedMissions: number;
     activeMissions: number;
-    avgDepth: number;
+    avgProgress: number;
+    avgSuccessRate: number;
+    totalDistance: number;
     maxDepth: number;
   } | null> {
     try {
@@ -272,15 +289,20 @@ class UnderwaterMissionService {
         return null;
       }
 
-      const missions = (data || []).map(mapRowToRecord);
-      const depths = missions.map(m => m.max_depth || 0).filter(d => d > 0);
+      const missions = (data as UnderwaterMissionRecord[]) || [];
 
       return {
         totalMissions: missions.length,
         completedMissions: missions.filter(m => m.status === "completed").length,
         activeMissions: missions.filter(m => m.status === "active").length,
-        avgDepth: depths.length > 0 ? depths.reduce((a, b) => a + b, 0) / depths.length : 0,
-        maxDepth: depths.length > 0 ? Math.max(...depths) : 0,
+        avgProgress: missions.length > 0 
+          ? missions.reduce((sum, m) => sum + m.progress, 0) / missions.length 
+          : 0,
+        avgSuccessRate: missions.filter(m => m.success_rate).length > 0
+          ? missions.reduce((sum, m) => sum + (m.success_rate || 0), 0) / missions.filter(m => m.success_rate).length
+          : 0,
+        totalDistance: missions.reduce((sum, m) => sum + (m.distance_covered_m || 0), 0),
+        maxDepth: Math.max(...missions.map(m => m.max_depth_reached || 0), 0),
       };
     } catch (error) {
       logger.error("Error fetching mission stats:", error);

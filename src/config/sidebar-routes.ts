@@ -40,7 +40,7 @@ import {
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
   ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar, Clock, Navigation
+  Radar, Clock
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -89,7 +89,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
   {
     title: "🧠 Central de Comando",
-    defaultOpen: false,
+    defaultOpen: true,
     items: [
       { label: "Visão Geral", path: "/central-comando/visao-geral", icon: Compass, emoji: "📊", status: "active" },
       { label: "Operações", path: "/central-comando/operacoes", icon: Activity, emoji: "⚡" },
@@ -110,8 +110,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🚢 Operações Marítimas",
     defaultOpen: false,
     items: [
-      { label: "🧠 Maritime AI Command", path: "/maritime-ai-command", icon: Brain, emoji: "🧠", badge: "NEURAL v4.1", status: "new" },
-      { label: "🚀 Operations Intelligence 3D", path: "/operations-intelligence", icon: Navigation, emoji: "🚀", badge: "AI+3D", status: "new" },
       { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
       { label: "Fleet Command Center", path: "/fleet-command", icon: Ship, emoji: "🚢" },
       { label: "Voyage Command", path: "/voyage-command", icon: Map, emoji: "🗺️" },
@@ -126,7 +124,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
       { label: "Histórico de Embarcação", path: "/vessel-history", icon: Activity, emoji: "📊" },
       { label: "Digital Twin", path: "/digital-twin", icon: Cpu, emoji: "🎮", badge: "v4.0", status: "new" },
-      { label: "Vessel Digital Twin", path: "/vessel-digital-twin", icon: Ship, emoji: "🚢", badge: "3D AI", status: "new" },
       { label: "Logistics Command", path: "/logistics-command", icon: Truck, emoji: "📦", badge: "v4.0", status: "new" },
     ],
   },
@@ -139,10 +136,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔧 Manutenção",
     defaultOpen: false,
     items: [
-      { label: "🧠 Maintenance AI Command", path: "/maintenance-ai-command", icon: Brain, emoji: "🧠", badge: "PREDICTIVE v4.1", status: "new" },
-      { label: "🔮 Manutenção Preditiva ML", path: "/predictive-maintenance-ml", icon: Brain, emoji: "🔮", badge: "TensorFlow.js", status: "new" },
       { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
-      { label: "Manutenção Preditiva", path: "/predictive-maintenance", icon: Activity, emoji: "📊" },
+      { label: "Manutenção Preditiva ML", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML", status: "new" },
       { label: "Saúde da Frota", path: "/maintenance-command?tab=health", icon: Activity, emoji: "💚" },
       { label: "IA Copilot", path: "/maintenance-command?tab=copilot", icon: Brain, emoji: "🤖" },
       { label: "Jobs & Ordens", path: "/maintenance-command?tab=jobs", icon: Briefcase, emoji: "📋" },
@@ -179,7 +174,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
       { label: "🎯 Agent Orchestration", path: "/agent-orchestration", icon: Brain, emoji: "🎯", badge: "v4.0", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
-      { label: "🚀 AI Command Center v4", path: "/ai-command-center", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
       { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
       { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
@@ -212,9 +206,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
   {
     title: "📊 Telemetria & Monitoramento",
-    defaultOpen: false,
+    defaultOpen: true,
     items: [
-      { label: "🛰️ Central IoT", path: "/iot-integration", icon: Cpu, emoji: "🛰️", badge: "INÉDITO", status: "new" },
       { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
       { label: "Otimização Satélite", path: "/satellite-optimizer", icon: Satellite, emoji: "📡", badge: "NEW", status: "new" },
@@ -255,7 +248,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "📁 Relatórios & Documentos",
     defaultOpen: false,
     items: [
-      { label: "🏢 Central Enterprise EDMS", path: "/enterprise-documents", icon: FileText, emoji: "🏢", badge: "ENTERPRISE", status: "new" },
       { label: "Reports Command", path: "/reports-command", icon: BarChart3, emoji: "📊" },
       { label: "Documentos IA", path: "/documents", icon: FileText, emoji: "📄" },
       { label: "Templates", path: "/templates", icon: FileText, emoji: "📋" },
@@ -287,10 +279,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: PREDICTIVE AUDIT AI =====
-      { label: "🔮 Auditoria Preditiva AI", path: "/predictive-audit", icon: Brain, emoji: "🔮", badge: "AI+ML+3D", status: "new" },
-      // ===== REVOLUCIONÁRIO: SMART AUDIT ENGINE =====
-      { label: "🧠 Smart Audit Engine", path: "/smart-audit-engine", icon: Brain, emoji: "🧠", badge: "AI+BLOCKCHAIN", status: "new" },
       // ===== DIAGNÓSTICO RÁPIDO - 5 SOLUÇÕES =====
       { label: "🔔 Alertas Certificados", path: "/diagnostic-certificates", icon: Bell, emoji: "🔔", badge: "NEW", status: "new" },
       { label: "📊 Dashboard Compliance", path: "/diagnostic-dashboard", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
@@ -343,9 +331,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "👥 RH & Pessoas",
     defaultOpen: false,
     items: [
-      { label: "🎯 HR Command Center", path: "/hr-command-center", icon: Brain, emoji: "🎯", badge: "PEOPLE AI v4.1", status: "new" },
-      { label: "🌟 HR Intelligence", path: "/hr-intelligence", icon: Brain, emoji: "🌟", badge: "TALENT AI", status: "new" },
-      { label: "🚀 Crew AI Copilot", path: "/crew-ai-copilot", icon: Brain, emoji: "🚀", badge: "MLC+FATIGUE+ML", status: "new" },
       { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
       { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
       { label: "👤 Portal Colaborador", path: "/employee-portal", icon: Users, emoji: "👤", badge: "NEW", status: "new" },
@@ -382,10 +367,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🎓 Treinamentos",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: TRAINING LXP =====
-      { label: "🎮 Training LXP", path: "/training-lxp", icon: Gamepad2, emoji: "🎮", badge: "GAMIFICATION", status: "new" },
-      { label: "🎯 Training AI Avançado", path: "/advanced-training-ai", icon: Brain, emoji: "🎯", badge: "ADAPTIVE+VR", status: "new" },
-      { label: "📄 Documentos de Treinamento", path: "/training-documents", icon: FileText, emoji: "📄", badge: "UPLOAD", status: "new" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
       { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", icon: Award, emoji: "📚" },
       { label: "Mentor DP", path: "/mentor-dp", icon: Users, emoji: "🧑‍🏫" },
@@ -400,9 +381,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "💰 Finanças & Procurement",
     defaultOpen: false,
     items: [
-      // ===== REVOLUCIONÁRIO: FINANCE AI =====
-      { label: "🤖 Finance Hub AI", path: "/finance-hub-ai", icon: Brain, emoji: "🤖", badge: "ML+PREDICT", status: "new" },
-      { label: "💹 Finance AI Avançado", path: "/advanced-finance-ai", icon: Brain, emoji: "💹", badge: "ML+FRAUD+ROI", status: "new" },
       { label: "Finance Command", path: "/finance-command", icon: DollarSign, emoji: "💰" },
       { label: "Voyage Accounting", path: "/voyage-accounting", icon: DollarSign, emoji: "📊", badge: "NEW" },
       { label: "Analytics Command", path: "/analytics-command", icon: BarChart3, emoji: "📊" },
@@ -435,12 +413,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "✈️ Viagens & Logística",
     defaultOpen: false,
     items: [
-      { label: "🤖 Smart Logistics AI", path: "/smart-logistics-ai", icon: Brain, emoji: "🤖", badge: "AUTONOMOUS", status: "new" },
-      { label: "📦 Logistics AI Hub", path: "/logistics-ai-hub", icon: Brain, emoji: "📦", badge: "SMART SUPPLY v4.1", status: "new" },
       { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
-      { label: "🚀 Travel AI Engine", path: "/travel-ai-engine", icon: Brain, emoji: "🚀", badge: "IA", status: "new" },
       { label: "Weather Command", path: "/weather-command", icon: Cloud, emoji: "🌤️" },
-      { label: "🌊 Weather Route Planner", path: "/weather-route-planner", icon: Navigation, emoji: "🌊", badge: "IA", status: "new" },
     ],
   },
 
@@ -452,10 +426,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
-      { label: "📱 PWA & Offline", path: "/pwa-settings", icon: HardDrive, emoji: "📱", badge: "NEW", status: "new" },
-      { label: "📊 Analytics Avançado", path: "/advanced-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
-      { label: "🌐 Idioma & Região", path: "/language-settings", icon: Globe, emoji: "🌐", badge: "i18n", status: "new" },
-      { label: "🧪 Testes E2E", path: "/test-suite", icon: Target, emoji: "🧪", badge: "QA", status: "new" },
       { label: "Hub de Integrações", path: "/integrations", icon: Link, emoji: "🔗" },
       { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
       { label: "Colaboração", path: "/collaboration", icon: Users, emoji: "🤝" },
@@ -468,39 +438,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Roadmap v3.2", path: "/roadmap", icon: Map, emoji: "🗺️", badge: "NEW" },
       { label: "QA Preview", path: "/qa/preview", icon: Eye, emoji: "🧪" },
       { label: "Production Deploy", path: "/production-deploy", icon: Zap, emoji: "🚀" },
-    ],
-  },
-  
-  // ============================================
-  // 🛠️ ADMINISTRAÇÃO & INFRAESTRUTURA (v4.0)
-  // ============================================
-  {
-    title: "🛠️ Admin & Infraestrutura",
-    defaultOpen: false,
-    requiredRoles: ['admin'],
-    items: [
-      { label: "🚢 Gestão de Acesso Embarcações", path: "/vessel-access-management", icon: Ship, emoji: "🚢", badge: "RLS", status: "new", requiredRoles: ['admin', 'hr_manager'] },
-      { label: "🚀 DevOps Dashboard", path: "/admin/devops", icon: Server, emoji: "🚀", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
-      { label: "🧠 ML & Analytics", path: "/admin/ml-analytics", icon: Brain, emoji: "🧠", badge: "ML", status: "new", requiredRoles: ['admin'] },
-      { label: "⚡ Scaling & Load", path: "/admin/scaling", icon: Zap, emoji: "⚡", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
-      { label: "🧪 QA & Testing", path: "/admin/qa-testing", icon: Target, emoji: "🧪", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
-      { label: "📚 Documentation Hub", path: "/admin/documentation", icon: BookOpen, emoji: "📚", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
-      { label: "🎧 Support Center", path: "/admin/support", icon: MessageSquare, emoji: "🎧", badge: "v4.0", status: "new", requiredRoles: ['admin'] },
-    ],
-  },
-
-  // ============================================
-  // 🛠️ FERRAMENTAS AVANÇADAS (17/17)
-  // PWA, Analytics, i18n, E2E Tests
-  // ============================================
-  {
-    title: "🛠️ Ferramentas Avançadas",
-    defaultOpen: false,
-    items: [
-      { label: "📱 PWA & Offline", path: "/pwa-settings", icon: HardDrive, emoji: "📱", badge: "NEW", status: "new" },
-      { label: "📊 Analytics Avançado", path: "/advanced-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
-      { label: "🌐 Idiomas & Região", path: "/language-settings", icon: Globe, emoji: "🌐", badge: "11 langs", status: "new" },
-      { label: "🧪 Suite de Testes E2E", path: "/test-suite", icon: Target, emoji: "🧪", badge: "Playwright", status: "new" },
     ],
   },
 ];

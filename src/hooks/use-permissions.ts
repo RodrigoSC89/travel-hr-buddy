@@ -21,15 +21,14 @@ export const usePermissions = () => {
   const { user } = useAuth();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [permissions, setPermissions] = useState<RolePermission[]>([]);
-  // PATCH v41: Start with FALSE to NEVER block UI - permissions load in background
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserRoleAndPermissions = async () => {
       if (!user) {
         setUserRole(null);
         setPermissions([]);
-        // No need to set isLoading false - already false
+        setIsLoading(false);
         return;
       }
 
@@ -120,14 +119,7 @@ export const usePermissions = () => {
       coordinator: "Coordenador",
       manager: "Gerente",
       employee: "Funcionário",
-      auditor: "Auditor",
-      legal: "Jurídico",
-      finance: "Financeiro",
-      purchasing: "Compras",
-      operations: "Operações",
-      crew_member: "Tripulante",
-      captain: "Comandante",
-      officer: "Oficial"
+      auditor: "Auditor"
     };
     return roleNames[role] || "Funcionário";
   };

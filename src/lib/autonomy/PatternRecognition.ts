@@ -34,8 +34,8 @@ class PatternRecognition {
   private isRunning = false;
 
   start() {
-    // Disabled by default - autonomy is opt-in via localStorage
-    const ENABLE = localStorage.getItem("nautilus_enable_autonomy") === "true";
+    // Disabled by default
+    const ENABLE = import.meta.env.VITE_ENABLE_AUTONOMY === "true";
     if (!ENABLE) {
       Logger.info("PatternRecognition disabled", undefined, "PatternRecognition");
       return;

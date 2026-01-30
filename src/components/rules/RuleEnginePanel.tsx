@@ -99,7 +99,7 @@ const OPERATORS = [
 
 export function RuleEnginePanel() {
   const [rules, setRules] = useState<Rule[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newRule, setNewRule] = useState<Partial<Rule>>({
     name: "",

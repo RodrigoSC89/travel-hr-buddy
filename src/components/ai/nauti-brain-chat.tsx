@@ -95,40 +95,95 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
     setMessages(prev => [...prev, assistantMessage]);
     
     try {
-      // Use supabase.functions.invoke instead of fetch for better reliability
-      const { data: fnData, error: fnError } = await supabase.functions.invoke('nauti-brain', {
-        body: {
-          messages: messages.slice(-10).map(m => ({ 
-            role: m.role, 
-            content: m.content 
-          })).concat({ role: 'user', content: input }),
-        },
-      });
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (fnError) {
-        if (fnError.message?.includes('429')) {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-brain`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            messages: messages.slice(-10).map(m => ({ 
+              role: m.role, 
+              content: m.content 
+            })).concat({ role: 'user', content: input }),
+          }),
+        }
+      );
+      
+      if (!response.ok) {
+        if (response.status === 429) {
           toast.error('Limite de requisições excedido', { description: 'Aguarde alguns segundos' });
           throw new Error('Rate limited');
         }
-        if (fnError.message?.includes('402')) {
+        if (response.status === 402) {
           toast.error('Créditos de IA insuficientes');
           throw new Error('Payment required');
         }
-        throw fnError;
+        throw new Error('Failed to get response');
       }
       
-      // Handle response from edge function
-      const responseContent = fnData?.content || fnData?.response || fnData?.message || 
-        (typeof fnData === 'string' ? fnData : JSON.stringify(fnData));
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No reader available');
       
-      // Update the assistant message with the response
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === assistantMessageId 
-            ? { ...msg, content: responseContent }
-            : msg
-        )
-      );
+      const decoder = new TextDecoder();
+      let accumulatedResponse = '';
+      let textBuffer = '';
+      
+      // Stream response token by token
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        textBuffer += decoder.decode(value, { stream: true });
+        
+        // Process SSE lines
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf('\n')) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+          
+          if (line.endsWith('\r')) line = line.slice(0, -1);
+          if (line.startsWith(':') || line.trim() === '') continue;
+          if (!line.startsWith('data: ')) continue;
+          
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === '[DONE]') break;
+          
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              accumulatedResponse += content;
+              setMessages(prev => 
+                prev.map(msg => 
+                  msg.id === assistantMessageId 
+                    ? { ...msg, content: accumulatedResponse }
+                    : msg
+                )
+              );
+            }
+          } catch {
+            // Incomplete JSON, wait for more data
+            textBuffer = line + '\n' + textBuffer;
+            break;
+          }
+        }
+      }
+      
+      // Ensure final content is set
+      if (accumulatedResponse) {
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === assistantMessageId 
+              ? { ...msg, content: accumulatedResponse }
+              : msg
+          )
+        );
+      }
       
     } catch (error) {
       console.error('Chat error:', error);

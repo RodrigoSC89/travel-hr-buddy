@@ -82,12 +82,10 @@ class MissionSyncService {
       this.syncWithSupabase();
     });
 
-    // PATCH v36: Evento offline REMOVIDO - navigator.onLine não é confiável no iOS PWA
-    // Nunca definir isOnline = false para evitar bloqueios falsos
     window.addEventListener("offline", () => {
-      console.log("Network: Offline event (ignored - always online mode)");
-      // this.isOnline = false; // REMOVIDO
-      // this.notifyCallbacks("offline"); // REMOVIDO
+      console.log("Network: Offline");
+      this.isOnline = false;
+      this.notifyCallbacks("offline");
     });
   }
 

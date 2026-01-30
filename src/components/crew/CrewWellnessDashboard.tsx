@@ -4,7 +4,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -140,75 +139,9 @@ const urgencyColors = {
 };
 
 export function CrewWellnessDashboard() {
-  const [crew, setCrew] = useState<CrewMember[]>([]);
+  const [crew] = useState<CrewMember[]>(MOCK_CREW);
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  // Load real data from database
-  useEffect(() => {
-    const loadCrewWellness = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('crew_wellbeing_logs')
-          .select(`
-            id,
-            crew_member_id,
-            mood_score,
-            energy_level,
-            stress_level,
-            created_at
-          `)
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        if (error || !data || data.length === 0) {
-          // Fallback to demo data if no real data
-          setCrew(MOCK_CREW);
-          setLoading(false);
-          return;
-        }
-
-        // Group by crew member and get latest wellness data
-        const crewMap = new Map<string, CrewMember>();
-        
-        (data as Record<string, unknown>[]).forEach((log) => {
-          const memberId = String(log.crew_member_id || '');
-          
-          if (!crewMap.has(memberId)) {
-            const moodScore = Number(log.mood_score || 50);
-            const stressLevel = Number(log.stress_level || 30);
-            const wellnessScore = Math.round((moodScore + (100 - stressLevel)) / 2);
-            
-            crewMap.set(memberId, {
-              id: memberId,
-              name: `Crew ${memberId.slice(0, 4)}`,
-              rank: 'Crew Member',
-              department: 'Operations',
-              daysOnboard: 30,
-              wellnessScore,
-              burnoutRisk: stressLevel,
-              trend: wellnessScore >= 60 ? 'stable' : stressLevel > 70 ? 'declining' : 'improving',
-              lastCheckIn: new Date(String(log.created_at)),
-              alerts: stressLevel > 70 ? [{ type: 'stress', severity: 'warning' as const, message: 'Alto nível de estresse' }] : []
-            });
-          }
-        });
-
-        if (crewMap.size > 0) {
-          setCrew(Array.from(crewMap.values()));
-        } else {
-          setCrew(MOCK_CREW);
-        }
-      } catch (err) {
-        console.warn('Error loading wellness data, using fallback', err);
-        setCrew(MOCK_CREW);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCrewWellness();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const stats = {
     total: crew.length,

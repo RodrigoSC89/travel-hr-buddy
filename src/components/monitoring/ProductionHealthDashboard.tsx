@@ -82,16 +82,13 @@ export const ProductionHealthDashboard: React.FC = () => {
       });
     }
 
-    // API Check - Hardcoded for production stability
-    const SUPABASE_URL = "https://vnbptmixvwropvanyhdb.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
-    
+    // API Check
     try {
       const start = performance.now();
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/`, {
         method: 'HEAD',
         headers: {
-          'apikey': SUPABASE_KEY
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
         }
       });
       const latency = Math.round(performance.now() - start);

@@ -27,14 +27,11 @@ import {
   Zap,
   Globe,
   Award,
-  Camera,
-  Loader2
+  Camera
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CrewScheduleVisualizer } from "./crew-schedule-visualizer";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 
 interface CrewMember {
   id: string;
@@ -108,75 +105,17 @@ interface TrainingProgram {
 
 export const MaritimeHRDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [wellnessData, setWellnessData] = useState<WellnessMetric[]>([]);
+  const [trainingPrograms, setTrainingPrograms] = useState<TrainingProgram[]>([]);
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  // Buscar dados reais do Supabase
-  const { data: crewMembers = [], isLoading } = useQuery({
-    queryKey: ['hr-crew-members'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('crew_members')
-        .select('*')
-        .limit(20);
-
-      if (!data?.length) return getDefaultCrewData();
-
-      return data.map(c => ({
-        id: c.id,
-        name: c.full_name || 'Tripulante',
-        rank: c.rank || 'Marinheiro',
-        nationality: c.nationality || 'BR',
-        vessel: c.vessel_id || undefined,
-        status: (c.status || 'available') as CrewMember['status'],
-        contract: {
-          start_date: c.contract_start || new Date().toISOString(),
-          end_date: c.contract_end || new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
-          duration_months: 6
-        },
-        certifications: [],
-        medical: {
-          last_checkup: new Date().toISOString(),
-          next_due: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-          status: 'valid' as const
-        },
-        contact: {
-          email: c.email || '',
-          phone: c.phone || '',
-          emergency_contact: ''
-        },
-        performance: {
-          rating: 8.5,
-          last_evaluation: new Date().toISOString(),
-          areas_improvement: []
-        },
-        sea_service: { total_months: 60, vessels_served: [], last_voyage_end: new Date().toISOString() }
-      }));
-    },
-    staleTime: 60 * 1000
-  });
-
-  // Dados de fallback
-  function getDefaultCrewData(): CrewMember[] {
-    return [{
-      id: "1",
-      name: "Capitão João Silva",
-      rank: "Master",
-      nationality: "Brazilian",
-      vessel: "MV Nautilus Pioneer",
-      status: "onboard",
-      contract: { start_date: "2023-06-01", end_date: "2024-02-01", duration_months: 8 },
-      certifications: [],
-      medical: { last_checkup: "2023-11-15", next_due: "2024-05-15", status: "valid" },
-      contact: { email: "joao.silva@nautilus.com", phone: "+55 11 99999-0001", emergency_contact: "+55 11 88888-0001" },
-      performance: { rating: 9.2, last_evaluation: "2023-12-01", areas_improvement: [] },
-      sea_service: { total_months: 120, vessels_served: ["MV Nautilus"], last_voyage_end: "2024-01-15" }
-    }];
-  }
-
-  const [trainingPrograms] = useState<TrainingProgram[]>([]);
-  const [wellnessData] = useState<WellnessMetric[]>([]);
+  useEffect(() => {
+    loadMockData();
+  }, []);
 
   const loadMockData = () => {
     const mockCrew: CrewMember[] = [
@@ -312,17 +251,20 @@ export const MaritimeHRDashboard: React.FC = () => {
       }
     ];
 
-    // Dados carregados via useQuery
+    setCrewMembers(mockCrew);
+    setTrainingPrograms(mockTraining);
+    setWellnessData(mockWellness);
+    setSelectedCrew(mockCrew[0]);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "onboard": return "text-info bg-info/10";
-    case "on_leave": return "text-success bg-success/10";
-    case "available": return "text-muted-foreground bg-muted";
-    case "training": return "text-secondary bg-secondary/10";
-    case "medical_leave": return "text-destructive bg-destructive/10";
-    default: return "text-muted-foreground bg-muted";
+    case "onboard": return "text-blue-600 bg-blue-100";
+    case "on_leave": return "text-green-600 bg-green-100";
+    case "available": return "text-muted-foreground bg-gray-100";
+    case "training": return "text-purple-600 bg-purple-100";
+    case "medical_leave": return "text-red-600 bg-red-100";
+    default: return "text-muted-foreground bg-gray-100";
     }
   };
 
@@ -373,7 +315,7 @@ export const MaritimeHRDashboard: React.FC = () => {
       title: "🗓️ Planejamento de Rotação",
       description: "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
     });
-    window.location.href = "/crew-management?tab=rotation";
+    // TODO: Implement rotation planning dialog/page
   };
 
   return (
@@ -822,34 +764,12 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-3">
-                  <Card className="p-4 bg-green-500/10 border-green-500/30">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-green-600" />
-                      <span className="font-medium">STCW</span>
-                    </div>
-                    <p className="text-2xl font-bold mt-2">94%</p>
-                    <p className="text-xs text-muted-foreground">Conformidade</p>
-                  </Card>
-                  <Card className="p-4 bg-blue-500/10 border-blue-500/30">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-blue-600" />
-                      <span className="font-medium">MLC 2006</span>
-                    </div>
-                    <p className="text-2xl font-bold mt-2">98%</p>
-                    <p className="text-xs text-muted-foreground">Conformidade</p>
-                  </Card>
-                  <Card className="p-4 bg-purple-500/10 border-purple-500/30">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-purple-600" />
-                      <span className="font-medium">ISM Code</span>
-                    </div>
-                    <p className="text-2xl font-bold mt-2">100%</p>
-                    <p className="text-xs text-muted-foreground">Conformidade</p>
-                  </Card>
-                </div>
-                <Button variant="outline" className="w-full">Ver Certificações Detalhadas</Button>
+              <div className="text-center py-12">
+                <Shield className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Sistema de Certificações</h3>
+                <p className="text-muted-foreground">
+                  Módulo de gestão de certificações STCW, MLC e ISM em desenvolvimento
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -864,44 +784,12 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Card className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-500/10 rounded-lg">
-                        <Heart className="h-5 w-5 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Índice de Bem-estar</p>
-                        <p className="text-2xl font-bold">87%</p>
-                      </div>
-                    </div>
-                  </Card>
-                  <Card className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-500/10 rounded-lg">
-                        <Clock className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Horas de Descanso Médias</p>
-                        <p className="text-2xl font-bold">10.2h</p>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-                <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="font-medium mb-2">Alertas Ativos</p>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Badge variant="outline" className="bg-yellow-500/10">2</Badge>
-                      <span>Tripulantes próximos do limite de horas</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Badge variant="outline" className="bg-green-500/10">0</Badge>
-                      <span>Casos de saúde ativos</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="text-center py-12">
+                <Heart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Wellness Inteligente</h3>
+                <p className="text-muted-foreground">
+                  Sistema de monitoramento de bem-estar e telemedicina em desenvolvimento
+                </p>
               </div>
             </CardContent>
           </Card>

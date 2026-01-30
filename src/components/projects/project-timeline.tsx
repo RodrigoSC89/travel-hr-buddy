@@ -1,7 +1,4 @@
-/**
- * Project Timeline - PATCH 877
- * PATCH 900 - Removed @ts-nocheck, using proper typing with dynamic imports
- */
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,14 +24,19 @@ import {
   Users,
   FileText
 } from "lucide-react";
-import type jsPDFType from "jspdf";
-
-// Dynamic DB access type
-type DynamicSupabaseClient = {
-  from: (table: string) => ReturnType<typeof supabase.from>;
+let XLSX: any = null;
+const loadXLSX = async () => {
+  if (!XLSX) {
+    XLSX = await import("xlsx");
+  }
+  return XLSX;
 };
 
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface ProjectTask {
   id: string;
@@ -75,17 +77,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const [viewMode, setViewMode] = useState<"gantt" | "list">("gantt");
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState<{
-    project_name: string;
-    task_name: string;
-    description: string;
-    status: string;
-    priority: string;
-    assigned_to: string;
-    start_date: string;
-    end_date: string;
-    progress: number;
-  }>({
+  const [formData, setFormData] = useState({
     project_name: "",
     task_name: "",
     description: "",
@@ -109,30 +101,13 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from("project_tasks")
         .select("*")
-        .order("start_date", { ascending: true });
+        .order("start_date", { ascending: true }) as any;
 
       if (error) throw error;
-      
-      const mapped = (data || []).map((row: Record<string, unknown>): ProjectTask => ({
-        id: row.id as string,
-        project_id: (row.project_id as string) || "",
-        project_name: (row.project_name as string) || "",
-        task_name: (row.task_name as string) || "",
-        description: (row.description as string) || "",
-        status: (row.status as ProjectTask["status"]) || "pending",
-        priority: (row.priority as ProjectTask["priority"]) || "medium",
-        assigned_to: row.assigned_to as string | undefined,
-        start_date: (row.start_date as string) || new Date().toISOString(),
-        end_date: (row.end_date as string) || new Date().toISOString(),
-        progress: (row.progress as number) || 0,
-        created_at: (row.created_at as string) || "",
-        updated_at: (row.updated_at as string) || ""
-      }));
-      
-      setTasks(mapped);
+      setTasks((data || []) as any);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       toast({
@@ -140,7 +115,6 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         description: "Failed to load tasks",
         variant: "destructive"
       });
-      setTasks([]);
     } finally {
       setLoading(false);
     }
@@ -148,23 +122,14 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
   const fetchDependencies = async () => {
     try {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from("project_dependencies")
-        .select("*");
+        .select("*") as any;
 
       if (error) throw error;
-      
-      const mapped = (data || []).map((row: Record<string, unknown>): TaskDependency => ({
-        id: row.id as string,
-        task_id: (row.task_id as string) || "",
-        depends_on_task_id: (row.depends_on_task_id as string) || "",
-        dependency_type: (row.dependency_type as TaskDependency["dependency_type"]) || "finish_to_start"
-      }));
-      
-      setDependencies(mapped);
+      setDependencies((data || []) as any);
     } catch (error) {
       console.error("Error fetching dependencies:", error);
-      setDependencies([]);
     }
   };
 
@@ -188,22 +153,12 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
   const createTask = async () => {
     try {
-      const insertData = {
-        project_id: formData.project_name,
-        project_name: formData.project_name,
-        task_name: formData.task_name,
-        description: formData.description,
-        status: formData.status,
-        priority: formData.priority,
-        assigned_to: formData.assigned_to || null,
-        start_date: formData.start_date,
-        end_date: formData.end_date,
-        progress: formData.progress
-      };
-
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("project_tasks")
-        .insert([insertData] as never);
+        .insert([{
+          project_id: formData.project_name, // In a real app, this would be a proper UUID
+          ...formData
+        }]);
 
       if (error) throw error;
 
@@ -225,21 +180,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     if (!selectedTask) return;
 
     try {
-      const updateData = {
-        project_name: formData.project_name,
-        task_name: formData.task_name,
-        description: formData.description,
-        status: formData.status,
-        priority: formData.priority,
-        assigned_to: formData.assigned_to || null,
-        start_date: formData.start_date,
-        end_date: formData.end_date,
-        progress: formData.progress
-      };
-
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("project_tasks")
-        .update(updateData as never)
+        .update(formData)
         .eq("id", selectedTask.id);
 
       if (error) throw error;
@@ -263,7 +206,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     if (!confirm("Are you sure you want to delete this task?")) return;
 
     try {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("project_tasks")
         .delete()
         .eq("id", id);
@@ -312,65 +255,52 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     setIsEditOpen(true);
   };
 
-  const exportToExcel = async () => {
-    try {
-      const XLSX = await import("xlsx");
-      
-      const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({
-        "Project": task.project_name,
-        "Task": task.task_name,
-        "Status": task.status,
-        "Priority": task.priority,
-        "Assigned To": task.assigned_to || "Unassigned",
-        "Start Date": new Date(task.start_date).toLocaleDateString(),
-        "End Date": new Date(task.end_date).toLocaleDateString(),
-        "Progress": `${task.progress}%`
-      })));
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({
+      "Project": task.project_name,
+      "Task": task.task_name,
+      "Status": task.status,
+      "Priority": task.priority,
+      "Assigned To": task.assigned_to || "Unassigned",
+      "Start Date": new Date(task.start_date).toLocaleDateString(),
+      "End Date": new Date(task.end_date).toLocaleDateString(),
+      "Progress": `${task.progress}%`
+    })));
 
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
-      XLSX.writeFile(workbook, "project_timeline.xlsx");
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
+    XLSX.writeFile(workbook, "project_timeline.xlsx");
 
-      toast({ title: "Success", description: "Timeline exported to Excel" });
-    } catch (error) {
-      console.error("Error exporting to Excel:", error);
-      toast({ title: "Error", description: "Failed to export", variant: "destructive" });
-    }
+    toast({ title: "Success", description: "Timeline exported to Excel" });
   };
 
-  const exportToPDF = async () => {
-    try {
-      const { default: jsPDF } = await import("jspdf");
-      const doc: jsPDFType = new jsPDF();
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(16);
+    doc.text("Project Timeline", 14, 20);
+    
+    doc.setFontSize(10);
+    let yPos = 35;
+    
+    filteredTasks.forEach((task, index) => {
+      if (yPos > 270) {
+        doc.addPage();
+        yPos = 20;
+      }
       
-      doc.setFontSize(16);
-      doc.text("Project Timeline", 14, 20);
-      
-      doc.setFontSize(10);
-      let yPos = 35;
-      
-      filteredTasks.forEach((task, index) => {
-        if (yPos > 270) {
-          doc.addPage();
-          yPos = 20;
-        }
-        
-        doc.text(`${index + 1}. ${task.task_name}`, 14, yPos);
-        yPos += 5;
-        doc.text(`   Project: ${task.project_name}`, 14, yPos);
-        yPos += 5;
-        doc.text(`   Status: ${task.status} | Priority: ${task.priority}`, 14, yPos);
-        yPos += 5;
-        doc.text(`   Duration: ${new Date(task.start_date).toLocaleDateString()} - ${new Date(task.end_date).toLocaleDateString()}`, 14, yPos);
-        yPos += 10;
-      });
-      
-      doc.save("project_timeline.pdf");
-      toast({ title: "Success", description: "Timeline exported to PDF" });
-    } catch (error) {
-      console.error("Error exporting to PDF:", error);
-      toast({ title: "Error", description: "Failed to export", variant: "destructive" });
-    }
+      doc.text(`${index + 1}. ${task.task_name}`, 14, yPos);
+      yPos += 5;
+      doc.text(`   Project: ${task.project_name}`, 14, yPos);
+      yPos += 5;
+      doc.text(`   Status: ${task.status} | Priority: ${task.priority}`, 14, yPos);
+      yPos += 5;
+      doc.text(`   Duration: ${new Date(task.start_date).toLocaleDateString()} - ${new Date(task.end_date).toLocaleDateString()}`, 14, yPos);
+      yPos += 10;
+    });
+    
+    doc.save("project_timeline.pdf");
+    toast({ title: "Success", description: "Timeline exported to PDF" });
   };
 
   const getStatusColor = (status: string) => {
@@ -391,7 +321,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case "critical":
-      return "bg-destructive/20 text-destructive";
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     case "high":
       return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
     case "medium":
@@ -679,7 +609,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+                <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -694,7 +624,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               </div>
               <div>
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value) => setFormData({ ...formData, priority: value })}>
+                <Select value={formData.priority} onValueChange={(value: any) => setFormData({ ...formData, priority: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

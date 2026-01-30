@@ -128,14 +128,6 @@ class TelemetryTracker {
     this.queue = [];
 
     try {
-      // Check auth before sending telemetry (prevents 401 errors)
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        // Re-add events for later (when user logs in)
-        this.queue = [...events.slice(0, 50), ...this.queue];
-        return;
-      }
-
       // Store telemetry in analytics_events table
       const { error } = await supabase.from("analytics_events").insert(
         events.map(event => ({
@@ -152,17 +144,18 @@ class TelemetryTracker {
           page_url: window.location.href,
           user_agent: navigator.userAgent,
           session_id: this.sessionId,
-          user_id: user.id,
         }))
       );
 
       if (error) {
-        // Put events back in queue to retry (max 50)
-        this.queue = [...events.slice(0, 50), ...this.queue];
+        logger.error("Failed to send telemetry", { error });
+        // Put events back in queue to retry
+        this.queue.unshift(...events);
       }
-    } catch {
-      // Put events back in queue to retry (max 50)
-      this.queue = [...events.slice(0, 50), ...this.queue];
+    } catch (error) {
+      logger.error("Telemetry flush error", { error });
+      // Put events back in queue to retry
+      this.queue.unshift(...events);
     }
   }
 

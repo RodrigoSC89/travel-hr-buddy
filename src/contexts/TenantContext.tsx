@@ -145,7 +145,6 @@ interface TenantContextType {
 }
 
 // Default context value to prevent null errors
-// PATCH v43: Default values with isLoading=FALSE to never block UI
 const defaultTenantValue: TenantContextType = {
   currentTenant: null,
   currentBranding: null,
@@ -153,7 +152,7 @@ const defaultTenantValue: TenantContextType = {
   tenantPlans: [],
   tenantUsage: null,
   availableTenants: [],
-  isLoading: false, // CRITICAL: Must be false to never block UI
+  isLoading: true,
   error: null,
   switchTenant: async () => {},
   updateBranding: async () => {},
@@ -194,8 +193,7 @@ export const TenantProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [tenantPlans, setTenantPlans] = useState<SaasPlan[]>([]);
   const [tenantUsage, setTenantUsage] = useState<TenantUsage | null>(null);
   const [availableTenants, setAvailableTenants] = useState<SaasTenant[]>([]);
-  // PATCH v41: Start with FALSE to NEVER block UI - tenant loads in background
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Carregar dados iniciais

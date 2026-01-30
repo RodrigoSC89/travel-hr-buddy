@@ -1,53 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { edgeLogger } from "../_shared/logger.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-interface WeatherData {
-  main?: { temp: number; feels_like: number; humidity: number; pressure: number; sea_level?: number };
-  wind?: { speed: number; deg: number; gust?: number };
-  visibility?: number;
-  weather?: Array<{ description: string; icon: string }>;
-  clouds?: { all: number };
-  name?: string;
-}
-
-interface ForecastData {
-  list?: Array<{
-    dt_txt: string;
-    main: { temp: number };
-    wind: { speed: number; deg: number };
-    weather: Array<{ description: string }>;
-    rain?: { "3h"?: number };
-  }>;
-}
-
-interface WindyData {
-  temp?: number[];
-  rh?: number[];
-  pressure?: number[];
-  wind?: number[];
-  wind_u?: number[];
-  wind_v?: number[];
-  dewpoint?: number[];
-  waves_height?: number[];
-  waves_direction?: number[];
-  waves_period?: number[];
-  swell_height?: number[];
-  ts?: number[];
-}
-
-interface WeatherAlert {
-  type: string;
-  severity: string;
-  title: string;
-  description: string;
-  recommendation: string;
-}
 
 /**
  * Weather Integration Edge Function
@@ -74,15 +31,15 @@ serve(async (req) => {
 
     const { latitude, longitude, vessel_id, source = "auto" } = await req.json();
 
-    edgeLogger.info(`Fetching weather data for vessel: ${vessel_id}`, { latitude, longitude, source });
+    console.log(`Fetching weather data for vessel: ${vessel_id} at coordinates: ${latitude}, ${longitude} (source: ${source})`);
 
-    let weatherData: WeatherData = {};
-    let forecastData: ForecastData = {};
-    let windyData: WindyData | null = null;
+    let weatherData: any = {};
+    let forecastData: any = {};
+    let windyData: any = null;
 
     // Fetch OpenWeather data
     if (openWeatherApiKey && (source === "auto" || source === "openweather")) {
-      edgeLogger.debug("Fetching OpenWeather data...");
+      console.log("Fetching OpenWeather data...");
       
       // Current weather
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherApiKey}&units=metric&lang=pt_br`;
@@ -97,7 +54,7 @@ serve(async (req) => {
 
     // Fetch Windy data (Point Forecast API)
     if (windyApiKey && (source === "auto" || source === "windy")) {
-      edgeLogger.debug("Fetching Windy data...");
+      console.log("Fetching Windy data...");
       
       try {
         const windyUrl = "https://api.windy.com/api/point-forecast/v2";
@@ -118,12 +75,12 @@ serve(async (req) => {
 
         if (windyResponse.ok) {
           windyData = await windyResponse.json();
-          edgeLogger.debug("Windy data received successfully");
+          console.log("Windy data received successfully");
         } else {
-          edgeLogger.warn(`Windy API error: ${windyResponse.status} ${windyResponse.statusText}`);
+          console.log(`Windy API error: ${windyResponse.status} ${windyResponse.statusText}`);
         }
       } catch (windyError) {
-        edgeLogger.warn("Windy API call failed", { error: windyError instanceof Error ? windyError.message : "Unknown error" });
+        console.log("Windy API call failed:", windyError instanceof Error ? windyError.message : "Unknown error");
       }
     }
 
@@ -139,8 +96,8 @@ serve(async (req) => {
         humidity: weatherData.main?.humidity ?? windyData?.rh?.[0] ?? null,
         pressure: weatherData.main?.pressure ?? windyData?.pressure?.[0] ?? null,
         visibility: weatherData.visibility ?? null,
-        wind_speed: weatherData.wind?.speed ?? (windyData?.wind?.[0] ? Math.sqrt((windyData.wind_u?.[0] ?? 0)**2 + (windyData.wind_v?.[0] ?? 0)**2) : null),
-        wind_direction: weatherData.wind?.deg ?? (windyData?.wind_u?.[0] ? Math.atan2(windyData.wind_u[0], windyData.wind_v?.[0] ?? 0) * 180 / Math.PI : null),
+        wind_speed: weatherData.wind?.speed ?? (windyData?.wind?.[0] ? Math.sqrt(windyData.wind_u?.[0]**2 + windyData.wind_v?.[0]**2) : null),
+        wind_direction: weatherData.wind?.deg ?? (windyData?.wind_u?.[0] ? Math.atan2(windyData.wind_u[0], windyData.wind_v[0]) * 180 / Math.PI : null),
         wind_gust: weatherData.wind?.gust ?? null,
         weather_condition: weatherData.weather?.[0]?.description ?? "Dados do Windy",
         weather_icon: weatherData.weather?.[0]?.icon ?? null,
@@ -155,7 +112,7 @@ serve(async (req) => {
         direction: windyData.waves_direction?.[0] ?? null,
         period: windyData.waves_period?.[0] ?? null,
       } : null,
-      forecast: forecastData.list?.slice(0, 8).map((item) => ({
+      forecast: forecastData.list?.slice(0, 8).map((item: any) => ({
         datetime: item.dt_txt,
         temperature: item.main.temp,
         wind_speed: item.wind.speed,
@@ -171,7 +128,7 @@ serve(async (req) => {
         pressure: windyData.pressure ?? [],
         waves_height: windyData.waves_height ?? [],
       } : null,
-      alerts: [] as WeatherAlert[],
+      alerts: [] as any[],
       marine_conditions: {
         wave_height: windyData?.waves_height?.[0] ?? null,
         wave_direction: windyData?.waves_direction?.[0] ?? null,
@@ -181,7 +138,7 @@ serve(async (req) => {
     };
 
     // Check for weather alerts
-    const alerts: WeatherAlert[] = [];
+    const alerts = [];
     
     const windSpeed = processedWeather.current.wind_speed;
     if (windSpeed && windSpeed > 15) { // 15 m/s = ~30 knots
@@ -243,7 +200,7 @@ serve(async (req) => {
           recorded_at: new Date().toISOString()
         });
     } catch (dbError) {
-      edgeLogger.warn("Failed to store weather data", { error: dbError instanceof Error ? dbError.message : "Unknown error" });
+      console.log("Failed to store weather data:", dbError instanceof Error ? dbError.message : "Unknown error");
     }
 
     // Create notifications for severe weather
@@ -259,14 +216,11 @@ serve(async (req) => {
             metadata: { vessel_id, alerts, coordinates: { latitude, longitude } }
           });
       } catch (notifError) {
-        edgeLogger.warn("Failed to create notification", { error: notifError instanceof Error ? notifError.message : "Unknown error" });
+        console.log("Failed to create notification:", notifError instanceof Error ? notifError.message : "Unknown error");
       }
     }
 
-    edgeLogger.info(`Weather data processed for vessel: ${vessel_id}`, { 
-      sources: processedWeather.sources, 
-      alertsCount: alerts.length 
-    });
+    console.log(`Weather data processed successfully for vessel: ${vessel_id} (sources: OpenWeather=${processedWeather.sources.openweather}, Windy=${processedWeather.sources.windy})`);
 
     return new Response(
       JSON.stringify({
@@ -286,7 +240,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    edgeLogger.error("Error fetching weather data", { error });
+    console.error("Error fetching weather data:", error);
 
     return new Response(
       JSON.stringify({

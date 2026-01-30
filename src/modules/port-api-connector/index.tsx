@@ -122,15 +122,6 @@ export default function PortAPIConnector() {
   const [logs, setLogs] = useState<APILog[]>(mockLogs);
   const [isSyncing, setIsSyncing] = useState(false);
   const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
-  const [portSettings, setPortSettings] = useState(() => {
-    const saved = localStorage.getItem("port-api-settings");
-    return saved ? JSON.parse(saved) : { timeout: 30000, retryAttempts: 3, autoSync: true, retryOnFailure: true, verboseLog: false };
-  });
-
-  const handleSaveSettings = () => {
-    localStorage.setItem("port-api-settings", JSON.stringify(portSettings));
-    toast.success("Configurações salvas com sucesso!");
-  };
 
   const syncAll = () => {
     setIsSyncing(true);
@@ -436,7 +427,7 @@ export default function PortAPIConnector() {
                 </div>
               </div>
 
-              <Button onClick={handleSaveSettings}>
+              <Button onClick={() => toast.success("Configurações salvas!")}>
                 Salvar Configurações
               </Button>
             </CardContent>

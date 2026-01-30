@@ -8,7 +8,6 @@ import { syncQueue } from "../services/syncQueue";
 import { networkDetector } from "../services/networkDetector";
 import { NetworkStatus } from "../types";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 
 interface SyncManagerState {
   isOnline: boolean;
@@ -32,10 +31,8 @@ interface SyncManagerActions {
 }
 
 export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
-  // PATCH v44 iOS PWA: SEMPRE inicializar como online
-  // navigator.onLine NÃO é confiável no iOS Safari PWA - causa falsos positivos
   const [state, setState] = useState<SyncManagerState>({
-    isOnline: true, // CRÍTICO: Nunca usar navigator.onLine aqui
+    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
     isSyncing: false,
     queueSize: 0,
     lastSyncTime: null,
@@ -218,7 +215,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       const currentQueueSize = await syncQueue.getQueueSize();
       
       if (state.isOnline && state.networkQuality === "good" && currentQueueSize > 0) {
-        logger.debug("Auto-sync check: syncing pending changes...");
+        console.log("Auto-sync check: syncing pending changes...");
         await syncNow();
       }
     }, 5 * 60 * 1000); // 5 minutes

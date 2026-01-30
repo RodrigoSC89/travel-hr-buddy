@@ -26,12 +26,11 @@ interface NetworkStats {
 }
 
 const NetworkStatusWidgetComponent: React.FC = () => {
-  // PATCH v43 iOS PWA: Sempre inicializar como online - navigator.onLine não confiável
   const [stats, setStats] = useState<NetworkStats>({
     downlink: 10,
     rtt: 50,
     effectiveType: '4g',
-    isOnline: true, // CRÍTICO: Nunca usar navigator.onLine aqui
+    isOnline: navigator.onLine,
   });
 
   // PATCH v20: Sempre assume online - navigator.onLine não confiável no iOS PWA

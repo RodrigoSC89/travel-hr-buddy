@@ -147,13 +147,9 @@ export default function PortCallOptimizationV2() {
               </div>
             </CardV2>
             <CardV2 icon={MapPin} title="Coordenação Portuária" description="Status de berços e agentes" gradient="blue">
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-2 text-sm">
-                  <div className="p-2 rounded bg-green-500/10 text-center"><span className="font-medium text-green-600">Berço A1</span><p className="text-xs text-muted-foreground">Disponível</p></div>
-                  <div className="p-2 rounded bg-orange-500/10 text-center"><span className="font-medium text-orange-600">Berço A2</span><p className="text-xs text-muted-foreground">Em uso</p></div>
-                  <div className="p-2 rounded bg-blue-500/10 text-center"><span className="font-medium text-blue-600">Berço B1</span><p className="text-xs text-muted-foreground">Reservado</p></div>
-                </div>
-                <div className="text-sm"><p className="font-medium">Agente: Maritime Services</p><p className="text-muted-foreground">Contato: +55 13 99999-0000</p></div>
+              <div className="text-center py-8 text-muted-foreground">
+                <MapPin className="h-12 w-12 mx-auto mb-4 opacity-30" />
+                <p>Mapa de berços em desenvolvimento</p>
               </div>
             </CardV2>
           </div>

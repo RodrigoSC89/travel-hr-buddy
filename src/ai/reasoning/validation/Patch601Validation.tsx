@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Brain, CheckCircle2, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
 
 interface ReasoningStep {
   id: string;
@@ -75,7 +74,7 @@ export function Patch601Validation() {
         description: `Processed ${steps.length} reasoning steps with coherent justifications`,
       });
       
-      logger.info("PATCH 601 ✅ Strategic reasoning sequence", { steps });
+      console.log("PATCH 601 ✅ Strategic reasoning sequence:", steps);
     }, 1500);
   };
 

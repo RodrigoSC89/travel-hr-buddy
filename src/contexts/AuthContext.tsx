@@ -23,12 +23,11 @@ interface AuthContextType {
   clearSession: () => Promise<void>;
 }
 
-// PATCH v49: Default context MUST have isLoading: FALSE
-// This is CRITICAL - if true, entire app blocks forever waiting for context
+// Default context value to prevent null errors
 const defaultAuthValue: AuthContextType = {
   user: null,
   session: null,
-  isLoading: false, // CRITICAL v49: NEVER true - prevents infinite loading
+  isLoading: true,
   signUp: async () => ({ error: null }),
   signIn: async () => ({ error: null }),
   signInWithOAuth: async () => ({ error: null }),
@@ -114,59 +113,81 @@ function clearCorruptedTokens(): void {
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  // CRITICAL v29: Start with isLoading FALSE to NEVER block render
-  // Auth check happens in background - UI is always immediately available
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
+    
+    // Safety timeout - ALWAYS exit loading state
+    const safetyTimeout = setTimeout(() => {
+      if (mounted && isLoading) {
+        logger.warn("[AuthContext] Safety timeout (20s) - forcing ready state");
+        setIsLoading(false);
+      }
+    }, 20000);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
-    // Initialize auth - FAST, non-blocking
     const initializeAuth = async () => {
       try {
-        const { data } = await supabase.auth.getSession();
+        // Set up auth state listener FIRST (critical for session detection)
+        const { data } = supabase.auth.onAuthStateChange(
+          (event, currentSession) => {
+            if (!mounted) return;
+            
+            // Update state synchronously - NEVER async here
+            setSession(currentSession);
+            setUser(currentSession?.user ?? null);
+            setIsLoading(false);
+            
+            // Defer toasts to prevent deadlock
+            if (event === "SIGNED_IN") {
+              setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
+            } else if (event === "SIGNED_OUT") {
+              setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
+            } else if (event === "TOKEN_REFRESHED") {
+              // Token refreshed - silent success
+            }
+          }
+        );
         
-        if (!mounted) return;
-        
-        if (data.session) {
-          setSession(data.session);
-          setUser(data.session.user);
+        subscription = data.subscription;
+
+        // THEN check for existing session
+        try {
+          const { data: sessionData, error } = await supabase.auth.getSession();
+
+          if (!mounted) return;
+
+          if (error) {
+            logger.warn("[AuthContext] Error getting session", { error: error.message });
+            // Clear potentially corrupted session
+            clearCorruptedTokens();
+          }
+          
+          setSession(sessionData?.session ?? null);
+          setUser(sessionData?.session?.user ?? null);
+        } catch (fetchError) {
+          logger.warn("[AuthContext] Failed to fetch session (network issue)");
+        } finally {
+          if (mounted) {
+            setIsLoading(false);
+          }
         }
-      } catch (e) {
-        // On ANY error, just continue - app should still work
-        logger.warn("[AuthContext] Session fetch failed", e instanceof Error ? { msg: e.message } : {});
+      } catch (error) {
+        if (!mounted) return;
+        logger.warn("[AuthContext] Error initializing auth", { error });
+        setIsLoading(false);
       }
     };
 
-    // Set up listener for auth changes
-    const { data } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
-        if (!mounted) return;
-        
-        // Update state immediately
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-        
-        // Notifications (deferred)
-        if (event === "SIGNED_IN") {
-          setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
-        } else if (event === "SIGNED_OUT") {
-          setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
-        }
-      }
-    );
-    
-    subscription = data.subscription;
-
-    // Start auth check
     initializeAuth();
 
     return () => {
       mounted = false;
+      clearTimeout(safetyTimeout);
       if (subscription) {
         subscription.unsubscribe();
       }
@@ -256,10 +277,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         const errorMsg = error.message.toLowerCase();
         let userMessage = "Verifique suas credenciais e tente novamente.";
         
-        if (errorMsg.includes('captcha')) {
-          // CAPTCHA enabled in Supabase but not implemented in frontend
-          userMessage = "CAPTCHA habilitado no Supabase. Desabilite em Authentication → Settings → CAPTCHA protection → Disabled";
-        } else if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid') || errorMsg.includes('credentials')) {
+        if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid') || errorMsg.includes('credentials')) {
           userMessage = "Email ou senha incorretos.";
         } else if (errorMsg.includes('email not confirmed')) {
           userMessage = "Confirme seu email antes de entrar. Verifique sua caixa de entrada.";

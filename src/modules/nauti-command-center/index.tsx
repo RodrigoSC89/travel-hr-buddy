@@ -67,8 +67,7 @@ const tabs = [
 
 export default function NautilusCommandCenter() {
   const [activeTab, setActiveTab] = useState("overview");
-  // PATCH v44: Iniciar com isLoading=false para NUNCA bloquear renderização
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => 
     document.documentElement.classList.contains("dark")
@@ -135,42 +134,24 @@ export default function NautilusCommandCenter() {
     }
   }, []);
 
-  // PATCH v47: Single mount effect with throttled realtime - NEVER causes infinite loops
   useEffect(() => {
-    let mounted = true;
-    
-    // Background load on mount
     loadSystemData();
 
-    // Throttled realtime - max once per 60 seconds
-    let lastUpdate = 0;
-    const throttledRefresh = () => {
-      const now = Date.now();
-      if (now - lastUpdate > 60000 && mounted) { // 60s minimum between updates
-        lastUpdate = now;
-        loadSystemData();
-      }
-    };
-
+    // Real-time subscriptions
     const channel = supabase
-      .channel("command-center-v47")
-      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, throttledRefresh)
-      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, throttledRefresh)
+      .channel("command-center-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => loadSystemData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => loadSystemData())
       .subscribe();
 
-    // Auto refresh every 2 minutes when tab is visible
-    const interval = setInterval(() => {
-      if (mounted && document.visibilityState === 'visible') {
-        loadSystemData();
-      }
-    }, 120000);
+    // Auto refresh every 30 seconds
+    const interval = setInterval(loadSystemData, 30000);
 
     return () => {
-      mounted = false;
       supabase.removeChannel(channel);
       clearInterval(interval);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadSystemData]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);

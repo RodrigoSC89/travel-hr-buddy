@@ -23,7 +23,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
@@ -79,7 +78,7 @@ const VesselContracts = () => {
       if (contractsRes.data) setContracts(contractsRes.data);
       if (downtimeRes.data) setDowntimeEvents(downtimeRes.data);
     } catch (error) {
-      logger.error('Error loading contract data:', error);
+      console.error('Error loading data:', error);
       toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
@@ -97,7 +96,7 @@ const VesselContracts = () => {
       toast.success('Análise de downtime concluída');
       loadData();
     } catch (error) {
-      logger.error('Error analyzing downtime:', error);
+      console.error('Error analyzing downtime:', error);
       toast.error('Erro na análise IA');
     } finally {
       setIsAnalyzing(false);
@@ -115,7 +114,7 @@ const VesselContracts = () => {
       toast.success('BROA gerado com sucesso');
       loadData();
     } catch (error) {
-      logger.error('Error generating BROA:', error);
+      console.error('Error generating BROA:', error);
       toast.error('Erro ao gerar BROA');
     } finally {
       setIsAnalyzing(false);

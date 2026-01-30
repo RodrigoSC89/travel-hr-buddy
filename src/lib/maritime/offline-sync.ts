@@ -88,7 +88,7 @@ export function detectConnectionQuality(): ConnectionQuality {
     downlink: connection?.downlink || 10,
     rtt: connection?.rtt || 100,
     saveData: connection?.saveData || false,
-    isOnline: true, // PATCH v43 iOS PWA: Sempre true - navigator.onLine não confiável
+    isOnline: navigator.onLine,
     isMaritime: false,
   };
 
@@ -338,13 +338,15 @@ class SyncManager {
         try {
           // Implement actual sync logic here
           // This would call Supabase with the pending operations
+          console.log('[Sync] Processing:', item.table, item.operation);
 
           // Simulate sync delay based on connection
           await new Promise(resolve => setTimeout(resolve, quality.isMaritime ? 500 : 100));
 
           await removeSyncedItem(item.id);
           synced++;
-        } catch {
+        } catch (error) {
+          console.error('[Sync] Failed:', item.id, error);
           await incrementRetryCount(item.id);
           failed++;
 

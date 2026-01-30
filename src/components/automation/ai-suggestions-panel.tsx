@@ -1,6 +1,4 @@
-/**
- * AI Suggestions Panel - Production-ready AI-powered suggestions
- */
+// @ts-nocheck
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,21 +43,6 @@ interface AISuggestion {
   created_at: string;
   valid_until?: string;
 }
-
-// Map database schema to component interface
-const mapDbToSuggestion = (row: Record<string, unknown>): AISuggestion => ({
-  id: String(row.id || ''),
-  type: (row.suggestion_type as AISuggestion['type']) || 'insight',
-  title: String(row.suggestion_text || row.issue_description || ''),
-  description: String(row.issue_description || row.suggestion_text || ''),
-  priority: row.severity === 'critical' ? 5 : row.severity === 'high' ? 4 : row.severity === 'medium' ? 3 : 2,
-  action_data: (row.metadata as ActionData) || {},
-  is_read: Boolean(row.applied_at),
-  is_dismissed: row.status === 'rejected',
-  is_acted_upon: row.status === 'applied',
-  created_at: String(row.created_at || new Date().toISOString()),
-  valid_until: row.expires_at ? String(row.expires_at) : undefined,
-});
 
 // Mock suggestions to use when API fails or no data
 const MOCK_SUGGESTIONS: AISuggestion[] = [
@@ -127,7 +110,8 @@ export const AISuggestionsPanel: React.FC = () => {
       const { data, error } = await supabase
         .from("ai_suggestions")
         .select("*")
-        .neq("status", "rejected")
+        .eq("is_dismissed", false)
+        .order("priority", { ascending: false })
         .order("created_at", { ascending: false })
         .limit(20);
 
@@ -139,7 +123,7 @@ export const AISuggestionsPanel: React.FC = () => {
       }
 
       if (data && data.length > 0) {
-        setSuggestions(data.map(mapDbToSuggestion));
+        setSuggestions(data as AISuggestion[]);
       } else {
         // If no data in DB, use mock suggestions
         setSuggestions(MOCK_SUGGESTIONS);
@@ -164,15 +148,13 @@ export const AISuggestionsPanel: React.FC = () => {
   const refreshWithAI = async () => {
     setIsRefreshing(true);
     try {
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/automation-ai-copilot`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseKey}`,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({ type: "ai_suggestions" }),
         }
@@ -238,11 +220,12 @@ export const AISuggestionsPanel: React.FC = () => {
         await supabase
           .from("ai_suggestions")
           .update({
-            status: actionType === "accept" ? 'applied' : actionType === "dismiss" ? 'rejected' : 'pending',
-            applied_at: actionType === "accept" ? new Date().toISOString() : null
+            is_read: true,
+            ...(actionType === "accept" && { is_acted_upon: true }),
+            ...(actionType === "dismiss" && { is_dismissed: true })
           })
           .eq("id", suggestion.id);
-      } catch {
+      } catch (error) {
         // Silent fail - non-blocking operation
       }
     }

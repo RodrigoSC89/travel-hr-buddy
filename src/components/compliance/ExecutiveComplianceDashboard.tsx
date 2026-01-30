@@ -79,12 +79,14 @@ interface OAuthStatus {
   microsoftConfigured: boolean;
 }
 
-// OAuth Status Check - PATCH: VITE_* não funciona no Lovable
+// OAuth Status Check
 const useOAuthStatus = (): OAuthStatus => {
-  // OAuth deve ser configurado via Edge Functions/secrets
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const microsoftClientId = import.meta.env.VITE_MICROSOFT_CLIENT_ID;
+  
   return {
-    googleConfigured: false,
-    microsoftConfigured: false,
+    googleConfigured: !!googleClientId && googleClientId !== 'PENDING',
+    microsoftConfigured: !!microsoftClientId && microsoftClientId !== 'PENDING',
   };
 };
 
@@ -252,10 +254,7 @@ const useExecutiveKPIs = () => {
       
       return { modules, metrics, trends };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 60000,
   });
 };
 

@@ -39,9 +39,10 @@ export function initializePerformance() {
   // 4. Resource hints
   try {
     resourceHints.initializeCommonHints();
-    // Supabase URL hardcoded - VITE_ vars not supported in Lovable
-    const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-    resourceHints.preconnect(supabaseUrl);
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (supabaseUrl) {
+      resourceHints.preconnect(supabaseUrl);
+    }
   } catch (e) {
     Logger.warn("Resource hints setup failed", { error: e }, "PerfInit");
   }

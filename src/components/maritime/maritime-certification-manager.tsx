@@ -556,22 +556,12 @@ export const MaritimeCertificationManager = () => {
 
         <TabsContent value="reports" className="space-y-6">
           <Card>
-            <CardContent className="pt-6 space-y-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2"><FileText className="h-5 w-5" />Relatórios de Certificações</h3>
-              <div className="grid gap-3 md:grid-cols-2">
-                <Button variant="outline" className="justify-start h-auto py-3" onClick={() => toast({ title: 'Gerando relatório...', description: 'Relatório de Conformidade' })}>
-                  <FileText className="h-4 w-4 mr-2" /><div className="text-left"><p className="font-medium">Relatório de Conformidade</p><p className="text-xs text-muted-foreground">Status geral das certificações</p></div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto py-3" onClick={() => toast({ title: 'Gerando relatório...', description: 'Certificados a Vencer' })}>
-                  <FileText className="h-4 w-4 mr-2" /><div className="text-left"><p className="font-medium">Certificados a Vencer</p><p className="text-xs text-muted-foreground">Próximos 90 dias</p></div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto py-3" onClick={() => toast({ title: 'Gerando relatório...', description: 'Histórico de Renovações' })}>
-                  <FileText className="h-4 w-4 mr-2" /><div className="text-left"><p className="font-medium">Histórico de Renovações</p><p className="text-xs text-muted-foreground">Últimos 12 meses</p></div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto py-3" onClick={() => toast({ title: 'Gerando relatório...', description: 'Análise por Tripulante' })}>
-                  <FileText className="h-4 w-4 mr-2" /><div className="text-left"><p className="font-medium">Análise por Tripulante</p><p className="text-xs text-muted-foreground">Detalhamento individual</p></div>
-                </Button>
-              </div>
+            <CardContent className="text-center py-12">
+              <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Relatórios de Certificações</h3>
+              <p className="text-muted-foreground">
+                Relatórios detalhados em desenvolvimento
+              </p>
             </CardContent>
           </Card>
         </TabsContent>

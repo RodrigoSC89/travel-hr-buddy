@@ -44,9 +44,7 @@ export function useMLCOffline(): UseMLCOfflineReturn {
   const { data: pendingSyncCount = 0, refetch: refetchSyncCount } = useQuery({
     queryKey: ['mlc-pending-sync-count'],
     queryFn: () => mlcOfflineStorage.getPendingSyncCount(),
-    staleTime: 1000 * 30, // 30 sec cache for offline sync
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
+    refetchInterval: 5000,
   });
 
   // Query for all inspections

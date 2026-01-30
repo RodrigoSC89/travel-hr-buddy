@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Document Management", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to documents page - adjust URL as needed
-    await page.goto("/documents");
+    await page.goto("/admin/documents");
     // Wait for page to load
     await page.waitForTimeout(1000);
   });

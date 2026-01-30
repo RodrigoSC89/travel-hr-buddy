@@ -11,10 +11,9 @@
 const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
-// Type-safe environment variable with safe access
+// Type-safe environment variable
 const getSentryDsn = (): string | undefined => {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const dsn = safeEnv.VITE_SENTRY_DSN;
+  const dsn = import.meta.env.VITE_SENTRY_DSN;
   return typeof dsn === "string" ? dsn : undefined;
 };
 

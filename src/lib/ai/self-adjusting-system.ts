@@ -213,11 +213,7 @@ class SelfAdjustingSystem {
       this.adjustments = this.adjustments.slice(-100);
     }
 
-    // Log adjustment in development only
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.debug(`[SelfAdjust] ${adjustment.type}: ${adjustment.target} - ${adjustment.reason}`);
-    }
+    console.log(`[SelfAdjust] ${adjustment.type}: ${adjustment.target} - ${adjustment.reason}`);
   }
 
   /**

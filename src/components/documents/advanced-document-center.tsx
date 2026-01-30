@@ -44,8 +44,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
 
 interface Document {
   id: string;
@@ -118,128 +116,150 @@ export const AdvancedDocumentCenter: React.FC = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
   const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
 
-  // Fetch documents from Supabase
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      setIsLoading(true);
-      try {
-        // Fetch documents from ai_documents table
-        const { data: docsData, error: docsError } = await supabase
-          .from('ai_documents')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        if (docsError) throw docsError;
-
-        // Transform database records to component format
-        const transformedDocs: Document[] = (docsData || []).map(item => {
-          const keywords = item.extracted_keywords as Record<string, unknown> || {};
-          return {
-            id: item.id,
-            title: item.title || item.file_name,
-            description: item.description || '',
-            type: (item.file_type?.includes('pdf') ? 'pdf' : 
-                   item.file_type?.includes('doc') ? 'docx' :
-                   item.file_type?.includes('xls') ? 'xlsx' :
-                   item.file_type?.includes('ppt') ? 'pptx' :
-                   item.file_type?.includes('image') ? 'image' : 'other') as Document['type'],
-            category: item.category || 'manuais',
-            size: item.file_size_bytes || item.file_size || 0,
-            status: (item.ocr_status === 'completed' ? 'approved' : 
-                    item.ocr_status === 'processing' ? 'review' : 'draft') as Document['status'],
-            version: '1.0',
-            createdAt: new Date(item.created_at),
-            updatedAt: new Date(item.updated_at),
-            createdBy: 'Sistema',
-            tags: Array.isArray(keywords.tags) ? keywords.tags as string[] : [],
-            isPublic: false,
-            downloadCount: 0,
-            viewCount: 0,
-            collaborators: [],
-            approvals: []
-          };
-        });
-
-        // Fetch templates from ai_document_templates table
-        const { data: templatesData, error: templatesError } = await supabase
-          .from('ai_document_templates')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(20);
-
-        if (templatesError) throw templatesError;
-
-        const transformedTemplates: DocumentTemplate[] = (templatesData || []).map(item => {
-          const variables = item.variables as Record<string, unknown> || {};
-          const fields = Array.isArray(variables.fields) ? variables.fields : [];
-          return {
-            id: item.id,
-            name: item.title,
-            description: item.content?.slice(0, 100) || '',
-            category: item.template_type,
-            usageCount: 0,
-            fields: (fields as Array<{ name: string; type: string; required: boolean; options?: string[] }>).map(f => ({
-              name: f.name || 'Campo',
-              type: (f.type as 'text' | 'number' | 'date' | 'select' | 'textarea') || 'text',
-              required: f.required || false,
-              options: f.options
-            }))
-          };
-        });
-
-        setDocuments(transformedDocs.length > 0 ? transformedDocs : getFallbackDocuments());
-        setTemplates(transformedTemplates.length > 0 ? transformedTemplates : getFallbackTemplates());
-      } catch (error) {
-        console.error('Error fetching documents:', error);
-        // Use fallback data if fetch fails
-        setDocuments(getFallbackDocuments());
-        setTemplates(getFallbackTemplates());
-      } finally {
-        setIsLoading(false);
+  // Dados simulados para demonstração
+  const generateMockData = () => {
+    const mockDocuments: Document[] = [
+      {
+        id: "1",
+        title: "Manual de Operações Marítimas",
+        description: "Guia completo de procedimentos operacionais para embarcações",
+        type: "pdf",
+        category: "manuais",
+        size: 2048576, // 2MB
+        status: "approved",
+        version: "2.1",
+        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        createdBy: "João Silva",
+        tags: ["marítimo", "operações", "manual", "segurança"],
+        isPublic: false,
+        downloadCount: 47,
+        viewCount: 156,
+        collaborators: ["João Silva", "Maria Santos", "Pedro Costa"],
+        approvals: [
+          { user: "Supervisor Marítimo", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
+          { user: "Diretor Operacional", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
+        ]
+      },
+      {
+        id: "2",
+        title: "Relatório Financeiro Q1 2024",
+        description: "Análise financeira do primeiro trimestre",
+        type: "xlsx",
+        category: "relatórios",
+        size: 1536000, // 1.5MB
+        status: "review",
+        version: "1.3",
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+        createdBy: "Ana Oliveira",
+        tags: ["financeiro", "relatório", "Q1", "2024"],
+        isPublic: false,
+        downloadCount: 23,
+        viewCount: 89,
+        collaborators: ["Ana Oliveira", "Carlos Ferreira"],
+        approvals: [
+          { user: "Gerente Financeiro", status: "pending", date: new Date() },
+          { user: "CFO", status: "pending", date: new Date() }
+        ]
+      },
+      {
+        id: "3",
+        title: "Política de Recursos Humanos",
+        description: "Documento oficial das políticas de RH da empresa",
+        type: "docx",
+        category: "políticas",
+        size: 512000, // 512KB
+        status: "draft",
+        version: "3.0",
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+        createdBy: "Roberto Lima",
+        tags: ["rh", "política", "recursos humanos", "oficial"],
+        isPublic: true,
+        downloadCount: 12,
+        viewCount: 67,
+        collaborators: ["Roberto Lima", "Fernanda Alves"],
+        approvals: [
+          { user: "Diretor de RH", status: "pending", date: new Date() }
+        ]
+      },
+      {
+        id: "4",
+        title: "Certificados de Qualidade ISO",
+        description: "Coleção de certificados ISO da empresa",
+        type: "pdf",
+        category: "certificados",
+        size: 3072000, // 3MB
+        status: "approved",
+        version: "1.0",
+        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        createdBy: "Qualidade ISO",
+        tags: ["iso", "qualidade", "certificado", "auditoria"],
+        isPublic: true,
+        downloadCount: 89,
+        viewCount: 234,
+        collaborators: ["Qualidade ISO"],
+        approvals: [
+          { user: "Auditor Interno", status: "approved", date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000) }
+        ]
       }
-    };
+    ];
 
-    fetchDocuments();
+    const mockTemplates: DocumentTemplate[] = [
+      {
+        id: "t1",
+        name: "Relatório de Incidente",
+        description: "Template para reportar incidentes operacionais",
+        category: "relatórios",
+        usageCount: 34,
+        fields: [
+          { name: "Data do Incidente", type: "date", required: true },
+          { name: "Local", type: "text", required: true },
+          { name: "Descrição", type: "textarea", required: true },
+          { name: "Gravidade", type: "select", required: true, options: ["Baixa", "Média", "Alta", "Crítica"] },
+          { name: "Responsável", type: "text", required: true }
+        ]
+      },
+      {
+        id: "t2",
+        name: "Solicitação de Férias",
+        description: "Template para solicitação de períodos de férias",
+        category: "rh",
+        usageCount: 87,
+        fields: [
+          { name: "Nome do Funcionário", type: "text", required: true },
+          { name: "Data de Início", type: "date", required: true },
+          { name: "Data de Fim", type: "date", required: true },
+          { name: "Motivo", type: "textarea", required: false },
+          { name: "Substituto", type: "text", required: true }
+        ]
+      },
+      {
+        id: "t3",
+        name: "Avaliação de Fornecedor",
+        description: "Template para avaliar fornecedores",
+        category: "compras",
+        usageCount: 23,
+        fields: [
+          { name: "Nome do Fornecedor", type: "text", required: true },
+          { name: "Categoria", type: "select", required: true, options: ["Serviços", "Produtos", "Equipamentos"] },
+          { name: "Qualidade", type: "number", required: true },
+          { name: "Pontualidade", type: "number", required: true },
+          { name: "Observações", type: "textarea", required: false }
+        ]
+      }
+    ];
+
+    setDocuments(mockDocuments);
+    setTemplates(mockTemplates);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    generateMockData();
   }, []);
-
-  // Fallback data when database is empty or unavailable
-  const getFallbackDocuments = (): Document[] => [
-    {
-      id: "fallback-1",
-      title: "Manual de Operações Marítimas",
-      description: "Guia completo de procedimentos operacionais para embarcações",
-      type: "pdf",
-      category: "manuais",
-      size: 2048576,
-      status: "approved",
-      version: "2.1",
-      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-      createdBy: "Sistema",
-      tags: ["marítimo", "operações"],
-      isPublic: false,
-      downloadCount: 0,
-      viewCount: 0,
-      collaborators: [],
-      approvals: []
-    }
-  ];
-
-  const getFallbackTemplates = (): DocumentTemplate[] => [
-    {
-      id: "fallback-t1",
-      name: "Relatório de Incidente",
-      description: "Template para reportar incidentes operacionais",
-      category: "relatórios",
-      usageCount: 0,
-      fields: [
-        { name: "Data do Incidente", type: "date", required: true },
-        { name: "Local", type: "text", required: true },
-        { name: "Descrição", type: "textarea", required: true }
-      ]
-    }
-  ];
 
   const getFileTypeIcon = (type: string) => {
     switch (type) {

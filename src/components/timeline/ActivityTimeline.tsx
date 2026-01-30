@@ -145,10 +145,7 @@ export function ActivityTimeline() {
 
       return timelineEvents.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 30000,
   });
 
   // Filter events

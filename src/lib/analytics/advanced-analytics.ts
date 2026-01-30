@@ -4,7 +4,6 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { logger } from '@/lib/logger';
 
 export interface AnalyticsEvent {
   name: string;
@@ -131,7 +130,7 @@ class AdvancedAnalytics {
     this.eventQueue.push(event);
 
     if (this.config.debug) {
-      logger.debug('[Analytics] Event:', event);
+      console.log('[Analytics] Event:', event);
     }
 
     if (this.eventQueue.length >= this.config.batchSize) {

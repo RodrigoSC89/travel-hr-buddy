@@ -18,8 +18,7 @@ export function initAutoHealingSystem(options?: {
   checkInterval?: number;
   autoFixEnabled?: boolean;
 }): void {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const isEnabled = safeEnv.VITE_ENABLE_AUTO_HEALING !== "false";
+  const isEnabled = import.meta.env.VITE_ENABLE_AUTO_HEALING !== "false";
 
   if (!isEnabled) {
     Logger.info("Auto-Healing system disabled by configuration", undefined, "AutoHealing");

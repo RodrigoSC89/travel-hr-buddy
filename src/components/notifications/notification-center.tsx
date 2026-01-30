@@ -173,7 +173,7 @@ export const NotificationCenter: React.FC = () => {
 
         {notifications.length > 0 && (
           <div className="border-t border-border p-2">
-            <Link to="/alerts-command" className="block">
+            <Link to="/notifications-center" className="block">
               <Button 
                 variant="ghost" 
                 className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"

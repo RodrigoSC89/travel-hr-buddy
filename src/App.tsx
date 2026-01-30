@@ -16,8 +16,6 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 import { ProductOnboardingTour } from "./components/onboarding/ProductOnboardingTour";
-import { UserFeedbackWidget } from "./components/feedback/UserFeedbackWidget";
-import { usageTracker } from "./lib/analytics/usage-tracker";
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -59,7 +57,6 @@ const VesselHistoryV2 = lazy(() => import("@/pages/VesselHistoryV2"));
 
 // Digital Twin & Logistics (v4.0)
 const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
-const VesselDigitalTwinPage = lazy(() => import("@/pages/vessel-digital-twin"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
 const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
 const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
@@ -68,17 +65,6 @@ const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
 const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
 const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
-const IoTIntegrationPage = lazy(() => import("@/pages/IoTIntegrationPage"));
-
-// ============================================
-// REVOLUTIONARY MODULES v6.0
-// ============================================
-const OperationsIntelligencePage = lazy(() => import("@/pages/OperationsIntelligencePage"));
-const HRIntelligencePage = lazy(() => import("@/pages/HRIntelligencePage"));
-const PredictiveMaintenanceMLPage = lazy(() => import("@/pages/PredictiveMaintenanceMLPage"));
-const PredictiveAuditPage = lazy(() => import("@/pages/PredictiveAuditPage"));
-const FinanceHubAIPage = lazy(() => import("@/pages/FinanceHubAIPage"));
-const SmartLogisticsAIPage = lazy(() => import("@/pages/SmartLogisticsAIPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -101,7 +87,6 @@ const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
 // RevolutionaryAI moved to AICommandCenter
 const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
-const AICommandCenterPage = lazy(() => import("@/pages/AICommandCenterPage"));
 const AIHubPage = lazy(() => import("@/pages/AIHubPage"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
 const RevolutionaryFeaturesPage = lazy(() => import("@/pages/RevolutionaryFeaturesPage"));
@@ -112,8 +97,6 @@ const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
-const SupportCenterPage = lazy(() => import("@/pages/SupportCenterPage"));
-const SubscriptionPlansPage = lazy(() => import("@/pages/SubscriptionPlansPage"));
 
 // ============================================
 // INTELIGÊNCIA AVANÇADA
@@ -154,9 +137,6 @@ const Templates = lazy(() => import("@/pages/Templates"));
 // MaritimeChecklists moved to MaritimeCommandCenter
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
-const EnterpriseDocumentCenterPage = lazy(() => import("@/pages/EnterpriseDocumentCenterPage"));
-const TrainingDocumentsPage = lazy(() => import("@/pages/TrainingDocumentsPage"));
-const VesselAccessManagementPage = lazy(() => import("@/pages/VesselAccessManagementPage"));
 const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
 
 // ============================================
@@ -219,22 +199,9 @@ const HRChatbotPage = lazy(() => import("@/pages/HRChatbotPage"));
 const HRDocumentOCRPage = lazy(() => import("@/pages/HRDocumentOCRPage"));
 const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPredictionPage"));
 
-// ===== REVOLUTIONARY AI MODULES =====
-const CrewAICopilotPage = lazy(() => import("@/pages/CrewAICopilotPage"));
-const AdvancedFinanceAIPage = lazy(() => import("@/pages/AdvancedFinanceAIPage"));
-const SmartAuditEnginePage = lazy(() => import("@/pages/SmartAuditEnginePage"));
-const AdvancedTrainingAIPage = lazy(() => import("@/pages/AdvancedTrainingAIPage"));
-
-// ===== NEW REVOLUTIONARY MODULES v4.1 =====
-const MaritimeAICommandPage = lazy(() => import("@/pages/MaritimeAICommandPage"));
-const MaintenanceAICommandPage = lazy(() => import("@/pages/MaintenanceAICommandPage"));
-const LogisticsAIHubPage = lazy(() => import("@/pages/LogisticsAIHubPage"));
-const HRCommandCenterPage = lazy(() => import("@/pages/HRCommandCenterPage"));
-
 // ============================================
 // TREINAMENTOS
 // ============================================
-const TrainingLXPPage = lazy(() => import("@/pages/TrainingLXPPage"));
 const AITraining = lazy(() => import("@/pages/AITraining"));
 const MentorDP = lazy(() => import("@/pages/MentorDP"));
 const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
@@ -258,9 +225,7 @@ const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePa
 // VIAGENS & LOGÍSTICA
 // ============================================
 const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandCenter"));
-const TravelAIEnginePage = lazy(() => import("@/pages/TravelAIEnginePage"));
 const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
-const WeatherRoutePlannerPage = lazy(() => import("@/pages/WeatherRoutePlannerPage"));
 
 // ============================================
 // SISTEMA & CONFIGURAÇÕES
@@ -273,15 +238,7 @@ const IoT = lazy(() => import("@/pages/IoT"));
 const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
-
-// NEW: PWA, Analytics, i18n, Tests
-const PWASettingsPage = lazy(() => import("@/pages/PWASettingsPage"));
-const AdvancedAnalyticsPage = lazy(() => import("@/pages/AdvancedAnalyticsPage"));
-const LanguageSettingsPage = lazy(() => import("@/pages/LanguageSettingsPage"));
-const TestSuitePage = lazy(() => import("@/pages/TestSuitePage"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
-const TermsPage = lazy(() => import("@/pages/TermsPage"));
-const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 
 // ============================================
@@ -290,102 +247,102 @@ const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 const Admin = lazy(() => import("@/pages/Admin"));
 // Dashboard, ExecutiveDashboard, Analytics → CentralComando/AnalyticsCommandCenter
 
-// Admin Dashboards - Infraestrutura v4.0
-const DevOpsDashboard = lazy(() => import("@/pages/admin/DevOpsDashboard"));
-const MLAnalyticsDashboard = lazy(() => import("@/pages/admin/MLAnalyticsDashboard"));
-const ScalingDashboard = lazy(() => import("@/pages/admin/ScalingDashboard"));
-const QATestingDashboard = lazy(() => import("@/pages/admin/QATestingDashboard"));
-const AdminDocumentationHub = lazy(() => import("@/pages/admin/DocumentationHub"));
-const AdminSupportCenter = lazy(() => import("@/pages/admin/SupportCenter"));
-
-// Admin - API & Integrations v4.0
-const APIKeysManagement = lazy(() => import("@/pages/admin/APIKeysManagement"));
-const WebhooksManagement = lazy(() => import("@/pages/admin/WebhooksManagement"));
-const APIDocs = lazy(() => import("@/pages/admin/APIDocs"));
-
-// Integrations Hub
-const ExternalIntegrationsHub = lazy(() => import("@/pages/admin/ExternalIntegrationsHub"));
-const NotificationCenterPage = lazy(() => import("@/pages/NotificationCenterPage"));
-
-// AI Intelligence Suite v6.0
-const AIIntelligenceSuitePage = lazy(() => import("@/pages/AIIntelligenceSuitePage"));
-
-// Query client - otimizado para conexões lentas/satélite
+// Query client
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { 
-      staleTime: 1000 * 60 * 5, // 5 minutos - evita refetch desnecessário
-      gcTime: 1000 * 60 * 30, // 30 minutos de cache
-      retry: 2,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      refetchOnWindowFocus: false, // Desabilitado para economizar dados
-      refetchOnReconnect: 'always',
-      networkMode: 'offlineFirst', // Prioriza cache em conexões lentas
-    },
-    mutations: {
-      retry: 2,
-      retryDelay: 1000,
-      networkMode: 'offlineFirst',
-    },
+    queries: { staleTime: 1000 * 60 * 5, retry: 1 },
   },
 });
 
-// Analytics Tracker inicializado via useEffect no AppInitializer
-
-// ============================================
-// LOADER v57 - Simple spinner ONLY, NO recovery UI
-// Recovery is ONLY in index.html - prevents duplicate recovery screens
-// ============================================
-const Loader = React.memo(() => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="text-center space-y-3">
-      <div className="h-10 w-10 border-4 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
-      <p className="text-muted-foreground text-sm">Carregando...</p>
+// Loader com timeout de segurança para prevenir loading infinito
+const Loader = () => {
+  const [showRetry, setShowRetry] = React.useState(false);
+  
+  React.useEffect(() => {
+    // Se ficar mais de 15s no loader, mostrar botão de retry
+    const timeout = setTimeout(() => setShowRetry(true), 15000);
+    return () => clearTimeout(timeout);
+  }, []);
+  
+  const handleRetry = async () => {
+    try {
+      // Limpar caches do SW
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      }
+    } catch {}
+    // Hard reload
+    window.location.href = window.location.origin + '/?_sw=' + Date.now();
+  };
+  
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="text-center space-y-4">
+        <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+        <p className="text-foreground">Carregando Nautilus One...</p>
+        {showRetry && (
+          <div className="space-y-2 pt-4">
+            <p className="text-sm text-muted-foreground">
+              O carregamento está demorando mais que o normal.
+            </p>
+            <button
+              onClick={handleRetry}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
+            >
+              Limpar cache e recarregar
+            </button>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-));
-
-// ============================================
-// PROTECTED ROUTE v51 - INSTANT decision, ZERO loading states
-// Auth context now starts with isLoading=false, so we can decide immediately
-// ============================================
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, isLoading } = useAuth();
-  
-  // PATCH v51: User logged in = show content IMMEDIATELY
-  if (user) {
-    return <>{children}</>;
-  }
-  
-  // PATCH v51: If not loading OR no user = redirect INSTANTLY
-  // AuthContext now initializes with isLoading=false so this is immediate
-  if (!isLoading) {
-    return <Navigate to="/auth" replace />;
-  }
-  
-  // Very brief loading (only while auth is actually checking - max 100ms in practice)
-  return <Loader />;
+  );
 };
 
-// Layout com Sidebar para rotas autenticadas
+// Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
+        {/* Sidebar - renders as Sheet on mobile via SidebarProvider */}
         <AppSidebar />
+        
+        {/* Main content area */}
         <div className="flex-1 flex flex-col min-w-0 w-full">
+          {/* Header with mobile menu trigger */}
           <Header />
+          
+          {/* Main content with padding for mobile bottom nav */}
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
             <Outlet />
           </main>
         </div>
+        
+        {/* Mobile Bottom Navigation - only shows on mobile */}
         <MobileBottomNav />
+        
+        {/* Onboarding Tour for new users */}
         <ProductOnboardingTour />
-        <UserFeedbackWidget position="bottom-right" />
+        
+        {/* Toast Notifications */}
         <Toaster />
       </div>
     </SidebarProvider>
   );
+};
+
+// Componente de rota protegida
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuth();
+  
+  if (isLoading) return <Loader />;
+  if (!user) return <Navigate to="/auth" replace />;
+  
+  return <>{children}</>;
 };
 
 // Rotas internas
@@ -397,8 +354,6 @@ const AppRoutes = () => (
     <Route path="/landing" element={<LandingPage />} />
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
-    <Route path="/terms" element={<TermsPage />} />
-    <Route path="/privacy" element={<PrivacyPage />} />
     
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
@@ -439,7 +394,6 @@ const AppRoutes = () => (
       <Route path="/vessel-cts" element={<VesselCTSV2 />} />
       <Route path="/vessel-history" element={<VesselHistoryV2 />} />
       <Route path="/digital-twin" element={<DigitalTwinPage />} />
-      <Route path="/vessel-digital-twin" element={<VesselDigitalTwinPage />} />
       <Route path="/logistics-command" element={<LogisticsCommandPage />} />
       <Route path="/recruitment" element={<RecruitmentPage />} />
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
@@ -453,13 +407,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
-      <Route path="/predictive-maintenance-ml" element={<PredictiveMaintenanceMLPage />} />
-      <Route path="/maintenance-ai-command" element={<MaintenanceAICommandPage />} />
-      <Route path="/maritime-ai-command" element={<MaritimeAICommandPage />} />
-      <Route path="/operations-intelligence" element={<OperationsIntelligencePage />} />
-      <Route path="/hr-intelligence" element={<HRIntelligencePage />} />
-      <Route path="/logistics-ai-hub" element={<LogisticsAIHubPage />} />
-      <Route path="/hr-command-center" element={<HRCommandCenterPage />} />
       
       {/* ============================================ */}
       {/* OPERAÇÕES SUBMARINAS */}
@@ -476,7 +423,6 @@ const AppRoutes = () => (
       <Route path="/nauti-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<AICommandCenter />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
-      <Route path="/ai-command-center" element={<AICommandCenterPage />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
       <Route path="/revolutionary-features" element={<RevolutionaryFeaturesPage />} />
@@ -488,8 +434,6 @@ const AppRoutes = () => (
       <Route path="/ai-audit" element={<AIAudit />} />
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
       <Route path="/assistant/voice" element={<VoiceAssistant />} />
-      <Route path="/ai-intelligence-suite" element={<AIIntelligenceSuitePage />} />
-      <Route path="/ai-suite" element={<AIIntelligenceSuitePage />} />
       
       {/* ============================================ */}
       {/* INTELIGÊNCIA AVANÇADA */}
@@ -505,7 +449,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* TELEMETRIA & MONITORAMENTO */}
       {/* ============================================ */}
-      <Route path="/iot-integration" element={<IoTIntegrationPage />} />
       <Route path="/telemetria" element={<TelemetriaCommand />} />
       <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
@@ -544,11 +487,6 @@ const AppRoutes = () => (
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
       <Route path="/documentation" element={<Documents />} />
-      {/* Enterprise Document Management System */}
-      <Route path="/enterprise-documents" element={<EnterpriseDocumentCenterPage />} />
-      <Route path="/document-center" element={<EnterpriseDocumentCenterPage />} />
-      <Route path="/training-documents" element={<TrainingDocumentsPage />} />
-      <Route path="/vessel-access-management" element={<VesselAccessManagementPage />} />
       
       {/* ============================================ */}
       {/* COMUNICAÇÃO & ALERTAS */}
@@ -561,8 +499,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* AUDITORIAS & COMPLIANCE */}
       {/* ============================================ */}
-      <Route path="/predictive-audit" element={<PredictiveAuditPage />} />
-      <Route path="/smart-audit-engine" element={<SmartAuditEnginePage />} />
       <Route path="/audit-ai-chat" element={<AuditAIChatPage />} />
       <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
@@ -609,7 +545,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* RH & PESSOAS (HR/DP MODULE) */}
       {/* ============================================ */}
-      <Route path="/crew-ai-copilot" element={<CrewAICopilotPage />} />
       <Route path="/nautilus-people" element={<MaritimeCommandCenter />} />
       <Route path="/crew-management" element={<MaritimeCommandCenter />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
@@ -649,15 +584,9 @@ const AppRoutes = () => (
       <Route path="/hr/turnover-prediction" element={<HRTurnoverPredictionPage />} />
       <Route path="/predicao-turnover" element={<HRTurnoverPredictionPage />} />
       
-      {/* HR Payroll & Time Tracking */}
-      <Route path="/hr-payroll" element={<Payroll />} />
-      <Route path="/hr-time-tracking" element={<TimeTracking />} />
-      
       {/* ============================================ */}
       {/* TREINAMENTOS */}
       {/* ============================================ */}
-      <Route path="/training-lxp" element={<TrainingLXPPage />} />
-      <Route path="/advanced-training-ai" element={<AdvancedTrainingAIPage />} />
       <Route path="/nautilus-academy" element={<AITraining />} />
       <Route path="/solas-isps-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
@@ -666,8 +595,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* FINANÇAS & PROCUREMENT */}
       {/* ============================================ */}
-      <Route path="/advanced-finance-ai" element={<AdvancedFinanceAIPage />} />
-      <Route path="/finance-hub-ai" element={<FinanceHubAIPage />} />
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
@@ -685,11 +612,8 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* VIAGENS & LOGÍSTICA */}
       {/* ============================================ */}
-      <Route path="/smart-logistics-ai" element={<SmartLogisticsAIPage />} />
       <Route path="/travel-command" element={<TravelCommandCenter />} />
-      <Route path="/travel-ai-engine" element={<TravelAIEnginePage />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />
-      <Route path="/weather-route-planner" element={<WeatherRoutePlannerPage />} />
       
       {/* ============================================ */}
       {/* SISTEMA & CONFIGURAÇÕES */}
@@ -697,10 +621,6 @@ const AppRoutes = () => (
       <Route path="/quality-dashboard" element={<QualityDashboard />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/settings/security" element={<SecuritySettings />} />
-      <Route path="/pwa-settings" element={<PWASettingsPage />} />
-      <Route path="/advanced-analytics" element={<AdvancedAnalyticsPage />} />
-      <Route path="/language-settings" element={<LanguageSettingsPage />} />
-      <Route path="/test-suite" element={<TestSuitePage />} />
       <Route path="/integrations" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
       <Route path="/collaboration" element={<Collaboration />} />
@@ -722,27 +642,6 @@ const AppRoutes = () => (
       <Route path="/testing" element={<CentralComando />} />
       <Route path="/feedback" element={<CentralComando />} />
       <Route path="/saas-manager" element={<Admin />} />
-      <Route path="/support-center" element={<SupportCenterPage />} />
-      <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
-      
-      {/* ============================================ */}
-      {/* ADMIN - INFRAESTRUTURA v4.0 */}
-      {/* ============================================ */}
-      <Route path="/admin/devops" element={<DevOpsDashboard />} />
-      <Route path="/admin/ml-analytics" element={<MLAnalyticsDashboard />} />
-      <Route path="/admin/scaling" element={<ScalingDashboard />} />
-      <Route path="/admin/qa-testing" element={<QATestingDashboard />} />
-      <Route path="/admin/documentation" element={<AdminDocumentationHub />} />
-      <Route path="/admin/support" element={<AdminSupportCenter />} />
-      
-      {/* ============================================ */}
-      {/* ADMIN - API & INTEGRAÇÕES v4.0 */}
-      {/* ============================================ */}
-      <Route path="/admin/api-keys" element={<APIKeysManagement />} />
-      <Route path="/admin/webhooks" element={<WebhooksManagement />} />
-      <Route path="/admin/api-docs" element={<APIDocs />} />
-      <Route path="/admin/external-integrations" element={<ExternalIntegrationsHub />} />
-      <Route path="/notifications-center" element={<NotificationCenterPage />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
@@ -754,70 +653,6 @@ const AppRoutes = () => (
 );
 
 function App() {
-  // PATCH v52: Mark app as loaded IMMEDIATELY on function call
-  // This must happen as early as possible to prevent recovery UI from showing
-  if (typeof window !== 'undefined') {
-    (window as any).__NAUTI_APP_LOADED__ = true;
-    
-    // Remove initial loader synchronously
-    const loader = document.getElementById('initial-loader');
-    if (loader) loader.style.display = 'none';
-  }
-
-  React.useEffect(() => {
-    console.log('[App v52] React app mounted successfully');
-    
-    // Ensure loader is completely removed (not just hidden)
-    const initialLoader = document.getElementById('initial-loader');
-    if (initialLoader) initialLoader.remove();
-    
-    return () => {
-      console.log('[App v52] React app unmounting');
-    };
-  }, []);
-
-  // ============================================
-  // CRITICAL v33: Global unhandledrejection handler
-  // Prevents async errors from crashing the app / causing infinite loops
-  // ============================================
-  React.useEffect(() => {
-    const handleRejection = (event: PromiseRejectionEvent) => {
-      console.warn('[App] Unhandled promise rejection caught:', event.reason);
-      event.preventDefault(); // Prevent default browser error handling
-      
-      // If it's an auth-related error, clear session and redirect
-      const reason = String(event.reason || '');
-      if (reason.includes('auth') || reason.includes('session') || reason.includes('token')) {
-        try {
-          Object.keys(localStorage)
-            .filter(k => k.includes('supabase') || k.includes('sb-'))
-            .forEach(k => localStorage.removeItem(k));
-        } catch {}
-        // Don't redirect here - let user continue
-      }
-    };
-
-    window.addEventListener('unhandledrejection', handleRejection);
-    
-    return () => {
-      window.removeEventListener('unhandledrejection', handleRejection);
-    };
-  }, []);
-
-  // Initialize analytics safely after component mount
-  React.useEffect(() => {
-    // Defer to avoid blocking initial render
-    const timer = setTimeout(() => {
-      try {
-        usageTracker.init();
-      } catch (e) {
-        console.warn('[App] Analytics init failed:', e);
-      }
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">

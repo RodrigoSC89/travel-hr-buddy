@@ -47,21 +47,17 @@ function useEquipmentMetrics() {
 
       if (error) throw error;
 
-      return (data || []).map((task, idx) => {
-        // Deterministic values based on ID hash
-        const idHash = task.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-        return {
-          equipmentId: task.id,
-          name: task.title || task.component_name || `Equipment #${idx + 1}`,
-          operatingHours: 5000 + (idHash % 10000),
-          cycleCount: 3000 + ((idHash * 7) % 20000),
-          lastMaintenance: task.completed_date ? new Date(task.completed_date) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-          avgTimeBetweenFailures: 3000 + (idHash % 3000),
-          vibrationLevel: 3 + (idHash % 4),
-          temperature: 65 + (idHash % 30),
-          oilPressure: 30 + (idHash % 20),
-        } as EquipmentMetrics;
-      });
+      return (data || []).map((task, idx) => ({
+        equipmentId: task.id,
+        name: task.title || task.component_name || `Equipment #${idx + 1}`,
+        operatingHours: 5000 + Math.floor(Math.random() * 10000),
+        cycleCount: 3000 + Math.floor(Math.random() * 20000),
+        lastMaintenance: task.completed_date ? new Date(task.completed_date) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        avgTimeBetweenFailures: 3000 + Math.floor(Math.random() * 3000),
+        vibrationLevel: 2 + Math.random() * 5,
+        temperature: 60 + Math.random() * 35,
+        oilPressure: 25 + Math.random() * 25,
+      } as EquipmentMetrics));
     },
     staleTime: 5 * 60 * 1000
   });

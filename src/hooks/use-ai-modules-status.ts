@@ -22,7 +22,7 @@ export interface ModuleStatus {
 
 export const useAIModulesStatus = () => {
   const [modules, setModules] = useState<ModuleStatus[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [overallHealth, setOverallHealth] = useState<"healthy" | "degraded" | "critical">("healthy");
 
   const checkModulesStatus = async () => {

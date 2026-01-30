@@ -1,7 +1,4 @@
-/**
- * SatelliteTrackerEnhanced - Real-time satellite tracking module
- * PATCH 881: Removed @ts-nocheck - Uses in-memory simulation (tables not in schema)
- */
+// @ts-nocheck
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Satellite,
   Radio,
@@ -21,6 +19,7 @@ import {
   CheckCircle2,
   RefreshCw,
 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -35,13 +34,14 @@ const COVERAGE_EVENT_MIN_ELEVATION = 10;
 const COVERAGE_EVENT_PROBABILITY = 0.8;
 const COVERAGE_EVENT_MIN_DURATION_SEC = 60;
 const COVERAGE_EVENT_MAX_DURATION_SEC = 600;
+const COVERAGE_EVENT_DURATION_MS = 600000;
 
 interface SatelliteData {
   id: string;
   satellite_id: string;
   satellite_name: string;
-  tle_line1?: string | null;
-  tle_line2?: string | null;
+  tle_line1?: string;
+  tle_line2?: string;
   latitude: number;
   longitude: number;
   altitude_km: number;
@@ -64,70 +64,139 @@ interface CoverageEvent {
   notified: boolean;
 }
 
-// Mock satellite data (since tables are not in schema)
-const MOCK_SATELLITES: SatelliteData[] = [
-  {
-    id: "1",
-    satellite_id: "NOAA-18",
-    satellite_name: "NOAA-18",
-    tle_line1: "1 28654U 05018A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
-    tle_line2: "2 28654  98.7000 000.0000 0013000 000.0000 360.0000 14.12000000000000",
-    latitude: -15.234,
-    longitude: 45.678,
-    altitude_km: 854.2,
-    velocity_kmh: 27200.5,
-    visibility_status: "visible",
-    azimuth: 125.5,
-    elevation: 45.2,
-    range_km: 1245.8,
-    timestamp: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    satellite_id: "ISS",
-    satellite_name: "International Space Station",
-    tle_line1: "1 25544U 98067A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
-    tle_line2: "2 25544  51.6000 000.0000 0001000 000.0000 360.0000 15.49000000000000",
-    latitude: 23.456,
-    longitude: -78.123,
-    altitude_km: 408.5,
-    velocity_kmh: 27600.0,
-    visibility_status: "visible",
-    azimuth: 275.3,
-    elevation: 32.1,
-    range_km: 687.4,
-    timestamp: new Date().toISOString(),
-  },
-  {
-    id: "3",
-    satellite_id: "SENTINEL-1A",
-    satellite_name: "Sentinel-1A",
-    tle_line1: "1 39634U 14016A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
-    tle_line2: "2 39634  98.1800 000.0000 0001200 000.0000 360.0000 14.59000000000000",
-    latitude: 52.789,
-    longitude: 13.456,
-    altitude_km: 693.0,
-    velocity_kmh: 27100.0,
-    visibility_status: "eclipsed",
-    azimuth: 180.0,
-    elevation: 12.5,
-    range_km: 2456.2,
-    timestamp: new Date().toISOString(),
-  },
-];
-
-export const SatelliteTrackerEnhanced: React.FC = () => {
+export const SatelliteTrackerEnhanced = () => {
   const { toast } = useToast();
-  const [satellites, setSatellites] = useState<SatelliteData[]>(MOCK_SATELLITES);
+  const [satellites, setSatellites] = useState<SatelliteData[]>([]);
   const [coverageEvents, setCoverageEvents] = useState<CoverageEvent[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(30);
   const [selectedSatellite, setSelectedSatellite] = useState<SatelliteData | null>(null);
 
-  const simulateTLEUpdate = useCallback(() => {
-    setSatellites(prevSatellites => 
-      prevSatellites.map((sat) => ({
+  useEffect(() => {
+    loadSatelliteData();
+    loadCoverageEvents();
+  }, []);
+
+  useEffect(() => {
+    if (!autoRefresh) return;
+
+    const interval = setInterval(() => {
+      loadSatelliteData();
+      simulateTLEUpdate();
+    }, refreshInterval * 1000);
+
+    return () => clearInterval(interval);
+  }, [autoRefresh, refreshInterval]);
+
+  const loadSatelliteData = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("satellite_tracks")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+
+      // If no data, create mock satellites
+      if (!data || data.length === 0) {
+        await createMockSatellites();
+        return;
+      }
+
+      setSatellites(data);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro ao carregar satélites";
+      toast({
+        title: "Error loading satellites",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadCoverageEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("satellite_coverage_events")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setCoverageEvents(data || []);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error loading coverage events:", errorMessage);
+    }
+  };
+
+  const createMockSatellites = async () => {
+    const mockSatellites = [
+      {
+        satellite_id: "NOAA-18",
+        satellite_name: "NOAA-18",
+        tle_line1: "1 28654U 05018A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 28654  98.7000 000.0000 0013000 000.0000 360.0000 14.12000000000000",
+        latitude: -15.234,
+        longitude: 45.678,
+        altitude_km: 854.2,
+        velocity_kmh: 27200.5,
+        visibility_status: "visible",
+        azimuth: 125.5,
+        elevation: 45.2,
+        range_km: 1245.8,
+      },
+      {
+        satellite_id: "ISS",
+        satellite_name: "International Space Station",
+        tle_line1: "1 25544U 98067A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 25544  51.6000 000.0000 0001000 000.0000 360.0000 15.49000000000000",
+        latitude: 23.456,
+        longitude: -78.123,
+        altitude_km: 408.5,
+        velocity_kmh: 27600.0,
+        visibility_status: "visible",
+        azimuth: 275.3,
+        elevation: 32.1,
+        range_km: 687.4,
+      },
+      {
+        satellite_id: "SENTINEL-1A",
+        satellite_name: "Sentinel-1A",
+        tle_line1: "1 39634U 14016A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 39634  98.1800 000.0000 0001200 000.0000 360.0000 14.59000000000000",
+        latitude: 52.789,
+        longitude: 13.456,
+        altitude_km: 693.0,
+        velocity_kmh: 27100.0,
+        visibility_status: "eclipsed",
+        azimuth: 180.0,
+        elevation: 12.5,
+        range_km: 2456.2,
+      },
+    ];
+
+    try {
+      for (const sat of mockSatellites) {
+        await supabase.from("satellite_tracks").insert(sat);
+      }
+
+      await loadSatelliteData();
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error creating mock satellites:", errorMessage);
+    }
+  };
+
+  const simulateTLEUpdate = async () => {
+    // Simulate satellite position updates
+    try {
+      const updates = satellites.map((sat) => ({
         ...sat,
         latitude: sat.latitude + (Math.random() - 0.5) * 2,
         longitude: sat.longitude + (Math.random() - 0.5) * 2,
@@ -135,25 +204,48 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
         azimuth: (sat.azimuth + Math.random() * 10) % 360,
         elevation: Math.max(0, Math.min(90, sat.elevation + (Math.random() - 0.5) * 5)),
         timestamp: new Date().toISOString(),
-      }))
-    );
+      }));
 
-    // Check for coverage events
-    satellites.forEach((sat) => {
+      for (const update of updates) {
+        await supabase.from("satellite_tracks").insert({
+          satellite_id: update.satellite_id,
+          satellite_name: update.satellite_name,
+          tle_line1: update.tle_line1,
+          tle_line2: update.tle_line2,
+          latitude: update.latitude,
+          longitude: update.longitude,
+          altitude_km: update.altitude_km,
+          velocity_kmh: update.velocity_kmh,
+          visibility_status: update.visibility_status,
+          azimuth: update.azimuth,
+          elevation: update.elevation,
+          range_km: update.range_km,
+        });
+      }
+
+      // Check for coverage events
+      checkCoverageEvents(updates);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error updating satellites:", errorMessage);
+    }
+  };
+
+  const checkCoverageEvents = async (satellites: SatelliteData[]) => {
+    for (const sat of satellites) {
+      // Simulate coverage entry/exit events
       if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
         const eventType = Math.random() > 0.5 ? "entry" : "exit";
-        const newEvent: CoverageEvent = {
-          id: `${Date.now()}-${sat.satellite_id}`,
+
+        await supabase.from("satellite_coverage_events").insert({
+          satellite_id: sat.satellite_id,
           satellite_name: sat.satellite_name,
           event_type: eventType,
           max_elevation: sat.elevation,
           duration_seconds: Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC,
           start_time: new Date().toISOString(),
-          end_time: new Date(Date.now() + 600000).toISOString(),
-          notified: false,
-        };
-        
-        setCoverageEvents(prev => [newEvent, ...prev.slice(0, 9)]);
+          end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
+        });
 
         if (eventType === "entry") {
           toast({
@@ -162,23 +254,16 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
           });
         }
       }
-    });
-  }, [satellites, toast]);
+    }
 
-  useEffect(() => {
-    if (!autoRefresh) return;
+    await loadCoverageEvents();
+  };
 
-    const interval = setInterval(() => {
-      simulateTLEUpdate();
-    }, refreshInterval * 1000);
-
-    return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, simulateTLEUpdate]);
-
-  const manualRefresh = () => {
+  const manualRefresh = async () => {
     setLoading(true);
-    simulateTLEUpdate();
-    setTimeout(() => setLoading(false), 500);
+    await loadSatelliteData();
+    await simulateTLEUpdate();
+    setLoading(false);
 
     toast({
       title: "Data refreshed",
@@ -186,14 +271,27 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
     });
   };
 
+  const getVisibilityColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+    case "visible":
+      return "text-green-600";
+    case "eclipsed":
+      return "text-gray-600";
+    case "daylight":
+      return "text-blue-600";
+    default:
+      return "text-gray-400";
+    }
+  };
+
   const getVisibilityIcon = (status: string) => {
     switch (status?.toLowerCase()) {
     case "visible":
       return <CheckCircle2 className="h-4 w-4 text-green-600" />;
     case "eclipsed":
-      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+      return <AlertCircle className="h-4 w-4 text-gray-600" />;
     default:
-      return <Radio className="h-4 w-4 text-primary" />;
+      return <Radio className="h-4 w-4 text-blue-600" />;
     }
   };
 
@@ -277,7 +375,9 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">
               {satellites.length > 0
-                ? (satellites.reduce((sum, s) => sum + s.altitude_km, 0) / satellites.length).toFixed(0)
+                ? (
+                  satellites.reduce((sum, s) => sum + s.altitude_km, 0) / satellites.length
+                ).toFixed(0)
                 : 0}{" "}
               km
             </div>
@@ -358,7 +458,7 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
 
       {/* Selected Satellite Details */}
       {selectedSatellite && (
-        <Card className="border-primary/20 bg-primary/5">
+        <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="h-5 w-5" />
@@ -367,36 +467,36 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Satellite ID</p>
                 <p className="font-semibold">{selectedSatellite.satellite_id}</p>
               </div>
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Azimuth</p>
                 <p className="font-semibold">{selectedSatellite.azimuth.toFixed(2)}°</p>
               </div>
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Elevation</p>
                 <p className="font-semibold">{selectedSatellite.elevation.toFixed(2)}°</p>
               </div>
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Altitude</p>
                 <p className="font-semibold">{selectedSatellite.altitude_km.toFixed(2)} km</p>
               </div>
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Velocity</p>
                 <p className="font-semibold">{selectedSatellite.velocity_kmh.toFixed(0)} km/h</p>
               </div>
-              <div className="bg-background p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">Range</p>
                 <p className="font-semibold">{selectedSatellite.range_km.toFixed(2)} km</p>
               </div>
             </div>
             {selectedSatellite.tle_line1 && (
-              <div className="mt-4 bg-background p-4 rounded-lg">
+              <div className="mt-4 bg-white p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground mb-2">TLE Data</p>
-                <code className="text-xs block font-mono">{selectedSatellite.tle_line1}</code>
-                <code className="text-xs block mt-1 font-mono">{selectedSatellite.tle_line2}</code>
+                <code className="text-xs block">{selectedSatellite.tle_line1}</code>
+                <code className="text-xs block mt-1">{selectedSatellite.tle_line2}</code>
               </div>
             )}
           </CardContent>
@@ -444,5 +544,3 @@ export const SatelliteTrackerEnhanced: React.FC = () => {
     </div>
   );
 };
-
-export default SatelliteTrackerEnhanced;

@@ -19,7 +19,7 @@ const criticalModules: CriticalModule[] = [
   {
     name: 'Vessel Contracts + Downtime AI',
     route: '/vessel-contracts',
-    pageFile: 'src/pages/VesselContractsUnified.tsx',
+    pageFile: 'src/pages/VesselContracts.tsx',
     edgeFunction: 'supabase/functions/vessel-downtime-ai'
   },
   {

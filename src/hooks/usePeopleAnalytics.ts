@@ -156,10 +156,8 @@ export function useEmployeeStats() {
         riskEmployees,
       };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchInterval: 1000 * 60 * 5, // Refetch every 5 minutes
   });
 }
 
@@ -225,10 +223,8 @@ export function usePayrollStats() {
         monthlyTrend,
       };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
   });
 }
 
@@ -287,9 +283,7 @@ export function useHeadcountTrend() {
 
       return months;
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
   });
 }

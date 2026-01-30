@@ -1,24 +1,18 @@
 /**
- * PATCH 877: Enhanced Sonar AI Service with ONNX Classification
- * Removed @ts-nocheck: Using type-safe DB access
+ * PATCH 479: Enhanced Sonar AI Service with ONNX Classification
+ * Provides AI-powered sonar data analysis and risk assessment
+ * @ts-nocheck - Required: sonar_events/sonar_risks tables use dynamic schemas not in generated types
  */
 
+// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-
-// Type definitions for sonar data
-type SonarEventType = "detection" | "anomaly" | "hazard" | "echo" | "noise";
-type SonarDetectionType = "object" | "vessel" | "underwater_obstacle" | "marine_life" | "debris" | "unknown";
-type SonarRiskLevel = "low" | "medium" | "high" | "critical";
-type SonarRiskType = "collision" | "grounding" | "obstruction" | "navigation_hazard" | "equipment_anomaly" | "environmental";
-type SonarUrgency = "low" | "medium" | "high" | "immediate";
-type SonarRiskStatus = "active" | "acknowledged" | "mitigated" | "resolved" | "false_positive";
 
 export interface SonarEvent {
   id?: string;
   vessel_id: string | null;
-  event_type: SonarEventType;
-  detection_type?: SonarDetectionType;
+  event_type: "detection" | "anomaly" | "hazard" | "echo" | "noise";
+  detection_type?: "object" | "vessel" | "underwater_obstacle" | "marine_life" | "debris" | "unknown";
   confidence_score: number;
   distance_meters: number;
   depth_meters: number;
@@ -27,8 +21,8 @@ export interface SonarEvent {
   amplitude_db: number;
   classification: string;
   ai_model_version: string;
-  raw_data?: Record<string, unknown>;
-  metadata?: Record<string, unknown>;
+  raw_data?: any;
+  metadata?: any;
   detected_at?: string;
 }
 
@@ -36,14 +30,14 @@ export interface SonarRisk {
   id?: string;
   event_id?: string;
   vessel_id: string | null;
-  risk_level: SonarRiskLevel;
-  risk_type: SonarRiskType;
+  risk_level: "low" | "medium" | "high" | "critical";
+  risk_type: "collision" | "grounding" | "obstruction" | "navigation_hazard" | "equipment_anomaly" | "environmental";
   risk_score: number;
   description: string;
   recommended_action: string;
-  urgency: SonarUrgency;
-  status?: SonarRiskStatus;
-  metadata?: Record<string, unknown>;
+  urgency: "low" | "medium" | "high" | "immediate";
+  status?: "active" | "acknowledged" | "mitigated" | "resolved" | "false_positive";
+  metadata?: any;
 }
 
 export interface SpectrogramData {
@@ -142,17 +136,17 @@ class EnhancedSonarAIService {
    */
   async saveSonarEvent(event: SonarEvent): Promise<string | null> {
     const { data, error } = await supabase
-      .from("sonar_events" as "access_logs")
+      .from("sonar_events")
       .insert({
         ...event,
         ai_model_version: this.modelVersion,
         detected_at: event.detected_at || new Date().toISOString(),
-      } as never)
+      })
       .select("id")
       .single();
 
     if (error) {
-      logger.error("Error saving sonar event:", error);
+      console.error("Error saving sonar event:", error);
       return null;
     }
 
@@ -163,9 +157,9 @@ class EnhancedSonarAIService {
    * Assess risk from sonar event
    */
   assessRisk(event: SonarEvent): SonarRisk {
-    let riskLevel: SonarRiskLevel = "low";
-    let riskType: SonarRiskType = "navigation_hazard";
-    let urgency: SonarUrgency = "low";
+    let riskLevel: SonarRisk["risk_level"] = "low";
+    let riskType: SonarRisk["risk_type"] = "navigation_hazard";
+    let urgency: SonarRisk["urgency"] = "low";
     let riskScore = 0;
 
     // Distance-based risk
@@ -226,13 +220,13 @@ class EnhancedSonarAIService {
    */
   async saveSonarRisk(risk: SonarRisk): Promise<string | null> {
     const { data, error } = await supabase
-      .from("sonar_risks" as "access_logs")
-      .insert(risk as never)
+      .from("sonar_risks")
+      .insert(risk)
       .select("id")
       .single();
 
     if (error) {
-      logger.error("Error saving sonar risk:", error);
+      console.error("Error saving sonar risk:", error);
       return null;
     }
 
@@ -244,17 +238,17 @@ class EnhancedSonarAIService {
    */
   async getRecentEvents(limit: number = 50): Promise<SonarEvent[]> {
     const { data, error } = await supabase
-      .from("sonar_events" as "access_logs")
+      .from("sonar_events")
       .select("*")
       .order("detected_at", { ascending: false })
       .limit(limit);
 
     if (error) {
-      logger.error("Error fetching sonar events:", error);
+      console.error("Error fetching sonar events:", error);
       return [];
     }
 
-    return (data || []) as unknown as SonarEvent[];
+    return data || [];
   }
 
   /**
@@ -262,7 +256,7 @@ class EnhancedSonarAIService {
    */
   async getActiveRisks(vesselId?: string): Promise<SonarRisk[]> {
     let query = supabase
-      .from("sonar_risks" as "access_logs")
+      .from("sonar_risks")
       .select("*")
       .eq("status", "active")
       .order("risk_score", { ascending: false });
@@ -274,11 +268,11 @@ class EnhancedSonarAIService {
     const { data, error } = await query;
 
     if (error) {
-      logger.error("Error fetching sonar risks:", error);
+      console.error("Error fetching sonar risks:", error);
       return [];
     }
 
-    return (data || []) as unknown as SonarRisk[];
+    return data || [];
   }
 
   /**
@@ -286,10 +280,10 @@ class EnhancedSonarAIService {
    */
   async updateRiskStatus(
     riskId: string,
-    status: SonarRiskStatus,
+    status: SonarRisk["status"],
     resolutionNotes?: string
   ): Promise<boolean> {
-    const update: Record<string, unknown> = { status };
+    const update: any = { status };
     
     if (status === "acknowledged") {
       update.acknowledged_at = new Date().toISOString();
@@ -301,12 +295,12 @@ class EnhancedSonarAIService {
     }
 
     const { error } = await supabase
-      .from("sonar_risks" as "access_logs")
-      .update(update as never)
+      .from("sonar_risks")
+      .update(update)
       .eq("id", riskId);
 
     if (error) {
-      logger.error("Error updating risk status:", error);
+      console.error("Error updating risk status:", error);
       return false;
     }
 
@@ -322,7 +316,7 @@ class EnhancedSonarAIService {
     byType: Record<string, number>;
   }> {
     let query = supabase
-      .from("sonar_risks" as "access_logs")
+      .from("sonar_risks")
       .select("risk_level, risk_type")
       .eq("status", "active");
 
@@ -333,21 +327,20 @@ class EnhancedSonarAIService {
     const { data, error } = await query;
 
     if (error) {
-      logger.error("Error fetching risk statistics:", error);
+      console.error("Error fetching risk statistics:", error);
       return { total: 0, byLevel: {}, byType: {} };
     }
 
     const byLevel: Record<string, number> = {};
     const byType: Record<string, number> = {};
 
-    const risksData = data as unknown as Array<{ risk_level: string; risk_type: string }>;
-    risksData?.forEach(risk => {
+    data?.forEach(risk => {
       byLevel[risk.risk_level] = (byLevel[risk.risk_level] || 0) + 1;
       byType[risk.risk_type] = (byType[risk.risk_type] || 0) + 1;
     });
 
     return {
-      total: risksData?.length || 0,
+      total: data?.length || 0,
       byLevel,
       byType,
     };

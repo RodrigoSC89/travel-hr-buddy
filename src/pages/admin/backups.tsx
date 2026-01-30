@@ -99,11 +99,18 @@ export default function BackupsPage() {
         throw new Error("Not authenticated");
       }
 
-      const { data: result, error: backupError } = await supabase.functions.invoke("weekly-backup", {});
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/weekly-backup`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (backupError) {
-        throw backupError;
-      }
+      const result = await response.json();
 
       if (!result.success) {
         throw new Error(result.error || "Backup failed");

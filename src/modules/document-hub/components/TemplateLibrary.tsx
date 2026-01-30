@@ -1,6 +1,7 @@
+// @ts-nocheck
 /**
- * PATCH 877: Document Template Library with PDF Generation
- * PATCH 900: Removed @ts-nocheck, using proper typing
+ * PATCH 380: Document Template Library with PDF Generation
+ * Template management with dynamic placeholders and PDF export
  */
 
 import React, { useState, useEffect } from "react";
@@ -16,39 +17,34 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Plus, Download, Edit, Trash2, History, Copy } from "lucide-react";
-import type jsPDFType from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface Template {
   id: string;
   name: string;
-  description?: string | null;
-  category: string | null;
+  description?: string;
+  category: string;
   content: string;
   placeholders?: string[];
-  is_public: boolean | null;
-  variables?: string[] | null;
-  version?: number;
+  is_public: boolean;
+  version: number;
   created_at: string;
   updated_at: string;
 }
 
 interface TemplateVersion {
   id: string;
-  template_id: string | null;
+  template_id: string;
   version_number: number;
   content: string;
-  change_notes?: string | null;
-  change_summary?: string | null;
-  created_at: string | null;
-  is_active?: boolean | null;
+  change_summary?: string;
+  created_at: string;
 }
-
-// Dynamic DB access type
-type DynamicSupabaseClient = {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
-
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
 
 export const TemplateLibrary: React.FC = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -89,26 +85,7 @@ export const TemplateLibrary: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      
-      // Map to interface
-      const mapped = (data || []).map((row): Template => {
-        const rowAny = row as Record<string, unknown>;
-        return {
-          id: row.id,
-          name: row.name || "",
-          description: row.description,
-          category: row.category,
-          content: row.content || "",
-          placeholders: rowAny.placeholders as string[] | undefined,
-          is_public: row.is_public,
-          variables: row.variables as string[] | null,
-          version: rowAny.version as number | undefined,
-          created_at: row.created_at || "",
-          updated_at: row.updated_at || ""
-        };
-      });
-      
-      setTemplates(mapped);
+      setTemplates(data || []);
     } catch (error) {
       console.error("Error loading templates:", error);
       toast({
@@ -123,29 +100,16 @@ export const TemplateLibrary: React.FC = () => {
 
   const loadVersions = async (templateId: string) => {
     try {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from("template_versions")
         .select("*")
         .eq("template_id", templateId)
         .order("version_number", { ascending: false });
 
       if (error) throw error;
-      
-      const mapped = (data || []).map((row: Record<string, unknown>): TemplateVersion => ({
-        id: row.id as string,
-        template_id: row.template_id as string | null,
-        version_number: (row.version_number as number) || 1,
-        content: (row.content as string) || "",
-        change_notes: row.change_notes as string | undefined,
-        change_summary: row.change_summary as string | undefined,
-        created_at: row.created_at as string | null,
-        is_active: row.is_active as boolean | undefined
-      }));
-      
-      setVersions(mapped);
+      setVersions(data || []);
     } catch (error) {
       console.error("Error loading versions:", error);
-      setVersions([]);
     }
   };
 
@@ -180,37 +144,29 @@ export const TemplateLibrary: React.FC = () => {
 
       const placeholders = extractPlaceholders(formData.content);
 
-      const insertData = {
-        name: formData.name,
-        description: formData.description,
-        category: formData.category,
-        content: formData.content,
-        is_public: formData.is_public,
-        user_id: user.id,
-        placeholders,
-        version: 1
-      };
-
       const { data: template, error } = await supabase
         .from("document_templates")
-        .insert([insertData] as never)
+        .insert([{
+          ...formData,
+          user_id: user.id,
+          placeholders,
+          version: 1
+        }])
         .select()
         .single();
 
       if (error) throw error;
 
       // Create initial version
-      const versionData = {
-        template_id: template.id,
-        version_number: 1,
-        content: formData.content,
-        change_summary: "Initial version",
-        changed_by: user.id
-      };
-
-      await dynamicDb
+      await supabase
         .from("template_versions")
-        .insert([versionData] as never);
+        .insert([{
+          template_id: template.id,
+          version_number: 1,
+          content: formData.content,
+          change_summary: "Initial version",
+          changed_by: user.id
+        }]);
 
       toast({
         title: "Success",
@@ -268,7 +224,7 @@ export const TemplateLibrary: React.FC = () => {
     setIsGenerateOpen(true);
   };
 
-  const generatePDF = async () => {
+  const generatePDF = () => {
     if (!selectedTemplate) return;
 
     try {
@@ -280,9 +236,8 @@ export const TemplateLibrary: React.FC = () => {
         content = content.replace(regex, generateData[key] || `[${key}]`);
       });
 
-      // Dynamic import jsPDF
-      const { default: jsPDF } = await import("jspdf");
-      const doc: jsPDFType = new jsPDF();
+      // Generate PDF
+      const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const margin = 20;
       const maxWidth = pageWidth - 2 * margin;
@@ -300,6 +255,14 @@ export const TemplateLibrary: React.FC = () => {
 
       // Save PDF
       doc.save(`${selectedTemplate.name.replace(/\s+/g, "_")}_${Date.now()}.pdf`);
+
+      // Log export
+      supabase
+        .from("itinerary_exports")
+        .insert([{
+          export_format: "pdf",
+          file_size_kb: Math.round(doc.output("blob").size / 1024)
+        }]);
 
       toast({
         title: "Success",
@@ -327,7 +290,7 @@ export const TemplateLibrary: React.FC = () => {
     });
   };
 
-  const getCategoryBadge = (category: string | null) => {
+  const getCategoryBadge = (category: string) => {
     const variants: Record<string, string> = {
       general: "bg-blue-100 text-blue-800",
       report: "bg-green-100 text-green-800",
@@ -335,7 +298,7 @@ export const TemplateLibrary: React.FC = () => {
       compliance: "bg-red-100 text-red-800"
     };
 
-    return <Badge className={variants[category || "general"] || "bg-gray-100"}>{category || "general"}</Badge>;
+    return <Badge className={variants[category] || "bg-gray-100"}>{category}</Badge>;
   };
 
   return (
@@ -420,7 +383,7 @@ export const TemplateLibrary: React.FC = () => {
                       rows={15}
                       className="font-mono text-sm"
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-gray-500 mt-1">
                       Use double curly braces for placeholders, e.g., {"{{company_name}}"}, {"{{date}}"}
                     </p>
                   </div>
@@ -468,7 +431,7 @@ export const TemplateLibrary: React.FC = () => {
           {loading ? (
             <div className="text-center py-8">Loading templates...</div>
           ) : filteredTemplates.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-8 text-gray-500">
               No templates found. Create your first template to get started.
             </div>
           ) : (
@@ -490,15 +453,15 @@ export const TemplateLibrary: React.FC = () => {
                       <TableCell>
                         <div className="font-medium">{template.name}</div>
                         {template.description && (
-                          <div className="text-xs text-muted-foreground">{template.description}</div>
+                          <div className="text-xs text-gray-500">{template.description}</div>
                         )}
                       </TableCell>
                       <TableCell>{getCategoryBadge(template.category)}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">v{template.version || 1}</Badge>
+                        <Badge variant="outline">v{template.version}</Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-gray-600">
                           {template.placeholders && template.placeholders.length > 0
                             ? template.placeholders.length + " placeholder(s)"
                             : "No placeholders"}
@@ -534,7 +497,7 @@ export const TemplateLibrary: React.FC = () => {
                             size="sm"
                             onClick={() => handleDelete(template.id)}
                           >
-                            <Trash2 className="h-4 w-4 text-destructive" />
+                            <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </div>
                       </TableCell>
@@ -591,19 +554,19 @@ export const TemplateLibrary: React.FC = () => {
           </DialogHeader>
           <div className="py-4">
             {versions.length === 0 ? (
-              <div className="text-center text-muted-foreground text-sm">No version history available</div>
+              <div className="text-center text-gray-500 text-sm">No version history available</div>
             ) : (
               <div className="space-y-2">
                 {versions.map((version) => (
                   <div key={version.id} className="border rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
                       <Badge>Version {version.version_number}</Badge>
-                      <div className="text-xs text-muted-foreground">
-                        {version.created_at ? new Date(version.created_at).toLocaleDateString() : "Unknown"}
+                      <div className="text-xs text-gray-500">
+                        {new Date(version.created_at).toLocaleDateString()}
                       </div>
                     </div>
-                    {(version.change_summary || version.change_notes) && (
-                      <div className="text-sm text-muted-foreground">{version.change_summary || version.change_notes}</div>
+                    {version.change_summary && (
+                      <div className="text-sm text-gray-600">{version.change_summary}</div>
                     )}
                   </div>
                 ))}

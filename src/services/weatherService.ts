@@ -93,8 +93,7 @@ interface OpenWeatherMapAlertsResponse {
   alerts?: OpenWeatherMapAlert[];
 }
 
-// API Key should be configured via secrets/edge function, not env vars
-const API_KEY: string | undefined = undefined; // Weather API via edge function
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const CACHE_DURATION_MS = 60 * 60 * 1000; // 1 hour
 
 /**

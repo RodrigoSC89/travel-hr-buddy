@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -113,16 +112,14 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
     try {
       setIsPlayingAudio(true);
       
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
-      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/eleven-labs-voice`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/eleven-labs-voice`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             text: text.substring(0, 500), // Limit to 500 chars for voice
@@ -196,7 +193,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
   };
 
   const handleMessage = useCallback((event: RealtimeMessage) => {
-    logger.debug('Realtime message', { type: event.type });
+    console.log('Realtime message:', event.type);
     
     // Update listening state
     if (event.type === 'input_audio_buffer.speech_started') {

@@ -25,8 +25,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
   const markers = useRef<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const mapboxToken = safeEnv.VITE_MAPBOX_ACCESS_TOKEN || safeEnv.VITE_MAPBOX_TOKEN || "";
+  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || "";
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;

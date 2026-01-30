@@ -300,7 +300,7 @@ export async function getWeatherForecast(
       icon: item.icon,
     }));
   } catch (error) {
-    logger.error("[Weather] Forecast fetch failed", error);
+    console.error("[Weather] Forecast fetch failed:", error);
     return [];
   }
 }
@@ -310,6 +310,7 @@ export async function getWeatherForecast(
  */
 export function clearWeatherCache(): void {
   weatherCache.clear();
+  console.log("[Weather] Cache cleared");
 }
 
 /**

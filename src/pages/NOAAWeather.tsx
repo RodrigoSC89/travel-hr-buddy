@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Cloud, Thermometer, Wind, Droplets, RefreshCw, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 
 interface WeatherData {
   location: string;
@@ -61,7 +60,7 @@ export default function NOAAWeather() {
 
       toast.success("Dados meteorológicos atualizados!");
     } catch (error) {
-      logger.error("Error fetching weather:", error);
+      console.error("Error fetching weather:", error);
       toast.error("Erro ao buscar dados meteorológicos");
     } finally {
       setLoading(false);

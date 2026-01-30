@@ -34,8 +34,7 @@ export const ConsolidatedCrewManagement = () => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [performances, setPerformances] = useState<PerformanceReview[]>([]);
-  // PATCH v48: Start with loading=false to NEVER block render
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
 

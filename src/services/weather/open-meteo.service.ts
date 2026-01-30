@@ -10,8 +10,6 @@
  * Documentation: https://open-meteo.com/
  */
 
-import { logger } from "@/lib/logger";
-
 export interface OpenMeteoCurrentWeather {
   temperature_2m: number;
   relative_humidity_2m: number;
@@ -125,7 +123,7 @@ function getCacheKey(endpoint: string, params: Record<string, any>): string {
 function getCachedData<T>(key: string): T | null {
   const cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    logger.debug('[Open-Meteo] Using cached data');
+    console.log('[Open-Meteo] Using cached data');
     return cached.data as T;
   }
   return null;
@@ -254,7 +252,7 @@ export async function fetchOpenMeteoWeather(
     `&timezone=auto` +
     `&wind_speed_unit=kmh`;
 
-  logger.debug('[Open-Meteo] Fetching weather data...');
+  console.log('[Open-Meteo] Fetching weather data...');
 
   try {
     const response = await fetch(url);
@@ -265,10 +263,10 @@ export async function fetchOpenMeteoWeather(
 
     const data: OpenMeteoResponse = await response.json();
     setCachedData(cacheKey, data);
-    logger.debug('[Open-Meteo] Weather data fetched successfully');
+    console.log('[Open-Meteo] Weather data fetched successfully');
     return data;
   } catch (error) {
-    logger.error('[Open-Meteo] Fetch error:', { error });
+    console.error('[Open-Meteo] Fetch error:', error);
     throw error;
   }
 }
@@ -316,7 +314,7 @@ export async function fetchOpenMeteoMarine(
     `&forecast_days=${forecastDays}` +
     `&timezone=auto`;
 
-  logger.debug('[Open-Meteo] Fetching marine data...');
+  console.log('[Open-Meteo] Fetching marine data...');
 
   try {
     const response = await fetch(url);
@@ -327,10 +325,10 @@ export async function fetchOpenMeteoMarine(
 
     const data: OpenMeteoMarineData = await response.json();
     setCachedData(cacheKey, data);
-    logger.debug('[Open-Meteo] Marine data fetched successfully');
+    console.log('[Open-Meteo] Marine data fetched successfully');
     return data;
   } catch (error) {
-    logger.error('[Open-Meteo] Marine fetch error:', { error });
+    console.error('[Open-Meteo] Marine fetch error:', error);
     throw error;
   }
 }
@@ -374,7 +372,7 @@ export async function fetchOpenMeteoAirQuality(
     `&forecast_days=${forecastDays}` +
     `&timezone=auto`;
 
-  logger.debug('[Open-Meteo] Fetching air quality data...');
+  console.log('[Open-Meteo] Fetching air quality data...');
 
   try {
     const response = await fetch(url);
@@ -385,10 +383,10 @@ export async function fetchOpenMeteoAirQuality(
 
     const data: OpenMeteoAirQuality = await response.json();
     setCachedData(cacheKey, data);
-    logger.debug('[Open-Meteo] Air quality data fetched successfully');
+    console.log('[Open-Meteo] Air quality data fetched successfully');
     return data;
   } catch (error) {
-    logger.error('[Open-Meteo] AQI fetch error:', { error });
+    console.error('[Open-Meteo] AQI fetch error:', error);
     throw error;
   }
 }
@@ -398,7 +396,7 @@ export async function fetchOpenMeteoAirQuality(
  */
 export function clearOpenMeteoCache(): void {
   cache.clear();
-  logger.debug('[Open-Meteo] Cache cleared');
+  console.log('[Open-Meteo] Cache cleared');
 }
 
 /**

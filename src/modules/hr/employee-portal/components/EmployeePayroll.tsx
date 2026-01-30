@@ -94,49 +94,15 @@ export const EmployeePayroll: React.FC = () => {
     try {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) {
-        setPayrollRecords([]);
-        return;
-      }
-
-      // Query crew_payroll table for real data
-      const { data, error } = await supabase
-        .from('crew_payroll')
-        .select('*')
-        .order('payment_date', { ascending: false })
-        .limit(50);
-
-      if (error) {
-        logger.warn("No payroll records found, using fallback", { error: error.message });
-        // Fallback to demo data only if DB query fails
+        // Use mock data for demo
         setPayrollRecords(MOCK_PAYROLL_DATA);
         return;
       }
 
-      if (data && data.length > 0) {
-        // Map DB data to component interface
-        const mappedRecords: PayrollRecord[] = data.map((record: Record<string, unknown>) => ({
-          id: String(record.id || ''),
-          pay_period_start: String(record.pay_period_start || record.period_start || ''),
-          pay_period_end: String(record.pay_period_end || record.period_end || ''),
-          payment_date: String(record.payment_date || record.created_at || ''),
-          gross_salary: Number(record.gross_salary || record.gross_amount || 0),
-          deductions: Number(record.deductions || record.total_deductions || 0),
-          bonuses: Number(record.bonuses || record.allowances || 0),
-          net_salary: Number(record.net_salary || record.net_amount || 0),
-          currency: String(record.currency || 'USD'),
-          status: String(record.status || 'pending'),
-          payslip_url: record.payslip_url ? String(record.payslip_url) : undefined,
-          breakdown: (record.breakdown as PayrollBreakdown) || {},
-          notes: record.notes ? String(record.notes) : undefined,
-          created_at: String(record.created_at || new Date().toISOString())
-        }));
-        setPayrollRecords(mappedRecords);
-      } else {
-        // No data found - show empty state
-        setPayrollRecords([]);
-      }
+      // In production, this would query crew_payroll table
+      // For now, use mock data
+      setPayrollRecords(MOCK_PAYROLL_DATA);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading payroll", { error: errorMessage });

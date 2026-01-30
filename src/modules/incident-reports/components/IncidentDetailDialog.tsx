@@ -1,8 +1,6 @@
-/**
- * PATCH 879 - Incident Detail Dialog
- * Enhanced with signatures, corrective actions, and PDF export
- * Type-safe with fallbacks for missing tables
- */
+// @ts-nocheck
+// PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
+// PATCH 653 - Lazy loading for jsPDF
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -20,9 +18,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { SignatureDialog, SignatureData } from "./SignatureDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
-import { FileDown, PenTool, Plus, CheckCircle, Image as ImageIcon } from "lucide-react";
+import { FileDown, PenTool, Plus, CheckCircle } from "lucide-react";
 import { format } from "date-fns";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 interface Incident {
   id: string;
@@ -55,13 +59,6 @@ interface IncidentDetailDialogProps {
   onUpdate?: () => void;
 }
 
-// Type-safe dynamic table access
-type DynamicSupabaseClient = {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
-
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
-
 export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
   incident,
   open,
@@ -75,7 +72,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     action_description: "",
     assigned_to: "",
     due_date: "",
-    status: "pending",
+    status: "pending"
   });
   const [showActionForm, setShowActionForm] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(incident?.status || "new");
@@ -92,44 +89,23 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     if (!incident) return;
 
     try {
-      // Load signatures from dynamic table (may not exist)
-      const { data: sigData, error: sigError } = await dynamicDb
+      // Load signatures
+      const { data: sigData } = await supabase
         .from("incident_signatures")
         .select("*")
         .eq("incident_id", incident.id);
       
-      if (sigError) {
-        logger.warn("incident_signatures table may not exist:", sigError);
-      } else if (sigData) {
-        const mappedSigs: SignatureData[] = (sigData || []).map((row: Record<string, unknown>) => ({
-          signatory_name: String(row.signatory_name || ""),
-          signatory_role: String(row.signatory_role || ""),
-          signature_image: String(row.signature_image || ""),
-          signed_at: String(row.signed_at || new Date().toISOString()),
-        }));
-        setSignatures(mappedSigs);
-      }
+      if (sigData) setSignatures(sigData);
 
-      // Load corrective actions from dynamic table (may not exist)
-      const { data: actionData, error: actionError } = await dynamicDb
+      // Load corrective actions
+      const { data: actionData } = await supabase
         .from("incident_actions")
         .select("*")
         .eq("incident_id", incident.id);
       
-      if (actionError) {
-        logger.warn("incident_actions table may not exist:", actionError);
-      } else if (actionData) {
-        const mappedActions: CorrectiveAction[] = (actionData || []).map((row: Record<string, unknown>) => ({
-          id: String(row.id || ""),
-          action_description: String(row.action_description || ""),
-          assigned_to: String(row.assigned_to || ""),
-          due_date: String(row.due_date || ""),
-          status: String(row.status || "pending"),
-        }));
-        setCorrectiveActions(mappedActions);
-      }
+      if (actionData) setCorrectiveActions(actionData);
     } catch (error) {
-      logger.error("Error loading data:", error);
+      console.error("Error loading data:", error);
     }
   };
 
@@ -137,32 +113,27 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     if (!incident) return;
 
     try {
-      const insertData = {
-        incident_id: incident.id,
-        signatory_name: signatureData.signatory_name,
-        signatory_role: signatureData.signatory_role,
-        signature_image: signatureData.signature_image,
-        signed_at: signatureData.signed_at,
-      } as Record<string, unknown>;
-
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("incident_signatures")
-        .insert(insertData as never);
+        .insert({
+          incident_id: incident.id,
+          ...signatureData
+        });
 
       if (error) throw error;
 
       setSignatures([...signatures, signatureData]);
       toast({
         title: "Assinatura salva",
-        description: "A assinatura foi registrada com sucesso",
+        description: "A assinatura foi registrada com sucesso"
       });
-    } catch (err) {
-      logger.warn("Error saving signature (table may not exist):", { error: err });
+    } catch (error) {
+      console.error("Error saving signature:", error);
       // Continue without database if it fails
       setSignatures([...signatures, signatureData]);
       toast({
         title: "Assinatura registrada",
-        description: "Assinatura salva localmente",
+        description: "Assinatura salva localmente"
       });
     }
   };
@@ -172,23 +143,18 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Campos obrigatórios",
         description: "Preencha descrição e responsável",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
 
     try {
-      const insertData = {
-        incident_id: incident.id,
-        action_description: newAction.action_description,
-        assigned_to: newAction.assigned_to,
-        due_date: newAction.due_date || null,
-        status: newAction.status,
-      } as Record<string, unknown>;
-
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from("incident_actions")
-        .insert(insertData as never);
+        .insert({
+          incident_id: incident.id,
+          ...newAction
+        });
 
       if (error) throw error;
 
@@ -197,17 +163,17 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       setShowActionForm(false);
       toast({
         title: "Ação adicionada",
-        description: "Ação corretiva registrada",
+        description: "Ação corretiva registrada"
       });
-    } catch (err) {
-      logger.warn("Error adding action (table may not exist):", { error: err });
+    } catch (error) {
+      console.error("Error adding action:", error);
       // Continue without database if it fails
-      setCorrectiveActions([...correctiveActions, { ...newAction, id: crypto.randomUUID() }]);
+      setCorrectiveActions([...correctiveActions, newAction]);
       setNewAction({ action_description: "", assigned_to: "", due_date: "", status: "pending" });
       setShowActionForm(false);
       toast({
         title: "Ação registrada",
-        description: "Ação salva localmente",
+        description: "Ação salva localmente"
       });
     }
   };
@@ -228,26 +194,23 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       
       toast({
         title: "Status atualizado",
-        description: `Status alterado para: ${newStatus}`,
+        description: `Status alterado para: ${newStatus}`
       });
     } catch (error) {
-      logger.error("Error updating status:", error);
+      console.error("Error updating status:", error);
       setCurrentStatus(newStatus);
       toast({
         title: "Status atualizado",
-        description: "Alteração registrada localmente",
+        description: "Alteração registrada localmente"
       });
     }
   };
 
   // PDF Export for individual incident
-  const exportToPDF = async () => {
+  const exportToPDF = () => {
     if (!incident) return;
 
     try {
-      const { default: jsPDF } = await import("jspdf");
-      const { default: autoTable } = await import("jspdf-autotable");
-      
       const doc = new jsPDF();
       
       // Title
@@ -303,17 +266,17 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           action.action_description,
           action.assigned_to,
           action.due_date ? format(new Date(action.due_date), "dd/MM/yyyy") : "N/A",
-          action.status,
+          action.status
         ]);
         
         autoTable(doc, {
           startY: yPos,
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
-          styles: { fontSize: 8 },
+          styles: { fontSize: 8 }
         });
         
-        yPos = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+        yPos = (doc as any).lastAutoTable.finalY + 10;
       }
       
       // Signatures
@@ -327,7 +290,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         doc.text("Assinaturas:", 14, yPos);
         yPos += 10;
         
-        signatures.forEach((sig) => {
+        signatures.forEach((sig, index) => {
           if (yPos > 260) {
             doc.addPage();
             yPos = 20;
@@ -344,7 +307,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
               doc.addImage(sig.signature_image, "PNG", 14, yPos, 80, 30);
               yPos += 35;
             } catch (err) {
-              logger.error("Error adding signature image:", err);
+              console.error("Error adding signature image:", err);
             }
           }
           
@@ -357,19 +320,17 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       
       toast({
         title: "PDF gerado",
-        description: "Download iniciado",
+        description: "Download iniciado"
       });
     } catch (error) {
-      logger.error("Error generating PDF:", error);
+      console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
-  if (!incident) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -442,7 +403,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             </Card>
           </TabsContent>
 
-          {/* Corrective Actions Tab */}
+          {/* Corrective Actions Tab - PATCH 393 */}
           <TabsContent value="actions" className="space-y-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
@@ -492,7 +453,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                 {correctiveActions.length > 0 ? (
                   <div className="space-y-3">
                     {correctiveActions.map((action, index) => (
-                      <div key={action.id || index} className="border rounded-lg p-4">
+                      <div key={index} className="border rounded-lg p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <p className="font-medium">{action.action_description}</p>
@@ -517,7 +478,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             </Card>
           </TabsContent>
 
-          {/* Signatures Tab */}
+          {/* Signatures Tab - PATCH 393 */}
           <TabsContent value="signatures" className="space-y-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
@@ -537,17 +498,16 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                             <img 
                               src={sig.signature_image} 
                               alt="Signature" 
-                              className="w-32 h-16 object-contain border rounded"
+                              className="w-32 h-20 object-contain border rounded"
                             />
                           )}
-                          <div className="flex-1">
+                          <div>
                             <p className="font-medium">{sig.signatory_name}</p>
                             <p className="text-sm text-muted-foreground">{sig.signatory_role}</p>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Assinado em: {format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}
+                            <p className="text-xs text-muted-foreground mt-2">
+                              {format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}
                             </p>
                           </div>
-                          <CheckCircle className="h-5 w-5 text-green-500" />
                         </div>
                       </div>
                     ))}
@@ -561,73 +521,99 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             </Card>
           </TabsContent>
 
-          {/* Attachments Tab */}
-          <TabsContent value="attachments" className="space-y-4">
+          <TabsContent value="attachments">
             <Card>
               <CardHeader>
-                <CardTitle>Anexos e Fotos</CardTitle>
+                <CardTitle>Fotos e Anexos</CardTitle>
               </CardHeader>
               <CardContent>
                 {incident.photo_urls && incident.photo_urls.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     {incident.photo_urls.map((url, index) => (
-                      <div key={index} className="border rounded-lg overflow-hidden">
-                        <img 
-                          src={url} 
-                          alt={`Anexo ${index + 1}`}
-                          className="w-full h-32 object-cover"
-                        />
-                      </div>
+                      <img 
+                        key={index}
+                        src={url}
+                        alt={`Attachment ${index + 1}`}
+                        className="w-full h-48 object-cover rounded border"
+                      />
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-muted-foreground py-8">
-                    <ImageIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Nenhum anexo registrado</p>
-                  </div>
+                  <p className="text-center text-muted-foreground py-8">
+                    Nenhum anexo disponível
+                  </p>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Workflow Tab */}
-          <TabsContent value="workflow" className="space-y-4">
+          {/* Workflow Status - PATCH 393 */}
+          <TabsContent value="workflow">
             <Card>
               <CardHeader>
-                <CardTitle>Workflow do Incidente</CardTitle>
+                <CardTitle>Fluxo de Status</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  {["new", "investigating", "action_required", "resolved", "closed"].map((status) => (
-                    <Button
-                      key={status}
-                      variant={currentStatus === status ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleStatusUpdate(status)}
-                    >
-                      {status.replace("_", " ")}
-                    </Button>
-                  ))}
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <span className="font-medium">Status Atual:</span>
+                  <Badge className="text-base px-4 py-2">{currentStatus}</Badge>
                 </div>
                 
+                <div className="space-y-2">
+                  <Label>Alterar Status:</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      variant={currentStatus === "new" ? "default" : "outline"}
+                      onClick={() => handleStatusUpdate("new")}
+                      className="w-full"
+                    >
+                      Novo
+                    </Button>
+                    <Button
+                      variant={currentStatus === "under_analysis" ? "default" : "outline"}
+                      onClick={() => handleStatusUpdate("under_analysis")}
+                      className="w-full"
+                    >
+                      Em Análise
+                    </Button>
+                    <Button
+                      variant={currentStatus === "resolved" ? "default" : "outline"}
+                      onClick={() => handleStatusUpdate("resolved")}
+                      className="w-full"
+                    >
+                      Resolvido
+                    </Button>
+                  </div>
+                </div>
+
                 <div className="pt-4 border-t">
-                  <Button onClick={exportToPDF} className="w-full">
-                    <FileDown className="mr-2 h-4 w-4" />
-                    Exportar Relatório PDF
-                  </Button>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Fluxo:</strong> Novo → Em Análise → Resolvido
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </DialogContent>
 
-      <SignatureDialog
-        open={showSignatureDialog}
-        onOpenChange={setShowSignatureDialog}
-        onSave={handleSignatureSave}
-        incidentId={incident?.id || ""}
-      />
+        <div className="flex justify-between gap-2 mt-4">
+          <Button variant="outline" onClick={exportToPDF}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Exportar PDF
+          </Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Fechar
+          </Button>
+        </div>
+
+        {/* Signature Dialog */}
+        <SignatureDialog
+          open={showSignatureDialog}
+          onOpenChange={setShowSignatureDialog}
+          onSave={handleSignatureSave}
+          incidentId={incident.id}
+        />
+      </DialogContent>
     </Dialog>
   );
 };

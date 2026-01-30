@@ -45,8 +45,7 @@ export class ChaosMonkey {
   }
 
   static isEnabled(): boolean {
-    // Chaos Monkey disabled by default - use localStorage for testing
-    return localStorage.getItem('nautilus_chaos_monkey') === 'true';
+    return import.meta.env.VITE_CHAOS_MONKEY_ENABLED === 'true';
   }
 
   enable(): void {

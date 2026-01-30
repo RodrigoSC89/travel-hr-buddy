@@ -116,10 +116,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
       return data as DigitalTwinState;
     },
     enabled: !!selectedVessel,
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 
   // Fetch equipment health

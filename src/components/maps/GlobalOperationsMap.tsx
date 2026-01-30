@@ -72,7 +72,7 @@ export function GlobalOperationsMap() {
   const [showVessels, setShowVessels] = useState(true);
   const [showAlerts, setShowAlerts] = useState(true);
   const [showHeatmap, setShowHeatmap] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   // Fetch vessel locations - using mock positions since last_known_position column doesn't exist

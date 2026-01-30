@@ -4,7 +4,6 @@
  */
 
 import pako from 'pako';
-import { logger } from '@/lib/logger';
 
 // Types
 interface ChunkedData {
@@ -433,7 +432,7 @@ export class SatelliteOptimizer {
   // Private: Sync individual item
   private static async syncItem(item: SyncItem): Promise<void> {
     // In production, this would actually sync to server
-    logger.debug(`[SatelliteOptimizer] Syncing item: ${item.id} (${item.type})`);
+    console.log(`[SatelliteOptimizer] Syncing item: ${item.id} (${item.type})`);
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 100));

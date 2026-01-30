@@ -25,14 +25,13 @@ export interface SafetyMetrics {
 }
 
 export function useComplianceMetrics(): ComplianceMetrics {
-  // PATCH v48: Start with isLoading=false to NEVER block render
   const [metrics, setMetrics] = useState<ComplianceMetrics>({
     overallScore: 91,
     regulatoryCompliance: 94,
     riskMitigation: 88,
     trainingCompletion: 85,
     openIssues: 3,
-    isLoading: false, // NEVER start as true
+    isLoading: true,
   });
 
   const fetchMetrics = useCallback(async () => {
@@ -84,24 +83,22 @@ export function useComplianceMetrics(): ComplianceMetrics {
     }
   }, []);
 
-  // PATCH v48: Empty dependency array - NEVER causes infinite loops
   useEffect(() => {
     fetchMetrics();
-    const interval = setInterval(fetchMetrics, 120000); // 2 minutes (was 1 min)
+    const interval = setInterval(fetchMetrics, 60000); // Refresh every minute
     return () => clearInterval(interval);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchMetrics]);
 
   return metrics;
 }
 
 export function useSafetyMetrics(): SafetyMetrics {
-  // PATCH v48: Start with isLoading=false to NEVER block render
   const [metrics, setMetrics] = useState<SafetyMetrics>({
     avgQE: 78,
     fatigueRisk: 15,
     stressLevel: 22,
     wellnessScore: 85,
-    isLoading: false, // NEVER start as true
+    isLoading: true,
   });
 
   const fetchMetrics = useCallback(async () => {
@@ -142,24 +139,22 @@ export function useSafetyMetrics(): SafetyMetrics {
     }
   }, []);
 
-  // PATCH v48: Empty dependency array - NEVER causes infinite loops
   useEffect(() => {
     fetchMetrics();
-    const interval = setInterval(fetchMetrics, 120000); // 2 minutes (was 1 min)
+    const interval = setInterval(fetchMetrics, 60000);
     return () => clearInterval(interval);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchMetrics]);
 
   return metrics;
 }
 
 export function useFleetMetrics() {
-  // PATCH v48: Start with isLoading=false to NEVER block render
   const [metrics, setMetrics] = useState({
     totalVessels: 0,
     activeVessels: 0,
     inMaintenance: 0,
     standby: 0,
-    isLoading: false, // NEVER start as true
+    isLoading: true,
   });
 
   const fetchMetrics = useCallback(async () => {
@@ -187,12 +182,11 @@ export function useFleetMetrics() {
     }
   }, []);
 
-  // PATCH v48: Empty dependency array - NEVER causes infinite loops
   useEffect(() => {
     fetchMetrics();
-    const interval = setInterval(fetchMetrics, 120000); // 2 minutes (was 1 min)
+    const interval = setInterval(fetchMetrics, 60000);
     return () => clearInterval(interval);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchMetrics]);
 
   return metrics;
 }

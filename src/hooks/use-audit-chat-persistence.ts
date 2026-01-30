@@ -38,7 +38,7 @@ const LOCAL_STORAGE_KEY = 'audit-chat-sessions';
 
 export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
 
   // Load sessions on mount or when module changes

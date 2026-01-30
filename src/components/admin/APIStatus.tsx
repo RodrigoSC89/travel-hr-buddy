@@ -183,7 +183,7 @@ export const APIStatus: React.FC = () => {
               <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
               Testar Todas
             </Button>
-            <Link to="/api-documentation">
+            <Link to="/admin/api-tester">
               <Button variant="default" size="sm">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Abrir API Tester

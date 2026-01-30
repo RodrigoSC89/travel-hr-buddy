@@ -245,7 +245,7 @@ const AdminSGSO = () => {
                 <div className="rounded-lg border p-4 bg-blue-50/50 dark:bg-blue-950/20">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold">Histórico de Auditorias SGSO</h3>
-                    <Link to="/sgso-anp">
+                    <Link to="/admin/sgso/history">
                       <Button variant="outline" size="sm">
                         <History className="mr-2 h-4 w-4" />
                         Ver Histórico

@@ -1,44 +1,45 @@
-/**
- * Satellite Tracker Page - PATCH 877 / PATCH 1003
- * Type-safe version with proper null handling for satellite_positions
- */
+// @ts-nocheck
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { Satellite, AlertTriangle, Square, Globe, Orbit } from "lucide-react";
+import { Satellite, AlertTriangle, Play, Square, Globe, Orbit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-
-interface SatellitePosition {
-  latitude: number;
-  longitude: number;
-  altitude: number;
-  calculated_at: string | null;
-}
+let THREE: any = null;
+const loadTHREE = async () => {
+  if (!THREE) {
+    THREE = await import("three");
+  }
+  return THREE;
+};
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 interface SatelliteData {
   id: string;
-  norad_id: string | number | null;
+  norad_id: number;
   name: string;
-  satellite_type: string | null;
-  is_active: boolean | null;
-  position?: SatellitePosition | null;
+  satellite_type: string;
+  is_active: boolean;
+  position?: {
+    latitude: number;
+    longitude: number;
+    altitude: number;
+    calculated_at: string;
+  };
 }
 
 interface SatelliteAlert {
   id: string;
-  satellite_id: string | null;
+  satellite_id: string;
   alert_type: string;
   severity: string;
-  title: string | null;
-  description: string | null;
-  is_resolved: boolean | null;
-  message: string;
+  title: string;
+  description: string;
+  is_resolved: boolean;
   created_at: string;
 }
 
@@ -218,19 +219,14 @@ export default function SatelliteTracker() {
 
   const startTracking = async (satelliteId: string) => {
     try {
-      // Use start_tracking_session function - returns jsonb with session_id
       const { data, error } = await supabase.rpc("start_tracking_session", {
         p_satellite_id: satelliteId,
-        p_session_name: "real-time"
+        p_tracking_mode: "real-time"
       });
 
       if (error) throw error;
 
-      // Extract session_id from jsonb response
-      const sessionData = data as { session_id?: string; success?: boolean } | null;
-      if (sessionData?.session_id) {
-        setTrackingSessionId(sessionData.session_id);
-      }
+      setTrackingSessionId(data);
       setSelectedSatellite(satelliteId);
 
       toast({
@@ -251,11 +247,11 @@ export default function SatelliteTracker() {
     if (!trackingSessionId) return;
 
     try {
-      // Update the satellite alert to mark as resolved instead of calling non-existent function
-      await supabase
-        .from("satellite_alerts")
-        .update({ is_resolved: true })
-        .eq("id", trackingSessionId);
+      const { error } = await supabase.rpc("end_tracking_session", {
+        p_session_id: trackingSessionId
+      });
+
+      if (error) throw error;
 
       setTrackingSessionId(null);
       setSelectedSatellite(null);
@@ -271,11 +267,9 @@ export default function SatelliteTracker() {
 
   const resolveAlert = async (alertId: string) => {
     try {
-      // Direct update instead of using non-existent RPC function
-      const { error } = await supabase
-        .from("satellite_alerts")
-        .update({ is_resolved: true })
-        .eq("id", alertId);
+      const { error } = await supabase.rpc("resolve_satellite_alert", {
+        p_alert_id: alertId
+      });
 
       if (error) throw error;
 

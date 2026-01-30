@@ -3,8 +3,6 @@
  * Validates offline operation capabilities
  */
 
-import { logger } from "@/lib/logger";
-
 export interface OfflineValidationResult {
   timestamp: number;
   overallStatus: 'pass' | 'partial' | 'fail';
@@ -29,7 +27,7 @@ class OfflineValidator {
    * Run complete offline validation
    */
   async validate(): Promise<OfflineValidationResult> {
-    logger.info("[OfflineValidator] Starting offline validation...");
+    console.log('[OfflineValidator] Starting offline validation...');
     
     const tests = await this.runTests();
     const capabilities = this.checkCapabilities();

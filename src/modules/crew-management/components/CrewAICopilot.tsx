@@ -79,25 +79,70 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
     setIsLoading(true);
 
     try {
-      // Use supabase.functions.invoke instead of fetch with VITE_ vars
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data: response, error } = await supabase.functions.invoke("crew-ai-copilot", {
-        body: {
-          type: "chat",
-          messages: [...messages, userMessage],
-          data: { crewData, certificates },
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/crew-ai-copilot`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            type: "chat",
+            messages: [...messages, userMessage],
+            data: { crewData, certificates },
+          }),
+        }
+      );
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        if (response.status === 429) {
+          toast({
+            title: "Rate limit excedido",
+            description: "Aguarde um momento antes de tentar novamente",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw new Error("Failed to get response");
       }
 
-      // Handle response from edge function (non-streaming)
-      const assistantContent = response?.content || response?.message || 
-        "Desculpe, não consegui processar sua solicitação. Por favor, tente novamente.";
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = "";
 
-      setMessages(prev => [...prev, { role: "assistant", content: assistantContent }]);
+      setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+
+      if (reader) {
+        let buffer = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (line.startsWith("data: ") && line !== "data: [DONE]") {
+              try {
+                const json = JSON.parse(line.slice(6));
+                const content = json.choices?.[0]?.delta?.content;
+                if (content) {
+                  assistantContent += content;
+                  setMessages(prev => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = { role: "assistant", content: assistantContent };
+                    return updated;
+                  });
+                }
+              } catch {
+                // Skip invalid JSON
+              }
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error("AI Copilot error:", error);
       toast({

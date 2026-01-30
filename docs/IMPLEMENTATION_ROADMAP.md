@@ -2,10 +2,9 @@
 
 ## Visão Geral
 
-✅ **ROADMAP 100% IMPLEMENTADO** - Todas as 10 áreas prioritárias + 5 módulos adicionais concluídos.
+Este documento define o plano de implementação para todas as 10 áreas prioritárias do sistema Nautilus One, ordenadas por criticidade.
 
-**Última atualização:** 2026-01-29  
-**Status:** PRODUÇÃO ATIVA
+**Última atualização:** 2025-12-09
 
 ---
 
@@ -19,7 +18,7 @@
 | 4 | 🔁 Offline-First/Conflitos | ALTA | ✅ Concluído |
 | 5 | 🤖 IA com RAG + HITL | MÉDIA | ✅ Concluído |
 | 6 | 🧩 Fusão de Componentes | MÉDIA | ✅ Concluído |
-| 7 | 📡 Integração IoT | MÉDIA | ✅ Concluído |
+| 7 | 📡 Integração IoT | MÉDIA | ⏳ Pendente |
 | 8 | 🌐 Internacionalização | MÉDIA | ✅ Concluído |
 | 9 | 🚨 Modo Emergência | MÉDIA | ✅ Concluído |
 | 10 | 📦 Prontidão Deploy | ALTA | ✅ Concluído |
@@ -223,21 +222,13 @@ tests/
 
 ---
 
-## 7. 📡 Integração IoT ✅ CONCLUÍDO
+## 7. 📡 Integração IoT
 
-### Funcionalidades Implementadas
-- **IoT Connector**: MQTT + Supabase Realtime com fallback automático
-- **Noon Report Auto-Fill**: Geração automática de Noon Reports com dados IoT (INÉDITO MUNDIAL)
-- **Predictive IoT Analytics**: Detecção de anomalias com Z-Score e previsão EWMA
-- **Vessel Health Score**: Cálculo de saúde do navio em tempo real
-- **Central IoT**: Dashboard unificado em `/iot-integration`
-
-### Arquivos
-- `src/lib/iot/IoTConnector.ts`
-- `src/lib/iot/NoonReportAutoFill.ts`
-- `src/lib/iot/PredictiveIoTAnalytics.ts`
-- `src/components/iot/IoTNoonReportPanel.tsx`
-- `src/pages/IoTIntegrationPage.tsx`
+### Camada de Ingestão
+- Collector local (edge device)
+- Protocolo MQTT
+- Armazenamento temporal
+- Auto-preenchimento de Noon Reports
 
 ---
 
@@ -265,21 +256,17 @@ tests/
 
 ---
 
-## 10. 📦 Prontidão Deploy ✅ CONCLUÍDO
+## 10. 📦 Prontidão Deploy
 
 ### Checklist
-- [x] Build sem erros
-- [x] Edge functions deployadas (313+)
-- [x] PWA funcional offline
-- [x] README atualizado
-- [x] Variáveis de ambiente documentadas
+- [ ] Build sem erros
+- [ ] Edge functions deployadas
+- [ ] PWA funcional offline
+- [ ] README atualizado
+- [ ] Variáveis de ambiente documentadas
 
 ---
 
-## ✅ ROADMAP 100% CONCLUÍDO
+## Próximos Passos
 
-**Data de Conclusão:** 2026-01-29  
-**Módulos Operacionais:** 233+ páginas  
-**Edge Functions:** 313+  
-**Tabelas DB:** 687  
-**Status:** PRODUÇÃO ATIVA
+Iniciando implementação na ordem de prioridade...

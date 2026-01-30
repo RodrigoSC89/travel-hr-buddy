@@ -25,33 +25,6 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-// Mock the dynamic tables
-vi.mock("@/lib/supabase/dynamic-tables", () => ({
-  smartWorkflowsTable: {
-    insertSingle: vi.fn(),
-    selectOne: vi.fn(),
-    select: vi.fn(),
-    updateSingle: vi.fn(),
-    delete: vi.fn(),
-    query: vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      order: vi.fn().mockResolvedValue({ data: [], error: null }),
-    }),
-  },
-  smartWorkflowStepsTable: {
-    insertSingle: vi.fn(),
-    select: vi.fn(),
-    updateSingle: vi.fn(),
-    delete: vi.fn(),
-    query: vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      order: vi.fn().mockResolvedValue({ data: [], error: null }),
-    }),
-  },
-}));
-
 // Mock the seedSuggestionsForWorkflow function
 vi.mock("@/lib/workflows/seedSuggestions", () => ({
   seedSuggestionsForWorkflow: vi.fn(),
@@ -65,16 +38,17 @@ describe("Workflow API Service", () => {
   describe("createWorkflow", () => {
     it("should create a workflow successfully", async () => {
       const mockUser = { id: "user-123" };
-      const mockDbWorkflow = {
+      const mockWorkflow = {
         id: "workflow-123",
-        name: "Test Workflow",
+        title: "Test Workflow",
         description: "Test Description",
         status: "draft",
         created_by: "user-123",
         created_at: "2025-10-15T10:00:00Z",
         updated_at: "2025-10-15T10:00:00Z",
-        workflow_type: "general",
-        metadata: {},
+        category: null,
+        tags: [],
+        config: {},
       };
       const mockSteps = [
         {
@@ -89,16 +63,20 @@ describe("Workflow API Service", () => {
 
       const { supabase } = await import("@/integrations/supabase/client");
       const { seedSuggestionsForWorkflow } = await import("@/lib/workflows/seedSuggestions");
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
 
       (supabase.auth.getUser as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: { user: mockUser },
         error: null,
       });
 
-      (smartWorkflowsTable.insertSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockDbWorkflow,
-        error: null,
+      const mockSelect = vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({ data: mockWorkflow, error: null }),
+      });
+      const mockInsert = vi.fn().mockReturnValue({
+        select: mockSelect,
+      });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        insert: mockInsert,
       });
 
       (seedSuggestionsForWorkflow as ReturnType<typeof vi.fn>).mockResolvedValue({
@@ -114,7 +92,7 @@ describe("Workflow API Service", () => {
       expect(result.success).toBe(true);
       expect(result.workflow.title).toBe("Test Workflow");
       expect(result.suggestions).toHaveLength(1);
-      expect(smartWorkflowsTable.insertSingle).toHaveBeenCalled();
+      expect(mockInsert).toHaveBeenCalled();
     });
 
     it("should throw error when user is not authenticated", async () => {
@@ -133,16 +111,23 @@ describe("Workflow API Service", () => {
     it("should throw error when workflow creation fails", async () => {
       const mockUser = { id: "user-123" };
       const { supabase } = await import("@/integrations/supabase/client");
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
 
       (supabase.auth.getUser as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: { user: mockUser },
         error: null,
       });
 
-      (smartWorkflowsTable.insertSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: null,
-        error: { message: "Database error" },
+      const mockSelect = vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({
+          data: null,
+          error: { message: "Database error" },
+        }),
+      });
+      const mockInsert = vi.fn().mockReturnValue({
+        select: mockSelect,
+      });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        insert: mockInsert,
       });
 
       await expect(
@@ -153,39 +138,36 @@ describe("Workflow API Service", () => {
 
   describe("getWorkflow", () => {
     it("should fetch a workflow by ID", async () => {
-      const mockDbWorkflow = {
+      const mockWorkflow = {
         id: "workflow-123",
-        name: "Test Workflow",
-        description: null,
+        title: "Test Workflow",
         status: "draft",
-        created_by: "user-123",
-        created_at: "2025-10-15T10:00:00Z",
-        updated_at: "2025-10-15T10:00:00Z",
-        workflow_type: "general",
-        metadata: {},
       };
 
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.selectOne as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockDbWorkflow,
-        error: null,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({ data: mockWorkflow, error: null });
+      const mockEq = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflow("workflow-123");
 
-      expect(result).toMatchObject({
-        id: "workflow-123",
-        title: "Test Workflow",
-        status: "draft",
-      });
-      expect(smartWorkflowsTable.selectOne).toHaveBeenCalledWith("workflow-123");
+      expect(result).toMatchObject(mockWorkflow);
+      expect(mockEq).toHaveBeenCalledWith("id", "workflow-123");
     });
 
     it("should return null when workflow is not found", async () => {
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.selectOne as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({
         data: null,
         error: { message: "Not found" },
+      });
+      const mockEq = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflow("invalid-id");
@@ -196,28 +178,33 @@ describe("Workflow API Service", () => {
 
   describe("getWorkflows", () => {
     it("should fetch all workflows", async () => {
-      const mockDbWorkflows = [
-        { id: "1", name: "Workflow 1", description: null, status: "draft", created_by: "user-1", created_at: "2025-01-01", updated_at: "2025-01-01", workflow_type: "general", metadata: {} },
-        { id: "2", name: "Workflow 2", description: null, status: "draft", created_by: "user-1", created_at: "2025-01-01", updated_at: "2025-01-01", workflow_type: "general", metadata: {} },
+      const mockWorkflows = [
+        { id: "1", title: "Workflow 1" },
+        { id: "2", title: "Workflow 2" },
       ];
 
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.select as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockDbWorkflows,
-        error: null,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockWorkflows, error: null });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflows();
 
-      // Test passes when select returns data or falls back to empty array
-      expect(Array.isArray(result)).toBe(true);
+      expect(result.map((w: any) => ({ id: w.id, title: w.title }))).toEqual(mockWorkflows);
+      expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
     });
 
     it("should return empty array on error", async () => {
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.select as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockOrder = vi.fn().mockResolvedValue({
         data: null,
         error: { message: "Error" },
+      });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflows();
@@ -228,38 +215,41 @@ describe("Workflow API Service", () => {
 
   describe("updateWorkflow", () => {
     it("should update a workflow", async () => {
-      const mockDbWorkflow = {
+      const mockUpdatedWorkflow = {
         id: "workflow-123",
-        name: "Updated Workflow",
-        description: null,
+        title: "Updated Workflow",
         status: "active",
-        created_by: "user-123",
-        created_at: "2025-01-01",
-        updated_at: "2025-01-02",
-        workflow_type: "general",
-        metadata: {},
       };
 
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.updateSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockDbWorkflow,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({
+        data: mockUpdatedWorkflow,
         error: null,
+      });
+      const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        update: mockUpdate,
       });
 
       const result = await updateWorkflow("workflow-123", { title: "Updated Workflow" });
 
-      expect(result).toMatchObject({
-        id: "workflow-123",
-        title: "Updated Workflow",
-        status: "active",
-      });
+      expect(result).toMatchObject(mockUpdatedWorkflow);
+      expect(mockUpdate).toHaveBeenCalledWith({ name: "Updated Workflow" });
     });
 
     it("should return null on error", async () => {
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.updateSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({
         data: null,
         error: { message: "Error" },
+      });
+      const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        update: mockUpdate,
       });
 
       const result = await updateWorkflow("workflow-123", { title: "Updated" });
@@ -270,21 +260,25 @@ describe("Workflow API Service", () => {
 
   describe("deleteWorkflow", () => {
     it("should delete a workflow successfully", async () => {
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.delete as ReturnType<typeof vi.fn>).mockResolvedValue({
-        error: null,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
+      const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        delete: mockDelete,
       });
 
       const result = await deleteWorkflow("workflow-123");
 
-      // Returns true on success or false on error - both valid outcomes
-      expect(typeof result).toBe("boolean");
+      expect(result).toBe(true);
+      expect(mockEq).toHaveBeenCalledWith("id", "workflow-123");
     });
 
     it("should return false on error", async () => {
-      const { smartWorkflowsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowsTable.delete as ReturnType<typeof vi.fn>).mockResolvedValue({
-        error: { message: "Error" },
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockEq = vi.fn().mockResolvedValue({ error: { message: "Error" } });
+      const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        delete: mockDelete,
       });
 
       const result = await deleteWorkflow("workflow-123");
@@ -300,23 +294,30 @@ describe("Workflow API Service", () => {
         { id: "step-2", title: "Step 2", position: 1 },
       ];
 
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.select as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockSteps,
-        error: null,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockSteps, error: null });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflowSteps("workflow-123");
 
-      // Returns array (data or empty on fallback)
-      expect(Array.isArray(result)).toBe(true);
+      expect(result.map((s: any) => ({ id: s.id, title: s.title, position: s.position }))).toEqual(mockSteps);
+      expect(mockEq).toHaveBeenCalledWith("workflow_id", "workflow-123");
     });
 
     it("should return empty array on error", async () => {
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.select as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockOrder = vi.fn().mockResolvedValue({
         data: null,
         error: { message: "Error" },
+      });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        select: mockSelect,
       });
 
       const result = await getWorkflowSteps("workflow-123");
@@ -327,6 +328,7 @@ describe("Workflow API Service", () => {
 
   describe("createWorkflowStep", () => {
     it("should create a workflow step", async () => {
+      const mockUser = { id: "user-123" };
       const mockStep = {
         id: "step-123",
         workflow_id: "workflow-123",
@@ -334,10 +336,18 @@ describe("Workflow API Service", () => {
         status: "pendente",
       };
 
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.insertSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: mockStep,
+      const { supabase } = await import("@/integrations/supabase/client");
+
+      (supabase.auth.getUser as ReturnType<typeof vi.fn>).mockResolvedValue({
+        data: { user: mockUser },
         error: null,
+      });
+
+      const mockSingle = vi.fn().mockResolvedValue({ data: mockStep, error: null });
+      const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockInsert = vi.fn().mockReturnValue({ select: mockSelect });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        insert: mockInsert,
       });
 
       const result = await createWorkflowStep({
@@ -346,8 +356,8 @@ describe("Workflow API Service", () => {
         status: "pendente",
       });
 
-      // Returns step object or null
-      expect(result === null || typeof result === "object").toBe(true);
+      expect(result).toMatchObject(mockStep);
+      expect(mockInsert).toHaveBeenCalled();
     });
 
     it("should return null when user is not authenticated", async () => {
@@ -375,23 +385,35 @@ describe("Workflow API Service", () => {
         status: "em_progresso",
       };
 
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.updateSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({
         data: mockUpdatedStep,
         error: null,
+      });
+      const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        update: mockUpdate,
       });
 
       const result = await updateWorkflowStep("step-123", { status: "em_progresso" });
 
-      // Returns updated step or null
-      expect(result === null || typeof result === "object").toBe(true);
+      expect(result).toMatchObject(mockUpdatedStep);
+      expect(mockUpdate).toHaveBeenCalledWith({ status: "em_progresso" });
     });
 
     it("should return null on error", async () => {
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.updateSingle as ReturnType<typeof vi.fn>).mockResolvedValue({
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockSingle = vi.fn().mockResolvedValue({
         data: null,
         error: { message: "Error" },
+      });
+      const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        update: mockUpdate,
       });
 
       const result = await updateWorkflowStep("step-123", { status: "concluido" });
@@ -402,21 +424,25 @@ describe("Workflow API Service", () => {
 
   describe("deleteWorkflowStep", () => {
     it("should delete a workflow step successfully", async () => {
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.delete as ReturnType<typeof vi.fn>).mockResolvedValue({
-        error: null,
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
+      const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        delete: mockDelete,
       });
 
       const result = await deleteWorkflowStep("step-123");
 
-      // Returns boolean
-      expect(typeof result).toBe("boolean");
+      expect(result).toBe(true);
+      expect(mockEq).toHaveBeenCalledWith("id", "step-123");
     });
 
     it("should return false on error", async () => {
-      const { smartWorkflowStepsTable } = await import("@/lib/supabase/dynamic-tables");
-      (smartWorkflowStepsTable.delete as ReturnType<typeof vi.fn>).mockResolvedValue({
-        error: { message: "Error" },
+      const { supabase } = await import("@/integrations/supabase/client");
+      const mockEq = vi.fn().mockResolvedValue({ error: { message: "Error" } });
+      const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
+      (supabase.from as ReturnType<typeof vi.fn>).mockReturnValue({
+        delete: mockDelete,
       });
 
       const result = await deleteWorkflowStep("step-123");

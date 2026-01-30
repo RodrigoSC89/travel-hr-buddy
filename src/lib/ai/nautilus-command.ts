@@ -6,7 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-const COMMAND_URL = 'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-command';
+const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
 
 export interface Message {
   role: "user" | "assistant" | "system";
@@ -37,13 +37,11 @@ export async function streamCommandChat({
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
-    const { data: { session } } = await supabase.auth.getSession();
-    
     const resp = await fetch(COMMAND_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${session?.access_token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE'}`,
+        "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         "x-user-id": user?.id || "anonymous",
       },
       body: JSON.stringify({ messages, context }),

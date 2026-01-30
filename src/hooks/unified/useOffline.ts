@@ -222,7 +222,7 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
   const { key, fetchFn, staleTime = 5 * 60 * 1000, enabled = true } = options;
   
   const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [isStale, setIsStale] = useState(false);
 

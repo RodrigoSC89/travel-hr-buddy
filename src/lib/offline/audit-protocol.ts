@@ -50,8 +50,8 @@ export interface AuditReport {
 const STORAGE_KEY = 'nautilus_audit_log';
 const MAX_ENTRIES = 10000;
 const RETENTION_DAYS = 90;
-// SECURITY: Password is dynamically generated per session
-const getAuditPassword = () => crypto.randomUUID();
+// SECURITY: Password should be configured via environment, not hardcoded
+const getAuditPassword = () => import.meta.env.VITE_AUDIT_KEY || crypto.randomUUID();
 
 class AuditProtocol {
   private entries: AuditEntry[] = [];
@@ -97,7 +97,7 @@ class AuditProtocol {
         }
       }
     } catch (error) {
-      // Silently handle - this is expected on first load
+      console.warn('Failed to load audit log:', error);
       this.entries = [];
     }
   }
@@ -114,8 +114,8 @@ class AuditProtocol {
       } else {
         localStorage.setItem(STORAGE_KEY, data);
       }
-    } catch {
-      // Storage might be full or unavailable - silently ignore
+    } catch (error) {
+      console.warn('Failed to save audit log:', error);
     }
   }
 

@@ -37,10 +37,9 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
 
     metricsRef.current.push(enrichedMetric);
 
-    if (enableLogging && import.meta.env.DEV) {
+    if (enableLogging) {
       const icon = metric.rating === 'good' ? '✅' : metric.rating === 'needs-improvement' ? '⚠️' : '❌';
-      // eslint-disable-next-line no-console
-      console.info(`[Performance] ${icon} ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`);
+      console.log(`[Performance] ${icon} ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`);
     }
 
     // Report to analytics
@@ -75,9 +74,8 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
         const domLoad = navigationEntry.domContentLoadedEventEnd - navigationEntry.startTime;
         const pageLoad = navigationEntry.loadEventEnd - navigationEntry.startTime;
 
-        if (enableLogging && import.meta.env.DEV) {
-          // eslint-disable-next-line no-console
-          console.info('[Performance] Navigation Timing:', {
+        if (enableLogging) {
+          console.log('[Performance] Navigation Timing:', {
             TTFB: `${ttfb.toFixed(0)}ms`,
             DOMLoad: `${domLoad.toFixed(0)}ms`,
             PageLoad: `${pageLoad.toFixed(0)}ms`,

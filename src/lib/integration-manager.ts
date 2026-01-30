@@ -30,11 +30,8 @@ export class IntegrationManager {
    * Initialize known services
    */
   private initializeServices() {
-    // Safe environment access
-    const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-    
     // Amadeus API
-    const amadeusKey = safeEnv.VITE_AMADEUS_API_KEY || "";
+    const amadeusKey = import.meta.env.VITE_AMADEUS_API_KEY;
     if (amadeusKey) {
       this.services.set("amadeus", {
         name: "Amadeus",
@@ -45,8 +42,8 @@ export class IntegrationManager {
       });
     }
 
-    // Mapbox - reuse safeEnv from above
-    const mapboxKey = safeEnv.VITE_MAPBOX_ACCESS_TOKEN || "";
+    // Mapbox
+    const mapboxKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
     if (mapboxKey) {
       this.services.set("mapbox", {
         name: "Mapbox",
@@ -57,7 +54,7 @@ export class IntegrationManager {
     }
 
     // Stripe
-    const stripeKey = safeEnv.VITE_STRIPE_PUBLISHABLE_KEY || "";
+    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
     if (stripeKey) {
       this.services.set("stripe", {
         name: "Stripe",

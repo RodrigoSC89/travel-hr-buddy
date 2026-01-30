@@ -1,6 +1,7 @@
+// @ts-nocheck - Dynamic table access requires type override
 /**
- * PATCH 879 - Dashboard de Internacionalização
- * Type-safe with dynamic table access
+ * PATCH 851 - Dashboard de Internacionalização
+ * Painel para monitorar uso multilíngue do sistema
  */
 
 import * as React from "react";
@@ -75,12 +76,10 @@ const LANGUAGE_NAMES: Record<string, string> = {
   de: "Deutsch",
 };
 
-// Type-safe dynamic DB access for tables not in generated schema
-type DynamicSupabaseClient = {
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
   from: (table: string) => ReturnType<typeof supabase.from>;
 };
-
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
 
 export default function I18nDashboard() {
   const { t } = useTranslation();
@@ -113,7 +112,7 @@ export default function I18nDashboard() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      // Load usage statistics
+      // Carregar estatísticas de uso
       const { data: statsData, error: statsError } = await dynamicDb
         .from("language_usage_stats")
         .select("*")
@@ -121,17 +120,9 @@ export default function I18nDashboard() {
         .order("translation_count", { ascending: false });
 
       if (statsError) throw statsError;
-      
-      // Map with safe defaults
-      const mappedStats: LanguageStats[] = (statsData || []).map((row: Record<string, unknown>) => ({
-        language: String(row.language || "unknown"),
-        translation_count: Number(row.translation_count) || 0,
-        user_count: Number(row.user_count) || 0,
-        region: row.region ? String(row.region) : undefined,
-      }));
-      setStats(mappedStats);
+      setStats((statsData as LanguageStats[]) || []);
 
-      // Load translation logs
+      // Carregar logs de tradução
       const { data: logsData, error: logsError } = await dynamicDb
         .from("translation_logs")
         .select("*")
@@ -140,20 +131,9 @@ export default function I18nDashboard() {
         .limit(100);
 
       if (logsError) throw logsError;
-      
-      const mappedLogs: TranslationLog[] = (logsData || []).map((row: Record<string, unknown>) => ({
-        id: String(row.id || ""),
-        source_lang: String(row.source_lang || ""),
-        target_lang: String(row.target_lang || ""),
-        key: String(row.key || ""),
-        source_type: String(row.source_type || ""),
-        success: Boolean(row.success),
-        response_time_ms: Number(row.response_time_ms) || 0,
-        created_at: String(row.created_at || ""),
-      }));
-      setLogs(mappedLogs);
+      setLogs((logsData as TranslationLog[]) || []);
 
-      // Load feedback
+      // Carregar feedback
       const { data: feedbackData, error: feedbackError } = await dynamicDb
         .from("translation_feedback")
         .select("*")
@@ -161,17 +141,7 @@ export default function I18nDashboard() {
         .limit(50);
 
       if (feedbackError) throw feedbackError;
-      
-      const mappedFeedback: TranslationFeedback[] = (feedbackData || []).map((row: Record<string, unknown>) => ({
-        id: String(row.id || ""),
-        original_translation: String(row.original_translation || ""),
-        suggested_translation: String(row.suggested_translation || ""),
-        rating: Number(row.rating) || 0,
-        comment: String(row.comment || ""),
-        status: String(row.status || "pending"),
-        created_at: String(row.created_at || ""),
-      }));
-      setFeedback(mappedFeedback);
+      setFeedback((feedbackData as TranslationFeedback[]) || []);
 
       logger.info("[I18nDashboard] Data loaded successfully");
     } catch (error) {
@@ -200,7 +170,7 @@ export default function I18nDashboard() {
     URL.revokeObjectURL(url);
   };
 
-  // Aggregate data for charts
+  // Agregar dados para gráficos
   const aggregateByLanguage = stats.reduce((acc, stat) => {
     const existing = acc.find((item) => item.language === stat.language);
     if (existing) {
@@ -341,9 +311,9 @@ export default function I18nDashboard() {
         </Card>
       </div>
 
-      {/* Charts */}
+      {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Usage by Language */}
+        {/* Uso por Idioma */}
         <Card>
           <CardHeader>
             <CardTitle>
@@ -364,7 +334,7 @@ export default function I18nDashboard() {
           </CardContent>
         </Card>
 
-        {/* Language Distribution */}
+        {/* Distribuição de Idiomas */}
         <Card>
           <CardHeader>
             <CardTitle>
@@ -395,7 +365,7 @@ export default function I18nDashboard() {
         </Card>
       </div>
 
-      {/* Failed Translations Log */}
+      {/* Logs de Tradução com Falhas */}
       {failedTranslations.length > 0 && (
         <Card>
           <CardHeader>
@@ -425,7 +395,7 @@ export default function I18nDashboard() {
         </Card>
       )}
 
-      {/* User Feedback */}
+      {/* Feedback de Usuários */}
       <Card>
         <CardHeader>
           <CardTitle>

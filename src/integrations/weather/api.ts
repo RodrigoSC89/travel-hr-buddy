@@ -3,8 +3,6 @@
  * Fetches weather data from external APIs (OpenWeather, etc.)
  */
 
-import { logger } from "@/lib/utils/production-logger";
-
 interface WeatherData {
   location: {
     lat: number;
@@ -41,8 +39,7 @@ interface WeatherAPIResponse {
   name: string;
 }
 
-// PATCH: VITE_* não funciona no Lovable - weather via Edge Function
-const OPENWEATHER_API_KEY = "";
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || "";
 const OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 /**
@@ -89,7 +86,7 @@ export async function fetchMaritimeWeather(locations: Array<{ lat: number; lon: 
   const weatherPromises = locations.map(loc => 
     fetchWeather(loc.lat, loc.lon)
       .catch(error => {
-        logger.error(`Failed to fetch weather for ${loc.name}`, error);
+        console.error(`Failed to fetch weather for ${loc.name}:`, error);
         return null;
       })
   );

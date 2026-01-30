@@ -26,7 +26,7 @@ export async function getWorkflowSuggestions(
       throw new Error("User not authenticated");
     }
 
-    const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
     const functionUrl = `${supabaseUrl}/functions/v1/workflows-copilot-suggest`;
 
     const response = await fetch(functionUrl, {

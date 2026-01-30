@@ -33,12 +33,12 @@ interface OrganizationContextType {
   updateUserRole: (userId: string, role: string) => Promise<void>;
 }
 
-// Default context value to prevent null errors - PATCH v43: isLoading FALSE
+// Default context value to prevent null errors
 const defaultContextValue: OrganizationContextType = {
   currentOrganization: null,
   currentBranding: null,
   userRole: null,
-  isLoading: false, // CRITICAL: Must be false to never block UI
+  isLoading: true,
   error: null,
   switchOrganization: async () => {},
   updateBranding: async () => {},
@@ -62,8 +62,7 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
   const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
   const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  // PATCH v41: Start with FALSE to NEVER block UI - org loads in background
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Carregar organização demo
@@ -73,7 +72,7 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
 
   const loadDemoOrganization = async () => {
     try {
-      // PATCH v41: Don't set loading true - prevents UI blocking
+      setIsLoading(true);
       setError(null);
 
       // Usar organização demo - cast to Organization with required fields

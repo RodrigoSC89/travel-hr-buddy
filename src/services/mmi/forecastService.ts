@@ -7,20 +7,8 @@ import OpenAI from "openai";
 import type { AIForecast, MMIComponent, MMIHistory } from "@/types/mmi";
 import { logger } from "@/lib/logger";
 
-// Safe getter for env vars
-const getEnv = (key: string): string | undefined => {
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env) {
-      return import.meta.env[key] as string | undefined;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
-};
-
 const openai = new OpenAI({
-  apiKey: getEnv('VITE_OPENAI_API_KEY') || "",
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true, // Note: In production, use server-side API
 });
 

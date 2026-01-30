@@ -82,84 +82,38 @@ const initialTargets: Target[] = [
 ];
 
 export function ESGSettings() {
-  const [factors, setFactors] = useState<EmissionFactor[]>(() => {
-    const saved = localStorage.getItem("esg-emission-factors");
-    return saved ? JSON.parse(saved) : initialFactors;
+  const [factors, setFactors] = useState<EmissionFactor[]>(initialFactors);
+  const [targets, setTargets] = useState<Target[]>(initialTargets);
+  const [notifications, setNotifications] = useState({
+    emailAlerts: true,
+    weeklyReport: true,
+    complianceAlerts: true,
+    targetAlerts: true,
   });
-  const [targets, setTargets] = useState<Target[]>(() => {
-    const saved = localStorage.getItem("esg-targets");
-    return saved ? JSON.parse(saved) : initialTargets;
-  });
-  const [notifications, setNotifications] = useState(() => {
-    const saved = localStorage.getItem("esg-notifications");
-    return saved ? JSON.parse(saved) : {
-      emailAlerts: true,
-      weeklyReport: true,
-      complianceAlerts: true,
-      targetAlerts: true,
-    };
-  });
-  const [autoCollection, setAutoCollection] = useState(() => {
-    const saved = localStorage.getItem("esg-auto-collection");
-    return saved ? JSON.parse(saved) : {
-      enabled: true,
-      frequency: "daily",
-      vessels: ["all"],
-    };
+  const [autoCollection, setAutoCollection] = useState({
+    enabled: true,
+    frequency: "daily",
+    vessels: ["all"],
   });
 
   const handleSaveFactors = () => {
-    localStorage.setItem("esg-emission-factors", JSON.stringify(factors));
     toast.success("Fatores de emissão salvos com sucesso!");
   };
 
   const handleUpdateFactors = () => {
-    setFactors(initialFactors);
-    localStorage.setItem("esg-emission-factors", JSON.stringify(initialFactors));
     toast.success("Fatores atualizados para versão mais recente IMO!");
   };
 
   const handleSaveNotifications = () => {
-    localStorage.setItem("esg-notifications", JSON.stringify(notifications));
     toast.success("Configurações de notificação salvas!");
   };
 
   const handleExportConfig = () => {
-    const config = { factors, targets, notifications, autoCollection };
-    const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "esg-config.json";
-    a.click();
-    URL.revokeObjectURL(url);
     toast.success("Configurações exportadas para arquivo JSON!");
   };
 
   const handleImportConfig = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const config = JSON.parse(event.target?.result as string);
-            if (config.factors) setFactors(config.factors);
-            if (config.targets) setTargets(config.targets);
-            if (config.notifications) setNotifications(config.notifications);
-            if (config.autoCollection) setAutoCollection(config.autoCollection);
-            toast.success("Configurações importadas com sucesso!");
-          } catch {
-            toast.error("Erro ao importar arquivo de configuração");
-          }
-        };
-        reader.readAsText(file);
-      }
-    };
-    input.click();
+    toast.success("Configurações importadas com sucesso!");
   };
 
   return (

@@ -59,8 +59,7 @@ export default function SystemHealthPage() {
 
       // Build simplified status object
       const supabaseStatus = report.results.find(r => r.category === "Database")?.status === "success";
-      const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-      const openaiConfigured = !!safeEnv.VITE_OPENAI_API_KEY;
+      const openaiConfigured = !!import.meta.env.VITE_OPENAI_API_KEY;
       const pdfLibAvailable = typeof window !== "undefined" && "jsPDF" in window;
 
       // Count routes from React Router

@@ -6,7 +6,6 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/utils/production-logger";
 
 export interface AvisoNavegacao {
   id: string;
@@ -102,20 +101,20 @@ export async function fetchMarinhaBrasilData(
   if (!forceRefresh) {
     const cached = marinhaBrasilCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      logger.debug("[Marinha Brasil] Using cached data");
+      console.log("[Marinha Brasil] Using cached data");
       return cached.data;
     }
   }
 
   try {
-    logger.debug("[Marinha Brasil] Fetching from Edge Function...");
+    console.log("[Marinha Brasil] Fetching from Edge Function...");
     
     const { data, error } = await supabase.functions.invoke("marinha-brasil", {
       body: { type, region, lat, lon }
     });
 
     if (error) {
-      logger.error("[Marinha Brasil] Edge Function error", error);
+      console.error("[Marinha Brasil] Edge Function error:", error);
       throw error;
     }
 
@@ -127,7 +126,7 @@ export async function fetchMarinhaBrasilData(
 
     return data;
   } catch (error) {
-    logger.error("[Marinha Brasil] Fetch failed", error);
+    console.error("[Marinha Brasil] Fetch failed:", error);
     
     // Return cached data even if expired
     const cached = marinhaBrasilCache.get(cacheKey);
@@ -189,7 +188,7 @@ export async function getBoletimCHM(
  */
 export function clearMarinhaBrasilCache(): void {
   marinhaBrasilCache.clear();
-  logger.debug("[Marinha Brasil] Cache cleared");
+  console.log("[Marinha Brasil] Cache cleared");
 }
 
 /**

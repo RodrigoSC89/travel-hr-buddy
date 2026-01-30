@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,10 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Clock, Download, Filter, TrendingUp, Activity, FileText, X, Loader2 } from "lucide-react";
+import { Clock, Download, Filter, TrendingUp, Activity, FileText, X } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/utils/production-logger";
 
 interface HistoryItem {
   id: number;
@@ -34,64 +32,72 @@ interface HistoryItem {
   details: string;
 }
 
-// Fallback data for when DB is empty
-const fallbackData: HistoryItem[] = [
-  { id: 1, date: new Date().toISOString(), event: "Sistema Iniciado", type: "operation", status: "success", details: "DP Intelligence Center online" },
+const historyData: HistoryItem[] = [
+  {
+    id: 1,
+    date: "2024-12-06 14:30",
+    event: "Análise IA Completa",
+    type: "analysis",
+    status: "success",
+    details: "Todos os sistemas operando normalmente. Confidence 98%",
+  },
+  {
+    id: 2,
+    date: "2024-12-06 12:15",
+    event: "Troca de Referência",
+    type: "operation",
+    status: "success",
+    details: "DGPS Primary → HPR System (manutenção programada)",
+  },
+  {
+    id: 3,
+    date: "2024-12-06 10:00",
+    event: "Alerta de Vento",
+    type: "alert",
+    status: "warning",
+    details: "Velocidade do vento atingiu 25 knots. Capability reduzida.",
+  },
+  {
+    id: 4,
+    date: "2024-12-05 18:45",
+    event: "Análise Preditiva",
+    type: "analysis",
+    status: "success",
+    details: "Nenhuma falha prevista nas próximas 24h. Manutenção recomendada em 7 dias.",
+  },
+  {
+    id: 5,
+    date: "2024-12-05 16:30",
+    event: "Otimização de Energia",
+    type: "optimization",
+    status: "success",
+    details: "Economia de 12% no consumo de energia. Configuração otimizada aplicada.",
+  },
+  {
+    id: 6,
+    date: "2024-12-05 08:00",
+    event: "Início de Operação",
+    type: "operation",
+    status: "success",
+    details: "Operação DP iniciada. Todos os sistemas online.",
+  },
+  {
+    id: 7,
+    date: "2024-12-04 22:15",
+    event: "Manutenção Preventiva",
+    type: "maintenance",
+    status: "info",
+    details: "Thruster #3 - manutenção preventiva realizada.",
+  },
+  {
+    id: 8,
+    date: "2024-12-04 14:00",
+    event: "Falha de Sensor",
+    type: "alert",
+    status: "error",
+    details: "Wind Sensor #2 offline. Backup ativado automaticamente.",
+  },
 ];
-
-function useDPHistory() {
-  const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchHistory() {
-      try {
-        // Fetch from ai_audit_logs which has the right structure
-        const { data, error } = await supabase
-          .from('ai_audit_logs')
-          .select('id, created_at, module_name, interaction_type, ai_response, confidence_score')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        if (error || !data || data.length === 0) {
-          logger.info("DP History: Using demo data");
-          // Generate realistic demo data
-          const demoData: HistoryItem[] = [
-            { id: 1, date: new Date().toLocaleString("pt-BR"), event: "Análise IA Completa", type: "analysis", status: "success", details: "Sistemas operando normalmente. Confidence 98%" },
-            { id: 2, date: new Date(Date.now() - 3600000).toLocaleString("pt-BR"), event: "Troca de Referência", type: "operation", status: "success", details: "DGPS Primary → HPR System" },
-            { id: 3, date: new Date(Date.now() - 7200000).toLocaleString("pt-BR"), event: "Alerta de Vento", type: "alert", status: "warning", details: "Velocidade do vento atingiu 25 knots" },
-            { id: 4, date: new Date(Date.now() - 86400000).toLocaleString("pt-BR"), event: "Análise Preditiva", type: "analysis", status: "success", details: "Nenhuma falha prevista nas próximas 24h" },
-            { id: 5, date: new Date(Date.now() - 172800000).toLocaleString("pt-BR"), event: "Manutenção Preventiva", type: "maintenance", status: "info", details: "Thruster #3 - manutenção realizada" },
-          ];
-          setHistoryData(demoData);
-          return;
-        }
-
-        const mapped: HistoryItem[] = data.map((item, idx) => ({
-          id: idx + 1,
-          date: new Date(item.created_at || new Date()).toLocaleString("pt-BR"),
-          event: item.module_name || "Evento DP",
-          type: item.interaction_type?.includes("alert") ? "alert" : 
-                item.interaction_type?.includes("analysis") ? "analysis" : "operation",
-          status: (item.confidence_score || 0) > 0.8 ? "success" : 
-                 (item.confidence_score || 0) > 0.5 ? "warning" : "info",
-          details: typeof item.ai_response === 'string' 
-            ? item.ai_response.substring(0, 100) 
-            : "Análise concluída",
-        }));
-        setHistoryData(mapped);
-      } catch (err) {
-        logger.error("DP History fetch failed", err);
-        setHistoryData(fallbackData);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchHistory();
-  }, []);
-
-  return { historyData, loading };
-}
 
 const getStatusBadge = (status: string) => {
   switch (status) {
@@ -147,7 +153,6 @@ const getStatusLabel = (status: string) => {
 };
 
 export default function DPHistory() {
-  const { historyData, loading } = useDPHistory();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -162,17 +167,7 @@ export default function DPHistory() {
   const allTypes = ["analysis", "operation", "alert", "optimization", "maintenance"];
   const allStatuses = ["success", "warning", "error", "info"];
 
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const filteredData = historyData.filter((item: HistoryItem) => {
+  const filteredData = historyData.filter((item) => {
     // Type filter
     if (activeFilters.types.length > 0 && !activeFilters.types.includes(item.type)) {
       return false;
@@ -250,14 +245,14 @@ export default function DPHistory() {
 
     if (format === "csv") {
       const headers = ["Data", "Evento", "Tipo", "Status", "Detalhes"];
-      const rows = dataToExport.map((item: HistoryItem) => [
+      const rows = dataToExport.map((item) => [
         item.date,
         item.event,
         getTypeLabel(item.type),
         getStatusLabel(item.status),
         item.details,
       ]);
-      const csvContent = [headers.join(","), ...rows.map((row: string[]) => row.map((cell: string) => `"${cell}"`).join(","))].join("\n");
+      const csvContent = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(","))].join("\n");
       
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
@@ -276,7 +271,7 @@ export default function DPHistory() {
     } else if (format === "pdf") {
       // Simple text-based PDF simulation - in production would use jsPDF
       const textContent = dataToExport
-        .map((item: HistoryItem) => `${item.date} - ${item.event}\nTipo: ${getTypeLabel(item.type)} | Status: ${getStatusLabel(item.status)}\n${item.details}\n\n`)
+        .map((item) => `${item.date} - ${item.event}\nTipo: ${getTypeLabel(item.type)} | Status: ${getStatusLabel(item.status)}\n${item.details}\n\n`)
         .join("");
       const blob = new Blob([`DP INTELLIGENCE - HISTÓRICO DE EVENTOS\n\n${textContent}`], { type: "text/plain" });
       const link = document.createElement("a");
@@ -463,7 +458,7 @@ export default function DPHistory() {
             <div className="relative">
               <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted" />
               <div className="space-y-6">
-                {filteredData.map((item: HistoryItem) => (
+                {filteredData.map((item) => (
                   <div key={item.id} className="relative pl-10">
                     <div className="absolute left-2 top-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
                       {getTypeIcon(item.type)}

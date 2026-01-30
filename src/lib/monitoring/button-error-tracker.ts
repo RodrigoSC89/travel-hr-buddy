@@ -23,8 +23,7 @@ export function trackButtonError(
   error: Error,
   context: ButtonErrorContext
 ): void {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const sentryDsn = safeEnv.VITE_SENTRY_DSN || "";
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   
   if (!sentryDsn) {
     logger.warn('[ButtonErrorTracker] Sentry not configured, logging locally', {
@@ -63,8 +62,7 @@ export function trackButtonError(
  * Track non-functional button (button without handler)
  */
 export function trackNonFunctionalButton(context: ButtonErrorContext): void {
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const sentryDsn = safeEnv.VITE_SENTRY_DSN || "";
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   
   if (!sentryDsn) {
     logger.warn('[ButtonErrorTracker] Non-functional button detected', { ...context });

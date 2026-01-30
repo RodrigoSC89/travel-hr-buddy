@@ -4,7 +4,6 @@
  */
 
 import { useEffect, useState } from "react";
-import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -99,38 +98,34 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
     }
   };
 
-  // PATCH v46: Background data fetch - NEVER blocks render
+  // Fetch real-time stats from Supabase
   useEffect(() => {
-    let mounted = true;
-    
     async function fetchRealTimeStats() {
       try {
-        // Parallel fetch with short timeout
-        const [sensorsRes, wellnessRes] = await Promise.all([
-          supabase
-            .from('equipment_sensors')
-            .select('*')
-            .order('recorded_at', { ascending: false })
-            .limit(50),
-          supabase
-            .from('crew_health_checkins')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(30)
-        ]);
+        // Fetch IoT sensor anomalies
+        const { data: sensors } = await supabase
+          .from('equipment_sensors')
+          .select('*')
+          .order('recorded_at', { ascending: false })
+          .limit(100);
 
-        if (!mounted) return;
-
-        const sensors = sensorsRes.data || [];
-        const wellness = wellnessRes.data || [];
-
-        const anomalies = sensors.filter(s => s.is_anomaly);
+        const anomalies = sensors?.filter(s => s.is_anomaly) || [];
+        // Critical = value exceeds max_threshold by 20%+
         const critical = anomalies.filter(s => s.value && s.max_threshold && s.value > s.max_threshold * 1.2);
-        const healthySensors = sensors.filter(s => !s.is_anomaly).length;
-        const totalSensors = sensors.length || 1;
+        const healthySensors = sensors?.filter(s => !s.is_anomaly).length || 0;
+        const totalSensors = sensors?.length || 1;
 
-        const atRisk = wellness.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2);
-        const avgWellnessScore = wellness.length 
+        // Fetch crew wellness data
+        const { data: wellness } = await supabase
+          .from('crew_health_checkins')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        // At risk = stress_level >= 4 or energy_level <= 2
+        const atRisk = wellness?.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2) || [];
+        // Calculate overall wellness from mood, energy, sleep (1-5 scale average)
+        const avgWellnessScore = wellness?.length 
           ? wellness.reduce((acc, w) => acc + ((w.mood + w.energy_level + w.sleep_quality) / 3), 0) / wellness.length 
           : 3;
 
@@ -139,12 +134,13 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
           iotCritical: critical.length,
           sensorHealth: Math.round((healthySensors / totalSensors) * 100),
           crewAtRisk: atRisk.length,
-          avgWellness: Math.round(avgWellnessScore * 20),
-          vesselsTracking: 5
+          avgWellness: Math.round(avgWellnessScore * 20), // Convert 1-5 to percentage
+          vesselsTracking: 5 // Mock - would come from AIS
         });
 
-        // Build activities
+        // Build recent activities from real data
         const activities: any[] = [];
+        
         if (critical.length > 0) {
           activities.push({
             id: 'iot-critical',
@@ -155,6 +151,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             urgent: true
           });
         }
+
         if (atRisk.length > 0) {
           activities.push({
             id: 'crew-risk',
@@ -165,7 +162,9 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             urgent: true
           });
         }
-        sensors.slice(0, 2).forEach((s, i) => {
+
+        // Add recent sensor readings
+        sensors?.slice(0, 2).forEach((s, i) => {
           activities.push({
             id: `sensor-${i}`,
             action: `Sensor ${s.equipment_name}: ${s.value?.toFixed(1)} ${s.unit || ''} (${s.sensor_type})`,
@@ -174,7 +173,9 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             icon: Thermometer
           });
         });
-        wellness.slice(0, 2).forEach((w, i) => {
+
+        // Add wellness check-ins
+        wellness?.slice(0, 2).forEach((w, i) => {
           const avgScore = ((w.mood + w.energy_level + w.sleep_quality) / 3).toFixed(1);
           activities.push({
             id: `wellness-${i}`,
@@ -186,32 +187,21 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
         });
 
         setRecentActivities(activities.slice(0, 6));
-      } catch {
-        // Silently fail - use default data
-        logger.debug('Background stats fetch failed');
+      } catch (error) {
+        console.error('Error fetching real-time stats:', error);
       }
     }
 
     fetchRealTimeStats();
 
-    // Throttled realtime - max once per minute
-    let lastUpdate = 0;
-    const throttledFetch = () => {
-      const now = Date.now();
-      if (now - lastUpdate > 60000 && mounted) {
-        lastUpdate = now;
-        fetchRealTimeStats();
-      }
-    };
-
+    // Set up realtime subscription
     const channel = supabase
-      .channel('visao-geral-v46')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, throttledFetch)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, throttledFetch)
+      .channel('command-center-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, fetchRealTimeStats)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, fetchRealTimeStats)
       .subscribe();
 
     return () => {
-      mounted = false;
       supabase.removeChannel(channel);
     };
   }, []);

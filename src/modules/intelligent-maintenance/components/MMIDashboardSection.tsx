@@ -278,15 +278,15 @@ export default function MMIDashboardSection() {
               <Badge className="bg-red-500 text-white">Crítico</Badge>
             </div>
             
-            <div className="flex items-center justify-between p-3 bg-warning/10 dark:bg-warning/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-orange-100 dark:bg-orange-950/30 rounded-lg">
               <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-warning" />
+                <Clock className="h-5 w-5 text-orange-500" />
                 <div>
-                  <p className="font-medium text-warning dark:text-warning">Sistema Hidráulico - PSV Beta</p>
-                  <p className="text-sm text-warning/80 dark:text-warning/70">Vence em 2 dias</p>
+                  <p className="font-medium text-orange-700 dark:text-orange-300">Sistema Hidráulico - PSV Beta</p>
+                  <p className="text-sm text-orange-600 dark:text-orange-400">Vence em 2 dias</p>
                 </div>
               </div>
-              <Badge className="bg-warning text-warning-foreground">Alto</Badge>
+              <Badge className="bg-orange-500 text-white">Alto</Badge>
             </div>
 
             <div className="flex items-center justify-between p-3 bg-yellow-100 dark:bg-yellow-950/30 rounded-lg">

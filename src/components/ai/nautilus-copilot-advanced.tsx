@@ -28,7 +28,6 @@ import {
   Lightbulb
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { MaintenanceCopilotDialog, ReportsCopilotDialog, CrewPlanningCopilotDialog } from "@/components/copilot";
 
 interface Message {
   id: string;
@@ -64,11 +63,6 @@ const NautilusCopilotAdvanced: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState("chat");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  // Dialog states
-  const [maintenanceDialogOpen, setMaintenanceDialogOpen] = useState(false);
-  const [reportsDialogOpen, setReportsDialogOpen] = useState(false);
-  const [crewPlanningDialogOpen, setCrewPlanningDialogOpen] = useState(false);
 
   const capabilities: CopilotCapability[] = [
     {
@@ -252,24 +246,36 @@ What would you like assistance with today?`,
 
   const getCategoryColor = (category: CopilotCapability["category"]) => {
     switch (category) {
-    case "analytics": return "bg-primary/10 text-primary dark:bg-primary/20";
-    case "automation": return "bg-accent text-accent-foreground dark:bg-accent/80";
-    case "compliance": return "bg-success/10 text-success dark:bg-success/20";
-    case "operations": return "bg-warning/10 text-warning dark:bg-warning/20";
+    case "analytics": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "automation": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+    case "compliance": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    case "operations": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
     default: return "bg-muted text-muted-foreground";
     }
   };
 
   const handleScheduleMaintenance = () => {
-    setMaintenanceDialogOpen(true);
+    toast({
+      title: "🔧 Agendar Manutenção",
+      description: "Abrindo sistema de agendamento de manutenção preventiva"
+    });
+    // TODO: Open maintenance scheduling dialog
   };
 
   const handleGenerateReport = () => {
-    setReportsDialogOpen(true);
+    toast({
+      title: "📄 Gerar Relatório",
+      description: "Iniciando geração de relatório operacional"
+    });
+    // TODO: Open report generation dialog
   };
 
   const handleCrewPlanning = () => {
-    setCrewPlanningDialogOpen(true);
+    toast({
+      title: "👥 Planejamento de Tripulação",
+      description: "Abrindo ferramenta de planejamento e escalas de tripulação"
+    });
+    // TODO: Open crew planning interface
   };
 
   return (
@@ -536,20 +542,6 @@ What would you like assistance with today?`,
           </div>
         </TabsContent>
       </Tabs>
-      
-      {/* Copilot Dialogs */}
-      <MaintenanceCopilotDialog 
-        open={maintenanceDialogOpen} 
-        onOpenChange={setMaintenanceDialogOpen} 
-      />
-      <ReportsCopilotDialog 
-        open={reportsDialogOpen} 
-        onOpenChange={setReportsDialogOpen} 
-      />
-      <CrewPlanningCopilotDialog 
-        open={crewPlanningDialogOpen} 
-        onOpenChange={setCrewPlanningDialogOpen} 
-      />
     </div>
   );
 };

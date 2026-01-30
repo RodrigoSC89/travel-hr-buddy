@@ -4,7 +4,7 @@
  */
 
 import * as Sentry from '@sentry/react';
-import { logger } from "@/lib/logger";
+
 // Types
 interface Metric {
   name: string;
@@ -90,7 +90,7 @@ export class AdvancedMonitoring {
     try {
       Sentry.setMeasurement(metric.name, metric.value, 'none');
     } catch (error) {
-      logger.debug("Sentry metrics not available", { error });
+      console.warn('Sentry metrics not available:', error);
     }
     
     // Store locally for trend analysis

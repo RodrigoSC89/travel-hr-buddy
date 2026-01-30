@@ -124,10 +124,10 @@ class ONNXRuntime {
         });
 
         this.sessions.set(modelKey, session);
-        logger.info(`ONNX model loaded: ${config.name}`);
+        console.log(`Model loaded: ${config.name}`);
         return session;
       } catch (error) {
-        logger.error(`Failed to load ONNX model ${modelKey}`, { error });
+        console.error(`Failed to load model ${modelKey}:`, error);
         throw error;
       } finally {
         this.loadingPromises.delete(modelKey);

@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { FileText, Download, Loader2, Sparkles, Users, Settings, BarChart3, Target } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import ReactMarkdown from "react-markdown";
-import { supabase } from "@/integrations/supabase/client";
 
 interface AIReportGeneratorProps {
   onReportGenerated?: (report: GeneratedReport) => void;
@@ -72,27 +71,42 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-ai-report', {
-        body: {
+      console.log("[AIReportGenerator] Starting report generation:", { reportType, format, dateRange });
+      
+      const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-ai-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
+        },
+        body: JSON.stringify({
           type: reportType,
           dateRange,
           modules: selectedModules,
           format,
           customPrompt: customPrompt || undefined
-        }
+        })
       });
 
-      if (error) {
-        if (error.message?.includes('429')) {
+      console.log("[AIReportGenerator] Response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[AIReportGenerator] Error response:", errorText);
+        
+        if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
         }
-        if (error.message?.includes('402')) {
+        if (response.status === 402) {
           throw new Error("Créditos de IA insuficientes. Adicione créditos ao workspace.");
         }
-        throw error;
+        throw new Error(`Erro ${response.status}: ${errorText || "Falha ao gerar relatório"}`);
       }
 
-      if (data?.success && data?.report) {
+      const data = await response.json();
+      console.log("[AIReportGenerator] Response data:", { success: data.success, hasReport: !!data.report });
+
+      if (data.success && data.report) {
         setLastReport(data.report);
         onReportGenerated?.(data.report);
         
@@ -100,16 +114,8 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           title: "Relatório Gerado",
           description: "Relatório criado com sucesso usando IA generativa",
         });
-      } else if (data?.report) {
-        // Direct report format
-        setLastReport(data.report);
-        onReportGenerated?.(data.report);
-        toast({
-          title: "Relatório Gerado",
-          description: "Relatório criado com sucesso",
-        });
       } else {
-        throw new Error(data?.error || "Erro ao gerar relatório");
+        throw new Error(data.error || "Erro ao gerar relatório");
       }
     } catch (error) {
       console.error("[AIReportGenerator] Error:", error);

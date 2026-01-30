@@ -19,19 +19,7 @@ const generateMockEmbedding = (): number[] => {
  * Falls back to mock data if API key is not configured
  */
 export const generateEmbedding = async (text: string): Promise<number[]> => {
-  // Safe getter for env vars
-  const getEnv = (key: string): string | undefined => {
-    try {
-      if (typeof import.meta !== 'undefined' && import.meta.env) {
-        return import.meta.env[key] as string | undefined;
-      }
-    } catch {
-      return undefined;
-    }
-    return undefined;
-  };
-
-  const apiKey = getEnv('VITE_OPENAI_API_KEY');
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   
   if (!apiKey || apiKey === "your_openai_api_key_here") {
     logger.warn("OpenAI API key not configured, using mock embedding");

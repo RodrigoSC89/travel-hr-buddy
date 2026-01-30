@@ -90,7 +90,7 @@ const generateMockAlerts = (): ComplianceAlertRecord[] => {
 export function ComplianceAlertHistory({ onAlertClick }: ComplianceAlertHistoryProps) {
   const [alerts, setAlerts] = useState<ComplianceAlertRecord[]>([]);
   const [filteredAlerts, setFilteredAlerts] = useState<ComplianceAlertRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');

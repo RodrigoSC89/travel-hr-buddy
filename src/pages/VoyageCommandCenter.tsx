@@ -195,31 +195,22 @@ export default function VoyageCommandCenter() {
     const originPort = ports.find((p: Port) => p.id === newVoyage.origin) || ports[0];
     const destPort = ports.find((p: Port) => p.id === newVoyage.destination) || ports[2];
 
-    // Calculate deterministic values based on port coordinates
-    const distanceNm = Math.floor(
-      Math.abs(originPort.lat - destPort.lat) * 60 + 
-      Math.abs(originPort.lng - destPort.lng) * 60
-    ) + 1000;
-    const estimatedDays = Math.floor(distanceNm / 350); // Average speed ~350nm/day
-    const fuelConsumption = Math.floor(distanceNm * 0.6); // ~0.6 tons per nm
-    const estimatedCost = Math.floor(distanceNm * 150); // ~$150 per nm
-
     const voyage: VoyageRoute = {
       id: Date.now().toString(),
       name: `${originPort.name} → ${destPort.name}`,
       origin: originPort,
       destination: destPort,
       waypoints: [],
-      distanceNm,
-      estimatedDays,
-      fuelConsumption,
+      distanceNm: Math.floor(Math.random() * 3000) + 2000,
+      estimatedDays: Math.floor(Math.random() * 15) + 7,
+      fuelConsumption: Math.floor(Math.random() * 2000) + 1500,
       status: "planned",
       vesselName: newVoyage.vessel || "A definir",
       departureDate: newVoyage.departure || new Date().toISOString().split('T')[0],
-      arrivalDate: new Date(Date.now() + estimatedDays * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       weatherRisk: "medium",
       createdAt: new Date().toISOString().split('T')[0],
-      estimatedCost,
+      estimatedCost: Math.floor(Math.random() * 500000) + 200000,
       aiRecommendations: ["Aguardando análise de IA para otimização de rota"]
     };
 
@@ -247,12 +238,9 @@ export default function VoyageCommandCenter() {
         "Identificamos uma oportunidade de bunker em Durban com preços 8% abaixo da média. Deseja incluir essa escala no planejamento?"
       ];
       
-      // Use message count for deterministic response selection
-      const responseIndex = aiMessages.length % responses.length;
-      
       setAiMessages(prev => [...prev, { 
         role: "assistant", 
-        content: responses[responseIndex]
+        content: responses[Math.floor(Math.random() * responses.length)]
       }]);
     }, 1500);
 

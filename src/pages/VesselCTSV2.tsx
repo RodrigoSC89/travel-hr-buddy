@@ -44,8 +44,7 @@ const EVIDENCE_FIELDS = [
 
 export default function VesselCTSV2() {
   const [crew, setCrew] = useState<CrewMember[]>([]);
-  // PATCH v48: Start with loading=false to NEVER block render
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setCrew([

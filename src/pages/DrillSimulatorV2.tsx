@@ -131,23 +131,7 @@ export default function DrillSimulatorV2() {
                     <drill.icon className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p className="text-sm text-muted-foreground">Clique para iniciar simulação</p>
                   </div>
-                  <Button className="w-full" onClick={() => {
-                    // Adicionar novo drill ao histórico
-                    const newDrill: DrillRecord = {
-                      id: `drill-${Date.now()}`,
-                      drill_type: drill.type,
-                      date: new Date().toISOString().split('T')[0],
-                      duration_minutes: 0,
-                      participants: 0,
-                      score: 0,
-                      status: "Em Andamento"
-                    };
-                    setDrills(prev => [newDrill, ...prev]);
-                    toast.success(`Simulação de ${drill.type} iniciada!`, {
-                      description: "Cronômetro ativo. Complete os procedimentos de emergência.",
-                      duration: 5000
-                    });
-                  }}>
+                  <Button className="w-full" onClick={() => toast.success(`Iniciando drill de ${drill.type}`)}>
                     <Play className="h-4 w-4 mr-2" />
                     Iniciar Simulação
                   </Button>

@@ -203,22 +203,16 @@ const IntelligentAlerts: React.FC = () => {
     const severities = ["info", "warning", "critical"];
     const vessels = ["MV Atlântico Explorer", "MV Pacífico Star", "MV Índico Pioneer"];
     
-    // Deterministic selection based on timestamp
-    const timeHash = Math.floor(Date.now() / 1000);
-    const typeIndex = timeHash % alertTypes.length;
-    const severityIndex = (timeHash + 1) % severities.length;
-    const vesselIndex = (timeHash + 2) % vessels.length;
-    
     const newAlert: IntelligentAlert = {
-      id: `alert-${timeHash}`,
-      type: alertTypes[typeIndex] as any,
-      severity: severities[severityIndex] as any,
+      id: Math.random().toString(),
+      type: alertTypes[Math.floor(Math.random() * alertTypes.length)] as any,
+      severity: severities[Math.floor(Math.random() * severities.length)] as any,
       title: "Anomalia Detectada pelo Sistema de IA",
       description: "Sistema inteligente identificou padrão anômalo que requer atenção.",
-      vessel_name: vessels[vesselIndex],
-      vessel_id: ((timeHash % 4) + 1).toString(),
+      vessel_name: vessels[Math.floor(Math.random() * vessels.length)],
+      vessel_id: Math.floor(Math.random() * 4 + 1).toString(),
       predicted_impact: "Impacto operacional potencial detectado",
-      ai_confidence: 75 + (timeHash % 25), // 75-99%
+      ai_confidence: Math.floor(Math.random() * 30 + 70), // 70-100%
       recommendations: ["Investigar anomalia", "Monitorar parâmetros", "Notificar equipe técnica"],
       created_at: new Date().toISOString(),
       is_acknowledged: false,

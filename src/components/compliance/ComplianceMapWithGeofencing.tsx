@@ -15,7 +15,6 @@ import {
   Ship, MapPin, AlertTriangle, RefreshCw, Filter, Radio, Target, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
 
 interface VesselInspection {
   id: string;
@@ -100,7 +99,7 @@ export function ComplianceMapWithGeofencing({
   const mapLoadedRef = useRef(false);
   
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [vessels, setVessels] = useState<VesselInspection[]>([]);
   const [geofences, setGeofences] = useState<Geofence[]>([]);
@@ -290,12 +289,12 @@ export function ComplianceMapWithGeofencing({
           setIsLoading(false);
         });
 
-        mapInstance.on('error', (e: mapboxgl.ErrorEvent) => {
-          logger.warn('Map error:', { error: e.error?.message || 'Unknown map error' });
+        mapInstance.on('error', (e: any) => {
+          console.warn('Map error:', e);
         });
 
       } catch (err) {
-        logger.error('Failed to initialize map:', err);
+        console.error('Failed to initialize map:', err);
         if (isMounted) {
           setError('Erro ao carregar mapa');
           setIsLoading(false);
@@ -394,7 +393,7 @@ export function ComplianceMapWithGeofencing({
           }
         });
       } catch (e) {
-        logger.warn(`Error adding geofence ${geofence.id}`, { error: e });
+        console.warn('Error adding geofence:', geofence.id, e);
       }
     });
   }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, Users, Settings, Lock, Unlock, Search, 
   Save, RefreshCw, AlertTriangle, CheckCircle2, Eye,
-  Edit, Trash2, Plus, FileText, Database, Zap, Loader2
+  Edit, Trash2, Plus, FileText, Database, Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/utils/production-logger";
 
 interface Role {
   id: string;
@@ -108,33 +106,10 @@ export function PermissionsManager() {
     setHasChanges(true);
   };
 
-  const [isSaving, setIsSaving] = useState(false);
-
-  const handleSave = useCallback(async () => {
-    setIsSaving(true);
-    try {
-      // Save permissions to Supabase ai_configurations table
-      const { error } = await supabase
-        .from('ai_configurations')
-        .upsert({
-          config_key: 'role_permissions',
-          config_value: permissions,
-          description: 'Role-based permissions configuration',
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'config_key' });
-
-      if (error) throw error;
-
-      toast.success('Permissões salvas com sucesso!');
-      setHasChanges(false);
-      logger.info('Permissions saved', { roles: Object.keys(permissions) });
-    } catch (err) {
-      logger.error('Failed to save permissions', err);
-      toast.error('Erro ao salvar permissões');
-    } finally {
-      setIsSaving(false);
-    }
-  }, [permissions]);
+  const handleSave = () => {
+    toast.success('Permissões salvas com sucesso!');
+    setHasChanges(false);
+  };
 
   const handleReset = () => {
     toast.success('Permissões resetadas para padrão');

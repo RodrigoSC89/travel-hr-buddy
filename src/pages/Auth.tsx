@@ -53,9 +53,7 @@ type SignUpFormData = z.infer<typeof signUpSchema>;
 type ResetFormData = z.infer<typeof resetSchema>;
 
 const Auth: React.FC = () => {
-  // PATCH v49: Ignore authLoading from context - we NEVER block the Auth page
-  // The form should always render immediately for users to login
-  const { user, clearSession } = useAuth();
+  const { user, isLoading: authLoading, clearSession } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -78,35 +76,35 @@ const Auth: React.FC = () => {
     defaultValues: { email: "" }
   });
 
-  // Cleanup corrupted tokens on mount - only once
+  // Cleanup corrupted tokens on mount
   useEffect(() => {
-    try {
-      const keys = Object.keys(localStorage).filter(
-        k => k.includes('supabase') || k.includes('sb-')
-      );
-      
-      for (const key of keys) {
-        try {
-          const value = localStorage.getItem(key);
-          if (value) {
-            const parsed = JSON.parse(value);
-            if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
-              localStorage.removeItem(key);
+    const cleanup = async () => {
+      try {
+        const keys = Object.keys(localStorage).filter(
+          k => k.includes('supabase') || k.includes('sb-')
+        );
+        
+        for (const key of keys) {
+          try {
+            const value = localStorage.getItem(key);
+            if (value) {
+              const parsed = JSON.parse(value);
+              if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
+                localStorage.removeItem(key);
+              }
             }
+          } catch {
+            localStorage.removeItem(key);
           }
-        } catch {
-          localStorage.removeItem(key);
         }
+      } catch {
+        // Ignore cleanup errors
       }
-    } catch {
-      // Ignore cleanup errors
-    }
+    };
+    cleanup();
   }, []);
 
-  // NEVER block render - show form immediately, auth check happens in background
-  // This eliminates infinite loading on the Auth page completely
-
-  // Redirect if already logged in
+  // Redirect after all hooks
   if (user) {
     return <Navigate to="/" replace />;
   }
@@ -143,13 +141,7 @@ const Auth: React.FC = () => {
         const errorMsg = error.message.toLowerCase();
         console.error('[Auth] Login error:', error.message, error.status);
         
-        if (errorMsg.includes('captcha')) {
-          // CAPTCHA está habilitado no Supabase mas não implementado no frontend
-          toast.error("Configuração pendente", { 
-            description: "Desabilite o CAPTCHA no Supabase Dashboard: Authentication → Settings → CAPTCHA protection → Disabled"
-          });
-          setShowTroubleshooting(true);
-        } else if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
+        if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
         } else if (errorMsg.includes('email not confirmed')) {
           toast.error("Email não confirmado", { description: "Verifique seu email para confirmar a conta." });
@@ -524,7 +516,7 @@ const Auth: React.FC = () => {
                       </Button>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading || authLoading}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Entrar
                     </Button>

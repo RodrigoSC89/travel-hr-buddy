@@ -16,8 +16,7 @@ export interface WindyTestResult {
  */
 export async function testWindyConnection(): Promise<WindyTestResult> {
   const startTime = Date.now();
-  const safeEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string | undefined>;
-  const apiKey = safeEnv.VITE_WINDY_API_KEY || safeEnv.VITE_OPENWEATHER_API_KEY || "";
+  const apiKey = import.meta.env.VITE_WINDY_API_KEY || import.meta.env.VITE_OPENWEATHER_API_KEY;
 
   if (!apiKey) {
     return {

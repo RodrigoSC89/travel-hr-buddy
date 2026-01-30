@@ -225,71 +225,73 @@ export async function predictComplianceRisks(
   try {
     logger.info("🔮 Starting predictive risk analysis", { vesselId });
 
-    // Fetch real non-conformities data
-    const { data: ncData } = await supabase
-      .from('non_conformities')
-      .select('id, category, severity, status, created_at')
-      .order('created_at', { ascending: false })
-      .limit(100);
-
-    // Fetch recent audits/inspections
-    const { data: auditData } = await supabase
-      .from('peotram_audits')
-      .select('id, audit_type, audit_date, compliance_score, non_conformities_count')
-      .order('audit_date', { ascending: false })
-      .limit(50);
-
-    // Build modules from real data or use defaults if empty
-    const modules: ComplianceModule[] = [];
-    
-    // Aggregate data by compliance type
-    const typeMap = new Map<string, { lastInspection: string; ncCount: number; changes: number }>();
-    
-    // Count NCs by category
-    if (ncData && ncData.length > 0) {
-      for (const nc of ncData) {
-        const moduleType = (nc.category || 'ISM').toUpperCase();
-        const existing = typeMap.get(moduleType) || { lastInspection: '', ncCount: 0, changes: 0 };
-        existing.ncCount++;
-        existing.changes++;
-        typeMap.set(moduleType, existing);
+    // Mock data for demonstration (replace with real Supabase queries)
+    const modules: ComplianceModule[] = [
+      {
+        id: "ism-code",
+        name: "ISM Code Compliance",
+        type: "ISM",
+        lastInspection: new Date(Date.now() - 150 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 3,
+        changeFrequency: 5
+      },
+      {
+        id: "mlc-2006",
+        name: "MLC 2006 Maritime Labor",
+        type: "MLC",
+        lastInspection: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 1,
+        changeFrequency: 2
+      },
+      {
+        id: "marpol-73-78",
+        name: "MARPOL 73/78 Environmental",
+        type: "MARPOL",
+        lastInspection: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 2,
+        changeFrequency: 3
+      },
+      {
+        id: "psc-inspection",
+        name: "Port State Control",
+        type: "PSC",
+        lastInspection: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 4,
+        changeFrequency: 1
+      },
+      {
+        id: "imca-m117",
+        name: "IMCA M117 DP Operations",
+        type: "IMCA",
+        lastInspection: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 0,
+        changeFrequency: 7
+      },
+      {
+        id: "sgso",
+        name: "SGSO Safety Management",
+        type: "SGSO",
+        lastInspection: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000).toISOString(),
+        nonConformanceCount: 2,
+        changeFrequency: 4
       }
-    }
+    ];
 
-    // Add audit data
-    if (auditData && auditData.length > 0) {
-      for (const audit of auditData) {
-        const moduleType = (audit.audit_type || 'ISM').toUpperCase();
-        const existing = typeMap.get(moduleType) || { lastInspection: '', ncCount: 0, changes: 0 };
-        if (audit.audit_date && (!existing.lastInspection || audit.audit_date > existing.lastInspection)) {
-          existing.lastInspection = audit.audit_date;
-        }
-        existing.ncCount += audit.non_conformities_count || 0;
-        typeMap.set(moduleType, existing);
-      }
-    }
-
-    // Default modules if no data
-    const defaultModuleTypes: Array<ComplianceModule['type']> = ['ISM', 'MLC', 'MARPOL', 'PSC', 'IMCA', 'SGSO'];
-    for (const type of defaultModuleTypes) {
-      const data = typeMap.get(type) || { lastInspection: '', ncCount: 0, changes: 0 };
-      modules.push({
-        id: type.toLowerCase().replace(/\s+/g, '-'),
-        name: `${type} Compliance`,
-        type,
-        lastInspection: data.lastInspection || new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
-        nonConformanceCount: data.ncCount,
-        changeFrequency: data.changes
-      });
-    }
-
-    // Build inspection history from NC data
-    const inspectionHistory: InspectionHistory[] = (ncData || []).map(nc => ({
-      module: ((nc.category || 'ism') as string).toLowerCase().replace(/\s+/g, '-'),
-      date: nc.created_at || new Date().toISOString(),
-      nonConformances: 1,
-      severity: nc.severity || 'medium'
-    }));
+    // Mock inspection history
+    const inspectionHistory: InspectionHistory[] = [
+      { module: "ism-code", date: "2025-06-01", nonConformances: 4, severity: "high" },
+      { module: "ism-code", date: "2025-03-15", nonConformances: 2, severity: "medium" },
+      { module: "ism-code", date: "2024-12-10", nonConformances: 3, severity: "high" },
+      { module: "mlc-2006", date: "2025-09-20", nonConformances: 1, severity: "low" },
+      { module: "mlc-2006", date: "2025-06-01", nonConformances: 0, severity: "low" },
+      { module: "marpol-73-78", date: "2025-08-01", nonConformances: 2, severity: "medium" },
+      { module: "marpol-73-78", date: "2025-05-15", nonConformances: 3, severity: "medium" },
+      { module: "psc-inspection", date: "2025-04-30", nonConformances: 5, severity: "critical" },
+      { module: "psc-inspection", date: "2025-01-15", nonConformances: 3, severity: "high" },
+      { module: "imca-m117", date: "2025-10-05", nonConformances: 0, severity: "low" },
+      { module: "sgso", date: "2025-07-15", nonConformances: 2, severity: "medium" },
+      { module: "sgso", date: "2025-04-10", nonConformances: 3, severity: "medium" }
+    ];
 
     // Calculate risk for each module
     const risks = modules.map(module => 

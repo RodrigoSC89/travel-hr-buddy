@@ -12,7 +12,6 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
 import {
   Shield,
   AlertTriangle,
@@ -128,7 +127,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
         description: "A IA analisou sua consulta de segurança."
       });
     } catch (err) {
-      logger.error("Security analysis error:", err);
+      console.error("Erro na análise:", err);
       toast({
         title: "Erro na análise",
         description: "Não foi possível processar a análise de segurança.",

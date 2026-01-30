@@ -459,8 +459,8 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-2xl font-bold">{metrics.innovationScore}</span>
-                      <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                        Ativo
+                      <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                        Em Desenvolvimento
                       </Badge>
                     </div>
                     <Progress value={metrics.innovationScore} className="h-2" />

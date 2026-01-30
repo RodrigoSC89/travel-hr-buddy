@@ -435,8 +435,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Vencem Hoje",
       description: "Alertas para inspeções que vencem hoje",
       icon: CalendarClock,
-      color: "text-warning",
-      badgeColor: "bg-warning/10 text-warning",
+      color: "text-orange-600",
+      badgeColor: "bg-orange-100 text-orange-800",
       priority: "Alto"
     },
     {

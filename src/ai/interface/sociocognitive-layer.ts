@@ -7,8 +7,6 @@
  * @created 2025-01-24
  */
 
-import { logger } from "@/lib/logger";
-
 export type UrgencyLevel = "low" | "medium" | "high" | "critical";
 export type ToneType = "calm" | "neutral" | "urgent" | "stressed" | "confident";
 export type OperationalLoad = "minimal" | "normal" | "high" | "overload";
@@ -138,7 +136,7 @@ class SocioCognitiveLayer {
       this.contextLog.shift();
     }
 
-    logger.debug("[SocioCognitive] Context logged", {
+    console.log("[SocioCognitive] Context logged:", {
       commandId: context.commandId,
       urgency: interpretation.urgency,
       tone: interpretation.tone,

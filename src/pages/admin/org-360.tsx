@@ -15,38 +15,16 @@ export default function Org360Dashboard() {
   const { data: systemHealth, isLoading: loadingHealth } = useQuery({
     queryKey: ["system-health-360"],
     queryFn: async () => {
-      // Query real system metrics from database
-      const [logsResult, aiResult] = await Promise.all([
-        supabase
-          .from("system_logs")
-          .select("severity, created_at")
-          .gte("created_at", new Date(Date.now() - 3600000).toISOString()),
-        supabase
-          .from("ai_logs")
-          .select("status")
-          .gte("created_at", new Date(Date.now() - 3600000).toISOString()),
-      ]);
-
-      const logs = logsResult.data || [];
-      const aiLogs = aiResult.data || [];
-      
-      const errorCount = logs.filter(l => l.severity === "error").length;
-      const totalLogs = logs.length || 1;
-      const aiSuccessRate = aiLogs.length ? 
-        (aiLogs.filter(a => a.status === "success").length / aiLogs.length) * 100 : 95;
-
+      // TODO: Implement actual system health check
       return {
-        overall: Math.max(80, 100 - (errorCount / totalLogs) * 50),
-        api: Math.max(85, 100 - (errorCount * 2)),
+        overall: 95,
+        api: 98,
         database: 97,
-        ai: Math.round(aiSuccessRate),
+        ai: 92,
         storage: 94,
       };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 30000,
   });
 
   const { data: userEngagement, isLoading: loadingEngagement } = useQuery({
@@ -76,37 +54,16 @@ export default function Org360Dashboard() {
   const { data: aiUsage, isLoading: loadingAI } = useQuery({
     queryKey: ["ai-usage-360"],
     queryFn: async () => {
-      // Query actual AI usage from ai_logs table
-      const { data: aiLogs, error } = await supabase
-        .from("ai_logs")
-        .select("service, status, response_time_ms, created_at")
-        .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
-
-      if (error || !aiLogs?.length) {
-        return {
-          totalRequests: 0,
-          avgResponseTime: 0,
-          successRate: 0,
-          bySector: [],
-        };
-      }
-
-      const totalRequests = aiLogs.length;
-      const successCount = aiLogs.filter(l => l.status === "success").length;
-      const avgResponseTime = aiLogs.reduce((sum, l) => sum + (l.response_time_ms || 0), 0) / totalRequests;
-
-      // Group by service
-      const byService = aiLogs.reduce((acc, log) => {
-        const service = log.service || "Other";
-        acc[service] = (acc[service] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-
+      // TODO: Implement actual AI usage metrics
       return {
-        totalRequests,
-        avgResponseTime: Math.round(avgResponseTime),
-        successRate: Math.round((successCount / totalRequests) * 100 * 10) / 10,
-        bySector: Object.entries(byService).map(([name, requests]) => ({ name, requests })),
+        totalRequests: 1547,
+        avgResponseTime: 245,
+        successRate: 97.3,
+        bySector: [
+          { name: "Operations", requests: 624 },
+          { name: "Compliance", requests: 412 },
+          { name: "Maintenance", requests: 511 },
+        ],
       };
     },
   });

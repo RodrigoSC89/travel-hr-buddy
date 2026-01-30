@@ -3,8 +3,6 @@
  * Complete system health and readiness diagnostic
  */
 
-import { logger } from '@/lib/logger';
-
 export interface ModuleStatus {
   id: string;
   name: string;
@@ -71,7 +69,7 @@ class SystemDiagnostic {
    * Run complete system diagnostic
    */
   async runDiagnostic(): Promise<DiagnosticReport> {
-    logger.info('[Diagnostic] Starting system diagnostic...');
+    console.log('[Diagnostic] Starting system diagnostic...');
     
     const modules = await this.analyzeModules();
     const summary = this.generateSummary(modules);
@@ -93,7 +91,7 @@ class SystemDiagnostic {
       readinessChecklist
     };
     
-    logger.info('[Diagnostic] Complete', { overallScore: report.overallScore, status: report.systemStatus });
+    console.log('[Diagnostic] Complete:', report);
     return report;
   }
 

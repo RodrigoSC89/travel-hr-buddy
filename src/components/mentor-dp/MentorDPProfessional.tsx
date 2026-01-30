@@ -207,16 +207,9 @@ export default function MentorDPProfessional() {
     setLogEntries(prev => [entry, ...prev]);
   }, []);
 
-  interface MentorAIResponse {
-    success?: boolean;
-    error?: string;
-    content?: string;
-    quiz?: unknown;
-    [key: string]: unknown;
-  }
-
   // Call AI Edge Function with enhanced error handling
-  const callMentorAI = async (action: string, params: Record<string, unknown> = {}): Promise<MentorAIResponse> => {
+  const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
+    console.log("[MentorDP] Calling edge function:", action, params);
     
     try {
       const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
@@ -228,8 +221,11 @@ export default function MentorDPProfessional() {
         body: JSON.stringify({ action, ...params }),
       });
 
+      console.log("[MentorDP] Response status:", response.status);
+
       if (!response.ok) {
         const errorText = await response.text();
+        console.error("[MentorDP] Response error:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -240,7 +236,8 @@ export default function MentorDPProfessional() {
         throw new Error(`Erro ${response.status}: ${errorText || "Falha na comunicação com o Mentor DP"}`);
       }
 
-      const data: MentorAIResponse = await response.json();
+      const data = await response.json();
+      console.log("[MentorDP] Response data:", { success: data.success, hasContent: !!data.content });
 
       if (!data.success && data.error) {
         throw new Error(data.error);
@@ -249,7 +246,8 @@ export default function MentorDPProfessional() {
       return data;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      throw new Error(errorMessage);
+      console.error("[MentorDP] callMentorAI error:", errorMessage);
+      throw error;
     }
   };
 
@@ -268,7 +266,7 @@ export default function MentorDPProfessional() {
         messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
       });
 
-      const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content || "", timestamp: new Date(), type: "chat" };
+      const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
       addLogEntry("chat", "Conversa com Mentor", messageText.substring(0, 100) + "...");
     } catch (error: unknown) {
@@ -285,7 +283,7 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("generate_lesson", { topic: module.name, difficulty: module.difficulty });
       
-      const lessonMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 📚 Lição: ${module.name}\n\n${data.content || ""}`, timestamp: new Date(), type: "lesson" };
+      const lessonMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 📚 Lição: ${module.name}\n\n${data.content}`, timestamp: new Date(), type: "lesson" };
       setMessages([lessonMessage]);
       setActiveTab("mentor");
       addLogEntry("lesson", `Lição: ${module.name}`, module.description);
@@ -313,7 +311,7 @@ export default function MentorDPProfessional() {
         context: { conditions: scenario.description },
       });
 
-      const simMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 🎮 Simulação: ${scenario.name}\n\n${data.content || ""}`, timestamp: new Date(), type: "simulation" };
+      const simMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 🎮 Simulação: ${scenario.name}\n\n${data.content}`, timestamp: new Date(), type: "simulation" };
       setMessages([simMessage]);
       setActiveTab("mentor");
       addLogEntry("simulation", `Simulação: ${scenario.name}`, scenario.description);
@@ -343,23 +341,19 @@ export default function MentorDPProfessional() {
       const data = await callMentorAI("generate_quiz", { quizTopic: quizTopicToUse, difficulty });
 
       // Parse quiz content
-      let quizContent: unknown = data.content;
+      let quizContent = data.content;
       if (typeof quizContent === "string") {
         try {
           const jsonMatch = quizContent.match(/```json\n?([\s\S]*?)\n?```/) || quizContent.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             quizContent = JSON.parse(jsonMatch[1] || jsonMatch[0]);
           }
-        } catch {
-          // Quiz not in JSON format, will display as text
+        } catch (e) {
+          console.log("Quiz not in JSON format, displaying as text");
         }
       }
 
-      // Type guard for quiz object
-      const isQuizObject = (obj: unknown): obj is { questions: unknown[] } => 
-        typeof obj === "object" && obj !== null && "questions" in obj && Array.isArray((obj as { questions: unknown[] }).questions);
-
-      if (isQuizObject(quizContent)) {
+      if (quizContent?.questions && Array.isArray(quizContent.questions)) {
         setActiveQuiz({ ...quizContent, topic: quizTopicToUse });
         setQuizAnswers({});
         
@@ -368,8 +362,7 @@ export default function MentorDPProfessional() {
         addLogEntry("quiz", `Quiz: ${quizTopicToUse}`, `${quizContent.questions.length} questões`);
       } else {
         // Display as text
-        const contentStr = typeof quizContent === "string" ? quizContent : JSON.stringify(quizContent, null, 2);
-        const quizMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 📝 Quiz: ${quizTopicToUse}\n\n${contentStr}`, timestamp: new Date(), type: "quiz" };
+        const quizMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 📝 Quiz: ${quizTopicToUse}\n\n${typeof quizContent === "string" ? quizContent : JSON.stringify(quizContent, null, 2)}`, timestamp: new Date(), type: "quiz" };
         setMessages([quizMessage]);
         setActiveTab("mentor");
       }

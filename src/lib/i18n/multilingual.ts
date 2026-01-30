@@ -3,8 +3,6 @@
  * Offline-first internationalization (PT, EN, ES)
  */
 
-import { logger } from "@/lib/logger";
-
 export type SupportedLanguage = 'pt' | 'en' | 'es';
 
 export interface TranslationEntry {
@@ -191,7 +189,7 @@ class MultilingualSystem {
     try {
       localStorage.setItem(STORAGE_KEY, this.currentLanguage);
     } catch (error) {
-      logger.warn("Failed to save language preference", { error });
+      console.warn('Failed to save language preference:', error);
     }
   }
 
@@ -207,7 +205,7 @@ class MultilingualSystem {
    */
   setLanguage(lang: SupportedLanguage): void {
     if (!['pt', 'en', 'es'].includes(lang)) {
-      logger.warn(`Unsupported language: ${lang}`);
+      console.warn(`Unsupported language: ${lang}`);
       return;
     }
 
@@ -235,7 +233,7 @@ class MultilingualSystem {
 
     for (const part of parts) {
       if (current[part] === undefined) {
-        logger.debug(`Translation not found: ${key}`);
+        console.warn(`Translation not found: ${key}`);
         return fallback || key;
       }
       current = current[part];
@@ -245,7 +243,7 @@ class MultilingualSystem {
       return current[this.currentLanguage];
     }
 
-    logger.debug(`Translation missing for language ${this.currentLanguage}: ${key}`);
+    console.warn(`Translation missing for language ${this.currentLanguage}: ${key}`);
     return fallback || current.pt || key;
   }
 

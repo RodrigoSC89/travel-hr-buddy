@@ -151,8 +151,11 @@ export default function AnalyticsPage() {
       const canvas = await html2canvas(node);
       const imageBase64 = canvas.toDataURL("image/png");
 
-      // Get Supabase URL - hardcoded since VITE_ vars not supported in Lovable
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
+      // Get Supabase URL from environment
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (!supabaseUrl) {
+        throw new Error("VITE_SUPABASE_URL não configurado");
+      }
 
       // Get current session for auth token
       const { data: { session } } = await supabase.auth.getSession();

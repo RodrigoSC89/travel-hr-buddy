@@ -94,17 +94,12 @@ const radarData = [
   { subject: "Confiança", mc: 94, qr: 89, eo: 92, fullMark: 100 },
 ];
 
-const timeSeriesData = Array.from({ length: 24 }, (_, i) => {
-  // Deterministic values using sine waves
-  const sinFactor = Math.sin(i * 0.3);
-  const cosFactor = Math.cos(i * 0.25);
-  return {
-    hour: `${i.toString().padStart(2, "0")}:00`,
-    monteCarlo: 85 + sinFactor * 5,
-    quantumRouter: 90 + cosFactor * 4,
-    energyOptimizer: 82 + sinFactor * 6,
-  };
-});
+const timeSeriesData = Array.from({ length: 24 }, (_, i) => ({
+  hour: `${i.toString().padStart(2, "0")}:00`,
+  monteCarlo: 85 + Math.random() * 10 - 5,
+  quantumRouter: 90 + Math.random() * 8 - 4,
+  energyOptimizer: 82 + Math.random() * 12 - 6,
+}));
 
 const scenarioResults = [
   { scenario: "Normal", mc: 125000, qr: 118500, eo: 128200 },

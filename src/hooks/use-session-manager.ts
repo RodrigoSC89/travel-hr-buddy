@@ -50,7 +50,7 @@ interface CreateSessionParams {
 export const useSessionManager = () => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<SessionToken[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(() => getStoredSessionId());
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 

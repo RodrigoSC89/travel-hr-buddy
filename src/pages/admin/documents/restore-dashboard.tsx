@@ -1,7 +1,7 @@
-/**
- * Comprehensive Restore Audit Dashboard - PATCH 874
- * PATCH 881: Removed @ts-nocheck - Uses RPC functions with proper type casting
- */
+// @ts-nocheck
+// ✅ Comprehensive Restore Audit Dashboard
+// Path: /admin/documents/restore-dashboard
+// Features: Interactive charts, CSV/PDF export, email reports, public view mode
 
 "use client";
 
@@ -24,12 +24,17 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartOptions,
-  ChartData,
 } from "chart.js";
 import { QRCodeSVG } from "qrcode.react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 
 // Register Chart.js components
 ChartJS.register(
@@ -57,22 +62,6 @@ interface DepartmentSummary {
   count: number;
 }
 
-// Dynamic RPC caller for functions not in generated types
-async function callRpc<T>(
-  functionName: string, 
-  params: Record<string, unknown> = {}
-): Promise<T | null> {
-  const { data, error } = await (supabase.rpc as (name: string, params: Record<string, unknown>) => ReturnType<typeof supabase.rpc>)(
-    functionName,
-    params
-  );
-  if (error) {
-    logger.error(`RPC ${functionName} failed:`, error);
-    return null;
-  }
-  return data as T;
-}
-
 export default function RestoreDashboard() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -97,7 +86,7 @@ export default function RestoreDashboard() {
     fetchStats();
     const interval = setInterval(() => {
       fetchStats(true);
-    }, 10000);
+    }, 10000); // 10 seconds
 
     return () => clearInterval(interval);
   }, [filterEmail]);
@@ -110,27 +99,33 @@ export default function RestoreDashboard() {
     }
     
     try {
-      // Get summary statistics using dynamic RPC call
-      const summaryResult = await callRpc<RestoreSummary[]>("get_restore_summary", { 
-        email_input: filterEmail || null 
-      });
-      setSummary(summaryResult?.[0] || { total: 0, unique_docs: 0, avg_per_day: 0 });
+      // Get summary statistics
+      const { data: summaryData, error: summaryError } = await supabase
+        .rpc("get_restore_summary", { email_input: filterEmail || null });
+
+      if (summaryError) throw summaryError;
+
+      setSummary(summaryData?.[0] || { total: 0, unique_docs: 0, avg_per_day: 0 });
 
       // Get daily data for the last 15 days
-      const dailyResult = await callRpc<RestoreDataPoint[]>("get_restore_count_by_day_with_email", { 
-        email_input: filterEmail || null 
-      });
-      setDailyData(dailyResult || []);
+      const { data: dailyDataResult, error: dailyError } = await supabase
+        .rpc("get_restore_count_by_day_with_email", { email_input: filterEmail || null });
+
+      if (dailyError) throw dailyError;
+
+      setDailyData(dailyDataResult || []);
 
       // Get monthly department summary
-      const deptResult = await callRpc<DepartmentSummary[]>("get_monthly_restore_summary_by_department", {});
-      if (deptResult) {
-        setDepartmentSummary(deptResult);
+      const { data: deptData, error: deptError } = await supabase
+        .rpc("get_monthly_restore_summary_by_department");
+
+      if (!deptError && deptData) {
+        setDepartmentSummary(deptData);
       }
 
       setLastUpdate(new Date());
     } catch (error) {
-      logger.error("Error fetching stats:", error as Error);
+      logger.error("Error fetching stats:", error);
       if (!isAutoRefresh) {
         toast({
           title: "Erro ao carregar estatísticas",
@@ -155,14 +150,21 @@ export default function RestoreDashboard() {
     }
 
     try {
+      // Create CSV header
       const csvHeader = "Data,Restaurações\n";
+      
+      // Create CSV rows
       const csvRows = dailyData
         .map((d) => `${format(new Date(d.day), "dd/MM/yyyy")},${d.count}`)
         .join("\n");
+      
       const csvContent = csvHeader + csvRows;
+      
+      // Create blob with UTF-8 BOM for proper encoding
       const BOM = "\uFEFF";
       const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
       
+      // Download file
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
@@ -177,7 +179,7 @@ export default function RestoreDashboard() {
         description: "O arquivo CSV foi baixado com sucesso.",
       });
     } catch (error) {
-      logger.error("Error exporting CSV:", error as Error);
+      logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
@@ -199,14 +201,17 @@ export default function RestoreDashboard() {
     try {
       const doc = new jsPDF();
       
+      // Add title
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
       doc.text("Restore Analytics Dashboard", 14, 20);
       
+      // Add generation date
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 28);
       
+      // Add summary statistics
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
       doc.text("Estatísticas Resumidas", 14, 40);
@@ -224,6 +229,7 @@ export default function RestoreDashboard() {
         yPosition += 12;
       }
       
+      // Add table with daily data
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
       doc.text("Restaurações Diárias", 14, yPosition);
@@ -246,6 +252,7 @@ export default function RestoreDashboard() {
         },
       });
       
+      // Save PDF with date-stamped filename
       const filename = `restore-analytics-${format(new Date(), "yyyy-MM-dd")}.pdf`;
       doc.save(filename);
       
@@ -254,7 +261,7 @@ export default function RestoreDashboard() {
         description: `Arquivo ${filename} foi baixado com sucesso.`,
       });
     } catch (error) {
-      logger.error("Error exporting PDF:", error as Error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",
@@ -276,6 +283,7 @@ export default function RestoreDashboard() {
     setEmailSending(true);
     
     try {
+      // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -287,11 +295,22 @@ export default function RestoreDashboard() {
         return;
       }
 
-      const response = await supabase.functions.invoke("send-restore-dashboard", {
-        body: { summary, dailyData },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-restore-dashboard`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            summary,
+            dailyData,
+          }),
+        }
+      );
 
-      if (response.error) {
+      if (!response.ok) {
         throw new Error("Failed to send email");
       }
 
@@ -300,7 +319,7 @@ export default function RestoreDashboard() {
         description: "O relatório foi enviado por email com sucesso.",
       });
     } catch (error) {
-      logger.error("Error sending email:", error as Error);
+      logger.error("Error sending email:", error);
       toast({
         title: "Erro ao enviar email",
         description: "Não foi possível enviar o relatório por email.",
@@ -317,57 +336,51 @@ export default function RestoreDashboard() {
     }
   };
 
-  const chartData: ChartData<"bar", number[], string> = {
+  const chartData = {
     labels: dailyData.map((d) => format(new Date(d.day), "dd/MM")),
     datasets: [
       {
         label: "Restaurações por dia",
         data: dailyData.map((d) => d.count),
-        backgroundColor: "hsl(var(--primary) / 0.8)",
-        borderColor: "hsl(var(--primary))",
+        backgroundColor: "rgba(59, 130, 246, 0.8)",
+        borderColor: "rgba(59, 130, 246, 1)",
         borderWidth: 1,
       },
     ],
   };
 
-  const chartOptions: ChartOptions<"bar"> = {
+  const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true, position: "top" },
-      title: { display: false },
+      legend: {
+        display: true,
+        position: "top" as const,
+      },
+      title: {
+        display: false,
+      },
     },
     scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1 } },
-    },
-  };
-
-  const departmentChartData: ChartData<"bar", number[], string> = {
-    labels: departmentSummary.map(d => d.department),
-    datasets: [
-      {
-        label: "Restaurações",
-        data: departmentSummary.map(d => d.count),
-        backgroundColor: "hsl(142 76% 36% / 0.8)",
-        borderColor: "hsl(142 76% 36%)",
-        borderWidth: 1,
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
       },
-    ],
-  };
-
-  const departmentChartOptions: ChartOptions<"bar"> = {
-    indexAxis: "y",
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false }, title: { display: false } },
-    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
+    },
   };
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
+      {/* Header with navigation */}
       {!isPublicView && (
         <div className="flex items-center justify-between gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/admin")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/admin")}
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar ao Painel Admin
           </Button>
@@ -378,6 +391,7 @@ export default function RestoreDashboard() {
         </div>
       )}
 
+      {/* Title */}
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <BarChart3 className="w-8 h-8" />
@@ -388,6 +402,7 @@ export default function RestoreDashboard() {
         </p>
       </div>
 
+      {/* Search and Export Controls - Hidden in public view */}
       {!isPublicView && (
         <Card>
           <CardHeader>
@@ -411,15 +426,27 @@ export default function RestoreDashboard() {
               <Button onClick={() => fetchStats()} disabled={loading} variant="default">
                 🔍 Buscar
               </Button>
-              <Button onClick={exportToCSV} disabled={loading || dailyData.length === 0} variant="outline">
+              <Button 
+                onClick={exportToCSV} 
+                disabled={loading || dailyData.length === 0} 
+                variant="outline"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 CSV
               </Button>
-              <Button onClick={exportToPDF} disabled={loading || dailyData.length === 0} variant="outline">
+              <Button 
+                onClick={exportToPDF} 
+                disabled={loading || dailyData.length === 0} 
+                variant="outline"
+              >
                 <FileText className="w-4 h-4 mr-2" />
                 PDF
               </Button>
-              <Button onClick={sendEmailReport} disabled={loading || dailyData.length === 0 || emailSending} variant="outline">
+              <Button 
+                onClick={sendEmailReport} 
+                disabled={loading || dailyData.length === 0 || emailSending} 
+                variant="outline"
+              >
                 <Mail className="w-4 h-4 mr-2" />
                 {emailSending ? "Enviando..." : "Email"}
               </Button>
@@ -428,47 +455,69 @@ export default function RestoreDashboard() {
         </Card>
       )}
 
+      {/* Summary Statistics Cards */}
       {summary && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-primary">Total de Restaurações</CardTitle>
+              <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                Total de Restaurações
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{summary.total}</div>
-              <p className="text-xs text-muted-foreground mt-1">Todas as restaurações registradas</p>
+              <div className="text-3xl font-bold text-blue-900 dark:text-blue-100">
+                {summary.total}
+              </div>
+              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                Todas as restaurações registradas
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-green-500/5 border-green-500/20">
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-green-600 dark:text-green-400">Documentos Únicos</CardTitle>
+              <CardTitle className="text-sm font-medium text-green-700 dark:text-green-300">
+                Documentos Únicos
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{summary.unique_docs}</div>
-              <p className="text-xs text-muted-foreground mt-1">Documentos diferentes restaurados</p>
+              <div className="text-3xl font-bold text-green-900 dark:text-green-100">
+                {summary.unique_docs}
+              </div>
+              <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                Documentos diferentes restaurados
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-purple-500/5 border-purple-500/20">
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-purple-600 dark:text-purple-400">Média por Dia</CardTitle>
+              <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                Média por Dia
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{summary.avg_per_day.toFixed(1)}</div>
-              <p className="text-xs text-muted-foreground mt-1">Restaurações em média diária</p>
+              <div className="text-3xl font-bold text-purple-900 dark:text-purple-100">
+                {summary.avg_per_day.toFixed(1)}
+              </div>
+              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                Restaurações em média diária
+              </p>
             </CardContent>
           </Card>
         </div>
       )}
 
+      {/* Chart */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
             Atividade de Restauração (Últimos 15 Dias)
           </CardTitle>
-          <CardDescription>Visualização das restaurações realizadas por dia</CardDescription>
+          <CardDescription>
+            Visualização das restaurações realizadas por dia
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-80 md:h-96">
@@ -493,6 +542,7 @@ export default function RestoreDashboard() {
         </CardContent>
       </Card>
 
+      {/* Monthly Department Summary Chart */}
       {departmentSummary.length > 0 && (
         <Card>
           <CardHeader>
@@ -500,26 +550,71 @@ export default function RestoreDashboard() {
               <Users className="w-5 h-5" />
               📆 Comparativo Mensal por Departamento
             </CardTitle>
-            <CardDescription>Restaurações do mês atual agrupadas por departamento</CardDescription>
+            <CardDescription>
+              Restaurações do mês atual agrupadas por departamento
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <Bar data={departmentChartData} options={departmentChartOptions} />
+              <Bar
+                data={{
+                  labels: departmentSummary.map(d => d.department),
+                  datasets: [
+                    {
+                      label: "Restaurações",
+                      data: departmentSummary.map(d => d.count),
+                      backgroundColor: "rgba(34, 197, 94, 0.8)",
+                      borderColor: "rgba(34, 197, 94, 1)",
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  indexAxis: "y" as const,
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: false,
+                    },
+                  },
+                  scales: {
+                    x: {
+                      beginAtZero: true,
+                      ticks: {
+                        stepSize: 1,
+                      },
+                    },
+                  },
+                }}
+              />
             </div>
           </CardContent>
         </Card>
       )}
 
+      {/* QR Code for Public Access - Hidden in public view */}
       {!isPublicView && publicUrl && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">🔗 Link Público com QR Code</CardTitle>
-            <CardDescription>Compartilhe este painel com acesso de leitura em TV Walls ou monitores</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              🔗 Link Público com QR Code
+            </CardTitle>
+            <CardDescription>
+              Compartilhe este painel com acesso de leitura em TV Walls ou monitores
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground mb-2">Link de acesso público (somente leitura):</p>
-              <p className="text-sm text-primary font-mono bg-muted p-3 rounded-md break-all">{publicUrl}</p>
+              <p className="text-sm text-muted-foreground mb-2">
+                Link de acesso público (somente leitura):
+              </p>
+              <p className="text-sm text-blue-600 font-mono bg-blue-50 dark:bg-blue-950 p-3 rounded-md break-all">
+                {publicUrl}
+              </p>
             </div>
             <div className="flex justify-center">
               <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -533,10 +628,11 @@ export default function RestoreDashboard() {
         </Card>
       )}
 
+      {/* Public view indicator */}
       {isPublicView && (
-        <Card className="border-warning bg-warning/10">
+        <Card className="border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10 dark:border-yellow-800">
           <CardContent className="pt-6">
-            <p className="text-sm text-center font-medium">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center font-medium">
               🔒 Modo público somente leitura (TV Wall Ativado) - Atualização automática a cada 10 segundos
             </p>
           </CardContent>

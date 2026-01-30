@@ -53,11 +53,11 @@ class NetworkDetector {
   private initializeListeners(): void {
     if (typeof window === "undefined") return;
 
-    // PATCH v37: REMOVIDO listeners online/offline - causam falsos positivos no iOS PWA
-    // Apenas escutar evento 'online' para trigger, mas ignorar 'offline'
+    // Listen for online/offline events
     window.addEventListener("online", () => this.handleStatusChange());
+    window.addEventListener("offline", () => this.handleStatusChange());
 
-    // Listen for connection quality changes only
+    // Listen for connection quality changes
     const connection = (navigator as any).connection || 
                       (navigator as any).mozConnection || 
                       (navigator as any).webkitConnection;

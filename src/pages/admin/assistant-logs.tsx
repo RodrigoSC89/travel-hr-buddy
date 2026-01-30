@@ -228,9 +228,8 @@ export default function AssistantLogsPage() {
       const confirmed = confirm(`Deseja enviar relatório com ${filteredLogs.length} interações por e-mail?`);
       if (!confirmed) return;
 
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/send-assistant-report`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-assistant-report`,
         {
           method: "POST",
           headers: {

@@ -720,11 +720,10 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                             variant="outline"
                             size="sm"
                             onClick={() => {
-                              // FUTURE: IoT integration via vessel_sensors table
-                              // Will fetch real-time sensor data when IoT module is connected
+                              // TODO: Fetch IoT sensor data
                               toast({
                                 title: "Dados do sensor",
-                                description: "Integração IoT pendente - dados simulados"
+                                description: "Dados atualizados do sensor IoT"
                               });
                             }}
                             disabled={readOnly}

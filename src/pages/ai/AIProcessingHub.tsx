@@ -52,31 +52,30 @@ const AIProcessingHub: React.FC = () => {
   const [realtimeMetrics, setRealtimeMetrics] = useState<Array<{time: string; gpu: number; memory: number; throughput: number}>>([]);
 
   useEffect(() => {
-    // Deterministic metrics based on time - no Math.random()
-    const generateMetrics = (baseTime: Date) => {
-      const seconds = baseTime.getSeconds();
-      const minutes = baseTime.getMinutes();
-      // Use sine wave for realistic fluctuation without random
-      const gpuVariation = Math.sin(seconds * 0.1) * 12;
-      const memVariation = Math.cos(seconds * 0.15) * 15;
-      const throughputVariation = Math.sin((seconds + minutes) * 0.08) * 200;
-      
+    // Simulated real-time metrics
+    const generateMetrics = () => {
+      const now = new Date();
       return {
-        time: baseTime.toLocaleTimeString(),
-        gpu: Math.floor(82 + gpuVariation),
-        memory: Math.floor(75 + memVariation),
-        throughput: Math.floor(1000 + throughputVariation)
+        time: now.toLocaleTimeString(),
+        gpu: Math.floor(70 + Math.random() * 25),
+        memory: Math.floor(60 + Math.random() * 30),
+        throughput: Math.floor(800 + Math.random() * 400)
       };
     };
 
     const initialData = Array.from({ length: 20 }, (_, i) => {
       const time = new Date(Date.now() - (19 - i) * 3000);
-      return generateMetrics(time);
+      return {
+        time: time.toLocaleTimeString(),
+        gpu: Math.floor(70 + Math.random() * 25),
+        memory: Math.floor(60 + Math.random() * 30),
+        throughput: Math.floor(800 + Math.random() * 400)
+      };
     });
     setRealtimeMetrics(initialData);
 
     const interval = setInterval(() => {
-      setRealtimeMetrics(prev => [...prev.slice(-19), generateMetrics(new Date())]);
+      setRealtimeMetrics(prev => [...prev.slice(-19), generateMetrics()]);
     }, 3000);
 
     return () => clearInterval(interval);

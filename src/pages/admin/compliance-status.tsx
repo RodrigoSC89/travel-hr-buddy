@@ -32,8 +32,7 @@ export default function ComplianceStatusPage() {
   const [report, setReport] = useState<ComplianceReport | null>(null);
   const [alerts, setAlerts] = useState<ComplianceAlert[]>([]);
   const [scoresByStandard, setScoresByStandard] = useState<Record<string, number>>({});
-  // PATCH v48: Start with loading=false to NEVER block render
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
   const loadData = async () => {
@@ -58,10 +57,10 @@ export default function ComplianceStatusPage() {
 
   useEffect(() => {
     loadData();
-    // Auto-refresh every 5 minutes - PATCH v48: removed [loadData] dependency
+    // Auto-refresh every 5 minutes
     const interval = setInterval(loadData, 5 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";

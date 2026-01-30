@@ -129,39 +129,18 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
       );
       
     default:
-      // Fallback genérico para tipos de checklist não reconhecidos
       return (
-        <div className="space-y-4 p-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold">Checklist: {selectedChecklist.type}</h3>
-            <button
-              onClick={handleBackToManager}
-              className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80"
-            >
+        <div className="text-center p-8">
+          <h3 className="text-lg font-semibold mb-2">Tipo de Checklist Não Implementado</h3>
+          <p className="text-muted-foreground mb-4">
+              O tipo "{selectedChecklist.type}" ainda não foi implementado.
+          </p>
+          <button
+            onClick={handleBackToManager}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+          >
               Voltar
-            </button>
-          </div>
-          <div className="border rounded-lg p-4 bg-muted/50">
-            <p className="text-sm text-muted-foreground mb-4">
-              Este tipo de checklist utiliza o formato padrão.
-            </p>
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="flex items-center gap-3 p-2 bg-background rounded">
-                  <input type="checkbox" className="h-4 w-4" />
-                  <span>Item de verificação #{i}</span>
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={() => {
-                handleSubmitChecklist(selectedChecklist);
-              }}
-              className="mt-4 w-full px-4 py-2 bg-primary text-primary-foreground rounded-md"
-            >
-              Concluir Checklist
-            </button>
-          </div>
+          </button>
         </div>
       );
     }

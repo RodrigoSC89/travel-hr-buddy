@@ -362,11 +362,11 @@ Seja claro, direto e útil.
 
     // Add contextual links based on question content
     if (/checklist/i.test(question)) {
-      enhanced += "\n\n👉 <a href=\"/admin/checklists\" class=\"text-blue-600 underline\">Criar Checklist Agora</a>";
+      enhanced += "\n\n👉 <a href=\"/admin/checklists/new\" class=\"text-blue-600 underline\">Criar Checklist Agora</a>";
     } else if (/documento/i.test(question)) {
-      enhanced += "\n\n📄 <a href=\"/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
+      enhanced += "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
     } else if (/alertas?/i.test(question)) {
-      enhanced += "\n\n🚨 <a href=\"/alerts-command\" class=\"text-blue-600 underline\">Ver Alertas</a>";
+      enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
     }
 
     return new Response(

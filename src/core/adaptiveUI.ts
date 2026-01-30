@@ -280,8 +280,7 @@ class AdaptiveUI {
     // For now, derive from localStorage or defaults
     const missionType = (localStorage.getItem("current_mission_type") as MissionType) || "administrative";
     const priority = (localStorage.getItem("current_priority") as "low" | "medium" | "high" | "critical") || "medium";
-    // PATCH v38: Sempre online - navigator.onLine não é confiável no iOS PWA
-    const isOffline = false;
+    const isOffline = !navigator.onLine;
 
     return {
       missionType,

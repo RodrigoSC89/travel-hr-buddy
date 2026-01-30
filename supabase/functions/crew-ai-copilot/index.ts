@@ -1,6 +1,5 @@
-import { edgeLogger } from "../_shared/edge-logger.ts";
-
-const TAG = "CREW-AI-COPILOT";
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 interface CrewCopilotRequest {
   type: string;
@@ -13,7 +12,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-Deno.serve(async (req: Request): Promise<Response> => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -138,7 +137,7 @@ Seja proativo com sugestões e alertas importantes.`;
         });
       }
       const errorText = await response.text();
-      edgeLogger.error(TAG, "AI gateway error", new Error(errorText), { status: response.status });
+      console.error("AI gateway error:", response.status, errorText);
       return new Response(JSON.stringify({ error: "AI gateway error" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -159,7 +158,7 @@ Seja proativo com sugestões e alertas importantes.`;
     });
 
   } catch (error) {
-    edgeLogger.error(TAG, "Error", error);
+    console.error("Crew AI Copilot error:", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Unknown error" 
     }), {

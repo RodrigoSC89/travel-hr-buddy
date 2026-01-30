@@ -47,9 +47,10 @@ export function EnhancedVoiceAI() {
   // ElevenLabs conversation hook
   const conversation = useConversation({
     onConnect: () => {
-      // Connected to ElevenLabs
+      console.log('[VoiceAI] Connected to ElevenLabs');
     },
     onDisconnect: () => {
+      console.log('[VoiceAI] Disconnected');
       setIsListening(false);
     },
     onMessage: (message: { type: string; message?: unknown }) => {

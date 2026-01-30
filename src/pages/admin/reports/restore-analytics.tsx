@@ -82,9 +82,8 @@ export default function RestoreAnalyticsPage() {
       const params = new URLSearchParams();
       if (filterEmail) params.append("email", filterEmail);
 
-      const supabaseUrl = "https://vnbptmixvwropvanyhdb.supabase.co";
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/restore-analytics?${params.toString()}`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/restore-analytics?${params.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${session.access_token}`,

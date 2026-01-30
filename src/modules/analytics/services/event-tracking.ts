@@ -59,13 +59,8 @@ class EventTrackingService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      // Skip tracking if not authenticated (prevents 401 errors)
-      if (!user) {
-        return;
-      }
-      
       const eventData = {
-        user_id: user.id,
+        user_id: user?.id || null,
         organization_id: this.organizationId,
         session_id: this.sessionId,
         event_name: options.eventName,
@@ -84,10 +79,10 @@ class EventTrackingService {
         .insert([eventData]);
 
       if (error) {
-        // Silent fail for analytics
+        console.error("Error tracking event:", error);
       }
-    } catch {
-      // Silent fail for analytics
+    } catch (error) {
+      console.error("Error in trackEvent:", error);
     }
   }
 

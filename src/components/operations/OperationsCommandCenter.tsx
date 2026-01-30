@@ -256,10 +256,7 @@ export const OperationsCommandCenter: React.FC = () => {
         compliance: Math.floor(Math.random() * 20) + 80,
       }));
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 30000,
   });
 
   const { data: complianceStats } = useQuery({
@@ -274,10 +271,7 @@ export const OperationsCommandCenter: React.FC = () => {
       const compliant = data?.filter(d => d.status === 'compliant').length || 0;
       return { total, compliant, rate: total > 0 ? Math.round((compliant / total) * 100) : 100 };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 60000,
   });
 
   const { data: crewStats } = useQuery({
@@ -292,10 +286,7 @@ export const OperationsCommandCenter: React.FC = () => {
       const active = data?.filter(d => d.status === 'active' || d.status === 'on_board').length || 0;
       return { total, active };
     },
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    refetchInterval: false, // DISABLED - prevent infinite loading
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchInterval: 60000,
   });
 
   // Mock alerts (in production, fetch from intelligent_notifications)

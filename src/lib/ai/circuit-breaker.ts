@@ -193,7 +193,7 @@ export async function executeWithFallback(
     if (breaker.getStats().state === 'OPEN') {
       const timeSinceFailure = Date.now() - (breaker.getStats().lastFailure || 0);
       if (timeSinceFailure < 30000) {
-        // Skip this provider - circuit is open
+        console.log(`[AI] Skipping ${provider.name} - circuit OPEN`);
         continue;
       }
     }
@@ -273,6 +273,7 @@ export function resetCircuit(providerName: string): void {
   const breaker = circuitBreakers.get(providerName);
   if (breaker) {
     breaker.reset();
+    console.log(`[CircuitBreaker] Reset ${providerName}`);
   }
 }
 
@@ -280,9 +281,10 @@ export function resetCircuit(providerName: string): void {
  * Reset all circuit breakers
  */
 export function resetAllCircuits(): void {
-  for (const [, breaker] of circuitBreakers) {
+  for (const [name, breaker] of circuitBreakers) {
     breaker.reset();
   }
+  console.log('[CircuitBreaker] All circuits reset');
 }
 
 export { PROVIDERS, CircuitBreaker };

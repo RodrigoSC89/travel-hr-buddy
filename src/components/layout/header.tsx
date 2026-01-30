@@ -28,6 +28,8 @@ export const Header: FC = () => {
     e.preventDefault();
     e.stopPropagation();
     
+    console.log('[Header] Menu clicked, isMobile:', isMobile, 'openMobile:', openMobile);
+    
     if (isMobile) {
       setOpenMobile(!openMobile);
     } else {

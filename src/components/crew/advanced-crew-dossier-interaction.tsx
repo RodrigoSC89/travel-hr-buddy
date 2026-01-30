@@ -1,8 +1,4 @@
-/**
- * PATCH 879 - Advanced Crew Dossier Interaction Component
- * Interactive dossier with AI, gamification, and voice interaction
- * Type-safe with proper error handling for missing tables/edge functions
- */
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
 import { Button } from "@/components/ui/button";
@@ -18,9 +14,10 @@ import {
   Brain,
   Trophy,
   Target,
+  Users,
   TrendingUp,
   Star,
-  Award,
+  Award
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -33,7 +30,7 @@ interface VoiceInteractionPanelProps {
 interface AIInsight {
   id: string;
   analysis_type: string;
-  insights_data: Record<string, unknown>;
+  insights_data: any;
   confidence_score: number;
   created_at: string;
 }
@@ -42,9 +39,9 @@ interface GamificationProfile {
   id: string;
   total_experience_points: number;
   current_level: number;
-  badges_earned: Array<{ name: string; icon: string }>;
-  achievements: unknown[];
-  skill_progression: Record<string, unknown>;
+  badges_earned: any[];
+  achievements: any[];
+  skill_progression: any;
   leaderboard_rank: number;
 }
 
@@ -59,16 +56,9 @@ interface Goal {
   deadline: string;
 }
 
-// Type-safe dynamic table access
-type DynamicSupabaseClient = {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
-
-const dynamicDb = supabase as unknown as DynamicSupabaseClient;
-
 export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps> = ({
   crewMemberId,
-  crewMemberName,
+  crewMemberName
 }) => {
   const [activeTab, setActiveTab] = useState<"voice" | "ai" | "gamification" | "goals">("voice");
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -96,6 +86,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             description: `"${transcribedText}"`,
           });
           
+          // Enviar para IA processar
           await processVoiceCommand(transcribedText);
         }
       } else {
@@ -109,7 +100,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
@@ -143,8 +134,8 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const { data, error } = await supabase.functions.invoke("crew-ai-insights", {
         body: { 
           crew_member_id: crewMemberId,
-          analysis_type: "comprehensive",
-        },
+          analysis_type: "comprehensive"
+        }
       });
 
       if (error) throw error;
@@ -155,22 +146,11 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       });
 
       await loadAIInsights();
-    } catch (err) {
-      logger.warn("AI insights generation failed (edge function may not exist):", { error: err });
-      // Generate mock insights as fallback
-      const mockInsights: AIInsight[] = [
-        {
-          id: crypto.randomUUID(),
-          analysis_type: "performance",
-          insights_data: { summary: "Desempenho acima da média nos últimos 30 dias." },
-          confidence_score: 0.85,
-          created_at: new Date().toISOString(),
-        },
-      ];
-      setAiInsights(mockInsights);
+    } catch (error) {
       toast({
-        title: "Insights gerados",
-        description: "Análise baseada em dados disponíveis.",
+        title: "Erro ao gerar insights",
+        description: "Não foi possível gerar a análise de IA.",
+        variant: "destructive"
       });
     } finally {
       setIsLoadingAI(false);
@@ -179,28 +159,17 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
   const loadAIInsights = async () => {
     try {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from("crew_ai_insights")
         .select("*")
         .eq("crew_member_id", crewMemberId)
         .order("created_at", { ascending: false })
         .limit(3);
 
-      if (error) {
-        logger.warn("crew_ai_insights table may not exist:", error);
-        return;
-      }
-      
-      const mappedInsights: AIInsight[] = (data || []).map((row: Record<string, unknown>) => ({
-        id: String(row.id || ""),
-        analysis_type: String(row.analysis_type || "general"),
-        insights_data: (row.insights_data as Record<string, unknown>) || {},
-        confidence_score: Number(row.confidence_score) || 0,
-        created_at: String(row.created_at || ""),
-      }));
-      setAiInsights(mappedInsights);
+      if (error) throw error;
+      setAiInsights(data || []);
     } catch (error) {
-      logger.error("Failed to load AI insights:", error);
+      logger.error("Failed to generate AI insights:", error);
     }
   };
 
@@ -210,30 +179,14 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const { data, error } = await supabase.functions.invoke("crew-gamification", {
         body: { 
           crew_member_id: crewMemberId,
-          action_type: "get_profile",
-        },
+          action_type: "get_profile"
+        }
       });
 
       if (error) throw error;
-      
-      if (data?.profile) {
-        setGamificationProfile(data.profile as GamificationProfile);
-      }
-    } catch (err) {
-      logger.warn("Gamification profile load failed (edge function may not exist):", { error: err });
-      // Set mock profile as fallback
-      setGamificationProfile({
-        id: crypto.randomUUID(),
-        total_experience_points: 1250,
-        current_level: 5,
-        badges_earned: [
-          { name: "First Login", icon: "🎯" },
-          { name: "Document Master", icon: "📋" },
-        ],
-        achievements: [],
-        skill_progression: {},
-        leaderboard_rank: 42,
-      });
+      setGamificationProfile(data.profile);
+    } catch (error) {
+      logger.error("Failed to load gamification profile:", error);
     } finally {
       setIsLoadingGamification(false);
     }
@@ -244,39 +197,24 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
         body: { 
           crew_member_id: crewMemberId,
-          action: "get_goals",
-        },
+          action: "get_goals"
+        }
       });
 
       if (error) throw error;
-      
-      const goalsData = data?.result?.goals || [];
-      setGoals(goalsData as Goal[]);
-    } catch (err) {
-      logger.warn("Goals load failed (edge function may not exist):", { error: err });
-      // Set mock goals as fallback
-      setGoals([
-        {
-          id: crypto.randomUUID(),
-          title: "Renovar Certificado STCW",
-          description: "Atualizar certificação de segurança marítima",
-          category: "certification",
-          current_progress: 2,
-          target_value: 5,
-          status: "in_progress",
-          deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ]);
+      setGoals(data.result?.goals || []);
+    } catch (error) {
+      logger.error("Failed to load personal goals:", error);
     }
   };
 
   const createNewGoal = async () => {
     try {
-      const { error } = await supabase.functions.invoke("crew-goal-tracker", {
+      const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
         body: { 
           crew_member_id: crewMemberId,
-          action: "suggest_goals",
-        },
+          action: "suggest_goals"
+        }
       });
 
       if (error) throw error;
@@ -285,15 +223,8 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         title: "Sugestões de metas geradas",
         description: "Novas metas personalizadas foram sugeridas para você!",
       });
-      
-      await loadGoals();
-    } catch (err) {
-      logger.warn("Goal suggestions failed:", { error: err });
-      toast({
-        title: "Erro ao gerar sugestões",
-        description: "Não foi possível gerar metas. Tente novamente.",
-        variant: "destructive",
-      });
+    } catch (error) {
+      logger.error("Failed to create new goal:", error);
     }
   };
 
@@ -370,7 +301,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                     </span>
                   </div>
                   <p className="text-sm">
-                    {(insight.insights_data?.summary as string) || "Análise disponível nos dados detalhados."}
+                    {insight.insights_data.summary || "Análise disponível nos dados detalhados."}
                   </p>
                 </CardContent>
               </Card>
@@ -415,16 +346,12 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   Conquistas ({gamificationProfile.badges_earned?.length || 0})
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {gamificationProfile.badges_earned?.length ? (
-                    gamificationProfile.badges_earned.map((badge, index) => (
-                      <Badge key={index} variant="outline" className="flex items-center gap-1">
-                        <span>{badge.icon}</span>
-                        {badge.name}
-                      </Badge>
-                    ))
-                  ) : (
-                    <p className="text-sm text-muted-foreground">Nenhuma conquista ainda.</p>
-                  )}
+                  {gamificationProfile.badges_earned?.map((badge, index) => (
+                    <Badge key={index} variant="outline" className="flex items-center gap-1">
+                      <span>{badge.icon}</span>
+                      {badge.name}
+                    </Badge>
+                  )) || <p className="text-sm text-muted-foreground">Nenhuma conquista ainda.</p>}
                 </div>
               </div>
 
@@ -516,14 +443,14 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       {/* Navigation Tabs */}
       <div className="flex space-x-1 mb-6 bg-muted p-1 rounded-lg">
         {[
-          { id: "voice" as const, label: "Voz", icon: Mic },
-          { id: "ai" as const, label: "IA", icon: Brain },
-          { id: "gamification" as const, label: "Conquistas", icon: Trophy },
-          { id: "goals" as const, label: "Metas", icon: Target },
+          { id: "voice", label: "Voz", icon: Mic },
+          { id: "ai", label: "IA", icon: Brain },
+          { id: "gamification", label: "Conquistas", icon: Trophy },
+          { id: "goals", label: "Metas", icon: Target }
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => setActiveTab(id)}
+            onClick={() => setActiveTab(id as any)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               activeTab === id
                 ? "bg-background text-foreground shadow-sm"

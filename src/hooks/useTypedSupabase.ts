@@ -37,8 +37,7 @@ export function useVessels(
   options: UseTypedQueryOptions = {}
 ): UseTypedQueryResult<Vessel> {
   const [data, setData] = useState<Vessel[]>([]);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { enabled = true } = options;
 
@@ -84,8 +83,7 @@ export function useCrewMembers(
   options: UseTypedQueryOptions = {}
 ): UseTypedQueryResult<CrewMember> {
   const [data, setData] = useState<CrewMember[]>([]);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { enabled = true } = options;
 
@@ -134,8 +132,7 @@ export function useCrewMembers(
 
 export function useVessel(vesselId: string | undefined) {
   const [data, setData] = useState<Vessel | null>(null);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -179,8 +176,7 @@ export function useVessel(vesselId: string | undefined) {
 
 export function useCrewMember(crewMemberId: string | undefined) {
   const [data, setData] = useState<CrewMember | null>(null);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -224,8 +220,7 @@ export function useCrewMember(crewMemberId: string | undefined) {
 
 export function useProfile(userId: string | undefined) {
   const [data, setData] = useState<Profile | null>(null);
-  // PATCH v44: Iniciar com loading=false para NUNCA bloquear a renderização
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
