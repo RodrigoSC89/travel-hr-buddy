@@ -94,42 +94,26 @@
   </head>
 
   <body>
-    <!-- PATCH v57: Minimal loader - React removes this immediately -->
+    <!-- PATCH v58: Minimal loader - React removes this SYNCHRONOUSLY on mount -->
     <div id="root">
       <div id="initial-loader" class="min-h-screen flex items-center justify-center bg-background">
         <div class="text-center space-y-4 p-6 max-w-sm">
           <div class="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" style="margin:0 auto"></div>
-          <p class="text-muted text-sm">Iniciando...</p>
+          <p class="text-muted text-sm">Iniciando v58...</p>
         </div>
       </div>
     </div>
     
-    <!-- PATCH v57: NO recovery timeout - React handles everything -->
-    <!-- Recovery removed: was causing infinite loop when Suspense lazy loads triggered it -->
+    <!-- PATCH v58: ZERO automatic recovery - React takes full control -->
     <script>
-      (function() {
-        'use strict';
-        window.__NAUTI_APP_LOADED__ = false;
-        
-        // Only manual cache clear (no automatic recovery UI)
-        window.clearCacheAndReload = function() {
-          try { localStorage.clear(); } catch(e) {}
-          try { sessionStorage.clear(); } catch(e) {}
-          if ('caches' in window) {
-            caches.keys().then(function(keys) { 
-              keys.forEach(function(k) { caches.delete(k); });
-            }).catch(function() {});
-          }
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(regs) { 
-              regs.forEach(function(r) { r.unregister(); });
-            }).catch(function() {});
-          }
-          setTimeout(function() {
-            location.replace(location.origin + '/auth?t=' + Date.now());
-          }, 200);
-        };
-      })();
+      window.__NAUTI_APP_LOADED__ = false;
+      // Manual cache clear utility only - NO automatic timeouts
+      window.clearCacheAndReload = function() {
+        try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
+        if ('caches' in window) caches.keys().then(function(k) { k.forEach(function(c) { caches.delete(c); }); });
+        if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(r) { r.forEach(function(s) { s.unregister(); }); });
+        setTimeout(function() { location.replace(location.origin + '/auth?t=' + Date.now()); }, 100);
+      };
     </script>
     
     <!-- Main Application Bundle -->
