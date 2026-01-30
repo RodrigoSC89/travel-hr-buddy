@@ -215,7 +215,7 @@ const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter
 const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
 const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenter"));
 const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
-
+const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAIPage"));
 // ============================================
 // ESG & SUSTENTABILIDADE
 // ============================================
@@ -240,6 +240,14 @@ const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
 const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
+
+// ============================================
+// AI MODULES HUB - All 11 AI Modules
+// ============================================
+const AIModulesHubPage = lazy(() => import("@/pages/ai/AIModulesHubPage"));
+const VoyageLogisticsAIPage = lazy(() => import("@/pages/ai/VoyageLogisticsAIPage"));
+const SafetyIncidentAIPage = lazy(() => import("@/pages/ai/SafetyIncidentAIPage"));
+const InventorySparesAIPage = lazy(() => import("@/pages/ai/InventorySparesAIPage"));
 
 // ============================================
 // ADMIN & DASHBOARDS
@@ -435,6 +443,13 @@ const AppRoutes = () => (
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
       <Route path="/assistant/voice" element={<VoiceAssistant />} />
       
+      {/* AI Modules Hub - 11 Complete AI Modules */}
+      <Route path="/ai-modules" element={<AIModulesHubPage />} />
+      <Route path="/ai-modules-hub" element={<AIModulesHubPage />} />
+      <Route path="/ai/voyage-logistics" element={<VoyageLogisticsAIPage />} />
+      <Route path="/ai/safety-incident" element={<SafetyIncidentAIPage />} />
+      <Route path="/ai/inventory-spares" element={<InventorySparesAIPage />} />
+      
       {/* ============================================ */}
       {/* INTELIGÊNCIA AVANÇADA */}
       {/* ============================================ */}
@@ -596,6 +611,8 @@ const AppRoutes = () => (
       {/* FINANÇAS & PROCUREMENT */}
       {/* ============================================ */}
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
+      <Route path="/finance-ai" element={<FinanceProcurementAIPage />} />
+      <Route path="/finance-procurement-ai" element={<FinanceProcurementAIPage />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
       <Route path="/operations-command" element={<OperationsCommandCenter />} />
