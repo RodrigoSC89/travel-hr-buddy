@@ -89,17 +89,17 @@ const forceUpdateIfNeeded = async () => {
     
     // Always clean on version mismatch or first load
     if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v42] Version mismatch, forcing full cleanup...');
-      console.log('[Boot v42] Cleaning caches and service workers...');
+      logger.info('[Boot v43] Version mismatch, forcing full cleanup...');
+      console.log('[Boot v43] Cleaning caches and service workers...');
       
       // Clear ALL caches aggressively
       if ('caches' in window) {
         try {
           const keys = await caches.keys();
           await Promise.all(keys.map(k => caches.delete(k)));
-          console.log('[Boot v42] Caches cleared:', keys.length);
+          console.log('[Boot v43] Caches cleared:', keys.length);
         } catch (e) {
-          console.warn('[Boot v42] Cache clear failed:', e);
+          console.warn('[Boot v43] Cache clear failed:', e);
         }
       }
       
@@ -108,17 +108,17 @@ const forceUpdateIfNeeded = async () => {
         try {
           const registrations = await navigator.serviceWorker.getRegistrations();
           await Promise.all(registrations.map(r => r.unregister()));
-          console.log('[Boot v42] Service workers unregistered:', registrations.length);
+          console.log('[Boot v43] Service workers unregistered:', registrations.length);
         } catch (e) {
-          console.warn('[Boot v42] SW unregister failed:', e);
+          console.warn('[Boot v43] SW unregister failed:', e);
         }
       }
       
       localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      console.log('[Boot v42] Cleanup complete, version stored:', CURRENT_VERSION);
+      console.log('[Boot v43] Cleanup complete, version stored:', CURRENT_VERSION);
     }
   } catch (e) {
-    logger.warn('[Boot v42] Error during update check', e instanceof Error ? { message: e.message } : undefined);
+    logger.warn('[Boot v43] Error during update check', e instanceof Error ? { message: e.message } : undefined);
   }
 };
 
@@ -135,9 +135,9 @@ const initServiceWorker = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       updateViaCache: 'none',
     });
-    console.log('[Boot v42] SW registered', { scope: registration.scope });
+    console.log('[Boot v43] SW registered', { scope: registration.scope });
   } catch (error) {
-    console.warn('[Boot v42] SW registration failed (non-critical)', error);
+    console.warn('[Boot v43] SW registration failed (non-critical)', error);
   }
 };
 

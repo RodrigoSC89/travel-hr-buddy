@@ -27,10 +27,11 @@ class OfflineManager {
   private dbName = "nautilus-offline-db";
   private dbVersion = 1;
   private db: IDBDatabase | null = null;
+  // PATCH v43 iOS PWA: SEMPRE inicializar como online - navigator.onLine não é confiável
   private syncState: SyncState = {
     pendingRequests: 0,
     lastSync: 0,
-    isOnline: navigator.onLine,
+    isOnline: true, // CRÍTICO: Nunca usar navigator.onLine aqui
     syncInProgress: false,
   };
   private listeners: Set<(state: SyncState) => void> = new Set();
