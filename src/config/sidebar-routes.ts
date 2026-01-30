@@ -89,7 +89,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
   {
     title: "🧠 Central de Comando",
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       { label: "Visão Geral", path: "/central-comando/visao-geral", icon: Compass, emoji: "📊", status: "active" },
       { label: "Operações", path: "/central-comando/operacoes", icon: Activity, emoji: "⚡" },
@@ -229,7 +229,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
   {
     title: "📊 Telemetria & Monitoramento",
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
