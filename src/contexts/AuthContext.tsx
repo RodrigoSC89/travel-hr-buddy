@@ -124,41 +124,33 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
-    // Initialize auth in background - NO BLOCKING
+    // Initialize auth - FAST, non-blocking
     const initializeAuth = async () => {
       try {
-        // Quick timeout - 800ms max
-        const timeoutPromise = new Promise<null>((_, reject) => 
-          setTimeout(() => reject(new Error('timeout')), 800)
-        );
-        
-        const sessionPromise = supabase.auth.getSession();
-        
-        const result = await Promise.race([sessionPromise, timeoutPromise]);
+        const { data } = await supabase.auth.getSession();
         
         if (!mounted) return;
         
-        if (result && 'data' in result) {
-          setSession(result.data.session);
-          setUser(result.data.session?.user ?? null);
+        if (data.session) {
+          setSession(data.session);
+          setUser(data.session.user);
         }
-      } catch {
-        // On ANY error, just continue without session
-        logger.warn("[AuthContext] Session fetch failed, continuing without auth");
+      } catch (e) {
+        // On ANY error, just continue - app should still work
+        logger.warn("[AuthContext] Session fetch failed", e instanceof Error ? { msg: e.message } : {});
       }
-      // NO setIsLoading here - we never block
     };
 
-    // Set up listener for auth changes (does NOT control isLoading)
+    // Set up listener for auth changes
     const { data } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         if (!mounted) return;
         
-        // Update state synchronously - NEVER async here
+        // Update state immediately
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Defer toasts to prevent deadlock
+        // Notifications (deferred)
         if (event === "SIGNED_IN") {
           setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
         } else if (event === "SIGNED_OUT") {
@@ -169,7 +161,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     
     subscription = data.subscription;
 
-    // Start initial auth check
+    // Start auth check
     initializeAuth();
 
     return () => {
