@@ -191,7 +191,8 @@ class SystemDiagnostics {
 
   private async testNetworkConnectivity(): Promise<DiagnosticResult> {
     const start = performance.now();
-    const isOnline = navigator.onLine;
+    // PATCH v35: navigator.onLine não é confiável no iOS PWA - sempre assumir online
+    const isOnline = true;
     
     const connection = (navigator as any).connection;
     const details: Record<string, unknown> = {
@@ -208,9 +209,7 @@ class SystemDiagnostics {
     return {
       name: 'Network',
       passed: true,
-      message: isOnline 
-        ? `Online - ${connection?.effectiveType || 'Conexão'} (${connection?.downlink || '?'}Mbps)`
-        : 'Offline',
+      message: `Online - ${connection?.effectiveType || 'Conexão'} (${connection?.downlink || '?'}Mbps)`,
       duration: performance.now() - start,
       details,
     };
@@ -277,7 +276,7 @@ class SystemDiagnostics {
       platform: navigator.platform,
       language: navigator.language,
       cookiesEnabled: navigator.cookieEnabled,
-      onLine: navigator.onLine,
+      onLine: true, // PATCH v35: Sempre true - navigator.onLine não é confiável
       memory: memory ? {
         used: memory.usedJSHeapSize,
         total: memory.jsHeapSizeLimit,

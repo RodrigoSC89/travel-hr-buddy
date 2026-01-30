@@ -39,7 +39,8 @@ const DB_VERSION = 1;
 
 class EmbeddedLLMManager {
   private db: IDBDatabase | null = null;
-  private isOnline = navigator.onLine;
+  // PATCH v35: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
+  private isOnline = true;
   private pendingRequests: Map<string, LLMRequest> = new Map();
   private responseCache: Map<string, LLMResponse> = new Map();
   

@@ -349,25 +349,25 @@ const Loader = React.memo(() => {
 });
 
 // ============================================
-// PROTECTED ROUTE v33 DEFINITIVO - Zero blocking
+// PROTECTED ROUTE v35 - Timeout maior para conexões lentas
 // Auth é 100% background, NUNCA bloqueia UI
 // ============================================
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [forceRedirect, setForceRedirect] = React.useState(false);
   
-  // Timeout de segurança: se não tiver user após 100ms, redireciona
+  // Timeout de segurança: 2 segundos para conexões lentas (era 100ms)
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      if (!user) {
+      if (!user && !isLoading) {
         setForceRedirect(true);
       }
-    }, 100);
+    }, 2000);
     
     return () => clearTimeout(timer);
-  }, [user]);
+  }, [user, isLoading]);
   
-  // User logado = mostra conteúdo
+  // User logado = mostra conteúdo imediatamente
   if (user) {
     return <>{children}</>;
   }
@@ -377,10 +377,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/auth" replace />;
   }
   
-  // Loading muito breve (máximo 100ms) - NÃO usa Loader component
+  // Loading breve enquanto auth carrega (máximo 2s)
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="text-center space-y-3">
+        <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full mx-auto animate-spin" />
+        <p className="text-muted-foreground text-sm">Verificando autenticação...</p>
+      </div>
     </div>
   );
 };
