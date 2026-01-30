@@ -99,34 +99,38 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
     }
   };
 
-  // Fetch real-time stats from Supabase
+  // PATCH v46: Background data fetch - NEVER blocks render
   useEffect(() => {
+    let mounted = true;
+    
     async function fetchRealTimeStats() {
       try {
-        // Fetch IoT sensor anomalies
-        const { data: sensors } = await supabase
-          .from('equipment_sensors')
-          .select('*')
-          .order('recorded_at', { ascending: false })
-          .limit(100);
+        // Parallel fetch with short timeout
+        const [sensorsRes, wellnessRes] = await Promise.all([
+          supabase
+            .from('equipment_sensors')
+            .select('*')
+            .order('recorded_at', { ascending: false })
+            .limit(50),
+          supabase
+            .from('crew_health_checkins')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(30)
+        ]);
 
-        const anomalies = sensors?.filter(s => s.is_anomaly) || [];
-        // Critical = value exceeds max_threshold by 20%+
+        if (!mounted) return;
+
+        const sensors = sensorsRes.data || [];
+        const wellness = wellnessRes.data || [];
+
+        const anomalies = sensors.filter(s => s.is_anomaly);
         const critical = anomalies.filter(s => s.value && s.max_threshold && s.value > s.max_threshold * 1.2);
-        const healthySensors = sensors?.filter(s => !s.is_anomaly).length || 0;
-        const totalSensors = sensors?.length || 1;
+        const healthySensors = sensors.filter(s => !s.is_anomaly).length;
+        const totalSensors = sensors.length || 1;
 
-        // Fetch crew wellness data
-        const { data: wellness } = await supabase
-          .from('crew_health_checkins')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        // At risk = stress_level >= 4 or energy_level <= 2
-        const atRisk = wellness?.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2) || [];
-        // Calculate overall wellness from mood, energy, sleep (1-5 scale average)
-        const avgWellnessScore = wellness?.length 
+        const atRisk = wellness.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2);
+        const avgWellnessScore = wellness.length 
           ? wellness.reduce((acc, w) => acc + ((w.mood + w.energy_level + w.sleep_quality) / 3), 0) / wellness.length 
           : 3;
 
@@ -135,13 +139,12 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
           iotCritical: critical.length,
           sensorHealth: Math.round((healthySensors / totalSensors) * 100),
           crewAtRisk: atRisk.length,
-          avgWellness: Math.round(avgWellnessScore * 20), // Convert 1-5 to percentage
-          vesselsTracking: 5 // Mock - would come from AIS
+          avgWellness: Math.round(avgWellnessScore * 20),
+          vesselsTracking: 5
         });
 
-        // Build recent activities from real data
+        // Build activities
         const activities: any[] = [];
-        
         if (critical.length > 0) {
           activities.push({
             id: 'iot-critical',
@@ -152,7 +155,6 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             urgent: true
           });
         }
-
         if (atRisk.length > 0) {
           activities.push({
             id: 'crew-risk',
@@ -163,9 +165,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             urgent: true
           });
         }
-
-        // Add recent sensor readings
-        sensors?.slice(0, 2).forEach((s, i) => {
+        sensors.slice(0, 2).forEach((s, i) => {
           activities.push({
             id: `sensor-${i}`,
             action: `Sensor ${s.equipment_name}: ${s.value?.toFixed(1)} ${s.unit || ''} (${s.sensor_type})`,
@@ -174,9 +174,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
             icon: Thermometer
           });
         });
-
-        // Add wellness check-ins
-        wellness?.slice(0, 2).forEach((w, i) => {
+        wellness.slice(0, 2).forEach((w, i) => {
           const avgScore = ((w.mood + w.energy_level + w.sleep_quality) / 3).toFixed(1);
           activities.push({
             id: `wellness-${i}`,
@@ -188,21 +186,32 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
         });
 
         setRecentActivities(activities.slice(0, 6));
-      } catch (error) {
-        logger.error('Error fetching real-time stats:', error);
+      } catch {
+        // Silently fail - use default data
+        logger.debug('Background stats fetch failed');
       }
     }
 
     fetchRealTimeStats();
 
-    // Set up realtime subscription
+    // Throttled realtime - max once per minute
+    let lastUpdate = 0;
+    const throttledFetch = () => {
+      const now = Date.now();
+      if (now - lastUpdate > 60000 && mounted) {
+        lastUpdate = now;
+        fetchRealTimeStats();
+      }
+    };
+
     const channel = supabase
-      .channel('command-center-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, fetchRealTimeStats)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, fetchRealTimeStats)
+      .channel('visao-geral-v46')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, throttledFetch)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, throttledFetch)
       .subscribe();
 
     return () => {
+      mounted = false;
       supabase.removeChannel(channel);
     };
   }, []);

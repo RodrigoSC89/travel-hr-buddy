@@ -84,9 +84,10 @@ function CentralComandoContent() {
   const location = useLocation();
   const tenant = { id: null, name: null }; // Placeholder para multi-tenant
   
-  const [isLoading, setIsLoading] = useState(false); // Start false to prevent infinite loading on mobile
+  // PATCH v46: ALL states start stable - NEVER block render
+  const [isLoading] = useState(false); // NEVER set to true - prevents blocking
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(true); // Start true - data loads in background
   const [isDarkMode, setIsDarkMode] = useState(() => 
     document.documentElement.classList.contains("dark")
   );
@@ -127,112 +128,95 @@ function CentralComandoContent() {
     ]);
   };
 
-  // Filtrar dados por tenant com timeout e fallback - MOBILE FIX
-  const loadSystemData = useCallback(async () => {
-    // Prevent loading if already loaded to avoid infinite loops on mobile
-    if (dataLoaded && !isRefreshing) return;
+  // PATCH v46: Background data loading - NEVER blocks UI
+  const loadSystemData = useCallback(async (forceRefresh = false) => {
+    // Silent background fetch - no loading states
+    if (isRefreshing && !forceRefresh) return;
     
     try {
-      setIsLoading(true);
       const tenantFilter = tenant?.id ? { tenant_id: tenant.id } : {};
       
-      // Use shorter timeout for mobile (5s) vs desktop (10s)
-      const isMobile = window.innerWidth < 768;
-      const timeout = isMobile ? 5000 : 10000;
-      
-      const [vesselsRes, crewRes, maintenanceRes] = await withTimeout(
+      // Short timeout - fail fast, use cached data
+      const [vesselsRes, crewRes] = await withTimeout(
         Promise.all([
-          supabase.from("vessels").select("id, status").match(tenantFilter).limit(100),
-          supabase.from("crew_members").select("id, status").match(tenantFilter).limit(500),
-          supabase.from("maintenance_records").select("id, status").match(tenantFilter).limit(100)
+          supabase.from("vessels").select("id, status").match(tenantFilter).limit(50),
+          supabase.from("crew_members").select("id, status").match(tenantFilter).limit(100),
         ]),
-        timeout
+        3000 // 3s max
       );
 
-      if (vesselsRes.data) {
+      if (vesselsRes.data?.length) {
         const vessels = vesselsRes.data;
         setSystemStatus(prev => ({
           ...prev,
           fleet: {
             ...prev.fleet,
-            total: vessels.length || 12,
-            active: vessels.filter(v => v.status === "active").length || 11,
-            maintenance: vessels.filter(v => v.status === "maintenance").length || 1
+            total: vessels.length || prev.fleet.total,
+            active: vessels.filter(v => v.status === "active").length || prev.fleet.active,
+            maintenance: vessels.filter(v => v.status === "maintenance").length || prev.fleet.maintenance
           }
         }));
       }
 
-      if (crewRes.data) {
+      if (crewRes.data?.length) {
         const crew = crewRes.data;
         setSystemStatus(prev => ({
           ...prev,
           crew: {
             ...prev.crew,
-            total: crew.length || 247,
-            onboard: crew.filter(c => c.status === "active").length || 198
+            total: crew.length || prev.crew.total,
+            onboard: crew.filter(c => c.status === "active").length || prev.crew.onboard
           }
         }));
       }
 
       setLastSync(new Date());
-      setDataLoaded(true);
-    } catch (error) {
-      // On timeout/error, use fallback data and stop loading
-      logger.warn("Error loading system data (using fallback):", { error });
-      if (!dataLoaded) {
-        toast.warning("Conexão lenta - usando dados em cache");
-      }
-      setDataLoaded(true); // Mark as loaded even on error to prevent loops
-    } finally {
-      // ALWAYS stop loading, even on error
-      setIsLoading(false);
+    } catch {
+      // Silently fail - use cached/default data
+      logger.debug("Background data fetch failed, using cached data");
     }
-  }, [tenant?.id, dataLoaded, isRefreshing]);
+  }, [tenant?.id, isRefreshing]);
 
-  // MOBILE FIX: Load data only once on mount, not on every callback change
+  // PATCH v46: Single mount effect - no loops, no dependencies
   useEffect(() => {
     let mounted = true;
     
-    // Initial load
-    if (!dataLoaded) {
-      loadSystemData();
-    }
+    // Background load on mount - doesn't block render
+    loadSystemData();
 
-    // Real-time subscriptions - only trigger on actual changes, not loops
+    // Realtime - throttled to prevent spam
+    let lastUpdate = 0;
+    const throttledRefresh = () => {
+      const now = Date.now();
+      if (now - lastUpdate > 30000) { // Max once per 30s
+        lastUpdate = now;
+        if (mounted) loadSystemData();
+      }
+    };
+
     const channel = supabase
-      .channel("central-comando-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => {
-        if (mounted) setDataLoaded(false); // Allow refetch
-      })
-      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => {
-        if (mounted) setDataLoaded(false); // Allow refetch
-      })
+      .channel("central-comando-v46")
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, throttledRefresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, throttledRefresh)
       .subscribe();
 
-    // Auto refresh every 60 seconds (increased from 30 for mobile)
+    // Auto refresh every 2 minutes when visible
     const interval = setInterval(() => {
       if (mounted && document.visibilityState === 'visible') {
-        setDataLoaded(false);
+        loadSystemData();
       }
-    }, 60000);
+    }, 120000);
 
     return () => {
       mounted = false;
       supabase.removeChannel(channel);
       clearInterval(interval);
     };
-  }, []); // Empty deps - run only on mount
-
-  // Separate effect to handle data refetch
-  useEffect(() => {
-    if (!dataLoaded) {
-      loadSystemData();
-    }
-  }, [dataLoaded, loadSystemData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await loadSystemData();
+    await loadSystemData(true);
     toast.success("Dados atualizados em tempo real");
     setIsRefreshing(false);
   };
