@@ -5,7 +5,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/use-auth';
+import { useOrganization } from '@/contexts/OrganizationContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface SystemModule {
   id: string;
@@ -29,7 +30,9 @@ export interface ModuleAccessState {
 }
 
 export function useModuleAccess(): ModuleAccessState {
-  const { user, organizationId } = useAuth();
+  const { user } = useAuth();
+  const { currentOrganization } = useOrganization();
+  const organizationId = currentOrganization?.id;
 
   // Fetch all available modules
   const { data: allModules = [], isLoading: loadingModules } = useQuery({
