@@ -420,11 +420,25 @@ const AuthenticatedLayout = () => {
   );
 };
 
-// Componente de rota protegida
+// Componente de rota protegida - v29: Never block, graceful auth check
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
+  const [initialCheck, setInitialCheck] = React.useState(true);
   
-  if (isLoading) return <Loader />;
+  // Give 500ms for initial session check, then redirect if no user
+  React.useEffect(() => {
+    const timer = setTimeout(() => setInitialCheck(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // During initial check, show loader only briefly
+  if (isLoading || initialCheck) {
+    // If we already have a user, show content immediately
+    if (user) return <>{children}</>;
+    // Otherwise show brief loader (max 500ms)
+    return <Loader />;
+  }
+  
   if (!user) return <Navigate to="/auth" replace />;
   
   return <>{children}</>;

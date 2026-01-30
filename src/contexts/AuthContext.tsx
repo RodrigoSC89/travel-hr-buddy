@@ -113,29 +113,23 @@ function clearCorruptedTokens(): void {
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // CRITICAL v29: Start with isLoading FALSE to NEVER block render
+  // Auth check happens in background - UI is always immediately available
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
-    
-    // CRITICAL v28: Force loading false IMMEDIATELY after 300ms
-    // This is the PRIMARY defense against infinite loading
-    const immediateTimeout = setTimeout(() => {
-      if (mounted) {
-        setIsLoading(false);
-      }
-    }, 300);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
 
-    // Initialize auth - simplified and bulletproof
+    // Initialize auth in background - NO BLOCKING
     const initializeAuth = async () => {
       try {
-        // Quick timeout - 1s max
+        // Quick timeout - 800ms max
         const timeoutPromise = new Promise<null>((_, reject) => 
-          setTimeout(() => reject(new Error('timeout')), 1000)
+          setTimeout(() => reject(new Error('timeout')), 800)
         );
         
         const sessionPromise = supabase.auth.getSession();
@@ -151,12 +145,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       } catch {
         // On ANY error, just continue without session
         logger.warn("[AuthContext] Session fetch failed, continuing without auth");
-      } finally {
-        // ALWAYS set loading false
-        if (mounted) {
-          setIsLoading(false);
-        }
       }
+      // NO setIsLoading here - we never block
     };
 
     // Set up listener for auth changes (does NOT control isLoading)
@@ -184,7 +174,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     return () => {
       mounted = false;
-      clearTimeout(immediateTimeout);
       if (subscription) {
         subscription.unsubscribe();
       }
