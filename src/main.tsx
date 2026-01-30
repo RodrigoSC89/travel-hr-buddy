@@ -111,36 +111,20 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Render the app - PATCH v61 FORCE DEPLOY
-// Update boot status helper
-const updateStatus = (msg: string) => {
-  const win = window as { __updateBootStatus?: (msg: string) => void };
-  if (win.__updateBootStatus) {
-    win.__updateBootStatus(msg);
-  } else {
-    console.log('[Boot v61]', msg);
-  }
-};
+// Render the app - PATCH v62 SIMPLIFIED BOOT
 
-console.log('[Boot v61] JavaScript bundle loaded - build timestamp:', Date.now());
-updateStatus('Bundle carregado');
+console.log('[Nauti v62] JavaScript bundle loaded - timestamp:', Date.now());
+
+// Remove loader immediately when JS loads
+const htmlLoader = document.getElementById("initial-loader");
+if (htmlLoader) htmlLoader.remove();
 
 const container = document.getElementById("root");
 if (container) {
-  updateStatus('Container encontrado');
+  console.log('[Nauti v62] Container found, mounting React...');
   
-  // Mark app as loaded FIRST to prevent recovery UI
+  // Mark app as loaded to prevent recovery UI
   (window as { __NAUTI_APP_LOADED__?: boolean }).__NAUTI_APP_LOADED__ = true;
-  
-  // Remove HTML loader
-  const initialLoader = document.getElementById("initial-loader");
-  if (initialLoader) {
-    initialLoader.remove();
-    updateStatus('Loader removido');
-  }
-  
-  console.log('[Boot v61] React mounting...');
-  updateStatus('Montando React...');
   
   try {
     createRoot(container).render(
@@ -151,11 +135,9 @@ if (container) {
       </React.StrictMode>
     );
     
-    console.log('[Boot v61] React mounted OK');
-    updateStatus('React OK');
+    console.log('[Nauti v62] React mounted successfully');
   } catch (error) {
-    console.error('[Boot v61] React mount FAILED:', error);
-    updateStatus('ERRO: ' + (error instanceof Error ? error.message : 'Unknown'));
+    console.error('[Nauti v62] React mount FAILED:', error);
     
     // Show error in UI
     container.innerHTML = `
@@ -163,7 +145,7 @@ if (container) {
         <div class="text-center space-y-4 max-w-sm">
           <p class="text-foreground text-lg font-semibold">Erro ao carregar</p>
           <p class="text-muted text-sm">${error instanceof Error ? error.message : 'Erro desconhecido'}</p>
-          <button onclick="window.clearCacheAndReload()" class="btn">Limpar cache e recarregar</button>
+          <button onclick="localStorage.clear();sessionStorage.clear();location.reload(true)" class="btn">Limpar cache e recarregar</button>
         </div>
       </div>
     `;
@@ -174,5 +156,5 @@ if (container) {
     ultraStartupOptimizer.markTTI();
   });
 } else {
-  console.error('[Boot v61] CRITICAL: #root container not found!');
+  console.error('[Nauti v62] CRITICAL: #root container not found!');
 }
