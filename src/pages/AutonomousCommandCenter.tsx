@@ -410,6 +410,27 @@ export default function AutonomousCommandCenter() {
                       </Badge>
                     )}
                   </div>
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        const response = `[${agent.name}] Pronto para receber instruções. Status: ${agent.status}`;
+                        alert(response);
+                      }}
+                    >
+                      Chat
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="secondary"
+                      onClick={() => {
+                        alert(`Histórico de ${agent.decisionsCount} decisões do ${agent.name}`);
+                      }}
+                    >
+                      Histórico
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
