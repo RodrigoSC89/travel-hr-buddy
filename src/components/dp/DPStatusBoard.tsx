@@ -19,15 +19,13 @@ export default function DPStatusBoard() {
   const [dp, setDP] = useState<DPState>({ position: "—", status: "Offline", integrity: 0 });
 
   useEffect(() => {
-    const client = subscribeBridgeStatus((data: { dp?: Partial<DPState> }) => {
+    const unsubscribe = subscribeBridgeStatus((data: { dp?: Partial<DPState> }) => {
       if (data.dp) {
         setDP(prev => ({ ...prev, ...data.dp }));
       }
     });
     return () => {
-      if (client && typeof client.end === 'function') {
-        client.end();
-      }
+      unsubscribe();
     };
   }, []);
 

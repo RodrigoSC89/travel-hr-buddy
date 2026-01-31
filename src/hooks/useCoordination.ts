@@ -59,7 +59,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
   useEffect(() => {
     if (!enableMQTT) return;
 
-    const client = subscribeTopic("nautilus/coordination/agents", (data) => {
+    const unsubscribe = subscribeTopic("nautilus/coordination/agents", (data) => {
       try {
         if (data.action === "update" && data.agentId && data.updates) {
           coordinationEngine.updateAgent(data.agentId as string, data.updates);
@@ -72,7 +72,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     });
 
     return () => {
-      client.end();
+      unsubscribe();
     };
   }, [enableMQTT]);
 
