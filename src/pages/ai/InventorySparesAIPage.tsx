@@ -2,7 +2,7 @@
  * Inventory & Spares AI Page
  * Smart inventory, demand forecasting, auto-reordering, cost optimization
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,11 +14,26 @@ import {
   Package, TrendingUp, AlertTriangle, ShoppingCart, 
   BarChart3, Loader2, Search, DollarSign
 } from 'lucide-react';
-import { useInventorySparesAI } from '@/hooks/useInventorySparesAI';
+import { useInventorySparesAI, InventoryItem, ReorderSuggestion } from '@/hooks/useInventorySparesAI';
+
+// Fallback data when API is unavailable
+const FALLBACK_INVENTORY = [
+  { partNumber: 'ENG-001', name: 'Oil Filter', stock: 12, min: 5, max: 20, criticality: 'essential', class: 'A' },
+  { partNumber: 'HYD-015', name: 'Hydraulic Seal', stock: 3, min: 10, max: 25, criticality: 'critical', class: 'A' },
+  { partNumber: 'ELE-042', name: 'Fuse 20A', stock: 45, min: 20, max: 100, criticality: 'standard', class: 'C' },
+  { partNumber: 'MEC-023', name: 'Bearing 6205', stock: 8, min: 6, max: 15, criticality: 'essential', class: 'B' },
+];
+
+const FALLBACK_REORDERS = [
+  { item: 'Hydraulic Seal', urgency: 'critical', quantity: 15, supplier: 'Maritime Supplies Co.', savings: 450 },
+  { item: 'Fuel Filter', urgency: 'high', quantity: 10, supplier: 'Global Marine Parts', savings: 120 },
+  { item: 'Gasket Set', urgency: 'medium', quantity: 5, supplier: 'Ship Parts Ltd', savings: 80 },
+];
 
 export default function InventorySparesAIPage() {
   const { 
     isLoading, 
+    getInventoryStatus,
     forecastDemand, 
     getReorderSuggestions, 
     analyzeCosts,
@@ -27,19 +42,50 @@ export default function InventorySparesAIPage() {
   
   const [activeTab, setActiveTab] = useState('inventory');
   const [searchTerm, setSearchTerm] = useState('');
+  const [inventory, setInventory] = useState(FALLBACK_INVENTORY);
+  const [reorders, setReorders] = useState(FALLBACK_REORDERS);
+  const [loadingData, setLoadingData] = useState(true);
 
-  const mockInventory = [
-    { partNumber: 'ENG-001', name: 'Oil Filter', stock: 12, min: 5, max: 20, criticality: 'essential', class: 'A' },
-    { partNumber: 'HYD-015', name: 'Hydraulic Seal', stock: 3, min: 10, max: 25, criticality: 'critical', class: 'A' },
-    { partNumber: 'ELE-042', name: 'Fuse 20A', stock: 45, min: 20, max: 100, criticality: 'standard', class: 'C' },
-    { partNumber: 'MEC-023', name: 'Bearing 6205', stock: 8, min: 6, max: 15, criticality: 'essential', class: 'B' },
-  ];
+  // Load real data on mount
+  useEffect(() => {
+    const loadData = async () => {
+      setLoadingData(true);
+      try {
+        const [inventoryData, reorderData] = await Promise.all([
+          getInventoryStatus(),
+          getReorderSuggestions('default')
+        ]);
 
-  const mockReorders = [
-    { item: 'Hydraulic Seal', urgency: 'critical', quantity: 15, supplier: 'Maritime Supplies Co.', savings: 450 },
-    { item: 'Fuel Filter', urgency: 'high', quantity: 10, supplier: 'Global Marine Parts', savings: 120 },
-    { item: 'Gasket Set', urgency: 'medium', quantity: 5, supplier: 'Ship Parts Ltd', savings: 80 },
-  ];
+        if (inventoryData && inventoryData.length > 0) {
+          setInventory(inventoryData.map(item => ({
+            partNumber: item.partNumber,
+            name: item.name,
+            stock: item.currentStock,
+            min: item.minStock,
+            max: item.maxStock,
+            criticality: item.criticality,
+            class: item.abcClass
+          })));
+        }
+
+        if (reorderData && reorderData.length > 0) {
+          setReorders(reorderData.map(r => ({
+            item: r.itemName,
+            urgency: r.urgency,
+            quantity: r.eoq,
+            supplier: r.recommendedSupplier,
+            savings: r.estimatedSavings
+          })));
+        }
+      } catch {
+        // Use fallback data
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    loadData();
+  }, [getInventoryStatus, getReorderSuggestions]);
 
   return (
     <>
@@ -153,7 +199,7 @@ export default function InventorySparesAIPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {mockInventory.map((item) => (
+                  {inventory.map((item) => (
                     <div key={item.partNumber} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <Package className={`h-6 w-6 ${
@@ -255,7 +301,7 @@ export default function InventorySparesAIPage() {
                 </div>
 
                 <div className="space-y-2">
-                  {mockReorders.map((item, idx) => (
+                  {reorders.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <AlertTriangle className={`h-6 w-6 ${

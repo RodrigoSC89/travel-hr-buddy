@@ -109,8 +109,7 @@ export default function UserProfilePage() {
           avatar_url: user.user_metadata?.avatar_url || ""
         });
       }
-    } catch (error) {
-      console.error("Error loading profile:", error);
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível carregar o perfil",
@@ -143,8 +142,7 @@ export default function UserProfilePage() {
         title: "Sucesso",
         description: "Perfil atualizado com sucesso"
       });
-    } catch (error) {
-      console.error("Error saving profile:", error);
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível salvar o perfil",

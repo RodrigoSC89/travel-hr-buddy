@@ -72,9 +72,7 @@ export const ConsolidatedCrewManagement = () => {
       setCrewMembers(crewData || []);
       setCertifications(certData || []);
       setPerformances(perfData || []);
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error loading data:", errorMessage);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to load crew data",

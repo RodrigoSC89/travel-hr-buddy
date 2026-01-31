@@ -35,8 +35,7 @@ export default function PrePSCDashboard() {
     try {
       const statsData = await prePSCService.getInspectionStats();
       setStats(statsData);
-    } catch (error) {
-      console.error("Error loading stats:", error);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to load inspection statistics",

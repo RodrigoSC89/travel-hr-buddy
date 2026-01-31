@@ -142,7 +142,7 @@ export default function WorkflowDetailPage() {
         description: "PDF exportado com sucesso!",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      // PDF export error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível exportar o PDF",
@@ -165,7 +165,7 @@ export default function WorkflowDetailPage() {
       if (error) throw error;
       setWorkflow(data);
     } catch (error) {
-      console.error("Error fetching workflow:", error);
+      // Workflow fetch error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível carregar o fluxo de trabalho",
@@ -186,7 +186,7 @@ export default function WorkflowDetailPage() {
       if (error) throw error;
       setProfiles(data || []);
     } catch (error) {
-      console.error("Error fetching profiles:", error);
+      // Profiles fetch error - non-critical
     }
   }
 
@@ -203,7 +203,7 @@ export default function WorkflowDetailPage() {
       if (error) throw error;
       setSteps(data || []);
     } catch (error) {
-      console.error("Error fetching steps:", error);
+      // Steps fetch error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível carregar as etapas",
@@ -239,7 +239,7 @@ export default function WorkflowDetailPage() {
       });
       fetchSteps();
     } catch (error) {
-      console.error("Error adding step:", error);
+      // Step add error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a tarefa",
@@ -306,7 +306,7 @@ export default function WorkflowDetailPage() {
       resetTaskForm();
       fetchSteps();
     } catch (error) {
-      console.error("Error saving step:", error);
+      // Step save error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível salvar a tarefa",
@@ -332,7 +332,7 @@ export default function WorkflowDetailPage() {
       });
       fetchSteps();
     } catch (error) {
-      console.error("Error deleting step:", error);
+      // Step delete error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível excluir a tarefa",
@@ -388,7 +388,7 @@ export default function WorkflowDetailPage() {
       });
       fetchSteps();
     } catch (error) {
-      console.error("Error updating step status:", error);
+      // Step status update error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o status",
@@ -429,7 +429,7 @@ export default function WorkflowDetailPage() {
       });
       fetchSteps();
     } catch (error) {
-      console.error("Error updating step status:", error);
+      // Step status update error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível mover a tarefa",
@@ -456,7 +456,7 @@ export default function WorkflowDetailPage() {
         description: "Título atualizado com sucesso!"
       });
     } catch (error) {
-      console.error("Error updating step title:", error);
+      // Step title update error handled by toast
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o título",

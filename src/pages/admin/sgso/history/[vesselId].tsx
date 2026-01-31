@@ -49,7 +49,7 @@ const SGSOHistoryPage: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching action plans:", error);
+      // Action plans fetch error handled by toast
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro ao buscar histórico de planos de ação",

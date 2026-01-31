@@ -42,7 +42,7 @@ export default function MMIHistoryAdminPage() {
       const historiesData = await fetchMMIHistory(filters);
       setHistories(historiesData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      // Data loading error handled by toast
       toast.error("Erro ao carregar dados");
     } finally {
       setLoading(false);
@@ -139,7 +139,7 @@ export default function MMIHistoryAdminPage() {
       await html2pdf().set(opt).from(element).save();
       toast.success("PDF gerado com sucesso!");
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      // PDF export error handled by toast
       toast.error("Erro ao gerar PDF");
     }
   };

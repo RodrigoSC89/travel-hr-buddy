@@ -58,7 +58,7 @@ export default function ForecastPage() {
         setForecasts(transformed);
         setFilteredForecasts(transformed);
       } catch (error) {
-        console.error("Error fetching forecasts:", error);
+        // Forecasts fetch error handled by toast
         toast({
           title: "❌ Erro ao carregar forecasts",
           description: "Não foi possível carregar os forecasts",
@@ -162,7 +162,7 @@ export default function ForecastPage() {
         });
       }
     } catch (error) {
-      console.error("Error generating order:", error);
+      // Order generation error handled by toast
       toast({
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",

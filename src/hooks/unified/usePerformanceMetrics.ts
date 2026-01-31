@@ -150,7 +150,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
         newMetrics.vitals.ttfb = navigation.responseStart - navigation.requestStart;
         newMetrics.vitals.fcp = navigation.responseEnd - navigation.fetchStart;
       }
-    } catch (e) {
+    } catch {
       // Navigation timing not available
     }
 
@@ -212,7 +212,9 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
       observersRef.current.push(lcpObserver);
-    } catch (e) {}
+    } catch {
+      // LCP observer not supported in this browser
+    }
 
     // FID - First Input Delay
     try {
@@ -224,7 +226,9 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
       observersRef.current.push(fidObserver);
-    } catch (e) {}
+    } catch {
+      // FID observer not supported in this browser
+    }
 
     // CLS - Cumulative Layout Shift
     try {
@@ -239,7 +243,9 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
       });
       clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
       observersRef.current.push(clsObserver);
-    } catch (e) {}
+    } catch {
+      // CLS observer not supported in this browser
+    }
 
     // Long Tasks
     try {
@@ -254,7 +260,9 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
         longTaskObserver.observe({ entryTypes: ['longtask'] });
         observersRef.current.push(longTaskObserver);
       }
-    } catch (e) {}
+    } catch {
+      // Long task observer not supported in this browser
+    }
 
     return cleanupObservers;
   }, [monitorVitals]);

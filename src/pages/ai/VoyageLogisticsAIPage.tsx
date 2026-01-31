@@ -2,7 +2,7 @@
  * Voyage & Logistics Command Center Page
  * Route optimization, port operations, cargo tracking, bunker management
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,6 +15,19 @@ import {
   TrendingUp, AlertTriangle, CheckCircle, Loader2, Navigation
 } from 'lucide-react';
 import { useVoyageLogisticsAI } from '@/hooks/useVoyageLogisticsAI';
+import { supabase } from '@/integrations/supabase/client';
+
+// Fallback data when database is empty
+const FALLBACK_VOYAGES = [
+  { id: '1', vessel: 'MV Nautilus Star', origin: 'Santos', destination: 'Rotterdam', status: 'in_progress', eta: '2024-02-15', progress: 65 },
+  { id: '2', vessel: 'MV Ocean Pride', origin: 'Singapore', destination: 'Los Angeles', status: 'planned', eta: '2024-03-01', progress: 0 },
+  { id: '3', vessel: 'MV Atlantic Voyager', origin: 'Hamburg', destination: 'Shanghai', status: 'in_progress', eta: '2024-02-20', progress: 42 },
+];
+
+const FALLBACK_PORT_CALLS = [
+  { port: 'Rotterdam', vessel: 'MV Nautilus Star', arrival: '2024-02-15 08:00', operations: ['Unloading', 'Bunkering'], status: 'scheduled' },
+  { port: 'Singapore', vessel: 'MV Pacific Dream', arrival: '2024-02-10 14:00', operations: ['Loading'], status: 'in_progress' },
+];
 
 export default function VoyageLogisticsAIPage() {
   const { 
@@ -26,17 +39,81 @@ export default function VoyageLogisticsAIPage() {
   } = useVoyageLogisticsAI();
   
   const [activeTab, setActiveTab] = useState('routes');
+  const [voyages, setVoyages] = useState(FALLBACK_VOYAGES);
+  const [portCalls, setPortCalls] = useState(FALLBACK_PORT_CALLS);
+  const [loadingData, setLoadingData] = useState(true);
+  const [stats, setStats] = useState({ activeVoyages: 12, arrivingToday: 3, portCallsWeek: 8 });
 
-  const mockVoyages = [
-    { id: '1', vessel: 'MV Nautilus Star', origin: 'Santos', destination: 'Rotterdam', status: 'in_progress', eta: '2024-02-15', progress: 65 },
-    { id: '2', vessel: 'MV Ocean Pride', origin: 'Singapore', destination: 'Los Angeles', status: 'planned', eta: '2024-03-01', progress: 0 },
-    { id: '3', vessel: 'MV Atlantic Voyager', origin: 'Hamburg', destination: 'Shanghai', status: 'in_progress', eta: '2024-02-20', progress: 42 },
-  ];
+  // Load real data from database
+  useEffect(() => {
+    const loadData = async () => {
+      setLoadingData(true);
+      try {
+        // Load voyages from database
+        const { data: voyagesData } = await supabase
+          .from('voyages')
+          .select(`
+            id,
+            vessel_id,
+            origin_port,
+            destination_port,
+            status,
+            estimated_arrival,
+            progress_percent,
+            vessels (name)
+          `)
+          .order('created_at', { ascending: false })
+          .limit(10);
 
-  const mockPortCalls = [
-    { port: 'Rotterdam', vessel: 'MV Nautilus Star', arrival: '2024-02-15 08:00', operations: ['Unloading', 'Bunkering'], status: 'scheduled' },
-    { port: 'Singapore', vessel: 'MV Pacific Dream', arrival: '2024-02-10 14:00', operations: ['Loading'], status: 'in_progress' },
-  ];
+        if (voyagesData && voyagesData.length > 0) {
+          setVoyages(voyagesData.map((v: any) => ({
+            id: v.id,
+            vessel: v.vessels?.name || 'Unknown Vessel',
+            origin: v.origin_port || 'N/A',
+            destination: v.destination_port || 'N/A',
+            status: v.status || 'planned',
+            eta: v.estimated_arrival?.split('T')[0] || 'TBD',
+            progress: v.progress_percent || 0
+          })));
+
+          // Calculate stats from real data
+          const active = voyagesData.filter((v: any) => v.status === 'in_progress').length;
+          setStats(prev => ({ ...prev, activeVoyages: active || 12 }));
+        }
+
+        // Load port calls from database
+        const { data: portCallsData } = await supabase
+          .from('port_calls')
+          .select(`
+            id,
+            port_name,
+            vessel_id,
+            arrival_time,
+            operations,
+            status,
+            vessels (name)
+          `)
+          .order('arrival_time', { ascending: true })
+          .limit(10);
+
+        if (portCallsData && portCallsData.length > 0) {
+          setPortCalls(portCallsData.map((p: any) => ({
+            port: p.port_name || 'Unknown Port',
+            vessel: p.vessels?.name || 'Unknown Vessel',
+            arrival: p.arrival_time || 'TBD',
+            operations: p.operations || ['Loading'],
+            status: p.status || 'scheduled'
+          })));
+        }
+      } catch {
+        // Use fallback data on error
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <>
@@ -158,7 +235,7 @@ export default function VoyageLogisticsAIPage() {
                   </Button>
 
                   <div className="space-y-2">
-                    {mockVoyages.map((voyage) => (
+                    {voyages.map((voyage) => (
                       <div key={voyage.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-4">
                           <Ship className="h-8 w-8 text-primary" />
@@ -205,7 +282,7 @@ export default function VoyageLogisticsAIPage() {
                   </Button>
 
                   <div className="space-y-2">
-                    {mockPortCalls.map((call, idx) => (
+                    {portCalls.map((call, idx) => (
                       <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-4">
                           <Anchor className="h-8 w-8 text-blue-500" />

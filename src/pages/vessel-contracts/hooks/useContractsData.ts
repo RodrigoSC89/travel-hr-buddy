@@ -108,7 +108,7 @@ export function useContractsData() {
       await loadData();
       return true;
     } catch (error) {
-      console.error('Error creating contract:', error);
+      logger.error('Error creating contract', error);
       toast.error('Erro ao criar contrato');
       return false;
     }
@@ -146,7 +146,7 @@ export function useContractsData() {
       await loadData();
       return true;
     } catch (error) {
-      console.error('Error creating downtime:', error);
+      logger.error('Error creating downtime', error);
       toast.error('Erro ao registrar downtime');
       return false;
     }

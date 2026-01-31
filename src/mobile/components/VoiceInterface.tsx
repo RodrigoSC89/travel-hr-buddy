@@ -11,6 +11,7 @@ import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { intentParser, Intent } from "../ai/intentParser";
 import { localMemory } from "../ai/localMemory";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Type declarations for Web Speech API - using any to avoid conflicts with browser types
 interface VoiceSpeechRecognition {
@@ -34,7 +35,7 @@ interface VoiceInterfaceProps {
 export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   onIntentDetected,
   onTranscript,
-  isOnline = true
+  isOnline: _isOnline = true
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -55,7 +56,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
-      console.warn("Speech recognition not supported in this browser");
+      logger.warn("Speech recognition not supported in this browser");
       return;
     }
 
@@ -66,7 +67,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-      console.log("Voice recognition started");
+      logger.info("Voice recognition started");
     };
 
     recognition.onresult = (event: any) => {
@@ -83,7 +84,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
+      logger.error("Speech recognition error:", event.error);
       setIsListening(false);
       
       if (event.error === "no-speech") {
@@ -95,7 +96,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onend = () => {
       setIsListening(false);
-      console.log("Voice recognition ended");
+      logger.info("Voice recognition ended");
     };
 
     recognitionRef.current = recognition;
@@ -132,7 +133,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   /**
    * Generate and speak response
    */
-  const generateResponse = useCallback(async (intent: Intent, userInput: string) => {
+  const generateResponse = useCallback(async (intent: Intent, _userInput: string) => {
     let response = "";
 
     // Get context for better responses
@@ -316,10 +317,11 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
           </Button>
 
           <Button
-            onClick={isSpeaking ? stopSpeaking : () => {}}
+            onClick={stopSpeaking}
             variant={isSpeaking ? "destructive" : "outline"}
             disabled={!isSpeaking}
             size="lg"
+            title={isSpeaking ? "Parar de falar" : "Nenhum áudio em reprodução"}
           >
             {isSpeaking ? (
               <VolumeX className="h-5 w-5" />

@@ -65,8 +65,7 @@ const AICommandCenter = () => {
         context: getSystemContext(),
         onDelta: updateAssistant,
         onDone: () => setIsLoading(false),
-        onError: (error) => {
-          console.error(error);
+        onError: () => {
           toast({
             title: "Erro",
             description: "Não foi possível processar o comando",
@@ -75,8 +74,12 @@ const AICommandCenter = () => {
           setIsLoading(false);
         },
       });
-    } catch (error) {
-      console.error("Error sending message:", error);
+    } catch {
+      toast({
+        title: "Erro",
+        description: "Falha na comunicação com IA",
+        variant: "destructive",
+      });
       setIsLoading(false);
     }
   };

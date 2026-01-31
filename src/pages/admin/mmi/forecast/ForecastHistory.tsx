@@ -62,7 +62,7 @@ export default function ForecastHistoryPage() {
         });
       }
     } catch (error) {
-      console.error("Error generating order:", error);
+      // Order generation error handled by toast
       toast({
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",
@@ -88,7 +88,7 @@ export default function ForecastHistoryPage() {
         setData(transformed);
       })
       .catch((err) => {
-        console.error("Error loading forecasts:", err);
+        // Forecasts loading error - using empty data
         setData([]);
       })
       .finally(() => {

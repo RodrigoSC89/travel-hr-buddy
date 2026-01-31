@@ -109,9 +109,8 @@ const GenerativeAIPage: React.FC = () => {
         title: "Conteúdo Gerado",
         description: "O documento foi gerado com sucesso!",
       });
-    } catch (error) {
-      console.error("Error generating content:", error);
-      // Fallback com conteúdo simulado
+    } catch {
+      // Fallback com conteúdo simulado quando API não disponível
       setGeneratedContent(`# ${documentType.charAt(0).toUpperCase() + documentType.slice(1)} Gerado
 
 ## Introdução

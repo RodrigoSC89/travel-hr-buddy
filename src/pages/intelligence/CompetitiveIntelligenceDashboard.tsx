@@ -344,8 +344,8 @@ export default function CompetitiveIntelligenceDashboard() {
         if (data?.token) {
           setMapboxToken(data.token);
         }
-      } catch (err) {
-        console.error("Failed to fetch Mapbox token:", err);
+      } catch {
+        // Mapbox token fetch failed - map will use fallback or show error state
       }
     };
     fetchToken();
@@ -612,8 +612,7 @@ export default function CompetitiveIntelligenceDashboard() {
           description: `${enrichedVessels.length} navios rastreados via ${data.source === "marinetraffic" ? "MarineTraffic" : "simulação"}`,
         });
       }
-    } catch (error) {
-      console.error("Erro ao buscar dados AIS:", error);
+    } catch {
       toast({
         title: "Erro AIS",
         description: "Falha ao carregar dados de rastreamento",

@@ -189,7 +189,18 @@ export function IMCADPAuditDashboard() {
           <Button variant="outline" size="icon" onClick={handleFilterSettings}>
             <Filter className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setAuditData({})}>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={() => {
+              setAuditData({});
+              toast({
+                title: "Auditoria Resetada",
+                description: "Todos os dados da auditoria foram limpos.",
+              });
+            }}
+            title="Resetar auditoria"
+          >
             <RefreshCw className="h-4 w-4" />
           </Button>
           <Button onClick={handleExportAudit}>

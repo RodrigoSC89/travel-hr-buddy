@@ -58,8 +58,7 @@ export default function SecuritySettings() {
         toast.success('2FA configurado com sucesso!');
         refetch();
       }
-    } catch (error) {
-      console.error('2FA error:', error);
+    } catch {
       toast.error('Erro ao ativar 2FA. Tente novamente.');
     } finally {
       setEnabling2FA(false);

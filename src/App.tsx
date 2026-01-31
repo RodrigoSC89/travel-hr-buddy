@@ -73,13 +73,14 @@ const MaintenanceCommandCenter = lazy(() => import("@/pages/MaintenanceCommandCe
 const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenancePage"));
 
 // ============================================
-// OPERAÇÕES SUBMARINAS
+// OPERAÇÕES SUBMARINAS - DESABILITADO (100% mockado)
+// Módulos removidos até implementação real do backend
 // ============================================
-const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
-const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
-const AutoSub = lazy(() => import("@/pages/AutoSub"));
-const SonarAI = lazy(() => import("@/pages/SonarAI"));
-const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
+// const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
+// const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
+// const AutoSub = lazy(() => import("@/pages/AutoSub"));
+// const SonarAI = lazy(() => import("@/pages/SonarAI"));
+// const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 
 // ============================================
 // IA & AUTOMAÇÃO
@@ -459,13 +460,14 @@ const AppRoutes = () => (
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
       
       {/* ============================================ */}
-      {/* OPERAÇÕES SUBMARINAS */}
+      {/* OPERAÇÕES SUBMARINAS - DESABILITADO (100% mockado) */}
+      {/* Rotas removidas até implementação real */}
       {/* ============================================ */}
-      <Route path="/ocean-sonar" element={<OceanSonar />} />
-      <Route path="/underwater-drone" element={<UnderwaterDrone />} />
-      <Route path="/auto-sub" element={<AutoSub />} />
-      <Route path="/sonar-ai" element={<SonarAI />} />
-      <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
+      {/* <Route path="/ocean-sonar" element={<OceanSonar />} /> */}
+      {/* <Route path="/underwater-drone" element={<UnderwaterDrone />} /> */}
+      {/* <Route path="/auto-sub" element={<AutoSub />} /> */}
+      {/* <Route path="/sonar-ai" element={<SonarAI />} /> */}
+      {/* <Route path="/deep-risk-ai" element={<DeepRiskAI />} /> */}
       
       {/* ============================================ */}
       {/* IA & AUTOMAÇÃO */}

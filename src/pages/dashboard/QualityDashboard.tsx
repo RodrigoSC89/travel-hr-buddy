@@ -125,8 +125,8 @@ export default function QualityDashboard() {
       
       setLastUpdate(new Date());
       setIsLoading(false);
-    } catch (error) {
-      console.error("Error loading metrics:", error);
+    } catch {
+      // Metrics loading failed - using fallback values
       setIsLoading(false);
     }
   }

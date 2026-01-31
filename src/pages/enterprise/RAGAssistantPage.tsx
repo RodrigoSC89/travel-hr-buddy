@@ -32,6 +32,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -102,9 +103,44 @@ export default function RAGAssistantPage() {
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response with RAG sources
-    setTimeout(() => {
+    try {
+      // Call AI Hub Chat edge function with knowledge context
+      const { data, error } = await supabase.functions.invoke('ai-hub-chat', {
+        body: {
+          module: 'compliance', // Use compliance module for knowledge queries
+          message: input.trim(),
+          context: {
+            type: 'knowledge_query',
+            history: currentConversation?.messages.slice(-5).map(m => ({
+              role: m.role,
+              content: m.content
+            })) || []
+          }
+        }
+      });
+
+      if (error) throw error;
+
       const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: data?.response || data?.message || 'Desculpe, não consegui processar sua pergunta. Tente novamente.',
+        sources: data?.sources || [
+          { title: 'Base de Conhecimento Nauti One', relevance: 90 },
+        ],
+        timestamp: new Date(),
+      };
+
+      setConversations(prev =>
+        prev.map(c =>
+          c.id === activeConversation
+            ? { ...c, messages: [...c.messages, assistantMessage] }
+            : c
+        )
+      );
+    } catch {
+      // Fallback response when API is unavailable
+      const fallbackMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
         content: `Baseado nos documentos da base de conhecimento, encontrei informações relevantes sobre sua pergunta "${input.slice(0, 50)}...":\n\n**Resumo da Análise:**\nOs procedimentos operacionais indicam que as melhores práticas incluem verificação regular de equipamentos, documentação adequada e treinamento contínuo da tripulação.\n\n**Recomendações:**\n1. Revisar o manual de operações seção 4.2\n2. Atualizar checklists de segurança\n3. Agendar treinamento de reciclagem\n\nPosso fornecer mais detalhes sobre algum destes pontos?`,
@@ -119,12 +155,14 @@ export default function RAGAssistantPage() {
       setConversations(prev =>
         prev.map(c =>
           c.id === activeConversation
-            ? { ...c, messages: [...c.messages, assistantMessage] }
+            ? { ...c, messages: [...c.messages, fallbackMessage] }
             : c
         )
       );
+      toast.warning('Usando resposta offline - conecte-se para respostas em tempo real');
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const copyToClipboard = (text: string, id: string) => {

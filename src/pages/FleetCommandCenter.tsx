@@ -254,8 +254,8 @@ const FleetAICopilot = ({ vessels, onToast }: { vessels: any[]; onToast: (opts: 
   );
 };
 
-// Mock data para gráficos
-const fuelTrend = [
+// Fallback data para gráficos (usado quando não há dados reais)
+const FALLBACK_FUEL_TREND = [
   { day: "Seg", consumption: 245, efficiency: 92 },
   { day: "Ter", consumption: 238, efficiency: 94 },
   { day: "Qua", consumption: 252, efficiency: 90 },
@@ -265,7 +265,7 @@ const fuelTrend = [
   { day: "Dom", consumption: 230, efficiency: 95 }
 ];
 
-const performanceMetrics = [
+const FALLBACK_PERFORMANCE_METRICS = [
   { metric: "Eficiência", value: 93 },
   { metric: "Segurança", value: 96 },
   { metric: "Pontualidade", value: 89 },
@@ -280,6 +280,8 @@ export default function FleetCommandCenter() {
   const { toast } = useToast();
   const [vessels, setVessels] = useState<any[]>([]);
   const [maintenance, setMaintenance] = useState<any[]>([]);
+  const [fuelTrend, setFuelTrend] = useState(FALLBACK_FUEL_TREND);
+  const [performanceMetrics, setPerformanceMetrics] = useState(FALLBACK_PERFORMANCE_METRICS);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showMissionDialog, setShowMissionDialog] = useState(false);
@@ -290,35 +292,88 @@ export default function FleetCommandCenter() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
+      // Carregar embarcações
       const { data: vesselsData } = await supabase
         .from("vessels")
         .select("*")
         .order("name")
         .limit(50);
       
-      // Enriquecer dados com campos simulados
+      // Enriquecer dados com campos de telemetria (fallback para simulados se não houver)
       const enrichedVessels = (vesselsData || []).map(v => ({
         ...v,
-        speed: Math.floor(Math.random() * 20),
-        fuel: Math.floor(70 + Math.random() * 30),
-        efficiency: Math.floor(85 + Math.random() * 15),
-        crew_count: Math.floor(15 + Math.random() * 15),
-        course: Math.floor(Math.random() * 360)
+        speed: v.current_speed || Math.floor(Math.random() * 20),
+        fuel: v.fuel_level || Math.floor(70 + Math.random() * 30),
+        efficiency: v.efficiency_score || Math.floor(85 + Math.random() * 15),
+        crew_count: v.crew_count || Math.floor(15 + Math.random() * 15),
+        course: v.heading || Math.floor(Math.random() * 360)
       }));
       setVessels(enrichedVessels);
 
+      // Carregar manutenções
       const { data: maintenanceData } = await supabase
         .from("maintenance_schedules" as any)
         .select("*")
         .order("scheduled_date", { ascending: false })
         .limit(50);
       setMaintenance((maintenanceData as any[]) || []);
+
+      // Carregar dados de combustível (últimos 7 dias)
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      
+      const { data: fuelData } = await supabase
+        .from("fuel_records")
+        .select("record_date, quantity_consumed, efficiency_rating")
+        .gte("record_date", sevenDaysAgo.toISOString())
+        .order("record_date", { ascending: true })
+        .limit(100);
+
+      if (fuelData && fuelData.length > 0) {
+        // Agrupar por dia da semana
+        const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        const grouped = fuelData.reduce((acc: Record<string, { consumption: number; efficiency: number; count: number }>, record) => {
+          const day = dayNames[new Date(record.record_date).getDay()];
+          if (!acc[day]) acc[day] = { consumption: 0, efficiency: 0, count: 0 };
+          acc[day].consumption += record.quantity_consumed || 0;
+          acc[day].efficiency += record.efficiency_rating || 90;
+          acc[day].count += 1;
+          return acc;
+        }, {});
+
+        const realFuelTrend = Object.entries(grouped).map(([day, data]) => ({
+          day,
+          consumption: Math.round(data.consumption / data.count),
+          efficiency: Math.round(data.efficiency / data.count)
+        }));
+
+        if (realFuelTrend.length > 0) {
+          setFuelTrend(realFuelTrend);
+        }
+      }
+
+      // Calcular métricas de performance reais baseadas nos dados
+      if (vesselsData && vesselsData.length > 0) {
+        const operational = vesselsData.filter(v => v.status === "active" || v.status === "operational").length;
+        const total = vesselsData.length;
+        const efficiencyAvg = enrichedVessels.reduce((acc, v) => acc + v.efficiency, 0) / total;
+        
+        setPerformanceMetrics([
+          { metric: "Eficiência", value: Math.round(efficiencyAvg) },
+          { metric: "Segurança", value: Math.round(96 + Math.random() * 3) }, // TODO: integrar com safety_incidents
+          { metric: "Pontualidade", value: Math.round((operational / total) * 100) },
+          { metric: "Manutenção", value: maintenanceData ? Math.max(70, 100 - maintenanceData.filter((m: any) => m.status === 'overdue').length * 5) : 91 },
+          { metric: "Tripulação", value: 94 }, // TODO: integrar com crew_wellbeing
+          { metric: "Compliance", value: 97 } // TODO: integrar com compliance_records
+        ]);
+      }
     } catch (error) {
-      console.error("Error loading fleet data:", error);
+      // Using toast to show user-friendly error - silent logging for production
+      toast({ title: "Erro", description: "Falha ao carregar dados da frota", variant: "destructive" });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => { loadData(); }, [loadData]);
 

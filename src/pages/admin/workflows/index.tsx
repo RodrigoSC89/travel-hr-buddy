@@ -44,8 +44,7 @@ export default function SmartWorkflowPage() {
       
       if (error) throw error;
       setWorkflows((data as SmartWorkflow[]) || []);
-    } catch (error) {
-      console.error("Error fetching workflows:", error);
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível carregar os fluxos de trabalho",
@@ -86,8 +85,7 @@ export default function SmartWorkflowPage() {
         description: "Fluxo de trabalho criado com sucesso!"
       });
       fetchWorkflows();
-    } catch (error) {
-      console.error("Error creating workflow:", error);
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível criar o fluxo de trabalho",
