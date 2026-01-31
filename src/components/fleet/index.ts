@@ -4,3 +4,4 @@ export { VesselCRUDManager } from "./VesselCRUDManager";
 export { VesselHistoryTimeline } from "./VesselHistoryTimeline";
 export { DigitalTwinInteractive } from "./DigitalTwinInteractive";
 export { FleetCommandDashboard } from "./FleetCommandDashboard";
+export { VesselHistoryCRUD } from "./VesselHistoryCRUD";
