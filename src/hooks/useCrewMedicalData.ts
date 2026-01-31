@@ -52,11 +52,11 @@ export function useCrewMedicalData() {
 
       if (error) {
         logger.error("Error fetching crew medical data:", error);
-        return getDemoCrewData();
+        throw new Error(`Erro ao buscar dados médicos: ${error.message}`);
       }
 
       if (!crewMembers?.length) {
-        return getDemoCrewData();
+        return []; // Return empty array - UI should show EmptyState
       }
 
       // Get certificates for crew
@@ -207,55 +207,5 @@ export function useCrewMedicalData() {
   };
 }
 
-function getDemoCrewData(): CrewMedicalMember[] {
-  return [
-    {
-      id: "demo-1",
-      name: "Carlos Silva",
-      position: "Capitão",
-      vessel: "MV Nautilus One",
-      bloodType: "O+",
-      status: "fit",
-      allergies: ["Penicilina"],
-      conditions: [],
-      vaccinations: [
-        { name: "COVID-19", date: "2024-01-15", expiryDate: "2025-01-15", status: "valid" },
-        { name: "Febre Amarela", date: "2023-06-01", expiryDate: "2033-06-01", status: "valid" },
-        { name: "Tétano", date: "2023-03-20", expiryDate: "2028-03-20", status: "valid" }
-      ],
-      lastCheckup: "2024-11-15",
-      nextCheckup: "2025-05-15"
-    },
-    {
-      id: "demo-2",
-      name: "Maria Santos",
-      position: "Engenheira Chefe",
-      vessel: "MV Nautilus Two",
-      bloodType: "A+",
-      status: "fit",
-      allergies: [],
-      conditions: ["Hipertensão controlada"],
-      vaccinations: [
-        { name: "COVID-19", date: "2024-02-10", expiryDate: "2025-02-10", status: "expiring" },
-        { name: "Hepatite B", date: "2022-08-15", expiryDate: "2027-08-15", status: "valid" }
-      ],
-      lastCheckup: "2024-10-20",
-      nextCheckup: "2025-04-20"
-    },
-    {
-      id: "demo-3",
-      name: "João Oliveira",
-      position: "Imediato",
-      vessel: "MV Nautilus One",
-      bloodType: "B-",
-      status: "restricted",
-      allergies: ["Dipirona", "Sulfa"],
-      conditions: ["Lesão no joelho - restrição de peso"],
-      vaccinations: [
-        { name: "COVID-19", date: "2023-09-05", expiryDate: "2024-09-05", status: "expired" }
-      ],
-      lastCheckup: "2024-12-01",
-      nextCheckup: "2025-03-01"
-    }
-  ];
-}
+// Demo data removed - system should use real data from Supabase
+// If no data, components should display EmptyState with CTA to add records

@@ -69,7 +69,7 @@ export function useFleetTracking() {
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        return generateDemoVessels();
+        return []; // Return empty array - UI should show EmptyState
       }
 
       return data.map((vessel) => ({
@@ -118,7 +118,7 @@ export function useFleetTracking() {
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        return generateDemoAlerts();
+        return []; // Return empty array - no demo data
       }
 
       return data.map((alert) => ({
@@ -187,68 +187,8 @@ function mapAlertSeverity(severity: string | null): FleetAlert["type"] {
   return "info";
 }
 
-function generateDemoVessels(): VesselLocation[] {
-  return [
-    {
-      id: "demo-1",
-      name: "Nautilus Explorer",
-      type: "PSV",
-      latitude: -23.5505,
-      longitude: -46.6333,
-      course: 45,
-      speed: 12.5,
-      status: "active",
-      last_update: new Date().toISOString(),
-      captain: "Capitão Silva",
-      destination: "Porto de Santos",
-      dpClass: "DP-2",
-      dpMode: "Auto DP",
-      asogStatus: "green",
-      operationType: "Supply",
-      environmental: { windSpeed: 18, waveHeight: 1.2, current: 0.8 },
-      power: { available: 12000, consumed: 7500 },
-      alerts: 0,
-      crew: 24,
-      onlineStatus: "online",
-    },
-    {
-      id: "demo-2",
-      name: "Atlantic Pioneer",
-      type: "AHTS",
-      latitude: -22.9068,
-      longitude: -43.1729,
-      course: 180,
-      speed: 0,
-      status: "anchored",
-      last_update: new Date().toISOString(),
-      captain: "Capitão Costa",
-      destination: "Rio de Janeiro",
-      dpClass: "DP-2",
-      dpMode: "TAM",
-      asogStatus: "yellow",
-      operationType: "Anchor Handling",
-      environmental: { windSpeed: 25, waveHeight: 2.1, current: 1.2 },
-      power: { available: 18000, consumed: 14000 },
-      alerts: 2,
-      crew: 32,
-      onlineStatus: "online",
-    },
-  ];
-}
-
-function generateDemoAlerts(): FleetAlert[] {
-  return [
-    {
-      id: "demo-alert-1",
-      vesselId: "demo-2",
-      vesselName: "Atlantic Pioneer",
-      type: "warning",
-      message: "Vento aproximando-se do limite operacional",
-      timestamp: new Date().toISOString(),
-      acknowledged: false,
-    },
-  ];
-}
+// Demo data removed - system should use real data from Supabase
+// If no data, components should display EmptyState with CTA to add vessels
 
 export function useFleetStats() {
   const { vessels, alerts } = useFleetTracking();

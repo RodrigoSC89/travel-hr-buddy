@@ -94,25 +94,9 @@ export function usePredictiveMaintenanceData() {
         }));
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-1",
-          equipment: "Motor Principal #1",
-          vessel: "Navio Exemplo",
-          type: "predictive" as const,
-          priority: "high" as const,
-          predictedDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          confidence: 87,
-          estimatedCost: 15000,
-          partsNeeded: [
-            { name: "Filtro de óleo", quantity: 2, inStock: true },
-            { name: "Sensor de temperatura", quantity: 1, inStock: false },
-          ],
-          reason: "Padrão de vibração anômalo detectado.",
-          healthScore: 72,
-        },
-      ];
+      // No data available - return empty array
+      // UI should show EmptyState with CTA to add maintenance records
+      return [];
     },
     staleTime: 1000 * 60 * 5,
     refetchInterval: 1000 * 60 * 10,

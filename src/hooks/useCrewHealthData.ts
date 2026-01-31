@@ -109,53 +109,9 @@ export function useCrewHealthData() {
         });
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-1",
-          name: "João Silva",
-          position: "Capitão",
-          bloodType: "O+",
-          status: "fit",
-          allergies: [],
-          conditions: [],
-          vaccinations: [
-            { name: "Febre Amarela", date: "2024-01-15", expiryDate: "2034-01-15", status: "valid" },
-            { name: "Hepatite B", date: "2023-06-20", expiryDate: "2028-06-20", status: "valid" },
-          ],
-          lastCheckup: "2024-10-15",
-          nextCheckup: "2025-04-15",
-        },
-        {
-          id: "demo-2",
-          name: "Maria Santos",
-          position: "Engenheira Chefe",
-          bloodType: "A+",
-          status: "fit",
-          allergies: ["Penicilina"],
-          conditions: [],
-          vaccinations: [
-            { name: "Febre Amarela", date: "2023-03-10", expiryDate: "2033-03-10", status: "valid" },
-            { name: "Tétano", date: "2022-08-05", expiryDate: "2025-08-05", status: "expiring" },
-          ],
-          lastCheckup: "2024-09-20",
-          nextCheckup: "2025-03-20",
-        },
-        {
-          id: "demo-3",
-          name: "Pedro Costa",
-          position: "Marinheiro",
-          bloodType: "B-",
-          status: "restricted",
-          allergies: [],
-          conditions: ["Hipertensão controlada"],
-          vaccinations: [
-            { name: "Febre Amarela", date: "2024-02-01", expiryDate: "2034-02-01", status: "valid" },
-          ],
-          lastCheckup: "2024-11-01",
-          nextCheckup: "2025-02-01",
-        },
-      ];
+      // No data found - return empty array
+      // UI should show EmptyState with CTA to add crew members
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });

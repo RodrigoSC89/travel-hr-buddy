@@ -1,3 +1,8 @@
+/**
+ * Hook para Due Diligence - integração real com Supabase
+ * CRUD completo para relatórios de due diligence
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
@@ -47,49 +52,6 @@ export interface CreateDueDiligenceInput {
   valid_until?: string;
 }
 
-// Mock data for when table doesn't exist yet
-const mockReports: DueDiligenceReport[] = [
-  {
-    id: '1',
-    report_code: 'DD-2025-001',
-    report_type: 'vessel_vetting',
-    subject_type: 'vessel',
-    subject_name: 'MV Atlantic Explorer',
-    risk_score: 25,
-    risk_level: 'low',
-    report_status: 'completed',
-    recommendations: 'Embarcação aprovada para operações.',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    report_code: 'DD-2025-002',
-    report_type: 'company_screening',
-    subject_type: 'company',
-    subject_name: 'Global Maritime Services Ltd',
-    risk_score: 45,
-    risk_level: 'medium',
-    report_status: 'requires_action',
-    recommendations: 'Necessária verificação adicional de beneficiários finais.',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    report_code: 'DD-2025-003',
-    report_type: 'sanctions',
-    subject_type: 'individual',
-    subject_name: 'John Smith',
-    risk_score: 85,
-    risk_level: 'high',
-    report_status: 'pending',
-    recommendations: 'Verificação de sanções em andamento.',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
-
 export function useDueDiligenceReports(filters?: { 
   report_type?: string; 
   risk_level?: string; 
@@ -98,18 +60,61 @@ export function useDueDiligenceReports(filters?: {
 }) {
   return useQuery({
     queryKey: ['due_diligence_reports', filters],
-    queryFn: async () => {
-      try {
-        let result = [...mockReports];
-        if (filters?.report_type) result = result.filter(r => r.report_type === filters.report_type);
-        if (filters?.risk_level) result = result.filter(r => r.risk_level === filters.risk_level);
-        if (filters?.status) result = result.filter(r => r.report_status === filters.status);
-        if (filters?.subject_type) result = result.filter(r => r.subject_type === filters.subject_type);
-        return result;
-      } catch {
-        logger.warn('Using mock due diligence data');
-        return mockReports;
+    queryFn: async (): Promise<DueDiligenceReport[]> => {
+      let query = supabase
+        .from('due_diligence_reports')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (filters?.report_type) {
+        query = query.eq('report_type', filters.report_type);
       }
+      if (filters?.risk_level) {
+        query = query.eq('risk_level', filters.risk_level);
+      }
+      if (filters?.status) {
+        query = query.eq('report_status', filters.status);
+      }
+      if (filters?.subject_type) {
+        query = query.eq('subject_type', filters.subject_type);
+      }
+
+      const { data, error } = await query.limit(100);
+
+      if (error) {
+        logger.error('Error fetching due diligence reports:', error);
+        // Return empty array - UI should show EmptyState
+        return [];
+      }
+
+      if (!data || data.length === 0) {
+        return [];
+      }
+
+      return data.map(report => ({
+        id: report.id,
+        report_code: report.report_code || `DD-${report.id.slice(0, 8)}`,
+        report_type: report.report_type || 'general',
+        subject_type: report.subject_type || 'company',
+        subject_id: report.subject_id,
+        subject_name: report.subject_name || 'N/A',
+        subject_details: report.subject_details,
+        screening_sources: report.screening_sources,
+        risk_score: report.risk_score,
+        risk_level: report.risk_level,
+        findings: report.findings,
+        sanctions_check: report.sanctions_check,
+        pep_check: report.pep_check,
+        adverse_media: report.adverse_media,
+        recommendations: report.recommendations,
+        report_status: report.report_status || 'pending',
+        reviewed_by: report.reviewed_by,
+        reviewed_at: report.reviewed_at,
+        valid_until: report.valid_until,
+        ai_analysis: report.ai_analysis,
+        created_at: report.created_at,
+        updated_at: report.updated_at,
+      }));
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -118,9 +123,44 @@ export function useDueDiligenceReports(filters?: {
 export function useDueDiligenceReport(id: string) {
   return useQuery({
     queryKey: ['due_diligence_report', id],
-    queryFn: async () => {
-      const mock = mockReports.find(r => r.id === id);
-      return mock || null;
+    queryFn: async (): Promise<DueDiligenceReport | null> => {
+      const { data, error } = await supabase
+        .from('due_diligence_reports')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        logger.error('Error fetching due diligence report:', error);
+        return null;
+      }
+
+      if (!data) return null;
+
+      return {
+        id: data.id,
+        report_code: data.report_code || `DD-${data.id.slice(0, 8)}`,
+        report_type: data.report_type || 'general',
+        subject_type: data.subject_type || 'company',
+        subject_id: data.subject_id,
+        subject_name: data.subject_name || 'N/A',
+        subject_details: data.subject_details,
+        screening_sources: data.screening_sources,
+        risk_score: data.risk_score,
+        risk_level: data.risk_level,
+        findings: data.findings,
+        sanctions_check: data.sanctions_check,
+        pep_check: data.pep_check,
+        adverse_media: data.adverse_media,
+        recommendations: data.recommendations,
+        report_status: data.report_status || 'pending',
+        reviewed_by: data.reviewed_by,
+        reviewed_at: data.reviewed_at,
+        valid_until: data.valid_until,
+        ai_analysis: data.ai_analysis,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
     },
     enabled: !!id,
   });
@@ -131,21 +171,42 @@ export function useCreateDueDiligence() {
 
   return useMutation({
     mutationFn: async (input: CreateDueDiligenceInput) => {
-      const newReport: DueDiligenceReport = {
-        id: crypto.randomUUID(),
-        ...input,
-        report_status: input.report_status ?? 'pending',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      return newReport;
+      const { data, error } = await supabase
+        .from('due_diligence_reports')
+        .insert({
+          report_code: input.report_code,
+          report_type: input.report_type,
+          subject_type: input.subject_type,
+          subject_id: input.subject_id,
+          subject_name: input.subject_name,
+          subject_details: input.subject_details,
+          screening_sources: input.screening_sources,
+          risk_score: input.risk_score,
+          risk_level: input.risk_level,
+          findings: input.findings,
+          sanctions_check: input.sanctions_check,
+          pep_check: input.pep_check,
+          adverse_media: input.adverse_media,
+          recommendations: input.recommendations,
+          report_status: input.report_status || 'pending',
+          valid_until: input.valid_until,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        logger.error('Error creating due diligence report:', error);
+        throw new Error(`Erro ao criar relatório: ${error.message}`);
+      }
+
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['due_diligence_reports'] });
       toast.success('Relatório de Due Diligence criado com sucesso');
     },
-    onError: (error) => {
-      toast.error(`Erro ao criar relatório: ${error.message}`);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 }
@@ -155,17 +216,27 @@ export function useUpdateDueDiligence() {
 
   return useMutation({
     mutationFn: async ({ id, ...input }: Partial<CreateDueDiligenceInput> & { id: string }) => {
-      const existing = mockReports.find(r => r.id === id);
-      if (!existing) throw new Error('Report not found');
-      return { ...existing, ...input, updated_at: new Date().toISOString() };
+      const { data, error } = await supabase
+        .from('due_diligence_reports')
+        .update(input)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        logger.error('Error updating due diligence report:', error);
+        throw new Error(`Erro ao atualizar relatório: ${error.message}`);
+      }
+
+      return data;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['due_diligence_reports'] });
       queryClient.invalidateQueries({ queryKey: ['due_diligence_report', variables.id] });
       toast.success('Relatório atualizado com sucesso');
     },
-    onError: (error) => {
-      toast.error(`Erro ao atualizar relatório: ${error.message}`);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 }
@@ -175,19 +246,29 @@ export function useDeleteDueDiligence() {
 
   return useMutation({
     mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('due_diligence_reports')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        logger.error('Error deleting due diligence report:', error);
+        throw new Error(`Erro ao excluir relatório: ${error.message}`);
+      }
+
       return id;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['due_diligence_reports'] });
       toast.success('Relatório excluído com sucesso');
     },
-    onError: (error) => {
-      toast.error(`Erro ao excluir relatório: ${error.message}`);
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 }
 
-// AI-powered risk assessment using Supabase client (no hardcoded tokens)
+// AI-powered risk assessment using Supabase Edge Function
 export function useAIRiskAssessment() {
   return useMutation({
     mutationFn: async (subjectData: { name: string; type: string; details?: Record<string, unknown> }) => {

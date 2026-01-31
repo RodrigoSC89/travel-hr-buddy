@@ -87,22 +87,9 @@ export function useAutonomousAgentActions() {
         }));
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-action-1",
-          agentId: "agent-maintenance",
-          agentName: "Agente de Manutenção",
-          actionType: "suggest" as const,
-          description: "Recomenda inspeção do motor principal baseado em análise de vibração",
-          target: "Motor Principal - MV Atlas",
-          status: "pending" as const,
-          confidence: 87,
-          timestamp: new Date(Date.now() - 30 * 60 * 1000),
-          impact: "high" as const,
-          requiresApproval: true,
-        },
-      ];
+      // No data found - return empty array
+      // UI should show EmptyState for autonomous agent actions
+      return [];
     },
     staleTime: 1000 * 60 * 2,
     refetchInterval: 1000 * 60 * 5,
