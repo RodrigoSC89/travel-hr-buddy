@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +24,7 @@ import {
   Users, Leaf, Brain, AlertTriangle, CheckCircle2, TrendingUp,
   Search, QrCode, Send, Sparkles, Navigation, RefreshCw,
   Plus, Download, Building, Globe, Star, CreditCard, Shield,
-  FileText, LayoutDashboard, Bot
+  FileText, LayoutDashboard, Bot, X, Eye, Edit2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -203,6 +206,28 @@ export default function TravelCommandCenter() {
     searchTerm: "",
     crewMember: "all"
   });
+  
+  // Trip details dialog state
+  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+  const [isTripDialogOpen, setIsTripDialogOpen] = useState(false);
+  
+  // AI Suggestions dialog state
+  const [isAISuggestionsOpen, setIsAISuggestionsOpen] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState<{title: string; savings: number; description: string}[]>([
+    { title: "Combinar voos de ida Carlos + Ana", savings: 850, description: "Ambos embarcam mesmo dia no OSV Atlantic. Rota GIG-MCE pode ser combinada." },
+    { title: "Negociação corporativa com LATAM", savings: 2400, description: "Volume de viagens permite desconto de 15% em tarifas corporativas." },
+    { title: "Hotel parceiro em Macaé", savings: 1600, description: "Acordo corporativo com Hotel Macaé Business para tarifa reduzida." },
+  ]);
+  
+  // Check-in dialog state
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [checkInTrip, setCheckInTrip] = useState<Trip | null>(null);
+  const [checkInData, setCheckInData] = useState({
+    passportNumber: "",
+    seatPreference: "window",
+    mealPreference: "standard",
+    emergencyContact: ""
+  });
 
   useEffect(() => {
     setIsLoaded(true);
@@ -355,6 +380,42 @@ export default function TravelCommandCenter() {
     a.download = `reservas_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  // Trip Details Handler
+  const handleViewTripDetails = (trip: Trip) => {
+    setSelectedTrip(trip);
+    setIsTripDialogOpen(true);
+  };
+
+  // Check-in Handler
+  const handleCheckIn = (trip: Trip) => {
+    setCheckInTrip(trip);
+    setIsCheckInOpen(true);
+  };
+
+  const submitCheckIn = () => {
+    if (!checkInTrip) return;
+    toast({
+      title: "✅ Check-in Realizado",
+      description: `Check-in online concluído para ${checkInTrip.crewMember} no voo ${checkInTrip.flight.number}`,
+    });
+    setIsCheckInOpen(false);
+    setCheckInData({
+      passportNumber: "",
+      seatPreference: "window",
+      mealPreference: "standard",
+      emergencyContact: ""
+    });
+  };
+
+  // Apply AI Suggestion
+  const applyAISuggestion = (suggestion: {title: string; savings: number; description: string}) => {
+    toast({
+      title: "🚀 Sugestão Aplicada",
+      description: `"${suggestion.title}" implementada. Economia: R$ ${suggestion.savings.toLocaleString()}`,
+    });
+    setAiSuggestions(prev => prev.filter(s => s.title !== suggestion.title));
   };
 
   // ============================================
@@ -624,7 +685,10 @@ export default function TravelCommandCenter() {
                               {trip.carbonFootprint} kg CO₂
                             </span>
                           </div>
-                          <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes da Viagem", description: `Visualizando viagem de ${trip.crewMember}` })}>Detalhes</Button>
+                          <Button variant="outline" size="sm" onClick={() => handleViewTripDetails(trip)}>
+                            <Eye className="h-4 w-4 mr-1" />
+                            Detalhes
+                          </Button>
                         </div>
                       </div>
                     ))}
@@ -643,14 +707,14 @@ export default function TravelCommandCenter() {
                   <div className="flex-1 min-w-48">
                     <h3 className="text-lg font-semibold">IA de Otimização de Custos</h3>
                     <p className="text-sm text-muted-foreground">
-                      3 oportunidades de economia identificadas combinando voos e hospedagens
+                      {aiSuggestions.length} oportunidades de economia identificadas combinando voos e hospedagens
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-success">R$ 4.850</p>
+                    <p className="text-2xl font-bold text-success">R$ {aiSuggestions.reduce((sum, s) => sum + s.savings, 0).toLocaleString()}</p>
                     <p className="text-sm text-muted-foreground">economia potencial</p>
                   </div>
-                  <Button onClick={() => toast({ title: "Sugestões de IA", description: "3 oportunidades identificadas para otimização de custos" })}>
+                  <Button onClick={() => setIsAISuggestionsOpen(true)}>
                     <Sparkles className="h-4 w-4 mr-2" />
                     Ver Sugestões
                   </Button>
@@ -754,11 +818,14 @@ export default function TravelCommandCenter() {
                         </span>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => toast({ title: "Check-in Online", description: "Abrindo formulário de check-in..." })}>
+                        <Button variant="ghost" size="sm" onClick={() => handleCheckIn(trip)}>
                           <QrCode className="h-4 w-4 mr-1" />
                           Check-in
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes", description: `Visualizando detalhes de ${trip.crewMember}` })}>Detalhes</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleViewTripDetails(trip)}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          Detalhes
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -909,6 +976,238 @@ export default function TravelCommandCenter() {
             fetchReservations();
           }}
         />
+
+        {/* Trip Details Dialog */}
+        <Dialog open={isTripDialogOpen} onOpenChange={setIsTripDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Plane className="h-5 w-5 text-primary" />
+                Detalhes da Viagem
+              </DialogTitle>
+              <DialogDescription>
+                Informações completas da mobilização/desmobilização
+              </DialogDescription>
+            </DialogHeader>
+            
+            {selectedTrip && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                  <div>
+                    <h3 className="text-lg font-semibold">{selectedTrip.crewMember}</h3>
+                    <p className="text-sm text-muted-foreground">{selectedTrip.role} • {selectedTrip.vessel}</p>
+                  </div>
+                  <Badge variant={selectedTrip.type === "mobilization" ? "default" : "secondary"}>
+                    {selectedTrip.type === "mobilization" ? "Mobilização" : "Desmobilização"}
+                  </Badge>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm flex items-center gap-2">
+                        <Plane className="h-4 w-4" />
+                        Informações do Voo
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="font-medium">{selectedTrip.flight.airline} {selectedTrip.flight.number}</p>
+                      <p className="text-sm">{selectedTrip.flight.departure} → {selectedTrip.flight.arrival}</p>
+                      <p className="text-sm text-muted-foreground">Partida: {selectedTrip.flight.departureTime}</p>
+                      <p className="text-sm text-muted-foreground">Chegada: {selectedTrip.flight.arrivalTime}</p>
+                      <Badge variant={selectedTrip.flight.status === "on_time" ? "outline" : "destructive"}>
+                        {selectedTrip.flight.status === "on_time" ? "✅ No Horário" : "⚠️ Atrasado"}
+                      </Badge>
+                    </CardContent>
+                  </Card>
+
+                  {selectedTrip.hotel && (
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm flex items-center gap-2">
+                          <Hotel className="h-4 w-4" />
+                          Hospedagem
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p className="font-medium">{selectedTrip.hotel.name}</p>
+                        <p className="text-sm text-muted-foreground">{selectedTrip.hotel.location}</p>
+                        <p className="text-sm">Check-in: {selectedTrip.hotel.checkIn}</p>
+                        <p className="text-sm">Check-out: {selectedTrip.hotel.checkOut}</p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {selectedTrip.transfer && (
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm flex items-center gap-2">
+                          <Car className="h-4 w-4" />
+                          Transfer
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p className="font-medium">{selectedTrip.transfer.type}</p>
+                        <p className="text-sm text-muted-foreground">{selectedTrip.transfer.provider}</p>
+                        <p className="text-sm">Horário: {selectedTrip.transfer.time}</p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm flex items-center gap-2">
+                        <DollarSign className="h-4 w-4" />
+                        Custos e ESG
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="font-medium text-lg">R$ {selectedTrip.cost.toLocaleString()}</p>
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <Leaf className="h-4 w-4 text-success" />
+                        {selectedTrip.carbonFootprint} kg CO₂
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsTripDialogOpen(false)}>Fechar</Button>
+              <Button onClick={() => { setIsTripDialogOpen(false); if(selectedTrip) handleCheckIn(selectedTrip); }}>
+                <QrCode className="h-4 w-4 mr-2" />
+                Check-in Online
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* AI Suggestions Dialog */}
+        <Dialog open={isAISuggestionsOpen} onOpenChange={setIsAISuggestionsOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                Sugestões de Otimização IA
+              </DialogTitle>
+              <DialogDescription>
+                Oportunidades identificadas para redução de custos
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              {aiSuggestions.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-success" />
+                  <p>Todas as sugestões foram aplicadas!</p>
+                </div>
+              ) : (
+                aiSuggestions.map((suggestion, index) => (
+                  <Card key={index} className="border-l-4 border-l-primary">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{suggestion.title}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{suggestion.description}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold text-success">R$ {suggestion.savings.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">economia</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-end mt-4">
+                        <Button size="sm" onClick={() => applyAISuggestion(suggestion)}>
+                          Aplicar Sugestão
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAISuggestionsOpen(false)}>Fechar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Check-in Dialog */}
+        <Dialog open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <QrCode className="h-5 w-5 text-primary" />
+                Check-in Online
+              </DialogTitle>
+              <DialogDescription>
+                {checkInTrip && `Voo ${checkInTrip.flight.airline} ${checkInTrip.flight.number} - ${checkInTrip.crewMember}`}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              <div className="grid gap-2">
+                <Label htmlFor="passport">Número do Passaporte</Label>
+                <Input
+                  id="passport"
+                  value={checkInData.passportNumber}
+                  onChange={(e) => setCheckInData(prev => ({ ...prev, passportNumber: e.target.value }))}
+                  placeholder="AB123456"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Preferência de Assento</Label>
+                <div className="flex gap-2">
+                  {["window", "middle", "aisle"].map(pref => (
+                    <Button
+                      key={pref}
+                      type="button"
+                      variant={checkInData.seatPreference === pref ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCheckInData(prev => ({ ...prev, seatPreference: pref }))}
+                    >
+                      {pref === "window" ? "Janela" : pref === "middle" ? "Meio" : "Corredor"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Preferência de Refeição</Label>
+                <div className="flex gap-2 flex-wrap">
+                  {["standard", "vegetarian", "vegan", "kosher"].map(meal => (
+                    <Button
+                      key={meal}
+                      type="button"
+                      variant={checkInData.mealPreference === meal ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCheckInData(prev => ({ ...prev, mealPreference: meal }))}
+                    >
+                      {meal === "standard" ? "Padrão" : meal === "vegetarian" ? "Vegetariano" : meal === "vegan" ? "Vegano" : "Kosher"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="emergency">Contato de Emergência</Label>
+                <Input
+                  id="emergency"
+                  value={checkInData.emergencyContact}
+                  onChange={(e) => setCheckInData(prev => ({ ...prev, emergencyContact: e.target.value }))}
+                  placeholder="+55 21 99999-9999"
+                />
+              </div>
+            </div>
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsCheckInOpen(false)}>Cancelar</Button>
+              <Button onClick={submitCheckIn}>
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                Confirmar Check-in
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
