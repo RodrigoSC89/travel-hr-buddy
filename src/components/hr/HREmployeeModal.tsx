@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Save, X } from 'lucide-react';
 import { useCreateHREmployee, useUpdateHREmployee, type HREmployee, type CreateEmployeeInput } from '@/hooks/useHREmployees';
+import { logger } from '@/lib/logger';
 
 interface HREmployeeModalProps {
   open: boolean;
@@ -81,7 +82,7 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
       }
       onClose();
     } catch (error) {
-      console.error('Error saving employee:', error);
+      logger.error('Error saving employee:', error);
     }
   };
 

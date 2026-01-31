@@ -6,6 +6,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
+import { logger } from '@/lib/logger';
 
 export interface SensorData {
   id: string;
@@ -36,7 +37,7 @@ async function fetchVesselsWithSensors(): Promise<VesselMonitor[]> {
     .limit(50);
 
   if (error) {
-    console.error("Error fetching vessels:", error);
+    logger.error("Error fetching vessels:", error);
     return [];
   }
 

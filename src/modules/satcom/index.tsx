@@ -18,6 +18,7 @@ import { CommunicationHistory } from "./components/CommunicationHistory";
 import { DiagnosticPanel } from "./components/DiagnosticPanel";
 import { ConnectivityPanel } from "./components/ConnectivityPanel";
 import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
+import { logger } from '@/lib/logger';
 
 // Export new PATCH 171.0 modules
 export { satcomStatusMonitor } from "./satcom-status";
@@ -228,7 +229,7 @@ const SatcomDashboard = () => {
         vesselId="vessel-001"
         onTestComplete={() => {
           // Reload any necessary data after test
-          console.log("Diagnostic test completed");
+          logger.debug("Diagnostic test completed");
         }}
       />
 

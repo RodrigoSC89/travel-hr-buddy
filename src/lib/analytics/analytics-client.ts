@@ -104,7 +104,7 @@ class AnalyticsClient {
     this.queue.push(event);
 
     if (this.config.debug) {
-      console.log('[Analytics] Event tracked:', eventName, properties);
+      logger.debug('[Analytics] Event tracked:', eventName, properties);
     }
 
     if (this.queue.length >= this.config.batchSize) {
@@ -178,14 +178,14 @@ class AnalyticsClient {
       }
 
       if (this.config.debug) {
-        console.log('[Analytics] Flushed', events.length, 'events');
+        logger.debug('[Analytics] Flushed', events.length, 'events');
       }
     } catch (error) {
       // Re-queue events on failure
       this.queue = [...events, ...this.queue];
       
       if (this.config.debug) {
-        console.error('[Analytics] Flush failed:', error);
+        logger.error('[Analytics] Flush failed:', error);
       }
     }
   }
@@ -249,6 +249,7 @@ export const analytics = new AnalyticsClient();
 // React hook
 import { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { logger } from '@/lib/logger';
 
 export function useAnalytics() {
   const location = useLocation();

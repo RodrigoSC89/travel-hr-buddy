@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Map, Loader2, RefreshCw, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface Waypoint {
   lat: number;
@@ -87,7 +88,7 @@ export function RouteMap({
         const { data, error: fnError } = await supabase.functions.invoke('mapbox-token');
         
         if (fnError) {
-          console.error('Edge function error:', fnError);
+          logger.error('Edge function error:', fnError);
           // Fallback to env variable
           const envToken = import.meta.env.VITE_MAPBOX_TOKEN;
           if (envToken) {
@@ -101,7 +102,7 @@ export function RouteMap({
           throw new Error('Token not returned from edge function');
         }
       } catch (err) {
-        console.error('Failed to get Mapbox token:', err);
+        logger.error('Failed to get Mapbox token:', err);
         setError('Mapbox token não configurado');
       } finally {
         setLoading(false);
@@ -404,11 +405,11 @@ export function RouteMap({
       });
 
       map.on('error', (e: any) => {
-        console.error('Map error:', e);
+        logger.error('Map error:', e);
       });
 
     } catch (err) {
-      console.error('Failed to initialize map:', err);
+      logger.error('Failed to initialize map:', err);
       setError('Falha ao inicializar o mapa');
     }
 

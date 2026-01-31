@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, CheckCircle2, Plus, Sparkles } from "lucide-react";
 import { mlcInspectionService, MLCFinding } from "@/services/mlc-inspection.service";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface ChecklistInterfaceProps {
   inspectionId: string;
@@ -45,7 +46,7 @@ export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfac
       const data = await mlcInspectionService.getFindings(inspectionId);
       setFindings(data);
     } catch (error) {
-      console.error("Error loading findings:", error);
+      logger.error("Error loading findings:", error);
       toast({
         title: "Error",
         description: "Failed to load findings",
@@ -78,7 +79,7 @@ export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfac
         description: "Finding added successfully",
       });
     } catch (error) {
-      console.error("Error adding finding:", error);
+      logger.error("Error adding finding:", error);
       toast({
         title: "Error",
         description: "Failed to add finding",

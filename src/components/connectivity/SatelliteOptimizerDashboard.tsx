@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SatelliteOptimizer } from '@/lib/connectivity/satellite-optimizer';
+import { logger } from '@/lib/logger';
 
 type SatelliteProvider = 'iridium' | 'inmarsat' | 'vsat' | 'starlink';
 
@@ -122,7 +123,7 @@ export function SatelliteOptimizerDashboard() {
       }));
       updateQueue();
     } catch (error) {
-      console.error('Failed to process queue:', error);
+      logger.error('Failed to process queue:', error);
     } finally {
       setLoading(false);
     }
@@ -147,7 +148,7 @@ export function SatelliteOptimizerDashboard() {
         costSaved: prev.costSaved + result.estimatedCost * 0.6, // 60% compression savings
       }));
     } catch (error) {
-      console.error('Failed to optimize:', error);
+      logger.error('Failed to optimize:', error);
     } finally {
       setLoading(false);
     }

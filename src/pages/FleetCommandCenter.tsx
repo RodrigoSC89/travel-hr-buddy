@@ -358,13 +358,41 @@ export default function FleetCommandCenter() {
         const total = vesselsData.length;
         const efficiencyAvg = enrichedVessels.reduce((acc, v) => acc + v.efficiency, 0) / total;
         
+        // Fetch safety incidents for safety score
+        const { count: totalIncidents } = await supabase
+          .from("safety_incidents")
+          .select("id", { count: "exact", head: true });
+        const safetyScore = totalIncidents ? Math.max(85, 100 - (totalIncidents * 2)) : 97;
+        
+        // Fetch crew wellbeing for crew score
+        const { data: wellbeingData } = await supabase
+          .from("crew_wellbeing")
+          .select("score")
+          .order("created_at", { ascending: false })
+          .limit(50);
+        const crewScore = wellbeingData && wellbeingData.length > 0
+          ? Math.round(wellbeingData.reduce((acc, w) => acc + (w.score || 80), 0) / wellbeingData.length)
+          : 94;
+        
+        // Fetch compliance records for compliance score
+        const { count: totalCompliance } = await supabase
+          .from("compliance_records")
+          .select("id", { count: "exact", head: true });
+        const { count: passedCompliance } = await supabase
+          .from("compliance_records")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "compliant");
+        const complianceScore = totalCompliance && totalCompliance > 0
+          ? Math.round((passedCompliance || 0) / totalCompliance * 100)
+          : 97;
+        
         setPerformanceMetrics([
           { metric: "Eficiência", value: Math.round(efficiencyAvg) },
-          { metric: "Segurança", value: Math.round(96 + Math.random() * 3) }, // TODO: integrar com safety_incidents
+          { metric: "Segurança", value: safetyScore },
           { metric: "Pontualidade", value: Math.round((operational / total) * 100) },
           { metric: "Manutenção", value: maintenanceData ? Math.max(70, 100 - maintenanceData.filter((m: any) => m.status === 'overdue').length * 5) : 91 },
-          { metric: "Tripulação", value: 94 }, // TODO: integrar com crew_wellbeing
-          { metric: "Compliance", value: 97 } // TODO: integrar com compliance_records
+          { metric: "Tripulação", value: crewScore },
+          { metric: "Compliance", value: complianceScore }
         ]);
       }
     } catch (error) {

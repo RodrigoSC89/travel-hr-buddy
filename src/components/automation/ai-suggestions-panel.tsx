@@ -156,7 +156,7 @@ export const AISuggestionsPanel: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error loading suggestions:", error);
+      logger.error("Error loading suggestions:", error);
       // Fallback to mock data
       setSuggestions(MOCK_SUGGESTIONS);
     } finally {
@@ -208,7 +208,7 @@ export const AISuggestionsPanel: React.FC = () => {
         await loadSuggestions(true);
       }
     } catch (error) {
-      console.error("Error refreshing with AI:", error);
+      logger.error("Error refreshing with AI:", error);
       await loadSuggestions(true);
     } finally {
       setIsRefreshing(false);

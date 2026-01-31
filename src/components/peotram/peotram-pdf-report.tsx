@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { FileDown, FileText, Loader2, Star, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface ElementScore {
   number: number;
@@ -216,7 +217,7 @@ export function PeotramPdfReport({ auditData, onGenerated }: PeotramPdfReportPro
       onGenerated?.(pdfBlob);
       toast.success("Relatório PDF gerado com sucesso!");
     } catch (error) {
-      console.error('PDF generation error:', error);
+      logger.error('PDF generation error:', error);
       toast.error("Erro ao gerar PDF");
     } finally {
       setIsGenerating(false);

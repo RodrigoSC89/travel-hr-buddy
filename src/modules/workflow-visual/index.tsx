@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
  * Visualização interativa de fluxos com sugestões IA em tempo real
@@ -70,6 +69,7 @@ import {
   Upload
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { logger } from '@/lib/logger';
 
 // Custom Node Types
 const WorkflowNode = ({ data }: { data: any }) => {
@@ -239,7 +239,7 @@ const WorkflowVisual = () => {
         toast({ title: "Análise Concluída", description: "IA gerou 3 sugestões de otimização" });
       }
     } catch (error) {
-      console.error("AI analysis error:", error);
+      logger.error("AI analysis error:", error);
       setAiSuggestions([
         { nodeId: "3", suggestion: "Fornecedor alternativo disponível com entrega em 24h", priority: "high" },
         { nodeId: "5", suggestion: "Aprovação pode ser delegada ao supervisor de turno", priority: "medium" },

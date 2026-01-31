@@ -23,6 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
+import { logger } from '@/lib/logger';
 
 interface ScenarioPreset {
   id: string;
@@ -169,7 +170,7 @@ export const ScenarioSimulator: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Simulation failed:", error);
+      logger.error("Simulation failed:", error);
     }
   };
 

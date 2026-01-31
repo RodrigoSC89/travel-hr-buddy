@@ -12,6 +12,7 @@ import {
   Download, Copy, RefreshCw, Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface EvidenceData {
   itemReference: string;
@@ -122,7 +123,7 @@ Responda APENAS com o JSON, sem texto adicional.`
         throw new Error('Formato de resposta inválido');
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       toast.error('Erro ao gerar evidência');
     } finally {
       setIsGenerating(false);

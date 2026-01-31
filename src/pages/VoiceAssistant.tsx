@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Mic,
   MicOff,
   Volume2,
@@ -101,7 +102,7 @@ export default function VoiceAssistant() {
         description: "Fale seu comando",
       });
     } catch (error) {
-      console.error("Recording error:", error);
+      logger.error("Recording error:", error);
       toast({
         title: "Erro no microfone",
         description: "Não foi possível acessar o microfone",
@@ -172,7 +173,7 @@ export default function VoiceAssistant() {
         description: data.userText?.substring(0, 50) + "...",
       });
     } catch (error) {
-      console.error("Voice command error:", error);
+      logger.error("Voice command error:", error);
       toast({
         title: "Erro no processamento",
         description: error instanceof Error ? error.message : "Falha ao processar comando",
@@ -227,7 +228,7 @@ export default function VoiceAssistant() {
         playAudio(`data:audio/mpeg;base64,${data.audioContent}`);
       }
     } catch (error) {
-      console.error("Text message error:", error);
+      logger.error("Text message error:", error);
       toast({
         title: "Erro",
         description: "Falha ao processar mensagem",
@@ -286,7 +287,7 @@ export default function VoiceAssistant() {
         playAudio(`data:audio/mpeg;base64,${data.audioContent}`);
       }
     } catch (error) {
-      console.error("TTS error:", error);
+      logger.error("TTS error:", error);
     } finally {
       setIsProcessing(false);
     }

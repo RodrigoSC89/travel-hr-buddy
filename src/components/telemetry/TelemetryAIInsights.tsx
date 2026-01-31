@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface AIInsight {
   id: string;
@@ -143,7 +144,7 @@ Responda em JSON:
       });
 
     } catch (err) {
-      console.error("[TelemetryAIInsights] Analysis failed:", err);
+      logger.error("[TelemetryAIInsights] Analysis failed:", err);
       generateFallbackInsights();
       toast.error("Erro na análise IA", {
         description: "Usando análise local como fallback"

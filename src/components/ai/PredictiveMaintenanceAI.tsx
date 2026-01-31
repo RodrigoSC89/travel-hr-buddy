@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   Brain, AlertTriangle, TrendingUp, Wrench, Clock,
   CheckCircle, XCircle, RefreshCw, Sparkles, Ship,
   Gauge, Zap, ThermometerSun, Settings
@@ -174,7 +175,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
         accuracy: 94.2
       });
     } catch (error) {
-      console.error('Error loading predictions:', error);
+      logger.error('Error loading predictions:', error);
     } finally {
       setIsAnalyzing(false);
     }

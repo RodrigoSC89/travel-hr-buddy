@@ -6,6 +6,7 @@
 import { sqliteStorage } from "./sqlite-storage";
 import { supabase } from "@/integrations/supabase/client";
 import { SyncQueueItem } from "../types";
+import { logger } from '@/lib/logger';
 
 type SyncPriority = "high" | "medium" | "low";
 
@@ -61,7 +62,7 @@ class SyncQueue {
     total: number;
   }> {
     if (this.isSyncing) {
-      console.log("Sync already in progress");
+      logger.debug("Sync already in progress");
       return { success: 0, failed: 0, total: 0 };
     }
 
@@ -76,7 +77,7 @@ class SyncQueue {
       const records = await sqliteStorage.getUnsyncedRecords();
       const totalCount = records.length;
 
-      console.log(`Processing ${totalCount} items in sync queue`);
+      logger.debug(`Processing ${totalCount} items in sync queue`);
 
       // Process in batches
       for (let i = 0; i < records.length; i += opts.batchSize!) {
@@ -95,7 +96,7 @@ class SyncQueue {
                 await sqliteStorage.deleteSyncedRecord(record.id);
               }
             } catch (error) {
-              console.error(`Failed to sync record ${record.id}:`, error);
+              logger.error(`Failed to sync record ${record.id}:`, error);
               failedCount++;
             }
           })

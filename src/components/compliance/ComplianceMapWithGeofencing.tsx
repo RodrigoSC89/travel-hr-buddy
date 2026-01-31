@@ -15,6 +15,7 @@ import {
   Ship, MapPin, AlertTriangle, RefreshCw, Filter, Radio, Target, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface VesselInspection {
   id: string;
@@ -116,7 +117,7 @@ export function ComplianceMapWithGeofencing({
         if (err) throw err;
         setMapboxToken(data.token);
       } catch (err) {
-        console.error('Failed to fetch Mapbox token:', err);
+        logger.error('Failed to fetch Mapbox token:', err);
         setError('Mapbox token não configurado');
         setIsLoading(false);
       }
@@ -151,7 +152,7 @@ export function ComplianceMapWithGeofencing({
       setGeofences(INSPECTION_ZONES);
       return INSPECTION_ZONES;
     } catch (err) {
-      console.error('Error fetching geofences:', err);
+      logger.error('Error fetching geofences:', err);
       setGeofences(INSPECTION_ZONES);
       return INSPECTION_ZONES;
     }
@@ -197,7 +198,7 @@ export function ComplianceMapWithGeofencing({
       setVessels(mock);
       return mock;
     } catch (err) {
-      console.error('Error fetching vessels:', err);
+      logger.error('Error fetching vessels:', err);
       const mock = getMockVessels();
       setVessels(mock);
       return mock;
@@ -290,11 +291,11 @@ export function ComplianceMapWithGeofencing({
         });
 
         mapInstance.on('error', (e: any) => {
-          console.warn('Map error:', e);
+          logger.warn('Map error:', e);
         });
 
       } catch (err) {
-        console.error('Failed to initialize map:', err);
+        logger.error('Failed to initialize map:', err);
         if (isMounted) {
           setError('Erro ao carregar mapa');
           setIsLoading(false);
@@ -393,7 +394,7 @@ export function ComplianceMapWithGeofencing({
           }
         });
       } catch (e) {
-        console.warn('Error adding geofence:', geofence.id, e);
+        logger.warn('Error adding geofence:', geofence.id, e);
       }
     });
   }

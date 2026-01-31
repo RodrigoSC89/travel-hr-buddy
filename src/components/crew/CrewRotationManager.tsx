@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-CLEANUP: Requires table: crew_rotations - not in schema (kept @ts-nocheck)
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
@@ -38,6 +37,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, parseISO, addDays, isBefore, isAfter } from "date-fns";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 type CrewEmbarkationRow = Database["public"]["Tables"]["crew_embarkations"]["Row"];
 type VesselRow = Database["public"]["Tables"]["vessels"]["Row"];
@@ -197,7 +197,7 @@ export const CrewRotationManager: React.FC = () => {
       // Detect conflicts
       detectConflicts(rotationsData || []);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
       toast.error("Failed to load crew rotation data");
     } finally {
       setLoading(false);
@@ -278,7 +278,7 @@ export const CrewRotationManager: React.FC = () => {
       // Generate alert
       await generateRotationAlert(crewMemberId, date, rotationType);
     } catch (error) {
-      console.error("Error scheduling rotation:", error);
+      logger.error("Error scheduling rotation:", error);
       toast.error("Failed to schedule rotation");
     }
   };
@@ -300,7 +300,7 @@ export const CrewRotationManager: React.FC = () => {
       // Log the alert
       toast.info("Alert generated for crew member");
     } catch (error) {
-      console.error("Error generating alert:", error);
+      logger.error("Error generating alert:", error);
     }
   };
 
@@ -325,7 +325,7 @@ export const CrewRotationManager: React.FC = () => {
         );
       }
     } catch (error) {
-      console.error("Error creating rotation:", error);
+      logger.error("Error creating rotation:", error);
       toast.error("Failed to create rotation");
     }
   };
@@ -350,7 +350,7 @@ export const CrewRotationManager: React.FC = () => {
       toast.success("Rotation status updated");
       loadData();
     } catch (error) {
-      console.error("Error updating rotation:", error);
+      logger.error("Error updating rotation:", error);
       toast.error("Failed to update rotation");
     }
   };

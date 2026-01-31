@@ -28,6 +28,7 @@ import {
   Plus
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
+import { logger } from '@/lib/logger';
 
 interface PersonalDocument {
   id: string;
@@ -91,7 +92,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       setDocuments(data || []);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading documents:", error);
+      logger.error("Error loading documents:", error);
       toast({
         title: "Error loading documents",
         description: message,

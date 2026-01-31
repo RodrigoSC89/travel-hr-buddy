@@ -29,6 +29,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface RoutePoint {
   name: string;
@@ -125,7 +126,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
         description: "Recomendações de navegação geradas com sucesso.",
       });
     } catch (error) {
-      console.error("Error analyzing route:", error);
+      logger.error("Error analyzing route:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar a rota. Tente novamente.",

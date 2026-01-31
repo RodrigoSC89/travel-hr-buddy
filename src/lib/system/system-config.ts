@@ -106,7 +106,7 @@ class SystemConfigManager {
         return { ...defaultConfig, ...JSON.parse(stored) };
       }
     } catch (error) {
-      console.error('Failed to load system config:', error);
+      logger.error('Failed to load system config:', error);
     }
     return defaultConfig;
   }
@@ -115,7 +115,7 @@ class SystemConfigManager {
     try {
       localStorage.setItem('system_config', JSON.stringify(this.config));
     } catch (error) {
-      console.error('Failed to save system config:', error);
+      logger.error('Failed to save system config:', error);
     }
   }
 
@@ -215,6 +215,7 @@ export const systemConfig = new SystemConfigManager();
 
 // React hook
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useSystemConfig() {
   const [config, setConfig] = useState<SystemConfig>(systemConfig.get());

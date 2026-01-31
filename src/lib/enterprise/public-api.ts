@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // API Key Management
 export interface APIKey {
@@ -254,11 +255,11 @@ export async function generateAPIKey(
     // In production, store in database
     const keyId = crypto.randomUUID();
     
-    console.log('[API] Generated new key:', { keyId, keyPrefix, permissions: options.permissions });
+    logger.debug('[API] Generated new key:', { keyId, keyPrefix, permissions: options.permissions });
     
     return { key, keyId };
   } catch (error) {
-    console.error('[API] Key generation failed:', error);
+    logger.error('[API] Key generation failed:', error);
     return null;
   }
 }
@@ -307,10 +308,10 @@ export async function validateAPIKey(key: string): Promise<{
 export async function revokeAPIKey(keyId: string): Promise<boolean> {
   try {
     // In production, update database to set is_active = false
-    console.log('[API] Revoked key:', keyId);
+    logger.debug('[API] Revoked key:', keyId);
     return true;
   } catch (error) {
-    console.error('[API] Key revocation failed:', error);
+    logger.error('[API] Key revocation failed:', error);
     return false;
   }
 }

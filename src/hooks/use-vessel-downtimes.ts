@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface VesselDowntime {
   id: string;
@@ -65,7 +66,7 @@ export function useVesselDowntimes(vesselId?: string) {
       // Type assertion since we know the structure matches
       setDowntimes((data || []) as unknown as VesselDowntime[]);
     } catch (err) {
-      console.error('Error fetching downtimes:', err);
+      logger.error('Error fetching downtimes:', err);
       setError('Erro ao carregar downtimes');
     } finally {
       setLoading(false);
@@ -106,7 +107,7 @@ export function useVesselDowntimes(vesselId?: string) {
       await fetchDowntimes();
       return newDowntime as unknown as VesselDowntime;
     } catch (err) {
-      console.error('Error creating downtime:', err);
+      logger.error('Error creating downtime:', err);
       toast.error('Erro ao registrar downtime');
       return null;
     }
@@ -125,7 +126,7 @@ export function useVesselDowntimes(vesselId?: string) {
       await fetchDowntimes();
       return true;
     } catch (err) {
-      console.error('Error updating downtime:', err);
+      logger.error('Error updating downtime:', err);
       toast.error('Erro ao atualizar downtime');
       return false;
     }
@@ -144,7 +145,7 @@ export function useVesselDowntimes(vesselId?: string) {
       await fetchDowntimes();
       return true;
     } catch (err) {
-      console.error('Error deleting downtime:', err);
+      logger.error('Error deleting downtime:', err);
       toast.error('Erro ao remover downtime');
       return false;
     }

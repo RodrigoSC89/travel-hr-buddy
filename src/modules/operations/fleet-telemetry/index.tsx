@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time sensor data and predictive maintenance system
@@ -28,6 +27,7 @@ import {
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface SensorData {
   id: string;
@@ -120,7 +120,7 @@ export default function FleetTelemetryModule() {
       })) || []);
 
     } catch (error) {
-      console.error("Error loading telemetry:", error);
+      logger.error("Error loading telemetry:", error);
       toast({
         title: "Erro ao carregar telemetria",
         description: "Não foi possível carregar os dados dos sensores.",
@@ -142,7 +142,7 @@ export default function FleetTelemetryModule() {
           table: "fleet_sensors"
         },
         (payload) => {
-          console.log("New sensor data:", payload);
+          logger.debug("New sensor data:", payload);
           loadTelemetryData();
         }
       )
@@ -154,7 +154,7 @@ export default function FleetTelemetryModule() {
           table: "maintenance_alerts"
         },
         (payload) => {
-          console.log("New maintenance alert:", payload);
+          logger.debug("New maintenance alert:", payload);
           toast({
             title: "Novo alerta de manutenção",
             description: payload.new.message,
@@ -203,7 +203,7 @@ export default function FleetTelemetryModule() {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error generating sensor data:", error);
+      logger.error("Error generating sensor data:", error);
     }
   };
 

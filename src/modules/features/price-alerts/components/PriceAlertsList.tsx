@@ -6,6 +6,7 @@ import { Bell, BellOff, Trash2, Edit, TrendingDown, TrendingUp } from "lucide-re
 import { priceAlertsService, PriceAlert } from "@/services/price-alerts-service";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface PriceAlertsListProps {
   onEdit: (alert: PriceAlert) => void;
@@ -23,7 +24,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
       const data = await priceAlertsService.getAlerts();
       setAlerts(data);
     } catch (error) {
-      console.error("Error loading alerts:", error);
+      logger.error("Error loading alerts:", error);
       toast.error("Erro ao carregar alertas");
     } finally {
       setLoading(false);

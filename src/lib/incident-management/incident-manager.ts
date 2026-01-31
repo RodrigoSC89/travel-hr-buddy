@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface Incident {
   id: string;
@@ -225,7 +226,7 @@ class IncidentManager {
         .single();
 
       if (error) {
-        console.error('Failed to create incident:', error);
+        logger.error('Failed to create incident:', error);
         return null;
       }
 
@@ -245,7 +246,7 @@ class IncidentManager {
 
       return data as unknown as Incident;
     } catch (error) {
-      console.error('Error creating incident:', error);
+      logger.error('Error creating incident:', error);
       return null;
     }
   }
@@ -426,7 +427,7 @@ class IncidentManager {
       .single();
 
     if (error) {
-      console.error('Failed to get incident:', error);
+      logger.error('Failed to get incident:', error);
       return null;
     }
 
@@ -462,7 +463,7 @@ class IncidentManager {
     const { data, error } = await query.order('detected_at', { ascending: false });
 
     if (error) {
-      console.error('Failed to get incidents:', error);
+      logger.error('Failed to get incidents:', error);
       return [];
     }
 
@@ -480,7 +481,7 @@ class IncidentManager {
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Failed to get timeline:', error);
+      logger.error('Failed to get timeline:', error);
       return [];
     }
 
@@ -498,7 +499,7 @@ class IncidentManager {
       .single();
 
     if (error) {
-      console.error('Failed to get runbook:', error);
+      logger.error('Failed to get runbook:', error);
       return null;
     }
 
@@ -521,7 +522,7 @@ class IncidentManager {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Failed to get runbooks:', error);
+      logger.error('Failed to get runbooks:', error);
       return [];
     }
 

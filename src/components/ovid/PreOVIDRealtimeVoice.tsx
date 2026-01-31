@@ -16,6 +16,7 @@ import { PreOVIDRealtimeChat, RealtimeMessage } from '@/utils/PreOVIDRealtimeAud
 import { AnimatedAudioWaveform, PulseIndicator } from '@/components/ui/audio-waveform';
 import { PhotoCaptureModal, ObservationModal, ChapterNavigationModal } from './VoiceCommandModals';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface VoiceMessage {
   role: 'user' | 'assistant';
@@ -151,7 +152,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
         await audio.play();
       }
     } catch (error) {
-      console.error('ElevenLabs TTS error:', error);
+      logger.error('ElevenLabs TTS error:', error);
       // Fallback to browser TTS if ElevenLabs fails
       speakWithBrowserTTS(text);
     } finally {
@@ -193,7 +194,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
   };
 
   const handleMessage = useCallback((event: RealtimeMessage) => {
-    console.log('Realtime message:', event.type);
+    logger.debug('Realtime message:', event.type);
     
     // Update listening state
     if (event.type === 'input_audio_buffer.speech_started') {
@@ -273,7 +274,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
           }
         },
         onError: (error) => {
-          console.error('Realtime error:', error);
+          logger.error('Realtime error:', error);
           toast.error('Erro na conexão de voz');
           setIsConnected(false);
         }
@@ -284,7 +285,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
       toast.success('ARIA conectada! Fale seus comandos.');
       
     } catch (error) {
-      console.error('Failed to start conversation:', error);
+      logger.error('Failed to start conversation:', error);
       toast.error('Falha ao conectar assistente de voz');
     } finally {
       setIsConnecting(false);
@@ -344,7 +345,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
         timestamp: new Date()
       }]);
     } catch (error) {
-      console.error('Failed to send message:', error);
+      logger.error('Failed to send message:', error);
       toast.error('Erro ao enviar mensagem');
     }
   };

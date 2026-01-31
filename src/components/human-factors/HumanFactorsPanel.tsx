@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface HumanFactorsAssessment {
   risk_score: number;
@@ -81,7 +82,7 @@ export function HumanFactorsPanel({
       setOverallEIScore(data.overall_ei_score);
       toast.success('Avaliação de fatores humanos concluída');
     } catch (error) {
-      console.error('Assessment error:', error);
+      logger.error('Assessment error:', error);
       toast.error('Erro ao realizar avaliação');
     } finally {
       setLoading(false);

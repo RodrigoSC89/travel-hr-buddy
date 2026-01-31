@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +9,7 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -103,7 +103,7 @@ export const PerformanceMonitor: React.FC = () => {
       // Check thresholds and alert
       checkThresholds(newMetrics);
     } catch (error) {
-      console.error("Error measuring performance:", error);
+      logger.error("Error measuring performance:", error);
     }
   }, []);
 
@@ -120,10 +120,10 @@ export const PerformanceMonitor: React.FC = () => {
         });
 
       if (error) {
-        console.error("Error persisting metrics:", error);
+        logger.error("Error persisting metrics:", error);
       }
     } catch (error) {
-      console.error("Error in persistMetrics:", error);
+      logger.error("Error in persistMetrics:", error);
     }
   };
 
@@ -148,7 +148,7 @@ export const PerformanceMonitor: React.FC = () => {
         setHistoricalData(formatted);
       }
     } catch (error) {
-      console.error("Error loading historical data:", error);
+      logger.error("Error loading historical data:", error);
     }
   };
 

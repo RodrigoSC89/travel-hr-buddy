@@ -7,6 +7,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone, Zap, WifiOff, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -49,7 +50,7 @@ export function InstallPrompt() {
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      console.log('User accepted PWA install');
+      logger.debug('User accepted PWA install');
     }
     
     setDeferredPrompt(null);

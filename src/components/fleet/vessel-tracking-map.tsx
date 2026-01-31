@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Ship, MapPin, Navigation, Activity, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { logger } from '@/lib/logger';
 
 interface VesselLocation {
   id: string;
@@ -86,7 +87,7 @@ const VesselTrackingMap = () => {
           }
         });
       } catch (error) {
-        console.error("Failed to load map:", error);
+        logger.error("Failed to load map:", error);
         if (mounted) setIsMapLoading(false);
       }
     };

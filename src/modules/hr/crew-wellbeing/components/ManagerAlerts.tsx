@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, CheckCircle, AlertCircle, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface WellbeingAlert {
   id: string;
@@ -40,7 +41,7 @@ export const ManagerAlerts: React.FC = () => {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error("Error fetching alerts:", error);
+      logger.error("Error fetching alerts:", error);
       toast({
         title: "Error",
         description: "Failed to load wellbeing alerts",
@@ -70,7 +71,7 @@ export const ManagerAlerts: React.FC = () => {
 
       fetchAlerts();
     } catch (error) {
-      console.error("Error acknowledging alert:", error);
+      logger.error("Error acknowledging alert:", error);
       toast({
         title: "Error",
         description: "Failed to acknowledge alert",
@@ -98,7 +99,7 @@ export const ManagerAlerts: React.FC = () => {
 
       fetchAlerts();
     } catch (error) {
-      console.error("Error resolving alert:", error);
+      logger.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",

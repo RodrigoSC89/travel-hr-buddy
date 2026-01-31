@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
+import { logger } from '@/lib/logger';
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -139,7 +140,7 @@ const Auth: React.FC = () => {
       
       if (error) {
         const errorMsg = error.message.toLowerCase();
-        console.error('[Auth] Login error:', error.message, error.status);
+        logger.error('[Auth] Login error:', error.message, error.status);
         
         if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
@@ -158,7 +159,7 @@ const Auth: React.FC = () => {
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      console.error('[Auth] Login exception:', errorMessage);
+      logger.error('[Auth] Login exception:', errorMessage);
       
       // Handle network errors specifically  
       if (errorMessage.includes('Failed to fetch') || 

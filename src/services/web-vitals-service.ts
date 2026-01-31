@@ -2,6 +2,7 @@
 import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from "web-vitals";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 export interface WebVitalsData {
   name: string;
@@ -72,10 +73,10 @@ export class WebVitalsService {
         });
       
       if (error) {
-        console.error("Error reporting Web Vitals metric:", error);
+        logger.error("Error reporting Web Vitals metric:", error);
       }
     } catch (error) {
-      console.error("Failed to report metric:", error);
+      logger.error("Failed to report metric:", error);
     }
   }
   

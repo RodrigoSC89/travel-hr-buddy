@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 380: Document Template Library with PDF Generation
  * Template management with dynamic placeholders and PDF export
@@ -17,6 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Plus, Download, Edit, Trash2, History, Copy } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -87,7 +87,7 @@ export const TemplateLibrary: React.FC = () => {
       if (error) throw error;
       setTemplates(data || []);
     } catch (error) {
-      console.error("Error loading templates:", error);
+      logger.error("Error loading templates:", error);
       toast({
         title: "Error",
         description: "Failed to load templates",
@@ -109,7 +109,7 @@ export const TemplateLibrary: React.FC = () => {
       if (error) throw error;
       setVersions(data || []);
     } catch (error) {
-      console.error("Error loading versions:", error);
+      logger.error("Error loading versions:", error);
     }
   };
 
@@ -177,7 +177,7 @@ export const TemplateLibrary: React.FC = () => {
       resetForm();
       loadTemplates();
     } catch (error) {
-      console.error("Error creating template:", error);
+      logger.error("Error creating template:", error);
       toast({
         title: "Error",
         description: "Failed to create template",
@@ -204,7 +204,7 @@ export const TemplateLibrary: React.FC = () => {
 
       loadTemplates();
     } catch (error) {
-      console.error("Error deleting template:", error);
+      logger.error("Error deleting template:", error);
       toast({
         title: "Error",
         description: "Failed to delete template",
@@ -271,7 +271,7 @@ export const TemplateLibrary: React.FC = () => {
 
       setIsGenerateOpen(false);
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
       toast({
         title: "Error",
         description: "Failed to generate PDF",

@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Digital Twin Engine
  * Real-time vessel simulation and prediction
@@ -146,7 +148,7 @@ export class VesselDigitalTwin {
       }
     };
 
-    console.log(`[DigitalTwin] Initialized for ${vesselName}`);
+    logger.debug(`[DigitalTwin] Initialized for ${vesselName}`);
     this.emit('initialized', this.state);
   }
 
@@ -162,7 +164,7 @@ export class VesselDigitalTwin {
       await this.simulationTick();
     }, intervalMs);
 
-    console.log('[DigitalTwin] Simulation started');
+    logger.debug('[DigitalTwin] Simulation started');
   }
 
   /**
@@ -173,7 +175,7 @@ export class VesselDigitalTwin {
       clearInterval(this.simulationInterval);
       this.simulationInterval = null;
     }
-    console.log('[DigitalTwin] Simulation stopped');
+    logger.debug('[DigitalTwin] Simulation stopped');
   }
 
   /**

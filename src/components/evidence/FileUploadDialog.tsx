@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Upload, FileText, X, CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface FileUploadProps {
   onUploadComplete?: (files: UploadedFile[]) => void;
@@ -144,7 +145,7 @@ export function FileUploadDialog({
           idx === i ? { ...f, status: 'success' as const } : f
         ));
       } catch (error) {
-        console.error('Upload error:', error);
+        logger.error('Upload error:', error);
         setFiles(prev => prev.map((f, idx) => 
           idx === i ? { ...f, status: 'error' as const, error: 'Falha no upload' } : f
         ));

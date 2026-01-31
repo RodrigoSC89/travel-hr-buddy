@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   Brain, 
   Search, 
   AlertTriangle, 
@@ -60,7 +61,7 @@ export const DPIntelCenter: React.FC = () => {
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error('Error fetching incidents:', error);
+      logger.error('Error fetching incidents:', error);
       toast.error('Erro ao carregar incidentes');
     } finally {
       setLoading(false);
@@ -80,7 +81,7 @@ export const DPIntelCenter: React.FC = () => {
       if (error) throw error;
       setAnalysisResult(data.result);
     } catch (error) {
-      console.error('Error analyzing incident:', error);
+      logger.error('Error analyzing incident:', error);
       toast.error('Erro ao analisar incidente');
     } finally {
       setAnalyzing(false);

@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils';
 import { AI_MODULES, type AIModuleKey } from '@/lib/ai-prompts';
 import { unifiedAI } from '@/lib/ai/unified-ai-service';
 import { UniversalAIChat } from './UniversalAIChat';
+import { logger } from '@/lib/logger';
 
 interface GlobalAIButtonProps {
   className?: string;
@@ -103,7 +104,7 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognitionRef.current.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
+      logger.error('Speech recognition error:', event.error);
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
     };

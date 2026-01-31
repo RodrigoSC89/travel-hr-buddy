@@ -45,6 +45,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   WorkspaceTeamPanel,
   WorkspaceChatPanel,
   WorkspaceDocuments,
@@ -243,7 +244,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       
     } catch (error) {
-      console.error('AI assist error:', error);
+      logger.error('AI assist error:', error);
       toast({
         title: "Erro",
         description: "Falha ao obter resposta da IA. Usando modo offline.",

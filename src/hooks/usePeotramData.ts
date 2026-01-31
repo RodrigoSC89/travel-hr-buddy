@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { PEOTRAM_2024_ELEMENTS } from '@/data/peotram-2024-elements';
+import { logger } from '@/lib/logger';
 
 export interface PeotramElementDB {
   id: string;
@@ -65,7 +66,7 @@ export function usePeotramData() {
         return data;
       } else {
         // Fallback to local data
-        console.log('Using local PEOTRAM data (no remote data)');
+        logger.debug('Using local PEOTRAM data (no remote data)');
         // PATCH v20: NÃO definir isOnline como false - dados locais não significam offline
         const localElements = PEOTRAM_2024_ELEMENTS.map(e => ({
           id: `local-${e.id}`,
@@ -82,7 +83,7 @@ export function usePeotramData() {
         return localElements;
       }
     } catch (err) {
-      console.error('Error loading elements:', err);
+      logger.error('Error loading elements:', err);
       setError('Erro ao carregar elementos');
       // PATCH v20: NÃO definir isOnline como false - erros de API não significam offline
       // Fallback to local data
@@ -114,7 +115,7 @@ export function usePeotramData() {
       if (error) throw error;
       return data || [];
     } catch (err) {
-      console.error('Error loading items:', err);
+      logger.error('Error loading items:', err);
       return [];
     }
   }, []);
@@ -131,7 +132,7 @@ export function usePeotramData() {
       setItems(data || []);
       return data || [];
     } catch (err) {
-      console.error('Error loading items:', err);
+      logger.error('Error loading items:', err);
       setItems([]);
       return [];
     }
@@ -149,7 +150,7 @@ export function usePeotramData() {
       setAudits(data || []);
       return data || [];
     } catch (err) {
-      console.error('Error loading audits:', err);
+      logger.error('Error loading audits:', err);
       setAudits([]);
       return [];
     }
@@ -175,7 +176,7 @@ export function usePeotramData() {
       await loadAudits();
       return data;
     } catch (err) {
-      console.error('Error creating audit:', err);
+      logger.error('Error creating audit:', err);
       throw err;
     }
   }, [loadAudits]);
@@ -200,7 +201,7 @@ export function usePeotramData() {
       if (error) throw error;
       return data;
     } catch (err) {
-      console.error('Error saving response:', err);
+      logger.error('Error saving response:', err);
       throw err;
     }
   }, []);
@@ -216,7 +217,7 @@ export function usePeotramData() {
       if (error) throw error;
       return data || [];
     } catch (err) {
-      console.error('Error loading responses:', err);
+      logger.error('Error loading responses:', err);
       return [];
     }
   }, []);

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { useCircuitBreaker } from '@/hooks/use-circuit-breaker';
 import { useTracing } from '@/hooks/use-tracing';
 import { useOfflineSync } from '@/hooks/use-offline-sync';
+import { logger } from '@/lib/logger';
 
 export interface Message {
   role: 'user' | 'assistant';
@@ -77,7 +78,7 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
 
       // Log connection quality for debugging
       if (isMaritime) {
-        console.log('[NautiBrain] Maritime mode active:', {
+        logger.debug('[NautiBrain] Maritime mode active:', {
           latency: connectionQuality?.rtt,
           bandwidth: connectionQuality?.downlink,
           timeout,
@@ -166,7 +167,7 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
         }
       }
     } catch (error) {
-      console.error('Nautilus Brain error:', error);
+      logger.error('Nautilus Brain error:', error);
       if (!assistantContent) {
         setMessages(prev => [...prev, { 
           role: 'assistant', 

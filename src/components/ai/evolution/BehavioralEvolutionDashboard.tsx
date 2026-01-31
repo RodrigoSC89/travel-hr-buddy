@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Behavioral Evolution Dashboard
  * Real-time AI behavior tracking with System Watchdog integration

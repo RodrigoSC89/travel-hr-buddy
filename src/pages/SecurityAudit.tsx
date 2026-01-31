@@ -34,6 +34,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface SecurityFinding {
   id: string;
@@ -182,7 +183,7 @@ export default function SecurityAudit() {
       setLastScan(new Date());
       toast.success("Varredura de segurança concluída");
     } catch (error) {
-      console.error("Security scan error:", error);
+      logger.error("Security scan error:", error);
       toast.error("Erro ao executar varredura de segurança");
     } finally {
       setLoading(false);

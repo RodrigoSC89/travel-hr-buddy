@@ -48,6 +48,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
+import { logger } from '@/lib/logger';
   Bell,
   CheckCircle,
   AlertCircle,
@@ -522,7 +523,7 @@ export default function NotificationCenterProfessional() {
       
       setAiSummary(data?.response || data?.text || `📊 **Resumo Executivo das Notificações**\n\n• Total não lidas: ${unreadTotal}\n• Notificações críticas: ${unreadCritical}\n\n**Recomendações:**\n1. Priorize as ${unreadCritical} notificações críticas imediatamente\n2. Revise alertas de compliance e certificados\n3. Configure auto-arquivamento para notificações informativas`);
     } catch (error) {
-      console.error('AI Error:', error);
+      logger.error('AI Error:', error);
       setAiSummary(`📊 **Resumo Executivo das Notificações**\n\n• Total não lidas: ${stats.unread}\n• Notificações críticas: ${stats.critical}\n\n**Recomendações:**\n1. Priorize as notificações críticas imediatamente\n2. Revise alertas de compliance e certificados\n3. Configure auto-arquivamento para notificações informativas\n4. Ative notificações push para alertas críticos`);
     } finally {
       setIsAiLoading(false);

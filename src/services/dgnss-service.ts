@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface DGNSSSatellite {
   satid: number;
@@ -115,7 +116,7 @@ class DGNSSService {
       if (error) throw error;
       return data?.satellites || [];
     } catch (error) {
-      console.error("Error fetching satellites above:", error);
+      logger.error("Error fetching satellites above:", error);
       return this.getMockSatellites(lat, lng);
     }
   }
@@ -144,7 +145,7 @@ class DGNSSService {
       if (error) throw error;
       return data?.positions?.[0] || null;
     } catch (error) {
-      console.error("Error fetching satellite position:", error);
+      logger.error("Error fetching satellite position:", error);
       return this.getMockPosition(noradId);
     }
   }
@@ -176,7 +177,7 @@ class DGNSSService {
       if (error) throw error;
       return data?.passes || [];
     } catch (error) {
-      console.error("Error fetching satellite passes:", error);
+      logger.error("Error fetching satellite passes:", error);
       return [];
     }
   }
@@ -196,7 +197,7 @@ class DGNSSService {
       if (error) throw error;
       return data?.tle || null;
     } catch (error) {
-      console.error("Error fetching TLE:", error);
+      logger.error("Error fetching TLE:", error);
       return null;
     }
   }

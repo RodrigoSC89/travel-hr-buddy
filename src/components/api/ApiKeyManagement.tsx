@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface ApiKey {
   id: string;
@@ -163,7 +164,7 @@ export const ApiKeyManagement: React.FC = () => {
       toast.success("Chave de API criada com sucesso!");
       fetchApiKeys();
     } catch (error) {
-      console.error("Error creating API key:", error);
+      logger.error("Error creating API key:", error);
       toast.error("Erro ao criar chave de API");
     }
   };
@@ -180,7 +181,7 @@ export const ApiKeyManagement: React.FC = () => {
       toast.success(isActive ? "Chave desativada" : "Chave ativada");
       fetchApiKeys();
     } catch (error) {
-      console.error("Error toggling API key:", error);
+      logger.error("Error toggling API key:", error);
       toast.error("Erro ao atualizar chave");
     }
   };
@@ -197,7 +198,7 @@ export const ApiKeyManagement: React.FC = () => {
       toast.success("Chave removida com sucesso");
       fetchApiKeys();
     } catch (error) {
-      console.error("Error deleting API key:", error);
+      logger.error("Error deleting API key:", error);
       toast.error("Erro ao remover chave");
     }
   };

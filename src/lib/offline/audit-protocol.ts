@@ -4,6 +4,7 @@
  */
 
 import { localCrypto } from '@/lib/security/local-crypto';
+import { logger } from '@/lib/logger';
 
 export interface AuditEntry {
   id: string;
@@ -97,7 +98,7 @@ class AuditProtocol {
         }
       }
     } catch (error) {
-      console.warn('Failed to load audit log:', error);
+      logger.warn('Failed to load audit log:', error);
       this.entries = [];
     }
   }
@@ -115,7 +116,7 @@ class AuditProtocol {
         localStorage.setItem(STORAGE_KEY, data);
       }
     } catch (error) {
-      console.warn('Failed to save audit log:', error);
+      logger.warn('Failed to save audit log:', error);
     }
   }
 

@@ -5,6 +5,7 @@
  */
 
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 export interface HealthIssue {
   id: string;
@@ -80,7 +81,7 @@ export class SelfHealingSystem {
       clearInterval(this.monitorInterval);
       this.monitorInterval = null;
     }
-    console.log('[SelfHealing] Stopped');
+    logger.debug('[SelfHealing] Stopped');
     this.emit('stopped', {});
   }
 
@@ -129,12 +130,12 @@ export class SelfHealingSystem {
       };
 
       const duration = Date.now() - checkStart;
-      console.log(`[SelfHealing] Health check completed in ${duration}ms - Status: ${this.health.status}, Score: ${this.health.score}`);
+      logger.debug(`[SelfHealing] Health check completed in ${duration}ms - Status: ${this.health.status}, Score: ${this.health.score}`);
 
       this.emit('health-check', this.health);
 
     } catch (error) {
-      console.error('[SelfHealing] Health check failed:', error);
+      logger.error('[SelfHealing] Health check failed:', error);
       this.emit('error', error);
     }
   }
@@ -325,7 +326,7 @@ export class SelfHealingSystem {
    * Repair an issue
    */
   private async repairIssue(issue: HealthIssue): Promise<void> {
-    console.log(`[SelfHealing] Repairing issue: ${issue.type}`);
+    logger.debug(`[SelfHealing] Repairing issue: ${issue.type}`);
 
     try {
       switch (issue.type) {
@@ -350,7 +351,7 @@ export class SelfHealingSystem {
           break;
 
         default:
-          console.log(`[SelfHealing] No auto-repair for ${issue.type}`);
+          logger.debug(`[SelfHealing] No auto-repair for ${issue.type}`);
           return;
       }
 
@@ -359,11 +360,11 @@ export class SelfHealingSystem {
       this.lastRepairTime.set(issue.type, Date.now());
       this.repairHistory.push(issue);
 
-      console.log(`[SelfHealing] Repaired: ${issue.repairAction}`);
+      logger.debug(`[SelfHealing] Repaired: ${issue.repairAction}`);
       this.emit('repaired', issue);
 
     } catch (error) {
-      console.error(`[SelfHealing] Repair failed for ${issue.type}:`, error);
+      logger.error(`[SelfHealing] Repair failed for ${issue.type}:`, error);
       this.emit('repair-failed', { issue, error });
     }
   }
@@ -499,7 +500,7 @@ export class SelfHealingSystem {
     const count = (this.errorCounts.get(module) || 0) + 1;
     this.errorCounts.set(module, count);
 
-    console.log(`[SelfHealing] Error reported from ${module}: ${error.message}`);
+    logger.debug(`[SelfHealing] Error reported from ${module}: ${error.message}`);
     this.emit('error-reported', { module, error, count });
   }
 

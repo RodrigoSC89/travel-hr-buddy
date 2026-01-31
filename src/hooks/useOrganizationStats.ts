@@ -5,6 +5,7 @@
 
 import useSWR from "swr";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface OrganizationStats {
   totalVessels: number;
@@ -83,7 +84,7 @@ const fetcher = async (organizationId: string): Promise<OrganizationStats> => {
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
-    console.error("Error fetching organization stats:", error);
+    logger.error("Error fetching organization stats:", error);
     // Return default values on error
     return {
       totalVessels: 0,

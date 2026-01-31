@@ -7,6 +7,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type {
+import { logger } from '@/lib/logger';
   ComplianceItem,
   AuditSession,
   AuditFinding,
@@ -323,7 +324,7 @@ export function useComplianceData() {
       await new Promise(resolve => setTimeout(resolve, 500));
       // Data is already set from mock
     } catch (error) {
-      console.error('Error fetching compliance data:', error);
+      logger.error('Error fetching compliance data:', error);
       toast.error('Erro ao carregar dados de conformidade');
     } finally {
       setLoading(false);

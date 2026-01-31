@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type AlertSeverity = 'info' | 'warning' | 'critical';
 
@@ -27,12 +28,12 @@ export const sendAlert = async (payload: AlertPayload): Promise<boolean> => {
     });
 
     if (error) {
-      console.error('Failed to send alert:', error);
+      logger.error('Failed to send alert:', error);
       return false;
     }
 
     // Log alert - using console for now as access_logs schema may vary
-    console.log('[Alert Logged]', {
+    logger.debug('[Alert Logged]', {
       action: 'ALERT_SENT',
       source: payload.source,
       severity: payload.severity,
@@ -42,7 +43,7 @@ export const sendAlert = async (payload: AlertPayload): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.error('Alert sending error:', error);
+    logger.error('Alert sending error:', error);
     return false;
   }
 };

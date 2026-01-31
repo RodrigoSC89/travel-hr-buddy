@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface VesselStatus {
   id: string;
@@ -46,7 +47,7 @@ export function FleetIntelligence() {
         .limit(10);
 
       if (error) {
-        console.error("Error loading vessels:", error);
+        logger.error("Error loading vessels:", error);
         // Use demo data if no access
         setVessels(getDemoVessels());
         return;
@@ -73,7 +74,7 @@ export function FleetIntelligence() {
         setVessels(getDemoVessels());
       }
     } catch (error) {
-      console.error("Error loading fleet:", error);
+      logger.error("Error loading fleet:", error);
       setVessels(getDemoVessels());
     } finally {
       setIsLoading(false);

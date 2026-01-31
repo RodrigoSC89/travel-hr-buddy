@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ExtractedData {
   cpf?: string;
@@ -103,7 +104,7 @@ export default function HRDocumentOCRPage() {
 
       toast.success(`Documento ${DOCUMENT_TYPES.find(d => d.id === documentType)?.label} processado com sucesso!`);
     } catch (error) {
-      console.error('OCR Error:', error);
+      logger.error('OCR Error:', error);
       
       // Update with error
       setResults(prev => prev.map(r => 

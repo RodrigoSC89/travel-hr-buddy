@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Ship, RefreshCw, Navigation, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { logger } from '@/lib/logger';
 
 interface VesselPosition {
   vesselId?: string;
@@ -64,7 +65,7 @@ export function FleetMapBox({
         const { data, error: fnError } = await supabase.functions.invoke("mapbox-token");
         
         if (fnError) {
-          console.error("Mapbox token error:", fnError);
+          logger.error("Mapbox token error:", fnError);
           setError("Erro ao carregar token do mapa");
           setLoading(false);
           return;
@@ -77,7 +78,7 @@ export function FleetMapBox({
           setLoading(false);
         }
       } catch (err) {
-        console.error("Failed to get Mapbox token:", err);
+        logger.error("Failed to get Mapbox token:", err);
         setError("Falha ao conectar com o serviço de mapas");
         setLoading(false);
       }
@@ -121,7 +122,7 @@ export function FleetMapBox({
         }
       }
     } catch (err) {
-      console.error("Failed to fetch vessels:", err);
+      logger.error("Failed to fetch vessels:", err);
       // Fallback to external vessels
       if (externalVessels && externalVessels.length > 0) {
         const mappedVessels = externalVessels.map((v, i) => ({
@@ -186,7 +187,7 @@ export function FleetMapBox({
 
         mapRef.current = mapInstance;
       } catch (err) {
-        console.error("Failed to initialize map:", err);
+        logger.error("Failed to initialize map:", err);
         setError("Falha ao inicializar o mapa");
       }
     };

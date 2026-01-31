@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { 
+import { logger } from '@/lib/logger';
   Anchor, Plus, Search, Edit, Trash2, Calendar, Clock,
   Ship, MapPin, FileText, CheckCircle, AlertTriangle,
   Play, Pause, StopCircle, Download, Filter
@@ -237,7 +238,7 @@ export function PortCallManager() {
   }, []);
 
   const handleExport = useCallback(() => {
-    console.log('Exporting port calls:', filteredCalls);
+    logger.debug('Exporting port calls:', filteredCalls);
     toast.success(`${filteredCalls.length} escalas exportadas`);
   }, [filteredCalls]);
 

@@ -369,7 +369,7 @@ export async function getWeatherData(
     const cached = weatherCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       if (ENABLE_LOGS) {
-        console.log("[Weather] Using cached data");
+        logger.debug("[Weather] Using cached data");
       }
       return cached.data;
     }
@@ -451,7 +451,7 @@ export async function getWeatherData(
  */
 export function clearWeatherCache(): void {
   weatherCache.clear();
-  console.log("[Weather] Cache cleared");
+  logger.debug("[Weather] Cache cleared");
 }
 
 /**

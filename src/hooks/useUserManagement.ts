@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from '@/lib/logger';
 
 export interface OrganizationUser {
   id: string;
@@ -128,7 +129,7 @@ export const useUserManagement = () => {
         })));
       }
     } catch (err) {
-      console.error("Error fetching users:", err);
+      logger.error("Error fetching users:", err);
       setUsers(sampleUsers);
     } finally {
       setIsLoading(false);

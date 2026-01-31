@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format, isSameDay, startOfMonth, endOfMonth } from "date-fns";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 type MaintenanceSchedule = Database["public"]["Tables"]["maintenance_schedules"]["Row"];
 
@@ -42,7 +43,7 @@ export const MaintenanceCalendarView: React.FC = () => {
 
       setTasks(data || []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks:", error);
       toast({
         title: "Error",
         description: "Failed to load maintenance tasks",

@@ -26,6 +26,7 @@ import {
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import ReactMarkdown from 'react-markdown';
+import { logger } from '@/lib/logger';
 
 type ModuleType = 'peotram' | 'peo-dp';
 type EvidenceStatus = 'draft' | 'generated' | 'validated' | 'exported';
@@ -188,7 +189,7 @@ export function UnifiedEvidenceGenerator() {
         description: `Confiança: ${evidence.confidence_score}%`
       });
     } catch (error) {
-      console.error('Error generating evidence:', error);
+      logger.error('Error generating evidence:', error);
       toast.error('Erro ao gerar evidência', {
         description: 'Tente novamente ou verifique os dados'
       });

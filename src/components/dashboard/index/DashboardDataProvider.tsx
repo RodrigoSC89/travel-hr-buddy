@@ -6,6 +6,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 export interface DashboardMetrics {
   totalVessels: number;
@@ -129,7 +130,7 @@ export function useDashboardData() {
       setNotifications(mappedNotifications);
 
     } catch (error) {
-      console.error("Error fetching dashboard metrics:", error);
+      logger.error("Error fetching dashboard metrics:", error);
       // Set default values on error
       setMetrics(prev => ({
         ...prev,

@@ -12,6 +12,7 @@ import { CertificationsPanel } from "./components/CertificationsPanel";
 import { CrewAICopilot } from "./components/CrewAICopilot";
 import { InsightsPanel } from "./components/InsightsPanel";
 import { AddCrewDialog } from "./components/AddCrewDialog";
+import { logger } from '@/lib/logger';
 
 interface CrewMember {
   id: string;
@@ -67,7 +68,7 @@ const CrewManagement = () => {
       setCertificates((certData as unknown as Certificate[]) || []);
 
     } catch (error) {
-      console.error("Error loading crew data:", error);
+      logger.error("Error loading crew data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados da tripulação",

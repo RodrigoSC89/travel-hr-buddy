@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -186,7 +187,7 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
       }
       
     } catch (error) {
-      console.error('Chat error:', error);
+      logger.error('Chat error:', error);
       // Remove the empty assistant message on error
       setMessages(prev => prev.filter(m => m.id !== assistantMessageId));
       if (!(error instanceof Error && error.message.includes('Rate'))) {

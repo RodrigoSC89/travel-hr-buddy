@@ -27,6 +27,7 @@ const loadXLSX = async () => {
   return XLSX;
 };
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 // PATCH 392 - Compliance Reports: Advanced Filtering & Multi-Format Export
 const ComplianceReports = () => {
@@ -121,7 +122,7 @@ const ComplianceReports = () => {
       const { data, error } = await query;
       
       if (error) {
-        console.error("Error fetching compliance data:", error);
+        logger.error("Error fetching compliance data:", error);
         // Use mock data if table doesn't exist
         setComplianceData([
           { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
@@ -131,7 +132,7 @@ const ComplianceReports = () => {
         setComplianceData(data || []);
       }
     } catch (error) {
-      console.error("Error:", error);
+      logger.error("Error:", error);
       // Use mock data on error
       setComplianceData([
         { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
@@ -184,7 +185,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
@@ -221,7 +222,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
-      console.error("Error generating CSV:", error);
+      logger.error("Error generating CSV:", error);
       toast({
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
@@ -252,7 +253,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
-      console.error("Error generating Excel:", error);
+      logger.error("Error generating Excel:", error);
       toast({
         title: "Erro ao gerar Excel",
         description: "Tente novamente",
@@ -291,7 +292,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
-      console.error("Error generating JSON:", error);
+      logger.error("Error generating JSON:", error);
       toast({
         title: "Erro ao gerar JSON",
         description: "Tente novamente",

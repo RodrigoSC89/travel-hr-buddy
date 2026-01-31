@@ -6,6 +6,7 @@ import { Search, FileText, Users, Calendar, BarChart3, Settings, Plane, Hotel, B
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface SearchResult {
   id: string;
@@ -118,7 +119,7 @@ export const SimpleGlobalSearch: React.FC = () => {
         .eq("enabled", true);
       
       if (error) {
-        console.log("No tenant_modules table available, using static results");
+        logger.debug("No tenant_modules table available, using static results");
         setSearchResults(staticResults);
         return;
       }
@@ -147,7 +148,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       
       setSearchResults(allResults);
     } catch (error) {
-      console.error("Error loading modules:", error);
+      logger.error("Error loading modules:", error);
       // Fallback to static results on error
       setSearchResults(staticResults);
     } finally {

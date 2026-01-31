@@ -6,6 +6,7 @@
 import { cpuBenchmark, BenchmarkReport } from "@/lib/performance/cpu-benchmark";
 import { memoryMonitor, MemoryLeakReport } from "@/lib/performance/memory-monitor";
 import { LovableValidator } from "@/lib/qa/LovableValidator";
+import { logger } from '@/lib/logger';
 
 export interface ValidationReport {
   timestamp: Date;
@@ -39,7 +40,7 @@ class AutoValidator {
    * Run complete system validation
    */
   async runFullValidation(): Promise<ValidationReport> {
-    console.log("[AutoValidator] Starting full system validation...");
+    logger.debug("[AutoValidator] Starting full system validation...");
 
     const results = await Promise.all([
       this.validatePerformance(),

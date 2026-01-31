@@ -23,6 +23,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { RoleGuard } from "./RoleGuard";
+import { logger } from '@/lib/logger';
 
 interface ModulePermission {
   id: string;
@@ -75,7 +76,7 @@ export const RoleConfigurator: React.FC = () => {
         .order("role", { ascending: true });
 
       if (error) {
-        console.error("Error loading permissions:", error);
+        logger.error("Error loading permissions:", error);
         toast({
           title: "Erro",
           description: "Não foi possível carregar as permissões.",
@@ -86,7 +87,7 @@ export const RoleConfigurator: React.FC = () => {
 
       setPermissions(data || []);
     } catch (error) {
-      console.error("Error loading permissions:", error);
+      logger.error("Error loading permissions:", error);
     } finally {
       setLoading(false);
     }
@@ -106,7 +107,7 @@ export const RoleConfigurator: React.FC = () => {
         .eq("id", permissionId);
 
       if (error) {
-        console.error("Error updating permission:", error);
+        logger.error("Error updating permission:", error);
         toast({
           title: "Erro",
           description: "Não foi possível atualizar a permissão.",
@@ -127,7 +128,7 @@ export const RoleConfigurator: React.FC = () => {
         description: "A permissão foi atualizada com sucesso.",
       });
     } catch (error) {
-      console.error("Error updating permission:", error);
+      logger.error("Error updating permission:", error);
     } finally {
       setSaving(false);
     }
@@ -149,7 +150,7 @@ export const RoleConfigurator: React.FC = () => {
         });
 
       if (error) {
-        console.error("Error creating permission:", error);
+        logger.error("Error creating permission:", error);
         toast({
           title: "Erro",
           description: "Não foi possível criar a permissão.",
@@ -165,7 +166,7 @@ export const RoleConfigurator: React.FC = () => {
 
       loadPermissions();
     } catch (error) {
-      console.error("Error creating permission:", error);
+      logger.error("Error creating permission:", error);
     } finally {
       setSaving(false);
     }

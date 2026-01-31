@@ -29,6 +29,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
+import { logger } from '@/lib/logger';
 
 interface CopilotSuggestion {
   id: string;
@@ -180,7 +181,7 @@ export function ContextualCopilot({
         setSuggestions(prev => [...prev, ...data.suggestions]);
       }
     } catch (error) {
-      console.error("Copilot error:", error);
+      logger.error("Copilot error:", error);
       toast.error("Erro ao processar mensagem");
       
       // Fallback response

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export default function Patch551Validation() {
   const [checks, setChecks] = useState({
@@ -39,7 +40,7 @@ export default function Patch551Validation() {
         historyVisible: messages ? messages.length > 0 : false,
       });
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("Validation error:", error);
     } finally {
       setLoading(false);
     }

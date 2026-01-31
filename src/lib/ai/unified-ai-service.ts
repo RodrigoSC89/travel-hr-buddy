@@ -6,6 +6,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { AI_MODULES, type AIModuleKey, getSystemPrompt } from '@/lib/ai-prompts';
+import { logger } from '@/lib/logger';
 
 export interface AIMessage {
   role: 'user' | 'assistant' | 'system';
@@ -89,7 +90,7 @@ export class UnifiedAIService {
       });
 
       if (error) {
-        console.error(`[${module.name}] Error:`, error);
+        logger.error(`[${module.name}] Error:`, error);
         return {
           success: false,
           message: `Erro ao processar sua solicitação: ${error.message}`,
@@ -106,7 +107,7 @@ export class UnifiedAIService {
         source: module.name
       };
     } catch (err) {
-      console.error(`[${module.name}] Exception:`, err);
+      logger.error(`[${module.name}] Exception:`, err);
       return {
         success: false,
         message: 'Erro interno ao processar sua solicitação.',
@@ -180,7 +181,7 @@ export class UnifiedAIService {
         }
       }
     } catch (err) {
-      console.error(`[${module.name}] Stream error:`, err);
+      logger.error(`[${module.name}] Stream error:`, err);
       yield 'Erro no streaming.';
     }
   }

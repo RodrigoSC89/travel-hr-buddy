@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 228 - Joint Tasking System
  * Mission management for delegation and synchronization between external and internal systems

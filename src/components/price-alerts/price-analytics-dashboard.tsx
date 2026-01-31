@@ -21,6 +21,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { travelPriceService } from "@/services/travel-price-service";
+import { logger } from '@/lib/logger';
 
 interface AnalyticsData {
   categoryDistribution: { name: string; value: number; color: string }[];
@@ -191,7 +192,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Error loading analytics:", error);
+      logger.error("Error loading analytics:", error);
       // Use mock data on error
       setAnalytics(generateMockAnalytics());
     } finally {
@@ -286,7 +287,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         description: "Arquivo baixado com sucesso",
       });
     } catch (error) {
-      console.error("Export error:", error);
+      logger.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados",
@@ -312,7 +313,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         description: "Arquivo baixado com sucesso",
       });
     } catch (error) {
-      console.error("Export error:", error);
+      logger.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o PDF",

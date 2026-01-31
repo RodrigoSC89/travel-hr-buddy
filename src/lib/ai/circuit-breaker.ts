@@ -4,6 +4,7 @@
  */
 
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
@@ -193,7 +194,7 @@ export async function executeWithFallback(
     if (breaker.getStats().state === 'OPEN') {
       const timeSinceFailure = Date.now() - (breaker.getStats().lastFailure || 0);
       if (timeSinceFailure < 30000) {
-        console.log(`[AI] Skipping ${provider.name} - circuit OPEN`);
+        logger.debug(`[AI] Skipping ${provider.name} - circuit OPEN`);
         continue;
       }
     }
@@ -273,7 +274,7 @@ export function resetCircuit(providerName: string): void {
   const breaker = circuitBreakers.get(providerName);
   if (breaker) {
     breaker.reset();
-    console.log(`[CircuitBreaker] Reset ${providerName}`);
+    logger.debug(`[CircuitBreaker] Reset ${providerName}`);
   }
 }
 
@@ -284,7 +285,7 @@ export function resetAllCircuits(): void {
   for (const [name, breaker] of circuitBreakers) {
     breaker.reset();
   }
-  console.log('[CircuitBreaker] All circuits reset');
+  logger.debug('[CircuitBreaker] All circuits reset');
 }
 
 export { PROVIDERS, CircuitBreaker };

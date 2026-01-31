@@ -262,7 +262,7 @@ class SonarAIService {
       try {
         await this.logDetection(detection);
       } catch (error) {
-        console.error("Failed to log detection:", error);
+        logger.error("Failed to log detection:", error);
       }
     }
 

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface ComplianceRule {
   id: string;
@@ -280,7 +281,7 @@ class ComplianceEngine {
       .or(`organization_id.is.null,organization_id.eq.${organizationId || 'null'}`);
 
     if (error) {
-      console.error('Failed to load compliance rules:', error);
+      logger.error('Failed to load compliance rules:', error);
       return [];
     }
 
@@ -368,7 +369,7 @@ class ComplianceEngine {
       
       return null;
     } catch (error) {
-      console.error(`Error checking rule ${rule.rule_id}:`, error);
+      logger.error(`Error checking rule ${rule.rule_id}:`, error);
       return null;
     }
   }
@@ -397,13 +398,13 @@ class ComplianceEngine {
         .single();
 
       if (error) {
-        console.error('Failed to record violation:', error);
+        logger.error('Failed to record violation:', error);
         return null;
       }
 
       return data as ComplianceViolation;
     } catch (error) {
-      console.error('Error recording violation:', error);
+      logger.error('Error recording violation:', error);
       return null;
     }
   }
@@ -417,7 +418,7 @@ class ComplianceEngine {
       .order('detected_at', { ascending: false });
 
     if (error) {
-      console.error('Failed to fetch violations:', error);
+      logger.error('Failed to fetch violations:', error);
       return [];
     }
 

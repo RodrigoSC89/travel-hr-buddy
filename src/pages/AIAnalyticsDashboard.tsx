@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AI_MODULES } from '@/lib/ai-prompts';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area } from 'recharts';
+import { logger } from '@/lib/logger';
 
 interface ModuleStats {
   total: number;
@@ -97,7 +98,7 @@ export default function AIAnalyticsDashboard() {
       await new Promise(r => setTimeout(r, 500));
       setAnalytics(getMockAnalytics());
     } catch (error) {
-      console.error('Failed to load analytics:', error);
+      logger.error('Failed to load analytics:', error);
     } finally {
       setIsLoading(false);
     }

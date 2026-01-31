@@ -41,6 +41,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from "recharts";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
+import { logger } from '@/lib/logger';
 
 // Types
 interface Transaction {
@@ -275,7 +276,7 @@ const FinanceCommandCenter: React.FC = () => {
         toast({ title: "Dados atualizados", description: "O dashboard financeiro foi atualizado." });
       }
     } catch (err) {
-      console.error("Error fetching data:", err);
+      logger.error("Error fetching data:", err);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

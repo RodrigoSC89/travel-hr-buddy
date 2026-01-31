@@ -72,6 +72,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   type PEODPAudit,
   type PEODPAuditItem,
   type PEODPChecklistVersion,
@@ -211,7 +212,7 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
-    console.log("Audit saved:", { items, score });
+    logger.debug("Audit saved:", { items, score });
     toast.success("Auditoria salva como rascunho");
   };
 
@@ -239,7 +240,7 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleChecklistSave = (version: PEODPChecklistVersion) => {
-    console.log("Checklist saved:", version);
+    logger.debug("Checklist saved:", version);
     setIsChecklistEditorOpen(false);
   };
 

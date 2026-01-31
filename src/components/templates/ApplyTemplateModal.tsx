@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 interface Template {
   id: string;
@@ -53,7 +54,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
       const normalized = (data as TemplateRow[] | null)?.map((row) => normalizeTemplate(row, tableName)) ?? [];
       setTemplates(normalized);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      logger.error("Error fetching templates:", error);
       toast({
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",

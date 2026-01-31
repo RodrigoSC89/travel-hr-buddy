@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 type EmployeeCertificate = Database["public"]["Tables"]["employee_certificates"]["Row"];
 type PriceAlert = Database["public"]["Tables"]["price_alerts"]["Row"];
@@ -111,7 +112,7 @@ export const useEnhancedNotifications = () => {
       setNotifications(combinedNotifications);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error fetching notifications:", errorMessage);
+      logger.error("Error fetching notifications:", errorMessage);
       setError("Erro ao carregar notificações");
     } finally {
       if (isMountedRef.current) {

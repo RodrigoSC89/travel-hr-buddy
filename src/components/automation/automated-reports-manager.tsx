@@ -28,6 +28,7 @@ import {
   CheckCircle
 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface AutomatedReport {
   id: string;
@@ -194,7 +195,7 @@ export const AutomatedReportsManager = () => {
           : r
       ));
     } catch (error) {
-      console.error("Error generating report:", error);
+      logger.error("Error generating report:", error);
       toast.success('Relatório gerado com sucesso!');
     } finally {
       setGeneratingReport(null);
@@ -239,7 +240,7 @@ export const AutomatedReportsManager = () => {
       
       toast.success('Sugestões de IA geradas!');
     } catch (error) {
-      console.error("Error getting AI suggestion:", error);
+      logger.error("Error getting AI suggestion:", error);
       setAiSuggestion('Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.');
       toast.success('Sugestões carregadas');
     } finally {

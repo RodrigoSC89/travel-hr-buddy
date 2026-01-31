@@ -16,6 +16,7 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useConversation } from '@11labs/react';
+import { logger } from '@/lib/logger';
 
 interface VoiceCommand {
   id: string;
@@ -47,10 +48,10 @@ export function EnhancedVoiceAI() {
   // ElevenLabs conversation hook
   const conversation = useConversation({
     onConnect: () => {
-      console.log('[VoiceAI] Connected to ElevenLabs');
+      logger.debug('[VoiceAI] Connected to ElevenLabs');
     },
     onDisconnect: () => {
-      console.log('[VoiceAI] Disconnected');
+      logger.debug('[VoiceAI] Disconnected');
       setIsListening(false);
     },
     onMessage: (message: { type: string; message?: unknown }) => {
@@ -64,7 +65,7 @@ export function EnhancedVoiceAI() {
       }
     },
     onError: (error: unknown) => {
-      console.error('[VoiceAI] Error:', error);
+      logger.error('[VoiceAI] Error:', error);
       toast.error('Erro na conexão de voz');
     },
   });
@@ -107,7 +108,7 @@ export function EnhancedVoiceAI() {
 
         analyze();
       } catch (error) {
-        console.error('[VoiceAI] Microphone access denied:', error);
+        logger.error('[VoiceAI] Microphone access denied:', error);
       }
     };
 
@@ -147,7 +148,7 @@ export function EnhancedVoiceAI() {
           body: { message: cmd.text, context: 'maritime-voice' },
         });
       } catch (error) {
-        console.error('[VoiceAI] Failed to process queued command:', error);
+        logger.error('[VoiceAI] Failed to process queued command:', error);
       }
     }
     
@@ -174,7 +175,7 @@ export function EnhancedVoiceAI() {
         setIsListening(true);
         toast.success('🎙️ ARIA está ouvindo...');
       } catch (error) {
-        console.error('[VoiceAI] Failed to start session:', error);
+        logger.error('[VoiceAI] Failed to start session:', error);
         toast.error('Não foi possível iniciar a escuta');
       }
     }

@@ -22,6 +22,7 @@ import {
   ArrowLeft
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { logger } from '@/lib/logger';
 
 interface SGSOPractice {
   id: number;
@@ -189,7 +190,7 @@ const SGSOReportPage: React.FC = () => {
       pdf.save(`SGSO_Relatorio_${new Date().toISOString().split('T')[0]}.pdf`);
       toast.success('Relatório PDF gerado com sucesso!');
     } catch (error) {
-      console.error('PDF generation error:', error);
+      logger.error('PDF generation error:', error);
       toast.error('Erro ao gerar PDF');
     } finally {
       setIsGenerating(false);

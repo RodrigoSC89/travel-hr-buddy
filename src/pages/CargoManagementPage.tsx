@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Package, Ship, Container, Brain, AlertTriangle, CheckCircle, 
   FileText, Scale, Loader2, RefreshCw, Plus, Search, Filter,
   TrendingUp, Shield, Anchor, MapPin, Clock, Truck, BarChart3
@@ -132,7 +133,7 @@ const CargoManagementPage = () => {
         description: `Score de otimização: ${data?.optimization_score || 95}%`,
       });
     } catch (err) {
-      console.error('AI optimization error:', err);
+      logger.error('AI optimization error:', err);
       // Demo fallback
       setAiAnalysis({
         optimization_score: 95,

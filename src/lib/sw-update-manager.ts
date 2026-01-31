@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Service Worker Update Manager v12-minimal
  * SW agora é MÍNIMO - apenas push notifications
@@ -15,7 +17,7 @@ const SW_DISABLED_KEY = 'nautilus_sw_disabled';
  */
 export async function checkAndUpdateServiceWorker(): Promise<void> {
   if (!('serviceWorker' in navigator)) {
-    console.log('[SW-Manager] Service Worker not supported');
+    logger.debug('[SW-Manager] Service Worker not supported');
     return;
   }
 
@@ -31,7 +33,7 @@ export async function checkAndUpdateServiceWorker(): Promise<void> {
     const versionMismatch = storedVersion && storedVersion !== EXPECTED_SW_VERSION;
     
     if (versionMismatch || shouldForceCheck) {
-      console.log('[SW-Manager] Checking for SW updates...', {
+      logger.debug('[SW-Manager] Checking for SW updates...', {
         storedVersion,
         expected: EXPECTED_SW_VERSION,
         shouldForceCheck
@@ -45,7 +47,7 @@ export async function checkAndUpdateServiceWorker(): Promise<void> {
         
         // Se há um SW aguardando, ativá-lo imediatamente
         if (registration.waiting) {
-          console.log('[SW-Manager] New SW waiting, activating...');
+          logger.debug('[SW-Manager] New SW waiting, activating...');
           registration.waiting.postMessage({ type: 'SKIP_WAITING' });
         }
         
@@ -55,7 +57,7 @@ export async function checkAndUpdateServiceWorker(): Promise<void> {
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('[SW-Manager] New SW installed, will activate on next load');
+                logger.debug('[SW-Manager] New SW installed, will activate on next load');
                 // Não recarregar automaticamente, deixar o usuário decidir ou próximo load
               }
             });
@@ -71,7 +73,7 @@ export async function checkAndUpdateServiceWorker(): Promise<void> {
     localStorage.setItem(SW_VERSION_KEY, EXPECTED_SW_VERSION);
     
   } catch (error) {
-    console.error('[SW-Manager] Error checking SW:', error);
+    logger.error('[SW-Manager] Error checking SW:', error);
   }
 }
 
@@ -80,7 +82,7 @@ export async function checkAndUpdateServiceWorker(): Promise<void> {
  * Usar quando há erros persistentes
  */
 export async function forceFullCacheClear(): Promise<void> {
-  console.log('[SW-Manager] Force clearing all caches...');
+  logger.debug('[SW-Manager] Force clearing all caches...');
   
   try {
     // 1. Desregistrar todos os Service Workers
@@ -92,14 +94,14 @@ export async function forceFullCacheClear(): Promise<void> {
         }
         await registration.unregister();
       }
-      console.log('[SW-Manager] All SWs unregistered');
+      logger.debug('[SW-Manager] All SWs unregistered');
     }
     
     // 2. Limpar todos os caches
     if ('caches' in window) {
       const cacheNames = await caches.keys();
       await Promise.all(cacheNames.map(name => caches.delete(name)));
-      console.log('[SW-Manager] All caches cleared');
+      logger.debug('[SW-Manager] All caches cleared');
     }
     
     // 3. Limpar storage relacionado ao SW
@@ -107,10 +109,10 @@ export async function forceFullCacheClear(): Promise<void> {
     localStorage.removeItem(LAST_UPDATE_CHECK_KEY);
     sessionStorage.clear();
     
-    console.log('[SW-Manager] Cache clear complete');
+    logger.debug('[SW-Manager] Cache clear complete');
     
   } catch (error) {
-    console.error('[SW-Manager] Error clearing caches:', error);
+    logger.error('[SW-Manager] Error clearing caches:', error);
     throw error;
   }
 }
@@ -140,7 +142,7 @@ export async function registerServiceWorker(): Promise<void> {
 
   // Verificar se SW foi desabilitado por loop detection
   if (localStorage.getItem(SW_DISABLED_KEY) === 'true') {
-    console.log('[SW-Manager] SW disabled due to previous loop detection');
+    logger.debug('[SW-Manager] SW disabled due to previous loop detection');
     return;
   }
 
@@ -149,7 +151,7 @@ export async function registerServiceWorker(): Promise<void> {
       updateViaCache: 'none',
     });
     
-    console.log('[SW-Manager] SW registered:', registration.scope);
+    logger.debug('[SW-Manager] SW registered:', registration.scope);
     
     // Verificar atualizações a cada hora
     setInterval(() => {
@@ -157,7 +159,7 @@ export async function registerServiceWorker(): Promise<void> {
     }, 1000 * 60 * 60);
     
   } catch (error) {
-    console.error('[SW-Manager] SW registration failed:', error);
+    logger.error('[SW-Manager] SW registration failed:', error);
   }
 }
 
@@ -167,5 +169,5 @@ export async function registerServiceWorker(): Promise<void> {
 export function reenableServiceWorker(): void {
   localStorage.removeItem(SW_DISABLED_KEY);
   localStorage.removeItem(SW_VERSION_KEY);
-  console.log('[SW-Manager] SW re-enabled, will register on next reload');
+  logger.debug('[SW-Manager] SW re-enabled, will register on next reload');
 }

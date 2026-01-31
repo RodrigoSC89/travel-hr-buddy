@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { logger } from '@/lib/logger';
 
 export type AppTheme = "light" | "dark" | "mission";
 
@@ -25,7 +26,7 @@ export function useThemeManager() {
         return stored;
       }
     } catch (error) {
-      console.error("Error reading theme from localStorage:", error);
+      logger.error("Error reading theme from localStorage:", error);
     }
 
     return "light";
@@ -59,7 +60,7 @@ export function useThemeManager() {
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch (error) {
-      console.error("Error saving theme to localStorage:", error);
+      logger.error("Error saving theme to localStorage:", error);
     }
 
     // Dispatch custom event for other components
@@ -182,7 +183,7 @@ export function getStoredTheme(): AppTheme {
       return stored;
     }
   } catch (error) {
-    console.error("Error reading theme from localStorage:", error);
+    logger.error("Error reading theme from localStorage:", error);
   }
 
   return "light";

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface AuditLogEntry {
   id: string;
@@ -70,7 +71,7 @@ export const AuditTrailSystem = () => {
 
         setLogs(mockLogs);
       } catch (error) {
-        console.error("Error fetching audit logs:", error);
+        logger.error("Error fetching audit logs:", error);
         toast.error("Erro ao carregar logs");
       } finally {
         setLoading(false);
@@ -168,7 +169,7 @@ export const AuditTrailSystem = () => {
       logSuccess("GENERATE_REPORT", "audit_trail", null, { logsCount: filteredLogs.length });
       toast.success("Relatório gerado com sucesso!");
     } catch (error) {
-      console.error("Error generating report:", error);
+      logger.error("Error generating report:", error);
       toast.error("Erro ao gerar relatório");
     } finally {
       setGenerating(false);

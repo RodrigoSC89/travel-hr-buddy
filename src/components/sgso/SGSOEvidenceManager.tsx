@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from 'tesseract.js';
 import {
+import { logger } from '@/lib/logger';
   Upload,
   FileText,
   Image,
@@ -113,7 +114,7 @@ export const SGSOEvidenceManager: React.FC = () => {
         created_at: e.created_at || new Date().toISOString()
       })));
     } catch (error) {
-      console.error("Error loading evidences:", error);
+      logger.error("Error loading evidences:", error);
       toast({
         title: "Erro ao carregar evidências",
         description: "Não foi possível carregar as evidências do banco de dados",
@@ -142,7 +143,7 @@ export const SGSOEvidenceManager: React.FC = () => {
         confidence: data.confidence
       };
     } catch (error) {
-      console.error("OCR Error:", error);
+      logger.error("OCR Error:", error);
       throw error;
     } finally {
       setIsProcessingOCR(false);
@@ -313,7 +314,7 @@ export const SGSOEvidenceManager: React.FC = () => {
       setDialogOpen(false);
 
     } catch (error) {
-      console.error("Upload error:", error);
+      logger.error("Upload error:", error);
       toast({
         title: "Erro no Upload",
         description: "Falha ao salvar evidência",
@@ -339,7 +340,7 @@ export const SGSOEvidenceManager: React.FC = () => {
         description: "A evidência foi excluída com sucesso"
       });
     } catch (error) {
-      console.error("Delete error:", error);
+      logger.error("Delete error:", error);
       toast({
         title: "Erro ao excluir",
         description: "Não foi possível excluir a evidência",

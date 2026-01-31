@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   FileCheck,
   Brain,
   Sparkles,
@@ -111,7 +112,7 @@ export function ModuleEvidenceGenerator({
       onEvidenceGenerated?.(data);
       toast.success("Evidência gerada com sucesso!");
     } catch (error) {
-      console.error("Error generating evidence:", error);
+      logger.error("Error generating evidence:", error);
       
       // Fallback com dados mock
       const fallbackResult: EvidenceResult = {

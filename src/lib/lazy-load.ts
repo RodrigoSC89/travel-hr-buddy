@@ -5,6 +5,7 @@
 
 import React, { ComponentType, lazy, Suspense } from 'react';
 import { ModulePageSkeleton } from '@/components/ui/enhanced-skeletons';
+import { logger } from '@/lib/logger';
 
 interface LazyLoadOptions {
   fallback?: React.ReactNode;
@@ -34,7 +35,7 @@ export function lazyWithRetry<T extends ComponentType<any>>(
         }
         
         // Log error and re-throw
-        console.error(`Failed to load module after ${retries} retries:`, error);
+        logger.error(`Failed to load module after ${retries} retries:`, error);
         throw error;
       }
     };

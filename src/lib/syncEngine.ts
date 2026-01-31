@@ -6,6 +6,7 @@
 import { localSync, type OfflineRecord } from "./localSync";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface SyncStats {
   total: number;
@@ -23,7 +24,7 @@ class SyncEngine {
    */
   async pushLocalChanges(): Promise<SyncStats> {
     if (this.isSyncing) {
-      console.log("Sync already in progress");
+      logger.debug("Sync already in progress");
       return { total: 0, synced: 0, failed: 0, pending: 0 };
     }
 
@@ -36,7 +37,7 @@ class SyncEngine {
       stats.total = records.length;
       stats.pending = records.length;
 
-      console.log(`Starting sync: ${records.length} records to sync`);
+      logger.debug(`Starting sync: ${records.length} records to sync`);
 
       // Process each record
       for (const record of records) {
@@ -55,7 +56,7 @@ class SyncEngine {
             }
           }
         } catch (error) {
-          console.error(`Failed to sync record ${record.id}:`, error);
+          logger.error(`Failed to sync record ${record.id}:`, error);
           stats.failed++;
           stats.pending--;
         }
@@ -74,7 +75,7 @@ class SyncEngine {
 
       return stats;
     } catch (error) {
-      console.error("Error during sync:", error);
+      logger.error("Error during sync:", error);
       toast.error("Sync failed. Will retry later.");
       return stats;
     } finally {
@@ -165,7 +166,7 @@ class SyncEngine {
         await this.syncRecord({ table, action, data, timestamp: Date.now(), synced: false });
         return;
       } catch (error) {
-        console.log("Online save failed, saving locally:", error);
+        logger.debug("Online save failed, saving locally:", error);
       }
     }
 
@@ -183,7 +184,7 @@ export const syncEngine = new SyncEngine();
  */
 if (typeof window !== "undefined") {
   window.addEventListener("online", async () => {
-    console.log("Connection restored, starting sync...");
+    logger.debug("Connection restored, starting sync...");
     const hasPending = await syncEngine.hasPendingChanges();
     if (hasPending) {
       await syncEngine.pushLocalChanges();
@@ -199,7 +200,7 @@ if (typeof window !== "undefined") {
     if (navigator.onLine) {
       const hasPending = await syncEngine.hasPendingChanges();
       if (hasPending) {
-        console.log("Periodic sync check: syncing pending changes...");
+        logger.debug("Periodic sync check: syncing pending changes...");
         await syncEngine.pushLocalChanges();
       }
     }

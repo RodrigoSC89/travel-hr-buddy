@@ -30,6 +30,7 @@ import {
   Umbrella
 } from "lucide-react";
 import {
+import { logger } from '@/lib/logger';
   fetchCPTECData,
   type CPTECData,
   type PrevisaoCPTEC,
@@ -95,7 +96,7 @@ export function CPTECPanel({ lat, lon, cidade, compact = false }: CPTECPanelProp
         });
       }
     } catch (error) {
-      console.error("Error fetching CPTEC data:", error);
+      logger.error("Error fetching CPTEC data:", error);
       toast({
         title: "Erro ao carregar dados",
         description: "Não foi possível obter os dados do CPTEC/INPE",

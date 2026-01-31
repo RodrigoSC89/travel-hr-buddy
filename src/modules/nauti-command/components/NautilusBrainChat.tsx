@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+import { logger } from '@/lib/logger';
   Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
   Package, Shield, Mic, Volume2, Copy, ThumbsUp, ThumbsDown,
   Lightbulb, Target, AlertTriangle, CheckCircle, MessageSquare
@@ -127,7 +128,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
-      console.error('Brain error:', error);
+      logger.error('Brain error:', error);
       
       // Fallback response
       const fallbackMessage: Message = {

@@ -6,6 +6,7 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 export interface AIMemoryEvent {
   context: string;
@@ -53,7 +54,7 @@ export function useAIMemory(): UseAIMemoryReturn {
         }]);
 
       if (insertError) {
-        console.error("Failed to store memory:", insertError);
+        logger.error("Failed to store memory:", insertError);
         setError(insertError.message);
         return false;
       }

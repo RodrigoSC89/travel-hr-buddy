@@ -19,6 +19,7 @@ import HourometerManager from "./components/HourometerManager";
 import WorkOrderManager from "./components/WorkOrderManager";
 import AdvancedCopilot from "./components/AdvancedCopilot";
 import DigitalTwin from "./components/DigitalTwin";
+import { logger } from '@/lib/logger';
 
 interface MaintenanceStats {
   scheduled: number;
@@ -54,7 +55,7 @@ const MaintenancePlanner = () => {
         efficiency: 94
       });
     } catch (error) {
-      console.error("Error fetching maintenance stats:", error);
+      logger.error("Error fetching maintenance stats:", error);
     } finally {
       setLoading(false);
     }

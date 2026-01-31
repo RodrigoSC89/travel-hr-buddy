@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Ship, AlertTriangle, TrendingUp, FileText } from "lucide-react";
 import { Line, Pie } from "react-chartjs-2";
 import {
+import { logger } from '@/lib/logger';
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -83,7 +84,7 @@ export const MetricasPanel = () => {
       const embarcacaoData = await embarcacaoResponse.json();
       setMetricsEmbarcacao(embarcacaoData || []);
     } catch (error) {
-      console.error("Erro ao buscar métricas:", error);
+      logger.error("Erro ao buscar métricas:", error);
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Globe, Satellite } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import type { DemoSatellite } from "../data/demo-satellites";
+import { logger } from '@/lib/logger';
 
 interface SatelliteGlobeMapProps {
   satellites: DemoSatellite[];
@@ -76,7 +77,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
           }
         });
       } catch (err) {
-        console.error("Failed to load Mapbox:", err);
+        logger.error("Failed to load Mapbox:", err);
         if (mounted) {
           setError("Falha ao carregar o mapa");
           setIsLoading(false);

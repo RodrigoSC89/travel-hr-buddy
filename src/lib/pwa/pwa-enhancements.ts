@@ -6,6 +6,7 @@
  */
 
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 // PWA Install State
 interface PWAInstallState {
@@ -32,7 +33,7 @@ export function initPWA(): void {
   // Check if already installed
   if (window.matchMedia('(display-mode: standalone)').matches) {
     pwaState.isInstalled = true;
-    console.log('[PWA] Running as installed app');
+    logger.debug('[PWA] Running as installed app');
   }
   
   // Listen for install prompt
@@ -40,7 +41,7 @@ export function initPWA(): void {
     e.preventDefault();
     pwaState.deferredPrompt = e as BeforeInstallPromptEvent;
     pwaState.isInstallable = true;
-    console.log('[PWA] Install prompt available');
+    logger.debug('[PWA] Install prompt available');
   });
   
   // Listen for app installed
@@ -48,7 +49,7 @@ export function initPWA(): void {
     pwaState.isInstalled = true;
     pwaState.isInstallable = false;
     pwaState.deferredPrompt = null;
-    console.log('[PWA] App installed successfully');
+    logger.debug('[PWA] App installed successfully');
     toast.success('NAUTI ONE instalado com sucesso!');
   });
   
@@ -61,7 +62,7 @@ export function initPWA(): void {
   // Initialize push notifications
   initPushNotifications();
   
-  console.log('[PWA] Initialized');
+  logger.debug('[PWA] Initialized');
 }
 
 /**
@@ -83,7 +84,7 @@ export function isPWAInstalled(): boolean {
  */
 export async function promptInstall(): Promise<boolean> {
   if (!pwaState.deferredPrompt) {
-    console.warn('[PWA] Install prompt not available');
+    logger.warn('[PWA] Install prompt not available');
     return false;
   }
   
@@ -92,14 +93,14 @@ export async function promptInstall(): Promise<boolean> {
     const { outcome } = await pwaState.deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      console.log('[PWA] User accepted install');
+      logger.debug('[PWA] User accepted install');
       return true;
     } else {
-      console.log('[PWA] User dismissed install');
+      logger.debug('[PWA] User dismissed install');
       return false;
     }
   } catch (error) {
-    console.error('[PWA] Install prompt error:', error);
+    logger.error('[PWA] Install prompt error:', error);
     return false;
   } finally {
     pwaState.deferredPrompt = null;
@@ -112,7 +113,7 @@ export async function promptInstall(): Promise<boolean> {
  */
 function registerServiceWorkerUpdates(): void {
   if (!('serviceWorker' in navigator)) {
-    console.warn('[PWA] Service Worker not supported');
+    logger.warn('[PWA] Service Worker not supported');
     return;
   }
   
@@ -159,14 +160,14 @@ function showUpdateNotification(registration: ServiceWorkerRegistration): void {
  */
 async function initBackgroundSync(): Promise<void> {
   if (!('serviceWorker' in navigator) || !('sync' in (await navigator.serviceWorker.ready))) {
-    console.warn('[PWA] Background Sync not supported');
+    logger.warn('[PWA] Background Sync not supported');
     return;
   }
   
   // Register sync event listener
   navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data?.type === 'SYNC_COMPLETE') {
-      console.log('[PWA] Background sync completed:', event.data.tag);
+      logger.debug('[PWA] Background sync completed:', event.data.tag);
       toast.success('Dados sincronizados com sucesso!');
     }
   });
@@ -184,11 +185,11 @@ export async function requestBackgroundSync(tag: string): Promise<boolean> {
     const registration = await navigator.serviceWorker.ready;
     if ('sync' in registration) {
       await (registration as any).sync.register(tag);
-      console.log('[PWA] Background sync registered:', tag);
+      logger.debug('[PWA] Background sync registered:', tag);
       return true;
     }
   } catch (error) {
-    console.error('[PWA] Background sync error:', error);
+    logger.error('[PWA] Background sync error:', error);
   }
   
   return false;
@@ -199,13 +200,13 @@ export async function requestBackgroundSync(tag: string): Promise<boolean> {
  */
 async function initPushNotifications(): Promise<void> {
   if (!('Notification' in window)) {
-    console.warn('[PWA] Notifications not supported');
+    logger.warn('[PWA] Notifications not supported');
     return;
   }
   
   // Check current permission
   const permission = Notification.permission;
-  console.log('[PWA] Notification permission:', permission);
+  logger.debug('[PWA] Notification permission:', permission);
 }
 
 /**
@@ -217,7 +218,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   }
   
   const permission = await Notification.requestPermission();
-  console.log('[PWA] Notification permission result:', permission);
+  logger.debug('[PWA] Notification permission result:', permission);
   
   if (permission === 'granted') {
     toast.success('Notificações ativadas!');
@@ -234,7 +235,7 @@ export async function showNotification(
   options?: NotificationOptions
 ): Promise<void> {
   if (!('Notification' in window) || Notification.permission !== 'granted') {
-    console.warn('[PWA] Cannot show notification');
+    logger.warn('[PWA] Cannot show notification');
     return;
   }
   
@@ -251,7 +252,7 @@ export async function showNotification(
  */
 export async function setAppBadge(count: number): Promise<void> {
   if (!('setAppBadge' in navigator)) {
-    console.warn('[PWA] App Badge not supported');
+    logger.warn('[PWA] App Badge not supported');
     return;
   }
   
@@ -261,9 +262,9 @@ export async function setAppBadge(count: number): Promise<void> {
     } else {
       await (navigator as any).clearAppBadge();
     }
-    console.log('[PWA] App badge set:', count);
+    logger.debug('[PWA] App badge set:', count);
   } catch (error) {
-    console.error('[PWA] App badge error:', error);
+    logger.error('[PWA] App badge error:', error);
   }
 }
 
@@ -272,17 +273,17 @@ export async function setAppBadge(count: number): Promise<void> {
  */
 export async function shareContent(data: ShareData): Promise<boolean> {
   if (!navigator.share) {
-    console.warn('[PWA] Web Share API not supported');
+    logger.warn('[PWA] Web Share API not supported');
     return false;
   }
   
   try {
     await navigator.share(data);
-    console.log('[PWA] Content shared successfully');
+    logger.debug('[PWA] Content shared successfully');
     return true;
   } catch (error) {
     if ((error as Error).name !== 'AbortError') {
-      console.error('[PWA] Share error:', error);
+      logger.error('[PWA] Share error:', error);
     }
     return false;
   }
@@ -317,16 +318,16 @@ export function onConnectionChange(callback: (online: boolean) => void): () => v
  */
 export async function cacheForOffline(urls: string[]): Promise<void> {
   if (!('caches' in window)) {
-    console.warn('[PWA] Cache API not supported');
+    logger.warn('[PWA] Cache API not supported');
     return;
   }
   
   try {
     const cache = await caches.open('nauti-one-v4-pages');
     await cache.addAll(urls);
-    console.log('[PWA] Pages cached for offline:', urls);
+    logger.debug('[PWA] Pages cached for offline:', urls);
   } catch (error) {
-    console.error('[PWA] Cache error:', error);
+    logger.error('[PWA] Cache error:', error);
   }
 }
 

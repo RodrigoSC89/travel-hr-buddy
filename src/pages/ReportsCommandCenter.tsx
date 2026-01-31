@@ -31,6 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import ReportsDashboard from "@/components/reports/reports-dashboard";
 import AIReportGenerator from "@/components/reports/AIReportGenerator";
 import IncidentCards from "@/components/dp/IncidentCards";
+import { logger } from '@/lib/logger';
 
 interface AnalyticsData {
   totalReports: number;
@@ -129,7 +130,7 @@ const ReportsCommandCenter = () => {
         incidentsThisMonth: incidentsThisMonth || 0
       });
     } catch (error) {
-      console.error("Error loading analytics:", error);
+      logger.error("Error loading analytics:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de analytics",

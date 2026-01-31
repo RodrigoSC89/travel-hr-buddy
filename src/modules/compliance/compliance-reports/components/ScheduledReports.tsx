@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { logger } from '@/lib/logger';
 
 interface ScheduledReport {
   id: string;
@@ -76,7 +77,7 @@ export const ScheduledReports: React.FC = () => {
         setReports((data as any) || []);
       }
     } catch (error) {
-      console.error("Error fetching scheduled reports:", error);
+      logger.error("Error fetching scheduled reports:", error);
       setReports([]);
     }
   };
@@ -104,7 +105,7 @@ export const ScheduledReports: React.FC = () => {
       });
 
       if (error) {
-        console.log("Schedule not saved (table may not exist) - using mock data");
+        logger.debug("Schedule not saved (table may not exist) - using mock data");
       }
 
       toast({
@@ -115,7 +116,7 @@ export const ScheduledReports: React.FC = () => {
       setShowForm(false);
       fetchScheduledReports();
     } catch (error) {
-      console.error("Error creating schedule:", error);
+      logger.error("Error creating schedule:", error);
       toast({
         title: "Schedule Created (Demo)",
         description: "Feature demonstration - database not configured",
@@ -169,7 +170,7 @@ export const ScheduledReports: React.FC = () => {
             })
             .eq("id", reportId);
         } catch (dbError) {
-          console.log("Report metadata not updated (table may not exist)");
+          logger.debug("Report metadata not updated (table may not exist)");
         }
 
         toast({
@@ -179,7 +180,7 @@ export const ScheduledReports: React.FC = () => {
 
         fetchScheduledReports();
       } catch (error) {
-        console.error("Error running report:", error);
+        logger.error("Error running report:", error);
         toast({
           title: "Generation Failed",
           description: "Failed to generate report",
@@ -197,7 +198,7 @@ export const ScheduledReports: React.FC = () => {
         .eq("id", reportId);
 
       if (error) {
-        console.log("Schedule not deleted (table may not exist)");
+        logger.debug("Schedule not deleted (table may not exist)");
       }
 
       toast({
@@ -207,7 +208,7 @@ export const ScheduledReports: React.FC = () => {
 
       fetchScheduledReports();
     } catch (error) {
-      console.error("Error deleting schedule:", error);
+      logger.error("Error deleting schedule:", error);
       toast({
         title: "Schedule Deleted (Demo)",
         description: "Feature demonstration - database not configured",

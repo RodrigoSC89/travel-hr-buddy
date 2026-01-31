@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 export type ComplianceNotificationType = 
   | "deadline_warning" 
@@ -73,10 +74,10 @@ export function useComplianceNotifications() {
 
         if (error) throw error;
 
-        console.log("[Compliance Notification] Sent:", result);
+        logger.debug("[Compliance Notification] Sent:", result);
         return { success: true, result };
       } catch (error) {
-        console.error("[Compliance Notification] Error:", error);
+        logger.error("[Compliance Notification] Error:", error);
         return { success: false, error };
       }
     },

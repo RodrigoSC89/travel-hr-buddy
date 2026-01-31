@@ -5,6 +5,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface Prediction {
   title: string;
@@ -61,7 +62,7 @@ export function useNautilusPredictions(): UseNautilusPredictionsReturn {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao obter predições';
       setError(message);
-      console.error('Prediction error:', err);
+      logger.error('Prediction error:', err);
       return null;
     } finally {
       setIsLoading(false);

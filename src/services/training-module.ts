@@ -4,6 +4,7 @@
  */
 import { supabase } from "@/integrations/supabase/client";
 import type {
+import { logger } from '@/lib/logger';
   TrainingModule,
   TrainingCompletion,
   GenerateTrainingModuleRequest,
@@ -124,7 +125,7 @@ export class TrainingModuleService {
       .single();
 
     if (error) {
-      console.error("Error fetching training module:", error);
+      logger.error("Error fetching training module:", error);
       return null;
     }
 

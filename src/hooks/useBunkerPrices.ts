@@ -5,6 +5,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface BunkerPrice {
   port: string;
@@ -58,7 +59,7 @@ export function useBunkerPrices(options: UseBunkerPricesOptions = {}) {
         if (error) throw error;
         return data as BunkerPricesResponse;
       } catch (err) {
-        console.error("Failed to fetch bunker prices:", err);
+        logger.error("Failed to fetch bunker prices:", err);
         // Return fallback data
         return {
           success: false,

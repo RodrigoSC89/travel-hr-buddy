@@ -6,6 +6,7 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import { measureCoreWebVitals, reportWebVitalsToAnalytics } from '@/lib/performance/lighthouse-config';
+import { logger } from '@/lib/logger';
 
 interface PerformanceMetric {
   name: string;
@@ -39,7 +40,7 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
 
     if (enableLogging) {
       const icon = metric.rating === 'good' ? '✅' : metric.rating === 'needs-improvement' ? '⚠️' : '❌';
-      console.log(`[Performance] ${icon} ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`);
+      logger.debug(`[Performance] ${icon} ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`);
     }
 
     // Report to analytics
@@ -75,7 +76,7 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
         const pageLoad = navigationEntry.loadEventEnd - navigationEntry.startTime;
 
         if (enableLogging) {
-          console.log('[Performance] Navigation Timing:', {
+          logger.debug('[Performance] Navigation Timing:', {
             TTFB: `${ttfb.toFixed(0)}ms`,
             DOMLoad: `${domLoad.toFixed(0)}ms`,
             PageLoad: `${pageLoad.toFixed(0)}ms`,

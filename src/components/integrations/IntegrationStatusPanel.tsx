@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface IntegrationStatus {
   name: string;
@@ -53,7 +54,7 @@ export function IntegrationStatusPanel() {
       
       setIntegrations(updatedIntegrations);
     } catch (err) {
-      console.error("Failed to fetch integration status:", err);
+      logger.error("Failed to fetch integration status:", err);
       toast.error("Erro ao verificar status das integrações");
     } finally {
       setLoading(false);
@@ -100,7 +101,7 @@ export function IntegrationStatusPanel() {
         toast.warning(`Teste ${integration}: verifique os logs`);
       }
     } catch (err) {
-      console.error(`Test ${integration} failed:`, err);
+      logger.error(`Test ${integration} failed:`, err);
       
       const result: TestResult = {
         integration,

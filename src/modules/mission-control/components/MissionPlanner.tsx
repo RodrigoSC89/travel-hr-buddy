@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Target, Play, Clock, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface Mission {
   id: string;
@@ -66,7 +67,7 @@ export const MissionPlanner: React.FC = () => {
       
       setMissions(mappedMissions);
     } catch (error) {
-      console.error("Error fetching missions:", error);
+      logger.error("Error fetching missions:", error);
       toast({
         title: "Error",
         description: "Failed to load missions",
@@ -100,7 +101,7 @@ export const MissionPlanner: React.FC = () => {
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to activate mission";
-      console.error("Activation error:", error);
+      logger.error("Activation error:", error);
       toast({
         title: "Activation Failed",
         description: message,

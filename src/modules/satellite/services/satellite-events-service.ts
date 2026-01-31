@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface SatelliteEvent {
   id?: string;
@@ -37,7 +38,7 @@ export class SatelliteEventsService {
       if (error) throw error;
       return this.mapToEvent(data);
     } catch (error) {
-      console.error("Error logging satellite event:", error);
+      logger.error("Error logging satellite event:", error);
       return null;
     }
   }
@@ -59,7 +60,7 @@ export class SatelliteEventsService {
 
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error("Error fetching satellite events:", error);
+      logger.error("Error fetching satellite events:", error);
       return [];
     }
   }
@@ -76,7 +77,7 @@ export class SatelliteEventsService {
       if (error) throw error;
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error("Error fetching events by NORAD ID:", error);
+      logger.error("Error fetching events by NORAD ID:", error);
       return [];
     }
   }
@@ -93,7 +94,7 @@ export class SatelliteEventsService {
       if (error) throw error;
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error("Error fetching events by type:", error);
+      logger.error("Error fetching events by type:", error);
       return [];
     }
   }

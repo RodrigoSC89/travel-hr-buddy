@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Satellite Tracker Enhanced - Uses satellite_coverage_events table not in generated types
  */
@@ -24,6 +23,7 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
+import { logger } from '@/lib/logger';
   Table,
   TableBody,
   TableCell,
@@ -134,7 +134,7 @@ export const SatelliteTrackerEnhanced = () => {
       setCoverageEvents(data || []);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading coverage events:", errorMessage);
+      logger.error("Error loading coverage events:", errorMessage);
     }
   };
 
@@ -192,7 +192,7 @@ export const SatelliteTrackerEnhanced = () => {
       await loadSatelliteData();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error creating mock satellites:", errorMessage);
+      logger.error("Error creating mock satellites:", errorMessage);
     }
   };
 
@@ -230,7 +230,7 @@ export const SatelliteTrackerEnhanced = () => {
       checkCoverageEvents(updates);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error updating satellites:", errorMessage);
+      logger.error("Error updating satellites:", errorMessage);
     }
   };
 

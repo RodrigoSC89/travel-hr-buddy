@@ -21,6 +21,7 @@ import {
   type AIAuditEntry 
 } from '@/lib/ai/audit-logger';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export const AIAuditPanel: React.FC = () => {
   const [logs, setLogs] = useState<AIAuditEntry[]>([]);
@@ -61,7 +62,7 @@ export const AIAuditPanel: React.FC = () => {
         ragUsageRate: statsData.ragUsageRate
       });
     } catch (error) {
-      console.error('Error loading AI logs:', error);
+      logger.error('Error loading AI logs:', error);
       toast.error('Erro ao carregar logs de IA');
     } finally {
       setLoading(false);

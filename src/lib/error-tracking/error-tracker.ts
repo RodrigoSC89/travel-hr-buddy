@@ -199,10 +199,10 @@ class ErrorTracker {
         this.queue = [...errors, ...this.queue].slice(0, this.config.maxErrors);
         
         if (this.config.debug) {
-          console.error('[ErrorTracker] Flush failed:', error);
+          logger.error('[ErrorTracker] Flush failed:', error);
         }
       } else if (this.config.debug) {
-        console.log('[ErrorTracker] Flushed', errors.length, 'errors');
+        logger.debug('[ErrorTracker] Flushed', errors.length, 'errors');
       }
     } catch (err) {
       this.queue = [...errors, ...this.queue].slice(0, this.config.maxErrors);
@@ -234,6 +234,7 @@ export const errorTracker = new ErrorTracker();
 
 // React hook
 import { useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useErrorTracking(componentName?: string) {
   useEffect(() => {

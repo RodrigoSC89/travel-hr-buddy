@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Bot, User, Loader2, Sparkles, MessageSquare, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { ChatMessage, CurrentWeather, DailyForecast, MarineData, WeatherLocation } from "./types";
+import { logger } from '@/lib/logger';
 
 interface WeatherChatProps {
   location: WeatherLocation;
@@ -117,7 +118,7 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (err) {
-      console.error('[WeatherChat] Error:', err);
+      logger.error('[WeatherChat] Error:', err);
       
       // PATCH iOS PWA: Mensagem genérica sem mencionar "conexão"
       let fallbackContent = "Desculpe, ocorreu um erro ao processar sua pergunta. ";
@@ -170,7 +171,7 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
-      console.log('[WeatherChat] Welcome message set');
+      logger.debug('[WeatherChat] Welcome message set');
     }
   }, [weather, location.name, messages.length]);
 

@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
+import { logger } from '@/lib/logger';
   Ship, 
   Activity,
   AlertTriangle,
@@ -87,7 +88,7 @@ const OperationsDashboard = () => {
         ]);
       }
     } catch (error) {
-      console.error("Error loading operations:", error);
+      logger.error("Error loading operations:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados operacionais",

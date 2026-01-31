@@ -12,6 +12,7 @@ import { AddTransactionDialog } from "./components/AddTransactionDialog";
 import { FinanceAIPanel } from "./components/FinanceAIPanel";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { logger } from '@/lib/logger';
 
 interface Transaction {
   id: string;
@@ -92,7 +93,7 @@ export default function FinanceHub() {
         });
       }
     } catch (error) {
-      console.error("Error loading financial data:", error);
+      logger.error("Error loading financial data:", error);
       // Fallback demo data
       setSummary({
         income: 450000,

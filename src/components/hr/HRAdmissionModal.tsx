@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Save, X, UserPlus } from 'lucide-react';
 import { useCreateHRAdmission, type CreateAdmissionInput } from '@/hooks/useHRAdmissions';
+import { logger } from '@/lib/logger';
 
 interface HRAdmissionModalProps {
   open: boolean;
@@ -49,7 +50,7 @@ export function HRAdmissionModal({ open, onClose }: HRAdmissionModalProps) {
       });
       onClose();
     } catch (error) {
-      console.error('Error creating admission:', error);
+      logger.error('Error creating admission:', error);
     }
   };
 

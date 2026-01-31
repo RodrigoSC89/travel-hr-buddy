@@ -82,7 +82,7 @@ export const IncidentMetricsDashboard: React.FC = () => {
 
       setMetrics(transformed);
     } catch (error) {
-      console.error("Error fetching metrics:", error);
+      logger.error("Error fetching metrics:", error);
       toast({
         title: "Error",
         description: "Failed to load incident metrics",

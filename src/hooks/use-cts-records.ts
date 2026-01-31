@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface CTSRecord {
   id: string;
@@ -91,7 +92,7 @@ export function useCTSRecords(vesselId?: string) {
       setCurrentRecord(validRecord || null);
 
     } catch (error) {
-      console.error('Error fetching CTS records:', error);
+      logger.error('Error fetching CTS records:', error);
       toast.error('Erro ao carregar registros CTS');
     } finally {
       setLoading(false);
@@ -131,7 +132,7 @@ export function useCTSRecords(vesselId?: string) {
       await fetchRecords();
       return data;
     } catch (error) {
-      console.error('Error creating CTS record:', error);
+      logger.error('Error creating CTS record:', error);
       toast.error('Erro ao cadastrar CTS');
       throw error;
     }
@@ -152,7 +153,7 @@ export function useCTSRecords(vesselId?: string) {
       await fetchRecords();
       return data;
     } catch (error) {
-      console.error('Error updating CTS record:', error);
+      logger.error('Error updating CTS record:', error);
       toast.error('Erro ao atualizar CTS');
       throw error;
     }
@@ -170,7 +171,7 @@ export function useCTSRecords(vesselId?: string) {
       toast.success('CTS removido com sucesso');
       await fetchRecords();
     } catch (error) {
-      console.error('Error deleting CTS record:', error);
+      logger.error('Error deleting CTS record:', error);
       toast.error('Erro ao remover CTS');
       throw error;
     }
@@ -195,7 +196,7 @@ export function useCTSRecords(vesselId?: string) {
 
       return data;
     } catch (error) {
-      console.error('Error checking CTS compliance:', error);
+      logger.error('Error checking CTS compliance:', error);
       toast.error('Erro na verificação de conformidade');
       throw error;
     }

@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   Brain, TrendingUp, AlertTriangle, Clock, Ship, 
   Zap, Calendar, BarChart3, ArrowRight, RefreshCw,
   Target, Lightbulb, ShieldCheck
@@ -89,7 +90,7 @@ export function PredictiveDowntimeCard({ contractId, vesselId }: PredictiveDownt
         toast.success('Análise preditiva concluída!');
       }
     } catch (error) {
-      console.error('Prediction error:', error);
+      logger.error('Prediction error:', error);
       toast.error('Erro na análise preditiva');
     } finally {
       setLoading(false);

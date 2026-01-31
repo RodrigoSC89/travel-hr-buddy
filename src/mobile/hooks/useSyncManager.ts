@@ -8,6 +8,7 @@ import { syncQueue } from "../services/syncQueue";
 import { networkDetector } from "../services/networkDetector";
 import { NetworkStatus } from "../types";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface SyncManagerState {
   isOnline: boolean;
@@ -51,7 +52,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       const size = await syncQueue.getQueueSize();
       setState(prev => ({ ...prev, queueSize: size }));
     } catch (error) {
-      console.error("Failed to update queue size:", error);
+      logger.error("Failed to update queue size:", error);
     }
   }, []);
 
@@ -115,7 +116,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       }));
 
       toast.error(errorMessage);
-      console.error("Sync error:", error);
+      logger.error("Sync error:", error);
     }
   }, [state.isSyncing, state.isOnline, updateQueueSize]);
 
@@ -149,7 +150,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
         toast.info("Change saved offline. Will sync when online.");
       }
     } catch (error) {
-      console.error("Failed to enqueue change:", error);
+      logger.error("Failed to enqueue change:", error);
       toast.error("Failed to save change");
       throw error;
     }
@@ -164,7 +165,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       await updateQueueSize();
       toast.success("Cleared synced items");
     } catch (error) {
-      console.error("Failed to clear synced items:", error);
+      logger.error("Failed to clear synced items:", error);
       toast.error("Failed to clear synced items");
     }
   }, [updateQueueSize]);
@@ -215,7 +216,7 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
       const currentQueueSize = await syncQueue.getQueueSize();
       
       if (state.isOnline && state.networkQuality === "good" && currentQueueSize > 0) {
-        console.log("Auto-sync check: syncing pending changes...");
+        logger.debug("Auto-sync check: syncing pending changes...");
         await syncNow();
       }
     }, 5 * 60 * 1000); // 5 minutes

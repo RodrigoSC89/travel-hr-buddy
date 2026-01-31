@@ -20,6 +20,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { fetchMarinhaBrasilData, type MarinhaBrasilData } from "@/services/weather/marinha-brasil.service";
 import { fetchCPTECData, type CPTECData } from "@/services/weather/cptec-inpe.service";
+import { logger } from '@/lib/logger';
 
 interface BrazilianSourcesPanelProps {
   className?: string;
@@ -107,7 +108,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
         });
       }
     } catch (error) {
-      console.error('Failed to fetch Marinha data:', error);
+      logger.error('Failed to fetch Marinha data:', error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados da Marinha",
@@ -149,7 +150,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
         });
       }
     } catch (error) {
-      console.error('Failed to fetch CPTEC data:', error);
+      logger.error('Failed to fetch CPTEC data:', error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do CPTEC",

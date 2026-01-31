@@ -16,6 +16,7 @@ import { getDefaultChecklistTemplate } from "@/lib/psc-score-calculator";
 import { Loader2, Save, Send, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { logger } from '@/lib/logger';
 
 interface PrePSCFormProps {
   inspectionId?: string;
@@ -60,7 +61,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
       setInspectionDate(inspection.inspection_date?.split("T")[0] || "");
       setChecklistItems(items);
     } catch (error) {
-      console.error("Error loading inspection:", error);
+      logger.error("Error loading inspection:", error);
       toast({
         title: "Error",
         description: "Failed to load inspection",
@@ -154,7 +155,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         onComplete(inspId);
       }
     } catch (error) {
-      console.error("Error saving inspection:", error);
+      logger.error("Error saving inspection:", error);
       toast({
         title: "Error",
         description: "Failed to save inspection",

@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+import { logger } from '@/lib/logger';
   Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
   Package, Shield, Mic, Copy, ThumbsUp, ThumbsDown,
   Lightbulb, MessageSquare, Minimize2, Maximize2
@@ -127,7 +128,7 @@ Como posso ajudar você hoje? Posso analisar dados, gerar relatórios, prever ne
         ]
       }]);
     } catch (error) {
-      console.error('Error loading context:', error);
+      logger.error('Error loading context:', error);
       setMessages([{
         id: '1',
         role: 'assistant',
@@ -327,7 +328,7 @@ Como posso ajudar?`;
       ));
 
     } catch (error) {
-      console.error('Brain error:', error);
+      logger.error('Brain error:', error);
       
       // Update assistant message with fallback
       setMessages(prev => prev.map(m => 

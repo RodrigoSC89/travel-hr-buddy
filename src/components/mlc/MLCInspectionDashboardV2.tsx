@@ -32,6 +32,7 @@ import { PushNotificationSettingsPanel } from '@/components/notifications/PushNo
 import { ComplianceAlertHistory } from '@/components/compliance/ComplianceAlertHistory';
 import { GeofenceEditor } from '@/components/compliance/GeofenceEditor';
 import { useMLCOffline } from '@/hooks/use-mlc-offline';
+import { logger } from '@/lib/logger';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
 
@@ -816,7 +817,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
               <GeofenceEditor 
                 geofences={[]}
                 onGeofencesChange={(zones) => {
-                  console.log('Geofences updated:', zones);
+                  logger.debug('Geofences updated:', zones);
                   toast.success(`${zones.length} zonas de geofencing configuradas`);
                 }}
                 onSelectGeofence={(zone) => {

@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, Calendar } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface HistoryData {
   date: string;
@@ -82,7 +83,7 @@ export const WellbeingHistory: React.FC = () => {
 
       setHistoryData(chartData);
     } catch (error) {
-      console.error("Error fetching history:", error);
+      logger.error("Error fetching history:", error);
       toast({
         title: "Error",
         description: "Failed to load wellbeing history",

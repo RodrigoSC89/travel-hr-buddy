@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { useOfflineSync } from "../hooks/useOfflineSync";
+import { logger } from '@/lib/logger';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -73,7 +74,7 @@ export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
     <ErrorBoundary 
       FallbackComponent={ErrorFallback}
       onError={(error, errorInfo) => {
-        console.error("Mobile app error:", error, errorInfo);
+        logger.error("Mobile app error:", error, errorInfo);
       }}
     >
       <div className="min-h-screen bg-background">

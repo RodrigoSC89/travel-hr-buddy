@@ -18,6 +18,7 @@ import {
   CheckCircle2, Clock, Target, Sparkles, BarChart3
 } from "lucide-react";
 import {
+import { logger } from '@/lib/logger';
   generateFullPredictiveAnalysis,
   type PredictiveAnalysis,
   type PredictiveRecommendation
@@ -210,7 +211,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
       const result = await generateFullPredictiveAnalysis();
       setAnalysis(result);
     } catch (error) {
-      console.error('Error loading predictive analysis:', error);
+      logger.error('Error loading predictive analysis:', error);
       toast.error("Erro ao carregar análise preditiva");
     } finally {
       setLoading(false);

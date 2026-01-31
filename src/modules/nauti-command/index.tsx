@@ -39,6 +39,7 @@ import { SystemHealthGrid } from "./components/SystemHealthGrid";
 import { QuickActionsPanel } from "./components/QuickActionsPanel";
 import { PredictiveInsights } from "./components/PredictiveInsights";
 import { OperationalKPIs } from "./components/OperationalKPIs";
+import { logger } from '@/lib/logger';
 
 interface SystemStatus {
   fleet: { vessels: number; active: number; maintenance: number; alerts: number };
@@ -193,7 +194,7 @@ const NautilusCommandCenter = () => {
       setLastSync(new Date());
 
     } catch (error) {
-      console.error('Error loading system data:', error);
+      logger.error('Error loading system data:', error);
       toast({
         title: "Erro de Sincronização",
         description: "Operando em modo offline",

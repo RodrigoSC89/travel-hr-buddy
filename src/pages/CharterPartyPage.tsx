@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format, differenceInDays, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { 
+import { logger } from '@/lib/logger';
   FileText, Ship, DollarSign, Brain, AlertTriangle, CheckCircle, 
   Calendar, Clock, Loader2, RefreshCw, Plus, Search, TrendingUp,
   Building, Scale, Calculator, FileCheck, Bell, History
@@ -168,7 +169,7 @@ const CharterPartyPage = () => {
         description: `Saúde do contrato: ${data?.contract_health || 92}%`,
       });
     } catch (err) {
-      console.error('AI analysis error:', err);
+      logger.error('AI analysis error:', err);
       // Demo fallback
       setAiAnalysis({
         contract_health: 92,

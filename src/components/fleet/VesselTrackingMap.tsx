@@ -13,6 +13,7 @@ import { Ship, RefreshCw, Loader2, Anchor, Navigation, Gauge, AlertCircle } from
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface VesselPosition {
   mmsi: string;
@@ -64,7 +65,7 @@ export function VesselTrackingMap({
         const { data, error: fnError } = await supabase.functions.invoke('mapbox-token');
         
         if (fnError) {
-          console.error('Mapbox token error:', fnError);
+          logger.error('Mapbox token error:', fnError);
           setError('Erro ao carregar token do mapa');
           setLoading(false);
           return;
@@ -77,7 +78,7 @@ export function VesselTrackingMap({
           setLoading(false);
         }
       } catch (err) {
-        console.error('Failed to get Mapbox token:', err);
+        logger.error('Failed to get Mapbox token:', err);
         setError('Falha ao conectar com o serviço de mapas');
         setLoading(false);
       }
@@ -116,7 +117,7 @@ export function VesselTrackingMap({
         setSource(data.source === 'database' || data.source === 'marinetraffic' ? 'database' : 'mock');
       }
     } catch (err) {
-      console.error('Failed to fetch vessels:', err);
+      logger.error('Failed to fetch vessels:', err);
       toast({
         title: 'Erro',
         description: 'Falha ao carregar posições AIS',
@@ -175,7 +176,7 @@ export function VesselTrackingMap({
         });
 
         mapInstance.on('error', (e: any) => {
-          console.error('Mapbox error:', e);
+          logger.error('Mapbox error:', e);
           if (mounted) {
             setError('Erro ao carregar o mapa');
             setLoading(false);
@@ -184,7 +185,7 @@ export function VesselTrackingMap({
 
         mapRef.current = mapInstance;
       } catch (err) {
-        console.error('Failed to initialize map:', err);
+        logger.error('Failed to initialize map:', err);
         if (mounted) {
           setError('Falha ao inicializar o mapa');
           setLoading(false);

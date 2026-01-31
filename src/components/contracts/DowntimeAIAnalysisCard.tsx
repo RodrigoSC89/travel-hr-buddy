@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   Brain, AlertTriangle, CheckCircle, XCircle, Clock,
   Loader2, FileText, DollarSign, Shield, Lightbulb,
   TrendingUp, TrendingDown, RefreshCw
@@ -107,7 +108,7 @@ export function DowntimeAIAnalysisCard({ events, contracts, onAnalysisComplete }
       onAnalysisComplete?.();
 
     } catch (error) {
-      console.error("AI Analysis error:", error);
+      logger.error("AI Analysis error:", error);
       toast.error("Erro na análise IA");
     } finally {
       setAnalyzing(null);

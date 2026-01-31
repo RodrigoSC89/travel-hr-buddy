@@ -14,6 +14,7 @@ import {
 import { Download, FileText, MapPin, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { OptimizedRoute, RouteWaypoint } from "@/lib/optimization/quantum-router";
+import { logger } from '@/lib/logger';
 
 interface RouteExportButtonsProps {
   route: OptimizedRoute | null;
@@ -92,7 +93,7 @@ export function RouteExportButtons({ route, routeName = "rota-otimizada", classN
       doc.save(`${routeName}-${Date.now()}.pdf`);
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
+      logger.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     } finally {
       setIsExporting(false);
@@ -121,7 +122,7 @@ export function RouteExportButtons({ route, routeName = "rota-otimizada", classN
 
       toast.success("GPX exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar GPX:", error);
+      logger.error("Erro ao exportar GPX:", error);
       toast.error("Erro ao exportar GPX");
     } finally {
       setIsExporting(false);

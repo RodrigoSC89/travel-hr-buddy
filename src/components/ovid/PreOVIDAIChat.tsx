@@ -9,6 +9,7 @@ import {
   Book, Mic, MicOff, Volume2, VolumeX
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -177,7 +178,7 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
       }
     } catch (error) {
       toast.error('Erro ao comunicar com assistente IA');
-      console.error(error);
+      logger.error(error);
     } finally {
       setIsLoading(false);
     }

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, Brain, Heart, Moon, Battery, AlertCircle } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface FormData {
   sleep_hours: number;
@@ -92,7 +93,7 @@ export const WeeklyAssessment: React.FC = () => {
         concerns: "",
       });
     } catch (error) {
-      console.error("Error submitting assessment:", error);
+      logger.error("Error submitting assessment:", error);
       toast({
         title: "Error",
         description: "Failed to submit assessment. Please try again.",

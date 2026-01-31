@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 import { format, parseISO, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface TideExtreme {
   time: string;
@@ -63,7 +64,7 @@ export function TelemetryTideChart({
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch tidal data';
       setError(message);
-      console.error('[TideChart] Error:', err);
+      logger.error('[TideChart] Error:', err);
       
       // Use mock data as fallback
       setTides(generateMockTides());

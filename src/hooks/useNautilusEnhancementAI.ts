@@ -6,6 +6,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 export type EnhancementType = 
   | 'workflow_analyze' 
@@ -75,7 +76,7 @@ export function useNautilusEnhancementAI() {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(message);
-      console.error('[useNautilusEnhancementAI]', err);
+      logger.error('[useNautilusEnhancementAI]', err);
       return null;
     } finally {
       setIsLoading(false);

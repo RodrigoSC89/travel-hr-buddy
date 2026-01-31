@@ -35,6 +35,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Add Ship icon that was missing
 import { Ship } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface DPIncident {
   id: string;
@@ -127,7 +128,7 @@ export const SafetyDashboard: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents:", error);
     } finally {
       setLoading(false);
     }

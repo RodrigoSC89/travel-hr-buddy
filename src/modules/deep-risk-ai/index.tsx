@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 
 const DeepRiskAI: React.FC = () => {
@@ -62,7 +63,7 @@ const DeepRiskAI: React.FC = () => {
       const history = await deepRiskAIService.getRiskEventHistory(20);
       setEventHistory(history);
     } catch (error) {
-      console.error("Failed to load event history:", error);
+      logger.error("Failed to load event history:", error);
     }
   };
 
@@ -106,7 +107,7 @@ const DeepRiskAI: React.FC = () => {
 
       toast.success(`Análise de risco concluída: ${score.level.toUpperCase()}`);
     } catch (error) {
-      console.error("Risk analysis failed:", error);
+      logger.error("Risk analysis failed:", error);
       toast.error("Falha na análise de risco");
     } finally {
       setIsAnalyzing(false);

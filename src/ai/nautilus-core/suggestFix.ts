@@ -7,6 +7,7 @@
 import OpenAI from "openai";
 import type { Finding, AnalysisResult } from "./analyzer";
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 export interface FixSuggestion {
   title: string;
@@ -61,7 +62,7 @@ export async function suggestFix(analysis: AnalysisResult): Promise<FixSuggestio
 
     return parseAIResponse(content, findings);
   } catch (error) {
-    console.error("❌ Error calling OpenAI API:", error);
+    logger.error("❌ Error calling OpenAI API:", error);
     return generateFallbackSuggestion(findings);
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type UserRole = Database["public"]["Enums"]["user_role"];
@@ -53,7 +54,7 @@ export const useUsers = () => {
       setUsers(usersWithRoles);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error fetching users:", errorMessage);
+      logger.error("Error fetching users:", errorMessage);
       if (isMountedRef.current) {
         setError("Erro ao carregar usuários");
       }
@@ -90,7 +91,7 @@ export const useUsers = () => {
       return { success: true };
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error updating user role:", errorMessage);
+      logger.error("Error updating user role:", errorMessage);
       return { success: false, error: "Erro ao atualizar role do usuário" };
     }
   }, []);
@@ -130,7 +131,7 @@ export const useUsers = () => {
       return { success: true };
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error updating user profile:", errorMessage);
+      logger.error("Error updating user profile:", errorMessage);
       return { success: false, error: "Erro ao atualizar perfil do usuário" };
     }
   }, [updateUserRole]);

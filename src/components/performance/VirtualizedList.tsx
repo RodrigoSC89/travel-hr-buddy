@@ -5,6 +5,7 @@
 
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -206,7 +207,7 @@ export function useVirtualizedData<T>(
       setItems((prev) => [...prev, ...newItems]);
       setPage((p) => p + 1);
     } catch (error) {
-      console.error('Failed to load more items:', error);
+      logger.error('Failed to load more items:', error);
     } finally {
       setIsLoading(false);
     }

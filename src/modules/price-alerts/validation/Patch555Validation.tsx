@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { priceAlertsService } from "@/services/price-alerts-service";
+import { logger } from '@/lib/logger';
 
 export default function Patch555Validation() {
   const [checks, setChecks] = useState({
@@ -30,7 +31,7 @@ export default function Patch555Validation() {
         notificationsActive: notifications !== null,
       });
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("Validation error:", error);
       setChecks({
         tableRenders: false,
         uiComplete: false,

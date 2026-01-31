@@ -8,6 +8,7 @@ import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { ComplianceRisk, ComplianceEvidence, ComplianceAIRecommendation } from "../types";
+import { logger } from '@/lib/logger';
 
 interface AIComplianceInput {
   risks?: ComplianceRisk[];
@@ -110,7 +111,7 @@ export function useAICompliance() {
       return analysisResult;
 
     } catch (error) {
-      console.error("Compliance analysis error:", error);
+      logger.error("Compliance analysis error:", error);
       toast.error("Erro na análise de compliance");
       throw error;
     } finally {

@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   Mic,
   MicOff,
   Volume2,
@@ -178,7 +179,7 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
         await audioRef.current.play();
       }
     } catch (error) {
-      console.error('ElevenLabs TTS error:', error);
+      logger.error('ElevenLabs TTS error:', error);
       setIsPlayingAudio(false);
       // Fallback to browser TTS
       speakWithBrowserTTS(text);
@@ -304,7 +305,7 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
       }
 
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       
       // Fallback response
       const fallbackResponse = `Como especialista em MLC 2006, posso ajudar com sua pergunta sobre "${text}". 

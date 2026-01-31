@@ -37,7 +37,7 @@ export function SyncStatus() {
       ]);
       setPendingCount(docs.length + logs.length + actions.length);
     } catch (error) {
-      console.error("Failed to load pending count:", error);
+      logger.error("Failed to load pending count:", error);
     }
   };
 
@@ -58,12 +58,12 @@ export function SyncStatus() {
         }, { onConflict: 'id' });
 
       if (error) {
-        console.error("Failed to sync document:", error);
+        logger.error("Failed to sync document:", error);
         return false;
       }
       return true;
     } catch (error) {
-      console.error("Document sync error:", error);
+      logger.error("Document sync error:", error);
       return false;
     }
   };
@@ -85,12 +85,12 @@ export function SyncStatus() {
         });
 
       if (error) {
-        console.error("Failed to sync log:", error);
+        logger.error("Failed to sync log:", error);
         return false;
       }
       return true;
     } catch (error) {
-      console.error("Log sync error:", error);
+      logger.error("Log sync error:", error);
       return false;
     }
   };

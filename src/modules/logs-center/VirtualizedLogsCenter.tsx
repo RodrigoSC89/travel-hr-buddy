@@ -16,6 +16,7 @@ import { runAIContext } from "@/ai/kernel";
 import { exportLogsAsPDF } from "@/lib/logger/exportToPDF";
 import { toast } from "sonner";
 import type { LogEntry, LogLevel, LogFilter } from "./types";
+import { logger } from '@/lib/logger';
 
 export default function VirtualizedLogsCenter() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -54,7 +55,7 @@ export default function VirtualizedLogsCenter() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export default function VirtualizedLogsCenter() {
       await exportLogsAsPDF(filteredLogs);
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast.error("Erro ao exportar PDF");
     }
   };
@@ -127,7 +128,7 @@ export default function VirtualizedLogsCenter() {
         { duration: 8000 }
       );
     } catch (error) {
-      console.error("Error running AI diagnostic:", error);
+      logger.error("Error running AI diagnostic:", error);
       toast.error("Erro ao executar diagnóstico de IA");
     } finally {
       setAiLoading(false);

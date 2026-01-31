@@ -30,6 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface EmergencyContact {
   name: string;
@@ -95,7 +96,7 @@ export function EmergencyMode() {
           });
         },
         (error) => {
-          console.error('GPS error:', error);
+          logger.error('GPS error:', error);
         },
         { enableHighAccuracy: true }
       );
@@ -110,7 +111,7 @@ export function EmergencyMode() {
       try {
         setIncidents(JSON.parse(cached));
       } catch (e) {
-        console.error('Failed to load cached incidents:', e);
+        logger.error('Failed to load cached incidents:', e);
       }
     }
 

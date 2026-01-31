@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertOctagon, FileText, Search, CheckCircle, X, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -58,7 +59,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           performed_at: new Date().toISOString(),
         });
       } catch (logError) {
-        console.log("Workflow log not saved (table may not exist)");
+        logger.debug("Workflow log not saved (table may not exist)");
       }
 
       toast({
@@ -68,7 +69,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       onUpdate();
     } catch (error) {
-      console.error("Error updating incident:", error);
+      logger.error("Error updating incident:", error);
       toast({
         title: "Error",
         description: "Failed to update incident status",
@@ -103,7 +104,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           uploaded_at: new Date().toISOString(),
         });
       } catch (dbError) {
-        console.log("File metadata not saved (table may not exist)");
+        logger.debug("File metadata not saved (table may not exist)");
       }
 
       toast({
@@ -111,7 +112,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Evidence file uploaded successfully",
       });
     } catch (error) {
-      console.error("Error uploading file:", error);
+      logger.error("Error uploading file:", error);
       toast({
         title: "Upload Failed",
         description: "Failed to upload evidence file",
@@ -149,7 +150,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Incident report downloaded successfully",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Export Failed",
         description: "Failed to export PDF",

@@ -30,6 +30,7 @@ import {
   Zap
 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface APIStatus {
   name: string;
@@ -97,7 +98,7 @@ export default function APIMonitor() {
         setSummary(data.summary);
       }
     } catch (error) {
-      console.error("Failed to fetch API status:", error);
+      logger.error("Failed to fetch API status:", error);
       toast.error("Erro ao verificar status das APIs");
       
       // Set fallback data

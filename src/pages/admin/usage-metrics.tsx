@@ -6,6 +6,7 @@ import { Loader2, Download, BarChart3, Clock, Users, TrendingUp } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { LazyBarChart } from "@/components/charts/LazyChart";
 import { format, subDays, startOfDay, endOfDay } from "date-fns";
+import { logger } from '@/lib/logger';
 
 /**
  * PATCH 643.1: Usage Metrics Dashboard with Real Supabase Data
@@ -25,7 +26,7 @@ export default function UsageMetrics() {
         .not('page_url', 'is', null);
 
       if (error) {
-        console.error("Error fetching module access:", error);
+        logger.error("Error fetching module access:", error);
         // Fallback to access_logs if analytics_events has no data
         const { data: logsData } = await supabase
           .from('access_logs')

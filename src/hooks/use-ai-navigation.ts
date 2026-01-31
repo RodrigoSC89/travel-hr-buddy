@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 interface NavigationEntry {
   from: string;
@@ -48,7 +49,7 @@ export function useAINavigation() {
 
           await (supabase as any).from("navigation_history").insert(payload);
         } catch (error) {
-          console.error("Failed to track navigation:", error);
+          logger.error("Failed to track navigation:", error);
         }
       }
 
@@ -77,7 +78,7 @@ export function useAINavigation() {
 
         return analyzePatternsAndSuggest((history ?? []) as any[]);
       } catch (error) {
-        console.error("Failed to get navigation suggestions:", error);
+        logger.error("Failed to get navigation suggestions:", error);
         return [];
       }
     },
@@ -142,7 +143,7 @@ export function useRecordModuleAccess(moduleName: string) {
 
         await (supabase as any).from("module_access_log").insert(payload);
       } catch (error) {
-        console.error("Failed to record module access:", error);
+        logger.error("Failed to record module access:", error);
       }
     };
 

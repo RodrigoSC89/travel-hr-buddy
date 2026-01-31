@@ -56,7 +56,7 @@ export const PhotoCaptureModal: React.FC<PhotoCaptureModalProps> = ({
         streamRef.current = stream;
       }
     } catch (error) {
-      console.error('Camera error:', error);
+      logger.error('Camera error:', error);
       toast.error('Não foi possível acessar a câmera. Você pode fazer upload de uma imagem.');
       setIsCapturing(false);
     }

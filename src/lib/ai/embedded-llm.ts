@@ -169,7 +169,7 @@ class EmbeddedLLMManager {
         await this.query(request);
         this.pendingRequests.delete(hash);
       } catch (error) {
-        console.error('Failed to process pending request:', error);
+        logger.error('Failed to process pending request:', error);
       }
     }
   }
@@ -236,7 +236,7 @@ class EmbeddedLLMManager {
 
       return response;
     } catch (error) {
-      console.error('LLM query error:', error);
+      logger.error('LLM query error:', error);
       
       // Fallback para cache ou resposta padrão
       const cached = await this.getCachedResponse(promptHash);
@@ -308,6 +308,7 @@ export const embeddedLLM = new EmbeddedLLMManager();
 
 // React Hook
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useEmbeddedLLM() {
   const [isLoading, setIsLoading] = useState(false);

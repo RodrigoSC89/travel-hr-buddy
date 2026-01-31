@@ -106,7 +106,7 @@ export function useEdgeAI() {
 
       return prediction;
     } catch (error) {
-      console.error("Prediction error:", error);
+      logger.error("Prediction error:", error);
       return null;
     }
   }, []);

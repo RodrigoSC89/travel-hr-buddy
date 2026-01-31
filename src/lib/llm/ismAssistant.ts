@@ -5,6 +5,7 @@
 
 import { nautilusRespond } from "../ai/nautilusLLM";
 import type { ISMAuditItem, ComplianceStatus } from "../../types/ism-audit";
+import { logger } from '@/lib/logger';
 
 export interface AnalyzeISMItemParams {
   question: string;
@@ -82,7 +83,7 @@ Seja objetivo, técnico e foque na conformidade com padrões ISM.
       riskLevel: "medium"
     };
   } catch (error) {
-    console.error("Error analyzing ISM item:", error);
+    logger.error("Error analyzing ISM item:", error);
     throw new Error("Failed to analyze audit item with AI");
   }
 }
@@ -134,7 +135,7 @@ Seja conciso, profissional e objetivo. Máximo 500 palavras.
     
     return result.response;
   } catch (error) {
-    console.error("Error generating audit summary:", error);
+    logger.error("Error generating audit summary:", error);
     return "Erro ao gerar sumário da auditoria.";
   }
 }
@@ -178,7 +179,7 @@ Formate como lista simples, uma por linha, iniciando com "- ".
     
     return suggestions.length > 0 ? suggestions : [result.response];
   } catch (error) {
-    console.error("Error suggesting improvements:", error);
+    logger.error("Error suggesting improvements:", error);
     return ["Erro ao gerar sugestões de melhoria."];
   }
 }

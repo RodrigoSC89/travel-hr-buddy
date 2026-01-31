@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Shield, TrendingUp, TrendingDown, Info, History } from "lucide-react";
 import { calculateTrustScore, getTrustScoreHistory, type TrustScore, type TrustInput } from "./calculateTrustScore";
 import { Button } from "@/components/ui/button";
+import { logger } from '@/lib/logger';
 
 interface TrustScoreDisplayProps {
   entityId: string;
@@ -67,7 +68,7 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
       const score = await calculateTrustScore(input);
       setTrustScore(score);
     } catch (error) {
-      console.error("Error loading trust score:", error);
+      logger.error("Error loading trust score:", error);
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +79,7 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
       const historyData = await getTrustScoreHistory(entityId, 20);
       setHistory(historyData);
     } catch (error) {
-      console.error("Error loading trust history:", error);
+      logger.error("Error loading trust history:", error);
     }
   };
 

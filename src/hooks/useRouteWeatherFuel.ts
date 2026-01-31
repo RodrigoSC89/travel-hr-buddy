@@ -4,6 +4,7 @@
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface WeatherData {
   location: string;
@@ -101,7 +102,7 @@ export function useRouteWeatherFuel(): UseRouteWeatherFuelReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch route data';
       setError(errorMessage);
-      console.error('[useRouteWeatherFuel] Error:', err);
+      logger.error('[useRouteWeatherFuel] Error:', err);
     } finally {
       setLoading(false);
     }

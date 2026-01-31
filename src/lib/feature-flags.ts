@@ -58,7 +58,7 @@ export function getFeatureFlags(): FeatureFlags {
         return { ...DEFAULT_FEATURE_FLAGS, ...JSON.parse(stored) };
       }
     } catch (e) {
-      console.warn('Failed to parse feature flags from localStorage');
+      logger.warn('Failed to parse feature flags from localStorage');
     }
   }
   
@@ -77,6 +77,7 @@ export function isFeatureEnabled(flag: keyof FeatureFlags): boolean {
  * Hook para usar feature flags em componentes React
  */
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useFeatureFlags(): FeatureFlags {
   const [flags, setFlags] = useState<FeatureFlags>(DEFAULT_FEATURE_FLAGS);

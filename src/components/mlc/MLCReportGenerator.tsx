@@ -25,6 +25,7 @@ import {
   Mail, Send, Loader2
 } from 'lucide-react';
 import { MLC_2022_TITLES, getItemById, type MLCCheckItem } from '@/data/mlc-2022-checklist';
+import { logger } from '@/lib/logger';
 
 interface ChecklistAnswer {
   status: 'compliant' | 'non-compliant' | 'na' | null;
@@ -528,7 +529,7 @@ The undersigned parties hereby confirm that:
       });
 
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      logger.error('Error generating PDF:', error);
       toast.error('Erro ao gerar PDF', {
         description: 'Verifique os dados e tente novamente.'
       });
@@ -696,7 +697,7 @@ The undersigned parties hereby confirm that:
 
       setShowEmailDialog(false);
     } catch (error) {
-      console.error('Error sending email:', error);
+      logger.error('Error sending email:', error);
       toast.error('Erro ao enviar email', {
         description: 'Verifique os endereços e tente novamente.',
       });

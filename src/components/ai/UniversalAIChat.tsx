@@ -31,6 +31,7 @@ import { unifiedAI } from '@/lib/ai/unified-ai-service';
 import { AI_MODULES, type AIModuleKey } from '@/lib/ai-prompts';
 import { useToast } from '@/hooks/use-toast';
 import ReactMarkdown from 'react-markdown';
+import { logger } from '@/lib/logger';
 
 interface AIMessage {
   role: 'user' | 'assistant' | 'system';
@@ -126,7 +127,7 @@ export function UniversalAIChat({
         }
       }
     } catch (error) {
-      console.error('ElevenLabs HD failed, falling back to browser TTS:', error);
+      logger.error('ElevenLabs HD failed, falling back to browser TTS:', error);
     }
 
     // Fallback to browser TTS
@@ -200,7 +201,7 @@ export function UniversalAIChat({
         );
       }
     } catch (error) {
-      console.error('Chat error:', error);
+      logger.error('Chat error:', error);
       setMessages(prev => 
         prev.map(m => 
           m.id === assistantMessage.id 

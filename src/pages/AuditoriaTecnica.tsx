@@ -166,7 +166,7 @@ export default function AuditoriaTecnica() {
 
       toast.success("Auditoria concluída com sucesso!");
     } catch (error) {
-      console.error("Audit error:", error);
+      logger.error("Audit error:", error);
       toast.error("Erro ao executar auditoria");
     } finally {
       setLoading(false);
@@ -221,7 +221,7 @@ export default function AuditoriaTecnica() {
       doc.save(`auditoria-tecnica-${new Date().toISOString().split('T')[0]}.pdf`);
       toast.success("Relatório de Auditoria Técnica exportado!", { id: "audit-pdf" });
     } catch (error) {
-      console.error("PDF export error:", error);
+      logger.error("PDF export error:", error);
       toast.error("Erro ao gerar PDF", { id: "audit-pdf" });
     }
   };

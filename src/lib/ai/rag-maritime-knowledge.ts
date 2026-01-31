@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // Maritime document categories
 export type MaritimeDocumentCategory = 
@@ -343,7 +344,7 @@ export async function indexDocument(document: Omit<MaritimeDocument, 'id'>): Pro
   // const embedding = await openai.embeddings.create({ ... });
   // await pinecone.upsert({ id, values: embedding, metadata: document });
   
-  console.log(`[RAG] Indexed document: ${id}`);
+  logger.debug(`[RAG] Indexed document: ${id}`);
   
   return id;
 }

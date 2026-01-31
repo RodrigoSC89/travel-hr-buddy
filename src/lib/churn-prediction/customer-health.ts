@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface CustomerHealthMetrics {
   id: string;
@@ -86,7 +87,7 @@ class CustomerHealthService {
 
       return !error;
     } catch (error) {
-      console.error('Failed to track event:', error);
+      logger.error('Failed to track event:', error);
       return false;
     }
   }
@@ -207,7 +208,7 @@ class CustomerHealthService {
         .single();
 
       if (error) {
-        console.error('Failed to save health metrics:', error);
+        logger.error('Failed to save health metrics:', error);
         return null;
       }
 
@@ -217,7 +218,7 @@ class CustomerHealthService {
         recommended_actions: recommendedActions
       } as CustomerHealthMetrics;
     } catch (error) {
-      console.error('Error calculating health score:', error);
+      logger.error('Error calculating health score:', error);
       return null;
     }
   }
@@ -233,7 +234,7 @@ class CustomerHealthService {
       .single();
 
     if (error) {
-      console.error('Failed to get health metrics:', error);
+      logger.error('Failed to get health metrics:', error);
       return null;
     }
 
@@ -259,7 +260,7 @@ class CustomerHealthService {
       .order('churn_risk', { ascending: false });
 
     if (error) {
-      console.error('Failed to get at-risk customers:', error);
+      logger.error('Failed to get at-risk customers:', error);
       return [];
     }
 

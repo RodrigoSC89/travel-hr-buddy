@@ -15,6 +15,7 @@ import { IncidentDocumentation } from "@/modules/incident-reports/components/Inc
 import { IncidentClosure } from "@/modules/incident-reports/components/IncidentClosure";
 import { incidentService } from "@/modules/incident-reports/services/incident-service";
 import type { Incident } from "@/modules/incident-reports/types";
+import { logger } from '@/lib/logger';
 
 const IncidentsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("detection");
@@ -29,7 +30,7 @@ const IncidentsPage: React.FC = () => {
       const data = await incidentService.getIncidents();
       setIncidents(data);
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents:", error);
       toast.error("Failed to load incidents");
     }
   };

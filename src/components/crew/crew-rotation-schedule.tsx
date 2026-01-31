@@ -11,6 +11,7 @@ import { Calendar, Ship, User, AlertCircle, CheckCircle, Clock } from "lucide-re
 import { format } from "date-fns";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 type CrewEmbarkation = Database["public"]["Tables"]["crew_embarkations"]["Row"];
 
@@ -33,7 +34,7 @@ export function CrewRotationSchedule() {
       if (error) throw error;
       setEmbarkations(data || []);
     } catch (error) {
-      console.error("Error loading embarkations:", error);
+      logger.error("Error loading embarkations:", error);
       toast.error("Failed to load crew embarkations");
     } finally {
       setLoading(false);

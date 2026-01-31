@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useDebounce } from './use-debounce';
+import { logger } from '@/lib/logger';
 
 export interface OVIDInspection {
   id: string;
@@ -87,7 +88,7 @@ export function useOVIDInspection(inspectionId?: string) {
       
       setPhotos((photoData || []) as OVIDPhoto[]);
     } catch (error) {
-      console.error('Error loading inspection:', error);
+      logger.error('Error loading inspection:', error);
       toast.error('Erro ao carregar inspeção');
     } finally {
       setIsLoading(false);
@@ -125,7 +126,7 @@ export function useOVIDInspection(inspectionId?: string) {
       toast.success('Inspeção criada com sucesso');
       return newInsp?.id || null;
     } catch (error) {
-      console.error('Error creating inspection:', error);
+      logger.error('Error creating inspection:', error);
       toast.error('Erro ao criar inspeção');
       return null;
     } finally {
@@ -179,7 +180,7 @@ export function useOVIDInspection(inspectionId?: string) {
 
         setPendingUpdates({});
       } catch (error) {
-        console.error('Error saving answers:', error);
+        logger.error('Error saving answers:', error);
       } finally {
         setIsSaving(false);
       }
@@ -206,7 +207,7 @@ export function useOVIDInspection(inspectionId?: string) {
       toast.success('Inspeção finalizada!');
       return true;
     } catch (error) {
-      console.error('Error completing inspection:', error);
+      logger.error('Error completing inspection:', error);
       toast.error('Erro ao finalizar inspeção');
       return false;
     }
@@ -224,7 +225,7 @@ export function useOVIDInspection(inspectionId?: string) {
       if (error) throw error;
       return (data || []) as OVIDInspection[];
     } catch (error) {
-      console.error('Error loading history:', error);
+      logger.error('Error loading history:', error);
       return [];
     }
   }, []);
@@ -266,7 +267,7 @@ export function useOVIDInspection(inspectionId?: string) {
       toast.success('Foto anexada');
       return filePath;
     } catch (error) {
-      console.error('Error uploading photo:', error);
+      logger.error('Error uploading photo:', error);
       toast.error('Erro ao anexar foto');
       return null;
     }

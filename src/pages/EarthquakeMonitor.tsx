@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertTriangle, MapPin, Clock, RefreshCw, Activity, Globe, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface Earthquake {
   id: string;
@@ -74,7 +75,7 @@ export default function EarthquakeMonitor() {
         toast.success(`${formatted.length} eventos sísmicos carregados`);
       }
     } catch (err) {
-      console.error("Error fetching earthquakes:", err);
+      logger.error("Error fetching earthquakes:", err);
       toast.error("Erro ao carregar dados sísmicos");
     } finally {
       setIsLoading(false);

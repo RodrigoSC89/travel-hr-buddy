@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Calendar, User, TrendingUp } from "lucide-react";
 import { mlcInspectionService, MLCInspection } from "@/services/mlc-inspection.service";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface InspectionsListProps {
   onSelectInspection: (id: string) => void;
@@ -26,7 +27,7 @@ export function InspectionsList({ onSelectInspection, onStatsUpdate }: Inspectio
       const data = await mlcInspectionService.getInspections();
       setInspections(data);
     } catch (error) {
-      console.error("Error loading inspections:", error);
+      logger.error("Error loading inspections:", error);
       toast({
         title: "Error",
         description: "Failed to load inspections",

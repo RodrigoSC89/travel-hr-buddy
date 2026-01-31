@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, Bell, CheckCircle, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface PerformanceAlert {
   id: string;
@@ -100,7 +101,7 @@ export const AlertsSystem: React.FC = () => {
       }
       setAlerts((data as any) || []);
     } catch (error) {
-      console.error("Error fetching alerts:", error);
+      logger.error("Error fetching alerts:", error);
       setAlerts([]);
     } finally {
       setLoading(false);
@@ -122,7 +123,7 @@ export const AlertsSystem: React.FC = () => {
         description: "Alert marked as resolved",
       });
     } catch (error) {
-      console.error("Error resolving alert:", error);
+      logger.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",

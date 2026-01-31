@@ -26,6 +26,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface AnalysisResult {
   summary: string;
@@ -106,7 +107,7 @@ Responda em formato estruturado usando markdown.`,
         description: "O documento foi analisado com sucesso.",
       });
     } catch (error) {
-      console.error("Error analyzing document:", error);
+      logger.error("Error analyzing document:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar o documento. Tente novamente.",

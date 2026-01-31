@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export function HRTurnoverPrediction() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -116,7 +117,7 @@ export function HRTurnoverPrediction() {
       if (error) throw error;
       toast.success(`Análise concluída: ${data.total_analyzed} colaboradores analisados`);
     } catch (error) {
-      console.error('Error running analysis:', error);
+      logger.error('Error running analysis:', error);
       toast.error('Erro ao executar análise. Usando dados de demonstração.');
     } finally {
       setIsAnalyzing(false);

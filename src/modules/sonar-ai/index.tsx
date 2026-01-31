@@ -43,6 +43,7 @@ import { sonarAIService, type SonarDetection } from "./services/sonarAIService";
 import { SonarAIDashboard } from "./components/SonarAIDashboard";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 // Export PATCH 479 modules
 export { enhancedSonarAIService } from "./services/enhanced-ai-service";
@@ -79,7 +80,7 @@ const SonarAI: React.FC = () => {
       const history = await sonarAIService.getRecentDetections(20);
       setDetectionHistory(history);
     } catch (error) {
-      console.error("Failed to load detection history:", error);
+      logger.error("Failed to load detection history:", error);
     }
   };
 
@@ -133,7 +134,7 @@ const SonarAI: React.FC = () => {
         toast.success("Scan concluído - Área limpa");
       }
     } catch (error) {
-      console.error("Scan failed:", error);
+      logger.error("Scan failed:", error);
       toast.error("Falha no scan");
     } finally {
       setIsScanning(false);

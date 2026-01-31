@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Map, Wind, Thermometer, Droplets, Waves, Cloud, Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface WindyMapProps {
   lat?: number;
@@ -53,7 +54,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
         });
 
         if (error) {
-          console.error("Error fetching API keys:", error);
+          logger.error("Error fetching API keys:", error);
           setMapError(true);
           setUseAlternative(true);
           return;
@@ -66,7 +67,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           setUseAlternative(true);
         }
       } catch (err) {
-        console.error("Failed to fetch API keys:", err);
+        logger.error("Failed to fetch API keys:", err);
         setMapError(true);
         setUseAlternative(true);
       }
@@ -87,7 +88,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           setWeatherData(data.data);
         }
       } catch (err) {
-        console.error("Failed to fetch weather data:", err);
+        logger.error("Failed to fetch weather data:", err);
       }
     };
 

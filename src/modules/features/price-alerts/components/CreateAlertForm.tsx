@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { priceAlertsService, CreatePriceAlertInput, PriceAlert } from "@/services/price-alerts-service";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface CreateAlertFormProps {
   onSuccess: () => void;
@@ -62,7 +63,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
       onSuccess();
       if (onCancelEdit) onCancelEdit();
     } catch (error) {
-      console.error("Error creating/updating alert:", error);
+      logger.error("Error creating/updating alert:", error);
       toast.error(editingAlert ? "Erro ao atualizar alerta" : "Erro ao criar alerta");
     } finally {
       setLoading(false);

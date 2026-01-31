@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Request Idle Callback Polyfill and Utilities
  * For scheduling non-critical work during idle time
@@ -60,7 +62,7 @@ export function batchIdleTasks(
       try {
         tasks[taskIndex]();
       } catch (error) {
-        console.error('Error in idle task:', error);
+        logger.error('Error in idle task:', error);
       }
       taskIndex++;
     }

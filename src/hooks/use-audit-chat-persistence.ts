@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/lib/logger';
 
 export interface ChatMessage {
   id: string;
@@ -245,7 +246,7 @@ export function useAuditChatPersistence(activeModule: 'peotram' | 'peodp') {
       toast.success(`${localSessions.length} conversas sincronizadas com a nuvem`);
       loadSessions();
     } catch (error) {
-      console.error('Migration failed:', error);
+      logger.error('Migration failed:', error);
     }
   }, [user?.id, getAllLocalSessions, loadSessions]);
 

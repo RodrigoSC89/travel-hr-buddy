@@ -61,6 +61,7 @@ import { missionLogsService, type MissionLog as MissionLogType } from "@/modules
 import { AICommander } from "@/modules/mission-control/components/AICommander";
 import { KPIDashboard } from "@/modules/mission-control/components/KPIDashboard";
 import { SystemLogs } from "@/modules/mission-control/components/SystemLogs";
+import { logger } from '@/lib/logger';
 
 interface ModuleStatus {
   id: string;
@@ -147,7 +148,7 @@ const MissionCommandCenter: React.FC = () => {
       if (error) throw error;
       if (data) setMissions(data as Mission[]);
     } catch (error) {
-      console.error("Error loading missions:", error);
+      logger.error("Error loading missions:", error);
     } finally {
       setMissionsLoading(false);
     }
@@ -164,7 +165,7 @@ const MissionCommandCenter: React.FC = () => {
       if (error) throw error;
       if (data) setRecentLogs(data as ActivityLog[]);
     } catch (error) {
-      console.error("Error loading logs:", error);
+      logger.error("Error loading logs:", error);
     }
   }, []);
 

@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 type LogSeverity = "info" | "warning" | "error" | "critical";
 
@@ -46,7 +47,7 @@ export class MissionLoggingService {
 
       return this.mapToLog(data);
     } catch (error) {
-      console.error("Error logging mission event:", error);
+      logger.error("Error logging mission event:", error);
       return null;
     }
   }
@@ -64,7 +65,7 @@ export class MissionLoggingService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error("Error fetching mission logs:", error);
+      logger.error("Error fetching mission logs:", error);
       return [];
     }
   }
@@ -81,7 +82,7 @@ export class MissionLoggingService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error("Error fetching recent logs:", error);
+      logger.error("Error fetching recent logs:", error);
       return [];
     }
   }
@@ -99,7 +100,7 @@ export class MissionLoggingService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error("Error fetching logs by severity:", error);
+      logger.error("Error fetching logs by severity:", error);
       return [];
     }
   }

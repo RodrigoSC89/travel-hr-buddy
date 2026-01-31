@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface CrewMember {
   id: string;
@@ -48,7 +49,7 @@ export function CrewManagement() {
         .limit(20);
 
       if (error) {
-        console.error("Error loading crew:", error);
+        logger.error("Error loading crew:", error);
         setCrew(getDemoCrew());
         return;
       }
@@ -80,7 +81,7 @@ export function CrewManagement() {
         setCrew(getDemoCrew());
       }
     } catch (error) {
-      console.error("Error loading crew:", error);
+      logger.error("Error loading crew:", error);
       setCrew(getDemoCrew());
     } finally {
       setIsLoading(false);

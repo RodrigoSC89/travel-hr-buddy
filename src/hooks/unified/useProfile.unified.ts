@@ -12,6 +12,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 // ============================================
 // TYPES
@@ -83,14 +84,14 @@ export function useProfile(): UseProfileReturn {
           };
           setProfile(fallbackProfile);
         } else {
-          console.error("Error fetching profile:", fetchError);
+          logger.error("Error fetching profile:", fetchError);
           setError(new Error(fetchError.message));
         }
       } else {
         setProfile(data as Profile);
       }
     } catch (err) {
-      console.error("Error in fetchProfile:", err);
+      logger.error("Error in fetchProfile:", err);
       setError(err as Error);
     } finally {
       setIsLoading(false);

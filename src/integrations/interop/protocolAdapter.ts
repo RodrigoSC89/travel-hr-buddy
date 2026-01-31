@@ -1,4 +1,3 @@
-// @ts-nocheck - Dynamic table access requires type override
 /**
  * PATCH 851 - Protocol Adapter
  * Removed @ts-nocheck, added proper typing with dynamic table access

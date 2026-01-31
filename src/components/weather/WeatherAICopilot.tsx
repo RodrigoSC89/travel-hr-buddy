@@ -245,7 +245,7 @@ Dados meteorológicos atuais:
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message:", error);
       
       const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),

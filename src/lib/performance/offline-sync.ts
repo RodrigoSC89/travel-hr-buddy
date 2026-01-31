@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { logger } from '@/lib/logger';
 
 // Define IndexedDB schema
 interface OfflineSyncDB extends DBSchema {
@@ -108,7 +109,7 @@ class OfflineSyncManager {
       // PATCH v12: Removido setupNetworkListeners - não usar navigator.onLine
       // Sync será iniciado manualmente ou via intervalo
     } catch (error) {
-      console.error('Failed to initialize offline sync DB:', error);
+      logger.error('Failed to initialize offline sync DB:', error);
     }
   }
 
@@ -164,7 +165,7 @@ class OfflineSyncManager {
         syncing: false,
       });
     } catch (error) {
-      console.error('Sync error:', error);
+      logger.error('Sync error:', error);
     } finally {
       this.syncInProgress = false;
     }

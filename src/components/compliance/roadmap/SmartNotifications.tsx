@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface NotificationPreferences {
   emailEnabled: boolean;
@@ -125,7 +126,7 @@ export const SmartNotifications = () => {
 
         setNotifications(mapped);
       } catch (error) {
-        console.error("Error fetching notifications:", error);
+        logger.error("Error fetching notifications:", error);
         // Use mock data for demo
         setNotifications([
           {
@@ -214,7 +215,7 @@ export const SmartNotifications = () => {
         .update({ is_read: true })
         .eq("id", notificationId);
     } catch (error) {
-      console.error("Error marking as read:", error);
+      logger.error("Error marking as read:", error);
     }
   };
 
@@ -268,7 +269,7 @@ export const SmartNotifications = () => {
         ]);
       }
     } catch (error) {
-      console.error("Error sending test notification:", error);
+      logger.error("Error sending test notification:", error);
       toast.error("Erro ao enviar notificação de teste");
     } finally {
       setSending(false);

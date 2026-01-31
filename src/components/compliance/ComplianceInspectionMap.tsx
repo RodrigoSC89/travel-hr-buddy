@@ -15,6 +15,7 @@ import {
   RefreshCw, Maximize2, Filter, Layers
 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { logger } from '@/lib/logger';
 
 interface VesselInspection {
   id: string;
@@ -58,7 +59,7 @@ export function ComplianceInspectionMap({
         if (error) throw error;
         setMapboxToken(data.token);
       } catch (err) {
-        console.error('Failed to fetch Mapbox token:', err);
+        logger.error('Failed to fetch Mapbox token:', err);
         setError('Mapbox token não configurado');
         setIsLoading(false);
       }
@@ -184,7 +185,7 @@ export function ComplianceInspectionMap({
           }
         });
       } catch (err) {
-        console.error('Failed to initialize map:', err);
+        logger.error('Failed to initialize map:', err);
         if (mounted) {
           setError('Erro ao carregar mapa');
           setIsLoading(false);

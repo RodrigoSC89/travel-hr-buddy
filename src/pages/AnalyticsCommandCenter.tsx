@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 
 import { 
+import { logger } from '@/lib/logger';
   ComposedChart, Line, Bar, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
   Legend, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, AreaChart,
   LineChart as RechartsLineChart, BarChart
@@ -169,7 +170,7 @@ const AnalyticsCommandCenter: React.FC = () => {
         loadPredictions()
       ]);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
     } finally {
       setLoading(false);
     }

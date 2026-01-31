@@ -12,6 +12,7 @@ import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
 import { Settings, Menu } from "lucide-react";
 import {
+import { logger } from '@/lib/logger';
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -28,7 +29,7 @@ export const Header: FC = () => {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('[Header] Menu clicked, isMobile:', isMobile, 'openMobile:', openMobile);
+    logger.debug('[Header] Menu clicked, isMobile:', isMobile, 'openMobile:', openMobile);
     
     if (isMobile) {
       setOpenMobile(!openMobile);

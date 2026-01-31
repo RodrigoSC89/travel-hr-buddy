@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Activity, Heart, Brain, TrendingUp, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface WellbeingScore {
   overall: number;
@@ -79,7 +80,7 @@ export const WellbeingDashboard: React.FC = () => {
       });
       setRecentAlerts(alerts || []);
     } catch (error) {
-      console.error("Error fetching wellbeing data:", error);
+      logger.error("Error fetching wellbeing data:", error);
       toast({
         title: "Error",
         description: "Failed to load wellbeing data",

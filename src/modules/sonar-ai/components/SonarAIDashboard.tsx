@@ -27,6 +27,7 @@ import {
   type SpectrogramData,
 } from "../services/enhanced-ai-service";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export const SonarAIDashboard: React.FC = () => {
   const [events, setEvents] = useState<SonarEvent[]>([]);
@@ -106,7 +107,7 @@ export const SonarAIDashboard: React.FC = () => {
         await loadData();
       }
     } catch (error) {
-      console.error("Error performing AI scan:", error);
+      logger.error("Error performing AI scan:", error);
       toast.error("Erro ao executar scan AI");
     } finally {
       setScanning(false);

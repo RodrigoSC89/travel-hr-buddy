@@ -1,4 +1,3 @@
-// @ts-nocheck - Dynamic table access requires type override
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -36,7 +35,6 @@ interface RestoreReportLog {
   triggered_by: string;
 }
 
-// @ts-nocheck - Dynamic table access requires type override
 /**
  * Restore Report Logs Page
  * Displays audit logs of automated restore report executions with infinite scroll

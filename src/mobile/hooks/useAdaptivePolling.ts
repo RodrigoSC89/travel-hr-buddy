@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { networkDetector } from "../services/networkDetector";
+import { logger } from '@/lib/logger';
 
 interface AdaptivePollingConfig {
   /** Base interval in ms for 4G/WiFi */
@@ -124,7 +125,7 @@ export const useAdaptivePolling = (config: AdaptivePollingConfig) => {
         isPolling: false 
       }));
     } catch (error) {
-      console.error("[AdaptivePolling] Poll failed:", error);
+      logger.error("[AdaptivePolling] Poll failed:", error);
       setState(prev => ({ ...prev, isPolling: false }));
     }
   }, [onPoll, state.isPaused]);

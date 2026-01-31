@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
+import { logger } from '@/lib/logger';
   ResponsiveContainer,
   PieChart,
   Pie,
@@ -161,7 +162,7 @@ export default function ExecutiveKPIDashboard() {
       setRealtimeAlerts(criticalSensors.length);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      logger.error('Error fetching dashboard data:', error);
       toast({ title: 'Erro', description: 'Falha ao carregar dados', variant: 'destructive' });
     } finally {
       setLoading(false);

@@ -21,6 +21,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useTrainingAcademy, Course, CourseProgress, CrewMember } from "@/hooks/useTrainingAcademy";
 import { useTrainingAI } from "@/hooks/useTrainingAI";
+import { logger } from '@/lib/logger';
 
 interface Notification {
   id: string;
@@ -190,7 +191,7 @@ export default function AcademyDashboard() {
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
       });
     } catch (error) {
-      console.error("AI generation error:", error);
+      logger.error("AI generation error:", error);
       toast({ 
         title: "Insights gerados localmente", 
         description: "Utilizando análise offline. Conecte-se para IA completa." 
@@ -276,7 +277,7 @@ export default function AcademyDashboard() {
       setShowAICourseGenerator(false);
       setAiCoursePrompt("");
     } catch (error) {
-      console.error("AI course generation error:", error);
+      logger.error("AI course generation error:", error);
       toast({ title: "Erro", description: "Falha ao gerar curso com IA. Tente novamente.", variant: "destructive" });
     } finally {
       setIsGeneratingCourse(false);

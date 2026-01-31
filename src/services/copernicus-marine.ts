@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface CopernicusMarineData {
   seaSurfaceTemperature: number;
@@ -39,7 +40,7 @@ class CopernicusService {
     const cached = this.cache.get(cacheKey);
 
     if (cached && Date.now() - cached.timestamp < this.cacheDuration) {
-      console.log("[Copernicus] Returning cached data");
+      logger.debug("[Copernicus] Returning cached data");
       return cached.data;
     }
 
@@ -58,7 +59,7 @@ class CopernicusService {
 
       return marineData;
     } catch (error) {
-      console.error("[Copernicus] Error fetching marine data:", error);
+      logger.error("[Copernicus] Error fetching marine data:", error);
       // Return fallback/demo data
       return this.getFallbackData(request);
     }

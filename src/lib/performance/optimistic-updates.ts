@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { logger } from '@/lib/logger';
 
 interface OptimisticUpdate<T> {
   id: string;
@@ -356,7 +357,7 @@ export function useDebouncedOptimisticUpdate<T>(
             setLastSaved(new Date());
             pendingValueRef.current = null;
           } catch (error) {
-            console.error('Failed to save:', error);
+            logger.error('Failed to save:', error);
           } finally {
             setIsSaving(false);
           }
@@ -380,7 +381,7 @@ export function useDebouncedOptimisticUpdate<T>(
         setLastSaved(new Date());
         pendingValueRef.current = null;
       } catch (error) {
-        console.error('Failed to save:', error);
+        logger.error('Failed to save:', error);
       } finally {
         setIsSaving(false);
       }

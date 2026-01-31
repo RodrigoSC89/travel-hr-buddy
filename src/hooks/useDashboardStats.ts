@@ -7,6 +7,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface DashboardStats {
   totalVessels: number;
@@ -55,7 +56,7 @@ export const useDashboardStats = () => {
           setOrganizationId(orgUser.organization_id);
         }
       } catch (error) {
-        console.error("Failed to fetch organization:", error);
+        logger.error("Failed to fetch organization:", error);
       }
     };
 
@@ -109,13 +110,29 @@ export const useDashboardStats = () => {
           .eq("organization_id", organizationId)
           .eq("status", "active");
 
+        // Calculate compliance score from real data
+        const { count: totalChecks } = await supabase
+          .from("compliance_records")
+          .select("id", { count: "exact", head: true })
+          .eq("organization_id", organizationId);
+        
+        const { count: passedChecks } = await supabase
+          .from("compliance_records")
+          .select("id", { count: "exact", head: true })
+          .eq("organization_id", organizationId)
+          .eq("status", "compliant");
+        
+        const calculatedScore = totalChecks && totalChecks > 0 
+          ? Math.round((passedChecks || 0) / totalChecks * 100) 
+          : 95; // Default if no records
+
         setStats({
           totalVessels: vesselsData.length,
           activeCrew: crewCount || 0,
           pendingCertifications: pendingCerts || 0,
           completedAudits: auditsCount || 0,
           activeAlerts: alertsCount || 0,
-          complianceScore: 87 // TODO: Calculate from real data
+          complianceScore: calculatedScore
         });
       } else {
         // Fallback with zeros
@@ -130,7 +147,7 @@ export const useDashboardStats = () => {
       }
       
     } catch (error) {
-      console.error("Dashboard data error:", error);
+      logger.error("Dashboard data error:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",

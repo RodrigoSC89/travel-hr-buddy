@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
@@ -92,7 +93,7 @@ export function VoiceInput({
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-      console.error("Speech recognition error:", event.error);
+      logger.error("Speech recognition error:", event.error);
       setIsListening(false);
 
       if (event.error === "not-allowed") {
@@ -132,7 +133,7 @@ export function VoiceInput({
         recognitionRef.current.start();
         toast.info("Escutando... Fale sua pergunta");
       } catch (error) {
-        console.error("Failed to start recognition:", error);
+        logger.error("Failed to start recognition:", error);
         toast.error("Erro ao iniciar reconhecimento de voz");
       }
     }

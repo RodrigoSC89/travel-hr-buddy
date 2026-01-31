@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 370 - Operations Dashboard - Real Data Integration
  * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
@@ -31,6 +30,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 // Note: MQTT and Chart.js imports removed - functionality is simulated for demo
 // In production, uncomment and configure:
 // import mqtt from 'mqtt';
@@ -128,7 +128,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
-          console.log("Sensor data update:", payload);
+          logger.debug("Sensor data update:", payload);
           handleSupabaseUpdate(payload, "sensor");
         }
       )
@@ -136,7 +136,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "crew_rotations" },
         (payload) => {
-          console.log("Crew rotation update:", payload);
+          logger.debug("Crew rotation update:", payload);
           handleSupabaseUpdate(payload, "crew");
         }
       )
@@ -144,12 +144,12 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "vessels" },
         (payload) => {
-          console.log("Vessel update:", payload);
+          logger.debug("Vessel update:", payload);
           handleSupabaseUpdate(payload, "vessel");
         }
       )
       .subscribe((status) => {
-        console.log("Supabase subscription status:", status);
+        logger.debug("Supabase subscription status:", status);
         if (status === "SUBSCRIBED") {
           toast.success("Real-time data connected");
         }
@@ -165,26 +165,26 @@ export const OperationsDashboardRealTime: React.FC = () => {
       // mqttClientRef.current.on('connect', () => setMqttConnected(true));
       // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
       
-      console.log("MQTT connection simulated for demo");
+      logger.debug("MQTT connection simulated for demo");
       setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();
     } catch (error) {
-      console.error("MQTT connection error:", error);
+      logger.error("MQTT connection error:", error);
     }
   };
 
   const setupWebSocketConnection = () => {
     try {
       // In production, connect to actual WebSocket server
-      console.log("WebSocket connection would be established here");
+      logger.debug("WebSocket connection would be established here");
       setWsConnected(false); // Set to false for demo
       
       // Simulate WebSocket messages
       simulateWebSocketMessages();
     } catch (error) {
-      console.error("WebSocket connection error:", error);
+      logger.error("WebSocket connection error:", error);
     }
   };
 
@@ -343,7 +343,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         last_update: new Date().toISOString(),
       });
     } catch (error) {
-      console.error("Error loading real-time data:", error);
+      logger.error("Error loading real-time data:", error);
       toast.error("Failed to load operations data");
     } finally {
       setLoading(false);

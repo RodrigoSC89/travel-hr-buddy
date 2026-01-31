@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { FileText, Download, Loader2, Sparkles, Users, Settings, BarChart3, Target } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface AIReportGeneratorProps {
   onReportGenerated?: (report: GeneratedReport) => void;
@@ -71,7 +72,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
-      console.log("[AIReportGenerator] Starting report generation:", { reportType, format, dateRange });
+      logger.debug("[AIReportGenerator] Starting report generation:", { reportType, format, dateRange });
       
       const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-ai-report", {
         method: "POST",
@@ -88,11 +89,11 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         })
       });
 
-      console.log("[AIReportGenerator] Response status:", response.status);
+      logger.debug("[AIReportGenerator] Response status:", response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[AIReportGenerator] Error response:", errorText);
+        logger.error("[AIReportGenerator] Error response:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -104,7 +105,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       }
 
       const data = await response.json();
-      console.log("[AIReportGenerator] Response data:", { success: data.success, hasReport: !!data.report });
+      logger.debug("[AIReportGenerator] Response data:", { success: data.success, hasReport: !!data.report });
 
       if (data.success && data.report) {
         setLastReport(data.report);
@@ -118,7 +119,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         throw new Error(data.error || "Erro ao gerar relatório");
       }
     } catch (error) {
-      console.error("[AIReportGenerator] Error:", error);
+      logger.error("[AIReportGenerator] Error:", error);
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao gerar relatório",

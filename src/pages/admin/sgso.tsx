@@ -11,6 +11,7 @@ import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
 import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, History, Download, Loader2 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { logger } from '@/lib/logger';
 
 const AdminSGSO = () => {
   const [isExportingPDF, setIsExportingPDF] = useState(false);
@@ -149,7 +150,7 @@ const AdminSGSO = () => {
         description: "O arquivo foi baixado com sucesso"
       });
     } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
+      logger.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     } finally {
       setIsExportingPDF(false);

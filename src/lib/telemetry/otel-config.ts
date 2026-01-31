@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * OpenTelemetry Configuration for Nauti One
  * Distributed tracing across frontend, edge functions, and external APIs
@@ -176,7 +178,7 @@ async function exportTrace(trace: Trace): Promise<void> {
   if (!config.exportEndpoint) {
     // Log to console in development
     if (import.meta.env.DEV) {
-      console.log('[OTEL] Trace completed:', {
+      logger.debug('[OTEL] Trace completed:', {
         traceId: trace.traceId,
         duration: trace.endTime ? trace.endTime - trace.startTime : 0,
         spanCount: trace.spans.length,
@@ -192,7 +194,7 @@ async function exportTrace(trace: Trace): Promise<void> {
       body: JSON.stringify(trace),
     });
   } catch (error) {
-    console.error('[OTEL] Failed to export trace:', error);
+    logger.error('[OTEL] Failed to export trace:', error);
   }
 }
 

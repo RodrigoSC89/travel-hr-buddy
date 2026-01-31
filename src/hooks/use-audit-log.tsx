@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Json } from "@/integrations/supabase/types";
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 type AuditLogStatus = "success" | "failure" | "error";
 type JsonObject = Record<string, Json | undefined>;
@@ -105,13 +106,13 @@ export const useAuditLog = () => {
       });
 
       if (error) {
-        console.error("Error logging action:", error);
+        logger.error("Error logging action:", error);
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error("Error logging action:", error);
+      logger.error("Error logging action:", error);
       return null;
     }
   }, [user, userContextDetails]);

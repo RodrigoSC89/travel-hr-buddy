@@ -4,6 +4,7 @@
  */
 
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 export interface SatelliteOrbitData {
   id: string;
   noradId: string;
@@ -123,7 +124,7 @@ class SatelliteOrbitService {
       // Fallback to simulated data
       return this.getSimulatedTLEData();
     } catch (error) {
-      console.error("Error fetching TLE data:", error);
+      logger.error("Error fetching TLE data:", error);
       return this.getSimulatedTLEData();
     }
   }
@@ -247,7 +248,7 @@ class SatelliteOrbitService {
         const position = await this.calculateOrbitPosition(tle, sat.type);
         positions.push(position);
       } catch (error) {
-        console.error(`Error fetching satellite ${sat.noradId}:`, error);
+        logger.error(`Error fetching satellite ${sat.noradId}:`, error);
       }
     }
     
@@ -355,7 +356,7 @@ class SatelliteOrbitService {
    */
   async saveSatelliteOrbit(data: SatelliteOrbitData): Promise<void> {
     // In production, save to Supabase satellite_orbits table
-    console.log("Saving satellite orbit data:", data);
+    logger.debug("Saving satellite orbit data:", data);
   }
 
   /**

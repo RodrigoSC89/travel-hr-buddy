@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
+import { logger } from '@/lib/logger';
   BarChart, 
   Bar, 
   XAxis, 
@@ -42,7 +43,7 @@ export function PainelMetricasRisco() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Erro ao buscar métricas:", error);
+        logger.error("Erro ao buscar métricas:", error);
         setLoading(false);
       });
   }, []);

@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
+import { logger } from '@/lib/logger';
 
 interface SatelliteMapProps {
   satellite: {
@@ -75,7 +76,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
           if (mounted) setIsLoading(false);
         });
       } catch (err) {
-        console.error("Failed to load Mapbox:", err);
+        logger.error("Failed to load Mapbox:", err);
         if (mounted) {
           setError("Failed to load map");
           setIsLoading(false);

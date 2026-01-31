@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format, differenceInDays } from "date-fns";
 import { Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface MaintenanceTask {
   id: string;
@@ -42,7 +43,7 @@ export const MaintenanceTimelineView: React.FC = () => {
 
       setTasks(data || []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks:", error);
       toast({
         title: "Error",
         description: "Failed to load maintenance timeline",

@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface StormGlassWeatherData {
   airTemperature: number;
@@ -94,7 +95,7 @@ class StormGlassService {
 
       return weatherData;
     } catch (error) {
-      console.error("[StormGlass] Error fetching current weather:", error);
+      logger.error("[StormGlass] Error fetching current weather:", error);
       return null;
     }
   }
@@ -117,7 +118,7 @@ class StormGlassService {
 
       return this.parseForecast(data, hours);
     } catch (error) {
-      console.error("[StormGlass] Error fetching marine forecast:", error);
+      logger.error("[StormGlass] Error fetching marine forecast:", error);
       return null;
     }
   }
@@ -139,7 +140,7 @@ class StormGlassService {
 
       return data?.data || null;
     } catch (error) {
-      console.error("[StormGlass] Error fetching tide data:", error);
+      logger.error("[StormGlass] Error fetching tide data:", error);
       return null;
     }
   }

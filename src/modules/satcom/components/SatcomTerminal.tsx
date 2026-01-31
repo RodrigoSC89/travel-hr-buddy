@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 420: Satcom Interactive Terminal
  * Terminal interface for sending and receiving satellite communications
@@ -12,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Terminal, Activity, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface TerminalMessage {
   id: string;
@@ -90,7 +90,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         setMessages(logs);
       }
     } catch (error) {
-      console.error("Error loading logs:", error);
+      logger.error("Error loading logs:", error);
     }
   };
 
@@ -145,7 +145,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         metadata: { simulated: true }
       });
     } catch (error) {
-      console.error("Error logging transmission:", error);
+      logger.error("Error logging transmission:", error);
     }
 
     setMessages(prev => [...prev, newMessage]);

@@ -168,7 +168,7 @@ export function IoTSensorHistory() {
       setAnomalies(anomalyData);
 
     } catch (err) {
-      console.error('Failed to fetch sensor data:', err);
+      logger.error('Failed to fetch sensor data:', err);
     } finally {
       setLoading(false);
     }

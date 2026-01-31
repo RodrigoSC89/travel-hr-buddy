@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface ParsedCommand {
   intent: string;
@@ -117,7 +118,7 @@ export class NLUEngine {
       const aiResult = await this.processWithClaude(transcript);
       return this.executeCommand(aiResult);
     } catch (error) {
-      console.error('NLU processing failed:', error);
+      logger.error('NLU processing failed:', error);
       // Fall back to local matching even with lower confidence
       return this.executeCommand(localResult);
     }

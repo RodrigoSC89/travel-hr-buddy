@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useCompliancePushNotifications } from '@/hooks/use-compliance-push-notifications';
 import { toast } from 'sonner';
 import {
+import { logger } from '@/lib/logger';
   Bell, BellOff, Settings, Clock, Mail, Smartphone, 
   MessageSquare, AlertTriangle, CheckCircle, Info,
   Shield, Ship, FileText, Calendar, Volume2, VolumeX,
@@ -98,7 +99,7 @@ export function PushNotificationSettingsPanel() {
         const parsed = JSON.parse(saved);
         setSettings({ ...DEFAULT_SETTINGS, ...parsed });
       } catch (e) {
-        console.error('Failed to parse saved settings');
+        logger.error('Failed to parse saved settings');
       }
     }
   }, []);

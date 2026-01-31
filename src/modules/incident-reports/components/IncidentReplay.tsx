@@ -28,6 +28,7 @@ import {
   type AIAnalysis,
 } from "../services/incidentReplayService";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -68,7 +69,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
         performAnalysis(incidentData);
       }
     } catch (error) {
-      console.error("Failed to load incident data:", error);
+      logger.error("Failed to load incident data:", error);
       toast.error("Falha ao carregar dados do incidente");
     } finally {
       setIsLoading(false);
@@ -81,7 +82,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
       const analysisResult = await incidentReplayService.analyzeIncident(incidentData);
       setAnalysis(analysisResult);
     } catch (error) {
-      console.error("Failed to analyze incident:", error);
+      logger.error("Failed to analyze incident:", error);
       toast.error("Falha na análise de IA");
     } finally {
       setIsAnalyzing(false);
@@ -205,7 +206,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
       doc.save(`incident-replay-${incidentId}.pdf`);
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Failed to export PDF:", error);
+      logger.error("Failed to export PDF:", error);
       toast.error("Falha ao exportar PDF");
     }
   };

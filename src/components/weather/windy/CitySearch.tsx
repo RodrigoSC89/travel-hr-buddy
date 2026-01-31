@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, MapPin, Heart, History, Loader2, Navigation, X } from "lucide-react";
 import type { WeatherLocation } from "./types";
+import { logger } from '@/lib/logger';
 
 interface CitySearchProps {
   onSelectLocation: (location: WeatherLocation) => void;
@@ -80,7 +81,7 @@ export const CitySearch: React.FC<CitySearchProps> = ({
         setIsOpen(false);
       },
       (error) => {
-        console.error('Geolocation error:', error);
+        logger.error('Geolocation error:', error);
         setIsLocating(false);
       }
     );

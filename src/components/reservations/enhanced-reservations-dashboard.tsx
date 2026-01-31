@@ -30,6 +30,7 @@ import { ReservationCard } from "./reservation-card";
 import { ReservationStats } from "./reservation-stats";
 import { ReservationAI } from "./reservation-ai";
 import { ReservationCalendarView } from "./reservation-calendar-view";
+import { logger } from '@/lib/logger';
 
 export interface EnhancedReservation {
   id: string;
@@ -140,7 +141,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       const conflictChecked = detectConflicts(enhancedData);
       setReservations(conflictChecked);
     } catch (error) {
-      console.error("Error fetching reservations:", error);
+      logger.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",

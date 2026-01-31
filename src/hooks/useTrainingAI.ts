@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 export interface AIRecommendation {
   id: string;
@@ -56,7 +57,7 @@ export const useTrainingAI = () => {
       if (error) throw error;
       return result;
     } catch (err) {
-      console.error("AI call error:", err);
+      logger.error("AI call error:", err);
       return null;
     }
   }, []);
@@ -77,7 +78,7 @@ export const useTrainingAI = () => {
       setRecommendations(localRecs);
       return localRecs;
     } catch (err) {
-      console.error("Error generating recommendations:", err);
+      logger.error("Error generating recommendations:", err);
       const localRecs = generateLocalRecommendations(crewData, coursesData);
       setRecommendations(localRecs);
       return localRecs;
@@ -101,7 +102,7 @@ export const useTrainingAI = () => {
       setTrainingGaps(localGaps);
       return localGaps;
     } catch (err) {
-      console.error("Error analyzing gaps:", err);
+      logger.error("Error analyzing gaps:", err);
       const localGaps = generateLocalGaps(crewData);
       setTrainingGaps(localGaps);
       return localGaps;
@@ -125,7 +126,7 @@ export const useTrainingAI = () => {
       setPredictiveInsights(localInsights);
       return localInsights;
     } catch (err) {
-      console.error("Error generating insights:", err);
+      logger.error("Error generating insights:", err);
       const localInsights = generateLocalInsights();
       setPredictiveInsights(localInsights);
       return localInsights;
@@ -148,7 +149,7 @@ export const useTrainingAI = () => {
       // Fallback
       return generateLocalContent(topic, type);
     } catch (err) {
-      console.error("Error generating content:", err);
+      logger.error("Error generating content:", err);
       return generateLocalContent(topic, type);
     } finally {
       setIsGenerating(false);
@@ -167,7 +168,7 @@ export const useTrainingAI = () => {
 
       return generateLocalQuiz(difficulty);
     } catch (err) {
-      console.error("Error generating quiz:", err);
+      logger.error("Error generating quiz:", err);
       return generateLocalQuiz(difficulty);
     } finally {
       setIsGenerating(false);
@@ -181,7 +182,7 @@ export const useTrainingAI = () => {
       const result = await callAI("analyze_performance", { crewId, history: trainingHistory });
       return result || generateLocalPerformanceAnalysis();
     } catch (err) {
-      console.error("Error analyzing performance:", err);
+      logger.error("Error analyzing performance:", err);
       return generateLocalPerformanceAnalysis();
     } finally {
       setIsAnalyzing(false);
@@ -194,7 +195,7 @@ export const useTrainingAI = () => {
       const result = await callAI("chat", { message, context });
       return result?.response || "Desculpe, não consegui processar sua solicitação no momento.";
     } catch (err) {
-      console.error("Chat error:", err);
+      logger.error("Chat error:", err);
       return "Erro ao conectar com o assistente de IA. Tente novamente.";
     }
   }, [callAI]);

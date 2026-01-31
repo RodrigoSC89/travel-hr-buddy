@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 interface ComplianceRecord {
   id: string;
@@ -94,7 +95,7 @@ const ComplianceChecklist = () => {
       // PATCH 549: Call loadAIInsights after records are loaded
       await loadAIInsightsInternal(recordsWithDetails as any);
     } catch (error) {
-      console.error("Error loading compliance records:", error);
+      logger.error("Error loading compliance records:", error);
       toast({
         title: "Error",
         description: "Failed to load compliance records",
@@ -139,7 +140,7 @@ const ComplianceChecklist = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error("Error loading AI insights:", error);
+      logger.error("Error loading AI insights:", error);
     }
   };
 

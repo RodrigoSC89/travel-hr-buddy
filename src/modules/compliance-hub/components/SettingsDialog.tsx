@@ -28,6 +28,7 @@ import {
   Check
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -108,7 +109,7 @@ export function SettingsDialog({
       toast.success('Configurações salvas com sucesso');
       onOpenChange(false);
     } catch (error) {
-      console.error('Error saving settings:', error);
+      logger.error('Error saving settings:', error);
       toast.error('Erro ao salvar configurações');
     } finally {
       setLoading(false);

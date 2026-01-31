@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   Bot, 
   Send, 
   User, 
@@ -87,7 +88,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       toast.error('Erro ao processar mensagem');
       
       const errorMessage: Message = {

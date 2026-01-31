@@ -5,6 +5,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface AuditPrediction {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -100,7 +101,7 @@ export function useAuditHistory(vesselId: string) {
         .limit(20);
 
       if (error) {
-        console.warn("Audit history query failed, using mock data:", error);
+        logger.warn("Audit history query failed, using mock data:", error);
         return generateMockAuditHistory(vesselId);
       }
       

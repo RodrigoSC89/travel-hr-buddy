@@ -46,6 +46,7 @@ import { format, subDays, subHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+import { logger } from '@/lib/logger';
   ResponsiveContainer,
   LineChart,
   Line,
@@ -360,7 +361,7 @@ export default function PredictiveTelemetry() {
       setInsights(prev => [...newInsights, ...prev]);
       toast.success("Análise concluída com sucesso");
     } catch (error) {
-      console.error("AI analysis error:", error);
+      logger.error("AI analysis error:", error);
       
       // Fallback insights
       setInsights(prev => [

@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { logger } from '@/lib/logger';
 
 /**
  * Nautilus Memory Engine
@@ -26,8 +27,8 @@ const MEMORY_PATH = path.resolve("src/ai/nautilus-core/memory/memoryDB.json");
 
 // Simple logger for Node.js context (avoids browser-only logger import)
 const nodeLogger = {
-  warn: (msg: string, data?: unknown) => console.warn(`[MemoryEngine] ${msg}`, data || ""),
-  error: (msg: string, data?: unknown) => console.error(`[MemoryEngine] ${msg}`, data || ""),
+  warn: (msg: string, data?: unknown) => logger.warn(`[MemoryEngine] ${msg}`, data || ""),
+  error: (msg: string, data?: unknown) => logger.error(`[MemoryEngine] ${msg}`, data || ""),
 };
 
 export class MemoryEngine {

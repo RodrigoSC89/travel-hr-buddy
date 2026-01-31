@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Camera, FileText, Upload, X, Image, File, Trash2, Eye } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface UploadedFile {
   id: string;
@@ -94,7 +95,7 @@ export function PeotramEvidenceUploader({
       onUploadComplete?.(newFiles);
       toast.success(`${uploadedFiles.length} arquivo(s) enviado(s)`);
     } catch (error) {
-      console.error('Upload error:', error);
+      logger.error('Upload error:', error);
       toast.error("Erro ao enviar arquivo");
     } finally {
       setIsUploading(false);

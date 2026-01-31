@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useXLSXExport } from '@/hooks/use-xlsx-export';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 interface ExportButtonsProps {
   data: Record<string, unknown>[];
@@ -112,7 +113,7 @@ export function ExportButtons({
         description: `PDF ${filename}.pdf generated successfully`,
       });
     } catch (error) {
-      console.error('PDF export error:', error);
+      logger.error('PDF export error:', error);
       toast({
         title: t('errors.generic'),
         description: 'Failed to generate PDF',

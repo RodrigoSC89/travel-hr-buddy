@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 // Types aligned with database schema (iot_sensor_data)
 interface IoTSensorData {
@@ -89,7 +90,7 @@ export function MaritimeSystemDashboard() {
       setSensorData(sensorsRes.data || []);
       setChecklists(checklistsRes.data || []);
     } catch (error) {
-      console.error("Error loading maritime data:", error);
+      logger.error("Error loading maritime data:", error);
       toast.error("Failed to load maritime system data");
     } finally {
       setLoading(false);

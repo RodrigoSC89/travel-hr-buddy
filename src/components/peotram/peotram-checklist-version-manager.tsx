@@ -25,6 +25,7 @@ import {
   Settings2
 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface ChecklistRequirement {
   id: string;
@@ -286,7 +287,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
         doc.save(`peotram-${selectedTemplate?.version || 'export'}.pdf`);
         toast.success("PDF gerado com sucesso!", { id: "pdf-export" });
       } catch (error) {
-        console.error("PDF export error:", error);
+        logger.error("PDF export error:", error);
         toast.error("Erro ao gerar PDF", { id: "pdf-export" });
       }
       break;

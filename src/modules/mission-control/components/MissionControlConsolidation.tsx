@@ -22,6 +22,7 @@ const MissionLogs = lazy(() => import("../components/MissionLogs").then(m => ({ 
 const AICommander = lazy(() => import("../components/AICommander").then(m => ({ default: m.AICommander })));
 const KPIDashboard = lazy(() => import("../components/KPIDashboard").then(m => ({ default: m.KPIDashboard })));
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface MissionStats {
   total: number;
@@ -86,7 +87,7 @@ export const MissionControlConsolidation: React.FC = () => {
       doc.save(`mission-report-${Date.now()}.pdf`);
       toast.success("Relatório exportado com sucesso");
     } catch (error) {
-      console.error("Failed to export report:", error);
+      logger.error("Failed to export report:", error);
       toast.error("Falha ao exportar relatório");
     }
   };

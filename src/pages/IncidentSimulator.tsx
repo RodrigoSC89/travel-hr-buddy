@@ -40,6 +40,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { logger } from '@/lib/logger';
 
 interface Scenario {
   id: string;
@@ -391,7 +392,7 @@ export default function IncidentSimulator() {
         setAiFeedback(data.content);
       }
     } catch (error) {
-      console.error("AI feedback error:", error);
+      logger.error("AI feedback error:", error);
       // Fallback feedback
       setAiFeedback(score >= 70 
         ? "Excelente desempenho! Você demonstrou bom conhecimento dos procedimentos de emergência. Continue praticando para manter suas habilidades afiadas."

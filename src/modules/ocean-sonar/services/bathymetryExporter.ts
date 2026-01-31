@@ -9,6 +9,7 @@
  */
 
 import { BathymetricData, SonarReading } from "./sonarEngine";
+import { logger } from '@/lib/logger';
 
 export interface GeoJSONFeature {
   type: "Feature";
@@ -319,7 +320,7 @@ class BathymetryExporter {
       };
       localStorage.setItem(key, JSON.stringify(cacheData));
     } catch (error) {
-      console.error("Failed to save bathymetry data to cache:", error);
+      logger.error("Failed to save bathymetry data to cache:", error);
     }
   }
 
@@ -341,7 +342,7 @@ class BathymetryExporter {
 
       return cacheData.data;
     } catch (error) {
-      console.error("Failed to load bathymetry data from cache:", error);
+      logger.error("Failed to load bathymetry data from cache:", error);
       return null;
     }
   }

@@ -34,6 +34,7 @@ import {
   FileDown
 } from "lucide-react";
 import { MLC_2022_TITLES, getItemById } from "@/data/mlc-2022-checklist";
+import { logger } from '@/lib/logger';
 
 interface EvidenceResult {
   technical_analysis: string;
@@ -127,7 +128,7 @@ export function MLCEvidenceGenerator() {
       setResult(data);
       toast.success("Evidência gerada com sucesso!");
     } catch (error) {
-      console.error("Error generating evidence:", error);
+      logger.error("Error generating evidence:", error);
       
       // Fallback with mock data if edge function not available
       setResult({

@@ -8,7 +8,7 @@
  * 
  * const handleQuestion = async () => {
  *   const answer = await ask('What is the current mission status?');
- *   console.log(answer);
+ *   logger.debug(answer);
  * };
  * ```
  */
@@ -16,6 +16,7 @@
 import { useState, useCallback } from "react";
 import { runOpenAI, generateSystemPrompt } from "../engine";
 import { getModuleContext, addContextHistory } from "../contexts/moduleContext";
+import { logger } from '@/lib/logger';
 
 export interface AIAssistantOptions {
   userId?: string;

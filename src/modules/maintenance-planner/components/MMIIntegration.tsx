@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Brain, TrendingUp, AlertTriangle, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface MMIPrediction {
   id: string;
@@ -80,7 +81,7 @@ export const MMIIntegration: React.FC = () => {
         setPredictions(transformed);
       }
     } catch (error) {
-      console.error("Error fetching MMI predictions:", error);
+      logger.error("Error fetching MMI predictions:", error);
       setPredictions([]);
     } finally {
       setLoading(false);
@@ -111,7 +112,7 @@ export const MMIIntegration: React.FC = () => {
         description: `Task created for ${prediction.equipment_name}`,
       });
     } catch (error) {
-      console.error("Error scheduling maintenance:", error);
+      logger.error("Error scheduling maintenance:", error);
       toast({
         title: "Scheduled (Demo Mode)",
         description: "Feature demonstration - database not configured",

@@ -17,6 +17,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useEmployeeProfile, useEmployeePayslips } from '@/hooks/useEmployeePortal';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -119,7 +120,7 @@ export function HRChatbot() {
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
-      console.error('Chatbot error:', error);
+      logger.error('Chatbot error:', error);
       
       // Check for rate limit or payment errors
       const errorMessage = error instanceof Error ? error.message : '';

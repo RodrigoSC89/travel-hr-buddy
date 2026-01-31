@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * AR Inspection Mode - Augmented Reality for Maritime Equipment Inspection
  * Camera-based equipment detection and overlay system
@@ -99,7 +101,7 @@ export class ARInspection {
       // Start detection loop
       this.startDetectionLoop();
     } catch (error) {
-      console.error('Failed to access camera:', error);
+      logger.error('Failed to access camera:', error);
       throw error;
     }
   }

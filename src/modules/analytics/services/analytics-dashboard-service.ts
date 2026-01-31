@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface AnalyticsDashboard {
   id?: string;
@@ -62,7 +63,7 @@ export class AnalyticsDashboardService {
       if (error) throw error;
       return this.mapToDashboard(data);
     } catch (error) {
-      console.error("Error creating dashboard:", error);
+      logger.error("Error creating dashboard:", error);
       throw error;
     }
   }
@@ -85,7 +86,7 @@ export class AnalyticsDashboardService {
       if (error) throw error;
       return this.mapToDashboard(data);
     } catch (error) {
-      console.error("Error updating dashboard:", error);
+      logger.error("Error updating dashboard:", error);
       throw error;
     }
   }
@@ -99,7 +100,7 @@ export class AnalyticsDashboardService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting dashboard:", error);
+      logger.error("Error deleting dashboard:", error);
       throw error;
     }
   }
@@ -114,7 +115,7 @@ export class AnalyticsDashboardService {
       if (error) throw error;
       return (data || []).map(this.mapToDashboard);
     } catch (error) {
-      console.error("Error fetching dashboards:", error);
+      logger.error("Error fetching dashboards:", error);
       return [];
     }
   }
@@ -130,7 +131,7 @@ export class AnalyticsDashboardService {
       if (error) throw error;
       return data ? this.mapToDashboard(data) : null;
     } catch (error) {
-      console.error("Error fetching dashboard:", error);
+      logger.error("Error fetching dashboard:", error);
       return null;
     }
   }
@@ -154,7 +155,7 @@ export class AnalyticsDashboardService {
           os: event.os
         });
     } catch (error) {
-      console.error("Error tracking event:", error);
+      logger.error("Error tracking event:", error);
     }
   }
 
@@ -181,7 +182,7 @@ export class AnalyticsDashboardService {
 
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error("Error fetching events:", error);
+      logger.error("Error fetching events:", error);
       return [];
     }
   }

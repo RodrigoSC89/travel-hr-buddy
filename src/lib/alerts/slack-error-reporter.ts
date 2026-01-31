@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 type Severity = "critical" | "warning" | "info" | "success";
 
@@ -31,14 +32,14 @@ export async function reportErrorToSlack(report: ErrorReport): Promise<boolean> 
     });
 
     if (error) {
-      console.error("[SlackReporter] Failed to send:", error);
+      logger.error("[SlackReporter] Failed to send:", error);
       return false;
     }
 
-    console.log("[SlackReporter] Error reported to Slack");
+    logger.debug("[SlackReporter] Error reported to Slack");
     return true;
   } catch (err) {
-    console.error("[SlackReporter] Exception:", err);
+    logger.error("[SlackReporter] Exception:", err);
     return false;
   }
 }

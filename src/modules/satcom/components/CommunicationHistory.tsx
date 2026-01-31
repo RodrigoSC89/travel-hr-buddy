@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { History, ArrowUp, ArrowDown, Clock, Signal } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface TransmissionLog {
   id: string;
@@ -100,7 +101,7 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
         setLogs(formattedLogs);
       }
     } catch (error) {
-      console.error("Error loading history:", error);
+      logger.error("Error loading history:", error);
     } finally {
       setLoading(false);
     }

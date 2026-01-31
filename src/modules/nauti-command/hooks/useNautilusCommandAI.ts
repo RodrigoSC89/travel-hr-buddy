@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface CommandMessage {
   id: string;
@@ -165,7 +166,7 @@ export function useNautilusCommandAI() {
       return fullResponse;
 
     } catch (error) {
-      console.error("Command AI error:", error);
+      logger.error("Command AI error:", error);
       
       setMessages(prev => prev.map(m => 
         m.id === assistantId 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Performance Dashboard
  * NOTE: @ts-nocheck required - component uses UI fields (page_url, rating, is_resolved)

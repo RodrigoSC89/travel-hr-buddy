@@ -40,6 +40,7 @@ import { Badge } from "@/components/ui/badge";
 import html2pdf from "html2pdf.js";
 import { TemplateWYSIWYGEditor } from "./components/TemplateWYSIWYGEditor";
 import { createSafeHTML } from "@/lib/utils/safe-html";
+import { logger } from '@/lib/logger';
 
 interface Template {
   id: string;
@@ -203,7 +204,7 @@ export default function TemplatesPanel() {
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
       toast.error("Erro ao exportar PDF");
-      console.error(error);
+      logger.error(error);
     }
   };
 

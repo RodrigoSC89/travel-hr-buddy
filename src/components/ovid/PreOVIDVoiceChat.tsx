@@ -8,6 +8,7 @@ import {
   MessageSquare, Loader2, Play, Square
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface VoiceMessage {
   role: 'user' | 'assistant';
@@ -60,7 +61,7 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        logger.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
     }
@@ -134,7 +135,7 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
       // Auto-speak response
       speakText(assistantContent);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       toast.error('Erro ao processar mensagem');
     } finally {
       setIsProcessing(false);

@@ -75,7 +75,7 @@ class MissionSyncService {
    */
   private setupNetworkListeners() {
     window.addEventListener("online", () => {
-      console.log("Network event: Online");
+      logger.debug("Network event: Online");
       this.isOnline = true;
       this.reconnectAttempts = 0;
       this.notifyCallbacks("online");
@@ -83,7 +83,7 @@ class MissionSyncService {
     });
 
     window.addEventListener("offline", () => {
-      console.log("Network: Offline");
+      logger.debug("Network: Offline");
       this.isOnline = false;
       this.notifyCallbacks("offline");
     });
@@ -154,7 +154,7 @@ class MissionSyncService {
     try {
       // Step 1: Process sync queue (pending changes)
       const syncQueue = await getSyncQueue();
-      console.log(`Processing ${syncQueue.length} items from sync queue`);
+      logger.debug(`Processing ${syncQueue.length} items from sync queue`);
 
       for (const item of syncQueue) {
         try {
@@ -181,7 +181,7 @@ class MissionSyncService {
           // Remove from queue after successful sync
           await removeFromSyncQueue(item.id);
         } catch (error) {
-          console.error(`Error syncing item ${item.id}:`, error);
+          logger.error(`Error syncing item ${item.id}:`, error);
           // Keep item in queue for retry
         }
       }
@@ -206,11 +206,11 @@ class MissionSyncService {
 
       this.reconnectAttempts = 0;
       this.notifyCallbacks("online");
-      console.log("Sync completed successfully");
+      logger.debug("Sync completed successfully");
 
       return { success: true };
     } catch (error) {
-      console.error("Sync error:", error);
+      logger.error("Sync error:", error);
       this.reconnectAttempts++;
 
       if (this.reconnectAttempts >= this.maxReconnectAttempts) {
@@ -253,7 +253,7 @@ class MissionSyncService {
       // Fallback to local storage
       return getMissionsOffline();
     } catch (error) {
-      console.error("Error loading missions:", error);
+      logger.error("Error loading missions:", error);
       return getMissionsOffline();
     }
   }

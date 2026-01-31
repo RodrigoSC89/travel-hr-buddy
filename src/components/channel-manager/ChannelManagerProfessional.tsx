@@ -50,6 +50,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
+import { logger } from '@/lib/logger';
   Plus,
   MessageSquare,
   Send,
@@ -530,7 +531,7 @@ export default function ChannelManagerProfessional() {
       
       toast({ title: "Sucesso", description: "Canal criado com sucesso!" });
     } catch (error) {
-      console.error('Error creating channel:', error);
+      logger.error('Error creating channel:', error);
       // Create local channel if DB fails
       const newChannel: Channel = {
         id: Date.now().toString(),
@@ -581,7 +582,7 @@ export default function ChannelManagerProfessional() {
       setMessageContent("");
       toast({ title: "Mensagem enviada" });
     } catch (error) {
-      console.error('Error sending message:', error);
+      logger.error('Error sending message:', error);
       // Send locally if DB fails
       const newMessage: Message = {
         id: Date.now().toString(),
@@ -647,7 +648,7 @@ export default function ChannelManagerProfessional() {
       
       setAiResponse(data?.response || data?.text || "Análise concluída com sucesso. O canal está operando dentro dos parâmetros normais. Sugestões: 1) Manter comunicação ativa, 2) Revisar membros periodicamente, 3) Configurar alertas automáticos.");
     } catch (error) {
-      console.error('AI Error:', error);
+      logger.error('AI Error:', error);
       setAiResponse("🤖 Análise automática: O canal está configurado corretamente. Sugestões de melhoria: otimizar notificações, adicionar tags para categorização, e revisar permissões de membros.");
     } finally {
       setIsAiLoading(false);

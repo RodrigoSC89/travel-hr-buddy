@@ -7,6 +7,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { AIComplianceAnalysis, ComplianceItem, AuditSession, Certificate } from '../types';
+import { logger } from '@/lib/logger';
 
 interface AIAnalysisState {
   loading: boolean;
@@ -63,7 +64,7 @@ export function useComplianceAI() {
         setAnalysisState({ loading: false, error: null, analysis });
         return analysis;
       } catch (error) {
-        console.error('Error running compliance analysis:', error);
+        logger.error('Error running compliance analysis:', error);
         const fallback = generateFallbackAnalysis(items, certificates);
         setAnalysisState({ loading: false, error: null, analysis: fallback });
         return fallback;
@@ -96,7 +97,7 @@ export function useComplianceAI() {
         recommendations: data.recommendations || [],
       };
     } catch (error) {
-      console.error('Error analyzing document:', error);
+      logger.error('Error analyzing document:', error);
       toast.error('Erro ao analisar documento');
       return {
         documentType,
@@ -126,7 +127,7 @@ export function useComplianceAI() {
 
       return data.checklist || getDefaultChecklist(auditType);
     } catch (error) {
-      console.error('Error generating checklist:', error);
+      logger.error('Error generating checklist:', error);
       toast.error('Erro ao gerar checklist. Usando modelo padrão.');
       return getDefaultChecklist(auditType);
     }
@@ -171,7 +172,7 @@ export function useComplianceAI() {
       
       return response;
     } catch (error) {
-      console.error('Error in compliance AI chat:', error);
+      logger.error('Error in compliance AI chat:', error);
       toast.error('Erro ao processar pergunta');
       return generateAIResponse(question);
     } finally {
@@ -191,7 +192,7 @@ export function useComplianceAI() {
       if (error) throw error;
       return data.predictions || [];
     } catch (error) {
-      console.error('Error predicting risks:', error);
+      logger.error('Error predicting risks:', error);
       return [
         {
           issue: 'Possível não-conformidade em certificações STCW',
@@ -221,7 +222,7 @@ export function useComplianceAI() {
       if (error) throw error;
       return data.response || 'Implementar plano de ação corretiva conforme procedimentos do SMS.';
     } catch (error) {
-      console.error('Error suggesting corrective action:', error);
+      logger.error('Error suggesting corrective action:', error);
       return `Ação sugerida para ${finding.category}: Revisar procedimentos aplicáveis, implementar correções necessárias e documentar evidências de implementação.`;
     }
   }, []);
@@ -240,7 +241,7 @@ export function useComplianceAI() {
       if (error) throw error;
       return data.response || 'Recomenda-se revisar a matriz de competências e identificar gaps de treinamento.';
     } catch (error) {
-      console.error('Error generating training recommendation:', error);
+      logger.error('Error generating training recommendation:', error);
       return 'Recomenda-se revisar a matriz de competências STCW e identificar treinamentos prioritários para renovação de certificados.';
     }
   }, []);

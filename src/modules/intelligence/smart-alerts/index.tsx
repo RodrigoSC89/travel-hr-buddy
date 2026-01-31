@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatDistance } from "date-fns";
+import { logger } from '@/lib/logger';
 
 interface SmartAlert {
   id: string;
@@ -104,7 +105,7 @@ const SmartAlerts = () => {
 
       setAlerts(alertsWithDetails as any);
     } catch (error) {
-      console.error("Error loading smart alerts:", error);
+      logger.error("Error loading smart alerts:", error);
       toast({
         title: "Error",
         description: "Failed to load smart alerts",
@@ -136,7 +137,7 @@ const SmartAlerts = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error("Error loading AI insights:", error);
+      logger.error("Error loading AI insights:", error);
     }
   };
 
@@ -156,7 +157,7 @@ const SmartAlerts = () => {
 
       loadSmartAlerts();
     } catch (error) {
-      console.error("Error acknowledging alert:", error);
+      logger.error("Error acknowledging alert:", error);
       toast({
         title: "Error",
         description: "Failed to acknowledge alert",
@@ -181,7 +182,7 @@ const SmartAlerts = () => {
 
       loadSmartAlerts();
     } catch (error) {
-      console.error("Error resolving alert:", error);
+      logger.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",

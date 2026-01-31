@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface UseMapboxOptions {
   containerId?: string;
@@ -55,7 +56,7 @@ export function useMapbox(options: UseMapboxOptions = {}): UseMapboxReturn {
           setError("Token do Mapbox não encontrado");
         }
       } catch (err) {
-        console.error("Failed to fetch Mapbox token:", err);
+        logger.error("Failed to fetch Mapbox token:", err);
         setError("Erro ao carregar token do Mapbox");
         setIsLoading(false);
       }
@@ -98,14 +99,14 @@ export function useMapbox(options: UseMapboxOptions = {}): UseMapboxReturn {
         });
 
         mapInstance.on("error", (e: any) => {
-          console.error("Mapbox error:", e);
+          logger.error("Mapbox error:", e);
           if (mounted) {
             setError("Erro ao carregar o mapa");
             setIsLoading(false);
           }
         });
       } catch (err) {
-        console.error("Failed to initialize map:", err);
+        logger.error("Failed to initialize map:", err);
         if (mounted) {
           setError("Falha ao inicializar o mapa");
           setIsLoading(false);

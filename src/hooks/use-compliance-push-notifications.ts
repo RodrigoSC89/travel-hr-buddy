@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { compliancePushService, ComplianceAlert } from '@/lib/notifications/compliance-push-service';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 interface UseCompliancePushNotificationsReturn {
   isSupported: boolean;
@@ -42,7 +43,7 @@ export function useCompliancePushNotifications(): UseCompliancePushNotifications
               setIsSubscribed(!!subscription);
             }
           } catch (error) {
-            console.error('Error checking subscription:', error);
+            logger.error('Error checking subscription:', error);
           }
         }
       }
@@ -77,7 +78,7 @@ export function useCompliancePushNotifications(): UseCompliancePushNotifications
         return false;
       }
     } catch (error) {
-      console.error('Subscribe error:', error);
+      logger.error('Subscribe error:', error);
       toast({
         title: "Erro",
         description: "Falha ao configurar notificações push.",
@@ -108,7 +109,7 @@ export function useCompliancePushNotifications(): UseCompliancePushNotifications
         }
       }
     } catch (error) {
-      console.error('Unsubscribe error:', error);
+      logger.error('Unsubscribe error:', error);
     } finally {
       setIsLoading(false);
     }

@@ -4,6 +4,7 @@
  */
 
 import * as Sentry from '@sentry/react';
+import { logger } from '@/lib/logger';
 
 // Types
 interface Metric {
@@ -46,7 +47,7 @@ class AnalyticsTracker {
     
     // Log in development
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Analytics]', eventData);
+      logger.debug('[Analytics]', eventData);
     }
     
     // Send to backend in batches
@@ -63,7 +64,7 @@ class AnalyticsTracker {
     
     try {
       // Could send to analytics backend
-      console.log('[Analytics] Flushing', eventsToSend.length, 'events');
+      logger.debug('[Analytics] Flushing', eventsToSend.length, 'events');
     } catch (error) {
       // Re-add events on failure
       this.events.unshift(...eventsToSend);
@@ -90,7 +91,7 @@ export class AdvancedMonitoring {
     try {
       Sentry.setMeasurement(metric.name, metric.value, 'none');
     } catch (error) {
-      console.warn('Sentry metrics not available:', error);
+      logger.warn('Sentry metrics not available:', error);
     }
     
     // Store locally for trend analysis

@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface AIAssistantMessage {
   id: string;
@@ -53,7 +54,7 @@ export const useAIAssistant = (type: "crew" | "general") => {
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
-      console.error("Failed to cache context:", error);
+      logger.error("Failed to cache context:", error);
       throw error;
     }
   }, [openDB]);
@@ -69,7 +70,7 @@ export const useAIAssistant = (type: "crew" | "general") => {
         request.onerror = () => resolve(null);
       });
     } catch (error) {
-      console.error("Failed to get cached context:", error);
+      logger.error("Failed to get cached context:", error);
       return null;
     }
   }, [openDB]);
@@ -162,7 +163,7 @@ export const useAIAssistant = (type: "crew" | "general") => {
       }
 
     } catch (error) {
-      console.error("AI Assistant error:", error);
+      logger.error("AI Assistant error:", error);
       
       // Fallback to offline mode on error
       const fallbackResponse = getOfflineFallback(type, content);

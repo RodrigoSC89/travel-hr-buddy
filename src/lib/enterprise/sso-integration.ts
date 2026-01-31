@@ -99,7 +99,7 @@ export async function getSSOStatus(organizationId: string): Promise<SSOStatus> {
       active_sessions: 0
     };
   } catch (error) {
-    console.error('[SSO] Error getting status:', error);
+    logger.error('[SSO] Error getting status:', error);
     return {
       configured: false,
       enforced: false,
@@ -136,7 +136,7 @@ export async function initiateSSOLogin(
     
     return { url: ssoUrl, state };
   } catch (error) {
-    console.error('[SSO] Error initiating login:', error);
+    logger.error('[SSO] Error initiating login:', error);
     return null;
   }
 }
@@ -197,7 +197,7 @@ export async function handleSSOCallback(params: {
       }
     };
   } catch (err) {
-    console.error('[SSO] Callback error:', err);
+    logger.error('[SSO] Callback error:', err);
     return {
       success: false,
       error: 'Failed to process SSO callback'
@@ -227,11 +227,11 @@ export async function configureSSOProvider(
     }
     
     // In production, save to database
-    console.log('[SSO] Saving configuration:', { organizationId, provider: config.provider });
+    logger.debug('[SSO] Saving configuration:', { organizationId, provider: config.provider });
     
     return { success: true };
   } catch (error) {
-    console.error('[SSO] Configuration error:', error);
+    logger.error('[SSO] Configuration error:', error);
     return { success: false, error: 'Failed to save SSO configuration' };
   }
 }
@@ -268,7 +268,7 @@ export async function testSSOConfiguration(
       }
     };
   } catch (error) {
-    console.error('[SSO] Test failed:', error);
+    logger.error('[SSO] Test failed:', error);
     return {
       success: false,
       error: 'SSO configuration test failed'
@@ -291,7 +291,7 @@ export async function revokeSSOSession(userId: string): Promise<boolean> {
     
     return true;
   } catch (error) {
-    console.error('[SSO] Session revocation failed:', error);
+    logger.error('[SSO] Session revocation failed:', error);
     return false;
   }
 }

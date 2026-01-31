@@ -7,6 +7,7 @@ import posthog from "posthog-js";
 import type { TelemetryEvent, TelemetryEventName } from "./events";
 import { ConsentManager } from "./consent";
 import { OfflineQueue } from "./offline-queue";
+import { logger } from '@/lib/logger';
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
 const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
@@ -57,13 +58,13 @@ class TelemetryService {
         persistence: "localStorage",
         opt_out_capturing_by_default: false,
         loaded: (posthog) => {
-          console.log("PostHog initialized");
+          logger.debug("PostHog initialized");
           this.initialized = true;
           this.syncOfflineEvents();
         },
       });
     } catch (error) {
-      console.error("Failed to initialize PostHog:", error);
+      logger.error("Failed to initialize PostHog:", error);
     }
   }
 
@@ -77,7 +78,7 @@ class TelemetryService {
 
     // Check consent
     if (!ConsentManager.hasConsent()) {
-      console.log("Telemetry tracking skipped - no consent");
+      logger.debug("Telemetry tracking skipped - no consent");
       return;
     }
 
@@ -99,7 +100,7 @@ class TelemetryService {
     try {
       posthog.capture(name, event.properties);
     } catch (error) {
-      console.error("Failed to track event:", error);
+      logger.error("Failed to track event:", error);
       // Queue for retry
       OfflineQueue.enqueue(event);
     }
@@ -116,7 +117,7 @@ class TelemetryService {
     try {
       posthog.identify(userId, properties);
     } catch (error) {
-      console.error("Failed to identify user:", error);
+      logger.error("Failed to identify user:", error);
     }
   }
 
@@ -131,7 +132,7 @@ class TelemetryService {
     try {
       posthog.reset();
     } catch (error) {
-      console.error("Failed to reset telemetry:", error);
+      logger.error("Failed to reset telemetry:", error);
     }
   }
 
@@ -147,9 +148,9 @@ class TelemetryService {
       await OfflineQueue.processQueue(async (event) => {
         posthog.capture(event.name, event.properties);
       });
-      console.log("Offline events synced successfully");
+      logger.debug("Offline events synced successfully");
     } catch (error) {
-      console.error("Failed to sync offline events:", error);
+      logger.error("Failed to sync offline events:", error);
     }
   }
 

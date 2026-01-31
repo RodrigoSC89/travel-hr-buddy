@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 export interface ComplianceAlert {
   id: string;
@@ -73,16 +74,16 @@ export function useComplianceRealtimeAlerts(channelName = 'compliance-alerts'): 
         const state = realtimeChannel.presenceState();
         const userCount = Object.keys(state).length;
         setOnlineUsers(userCount);
-        console.log('[Realtime] Online users:', userCount);
+        logger.debug('[Realtime] Online users:', userCount);
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-        console.log('[Realtime] User joined:', key, newPresences);
+        logger.debug('[Realtime] User joined:', key, newPresences);
       })
       .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-        console.log('[Realtime] User left:', key, leftPresences);
+        logger.debug('[Realtime] User left:', key, leftPresences);
       })
       .subscribe(async (status) => {
-        console.log('[Realtime] Channel status:', status);
+        logger.debug('[Realtime] Channel status:', status);
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
           // Track presence

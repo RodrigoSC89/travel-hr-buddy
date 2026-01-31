@@ -4,6 +4,7 @@
  */
 
 import * as Sentry from '@sentry/react';
+import { logger } from '@/lib/logger';
 
 export interface TraceContext {
   traceId: string;
@@ -253,7 +254,7 @@ export class DistributedTracer {
     };
 
     // Structured JSON log
-    console.log(JSON.stringify(logEntry));
+    logger.debug(JSON.stringify(logEntry));
 
     // Send to Sentry as breadcrumb
     Sentry.addBreadcrumb({

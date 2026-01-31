@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { usePDFExport } from "@/hooks/use-pdf-export";
+import { logger } from '@/lib/logger';
 
 interface LogEntry {
   id: string;
@@ -97,7 +98,7 @@ export function UnifiedLogsPanel() {
 
       setLogs(allLogs);
     } catch (error) {
-      console.error("Error loading logs:", error);
+      logger.error("Error loading logs:", error);
       toast({
         title: "Erro ao carregar logs",
         description: "Não foi possível carregar os logs do sistema",

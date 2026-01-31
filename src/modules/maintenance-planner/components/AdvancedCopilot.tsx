@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   Bot,
   Mic,
   MicOff,
@@ -129,7 +130,7 @@ export default function AdvancedCopilot() {
       });
 
       if (error) {
-        console.error("Supabase function error:", error);
+        logger.error("Supabase function error:", error);
         
         // Fallback: generate local response when edge function fails
         const fallbackResponse = generateLocalResponse(input);
@@ -163,7 +164,7 @@ export default function AdvancedCopilot() {
         speakResponse(data.response);
       }
     } catch (error) {
-      console.error("Copilot error:", error);
+      logger.error("Copilot error:", error);
       
       // Fallback response when request fails completely
       const fallbackResponse = generateLocalResponse(input);
@@ -221,7 +222,7 @@ export default function AdvancedCopilot() {
       utterance.onend = () => setIsSpeaking(false);
       speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error("TTS error:", error);
+      logger.error("TTS error:", error);
       setIsSpeaking(false);
     }
   };
@@ -260,7 +261,7 @@ export default function AdvancedCopilot() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognitionRef.current.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
+      logger.error("Speech recognition error:", event.error);
       setIsListening(false);
     };
 

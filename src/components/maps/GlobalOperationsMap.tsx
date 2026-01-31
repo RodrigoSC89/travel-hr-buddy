@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { logger } from '@/lib/logger';
 
 // Mapbox token from Supabase secrets
 const MAPBOX_TOKEN = "pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x0OHFqMjVvMDVvYTJrcXRqNXkxNmF5NiJ9.YOUR_TOKEN";
@@ -96,7 +97,7 @@ export function GlobalOperationsMap() {
         );
       }
     } catch (err) {
-      console.error("[GeoMap] Error fetching vessels:", err);
+      logger.error("[GeoMap] Error fetching vessels:", err);
     }
   }, []);
 

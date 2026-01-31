@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { OffHireFormDialog } from "@/components/contracts/OffHireFormDialog";
 import { 
+import { logger } from '@/lib/logger';
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
   DollarSign, Calendar, Ship, Anchor, Eye, Edit, Trash2, Calculator
@@ -165,7 +166,7 @@ export default function CharterPartyV2() {
   }) => {
     // Would save to Supabase in production
     toast.success('Período de off-hire registrado com sucesso!');
-    console.log('Off-hire data:', data);
+    logger.debug('Off-hire data:', data);
   };
 
   const calculateHire = () => {

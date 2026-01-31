@@ -4,6 +4,7 @@
  */
 
 import { openDB, IDBPDatabase, DBSchema } from 'idb';
+import { logger } from '@/lib/logger';
 
 interface CacheEntry {
   key: string;
@@ -104,9 +105,9 @@ class IndexedDBOptimizer {
         }
       });
       
-      console.log('[IndexedDBOptimizer] Database initialized');
+      logger.debug('[IndexedDBOptimizer] Database initialized');
     } catch (e) {
-      console.error('[IndexedDBOptimizer] Failed to initialize:', e);
+      logger.error('[IndexedDBOptimizer] Failed to initialize:', e);
     }
   }
   
@@ -277,7 +278,7 @@ class IndexedDBOptimizer {
       cursor = await cursor.continue();
     }
     
-    console.log(`[IndexedDBOptimizer] Cleaned ${deleted} expired entries`);
+    logger.debug(`[IndexedDBOptimizer] Cleaned ${deleted} expired entries`);
     return deleted;
   }
   
@@ -306,7 +307,7 @@ class IndexedDBOptimizer {
       cursor = await cursor.continue();
     }
     
-    console.log(`[IndexedDBOptimizer] Cleaned ${deleted} least accessed entries (${(deletedSize / 1024 / 1024).toFixed(2)}MB)`);
+    logger.debug(`[IndexedDBOptimizer] Cleaned ${deleted} least accessed entries (${(deletedSize / 1024 / 1024).toFixed(2)}MB)`);
     return deleted;
   }
   

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * CALENDÁRIO OPERACIONAL UNIFICADO
  * Eventos integrados por embarcação/unidade com IA para reorganização
@@ -35,6 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 import {
+import { logger } from '@/lib/logger';
   CalendarDays,
   Ship,
   Wrench,
@@ -247,7 +247,7 @@ const OperationalCalendar = () => {
         toast({ title: "Sugestões Geradas", description: "3 recomendações de otimização" });
       }
     } catch (error) {
-      console.error("AI optimization error:", error);
+      logger.error("AI optimization error:", error);
       setAiSuggestions([
         "Considere reagendar eventos sobrepostos",
         "Priorize tarefas de compliance com prazo próximo",

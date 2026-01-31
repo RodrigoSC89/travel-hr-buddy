@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * PSC Signature Validator
  * Validates digital signatures for PSC inspection reports
@@ -57,7 +59,7 @@ export async function validatePSCSignature(
 
     return calculatedHash === providedHash;
   } catch (error) {
-    console.error('Error validating signature:', error);
+    logger.error('Error validating signature:', error);
     return false;
   }
 }

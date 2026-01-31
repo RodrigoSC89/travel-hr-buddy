@@ -18,13 +18,13 @@ class ServiceWorkerManager {
     this.config = config;
 
     if (!('serviceWorker' in navigator)) {
-      console.log('[SW] Service Workers not supported');
+      logger.debug('[SW] Service Workers not supported');
       return;
     }
 
     // Only register in production
     if (import.meta.env.DEV) {
-      console.log('[SW] Skipping SW registration in development');
+      logger.debug('[SW] Skipping SW registration in development');
       return;
     }
 
@@ -43,11 +43,11 @@ class ServiceWorkerManager {
             if (newWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 // New update available
-                console.log('[SW] New content available');
+                logger.debug('[SW] New content available');
                 config.onUpdate?.(registration);
               } else {
                 // Content cached for offline use
-                console.log('[SW] Content cached for offline use');
+                logger.debug('[SW] Content cached for offline use');
                 config.onSuccess?.(registration);
               }
             }
@@ -57,25 +57,25 @@ class ServiceWorkerManager {
 
       // Handle controller change (new SW activated)
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('[SW] Controller changed');
+        logger.debug('[SW] Controller changed');
       });
 
       // Listen for messages from SW
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data?.type === 'SYNC_COMPLETE') {
-          console.log('[SW] Background sync completed');
+          logger.debug('[SW] Background sync completed');
         }
       });
 
-      console.log('[SW] Service Worker registered successfully');
+      logger.debug('[SW] Service Worker registered successfully');
     } catch (error) {
-      console.error('[SW] Service Worker registration failed:', error);
+      logger.error('[SW] Service Worker registration failed:', error);
     }
 
     // PATCH v21: Listeners de rede SIMPLIFICADOS - apenas 'online' para trigger de sync
     // NÃO escutar 'offline' - causa falsos positivos no iOS PWA
     window.addEventListener('online', () => {
-      console.log('[SW] Back online - triggering sync');
+      logger.debug('[SW] Back online - triggering sync');
       config.onOnline?.();
     });
     // REMOVIDO: listener 'offline' que bloqueava login no iOS
@@ -87,9 +87,9 @@ class ServiceWorkerManager {
     try {
       const registration = await navigator.serviceWorker.ready;
       await registration.unregister();
-      console.log('[SW] Service Worker unregistered');
+      logger.debug('[SW] Service Worker unregistered');
     } catch (error) {
-      console.error('[SW] Unregister failed:', error);
+      logger.error('[SW] Unregister failed:', error);
     }
   }
 
@@ -97,9 +97,9 @@ class ServiceWorkerManager {
     if (this.registration) {
       try {
         await this.registration.update();
-        console.log('[SW] Service Worker updated');
+        logger.debug('[SW] Service Worker updated');
       } catch (error) {
-        console.error('[SW] Update failed:', error);
+        logger.error('[SW] Update failed:', error);
       }
     }
   }
@@ -136,7 +136,7 @@ class ServiceWorkerManager {
       });
       return subscription;
     } catch (error) {
-      console.error('[SW] Push subscription failed:', error);
+      logger.error('[SW] Push subscription failed:', error);
       return null;
     }
   }
@@ -150,6 +150,7 @@ export const swManager = new ServiceWorkerManager();
 
 // React hook for PWA status
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 export function usePWA() {
   const [isInstalled, setIsInstalled] = useState(false);

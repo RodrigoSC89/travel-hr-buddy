@@ -6,6 +6,7 @@ import { Bell, Check } from "lucide-react";
 import { priceAlertsService, PriceNotification } from "@/services/price-alerts-service";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export const NotificationsPanel: React.FC = () => {
   const [notifications, setNotifications] = useState<PriceNotification[]>([]);
@@ -18,7 +19,7 @@ export const NotificationsPanel: React.FC = () => {
       const data = await priceAlertsService.getNotifications(showUnreadOnly);
       setNotifications(data);
     } catch (error) {
-      console.error("Error loading notifications:", error);
+      logger.error("Error loading notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -40,7 +41,7 @@ export const NotificationsPanel: React.FC = () => {
           table: "price_notifications"
         },
         (payload) => {
-          console.log("Notification change:", payload);
+          logger.debug("Notification change:", payload);
           loadNotifications();
           
           // Show toast for new notifications

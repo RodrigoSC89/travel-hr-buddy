@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Camera, Upload, X, Image, Loader2, Trash2, ZoomIn } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface OVIDPhotoEvidenceProps {
   inspectionId?: string;
@@ -81,7 +82,7 @@ export const OVIDPhotoEvidence: React.FC<OVIDPhotoEvidenceProps> = ({
       toast.success('Foto anexada com sucesso');
       onPhotoUploaded?.(filePath);
     } catch (error) {
-      console.error('Upload error:', error);
+      logger.error('Upload error:', error);
       toast.error('Erro ao fazer upload da foto');
     } finally {
       setIsUploading(false);

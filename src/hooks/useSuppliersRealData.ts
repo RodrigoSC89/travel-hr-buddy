@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface Supplier {
   id: string;
@@ -42,7 +43,7 @@ async function fetchSuppliers(): Promise<Supplier[]> {
     .limit(100);
 
   if (error) {
-    console.error("Error fetching suppliers:", error);
+    logger.error("Error fetching suppliers:", error);
     return getDefaultSuppliers();
   }
 

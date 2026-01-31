@@ -19,6 +19,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: "user" | "assistant";
@@ -144,7 +145,7 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
         }
       }
     } catch (error) {
-      console.error("AI Copilot error:", error);
+      logger.error("AI Copilot error:", error);
       toast({
         title: "Erro",
         description: "Falha ao processar sua solicitação",

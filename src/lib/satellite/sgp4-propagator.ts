@@ -4,6 +4,7 @@
  */
 
 import * as satellite from 'satellite.js';
+import { logger } from '@/lib/logger';
 
 export interface TLEData {
   line1: string;
@@ -34,12 +35,12 @@ export function createSatelliteRecord(tle: TLEData): satellite.SatRec | null {
   try {
     const satrec = satellite.twoline2satrec(tle.line1, tle.line2);
     if (satrec.error !== 0) {
-      console.error('TLE parsing error:', satrec.error);
+      logger.error('TLE parsing error:', satrec.error);
       return null;
     }
     return satrec;
   } catch (error) {
-    console.error('Failed to parse TLE:', error);
+    logger.error('Failed to parse TLE:', error);
     return null;
   }
 }
@@ -83,7 +84,7 @@ export function propagateToTime(
       velocity,
     };
   } catch (error) {
-    console.error('Propagation error:', error);
+    logger.error('Propagation error:', error);
     return null;
   }
 }
@@ -125,7 +126,7 @@ export function calculateLookAngles(
       range: lookAngles.rangeSat,
     };
   } catch (error) {
-    console.error('Look angles calculation error:', error);
+    logger.error('Look angles calculation error:', error);
     return null;
   }
 }

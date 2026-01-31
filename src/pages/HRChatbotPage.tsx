@@ -11,6 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
+import { logger } from '@/lib/logger';
   Bot, Send, User, Calendar, FileText, DollarSign, 
   HelpCircle, Loader2, MessageSquare, Clock, TrendingUp,
   History, Sparkles, Shield, BookOpen
@@ -138,7 +139,7 @@ export default function HRChatbotPage() {
         }
       }
     } catch (error) {
-      console.error('Chatbot error:', error);
+      logger.error('Chatbot error:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',

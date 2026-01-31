@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Activity, Ship, Users, AlertTriangle, TrendingUp, Gauge } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface OperationalMetrics {
   total_vessels: number;
@@ -93,7 +94,7 @@ export function OperationsDashboard() {
         total_voyages: 0 // Will be implemented when voyage_plans table exists
       });
     } catch (error) {
-      console.error("Error loading operational data:", error);
+      logger.error("Error loading operational data:", error);
       toast.error("Failed to load operational metrics");
     } finally {
       setLoading(false);

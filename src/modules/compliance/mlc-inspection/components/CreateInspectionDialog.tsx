@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { mlcInspectionService } from "@/services/mlc-inspection.service";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface CreateInspectionDialogProps {
   open: boolean;
@@ -65,7 +66,7 @@ export function CreateInspectionDialog({ open, onOpenChange, onInspectionCreated
         notes: "",
       });
     } catch (error) {
-      console.error("Error creating inspection:", error);
+      logger.error("Error creating inspection:", error);
       toast({
         title: "Error",
         description: "Failed to create inspection",

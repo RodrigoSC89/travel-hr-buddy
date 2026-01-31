@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   Users, Brain, Shield, AlertTriangle, CheckCircle2, 
   RefreshCw, FileCheck, UserCheck, GraduationCap, Clock
 } from "lucide-react";
@@ -118,7 +119,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
       // Run compliance check
       runLocalComplianceCheck(ctsData, crewData);
     } catch (error: unknown) {
-      console.error('Error loading CTS data:', error);
+      logger.error('Error loading CTS data:', error);
       toast.error('Erro ao carregar dados CTS');
     } finally {
       setLoading(false);

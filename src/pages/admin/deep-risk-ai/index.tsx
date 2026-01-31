@@ -15,6 +15,7 @@ import { AnomalyDetection } from "@/modules/deep-risk-ai/components/AnomalyDetec
 import { RiskPredictions } from "@/modules/deep-risk-ai/components/RiskPredictions";
 import { deepRiskAIService } from "@/modules/deep-risk-ai/services/deep-risk-ai-service";
 import type { RiskPrediction, Anomaly } from "@/modules/deep-risk-ai/types";
+import { logger } from '@/lib/logger';
 
 const DeepRiskAIPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("anomalies");
@@ -38,7 +39,7 @@ const DeepRiskAIPage: React.FC = () => {
       setModelLoaded(true);
       toast.success("AI model loaded successfully");
     } catch (error) {
-      console.error("Error loading model:", error);
+      logger.error("Error loading model:", error);
       toast.error("Failed to load AI model");
     }
   };
@@ -53,7 +54,7 @@ const DeepRiskAIPage: React.FC = () => {
       setPredictions(predictionsData);
       setAnomalies(anomaliesData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
     } finally {
       setLoading(false);
     }

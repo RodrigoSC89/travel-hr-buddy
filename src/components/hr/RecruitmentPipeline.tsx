@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { useAIRecruitment } from "@/hooks/useAIRecruitment";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { logger } from '@/lib/logger';
 
 interface Candidate {
   id: string;
@@ -172,7 +173,7 @@ export function RecruitmentPipeline() {
       setCvText(text);
       setShowCVModal(true);
     } catch (error) {
-      console.error("Error reading file:", error);
+      logger.error("Error reading file:", error);
       toast.error("Erro ao ler arquivo");
     }
   };

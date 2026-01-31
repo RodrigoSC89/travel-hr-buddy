@@ -13,6 +13,7 @@ import { CheckCircle2, Circle, WifiOff, Cloud, AlertCircle } from "lucide-react"
 import { sqliteStorage } from "../services/sqlite-storage";
 import { MobileChecklist, ChecklistItem } from "../types";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface OfflineChecklistProps {
   checklist: MobileChecklist;
@@ -61,7 +62,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
       // PATCH v19: Sempre mostrar sucesso - removida verificação isOnline
       toast.success("Checklist updated");
     } catch (error) {
-      console.error("Failed to save checklist:", error);
+      logger.error("Failed to save checklist:", error);
       toast.error("Failed to save checklist");
     }
   };

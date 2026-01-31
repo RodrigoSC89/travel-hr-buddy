@@ -23,6 +23,7 @@ import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import {
+import { logger } from '@/lib/logger';
   PenTool,
   CheckCircle,
   XCircle,
@@ -122,7 +123,7 @@ export function GMUDApprovalModal({
       onApprovalComplete?.();
       onClose();
     } catch (error) {
-      console.error('Erro ao processar aprovação:', error);
+      logger.error('Erro ao processar aprovação:', error);
       toast.error('Erro ao processar aprovação. Tente novamente.');
     } finally {
       setSubmitting(false);

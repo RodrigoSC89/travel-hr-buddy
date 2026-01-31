@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface AIMessage {
   id: string;
@@ -162,7 +163,7 @@ export function useUnifiedCommandAI() {
         return null;
       }
       
-      console.error("AI error:", error);
+      logger.error("AI error:", error);
       setAiStatus("error");
       
       setMessages(prev => prev.map(m =>
@@ -199,7 +200,7 @@ export function useUnifiedCommandAI() {
       const result = await response.json();
       return result.insights || [];
     } catch (error) {
-      console.error("Error generating insights:", error);
+      logger.error("Error generating insights:", error);
       return [];
     }
   }, []);
@@ -228,7 +229,7 @@ export function useUnifiedCommandAI() {
       const result = await response.json();
       return result.analysis || "";
     } catch (error) {
-      console.error("Error analyzing data:", error);
+      logger.error("Error analyzing data:", error);
       throw error;
     }
   }, []);

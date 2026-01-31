@@ -8,6 +8,7 @@ import { agentOrchestrator, type Situation, type Decision } from './agent-orches
 import { vesselDigitalTwin, type VesselState, type Anomaly } from './digital-twin';
 import { blockchainLedger } from '@/lib/blockchain/compliance-ledger';
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 export interface AutonomousConfig {
   enabled: boolean;
@@ -60,7 +61,7 @@ export class AutonomousDecisionEngine {
    * Initialize the autonomous engine
    */
   async initialize(vesselId: string, vesselName: string): Promise<void> {
-    console.log('[AutonomousEngine] Initializing...');
+    logger.debug('[AutonomousEngine] Initializing...');
     
     // Initialize digital twin
     await vesselDigitalTwin.initialize(vesselId, vesselName);
@@ -93,7 +94,7 @@ export class AutonomousDecisionEngine {
       this.autonomousTick();
     }, this.config.loopIntervalMs);
 
-    console.log('[AutonomousEngine] Started');
+    logger.debug('[AutonomousEngine] Started');
     this.emit('started', this.status);
   }
 
@@ -127,7 +128,7 @@ export class AutonomousDecisionEngine {
     this.config.enabled = false;
     this.status.engineStatus = 'stopped';
 
-    console.log('[AutonomousEngine] Stopped');
+    logger.debug('[AutonomousEngine] Stopped');
     this.emit('stopped', this.status);
   }
 
@@ -196,7 +197,7 @@ export class AutonomousDecisionEngine {
       });
 
     } catch (error) {
-      console.error('[AutonomousEngine] Tick error:', error);
+      logger.error('[AutonomousEngine] Tick error:', error);
       this.emit('error', error);
     }
 
@@ -298,7 +299,7 @@ export class AutonomousDecisionEngine {
         }
       );
     } catch (error) {
-      console.error('[AutonomousEngine] Failed to record to blockchain:', error);
+      logger.error('[AutonomousEngine] Failed to record to blockchain:', error);
     }
   }
 

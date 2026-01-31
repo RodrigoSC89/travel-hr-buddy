@@ -14,6 +14,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { OVIDInspection, OVIDAnswer } from '@/hooks/useOVIDInspection';
 import { OVIQ4_CHAPTERS } from '@/data/oviq4-complete-data';
+import { logger } from '@/lib/logger';
 
 interface OVIDFinalizeInspectionProps {
   inspection: OVIDInspection | null;
@@ -219,7 +220,7 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
       pdf.save(`OVID_Report_${inspection.vessel_name.replace(/\s/g, '_')}_${inspection.inspection_date}.pdf`);
       toast.success('Relatório PDF gerado com sucesso!');
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      logger.error('Error generating PDF:', error);
       toast.error('Erro ao gerar relatório PDF');
     } finally {
       setIsGenerating(false);

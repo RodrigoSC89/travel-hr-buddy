@@ -10,6 +10,7 @@ import { CreateInspectionDialog } from "./components/CreateInspectionDialog";
 import { ChecklistInterface } from "./components/ChecklistInterface";
 import { EvidenceUploader } from "./components/EvidenceUploader";
 import { InspectorChatbot } from "./components/InspectorChatbot";
+import { logger } from '@/lib/logger';
 
 export default function MLCInspectionDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -37,7 +38,7 @@ export default function MLCInspectionDashboard() {
       const statsData = await mlcInspectionService.getInspectionStats();
       setStats(statsData);
     } catch (error) {
-      console.error("Error loading stats:", error);
+      logger.error("Error loading stats:", error);
       toast({
         title: "Error",
         description: "Failed to load inspection statistics",

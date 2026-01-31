@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from '@/lib/logger';
 
 export interface Course {
   id: string;
@@ -117,7 +118,7 @@ export const useTrainingAcademy = () => {
         setCourses(mappedCourses);
       }
     } catch (err) {
-      console.error("Error fetching courses:", err);
+      logger.error("Error fetching courses:", err);
       setCourses(getSampleCourses());
     }
   }, []);
@@ -133,7 +134,7 @@ export const useTrainingAcademy = () => {
       if (error) throw error;
       setMyProgress(data || []);
     } catch (err) {
-      console.error("Error fetching progress:", err);
+      logger.error("Error fetching progress:", err);
       setMyProgress(getSampleProgress());
     }
   }, []);
@@ -164,7 +165,7 @@ export const useTrainingAcademy = () => {
         setCrewMembers(mappedCrew);
       }
     } catch (err) {
-      console.error("Error fetching crew:", err);
+      logger.error("Error fetching crew:", err);
       setCrewMembers(getSampleCrewMembers());
     }
   }, []);
@@ -181,7 +182,7 @@ export const useTrainingAcademy = () => {
       if (error) throw error;
       setTrainingSessions(data || []);
     } catch (err) {
-      console.error("Error fetching sessions:", err);
+      logger.error("Error fetching sessions:", err);
     }
   }, []);
 
@@ -300,7 +301,7 @@ export const useTrainingAcademy = () => {
       toast({ title: "Progresso atualizado" });
       await fetchProgress();
     } catch (err) {
-      console.error("Error updating progress:", err);
+      logger.error("Error updating progress:", err);
       toast({ title: "Erro", description: "Falha ao atualizar progresso", variant: "destructive" });
     }
   }, [toast, fetchProgress]);
@@ -318,7 +319,7 @@ export const useTrainingAcademy = () => {
       setCourses((prev) => prev.filter((c) => c.id !== courseId));
       toast({ title: "Curso excluído" });
     } catch (err) {
-      console.error("Error deleting course:", err);
+      logger.error("Error deleting course:", err);
       toast({ title: "Erro", description: "Falha ao excluir", variant: "destructive" });
     }
   }, [toast]);

@@ -12,6 +12,7 @@ import { Mic, MicOff, Volume2, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { logger } from '@/lib/logger';
 
 interface VoiceCommandResult {
   command: string;
@@ -67,7 +68,7 @@ export function GlobalVoiceButton() {
       };
 
       recognitionInstance.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
+        logger.error("Speech recognition error:", event.error);
         setIsListening(false);
         if (event.error === "not-allowed") {
           toast.error("Permissão de microfone negada");
@@ -129,7 +130,7 @@ export function GlobalVoiceButton() {
         speak("Desculpe, não entendi o comando. Tente novamente.");
       }
     } catch (error) {
-      console.error("Command processing error:", error);
+      logger.error("Command processing error:", error);
       speak("Ocorreu um erro ao processar seu comando.");
     } finally {
       setIsProcessing(false);
@@ -165,7 +166,7 @@ export function GlobalVoiceButton() {
           const audio = new Audio(audioUrl);
           audio.onended = () => setIsSpeaking(false);
           audio.onerror = () => {
-            console.error("Audio playback error");
+            logger.error("Audio playback error");
             setIsSpeaking(false);
             // Fallback to Web Speech API
             speakWithWebAPI(text);

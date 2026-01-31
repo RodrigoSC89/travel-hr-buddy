@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Database } from "@/integrations/supabase/types";
 import { 
+import { logger } from '@/lib/logger';
   FileText, 
   Brain, 
   Download, 
@@ -184,7 +185,7 @@ export default function IncidentCards() {
         ]);
       }
     } catch (error) {
-      console.error("Erro ao carregar incidentes:", error);
+      logger.error("Erro ao carregar incidentes:", error);
     }
   };
 
@@ -236,7 +237,7 @@ export default function IncidentCards() {
         description: "A IA analisou o incidente com sucesso"
       });
     } catch (error) {
-      console.error("AI analysis error:", error);
+      logger.error("AI analysis error:", error);
       // Fallback to simulated analysis
       setAiAnalysis({
         rootCauseAnalysis: `**Análise de Causa Raiz para: ${incident.title}**\n\nCom base nos dados fornecidos, a causa raiz identificada é: ${incident.rootCause}. Esta análise considera fatores humanos, operacionais e técnicos que contribuíram para o incidente.\n\n**Fatores Contributivos:**\n- Condições operacionais no momento do incidente\n- Estado do equipamento e manutenção\n- Fatores humanos e treinamento\n- Procedimentos e sua aderência`,
@@ -323,7 +324,7 @@ export default function IncidentCards() {
         description: "Relatório de análise baixado com sucesso"
       });
     } catch (error) {
-      console.error("PDF export error:", error);
+      logger.error("PDF export error:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o PDF",

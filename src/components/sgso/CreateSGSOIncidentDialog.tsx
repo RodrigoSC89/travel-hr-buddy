@@ -21,6 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AlertTriangle, Loader2, MapPin, Ship } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { logger } from '@/lib/logger';
 
 interface CreateSGSOIncidentDialogProps {
   open: boolean;
@@ -148,7 +149,7 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
       onSuccess?.();
       onOpenChange(false);
     } catch (error) {
-      console.error("Error creating SGSO incident:", error);
+      logger.error("Error creating SGSO incident:", error);
       toast.error("Erro ao registrar incidente", {
         description: error instanceof Error ? error.message : "Tente novamente",
       });

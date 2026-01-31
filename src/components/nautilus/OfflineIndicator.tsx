@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { useOfflineSync } from '@/hooks/useOfflineSync';
 import { Wifi, WifiOff, RefreshCw, Cloud, CloudOff, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logger } from '@/lib/logger';
 
 export const OfflineIndicator: React.FC = () => {
   const { isOnline, isSyncing, pendingCount, lastSyncStatus, forceSync } = useOfflineSync();
@@ -17,7 +18,7 @@ export const OfflineIndicator: React.FC = () => {
     try {
       await forceSync();
     } catch (error) {
-      console.error('Sync failed:', error);
+      logger.error('Sync failed:', error);
     }
   };
 

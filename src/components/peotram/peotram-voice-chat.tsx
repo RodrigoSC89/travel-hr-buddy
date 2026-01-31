@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   Mic,
   MicOff,
   Volume2,
@@ -95,7 +96,7 @@ export function PeotramVoiceChat() {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
       };
@@ -159,7 +160,7 @@ export function PeotramVoiceChat() {
         speak(data.response);
       }
     } catch (error) {
-      console.error("Voice chat error:", error);
+      logger.error("Voice chat error:", error);
       toast.error("Erro ao processar pergunta");
       
       const errorMessage: VoiceMessage = {
@@ -230,7 +231,7 @@ export function PeotramVoiceChat() {
         await audio.play();
       }
     } catch (error) {
-      console.error("ElevenLabs TTS error:", error);
+      logger.error("ElevenLabs TTS error:", error);
       setIsLoadingAudio(false);
       setIsSpeaking(false);
       toast.error("Erro no ElevenLabs, usando voz nativa");
@@ -325,7 +326,7 @@ export function PeotramVoiceChat() {
         speak(data.response);
       }
     } catch (error) {
-      console.error("Element query error:", error);
+      logger.error("Element query error:", error);
       toast.error("Erro ao consultar elemento");
     } finally {
       setIsProcessing(false);

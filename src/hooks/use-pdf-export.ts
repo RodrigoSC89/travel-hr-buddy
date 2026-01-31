@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 type AutoTableUserInput = {
   head?: any[][];
@@ -107,7 +108,7 @@ export const usePDFExport = (): UsePDFExportReturn => {
         description: `Arquivo ${filename} gerado com sucesso.`
       });
     } catch (error) {
-      console.error("PDF export error:", error);
+      logger.error("PDF export error:", error);
       toast({
         title: "Erro na Exportação",
         description: "Falha ao gerar PDF. Tente novamente.",
@@ -176,7 +177,7 @@ export const usePDFExport = (): UsePDFExportReturn => {
         description: `Tabela exportada para ${filename}.`
       });
     } catch (error) {
-      console.error("PDF table export error:", error);
+      logger.error("PDF table export error:", error);
       toast({
         title: "Erro na Exportação",
         description: "Falha ao gerar PDF da tabela.",

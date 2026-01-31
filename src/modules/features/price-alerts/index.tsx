@@ -6,6 +6,7 @@ import { PriceAlertsList } from "./components/PriceAlertsList";
 import { CreateAlertForm } from "./components/CreateAlertForm";
 import { NotificationsPanel } from "./components/NotificationsPanel";
 import { priceAlertsService, PriceAlert } from "@/services/price-alerts-service";
+import { logger } from '@/lib/logger';
 
 const AlertasPrecosModule = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -42,7 +43,7 @@ const AlertasPrecosModule = () => {
         estimatedSavings
       });
     } catch (error) {
-      console.error("Error loading stats:", error);
+      logger.error("Error loading stats:", error);
     }
   };
 

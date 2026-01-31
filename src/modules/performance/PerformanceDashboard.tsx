@@ -39,6 +39,7 @@ import { getPerformanceStatus } from "@/lib/insights/performance";
 import { exportPerformancePDF } from "@/lib/pdf/performance-report";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, subDays } from "date-fns";
+import { logger } from '@/lib/logger';
 
 interface PerformanceMetrics {
   fuelEfficiency: number;
@@ -77,7 +78,7 @@ const PerformanceDashboard: React.FC = () => {
     setIsLoading(true);
     try {
       // Log dashboard access
-      console.log("[Performance Dashboard] Loading data", {
+      logger.debug("[Performance Dashboard] Loading data", {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType,
@@ -88,11 +89,25 @@ const PerformanceDashboard: React.FC = () => {
       const endDate = new Date();
       const startDate = subDays(endDate, parseInt(selectedPeriod));
 
-      // Using mock data as these tables don't exist yet
-      // TODO: Create fleet_logs, mission_activities, fuel_usage tables
-      const fleetLogs: any[] = [];
-      const missionActivities: any[] = [];
-      const fuelUsage: any[] = [];
+      // Fetch real data from existing tables
+      const { data: fleetLogs } = await supabase
+        .from("system_audit_logs")
+        .select("*")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at", { ascending: false })
+        .limit(100);
+      
+      const { data: missionActivities } = await supabase
+        .from("missions")
+        .select("*")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at", { ascending: false });
+      
+      const { data: fuelUsage } = await supabase
+        .from("fuel_records")
+        .select("*")
+        .gte("created_at", startDate.toISOString())
+        .order("created_at", { ascending: false });
 
       // If tables don't exist, use simulated data
       const simulatedMetrics: PerformanceMetrics = {
@@ -146,7 +161,7 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-      console.log("[Performance Dashboard] Data loaded successfully", {
+      logger.debug("[Performance Dashboard] Data loaded successfully", {
         metricsCount: Object.keys(simulatedMetrics).length,
         aiConfidence: aiResponse.confidence,
         status
@@ -158,7 +173,7 @@ const PerformanceDashboard: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("[Performance Dashboard] Error loading data:", error);
+      logger.error("[Performance Dashboard] Error loading data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",
@@ -195,12 +210,12 @@ const PerformanceDashboard: React.FC = () => {
         description: "Relatório de performance exportado com sucesso",
       });
 
-      console.log("[Performance Dashboard] PDF exported", {
+      logger.debug("[Performance Dashboard] PDF exported", {
         timestamp: new Date().toISOString()
       });
 
     } catch (error) {
-      console.error("[Performance Dashboard] PDF export error:", error);
+      logger.error("[Performance Dashboard] PDF export error:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar PDF",

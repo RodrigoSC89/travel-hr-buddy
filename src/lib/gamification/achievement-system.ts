@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Gamification System - Nautilus One v3.2.0
  * Achievement system, leaderboards, and challenges for maritime operations
@@ -292,7 +294,7 @@ export class GamificationSystem {
     
     const levelUp = progress.level > oldLevel;
     
-    console.log(`[Gamification] ${userId}: +${points} points (${reason})`);
+    logger.debug(`[Gamification] ${userId}: +${points} points (${reason})`);
     
     return {
       newPoints: progress.totalPoints,

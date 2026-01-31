@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -186,7 +187,7 @@ export default function DPCopilot() {
       }
 
     } catch (error) {
-      console.error("Copilot error:", error);
+      logger.error("Copilot error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",

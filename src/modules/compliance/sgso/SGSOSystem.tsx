@@ -13,6 +13,7 @@ import { SGSOKnowledgeBase } from "./components/SGSOKnowledgeBase";
 import { SGSOEvidenceManager } from "./components/SGSOEvidenceManager";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export default function SGSOSystem() {
   const [activeTab, setActiveTab] = useState("plans");
@@ -42,7 +43,7 @@ export default function SGSOSystem() {
         pendingActions: actions?.filter(a => a.status === "pending").length || 0,
       });
     } catch (error) {
-      console.error("Error loading stats:", error);
+      logger.error("Error loading stats:", error);
     }
   };
 

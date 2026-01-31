@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +26,7 @@ import { FuelOptimizationService } from "@/services/fuel-optimization-service";
 import { FuelAICopilot } from "./FuelAICopilot";
 import { FuelAnalysisPanel } from "./FuelAnalysisPanel";
 import { FuelSimulator } from "./FuelSimulator";
+import { logger } from '@/lib/logger';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -169,7 +169,7 @@ export const FuelOptimizer = () => {
       await runOptimizationAnalysis();
 
     } catch (error: unknown) {
-      console.error("Error loading fuel data:", error);
+      logger.error("Error loading fuel data:", error);
       // Keep using demo data - don't show error toast
     } finally {
       setLoading(false);
@@ -216,7 +216,7 @@ export const FuelOptimizer = () => {
       }
       // If no routes found, keep using demo data
     } catch (error) {
-      console.error("Error running optimization:", error);
+      logger.error("Error running optimization:", error);
       // Keep using demo data
     }
   };
@@ -327,7 +327,7 @@ export const FuelOptimizer = () => {
         description: "PDF baixado com sucesso",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível gerar o PDF",

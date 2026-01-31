@@ -7,6 +7,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -43,8 +44,8 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
     this.setState({ errorInfo });
 
     // Log to console for debugging
-    console.error("[ErrorBoundary] Caught error:", error);
-    console.error("[ErrorBoundary] Component stack:", errorInfo.componentStack);
+    logger.error("[ErrorBoundary] Caught error:", error);
+    logger.error("[ErrorBoundary] Component stack:", errorInfo.componentStack);
 
     // Call optional error handler
     this.props.onError?.(error, errorInfo);
@@ -75,9 +76,9 @@ export class EnhancedErrorBoundary extends Component<Props, State> {
         userAgent: navigator.userAgent,
       };
 
-      console.log("[ErrorBoundary] Error report:", errorReport);
+      logger.debug("[ErrorBoundary] Error report:", errorReport);
     } catch (reportError) {
-      console.error("[ErrorBoundary] Failed to report error:", reportError);
+      logger.error("[ErrorBoundary] Failed to report error:", reportError);
     }
   }
 

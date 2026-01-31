@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Diagnostic Engine - PATCH 980
  * Complete system health and readiness diagnostic
@@ -69,7 +71,7 @@ class SystemDiagnostic {
    * Run complete system diagnostic
    */
   async runDiagnostic(): Promise<DiagnosticReport> {
-    console.log('[Diagnostic] Starting system diagnostic...');
+    logger.debug('[Diagnostic] Starting system diagnostic...');
     
     const modules = await this.analyzeModules();
     const summary = this.generateSummary(modules);
@@ -91,7 +93,7 @@ class SystemDiagnostic {
       readinessChecklist
     };
     
-    console.log('[Diagnostic] Complete:', report);
+    logger.debug('[Diagnostic] Complete:', report);
     return report;
   }
 

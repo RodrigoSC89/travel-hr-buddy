@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { WeatherLocation } from "./types";
+import { logger } from '@/lib/logger';
 
 interface CityAlertConfig {
   cityId: string;
@@ -80,7 +81,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
         setAlertConfigs(JSON.parse(saved));
       }
     } catch (e) {
-      console.error('Failed to load alert configs:', e);
+      logger.error('Failed to load alert configs:', e);
     }
   }, []);
 
@@ -107,7 +108,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
       
       return granted;
     } catch (e) {
-      console.error('Failed to request push permission:', e);
+      logger.error('Failed to request push permission:', e);
       return false;
     }
   }, [isPushSupported, toast]);

@@ -10,6 +10,7 @@ import { aisClient, type VesselPosition } from "@/lib/aisClient";
 import { satelliteOrbitService, type SatelliteOrbitData } from "./services/satellite-orbit-service";
 import { satelliteOrbitPersistence } from "./services/satellite-orbit-persistence";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 const SatelliteTracker = () => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
@@ -55,7 +56,7 @@ const SatelliteTracker = () => {
         description: `${orbits.length} satellites tracked`
       });
     } catch (error) {
-      console.error("Error fetching satellite orbits:", error);
+      logger.error("Error fetching satellite orbits:", error);
       toast.error("Failed to update satellite positions");
     } finally {
       setIsLoadingSatellites(false);
@@ -76,7 +77,7 @@ const SatelliteTracker = () => {
         });
         setVessels(vesselData);
       } catch (error) {
-        console.error("Error fetching AIS data:", error);
+        logger.error("Error fetching AIS data:", error);
       } finally {
         setIsLoadingVessels(false);
       }

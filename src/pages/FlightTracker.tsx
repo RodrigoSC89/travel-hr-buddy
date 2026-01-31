@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plane, Search, RefreshCw, MapPin, Clock, Gauge, ArrowUp, Loader2, Navigation } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface FlightInfo {
   flightNumber: string;
@@ -83,7 +84,7 @@ export default function FlightTracker() {
         toast.error("Voo não encontrado");
       }
     } catch (err) {
-      console.error("Error tracking flight:", err);
+      logger.error("Error tracking flight:", err);
       toast.error("Erro ao rastrear voo");
     } finally {
       setIsLoading(false);
@@ -109,7 +110,7 @@ export default function FlightTracker() {
         toast.success(`${data.flights.length} voos encontrados`);
       }
     } catch (err) {
-      console.error("Error searching flights:", err);
+      logger.error("Error searching flights:", err);
       toast.error("Erro ao buscar voos");
     } finally {
       setIsLoading(false);

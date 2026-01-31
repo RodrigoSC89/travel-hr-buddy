@@ -152,7 +152,7 @@ export default function VesselContractsV2() {
       toast.success('Downtime registrado com sucesso!');
       loadData();
     } catch (error) {
-      console.error('Error creating downtime:', error);
+      logger.error('Error creating downtime:', error);
       toast.error('Erro ao registrar downtime');
     }
   };
@@ -181,7 +181,7 @@ export default function VesselContractsV2() {
       setNewContract({ contract_number: '', client_name: '', start_date: '', end_date: '', sla_downtime_percent: '', penalty_per_hour: '', terms: '' });
       loadData();
     } catch (error) {
-      console.error('Error creating contract:', error);
+      logger.error('Error creating contract:', error);
       toast.error('Erro ao criar contrato');
     }
   };

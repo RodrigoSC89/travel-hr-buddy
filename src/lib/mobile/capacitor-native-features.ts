@@ -16,6 +16,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 // ============================================
 // PLATFORM DETECTION
@@ -82,14 +83,14 @@ export async function authenticateWithBiometrics(
     // });
     
     // Simulated success for demonstration
-    console.log('[Biometric] Authentication requested:', reason);
+    logger.debug('[Biometric] Authentication requested:', reason);
     
     return { 
       success: true, 
       type: platformInfo.isIOS ? 'face' : 'fingerprint' 
     };
   } catch (error) {
-    console.error('[Biometric] Authentication failed:', error);
+    logger.error('[Biometric] Authentication failed:', error);
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Autenticação biométrica falhou' 
@@ -189,7 +190,7 @@ export async function takePhoto(): Promise<CameraPhotoResult> {
       webPath: image.webPath,
     };
   } catch (error) {
-    console.error('[Camera] Photo capture failed:', error);
+    logger.error('[Camera] Photo capture failed:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Falha ao capturar foto',
@@ -212,7 +213,7 @@ export async function pickFromGallery(): Promise<CameraPhotoResult> {
       webPath: image.webPath,
     };
   } catch (error) {
-    console.error('[Camera] Gallery pick failed:', error);
+    logger.error('[Camera] Gallery pick failed:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Falha ao selecionar imagem',
@@ -230,7 +231,7 @@ export interface PushNotificationToken {
 
 export async function registerPushNotifications(): Promise<PushNotificationToken | null> {
   if (!platformInfo.isNative) {
-    console.log('[Push] Web platform - using browser notifications instead');
+    logger.debug('[Push] Web platform - using browser notifications instead');
     return null;
   }
 
@@ -331,10 +332,10 @@ export async function scheduleLocalNotification(
       }],
     });
 
-    console.log('[LocalNotifications] Scheduled:', notification);
+    logger.debug('[LocalNotifications] Scheduled:', notification);
     return true;
   } catch (error) {
-    console.error('[LocalNotifications] Schedule failed:', error);
+    logger.error('[LocalNotifications] Schedule failed:', error);
     return false;
   }
 }
@@ -363,7 +364,7 @@ export const offlineStorage = {
       const data = JSON.stringify(value);
       localStorage.setItem(`nauti_offline_${key}`, data);
     } catch (error) {
-      console.error('[OfflineStorage] Failed to store:', error);
+      logger.error('[OfflineStorage] Failed to store:', error);
     }
   },
 

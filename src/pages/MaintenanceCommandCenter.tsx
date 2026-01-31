@@ -61,6 +61,7 @@ import MMIForecastSection from "@/modules/intelligent-maintenance/components/MMI
 import MMIHistorySection from "@/modules/intelligent-maintenance/components/MMIHistorySection";
 import MMIJobsPanelSection from "@/modules/intelligent-maintenance/components/MMIJobsPanelSection";
 import MMIDashboardSection from "@/modules/intelligent-maintenance/components/MMIDashboardSection";
+import { logger } from '@/lib/logger';
 
 interface MaintenanceStats {
   scheduled: number;
@@ -103,7 +104,7 @@ const MaintenanceCommandCenter = () => {
         pendingForecasts: 5
       });
     } catch (error) {
-      console.error("Error fetching maintenance stats:", error);
+      logger.error("Error fetching maintenance stats:", error);
     } finally {
       setLoading(false);
     }

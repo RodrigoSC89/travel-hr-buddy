@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * White-Label Configuration System
  * NAUTI ONE v4.0 - Phase 12: Enterprise Features
@@ -147,7 +149,7 @@ export function applyWhiteLabelBranding(branding: Partial<WhiteLabelBranding>): 
     }
   }
   
-  console.log('[White-Label] Branding applied');
+  logger.debug('[White-Label] Branding applied');
 }
 
 /**
@@ -162,7 +164,7 @@ export function resetToDefaultBranding(): void {
     customStyles.remove();
   }
   
-  console.log('[White-Label] Reset to default branding');
+  logger.debug('[White-Label] Reset to default branding');
 }
 
 /**
@@ -198,7 +200,7 @@ export async function saveWhiteLabelConfig(
     }
     
     // In production, save to database
-    console.log('[White-Label] Saving configuration:', { organizationId, config });
+    logger.debug('[White-Label] Saving configuration:', { organizationId, config });
     
     // Apply branding immediately
     if (config.branding) {
@@ -207,7 +209,7 @@ export async function saveWhiteLabelConfig(
     
     return { success: true };
   } catch (error) {
-    console.error('[White-Label] Save error:', error);
+    logger.error('[White-Label] Save error:', error);
     return { success: false, error: 'Failed to save white-label configuration' };
   }
 }
@@ -237,7 +239,7 @@ export function previewBranding(branding: Partial<WhiteLabelBranding>): () => vo
         root.style.removeProperty(prop);
       }
     });
-    console.log('[White-Label] Preview reverted');
+    logger.debug('[White-Label] Preview reverted');
   };
 }
 

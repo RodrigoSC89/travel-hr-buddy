@@ -7,6 +7,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { deltaSyncService } from "@/lib/sync/delta-sync-service";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface DeltaSyncStats {
   pendingCount: number;
@@ -69,7 +70,7 @@ export function useDeltaSync(options: UseDeltaSyncOptions = {}) {
         }));
         return { savings: result.savings };
       } catch (error) {
-        console.error("[useDeltaSync] Failed to track change:", error);
+        logger.error("[useDeltaSync] Failed to track change:", error);
         return { savings: 0 };
       }
     },
@@ -116,7 +117,7 @@ export function useDeltaSync(options: UseDeltaSyncOptions = {}) {
         });
       }
     } catch (error) {
-      console.error("[useDeltaSync] Sync failed:", error);
+      logger.error("[useDeltaSync] Sync failed:", error);
       toast.error("Falha na sincronização");
     } finally {
       setIsSyncing(false);

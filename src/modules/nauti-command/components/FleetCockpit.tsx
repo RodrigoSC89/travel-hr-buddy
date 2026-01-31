@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import {
+import { logger } from '@/lib/logger';
   Ship, Anchor, Navigation, Fuel, Thermometer, Activity,
   MapPin, Clock, AlertTriangle, CheckCircle, Radio, Waves
 } from "lucide-react";
@@ -65,7 +66,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
       
       setVessels(enrichedVessels);
     } catch (error) {
-      console.error('Error loading vessels:', error);
+      logger.error('Error loading vessels:', error);
     } finally {
       setLoading(false);
     }

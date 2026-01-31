@@ -13,6 +13,7 @@ import { Map, Loader2, MapPin, Route, Shield, CloudRain, Layers, Ship, Play, Pau
 import { supabase } from '@/integrations/supabase/client';
 import { AlternativeRoute, HazardZone, Waypoint } from '@/lib/routing/weather-routing';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface VesselPosition {
   lat: number;
@@ -88,7 +89,7 @@ export function WeatherRoutingMap({
           setMapboxToken(data.token);
         }
       } catch (err) {
-        console.error('Failed to get Mapbox token:', err);
+        logger.error('Failed to get Mapbox token:', err);
         setError('Mapbox token not configured');
       } finally {
         setLoading(false);

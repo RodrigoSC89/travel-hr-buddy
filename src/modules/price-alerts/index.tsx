@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 464 - Complete Price Alerts UI
  * Full-featured price alert system with history charts, configurable thresholds, and notifications
@@ -46,6 +45,7 @@ import {
 } from "lucide-react";
 import { Line } from "react-chartjs-2";
 import {
+import { logger } from '@/lib/logger';
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -136,7 +136,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
       setAlerts(data || []);
     } catch (error) {
-      console.error("Error loading alerts:", error);
+      logger.error("Error loading alerts:", error);
       toast.error("Failed to load price alerts");
     } finally {
       setIsLoading(false);
@@ -155,7 +155,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
 
       setPriceHistory(data || []);
     } catch (error) {
-      console.error("Error loading price history:", error);
+      logger.error("Error loading price history:", error);
     }
   };
 
@@ -194,7 +194,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       });
       loadAlerts();
     } catch (error) {
-      console.error("Error creating alert:", error);
+      logger.error("Error creating alert:", error);
       toast.error("Failed to create price alert");
     }
   };
@@ -211,7 +211,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       toast.success(`Alert ${!currentState ? "activated" : "deactivated"}`);
       loadAlerts();
     } catch (error) {
-      console.error("Error toggling alert:", error);
+      logger.error("Error toggling alert:", error);
       toast.error("Failed to update alert");
     }
   };
@@ -231,7 +231,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
         setSelectedAlert(null);
       }
     } catch (error) {
-      console.error("Error deleting alert:", error);
+      logger.error("Error deleting alert:", error);
       toast.error("Failed to delete alert");
     }
   };

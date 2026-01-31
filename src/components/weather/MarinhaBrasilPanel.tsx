@@ -27,6 +27,7 @@ import {
   Clock
 } from "lucide-react";
 import {
+import { logger } from '@/lib/logger';
   fetchMarinhaBrasilData,
   type MarinhaBrasilData,
   type AvisoNavegacao,
@@ -66,7 +67,7 @@ export function MarinhaBrasilPanel({ lat, lon, region, compact = false }: Marinh
         });
       }
     } catch (error) {
-      console.error("Error fetching Marinha Brasil data:", error);
+      logger.error("Error fetching Marinha Brasil data:", error);
       toast({
         title: "Erro ao carregar dados",
         description: "Não foi possível obter os boletins da Marinha",

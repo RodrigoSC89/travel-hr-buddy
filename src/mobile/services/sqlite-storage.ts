@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * PATCH 190.0 - SQLite Storage Service (Enhanced)
  * 
@@ -60,7 +62,7 @@ class SQLiteStorage {
         this.db = request.result;
         this.isInitialized = true;
         this.startCleanupJob();
-        console.log("SQLite storage initialized");
+        logger.debug("SQLite storage initialized");
         resolve();
       };
 

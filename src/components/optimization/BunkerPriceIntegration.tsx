@@ -67,7 +67,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
       
       setLastFetch(new Date());
     } catch (err) {
-      console.error("Error fetching bunker prices:", err);
+      logger.error("Error fetching bunker prices:", err);
       // Fallback to mock data
       setPrices(mockBunkerPrices);
       setLastFetch(new Date());

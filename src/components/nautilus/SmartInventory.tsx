@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface InventoryItem {
   id: string;
@@ -69,7 +70,7 @@ export function SmartInventory() {
         setItems(getDemoItems());
       }
     } catch (error) {
-      console.error("Error loading inventory:", error);
+      logger.error("Error loading inventory:", error);
       setItems(getDemoItems());
     } finally {
       setIsLoading(false);

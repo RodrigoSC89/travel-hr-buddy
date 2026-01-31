@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { logger } from '@/lib/logger';
 
 interface VirtualScrollOptions {
   itemHeight: number;
@@ -205,7 +206,7 @@ export function useWindowedData<T>(
         setHasMore(false);
       }
     } catch (error) {
-      console.error('Failed to load page:', error);
+      logger.error('Failed to load page:', error);
     } finally {
       setLoading(false);
     }

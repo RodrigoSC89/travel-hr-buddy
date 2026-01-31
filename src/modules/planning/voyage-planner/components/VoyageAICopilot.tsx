@@ -8,6 +8,7 @@ import { Bot, Send, Loader2, Sparkles, Ship, Route, AlertTriangle } from "lucide
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { VoyageRoute } from "../types";
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -101,7 +102,7 @@ ${plannedVoyages.map((v) => `- ${v.name}: partida ${v.departureDate}, ${v.distan
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error calling AI:", error);
+      logger.error("Error calling AI:", error);
       
       // Fallback to local response
       const fallbackMessage: Message = {

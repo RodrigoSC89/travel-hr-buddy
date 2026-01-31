@@ -15,6 +15,7 @@ import {
   RefreshCw, Loader2, ZoomIn, ZoomOut, Layers
 } from "lucide-react";
 import type { WeatherLocation } from "./types";
+import { logger } from '@/lib/logger';
 
 interface RainDataPoint {
   lat: number;
@@ -144,7 +145,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
       setCurrentFrameIndex(Math.floor(newFrames.length / 2)); // Start at current time
       setLastUpdate(new Date());
     } catch (err) {
-      console.error('Failed to fetch precipitation data:', err);
+      logger.error('Failed to fetch precipitation data:', err);
       setError('Falha ao carregar dados de precipitação');
     } finally {
       setIsLoading(false);

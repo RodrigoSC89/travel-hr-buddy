@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Camera,
   FileText,
   Upload,
@@ -144,7 +145,7 @@ export default function VisionAI() {
         description: `${operationConfig[selectedOperation].label} realizada com sucesso.`,
       });
     } catch (error) {
-      console.error("Vision AI error:", error);
+      logger.error("Vision AI error:", error);
       toast({
         title: "Erro na análise",
         description: error instanceof Error ? error.message : "Falha ao analisar imagem",

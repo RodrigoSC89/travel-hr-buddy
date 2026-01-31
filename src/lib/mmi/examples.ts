@@ -132,7 +132,7 @@ async function example4_batchProcessing() {
         const forecast = await generateForecastForJob(job);
         return { job, forecast, success: true };
       } catch (error) {
-        console.error(`Failed to generate forecast for job ${job.id}:`, error);
+        logger.error(`Failed to generate forecast for job ${job.id}:`, error);
         return { job, forecast: null, success: false };
       }
     })
@@ -169,7 +169,7 @@ async function runExamples() {
     logger.info("All examples completed successfully!");
     logger.info("=".repeat(60) + "\n");
   } catch (error) {
-    console.error("Error running examples:", error);
+    logger.error("Error running examples:", error);
   }
 }
 

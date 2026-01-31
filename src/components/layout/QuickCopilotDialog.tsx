@@ -33,6 +33,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: "user" | "assistant";
@@ -131,7 +132,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
       // Fallback to browser TTS
       fallbackSpeak(text);
     } catch (err) {
-      console.error("TTS error:", err);
+      logger.error("TTS error:", err);
       fallbackSpeak(text);
     }
   }, [isTTSEnabled, isSpeaking]);

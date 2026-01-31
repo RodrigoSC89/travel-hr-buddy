@@ -223,7 +223,7 @@ export async function getMonthlyCostSummary(organizationId?: string): Promise<Co
       budgetUtilization
     };
   } catch (error) {
-    console.error('[CostTracker] Failed to get cost summary:', error);
+    logger.error('[CostTracker] Failed to get cost summary:', error);
     return {
       totalCost: 0,
       byModel: {},

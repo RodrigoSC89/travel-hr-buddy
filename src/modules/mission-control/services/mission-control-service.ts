@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 452 - Mission Control Service
  * Consolidates all mission-related operations
@@ -6,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Mission, MissionLog, MissionTask } from "../types";
+import { logger } from '@/lib/logger';
 
 export class MissionControlService {
   
@@ -31,7 +31,7 @@ export class MissionControlService {
 
       return (data || []).map(this.mapToMission);
     } catch (error) {
-      console.error("Error fetching missions:", error);
+      logger.error("Error fetching missions:", error);
       return [];
     }
   }
@@ -47,7 +47,7 @@ export class MissionControlService {
       if (error) throw error;
       return data ? this.mapToMission(data) : null;
     } catch (error) {
-      console.error("Error fetching mission:", error);
+      logger.error("Error fetching mission:", error);
       return null;
     }
   }
@@ -87,7 +87,7 @@ export class MissionControlService {
 
       return this.mapToMission(data);
     } catch (error) {
-      console.error("Error creating mission:", error);
+      logger.error("Error creating mission:", error);
       throw error;
     }
   }
@@ -120,7 +120,7 @@ export class MissionControlService {
         metadata: { updates }
       });
     } catch (error) {
-      console.error("Error updating mission:", error);
+      logger.error("Error updating mission:", error);
       throw error;
     }
   }
@@ -143,7 +143,7 @@ export class MissionControlService {
         metadata: {}
       });
     } catch (error) {
-      console.error("Error deleting mission:", error);
+      logger.error("Error deleting mission:", error);
       throw error;
     }
   }
@@ -168,7 +168,7 @@ export class MissionControlService {
 
       return (data || []).map(this.mapToTask);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks:", error);
       return [];
     }
   }
@@ -193,7 +193,7 @@ export class MissionControlService {
       if (error) throw error;
       return this.mapToTask(data);
     } catch (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task:", error);
       throw error;
     }
   }
@@ -213,7 +213,7 @@ export class MissionControlService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error updating task:", error);
+      logger.error("Error updating task:", error);
       throw error;
     }
   }
@@ -240,7 +240,7 @@ export class MissionControlService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs:", error);
       return [];
     }
   }
@@ -265,7 +265,7 @@ export class MissionControlService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error logging event:", error);
+      logger.error("Error logging event:", error);
       throw error;
     }
   }

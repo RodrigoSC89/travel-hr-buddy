@@ -30,6 +30,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 // Seções PEO-DP 2021
 const PEODP_SECTIONS = [
@@ -136,7 +137,7 @@ export function PeodpEvidenceGenerator() {
       setResult(data);
       toast.success("Evidência PEO-DP gerada com sucesso!");
     } catch (error) {
-      console.error("Error generating evidence:", error);
+      logger.error("Error generating evidence:", error);
       toast.error("Erro ao gerar evidência. Tente novamente.");
     } finally {
       setIsGenerating(false);

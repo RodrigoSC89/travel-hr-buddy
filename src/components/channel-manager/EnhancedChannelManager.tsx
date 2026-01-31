@@ -19,6 +19,7 @@ import { MessageSquare, Plus, Send, Shield, Activity, Clock } from "lucide-react
 import { format } from "date-fns";
 import type { Database } from "@/integrations/supabase/types";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { logger } from '@/lib/logger';
 
 type CommunicationChannel = Database["public"]["Tables"]["communication_channels"]["Row"];
 type ChannelMessage = Database["public"]["Tables"]["channel_messages"]["Row"];
@@ -115,7 +116,7 @@ export const EnhancedChannelManager: React.FC = () => {
       
       setChannels(mappedChannels);
     } catch (error) {
-      console.error("Error loading channels:", error);
+      logger.error("Error loading channels:", error);
       toast({
         title: "Error",
         description: "Failed to load channels",
@@ -150,7 +151,7 @@ export const EnhancedChannelManager: React.FC = () => {
       
       setMessages(mappedMessages);
     } catch (error) {
-      console.error("Error loading messages:", error);
+      logger.error("Error loading messages:", error);
     }
   };
 
@@ -177,7 +178,7 @@ export const EnhancedChannelManager: React.FC = () => {
       
       setPermissions(mappedPermissions);
     } catch (error) {
-      console.error("Error loading permissions:", error);
+      logger.error("Error loading permissions:", error);
     }
   };
 
@@ -258,7 +259,7 @@ export const EnhancedChannelManager: React.FC = () => {
       resetForm();
       loadChannels();
     } catch (error) {
-      console.error("Error creating channel:", error);
+      logger.error("Error creating channel:", error);
       toast({
         title: "Error",
         description: "Failed to create channel",
@@ -287,7 +288,7 @@ export const EnhancedChannelManager: React.FC = () => {
 
       setMessageContent("");
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message",

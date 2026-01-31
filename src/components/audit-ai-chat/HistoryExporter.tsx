@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Download, FileJson, FileText, Loader2 } from "lucide-react";
 import { type ChatSession } from "@/hooks/use-audit-chat-persistence";
 import jsPDF from "jspdf";
+import { logger } from '@/lib/logger';
 
 interface HistoryExporterProps {
   sessions: ChatSession[];
@@ -61,7 +62,7 @@ export function HistoryExporter({ sessions, activeModule }: HistoryExporterProps
 
       toast.success(`${sessions.length} conversas exportadas para JSON`);
     } catch (error) {
-      console.error('Export error:', error);
+      logger.error('Export error:', error);
       toast.error("Erro ao exportar para JSON");
     } finally {
       setIsExporting(false);
@@ -193,7 +194,7 @@ export function HistoryExporter({ sessions, activeModule }: HistoryExporterProps
       doc.save(`audit-chat-${activeModule}-${new Date().toISOString().split('T')[0]}.pdf`);
       toast.success(`${sessions.length} conversas exportadas para PDF`);
     } catch (error) {
-      console.error('PDF export error:', error);
+      logger.error('PDF export error:', error);
       toast.error("Erro ao exportar para PDF");
     } finally {
       setIsExporting(false);

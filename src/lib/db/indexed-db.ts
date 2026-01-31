@@ -12,6 +12,7 @@
 import { indexedDBSync } from '@/lib/offline/indexeddb-sync';
 import { indexedDBCache } from '@/services/unified/offline-cache.service';
 import type { 
+import { logger } from '@/lib/logger';
   CachedRoute, 
   CachedCrewMember, 
   CachedVessel, 
@@ -30,7 +31,7 @@ export const offlineDB = {
       indexedDBSync.init(),
       indexedDBCache.initialize(),
     ]);
-    console.log('✅ Offline DB initialized');
+    logger.debug('✅ Offline DB initialized');
   },
 
   // ============ GENERIC CRUD ============

@@ -4,6 +4,7 @@
  */
 
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { logger } from '@/lib/logger';
 
 interface NautiDBSchema extends DBSchema {
   pendingSync: {
@@ -338,7 +339,7 @@ class SyncManager {
         try {
           // Implement actual sync logic here
           // This would call Supabase with the pending operations
-          console.log('[Sync] Processing:', item.table, item.operation);
+          logger.debug('[Sync] Processing:', item.table, item.operation);
 
           // Simulate sync delay based on connection
           await new Promise(resolve => setTimeout(resolve, quality.isMaritime ? 500 : 100));
@@ -346,7 +347,7 @@ class SyncManager {
           await removeSyncedItem(item.id);
           synced++;
         } catch (error) {
-          console.error('[Sync] Failed:', item.id, error);
+          logger.error('[Sync] Failed:', item.id, error);
           await incrementRetryCount(item.id);
           failed++;
 

@@ -7,6 +7,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { SafetyIncident, AIIncidentAnalysis } from '../types';
+import { logger } from '@/lib/logger';
 
 interface AIAnalysisState {
   loading: boolean;
@@ -148,7 +149,7 @@ export function useSafetyAI() {
       setRecommendations(recs);
       return recs;
     } catch (error) {
-      console.error('Error generating recommendations:', error);
+      logger.error('Error generating recommendations:', error);
       // Return fallback recommendations
       const fallback: TrainingRecommendation[] = [
         {
@@ -195,7 +196,7 @@ export function useSafetyAI() {
       setInsights(predictedInsights);
       return predictedInsights;
     } catch (error) {
-      console.error('Error generating insights:', error);
+      logger.error('Error generating insights:', error);
       const fallbackInsights: PredictiveInsight[] = [
         {
           id: 'insight-1',
@@ -256,7 +257,7 @@ export function useSafetyAI() {
         duration: data.duration || '15 minutos',
       };
     } catch (error) {
-      console.error('Error generating DDS:', error);
+      logger.error('Error generating DDS:', error);
       return {
         title: `DDS - ${topic}`,
         topic,
@@ -298,7 +299,7 @@ export function useSafetyAI() {
       
       return response;
     } catch (error) {
-      console.error('Error in AI chat:', error);
+      logger.error('Error in AI chat:', error);
       return 'Desculpe, não foi possível processar sua pergunta no momento. Tente novamente.';
     } finally {
       setChatLoading(false);

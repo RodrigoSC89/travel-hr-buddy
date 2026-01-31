@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Security Configuration and Middleware
  * Implements comprehensive security measures for Nautilus One
@@ -293,12 +295,12 @@ export interface SecurityEvent {
 export async function logSecurityEvent(event: SecurityEvent): Promise<void> {
   try {
     // In production, send to your logging service (Sentry, Datadog, etc.)
-    console.log('[SECURITY]', JSON.stringify(event, null, 2));
+    logger.debug('[SECURITY]', JSON.stringify(event, null, 2));
     
     // Store in database for audit trail
     // await supabase.from('security_audit_logs').insert(event);
   } catch (error) {
-    console.error('Failed to log security event:', error);
+    logger.error('Failed to log security event:', error);
   }
 }
 

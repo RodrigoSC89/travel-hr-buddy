@@ -33,6 +33,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logger } from '@/lib/logger';
 
 interface EquipmentHealth {
   equipment_id: string;
@@ -204,7 +205,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
       setSelectedVessel(vesselId);
       toast.success("Embarcação selecionada");
     } catch (error) {
-      console.error("Error selecting vessel:", error);
+      logger.error("Error selecting vessel:", error);
       toast.error("Erro ao selecionar embarcação");
     }
   };

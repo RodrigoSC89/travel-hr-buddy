@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 interface PWAStatus {
   isInstalled: boolean;
@@ -101,7 +102,7 @@ export function usePWAStatus() {
           }
         });
       } catch (error) {
-        console.error('[PWA] Error checking service worker:', error);
+        logger.error('[PWA] Error checking service worker:', error);
       }
     };
 
@@ -135,7 +136,7 @@ export function usePWAStatus() {
       
       return false;
     } catch (error) {
-      console.error('[PWA] Install error:', error);
+      logger.error('[PWA] Install error:', error);
       return false;
     }
   }, [deferredPrompt]);
@@ -153,7 +154,7 @@ export function usePWAStatus() {
         window.location.reload();
       }
     } catch (error) {
-      console.error('[PWA] Update error:', error);
+      logger.error('[PWA] Update error:', error);
     }
   }, []);
 

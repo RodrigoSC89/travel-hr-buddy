@@ -26,6 +26,7 @@ import { MissionExecution } from "@/modules/mission-control/components/MissionEx
 import { MissionLogs } from "@/modules/mission-control/components/MissionLogs";
 import { missionControlService } from "@/modules/mission-control/services/mission-control-service";
 import type { Mission, MissionLog, MissionTask } from "@/modules/mission-control/types";
+import { logger } from '@/lib/logger';
 
 const MissionControlPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("planning");
@@ -54,7 +55,7 @@ const MissionControlPage: React.FC = () => {
       setLogs(logsData);
       setTasks(tasksData);
     } catch (error) {
-      console.error("Error loading mission data:", error);
+      logger.error("Error loading mission data:", error);
       toast.error("Failed to load mission data");
     } finally {
       setLoading(false);

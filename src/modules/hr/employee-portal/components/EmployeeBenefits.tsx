@@ -23,6 +23,7 @@ import {
   LucideIcon
 } from "lucide-react";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 interface Benefit {
   id: string;
@@ -64,7 +65,7 @@ export const EmployeeBenefits: React.FC = () => {
       setBenefits((data as Benefit[]) || []);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading benefits:", error);
+      logger.error("Error loading benefits:", error);
       toast({
         title: "Error loading benefits",
         description: message,

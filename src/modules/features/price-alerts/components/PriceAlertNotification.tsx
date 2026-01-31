@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Bell, BellOff, Mail, MessageSquare, Smartphone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface NotificationSettings {
   id?: string;
@@ -67,7 +68,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         }));
       }
     } catch (error) {
-      console.error("Error loading settings:", error);
+      logger.error("Error loading settings:", error);
     }
   };
 
@@ -90,7 +91,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         description: "Notification preferences updated successfully",
       });
     } catch (error) {
-      console.error("Error saving settings:", error);
+      logger.error("Error saving settings:", error);
       toast({
         title: "Error",
         description: "Failed to save settings",
@@ -131,7 +132,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         description: "Check your notification center",
       });
     } catch (error) {
-      console.error("Error sending test notification:", error);
+      logger.error("Error sending test notification:", error);
       toast({
         title: "Error",
         description: "Failed to send test notification",

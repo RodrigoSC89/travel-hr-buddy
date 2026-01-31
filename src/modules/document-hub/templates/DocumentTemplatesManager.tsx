@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 299: Document Templates Manager
  * Enhanced with database integration, variable substitution, and PDF/Word export
@@ -38,6 +37,7 @@ const loadJsPDF = async () => {
   return jsPDF;
 };
 import { saveAs } from "file-saver";
+import { logger } from '@/lib/logger';
 
 interface Template {
   id: string;
@@ -144,7 +144,7 @@ const DocumentTemplatesManager = () => {
       setVersions(data || []);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading versions:", errorMessage);
+      logger.error("Error loading versions:", errorMessage);
     }
   };
 

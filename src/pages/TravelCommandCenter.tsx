@@ -35,6 +35,7 @@ import { ReservationCard } from "@/components/reservations/reservation-card";
 import { ReservationStats } from "@/components/reservations/reservation-stats";
 import { ReservationAI } from "@/components/reservations/reservation-ai";
 import { ReservationCalendarView } from "@/components/reservations/reservation-calendar-view";
+import { logger } from '@/lib/logger';
 
 // ============================================
 // INTERFACES
@@ -285,7 +286,7 @@ export default function TravelCommandCenter() {
       const conflictChecked = detectConflicts(enhancedData);
       setReservations(conflictChecked);
     } catch (error) {
-      console.error("Error fetching reservations:", error);
+      logger.error("Error fetching reservations:", error);
       setReservations([]);
     } finally {
       setReservationsLoading(false);

@@ -21,6 +21,7 @@ import {
 import { missionSyncService } from "./syncService";
 import { getDBStats, type Mission } from "./offlineStorage";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 const statusIcons = {
   active: <Circle className="h-4 w-4 text-blue-500" />,
@@ -69,7 +70,7 @@ export const MissionControlMobileDashboard: React.FC = () => {
       const data = await missionSyncService.loadMissions();
       setMissions(data);
     } catch (error) {
-      console.error("Error loading missions:", error);
+      logger.error("Error loading missions:", error);
       toast.error("Failed to load missions");
     } finally {
       setIsLoading(false);
@@ -81,7 +82,7 @@ export const MissionControlMobileDashboard: React.FC = () => {
       const dbStats = await getDBStats();
       setStats(dbStats);
     } catch (error) {
-      console.error("Error loading stats:", error);
+      logger.error("Error loading stats:", error);
     }
   };
 

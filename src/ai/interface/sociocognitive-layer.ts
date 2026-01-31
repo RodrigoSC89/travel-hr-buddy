@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * PATCH 591 - SocioCognitive Interaction Layer
  * 
@@ -136,7 +138,7 @@ class SocioCognitiveLayer {
       this.contextLog.shift();
     }
 
-    console.log("[SocioCognitive] Context logged:", {
+    logger.debug("[SocioCognitive] Context logged:", {
       commandId: context.commandId,
       urgency: interpretation.urgency,
       tone: interpretation.tone,

@@ -4,6 +4,7 @@
  */
 
 import { NetworkStatus } from "../types";
+import { logger } from '@/lib/logger';
 
 type NetworkChangeCallback = (status: NetworkStatus) => void;
 
@@ -125,7 +126,7 @@ class NetworkDetector {
       try {
         callback(status);
       } catch (error) {
-        console.error("Error in network status callback:", error);
+        logger.error("Error in network status callback:", error);
       }
     });
   }

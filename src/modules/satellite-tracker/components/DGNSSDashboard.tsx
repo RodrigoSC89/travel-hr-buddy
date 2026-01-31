@@ -24,6 +24,7 @@ import {
 import { dgnssService, DGNSSSatellite, DGNSSStation, DGNSS_SATELLITES } from "@/services/dgnss-service";
 import { WindyMapPlugin } from "@/components/maps/WindyMapPlugin";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface ConstellationStatus {
   constellation: string;
@@ -77,7 +78,7 @@ export const DGNSSDashboard: React.FC = () => {
       
       setLastUpdate(new Date());
     } catch (error) {
-      console.error("Error loading DGNSS data:", error);
+      logger.error("Error loading DGNSS data:", error);
       toast.error("Erro ao carregar dados DGNSS");
     } finally {
       setIsLoading(false);
@@ -104,7 +105,7 @@ export const DGNSSDashboard: React.FC = () => {
       
       setLastUpdate(new Date());
     } catch (error) {
-      console.error("Error updating DGNSS data:", error);
+      logger.error("Error updating DGNSS data:", error);
     } finally {
       setIsUpdating(false);
     }

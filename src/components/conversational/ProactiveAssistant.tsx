@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { streamCommandChat, type Message } from '@/lib/ai/nautilus-command';
+import { logger } from '@/lib/logger';
 
 interface Suggestion {
   id: string;
@@ -134,7 +135,7 @@ export function ProactiveAssistant({
           setIsLoading(false);
         },
         onError: (error) => {
-          console.error('Chat error:', error);
+          logger.error('Chat error:', error);
           setIsLoading(false);
         },
       });

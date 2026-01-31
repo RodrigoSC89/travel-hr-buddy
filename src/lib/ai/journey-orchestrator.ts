@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface JourneyContext {
   vesselId?: string;
@@ -432,7 +433,7 @@ export class JourneyOrchestrator {
    * Trigger a journey based on an event
    */
   async triggerJourney(event: JourneyEvent, context: JourneyContext): Promise<JourneyDefinition> {
-    console.log(`[OJAC] Triggering journey for event: ${event}`);
+    logger.debug(`[OJAC] Triggering journey for event: ${event}`);
     
     // Find matching template
     const template = this.findTemplateForEvent(event);
@@ -608,7 +609,7 @@ export class JourneyOrchestrator {
       });
       
       if (!dependenciesMet) {
-        console.log(`[OJAC] Task ${task.action} waiting for dependencies`);
+        logger.debug(`[OJAC] Task ${task.action} waiting for dependencies`);
         return false;
       }
     }
@@ -687,7 +688,7 @@ export class JourneyOrchestrator {
       }
       localStorage.setItem('ojac_journeys', JSON.stringify(journeys.slice(-50)));
     } catch (error) {
-      console.error('[OJAC] Failed to persist journey:', error);
+      logger.error('[OJAC] Failed to persist journey:', error);
     }
   }
 

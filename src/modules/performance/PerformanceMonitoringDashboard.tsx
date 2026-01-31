@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface PerformanceMetric {
   id: string;
@@ -84,7 +84,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching performance data:", error);
+      logger.error("Error fetching performance data:", error);
     } finally {
       setLoading(false);
     }

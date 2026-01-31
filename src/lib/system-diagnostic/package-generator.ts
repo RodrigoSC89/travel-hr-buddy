@@ -5,6 +5,7 @@
 
 import { systemDiagnostic, DiagnosticReport } from './diagnostic-engine';
 import { moduleIntegrationValidator, IntegrationReport } from './integration-validator';
+import { logger } from '@/lib/logger';
 
 export interface TechnicalPackage {
   generatedAt: number;
@@ -53,7 +54,7 @@ class TechnicalPackageGenerator {
    * Generate complete technical delivery package
    */
   async generate(): Promise<TechnicalPackage> {
-    console.log('[PackageGenerator] Generating technical package...');
+    logger.debug('[PackageGenerator] Generating technical package...');
     
     const diagnostic = await systemDiagnostic.runDiagnostic();
     const integration = await moduleIntegrationValidator.validate();
@@ -299,9 +300,9 @@ async function runBenchmark() {
   const { systemBenchmark } = await import('@/lib/performance');
   const result = await systemBenchmark.runFullBenchmark();
   
-  console.log('Score:', result.score);
-  console.log('Status:', result.status);
-  console.log('Recommendations:', result.recommendations);
+  logger.debug('Score:', result.score);
+  logger.debug('Status:', result.status);
+  logger.debug('Recommendations:', result.recommendations);
   
   return result.score >= 70;
 }

@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface SatellitePosition {
   satelliteId: string;
@@ -53,7 +54,7 @@ export class SatelliteTrackingService {
         isActive: s.is_active
       }));
     } catch (error) {
-      console.error("Error fetching active satellites:", error);
+      logger.error("Error fetching active satellites:", error);
       throw error;
     }
   }
@@ -83,7 +84,7 @@ export class SatelliteTrackingService {
         isActive: data.is_active
       };
     } catch (error) {
-      console.error("Error fetching satellite:", error);
+      logger.error("Error fetching satellite:", error);
       throw error;
     }
   }
@@ -115,7 +116,7 @@ export class SatelliteTrackingService {
 
       return position;
     } catch (error) {
-      console.error("Error calculating satellite position:", error);
+      logger.error("Error calculating satellite position:", error);
       throw error;
     }
   }
@@ -183,7 +184,7 @@ export class SatelliteTrackingService {
           calculated_at: position.calculatedAt
         });
     } catch (error) {
-      console.error("Error storing satellite position:", error);
+      logger.error("Error storing satellite position:", error);
       throw error;
     }
   }
@@ -212,7 +213,7 @@ export class SatelliteTrackingService {
         calculatedAt: data.calculated_at || new Date().toISOString()
       };
     } catch (error) {
-      console.error("Error fetching current position:", error);
+      logger.error("Error fetching current position:", error);
       return null;
     }
   }
@@ -244,7 +245,7 @@ export class SatelliteTrackingService {
         calculatedAt: p.calculated_at || new Date().toISOString()
       }));
     } catch (error) {
-      console.error("Error fetching position history:", error);
+      logger.error("Error fetching position history:", error);
       throw error;
     }
   }
@@ -272,7 +273,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data?.id || "";
     } catch (error) {
-      console.error("Error starting tracking session:", error);
+      logger.error("Error starting tracking session:", error);
       throw error;
     }
   }
@@ -291,7 +292,7 @@ export class SatelliteTrackingService {
         })
         .eq("id", sessionId);
     } catch (error) {
-      console.error("Error ending tracking session:", error);
+      logger.error("Error ending tracking session:", error);
       throw error;
     }
   }
@@ -324,7 +325,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data?.id;
     } catch (error) {
-      console.error("Error creating satellite alert:", error);
+      logger.error("Error creating satellite alert:", error);
       throw error;
     }
   }
@@ -360,7 +361,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching satellite alerts:", error);
+      logger.error("Error fetching satellite alerts:", error);
       throw error;
     }
   }
@@ -378,7 +379,7 @@ export class SatelliteTrackingService {
         })
         .eq("id", alertId);
     } catch (error) {
-      console.error("Error resolving satellite alert:", error);
+      logger.error("Error resolving satellite alert:", error);
       throw error;
     }
   }
@@ -397,7 +398,7 @@ export class SatelliteTrackingService {
         .delete()
         .lt("calculated_at", thirtyDaysAgo.toISOString());
     } catch (error) {
-      console.error("Error cleaning up old satellite data:", error);
+      logger.error("Error cleaning up old satellite data:", error);
       throw error;
     }
   }
@@ -421,7 +422,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data?.id;
     } catch (error) {
-      console.error("Error updating satellite TLE:", error);
+      logger.error("Error updating satellite TLE:", error);
       throw error;
     }
   }

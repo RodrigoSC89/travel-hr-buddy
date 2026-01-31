@@ -5,6 +5,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface Vaccination {
   name: string;
@@ -57,7 +58,7 @@ export function useCrewHealthData() {
         .limit(50);
 
       if (error) {
-        console.error("Error fetching crew health:", error);
+        logger.error("Error fetching crew health:", error);
       }
 
       // Fetch health check-ins

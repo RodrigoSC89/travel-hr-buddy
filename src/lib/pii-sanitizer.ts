@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * PII Sanitizer for LLM Inputs
  * Removes/masks personally identifiable information before sending to AI models
@@ -138,7 +140,7 @@ export const sanitizePII = (
         sanitized = sanitized.replace(pattern, replacement);
         
         if (verbose) {
-          console.log(`[PII] Masked ${matches.length} ${name} instances`);
+          logger.debug(`[PII] Masked ${matches.length} ${name} instances`);
         }
       }
     }

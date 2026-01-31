@@ -39,6 +39,7 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
+import { logger } from '@/lib/logger';
 
 // Types
 interface Alert {
@@ -143,7 +144,7 @@ export default function NOC() {
   // Voice commands
   const { isListening, isSupported, transcript, toggleVoice } = useVoiceCommands({
     onCommand: (command) => {
-      console.log("NOC Voice Command:", command);
+      logger.debug("NOC Voice Command:", command);
       // Process voice commands here
     }
   });

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management

@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { TrendingUp, TrendingDown, Minus, AlertTriangle, Ship, Users } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface VesselPerformance {
   id: string;
@@ -98,7 +99,7 @@ export const PerformanceEngineV1: React.FC = () => {
       setCrewPerformance(crewData || []);
       setOutliers(outliersData || []);
     } catch (error) {
-      console.error("Error fetching performance data:", error);
+      logger.error("Error fetching performance data:", error);
       toast({
         title: "Error",
         description: "Failed to load performance data",

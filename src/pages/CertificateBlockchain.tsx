@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Shield,
   FileCheck,
   QrCode,
@@ -175,7 +176,7 @@ export default function CertificateBlockchain() {
         issuingAuthority: "",
       });
     } catch (error) {
-      console.error("Issue error:", error);
+      logger.error("Issue error:", error);
       toast({
         title: "Erro ao emitir",
         description: error instanceof Error ? error.message : "Falha na emissão",
@@ -218,7 +219,7 @@ export default function CertificateBlockchain() {
         variant: data.valid ? "default" : "destructive"
       });
     } catch (error) {
-      console.error("Verify error:", error);
+      logger.error("Verify error:", error);
       toast({
         title: "Erro na verificação",
         description: error instanceof Error ? error.message : "Falha na verificação",
@@ -250,7 +251,7 @@ export default function CertificateBlockchain() {
         description: `${data.count} certificados encontrados`,
       });
     } catch (error) {
-      console.error("History error:", error);
+      logger.error("History error:", error);
     } finally {
       setIsProcessing(false);
     }

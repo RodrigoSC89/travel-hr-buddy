@@ -10,6 +10,7 @@ import { enhancedSyncEngine } from "../services/enhanced-sync-engine";
 import { sqliteStorage } from "../services/sqlite-storage";
 import { networkDetector } from "../services/networkDetector";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface OfflineDataContextType {
   // Status
@@ -89,7 +90,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
           return data as T;
         }
       } catch (e) {
-        console.error("Failed to fetch from server:", e);
+        logger.error("Failed to fetch from server:", e);
       }
     }
 
@@ -116,7 +117,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
           return data as T[];
         }
       } catch (e) {
-        console.error("Failed to fetch from server:", e);
+        logger.error("Failed to fetch from server:", e);
       }
     }
 

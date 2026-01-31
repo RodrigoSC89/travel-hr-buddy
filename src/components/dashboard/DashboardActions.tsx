@@ -27,6 +27,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   Download,
   FileText,
   RefreshCw,
@@ -102,7 +103,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         description: `Dados exportados como ${type.toUpperCase()}`
       });
     } catch (error) {
-      console.error("Export error:", error);
+      logger.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Falha ao exportar dados",
@@ -140,7 +141,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         });
       }
     } catch (error) {
-      console.error("Share error:", error);
+      logger.error("Share error:", error);
     }
   }, [toast]);
 

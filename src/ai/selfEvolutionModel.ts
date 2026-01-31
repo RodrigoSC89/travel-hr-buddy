@@ -149,7 +149,7 @@ class SelfEvolutionModel {
       id: `alt-${failure.id}-1`,
       failure_id: failure.id,
       description: "Add comprehensive error handling with try-catch",
-      code_suggestion: `try {\n  // Original code\n} catch (error) {\n  console.error('Error in ${failure.function_name}:', error);\n  // Fallback behavior\n}`,
+      code_suggestion: `try {\n  // Original code\n} catch (error) {\n  logger.error('Error in ${failure.function_name}:', error);\n  // Fallback behavior\n}`,
       estimated_success_rate: 0.75,
       complexity: 0.3,
       risk_level: "low",

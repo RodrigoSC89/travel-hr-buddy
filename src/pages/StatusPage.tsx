@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format, formatDistanceToNow, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { 
+import { logger } from '@/lib/logger';
   CheckCircle2, 
   AlertCircle, 
   XCircle, 
@@ -128,7 +129,7 @@ export default function StatusPage() {
       setIncidents(incidents);
       setLastUpdated(new Date());
     } catch (error) {
-      console.error("Error fetching status data:", error);
+      logger.error("Error fetching status data:", error);
     } finally {
       setIsLoading(false);
     }

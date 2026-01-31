@@ -25,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { getMapboxGLAsync, type MapboxGL } from "@/lib/mapbox-shim";
 import type { 
+import { logger } from '@/lib/logger';
   OptimizedRoute, 
   RouteWaypoint, 
   WeatherCondition, 
@@ -90,7 +91,7 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
           setMapboxToken(data.token);
         }
       } catch (err) {
-        console.error('Failed to get Mapbox token:', err);
+        logger.error('Failed to get Mapbox token:', err);
       }
     };
     fetchToken();
@@ -160,7 +161,7 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
           });
         });
       } catch (error) {
-        console.error('[WeatherRoutingPanel] Failed to initialize map:', error);
+        logger.error('[WeatherRoutingPanel] Failed to initialize map:', error);
         setMapError('Erro ao inicializar mapa');
       }
     };
@@ -281,7 +282,7 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
         description: `Confiança: ${(result.confidence * 100).toFixed(0)}% | Economia: $${result.savings.costSaved.toFixed(0)}`,
       });
     } catch (error) {
-      console.error('Optimization failed:', error);
+      logger.error('Optimization failed:', error);
       toast({
         title: "Erro na otimização",
         description: "Falha ao calcular rota otimizada",

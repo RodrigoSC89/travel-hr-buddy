@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface DocumentTemplate {
   id?: string;
@@ -51,7 +52,7 @@ export class TemplatePersistence {
 
       return this.mapToTemplate(data);
     } catch (error) {
-      console.error("Error saving template:", error);
+      logger.error("Error saving template:", error);
       throw error;
     }
   }
@@ -80,7 +81,7 @@ export class TemplatePersistence {
 
       return this.mapToTemplate(data);
     } catch (error) {
-      console.error("Error updating template:", error);
+      logger.error("Error updating template:", error);
       throw error;
     }
   }
@@ -94,7 +95,7 @@ export class TemplatePersistence {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting template:", error);
+      logger.error("Error deleting template:", error);
       throw error;
     }
   }
@@ -110,7 +111,7 @@ export class TemplatePersistence {
 
       return (data || []).map(this.mapToTemplate);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      logger.error("Error fetching templates:", error);
       return [];
     }
   }
@@ -127,7 +128,7 @@ export class TemplatePersistence {
 
       return data ? this.mapToTemplate(data) : null;
     } catch (error) {
-      console.error("Error fetching template:", error);
+      logger.error("Error fetching template:", error);
       return null;
     }
   }

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface CalendarEvent {
   id: string;
@@ -80,7 +81,7 @@ export const CalendarIntegration = () => {
         setEvents(calendarEvents);
         logSuccess("FETCH", "calendar_events", null, { count: calendarEvents.length });
       } catch (error) {
-        console.error("Error fetching events:", error);
+        logger.error("Error fetching events:", error);
         logError("FETCH", "calendar_events", error as Error);
       } finally {
         setLoading(false);
@@ -182,7 +183,7 @@ export const CalendarIntegration = () => {
       logSuccess("SYNC", "calendar_events", null, { syncedCount: events.length });
       toast.success(`Sincronização concluída! ${events.length} eventos atualizados.`);
     } catch (error) {
-      console.error("Sync error:", error);
+      logger.error("Sync error:", error);
       // Fallback to demo sync
       await new Promise(resolve => setTimeout(resolve, 2000));
       setEvents(prev => prev.map(evt => ({ ...evt, synced: true })));

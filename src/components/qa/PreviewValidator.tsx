@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, AlertTriangle, Loader2, Play, RefreshCw } from "lucide-react";
 import { LovableValidator, ValidationResult } from "@/lib/qa/LovableValidator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { logger } from '@/lib/logger';
 
 interface PreviewValidatorProps {
   componentName: string;
@@ -33,7 +34,7 @@ export function PreviewValidator({
       const validationResult = await LovableValidator.run(componentName);
       setResult(validationResult);
     } catch (error) {
-      console.error("Erro ao executar validação:", error);
+      logger.error("Erro ao executar validação:", error);
     } finally {
       setLoading(false);
     }

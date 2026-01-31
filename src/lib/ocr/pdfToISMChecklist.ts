@@ -5,6 +5,7 @@
 
 import Tesseract from "tesseract.js";
 import type { ISMAuditItem } from "../../types/ism-audit";
+import { logger } from '@/lib/logger';
 
 export interface OCRResult {
   text: string;
@@ -28,7 +29,7 @@ export async function extractTextFromPDF(file: File): Promise<OCRResult> {
       confidence: result.data.confidence / 100,
     };
   } catch (error) {
-    console.error("OCR Error:", error);
+    logger.error("OCR Error:", error);
     throw new Error("Failed to extract text from PDF");
   }
 }
@@ -101,7 +102,7 @@ export async function extractISMChecklistFromPDF(file: File): Promise<ISMAuditIt
     
     return items;
   } catch (error) {
-    console.error("Error extracting ISM checklist from PDF:", error);
+    logger.error("Error extracting ISM checklist from PDF:", error);
     throw error;
   }
 }

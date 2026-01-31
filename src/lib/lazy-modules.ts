@@ -6,6 +6,7 @@
  */
 
 import { lazy, ComponentType } from "react";
+import { logger } from '@/lib/logger';
 
 // Module priority levels
 type Priority = "critical" | "high" | "medium" | "low";
@@ -43,7 +44,7 @@ export async function preloadModule(name: string): Promise<void> {
     await config.loader();
     loadedModules.add(name);
   } catch (error) {
-    console.error(`Failed to preload module: ${name}`, error);
+    logger.error(`Failed to preload module: ${name}`, error);
   }
 }
 

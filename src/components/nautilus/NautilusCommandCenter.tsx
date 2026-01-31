@@ -29,6 +29,7 @@ import { MaintenanceHub } from "./MaintenanceHub";
 import { IoTDashboard } from "./IoTDashboard";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { SystemContext } from "@/modules/nauti-command/hooks/useNautilusCommandAI";
+import { logger } from '@/lib/logger';
 
 interface Notification {
   id: string;
@@ -125,7 +126,7 @@ export function NautilusCommandCenter() {
       setNotifications(newNotifications);
 
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
     }
   };
 

@@ -27,6 +27,7 @@ import {
   type PSCDeficiency 
 } from '@/lib/psc';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const severityColors: Record<string, string> = {
   observation: 'bg-blue-500/20 text-blue-600',
@@ -67,7 +68,7 @@ export const PSCPackagePanel: React.FC = () => {
       const score = calculateRiskScore(insp, def);
       setRiskScore(score);
     } catch (error) {
-      console.error('Error loading PSC data:', error);
+      logger.error('Error loading PSC data:', error);
       toast.error('Erro ao carregar dados PSC');
     } finally {
       setLoading(false);

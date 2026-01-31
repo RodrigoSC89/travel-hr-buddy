@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
+import { logger } from '@/lib/logger';
   getIonosphericData,
   requestPositionCorrection,
   subscribeToIonosphericAlerts,
@@ -155,7 +156,7 @@ export function useTerrastar(vesselId?: string) {
       
       return alerts;
     } catch (error) {
-      console.error('Error refreshing alerts:', error);
+      logger.error('Error refreshing alerts:', error);
       return [];
     }
   }, [toast]);
@@ -223,7 +224,7 @@ export function useTerrastar(vesselId?: string) {
       setStatistics(stats);
       return stats;
     } catch (error) {
-      console.error('Error fetching statistics:', error);
+      logger.error('Error fetching statistics:', error);
       return statistics;
     }
   }, [statistics]);
@@ -246,7 +247,7 @@ export function useTerrastar(vesselId?: string) {
       
       return status;
     } catch (error) {
-      console.error('Error checking service status:', error);
+      logger.error('Error checking service status:', error);
       return serviceStatus;
     }
   }, [toast, serviceStatus]);

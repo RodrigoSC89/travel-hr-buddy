@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface ValidationChecks {
   templateEditable: boolean;
@@ -36,7 +37,7 @@ export default function Patch554Validation() {
         pdfExport: true, // PDF export is available via jspdf library
       });
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("Validation error:", error);
     } finally {
       setLoading(false);
     }

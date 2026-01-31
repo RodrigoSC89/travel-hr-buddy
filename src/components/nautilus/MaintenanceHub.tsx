@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface MaintenanceTask {
   id: string;
@@ -116,7 +117,7 @@ export function MaintenanceHub() {
         setComponents(getDemoComponents());
       }
     } catch (error) {
-      console.error("Error loading maintenance:", error);
+      logger.error("Error loading maintenance:", error);
       setTasks(getDemoTasks());
       setComponents(getDemoComponents());
     } finally {

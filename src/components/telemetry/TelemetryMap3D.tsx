@@ -37,6 +37,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { logger } from '@/lib/logger';
 
 // Mapbox token from environment
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x0OHFqMjVvMDVvYTJrcXRqNXkxNmF5NiJ9.XkO2Cc9_HKIbM9azT9Ifjw";
@@ -169,7 +170,7 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
         setAlerts(newAlerts);
       }
     } catch (err) {
-      console.error("[TelemetryMap3D] Error fetching vessels:", err);
+      logger.error("[TelemetryMap3D] Error fetching vessels:", err);
     } finally {
       setIsLoading(false);
     }

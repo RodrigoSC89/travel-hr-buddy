@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH 862 - @ts-nocheck mantido temporariamente - mock data incompatível com schema completo
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

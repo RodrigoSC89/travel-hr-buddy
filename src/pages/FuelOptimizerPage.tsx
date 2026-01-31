@@ -21,6 +21,7 @@ import {
 import { format } from "date-fns";
 import { Bar, Line, Doughnut } from "react-chartjs-2";
 import {
+import { logger } from '@/lib/logger';
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -176,7 +177,7 @@ const FuelOptimizerPage = () => {
         setOptimizations(data as FuelOptimization[]);
       }
     } catch (error) {
-      console.error("Error fetching optimizations:", error);
+      logger.error("Error fetching optimizations:", error);
     } finally {
       setLoading(false);
     }
@@ -212,7 +213,7 @@ const FuelOptimizerPage = () => {
       });
 
       if (error) {
-        console.error("AI analysis error:", error);
+        logger.error("AI analysis error:", error);
         return null;
       }
 
@@ -228,7 +229,7 @@ const FuelOptimizerPage = () => {
         }
       };
     } catch (error) {
-      console.error("AI analysis failed:", error);
+      logger.error("AI analysis failed:", error);
       return null;
     }
   };
@@ -276,7 +277,7 @@ const FuelOptimizerPage = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           // Attempt to save but don't block on errors
-          console.log("Attempting to save optimization to database");
+          logger.debug("Attempting to save optimization to database");
         }
       } catch {
         // Ignore database errors
@@ -302,7 +303,7 @@ const FuelOptimizerPage = () => {
       });
 
     } catch (error) {
-      console.error("Error creating optimization:", error);
+      logger.error("Error creating optimization:", error);
       toast({ title: "Erro na análise", variant: "destructive" });
     } finally {
       setIsAnalyzing(false);

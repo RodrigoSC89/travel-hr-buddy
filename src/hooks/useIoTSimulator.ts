@@ -4,6 +4,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface SimulatorConfig {
   intervalMs: number;
@@ -58,7 +59,7 @@ export function useIoTSimulator(): UseIoTSimulatorReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send sensor reading';
       setError(errorMessage);
-      console.error('[IoT Simulator] Error:', err);
+      logger.error('[IoT Simulator] Error:', err);
     }
   }, []);
 
@@ -97,7 +98,7 @@ export function useIoTSimulator(): UseIoTSimulatorReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send burst';
       setError(errorMessage);
-      console.error('[IoT Simulator] Burst error:', err);
+      logger.error('[IoT Simulator] Burst error:', err);
     }
   }, []);
 

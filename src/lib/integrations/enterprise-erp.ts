@@ -39,12 +39,12 @@ export class SAPIntegration {
 
   async testConnection(): Promise<boolean> {
     // Placeholder - would make actual SAP RFC call
-    console.log('Testing SAP connection...');
+    logger.debug('Testing SAP connection...');
     return true;
   }
 
   async syncCrewData(): Promise<SyncResult> {
-    console.log('Syncing crew data with SAP HR...');
+    logger.debug('Syncing crew data with SAP HR...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -54,7 +54,7 @@ export class SAPIntegration {
   }
 
   async syncMaintenanceOrders(): Promise<SyncResult> {
-    console.log('Syncing maintenance orders with SAP PM...');
+    logger.debug('Syncing maintenance orders with SAP PM...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -64,7 +64,7 @@ export class SAPIntegration {
   }
 
   async syncFinancialData(): Promise<SyncResult> {
-    console.log('Syncing financial data with SAP FI...');
+    logger.debug('Syncing financial data with SAP FI...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -74,7 +74,7 @@ export class SAPIntegration {
   }
 
   async syncProcurement(): Promise<SyncResult> {
-    console.log('Syncing procurement data with SAP MM...');
+    logger.debug('Syncing procurement data with SAP MM...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -97,12 +97,12 @@ export class OracleIntegration {
   }
 
   async testConnection(): Promise<boolean> {
-    console.log('Testing Oracle connection...');
+    logger.debug('Testing Oracle connection...');
     return true;
   }
 
   async syncEmployees(): Promise<SyncResult> {
-    console.log('Syncing employees with Oracle HCM...');
+    logger.debug('Syncing employees with Oracle HCM...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -112,7 +112,7 @@ export class OracleIntegration {
   }
 
   async syncAssets(): Promise<SyncResult> {
-    console.log('Syncing assets with Oracle EAM...');
+    logger.debug('Syncing assets with Oracle EAM...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -122,7 +122,7 @@ export class OracleIntegration {
   }
 
   async syncFinance(): Promise<SyncResult> {
-    console.log('Syncing finance with Oracle Financials...');
+    logger.debug('Syncing finance with Oracle Financials...');
     return {
       success: true,
       recordsProcessed: 0,
@@ -150,7 +150,7 @@ export class IntegrationManager {
 
   async registerConnection(connection: ERPConnection): Promise<void> {
     this.connections.set(connection.id, connection);
-    console.log(`Registered ${connection.type} connection: ${connection.name}`);
+    logger.debug(`Registered ${connection.type} connection: ${connection.name}`);
   }
 
   async getConnections(): Promise<ERPConnection[]> {
@@ -178,7 +178,7 @@ export class IntegrationManager {
   }
 
   private async syncConnection(connection: ERPConnection): Promise<SyncResult> {
-    console.log(`Syncing ${connection.type}: ${connection.name}`);
+    logger.debug(`Syncing ${connection.type}: ${connection.name}`);
     
     // Placeholder sync logic
     return {
@@ -201,7 +201,7 @@ export async function handleERPWebhook(
   event: string,
   payload: Record<string, unknown>
 ): Promise<void> {
-  console.log(`ERP Webhook: ${source} - ${event}`, payload);
+  logger.debug(`ERP Webhook: ${source} - ${event}`, payload);
   
   switch (source) {
     case 'sap':
@@ -219,25 +219,25 @@ async function handleSAPWebhook(event: string, payload: Record<string, unknown>)
   switch (event) {
     case 'employee.created':
     case 'employee.updated':
-      console.log('SAP Employee event:', payload);
+      logger.debug('SAP Employee event:', payload);
       break;
     case 'maintenance.created':
-      console.log('SAP Maintenance order:', payload);
+      logger.debug('SAP Maintenance order:', payload);
       break;
     default:
-      console.log('SAP event:', event, payload);
+      logger.debug('SAP event:', event, payload);
   }
 }
 
 async function handleOracleWebhook(event: string, payload: Record<string, unknown>): Promise<void> {
   switch (event) {
     case 'asset.updated':
-      console.log('Oracle Asset event:', payload);
+      logger.debug('Oracle Asset event:', payload);
       break;
     case 'workorder.completed':
-      console.log('Oracle Work order:', payload);
+      logger.debug('Oracle Work order:', payload);
       break;
     default:
-      console.log('Oracle event:', event, payload);
+      logger.debug('Oracle event:', event, payload);
   }
 }

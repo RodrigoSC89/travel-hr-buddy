@@ -5,6 +5,7 @@
 
 import useSWR from "swr";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface SystemStats {
   totalLogs: number;
@@ -60,7 +61,7 @@ const fetcher = async (): Promise<SystemStats> => {
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
-    console.error("Error fetching system stats:", error);
+    logger.error("Error fetching system stats:", error);
     // Return default values on error
     return {
       totalLogs: 0,

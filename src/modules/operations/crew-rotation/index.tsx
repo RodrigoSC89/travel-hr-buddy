@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { format, addDays, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from '@/lib/logger';
 
 interface CrewRotation {
   id: string;
@@ -117,7 +118,7 @@ export default function CrewRotationModule() {
 
       setRotations(formattedRotations);
     } catch (error) {
-      console.error("Error loading rotations:", error);
+      logger.error("Error loading rotations:", error);
       toast({
         title: "Erro ao carregar rotações",
         description: "Não foi possível carregar as rotações de tripulação.",
@@ -139,7 +140,7 @@ export default function CrewRotationModule() {
           table: "crew_rotations"
         },
         (payload) => {
-          console.log("Rotation change detected:", payload);
+          logger.debug("Rotation change detected:", payload);
           loadRotations();
           
           toast({
@@ -242,7 +243,7 @@ export default function CrewRotationModule() {
       sendRotationNotification("scheduled", newRotation);
       
     } catch (error) {
-      console.error("Error creating rotation:", error);
+      logger.error("Error creating rotation:", error);
       toast({
         title: "Erro ao criar rotação",
         description: "Não foi possível criar a rotação.",
@@ -261,7 +262,7 @@ export default function CrewRotationModule() {
         read: false
       });
     } catch (error) {
-      console.error("Error sending notification:", error);
+      logger.error("Error sending notification:", error);
     }
   };
 

@@ -7,6 +7,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLiteMode } from "@/components/performance/LiteMode";
+import { logger } from '@/lib/logger';
 
 // =====================================
 // Types
@@ -285,7 +286,7 @@ export function useAIDecisions() {
       if (error) throw error;
       setDecisions(data || []);
     } catch (error) {
-      console.error("[AIDecisions] Error:", error);
+      logger.error("[AIDecisions] Error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -301,7 +302,7 @@ export function useAIDecisions() {
       if (error) throw error;
       await fetchDecisions();
     } catch (error) {
-      console.error("[AIDecisions] Approve error:", error);
+      logger.error("[AIDecisions] Approve error:", error);
     }
   }, [fetchDecisions]);
 
@@ -315,7 +316,7 @@ export function useAIDecisions() {
       if (error) throw error;
       await fetchDecisions();
     } catch (error) {
-      console.error("[AIDecisions] Reject error:", error);
+      logger.error("[AIDecisions] Reject error:", error);
     }
   }, [fetchDecisions]);
 
@@ -333,7 +334,7 @@ export function useAIDecisions() {
       if (error) throw error;
       await fetchDecisions();
     } catch (error) {
-      console.error("[AIDecisions] Feedback error:", error);
+      logger.error("[AIDecisions] Feedback error:", error);
     }
   }, [fetchDecisions]);
 
@@ -372,7 +373,7 @@ export function useAIInsights(organizationId?: string) {
       if (error) throw error;
       setInsights(data || []);
     } catch (error) {
-      console.error("[AIInsights] Error:", error);
+      logger.error("[AIInsights] Error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -388,7 +389,7 @@ export function useAIInsights(organizationId?: string) {
       if (error) throw error;
       await fetchInsights();
     } catch (error) {
-      console.error("[AIInsights] Dismiss error:", error);
+      logger.error("[AIInsights] Dismiss error:", error);
     }
   }, [fetchInsights]);
 
@@ -402,7 +403,7 @@ export function useAIInsights(organizationId?: string) {
       if (error) throw error;
       await fetchInsights();
     } catch (error) {
-      console.error("[AIInsights] Act error:", error);
+      logger.error("[AIInsights] Act error:", error);
     }
   }, [fetchInsights]);
 
@@ -441,7 +442,7 @@ export function useAITelemetry() {
         created_at: new Date().toISOString()
       });
     } catch (error) {
-      console.error("[AITelemetry] Log error:", error);
+      logger.error("[AITelemetry] Log error:", error);
     }
   }, []);
 

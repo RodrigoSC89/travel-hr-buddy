@@ -50,6 +50,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { nullToUndefined } from "@/lib/type-helpers";
+import { logger } from '@/lib/logger';
 
 // ============================================
 // TYPES
@@ -345,7 +346,7 @@ export function useUnifiedNotifications(userId?: string, autoRefresh = true, ref
       const formattedNotifications = (data || []).map(normalizeNotification);
       setNotifications(formattedNotifications);
     } catch (error) {
-      console.error("Error loading notifications:", error);
+      logger.error("Error loading notifications:", error);
     } finally {
       setLoading(false);
     }

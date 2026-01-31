@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Workflow, WorkflowStep, WorkflowTemplate } from "./useWorkflows";
+import { logger } from '@/lib/logger';
 
 interface AISuggestion {
   id: string;
@@ -55,7 +56,7 @@ export const useWorkflowAI = () => {
       setSuggestions(aiSuggestions);
       return aiSuggestions;
     } catch (err) {
-      console.error("AI suggestion error:", err);
+      logger.error("AI suggestion error:", err);
       // Fallback to local suggestions
       const localSuggestions = generateLocalSuggestions(workflow);
       setSuggestions(localSuggestions);
@@ -90,7 +91,7 @@ export const useWorkflowAI = () => {
       setAnalysis(aiAnalysis);
       return aiAnalysis;
     } catch (err) {
-      console.error("AI analysis error:", err);
+      logger.error("AI analysis error:", err);
       const localAnalysis = generateLocalAnalysis(workflow);
       setAnalysis(localAnalysis);
       return localAnalysis;
@@ -121,7 +122,7 @@ export const useWorkflowAI = () => {
 
       return data?.workflow || null;
     } catch (err) {
-      console.error("AI generation error:", err);
+      logger.error("AI generation error:", err);
       toast({
         title: "Erro na geração",
         description: "Usando template padrão",
@@ -154,7 +155,7 @@ export const useWorkflowAI = () => {
 
       return data?.optimizedSteps || steps;
     } catch (err) {
-      console.error("AI optimization error:", err);
+      logger.error("AI optimization error:", err);
       return steps;
     } finally {
       setIsAnalyzing(false);

@@ -127,7 +127,7 @@ class AIResponseCache {
     
     if (bestMatch) {
       bestMatch.metadata.useCount++;
-      console.log(`[AICache] Semantic match found (${(bestScore * 100).toFixed(0)}% similar)`);
+      logger.debug(`[AICache] Semantic match found (${(bestScore * 100).toFixed(0)}% similar)`);
     }
     
     return bestMatch;
@@ -258,7 +258,7 @@ class AIResponseCache {
       }
     }
     
-    console.log(`[AICache] Evicted ${toRemove} least used entries`);
+    logger.debug(`[AICache] Evicted ${toRemove} least used entries`);
   }
   
   /**

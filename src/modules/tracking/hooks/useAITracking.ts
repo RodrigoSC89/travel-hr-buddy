@@ -7,6 +7,7 @@ import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { GnssLog, GnssAIRecommendation } from "../types";
+import { logger } from '@/lib/logger';
 
 interface AITrackingInput {
   positionHistory: GnssLog[];
@@ -112,7 +113,7 @@ export function useAITracking() {
       
       return prediction;
     } catch (error) {
-      console.error("Trajectory prediction error:", error);
+      logger.error("Trajectory prediction error:", error);
       toast.error("Erro ao calcular predição de trajetória");
       return null;
     } finally {
@@ -199,7 +200,7 @@ export function useAITracking() {
       
       return analysis;
     } catch (error) {
-      console.error("Signal analysis error:", error);
+      logger.error("Signal analysis error:", error);
       return null;
     } finally {
       setIsAnalyzing(false);

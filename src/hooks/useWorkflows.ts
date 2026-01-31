@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 export interface WorkflowStep {
   id: string;
@@ -84,7 +85,7 @@ export const useWorkflows = () => {
         .order("created_at", { ascending: false });
 
       if (workflowError) {
-        console.error("Error fetching workflows:", workflowError);
+        logger.error("Error fetching workflows:", workflowError);
       }
 
       // Map database workflows to our interface
@@ -111,7 +112,7 @@ export const useWorkflows = () => {
         setWorkflows(mappedWorkflows);
       }
     } catch (err) {
-      console.error("Error:", err);
+      logger.error("Error:", err);
       setWorkflows(getSampleWorkflows());
     } finally {
       setIsLoading(false);
@@ -127,7 +128,7 @@ export const useWorkflows = () => {
         .order("created_at", { ascending: false });
 
       if (ruleError) {
-        console.error("Error fetching rules:", ruleError);
+        logger.error("Error fetching rules:", ruleError);
         setAutomationRules(getSampleRules());
         return;
       }
@@ -138,7 +139,7 @@ export const useWorkflows = () => {
         setAutomationRules(getSampleRules());
       }
     } catch (err) {
-      console.error("Error:", err);
+      logger.error("Error:", err);
       setAutomationRules(getSampleRules());
     }
   }, [user]);
@@ -223,7 +224,7 @@ export const useWorkflows = () => {
       toast({ title: "Sucesso", description: "Workflow atualizado!" });
       await fetchWorkflows();
     } catch (err) {
-      console.error("Error updating workflow:", err);
+      logger.error("Error updating workflow:", err);
       // Update locally if database fails
       setWorkflows(prev => prev.map(w => w.id === id ? { ...w, ...updates } : w));
       toast({ title: "Atualizado localmente", description: "Workflow atualizado" });
@@ -243,7 +244,7 @@ export const useWorkflows = () => {
       setWorkflows(prev => prev.filter(w => w.id !== id));
       toast({ title: "Sucesso", description: "Workflow excluído!" });
     } catch (err) {
-      console.error("Error deleting workflow:", err);
+      logger.error("Error deleting workflow:", err);
       toast({ title: "Erro", description: "Falha ao excluir workflow", variant: "destructive" });
     }
   }, [toast]);
@@ -283,7 +284,7 @@ export const useWorkflows = () => {
         description: `Automação ${!rule.is_active ? "ativada" : "desativada"}`
       });
     } catch (err) {
-      console.error("Error toggling rule:", err);
+      logger.error("Error toggling rule:", err);
       // Update locally
       setAutomationRules(prev => prev.map(r => 
         r.id === id ? { ...r, is_active: !r.is_active } : r
@@ -321,7 +322,7 @@ export const useWorkflows = () => {
       await fetchAutomationRules();
       return data;
     } catch (err) {
-      console.error("Error creating rule:", err);
+      logger.error("Error creating rule:", err);
       toast({ title: "Erro", description: "Falha ao criar regra", variant: "destructive" });
       return null;
     }

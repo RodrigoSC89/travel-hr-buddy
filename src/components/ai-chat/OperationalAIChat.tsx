@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: "user" | "assistant";
@@ -127,7 +128,7 @@ export function OperationalAIChat() {
         }
       }
     } catch (error) {
-      console.error("Chat error:", error);
+      logger.error("Chat error:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a mensagem. Tente novamente.",

@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { AlternativeRoute } from '@/lib/routing/weather-routing';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface RouteComparisonMapProps {
   routes: {
@@ -58,7 +59,7 @@ export function RouteComparisonMap({
           setMapboxToken(data.token);
         }
       } catch (err) {
-        console.error('Failed to get Mapbox token:', err);
+        logger.error('Failed to get Mapbox token:', err);
       } finally {
         setLoading(false);
       }

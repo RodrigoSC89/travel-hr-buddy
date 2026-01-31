@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   Cpu,
   AlertTriangle,
   CheckCircle2,
@@ -77,7 +78,7 @@ export default function DPAIAnalyzer() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Analysis error:", response.status, errorData);
+        logger.error("Analysis error:", response.status, errorData);
         
         if (response.status === 429) {
           toast.error("Limite de requisições", {
@@ -112,7 +113,7 @@ export default function DPAIAnalyzer() {
         description: `Análise ${getAnalysisLabel(type)} completada com sucesso.`,
       });
     } catch (err) {
-      console.error("Error:", err);
+      logger.error("Error:", err);
       // PATCH iOS PWA: Mensagem genérica sem mencionar conexão
       toast.error("Erro temporário", {
         description: "Não foi possível completar a análise. Tente novamente.",

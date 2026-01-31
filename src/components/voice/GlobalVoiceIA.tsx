@@ -103,7 +103,7 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
       };
 
       recognitionRef.current.onerror = (event: SpeechRecognitionErrorEventType) => {
-        console.error("Speech recognition error:", event.error);
+        logger.error("Speech recognition error:", event.error);
         setVoiceState(prev => ({
           ...prev,
           isListening: false,
@@ -178,7 +178,7 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
       onCommand?.(command, response);
 
     } catch (error) {
-      console.error("Error processing command:", error);
+      logger.error("Error processing command:", error);
       const errorMsg = "Desculpe, não consegui processar o comando. Tente novamente.";
       setVoiceState(prev => ({
         ...prev,

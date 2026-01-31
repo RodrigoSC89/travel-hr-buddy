@@ -7,6 +7,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/lib/logger';
 
 // Tabela INSS 2024
 const INSS_TABLE = [
@@ -165,7 +166,7 @@ export function usePayroll() {
       setEmployees(formattedEmployees);
       return formattedEmployees;
     } catch (error) {
-      console.error('Error loading employees:', error);
+      logger.error('Error loading employees:', error);
       toast({
         title: 'Erro ao carregar funcionários',
         variant: 'destructive',
@@ -291,7 +292,7 @@ export function usePayroll() {
 
       return payrollCalcs;
     } catch (error) {
-      console.error('Error calculating payroll:', error);
+      logger.error('Error calculating payroll:', error);
       toast({
         title: 'Erro ao calcular folha',
         variant: 'destructive',
@@ -353,7 +354,7 @@ export function usePayroll() {
 
       return true;
     } catch (error) {
-      console.error('Error saving payroll:', error);
+      logger.error('Error saving payroll:', error);
       toast({
         title: 'Erro ao salvar folha',
         variant: 'destructive',

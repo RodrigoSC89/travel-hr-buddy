@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 509: AI Learning Dashboard
  * Visualize AI self-reflection and continuous learning metrics
@@ -23,6 +22,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { logger } from '@/lib/logger';
 
 interface LearningInsight {
   action_type: string;
@@ -84,7 +84,7 @@ export default function AILearningDashboard() {
       if (progressError) throw progressError;
       setProgress(progressData || []);
     } catch (error) {
-      console.error("Error loading AI learning data:", error);
+      logger.error("Error loading AI learning data:", error);
       toast({
         title: "Error",
         description: "Failed to load learning data",

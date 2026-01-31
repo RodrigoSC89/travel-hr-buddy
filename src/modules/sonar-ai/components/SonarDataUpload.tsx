@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Upload, FileJson, FileText, Table, Loader2 } from "lucide-react";
 import { SonarAIService } from "../sonar-service";
 import { cn } from "@/lib/utils";
+import { logger } from '@/lib/logger';
 
 export function SonarDataUpload() {
   const [isUploading, setIsUploading] = useState(false);
@@ -127,7 +128,7 @@ export function SonarDataUpload() {
       }, 1000);
 
     } catch (error) {
-      console.error("Upload error:", error);
+      logger.error("Upload error:", error);
       toast({
         title: "Upload failed",
         description: error instanceof Error ? error.message : "Failed to process file",

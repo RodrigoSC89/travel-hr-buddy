@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface XLSXExportOptions {
   filename?: string;
@@ -73,7 +74,7 @@ export const useXLSXExport = (): UseXLSXExportReturn => {
         description: `Arquivo ${filename} gerado com sucesso.`
       });
     } catch (error) {
-      console.error("XLSX export error:", error);
+      logger.error("XLSX export error:", error);
       toast({
         title: "Erro na Exportação",
         description: "Falha ao gerar arquivo Excel.",
@@ -105,7 +106,7 @@ export const useXLSXExport = (): UseXLSXExportReturn => {
         description: `Arquivo ${filename} com ${sheets.length} planilhas gerado.`
       });
     } catch (error) {
-      console.error("XLSX multi-sheet export error:", error);
+      logger.error("XLSX multi-sheet export error:", error);
       toast({
         title: "Erro na Exportação",
         description: "Falha ao gerar arquivo Excel.",

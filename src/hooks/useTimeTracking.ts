@@ -182,7 +182,7 @@ export function useTimeTracking() {
         totalBankHours: formattedRecords.reduce((acc, r) => acc + (r.overtime_hours || 0), 0),
       });
     } catch (error) {
-      console.error('Error loading time records:', error);
+      logger.error('Error loading time records:', error);
       toast({
         title: 'Erro ao carregar registros',
         description: 'Não foi possível carregar os registros de ponto.',
@@ -238,7 +238,7 @@ export function useTimeTracking() {
         });
       }
     } catch (error) {
-      console.error('Error loading today record:', error);
+      logger.error('Error loading today record:', error);
     }
   }, [user?.id]);
 
@@ -368,7 +368,7 @@ export function useTimeTracking() {
 
       return true;
     } catch (error) {
-      console.error('Error clocking in:', error);
+      logger.error('Error clocking in:', error);
       toast({
         title: 'Erro ao registrar ponto',
         description: 'Tente novamente.',

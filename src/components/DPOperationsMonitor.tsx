@@ -17,7 +17,7 @@
  *   vesselLatitude={-22.9}
  *   vesselLongitude={-43.2}
  *   vesselName="MV Explorer"
- *   onStatusChange={(status) => console.log(status)}
+ *   onStatusChange={(status) => logger.debug(status)}
  * />
  * ```
  */
@@ -99,7 +99,7 @@ export function DPOperationsMonitor({
 
     if (previousStatus && previousStatus !== status.status) {
       // Status changed
-      console.log(`[DPMonitor] Status changed: ${previousStatus} → ${status.status}`);
+      logger.debug(`[DPMonitor] Status changed: ${previousStatus} → ${status.status}`);
 
       if (enableAudioAlerts) {
         if (status.status === 'RED') {

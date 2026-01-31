@@ -22,6 +22,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { DemoSatellite } from "../data/demo-satellites";
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -249,7 +250,7 @@ Para informações mais específicas, pergunte sobre:
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.log('Using local response fallback');
+      logger.debug('Using local response fallback');
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

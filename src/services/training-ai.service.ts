@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 import type {
+import { logger } from '@/lib/logger';
   AITrainingSession,
   AITrainingHistory,
   TrainingLearningPath,
@@ -53,7 +54,7 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching training sessions:", error);
+      logger.error("Error fetching training sessions:", error);
       throw error;
     }
 
@@ -75,7 +76,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error creating training session:", error);
+      logger.error("Error creating training session:", error);
       throw error;
     }
 
@@ -99,7 +100,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error updating training session:", error);
+      logger.error("Error updating training session:", error);
       throw error;
     }
 
@@ -134,7 +135,7 @@ export class TrainingAIService {
       .order("occurred_at", { ascending: true });
 
     if (error) {
-      console.error("Error fetching training history:", error);
+      logger.error("Error fetching training history:", error);
       throw error;
     }
 
@@ -157,7 +158,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error adding training history:", error);
+      logger.error("Error adding training history:", error);
       throw error;
     }
 
@@ -175,7 +176,7 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching learning paths:", error);
+      logger.error("Error fetching learning paths:", error);
       throw error;
     }
 
@@ -198,7 +199,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error creating learning path:", error);
+      logger.error("Error creating learning path:", error);
       throw error;
     }
 
@@ -265,7 +266,7 @@ export class TrainingAIService {
     });
 
     if (error) {
-      console.error("Error generating LLM explanation:", error);
+      logger.error("Error generating LLM explanation:", error);
       throw error;
     }
 
@@ -283,7 +284,7 @@ export class TrainingAIService {
     });
 
     if (error) {
-      console.error("Error generating quiz:", error);
+      logger.error("Error generating quiz:", error);
       throw error;
     }
 

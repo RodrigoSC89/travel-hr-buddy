@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface CrewMedicalMember {
   id: string;
@@ -50,7 +51,7 @@ export function useCrewMedicalData() {
         .order("full_name");
 
       if (error) {
-        console.error("Error fetching crew medical data:", error);
+        logger.error("Error fetching crew medical data:", error);
         return getDemoCrewData();
       }
 

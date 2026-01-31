@@ -28,6 +28,7 @@ import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from "@/services/price-alerts-service";
+import { logger } from '@/lib/logger';
 
 interface AlertFormProps {
   open: boolean;
@@ -87,7 +88,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
         setTravelDate(undefined);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      logger.error("Error submitting form:", error);
     } finally {
       setLoading(false);
     }

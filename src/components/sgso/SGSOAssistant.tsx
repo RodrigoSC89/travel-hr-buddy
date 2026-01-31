@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   Brain,
   Send,
   FileText,
@@ -104,7 +105,7 @@ Todas as minhas respostas incluem **citações das normas** aplicáveis. Como po
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error calling SGSO assistant:", error);
+      logger.error("Error calling SGSO assistant:", error);
       
       // Fallback response with mock data for demo
       const fallbackResponse = generateFallbackResponse(messageText);

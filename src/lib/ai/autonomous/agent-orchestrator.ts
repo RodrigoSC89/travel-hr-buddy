@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface AIAgent {
   id: string;
@@ -295,7 +296,7 @@ export class AgentOrchestrator {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`[AgentOrchestrator] Decision made in ${duration}ms`);
+    logger.debug(`[AgentOrchestrator] Decision made in ${duration}ms`);
     
     return decision;
   }
@@ -316,7 +317,7 @@ export class AgentOrchestrator {
         
         this.updateAgentStatus(agent.id, 'active');
       } catch (error) {
-        console.error(`[Agent ${agent.name}] Error:`, error);
+        logger.error(`[Agent ${agent.name}] Error:`, error);
         this.updateAgentStatus(agent.id, 'error');
       }
     }
@@ -506,7 +507,7 @@ export class AgentOrchestrator {
         executed_at: decision.executedAt?.toISOString()
       });
     } catch (error) {
-      console.error('[AgentOrchestrator] Failed to persist decision:', error);
+      logger.error('[AgentOrchestrator] Failed to persist decision:', error);
     }
   }
 

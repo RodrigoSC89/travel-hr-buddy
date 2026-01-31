@@ -17,6 +17,7 @@ import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from './dp-asog-client
 import type { DPASOGStatusResponse, DPASOGPDOPResponse } from './dp-asog-client.service';
 import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from './space-weather-monitoring.service';
 import type { SpaceWeatherStatus, SpaceWeatherThresholds } from '@/types/space-weather.types';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // Configuration
@@ -137,9 +138,9 @@ export class HybridSpaceWeatherService {
    * 
    * const status = await hybrid.getSpaceWeatherStatus(-22.9, -43.2);
    * 
-   * console.log(`Risk: ${status.risk_level}`);
-   * console.log(`DP Gate: ${status.dp_gate_status}`);
-   * console.log(`Source: ${status.data_source}`); // 'DP_ASOG' ou 'TYPESCRIPT'
+   * logger.debug(`Risk: ${status.risk_level}`);
+   * logger.debug(`DP Gate: ${status.dp_gate_status}`);
+   * logger.debug(`Source: ${status.data_source}`); // 'DP_ASOG' ou 'TYPESCRIPT'
    * ```
    */
   async getSpaceWeatherStatus(
@@ -153,7 +154,7 @@ export class HybridSpaceWeatherService {
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached) {
-      console.log('[HybridSpaceWeather] Using cached data');
+      logger.debug('[HybridSpaceWeather] Using cached data');
       return { ...cached, data_source: 'CACHED' };
     }
 
@@ -167,16 +168,16 @@ export class HybridSpaceWeatherService {
           this.cache.set(cacheKey, status, this.config.cache_ttl_ms);
           return { ...status, data_source: 'DP_ASOG' };
         } catch (error) {
-          console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
+          logger.warn('[HybridSpaceWeather] DP ASOG failed:', error);
           
           if (!this.config.enable_fallback) {
             throw error;
           }
           
-          console.log('[HybridSpaceWeather] Falling back to TypeScript implementation');
+          logger.debug('[HybridSpaceWeather] Falling back to TypeScript implementation');
         }
       } else {
-        console.log('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
+        logger.debug('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
       }
     }
 

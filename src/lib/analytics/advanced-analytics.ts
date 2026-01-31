@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export interface AnalyticsEvent {
   name: string;
@@ -178,7 +179,7 @@ class AdvancedAnalytics {
     this.metricsQueue.push(metric);
 
     if (this.config.debug) {
-      console.log('[Analytics] Metric:', metric);
+      logger.debug('[Analytics] Metric:', metric);
     }
   }
 
@@ -258,7 +259,7 @@ class AdvancedAnalytics {
     try {
       // In production, this would send to analytics backend
       if (this.config.debug) {
-        console.log('[Analytics] Flushing:', { events, metrics });
+        logger.debug('[Analytics] Flushing:', { events, metrics });
       }
 
       // Store locally for now

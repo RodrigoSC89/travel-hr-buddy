@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Activity, AlertTriangle, Brain } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface CrewHealthRecord {
   id: string;
@@ -67,7 +68,7 @@ export function CrewWellbeingDashboard() {
       setHealthRecords((recordsRes.data as CrewHealthRecord[]) || []);
       setAlerts((alertsRes.data as WellbeingAlert[]) || []);
     } catch (error) {
-      console.error("Error loading wellbeing data:", error);
+      logger.error("Error loading wellbeing data:", error);
       toast.error("Failed to load wellbeing data");
     } finally {
       setLoading(false);

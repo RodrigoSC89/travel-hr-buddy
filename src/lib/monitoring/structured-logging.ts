@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Structured Logging System
  * Centralized logging with levels, context, and remote reporting
@@ -143,13 +145,13 @@ class StructuredLogger {
     
     console.groupCollapsed(`%c${prefix} ${entry.message}`, style[entry.level]);
     if (entry.context && Object.keys(entry.context).length > 0) {
-      console.log('Context:', entry.context);
+      logger.debug('Context:', entry.context);
     }
     if (entry.error) {
-      console.error('Error:', entry.error);
+      logger.error('Error:', entry.error);
     }
     if (entry.tags) {
-      console.log('Tags:', entry.tags);
+      logger.debug('Tags:', entry.tags);
     }
     console.groupEnd();
   }
@@ -179,7 +181,7 @@ class StructuredLogger {
       // Re-add to buffer on failure
       this.buffer = [...logs, ...this.buffer].slice(-100);
       // Note: Using native console here to avoid circular dependency
-      if (import.meta.env.DEV) console.warn('[Logger] Failed to flush logs:', error);
+      if (import.meta.env.DEV) logger.warn('[Logger] Failed to flush logs:', error);
     }
   }
 

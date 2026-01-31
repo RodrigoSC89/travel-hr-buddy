@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface Aircraft {
   icao24: string;
@@ -65,7 +66,7 @@ export default function OpenSkyFlights() {
         toast.success(`${formattedAircraft.length} aeronaves encontradas!`);
       }
     } catch (error) {
-      console.error("Error fetching aircraft:", error);
+      logger.error("Error fetching aircraft:", error);
       toast.error("Erro ao buscar dados de voos");
     } finally {
       setLoading(false);

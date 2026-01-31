@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface MarkerData {
   id: string;
@@ -117,7 +118,7 @@ const MarineAROverlay = () => {
         drawOverlay();
       }
     } catch (error) {
-      console.error("Error accessing camera:", error);
+      logger.error("Error accessing camera:", error);
       toast({
         title: "Erro na Câmera",
         description: "Não foi possível acessar a câmera. Usando demo.",

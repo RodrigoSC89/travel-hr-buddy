@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import { logger } from '@/lib/logger';
   Calendar,
   Plus,
   Edit,
@@ -109,7 +109,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       if (error) throw error;
       setTasks((data || []) as any);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks:", error);
       toast({
         title: "Error",
         description: "Failed to load tasks",
@@ -129,7 +129,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       if (error) throw error;
       setDependencies((data || []) as any);
     } catch (error) {
-      console.error("Error fetching dependencies:", error);
+      logger.error("Error fetching dependencies:", error);
     }
   };
 
@@ -167,7 +167,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       resetForm();
       fetchTasks();
     } catch (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task:", error);
       toast({
         title: "Error",
         description: "Failed to create task",
@@ -193,7 +193,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       resetForm();
       fetchTasks();
     } catch (error) {
-      console.error("Error updating task:", error);
+      logger.error("Error updating task:", error);
       toast({
         title: "Error",
         description: "Failed to update task",
@@ -216,7 +216,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       toast({ title: "Success", description: "Task deleted successfully" });
       fetchTasks();
     } catch (error) {
-      console.error("Error deleting task:", error);
+      logger.error("Error deleting task:", error);
       toast({
         title: "Error",
         description: "Failed to delete task",

@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTaskAutomationData } from "@/hooks/useTaskAutomationData";
 import { 
+import { logger } from '@/lib/logger';
   Zap, 
   Play, 
   Pause, 
@@ -46,7 +47,7 @@ const TaskAutomation = () => {
     try {
       await toggleTaskStatus.mutateAsync({ id, isActive: currentStatus !== "active" });
     } catch (error) {
-      console.error("Failed to toggle task status:", error);
+      logger.error("Failed to toggle task status:", error);
     }
   };
 

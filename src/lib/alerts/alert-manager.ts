@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export type AlertSeverity = "critical" | "warning" | "info" | "success";
 export type AlertType = "crew" | "vessel" | "compliance" | "equipment" | "bunker" | "system" | "security";
@@ -62,7 +63,7 @@ class AlertManager {
       });
 
       if (error) {
-        console.error("[AlertManager] Error:", error);
+        logger.error("[AlertManager] Error:", error);
         return {
           success: false,
           results: {},
@@ -73,7 +74,7 @@ class AlertManager {
 
       return data as AlertResult;
     } catch (err) {
-      console.error("[AlertManager] Exception:", err);
+      logger.error("[AlertManager] Exception:", err);
       return {
         success: false,
         results: {},

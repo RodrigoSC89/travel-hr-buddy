@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { logger } from '@/lib/logger';
 
 type WorkerStatus = "idle" | "processing" | "error";
 
@@ -36,7 +37,7 @@ interface UseWorkerResult<T> {
  *     type: 'SORT_DATA',
  *     payload: { data: items, key: 'name', order: 'asc' }
  *   });
- *   console.log('Sorted:', sorted);
+ *   logger.debug('Sorted:', sorted);
  * };
  * ```
  */

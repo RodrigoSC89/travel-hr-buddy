@@ -6,6 +6,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 export interface HistoricalPrice {
   date: string;
@@ -138,7 +139,7 @@ export function useBunkerPriceHistory(options: UseBunkerPriceHistoryOptions = {}
           availablePorts,
         };
       } catch (err) {
-        console.error("Failed to fetch bunker price history:", err);
+        logger.error("Failed to fetch bunker price history:", err);
         // Return simulated data on error
         return {
           success: false,

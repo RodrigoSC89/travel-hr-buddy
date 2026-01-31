@@ -34,6 +34,7 @@ import {
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface InspectionResult {
   id: string;
@@ -137,7 +138,7 @@ export const MultimodalAIInspection: React.FC = () => {
       setInspections(prev => [completedInspection, ...prev]);
       toast.success('Análise concluída com sucesso!');
     } catch (error) {
-      console.error('Analysis error:', error);
+      logger.error('Analysis error:', error);
       clearInterval(progressInterval);
       
       const failedInspection: InspectionResult = {

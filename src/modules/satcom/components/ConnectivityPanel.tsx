@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Satellite, Signal, Clock, Activity, RefreshCw, AlertCircle } from "lucide-react";
 import { satcomPingService, type SatcomLink, type PingResult } from "../services/ping-service";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export const ConnectivityPanel: React.FC = () => {
   const [links, setLinks] = useState<SatcomLink[]>([]);
@@ -60,7 +61,7 @@ export const ConnectivityPanel: React.FC = () => {
 
       await loadLinks(); // Reload to get updated status
     } catch (error) {
-      console.error("Error pinging links:", error);
+      logger.error("Error pinging links:", error);
       toast.error("Failed to ping satellite links");
     } finally {
       setPinging(false);

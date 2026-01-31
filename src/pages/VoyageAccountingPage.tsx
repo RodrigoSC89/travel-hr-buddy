@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { 
+import { logger } from '@/lib/logger';
   DollarSign, Ship, TrendingUp, Brain, AlertTriangle, CheckCircle, 
   Calendar, Loader2, Plus, BarChart3, PieChart, ArrowUp, ArrowDown,
   Target, Briefcase, Calculator, FileText, RefreshCw
@@ -156,7 +157,7 @@ const VoyageAccountingPage = () => {
         description: `Score de rentabilidade: ${data?.profitability_score || 92}%`,
       });
     } catch (err) {
-      console.error('AI analysis error:', err);
+      logger.error('AI analysis error:', err);
       // Demo fallback
       setAiAnalysis({
         profitability_score: 92,

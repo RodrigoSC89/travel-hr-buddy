@@ -29,6 +29,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // Types
@@ -220,7 +221,7 @@ export function useSpaceWeather(options: UseSpaceWeatherOptions): UseSpaceWeathe
         onError(err);
       }
 
-      console.error('[useSpaceWeather] Error fetching status:', err);
+      logger.error('[useSpaceWeather] Error fetching status:', err);
     } finally {
       setLoading(false);
     }

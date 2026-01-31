@@ -20,6 +20,7 @@ import SonarEngine, { BathymetricData, SonarReading } from "./services/sonarEngi
 import BathymetryExporter from "./services/bathymetryExporter";
 import { sonarPersistenceService } from "./services/sonarPersistenceService";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 /**
  * PATCH 180.0 - Sonar AI & Bathymetric Scanner
@@ -144,7 +145,7 @@ const OceanSonar: React.FC = () => {
     try {
       await exporter.downloadPNG(bathymetricData, `bathymetry-${Date.now()}.png`, 1200, 1200);
     } catch (error) {
-      console.error("Failed to export PNG:", error);
+      logger.error("Failed to export PNG:", error);
     }
   };
 

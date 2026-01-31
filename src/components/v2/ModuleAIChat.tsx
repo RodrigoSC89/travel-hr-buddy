@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   Mic,
   MicOff,
   Volume2,
@@ -226,7 +227,7 @@ export function ModuleAIChat({
       }
 
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error:', error);
       
       const fallbackResponse = `Como assistente de ${moduleName}, posso ajudar com sua pergunta. Por favor, reformule ou consulte a documentação do módulo para mais detalhes.`;
 

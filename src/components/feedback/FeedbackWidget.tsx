@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface FeedbackData {
   type: 'nps' | 'bug' | 'feature';
@@ -131,7 +132,7 @@ export function FeedbackWidget() {
       setIsOpen(false);
 
     } catch (error) {
-      console.error('[Feedback] Error submitting:', error);
+      logger.error('[Feedback] Error submitting:', error);
       toast.error('Erro ao enviar feedback. Tente novamente.');
     } finally {
       setIsSubmitting(false);

@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { customerHealthService } from "@/lib/churn-prediction/customer-health";
+import { logger } from '@/lib/logger';
 
 export interface CustomerHealthMetrics {
   id: string;
@@ -112,7 +113,7 @@ export function useChurnPrediction() {
       if (error) throw error;
 
       // In real implementation, would send email via Edge Function
-      console.log(`Outreach sent to ${organizationId}: ${message}`);
+      logger.debug(`Outreach sent to ${organizationId}: ${message}`);
     }
   });
 

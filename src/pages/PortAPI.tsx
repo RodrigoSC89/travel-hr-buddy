@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Anchor, Ship, Clock, MapPin, RefreshCw, Search, Calendar, Loader2, Waves, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface PortInfo {
   code: string;
@@ -53,7 +54,7 @@ export default function PortAPI() {
         }
       }
     } catch (err) {
-      console.error("Error fetching ports:", err);
+      logger.error("Error fetching ports:", err);
       toast.error("Erro ao carregar portos");
     } finally {
       setIsLoading(false);
@@ -75,7 +76,7 @@ export default function PortAPI() {
         setPortDetails(data.port);
       }
     } catch (err) {
-      console.error("Error fetching port details:", err);
+      logger.error("Error fetching port details:", err);
     }
   };
 

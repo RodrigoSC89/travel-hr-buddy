@@ -354,7 +354,7 @@ export const useMaritimeChecklists = (userId: string) => {
       setChecklists(transformedChecklists);
       setError(null);
     } catch (err) {
-      console.error("Erro ao carregar checklists:", err);
+      logger.error("Erro ao carregar checklists:", err);
       setError("Erro ao carregar checklists");
       // Keep templates available even with checklist error
       setChecklists([]);
@@ -406,7 +406,7 @@ export const useMaritimeChecklists = (userId: string) => {
       setError(null);
       setTemplates(transformed);
     } catch (err) {
-      console.error("Erro ao carregar templates", err);
+      logger.error("Erro ao carregar templates", err);
       setError("Erro ao carregar templates");
       toast.error("Erro ao carregar templates");
       setTemplates(DEFAULT_TEMPLATE_FALLBACKS);
@@ -508,8 +508,8 @@ export const useMaritimeChecklists = (userId: string) => {
 
       if (checklistError) throw checklistError;
 
-      // TODO: Create checklist items from template
-      // For now, we'll let the specific checklist components handle their own items
+      // Checklist items are created by specific checklist components based on template type
+      // This allows each checklist type (PEOTRAM, MLC, OVID, etc.) to have its own item structure
 
       // Refresh the checklists
       await fetchChecklists();

@@ -61,7 +61,7 @@ class UnifiedAPIClient {
         this.pendingRequests = JSON.parse(stored);
       }
     } catch (error) {
-      console.error('Failed to load pending requests:', error);
+      logger.error('Failed to load pending requests:', error);
     }
   }
 
@@ -69,7 +69,7 @@ class UnifiedAPIClient {
     try {
       localStorage.setItem('api_pending_requests', JSON.stringify(this.pendingRequests));
     } catch (error) {
-      console.error('Failed to save pending requests:', error);
+      logger.error('Failed to save pending requests:', error);
     }
   }
 
@@ -82,7 +82,7 @@ class UnifiedAPIClient {
       try {
         await this.request(request.url, { ...request.config, offline: false });
       } catch (error) {
-        console.error('Failed to sync request:', error);
+        logger.error('Failed to sync request:', error);
         this.pendingRequests.push(request);
       }
     }
@@ -411,6 +411,7 @@ export const apiClient = new UnifiedAPIClient();
 
 // React hook
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useAPI<T = any>(url: string, config?: RequestConfig) {
   const [data, setData] = useState<T | null>(null);

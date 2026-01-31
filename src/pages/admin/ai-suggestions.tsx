@@ -89,7 +89,7 @@ const AISuggestionsDashboard: React.FC = () => {
         setSuggestions([]);
       }
     } catch (err) {
-      console.error("Error loading AI suggestions:", err);
+      logger.error("Error loading AI suggestions:", err);
       setSuggestions([]);
     } finally {
       setLoading(false);

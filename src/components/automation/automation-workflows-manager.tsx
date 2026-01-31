@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { logger } from '@/lib/logger';
 
 interface WorkflowStep {
   id: string;
@@ -246,7 +247,7 @@ export const AutomationWorkflowsManager = () => {
       
       toast.success('Sugestões de IA geradas!');
     } catch (error) {
-      console.error("Error getting AI suggestion:", error);
+      logger.error("Error getting AI suggestion:", error);
       setAiSuggestion('Sugestões: 1) Alerta automático quando horímetro atinge limite, 2) Notificação de compliance quando certificado expira em 30 dias, 3) Relatório semanal de performance.');
       toast.success('Sugestões carregadas');
     } finally {

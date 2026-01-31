@@ -28,6 +28,7 @@ import type { Database, Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import {
+import { logger } from '@/lib/logger';
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -167,7 +168,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       // Check for alerts
       await checkAndGenerateAlerts(transformedSensors);
     } catch (error) {
-      console.error("Error loading telemetry:", error);
+      logger.error("Error loading telemetry:", error);
       toast.error("Failed to load telemetry data");
     } finally {
       setLoading(false);
@@ -219,7 +220,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       const { error } = await supabase.from("iot_sensor_data").insert(newReadings);
       if (error) throw error;
     } catch (error) {
-      console.error("Error inserting sensor data:", error);
+      logger.error("Error inserting sensor data:", error);
     }
   }, []);
 

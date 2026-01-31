@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Bundle Size Analyzer Utilities
  * Helps identify and optimize large dependencies
@@ -185,21 +187,21 @@ export function getCriticalDependencies(): string[] {
 export function logBundleAnalysis(): void {
   console.group("📦 Bundle Size Analysis");
   
-  console.log("\n🔴 Heavy Dependencies (should lazy load):");
+  logger.debug("\n🔴 Heavy Dependencies (should lazy load):");
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "heavy")
-    .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize}`));
+    .forEach(d => logger.debug(`  - ${d.name}: ${d.estimatedSize}`));
   
-  console.log("\n🟡 Medium Dependencies:");
+  logger.debug("\n🟡 Medium Dependencies:");
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "medium")
-    .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize}`));
+    .forEach(d => logger.debug(`  - ${d.name}: ${d.estimatedSize}`));
   
-  console.log("\n✅ Recommendations:");
-  getBundleOptimizationRecommendations().forEach(r => console.log(`  ${r}`));
+  logger.debug("\n✅ Recommendations:");
+  getBundleOptimizationRecommendations().forEach(r => logger.debug(`  ${r}`));
   
   const savings = calculatePotentialSavings();
-  console.log(`\n💰 Potential Savings: ${savings.total}`);
+  logger.debug(`\n💰 Potential Savings: ${savings.total}`);
   
   console.groupEnd();
 }

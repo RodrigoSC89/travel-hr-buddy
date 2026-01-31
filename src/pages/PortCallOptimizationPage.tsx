@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format, addHours, differenceInHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { 
+import { logger } from '@/lib/logger';
   Anchor, Ship, Clock, Brain, AlertTriangle, CheckCircle, 
   Calendar, MapPin, Loader2, RefreshCw, Plus, FileText,
   DollarSign, Navigation, Users, Truck, FileCheck, Timer,
@@ -142,7 +143,7 @@ const PortCallOptimizationPage = () => {
         description: `Economia potencial: $${data?.cost_savings?.toLocaleString() || "12,500"}`,
       });
     } catch (err) {
-      console.error('AI optimization error:', err);
+      logger.error('AI optimization error:', err);
       // Demo fallback
       setAiOptimization({
         optimal_arrival: new Date(Date.now() + 50 * 60 * 60 * 1000).toISOString(),

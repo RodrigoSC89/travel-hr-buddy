@@ -32,6 +32,7 @@ import {
   FileText
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface ModuleScore {
   key: string;
@@ -100,7 +101,7 @@ export default function InteractivityScoreboard() {
         setReport(getDefaultReport());
       }
     } catch (error) {
-      console.warn("Could not load scores, using defaults");
+      logger.warn("Could not load scores, using defaults");
       setReport(getDefaultReport());
     } finally {
       setLoading(false);

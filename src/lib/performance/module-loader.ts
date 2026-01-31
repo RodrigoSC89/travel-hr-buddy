@@ -110,7 +110,7 @@ class ModuleLoader {
       const module = await import(/* @vite-ignore */ config.path);
       return module;
     } catch (e) {
-      console.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
+      logger.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
       throw e;
     }
   }

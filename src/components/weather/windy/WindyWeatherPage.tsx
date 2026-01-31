@@ -50,6 +50,7 @@ import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
 import { downloadWeatherComparisonPDF, shareWeatherComparison } from "@/lib/pdf/weather-comparison-pdf";
 import { openMeteoService } from "@/services/weather/open-meteo.service";
 import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange, CurrentWeather, DailyForecast } from "./types";
+import { logger } from '@/lib/logger';
 
 // Popular Brazilian cities for alerts
 const POPULAR_CITIES: WeatherLocation[] = [
@@ -124,7 +125,7 @@ export const WindyWeatherPage: React.FC = () => {
       const savedRecent = localStorage.getItem('weather_recent');
       if (savedRecent) setRecentSearches(JSON.parse(savedRecent));
     } catch (e) {
-      console.error('Failed to load saved locations:', e);
+      logger.error('Failed to load saved locations:', e);
     }
   }, []);
 
@@ -182,7 +183,7 @@ export const WindyWeatherPage: React.FC = () => {
           
           newData.set(city.id, { current, daily });
         } catch (err) {
-          console.error(`Failed to fetch data for ${city.name}:`, err);
+          logger.error(`Failed to fetch data for ${city.name}:`, err);
         }
       }
       
@@ -265,7 +266,7 @@ export const WindyWeatherPage: React.FC = () => {
         description: "O relatório foi baixado com sucesso"
       });
     } catch (err) {
-      console.error('PDF export failed:', err);
+      logger.error('PDF export failed:', err);
       toast({
         title: "Erro ao exportar",
         description: "Falha ao gerar o PDF",
@@ -416,7 +417,7 @@ export const WindyWeatherPage: React.FC = () => {
                 variant={isChatOpen ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  console.log('[WeatherChat] Toggle chat:', !isChatOpen);
+                  logger.debug('[WeatherChat] Toggle chat:', !isChatOpen);
                   setIsChatOpen(!isChatOpen);
                 }}
                 className={`transition-all duration-200 ${isChatOpen ? "bg-primary ring-2 ring-primary/50" : "border-white/20 text-white hover:bg-white/10"}`}
@@ -687,7 +688,7 @@ export const WindyWeatherPage: React.FC = () => {
               marine={marineData}
               isOpen={isChatOpen}
               onClose={() => {
-                console.log('[WeatherChat] Closing desktop chat');
+                logger.debug('[WeatherChat] Closing desktop chat');
                 setIsChatOpen(false);
               }}
             />
@@ -700,7 +701,7 @@ export const WindyWeatherPage: React.FC = () => {
             <div 
               className="absolute inset-0 bg-black/70 backdrop-blur-sm" 
               onClick={() => {
-                console.log('[WeatherChat] Closing mobile chat via overlay');
+                logger.debug('[WeatherChat] Closing mobile chat via overlay');
                 setIsChatOpen(false);
               }} 
             />
@@ -712,7 +713,7 @@ export const WindyWeatherPage: React.FC = () => {
                 marine={marineData}
                 isOpen={isChatOpen}
                 onClose={() => {
-                  console.log('[WeatherChat] Closing mobile chat');
+                  logger.debug('[WeatherChat] Closing mobile chat');
                   setIsChatOpen(false);
                 }}
               />

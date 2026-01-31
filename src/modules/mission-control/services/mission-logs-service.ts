@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface MissionLog {
   id?: string;
@@ -45,7 +46,7 @@ export class MissionLogsService {
       if (error) throw error;
       return this.mapToLog(data);
     } catch (error) {
-      console.error("Error creating mission log:", error);
+      logger.error("Error creating mission log:", error);
       throw error;
     }
   }
@@ -71,7 +72,7 @@ export class MissionLogsService {
       if (error) throw error;
       return this.mapToLog(data);
     } catch (error) {
-      console.error("Error updating mission log:", error);
+      logger.error("Error updating mission log:", error);
       throw error;
     }
   }
@@ -85,7 +86,7 @@ export class MissionLogsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting mission log:", error);
+      logger.error("Error deleting mission log:", error);
       throw error;
     }
   }
@@ -112,7 +113,7 @@ export class MissionLogsService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error("Error fetching mission logs:", error);
+      logger.error("Error fetching mission logs:", error);
       return [];
     }
   }
@@ -128,7 +129,7 @@ export class MissionLogsService {
       if (error) throw error;
       return data ? this.mapToLog(data) : null;
     } catch (error) {
-      console.error("Error fetching mission log:", error);
+      logger.error("Error fetching mission log:", error);
       return null;
     }
   }

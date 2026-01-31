@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface ActionButtonProps extends Omit<ButtonProps, "onClick"> {
   action: () => Promise<any> | void;
@@ -43,7 +44,7 @@ export function ActionButton({
       }
       return result;
     } catch (error) {
-      console.error("ActionButton error:", error);
+      logger.error("ActionButton error:", error);
       toast.error(errorMessage);
     } finally {
       setLoading(false);

@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * PATCH 626 - External Data Integrator
  * Integração com Fontes Externas de Dados Reais
@@ -123,7 +125,7 @@ export class TravelAPIClient {
       const skyscannerResults = await this.searchSkyscanner(params);
       results.push(...skyscannerResults);
     } catch (error) {
-      console.error('Skyscanner API error:', error);
+      logger.error('Skyscanner API error:', error);
     }
 
     try {
@@ -131,7 +133,7 @@ export class TravelAPIClient {
       const googleResults = await this.searchGoogleFlights(params);
       results.push(...googleResults);
     } catch (error) {
-      console.error('Google Flights API error:', error);
+      logger.error('Google Flights API error:', error);
     }
 
     try {
@@ -139,7 +141,7 @@ export class TravelAPIClient {
       const brazilianResults = await this.searchBrazilianAirlines(params);
       results.push(...brazilianResults);
     } catch (error) {
-      console.error('Brazilian airlines API error:', error);
+      logger.error('Brazilian airlines API error:', error);
     }
 
     // Sort by price
@@ -164,7 +166,7 @@ export class TravelAPIClient {
       const bookingResults = await this.searchBooking(params);
       results.push(...bookingResults);
     } catch (error) {
-      console.error('Booking.com API error:', error);
+      logger.error('Booking.com API error:', error);
     }
 
     try {
@@ -172,7 +174,7 @@ export class TravelAPIClient {
       const hoteisResults = await this.searchHoteisCom(params);
       results.push(...hoteisResults);
     } catch (error) {
-      console.error('Hoteis.com API error:', error);
+      logger.error('Hoteis.com API error:', error);
     }
 
     try {
@@ -180,7 +182,7 @@ export class TravelAPIClient {
       const airbnbResults = await this.searchAirbnb(params);
       results.push(...airbnbResults);
     } catch (error) {
-      console.error('Airbnb API error:', error);
+      logger.error('Airbnb API error:', error);
     }
 
     // Sort by rating and price
@@ -386,7 +388,7 @@ export class METARParser {
       const rawMETAR = await this.fetchRawMETAR(station);
       return this.parseMETAR(rawMETAR, station);
     } catch (error) {
-      console.error('Error fetching METAR:', error);
+      logger.error('Error fetching METAR:', error);
       return null;
     }
   }
@@ -471,7 +473,7 @@ export class PortStateClient {
       const data = await this.fetchIMOData(imo);
       return data;
     } catch (error) {
-      console.error('Error fetching port state data:', error);
+      logger.error('Error fetching port state data:', error);
       return null;
     }
   }
@@ -542,7 +544,7 @@ export class NewsScrapingService {
       // Mock implementation - replace with real scraping/API
       return await this.mockNewsSearch(query, categories);
     } catch (error) {
-      console.error('Error searching news:', error);
+      logger.error('Error searching news:', error);
       return [];
     }
   }

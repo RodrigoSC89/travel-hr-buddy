@@ -26,6 +26,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface VoiceMessage {
   id: string;
@@ -80,7 +81,7 @@ export function PeodpVoiceChat() {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
       };
@@ -172,7 +173,7 @@ export function PeodpVoiceChat() {
         speak(data.response.substring(0, 500)); // Limit speech length
       }
     } catch (error) {
-      console.error("Voice chat error:", error);
+      logger.error("Voice chat error:", error);
       toast.error("Erro ao processar pergunta");
       
       const errorMessage: VoiceMessage = {

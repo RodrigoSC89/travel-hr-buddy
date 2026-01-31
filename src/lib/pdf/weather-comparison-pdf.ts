@@ -7,6 +7,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { WeatherLocation, CurrentWeather, DailyForecast } from '@/components/weather/windy/types';
+import { logger } from '@/lib/logger';
 
 interface CityComparisonData {
   location: WeatherLocation;
@@ -316,7 +317,7 @@ export async function shareWeatherComparison(
       return true;
     }
   } catch (e) {
-    console.error('Share failed:', e);
+    logger.error('Share failed:', e);
     return false;
   }
 }

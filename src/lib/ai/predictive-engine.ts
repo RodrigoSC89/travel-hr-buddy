@@ -10,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface PredictiveRecommendation {
   id: string;
@@ -117,7 +118,7 @@ export async function generateMaintenancePredictions(): Promise<PredictiveRecomm
     }
 
   } catch (error) {
-    console.error('[PredictiveEngine] Error generating maintenance predictions:', error);
+    logger.error('[PredictiveEngine] Error generating maintenance predictions:', error);
   }
   
   return recommendations;
@@ -197,7 +198,7 @@ export async function analyzeCrewTrainingGaps(): Promise<PredictiveRecommendatio
     }
 
   } catch (error) {
-    console.error('[PredictiveEngine] Error analyzing crew training gaps:', error);
+    logger.error('[PredictiveEngine] Error analyzing crew training gaps:', error);
   }
   
   return recommendations;
@@ -269,7 +270,7 @@ export async function analyzeComplianceRisks(): Promise<PredictiveRecommendation
     }
 
   } catch (error) {
-    console.error('[PredictiveEngine] Error analyzing compliance risks:', error);
+    logger.error('[PredictiveEngine] Error analyzing compliance risks:', error);
   }
   
   return recommendations;

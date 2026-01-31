@@ -34,6 +34,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import jsPDF from "jspdf";
 import { 
+import { logger } from '@/lib/logger';
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart as RechartsPie, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from "recharts";
@@ -301,7 +302,7 @@ export default function OperationsCommandCenter() {
         toast({ title: "Dados atualizados", description: "O dashboard foi atualizado com os dados mais recentes." });
       }
     } catch (err) {
-      console.error("Error fetching data:", err);
+      logger.error("Error fetching data:", err);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

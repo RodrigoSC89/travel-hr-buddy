@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
 // PATCH 653 - Lazy loading for jsPDF
 import React, { useState, useEffect } from "react";
@@ -20,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { FileDown, PenTool, Plus, CheckCircle } from "lucide-react";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadPDFLibs = async () => {
@@ -105,7 +105,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       
       if (actionData) setCorrectiveActions(actionData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
     }
   };
 
@@ -128,7 +128,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "A assinatura foi registrada com sucesso"
       });
     } catch (error) {
-      console.error("Error saving signature:", error);
+      logger.error("Error saving signature:", error);
       // Continue without database if it fails
       setSignatures([...signatures, signatureData]);
       toast({
@@ -166,7 +166,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "Ação corretiva registrada"
       });
     } catch (error) {
-      console.error("Error adding action:", error);
+      logger.error("Error adding action:", error);
       // Continue without database if it fails
       setCorrectiveActions([...correctiveActions, newAction]);
       setNewAction({ action_description: "", assigned_to: "", due_date: "", status: "pending" });
@@ -197,7 +197,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: `Status alterado para: ${newStatus}`
       });
     } catch (error) {
-      console.error("Error updating status:", error);
+      logger.error("Error updating status:", error);
       setCurrentStatus(newStatus);
       toast({
         title: "Status atualizado",
@@ -307,7 +307,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
               doc.addImage(sig.signature_image, "PNG", 14, yPos, 80, 30);
               yPos += 35;
             } catch (err) {
-              console.error("Error adding signature image:", err);
+              logger.error("Error adding signature image:", err);
             }
           }
           
@@ -323,7 +323,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "Download iniciado"
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",

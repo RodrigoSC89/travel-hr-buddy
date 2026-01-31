@@ -2,7 +2,6 @@
  * PATCH 851 - Document Editor Component
  * @ts-nocheck - Required: document_versions table uses dynamic schema
  */
-// @ts-nocheck
 "use client";
 
 import * as React from "react";

@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 export interface AIDecisionDB {
   id: string;
@@ -77,7 +78,7 @@ export function useAIDecisionsSupabase() {
       if (fetchError) throw fetchError;
       setDecisions((data || []) as unknown as AIDecisionDB[]);
     } catch (err) {
-      console.error('Error fetching AI decisions:', err);
+      logger.error('Error fetching AI decisions:', err);
       setError('Erro ao carregar decisões da IA');
     }
   }, []);
@@ -92,7 +93,7 @@ export function useAIDecisionsSupabase() {
       if (fetchError) throw fetchError;
       setConfigurations((data || []) as unknown as AIConfigurationDB[]);
     } catch (err) {
-      console.error('Error fetching AI configurations:', err);
+      logger.error('Error fetching AI configurations:', err);
     }
   }, []);
 
@@ -108,7 +109,7 @@ export function useAIDecisionsSupabase() {
       if (fetchError) throw fetchError;
       setMetrics((data || []) as unknown as AILearningMetricDB[]);
     } catch (err) {
-      console.error('Error fetching AI metrics:', err);
+      logger.error('Error fetching AI metrics:', err);
     }
   }, []);
 
@@ -147,7 +148,7 @@ export function useAIDecisionsSupabase() {
       await fetchDecisions();
       return data;
     } catch (err) {
-      console.error('Error creating AI decision:', err);
+      logger.error('Error creating AI decision:', err);
       toast({
         title: "Erro",
         description: "Falha ao criar decisão",
@@ -187,7 +188,7 @@ export function useAIDecisionsSupabase() {
       await fetchDecisions();
       return true;
     } catch (err) {
-      console.error('Error updating AI decision:', err);
+      logger.error('Error updating AI decision:', err);
       toast({
         title: "Erro",
         description: "Falha ao atualizar decisão",
@@ -225,7 +226,7 @@ export function useAIDecisionsSupabase() {
       await fetchDecisions();
       return true;
     } catch (err) {
-      console.error('Error providing feedback:', err);
+      logger.error('Error providing feedback:', err);
       return false;
     }
   }, [fetchDecisions, toast]);
@@ -251,7 +252,7 @@ export function useAIDecisionsSupabase() {
       await fetchConfigurations();
       return true;
     } catch (err) {
-      console.error('Error updating configuration:', err);
+      logger.error('Error updating configuration:', err);
       toast({
         title: "Erro",
         description: "Falha ao salvar configuração",

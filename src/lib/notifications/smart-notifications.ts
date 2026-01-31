@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export type NotificationPriority = 'urgent' | 'high' | 'normal' | 'low';
 export type NotificationCategory = 
@@ -263,7 +264,7 @@ class SmartNotificationManager {
         native.close();
       };
     } catch (error) {
-      console.error('Failed to show native notification:', error);
+      logger.error('Failed to show native notification:', error);
     }
   }
 

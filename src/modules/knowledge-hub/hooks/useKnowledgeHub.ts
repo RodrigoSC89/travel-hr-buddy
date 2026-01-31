@@ -8,6 +8,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { 
+import { logger } from '@/lib/logger';
   KnowledgeDocument, 
   DocumentType, 
   DocumentCategory,
@@ -79,7 +80,7 @@ export function useKnowledgeHub() {
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.error('Error fetching knowledge documents:', error);
+        logger.error('Error fetching knowledge documents:', error);
         return [];
       }
       
@@ -289,7 +290,7 @@ export function useKnowledgeHub() {
         body: { documentId },
       });
     } catch (error) {
-      console.error('Failed to trigger AI processing:', error);
+      logger.error('Failed to trigger AI processing:', error);
     }
   };
 

@@ -37,6 +37,7 @@ import { format, isToday, isYesterday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface ChatMessage {
   id: string;
@@ -136,10 +137,10 @@ export function CollaborativeChat() {
         setOnlineUsers(users);
       })
       .on("presence", { event: "join" }, ({ newPresences }) => {
-        console.log("User joined:", newPresences);
+        logger.debug("User joined:", newPresences);
       })
       .on("presence", { event: "leave" }, ({ leftPresences }) => {
-        console.log("User left:", leftPresences);
+        logger.debug("User left:", leftPresences);
       })
       .subscribe(async (status) => {
         if (status === "SUBSCRIBED") {

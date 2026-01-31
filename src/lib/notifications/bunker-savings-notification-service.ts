@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Bunker Savings Notification Service
  * Sends push notifications when savings opportunities exceed $10k
@@ -30,10 +32,10 @@ class BunkerSavingsNotificationService {
       if ("Notification" in window && Notification.permission === "default") {
         await Notification.requestPermission();
       }
-      console.log("BunkerSavingsNotificationService initialized");
+      logger.debug("BunkerSavingsNotificationService initialized");
       return true;
     } catch (error) {
-      console.error("Failed to initialize BunkerSavingsNotificationService", error);
+      logger.error("Failed to initialize BunkerSavingsNotificationService", error);
       return false;
     }
   }
@@ -90,7 +92,7 @@ class BunkerSavingsNotificationService {
       };
       return true;
     } catch (error) {
-      console.error("Failed to send bunker notification", error);
+      logger.error("Failed to send bunker notification", error);
       return false;
     }
   }

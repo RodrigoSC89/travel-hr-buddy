@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 482 - Template PDF Renderer Service
  * Renders templates to PDF with placeholder substitution and workspace_files storage
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface PDFRenderOptions {
   orientation?: "portrait" | "landscape";
@@ -134,7 +134,7 @@ export class TemplatePDFRenderer {
         documentId: renderedDoc.id
       };
     } catch (error) {
-      console.error("Error rendering template to PDF:", error);
+      logger.error("Error rendering template to PDF:", error);
       throw error;
     }
   }
@@ -177,7 +177,7 @@ Settings:
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error("Error fetching rendered document:", error);
+      logger.error("Error fetching rendered document:", error);
       throw error;
     }
   }
@@ -213,7 +213,7 @@ Settings:
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error listing rendered documents:", error);
+      logger.error("Error listing rendered documents:", error);
       throw error;
     }
   }
@@ -240,7 +240,7 @@ Settings:
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting rendered document:", error);
+      logger.error("Error deleting rendered document:", error);
       throw error;
     }
   }

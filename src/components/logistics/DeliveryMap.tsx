@@ -41,7 +41,7 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
     if (!mapContainer.current || map.current) return;
 
     if (!MAPBOX_TOKEN) {
-      console.error("Mapbox token is required for map functionality");
+      logger.error("Mapbox token is required for map functionality");
       setIsLoading(false);
       return;
     }
@@ -73,7 +73,7 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
           }
         });
       } catch (error) {
-        console.error("Error initializing map:", error);
+        logger.error("Error initializing map:", error);
         if (mounted) setIsLoading(false);
       }
     };

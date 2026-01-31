@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 484 - Price Alerts Service
  * Monitor prices, create alerts, and send multi-channel notifications
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface PriceAlert {
   id: string;
@@ -72,7 +72,7 @@ export class PriceAlertsService {
       if (error) throw error;
       return data.id;
     } catch (error) {
-      console.error("Error creating price alert:", error);
+      logger.error("Error creating price alert:", error);
       throw error;
     }
   }
@@ -114,7 +114,7 @@ export class PriceAlertsService {
         updatedAt: a.updated_at
       }));
     } catch (error) {
-      console.error("Error fetching price alerts:", error);
+      logger.error("Error fetching price alerts:", error);
       throw error;
     }
   }
@@ -154,7 +154,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error updating price alert:", error);
+      logger.error("Error updating price alert:", error);
       throw error;
     }
   }
@@ -171,7 +171,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting price alert:", error);
+      logger.error("Error deleting price alert:", error);
       throw error;
     }
   }
@@ -215,7 +215,7 @@ export class PriceAlertsService {
 
       return false;
     } catch (error) {
-      console.error("Error checking price:", error);
+      logger.error("Error checking price:", error);
       throw error;
     }
   }
@@ -267,7 +267,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error creating notification:", error);
+      logger.error("Error creating notification:", error);
       throw error;
     }
   }
@@ -315,7 +315,7 @@ export class PriceAlertsService {
         sentAt: n.sent_at
       }));
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      logger.error("Error fetching notifications:", error);
       throw error;
     }
   }
@@ -335,7 +335,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      logger.error("Error marking notification as read:", error);
       throw error;
     }
   }
@@ -352,7 +352,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error dismissing notification:", error);
+      logger.error("Error dismissing notification:", error);
       throw error;
     }
   }
@@ -378,7 +378,7 @@ export class PriceAlertsService {
         checkedAt: h.checked_at
       }));
     } catch (error) {
-      console.error("Error fetching price history:", error);
+      logger.error("Error fetching price history:", error);
       throw error;
     }
   }
@@ -440,7 +440,7 @@ export class PriceAlertsService {
         targetReached
       };
     } catch (error) {
-      console.error("Error calculating price trends:", error);
+      logger.error("Error calculating price trends:", error);
       throw error;
     }
   }

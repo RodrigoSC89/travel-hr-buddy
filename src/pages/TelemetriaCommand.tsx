@@ -42,6 +42,7 @@ import { useTelemetryAI, TelemetrySensorData, TelemetryInsight } from "@/hooks/u
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { logger } from '@/lib/logger';
 
 interface TelemetryLog {
   id: string;
@@ -111,7 +112,7 @@ export default function TelemetriaCommand() {
         setAlerts(alertsRes.data as TelemetryAlert[]);
       }
     } catch (error) {
-      console.error("Error fetching telemetry:", error);
+      logger.error("Error fetching telemetry:", error);
     } finally {
       setLoading(false);
     }

@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
+import { logger } from '@/lib/logger';
   registerVesselInStarFix,
   fetchStarFixInspections,
   getStarFixPerformanceMetrics,
@@ -181,7 +182,7 @@ export function useStarFix(vesselId?: string) {
       setSyncStatus(status);
       return status;
     } catch (error) {
-      console.error('Error refreshing sync status:', error);
+      logger.error('Error refreshing sync status:', error);
       return syncStatus;
     }
   };

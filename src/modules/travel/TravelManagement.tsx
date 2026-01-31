@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 298: Travel Management Component
  * Multi-leg itinerary display with conflict detection and PDF export
@@ -31,6 +30,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -151,7 +151,7 @@ const TravelManagement = () => {
       setItineraries(data || []);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading itineraries:", errorMessage);
+      logger.error("Error loading itineraries:", errorMessage);
       toast({
         title: "Error loading itineraries",
         description: errorMessage,
@@ -175,7 +175,7 @@ const TravelManagement = () => {
       setConflicts(data || []);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      console.error("Error loading conflicts:", errorMessage);
+      logger.error("Error loading conflicts:", errorMessage);
     }
   };
 

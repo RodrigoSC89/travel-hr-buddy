@@ -30,6 +30,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface CreateAuditDialogProps {
   open: boolean;
@@ -96,7 +97,7 @@ export function CreateAuditDialog({
       setFormData({ auditType: 'internal' });
       setScheduledDate(undefined);
     } catch (error) {
-      console.error('Error creating audit:', error);
+      logger.error('Error creating audit:', error);
       toast.error('Erro ao criar auditoria');
     } finally {
       setLoading(false);

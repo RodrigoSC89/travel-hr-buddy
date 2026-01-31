@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { 
+import { logger } from '@/lib/logger';
   MapPin, 
   Navigation, 
   Ship, 
@@ -150,7 +151,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
       });
 
     } catch (error) {
-      console.error("Mapbox init error:", error);
+      logger.error("Mapbox init error:", error);
       setIsLoading(false);
     }
 

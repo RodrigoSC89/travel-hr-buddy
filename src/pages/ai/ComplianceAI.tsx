@@ -27,6 +27,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface ComplianceItem {
   id: string;
@@ -175,7 +176,7 @@ Formate a resposta em markdown estruturado.`,
         description: "Verificação de compliance atualizada.",
       });
     } catch (error) {
-      console.error("Error analyzing compliance:", error);
+      logger.error("Error analyzing compliance:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar o compliance. Tente novamente.",

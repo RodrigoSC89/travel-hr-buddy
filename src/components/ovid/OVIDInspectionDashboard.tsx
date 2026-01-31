@@ -34,6 +34,7 @@ import { OVIDInspectionComparison } from './OVIDInspectionComparison';
 import { OVIDHistoricalEvolution } from './OVIDHistoricalEvolution';
 import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
 import { useOVIDInspection } from '@/hooks/useOVIDInspection';
+import { logger } from '@/lib/logger';
 
 interface InspectionStatus {
   compliant: number;
@@ -107,7 +108,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         toast.success('Inspeção OVID criada e salva no banco');
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       toast.error('Erro ao criar inspeção');
     } finally {
       setIsCreating(false);
@@ -125,7 +126,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       setActiveTab('checklist');
       toast.success('Inspeção retomada com sucesso');
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       toast.error('Erro ao carregar inspeção');
     } finally {
       setIsCreating(false);

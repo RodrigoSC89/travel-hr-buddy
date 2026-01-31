@@ -6,6 +6,7 @@
 
 import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
 import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 // Thresholds based on Google's recommendations
 const THRESHOLDS = {
@@ -70,7 +71,7 @@ const handleVital = (metric: Metric) => {
   if (import.meta.env.DEV) {
     const color = report.rating === 'good' ? '🟢' : 
                   report.rating === 'needs-improvement' ? '🟡' : '🔴';
-    console.log(`${color} ${report.name}: ${report.value.toFixed(2)} (${report.rating})`);
+    logger.debug(`${color} ${report.name}: ${report.value.toFixed(2)} (${report.rating})`);
   }
   
   // Schedule flush
@@ -94,7 +95,7 @@ const flushVitals = async () => {
   
   // Skip sending in development
   if (import.meta.env.DEV) {
-    console.log('[Web Vitals] Would send:', vitalsToSend);
+    logger.debug('[Web Vitals] Would send:', vitalsToSend);
     return;
   }
   

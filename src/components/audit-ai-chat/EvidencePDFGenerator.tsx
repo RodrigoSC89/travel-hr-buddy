@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { Message } from "./AuditAIChatPage";
 import html2pdf from "html2pdf.js";
+import { logger } from '@/lib/logger';
 
 interface EvidencePDFGeneratorProps {
   message: Message;
@@ -188,7 +189,7 @@ export function EvidencePDFGenerator({ message, module, onClose }: EvidencePDFGe
       toast.success("PDF de evidência gerado com sucesso!");
       onClose();
     } catch (error) {
-      console.error('PDF generation error:', error);
+      logger.error('PDF generation error:', error);
       toast.error("Erro ao gerar PDF. Tente novamente.");
     } finally {
       setIsGenerating(false);

@@ -46,6 +46,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import type { ComplianceTraining, TrainingMatrix } from '../types';
+import { logger } from '@/lib/logger';
 
 interface TrainingMatrixPanelProps {
   trainings: ComplianceTraining[];
@@ -108,7 +109,7 @@ export function TrainingMatrixPanel({
       const recommendation = await onGenerateRecommendations(crewMemberId);
       setRecommendations((prev) => ({ ...prev, [crewMemberId]: recommendation }));
     } catch (error) {
-      console.error('Error generating recommendation:', error);
+      logger.error('Error generating recommendation:', error);
     } finally {
       setLoadingRecommendation(null);
     }

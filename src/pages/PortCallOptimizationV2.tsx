@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Anchor, Brain, Clock, AlertTriangle, Plus, Download, RefreshCw, 
   TrendingUp, CheckCircle, Ship, MapPin, Navigation, Timer, Calendar,
   Loader2, Edit, Trash2
@@ -105,7 +106,7 @@ export default function PortCallOptimizationV2() {
         ]);
       }
     } catch (error) {
-      console.error("Error loading port calls:", error);
+      logger.error("Error loading port calls:", error);
     } finally {
       setLoading(false);
     }

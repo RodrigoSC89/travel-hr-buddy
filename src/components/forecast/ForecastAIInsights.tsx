@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle } from "lucide-react";
+import { logger } from '@/lib/logger';
 let ort: any = null;
 const loadORT = async () => {
   if (!ort) {
@@ -22,7 +23,7 @@ export default function ForecastAIInsights() {
         const value = output.result.data[0];
         setPrediction(typeof value === 'bigint' ? Number(value) : value);
       } catch (err) {
-        console.error("AI Forecast Error:", err);
+        logger.error("AI Forecast Error:", err);
         setPrediction("Erro na previsão IA");
       }
     }

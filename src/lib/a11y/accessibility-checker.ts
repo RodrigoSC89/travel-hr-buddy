@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Accessibility Checker
  * NAUTI ONE v4.0 - WCAG 2.1 AA Compliance
@@ -363,9 +365,9 @@ export function logA11yReport(report: A11yReport): void {
   const badge = getA11yScoreBadge(report.score);
   
   console.group(`♿ Accessibility Report - Score: ${report.score}% (${badge.grade})`);
-  console.log(`Page: ${report.pageUrl}`);
-  console.log(`Timestamp: ${report.timestamp}`);
-  console.log(`Passed: ${report.passed} | Failed: ${report.failed} | Warnings: ${report.warnings}`);
+  logger.debug(`Page: ${report.pageUrl}`);
+  logger.debug(`Timestamp: ${report.timestamp}`);
+  logger.debug(`Passed: ${report.passed} | Failed: ${report.failed} | Warnings: ${report.warnings}`);
   
   if (report.issues.length > 0) {
     console.group('Issues:');
@@ -373,9 +375,9 @@ export function logA11yReport(report: A11yReport): void {
       const icon = issue.impact === 'critical' ? '🔴' : 
                    issue.impact === 'serious' ? '🟠' :
                    issue.impact === 'moderate' ? '🟡' : '🟢';
-      console.log(`${icon} [${issue.impact.toUpperCase()}] ${issue.description}`);
-      console.log(`   WCAG: ${issue.wcagCriteria.join(', ')}`);
-      if (issue.fix) console.log(`   Fix: ${issue.fix}`);
+      logger.debug(`${icon} [${issue.impact.toUpperCase()}] ${issue.description}`);
+      logger.debug(`   WCAG: ${issue.wcagCriteria.join(', ')}`);
+      if (issue.fix) logger.debug(`   Fix: ${issue.fix}`);
     });
     console.groupEnd();
   }

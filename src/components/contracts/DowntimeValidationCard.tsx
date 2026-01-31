@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ValidationResult {
   is_valid: boolean;
@@ -53,7 +54,7 @@ export function DowntimeValidationCard({ downtimeId, onValidationComplete }: Pro
         toast.success('Validação concluída!');
       }
     } catch (err) {
-      console.error('Validation error:', err);
+      logger.error('Validation error:', err);
       toast.error('Erro na validação. Tente novamente.');
     } finally {
       setLoading(false);

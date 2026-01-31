@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface LoginAttempt {
   userId?: string;
@@ -175,7 +176,7 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
       remainingAttempts: FAIL2BAN_CONFIG.maxAttempts - window.attempts.length,
     };
   } catch (error) {
-    console.error("Fail2ban logging error:", error);
+    logger.error("Fail2ban logging error:", error);
     // Don't block on logging errors
     return { blocked: false };
   }

@@ -74,7 +74,7 @@ class OPFSManager {
         this.fileIndex = new Map(Object.entries(parsed));
       }
     } catch (error) {
-      console.error('Failed to load OPFS index:', error);
+      logger.error('Failed to load OPFS index:', error);
     }
   }
 
@@ -83,7 +83,7 @@ class OPFSManager {
       const obj = Object.fromEntries(this.fileIndex);
       localStorage.setItem(INDEX_KEY, JSON.stringify(obj));
     } catch (error) {
-      console.error('Failed to save OPFS index:', error);
+      logger.error('Failed to save OPFS index:', error);
     }
   }
 
@@ -106,7 +106,7 @@ class OPFSManager {
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Failed to initialize OPFS:', error);
+      logger.error('Failed to initialize OPFS:', error);
       return false;
     }
   }
@@ -204,7 +204,7 @@ class OPFSManager {
 
       return fileInfo;
     } catch (error) {
-      console.error('Failed to store file in OPFS:', error);
+      logger.error('Failed to store file in OPFS:', error);
       return null;
     }
   }
@@ -237,7 +237,7 @@ class OPFSManager {
 
       return await file.arrayBuffer();
     } catch (error) {
-      console.error('Failed to retrieve file from OPFS:', error);
+      logger.error('Failed to retrieve file from OPFS:', error);
       return null;
     }
   }
@@ -263,7 +263,7 @@ class OPFSManager {
       
       return true;
     } catch (error) {
-      console.error('Failed to delete file from OPFS:', error);
+      logger.error('Failed to delete file from OPFS:', error);
       return false;
     }
   }
@@ -360,7 +360,7 @@ class OPFSManager {
 
       return result !== null;
     } catch (error) {
-      console.error('Failed to move file between tiers:', error);
+      logger.error('Failed to move file between tiers:', error);
       return false;
     }
   }

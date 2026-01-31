@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { logger } from '@/lib/logger';
 
 export interface SystemModule {
   id: string;
@@ -110,7 +111,7 @@ export function useModuleAccess(): ModuleAccessState {
         metadata: { timestamp: new Date().toISOString() }
       });
     } catch (error) {
-      console.error('Failed to track module usage:', error);
+      logger.error('Failed to track module usage:', error);
     }
   };
 

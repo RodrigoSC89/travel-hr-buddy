@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mic, MicOff, Copy, Trash2, Volume2, StopCircle, Play, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export default function VoiceTranscriber() {
   const [isRecording, setIsRecording] = useState(false);
@@ -55,7 +56,7 @@ export default function VoiceTranscriber() {
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
+      logger.error("Speech recognition error:", event.error);
       if (event.error === "not-allowed") {
         toast.error("Permissão de microfone negada");
       } else {

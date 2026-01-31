@@ -98,7 +98,7 @@ class ONNXRuntime {
   async loadModel(modelKey: string): Promise<boolean> {
     const config = MARITIME_MODELS[modelKey];
     if (!config) {
-      console.error(`Unknown model: ${modelKey}`);
+      logger.error(`Unknown model: ${modelKey}`);
       return false;
     }
 
@@ -124,10 +124,10 @@ class ONNXRuntime {
         });
 
         this.sessions.set(modelKey, session);
-        console.log(`Model loaded: ${config.name}`);
+        logger.debug(`Model loaded: ${config.name}`);
         return session;
       } catch (error) {
-        console.error(`Failed to load model ${modelKey}:`, error);
+        logger.error(`Failed to load model ${modelKey}:`, error);
         throw error;
       } finally {
         this.loadingPromises.delete(modelKey);
@@ -153,7 +153,7 @@ class ONNXRuntime {
   ): Promise<InferenceResult<T> | null> {
     const config = MARITIME_MODELS[modelKey];
     if (!config) {
-      console.error(`Unknown model: ${modelKey}`);
+      logger.error(`Unknown model: ${modelKey}`);
       return null;
     }
 
@@ -200,7 +200,7 @@ class ONNXRuntime {
         modelName: config.name
       };
     } catch (error) {
-      console.error(`Inference failed for ${modelKey}:`, error);
+      logger.error(`Inference failed for ${modelKey}:`, error);
       return null;
     }
   }

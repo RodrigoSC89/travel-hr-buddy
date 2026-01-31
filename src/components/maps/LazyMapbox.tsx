@@ -5,6 +5,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 // Lazy load mapbox-gl via shim
 let mapboxgl: any = null;
@@ -84,14 +85,14 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
         });
 
         mapInstance.on("error", (e: any) => {
-          console.error("Mapbox error:", e);
+          logger.error("Mapbox error:", e);
           if (mounted) {
             setError("Failed to load map");
             setIsLoading(false);
           }
         });
       } catch (err) {
-        console.error("Failed to load Mapbox:", err);
+        logger.error("Failed to load Mapbox:", err);
         if (mounted) {
           setError("Failed to load Mapbox library");
           setIsLoading(false);

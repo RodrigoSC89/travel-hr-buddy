@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: "user" | "assistant";
@@ -123,7 +124,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
-      console.error("Fleet AI error:", error);
+      logger.error("Fleet AI error:", error);
       const errorMessage: Message = {
         role: "assistant",
         content: "Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.",

@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface AutomatedTask {
   id: string;
@@ -123,7 +124,7 @@ export function useScheduledTasksRealData() {
       intervalMinutes?: number;
     }) => {
       // Note: This would require proper column mapping based on actual schema
-      console.log("Create task requested:", _taskData);
+      logger.debug("Create task requested:", _taskData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["scheduled-tasks"] });

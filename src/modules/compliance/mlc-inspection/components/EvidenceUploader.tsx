@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UploadCloud, Trash2, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface EvidenceUploaderProps {
   inspectionId: string;
@@ -46,7 +47,7 @@ export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderPro
       setSelectedFile(null);
       onUpdate();
     } catch (error) {
-      console.error("Error uploading file:", error);
+      logger.error("Error uploading file:", error);
       toast({
         title: "Error",
         description: "Failed to upload file",

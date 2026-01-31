@@ -32,6 +32,7 @@ import { ChatHistory } from "./ChatHistory";
 import { EvidencePDFGenerator } from "./EvidencePDFGenerator";
 import { HistoryExporter } from "./HistoryExporter";
 import { 
+import { logger } from '@/lib/logger';
   useAuditChatPersistence, 
   type ChatMessage as PersistentMessage, 
   type ChatSession 
@@ -288,7 +289,7 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
       }
 
     } catch (error) {
-      console.error('Chat error:', error);
+      logger.error('Chat error:', error);
       toast.error('Erro ao comunicar com a IA. Tente novamente.');
     } finally {
       setIsLoading(false);

@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface IMCABulletin {
   id: string;
@@ -97,7 +98,7 @@ export function useIMCAIncidents() {
       
       setBulletins(mappedData);
     } catch (error) {
-      console.error('Error fetching IMCA bulletins:', error);
+      logger.error('Error fetching IMCA bulletins:', error);
     }
   }, []);
 
@@ -134,7 +135,7 @@ export function useIMCAIncidents() {
       
       setLocalIncidents(mappedData);
     } catch (error) {
-      console.error('Error fetching local incidents:', error);
+      logger.error('Error fetching local incidents:', error);
     }
   }, []);
 
@@ -206,7 +207,7 @@ export function useIMCAIncidents() {
       await fetchLocalIncidents();
       return data;
     } catch (error) {
-      console.error('Error creating incident:', error);
+      logger.error('Error creating incident:', error);
       toast.error('Erro ao registrar incidente');
       throw error;
     }
@@ -256,7 +257,7 @@ export function useIMCAIncidents() {
       await fetchLocalIncidents();
       return data.analysis;
     } catch (error: unknown) {
-      console.error('Error analyzing incident:', error);
+      logger.error('Error analyzing incident:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       if (errorMessage.includes('429')) {
         toast.error('Limite de requisições atingido. Aguarde alguns minutos.');
@@ -281,7 +282,7 @@ export function useIMCAIncidents() {
       toast.success(`Status atualizado para ${status}`);
       await fetchLocalIncidents();
     } catch (error) {
-      console.error('Error updating status:', error);
+      logger.error('Error updating status:', error);
       toast.error('Erro ao atualizar status');
       throw error;
     }
@@ -299,7 +300,7 @@ export function useIMCAIncidents() {
       toast.success('Incidente removido');
       await fetchLocalIncidents();
     } catch (error) {
-      console.error('Error deleting incident:', error);
+      logger.error('Error deleting incident:', error);
       toast.error('Erro ao remover incidente');
       throw error;
     }

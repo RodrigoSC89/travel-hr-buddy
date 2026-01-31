@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
+import { logger } from '@/lib/logger';
 
 interface CrewWellbeing {
   id: string;
@@ -64,7 +65,7 @@ export default function CrewWellbeing() {
         
         setCrew(wellbeingData);
       } catch (err) {
-        console.error('Failed to fetch crew wellbeing:', err);
+        logger.error('Failed to fetch crew wellbeing:', err);
       } finally {
         setIsLoading(false);
       }

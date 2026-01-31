@@ -9,6 +9,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Loader2, RefreshCw, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -73,8 +74,8 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('[LazyLoadErrorBoundary] Error caught:', error.message);
-    console.error('[LazyLoadErrorBoundary] Component stack:', errorInfo.componentStack);
+    logger.error('[LazyLoadErrorBoundary] Error caught:', error.message);
+    logger.error('[LazyLoadErrorBoundary] Component stack:', errorInfo.componentStack);
     
     // Store error timestamp
     sessionStorage.setItem(LAST_ERROR_KEY, Date.now().toString());
@@ -84,7 +85,7 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
       const newCount = this.state.retryCount + 1;
       sessionStorage.setItem(RETRY_KEY, newCount.toString());
       
-      console.log(`[LazyLoadErrorBoundary] Auto-retry ${newCount}/${MAX_AUTO_RETRIES}`);
+      logger.debug(`[LazyLoadErrorBoundary] Auto-retry ${newCount}/${MAX_AUTO_RETRIES}`);
       
       // Clear caches and reload
       this.clearCachesAndReload();
@@ -92,7 +93,7 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
   }
 
   clearCachesAndReload = async () => {
-    console.log('[LazyLoadErrorBoundary] Starting cache clear...');
+    logger.debug('[LazyLoadErrorBoundary] Starting cache clear...');
     
     try {
       // Use the centralized SW manager if available
@@ -109,18 +110,18 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
             }
             await registration.unregister();
           }
-          console.log('[LazyLoadErrorBoundary] Service workers unregistered');
+          logger.debug('[LazyLoadErrorBoundary] Service workers unregistered');
         }
         
         if ('caches' in window) {
           const cacheNames = await caches.keys();
           await Promise.all(cacheNames.map(name => caches.delete(name)));
-          console.log('[LazyLoadErrorBoundary] All caches cleared');
+          logger.debug('[LazyLoadErrorBoundary] All caches cleared');
         }
       }
       
     } catch (e) {
-      console.error('[LazyLoadErrorBoundary] Cache clear error:', e);
+      logger.error('[LazyLoadErrorBoundary] Cache clear error:', e);
     }
     
     // Force hard reload - bypass cache completely with cache-busting query

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart3, Download, Plus, Trash2, Play } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface QueryFilter {
   field: string;
@@ -95,7 +96,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         description: `Query returned ${rows.length} results`
       });
     } catch (error) {
-      console.error("Error executing query:", error);
+      logger.error("Error executing query:", error);
       toast({
         title: "Error",
         description: "Failed to execute query",

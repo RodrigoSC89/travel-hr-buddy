@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface TemplateVariable {
   id?: string;
@@ -35,7 +36,7 @@ export class TemplateVariablesService {
       if (error) throw error;
       return this.mapToVariable(data);
     } catch (error) {
-      console.error("Error creating template variable:", error);
+      logger.error("Error creating template variable:", error);
       throw error;
     }
   }
@@ -59,7 +60,7 @@ export class TemplateVariablesService {
       if (error) throw error;
       return this.mapToVariable(data);
     } catch (error) {
-      console.error("Error updating template variable:", error);
+      logger.error("Error updating template variable:", error);
       throw error;
     }
   }
@@ -73,7 +74,7 @@ export class TemplateVariablesService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error deleting template variable:", error);
+      logger.error("Error deleting template variable:", error);
       throw error;
     }
   }
@@ -89,7 +90,7 @@ export class TemplateVariablesService {
       if (error) throw error;
       return (data || []).map(this.mapToVariable);
     } catch (error) {
-      console.error("Error fetching template variables:", error);
+      logger.error("Error fetching template variables:", error);
       return [];
     }
   }
@@ -105,7 +106,7 @@ export class TemplateVariablesService {
       if (error) throw error;
       return data ? this.mapToVariable(data) : null;
     } catch (error) {
-      console.error("Error fetching template variable:", error);
+      logger.error("Error fetching template variable:", error);
       return null;
     }
   }

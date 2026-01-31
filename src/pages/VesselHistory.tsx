@@ -17,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   History, Brain, Search, FileText, Plus, Calendar, Ship,
   Anchor, Wrench, Shield, AlertTriangle, Award, Upload,
   Download, Clock, Filter, ChevronDown, ChevronRight, Folder
@@ -67,7 +68,7 @@ const VesselHistory = () => {
       if (historyRes.data) setHistoryEvents(historyRes.data);
       if (manualsRes.data) setManuals(manualsRes.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data:', error);
       toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
@@ -86,7 +87,7 @@ const VesselHistory = () => {
       if (error) throw error;
       toast.success(`Encontrados ${data?.results?.length || 0} resultados`);
     } catch (error) {
-      console.error('Error searching:', error);
+      logger.error('Error searching:', error);
       toast.error('Erro na busca');
     }
   };

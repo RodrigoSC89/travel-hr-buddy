@@ -21,6 +21,7 @@ import {
   DEFAULT_THRESHOLDS
 } from '@/lib/notifications/weather-alert-service';
 import type { CurrentWeather, DailyForecast, HourlyForecast, MarineData, AirQuality } from '@/components/weather/windy/types';
+import { logger } from '@/lib/logger';
 
 interface UseOpenMeteoWeatherOptions {
   lat: number;
@@ -241,7 +242,7 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch weather data';
       setError(message);
-      console.error('[useOpenMeteoWeather] Error:', err);
+      logger.error('[useOpenMeteoWeather] Error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -270,7 +271,7 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
         }
       }
     } catch (err) {
-      console.error('[useOpenMeteoWeather] Marine error:', err);
+      logger.error('[useOpenMeteoWeather] Marine error:', err);
     }
   }, [lat, lon, enableAlerts, transformMarineData]);
 
@@ -282,7 +283,7 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
       const data = await fetchOpenMeteoAirQuality(lat, lon, { forceRefresh: true });
       transformAirQuality(data);
     } catch (err) {
-      console.error('[useOpenMeteoWeather] AQI error:', err);
+      logger.error('[useOpenMeteoWeather] AQI error:', err);
     }
   }, [lat, lon, transformAirQuality]);
 

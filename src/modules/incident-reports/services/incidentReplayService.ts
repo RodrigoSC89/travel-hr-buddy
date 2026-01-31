@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 472 - Incident Replay Service
  * Service for retrieving and analyzing incident data with AI
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface IncidentData {
   id: string;
@@ -76,7 +76,7 @@ class IncidentReplayService {
         }
         : null;
     } catch (error) {
-      console.error("Failed to fetch incident:", error);
+      logger.error("Failed to fetch incident:", error);
       return null;
     }
   }
@@ -109,7 +109,7 @@ class IncidentReplayService {
         metadata: item.metadata,
       }));
     } catch (error) {
-      console.error("Failed to fetch incidents:", error);
+      logger.error("Failed to fetch incidents:", error);
       return [];
     }
   }
@@ -179,7 +179,7 @@ class IncidentReplayService {
 
       return timeline;
     } catch (error) {
-      console.error("Failed to build incident timeline:", error);
+      logger.error("Failed to build incident timeline:", error);
       return timeline;
     }
   }
@@ -209,7 +209,7 @@ class IncidentReplayService {
         severity: analysis.severity,
       });
     } catch (error) {
-      console.error("Failed to save analysis:", error);
+      logger.error("Failed to save analysis:", error);
     }
 
     return analysis;

@@ -13,6 +13,7 @@ import { Eye, FileDown, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { escapeRegexSpecialChars } from "../services/template-utils";
 import { createSafeHTML } from "@/lib/utils/safe-html";
+import { logger } from '@/lib/logger';
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -73,7 +74,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
         description: "Your template has been exported to PDF",
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
       toast({
         title: "Error",
         description: "Failed to generate PDF",

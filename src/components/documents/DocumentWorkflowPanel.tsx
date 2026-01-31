@@ -35,6 +35,7 @@ import {
   type DocumentCategory
 } from '@/lib/documents';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const statusColors: Record<string, string> = {
   draft: 'bg-muted text-muted-foreground',
@@ -81,7 +82,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
       setDocuments(docs);
       setPendingApprovals([]);
     } catch (error) {
-      console.error('Error loading documents:', error);
+      logger.error('Error loading documents:', error);
       toast.error('Erro ao carregar documentos');
     } finally {
       setLoading(false);

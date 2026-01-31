@@ -18,6 +18,7 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 import {
+import { logger } from '@/lib/logger';
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -110,7 +111,7 @@ export function EnhancedHistoryStats() {
         }))
       );
     } catch (error) {
-      console.error("Error loading price history:", error);
+      logger.error("Error loading price history:", error);
       toast({
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar os dados de histórico de preços",

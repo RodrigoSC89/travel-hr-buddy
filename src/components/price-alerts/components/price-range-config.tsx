@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { CalendarIcon, Save, TrendingDown } from "lucide-react";
 import { format } from "date-fns";
+import { logger } from '@/lib/logger';
 
 export function PriceRangeConfig() {
   const { user } = useAuth();
@@ -80,7 +81,7 @@ export function PriceRangeConfig() {
       setMaxPrice("");
       setDiscountTarget([15]);
     } catch (error) {
-      console.error("Error saving alert:", error);
+      logger.error("Error saving alert:", error);
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível criar o alerta de preço",

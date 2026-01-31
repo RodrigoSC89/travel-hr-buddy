@@ -5,6 +5,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 export interface AIMemoryEntry {
   id: string;
@@ -93,7 +94,7 @@ export function useAILevel3(options: UseAILevel3Options) {
 
       setMemory(entries);
     } catch (error) {
-      console.error('Failed to load AI memory:', error);
+      logger.error('Failed to load AI memory:', error);
     }
   }, [enableMemory]);
 
@@ -116,7 +117,7 @@ export function useAILevel3(options: UseAILevel3Options) {
       memories.unshift(newEntry);
       localStorage.setItem('ai_memory', JSON.stringify(memories.slice(0, 100)));
     } catch (error) {
-      console.error('Failed to store AI memory:', error);
+      logger.error('Failed to store AI memory:', error);
     }
   }, [enableMemory]);
 
@@ -170,7 +171,7 @@ export function useAILevel3(options: UseAILevel3Options) {
 
       setSuggestions(prev => [...mockSuggestions, ...prev].slice(0, 10));
     } catch (error) {
-      console.error('Proactive analysis failed:', error);
+      logger.error('Proactive analysis failed:', error);
     }
   }, [enableProactive, module]);
 
@@ -212,7 +213,7 @@ export function useAILevel3(options: UseAILevel3Options) {
 
       return null;
     } catch (error) {
-      console.error('Self-correction failed:', error);
+      logger.error('Self-correction failed:', error);
       return null;
     } finally {
       setIsProcessing(false);

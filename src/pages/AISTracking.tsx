@@ -14,6 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { 
+import { logger } from '@/lib/logger';
   Ship,
   Satellite,
   MapPin,
@@ -83,7 +84,7 @@ export default function AISTracking() {
         description: `${data.vessels?.length || 0} embarcações rastreadas`,
       });
     } catch (error) {
-      console.error("AIS error:", error);
+      logger.error("AIS error:", error);
       toast({
         title: "Erro ao buscar dados",
         description: "Falha na conexão com AIS",
@@ -118,7 +119,7 @@ export default function AISTracking() {
         description: `${data.count} embarcações na área`,
       });
     } catch (error) {
-      console.error("Area search error:", error);
+      logger.error("Area search error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +148,7 @@ export default function AISTracking() {
         });
       }
     } catch (error) {
-      console.error("Proximity check error:", error);
+      logger.error("Proximity check error:", error);
     }
   };
 

@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/utils/production-logger";
+import { logger } from '@/lib/logger';
 
 export interface WeatherDataUnified {
   temperature: number | null;
@@ -300,7 +301,7 @@ export async function getWeatherForecast(
       icon: item.icon,
     }));
   } catch (error) {
-    console.error("[Weather] Forecast fetch failed:", error);
+    logger.error("[Weather] Forecast fetch failed:", error);
     return [];
   }
 }
@@ -310,7 +311,7 @@ export async function getWeatherForecast(
  */
 export function clearWeatherCache(): void {
   weatherCache.clear();
-  console.log("[Weather] Cache cleared");
+  logger.debug("[Weather] Cache cleared");
 }
 
 /**

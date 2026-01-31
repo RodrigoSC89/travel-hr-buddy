@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 419: Real-Time Mission Dashboard
  * Displays mission execution status with live updates
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from '@/lib/logger';
 
 interface Mission {
   id: string;
@@ -66,7 +66,7 @@ export const RealTimeMissionDashboard = () => {
         setMissions(data as Mission[]);
       }
     } catch (error) {
-      console.error("Error loading missions:", error);
+      logger.error("Error loading missions:", error);
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,7 @@ export const RealTimeMissionDashboard = () => {
         setRecentLogs(data as MissionLog[]);
       }
     } catch (error) {
-      console.error("Error loading logs:", error);
+      logger.error("Error loading logs:", error);
     }
   }, []);
 

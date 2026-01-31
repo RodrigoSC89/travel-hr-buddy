@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { satelliteTrackingService } from "../services/satellite-tracking-service";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface Alert {
   id: string;
@@ -41,7 +42,7 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
       const data = await satelliteTrackingService.getAlerts({ satelliteId });
       setAlerts(data);
     } catch (error) {
-      console.error("Failed to load alerts:", error);
+      logger.error("Failed to load alerts:", error);
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +54,7 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
       toast.success("Alerta resolvido");
       loadAlerts();
     } catch (error) {
-      console.error("Failed to resolve alert:", error);
+      logger.error("Failed to resolve alert:", error);
       toast.error("Falha ao resolver alerta");
     }
   };

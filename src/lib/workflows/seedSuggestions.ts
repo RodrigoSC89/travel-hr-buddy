@@ -7,6 +7,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 // Local types for workflow suggestions (independent of DB schema)
 export type WorkflowStepPriority = "low" | "medium" | "high" | "critical";
@@ -333,7 +334,7 @@ export async function seedSuggestionsForWorkflow(
       .select();
 
     if (error) {
-      console.error("Error creating workflow steps:", error);
+      logger.error("Error creating workflow steps:", error);
       return {
         success: false,
         stepsCreated: 0,
@@ -348,7 +349,7 @@ export async function seedSuggestionsForWorkflow(
       suggestions: data || [],
     };
   } catch (error) {
-    console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
+    logger.error("Unexpected error in seedSuggestionsForWorkflow:", error);
     return {
       success: false,
       stepsCreated: 0,

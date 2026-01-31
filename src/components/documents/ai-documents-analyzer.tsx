@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Tesseract from "tesseract.js";
+import { logger } from '@/lib/logger';
 
 interface DocumentEntity {
   id: string;
@@ -130,7 +130,7 @@ export function AIDocumentsAnalyzer() {
         confidence: result.data.confidence,
       };
     } catch (error) {
-      console.error("OCR Error:", error);
+      logger.error("OCR Error:", error);
       throw new Error("Falha ao processar OCR");
     }
   };
@@ -398,7 +398,7 @@ export function AIDocumentsAnalyzer() {
       
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Tente novamente mais tarde";
-      console.error("Error processing document:", errorMessage);
+      logger.error("Error processing document:", errorMessage);
       toast({
         title: "Erro ao processar documento",
         description: errorMessage,
@@ -421,7 +421,7 @@ export function AIDocumentsAnalyzer() {
 
       setDocuments(data || []);
     } catch (error) {
-      console.error("Error loading documents:", error);
+      logger.error("Error loading documents:", error);
       toast({
         title: "Erro ao carregar documentos",
         description: "Tente novamente mais tarde",
@@ -450,7 +450,7 @@ export function AIDocumentsAnalyzer() {
       setSelectedDocument(doc);
       setEntities(entitiesData || []);
     } catch (error) {
-      console.error("Error loading document details:", error);
+      logger.error("Error loading document details:", error);
       toast({
         title: "Erro ao carregar detalhes",
         description: "Tente novamente mais tarde",
@@ -476,7 +476,7 @@ export function AIDocumentsAnalyzer() {
 
       setSearchResults(data || []);
     } catch (error) {
-      console.error("Error searching documents:", error);
+      logger.error("Error searching documents:", error);
       toast({
         title: "Erro na busca",
         description: "Tente novamente mais tarde",

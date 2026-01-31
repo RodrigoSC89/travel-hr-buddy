@@ -5,6 +5,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface ForecastResult {
   date: string;
@@ -51,7 +52,7 @@ export function useBunkerForecast(options: UseBunkerForecastOptions = {}) {
         if (error) throw error;
         return data as ForecastResponse;
       } catch (err) {
-        console.error("Failed to fetch bunker forecast:", err);
+        logger.error("Failed to fetch bunker forecast:", err);
         throw err;
       }
     },

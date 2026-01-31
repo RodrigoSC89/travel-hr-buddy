@@ -23,6 +23,7 @@ const loadPDFLibs = async () => {
 };
 
 import type { LogEntry } from "../../modules/logs-center/types";
+import { logger } from '@/lib/logger';
 
 interface ExportOptions {
   title?: string;
@@ -65,7 +66,7 @@ async function generateQRCode(data: string): Promise<string> {
       margin: 1,
     });
   } catch (error) {
-    console.error("Failed to generate QR code:", error);
+    logger.error("Failed to generate QR code:", error);
     return "";
   }
 }

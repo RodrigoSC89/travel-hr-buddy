@@ -31,6 +31,7 @@ import {
   Share2, Printer, Save, Copy, ExternalLink, Info, ChevronDown
 } from "lucide-react";
 import { 
+import { logger } from '@/lib/logger';
   ComposedChart, Line, Bar, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
   Legend, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, AreaChart
 } from "recharts";
@@ -208,7 +209,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         loadAnalyticsData()
       ]);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -272,7 +273,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         setNotifications(generateMockNotifications());
       }
     } catch (error) {
-      console.error("Error loading notifications:", error);
+      logger.error("Error loading notifications:", error);
       setNotifications(generateMockNotifications());
     }
   };
@@ -389,7 +390,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Error loading analytics data:", error);
+      logger.error("Error loading analytics data:", error);
     }
   };
 
@@ -529,7 +530,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         throw new Error(response.error?.message || "Failed to generate insights");
       }
     } catch (error) {
-      console.error("Error generating insights:", error);
+      logger.error("Error generating insights:", error);
       
       // Generate fallback insights
       const fallbackInsights: AIInsight[] = [
@@ -742,7 +743,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         description: "Relatório PDF baixado"
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Não foi possível gerar o relatório. Tente novamente.",
@@ -790,7 +791,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         throw new Error("Failed to generate report");
       }
     } catch (error) {
-      console.error("Error generating report:", error);
+      logger.error("Error generating report:", error);
       
       // Generate fallback report
       setAiReportContent(`# Relatório Analytics - ${new Date().toLocaleDateString("pt-BR")}

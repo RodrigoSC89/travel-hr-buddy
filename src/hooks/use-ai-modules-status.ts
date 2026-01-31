@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react";
 import { getAIContextStats } from "@/ai/kernel";
+import { logger } from '@/lib/logger';
 
 export interface ModuleStatus {
   id: string;
@@ -115,7 +116,7 @@ export const useAIModulesStatus = () => {
         setOverallHealth("critical");
       }
     } catch (error) {
-      console.error("Error checking modules status:", error);
+      logger.error("Error checking modules status:", error);
     } finally {
       setIsLoading(false);
     }

@@ -6,6 +6,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface OnboardingStep {
   id: string;
@@ -108,7 +109,7 @@ export function useOnboarding() {
         }));
       }
     } catch (error) {
-      console.error('Failed to load onboarding progress:', error);
+      logger.error('Failed to load onboarding progress:', error);
     }
   }, []);
 
@@ -144,7 +145,7 @@ export function useOnboarding() {
         });
       }
     } catch (error) {
-      console.error('Failed to save onboarding progress:', error);
+      logger.error('Failed to save onboarding progress:', error);
     }
 
     toast.success('Etapa concluída!');

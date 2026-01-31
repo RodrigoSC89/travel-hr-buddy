@@ -21,6 +21,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from '@/lib/logger';
 
 interface AIInsight {
   id: string;
@@ -71,7 +72,7 @@ export function AIInsightsPanel() {
 
       setInsights(formattedInsights);
     } catch (error) {
-      console.error("Error loading insights:", error);
+      logger.error("Error loading insights:", error);
       // Use mock data if database fails
       setInsights(getMockInsights());
     } finally {
@@ -155,7 +156,7 @@ export function AIInsightsPanel() {
       );
       toast.success(`Ação registrada para: ${insight.title}`);
     } catch (error) {
-      console.error("Error updating insight:", error);
+      logger.error("Error updating insight:", error);
     }
   };
 

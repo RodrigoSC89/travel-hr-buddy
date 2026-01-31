@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * AI Integration Checker - PATCH 980
  * Validates AI integration across all modules
@@ -31,7 +33,7 @@ class AIIntegrationChecker {
    * Check AI integration across all modules
    */
   async check(): Promise<AIIntegrationStatus> {
-    console.log('[AIChecker] Checking AI integration...');
+    logger.debug('[AIChecker] Checking AI integration...');
     
     const modules = this.checkModules();
     const cacheStats = await this.getCacheStats();

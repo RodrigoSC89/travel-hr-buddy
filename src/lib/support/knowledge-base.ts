@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Knowledge Base Service
  * Simple in-memory knowledge base for support articles
@@ -51,6 +53,6 @@ export const knowledgeBase = {
 
   async recordFeedback(articleId: string, helpful: boolean): Promise<void> {
     // Feedback recording - could be persisted to DB
-    console.log(`Feedback for ${articleId}: ${helpful ? 'helpful' : 'not helpful'}`);
+    logger.debug(`Feedback for ${articleId}: ${helpful ? 'helpful' : 'not helpful'}`);
   },
 };

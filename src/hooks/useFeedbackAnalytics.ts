@@ -4,6 +4,7 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface NPSMetrics {
   score: number;
@@ -116,7 +117,7 @@ export function useFeedbackAnalytics() {
       });
 
     } catch (err) {
-      console.error('[FeedbackAnalytics] Error:', err);
+      logger.error('[FeedbackAnalytics] Error:', err);
       setError(err as Error);
     } finally {
       setIsLoading(false);

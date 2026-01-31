@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { createSafeHTML } from "@/lib/utils/safe-html";
 import {
+import { logger } from '@/lib/logger';
   Brain,
   Send,
   Bot,
@@ -232,7 +233,7 @@ Use as **ações rápidas** ou faça sua pergunta diretamente!`,
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error calling AI:", error);
+      logger.error("Error calling AI:", error);
       
       const fallbackMessage: ChatMessage = {
         id: `msg-${Date.now()}-fallback`,

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, User, Briefcase, Phone, Mail, Globe, Calendar } from "lucide-react";
+import { logger } from '@/lib/logger';
 
 interface AddCrewDialogProps {
   open: boolean;
@@ -77,7 +78,7 @@ export function AddCrewDialog({ open, onOpenChange, onSuccess }: AddCrewDialogPr
       onSuccess();
       onOpenChange(false);
     } catch (error) {
-      console.error("Error adding crew member:", error);
+      logger.error("Error adding crew member:", error);
       toast({
         title: "Erro",
         description: "Falha ao adicionar tripulante",

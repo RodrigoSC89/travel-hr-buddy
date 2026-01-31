@@ -13,6 +13,7 @@ import { FleetMetrics } from "./components/FleetMetrics";
 import { VesselGrid } from "./components/VesselGrid";
 import { MaintenancePanel } from "./components/MaintenancePanel";
 import { FleetAICopilot } from "./components/FleetAICopilot";
+import { logger } from '@/lib/logger';
 
 const FleetModule = () => {
   const { toast } = useToast();
@@ -36,7 +37,7 @@ const FleetModule = () => {
       const { data: crewData } = await supabase.from("crew_assignments" as any).select("*").limit(100);
       setCrewAssignments((crewData as any[]) || []);
     } catch (error) {
-      console.error("Error loading fleet data:", error);
+      logger.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
     }
@@ -158,7 +159,7 @@ const FleetModule = () => {
 
         {/* AI Copilot Sidebar */}
         <div className="xl:col-span-1">
-          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => console.log("Insight:", insight)} />
+          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => logger.debug("Insight:", insight)} />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
+import { logger } from '@/lib/logger';
   FileText,
   Download,
   Shield,
@@ -438,7 +439,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("PDF Generation Error:", error);
+      logger.error("PDF Generation Error:", error);
       toast({
         title: "Erro na Geração",
         description: "Falha ao gerar relatório PDF",

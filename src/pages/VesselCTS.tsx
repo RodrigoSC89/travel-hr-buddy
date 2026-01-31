@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   FileText, Brain, Shield, Users, AlertTriangle, Plus,
   CheckCircle, XCircle, Calendar, Award, RefreshCw,
   Clock, Ship, User, FileCheck, AlertCircle
@@ -80,7 +81,7 @@ const VesselCTS = () => {
       // Calculate initial compliance score
       calculateComplianceScore(certRes.data || []);
     } catch (error) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data:', error);
       toast.error('Erro ao carregar dados');
     } finally {
       setLoading(false);
@@ -136,7 +137,7 @@ const VesselCTS = () => {
       setNonConformities(mockNonConformities);
       toast.success('Verificação de conformidade concluída');
     } catch (error) {
-      console.error('Error checking conformity:', error);
+      logger.error('Error checking conformity:', error);
       toast.error('Erro na verificação de conformidade');
     } finally {
       setIsChecking(false);

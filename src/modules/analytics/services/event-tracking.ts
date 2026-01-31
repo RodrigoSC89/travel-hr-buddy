@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 export interface TrackEventOptions {
   eventName: string;
@@ -39,7 +40,7 @@ class EventTrackingService {
           .maybeSingle();
         
         if (error) {
-          console.warn("Failed to fetch organization, using user_id as fallback:", error.message);
+          logger.warn("Failed to fetch organization, using user_id as fallback:", error.message);
           this.organizationId = user.id;
           return;
         }
@@ -48,7 +49,7 @@ class EventTrackingService {
         this.organizationId = orgData?.organization_id || user.id;
       }
     } catch (error) {
-      console.error("Error initializing organization:", error);
+      logger.error("Error initializing organization:", error);
     }
   }
 
@@ -79,10 +80,10 @@ class EventTrackingService {
         .insert([eventData]);
 
       if (error) {
-        console.error("Error tracking event:", error);
+        logger.error("Error tracking event:", error);
       }
     } catch (error) {
-      console.error("Error in trackEvent:", error);
+      logger.error("Error in trackEvent:", error);
     }
   }
 

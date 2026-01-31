@@ -33,6 +33,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import type { OptimizedRoute, RouteWaypoint, RiskZone } from "@/lib/optimization/quantum-router";
 import { RouteExportButtons } from "@/components/optimization/RouteExportButtons";
+import { logger } from '@/lib/logger';
 
 // Sample ports for demo
 const samplePorts: RouteWaypoint[] = [
@@ -88,7 +89,7 @@ export function QuantumRouteMap({ mapboxToken, onRouteOptimized, className }: Qu
           setToken(data.token);
         }
       } catch (err) {
-        console.error("Failed to fetch Mapbox token:", err);
+        logger.error("Failed to fetch Mapbox token:", err);
         setError("Token Mapbox não configurado. Adicione MAPBOX_PUBLIC_TOKEN nos secrets.");
       }
     };

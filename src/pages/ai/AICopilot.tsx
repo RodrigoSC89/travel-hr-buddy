@@ -25,6 +25,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -111,7 +112,7 @@ const AICopilot: React.FC = () => {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error calling AI:", error);
+      logger.error("Error calling AI:", error);
       toast({
         title: "Erro ao processar",
         description: "Não foi possível obter resposta da IA. Tente novamente.",

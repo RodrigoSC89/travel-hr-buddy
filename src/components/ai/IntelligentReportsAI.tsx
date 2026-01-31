@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
+import { logger } from '@/lib/logger';
   Brain, FileText, Send, Loader2, Download, Sparkles,
   BarChart3, PieChart, LineChart, TrendingUp, Calendar,
   Ship, Users, Wrench, DollarSign, Shield, Clock, RefreshCw
@@ -129,7 +130,7 @@ export const IntelligentReportsAI: React.FC = () => {
 
       setGeneratedReport(report);
     } catch (error) {
-      console.error('Error generating report:', error);
+      logger.error('Error generating report:', error);
     } finally {
       setIsGenerating(false);
     }

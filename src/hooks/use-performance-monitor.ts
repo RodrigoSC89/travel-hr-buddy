@@ -5,6 +5,7 @@
 
 import { useCallback, useRef } from 'react';
 import { useOptimizedPolling } from './use-optimized-polling';
+import { logger } from '@/lib/logger';
 
 export interface PerformanceMetrics {
   lcp: number | null;
@@ -125,7 +126,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
         options.onMetricsUpdate(metrics);
       }
     } catch (error) {
-      console.error('Error collecting performance metrics:', error);
+      logger.error('Error collecting performance metrics:', error);
     }
 
     return metrics;

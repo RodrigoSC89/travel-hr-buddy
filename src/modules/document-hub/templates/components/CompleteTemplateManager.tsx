@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { extractTemplateVariables } from "../services/template-utils";
 import type { Json } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 const commonVariables = [
   "company_name",
@@ -90,7 +91,7 @@ export const CompleteTemplateManager = () => {
       setTemplateContent("");
       setShowPreview(false);
     } catch (error) {
-      console.error("Error saving template:", error);
+      logger.error("Error saving template:", error);
       toast({
         title: "Error",
         description: "Failed to save template",

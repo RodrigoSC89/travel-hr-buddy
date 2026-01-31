@@ -28,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
+import { logger } from '@/lib/logger';
 
 interface Incident {
   id: string;
@@ -93,7 +94,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading incidents:", error);
+        logger.error("Error loading incidents:", error);
         toast.error("Failed to load incidents");
         setIsLoading(false);
         return;
@@ -118,7 +119,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .sort();
       setAvailableModules(modules);
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents:", error);
       toast.error("Failed to load incidents");
     } finally {
       setIsLoading(false);
@@ -195,7 +196,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
 
       toast.success("Timeline exported successfully!");
     } catch (error) {
-      console.error("Error exporting timeline:", error);
+      logger.error("Error exporting timeline:", error);
       toast.error("Failed to export timeline");
     }
   };

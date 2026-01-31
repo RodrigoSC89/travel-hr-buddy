@@ -27,6 +27,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { VoiceInput } from "./VoiceInput";
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -117,7 +118,7 @@ export const AICopilot: React.FC = () => {
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Chat error:", error);
+      logger.error("Chat error:", error);
       const errorMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",

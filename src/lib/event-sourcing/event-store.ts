@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type AggregateType = 'crew' | 'voyage' | 'ship' | 'invoice' | 'maintenance' | 'compliance';
 
@@ -144,7 +145,7 @@ class EventStore {
         .single();
 
       if (error) {
-        console.error('Failed to append event:', error);
+        logger.error('Failed to append event:', error);
         return null;
       }
 
@@ -155,7 +156,7 @@ class EventStore {
 
       return domainEvent;
     } catch (error) {
-      console.error('Error appending event:', error);
+      logger.error('Error appending event:', error);
       return null;
     }
   }
@@ -171,7 +172,7 @@ class EventStore {
       .order('event_version', { ascending: true });
 
     if (error) {
-      console.error('Failed to get events:', error);
+      logger.error('Failed to get events:', error);
       return [];
     }
 
@@ -199,7 +200,7 @@ class EventStore {
     const { data, error } = await query.order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Failed to get events by type:', error);
+      logger.error('Failed to get events by type:', error);
       return [];
     }
 
@@ -295,7 +296,7 @@ class EventStore {
       try {
         handler(event);
       } catch (error) {
-        console.error(`Event handler error for ${event.event_type}:`, error);
+        logger.error(`Event handler error for ${event.event_type}:`, error);
       }
     });
   }
@@ -320,7 +321,7 @@ class EventStore {
       .range(options?.offset || 0, (options?.offset || 0) + (options?.limit || 50) - 1);
 
     if (error) {
-      console.error('Failed to get event history:', error);
+      logger.error('Failed to get event history:', error);
       return { events: [], total: 0 };
     }
 

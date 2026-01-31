@@ -17,6 +17,7 @@ import { AIRecommendationsStream } from './AIRecommendationsStream';
 import type { GlobeMarker, KPIMetric3D, AIRecommendation3D, CockpitState } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { Safe3DWrapper } from '@/components/3d/Safe3DWrapper';
+import { logger } from '@/lib/logger';
 
 // Lazy load 3D Globe to avoid ConcurrentRoot issues
 const Globe3D = lazy(() => import('./Globe3D').then(m => ({ default: m.Globe3D })));
@@ -111,7 +112,7 @@ export function CommandCockpit() {
         },
       ]);
     } catch (error) {
-      console.error('Error fetching operational data:', error);
+      logger.error('Error fetching operational data:', error);
     }
   }
 

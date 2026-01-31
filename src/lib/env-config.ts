@@ -232,15 +232,15 @@ export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boole
 export function printConfigSummary(): void {
   const config = getConfig();
   
-  console.log('\n📋 CONFIGURATION SUMMARY:\n');
-  console.log(`  Environment: ${config.nodeEnv}`);
-  console.log(`  App URL: ${config.appUrl}`);
-  console.log(`  Supabase: ${config.supabaseUrl}`);
-  console.log(`  OpenAI Model: ${config.openaiModel}`);
-  console.log(`  StarFix Integration: ${isFeatureEnabled('starfix') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log(`  Terrastar Integration: ${isFeatureEnabled('terrastar') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log(`  AI Features: ${isFeatureEnabled('ai') ? '✅ Enabled' : '❌ Disabled'}`);
-  console.log('');
+  logger.debug('\n📋 CONFIGURATION SUMMARY:\n');
+  logger.debug(`  Environment: ${config.nodeEnv}`);
+  logger.debug(`  App URL: ${config.appUrl}`);
+  logger.debug(`  Supabase: ${config.supabaseUrl}`);
+  logger.debug(`  OpenAI Model: ${config.openaiModel}`);
+  logger.debug(`  StarFix Integration: ${isFeatureEnabled('starfix') ? '✅ Enabled' : '❌ Disabled'}`);
+  logger.debug(`  Terrastar Integration: ${isFeatureEnabled('terrastar') ? '✅ Enabled' : '❌ Disabled'}`);
+  logger.debug(`  AI Features: ${isFeatureEnabled('ai') ? '✅ Enabled' : '❌ Disabled'}`);
+  logger.debug('');
 }
 
 // Auto-validate on import (apenas em produção ou quando explicitamente configurado)
@@ -249,7 +249,7 @@ if (process.env.NODE_ENV === 'production' || process.env.VALIDATE_ENV === 'true'
     loadEnvConfig();
     printConfigSummary();
   } catch (error) {
-    console.error('Failed to validate environment:', error);
+    logger.error('Failed to validate environment:', error);
     process.exit(1);
   }
 }

@@ -22,7 +22,7 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
       systemStatus: data.systemStatus,
     };
   } catch (error) {
-    console.error("Erro ao carregar dados do BridgeLink:", error);
+    logger.error("Erro ao carregar dados do BridgeLink:", error);
     
     // Return empty data with offline status on error
     return {
@@ -58,19 +58,19 @@ export function connectToLiveStream(
         const data = JSON.parse(event.data);
         onMessage(data);
       } catch (error) {
-        console.error("Erro ao processar mensagem WebSocket:", error);
+        logger.error("Erro ao processar mensagem WebSocket:", error);
       }
     };
     
     ws.onerror = (error) => {
-      console.error("❌ Erro no WebSocket BridgeLink:", error);
+      logger.error("❌ Erro no WebSocket BridgeLink:", error);
     };
     
     ws.onclose = () => {
       logger.info("🔴 BridgeLink WebSocket desconectado");
     };
   } catch (error) {
-    console.error("Erro ao conectar WebSocket:", error);
+    logger.error("Erro ao conectar WebSocket:", error);
   }
   
   // Return cleanup function

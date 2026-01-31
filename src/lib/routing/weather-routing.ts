@@ -397,7 +397,7 @@ export async function calculateWeatherRouting(
 ): Promise<WeatherRoutingResult> {
   const avoidance = { ...DEFAULT_AVOIDANCE, ...request.avoidanceSettings };
 
-  console.log("[WeatherRouting] Calculating routes...");
+  logger.debug("[WeatherRouting] Calculating routes...");
 
   // Generate direct route waypoints
   const directWaypoints = generateRouteWaypoints(request.origin, request.destination, 6);
@@ -555,7 +555,7 @@ export async function calculateWeatherRouting(
     });
   });
 
-  console.log(`[WeatherRouting] Generated ${routes.length} routes`);
+  logger.debug(`[WeatherRouting] Generated ${routes.length} routes`);
 
   return {
     recommendedRoute: routes[0],
@@ -585,7 +585,7 @@ export async function storeRouteCalculation(
       created_at: new Date().toISOString(),
     });
   } catch (err) {
-    console.error("[WeatherRouting] Failed to store route:", err);
+    logger.error("[WeatherRouting] Failed to store route:", err);
     Sentry.captureException(err);
   }
 }

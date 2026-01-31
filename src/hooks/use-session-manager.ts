@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback, Dispatch, SetStateAction } from "reac
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from '@/lib/logger';
 
 interface DeviceInfo {
   platform?: string;
@@ -66,7 +67,7 @@ export const useSessionManager = () => {
       const { data, error } = await supabase.rpc("get_active_sessions");
 
       if (error) {
-        console.error("Error loading sessions:", error);
+        logger.error("Error loading sessions:", error);
         setErrorMessage("Não foi possível carregar as sessões ativas.");
         return;
       }
@@ -89,7 +90,7 @@ export const useSessionManager = () => {
         }
       }
     } catch (error) {
-      console.error("Error loading sessions:", error);
+      logger.error("Error loading sessions:", error);
       setErrorMessage("Não foi possível carregar as sessões ativas.");
     } finally {
       setLoading(false);
@@ -117,7 +118,7 @@ export const useSessionManager = () => {
       });
 
       if (error) {
-        console.error("Error creating session:", error);
+        logger.error("Error creating session:", error);
         throw error;
       }
 
@@ -130,7 +131,7 @@ export const useSessionManager = () => {
 
       return null;
     } catch (error) {
-      console.error("Error creating session:", error);
+      logger.error("Error creating session:", error);
       setErrorMessage("Não foi possível criar a sessão.");
       throw error;
     }
@@ -151,7 +152,7 @@ export const useSessionManager = () => {
       });
 
       if (error) {
-        console.error("Error revoking session:", error);
+        logger.error("Error revoking session:", error);
         setErrorMessage("Não foi possível revogar a sessão.");
         throw error;
       }
@@ -164,7 +165,7 @@ export const useSessionManager = () => {
       await loadSessions(); // Refresh sessions list
       return data;
     } catch (error) {
-      console.error("Error revoking session:", error);
+      logger.error("Error revoking session:", error);
       setErrorMessage("Não foi possível revogar a sessão.");
       throw error;
     }
@@ -189,7 +190,7 @@ export const useSessionManager = () => {
 
       await loadSessions(); // Refresh sessions list
     } catch (error) {
-      console.error("Error revoking all other sessions:", error);
+      logger.error("Error revoking all other sessions:", error);
       setErrorMessage("Não foi possível revogar as outras sessões.");
       throw error;
     }
@@ -205,7 +206,7 @@ export const useSessionManager = () => {
       });
 
       if (error) {
-        console.error("Error validating session:", error);
+        logger.error("Error validating session:", error);
         return { isValid: false, userId: null, expiresAt: null };
       }
 
@@ -215,7 +216,7 @@ export const useSessionManager = () => {
 
       return { isValid: false, userId: null, expiresAt: null };
     } catch (error) {
-      console.error("Error validating session:", error);
+      logger.error("Error validating session:", error);
       return { isValid: false, userId: null, expiresAt: null };
     }
   }, []);
