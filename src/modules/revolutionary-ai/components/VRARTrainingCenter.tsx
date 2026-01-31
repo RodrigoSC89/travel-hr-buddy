@@ -14,8 +14,9 @@ import {
   Glasses, Video, Play, Award, Users, Clock,
   Monitor, Wifi, CheckCircle, Star, Target,
   Flame, Wrench, Ship, AlertTriangle, Phone,
-  BookOpen, GraduationCap, Trophy, Zap
+  BookOpen, GraduationCap, Trophy, Zap, Plus, Trash2
 } from "lucide-react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 interface TrainingScenario {
@@ -175,6 +176,22 @@ const statusColors = {
 export function VRARTrainingCenter() {
   const [selectedTab, setSelectedTab] = useState("scenarios");
   const [selectedScenario, setSelectedScenario] = useState<TrainingScenario | null>(null);
+  const [scenarios, setScenarios] = useState<TrainingScenario[]>(mockScenarios);
+  const [isAddScenarioOpen, setIsAddScenarioOpen] = useState(false);
+
+  const handleStartTraining = (scenario: TrainingScenario) => {
+    toast.success(`Iniciando treinamento: ${scenario.title}`, {
+      description: "Prepare seu headset VR para a sessão imersiva"
+    });
+    setSelectedScenario(scenario);
+  };
+
+  const handleDeleteScenario = (id: string) => {
+    if (confirm("Deseja remover este cenário?")) {
+      setScenarios(prev => prev.filter(s => s.id !== id));
+      toast.success("Cenário removido");
+    }
+  };
 
   const totalTrainees = mockScenarios.reduce((acc, s) => acc + s.completions, 0);
   const avgCompletionScore = Math.round(
@@ -274,8 +291,14 @@ export function VRARTrainingCenter() {
         </TabsList>
 
         <TabsContent value="scenarios" className="mt-6">
+          <div className="flex justify-end mb-4">
+            <Button onClick={() => toast.info("Criação de cenários VR disponível em breve")} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Novo Cenário
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mockScenarios.map((scenario, index) => {
+            {scenarios.map((scenario, index) => {
               const CategoryIcon = categoryIcons[scenario.category];
               return (
                 <motion.div
@@ -284,13 +307,13 @@ export function VRARTrainingCenter() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
+                  <Card className="h-full hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-2">
                       <div className="flex items-start justify-between">
                         <div className="p-2 rounded-lg bg-primary/10">
                           <CategoryIcon className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 items-center">
                           {scenario.imoApproved && (
                             <Badge variant="outline" className="bg-green-500/10 text-green-500 text-xs">
                               IMO ✓
@@ -299,6 +322,17 @@ export function VRARTrainingCenter() {
                           <Badge variant="outline" className={difficultyColors[scenario.difficulty]}>
                             {scenario.difficulty}
                           </Badge>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteScenario(scenario.id);
+                            }}
+                          >
+                            <Trash2 className="h-3 w-3 text-destructive" />
+                          </Button>
                         </div>
                       </div>
                       <CardTitle className="text-lg mt-2">{scenario.title}</CardTitle>
@@ -325,7 +359,7 @@ export function VRARTrainingCenter() {
                           {scenario.avgScore}% avg
                         </div>
                       </div>
-                      <Button className="w-full" size="sm">
+                      <Button className="w-full" size="sm" onClick={() => handleStartTraining(scenario)}>
                         <Play className="h-4 w-4 mr-1" />
                         Iniciar Treinamento
                       </Button>

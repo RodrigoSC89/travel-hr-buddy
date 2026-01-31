@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -414,9 +415,19 @@ export function CrewWellnessDashboard() {
                   </div>
                 )}
 
-                <Button className="w-full">
+                <Button className="w-full" onClick={() => {
+                  toast.success(`Iniciando intervenção para ${selectedMember.name}`, {
+                    description: "Plano de acompanhamento será criado"
+                  });
+                }}>
                   <Activity className="h-4 w-4 mr-2" />
                   Iniciar Intervenção
+                </Button>
+                <Button variant="outline" className="w-full mt-2" onClick={() => {
+                  toast.info(`Agendando check-in com ${selectedMember.name}`);
+                }}>
+                  <Clock className="h-4 w-4 mr-2" />
+                  Agendar Check-in
                 </Button>
               </div>
             ) : (

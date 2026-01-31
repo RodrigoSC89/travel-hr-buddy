@@ -147,19 +147,20 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 🌊 OPERAÇÕES SUBMARINAS
+  // 🌊 OPERAÇÕES SUBMARINAS (Temporariamente desabilitado)
+  // Status: Em desenvolvimento - módulos serão reativados quando prontos
   // ============================================
-  {
-    title: "🌊 Operações Submarinas",
-    defaultOpen: false,
-    items: [
-      { label: "Ocean Sonar AI", path: "/ocean-sonar", icon: Waves, emoji: "🔊" },
-      { label: "Underwater Drone", path: "/underwater-drone", icon: Zap, emoji: "🤖" },
-      { label: "AutoSub Mission", path: "/auto-sub", icon: Ship, emoji: "🛸" },
-      { label: "Sonar AI Enhancement", path: "/sonar-ai", icon: Radio, emoji: "📶" },
-      { label: "Deep Risk AI", path: "/deep-risk-ai", icon: AlertTriangle, emoji: "⚠️" },
-    ],
-  },
+  // {
+  //   title: "🌊 Operações Submarinas",
+  //   defaultOpen: false,
+  //   items: [
+  //     { label: "Ocean Sonar AI", path: "/ocean-sonar", icon: Waves, emoji: "🔊" },
+  //     { label: "Underwater Drone", path: "/underwater-drone", icon: Zap, emoji: "🤖" },
+  //     { label: "AutoSub Mission", path: "/auto-sub", icon: Ship, emoji: "🛸" },
+  //     { label: "Sonar AI Enhancement", path: "/sonar-ai", icon: Radio, emoji: "📶" },
+  //     { label: "Deep Risk AI", path: "/deep-risk-ai", icon: AlertTriangle, emoji: "⚠️" },
+  //   ],
+  // },
 
   // ============================================
   // 🧠 IA & AUTOMAÇÃO
