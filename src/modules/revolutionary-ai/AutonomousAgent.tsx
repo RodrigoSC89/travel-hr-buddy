@@ -185,7 +185,15 @@ export function AutonomousAgent() {
                   onCheckedChange={setIsAgentActive}
                 />
               </div>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  toast.info('Abrindo configuração de regras...', {
+                    description: 'Configure as regras de decisão do agente autônomo.'
+                  });
+                }}
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Configurar Regras
               </Button>
@@ -243,8 +251,12 @@ export function AutonomousAgent() {
                   <Activity className="h-5 w-5 text-primary" />
                   Feed de Ações
                 </div>
-                <Button variant="ghost" size="sm">
-                  <RefreshCw className="h-4 w-4" />
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => queryClient.invalidateQueries({ queryKey: ['agent-actions'] })}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 </Button>
               </CardTitle>
             </CardHeader>
