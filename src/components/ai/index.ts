@@ -15,3 +15,4 @@ export { AgentChatPanel } from "./AgentChatPanel";
 export { AutonomousAgentPanel } from "./AutonomousAgentPanel";
 export { GlobalAILevel3Button } from "./GlobalAILevel3Button";
 export { InteractiveAgentChat } from "./InteractiveAgentChat";
+export { AIObservabilityDashboard } from "./AIObservabilityDashboard";
