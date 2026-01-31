@@ -3,6 +3,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, LayoutDashboard, Package, Building2, BarChart3, Brain, FileText } from "lucide-react";
 import ProcurementDashboard from "./components/ProcurementDashboard";
+import OrdersListPanel from "./components/OrdersListPanel";
+import SuppliersPanel from "./components/SuppliersPanel";
+import ProcurementAnalyticsPanel from "./components/ProcurementAnalyticsPanel";
+import ProcurementReportsPanel from "./components/ProcurementReportsPanel";
 
 export default function AutonomousProcurement() {
   return (
@@ -61,27 +65,19 @@ export default function AutonomousProcurement() {
           </TabsContent>
 
           <TabsContent value="orders">
-            <div className="text-center py-12 text-muted-foreground">
-              Lista completa de pedidos e requisições - Em desenvolvimento
-            </div>
+            <OrdersListPanel />
           </TabsContent>
 
           <TabsContent value="suppliers">
-            <div className="text-center py-12 text-muted-foreground">
-              Gestão de fornecedores e contratos - Em desenvolvimento
-            </div>
+            <SuppliersPanel />
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="text-center py-12 text-muted-foreground">
-              Analytics preditivo de custos e lead time - Em desenvolvimento
-            </div>
+            <ProcurementAnalyticsPanel />
           </TabsContent>
 
           <TabsContent value="reports">
-            <div className="text-center py-12 text-muted-foreground">
-              Relatórios de auditoria e blockchain - Em desenvolvimento
-            </div>
+            <ProcurementReportsPanel />
           </TabsContent>
         </Tabs>
       </div>
