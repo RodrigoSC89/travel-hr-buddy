@@ -18,277 +18,44 @@ import type {
   TrainingMatrix,
 } from '../types';
 
-// Mock data for demonstration
-const mockComplianceItems: ComplianceItem[] = [
-  {
-    id: '1',
-    code: 'ISM-001',
-    title: 'Sistema de Gestão de Segurança',
-    category: 'ISM Code',
-    regulation: 'ISM Code Chapter 9',
-    status: 'compliant',
-    lastAuditDate: '2024-10-15',
-    nextAuditDate: '2025-04-15',
-    responsibleId: 'user-1',
-    responsibleName: 'Capitão Silva',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    evidence: ['sms-manual.pdf', 'audit-report-2024.pdf'],
-    notes: 'SMS atualizado conforme última auditoria',
-    score: 95,
-  },
-  {
-    id: '2',
-    code: 'SOLAS-001',
-    title: 'Equipamentos de Salvatagem',
-    category: 'SOLAS',
-    regulation: 'SOLAS Chapter III',
-    status: 'compliant',
-    lastAuditDate: '2024-11-01',
-    nextAuditDate: '2025-05-01',
-    responsibleId: 'user-2',
-    responsibleName: 'Imediato Santos',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    evidence: ['lifesaving-inspection.pdf'],
-    notes: 'Todos equipamentos inspecionados e certificados',
-    score: 100,
-  },
-  {
-    id: '3',
-    code: 'MLC-001',
-    title: 'Condições de Trabalho a Bordo',
-    category: 'MLC 2006',
-    regulation: 'MLC 2006 Title 3',
-    status: 'partial',
-    lastAuditDate: '2024-09-20',
-    nextAuditDate: '2025-03-20',
-    responsibleId: 'user-3',
-    responsibleName: 'Chefe de Máquinas',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    evidence: ['mlc-inspection.pdf'],
-    notes: 'Pendente atualização de alojamentos',
-    score: 78,
-  },
-  {
-    id: '4',
-    code: 'ISPS-001',
-    title: 'Plano de Proteção do Navio',
-    category: 'ISPS Code',
-    regulation: 'ISPS Code Part A',
-    status: 'compliant',
-    lastAuditDate: '2024-08-10',
-    nextAuditDate: '2025-02-10',
-    responsibleId: 'user-1',
-    responsibleName: 'Capitão Silva',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    evidence: ['ssp-2024.pdf', 'security-drills.pdf'],
-    notes: 'SSP atualizado e exercícios em dia',
-    score: 92,
-  },
-];
+// Mock data removed - using real Supabase data
+// @deprecated All mock arrays have been removed. Data comes from Supabase.
 
-const mockAudits: AuditSession[] = [
-  {
-    id: 'audit-1',
-    auditType: 'internal',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    auditorId: 'auditor-1',
-    auditorName: 'Auditor Interno - João Pereira',
-    scheduledDate: '2025-01-15',
-    status: 'scheduled',
-    findings: [],
-    score: 0,
-  },
-  {
-    id: 'audit-2',
-    auditType: 'class',
-    vesselId: 'vessel-2',
-    vesselName: 'Nordeste Explorer',
-    auditorId: 'auditor-2',
-    auditorName: 'Bureau Veritas',
-    scheduledDate: '2024-12-20',
-    completedDate: '2024-12-20',
-    status: 'completed',
-    findings: [
-      {
-        id: 'finding-1',
-        auditId: 'audit-2',
-        category: 'Manutenção',
-        description: 'Registro de manutenção preventiva incompleto',
-        severity: 'minor',
-        status: 'in-progress',
-        correctiveAction: 'Atualizar todos registros pendentes',
-        responsibleId: 'user-4',
-        responsibleName: 'Chefe de Máquinas',
-        dueDate: '2025-01-20',
-        evidence: [],
-      },
-    ],
-    score: 88,
-  },
-];
+// Helper functions for data mapping
+function mapComplianceStatus(status: string | null): ComplianceItem['status'] {
+  const lower = status?.toLowerCase() || '';
+  if (lower.includes('compliant') || lower === 'ok' || lower === 'valid') return 'compliant';
+  if (lower.includes('partial') || lower.includes('progress')) return 'partial';
+  if (lower.includes('non') || lower.includes('fail')) return 'non-compliant';
+  if (lower.includes('pending')) return 'pending';
+  return 'compliant';
+}
 
-const mockCertificates: Certificate[] = [
-  {
-    id: 'cert-1',
-    name: 'Documento de Conformidade (DOC)',
-    type: 'ISM',
-    issuingAuthority: 'DPC/Marinha do Brasil',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    issueDate: '2023-06-15',
-    expiryDate: '2028-06-14',
-    status: 'valid',
-    reminderDays: 90,
-  },
-  {
-    id: 'cert-2',
-    name: 'Certificado de Segurança de Construção',
-    type: 'SOLAS',
-    issuingAuthority: 'Bureau Veritas',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    issueDate: '2022-03-01',
-    expiryDate: '2025-02-28',
-    status: 'expiring-soon',
-    reminderDays: 60,
-  },
-  {
-    id: 'cert-3',
-    name: 'Certificado Internacional de Proteção do Navio (ISSC)',
-    type: 'ISPS',
-    issuingAuthority: 'DPC/Marinha do Brasil',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    issueDate: '2023-01-10',
-    expiryDate: '2028-01-09',
-    status: 'valid',
-    reminderDays: 90,
-  },
-  {
-    id: 'cert-4',
-    name: 'Certificado de Trabalho Marítimo (MLC)',
-    type: 'MLC',
-    issuingAuthority: 'Autoridade Marítima',
-    vesselId: 'vessel-1',
-    vesselName: 'Atlântico Sul',
-    issueDate: '2024-02-01',
-    expiryDate: '2024-12-31',
-    status: 'expired',
-    reminderDays: 30,
-  },
-];
+function getCertificateStatus(expiryDate: string | null): Certificate['status'] {
+  if (!expiryDate) return 'valid';
+  const expiry = new Date(expiryDate);
+  const now = new Date();
+  const daysUntilExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+  
+  if (daysUntilExpiry < 0) return 'expired';
+  if (daysUntilExpiry <= 60) return 'expiring-soon';
+  return 'valid';
+}
 
-const mockAlerts: ComplianceAlert[] = [
-  {
-    id: 'alert-1',
-    type: 'certificate-expiry',
-    title: 'Certificado MLC Expirado',
-    message: 'O Certificado de Trabalho Marítimo expirou em 31/12/2024. Renovação urgente necessária.',
-    severity: 'critical',
-    relatedItemId: 'cert-4',
-    relatedItemType: 'certificate',
-    createdAt: new Date().toISOString(),
-    isRead: false,
-    actionUrl: '/compliance/certificates',
-  },
-  {
-    id: 'alert-2',
-    type: 'certificate-expiry',
-    title: 'Certificado SOLAS Expirando',
-    message: 'O Certificado de Segurança de Construção expira em 28/02/2025.',
-    severity: 'warning',
-    relatedItemId: 'cert-2',
-    relatedItemType: 'certificate',
-    createdAt: new Date().toISOString(),
-    isRead: false,
-    actionUrl: '/compliance/certificates',
-  },
-  {
-    id: 'alert-3',
-    type: 'audit-due',
-    title: 'Auditoria Interna Programada',
-    message: 'Auditoria interna do Atlântico Sul agendada para 15/01/2025.',
-    severity: 'info',
-    relatedItemId: 'audit-1',
-    relatedItemType: 'audit',
-    createdAt: new Date().toISOString(),
-    isRead: true,
-    actionUrl: '/compliance/audits',
-  },
-  {
-    id: 'alert-4',
-    type: 'finding-overdue',
-    title: 'Finding Pendente',
-    message: 'Ação corretiva para registro de manutenção vence em 20/01/2025.',
-    severity: 'warning',
-    relatedItemId: 'finding-1',
-    relatedItemType: 'finding',
-    createdAt: new Date().toISOString(),
-    isRead: false,
-    actionUrl: '/compliance/findings',
-  },
-];
-
-const mockTrainings: ComplianceTraining[] = [
-  {
-    id: 'training-1',
-    crewMemberId: 'crew-1',
-    crewMemberName: 'Carlos Silva',
-    crewMemberRank: 'Capitão',
-    courseId: 'course-1',
-    courseName: 'ISM Code Awareness',
-    category: 'ISM',
-    status: 'completed',
-    progress: 100,
-    startDate: '2024-06-01',
-    completedDate: '2024-06-15',
-    expiryDate: '2026-06-15',
-    score: 95,
-    certificateNumber: 'ISM-2024-001',
-    isMandatory: true,
-  },
-  {
-    id: 'training-2',
-    crewMemberId: 'crew-2',
-    crewMemberName: 'Roberto Santos',
-    crewMemberRank: 'Imediato',
-    courseId: 'course-2',
-    courseName: 'STCW Basic Safety',
-    category: 'STCW',
-    status: 'in-progress',
-    progress: 65,
-    startDate: '2024-11-01',
-    isMandatory: true,
-  },
-  {
-    id: 'training-3',
-    crewMemberId: 'crew-3',
-    crewMemberName: 'Paulo Ferreira',
-    crewMemberRank: 'Chefe de Máquinas',
-    courseId: 'course-3',
-    courseName: 'Fire Fighting Advanced',
-    category: 'Safety',
-    status: 'expired',
-    progress: 100,
-    completedDate: '2022-03-10',
-    expiryDate: '2024-03-10',
-    score: 88,
-    isMandatory: true,
-  },
-];
+function mapAlertSeverity(severity: string | null): ComplianceAlert['severity'] {
+  const lower = severity?.toLowerCase() || '';
+  if (lower.includes('critical') || lower.includes('urgent')) return 'critical';
+  if (lower.includes('warning') || lower.includes('high')) return 'warning';
+  return 'info';
+}
 
 export function useComplianceData() {
-  const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>(mockComplianceItems);
-  const [audits, setAudits] = useState<AuditSession[]>(mockAudits);
-  const [certificates, setCertificates] = useState<Certificate[]>(mockCertificates);
-  const [alerts, setAlerts] = useState<ComplianceAlert[]>(mockAlerts);
-  const [trainings, setTrainings] = useState<ComplianceTraining[]>(mockTrainings);
-  const [loading, setLoading] = useState(false);
+  const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>([]);
+  const [audits, setAudits] = useState<AuditSession[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [alerts, setAlerts] = useState<ComplianceAlert[]>([]);
+  const [trainings, setTrainings] = useState<ComplianceTraining[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     status: 'all',
     category: 'all',
@@ -297,9 +64,9 @@ export function useComplianceData() {
   });
 
   const kpis: ComplianceKPIs = {
-    overallScore: Math.round(
-      complianceItems.reduce((acc, item) => acc + item.score, 0) / complianceItems.length
-    ),
+    overallScore: complianceItems.length > 0 
+      ? Math.round(complianceItems.reduce((acc, item) => acc + item.score, 0) / complianceItems.length)
+      : 0,
     certificatesValid: certificates.filter(c => c.status === 'valid').length,
     certificatesTotal: certificates.length,
     openFindings: audits.reduce(
@@ -320,9 +87,121 @@ export function useComplianceData() {
   const fetchComplianceData = useCallback(async () => {
     setLoading(true);
     try {
-      // Simulated fetch - in production, fetch from Supabase
-      await new Promise(resolve => setTimeout(resolve, 500));
-      // Data is already set from mock
+      // Fetch compliance records from Supabase
+      const { data: complianceData, error: complianceError } = await supabase
+        .from('compliance_records')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (complianceError) throw complianceError;
+
+      if (complianceData && complianceData.length > 0) {
+        const items: ComplianceItem[] = complianceData.map((record: Record<string, unknown>) => ({
+          id: String(record.id),
+          code: String(record.code || `COMP-${String(record.id).slice(0, 6)}`),
+          title: String(record.title || record.requirement_name || 'Requisito'),
+          category: String(record.category || record.regulation_type || 'Geral'),
+          regulation: String(record.regulation || ''),
+          status: mapComplianceStatus(record.status as string),
+          lastAuditDate: record.last_audit_date ? String(record.last_audit_date) : undefined,
+          nextAuditDate: record.next_audit_date ? String(record.next_audit_date) : undefined,
+          responsibleId: String(record.responsible_id || ''),
+          responsibleName: String(record.responsible_name || 'Não atribuído'),
+          vesselId: String(record.vessel_id || ''),
+          vesselName: String(record.vessel_name || 'Embarcação'),
+          evidence: Array.isArray(record.evidence) ? record.evidence as string[] : [],
+          notes: String(record.notes || ''),
+          score: Number(record.score || record.compliance_score || 0),
+        }));
+        setComplianceItems(items);
+      }
+
+      // Fetch audits
+      const { data: auditsData } = await supabase
+        .from('audits')
+        .select('*, audit_findings(*)')
+        .order('scheduled_date', { ascending: false })
+        .limit(20);
+
+      if (auditsData && auditsData.length > 0) {
+        const auditSessions: AuditSession[] = auditsData.map((audit: Record<string, unknown>) => ({
+          id: String(audit.id),
+          auditType: (audit.audit_type as AuditSession['auditType']) || 'internal',
+          vesselId: String(audit.vessel_id || ''),
+          vesselName: String(audit.vessel_name || 'Embarcação'),
+          auditorId: String(audit.auditor_id || ''),
+          auditorName: String(audit.auditor_name || 'Auditor'),
+          scheduledDate: String(audit.scheduled_date || ''),
+          completedDate: audit.completed_date ? String(audit.completed_date) : undefined,
+          status: (audit.status as AuditSession['status']) || 'scheduled',
+          findings: Array.isArray(audit.audit_findings)
+            ? (audit.audit_findings as Record<string, unknown>[]).map((f) => ({
+                id: String(f.id),
+                auditId: String(f.audit_id),
+                category: String(f.category || ''),
+                description: String(f.description || ''),
+                severity: (f.severity as AuditFinding['severity']) || 'minor',
+                status: (f.status as AuditFinding['status']) || 'open',
+                correctiveAction: String(f.corrective_action || ''),
+                responsibleId: String(f.responsible_id || ''),
+                responsibleName: String(f.responsible_name || ''),
+                dueDate: String(f.due_date || ''),
+                evidence: [],
+              }))
+            : [],
+          score: Number(audit.score || 0),
+        }));
+        setAudits(auditSessions);
+      }
+
+      // Fetch certificates
+      const { data: certsData } = await supabase
+        .from('maritime_certificates')
+        .select('*')
+        .order('expiry_date', { ascending: true })
+        .limit(50);
+
+      if (certsData && certsData.length > 0) {
+        const certs: Certificate[] = certsData.map((cert: Record<string, unknown>) => ({
+          id: String(cert.id),
+          name: String(cert.certificate_type || cert.certificate_number || 'Certificado'),
+          type: String(cert.type || 'Geral'),
+          issuingAuthority: String(cert.issuing_authority || ''),
+          vesselId: String(cert.vessel_id || ''),
+          vesselName: String(cert.vessel_name || 'Embarcação'),
+          issueDate: String(cert.issue_date || ''),
+          expiryDate: String(cert.expiry_date || ''),
+          status: getCertificateStatus(cert.expiry_date as string),
+          reminderDays: 30,
+        }));
+        setCertificates(certs);
+      }
+
+      // Fetch alerts from soc_alerts
+      const { data: alertsData } = await supabase
+        .from('soc_alerts')
+        .select('*')
+        .eq('is_resolved', false)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (alertsData && alertsData.length > 0) {
+        const compAlerts: ComplianceAlert[] = alertsData.map((alert: Record<string, unknown>) => ({
+          id: String(alert.id),
+          type: 'certificate-expiry' as const,
+          title: String(alert.title || 'Alerta'),
+          message: String(alert.message || ''),
+          severity: mapAlertSeverity(alert.severity as string),
+          relatedItemId: String(alert.related_id || ''),
+          relatedItemType: 'certificate',
+          createdAt: String(alert.created_at),
+          isRead: Boolean(alert.acknowledged_at),
+          actionUrl: '/compliance',
+        }));
+        setAlerts(compAlerts);
+      }
+
     } catch (error) {
       logger.error('Error fetching compliance data:', error);
       toast.error('Erro ao carregar dados de conformidade');
