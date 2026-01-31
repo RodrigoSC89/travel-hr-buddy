@@ -1,6 +1,6 @@
 /**
  * Export Center - Multi-format export hub
- * PDF, Excel, Word, CSV exports with templates
+ * PDF, Excel, Word, CSV exports with templates and scheduling
  */
 
 import React, { useState } from "react";
@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -29,9 +28,10 @@ import {
   Calendar,
   Filter,
   Layers,
-  Send
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { ScheduledExportsDialog } from "./ScheduledExportsDialog";
 
 interface ExportTemplate {
   id: string;
@@ -74,9 +74,11 @@ export function ExportCenter() {
     { id: "j1", templateId: "t1", templateName: "Relatório de Manutenção Mensal", status: "completed", progress: 100, createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000 + 45000), fileUrl: "#", fileSize: "2.4 MB" },
     { id: "j2", templateId: "t4", templateName: "Lista de Tripulação", status: "completed", progress: 100, createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000), completedAt: new Date(Date.now() - 5 * 60 * 60 * 1000 + 12000), fileUrl: "#", fileSize: "856 KB" }
   ]);
-  const [dateRange, setDateRange] = useState({ start: "", end: "" });
-  const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [isExporting, setIsExporting] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [moduleFilter, setModuleFilter] = useState("all");
+  const [formatFilter, setFormatFilter] = useState("all");
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -143,7 +145,40 @@ export function ExportCenter() {
 
   const uniqueModules = [...new Set(EXPORT_TEMPLATES.map(t => t.module))];
 
+  // Filter templates
+  const filteredTemplates = EXPORT_TEMPLATES.filter(template => {
+    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         template.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesModule = moduleFilter === "all" || template.module === moduleFilter;
+    const matchesFormat = formatFilter === "all" || template.type === formatFilter;
+    return matchesSearch && matchesModule && matchesFormat;
+  });
+
+  const handleDownloadExport = (job: ExportJob) => {
+    // Simulate file download
+    toast.success("Download iniciado!", {
+      description: `${job.templateName} (${job.fileSize})`
+    });
+  };
+
+  const handleEmailExport = (job: ExportJob) => {
+    toast.success("Email enviado!", {
+      description: "O relatório foi enviado para seu email"
+    });
+  };
+
+  const handlePrintExport = (job: ExportJob) => {
+    window.print();
+    toast.success("Preparando impressão...");
+  };
+
+  const handleApplyFilters = () => {
+    const count = filteredTemplates.length;
+    toast.success(`${count} template${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''}`);
+  };
+
   return (
+    <>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -338,7 +373,7 @@ export function ExportCenter() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm">Exportações Agendadas</CardTitle>
-                <Button size="sm" onClick={() => toast.info("Abrindo formulário de agendamento...")}>
+                <Button size="sm" onClick={() => setShowScheduleDialog(true)}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Novo Agendamento
                 </Button>
@@ -349,12 +384,22 @@ export function ExportCenter() {
                 <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Nenhuma exportação agendada</p>
                 <p className="text-sm">Agende exportações automáticas diárias, semanais ou mensais</p>
+                <Button className="mt-4" onClick={() => setShowScheduleDialog(true)}>
+                  Criar Primeiro Agendamento
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
+    
+    <ScheduledExportsDialog 
+      open={showScheduleDialog}
+      onOpenChange={setShowScheduleDialog}
+      templates={EXPORT_TEMPLATES.map(t => ({ id: t.id, name: t.name }))}
+    />
+    </>
   );
 }
 

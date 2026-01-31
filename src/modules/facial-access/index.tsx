@@ -7,8 +7,6 @@ import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -23,10 +21,10 @@ import {
   Unlock,
   AlertTriangle,
   History,
-  Settings,
   UserPlus
 } from "lucide-react";
 import { toast } from "sonner";
+import { UserRegistrationForm } from "./components/UserRegistrationForm";
 
 interface AccessLog {
   id: string;
@@ -351,52 +349,7 @@ export default function FacialAccess() {
             </TabsContent>
 
             <TabsContent value="register">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <UserPlus className="h-5 w-5" />
-                    Cadastrar Novo Usuário
-                  </CardTitle>
-                  <CardDescription>
-                    Registre dados biométricos para controle de acesso
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Nome Completo</Label>
-                      <Input placeholder="Digite o nome" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Cargo</Label>
-                      <Input placeholder="Digite o cargo" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Matrícula</Label>
-                      <Input placeholder="Digite a matrícula" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Nível de Acesso</Label>
-                      <Input placeholder="Selecione o nível" />
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 border border-dashed rounded-lg text-center">
-                    <Camera className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">
-                      Capture 3 fotos para cadastro facial
-                    </p>
-                    <Button variant="outline" className="mt-2" onClick={startCamera}>
-                      Iniciar Captura
-                    </Button>
-                  </div>
-
-                  <Button className="w-full" onClick={() => toast.success("Usuário cadastrado com sucesso!")}>
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Cadastrar Usuário
-                  </Button>
-                </CardContent>
-              </Card>
+              <UserRegistrationForm />
             </TabsContent>
           </Tabs>
         </div>
