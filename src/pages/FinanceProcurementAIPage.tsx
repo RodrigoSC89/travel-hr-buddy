@@ -13,6 +13,7 @@ import {
 import { PredictiveCostDashboard } from '@/modules/finance/components/PredictiveCostDashboard';
 import { IntelligentProcurement } from '@/modules/finance/components/IntelligentProcurement';
 import { InvoiceAutomation } from '@/modules/finance/components/InvoiceAutomation';
+import { BudgetForecastingAI } from '@/modules/finance/components/BudgetForecastingAI';
 
 export default function FinanceProcurementAIPage() {
   const [activeTab, setActiveTab] = useState('costs');
@@ -90,10 +91,7 @@ export default function FinanceProcurementAIPage() {
           </TabsContent>
 
           <TabsContent value="budget" className="mt-6">
-            <div className="text-center py-12 text-muted-foreground">
-              <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Budget Forecasting AI - Em breve</p>
-            </div>
+            <BudgetForecastingAI />
           </TabsContent>
         </Tabs>
       </div>
