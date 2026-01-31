@@ -1,5 +1,6 @@
-// PATCH 862 - @ts-nocheck mantido temporariamente - mock data incompatível com schema completo
+// PATCH 862 - @ts-nocheck removido - integração real com Supabase
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -62,64 +63,30 @@ const VesselManagement: React.FC = () => {
     try {
       setIsLoading(true);
       
-      // Try to load from database, fallback to mock data
       const { data: vessels, error } = await supabase
         .from("vessels")
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) {
-        // Database fallback to mock data
-        // Fallback mock data
-        const mockVessels: Vessel[] = [
-          {
-            id: "1",
-            name: "MV Atlântico",
-            imo_number: "1234567",
-            vessel_type: "Container Ship",
-            flag_state: "Brasil",
-            status: "active",
-            current_location: "Santos, Brasil",
-            next_port: "Rio de Janeiro",
-            eta: "2024-01-15T10:00:00Z",
-            created_at: "2024-01-01T00:00:00Z"
-          },
-          {
-            id: "2",
-            name: "MV Pacífico",
-            imo_number: "2345678",
-            vessel_type: "Bulk Carrier",
-            flag_state: "Brasil",
-            status: "active",
-            current_location: "Paranaguá, Brasil",
-            next_port: "Salvador",
-            eta: "2024-01-18T14:30:00Z",
-            created_at: "2024-01-01T00:00:00Z"
-          },
-          {
-            id: "3",
-            name: "MV Índico",
-            imo_number: "3456789",
-            vessel_type: "Tanker",
-            flag_state: "Brasil",
-            status: "maintenance",
-            current_location: "Suape, Brasil",
-            next_port: "Fortaleza",
-            eta: "2024-01-22T08:00:00Z",
-            created_at: "2024-01-01T00:00:00Z"
-          }
-        ];
-      
-        setVessels(mockVessels);
+        logger.error("Error loading vessels:", error);
+        toast({
+          title: "Erro ao carregar embarcações",
+          description: error.message,
+          variant: "destructive"
+        });
+        setVessels([]);
       } else {
         setVessels(vessels || []);
       }
     } catch (error) {
+      logger.error("Unexpected error loading vessels:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
         variant: "destructive"
       });
+      setVessels([]);
     } finally {
       setIsLoading(false);
     }
