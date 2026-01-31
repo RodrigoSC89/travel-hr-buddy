@@ -28,6 +28,7 @@ import {
   Bot
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { AgentChatPanel } from "./AgentChatPanel";
 
 interface Agent {
   id: string;
@@ -229,6 +230,7 @@ const autonomyLabels: Record<number, { label: string; color: string }> = {
 
 export function AgentOrchestrationDashboard() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [chatAgent, setChatAgent] = useState<Agent | null>(null);
   const [systemStatus, setSystemStatus] = useState<"operational" | "degraded" | "critical">("operational");
 
   // Simulate real-time updates
@@ -389,9 +391,7 @@ export function AgentOrchestrationDashboard() {
                           className="w-full mt-2"
                           onClick={(e) => {
                             e.stopPropagation();
-                            toast.success(`Interagindo com ${agent.name}`, {
-                              description: "Iniciando comunicação direta com o agente"
-                            });
+                            setChatAgent(agent);
                           }}
                         >
                           <MessageSquare className="h-3 w-3 mr-1" />
@@ -556,6 +556,18 @@ export function AgentOrchestrationDashboard() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Agent Chat Panel */}
+      <AnimatePresence>
+        {chatAgent && (
+          <AgentChatPanel
+            agentId={chatAgent.id}
+            agentName={chatAgent.name}
+            agentRole={chatAgent.role}
+            onClose={() => setChatAgent(null)}
+          />
         )}
       </AnimatePresence>
     </div>
