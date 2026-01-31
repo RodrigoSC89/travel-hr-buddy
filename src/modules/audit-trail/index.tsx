@@ -207,8 +207,65 @@ export default function AuditTrail() {
     }
   };
 
-  const exportReport = () => {
-    toast.success("Relatório de auditoria exportado!");
+  const exportReport = (type: 'daily' | 'security' | 'ai' = 'daily') => {
+    const now = new Date();
+    const reportTitle = type === 'daily' ? 'Relatório Diário' : type === 'security' ? 'Relatório de Segurança' : 'Análise de IA';
+    
+    const content = `
+TRILHA DE AUDITORIA - ${reportTitle.toUpperCase()}
+${'='.repeat(50)}
+Gerado em: ${now.toLocaleString('pt-BR')}
+Período: ${new Date(now.getTime() - 86400000).toLocaleDateString('pt-BR')} - ${now.toLocaleDateString('pt-BR')}
+
+RESUMO EXECUTIVO
+----------------
+Total de Registros: ${auditEntries.length}
+Eventos Críticos: ${auditEntries.filter(e => e.severity === 'critical').length}
+Alertas: ${auditEntries.filter(e => e.severity === 'warning').length}
+Insights IA: ${aiInsights.length}
+
+REGISTROS DETALHADOS
+--------------------
+${auditEntries.map(entry => `
+[${entry.timestamp.toLocaleString('pt-BR')}] ${entry.severity.toUpperCase()}
+Usuário: ${entry.userName} (${entry.userId})
+Ação: ${entry.action}
+Módulo: ${entry.module}
+Detalhes: ${entry.details}
+IP: ${entry.ipAddress}
+`).join('\n---\n')}
+
+${type === 'ai' ? `
+INSIGHTS DA IA
+--------------
+${aiInsights.map(insight => `
+[${insight.type.toUpperCase()}] ${insight.title}
+Confiança: ${insight.confidence}%
+${insight.description}
+Registros afetados: ${insight.affectedEntries}
+`).join('\n---\n')}` : ''}
+
+${type === 'security' ? `
+ANÁLISE DE SEGURANÇA
+--------------------
+- Eventos críticos detectados: ${auditEntries.filter(e => e.severity === 'critical').length}
+- Alterações de permissão: ${auditEntries.filter(e => e.action === 'PERMISSION_CHANGE').length}
+- Acessos fora do horário: Verificar logs de 22h-6h
+- Exportações de dados: ${auditEntries.filter(e => e.action === 'EXPORT').length}
+` : ''}
+
+--- Fim do Relatório ---
+    `.trim();
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `auditoria-${type}-${now.toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    toast.success(`${reportTitle} exportado com sucesso!`);
   };
 
   const getSeverityColor = (severity: string) => {
@@ -253,7 +310,7 @@ export default function AuditTrail() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={exportReport}>
+          <Button variant="outline" onClick={() => exportReport('daily')}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
@@ -464,15 +521,15 @@ export default function AuditTrail() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => exportReport('daily')}>
                   <FileText className="h-6 w-6 mb-2" />
                   <span>Relatório Diário</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => exportReport('security')}>
                   <Shield className="h-6 w-6 mb-2" />
                   <span>Relatório de Segurança</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => exportReport('ai')}>
                   <Brain className="h-6 w-6 mb-2" />
                   <span>Análise de IA</span>
                 </Button>

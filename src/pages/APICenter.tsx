@@ -13,10 +13,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { 
   Server, Activity, CheckCircle2, AlertTriangle, XCircle, 
   RefreshCw, Settings, Zap, Cloud, Ship, Plane, Brain,
-  Search, TrendingUp, Clock, Shield, Globe, Waves
+  Search, TrendingUp, Clock, Shield, Globe, Waves, Loader2, Save, TestTube
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -31,6 +32,9 @@ interface APIIntegration {
   quota: { used: number; limit: number };
   lastSync: string;
   fallbackTo?: string;
+  endpoint?: string;
+  rateLimit?: number;
+  timeout?: number;
 }
 
 const mockIntegrations: APIIntegration[] = [
@@ -44,7 +48,10 @@ const mockIntegrations: APIIntegration[] = [
     latency: 245,
     quota: { used: 1234, limit: 5000 },
     lastSync: new Date().toISOString(),
-    fallbackTo: "openweather"
+    fallbackTo: "openweather",
+    endpoint: "https://api.stormglass.io/v2",
+    rateLimit: 100,
+    timeout: 30000
   },
   {
     id: "marinetraffic",
@@ -56,6 +63,9 @@ const mockIntegrations: APIIntegration[] = [
     latency: 189,
     quota: { used: 892, limit: 2000 },
     lastSync: new Date().toISOString(),
+    endpoint: "https://services.marinetraffic.com/api",
+    rateLimit: 50,
+    timeout: 15000
   },
   {
     id: "amadeus",
@@ -67,6 +77,9 @@ const mockIntegrations: APIIntegration[] = [
     latency: 523,
     quota: { used: 450, limit: 1000 },
     lastSync: new Date().toISOString(),
+    endpoint: "https://api.amadeus.com/v2",
+    rateLimit: 200,
+    timeout: 20000
   },
   {
     id: "openai",
@@ -78,6 +91,9 @@ const mockIntegrations: APIIntegration[] = [
     latency: 1245,
     quota: { used: 50000, limit: 100000 },
     lastSync: new Date().toISOString(),
+    endpoint: "https://api.openai.com/v1",
+    rateLimit: 500,
+    timeout: 60000
   },
   {
     id: "shodan",
@@ -89,6 +105,9 @@ const mockIntegrations: APIIntegration[] = [
     latency: 0,
     quota: { used: 0, limit: 100 },
     lastSync: new Date(Date.now() - 86400000).toISOString(),
+    endpoint: "https://api.shodan.io",
+    rateLimit: 10,
+    timeout: 30000
   },
   {
     id: "noaa",
@@ -100,6 +119,9 @@ const mockIntegrations: APIIntegration[] = [
     latency: 156,
     quota: { used: 0, limit: 0 },
     lastSync: new Date().toISOString(),
+    endpoint: "https://api.weather.gov",
+    rateLimit: 0,
+    timeout: 10000
   },
 ];
 
@@ -107,6 +129,10 @@ export default function APICenter() {
   const [integrations, setIntegrations] = useState<APIIntegration[]>(mockIntegrations);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [selectedAPI, setSelectedAPI] = useState<APIIntegration | null>(null);
+  const [editedSettings, setEditedSettings] = useState<Partial<APIIntegration>>({});
 
   const filteredIntegrations = integrations.filter(api => {
     const matchesSearch = api.displayName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -124,15 +150,90 @@ export default function APICenter() {
 
   const toggleIntegration = (id: string) => {
     setIntegrations(prev => prev.map(api => 
-      api.id === id ? { ...api, isEnabled: !api.isEnabled, status: api.isEnabled ? "inactive" : "active" } : api
+      api.id === id ? { 
+        ...api, 
+        isEnabled: !api.isEnabled, 
+        status: api.isEnabled ? "inactive" : "active",
+        lastSync: new Date().toISOString()
+      } : api
     ));
-    toast.success("Configuração atualizada");
+    const api = integrations.find(a => a.id === id);
+    toast.success(`${api?.displayName} ${api?.isEnabled ? 'desativado' : 'ativado'}`, {
+      description: "Configuração salva com sucesso"
+    });
   };
 
   const testConnection = async (id: string) => {
-    toast.info(`Testando conexão com ${id}...`);
+    const api = integrations.find(a => a.id === id);
+    toast.info(`Testando conexão com ${api?.displayName}...`);
+    
+    // Simulate connection test
     await new Promise(r => setTimeout(r, 1500));
-    toast.success("Conexão estabelecida com sucesso!");
+    
+    const success = Math.random() > 0.2; // 80% success rate
+    
+    if (success) {
+      const newLatency = Math.floor(Math.random() * 500) + 100;
+      setIntegrations(prev => prev.map(a => 
+        a.id === id ? { ...a, latency: newLatency, status: "active", lastSync: new Date().toISOString() } : a
+      ));
+      toast.success(`Conexão estabelecida!`, {
+        description: `Latência: ${newLatency}ms`
+      });
+    } else {
+      setIntegrations(prev => prev.map(a => 
+        a.id === id ? { ...a, status: "error" } : a
+      ));
+      toast.error(`Falha na conexão`, {
+        description: "Verifique as credenciais e tente novamente"
+      });
+    }
+  };
+
+  const syncAllAPIs = async () => {
+    setIsSyncing(true);
+    toast.info("Sincronizando todas as APIs...");
+    
+    // Simulate syncing each enabled API
+    for (const api of integrations.filter(a => a.isEnabled)) {
+      await new Promise(r => setTimeout(r, 500));
+    }
+    
+    setIntegrations(prev => prev.map(api => 
+      api.isEnabled ? { 
+        ...api, 
+        lastSync: new Date().toISOString(),
+        latency: Math.floor(Math.random() * 300) + 100
+      } : api
+    ));
+    
+    setIsSyncing(false);
+    toast.success("Sincronização concluída!", {
+      description: `${integrations.filter(a => a.isEnabled).length} APIs atualizadas`
+    });
+  };
+
+  const openSettings = (api: APIIntegration) => {
+    setSelectedAPI(api);
+    setEditedSettings({
+      endpoint: api.endpoint,
+      rateLimit: api.rateLimit,
+      timeout: api.timeout,
+      fallbackTo: api.fallbackTo
+    });
+    setShowSettingsDialog(true);
+  };
+
+  const saveSettings = () => {
+    if (!selectedAPI) return;
+    
+    setIntegrations(prev => prev.map(api => 
+      api.id === selectedAPI.id ? { ...api, ...editedSettings } : api
+    ));
+    
+    toast.success(`Configurações de ${selectedAPI.displayName} salvas`);
+    setShowSettingsDialog(false);
+    setSelectedAPI(null);
   };
 
   const getCategoryIcon = (category: string) => {
@@ -170,9 +271,18 @@ export default function APICenter() {
           </h1>
           <p className="text-muted-foreground mt-1">Central de gestão de integrações externas</p>
         </div>
-        <Button onClick={() => toast.info("Sincronizando todas as APIs...")}>
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Sincronizar Todas
+        <Button onClick={syncAllAPIs} disabled={isSyncing}>
+          {isSyncing ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Sincronizando...
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Sincronizar Todas
+            </>
+          )}
         </Button>
       </div>
 
@@ -264,16 +374,19 @@ export default function APICenter() {
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Quota</span>
-                    <span>{api.quota.used}/{api.quota.limit}</span>
+                    <span>{api.quota.used.toLocaleString()}/{api.quota.limit.toLocaleString()}</span>
                   </div>
                   <Progress value={(api.quota.used / api.quota.limit) * 100} className="h-1" />
                 </div>
               )}
+              <div className="text-xs text-muted-foreground">
+                Última sync: {new Date(api.lastSync).toLocaleString('pt-BR')}
+              </div>
               <div className="flex gap-2 pt-2">
                 <Button size="sm" variant="outline" className="flex-1" onClick={() => testConnection(api.id)}>
-                  <Zap className="h-3 w-3 mr-1" /> Testar
+                  <TestTube className="h-3 w-3 mr-1" /> Testar
                 </Button>
-                <Button size="sm" variant="ghost">
+                <Button size="sm" variant="ghost" onClick={() => openSettings(api)}>
                   <Settings className="h-3 w-3" />
                 </Button>
               </div>
@@ -281,6 +394,72 @@ export default function APICenter() {
           </Card>
         ))}
       </div>
+
+      {/* Settings Dialog */}
+      <Dialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Configurações - {selectedAPI?.displayName}
+            </DialogTitle>
+            <DialogDescription>
+              Ajuste os parâmetros de conexão da API
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAPI && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Endpoint</Label>
+                <Input 
+                  value={editedSettings.endpoint || ""}
+                  onChange={(e) => setEditedSettings(prev => ({ ...prev, endpoint: e.target.value }))}
+                  placeholder="https://api.example.com"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Rate Limit (req/min)</Label>
+                  <Input 
+                    type="number"
+                    value={editedSettings.rateLimit || 0}
+                    onChange={(e) => setEditedSettings(prev => ({ ...prev, rateLimit: parseInt(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Timeout (ms)</Label>
+                  <Input 
+                    type="number"
+                    value={editedSettings.timeout || 30000}
+                    onChange={(e) => setEditedSettings(prev => ({ ...prev, timeout: parseInt(e.target.value) }))}
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Fallback API</Label>
+                <Input 
+                  value={editedSettings.fallbackTo || ""}
+                  onChange={(e) => setEditedSettings(prev => ({ ...prev, fallbackTo: e.target.value }))}
+                  placeholder="ID da API de fallback"
+                />
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSettingsDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={saveSettings}>
+              <Save className="h-4 w-4 mr-2" />
+              Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
