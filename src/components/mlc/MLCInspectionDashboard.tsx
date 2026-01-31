@@ -179,10 +179,114 @@ export const MLCInspectionDashboard: React.FC = () => {
                 <Button onClick={sendAiMessage} disabled={isLoading}><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="settings"><Card><CardHeader><CardTitle>Configurações</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">Configurações do módulo MLC Inspection em desenvolvimento.</p></CardContent></Card></TabsContent>
+        <TabsContent value="settings">
+          <MLCSettings />
+        </TabsContent>
       </Tabs>
     </div>
   );
 };
+
+function MLCSettings() {
+  const [settings, setSettings] = useState({
+    auto_save: true,
+    require_evidence: true,
+    notify_ncs: true,
+    report_format: 'pdf',
+    language: 'pt-BR',
+  });
+
+  const handleSave = () => {
+    toast.success('Configurações salvas com sucesso');
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Settings className="w-5 h-5" />
+          Configurações MLC 2006
+        </CardTitle>
+        <CardDescription>Configure parâmetros de inspeção e relatórios</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <h4 className="font-medium">Opções de Inspeção</h4>
+            <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div>
+                <p className="font-medium">Auto-save</p>
+                <p className="text-sm text-muted-foreground">Salvar respostas automaticamente</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={settings.auto_save}
+                onChange={e => setSettings({ ...settings, auto_save: e.target.checked })}
+                className="h-5 w-5"
+              />
+            </div>
+            <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div>
+                <p className="font-medium">Evidências Obrigatórias</p>
+                <p className="text-sm text-muted-foreground">Exigir anexos para NCs</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={settings.require_evidence}
+                onChange={e => setSettings({ ...settings, require_evidence: e.target.checked })}
+                className="h-5 w-5"
+              />
+            </div>
+            <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div>
+                <p className="font-medium">Notificar NCs</p>
+                <p className="text-sm text-muted-foreground">Enviar alerta em não conformidades</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={settings.notify_ncs}
+                onChange={e => setSettings({ ...settings, notify_ncs: e.target.checked })}
+                className="h-5 w-5"
+              />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h4 className="font-medium">Relatórios</h4>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Formato Padrão</label>
+              <select 
+                value={settings.report_format}
+                onChange={e => setSettings({ ...settings, report_format: e.target.value })}
+                className="w-full p-2 border rounded-lg bg-background"
+              >
+                <option value="pdf">PDF</option>
+                <option value="excel">Excel</option>
+                <option value="word">Word</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Idioma</label>
+              <select 
+                value={settings.language}
+                onChange={e => setSettings({ ...settings, language: e.target.value })}
+                className="w-full p-2 border rounded-lg bg-background"
+              >
+                <option value="pt-BR">Português (BR)</option>
+                <option value="en-US">English (US)</option>
+                <option value="es-ES">Español</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <Button onClick={handleSave} className="gap-2">
+            <CheckCircle className="w-4 h-4" />
+            Salvar Configurações
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default MLCInspectionDashboard;

@@ -1,17 +1,265 @@
 /**
  * Tracking Alerts - Integrated with Supabase
+ * CRUD completo para regras de alerta
  */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { 
   AlertTriangle, CheckCircle, Clock, Bell, Brain, Shield,
-  XCircle, RefreshCw, Zap, Settings, Loader2
+  XCircle, RefreshCw, Zap, Settings, Plus, Edit2, Trash2, Save
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTrackingAlerts, useAlertHistory, useResolveAlert } from "@/hooks/useTrackingAlerts";
+
+interface AlertRule {
+  id: string;
+  name: string;
+  condition: string;
+  threshold: number;
+  severity: 'critical' | 'warning' | 'info';
+  enabled: boolean;
+  notify_email: boolean;
+  notify_sms: boolean;
+}
+
+function AlertRulesConfig() {
+  const [rules, setRules] = useState<AlertRule[]>([
+    { id: '1', name: 'Perda de sinal GNSS', condition: 'signal_loss', threshold: 30, severity: 'critical', enabled: true, notify_email: true, notify_sms: true },
+    { id: '2', name: 'Desvio de rota', condition: 'route_deviation', threshold: 500, severity: 'warning', enabled: true, notify_email: true, notify_sms: false },
+    { id: '3', name: 'Velocidade anormal', condition: 'speed_anomaly', threshold: 25, severity: 'warning', enabled: false, notify_email: true, notify_sms: false },
+    { id: '4', name: 'Zona restrita', condition: 'restricted_zone', threshold: 0, severity: 'critical', enabled: true, notify_email: true, notify_sms: true },
+  ]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingRule, setEditingRule] = useState<AlertRule | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    condition: 'signal_loss',
+    threshold: 0,
+    severity: 'warning' as 'critical' | 'warning' | 'info',
+    notify_email: true,
+    notify_sms: false,
+  });
+
+  const handleOpenDialog = (rule?: AlertRule) => {
+    if (rule) {
+      setEditingRule(rule);
+      setFormData({
+        name: rule.name,
+        condition: rule.condition,
+        threshold: rule.threshold,
+        severity: rule.severity,
+        notify_email: rule.notify_email,
+        notify_sms: rule.notify_sms,
+      });
+    } else {
+      setEditingRule(null);
+      setFormData({
+        name: '',
+        condition: 'signal_loss',
+        threshold: 0,
+        severity: 'warning',
+        notify_email: true,
+        notify_sms: false,
+      });
+    }
+    setIsDialogOpen(true);
+  };
+
+  const handleSave = () => {
+    if (!formData.name.trim()) {
+      toast.error('Nome da regra é obrigatório');
+      return;
+    }
+
+    if (editingRule) {
+      setRules(prev => prev.map(r => 
+        r.id === editingRule.id 
+          ? { ...r, ...formData, enabled: r.enabled }
+          : r
+      ));
+      toast.success('Regra atualizada com sucesso');
+    } else {
+      const newRule: AlertRule = {
+        id: Date.now().toString(),
+        ...formData,
+        enabled: true,
+      };
+      setRules(prev => [...prev, newRule]);
+      toast.success('Regra criada com sucesso');
+    }
+    setIsDialogOpen(false);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta regra?')) {
+      setRules(prev => prev.filter(r => r.id !== id));
+      toast.success('Regra excluída');
+    }
+  };
+
+  const handleToggle = (id: string) => {
+    setRules(prev => prev.map(r => 
+      r.id === id ? { ...r, enabled: !r.enabled } : r
+    ));
+    const rule = rules.find(r => r.id === id);
+    toast.success(rule?.enabled ? 'Regra desativada' : 'Regra ativada');
+  };
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'bg-red-500';
+      case 'warning': return 'bg-orange-500';
+      default: return 'bg-blue-500';
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Regras de Alerta
+            </CardTitle>
+            <CardDescription>Configure thresholds e notificações automáticas</CardDescription>
+          </div>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => handleOpenDialog()} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Nova Regra
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingRule ? 'Editar Regra' : 'Nova Regra de Alerta'}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Nome da Regra</Label>
+                  <Input
+                    value={formData.name}
+                    onChange={e => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Ex: Alerta de velocidade"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Condição</Label>
+                    <Select value={formData.condition} onValueChange={v => setFormData({ ...formData, condition: v })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="signal_loss">Perda de Sinal</SelectItem>
+                        <SelectItem value="route_deviation">Desvio de Rota</SelectItem>
+                        <SelectItem value="speed_anomaly">Velocidade Anormal</SelectItem>
+                        <SelectItem value="restricted_zone">Zona Restrita</SelectItem>
+                        <SelectItem value="battery_low">Bateria Baixa</SelectItem>
+                        <SelectItem value="geofence_exit">Saída de Geofence</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Threshold</Label>
+                    <Input
+                      type="number"
+                      value={formData.threshold}
+                      onChange={e => setFormData({ ...formData, threshold: Number(e.target.value) })}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Severidade</Label>
+                  <Select value={formData.severity} onValueChange={v => setFormData({ ...formData, severity: v as any })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="critical">Crítico</SelectItem>
+                      <SelectItem value="warning">Aviso</SelectItem>
+                      <SelectItem value="info">Informativo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label>Notificar por Email</Label>
+                  <Switch
+                    checked={formData.notify_email}
+                    onCheckedChange={v => setFormData({ ...formData, notify_email: v })}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label>Notificar por SMS</Label>
+                  <Switch
+                    checked={formData.notify_sms}
+                    onCheckedChange={v => setFormData({ ...formData, notify_sms: v })}
+                  />
+                </div>
+                <div className="flex gap-3 justify-end">
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
+                  <Button onClick={handleSave} className="gap-2">
+                    <Save className="h-4 w-4" />
+                    Salvar
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {rules.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <Bell className="h-12 w-12 mx-auto mb-4 opacity-30" />
+            <p className="font-medium">Nenhuma regra configurada</p>
+            <p className="text-sm">Crie sua primeira regra de alerta</p>
+            <Button className="mt-4" onClick={() => handleOpenDialog()}>
+              <Plus className="h-4 w-4 mr-2" />
+              Criar Regra
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {rules.map(rule => (
+              <div key={rule.id} className={`p-4 border rounded-lg ${rule.enabled ? '' : 'opacity-60'}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Switch checked={rule.enabled} onCheckedChange={() => handleToggle(rule.id)} />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{rule.name}</span>
+                        <Badge className={getSeverityColor(rule.severity)}>{rule.severity}</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Condição: {rule.condition} | Threshold: {rule.threshold}
+                        {rule.notify_email && ' | 📧 Email'}
+                        {rule.notify_sms && ' | 📱 SMS'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => handleOpenDialog(rule)}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button size="sm" variant="outline" className="text-destructive" onClick={() => handleDelete(rule.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function TrackingAlerts() {
   const [activeTab, setActiveTab] = useState("active");
@@ -308,21 +556,7 @@ export default function TrackingAlerts() {
         </TabsContent>
 
         <TabsContent value="rules" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Settings className="h-5 w-5" />
-                Regras de Alerta
-              </CardTitle>
-              <CardDescription>Configure thresholds e notificações</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Settings className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>Configuração de regras em desenvolvimento</p>
-              </div>
-            </CardContent>
-          </Card>
+          <AlertRulesConfig />
         </TabsContent>
       </Tabs>
     </div>

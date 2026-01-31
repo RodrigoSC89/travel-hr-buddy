@@ -6,7 +6,7 @@
  */
 
 import { lazy, Suspense } from "react";
-import { useFeatureFlag } from "@/lib/feature-flags";
+import { useFeatureFlag } from "@/lib/feature-flags/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load both versions
