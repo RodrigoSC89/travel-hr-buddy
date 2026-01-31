@@ -221,8 +221,25 @@ export default function VoyageCommandCenter() {
   };
 
   const handleDeleteVoyage = (id: string) => {
+    if (!confirm("Tem certeza que deseja remover esta viagem?")) return;
     setVoyages(prev => prev.filter(v => v.id !== id));
     toast.success("Viagem removida");
+  };
+
+  const handleExportVoyages = () => {
+    const headers = "ID,Nome,Origem,Destino,Distância (NM),Dias Estimados,Status,Data Partida,Embarcação\n";
+    const content = voyages.map(v => 
+      `${v.id},${v.name},${v.origin.name},${v.destination.name},${v.distanceNm},${v.estimatedDays},${v.status},${v.departureDate || 'N/A'},${v.vesselName || 'N/A'}`
+    ).join('\n');
+    
+    const blob = new Blob([headers + content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `viagens-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Viagens exportadas com sucesso!");
   };
 
   const handleAiCopilotSend = () => {
@@ -269,7 +286,7 @@ export default function VoyageCommandCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => toast.info("Exportando relatório...")}>
+          <Button variant="outline" onClick={handleExportVoyages}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
