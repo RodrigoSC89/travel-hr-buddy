@@ -72,6 +72,123 @@ interface PredictiveInsight {
   timeline: string;
 }
 
+// Predictive Insights Panel Component with real actions
+interface PredictiveInsightsPanelProps {
+  insights: PredictiveInsight[];
+}
+
+function PredictiveInsightsPanel({ insights }: PredictiveInsightsPanelProps) {
+  const { toast } = useToast();
+  const [implementedIds, setImplementedIds] = useState<Set<string>>(new Set());
+  const [detailsOpen, setDetailsOpen] = useState<string | null>(null);
+
+  const handleImplement = (insight: PredictiveInsight) => {
+    setImplementedIds(prev => new Set([...prev, insight.id]));
+    toast({
+      title: "✅ Ação Implementada",
+      description: `${insight.title} - Economia estimada: R$ ${insight.potential_savings.toLocaleString()}`,
+    });
+  };
+
+  const handleViewDetails = (insight: PredictiveInsight) => {
+    setDetailsOpen(detailsOpen === insight.id ? null : insight.id);
+  };
+
+  const getImpactColor = (impact: string) => {
+    switch (impact) {
+      case "high": return "bg-destructive";
+      case "medium": return "bg-warning text-warning-foreground";
+      case "low": return "bg-secondary";
+      default: return "bg-muted";
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Activity className="h-5 w-5" />
+          Insights Preditivos e Recomendações
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {insights.map((insight) => (
+            <div key={insight.id} className={`border rounded-lg p-4 transition-all ${implementedIds.has(insight.id) ? 'bg-success/10 border-success/30' : ''}`}>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    {implementedIds.has(insight.id) && <CheckCircle className="h-4 w-4 text-success" />}
+                    <h3 className="font-semibold">{insight.title}</h3>
+                    <Badge className={getImpactColor(insight.impact)}>
+                      {insight.impact === "high" ? "Alto Impacto" : 
+                        insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
+                    </Badge>
+                    {insight.action_required && !implementedIds.has(insight.id) && (
+                      <Badge variant="destructive">Ação Necessária</Badge>
+                    )}
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {insight.description}
+                  </p>
+                  
+                  <div className="flex items-center gap-4 text-xs">
+                    <div className="flex items-center gap-1">
+                      <Target className="h-3 w-3" />
+                      <span>Confiança: {insight.confidence}%</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="h-3 w-3" />
+                      <span>Economia: R$ {insight.potential_savings.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      <span>Prazo: {insight.timeline}</span>
+                    </div>
+                  </div>
+
+                  {/* Expanded Details */}
+                  {detailsOpen === insight.id && (
+                    <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                      <h4 className="font-medium mb-2">Detalhes da Análise</h4>
+                      <ul className="text-sm space-y-1 text-muted-foreground">
+                        <li>• Tipo: {insight.type}</li>
+                        <li>• Confiança do modelo: {insight.confidence}%</li>
+                        <li>• Impacto financeiro estimado: R$ {insight.potential_savings.toLocaleString()}</li>
+                        <li>• Prazo de implementação: {insight.timeline}</li>
+                        <li>• Status: {implementedIds.has(insight.id) ? 'Implementado' : 'Pendente'}</li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleViewDetails(insight)}
+                  >
+                    {detailsOpen === insight.id ? 'Ocultar' : 'Detalhes'}
+                  </Button>
+                  {insight.action_required && !implementedIds.has(insight.id) && (
+                    <Button 
+                      size="sm"
+                      onClick={() => handleImplement(insight)}
+                    >
+                      Implementar
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export const AdvancedFleetAnalytics = () => {
   const [metrics, setMetrics] = useState<FleetMetrics | null>(null);
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
@@ -582,63 +699,7 @@ export const AdvancedFleetAnalytics = () => {
         </TabsContent>
 
         <TabsContent value="predictions" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Insights Preditivos e Recomendações
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {predictiveInsights.map((insight) => (
-                  <div key={insight.id} className="border rounded-lg p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold">{insight.title}</h3>
-                          <Badge className={getImpactColor(insight.impact)}>
-                            {insight.impact === "high" ? "Alto Impacto" : 
-                              insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
-                          </Badge>
-                          {insight.action_required && (
-                            <Badge variant="destructive">Ação Necessária</Badge>
-                          )}
-                        </div>
-                        
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {insight.description}
-                        </p>
-                        
-                        <div className="flex items-center gap-4 text-xs">
-                          <div className="flex items-center gap-1">
-                            <Target className="h-3 w-3" />
-                            <span>Confiança: {insight.confidence}%</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <DollarSign className="h-3 w-3" />
-                            <span>Economia: R$ {insight.potential_savings.toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            <span>Prazo: {insight.timeline}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <Button 
-                        variant={insight.action_required ? "default" : "outline"} 
-                        size="sm"
-                        onClick={() => toast({ title: insight.action_required ? 'Ação implementada!' : 'Detalhes exibidos', description: insight.title })}
-                      >
-                        {insight.action_required ? "Implementar" : "Ver Detalhes"}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <PredictiveInsightsPanel insights={predictiveInsights} />
         </TabsContent>
       </Tabs>
     </div>
