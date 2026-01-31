@@ -292,7 +292,27 @@ export function VRARTrainingCenter() {
 
         <TabsContent value="scenarios" className="mt-6">
           <div className="flex justify-end mb-4">
-            <Button onClick={() => toast.info("Criação de cenários VR disponível em breve")} className="gap-2">
+            <Button 
+              onClick={() => {
+                const newScenario: TrainingScenario = {
+                  id: Date.now().toString(),
+                  title: `Novo Cenário VR #${scenarios.length + 1}`,
+                  description: "Cenário customizado de treinamento",
+                  category: "safety",
+                  difficulty: "intermediate",
+                  duration: 30,
+                  xpReward: 300,
+                  completions: 0,
+                  avgScore: 0,
+                  imoApproved: false,
+                };
+                setScenarios(prev => [...prev, newScenario]);
+                toast.success("Novo cenário VR criado!", {
+                  description: "Personalize os detalhes do cenário"
+                });
+              }} 
+              className="gap-2"
+            >
               <Plus className="h-4 w-4" />
               Novo Cenário
             </Button>
@@ -401,9 +421,29 @@ export function VRARTrainingCenter() {
                         <p className="text-sm text-muted-foreground mt-1">{session.issue}</p>
                       </div>
                       {session.status === "active" && (
-                        <Button size="sm" variant="destructive">
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={() => {
+                            toast.success(`Conectando à sessão AR com ${session.vesselName}`, {
+                              description: `Expert: ${session.expertName}`
+                            });
+                          }}
+                        >
                           <Phone className="h-4 w-4 mr-1" />
                           Entrar
+                        </Button>
+                      )}
+                      {session.status === "scheduled" && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => {
+                            toast.info(`Lembrete configurado para sessão com ${session.vesselName}`);
+                          }}
+                        >
+                          <Clock className="h-4 w-4 mr-1" />
+                          Lembrete
                         </Button>
                       )}
                     </div>

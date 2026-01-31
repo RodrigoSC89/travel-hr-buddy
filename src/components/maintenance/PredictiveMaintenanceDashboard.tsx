@@ -222,9 +222,21 @@ export function PredictiveMaintenanceDashboard() {
                           </Badge>
                           <span className="font-medium">{pred.equipmentName}</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">
-                          Risco: {pred.riskScore.toFixed(0)}%
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">
+                            Risco: {pred.riskScore.toFixed(0)}%
+                          </span>
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toast.success(`Manutenção rápida agendada para ${pred.equipmentName}`);
+                            }}
+                          >
+                            <Wrench className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
                       
                       <Progress 
