@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Settings, 
   Cog, 
@@ -719,12 +720,33 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => {
-                              // TODO: Fetch IoT sensor data
-                              toast({
-                                title: "Dados do sensor",
-                                description: "Dados atualizados do sensor IoT"
-                              });
+                            onClick={async () => {
+                              try {
+                                const response = await supabase
+                                  .from('iot_sensor_readings')
+                                  .select('*')
+                                  .eq('sensor_id', item.iotSensorId)
+                                  .order('timestamp', { ascending: false })
+                                  .limit(1)
+                                  .single();
+                                
+                                if (response.data) {
+                                  toast({
+                                    title: "Dados do sensor",
+                                    description: `Valor: ${response.data.value} | Última leitura: ${new Date(response.data.timestamp).toLocaleString()}`
+                                  });
+                                } else {
+                                  toast({
+                                    title: "Dados do sensor",
+                                    description: "Nenhuma leitura disponível para este sensor"
+                                  });
+                                }
+                              } catch {
+                                toast({
+                                  title: "Dados do sensor",
+                                  description: "Erro ao buscar dados do sensor IoT"
+                                });
+                              }
                             }}
                             disabled={readOnly}
                           >

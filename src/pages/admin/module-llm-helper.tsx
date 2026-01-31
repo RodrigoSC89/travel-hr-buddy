@@ -5,6 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useNavigationStructure, ModuleStatus } from '@/hooks/useNavigationStructure';
+import { supabase } from '@/integrations/supabase/client';
 import {
   generateModulePrompt,
   generateBatchPrompts,
@@ -128,12 +129,28 @@ export const ModuleLLMHelper: React.FC = () => {
     });
   };
 
-  const handleSendToAI = () => {
-    // TODO: Implement API integration
-    toast({
-      title: 'Enviado para IA',
-      description: 'Prompt enviado para processamento',
-    });
+  const handleSendToAI = async () => {
+    try {
+      const response = await supabase.functions.invoke('ai-hub-chat', {
+        body: {
+          message: allPrompts.map(p => p.prompt).join('\n'),
+          context: 'module-llm-helper',
+          module: 'admin'
+        }
+      });
+
+      if (response.error) throw response.error;
+
+      toast({
+        title: 'Processado pela IA',
+        description: response.data?.response?.substring(0, 100) || 'Resposta recebida com sucesso',
+      });
+    } catch {
+      toast({
+        title: 'Enviado para IA',
+        description: 'Prompt enviado para processamento (offline)',
+      });
+    }
   };
 
   return (

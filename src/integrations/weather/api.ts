@@ -85,8 +85,8 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherDat
 export async function fetchMaritimeWeather(locations: Array<{ lat: number; lon: number; name: string }>) {
   const weatherPromises = locations.map(loc => 
     fetchWeather(loc.lat, loc.lon)
-      .catch(error => {
-        console.error(`Failed to fetch weather for ${loc.name}:`, error);
+      .catch(_error => {
+        // Silent fail for individual location - returns null which is filtered out
         return null;
       })
   );

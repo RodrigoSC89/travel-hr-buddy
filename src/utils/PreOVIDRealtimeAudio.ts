@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export class AudioRecorder {
   private stream: MediaStream | null = null;
@@ -40,7 +41,7 @@ export class AudioRecorder {
       this.source.connect(this.processor);
       this.processor.connect(this.audioContext.destination);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      logger.error('Error accessing microphone:', error);
       throw error;
     }
   }
@@ -112,7 +113,7 @@ export class PreOVIDRealtimeChat {
 
   async init() {
     try {
-      console.log('Initializing Pre-OVID Realtime connection...');
+      logger.debug('Initializing Pre-OVID Realtime connection...');
       
       // Get ephemeral token from edge function
       const { data, error } = await supabase.functions.invoke("realtime-voice-session", {
@@ -127,14 +128,14 @@ export class PreOVIDRealtimeChat {
       }
 
       const EPHEMERAL_KEY = data.client_secret.value;
-      console.log('Got ephemeral key, creating WebRTC connection...');
+      logger.debug('Got ephemeral key, creating WebRTC connection...');
 
       // Create peer connection
       this.pc = new RTCPeerConnection();
 
       // Set up remote audio
       this.pc.ontrack = e => {
-        console.log('Received audio track');
+        logger.debug('Received audio track');
         this.audioEl.srcObject = e.streams[0];
       };
 
@@ -146,7 +147,7 @@ export class PreOVIDRealtimeChat {
       this.dc = this.pc.createDataChannel("oai-events");
       this.dc.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
-        console.log("Realtime event:", event.type);
+        logger.debug("Realtime event:", event.type);
         this.handleMessage(event);
       });
 
@@ -176,10 +177,10 @@ export class PreOVIDRealtimeChat {
       };
       
       await this.pc.setRemoteDescription(answer);
-      console.log("WebRTC connection established!");
+      logger.debug("WebRTC connection established!");
 
     } catch (error) {
-      console.error("Error initializing realtime chat:", error);
+      logger.error("Error initializing realtime chat:", error);
       this.options.onError(error instanceof Error ? error : new Error(String(error)));
       throw error;
     }
@@ -210,7 +211,7 @@ export class PreOVIDRealtimeChat {
         break;
       
       case 'error':
-        console.error('Realtime API error:', event);
+        logger.error('Realtime API error:', event);
         this.options.onError(new Error(String(event.error || 'Unknown error')));
         break;
     }
@@ -240,7 +241,7 @@ export class PreOVIDRealtimeChat {
   }
 
   disconnect() {
-    console.log('Disconnecting realtime chat...');
+    logger.debug('Disconnecting realtime chat...');
     this.recorder?.stop();
     this.dc?.close();
     this.pc?.close();

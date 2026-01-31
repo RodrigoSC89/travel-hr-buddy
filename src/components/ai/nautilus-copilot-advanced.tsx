@@ -259,7 +259,7 @@ What would you like assistance with today?`,
       title: "🔧 Agendar Manutenção",
       description: "Abrindo sistema de agendamento de manutenção preventiva"
     });
-    // TODO: Open maintenance scheduling dialog
+    window.location.href = "/maintenance-planner";
   };
 
   const handleGenerateReport = () => {
@@ -267,7 +267,7 @@ What would you like assistance with today?`,
       title: "📄 Gerar Relatório",
       description: "Iniciando geração de relatório operacional"
     });
-    // TODO: Open report generation dialog
+    window.location.href = "/admin/reports";
   };
 
   const handleCrewPlanning = () => {
@@ -275,7 +275,7 @@ What would you like assistance with today?`,
       title: "👥 Planejamento de Tripulação",
       description: "Abrindo ferramenta de planejamento e escalas de tripulação"
     });
-    // TODO: Open crew planning interface
+    window.location.href = "/crew";
   };
 
   return (

@@ -289,10 +289,14 @@ export function createSafeNavigate(navigate: (path: string) => void) {
   return (path: string) => {
     if (import.meta.env.DEV && !isValidRoute(path)) {
       const suggestion = getSuggestion(path);
-      console.error(
-        `[RouteAudit] Attempting to navigate to invalid route: "${path}"`,
-        suggestion ? `\nDid you mean: "${suggestion}"?` : ""
-      );
+      // Dev-only route validation warning - only shown in development mode
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `[RouteAudit] Attempting to navigate to invalid route: "${path}"`,
+          suggestion ? `\nDid you mean: "${suggestion}"?` : ""
+        );
+      }
     }
     navigate(path);
   };

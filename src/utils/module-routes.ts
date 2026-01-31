@@ -72,7 +72,7 @@ export function getModuleRoutes(): ModuleRoute[] {
           }
           throw new Error('Invalid module export');
         } catch (err) {
-          console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
+          logger.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
           return { 
             default: () => createElement(ModuleLoadError, { moduleId: m.id })
           };

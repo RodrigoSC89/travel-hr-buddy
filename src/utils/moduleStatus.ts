@@ -102,6 +102,7 @@ export function getModulesByCategory(category: string): ModuleDefinition[] {
 
 /**
  * Log do status dos módulos no console (dev only)
+ * @deprecated Use getModuleStatusReport() instead for programmatic access
  */
 export function logModuleStatus(): void {
   if (process.env.NODE_ENV !== 'development') return;
@@ -109,19 +110,29 @@ export function logModuleStatus(): void {
   const report = getModuleStatusReport();
   const incomplete = getIncompleteModules();
   
+  // Dev-only debug logging - intentionally using console for dev debugging
+  // eslint-disable-next-line no-console
   console.group('📊 Module Status Report');
+  // eslint-disable-next-line no-console
   console.log(`Total: ${report.totalModules}`);
+  // eslint-disable-next-line no-console
   console.log(`Active: ${report.activeModules}`);
+  // eslint-disable-next-line no-console
   console.log(`Incomplete: ${report.incompleteModules}`);
+  // eslint-disable-next-line no-console
   console.log(`Beta/Experimental: ${report.betaModules}`);
   
   if (incomplete.length > 0) {
+    // eslint-disable-next-line no-console
     console.group('⚠️ Incomplete Modules');
     incomplete.forEach((m) => {
+      // eslint-disable-next-line no-console
       console.log(`- ${m.name} (${m.id}): ${m.completeness}`);
     });
+    // eslint-disable-next-line no-console
     console.groupEnd();
   }
   
+  // eslint-disable-next-line no-console
   console.groupEnd();
 }

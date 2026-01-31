@@ -377,7 +377,7 @@ export const FleetCommandCenter: React.FC = () => {
                 <CardTitle>Active Missions</CardTitle>
                 <Button size="sm" onClick={() => {
                   logger.info("Creating new mission");
-                  // TODO: Open create mission dialog
+                  window.location.href = "/missions/new";
                 }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create Mission

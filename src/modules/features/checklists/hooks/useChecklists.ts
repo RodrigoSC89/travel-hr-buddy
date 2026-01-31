@@ -49,10 +49,13 @@ export function useChecklists(userId: string) {
       // Generate items with AI
       const items = await AIChecklistService.generateChecklistItems(prompt);
       
-      // Create the checklist
-      await ChecklistService.createChecklist(prompt, userId);
+      // Create the checklist and get the created checklist ID
+      const checklist = await ChecklistService.createChecklist(prompt, userId);
       
-      // TODO: Add items to the checklist
+      // Add AI-generated items to the checklist
+      if (checklist?.id && items.length > 0) {
+        await ChecklistService.addItemsToChecklist(checklist.id, items);
+      }
       
       toast.success(`Checklist created with ${items.length} AI-generated items`);
       await fetchChecklists();

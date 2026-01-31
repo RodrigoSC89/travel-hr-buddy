@@ -9,6 +9,8 @@
  * @module core
  */
 
+import { logger } from "@/lib/logger";
+
 export { BridgeLink, type BridgeLinkEvent, type BridgeLinkEventType } from "./BridgeLink";
 export { MQTTClient } from "./MQTTClient";
 
@@ -37,28 +39,28 @@ export async function initializeCollectiveIntelligence(): Promise<void> {
     try {
       await contextMesh.initialize();
     } catch (error) {
-      console.error("[CollectiveIntelligence] Failed to initialize context mesh:", error);
+      logger.error("[CollectiveIntelligence] Failed to initialize context mesh:", error);
       throw new Error("Context mesh initialization failed");
     }
 
     try {
       await distributedDecisionCore.initialize();
     } catch (error) {
-      console.error("[CollectiveIntelligence] Failed to initialize decision core:", error);
+      logger.error("[CollectiveIntelligence] Failed to initialize decision core:", error);
       throw new Error("Decision core initialization failed");
     }
 
     try {
       await consciousCore.initialize();
     } catch (error) {
-      console.error("[CollectiveIntelligence] Failed to initialize conscious core:", error);
+      logger.error("[CollectiveIntelligence] Failed to initialize conscious core:", error);
       throw new Error("Conscious core initialization failed");
     }
 
     try {
       await collectiveLoopEngine.initialize();
     } catch (error) {
-      console.error("[CollectiveIntelligence] Failed to initialize collective loop:", error);
+      logger.error("[CollectiveIntelligence] Failed to initialize collective loop:", error);
       throw new Error("Collective loop initialization failed");
     }
 
@@ -66,7 +68,7 @@ export async function initializeCollectiveIntelligence(): Promise<void> {
     consciousCore.startMonitoring();
     collectiveLoopEngine.startProcessing();
   } catch (error) {
-    console.error("[CollectiveIntelligence] Initialization failed:", error);
+    logger.error("[CollectiveIntelligence] Initialization failed:", error);
     throw error;
   }
 }
@@ -84,7 +86,7 @@ export async function shutdownCollectiveIntelligence(): Promise<void> {
     collectiveLoopEngine.stopProcessing();
     contextMesh.shutdown();
   } catch (error) {
-    console.error("[CollectiveIntelligence] Shutdown failed:", error);
+    logger.error("[CollectiveIntelligence] Shutdown failed:", error);
     throw error;
   }
 }

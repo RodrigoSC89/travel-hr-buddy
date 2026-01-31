@@ -315,7 +315,7 @@ export const MaritimeHRDashboard: React.FC = () => {
       title: "🗓️ Planejamento de Rotação",
       description: "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
     });
-    // TODO: Implement rotation planning dialog/page
+    window.location.href = "/crew/rotations";
   };
 
   return (

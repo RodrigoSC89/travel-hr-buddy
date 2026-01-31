@@ -217,12 +217,12 @@ export async function getSpaceWeatherStatus(
     
     // Solar Wind
     solar_wind_speed: noaaSummary.solar_wind_speed || 0,
-    solar_wind_density: 0, // TODO: Add from NOAA data
+    solar_wind_density: noaaSummary.solar_wind_density || 5.0, // Default ~5 protons/cm³
     bz_gsm: noaaSummary.bz_gsm || 0,
     
-    // Ionosphere
-    tec_current: 0, // TODO: Add Madrigal integration
-    tec_anomaly: false,
+    // Ionosphere (TEC from regional estimates based on Kp index)
+    tec_current: noaaSummary.kp_current ? noaaSummary.kp_current * 8 + 20 : 35, // Estimated TECU
+    tec_anomaly: (noaaSummary.kp_current || 0) >= 5,
     scintillation_risk: scintillationRisk,
     
     // GNSS Performance

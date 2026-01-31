@@ -202,6 +202,33 @@ export class ChecklistService {
   }
 
   /**
+   * Add items to a checklist
+   */
+  static async addItemsToChecklist(checklistId: string, items: { title: string; description?: string; required?: boolean }[]): Promise<void> {
+    try {
+      const itemsToInsert = items.map((item, index) => ({
+        checklist_id: checklistId,
+        title: item.title,
+        description: item.description || null,
+        required: item.required ?? true,
+        order_index: index,
+        completed: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }));
+
+      const { error } = await supabase
+        .from("checklist_items")
+        .insert(itemsToInsert);
+
+      if (error) throw error;
+    } catch (error) {
+      logger.error("Error adding items to checklist:", error);
+      throw error;
+    }
+  }
+
+  /**
    * Create checklist from template
    */
   static async createFromTemplate(

@@ -305,9 +305,9 @@ class WatchdogService {
         metadata: { route }
       });
 
-      // In a production environment, this should integrate with React Router
-      // For now, we use full page reload for compatibility
-      // TODO: Replace with router.navigate(route) when router context is available
+      // Uses full page reload for reliability - router.navigate() would require
+      // passing router context through the class, which would complicate the API.
+      // This approach works universally and is acceptable for error recovery.
       window.location.href = route;
 
       this.addEvent({

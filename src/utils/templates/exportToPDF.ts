@@ -14,9 +14,8 @@ async function loadHtml2Pdf() {
   if (typeof window !== "undefined") {
     try {
       html2pdfModule = (await import("html2pdf.js")).default;
-    } catch (error) {
-      console.error("html2pdf.js not installed. Install with: npm install html2pdf.js");
-      throw new Error("html2pdf.js is required for PDF export");
+    } catch (_error) {
+      throw new Error("html2pdf.js is required for PDF export. Install with: npm install html2pdf.js");
     }
   }
   

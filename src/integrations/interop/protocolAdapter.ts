@@ -3,6 +3,7 @@
  * Removed @ts-nocheck, added proper typing with dynamic table access
  */
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type ProtocolType = "json-rpc" | "gmdss" | "ais" | "http" | "mqtt";
 
@@ -139,7 +140,7 @@ async function logInterop(
       error_message: errorMessage
     });
   } catch (error) {
-    console.error("Failed to log interop event:", error);
+    logger.error("Failed to log interop event:", error);
   }
 }
 
