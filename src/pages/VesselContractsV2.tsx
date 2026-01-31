@@ -84,6 +84,10 @@ export default function VesselContractsV2() {
   const [showNewContract, setShowNewContract] = useState(false);
   const [showDowntimeForm, setShowDowntimeForm] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editingContract, setEditingContract] = useState<Contract | null>(null);
   const [newContract, setNewContract] = useState({
     contract_number: '',
     client_name: '',
@@ -230,6 +234,53 @@ export default function VesselContractsV2() {
     toast.success('Contratos exportados!');
   };
 
+  const handleViewDetails = (contract: Contract) => {
+    setSelectedContract(contract);
+    setShowDetailsDialog(true);
+  };
+
+  const handleEditContract = (contract: Contract) => {
+    setEditingContract(contract);
+    setShowEditDialog(true);
+  };
+
+  const handleDeleteContract = async (contract: Contract) => {
+    if (!confirm(`Tem certeza que deseja excluir o contrato ${contract.contract_number}?`)) return;
+    
+    try {
+      const { error } = await supabase.from('vessel_contracts').delete().eq('id', contract.id);
+      if (error) throw error;
+      toast.success('Contrato excluído com sucesso');
+      loadData();
+    } catch (error) {
+      toast.error('Erro ao excluir contrato');
+    }
+  };
+
+  const handleUpdateContract = async () => {
+    if (!editingContract) return;
+    
+    try {
+      const { error } = await supabase.from('vessel_contracts').update({
+        contract_number: editingContract.contract_number,
+        client_name: editingContract.client_name,
+        start_date: editingContract.start_date,
+        end_date: editingContract.end_date,
+        sla_downtime_percent: editingContract.sla_downtime_percent,
+        penalty_per_hour: editingContract.penalty_per_hour,
+        status: editingContract.status,
+      }).eq('id', editingContract.id);
+      
+      if (error) throw error;
+      toast.success('Contrato atualizado com sucesso');
+      setShowEditDialog(false);
+      setEditingContract(null);
+      loadData();
+    } catch (error) {
+      toast.error('Erro ao atualizar contrato');
+    }
+  };
+
   // Stats
   const activeContracts = contracts.filter(c => c.status === 'active').length;
   const totalDowntimeHours = downtimeEvents.reduce((acc, d) => acc + (d.duration_hours || 0), 0);
@@ -263,11 +314,12 @@ export default function VesselContractsV2() {
   ];
 
   const contractActions = [
-    { label: "Ver Detalhes", icon: Eye, onClick: (item: Contract) => toast.info(`Detalhes: ${item.contract_number}`) },
+    { label: "Ver Detalhes", icon: Eye, onClick: (item: Contract) => handleViewDetails(item) },
     { label: "Analisar com IA", icon: Brain, onClick: (item: Contract) => analyzeContractWithAI(item.id) },
-    { label: "Editar", icon: Edit, onClick: (item: Contract) => toast.info(`Editando: ${item.contract_number}`) },
-    { label: "Excluir", icon: Trash2, onClick: (item: Contract) => toast.error(`Excluir não permitido`), variant: "destructive" as const },
+    { label: "Editar", icon: Edit, onClick: (item: Contract) => handleEditContract(item) },
+    { label: "Excluir", icon: Trash2, onClick: (item: Contract) => handleDeleteContract(item), variant: "destructive" as const },
   ];
+
 
   return (
     <PageLayoutV2
@@ -560,6 +612,138 @@ export default function VesselContractsV2() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Contract Details Dialog */}
+      <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes do Contrato</DialogTitle>
+            <DialogDescription>
+              {selectedContract?.contract_number} - {selectedContract?.client_name}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedContract && (
+            <div className="grid grid-cols-2 gap-4 py-4">
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Número do Contrato</Label>
+                <p className="font-medium">{selectedContract.contract_number}</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Cliente</Label>
+                <p className="font-medium">{selectedContract.client_name}</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Operador</Label>
+                <p className="font-medium">{selectedContract.operator_name || '-'}</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Status</Label>
+                <Badge variant={selectedContract.status === 'active' ? 'default' : 'secondary'}>
+                  {selectedContract.status === 'active' ? 'Ativo' : selectedContract.status}
+                </Badge>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Data de Início</Label>
+                <p className="font-medium">{new Date(selectedContract.start_date).toLocaleDateString('pt-BR')}</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Data de Fim</Label>
+                <p className="font-medium">{new Date(selectedContract.end_date).toLocaleDateString('pt-BR')}</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">SLA Downtime (%)</Label>
+                <p className="font-medium">{selectedContract.sla_downtime_percent || 0}%</p>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Penalidade por Hora</Label>
+                <p className="font-medium">R$ {selectedContract.penalty_per_hour?.toLocaleString('pt-BR') || '0'}</p>
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setShowDetailsDialog(false)}>Fechar</Button>
+            <Button onClick={() => { setShowDetailsDialog(false); if(selectedContract) handleEditContract(selectedContract); }}>
+              <Edit className="h-4 w-4 mr-2" />
+              Editar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Contract Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Editar Contrato</DialogTitle>
+            <DialogDescription>
+              Atualize os dados do contrato {editingContract?.contract_number}
+            </DialogDescription>
+          </DialogHeader>
+          {editingContract && (
+            <div className="grid grid-cols-2 gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-contract-number">Número do Contrato</Label>
+                <Input
+                  id="edit-contract-number"
+                  value={editingContract.contract_number}
+                  onChange={(e) => setEditingContract({ ...editingContract, contract_number: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-client-name">Cliente</Label>
+                <Input
+                  id="edit-client-name"
+                  value={editingContract.client_name}
+                  onChange={(e) => setEditingContract({ ...editingContract, client_name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-start-date">Data de Início</Label>
+                <Input
+                  id="edit-start-date"
+                  type="date"
+                  value={editingContract.start_date.split('T')[0]}
+                  onChange={(e) => setEditingContract({ ...editingContract, start_date: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-end-date">Data de Fim</Label>
+                <Input
+                  id="edit-end-date"
+                  type="date"
+                  value={editingContract.end_date.split('T')[0]}
+                  onChange={(e) => setEditingContract({ ...editingContract, end_date: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-sla">SLA Downtime (%)</Label>
+                <Input
+                  id="edit-sla"
+                  type="number"
+                  value={editingContract.sla_downtime_percent || ''}
+                  onChange={(e) => setEditingContract({ ...editingContract, sla_downtime_percent: Number(e.target.value) })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-penalty">Penalidade por Hora (R$)</Label>
+                <Input
+                  id="edit-penalty"
+                  type="number"
+                  value={editingContract.penalty_per_hour || ''}
+                  onChange={(e) => setEditingContract({ ...editingContract, penalty_per_hour: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => { setShowEditDialog(false); setEditingContract(null); }}>Cancelar</Button>
+            <Button onClick={handleUpdateContract}>
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Salvar Alterações
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PageLayoutV2>
   );
 }

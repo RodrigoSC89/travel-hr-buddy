@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { useToast } from "@/hooks/use-toast";
@@ -355,9 +356,37 @@ const AlertsCommandCenter = () => {
     return "text-red-600";
   };
 
+  const [selectedAlert, setSelectedAlert] = useState<SmartAlert | null>(null);
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+
   const filteredAlerts = smartAlerts.filter(alert => 
     filterType === "all" || alert.category === filterType
   );
+
+  const handleViewDetails = (alert: SmartAlert) => {
+    setSelectedAlert(alert);
+    setShowDetailsDialog(true);
+  };
+
+  const handleResolveAlert = (alert: SmartAlert) => {
+    setSmartAlerts(prev => prev.map(a => 
+      a.id === alert.id ? { ...a, status: "resolved" as const, resolved_at: new Date().toISOString() } : a
+    ));
+    toast({
+      title: "✅ Alerta Resolvido",
+      description: `O alerta "${alert.title}" foi marcado como resolvido.`
+    });
+  };
+
+  const handleAcknowledgeAlert = (alert: SmartAlert) => {
+    setSmartAlerts(prev => prev.map(a => 
+      a.id === alert.id ? { ...a, status: "acknowledged" as const } : a
+    ));
+    toast({
+      title: "👁️ Alerta Reconhecido",
+      description: `Você reconheceu o alerta "${alert.title}".`
+    });
+  };
 
   const criticalAlerts = smartAlerts.filter(alert => alert.type === "critical").length;
   const warningAlerts = smartAlerts.filter(alert => alert.type === "warning").length;
@@ -726,8 +755,13 @@ const AlertsCommandCenter = () => {
                         </Badge>
                         <Badge variant="outline">{alert.status}</Badge>
                         <div className="flex gap-2 mt-2">
-                          <Button size="sm" variant="outline" onClick={() => toast({ title: "📋 Detalhes", description: `Visualizando detalhes do alerta "${alert.title}"...` })}>Detalhes</Button>
-                          <Button size="sm" onClick={() => toast({ title: "✅ Resolvendo", description: `Iniciando resolução do alerta "${alert.title}"...` })}>Resolver</Button>
+                          <Button size="sm" variant="outline" onClick={() => handleViewDetails(alert)}>Detalhes</Button>
+                          {alert.status === "new" && (
+                            <Button size="sm" variant="secondary" onClick={() => handleAcknowledgeAlert(alert)}>Reconhecer</Button>
+                          )}
+                          {alert.status !== "resolved" && (
+                            <Button size="sm" onClick={() => handleResolveAlert(alert)}>Resolver</Button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -759,6 +793,87 @@ const AlertsCommandCenter = () => {
           <PriceRangeConfig />
         </TabsContent>
       </Tabs>
+
+      {/* Alert Details Dialog */}
+      <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {selectedAlert && React.createElement(getAlertIcon(selectedAlert.type), { className: "h-5 w-5" })}
+              {selectedAlert?.title}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedAlert?.description}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedAlert && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Categoria</p>
+                  <Badge variant="outline" className="capitalize">{selectedAlert.category}</Badge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Prioridade</p>
+                  <Badge variant={selectedAlert.priority === "high" ? "destructive" : "secondary"}>
+                    {selectedAlert.priority}
+                  </Badge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <Badge variant="outline">{selectedAlert.status}</Badge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Confiança IA</p>
+                  <div className="flex items-center gap-2">
+                    <Progress value={selectedAlert.ai_confidence} className="h-2 w-20" />
+                    <span className="text-sm font-medium">{selectedAlert.ai_confidence}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {selectedAlert.vessel_name && (
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Embarcação</p>
+                  <p className="font-medium">{selectedAlert.vessel_name}</p>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Ações Recomendadas:</p>
+                <ul className="space-y-2">
+                  {selectedAlert.recommended_actions.map((action, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      {action}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-sm font-medium mb-1">Avaliação de Impacto:</p>
+                <p className="text-sm text-muted-foreground">{selectedAlert.impact_assessment}</p>
+              </div>
+
+              <div className="text-xs text-muted-foreground">
+                Criado em: {new Date(selectedAlert.created_at).toLocaleString('pt-BR')}
+                {selectedAlert.resolved_at && (
+                  <> • Resolvido em: {new Date(selectedAlert.resolved_at).toLocaleString('pt-BR')}</>
+                )}
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setShowDetailsDialog(false)}>Fechar</Button>
+            {selectedAlert?.status !== "resolved" && (
+              <Button onClick={() => { if (selectedAlert) { handleResolveAlert(selectedAlert); setShowDetailsDialog(false); } }}>
+                Resolver Alerta
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </ModulePageWrapper>
   );
 };
