@@ -6,15 +6,18 @@
 
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { 
   Store, Search, Star, MapPin, Phone, Mail, Globe, 
@@ -22,7 +25,7 @@ import {
   TrendingUp, TrendingDown, Users, Package, Award,
   Brain, ShoppingCart, AlertTriangle, DollarSign,
   Truck, Sparkles, Building2, Zap, RefreshCw, ArrowRight,
-  BarChart3, Edit, Trash2, Download
+  BarChart3, Edit, Trash2, Download, Eye
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -143,10 +146,23 @@ const categoryLabels: Record<string, string> = {
 
 export default function ProcurementCommandCenter() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  
+  // Dialog States
+  const [showNewSupplierDialog, setShowNewSupplierDialog] = useState(false);
+  const [showNewRFQDialog, setShowNewRFQDialog] = useState(false);
+  const [showNewItemDialog, setShowNewItemDialog] = useState(false);
+  const [showAlternativesDialog, setShowAlternativesDialog] = useState(false);
+  const [selectedRecommendation, setSelectedRecommendation] = useState<PurchaseRecommendation | null>(null);
+  
+  // Form States
+  const [newSupplier, setNewSupplier] = useState({ company_name: "", contact_email: "", contact_phone: "", city: "", country: "", category: "" });
+  const [newRFQ, setNewRFQ] = useState({ title: "", category: "spare_parts", delivery_port: "", budget_estimate: 0, deadline: "" });
+  const [newItem, setNewItem] = useState({ name: "", item_code: "", category: "", current_stock: 0, minimum_stock: 0, maximum_stock: 100, unit_cost: 0, location: "" });
   
   // AI Procurement State
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
@@ -364,10 +380,105 @@ export default function ProcurementCommandCenter() {
   );
 
   const executeAutoPurchase = async (rec: PurchaseRecommendation) => {
-    toast({
-      title: "Compra Iniciada",
-      description: `Pedido de ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} enviado para ${rec.suggestedSupplier.name}`,
-    });
+    try {
+      // Create purchase order in database
+      const { error } = await supabase.from("rfq_requests" as any).insert({
+        title: `Pedido Automático - ${rec.item.name}`,
+        category: rec.item.category.toLowerCase().replace(/ /g, '_'),
+        status: 'sent',
+        budget_estimate: rec.estimatedCost,
+        currency: 'BRL',
+        rfq_number: `RFQ-AUTO-${Date.now()}`
+      });
+      
+      if (error) throw error;
+      
+      // Remove from recommendations
+      setRecommendations(prev => prev.filter(r => r.id !== rec.id));
+      setAiStats(prev => ({ ...prev, pendingOrders: prev.pendingOrders + 1, autoOrders: prev.autoOrders + 1 }));
+      
+      toast({
+        title: "✅ Compra Iniciada",
+        description: `Pedido de ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} enviado para ${rec.suggestedSupplier.name}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao criar pedido",
+        description: "Tente novamente",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCreateSupplier = async () => {
+    try {
+      const { error } = await supabase.from("suppliers").insert({
+        ...newSupplier,
+        trading_name: newSupplier.company_name,
+        category: [newSupplier.category],
+        services: [],
+        ports_served: [],
+        countries: [newSupplier.country],
+        rating: 0,
+        total_orders: 0,
+        total_value: 0,
+        is_approved: false,
+        is_active: true
+      });
+      
+      if (error) throw error;
+      
+      queryClient.invalidateQueries({ queryKey: ["suppliers"] });
+      setShowNewSupplierDialog(false);
+      setNewSupplier({ company_name: "", contact_email: "", contact_phone: "", city: "", country: "", category: "" });
+      toast({ title: "✅ Fornecedor cadastrado", description: "Aguardando aprovação" });
+    } catch (error) {
+      toast({ title: "Erro ao cadastrar", description: "Tente novamente", variant: "destructive" });
+    }
+  };
+
+  const handleCreateRFQ = async () => {
+    try {
+      const { error } = await supabase.from("rfq_requests" as any).insert({
+        ...newRFQ,
+        rfq_number: `RFQ-${Date.now()}`,
+        status: 'draft',
+        currency: 'BRL'
+      });
+      
+      if (error) throw error;
+      
+      queryClient.invalidateQueries({ queryKey: ["rfq-requests"] });
+      setShowNewRFQDialog(false);
+      setNewRFQ({ title: "", category: "spare_parts", delivery_port: "", budget_estimate: 0, deadline: "" });
+      toast({ title: "✅ RFQ criada", description: "Solicitação de cotação registrada" });
+    } catch (error) {
+      toast({ title: "Erro ao criar RFQ", description: "Tente novamente", variant: "destructive" });
+    }
+  };
+
+  const handleCreateItem = async () => {
+    try {
+      const { error } = await supabase.from("inventory_items" as any).insert({
+        ...newItem,
+        status: 'active',
+        total_value: newItem.current_stock * newItem.unit_cost
+      });
+      
+      if (error) throw error;
+      
+      loadInventoryItems();
+      setShowNewItemDialog(false);
+      setNewItem({ name: "", item_code: "", category: "", current_stock: 0, minimum_stock: 0, maximum_stock: 100, unit_cost: 0, location: "" });
+      toast({ title: "✅ Item adicionado", description: "Item de inventário cadastrado com sucesso" });
+    } catch (error) {
+      toast({ title: "Erro ao adicionar item", description: "Tente novamente", variant: "destructive" });
+    }
+  };
+
+  const handleViewAlternatives = (rec: PurchaseRecommendation) => {
+    setSelectedRecommendation(rec);
+    setShowAlternativesDialog(true);
   };
 
   // ============================================
@@ -398,11 +509,11 @@ export default function ProcurementCommandCenter() {
               <RefreshCw className={cn("h-4 w-4", isAnalyzing && "animate-spin")} />
               Analisar
             </Button>
-            <Button variant="outline" className="gap-2" onClick={() => toast({ title: "📝 Novo Fornecedor", description: "Abrindo formulário de cadastro de fornecedor..." })}>
+            <Button variant="outline" className="gap-2" onClick={() => setShowNewSupplierDialog(true)}>
               <Plus className="h-4 w-4" />
               Novo Fornecedor
             </Button>
-            <Button className="gap-2" onClick={() => toast({ title: "📄 Nova RFQ", description: "Iniciando nova solicitação de cotação..." })}>
+            <Button className="gap-2" onClick={() => setShowNewRFQDialog(true)}>
               <FileText className="h-4 w-4" />
               Nova RFQ
             </Button>
@@ -714,7 +825,7 @@ export default function ProcurementCommandCenter() {
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           {rec.urgency === 'immediate' ? 'Comprar Agora' : 'Aprovar Compra'}
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => toast({ title: "🔍 Alternativas", description: "Buscando fornecedores alternativos..." })}>
+                        <Button variant="outline" size="sm" onClick={() => handleViewAlternatives(rec)}>
                           Ver Alternativas
                         </Button>
                       </div>
@@ -816,7 +927,7 @@ export default function ProcurementCommandCenter() {
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Atualizar
               </Button>
-              <Button onClick={() => toast({ title: "➕ Novo Item", description: "Abrindo formulário de cadastro de item..." })}>
+              <Button onClick={() => setShowNewItemDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar Item
               </Button>
@@ -986,7 +1097,7 @@ export default function ProcurementCommandCenter() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Solicitações de Cotação (RFQ)</CardTitle>
-                <Button size="sm" className="gap-2" onClick={() => toast({ title: "📄 Nova RFQ", description: "Criando nova solicitação de cotação..." })}>
+                <Button size="sm" className="gap-2" onClick={() => setShowNewRFQDialog(true)}>
                   <Plus className="h-4 w-4" />
                   Nova RFQ
                 </Button>
@@ -998,7 +1109,7 @@ export default function ProcurementCommandCenter() {
                   <div className="text-center py-12">
                     <FileText className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                     <p className="text-muted-foreground">Nenhuma RFQ criada</p>
-                    <Button variant="link" className="mt-2" onClick={() => toast({ title: "📄 Criar RFQ", description: "Iniciando criação da primeira RFQ..." })}>
+                    <Button variant="link" className="mt-2" onClick={() => setShowNewRFQDialog(true)}>
                       <Plus className="h-4 w-4 mr-1" />
                       Criar Primeira RFQ
                     </Button>
@@ -1059,6 +1170,281 @@ export default function ProcurementCommandCenter() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* New Supplier Dialog */}
+        <Dialog open={showNewSupplierDialog} onOpenChange={setShowNewSupplierDialog}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Cadastrar Novo Fornecedor</DialogTitle>
+              <DialogDescription>Preencha os dados do fornecedor para cadastro</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Nome da Empresa *</Label>
+                <Input 
+                  value={newSupplier.company_name} 
+                  onChange={(e) => setNewSupplier({...newSupplier, company_name: e.target.value})}
+                  placeholder="Nome da empresa"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Email de Contato</Label>
+                  <Input 
+                    type="email"
+                    value={newSupplier.contact_email} 
+                    onChange={(e) => setNewSupplier({...newSupplier, contact_email: e.target.value})}
+                    placeholder="contato@empresa.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Telefone</Label>
+                  <Input 
+                    value={newSupplier.contact_phone} 
+                    onChange={(e) => setNewSupplier({...newSupplier, contact_phone: e.target.value})}
+                    placeholder="+55 21 99999-9999"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Cidade</Label>
+                  <Input 
+                    value={newSupplier.city} 
+                    onChange={(e) => setNewSupplier({...newSupplier, city: e.target.value})}
+                    placeholder="Rio de Janeiro"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>País</Label>
+                  <Input 
+                    value={newSupplier.country} 
+                    onChange={(e) => setNewSupplier({...newSupplier, country: e.target.value})}
+                    placeholder="Brasil"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Categoria Principal</Label>
+                <Select value={newSupplier.category} onValueChange={(v) => setNewSupplier({...newSupplier, category: v})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(categoryLabels).map(([key, label]) => (
+                      <SelectItem key={key} value={key}>{label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowNewSupplierDialog(false)}>Cancelar</Button>
+              <Button onClick={handleCreateSupplier} disabled={!newSupplier.company_name}>
+                <Plus className="h-4 w-4 mr-2" />
+                Cadastrar Fornecedor
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* New RFQ Dialog */}
+        <Dialog open={showNewRFQDialog} onOpenChange={setShowNewRFQDialog}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Nova Solicitação de Cotação (RFQ)</DialogTitle>
+              <DialogDescription>Crie uma nova RFQ para solicitar cotações de fornecedores</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Título *</Label>
+                <Input 
+                  value={newRFQ.title} 
+                  onChange={(e) => setNewRFQ({...newRFQ, title: e.target.value})}
+                  placeholder="Ex: Compra de filtros para motor principal"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Categoria</Label>
+                  <Select value={newRFQ.category} onValueChange={(v) => setNewRFQ({...newRFQ, category: v})}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(categoryLabels).map(([key, label]) => (
+                        <SelectItem key={key} value={key}>{label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Porto de Entrega</Label>
+                  <Input 
+                    value={newRFQ.delivery_port} 
+                    onChange={(e) => setNewRFQ({...newRFQ, delivery_port: e.target.value})}
+                    placeholder="Ex: Porto de Santos"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Orçamento Estimado (R$)</Label>
+                  <Input 
+                    type="number"
+                    value={newRFQ.budget_estimate} 
+                    onChange={(e) => setNewRFQ({...newRFQ, budget_estimate: Number(e.target.value)})}
+                    placeholder="0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Data Limite</Label>
+                  <Input 
+                    type="date"
+                    value={newRFQ.deadline} 
+                    onChange={(e) => setNewRFQ({...newRFQ, deadline: e.target.value})}
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowNewRFQDialog(false)}>Cancelar</Button>
+              <Button onClick={handleCreateRFQ} disabled={!newRFQ.title}>
+                <FileText className="h-4 w-4 mr-2" />
+                Criar RFQ
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* New Inventory Item Dialog */}
+        <Dialog open={showNewItemDialog} onOpenChange={setShowNewItemDialog}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Adicionar Item ao Inventário</DialogTitle>
+              <DialogDescription>Cadastre um novo item no sistema de inventário</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Nome *</Label>
+                  <Input 
+                    value={newItem.name} 
+                    onChange={(e) => setNewItem({...newItem, name: e.target.value})}
+                    placeholder="Nome do item"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Código</Label>
+                  <Input 
+                    value={newItem.item_code} 
+                    onChange={(e) => setNewItem({...newItem, item_code: e.target.value})}
+                    placeholder="SKU-001"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Categoria</Label>
+                  <Input 
+                    value={newItem.category} 
+                    onChange={(e) => setNewItem({...newItem, category: e.target.value})}
+                    placeholder="Ex: Lubrificantes"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Localização</Label>
+                  <Input 
+                    value={newItem.location} 
+                    onChange={(e) => setNewItem({...newItem, location: e.target.value})}
+                    placeholder="Ex: Armazém A"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Estoque Atual</Label>
+                  <Input 
+                    type="number"
+                    value={newItem.current_stock} 
+                    onChange={(e) => setNewItem({...newItem, current_stock: Number(e.target.value)})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Mínimo</Label>
+                  <Input 
+                    type="number"
+                    value={newItem.minimum_stock} 
+                    onChange={(e) => setNewItem({...newItem, minimum_stock: Number(e.target.value)})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Máximo</Label>
+                  <Input 
+                    type="number"
+                    value={newItem.maximum_stock} 
+                    onChange={(e) => setNewItem({...newItem, maximum_stock: Number(e.target.value)})}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Custo Unitário (R$)</Label>
+                <Input 
+                  type="number"
+                  value={newItem.unit_cost} 
+                  onChange={(e) => setNewItem({...newItem, unit_cost: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowNewItemDialog(false)}>Cancelar</Button>
+              <Button onClick={handleCreateItem} disabled={!newItem.name}>
+                <Plus className="h-4 w-4 mr-2" />
+                Adicionar Item
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Alternatives Dialog */}
+        <Dialog open={showAlternativesDialog} onOpenChange={setShowAlternativesDialog}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Fornecedores Alternativos</DialogTitle>
+              <DialogDescription>
+                {selectedRecommendation && `Alternativas para: ${selectedRecommendation.item.name}`}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              {suppliers.slice(0, 5).map((supplier, index) => (
+                <div key={supplier.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium">{supplier.company_name}</p>
+                      <p className="text-sm text-muted-foreground">{supplier.city}, {supplier.country}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {renderStars(supplier.rating)}
+                    <Badge variant="outline">{supplier.lead_time_days || 5} dias</Badge>
+                    <Button size="sm" onClick={() => {
+                      toast({ title: "Fornecedor Selecionado", description: `${supplier.company_name} foi selecionado` });
+                      setShowAlternativesDialog(false);
+                    }}>
+                      Selecionar
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowAlternativesDialog(false)}>Fechar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

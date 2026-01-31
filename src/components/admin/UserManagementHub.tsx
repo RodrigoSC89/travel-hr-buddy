@@ -95,7 +95,9 @@ export const UserManagementHub: React.FC = () => {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
+  const [userToEdit, setUserToEdit] = useState<OrganizationUser | null>(null);
   const [unreadNotifications, setUnreadNotifications] = useState(2);
   
   // Invite form state
@@ -105,6 +107,9 @@ export const UserManagementHub: React.FC = () => {
     department: "",
     message: "",
   });
+  
+  // Edit form state
+  const [editData, setEditData] = useState({ full_name: "", department: "", position: "", role: "member" });
 
   // Filtered users - memoized to prevent re-renders
   const filteredUsers = useMemo(() => {
@@ -169,6 +174,25 @@ export const UserManagementHub: React.FC = () => {
     setUnreadNotifications(0);
     toast({ title: "Notificações", description: "Todas marcadas como lidas" });
   }, [toast]);
+
+  const handleEditUser = useCallback((user: OrganizationUser) => {
+    setUserToEdit(user);
+    setEditData({
+      full_name: user.full_name,
+      department: user.department || "",
+      position: user.position || "",
+      role: user.role
+    });
+    setShowEditDialog(true);
+  }, []);
+
+  const handleSaveEdit = useCallback(async () => {
+    if (!userToEdit) return;
+    await updateUserRole(userToEdit.id, editData.role as any);
+    toast({ title: "Usuário atualizado", description: "As alterações foram salvas com sucesso" });
+    setShowEditDialog(false);
+    setUserToEdit(null);
+  }, [userToEdit, editData, updateUserRole, toast]);
 
   // Role badge colors
   const getRoleBadge = (role: string) => {
@@ -507,7 +531,7 @@ export const UserManagementHub: React.FC = () => {
                               <Shield className="h-4 w-4 mr-2" />
                               Promover a Admin
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toast({ title: "Editar", description: "Abrindo editor de usuário..." })}>
+                            <DropdownMenuItem onClick={() => handleEditUser(user)}>
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
                             </DropdownMenuItem>
@@ -674,6 +698,48 @@ export const UserManagementHub: React.FC = () => {
           </div>
           <DialogFooter>
             <Button onClick={() => setShowSettingsDialog(false)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit User Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Usuário</DialogTitle>
+            <DialogDescription>Atualize as informações do usuário</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Nome Completo</Label>
+              <Input value={editData.full_name} onChange={(e) => setEditData(p => ({ ...p, full_name: e.target.value }))} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Departamento</Label>
+                <Input value={editData.department} onChange={(e) => setEditData(p => ({ ...p, department: e.target.value }))} />
+              </div>
+              <div className="space-y-2">
+                <Label>Cargo</Label>
+                <Input value={editData.position} onChange={(e) => setEditData(p => ({ ...p, position: e.target.value }))} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Função</Label>
+              <Select value={editData.role} onValueChange={(v) => setEditData(p => ({ ...p, role: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Administrador</SelectItem>
+                  <SelectItem value="manager">Gerente</SelectItem>
+                  <SelectItem value="member">Membro</SelectItem>
+                  <SelectItem value="viewer">Visualizador</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowEditDialog(false)}>Cancelar</Button>
+            <Button onClick={handleSaveEdit}>Salvar Alterações</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
