@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Building2, Package, FileText, Star, TrendingUp, Clock, CheckCircle, AlertTriangle, Search, Plus } from 'lucide-react';
+import RFQManagementPanel from './RFQManagementPanel';
 
 interface Supplier {
   id: string;
@@ -365,18 +366,7 @@ export const SupplierPortal: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="rfq" className="space-y-4">
-          <Card className="bg-card/50 border-border/50">
-            <CardHeader>
-              <CardTitle>Request for Quotation</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>RFQ management coming soon</p>
-                <p className="text-sm">Create and manage quotation requests from multiple suppliers</p>
-              </div>
-            </CardContent>
-          </Card>
+          <RFQManagementPanel />
         </TabsContent>
       </Tabs>
     </div>
