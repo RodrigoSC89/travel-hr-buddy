@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface AIAuditEntry {
   id?: string;
@@ -97,13 +98,13 @@ export async function logAIInteraction(entry: AIAuditEntry): Promise<string | nu
       .single();
 
     if (error) {
-      console.error('Failed to log AI interaction:', error);
+      logger.error('Failed to log AI interaction:', error);
       return null;
     }
 
     return data?.id || null;
   } catch (error) {
-    console.error('Error logging AI interaction:', error);
+    logger.error('Error logging AI interaction:', error);
     return null;
   }
 }
@@ -131,13 +132,13 @@ export async function updateAuditApproval(
       .eq('id', auditId);
 
     if (error) {
-      console.error('Failed to update audit approval:', error);
+      logger.error('Failed to update audit approval:', error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Error updating audit approval:', error);
+    logger.error('Error updating audit approval:', error);
     return false;
   }
 }
@@ -191,13 +192,13 @@ export async function searchAuditLogs(
     const { data, error } = await query;
 
     if (error) {
-      console.error('Failed to search audit logs:', error);
+      logger.error('Failed to search audit logs:', error);
       return [];
     }
 
     return data as unknown as AIAuditEntry[];
   } catch (error) {
-    console.error('Error searching audit logs:', error);
+    logger.error('Error searching audit logs:', error);
     return [];
   }
 }
@@ -299,7 +300,7 @@ export async function getAuditStatistics(
       byModel,
     };
   } catch (error) {
-    console.error('Error getting audit statistics:', error);
+    logger.error('Error getting audit statistics:', error);
     return {
       totalInteractions: 0,
       avgConfidence: 0,

@@ -4,6 +4,7 @@
  */
 
 import { useRef, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 interface LoopGuardOptions {
   maxExecutions?: number;
@@ -62,9 +63,8 @@ export const useLoopGuard = (
         stackTrace: new Error().stack || 'No stack trace available',
       };
 
-      console.error(
-        `🔁 LOOP DETECTED in ${componentName}.${functionName}:`,
-        `${executionHistory.current.length} executions in ${timeWindow}ms`,
+      logger.error(
+        `🔁 LOOP DETECTED in ${componentName}.${functionName}: ${executionHistory.current.length} executions in ${timeWindow}ms`,
         loopInfo
       );
 
@@ -129,9 +129,8 @@ export const withLoopGuard = <T extends (...args: any[]) => any>(
     executionHistory.push(...validExecutions, now);
 
     if (executionHistory.length >= maxExecutions) {
-      console.error(
-        `🔁 LOOP DETECTED in ${guardName}:`,
-        `${executionHistory.length} executions in ${timeWindow}ms. Execution blocked.`
+      logger.error(
+        `🔁 LOOP DETECTED in ${guardName}: ${executionHistory.length} executions in ${timeWindow}ms. Execution blocked.`
       );
       return Promise.resolve(undefined);
     }
