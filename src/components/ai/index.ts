@@ -10,3 +10,6 @@ export { AutonomousProcurementAI } from "./AutonomousProcurementAI";
 export { IntelligentReportsAI } from "./IntelligentReportsAI";
 export { AICopilot } from "./AICopilot";
 export { ScenarioSimulator } from "./ScenarioSimulator";
+export { AgentOrchestrationDashboard } from "./AgentOrchestrationDashboard";
+export { AgentChatPanel } from "./AgentChatPanel";
+export { AutonomousAgentPanel } from "./AutonomousAgentPanel";
