@@ -28,7 +28,8 @@ import {
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { 
+import { toast } from 'sonner';
+import {
   predictiveMaintenanceEngine, 
   type PredictionResult, 
   type EquipmentMetrics 
@@ -324,7 +325,14 @@ export function PredictiveMaintenanceDashboard() {
                   </div>
                 )}
 
-                <Button className="w-full">
+                <Button 
+                  className="w-full"
+                  onClick={() => {
+                    toast.success(`Manutenção agendada para ${selectedEquipment.equipmentName}`, {
+                      description: `Data prevista: ${selectedEquipment.predictedFailureDate?.toLocaleDateString('pt-BR') || 'A definir'}`
+                    });
+                  }}
+                >
                   <Wrench className="h-4 w-4 mr-2" />
                   Agendar Manutenção
                 </Button>

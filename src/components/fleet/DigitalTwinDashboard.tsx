@@ -199,6 +199,16 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
     return Activity;
   };
 
+  const handleVesselSelect = (vesselId: string) => {
+    try {
+      setSelectedVessel(vesselId);
+      toast.success("Embarcação selecionada");
+    } catch (error) {
+      console.error("Error selecting vessel:", error);
+      toast.error("Erro ao selecionar embarcação");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -213,7 +223,7 @@ export function DigitalTwinDashboard({ vesselId }: DigitalTwinDashboardProps) {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={selectedVessel} onValueChange={setSelectedVessel}>
+          <Select value={selectedVessel} onValueChange={handleVesselSelect}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Select vessel" />
             </SelectTrigger>

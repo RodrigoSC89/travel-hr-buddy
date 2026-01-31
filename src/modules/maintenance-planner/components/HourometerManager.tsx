@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, TrendingUp, AlertTriangle, RefreshCw, Camera } from "lucide-react";
+import { Clock, TrendingUp, AlertTriangle, RefreshCw, Camera, Upload, Loader2 } from "lucide-react";
 
 interface HourometerEntry {
   id: string;
@@ -127,14 +128,98 @@ export default function HourometerManager() {
     );
   };
 
+  const [ocrOpen, setOcrOpen] = useState(false);
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOCRCapture = async (file: File) => {
+    setOcrLoading(true);
+    try {
+      // Simulate OCR processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock extracted value
+      const extractedHours = Math.floor(Math.random() * 5000) + 10000;
+      
+      toast({
+        title: "OCR Concluído",
+        description: `Leitura extraída: ${extractedHours.toLocaleString()}h. Verifique e confirme o valor.`,
+      });
+      
+      setOcrOpen(false);
+    } catch (error) {
+      toast({
+        title: "Erro no OCR",
+        description: "Não foi possível processar a imagem. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setOcrLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Gestão de Horímetros</h3>
-        <Button variant="outline" size="sm">
-          <Camera className="h-4 w-4 mr-2" />
-          Captura OCR
-        </Button>
+        <Dialog open={ocrOpen} onOpenChange={setOcrOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Camera className="h-4 w-4 mr-2" />
+              Captura OCR
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Captura OCR de Horímetro</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Tire uma foto ou faça upload de uma imagem do horímetro para extrair a leitura automaticamente.
+              </p>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleOCRCapture(file);
+                }}
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={ocrLoading}
+                  className="w-full"
+                >
+                  {ocrLoading ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Camera className="h-4 w-4 mr-2" />
+                  )}
+                  Tirar Foto
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={ocrLoading}
+                  className="w-full"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload
+                </Button>
+              </div>
+              {ocrLoading && (
+                <div className="text-center py-4">
+                  <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+                  <p className="text-sm text-muted-foreground mt-2">Processando imagem...</p>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

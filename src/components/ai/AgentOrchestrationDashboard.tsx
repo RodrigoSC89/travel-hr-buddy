@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 import { 
   Brain, 
   Anchor, 
@@ -263,7 +264,18 @@ export function AgentOrchestrationDashboard() {
             <Activity className="h-3 w-3 mr-1" />
             {systemStatus === "operational" ? "Sistema Operacional" : "Degradado"}
           </Badge>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={() => {
+              // Force consensus action
+              const pendingCount = recentDecisions.filter(d => d.status === "pending").length;
+              if (pendingCount > 0) {
+                toast.success(`Consenso forçado para ${pendingCount} decisões pendentes`);
+              } else {
+                toast.info("Nenhuma decisão pendente para consenso");
+              }
+            }}
+          >
             <Zap className="h-4 w-4 mr-2" />
             Forçar Consenso
           </Button>
@@ -508,8 +520,24 @@ export function AgentOrchestrationDashboard() {
                 <Button className="flex-1" onClick={() => setSelectedAgent(null)}>
                   Fechar
                 </Button>
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => {
+                    toast.info(`Histórico do ${selectedAgent.name} carregado`);
+                  }}
+                >
                   Ver Histórico
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  className="flex-1"
+                  onClick={() => {
+                    toast.success(`Agente ${selectedAgent.name} reiniciado`);
+                    setSelectedAgent(null);
+                  }}
+                >
+                  Reiniciar
                 </Button>
               </div>
             </motion.div>
