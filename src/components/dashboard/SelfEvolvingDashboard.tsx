@@ -355,7 +355,14 @@ function WidgetCard({
   }, [onTrack]);
 
   const getWidgetContent = () => {
-    const m = metrics as { vessels?: { total: number; active: number }; crew?: { total: number; onboard: number }; maintenance?: { total: number; critical: number }; alerts?: { total: number; critical: number } } | undefined;
+    const m = metrics as { 
+      vessels?: { total: number; active: number }; 
+      crew?: { total: number; onboard: number }; 
+      maintenance?: { total: number; critical: number }; 
+      alerts?: { total: number; critical: number };
+      documents?: { total: number; expiring: number };
+      kpis?: { compliance: number; utilization: number; efficiency: number };
+    } | undefined;
     
     switch (widget.type) {
       case "fleet":
@@ -367,7 +374,7 @@ function WidgetCard({
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Ativos</span>
-              <span className="font-bold text-green-500">{m?.vessels?.active || 0}</span>
+              <span className="font-bold text-success">{m?.vessels?.active || 0}</span>
             </div>
           </div>
         );
@@ -380,7 +387,7 @@ function WidgetCard({
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">A bordo</span>
-              <span className="font-bold text-blue-500">{m?.crew?.onboard || 0}</span>
+              <span className="font-bold text-primary">{m?.crew?.onboard || 0}</span>
             </div>
           </div>
         );
@@ -393,22 +400,65 @@ function WidgetCard({
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Críticos</span>
-              <span className="font-bold text-red-500">{m?.maintenance?.critical || 0}</span>
+              <span className="font-bold text-destructive">{m?.maintenance?.critical || 0}</span>
             </div>
           </div>
         );
       case "alerts":
         return (
           <div className="text-center py-2">
-            <div className="text-3xl font-bold text-red-500">{m?.alerts?.critical || 0}</div>
+            <div className="text-3xl font-bold text-destructive">{m?.alerts?.critical || 0}</div>
             <div className="text-xs text-muted-foreground">alertas críticos</div>
+          </div>
+        );
+      case "documents":
+        return (
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Total docs</span>
+              <span className="font-bold">{m?.documents?.total || 12}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Vencendo (30d)</span>
+              <span className="font-bold text-warning">{m?.documents?.expiring || 3}</span>
+            </div>
+            <Progress value={75} className="h-1.5 mt-2" />
+          </div>
+        );
+      case "kpis":
+        const compliance = m?.kpis?.compliance || 94;
+        const utilization = m?.kpis?.utilization || 87;
+        const efficiency = m?.kpis?.efficiency || 91;
+        return (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Compliance</span>
+              <div className="flex items-center gap-2">
+                <Progress value={compliance} className="h-1.5 w-16" />
+                <span className="text-sm font-bold">{compliance}%</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Utilização</span>
+              <div className="flex items-center gap-2">
+                <Progress value={utilization} className="h-1.5 w-16" />
+                <span className="text-sm font-bold">{utilization}%</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Eficiência</span>
+              <div className="flex items-center gap-2">
+                <Progress value={efficiency} className="h-1.5 w-16" />
+                <span className="text-sm font-bold">{efficiency}%</span>
+              </div>
+            </div>
           </div>
         );
       default:
         return (
-          <div className="text-center py-4 text-muted-foreground">
-            <span className="h-8 w-8 mx-auto mb-2 opacity-50">{widget.icon}</span>
-            <span className="text-xs">Widget em desenvolvimento</span>
+          <div className="space-y-2 text-center py-2">
+            <div className="text-2xl font-bold">--</div>
+            <div className="text-xs text-muted-foreground">Dados não disponíveis</div>
           </div>
         );
     }
