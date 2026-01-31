@@ -13,3 +13,5 @@ export { ScenarioSimulator } from "./ScenarioSimulator";
 export { AgentOrchestrationDashboard } from "./AgentOrchestrationDashboard";
 export { AgentChatPanel } from "./AgentChatPanel";
 export { AutonomousAgentPanel } from "./AutonomousAgentPanel";
+export { GlobalAILevel3Button } from "./GlobalAILevel3Button";
+export { InteractiveAgentChat } from "./InteractiveAgentChat";
