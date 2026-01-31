@@ -84,31 +84,8 @@ export function useInventoryLocations() {
         return locations;
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-1",
-          name: "Navio Demo",
-          type: "vessel" as const,
-          location: { lat: -23.9, lng: -46.3, city: "Santos" },
-          itemCount: 245,
-          criticalItems: 2,
-          lowStockItems: 12,
-          expiringItems: 5,
-          totalValue: 125000,
-        },
-        {
-          id: "demo-2",
-          name: "Base Santos",
-          type: "warehouse" as const,
-          location: { lat: -23.96, lng: -46.33, city: "Santos" },
-          itemCount: 1520,
-          criticalItems: 5,
-          lowStockItems: 45,
-          expiringItems: 12,
-          totalValue: 850000,
-        },
-      ];
+      // No data - return empty array, UI should show EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -164,25 +141,8 @@ export function useInventoryItems(locationId?: string) {
         });
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "item-1",
-          name: "Filtro de Óleo Motor",
-          sku: "FLT-OLM-001",
-          category: "Filtros",
-          quantity: 2,
-          minStock: 5,
-          maxStock: 20,
-          location: "Navio Demo",
-          locationType: "vessel" as const,
-          leadTime: 7,
-          unitCost: 450,
-          status: "critical" as const,
-          lastMovement: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          predictedRunout: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-        },
-      ];
+      // No data - return empty array, UI should show EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 3,
   });

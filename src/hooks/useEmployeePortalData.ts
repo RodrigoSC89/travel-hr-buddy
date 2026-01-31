@@ -43,60 +43,63 @@ export function useEmployeePayments(period?: string) {
         .or(`auth_user_id.eq.${user?.id || ""},user_id.eq.${user?.id || ""}`)
         .maybeSingle();
 
-      // Simular dados de pagamento baseado no cargo
-      const baseSalary = crewMember?.rank?.toLowerCase().includes("captain") ? 25000 
-        : crewMember?.rank?.toLowerCase().includes("officer") ? 18000 
-        : 12000;
-      
-      const allowance = 450;
-      
-      // Simular histórico de pagamentos
-      const payments: Payment[] = [
-        {
-          id: "pay-1",
-          type: "salary",
-          description: `Salário Base - ${period || new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}`,
-          amount: baseSalary,
-          date: new Date().toISOString().split("T")[0],
-          status: "paid",
-          reference: `SAL-${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`,
-        },
-        {
-          id: "pay-2",
-          type: "allowance",
-          description: "Diária de Embarque",
-          amount: allowance * 11,
-          date: new Date().toISOString().split("T")[0],
-          status: "paid",
-        },
-        {
-          id: "pay-3",
-          type: "deduction",
-          description: "INSS",
-          amount: -baseSalary * 0.11,
-          date: new Date().toISOString().split("T")[0],
-          status: "paid",
-        },
-        {
-          id: "pay-4",
-          type: "deduction",
-          description: "IRRF",
-          amount: -baseSalary * 0.075,
-          date: new Date().toISOString().split("T")[0],
-          status: "paid",
-        },
-      ];
+      // Buscar pagamentos reais da tabela payroll_records (se existir)
+      // Por enquanto, retornar vazio - UI deve mostrar EmptyState
+      // TODO: Integrar com tabela payroll_records quando disponível
+      if (!crewMember) {
+        return {
+          payments: [],
+          summary: {
+            grossSalary: 0,
+            allowances: 0,
+            deductions: 0,
+            netSalary: 0,
+          },
+        };
+      }
+
+      // Tentar buscar de payroll_records
+      const { data: payrollData } = await supabase
+        .from("payroll_records")
+        .select("*")
+        .eq("employee_id", crewMember.id)
+        .order("payment_date", { ascending: false })
+        .limit(10);
+
+      if (!payrollData || payrollData.length === 0) {
+        // No payroll data - return empty, UI shows EmptyState
+        return {
+          payments: [],
+          summary: {
+            grossSalary: 0,
+            allowances: 0,
+            deductions: 0,
+            netSalary: 0,
+          },
+        };
+      }
+
+      const payments: Payment[] = payrollData.map((record: Record<string, unknown>) => ({
+        id: String(record.id),
+        type: (record.type as Payment["type"]) || "salary",
+        description: String(record.description || "Pagamento"),
+        amount: Number(record.amount) || 0,
+        date: String(record.payment_date || new Date().toISOString().split("T")[0]),
+        status: (record.status as Payment["status"]) || "paid",
+        reference: record.reference ? String(record.reference) : undefined,
+      }));
 
       const allowances = payments.filter(p => p.type === "allowance").reduce((acc, p) => acc + p.amount, 0);
       const deductions = Math.abs(payments.filter(p => p.type === "deduction").reduce((acc, p) => acc + p.amount, 0));
+      const grossSalary = payments.filter(p => p.type === "salary").reduce((acc, p) => acc + p.amount, 0);
 
       return {
         payments,
         summary: {
-          grossSalary: baseSalary,
+          grossSalary,
           allowances,
           deductions,
-          netSalary: baseSalary + allowances - deductions,
+          netSalary: grossSalary + allowances - deductions,
         },
       };
     },
@@ -204,31 +207,8 @@ export function useEmployeeTraining() {
         }));
       }
 
-      // Fallback demo
-      if (courses.length === 0) {
-        courses.push({
-          id: "demo-1",
-          title: "STCW Básico",
-          description: "Treinamento básico obrigatório",
-          category: "Obrigatório",
-          duration: "40h",
-          progress: 75,
-          status: "in_progress",
-          modules: 8,
-          completedModules: 6,
-        });
-      }
-
-      if (certificates.length === 0) {
-        certificates.push({
-          id: "demo-cert-1",
-          name: "STCW Básico",
-          issueDate: "2025-06-15",
-          expiryDate: "2030-06-15",
-          status: "valid",
-        });
-      }
-
+      // No fallback - return actual data (may be empty)
+      // UI should show EmptyState when no courses/certificates
       return { courses, certificates };
     },
     staleTime: 1000 * 60 * 5,

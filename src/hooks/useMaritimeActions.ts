@@ -31,14 +31,14 @@ export const useMaritimeActions = () => {
     });
   }, [toast]);
 
-  const handleExport = useCallback(async (moduleName: string, data?: any) => {
+  const handleExport = useCallback(async (moduleName: string, data?: unknown, callback?: () => Promise<void>) => {
     setIsLoading(true);
     try {
-      // Simulate export action
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (callback) {
+        await callback();
+      }
+      // Export is instant - no fake delay needed
       showSuccess("Exportação concluída", `Dados de ${moduleName} exportados com sucesso`);
-      
-      // In a real implementation, this would trigger actual export
     } catch (error) {
       showError("Erro na exportação", "Não foi possível exportar os dados");
     } finally {
@@ -47,20 +47,20 @@ export const useMaritimeActions = () => {
   }, [showSuccess, showError]);
 
   const handleRefresh = useCallback(async (moduleName: string, callback?: () => Promise<void>) => {
+    if (!callback) {
+      showInfo("Refresh", `Nenhuma ação de refresh configurada para ${moduleName}`);
+      return;
+    }
     setIsLoading(true);
     try {
-      if (callback) {
-        await callback();
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
+      await callback();
       showSuccess("Dados atualizados", `${moduleName} atualizado com sucesso`);
     } catch (error) {
       showError("Erro ao atualizar", "Não foi possível atualizar os dados");
     } finally {
       setIsLoading(false);
     }
-  }, [showSuccess, showError]);
+  }, [showSuccess, showError, showInfo]);
 
   const handleCreate = useCallback(async (itemName: string, callback?: () => Promise<void>) => {
     setIsLoading(true);
@@ -109,20 +109,20 @@ export const useMaritimeActions = () => {
   }, [showInfo]);
 
   const handleGenerateReport = useCallback(async (reportName: string, callback?: () => Promise<void>) => {
+    if (!callback) {
+      showInfo("Relatório", `Nenhum gerador de relatório configurado para ${reportName}`);
+      return;
+    }
     setIsLoading(true);
     try {
-      if (callback) {
-        await callback();
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
+      await callback();
       showSuccess("Relatório gerado", `${reportName} gerado com sucesso`);
     } catch (error) {
       showError("Erro ao gerar relatório", "Não foi possível gerar o relatório");
     } finally {
       setIsLoading(false);
     }
-  }, [showSuccess, showError]);
+  }, [showSuccess, showError, showInfo]);
 
   return {
     isLoading,

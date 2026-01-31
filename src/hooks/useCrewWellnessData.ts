@@ -44,25 +44,8 @@ export function useCrewWellnessData() {
         .limit(20);
 
       if (error || !crew || crew.length === 0) {
-        // Demo fallback
-        return [
-          {
-            id: "demo-1",
-            name: "João Silva",
-            position: "Comandante",
-            vessel: "Navio Demo",
-            wellnessScore: 85,
-            fatigueLevel: "low",
-            stressLevel: "moderate",
-            physicalHealth: "good",
-            mentalHealth: "good",
-            hoursWorked: 48,
-            restHours: 56,
-            daysOnBoard: 45,
-            lastCheckIn: new Date(Date.now() - 2 * 60 * 60 * 1000),
-            alerts: [],
-          },
-        ];
+        // No data - return empty array, UI should show EmptyState
+        return [];
       }
 
       return crew.map((member, idx) => {

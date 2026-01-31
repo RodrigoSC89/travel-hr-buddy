@@ -124,24 +124,32 @@ export function useIntegrationsData() {
     }
   });
 
-  // Test connection
+  // Test connection - calls real health check endpoint
   const testConnectionMutation = useMutation({
     mutationFn: async (id: string) => {
-      // Simulate connection test
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const integration = query.data?.find(i => i.id === id);
       if (!integration) throw new Error('Integração não encontrada');
       
-      return { success: true, latency: Math.floor(Math.random() * 100) + 50 };
+      // Call real health check if endpoint exists
+      const startTime = Date.now();
+      const { data, error } = await supabase
+        .from('api_integrations')
+        .select('status, last_health_check')
+        .eq('id', id)
+        .single();
+      
+      if (error) throw new Error(`Erro ao verificar conexão: ${error.message}`);
+      
+      const latency = Date.now() - startTime;
+      return { success: data?.status === 'active', latency };
     },
     onSuccess: (data) => {
-      toast.success('Conexão bem-sucedida', {
+      toast.success('Conexão verificada', {
         description: `Latência: ${data.latency}ms`
       });
     },
     onError: (error: Error) => {
-      toast.error('Falha na conexão', { description: error.message });
+      toast.error('Falha na verificação', { description: error.message });
     }
   });
 

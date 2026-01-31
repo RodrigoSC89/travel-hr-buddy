@@ -216,21 +216,8 @@ export function useCommunicationMessages() {
         }));
       }
 
-      // Fallback demo
-      return [
-        {
-          id: "msg-1",
-          subject: "Atualização de Política de Segurança",
-          content: "Nova política de segurança marítima entrará em vigor...",
-          from: "Departamento de Segurança",
-          timestamp: new Date().toISOString(),
-          read: false,
-          starred: true,
-          category: "inbox" as const,
-          priority: "high" as const,
-          attachments: 2,
-        },
-      ];
+      // No data - return empty array, UI should show EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 2,
   });
@@ -261,11 +248,8 @@ export function useCommunicationChannels() {
         }));
       }
 
-      // Demo fallback
-      return [
-        { id: "ch-1", name: "Geral", description: "Canal geral de comunicação", type: "broadcast" as const, isPublic: true, memberCount: 156, unreadCount: 5, lastMessage: "Bom dia!", lastMessageTime: "10:45" },
-        { id: "ch-2", name: "RH", description: "Recursos Humanos", type: "department" as const, isPublic: true, memberCount: 89, unreadCount: 2, lastMessage: "Nova política", lastMessageTime: "09:30" },
-      ];
+      // No data - return empty array, UI should show EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });

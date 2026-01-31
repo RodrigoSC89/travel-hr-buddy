@@ -106,24 +106,8 @@ export function useDPIncidents() {
         }));
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-1",
-          title: "Perda momentânea de posição",
-          date: new Date().toISOString(),
-          category: "system" as const,
-          riskLevel: "medium" as const,
-          dpClass: "DP2" as const,
-          vessel: "Navio Demo",
-          description: "Perda momentânea de posição durante operação de ancoragem",
-          correctiveActions: ["Verificar sensores de posição", "Recalibrar sistema"],
-          status: "investigating" as const,
-          sgsoCategory: "SGSO-003",
-          imcaCode: "M-182",
-          reportedBy: "Oficial de Turno",
-        },
-      ];
+      // No data - return empty array, UI should show EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 3,
   });
