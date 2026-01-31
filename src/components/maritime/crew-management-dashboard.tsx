@@ -20,6 +20,8 @@ import {
   Filter,
   Plus
 } from "lucide-react";
+import { CrewCertificationsPanel } from "./CrewCertificationsPanel";
+import { CrewReportsPanel } from "./CrewReportsPanel";
 
 interface CrewMember {
   id: string;
@@ -363,27 +365,11 @@ export const CrewManagementDashboard = () => {
         </TabsContent>
 
         <TabsContent value="certificates" className="space-y-6">
-          <Card>
-            <CardContent className="text-center py-12">
-              <Award className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Gestão de Certificações</h3>
-              <p className="text-muted-foreground">
-                Módulo de certificações em desenvolvimento
-              </p>
-            </CardContent>
-          </Card>
+          <CrewCertificationsPanel crewMembers={crewMembers} />
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-6">
-          <Card>
-            <CardContent className="text-center py-12">
-              <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Relatórios de Tripulação</h3>
-              <p className="text-muted-foreground">
-                Relatórios detalhados em desenvolvimento
-              </p>
-            </CardContent>
-          </Card>
+          <CrewReportsPanel crewMembers={crewMembers} assignments={assignments} />
         </TabsContent>
       </Tabs>
     </div>

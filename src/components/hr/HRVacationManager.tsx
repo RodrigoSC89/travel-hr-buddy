@@ -13,6 +13,7 @@ import { Calendar, AlertTriangle, CheckCircle2, Clock, Brain, CalendarDays, Data
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useHRVacations, useApproveVacation, useRejectVacation, useHRCertifications } from '@/hooks/useHRRealData';
 import { differenceInDays, addDays, format } from 'date-fns';
+import { VacationCalendarView } from './VacationCalendarView';
 
 export function HRVacationManager() {
   const { data: vacations = [], isLoading } = useHRVacations();
@@ -201,17 +202,7 @@ export function HRVacationManager() {
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Calendário de Férias</CardTitle>
-              <CardDescription>Visão mensal das férias programadas</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-96 flex items-center justify-center bg-muted/50 rounded-lg">
-                <p className="text-muted-foreground">Calendário interativo em desenvolvimento</p>
-              </div>
-            </CardContent>
-          </Card>
+          <VacationCalendarView vacations={vacations} />
         </TabsContent>
       </Tabs>
     </div>

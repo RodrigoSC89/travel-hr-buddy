@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RefreshCw, Settings, Sparkles } from "lucide-react";
+import { RefreshCw, Settings, Sparkles, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useWorkflows } from "@/hooks/useWorkflows";
 import { useWorkflowAI, workflowTemplates } from "@/hooks/useWorkflowAI";
@@ -16,6 +16,7 @@ import { WorkflowHeader } from "./workflow/WorkflowHeader";
 import { WorkflowStats } from "./workflow/WorkflowStats";
 import { WorkflowCard } from "./workflow/WorkflowCard";
 import { WorkflowFilters } from "./workflow/WorkflowFilters";
+import { RuleConfigCard } from "./RuleConfigCard";
 
 export const WorkflowAutomationHub: React.FC = () => {
   const { toast } = useToast();
@@ -162,36 +163,44 @@ export const WorkflowAutomationHub: React.FC = () => {
 
         <TabsContent value="automation" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Regras de Automação</CardTitle>
-              <CardDescription>Configure regras para automatizar processos</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Regras de Automação</CardTitle>
+                <CardDescription>Configure regras para automatizar processos</CardDescription>
+              </div>
+              <Button onClick={() => {
+                createAutomationRule({
+                  rule_name: `Nova Regra ${Date.now()}`,
+                  description: "Nova regra de automação",
+                  trigger_type: "schedule",
+                  is_active: false
+                });
+              }}>
+                <Plus className="h-4 w-4 mr-2" />
+                Nova Regra
+              </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              {automationRules.map((rule) => (
-                <div key={rule.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="font-medium">{rule.rule_name}</h4>
-                      <Badge variant="outline">{rule.trigger_type}</Badge>
-                      <Badge className={rule.is_active ? "bg-green-500/10 text-green-600" : "bg-gray-500/10 text-gray-600"}>
-                        {rule.is_active ? "Ativa" : "Inativa"}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{rule.description}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Execuções: {rule.execution_count} | Última: {rule.last_executed_at ? new Date(rule.last_executed_at).toLocaleString() : "Nunca"}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => toast({ title: "Configurações", description: "Abrindo configurações da regra..." })}>
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => toggleAutomationRule(rule.id)}>
-                      {rule.is_active ? "Desativar" : "Ativar"}
-                    </Button>
-                  </div>
+              {automationRules.length === 0 ? (
+                <div className="text-center py-8">
+                  <Sparkles className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <p className="text-muted-foreground">Nenhuma regra de automação configurada</p>
+                  <Button variant="link" onClick={() => createAutomationRule({ rule_name: "Primeira Regra", description: "Regra de exemplo", trigger_type: "event", is_active: false })}>
+                    Criar primeira regra
+                  </Button>
                 </div>
-              ))}
+              ) : (
+                automationRules.map((rule) => (
+                  <RuleConfigCard 
+                    key={rule.id} 
+                    rule={rule} 
+                    onToggle={() => toggleAutomationRule(rule.id)}
+                    onSave={(updates: Record<string, unknown>) => {
+                      toast({ title: "Regra atualizada", description: `"${rule.rule_name}" foi salva com sucesso` });
+                    }}
+                  />
+                ))
+              )}
             </CardContent>
           </Card>
         </TabsContent>
