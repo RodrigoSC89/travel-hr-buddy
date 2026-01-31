@@ -480,7 +480,16 @@ export default function AICommandCenter() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {aiInsights.map((insight) => (
-                      <Card key={insight.id} className="bg-muted/50">
+                      <Card 
+                        key={insight.id} 
+                        className="bg-muted/50 hover:bg-muted/70 cursor-pointer transition-all hover:shadow-md"
+                        onClick={() => {
+                          toast({
+                            title: insight.title,
+                            description: `Confiança: ${insight.confidence}% • Economia estimada: ${insight.savings}`,
+                          });
+                        }}
+                      >
                         <CardContent className="pt-4">
                           <div className="flex items-center justify-between mb-2">
                             <Badge className={getImpactColor(insight.impact)}>{insight.impact}</Badge>
@@ -489,6 +498,21 @@ export default function AICommandCenter() {
                           <p className="font-medium text-sm">{insight.title}</p>
                           <p className="text-xs text-muted-foreground mt-1">Economia: {insight.savings}</p>
                           <Progress value={insight.confidence} className="mt-2 h-1" />
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="w-full mt-3 text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toast({
+                                title: "Implementando insight...",
+                                description: `"${insight.title}" será aplicado automaticamente.`,
+                              });
+                            }}
+                          >
+                            <Zap className="h-3 w-3 mr-1" />
+                            Aplicar Insight
+                          </Button>
                         </CardContent>
                       </Card>
                     ))}
