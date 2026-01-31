@@ -17,8 +17,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { OffHireFormDialog } from "@/components/contracts/OffHireFormDialog";
-import { 
 import { logger } from '@/lib/logger';
+import {
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
   DollarSign, Calendar, Ship, Anchor, Eye, Edit, Trash2, Calculator

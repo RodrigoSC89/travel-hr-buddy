@@ -10,8 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from 'tesseract.js';
-import {
 import { logger } from '@/lib/logger';
+import {
   Upload,
   FileText,
   Image,

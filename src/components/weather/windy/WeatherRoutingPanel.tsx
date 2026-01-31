@@ -24,8 +24,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { getMapboxGLAsync, type MapboxGL } from "@/lib/mapbox-shim";
-import type { 
 import { logger } from '@/lib/logger';
+import type {
   OptimizedRoute, 
   RouteWaypoint, 
   WeatherCondition, 

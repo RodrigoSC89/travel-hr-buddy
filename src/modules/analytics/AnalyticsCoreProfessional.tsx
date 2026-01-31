@@ -30,8 +30,8 @@ import {
   Clock, ArrowUpRight, ArrowDownRight, MoreHorizontal, X, FileDown,
   Share2, Printer, Save, Copy, ExternalLink, Info, ChevronDown
 } from "lucide-react";
-import { 
 import { logger } from '@/lib/logger';
+import {
   ComposedChart, Line, Bar, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
   Legend, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, AreaChart
 } from "recharts";

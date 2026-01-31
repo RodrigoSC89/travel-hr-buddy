@@ -26,8 +26,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import {
 import { logger } from '@/lib/logger';
+import {
   Download,
   FileText,
   RefreshCw,

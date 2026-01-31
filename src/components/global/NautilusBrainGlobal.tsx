@@ -13,8 +13,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import {
 import { logger } from '@/lib/logger';
+import {
   Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
   Package, Shield, Mic, Copy, ThumbsUp, ThumbsDown,
   Lightbulb, MessageSquare, Minimize2, Maximize2

@@ -44,8 +44,8 @@ import {
   LineChart,
 } from "lucide-react";
 import { Line } from "react-chartjs-2";
-import {
 import { logger } from '@/lib/logger';
+import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,

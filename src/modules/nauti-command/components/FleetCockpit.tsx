@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
-import {
 import { logger } from '@/lib/logger';
+import {
   Ship, Anchor, Navigation, Fuel, Thermometer, Activity,
   MapPin, Clock, AlertTriangle, CheckCircle, Radio, Waves
 } from "lucide-react";

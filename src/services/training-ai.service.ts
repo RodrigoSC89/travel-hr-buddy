@@ -1,8 +1,8 @@
 // PATCH 598: Training AI Service
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
-import type {
 import { logger } from '@/lib/logger';
+import type {
   AITrainingSession,
   AITrainingHistory,
   TrainingLearningPath,

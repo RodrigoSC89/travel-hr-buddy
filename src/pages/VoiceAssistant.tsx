@@ -15,8 +15,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { 
 import { logger } from '@/lib/logger';
+import {
   Mic,
   MicOff,
   Volume2,

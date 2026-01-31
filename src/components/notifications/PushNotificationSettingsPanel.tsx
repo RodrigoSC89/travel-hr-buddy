@@ -15,8 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCompliancePushNotifications } from '@/hooks/use-compliance-push-notifications';
 import { toast } from 'sonner';
-import {
 import { logger } from '@/lib/logger';
+import {
   Bell, BellOff, Settings, Clock, Mail, Smartphone, 
   MessageSquare, AlertTriangle, CheckCircle, Info,
   Shield, Ship, FileText, Calendar, Volume2, VolumeX,

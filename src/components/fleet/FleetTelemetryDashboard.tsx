@@ -27,8 +27,8 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database, Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import {
 import { logger } from '@/lib/logger';
+import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,

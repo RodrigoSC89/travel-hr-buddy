@@ -9,8 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import {
 import { logger } from '@/lib/logger';
+import {
   FileText,
   Download,
   Shield,

@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { Bar, Line, Doughnut } from "react-chartjs-2";
-import {
 import { logger } from '@/lib/logger';
+import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,

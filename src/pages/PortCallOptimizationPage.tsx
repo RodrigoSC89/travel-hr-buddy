@@ -18,8 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { format, addHours, differenceInHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { 
 import { logger } from '@/lib/logger';
+import {
   Anchor, Ship, Clock, Brain, AlertTriangle, CheckCircle, 
   Calendar, MapPin, Loader2, RefreshCw, Plus, FileText,
   DollarSign, Navigation, Users, Truck, FileCheck, Timer,

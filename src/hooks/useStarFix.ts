@@ -5,8 +5,8 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import {
 import { logger } from '@/lib/logger';
+import {
   registerVesselInStarFix,
   fetchStarFixInspections,
   getStarFixPerformanceMetrics,

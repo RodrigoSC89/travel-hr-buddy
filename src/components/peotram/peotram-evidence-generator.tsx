@@ -16,8 +16,8 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import {
 import { logger } from '@/lib/logger';
+import {
   FileCheck,
   Brain,
   Sparkles,

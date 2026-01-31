@@ -11,8 +11,8 @@ import { OfflineSyncIndicator } from "@/components/ui/OfflineSyncIndicator";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
 import { Settings, Menu } from "lucide-react";
-import {
 import { logger } from '@/lib/logger';
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,

@@ -12,8 +12,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import {
 import { logger } from '@/lib/logger';
+import {
   Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
   Package, Shield, Mic, Volume2, Copy, ThumbsUp, ThumbsDown,
   Lightbulb, Target, AlertTriangle, CheckCircle, MessageSquare

@@ -11,8 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import {
 import { logger } from '@/lib/logger';
+import {
   Mic,
   MicOff,
   Volume2,

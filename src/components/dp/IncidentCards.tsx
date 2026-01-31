@@ -22,8 +22,8 @@ import { DPIncident, RISK_LEVEL_COLORS } from "@/types/incident";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Database } from "@/integrations/supabase/types";
-import { 
 import { logger } from '@/lib/logger';
+import {
   FileText, 
   Brain, 
   Download, 

@@ -44,8 +44,8 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import {
 import { logger } from '@/lib/logger';
+import {
   WorkspaceTeamPanel,
   WorkspaceChatPanel,
   WorkspaceDocuments,

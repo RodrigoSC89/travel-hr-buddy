@@ -29,8 +29,8 @@ import {
   MapPin,
   Umbrella
 } from "lucide-react";
-import {
 import { logger } from '@/lib/logger';
+import {
   fetchCPTECData,
   type CPTECData,
   type PrevisaoCPTEC,

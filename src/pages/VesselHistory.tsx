@@ -16,8 +16,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import {
 import { logger } from '@/lib/logger';
+import {
   History, Brain, Search, FileText, Plus, Calendar, Ship,
   Anchor, Wrench, Shield, AlertTriangle, Award, Upload,
   Download, Clock, Filter, ChevronDown, ChevronRight, Folder

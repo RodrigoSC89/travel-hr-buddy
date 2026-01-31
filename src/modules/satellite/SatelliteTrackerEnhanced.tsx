@@ -22,8 +22,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import {
 import { logger } from '@/lib/logger';
+import {
   Table,
   TableBody,
   TableCell,

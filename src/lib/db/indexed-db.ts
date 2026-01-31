@@ -11,8 +11,8 @@
 
 import { indexedDBSync } from '@/lib/offline/indexeddb-sync';
 import { indexedDBCache } from '@/services/unified/offline-cache.service';
-import type { 
 import { logger } from '@/lib/logger';
+import type {
   CachedRoute, 
   CachedCrewMember, 
   CachedVessel, 

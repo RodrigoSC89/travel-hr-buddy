@@ -16,8 +16,8 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import {
 import { logger } from '@/lib/logger';
+import {
   FileText, Brain, Shield, Users, AlertTriangle, Plus,
   CheckCircle, XCircle, Calendar, Award, RefreshCw,
   Clock, Ship, User, FileCheck, AlertCircle

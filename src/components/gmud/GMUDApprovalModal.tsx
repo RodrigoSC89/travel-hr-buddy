@@ -22,8 +22,8 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import {
 import { logger } from '@/lib/logger';
+import {
   PenTool,
   CheckCircle,
   XCircle,

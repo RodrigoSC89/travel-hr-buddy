@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTaskAutomationData } from "@/hooks/useTaskAutomationData";
-import { 
 import { logger } from '@/lib/logger';
+import {
   Zap, 
   Play, 
   Pause, 

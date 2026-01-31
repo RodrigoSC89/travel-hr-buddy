@@ -29,8 +29,8 @@ import {
   AlertTriangle, CheckCircle, Fuel, ArrowUpRight, ArrowDownRight, Eye
 } from "lucide-react";
 
-import { 
 import { logger } from '@/lib/logger';
+import {
   ComposedChart, Line, Bar, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
   Legend, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, AreaChart,
   LineChart as RechartsLineChart, BarChart

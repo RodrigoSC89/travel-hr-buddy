@@ -31,8 +31,8 @@ import { QuickActions } from "./QuickActions";
 import { ChatHistory } from "./ChatHistory";
 import { EvidencePDFGenerator } from "./EvidencePDFGenerator";
 import { HistoryExporter } from "./HistoryExporter";
-import { 
 import { logger } from '@/lib/logger';
+import {
   useAuditChatPersistence, 
   type ChatMessage as PersistentMessage, 
   type ChatSession 

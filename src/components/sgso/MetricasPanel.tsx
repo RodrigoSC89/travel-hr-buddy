@@ -5,8 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Ship, AlertTriangle, TrendingUp, FileText } from "lucide-react";
 import { Line, Pie } from "react-chartjs-2";
-import {
 import { logger } from '@/lib/logger';
+import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,

@@ -10,8 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
 import { logger } from '@/lib/logger';
+import {
   Bot, Send, User, Calendar, FileText, DollarSign, 
   HelpCircle, Loader2, MessageSquare, Clock, TrendingUp,
   History, Sparkles, Shield, BookOpen

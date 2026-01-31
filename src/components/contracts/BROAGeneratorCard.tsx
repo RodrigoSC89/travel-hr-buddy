@@ -16,8 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
-import { 
 import { logger } from '@/lib/logger';
+import {
   FileCheck, Brain, Download, Eye, Loader2, Ship, Calendar,
   User, Signature, AlertTriangle, Clock, CheckCircle, XCircle,
   FileText, Printer, Share2, Plus

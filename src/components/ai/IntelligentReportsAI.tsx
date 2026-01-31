@@ -13,8 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import {
 import { logger } from '@/lib/logger';
+import {
   Brain, FileText, Send, Loader2, Download, Sparkles,
   BarChart3, PieChart, LineChart, TrendingUp, Calendar,
   Ship, Users, Wrench, DollarSign, Shield, Clock, RefreshCw

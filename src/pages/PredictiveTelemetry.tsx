@@ -45,8 +45,8 @@ import { useNavigate } from "react-router-dom";
 import { format, subDays, subHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
-import {
 import { logger } from '@/lib/logger';
+import {
   ResponsiveContainer,
   LineChart,
   Line,

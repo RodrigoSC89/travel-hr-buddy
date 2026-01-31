@@ -15,8 +15,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { 
 import { logger } from '@/lib/logger';
+import { 
   Anchor, Brain, Clock, AlertTriangle, Plus, Download, RefreshCw, 
   TrendingUp, CheckCircle, Ship, MapPin, Navigation, Timer, Calendar,
   Loader2, Edit, Trash2

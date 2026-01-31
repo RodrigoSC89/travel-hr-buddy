@@ -26,8 +26,8 @@ import {
   Calendar,
   Clock
 } from "lucide-react";
-import {
 import { logger } from '@/lib/logger';
+import {
   fetchMarinhaBrasilData,
   type MarinhaBrasilData,
   type AvisoNavegacao,

@@ -11,8 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { 
 import { logger } from '@/lib/logger';
+import {
   Brain, TrendingUp, AlertTriangle, Clock, Ship, 
   Zap, Calendar, BarChart3, ArrowRight, RefreshCw,
   Target, Lightbulb, ShieldCheck

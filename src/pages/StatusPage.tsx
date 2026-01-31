@@ -11,8 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { format, formatDistanceToNow, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { 
 import { logger } from '@/lib/logger';
+import {
   CheckCircle2, 
   AlertCircle, 
   XCircle, 

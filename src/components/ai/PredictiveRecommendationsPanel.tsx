@@ -17,8 +17,8 @@ import {
   Shield, Fuel, Ship, ChevronRight, RefreshCw, Loader2,
   CheckCircle2, Clock, Target, Sparkles, BarChart3
 } from "lucide-react";
-import {
 import { logger } from '@/lib/logger';
+import {
   generateFullPredictiveAnalysis,
   type PredictiveAnalysis,
   type PredictiveRecommendation

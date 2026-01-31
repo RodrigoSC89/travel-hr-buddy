@@ -18,8 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { format, differenceInDays, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { 
 import { logger } from '@/lib/logger';
+import {
   FileText, Ship, DollarSign, Brain, AlertTriangle, CheckCircle, 
   Calendar, Clock, Loader2, RefreshCw, Plus, Search, TrendingUp,
   Building, Scale, Calculator, FileCheck, Bell, History

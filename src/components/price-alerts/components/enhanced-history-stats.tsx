@@ -17,8 +17,8 @@ const loadJsPDF = async () => {
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
 };
-import {
 import { logger } from '@/lib/logger';
+import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
