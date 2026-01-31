@@ -15,16 +15,18 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { 
   Ship, TrendingUp, TrendingDown, Users, Activity, BarChart3, Navigation, Gauge, AlertCircle,
   Loader2, RefreshCw, Download, FileText, Brain, Settings, Filter, CheckCircle2,
   Bell, Calendar, Clock, MapPin, Fuel, Anchor, ArrowUpRight, ArrowDownRight, Zap,
   Sparkles, Target, ShieldCheck, Waves, Lightbulb, AlertTriangle, DollarSign,
-  PieChart
+  PieChart, Play, X, Eye
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -161,6 +163,14 @@ export default function OperationsCommandCenter() {
   const [aiInsight, setAiInsight] = useState<string | null>(null);
   const [insights, setInsights] = useState<Insight[]>(sampleInsights);
   const { toast } = useToast();
+  
+  // Insight dialogs state
+  const [selectedInsight, setSelectedInsight] = useState<Insight | null>(null);
+  const [isAnalyzeDialogOpen, setIsAnalyzeDialogOpen] = useState(false);
+  const [isImplementDialogOpen, setIsImplementDialogOpen] = useState(false);
+  const [analysisNotes, setAnalysisNotes] = useState("");
+  const [implementationPlan, setImplementationPlan] = useState("");
+  const [isProcessingInsight, setIsProcessingInsight] = useState(false);
 
   const [data, setData] = useState<OperationsData>({
     activeVessels: 0,
@@ -456,6 +466,49 @@ export default function OperationsCommandCenter() {
     } finally {
       setIsGeneratingReport(false);
     }
+  };
+
+  // Insight handlers
+  const handleAnalyzeInsight = (insight: Insight) => {
+    setSelectedInsight(insight);
+    setAnalysisNotes("");
+    setIsAnalyzeDialogOpen(true);
+  };
+
+  const handleImplementInsight = (insight: Insight) => {
+    setSelectedInsight(insight);
+    setImplementationPlan("");
+    setIsImplementDialogOpen(true);
+  };
+
+  const submitAnalysis = async () => {
+    if (!selectedInsight) return;
+    setIsProcessingInsight(true);
+    
+    // Update insight status
+    setInsights(prev => prev.map(i => 
+      i.id === selectedInsight.id ? { ...i, status: "in_progress" } : i
+    ));
+    
+    await new Promise(r => setTimeout(r, 1000));
+    toast({ title: "✅ Análise Iniciada", description: `Análise do insight "${selectedInsight.title}" em andamento.` });
+    setIsAnalyzeDialogOpen(false);
+    setIsProcessingInsight(false);
+  };
+
+  const submitImplementation = async () => {
+    if (!selectedInsight) return;
+    setIsProcessingInsight(true);
+    
+    // Update insight status
+    setInsights(prev => prev.map(i => 
+      i.id === selectedInsight.id ? { ...i, status: "completed" } : i
+    ));
+    
+    await new Promise(r => setTimeout(r, 1000));
+    toast({ title: "🚀 Implementação Iniciada", description: `Implementação do insight "${selectedInsight.title}" em execução.` });
+    setIsImplementDialogOpen(false);
+    setIsProcessingInsight(false);
   };
 
   if (isLoading) {
@@ -816,8 +869,14 @@ export default function OperationsCommandCenter() {
                         </div>
                       </div>
                       <div className="flex gap-2 mt-4">
-                        <Button size="sm" onClick={() => toast({ title: "📊 Analisando", description: `Iniciando análise do insight "${insight.title}"...` })}>Analisar</Button>
-                        <Button size="sm" variant="outline" onClick={() => toast({ title: "🚀 Implementando", description: `Iniciando implementação do insight "${insight.title}"...` })}>Implementar</Button>
+                        <Button size="sm" onClick={() => handleAnalyzeInsight(insight)}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          Analisar
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight)}>
+                          <Play className="h-4 w-4 mr-1" />
+                          Implementar
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -1042,6 +1101,86 @@ export default function OperationsCommandCenter() {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Analyze Insight Dialog */}
+      <Dialog open={isAnalyzeDialogOpen} onOpenChange={setIsAnalyzeDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="h-5 w-5 text-primary" />
+              Analisar Insight
+            </DialogTitle>
+            <DialogDescription>
+              {selectedInsight?.title}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedInsight && (
+            <div className="space-y-4">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <p className="text-sm">{selectedInsight.description}</p>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="outline">{selectedInsight.category}</Badge>
+                  <Badge>{selectedInsight.impact}</Badge>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label>Notas da Análise</Label>
+                <Textarea
+                  value={analysisNotes}
+                  onChange={(e) => setAnalysisNotes(e.target.value)}
+                  placeholder="Adicione observações sobre este insight..."
+                  rows={3}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAnalyzeDialogOpen(false)}>Cancelar</Button>
+            <Button onClick={submitAnalysis} disabled={isProcessingInsight}>
+              {isProcessingInsight ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+              Iniciar Análise
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Implement Insight Dialog */}
+      <Dialog open={isImplementDialogOpen} onOpenChange={setIsImplementDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Play className="h-5 w-5 text-primary" />
+              Implementar Insight
+            </DialogTitle>
+            <DialogDescription>
+              {selectedInsight?.title} - Valor estimado: {selectedInsight?.estimatedValue}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedInsight && (
+            <div className="space-y-4">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <p className="text-sm">{selectedInsight.description}</p>
+              </div>
+              <div className="grid gap-2">
+                <Label>Plano de Implementação</Label>
+                <Textarea
+                  value={implementationPlan}
+                  onChange={(e) => setImplementationPlan(e.target.value)}
+                  placeholder="Descreva os passos para implementação..."
+                  rows={3}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsImplementDialogOpen(false)}>Cancelar</Button>
+            <Button onClick={submitImplementation} disabled={isProcessingInsight}>
+              {isProcessingInsight ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Zap className="h-4 w-4 mr-2" />}
+              Iniciar Implementação
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
