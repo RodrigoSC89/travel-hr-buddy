@@ -55,6 +55,8 @@ const GMUD = () => {
   const [isNewGMUDOpen, setIsNewGMUDOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState("");
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [selectedGMUD, setSelectedGMUD] = useState<GMUDRequest | null>(null);
   
   const [formData, setFormData] = useState({
     change_type: "",
@@ -66,8 +68,8 @@ const GMUD = () => {
     vessel_name: ""
   });
 
-  // Demo data
-  const [gmudRequests] = useState<GMUDRequest[]>([
+  // Demo data with state management for real updates
+  const [gmudRequests, setGmudRequests] = useState<GMUDRequest[]>([
     {
       id: "GMUD-001",
       change_type: "technical",
@@ -95,6 +97,36 @@ const GMUD = () => {
       created_at: "2024-12-20"
     }
   ]);
+
+  const handleApproveGMUD = async (gmudId: string) => {
+    setGmudRequests(prev => prev.map(g => 
+      g.id === gmudId 
+        ? { ...g, status: "approved", current_step: 4 }
+        : g
+    ));
+    toast({
+      title: "✅ GMUD Aprovado",
+      description: `${gmudId} foi aprovado com sucesso e está pronto para implementação`,
+    });
+  };
+
+  const handleRejectGMUD = async (gmudId: string) => {
+    setGmudRequests(prev => prev.map(g => 
+      g.id === gmudId 
+        ? { ...g, status: "rejected", current_step: g.current_step }
+        : g
+    ));
+    toast({
+      title: "❌ GMUD Rejeitado",
+      description: `${gmudId} foi rejeitado. O solicitante será notificado.`,
+      variant: "destructive"
+    });
+  };
+
+  const handleViewDetails = (gmud: GMUDRequest) => {
+    setSelectedGMUD(gmud);
+    setShowDetailsDialog(true);
+  };
 
   const handleCreateGMUD = async () => {
     setIsLoading(true);
@@ -375,7 +407,7 @@ const GMUD = () => {
                           {gmud.vessel_name} • {new Date(gmud.created_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes GMUD", description: gmud.description })}>
+                      <Button variant="outline" size="sm" onClick={() => handleViewDetails(gmud)}>
                         <FileText className="h-4 w-4 mr-1" />
                         Detalhes
                       </Button>
@@ -421,11 +453,11 @@ const GMUD = () => {
                         <p className="text-sm text-muted-foreground">{gmud.vessel_name}</p>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => toast({ title: "GMUD Rejeitado", description: `${gmud.id} foi rejeitado`, variant: "destructive" })}>
+                        <Button variant="outline" size="sm" onClick={() => handleRejectGMUD(gmud.id)}>
                           <XCircle className="h-4 w-4 mr-1" />
                           Rejeitar
                         </Button>
-                        <Button size="sm" onClick={() => toast({ title: "GMUD Aprovado", description: `${gmud.id} foi aprovado com sucesso` })}>
+                        <Button size="sm" onClick={() => handleApproveGMUD(gmud.id)}>
                           <CheckCircle className="h-4 w-4 mr-1" />
                           Aprovar
                         </Button>
@@ -446,7 +478,7 @@ const GMUD = () => {
             <CardContent>
               <div className="space-y-2">
                 {gmudRequests.map((gmud) => (
-                  <div key={gmud.id} className="flex justify-between items-center p-3 border rounded">
+                  <div key={gmud.id} className="flex justify-between items-center p-3 border rounded cursor-pointer hover:bg-accent" onClick={() => handleViewDetails(gmud)}>
                     <div>
                       <span className="font-medium">{gmud.id}</span>
                       <span className="text-muted-foreground ml-2">{gmud.description.substring(0, 50)}...</span>
@@ -459,6 +491,67 @@ const GMUD = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Details Dialog */}
+      <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{selectedGMUD?.id} - Detalhes</DialogTitle>
+          </DialogHeader>
+          {selectedGMUD && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Tipo de Mudança</Label>
+                  <p className="font-medium capitalize">{selectedGMUD.change_type}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Embarcação</Label>
+                  <p className="font-medium">{selectedGMUD.vessel_name}</p>
+                </div>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Descrição</Label>
+                <p className="font-medium">{selectedGMUD.description}</p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Justificativa</Label>
+                <p className="font-medium">{selectedGMUD.justification}</p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Avaliação de Impacto</Label>
+                <p className="font-medium">{selectedGMUD.impact_assessment}</p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Plano de Rollback</Label>
+                <p className="font-medium">{selectedGMUD.rollback_plan}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Data de Implementação</Label>
+                  <p className="font-medium">{new Date(selectedGMUD.implementation_date).toLocaleDateString('pt-BR')}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Status</Label>
+                  <div className="mt-1">{getStatusBadge(selectedGMUD.status)}</div>
+                </div>
+              </div>
+              <div className="pt-4 border-t">
+                <h4 className="font-medium mb-3">Progresso de Aprovação</h4>
+                <Progress value={(selectedGMUD.current_step / SIGNATURE_WORKFLOW.length) * 100} />
+                <div className="flex justify-between mt-2">
+                  {SIGNATURE_WORKFLOW.map((step) => (
+                    <div key={step.step_number} className="flex flex-col items-center">
+                      {getStepIcon(step.step_number <= selectedGMUD.current_step ? "approved" : step.step_number === selectedGMUD.current_step + 1 ? "pending" : "waiting")}
+                      <span className="text-xs mt-1">{step.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </ModulePageWrapper>
   );
 };
