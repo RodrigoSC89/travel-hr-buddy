@@ -383,6 +383,20 @@ export function AgentOrchestrationDashboard() {
                         <p className="text-xs text-muted-foreground mt-2">
                           {agent.lastAction}
                         </p>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="w-full mt-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toast.success(`Interagindo com ${agent.name}`, {
+                              description: "Iniciando comunicação direta com o agente"
+                            });
+                          }}
+                        >
+                          <MessageSquare className="h-3 w-3 mr-1" />
+                          Interagir
+                        </Button>
                       </div>
                     </motion.div>
                   );
