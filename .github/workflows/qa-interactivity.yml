@@ -1,0 +1,75 @@
+name: QA Interactivity Gate
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  interactivity_gate:
+    name: Interactivity & Completeness Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run interactivity scanner
+        id: scan
+        run: node qa/scan-interactivity.mjs
+        continue-on-error: true
+
+      - name: Upload scan report
+        uses: actions/upload-artifact@v4
+        with:
+          name: interactivity-scan-report
+          path: qa/out/interactivity-scan.json
+          retention-days: 30
+
+      - name: Check for blockers
+        if: steps.scan.outcome == 'failure'
+        run: |
+          echo "❌ BUILD BLOCKED: Interactivity issues detected"
+          echo "Check the scan report for details"
+          exit 1
+
+      - name: Success
+        if: steps.scan.outcome == 'success'
+        run: echo "✅ Interactivity check passed"
+
+  module_scores:
+    name: Module Completeness Scores
+    runs-on: ubuntu-latest
+    needs: interactivity_gate
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check module scores
+        run: |
+          if [ -f "qa/out/module-scores.json" ]; then
+            echo "📊 Module Scores Summary:"
+            cat qa/out/module-scores.json | jq '.averageScore, .readyForTest, .blocked'
+          else
+            echo "⚠️ No module scores file found"
+          fi
+
+      - name: Upload module scores
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-scores
+          path: qa/out/module-scores.json
+          retention-days: 30
+          if-no-files-found: ignore

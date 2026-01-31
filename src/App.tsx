@@ -287,6 +287,11 @@ const CrewWellnessAIAdvancedPage = lazy(() => import("@/pages/advanced/CrewWelln
 const ExecutiveDashboardAdvancedPage = lazy(() => import("@/pages/advanced/ExecutiveDashboardPage"));
 
 // ============================================
+// SYSTEM & QA
+// ============================================
+const InteractivityScoreboard = lazy(() => import("@/pages/System/InteractivityScoreboard"));
+
+// ============================================
 // ADMIN & DASHBOARDS
 // ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
@@ -727,6 +732,13 @@ const AppRoutes = () => (
       <Route path="/advanced/voice-commands" element={<VoiceCommandsPage />} />
       <Route path="/advanced/crew-wellness-ai" element={<CrewWellnessAIAdvancedPage />} />
       <Route path="/advanced/executive-dashboard" element={<ExecutiveDashboardAdvancedPage />} />
+      
+      {/* ============================================ */}
+      {/* SYSTEM & QA */}
+      {/* ============================================ */}
+      <Route path="/system/interactivity" element={<InteractivityScoreboard />} />
+      <Route path="/system/qa-scoreboard" element={<InteractivityScoreboard />} />
+      <Route path="/qa-dashboard" element={<InteractivityScoreboard />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
