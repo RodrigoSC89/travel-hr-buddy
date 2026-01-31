@@ -1,0 +1,144 @@
+{
+  "version": "1.0.0",
+  "description": "NAUTI ONE QA Specification - Interactivity & Completeness Contract",
+  "global": {
+    "must_have": [
+      "no_dead_buttons",
+      "crud_complete",
+      "live_lists_search_filter_sort_page",
+      "bulk_actions",
+      "loading_success_error_retry",
+      "empty_state_with_cta",
+      "rbac_hide_or_explain",
+      "audit_log_on_all_mutations",
+      "export_respects_filters",
+      "error_boundary_per_block",
+      "correlation_id_every_request",
+      "skeleton_loaders",
+      "undo_for_destructive_actions",
+      "auto_save_drafts",
+      "contextual_help"
+    ],
+    "torture_tests": [
+      "double_click_protection",
+      "slow_network_handling",
+      "offline_recovery",
+      "401_403_handling",
+      "500_timeout_handling",
+      "large_dataset_1000_plus",
+      "modal_close_without_save_warning",
+      "undo_after_delete",
+      "two_tabs_conflict_handling",
+      "back_button_after_save",
+      "rapid_form_submission",
+      "concurrent_edits",
+      "session_expiry_handling",
+      "file_upload_cancel",
+      "browser_refresh_during_action"
+    ],
+    "scoring": {
+      "discovery": {
+        "weight": 25,
+        "criteria": [
+          "clear_title_and_description",
+          "primary_cta_visible",
+          "empty_state_intelligent",
+          "contextual_help_available",
+          "user_understands_in_5_seconds"
+        ]
+      },
+      "action": {
+        "weight": 25,
+        "criteria": [
+          "primary_action_works",
+          "secondary_actions_available",
+          "crud_complete",
+          "bulk_actions_available",
+          "upload_attachments_when_applicable"
+        ]
+      },
+      "feedback_control": {
+        "weight": 25,
+        "criteria": [
+          "loading_states_visible",
+          "success_confirmation",
+          "error_messages_clear",
+          "retry_available",
+          "undo_available",
+          "status_visible",
+          "versioning_when_applicable"
+        ]
+      },
+      "operational_confidence": {
+        "weight": 25,
+        "criteria": [
+          "rbac_enforced",
+          "audit_log_complete",
+          "export_functional",
+          "error_boundary_per_block",
+          "correlation_id_tracked",
+          "data_persistence_verified"
+        ]
+      }
+    }
+  },
+  "modules": [
+    { "key": "maritime_command", "name": "Maritime Command", "critical": true, "category": "operations" },
+    { "key": "fleet_command_center", "name": "Fleet Command Center", "critical": true, "category": "operations" },
+    { "key": "voyage_command", "name": "Voyage Command", "critical": true, "category": "operations" },
+    { "key": "mission_command", "name": "Mission Command", "critical": true, "category": "operations" },
+    { "key": "bridge_link", "name": "Bridge Link", "critical": false, "category": "operations" },
+    { "key": "drydock_management", "name": "Drydock Management", "critical": true, "category": "operations" },
+    { "key": "ship_contracts", "name": "Contratos de Embarcação", "critical": true, "category": "operations" },
+    { "key": "charter_party", "name": "Charter Party", "critical": true, "category": "operations" },
+    { "key": "cargo_management", "name": "Cargo Management", "critical": true, "category": "operations" },
+    { "key": "port_call", "name": "Port Call", "critical": true, "category": "operations" },
+    { "key": "cts_tripulacao", "name": "CTS Tripulação", "critical": true, "category": "hr" },
+    { "key": "vessel_history", "name": "Histórico de Embarcações", "critical": true, "category": "operations" },
+    { "key": "digital_twin", "name": "Digital Twin", "critical": true, "category": "operations" },
+    { "key": "logistics_command", "name": "Logistics Command", "critical": true, "category": "operations" },
+    { "key": "maintenance_command_center", "name": "Maintenance Command Center", "critical": true, "category": "maintenance" },
+    { "key": "predictive_maintenance", "name": "Manutenção Preditiva", "critical": true, "category": "maintenance" },
+    { "key": "autonomous_command_center", "name": "Autonomous Command Center", "critical": true, "category": "ai" },
+    { "key": "ai_agent_orchestration", "name": "AI Agent Orchestration", "critical": true, "category": "ai" },
+    { "key": "ai_command_center", "name": "AI Command Center", "critical": true, "category": "ai" },
+    { "key": "autonomous_ai_central", "name": "Central de IA Autônoma", "critical": true, "category": "ai" },
+    { "key": "ai_observability", "name": "Observabilidade IA", "critical": true, "category": "ai" },
+    { "key": "vr_ar_training_support", "name": "VR/AR Training & Support Center", "critical": true, "category": "training" },
+    { "key": "underwater_ops", "name": "Operações Submarinas", "critical": false, "feature_flag_off": true, "category": "operations" },
+    { "key": "compliance_hub", "name": "Compliance Hub", "critical": true, "category": "compliance" },
+    { "key": "audit_management", "name": "Gestão de Auditorias", "critical": true, "category": "compliance" },
+    { "key": "isps_security", "name": "ISPS Security", "critical": true, "category": "compliance" },
+    { "key": "psc_inspections", "name": "PSC Inspections", "critical": true, "category": "compliance" },
+    { "key": "crew_management", "name": "Gestão de Tripulação", "critical": true, "category": "hr" },
+    { "key": "crew_wellbeing", "name": "Crew Wellbeing", "critical": true, "category": "hr" },
+    { "key": "training_academy", "name": "Training Academy", "critical": true, "category": "training" },
+    { "key": "finance_hub", "name": "Finance Hub", "critical": true, "category": "finance" },
+    { "key": "fuel_manager", "name": "Fuel Manager", "critical": true, "category": "operations" },
+    { "key": "document_processor", "name": "Document Processor", "critical": true, "category": "enterprise" },
+    { "key": "forms_builder", "name": "Forms Builder", "critical": true, "category": "enterprise" },
+    { "key": "checklists_builder", "name": "Checklists Builder", "critical": true, "category": "enterprise" }
+  ],
+  "acceptance_criteria": {
+    "ready_for_test": {
+      "minimum_score": 100,
+      "required_flows": [
+        "create_entity",
+        "edit_entity",
+        "delete_entity",
+        "list_with_filters",
+        "export_data",
+        "audit_trail_visible"
+      ]
+    },
+    "blockers": [
+      "dead_button",
+      "placeholder_text",
+      "in_development_route",
+      "silent_error",
+      "no_feedback_action",
+      "visual_only_filter",
+      "modal_no_persist"
+    ]
+  }
+}
