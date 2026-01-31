@@ -395,7 +395,7 @@ export function UnifiedLogisticsDashboard() {
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
-                  {filteredCargo.map((cargo: Cargo) => (
+                  {[...localCargo, ...filteredCargo].map((cargo: Cargo) => (
                     <div
                       key={cargo.id}
                       className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
@@ -437,18 +437,28 @@ export function UnifiedLogisticsDashboard() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-medium">{cargo.weight_tons.toLocaleString()} tons</p>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          ETA: {new Date(cargo.eta).toLocaleDateString()}
-                        </div>
-                        {cargo.value_usd && (
-                          <div className="flex items-center gap-1 text-sm text-green-500">
-                            <DollarSign className="h-3 w-3" />
-                            {cargo.value_usd.toLocaleString()}
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="font-medium">{cargo.weight_tons.toLocaleString()} tons</p>
+                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            ETA: {new Date(cargo.eta).toLocaleDateString()}
                           </div>
-                        )}
+                          {cargo.value_usd > 0 && (
+                            <div className="flex items-center gap-1 text-sm text-green-500">
+                              <DollarSign className="h-3 w-3" />
+                              {cargo.value_usd.toLocaleString()}
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive/10"
+                          onClick={() => handleDeleteCargo(cargo.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   ))}

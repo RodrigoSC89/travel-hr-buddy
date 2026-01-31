@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, lazy, Suspense } from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
   Play, Pause, Square, Cpu, Activity, Ship,
@@ -415,8 +416,9 @@ export default function AutonomousCommandCenter() {
                       size="sm" 
                       variant="outline"
                       onClick={() => {
-                        const response = `[${agent.name}] Pronto para receber instruções. Status: ${agent.status}`;
-                        alert(response);
+                        toast.success(`Iniciando chat com ${agent.name}`, {
+                          description: `Status: ${agent.status} | Modelo: ${agent.primaryModel}`
+                        });
                       }}
                     >
                       Chat
@@ -425,7 +427,9 @@ export default function AutonomousCommandCenter() {
                       size="sm" 
                       variant="secondary"
                       onClick={() => {
-                        alert(`Histórico de ${agent.decisionsCount} decisões do ${agent.name}`);
+                        toast.info(`${agent.name} - Histórico`, {
+                          description: `${agent.decisionsCount} decisões | Taxa de sucesso: ${agent.successRate}%`
+                        });
                       }}
                     >
                       Histórico
