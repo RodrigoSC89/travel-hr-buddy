@@ -1,4 +1,4 @@
-// @ts-nocheck
+// AI Suggestions Panel - Fully Interactive
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,9 @@ interface ActionData {
   route?: string;
   action?: string;
   params?: Record<string, unknown>;
+  savings?: string;
+  vessel?: string;
+  days_overdue?: number;
   [key: string]: unknown;
 }
 
@@ -43,6 +46,21 @@ interface AISuggestion {
   created_at: string;
   valid_until?: string;
 }
+
+// Map DB schema to local interface
+const mapDbToSuggestion = (dbItem: Record<string, unknown>): AISuggestion => ({
+  id: String(dbItem.id || ''),
+  type: (dbItem.suggestion_type as AISuggestion['type']) || 'action',
+  title: String(dbItem.title || dbItem.suggestion_type || 'Sugestão'),
+  description: String(dbItem.description || ''),
+  priority: Number(dbItem.priority || 2),
+  action_data: (dbItem.action_data as ActionData) || {},
+  is_read: Boolean(dbItem.is_read),
+  is_dismissed: Boolean(dbItem.is_dismissed),
+  is_acted_upon: Boolean(dbItem.applied_at),
+  created_at: String(dbItem.created_at || new Date().toISOString()),
+  valid_until: dbItem.valid_until ? String(dbItem.valid_until) : undefined,
+});
 
 // Mock suggestions to use when API fails or no data
 const MOCK_SUGGESTIONS: AISuggestion[] = [
@@ -123,7 +141,9 @@ export const AISuggestionsPanel: React.FC = () => {
       }
 
       if (data && data.length > 0) {
-        setSuggestions(data as AISuggestion[]);
+        // Map DB data to local interface
+        const mappedSuggestions = data.map(item => mapDbToSuggestion(item as Record<string, unknown>));
+        setSuggestions(mappedSuggestions);
       } else {
         // If no data in DB, use mock suggestions
         setSuggestions(MOCK_SUGGESTIONS);
@@ -220,9 +240,8 @@ export const AISuggestionsPanel: React.FC = () => {
         await supabase
           .from("ai_suggestions")
           .update({
-            is_read: true,
-            ...(actionType === "accept" && { is_acted_upon: true }),
-            ...(actionType === "dismiss" && { is_dismissed: true })
+            applied_at: actionType === "accept" ? new Date().toISOString() : null,
+            is_dismissed: actionType === "dismiss"
           })
           .eq("id", suggestion.id);
       } catch (error) {

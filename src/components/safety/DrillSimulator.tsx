@@ -554,7 +554,17 @@ export function DrillSimulator() {
                       </Badge>
                       <span className="text-sm">{rec.text}</span>
                     </div>
-                    <Button size="sm" variant="outline">{rec.action}</Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        toast.success(`Ação agendada: ${rec.action}`, {
+                          description: `Recomendação "${rec.text.substring(0, 40)}..." será implementada.`
+                        });
+                      }}
+                    >
+                      {rec.action}
+                    </Button>
                   </div>
                 ))}
               </div>
