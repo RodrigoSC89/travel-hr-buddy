@@ -50,7 +50,7 @@ export default function DPSyncDashboard() {
   };
 
   useEffect(() => {
-    const client = subscribeForecast(async (data: ForecastData) => {
+    const unsubscribe = subscribeForecast(async (data: ForecastData) => {
       const risk = await runAIModel(data);
       setPrediction(risk);
       if (risk > 0.8) {
@@ -59,9 +59,7 @@ export default function DPSyncDashboard() {
       setSync("Última sync: " + new Date().toLocaleTimeString());
     });
     return () => {
-      if (client && typeof client.end === 'function') {
-        client.end();
-      }
+      unsubscribe();
     };
   }, []);
 

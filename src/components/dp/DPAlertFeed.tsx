@@ -14,11 +14,11 @@ export default function DPAlertFeed() {
   const [alerts, setAlerts] = useState<DPAlert[]>([]);
 
   useEffect(() => {
-    const client = subscribeDPAlerts((msg) =>
+    const unsubscribe = subscribeDPAlerts((msg) =>
       setAlerts((prev) => [msg as DPAlert, ...prev].slice(0, 10))
     );
     return () => {
-      client.end();
+      unsubscribe();
     };
   }, []);
 

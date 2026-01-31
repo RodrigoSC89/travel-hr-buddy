@@ -36,7 +36,7 @@ export default function ForecastPanel() {
   const [data, setData] = useState<ForecastData>({ wind: 0, wave: 0, temp: 0, visibility: 0 });
 
   useEffect(() => {
-    const client = subscribeForecast((msg: Record<string, unknown>) => {
+    const unsubscribe = subscribeForecast((msg: Record<string, unknown>) => {
       setData({
         wind: typeof msg.wind === 'number' ? msg.wind : 0,
         wave: typeof msg.wave === 'number' ? msg.wave : 0,
@@ -45,9 +45,7 @@ export default function ForecastPanel() {
       });
     });
     return () => {
-      if (client && typeof client.end === 'function') {
-        client.end();
-      }
+      unsubscribe();
     };
   }, []);
 
