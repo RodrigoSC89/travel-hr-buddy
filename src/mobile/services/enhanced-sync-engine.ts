@@ -277,7 +277,7 @@ export class EnhancedSyncEngine {
       case "remote":
         // Accept remote changes, discard local
         structuredLogger.debug("Conflict: accepting remote changes");
-        // TODO: Update local storage with remote data
+        await this.updateLocalStorage(table, newRecord);
         break;
       case "latest":
         // Use timestamp to determine winner
@@ -285,7 +285,7 @@ export class EnhancedSyncEngine {
         const remoteTimestamp = newRecord.updated_at;
         if (remoteTimestamp > localTimestamp) {
           structuredLogger.debug("Conflict: remote is newer");
-          // TODO: Update local storage with remote data
+          await this.updateLocalStorage(table, newRecord);
         }
         break;
       }
@@ -299,8 +299,42 @@ export class EnhancedSyncEngine {
    * Handle remote delete
    */
   private async handleRemoteDelete(table: string, record: any): Promise<void> {
-    // TODO: Update local storage to mark as deleted
+    await this.deleteFromLocalStorage(table, record.id);
     this.emitChange(table, "delete", record);
+  }
+
+  /**
+   * Update local storage with remote data
+   */
+  private async updateLocalStorage(table: string, record: any): Promise<void> {
+    try {
+      const storageKey = `sync_${table}`;
+      const existing = localStorage.getItem(storageKey);
+      const data: Record<string, any> = existing ? JSON.parse(existing) : {};
+      data[record.id] = { ...record, _synced: true, _syncedAt: new Date().toISOString() };
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      structuredLogger.debug(`Updated local storage for ${table}:${record.id}`);
+    } catch (error) {
+      structuredLogger.error(`Failed to update local storage for ${table}`, error as Error);
+    }
+  }
+
+  /**
+   * Delete from local storage
+   */
+  private async deleteFromLocalStorage(table: string, recordId: string): Promise<void> {
+    try {
+      const storageKey = `sync_${table}`;
+      const existing = localStorage.getItem(storageKey);
+      if (existing) {
+        const data: Record<string, any> = JSON.parse(existing);
+        delete data[recordId];
+        localStorage.setItem(storageKey, JSON.stringify(data));
+        structuredLogger.debug(`Deleted from local storage: ${table}:${recordId}`);
+      }
+    } catch (error) {
+      structuredLogger.error(`Failed to delete from local storage for ${table}`, error as Error);
+    }
   }
 
   /**
@@ -348,12 +382,45 @@ export class EnhancedSyncEngine {
     }
   }
 
+  private changeListeners: Map<string, Set<(event: string, data: any) => void>> = new Map();
+
   /**
    * Emit change event for table
    */
   private emitChange(table: string, event: string, data: any): void {
-    // TODO: Implement event emitter for UI updates
     structuredLogger.debug("Change emitted", { table, event });
+    
+    // Notify table-specific listeners
+    const tableListeners = this.changeListeners.get(table);
+    if (tableListeners) {
+      for (const listener of tableListeners) {
+        try {
+          listener(event, data);
+        } catch (error) {
+          structuredLogger.error("Error in change listener", error as Error);
+        }
+      }
+    }
+    
+    // Dispatch custom event for global listeners
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(`sync:${table}:${event}`, { detail: data }));
+    }
+  }
+
+  /**
+   * Subscribe to table changes
+   */
+  public onTableChange(table: string, callback: (event: string, data: any) => void): () => void {
+    if (!this.changeListeners.has(table)) {
+      this.changeListeners.set(table, new Set());
+    }
+    this.changeListeners.get(table)!.add(callback);
+    
+    // Return unsubscribe function
+    return () => {
+      this.changeListeners.get(table)?.delete(callback);
+    };
   }
 
   /**
