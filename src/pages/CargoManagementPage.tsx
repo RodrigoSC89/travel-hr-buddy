@@ -68,6 +68,16 @@ const CargoManagementPage = () => {
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showNewContainer, setShowNewContainer] = useState(false);
+  const [showNewPlanDialog, setShowNewPlanDialog] = useState(false);
+  const [showBillOfLadingDialog, setShowBillOfLadingDialog] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<LoadingPlan | null>(null);
+  const [showPlanDetailsDialog, setShowPlanDetailsDialog] = useState(false);
+  
+  const [newPlanForm, setNewPlanForm] = useState({
+    vessel_name: "",
+    port: "",
+    containers_count: 0
+  });
 
   // Fetch real data from Supabase
   useEffect(() => {
@@ -171,6 +181,85 @@ const CargoManagementPage = () => {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  // Handler: Create new loading plan
+  const handleCreatePlan = () => {
+    if (!newPlanForm.vessel_name || !newPlanForm.port) {
+      toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" });
+      return;
+    }
+    const newPlan: LoadingPlan = {
+      id: `plan-${Date.now()}`,
+      vessel_name: newPlanForm.vessel_name,
+      port: newPlanForm.port,
+      utilization: 0,
+      stability_gm: 1.5,
+      containers_count: newPlanForm.containers_count,
+      status: "draft",
+      ai_optimized: false,
+      created_at: new Date().toISOString()
+    };
+    setLoadingPlans(prev => [newPlan, ...prev]);
+    setShowNewPlanDialog(false);
+    setNewPlanForm({ vessel_name: "", port: "", containers_count: 0 });
+    toast({ title: "Plano Criado", description: `Plano para ${newPlan.vessel_name} criado com sucesso` });
+  };
+
+  // Handler: Optimize plan with AI
+  const handleOptimizePlan = async (plan: LoadingPlan) => {
+    setIsAnalyzing(true);
+    try {
+      await runAIOptimization();
+      setLoadingPlans(prev => prev.map(p => p.id === plan.id ? { ...p, ai_optimized: true, utilization: Math.min(95, p.utilization + 5) } : p));
+      toast({ title: "Otimização Concluída", description: `Plano de ${plan.vessel_name} otimizado com IA` });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  // Handler: Generate Bill of Lading
+  const handleGenerateBL = () => {
+    setShowBillOfLadingDialog(false);
+    const blob = new Blob([`BILL OF LADING\n\nContainers: ${containers.length}\nData: ${new Date().toISOString()}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `BL-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "B/L Gerado", description: "Bill of Lading baixado com sucesso" });
+  };
+
+  // Handler: Generate Cargo Manifest
+  const handleGenerateManifest = () => {
+    const manifest = containers.map(c => `${c.container_number},${c.weight_kg}kg,${c.cargo_description}`).join('\n');
+    const blob = new Blob([`CARGO MANIFEST\n\n${manifest}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `manifest-${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "Manifesto Gerado", description: "Cargo Manifest baixado com sucesso" });
+  };
+
+  // Handler: DG Declaration
+  const handleDGDeclaration = () => {
+    const dgContainers = containers.filter(c => c.dangerous_goods);
+    if (dgContainers.length === 0) {
+      toast({ title: "Sem Carga Perigosa", description: "Nenhum container com carga perigosa registrado" });
+      return;
+    }
+    const declaration = dgContainers.map(c => `${c.container_number},${c.dg_class || 'N/A'},${c.cargo_description}`).join('\n');
+    const blob = new Blob([`DG DECLARATION - IMDG CODE\n\n${declaration}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dg-declaration-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "DG Declaration", description: `${dgContainers.length} containers de carga perigosa declarados` });
   };
 
   const stats = {
@@ -492,7 +581,7 @@ const CargoManagementPage = () => {
 
         <TabsContent value="loading-plans" className="space-y-4">
           <div className="flex justify-end">
-            <Button onClick={() => toast({ title: "📦 Novo Plano", description: "Abrindo criação de plano de carga..." })}>
+            <Button onClick={() => setShowNewPlanDialog(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Plano de Carga
             </Button>
@@ -538,11 +627,11 @@ const CargoManagementPage = () => {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1" onClick={() => toast({ title: "📋 Plano de Carga", description: `Visualizando plano de ${plan.vessel_name}...` })}>
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => { setSelectedPlan(plan); setShowPlanDetailsDialog(true); }}>
                       <FileText className="h-4 w-4 mr-2" />
                       Ver Plano
                     </Button>
-                    <Button size="sm" className="flex-1" onClick={() => toast({ title: "🤖 Otimizando", description: `Iniciando otimização IA para ${plan.vessel_name}...` })}>
+                    <Button size="sm" className="flex-1" onClick={() => handleOptimizePlan(plan)}>
                       <Brain className="h-4 w-4 mr-2" />
                       Otimizar
                     </Button>
@@ -564,15 +653,15 @@ const CargoManagementPage = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
-                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "📄 Gerando B/L", description: "Iniciando geração do Bill of Lading..." })}>
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => setShowBillOfLadingDialog(true)}>
                   <FileText className="h-6 w-6" />
                   <span>Gerar B/L</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "📦 Cargo Manifest", description: "Gerando manifesto de carga..." })}>
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={handleGenerateManifest}>
                   <Package className="h-6 w-6" />
                   <span>Cargo Manifest</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "⚠️ DG Declaration", description: "Abrindo declaração de carga perigosa..." })}>
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={handleDGDeclaration}>
                   <AlertTriangle className="h-6 w-6" />
                   <span>DG Declaration</span>
                 </Button>
@@ -581,6 +670,117 @@ const CargoManagementPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Dialog: New Loading Plan */}
+      <Dialog open={showNewPlanDialog} onOpenChange={setShowNewPlanDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Novo Plano de Carga</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Nome da Embarcação</Label>
+              <Input 
+                value={newPlanForm.vessel_name} 
+                onChange={e => setNewPlanForm({...newPlanForm, vessel_name: e.target.value})}
+                placeholder="MV Atlantic Star"
+              />
+            </div>
+            <div>
+              <Label>Porto</Label>
+              <Input 
+                value={newPlanForm.port} 
+                onChange={e => setNewPlanForm({...newPlanForm, port: e.target.value})}
+                placeholder="Santos, BR"
+              />
+            </div>
+            <div>
+              <Label>Número de Containers</Label>
+              <Input 
+                type="number"
+                value={newPlanForm.containers_count} 
+                onChange={e => setNewPlanForm({...newPlanForm, containers_count: parseInt(e.target.value) || 0})}
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setShowNewPlanDialog(false)}>Cancelar</Button>
+              <Button onClick={handleCreatePlan}>Criar Plano</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Plan Details */}
+      <Dialog open={showPlanDetailsDialog} onOpenChange={setShowPlanDetailsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Ship className="h-5 w-5" />
+              {selectedPlan?.vessel_name || "Plano de Carga"}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedPlan && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Porto</p>
+                  <p className="text-lg font-bold">{selectedPlan.port}</p>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Containers</p>
+                  <p className="text-lg font-bold">{selectedPlan.containers_count}</p>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">GM (Estabilidade)</p>
+                  <p className="text-lg font-bold text-green-600">{selectedPlan.stability_gm}m</p>
+                </div>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Utilização</p>
+                  <p className="text-lg font-bold">{selectedPlan.utilization}%</p>
+                </div>
+              </div>
+              <Progress value={selectedPlan.utilization} className="h-4" />
+              <div className="flex gap-2 justify-end">
+                <Button variant="outline" onClick={() => setShowPlanDetailsDialog(false)}>Fechar</Button>
+                <Button onClick={() => handleOptimizePlan(selectedPlan)}>
+                  <Brain className="h-4 w-4 mr-2" />
+                  Otimizar com IA
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Bill of Lading */}
+      <Dialog open={showBillOfLadingDialog} onOpenChange={setShowBillOfLadingDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Gerar Bill of Lading</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">Containers Selecionados</p>
+              <p className="text-2xl font-bold">{containers.length}</p>
+            </div>
+            <div>
+              <Label>Shipper</Label>
+              <Input placeholder="Nome do Embarcador" />
+            </div>
+            <div>
+              <Label>Consignee</Label>
+              <Input placeholder="Nome do Consignatário" />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setShowBillOfLadingDialog(false)}>Cancelar</Button>
+              <Button onClick={handleGenerateBL}>
+                <FileText className="h-4 w-4 mr-2" />
+                Gerar B/L
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

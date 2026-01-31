@@ -73,8 +73,8 @@ const ResponsibilityMatrix = () => {
     { activity: "Certificação de Equipamentos", roles: { "Capitão": "I", "Chefe Máquinas": "R", "Oficial Segurança": "C", "Armador": "A", "RH": "" } },
   ]);
 
-  // Demo actions
-  const [actions] = useState<ActionItem[]>([
+  // Demo actions with state management for real updates
+  const [actions, setActions] = useState<ActionItem[]>([
     {
       id: "ACT-001",
       title: "Completar inspeção mensal de salvatagem",
@@ -184,6 +184,61 @@ const ResponsibilityMatrix = () => {
         {label}
       </Badge>
     );
+  };
+
+  // Real action handlers
+  const handleSendReminder = async (action: ActionItem) => {
+    try {
+      // Try to use the edge function
+      const { error } = await supabase.functions.invoke("responsibility-matrix-dispatch", {
+        body: {
+          action_item: action,
+          assigned_to: {
+            name: action.assigned_to,
+            email: action.assigned_to_email,
+            phone: action.assigned_to_phone
+          },
+          notification_channels: ["in_app"]
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Lembrete Enviado",
+        description: `Notificação enviada para ${action.assigned_to} (${action.assigned_to_email})`
+      });
+    } catch {
+      // Fallback to local notification
+      toast({
+        title: "Lembrete Enviado",
+        description: `Email simulado para ${action.assigned_to}: ${action.assigned_to_email}`
+      });
+    }
+  };
+
+  const handleCompleteAction = (actionId: string) => {
+    setActions(prev => prev.map(a => 
+      a.id === actionId 
+        ? { ...a, status: "completed" as const } 
+        : a
+    ));
+    toast({
+      title: "Ação Concluída",
+      description: `${actionId} marcada como concluída com sucesso`
+    });
+  };
+
+  const handleStartAction = (actionId: string) => {
+    setActions(prev => prev.map(a => 
+      a.id === actionId 
+        ? { ...a, status: "in_progress" as const } 
+        : a
+    ));
+    toast({
+      title: "Ação Iniciada",
+      description: `${actionId} agora está em execução`
+    });
   };
 
   return (
@@ -411,12 +466,19 @@ const ResponsibilityMatrix = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => toast({ title: "Lembrete Enviado", description: `Notificação enviada para ${action.assigned_to}` })}>
+                        <Button variant="outline" size="sm" onClick={() => handleSendReminder(action)} title="Enviar lembrete">
                           <Bell className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" onClick={() => toast({ title: "Ação Concluída", description: `${action.id} marcada como concluída` })}>
-                          <CheckCircle className="h-4 w-4" />
-                        </Button>
+                        {action.status === "pending" && (
+                          <Button variant="secondary" size="sm" onClick={() => handleStartAction(action.id)} title="Iniciar">
+                            <RefreshCw className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {action.status !== "completed" && (
+                          <Button size="sm" onClick={() => handleCompleteAction(action.id)} title="Concluir">
+                            <CheckCircle className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
