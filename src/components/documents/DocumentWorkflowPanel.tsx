@@ -318,11 +318,45 @@ export const DocumentWorkflowPanel: React.FC = () => {
                             )}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm" onClick={() => toast.success(`Visualizando documento: ${doc.title}`)}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => {
+                                toast.success(`Abrindo documento: ${doc.title}`, {
+                                  description: `Versão ${doc.version} - ${categoryLabels[doc.category]}`
+                                });
+                                // In a real app, this would open a document viewer
+                              }}
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={() => toast.info(`Editando documento: ${doc.title}`)}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => {
+                                toast.info(`Modo edição: ${doc.title}`, {
+                                  description: "Alterações criarão uma nova versão"
+                                });
+                                // In a real app, this would open the editor
+                              }}
+                            >
                               <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => {
+                                const blob = new Blob([`Documento: ${doc.title}\n\nConteúdo: ${doc.description || 'N/A'}`], { type: 'text/plain' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${doc.document_number}.txt`;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                                toast.success("Download iniciado");
+                              }}
+                            >
+                              <Download className="h-4 w-4" />
                             </Button>
                             {doc.status === 'draft' && (
                               <Button 
