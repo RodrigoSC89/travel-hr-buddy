@@ -1,6 +1,7 @@
 /**
  * VesselHistoryV2 - Histórico de Embarcação
  * Timeline interativa com IA para análise de padrões
+ * CRUD completo para inserir/remover eventos
  */
 
 import { useState, useEffect } from "react";
@@ -8,11 +9,15 @@ import { PageLayoutV2, CardV2, StatsGridV2, ModuleAIChat, ModuleEvidenceGenerato
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { 
   Ship, Brain, History, FileText, Wrench, Shield, AlertTriangle, 
-  CheckCircle, Calendar, Search, TrendingUp
+  CheckCircle, Calendar, Search, TrendingUp, Plus, Edit2, Trash2
 } from "lucide-react";
 import { VesselTimelineAdvanced } from "@/components/vessel-history/VesselTimelineAdvanced";
 
@@ -24,6 +29,7 @@ interface HistoryEvent {
   description: string;
   documents: string[];
   status: string;
+  cost?: number;
 }
 
 const QUICK_QUESTIONS = [
@@ -49,16 +55,80 @@ const EVIDENCE_FIELDS = [
 export default function VesselHistoryV2() {
   const [events, setEvents] = useState<HistoryEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<HistoryEvent | null>(null);
+  const [formData, setFormData] = useState({
+    vessel_name: "",
+    event_type: "maintenance",
+    event_date: new Date().toISOString().split('T')[0],
+    description: "",
+    cost: 0
+  });
 
   useEffect(() => {
     setEvents([
-      { id: "1", vessel_name: "MV Atlantic Star", event_type: "inspection", event_date: "2025-01-02", description: "Inspeção PSC - Santos", documents: ["PSC Report"], status: "completed" },
-      { id: "2", vessel_name: "MV Atlantic Star", event_type: "maintenance", event_date: "2024-12-15", description: "Manutenção preventiva motor principal", documents: ["Work Order", "Spare Parts"], status: "completed" },
-      { id: "3", vessel_name: "MV Atlantic Star", event_type: "retrofit", event_date: "2024-11-20", description: "Instalação BWTS", documents: ["BWTS Certificate", "Installation Report"], status: "completed" },
-      { id: "4", vessel_name: "MV Pacific Dawn", event_type: "incident", event_date: "2024-10-05", description: "Near miss - procedimento de amarração", documents: ["Incident Report"], status: "closed" },
+      { id: "1", vessel_name: "MV Atlantic Star", event_type: "inspection", event_date: "2026-01-30", description: "Inspeção PSC - Santos", documents: ["PSC Report"], status: "completed", cost: 5000 },
+      { id: "2", vessel_name: "MV Atlantic Star", event_type: "maintenance", event_date: "2026-01-23", description: "Manutenção preventiva motor principal", documents: ["Work Order", "Spare Parts"], status: "completed", cost: 45000 },
+      { id: "3", vessel_name: "MV Atlantic Star", event_type: "retrofit", event_date: "2025-11-20", description: "Instalação BWTS", documents: ["BWTS Certificate", "Installation Report"], status: "completed", cost: 850000 },
+      { id: "4", vessel_name: "MV Pacific Dawn", event_type: "incident", event_date: "2025-10-05", description: "Near miss - procedimento de amarração", documents: ["Incident Report"], status: "closed" },
     ]);
     setLoading(false);
   }, []);
+
+  const handleOpenAddDialog = () => {
+    setEditingEvent(null);
+    setFormData({
+      vessel_name: "",
+      event_type: "maintenance",
+      event_date: new Date().toISOString().split('T')[0],
+      description: "",
+      cost: 0
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  const handleEdit = (event: HistoryEvent) => {
+    setEditingEvent(event);
+    setFormData({
+      vessel_name: event.vessel_name,
+      event_type: event.event_type,
+      event_date: event.event_date,
+      description: event.description,
+      cost: event.cost || 0
+    });
+    setIsAddDialogOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm("Tem certeza que deseja excluir este evento?")) {
+      setEvents(prev => prev.filter(e => e.id !== id));
+      toast.success("Evento excluído com sucesso");
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (editingEvent) {
+      setEvents(prev => prev.map(event => 
+        event.id === editingEvent.id 
+          ? { ...event, ...formData, documents: event.documents }
+          : event
+      ));
+      toast.success("Evento atualizado com sucesso");
+    } else {
+      const newEvent: HistoryEvent = {
+        id: Date.now().toString(),
+        ...formData,
+        documents: [],
+        status: "pending"
+      };
+      setEvents(prev => [newEvent, ...prev]);
+      toast.success("Evento adicionado com sucesso");
+    }
+    
+    setIsAddDialogOpen(false);
+  };
 
   const totalEvents = events.length;
   const inspections = events.filter(e => e.event_type === 'inspection').length;
@@ -94,6 +164,96 @@ export default function VesselHistoryV2() {
         { icon: Search, label: "OCR Search" },
       ]}
     >
+      {/* Action Buttons */}
+      <div className="flex justify-end mb-4">
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={handleOpenAddDialog} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Novo Evento
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>
+                {editingEvent ? "Editar Evento" : "Novo Evento no Histórico"}
+              </DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="vessel_name">Embarcação</Label>
+                  <Input
+                    id="vessel_name"
+                    value={formData.vessel_name}
+                    onChange={e => setFormData({ ...formData, vessel_name: e.target.value })}
+                    placeholder="MV Atlantic Star"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="event_type">Tipo de Evento</Label>
+                  <Select value={formData.event_type} onValueChange={v => setFormData({ ...formData, event_type: v })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="maintenance">Manutenção</SelectItem>
+                      <SelectItem value="inspection">Inspeção</SelectItem>
+                      <SelectItem value="incident">Incidente</SelectItem>
+                      <SelectItem value="retrofit">Retrofit</SelectItem>
+                      <SelectItem value="crew_change">Troca Tripulação</SelectItem>
+                      <SelectItem value="voyage">Viagem</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="event_date">Data</Label>
+                  <Input
+                    id="event_date"
+                    type="date"
+                    value={formData.event_date}
+                    onChange={e => setFormData({ ...formData, event_date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="cost">Custo (R$)</Label>
+                  <Input
+                    id="cost"
+                    type="number"
+                    value={formData.cost}
+                    onChange={e => setFormData({ ...formData, cost: Number(e.target.value) })}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Descrição</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Descreva o evento..."
+                  rows={3}
+                  required
+                />
+              </div>
+              <div className="flex gap-3 justify-end">
+                <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit">
+                  {editingEvent ? "Salvar" : "Adicionar"}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <StatsGridV2 stats={stats} columns={4} />
 
       <Tabs defaultValue="timeline" className="space-y-6">

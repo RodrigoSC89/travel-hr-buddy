@@ -780,7 +780,7 @@ export default function MaritimeCommandCenter() {
         {/* Checklists Tab */}
         <TabsContent value="checklists" className="space-y-6">
           <MaritimeChecklistSystem
-            userId="demo-user-id"
+            userId={userId || "default-user"}
             userRole="inspector"
             vesselId={undefined}
           />

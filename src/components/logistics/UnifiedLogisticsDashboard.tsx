@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -145,6 +146,44 @@ export function UnifiedLogisticsDashboard() {
     c.destination_port?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [isAddCargoOpen, setIsAddCargoOpen] = useState(false);
+  const [cargoForm, setCargoForm] = useState({
+    tracking_number: "",
+    cargo_type: "",
+    weight_tons: 0,
+    origin_port: "",
+    destination_port: "",
+    vessel_name: ""
+  });
+  const [localCargo, setLocalCargo] = useState<Cargo[]>([]);
+
+  // Combine API data with local data
+  const allCargo = [...localCargo, ...cargoData];
+
+  const handleAddCargo = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newCargo: Cargo = {
+      id: Date.now().toString(),
+      ...cargoForm,
+      status: "loading",
+      eta: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      temperature_controlled: false,
+      hazmat: false,
+      value_usd: 0
+    };
+    setLocalCargo(prev => [newCargo, ...prev]);
+    setIsAddCargoOpen(false);
+    setCargoForm({ tracking_number: "", cargo_type: "", weight_tons: 0, origin_port: "", destination_port: "", vessel_name: "" });
+    toast.success("Carga adicionada com sucesso!");
+  };
+
+  const handleDeleteCargo = (id: string) => {
+    if (confirm("Deseja deletar esta carga?")) {
+      setLocalCargo(prev => prev.filter(c => c.id !== id));
+      toast.success("Carga removida");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -158,11 +197,91 @@ export function UnifiedLogisticsDashboard() {
             Cargo tracking, supplier management, and port operations
           </p>
         </div>
-        <Button variant="outline" onClick={() => toast.success("Data refreshed")}>
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setIsAddCargoOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Nova Carga
+          </Button>
+          <Button variant="outline" onClick={() => toast.success("Data refreshed")}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
       </div>
+
+      {/* Add Cargo Dialog */}
+      {isAddCargoOpen && (
+        <Card className="border-primary/50">
+          <CardHeader>
+            <CardTitle className="text-lg">Adicionar Nova Carga</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleAddCargo} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm font-medium">Nº Tracking</label>
+                <Input
+                  value={cargoForm.tracking_number}
+                  onChange={e => setCargoForm({ ...cargoForm, tracking_number: e.target.value })}
+                  placeholder="CRG-2026-001"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Tipo de Carga</label>
+                <Input
+                  value={cargoForm.cargo_type}
+                  onChange={e => setCargoForm({ ...cargoForm, cargo_type: e.target.value })}
+                  placeholder="Container"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Peso (tons)</label>
+                <Input
+                  type="number"
+                  value={cargoForm.weight_tons}
+                  onChange={e => setCargoForm({ ...cargoForm, weight_tons: Number(e.target.value) })}
+                  placeholder="0"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Porto Origem</label>
+                <Input
+                  value={cargoForm.origin_port}
+                  onChange={e => setCargoForm({ ...cargoForm, origin_port: e.target.value })}
+                  placeholder="Santos"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Porto Destino</label>
+                <Input
+                  value={cargoForm.destination_port}
+                  onChange={e => setCargoForm({ ...cargoForm, destination_port: e.target.value })}
+                  placeholder="Rotterdam"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Embarcação</label>
+                <Input
+                  value={cargoForm.vessel_name}
+                  onChange={e => setCargoForm({ ...cargoForm, vessel_name: e.target.value })}
+                  placeholder="MV Atlantic Star"
+                  required
+                />
+              </div>
+              <div className="col-span-full flex gap-2 justify-end">
+                <Button type="button" variant="outline" onClick={() => setIsAddCargoOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit">Adicionar Carga</Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
