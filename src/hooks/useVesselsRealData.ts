@@ -29,6 +29,19 @@ export interface VesselMonitor {
   sensors: SensorData[];
 }
 
+// Database sensor record type
+interface SensorRecord {
+  id: string;
+  sensor_type: string | null;
+  value: number | null;
+  unit: string | null;
+  is_anomaly: boolean | null;
+  recorded_at: string | null;
+  min_threshold: number | null;
+  max_threshold: number | null;
+  vessel_id: string | null;
+}
+
 async function fetchVesselsWithSensors(): Promise<VesselMonitor[]> {
   // Buscar embarcações
   const { data: vessels, error } = await supabase
@@ -56,8 +69,8 @@ async function fetchVesselsWithSensors(): Promise<VesselMonitor[]> {
     .limit(200);
 
   // Agrupar sensores por embarcação
-  const sensorsByVessel: Record<string, any[]> = {};
-  sensors?.forEach((s: any) => {
+  const sensorsByVessel: Record<string, SensorRecord[]> = {};
+  (sensors as SensorRecord[] | null)?.forEach((s) => {
     const vesselId = s.vessel_id;
     if (!vesselId) return;
     
@@ -66,7 +79,7 @@ async function fetchVesselsWithSensors(): Promise<VesselMonitor[]> {
     }
     // Manter apenas o sensor mais recente de cada tipo
     const existingIndex = sensorsByVessel[vesselId].findIndex(
-      (existing: any) => existing.sensor_type === s.sensor_type
+      (existing) => existing.sensor_type === s.sensor_type
     );
     if (existingIndex === -1) {
       sensorsByVessel[vesselId].push(s);
@@ -87,7 +100,7 @@ async function fetchVesselsWithSensors(): Promise<VesselMonitor[]> {
   });
 }
 
-function mapSensor(s: any, vesselOnline: boolean): SensorData {
+function mapSensor(s: SensorRecord, vesselOnline: boolean): SensorData {
   const sensorType = mapSensorType(s.sensor_type);
   const status = determineSensorStatus(s, vesselOnline);
 
@@ -99,8 +112,8 @@ function mapSensor(s: any, vesselOnline: boolean): SensorData {
     unit: s.unit || getDefaultUnit(sensorType),
     status,
     lastUpdate: new Date(s.recorded_at || Date.now()),
-    min: s.min_threshold,
-    max: s.max_threshold
+    min: s.min_threshold ?? undefined,
+    max: s.max_threshold ?? undefined
   };
 }
 
@@ -138,7 +151,7 @@ function getDefaultUnit(type: SensorData["type"]): string {
   }
 }
 
-function determineSensorStatus(sensor: any, vesselOnline: boolean): SensorData["status"] {
+function determineSensorStatus(sensor: SensorRecord, vesselOnline: boolean): SensorData["status"] {
   if (!vesselOnline) return "offline";
   if (sensor.is_anomaly) return "critical";
   

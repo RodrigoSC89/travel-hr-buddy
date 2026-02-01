@@ -77,7 +77,7 @@ export function useCrewMedicalData() {
         const memberCerts = certificates?.filter(c => c.crew_member_id === member.id) || [];
         const memberCheckins = healthCheckins?.filter(c => c.crew_member_name === member.full_name) || [];
         const latestCheckin = memberCheckins[0];
-        const emergencyData = member.emergency_contact as any || {};
+        const emergencyData = (member.emergency_contact as Record<string, unknown>) || {};
 
         // Parse vaccinations from certificates - use certificate_number as identifier
         const vaccinations = memberCerts
@@ -114,7 +114,7 @@ export function useCrewMedicalData() {
           id: member.id,
           name: member.full_name || "N/A",
           position: member.position || member.rank || "Crew",
-          vessel: (member.vessels as any)?.name,
+          vessel: (member.vessels as { name?: string } | null)?.name,
           bloodType: "Não informado",
           status,
           allergies: emergencyData?.allergies || [],

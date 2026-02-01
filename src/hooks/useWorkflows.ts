@@ -34,7 +34,7 @@ export interface Workflow {
   actual_duration?: number;
   priority: "low" | "medium" | "high" | "urgent";
   tags?: string[];
-  ai_suggestions?: any[];
+  ai_suggestions?: Array<{ id: string; suggestion: string; confidence?: number }>;
 }
 
 export interface AutomationRule {

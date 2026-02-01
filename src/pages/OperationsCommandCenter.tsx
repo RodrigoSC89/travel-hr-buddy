@@ -78,6 +78,38 @@ interface Notification {
   category: string;
 }
 
+interface OperationsSettings {
+  autoRefresh: boolean;
+  refreshInterval: number;
+  showNotifications: boolean;
+  compactMode: boolean;
+}
+
+interface VesselRecord {
+  id: string;
+  name: string;
+  status: string;
+  vessel_type?: string;
+  current_location?: string;
+}
+
+interface CrewRecord {
+  id: string;
+  full_name: string;
+  status: string;
+  position?: string;
+}
+
+interface AIInsightRecord {
+  id: string;
+  title?: string;
+  description?: string;
+  priority?: string;
+  created_at: string;
+  status?: string;
+  category?: string;
+}
+
 const CHART_COLORS = [
   "hsl(var(--primary))",
   "hsl(var(--chart-1))",
@@ -189,7 +221,7 @@ export default function OperationsCommandCenter() {
     complianceRate: 95,
   });
 
-  const [settings, setSettings] = useState(() => {
+  const [settings, setSettings] = useState<OperationsSettings>(() => {
     const saved = localStorage.getItem("operations-command-settings");
     return saved ? JSON.parse(saved) : {
       autoRefresh: true,
@@ -254,14 +286,14 @@ export default function OperationsCommandCenter() {
         .order("created_at", { ascending: false })
         .limit(15);
 
-      const vesselsList = vessels || [];
-      const crewList = crew || [];
+      const vesselsList = (vessels || []) as VesselRecord[];
+      const crewList = (crew || []) as CrewRecord[];
       
-      const activeVessels = vesselsList.filter((v: any) => v.status === "active" || v.status === "operational").length;
-      const vesselsInOperation = vesselsList.filter((v: any) => v.status === "operational").length;
-      const vesselsAtPort = vesselsList.filter((v: any) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
-      const vesselsInMaintenance = vesselsList.filter((v: any) => v.status === "maintenance").length;
-      const activeCrew = crewList.filter((c: any) => c.status === "active" || c.status === "onboard").length;
+      const activeVessels = vesselsList.filter((v) => v.status === "active" || v.status === "operational").length;
+      const vesselsInOperation = vesselsList.filter((v) => v.status === "operational").length;
+      const vesselsAtPort = vesselsList.filter((v) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
+      const vesselsInMaintenance = vesselsList.filter((v) => v.status === "maintenance").length;
+      const activeCrew = crewList.filter((c) => c.status === "active" || c.status === "onboard").length;
 
       setData({
         activeVessels,
@@ -286,7 +318,7 @@ export default function OperationsCommandCenter() {
         { name: "Inativos", value: Math.max(0, vesselsList.length - activeVessels), color: "hsl(var(--chart-4))" },
       ]);
 
-      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: any) => ({
+      const mappedNotifications: Notification[] = ((aiInsights || []) as AIInsightRecord[]).map((insight) => ({
         id: insight.id,
         title: insight.title || "Insight Operacional",
         message: insight.description || "",
@@ -1075,7 +1107,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.autoRefresh}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, autoRefresh: v }))}
+                onCheckedChange={(v) => setSettings((prev) => ({ ...prev, autoRefresh: v }))}
               />
             </div>
             <Separator />
@@ -1084,7 +1116,7 @@ export default function OperationsCommandCenter() {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={(e) => setSettings((prev: any) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                onChange={(e) => setSettings((prev) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
                 disabled={!settings.autoRefresh}
               />
             </div>
@@ -1096,7 +1128,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.showNotifications}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, showNotifications: v }))}
+                onCheckedChange={(v) => setSettings((prev) => ({ ...prev, showNotifications: v }))}
               />
             </div>
           </div>

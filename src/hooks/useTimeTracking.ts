@@ -152,7 +152,7 @@ export function useTimeTracking() {
         return {
           id: r.id,
           employee_id: r.employee_id || '',
-          employee_name: (r.hr_employees as any)?.full_name || 'Desconhecido',
+          employee_name: (r.hr_employees as { full_name?: string } | null)?.full_name || 'Desconhecido',
           tracking_date: r.tracking_date,
           clock_in: r.clock_in_1 || null,
           lunch_out: r.clock_out_1 || null,

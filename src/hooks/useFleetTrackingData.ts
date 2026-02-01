@@ -124,7 +124,7 @@ export function useFleetTracking() {
       return data.map((alert) => ({
         id: alert.id,
         vesselId: alert.vessel_id || "",
-        vesselName: (alert.metadata as any)?.vessel_name || "Embarcação",
+        vesselName: (alert.metadata as Record<string, unknown> | null)?.vessel_name as string || "Embarcação",
         type: mapAlertSeverity(alert.severity),
         message: alert.message || alert.title || "Alerta",
         timestamp: alert.created_at,

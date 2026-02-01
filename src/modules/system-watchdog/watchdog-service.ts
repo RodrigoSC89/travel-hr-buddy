@@ -21,7 +21,7 @@ export interface WatchdogEvent {
   service: string;
   message: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 class WatchdogService {
@@ -409,7 +409,7 @@ class WatchdogService {
       });
     } catch (err) {
       // Silently fail - don't want logging errors to cascade
-      logger.warn("[Watchdog Service] Could not log to Supabase:", err as any);
+      logger.warn("[Watchdog Service] Could not log to Supabase:", err instanceof Error ? err.message : String(err));
     }
   }
 

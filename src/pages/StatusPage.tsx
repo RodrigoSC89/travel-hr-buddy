@@ -87,16 +87,16 @@ export default function StatusPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      // Fetch components
-      const { data: componentsData } = await supabase
-        .from("status_components" as any)
+      // Fetch components - using type assertion for dynamic table
+      const { data: componentsData } = await (supabase
+        .from("status_components") as ReturnType<typeof supabase.from>)
         .select("*")
         .order("display_order");
 
       // Fetch recent incidents (last 30 days)
       const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
-      const { data: incidentsData } = await supabase
-        .from("status_incidents" as any)
+      const { data: incidentsData } = await (supabase
+        .from("status_incidents") as ReturnType<typeof supabase.from>)
         .select("*")
         .gte("started_at", thirtyDaysAgo)
         .order("started_at", { ascending: false });
@@ -105,15 +105,15 @@ export default function StatusPage() {
       const incidents = (incidentsData as unknown as Incident[]) || [];
       if (incidents.length > 0) {
         const incidentIds = incidents.map((i) => i.id);
-        const { data: updatesData } = await supabase
-          .from("status_incident_updates" as any)
+        const { data: updatesData } = await (supabase
+          .from("status_incident_updates") as ReturnType<typeof supabase.from>)
           .select("*")
           .in("incident_id", incidentIds)
           .order("created_at", { ascending: false });
 
         // Group updates by incident_id
         const groupedUpdates: Record<string, IncidentUpdate[]> = {};
-        (updatesData as any[] || []).forEach((update) => {
+        ((updatesData as unknown as IncidentUpdate[]) || []).forEach((update) => {
           if (!groupedUpdates[update.incident_id]) {
             groupedUpdates[update.incident_id] = [];
           }
