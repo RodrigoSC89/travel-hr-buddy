@@ -1,3 +1,8 @@
+/**
+ * PATCH OPS-V7: Componente SGSO Training Compliance
+ * Integrado com Supabase - dados reais de crew_training_records
+ */
+
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,9 +19,12 @@ import {
   Clock,
   TrendingUp,
   FileText,
-  Award
+  Award,
+  Loader2
 } from "lucide-react";
+import { useTrainingComplianceData, type TrainingRecord } from "@/hooks/useSGSOData";
 
+// Interface mantida para compatibilidade
 interface Training {
   id: string;
   name: string;
@@ -30,54 +38,23 @@ interface Training {
   next_due?: string;
 }
 
-const SAMPLE_TRAININGS: Training[] = [
-  {
-    id: "1",
-    name: "SGSO - 17 Práticas ANP",
-    category: "sgso",
-    status: "valid",
-    completion_rate: 92,
-    certified: 23,
-    total: 25,
-    validity_months: 24,
-    last_conducted: "2023-05-15",
-    next_due: "2025-05-15"
-  },
-  {
-    id: "2",
-    name: "Investigação de Incidentes",
-    category: "safety",
-    status: "expiring_soon",
-    completion_rate: 88,
-    certified: 22,
-    total: 25,
-    validity_months: 12,
-    last_conducted: "2024-01-10",
-    next_due: "2025-01-10"
-  },
-  {
-    id: "3",
-    name: "Resposta a Emergências",
-    category: "safety",
-    status: "valid",
-    completion_rate: 96,
-    certified: 24,
-    total: 25,
-    validity_months: 12,
-    last_conducted: "2024-03-20",
-    next_due: "2025-03-20"
-  },
-  {
-    id: "4",
-    name: "Gestão de Mudanças (MOC)",
-    category: "sgso",
-    status: "expired",
-    completion_rate: 64,
-    certified: 16,
-    total: 25,
-    validity_months: 24,
-    last_conducted: "2022-08-15",
-    next_due: "2024-08-15"
+// Função para converter TrainingRecord para Training (compatibilidade)
+function convertToTraining(record: TrainingRecord): Training {
+  return {
+    id: record.id,
+    name: record.name,
+    category: record.category,
+    status: record.status,
+    completion_rate: record.completionRate,
+    certified: record.certified,
+    total: record.total,
+    validity_months: record.validityMonths,
+    last_conducted: record.lastConducted,
+    next_due: record.nextDue,
+  };
+}
+
+// SAMPLE_TRAININGS removido - usar useTrainingComplianceData()
   },
   {
     id: "5",
@@ -124,22 +101,56 @@ const getStatusConfig = (status: string) => {
 
 export const TrainingCompliance: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [isLoading, setIsLoading] = useState(false);
   const { handleViewDetails, showInfo, handleCreate } = useMaritimeActions();
   const { toast } = useToast();
 
-  const validCount = SAMPLE_TRAININGS.filter(t => t.status === "valid").length;
-  const expiringCount = SAMPLE_TRAININGS.filter(t => t.status === "expiring_soon").length;
-  const expiredCount = SAMPLE_TRAININGS.filter(t => t.status === "expired").length;
-  const pendingCount = SAMPLE_TRAININGS.filter(t => t.status === "pending").length;
+  // PATCH OPS-V7: Usar dados reais do Supabase
+  const { data: trainingRecords = [], isLoading } = useTrainingComplianceData();
+  
+  // Converter para formato de compatibilidade
+  const trainings: Training[] = trainingRecords.map(convertToTraining);
+
+  const validCount = trainings.filter(t => t.status === "valid").length;
+  const expiringCount = trainings.filter(t => t.status === "expiring_soon").length;
+  const expiredCount = trainings.filter(t => t.status === "expired").length;
+  const pendingCount = trainings.filter(t => t.status === "pending").length;
 
   const filteredTrainings = selectedCategory === "all" 
-    ? SAMPLE_TRAININGS 
-    : SAMPLE_TRAININGS.filter(t => t.category === selectedCategory);
+    ? trainings 
+    : trainings.filter(t => t.category === selectedCategory);
 
-  const overallCompliance = Math.round(
-    SAMPLE_TRAININGS.reduce((acc, t) => acc + t.completion_rate, 0) / SAMPLE_TRAININGS.length
-  );
+  const overallCompliance = trainings.length > 0 
+    ? Math.round(trainings.reduce((acc, t) => acc + t.completion_rate, 0) / trainings.length)
+    : 0;
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando treinamentos...</span>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (trainings.length === 0) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Award className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Nenhum treinamento cadastrado</h3>
+          <p className="text-muted-foreground text-center max-w-md mb-4">
+            Cadastre os treinamentos da tripulação para acompanhar o compliance SGSO.
+          </p>
+          <Button onClick={() => handleCreate("Novo Treinamento")}>
+            <FileText className="h-4 w-4 mr-2" />
+            Cadastrar Treinamento
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">

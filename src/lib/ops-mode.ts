@@ -45,8 +45,12 @@ export function allowDemoData(): boolean {
 
 /**
  * Lista de módulos que são Preview/Labs (não aparecem em OPS_REAL)
+ * 
+ * CRITÉRIO: Módulos com mock data, simulações ou funcionalidades incompletas
+ * Em OPS_REAL, estes módulos são ocultados para evitar confusão operacional
  */
 export const PREVIEW_MODULES = [
+  // AI Experimental
   'revolutionary-ai',
   'quantum-navigation',
   'blockchain-certificates',
@@ -54,6 +58,24 @@ export const PREVIEW_MODULES = [
   'digital-twin-advanced',
   'sonar-ai-experimental',
   'mission-simulation',
+  'mission-autonomy',
+  'empathy-core',
+  
+  // AI Observability (mock data)
+  'ai-observability',
+  'ai-explainability',
+  'autonomous-agent',
+  
+  // Outros com mock
+  'satellite-optimizer',
+  'voice-hotword',
+  'session-replay',
+  'bi-forecast-examples',
+  'action-plans-notifications',
+  
+  // Integrações não configuradas
+  'satellite-tracker',
+  'ais-tracking-advanced',
 ];
 
 /**

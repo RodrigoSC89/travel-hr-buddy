@@ -1,280 +1,317 @@
 /**
- * useAuditLog - Hook para auditoria de mutações CRUD
- * Registra todas as operações críticas para compliance e auditoria
+ * PATCH OPS-V7: Hook para Audit Log
+ * Integra com tabela immutable_audit_logs
+ * ISM/ISPS Ready - logs imutáveis
  */
 
-import { useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-
-export type AuditAction = 
-  | 'create' 
-  | 'read' 
-  | 'update' 
-  | 'delete' 
-  | 'archive' 
-  | 'restore'
-  | 'export'
-  | 'import'
-  | 'approve'
-  | 'reject'
-  | 'login'
-  | 'logout';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface AuditLogEntry {
-  id?: string;
-  user_id: string;
-  user_email?: string;
-  action: AuditAction;
-  entity_type: string; // e.g., 'vessel', 'crew_member', 'contract'
-  entity_id?: string;
-  entity_name?: string;
-  changes?: Record<string, { old: unknown; new: unknown }>;
-  metadata?: Record<string, unknown>;
-  ip_address?: string;
-  user_agent?: string;
-  timestamp?: string;
-  success: boolean;
-  error_message?: string;
+  id: string;
+  createdAt: string;
+  correlationId?: string;
+  actorId?: string;
+  actorEmail?: string;
+  actorRole?: string;
+  action: string;
+  entityType: string;
+  entityId?: string;
+  entityName?: string;
+  dataBefore?: Record<string, unknown>;
+  dataAfter?: Record<string, unknown>;
+  dataDiff?: Record<string, unknown>;
+  sourceModule?: string;
+  complianceCategory?: string;
+  checksum?: string;
+}
+
+export interface CreateAuditLogParams {
+  action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT" | "EXPORT" | "VIEW" | "APPROVE" | "REJECT";
+  entityType: string;
+  entityId?: string;
+  entityName?: string;
+  dataBefore?: Record<string, unknown>;
+  dataAfter?: Record<string, unknown>;
+  sourceModule?: string;
+  complianceCategory?: "ISM" | "ISPS" | "MLC" | "SGSO" | "GENERAL";
 }
 
 /**
- * Hook para criar entradas de audit log
+ * Hook para criar audit logs
  */
-export function useAuditLog() {
+export function useCreateAuditLog() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  const log = useCallback(async (
-    action: AuditAction,
-    entityType: string,
-    options: {
-      entityId?: string;
-      entityName?: string;
-      changes?: Record<string, { old: unknown; new: unknown }>;
-      metadata?: Record<string, unknown>;
-      success?: boolean;
-      errorMessage?: string;
-    } = {}
-  ): Promise<string | null> => {
-    if (!user) return null;
+  return useMutation({
+    mutationFn: async (params: CreateAuditLogParams) => {
+      // Calcular diff se tiver before e after
+      let dataDiff: Record<string, unknown> | undefined;
+      if (params.dataBefore && params.dataAfter) {
+        dataDiff = calculateDiff(params.dataBefore, params.dataAfter);
+      }
 
-    try {
-      const entry: AuditLogEntry = {
-        user_id: user.id,
-        user_email: user.email,
-        action,
-        entity_type: entityType,
-        entity_id: options.entityId,
-        entity_name: options.entityName,
-        changes: options.changes,
-        metadata: options.metadata,
-        user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-        timestamp: new Date().toISOString(),
-        success: options.success ?? true,
-        error_message: options.errorMessage,
-      };
+      // Calcular checksum
+      const checksum = await generateChecksum(
+        params.action,
+        params.entityType,
+        params.entityId,
+        params.dataBefore,
+        params.dataAfter
+      );
 
       const { data, error } = await supabase
-        .from('system_audit_logs')
-        .insert(entry as any)
-        .select('id')
+        .from("immutable_audit_logs")
+        .insert({
+          actor_id: user?.id,
+          actor_email: user?.email,
+          action: params.action,
+          entity_type: params.entityType,
+          entity_id: params.entityId,
+          entity_name: params.entityName,
+          data_before: params.dataBefore,
+          data_after: params.dataAfter,
+          data_diff: dataDiff,
+          source_module: params.sourceModule,
+          compliance_category: params.complianceCategory || "GENERAL",
+          checksum,
+        })
+        .select("id")
         .single();
 
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["audit-logs"] });
+    },
+  });
+}
+
+/**
+ * Hook para buscar audit logs
+ */
+export function useAuditLogs(filters?: {
+  entityType?: string;
+  entityId?: string;
+  action?: string;
+  startDate?: string;
+  endDate?: string;
+  limit?: number;
+}) {
+  return useQuery({
+    queryKey: ["audit-logs", filters],
+    queryFn: async (): Promise<AuditLogEntry[]> => {
+      let query = supabase
+        .from("immutable_audit_logs")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (filters?.entityType) {
+        query = query.eq("entity_type", filters.entityType);
+      }
+      if (filters?.entityId) {
+        query = query.eq("entity_id", filters.entityId);
+      }
+      if (filters?.action) {
+        query = query.eq("action", filters.action);
+      }
+      if (filters?.startDate) {
+        query = query.gte("created_at", filters.startDate);
+      }
+      if (filters?.endDate) {
+        query = query.lte("created_at", filters.endDate);
+      }
+
+      query = query.limit(filters?.limit || 100);
+
+      const { data, error } = await query;
+
       if (error) {
-        // Fallback: try simpler insert if table doesn't have all columns
-        const { data: fallbackData } = await supabase
-          .from('audit_logs')
-          .insert({
-            user_id: entry.user_id,
-            action: entry.action,
-            entity_type: entry.entity_type,
-            entity_id: entry.entity_id,
-            metadata: JSON.stringify({ ...entry.metadata, changes: entry.changes }),
-            created_at: entry.timestamp,
-          } as any)
-          .select('id')
-          .single();
-
-        return fallbackData?.id || null;
+        // Tabela pode não existir ainda
+        if (error.message?.includes("does not exist")) {
+          return [];
+        }
+        throw error;
       }
 
-      return data?.id || null;
-    } catch {
-      // Silent fail - audit logs should not break the main flow
-      return null;
-    }
-  }, [user]);
-
-  const logCreate = useCallback((
-    entityType: string,
-    entityId: string,
-    entityName?: string,
-    metadata?: Record<string, unknown>
-  ) => {
-    return log('create', entityType, { entityId, entityName, metadata });
-  }, [log]);
-
-  const logUpdate = useCallback((
-    entityType: string,
-    entityId: string,
-    changes: Record<string, { old: unknown; new: unknown }>,
-    entityName?: string
-  ) => {
-    return log('update', entityType, { entityId, entityName, changes });
-  }, [log]);
-
-  const logDelete = useCallback((
-    entityType: string,
-    entityId: string,
-    entityName?: string
-  ) => {
-    return log('delete', entityType, { entityId, entityName });
-  }, [log]);
-
-  const logExport = useCallback((
-    entityType: string,
-    count: number,
-    format: string
-  ) => {
-    return log('export', entityType, { 
-      metadata: { count, format, exportedAt: new Date().toISOString() } 
-    });
-  }, [log]);
-
-  const logApproval = useCallback((
-    entityType: string,
-    entityId: string,
-    approved: boolean,
-    comments?: string
-  ) => {
-    return log(approved ? 'approve' : 'reject', entityType, { 
-      entityId, 
-      metadata: { comments, decision: approved ? 'approved' : 'rejected' } 
-    });
-  }, [log]);
-
-  const logError = useCallback((
-    action: AuditAction,
-    entityType: string,
-    errorMessage: string,
-    entityId?: string
-  ) => {
-    return log(action, entityType, { 
-      entityId, 
-      success: false, 
-      errorMessage 
-    });
-  }, [log]);
-
-  return {
-    log,
-    logCreate,
-    logUpdate,
-    logDelete,
-    logExport,
-    logApproval,
-    logError,
-  };
+      return (data || []).map((log) => ({
+        id: log.id,
+        createdAt: log.created_at,
+        correlationId: log.correlation_id,
+        actorId: log.actor_id,
+        actorEmail: log.actor_email,
+        actorRole: log.actor_role,
+        action: log.action,
+        entityType: log.entity_type,
+        entityId: log.entity_id,
+        entityName: log.entity_name,
+        dataBefore: log.data_before as Record<string, unknown>,
+        dataAfter: log.data_after as Record<string, unknown>,
+        dataDiff: log.data_diff as Record<string, unknown>,
+        sourceModule: log.source_module,
+        complianceCategory: log.compliance_category,
+        checksum: log.checksum,
+      }));
+    },
+    staleTime: 1000 * 30,
+  });
 }
 
 /**
- * Higher-order function to wrap mutations with audit logging
+ * Hook para buscar audit log de uma entidade específica
  */
-export function withAuditLog<T extends (...args: any[]) => Promise<any>>(
-  fn: T,
+export function useEntityAuditTrail(entityType: string, entityId: string) {
+  return useAuditLogs({
+    entityType,
+    entityId,
+    limit: 50,
+  });
+}
+
+/**
+ * Wrapper para mutations com audit log automático
+ */
+export function useAuditedMutation<TData, TVariables extends { id?: string }>(
+  entityType: string,
+  mutationFn: (variables: TVariables) => Promise<TData>,
   options: {
-    action: AuditAction;
-    entityType: string;
-    getEntityId?: (...args: Parameters<T>) => string | undefined;
-    getEntityName?: (...args: Parameters<T>) => string | undefined;
-    getChanges?: (...args: Parameters<T>) => Record<string, { old: unknown; new: unknown }> | undefined;
+    action: CreateAuditLogParams["action"];
+    sourceModule: string;
+    complianceCategory?: CreateAuditLogParams["complianceCategory"];
+    getEntityName?: (variables: TVariables) => string;
+    getDataBefore?: (variables: TVariables) => Promise<Record<string, unknown> | undefined>;
   }
-): T {
-  return (async (...args: Parameters<T>) => {
-    const startTime = Date.now();
-    
-    try {
-      const result = await fn(...args);
-      
-      // Log success
-      const { data: user } = await supabase.auth.getUser();
-      if (user?.user) {
-        await supabase.from('system_audit_logs').insert({
-          user_id: user.user.id,
-          action: options.action,
-          entity_type: options.entityType,
-          entity_id: options.getEntityId?.(...args),
-          entity_name: options.getEntityName?.(...args),
-          changes: options.getChanges?.(...args),
-          success: true,
-          duration_ms: Date.now() - startTime,
-          timestamp: new Date().toISOString(),
-        } as any);
+) {
+  const createAuditLog = useCreateAuditLog();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (variables: TVariables) => {
+      // Buscar dados anteriores se for UPDATE ou DELETE
+      let dataBefore: Record<string, unknown> | undefined;
+      if (options.getDataBefore && (options.action === "UPDATE" || options.action === "DELETE")) {
+        dataBefore = await options.getDataBefore(variables);
       }
-      
+
+      // Executar a mutation principal
+      const result = await mutationFn(variables);
+
+      // Criar audit log
+      await createAuditLog.mutateAsync({
+        action: options.action,
+        entityType,
+        entityId: variables.id,
+        entityName: options.getEntityName?.(variables),
+        dataBefore,
+        dataAfter: options.action !== "DELETE" ? (result as Record<string, unknown>) : undefined,
+        sourceModule: options.sourceModule,
+        complianceCategory: options.complianceCategory,
+      });
+
       return result;
-    } catch (error) {
-      // Log failure
-      const { data: user } = await supabase.auth.getUser();
-      if (user?.user) {
-        await supabase.from('system_audit_logs').insert({
-          user_id: user.user.id,
-          action: options.action,
-          entity_type: options.entityType,
-          entity_id: options.getEntityId?.(...args),
-          success: false,
-          error_message: error instanceof Error ? error.message : 'Unknown error',
-          duration_ms: Date.now() - startTime,
-          timestamp: new Date().toISOString(),
-        } as any);
-      }
-      
-      throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [entityType] });
+    },
+  });
+}
+
+// =====================================================
+// HELPER FUNCTIONS
+// =====================================================
+
+function calculateDiff(
+  before: Record<string, unknown>,
+  after: Record<string, unknown>
+): Record<string, unknown> {
+  const diff: Record<string, unknown> = {};
+
+  // Campos adicionados ou modificados
+  for (const key of Object.keys(after)) {
+    if (!(key in before)) {
+      diff[key] = { added: after[key] };
+    } else if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) {
+      diff[key] = { old: before[key], new: after[key] };
     }
-  }) as T;
+  }
+
+  // Campos removidos
+  for (const key of Object.keys(before)) {
+    if (!(key in after)) {
+      diff[key] = { removed: before[key] };
+    }
+  }
+
+  return diff;
+}
+
+async function generateChecksum(
+  action: string,
+  entityType: string,
+  entityId?: string,
+  dataBefore?: Record<string, unknown>,
+  dataAfter?: Record<string, unknown>
+): Promise<string> {
+  const payload = JSON.stringify({
+    action,
+    entityType,
+    entityId,
+    dataBefore,
+    dataAfter,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Usar crypto para gerar hash
+  if (typeof crypto !== "undefined" && crypto.subtle) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(payload);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  // Fallback simples
+  let hash = 0;
+  for (let i = 0; i < payload.length; i++) {
+    const char = payload.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16);
 }
 
 /**
- * Create a migration to add system_audit_logs table
- * Run this SQL in Supabase:
- * 
- * CREATE TABLE IF NOT EXISTS system_audit_logs (
- *   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- *   user_id UUID REFERENCES auth.users(id),
- *   user_email TEXT,
- *   action TEXT NOT NULL,
- *   entity_type TEXT NOT NULL,
- *   entity_id TEXT,
- *   entity_name TEXT,
- *   changes JSONB,
- *   metadata JSONB,
- *   ip_address TEXT,
- *   user_agent TEXT,
- *   success BOOLEAN DEFAULT true,
- *   error_message TEXT,
- *   duration_ms INTEGER,
- *   timestamp TIMESTAMPTZ DEFAULT NOW(),
- *   created_at TIMESTAMPTZ DEFAULT NOW()
- * );
- * 
- * CREATE INDEX idx_audit_user ON system_audit_logs(user_id);
- * CREATE INDEX idx_audit_action ON system_audit_logs(action);
- * CREATE INDEX idx_audit_entity ON system_audit_logs(entity_type, entity_id);
- * CREATE INDEX idx_audit_timestamp ON system_audit_logs(timestamp DESC);
- * 
- * ALTER TABLE system_audit_logs ENABLE ROW LEVEL SECURITY;
- * 
- * CREATE POLICY "Users can insert own audit logs"
- *   ON system_audit_logs FOR INSERT
- *   WITH CHECK (auth.uid() = user_id);
- * 
- * CREATE POLICY "Admins can read all audit logs"
- *   ON system_audit_logs FOR SELECT
- *   USING (
- *     EXISTS (
- *       SELECT 1 FROM profiles
- *       WHERE profiles.id = auth.uid()
- *       AND profiles.role IN ('admin', 'super_admin', 'auditor')
- *     )
- *   );
+ * Export audit logs para CSV
  */
+export async function exportAuditLogsToCSV(logs: AuditLogEntry[]): Promise<string> {
+  const headers = [
+    "ID",
+    "Data/Hora",
+    "Ação",
+    "Tipo Entidade",
+    "ID Entidade",
+    "Usuário",
+    "Módulo",
+    "Categoria Compliance",
+    "Checksum",
+  ];
+
+  const rows = logs.map((log) => [
+    log.id,
+    new Date(log.createdAt).toLocaleString("pt-BR"),
+    log.action,
+    log.entityType,
+    log.entityId || "",
+    log.actorEmail || "",
+    log.sourceModule || "",
+    log.complianceCategory || "",
+    log.checksum || "",
+  ]);
+
+  const csvContent = [headers, ...rows].map((row) => row.join(",")).join("\n");
+
+  return csvContent;
+}

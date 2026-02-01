@@ -1,3 +1,8 @@
+/**
+ * PATCH OPS-V7: Non-Conformity Manager
+ * Integrado com Supabase - dados reais de non_conformities
+ */
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +17,12 @@ import {
   FileText,
   TrendingDown,
   Plus,
-  Eye
+  Eye,
+  Loader2
 } from "lucide-react";
+import { useNonConformityData, type NonConformity as NCType } from "@/hooks/useSGSOData";
 
+// Interface mantida para compatibilidade interna
 interface NonConformity {
   id: string;
   number: string;
@@ -32,52 +40,30 @@ interface NonConformity {
   completion_percentage: number;
 }
 
-const SAMPLE_NCS: NonConformity[] = [
-  {
-    id: "1",
-    number: "NC-2024-001",
-    title: "Ausência de matriz de competências atualizada",
-    type: "major",
-    practice_id: 4,
-    practice_name: "Prática 4 - Treinamento",
-    status: "in_treatment",
-    severity: "high",
-    identified_date: "2024-09-15",
-    due_date: "2024-11-15",
-    responsible: "Ana Paula - RH",
-    corrective_action: "Criar matriz de competências completa",
-    completion_percentage: 65
-  },
-  {
-    id: "2",
-    number: "NC-2024-002",
-    title: "Procedimento MOC não implementado",
-    type: "major",
-    practice_id: 13,
-    practice_name: "Prática 13 - Gestão de Mudanças",
-    status: "open",
-    severity: "critical",
-    identified_date: "2024-10-01",
-    due_date: "2024-12-01",
-    responsible: "Eng. Roberto Santos",
-    completion_percentage: 0
-  },
-  {
-    id: "3",
-    number: "NC-2024-003",
-    title: "Plano de integridade mecânica desatualizado",
-    type: "major",
-    practice_id: 17,
-    practice_name: "Prática 17 - Integridade Mecânica",
-    status: "in_treatment",
-    severity: "high",
-    identified_date: "2024-09-20",
-    due_date: "2024-11-20",
-    responsible: "Eng. João Oliveira",
-    corrective_action: "Atualizar plano com novos equipamentos",
-    completion_percentage: 45
-  },
-  {
+// Função para converter NCType para NonConformity (compatibilidade)
+function convertToNC(record: NCType): NonConformity {
+  return {
+    id: record.id,
+    number: record.number,
+    title: record.title,
+    type: record.type,
+    practice_id: record.practiceId,
+    practice_name: record.practiceName,
+    status: record.status,
+    severity: record.severity,
+    identified_date: record.identifiedDate,
+    due_date: record.dueDate,
+    responsible: record.responsible,
+    corrective_action: record.correctiveAction,
+    preventive_action: record.preventiveAction,
+    completion_percentage: record.completionPercentage,
+  };
+}
+
+// SAMPLE_NCS removido - usar useNonConformityData()
+
+// Placeholder para manter estrutura (será substituído por hook)
+const _DEPRECATED = {
     id: "4",
     number: "OBS-2024-001",
     title: "Registros de treinamento incompletos",
@@ -142,16 +128,51 @@ const getStatusConfig = (status: string) => {
 
 export const NonConformityManager: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");
-  const { handleViewDetails, handleUpdate, handleCreate, handleGenerateReport, showInfo, isLoading } = useMaritimeActions();
+  const { handleViewDetails, handleUpdate, handleCreate, handleGenerateReport, showInfo } = useMaritimeActions();
 
-  const openCount = SAMPLE_NCS.filter(nc => nc.status === "open").length;
-  const inTreatmentCount = SAMPLE_NCS.filter(nc => nc.status === "in_treatment").length;
-  const closedCount = SAMPLE_NCS.filter(nc => nc.status === "closed").length;
+  // PATCH OPS-V7: Usar dados reais do Supabase
+  const { data: ncRecords = [], isLoading } = useNonConformityData();
+  
+  // Converter para formato de compatibilidade
+  const ncs: NonConformity[] = ncRecords.map(convertToNC);
+
+  const openCount = ncs.filter(nc => nc.status === "open").length;
+  const inTreatmentCount = ncs.filter(nc => nc.status === "in_treatment").length;
+  const closedCount = ncs.filter(nc => nc.status === "closed").length;
   const totalOpen = openCount + inTreatmentCount;
 
   const filteredNCs = selectedType === "all"
-    ? SAMPLE_NCS
-    : SAMPLE_NCS.filter(nc => nc.type === selectedType);
+    ? ncs
+    : ncs.filter(nc => nc.type === selectedType);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando não conformidades...</span>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (ncs.length === 0) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Nenhuma não conformidade registrada</h3>
+          <p className="text-muted-foreground text-center max-w-md mb-4">
+            Registre as não conformidades identificadas em auditorias e inspeções.
+          </p>
+          <Button onClick={() => handleCreate("Nova NC")}>
+            <Plus className="h-4 w-4 mr-2" />
+            Registrar NC
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const handleViewNC = (ncId: string, ncNumber: string) => {
     handleViewDetails(`não conformidade ${ncNumber}`, ncId);
