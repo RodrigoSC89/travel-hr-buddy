@@ -1,4 +1,3 @@
-// @ts-nocheck - logger.error expects string but receives unknown
 import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -109,7 +108,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         toast.success('Inspeção OVID criada e salva no banco');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error('Failed to create OVID inspection', error);
       toast.error('Erro ao criar inspeção');
     } finally {
       setIsCreating(false);
@@ -127,7 +126,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       setActiveTab('checklist');
       toast.success('Inspeção retomada com sucesso');
     } catch (error) {
-      logger.error(error);
+      logger.error('Failed to load OVID inspection', error);
       toast.error('Erro ao carregar inspeção');
     } finally {
       setIsCreating(false);

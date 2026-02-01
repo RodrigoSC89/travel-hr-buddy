@@ -1,4 +1,3 @@
-// @ts-nocheck - performance_metrics table schema mismatch with PerformanceSnapshot interface
 /**
  * PATCH 617 - Live Performance Profiler
  * Real-time monitoring of CPU, Memory, FPS and component performance
@@ -15,6 +14,13 @@ import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+
+interface SlowComponent {
+  name: string;
+  renderTime: number;
+  count: number;
+  lastSeen: number;
+}
 
 interface PerformanceMetric {
   timestamp: number;
@@ -219,17 +225,21 @@ export default function PerformanceProfiler() {
 
   const storeMetrics = async (metric: PerformanceMetric) => {
     try {
-      const snapshot: Omit<PerformanceSnapshot, "id"> = {
-        timestamp: new Date(metric.timestamp).toISOString(),
-        cpu_usage: metric.cpu,
+      // Map to actual table schema with proper JSON serialization
+      const metricsData = {
+        metric_name: 'live_profiler',
+        metric_value: metric.cpu,
+        metric_unit: 'percent',
+        category: 'performance',
+        status: metric.fps >= 30 ? 'healthy' : 'degraded',
+        recorded_at: new Date(metric.timestamp).toISOString(),
         memory_usage: metric.memory,
-        fps: metric.fps,
-        slow_components: slowComponents,
+        metadata: JSON.parse(JSON.stringify({ fps: metric.fps, slow_components: slowComponents })),
       };
 
-      await supabase.from("performance_metrics").insert(snapshot);
+      await supabase.from("performance_metrics").insert([metricsData]);
     } catch (error) {
-      logger.error("Error storing performance metrics", { error, cpuUsage: metric.cpu, memoryUsage: metric.memory });
+      logger.error("Error storing performance metrics", error);
     }
   };
 

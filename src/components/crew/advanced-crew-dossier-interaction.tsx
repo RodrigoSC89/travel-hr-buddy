@@ -1,4 +1,3 @@
-// @ts-nocheck - crew_ai_insights.confidence_score nullable vs AIInsight.confidence_score required
 import React, { useState, useEffect } from "react";
 import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
 import { Button } from "@/components/ui/button";
@@ -30,8 +29,8 @@ interface VoiceInteractionPanelProps {
 interface AIInsight {
   id: string;
   analysis_type: string;
-  insights_data: any;
-  confidence_score: number;
+  insights_data: { summary?: string } & Record<string, unknown>;
+  confidence_score: number | null;
   created_at: string;
 }
 
@@ -167,7 +166,15 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         .limit(3);
 
       if (error) throw error;
-      setAiInsights(data || []);
+      // Map Supabase data to AIInsight interface
+      const mappedData: AIInsight[] = (data || []).map(row => ({
+        id: row.id,
+        analysis_type: row.analysis_type,
+        insights_data: (row.insights_data as Record<string, unknown>) || {},
+        confidence_score: row.confidence_score,
+        created_at: row.created_at,
+      }));
+      setAiInsights(mappedData);
     } catch (error) {
       logger.error("Failed to generate AI insights:", error);
     }
@@ -297,11 +304,11 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="secondary">{insight.analysis_type}</Badge>
                     <span className="text-sm text-muted-foreground">
-                      Confiança: {(insight.confidence_score * 100).toFixed(0)}%
+                      Confiança: {((insight.confidence_score ?? 0) * 100).toFixed(0)}%
                     </span>
                   </div>
                   <p className="text-sm">
-                    {insight.insights_data.summary || "Análise disponível nos dados detalhados."}
+                    {(insight.insights_data as Record<string, unknown>)?.summary as string || "Análise disponível nos dados detalhados."}
                   </p>
                 </CardContent>
               </Card>
