@@ -110,19 +110,21 @@ export const PerformanceMonitor: React.FC = () => {
 
   const persistMetrics = async (newMetrics: PerformanceMetrics) => {
     try {
-      // Use performance_metrics table with proper column mapping
+      // Store metrics in access_logs as fallback (performance_metrics may have different schema)
       const { error } = await supabase
-        .from("performance_metrics")
+        .from("access_logs")
         .insert({
-          metric_name: 'page_performance',
-          metric_value: newMetrics.score,
-          metric_unit: 'score',
-          category: 'performance',
-          load_time: newMetrics.loadTime,
-          memory_usage: newMetrics.memoryUsage,
-          network_latency: newMetrics.networkLatency,
-          score: newMetrics.score,
-          measured_at: new Date().toISOString()
+          action: 'performance_metric',
+          module_accessed: 'performance_monitor',
+          result: 'success',
+          severity: 'info',
+          details: {
+            load_time: newMetrics.loadTime,
+            memory_usage: newMetrics.memoryUsage,
+            network_latency: newMetrics.networkLatency,
+            score: newMetrics.score,
+            measured_at: new Date().toISOString()
+          }
         });
 
       if (error) {
@@ -224,7 +226,7 @@ export const PerformanceMonitor: React.FC = () => {
   };
 
   const exportToPDF = async () => {
-    const jsPDF = await loadJsPDF();
+    const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
 
     // Title
