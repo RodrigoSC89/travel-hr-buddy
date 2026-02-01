@@ -1,7 +1,7 @@
-// @ts-nocheck - TODO: Migrate to real schema (voyage_plans table needed)
 /**
- * PATCH 871 - Operations Dashboard - Real Data Integration
+ * PATCH 871.2 - Operations Dashboard - Real Data Integration
  * Complete operations dashboard with real-time data from Supabase
+ * Type-safe with voyage_plans table
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -32,16 +32,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { logger } from '@/lib/logger';
-// Note: MQTT and Chart.js imports removed - functionality is simulated for demo
-// In production, uncomment and configure:
-// import mqtt from 'mqtt';
-// import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import type { Database } from "@/integrations/supabase/types";
+import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+
+// Types from Supabase schema
+type VoyagePlan = Database["public"]["Tables"]["voyage_plans"]["Row"];
+type Vessel = Database["public"]["Tables"]["vessels"]["Row"];
+type IotSensorData = Database["public"]["Tables"]["iot_sensor_data"]["Row"];
 
 interface OperationalMetrics {
   mission_status: Record<string, number>;
   vessel_health: Record<string, number>;
   alerts_by_severity: Record<string, number>;
-  telemetry_data: Record<string, unknown>[];
+  telemetry_data: IotSensorData[];
   active_operations: number;
   crew_availability: number;
   system_health: number;
@@ -62,7 +65,7 @@ interface RealTimeAlert {
   message: string;
   source: "supabase" | "mqtt" | "websocket";
   timestamp: string;
-  metadata: any;
+  metadata: Record<string, unknown>;
 }
 
 export const OperationsDashboardRealTime: React.FC = () => {
@@ -290,8 +293,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
       if (missionError) throw missionError;
 
       // Count by status
-      const missionStatus = (missionData || []).reduce((acc, item) => {
-        acc[item.status] = (acc[item.status] || 0) + 1;
+      const missionStatus = (missionData || []).reduce<Record<string, number>>((acc, item) => {
+        const status = item.status || 'unknown';
+        acc[status] = (acc[status] || 0) + 1;
         return acc;
       }, {});
 
@@ -308,28 +312,30 @@ export const OperationsDashboardRealTime: React.FC = () => {
         critical: vesselData?.filter((v) => v.status === "offline").length || 0,
       };
 
-      // Load alert data
+      // Load alert data from iot_sensor_data
       const { data: sensorData, error: sensorError } = await supabase
         .from("iot_sensor_data")
         .select("*")
-        .gte("reading_timestamp", timeFilter)
-        .order("reading_timestamp", { ascending: false })
+        .gte("timestamp", timeFilter)
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       if (sensorError) throw sensorError;
 
-      const alertsBySeverity = (sensorData || []).reduce((acc, sensor) => {
-        if (sensor.is_alert) {
-          acc[sensor.status] = (acc[sensor.status] || 0) + 1;
+      // Count alerts by status (using status field as severity indicator)
+      const alertsBySeverity = (sensorData || []).reduce<Record<string, number>>((acc, sensor) => {
+        const sensorStatus = sensor.status || 'normal';
+        if (sensorStatus !== 'normal') {
+          acc[sensorStatus] = (acc[sensorStatus] || 0) + 1;
         }
         return acc;
       }, {});
 
-      // Load crew availability
+      // Load crew availability from crew_embarkations instead of crew_rotations
       const { data: crewData, error: crewError } = await supabase
-        .from("crew_rotations")
+        .from("crew_embarkations")
         .select("*")
-        .eq("status", "confirmed");
+        .eq("status", "active");
 
       if (crewError) throw crewError;
 
@@ -338,7 +344,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         vessel_health: vesselHealth,
         alerts_by_severity: alertsBySeverity,
         telemetry_data: sensorData || [],
-        active_operations: (missionData || []).filter((m) => m.status === "active").length,
+        active_operations: (missionData || []).filter((m) => m.status === "in_progress").length,
         crew_availability: crewData?.length || 0,
         system_health: calculateSystemHealth(vesselHealth, alertsBySeverity),
         last_update: new Date().toISOString(),
@@ -367,8 +373,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }
   };
 
-  const calculateSystemHealth = (vesselHealth: any, alerts: any): number => {
-    const totalVessels = Object.values(vesselHealth).reduce((a: any, b: any) => a + b, 0);
+  const calculateSystemHealth = (vesselHealth: Record<string, number>, alerts: Record<string, number>): number => {
+    const totalVessels = Object.values(vesselHealth).reduce((a, b) => a + b, 0);
     const healthyVessels = vesselHealth.healthy || 0;
     const criticalAlerts = alerts.critical || 0;
 
@@ -378,12 +384,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     const alertPenalty = Math.min(criticalAlerts * 5, 30);
 
     return Math.max(0, Math.round(healthScore - alertPenalty));
-  };
-
-  const cleanup = () => {
-    if (realtimeChannelRef.current) {
-      supabase.removeChannel(realtimeChannelRef.current);
-    }
+  }
     if (mqttClientRef.current) {
       mqttClientRef.current.end();
     }
@@ -418,18 +419,18 @@ export const OperationsDashboardRealTime: React.FC = () => {
     toast.success("Dashboard data exported");
   };
 
-  const getSeverityColor = (severity: string) => {
-    const colors = {
+  const getSeverityColor = (severity: string): string => {
+    const colors: Record<string, string> = {
       low: "text-blue-500",
       medium: "text-yellow-500",
       high: "text-orange-500",
       critical: "text-red-500",
     };
-    return colors[severity] || "text-gray-500";
+    return colors[severity] || "text-muted-foreground";
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants = {
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
       low: "secondary",
       medium: "default",
       high: "default",
@@ -744,7 +745,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                   <div key={sensor.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium capitalize">
-                        {sensor.sensor_type}
+                        {sensor.sensor_type || 'Unknown'}
                       </span>
                       <Badge
                         variant={
@@ -755,15 +756,15 @@ export const OperationsDashboardRealTime: React.FC = () => {
                               : "destructive"
                         }
                       >
-                        {sensor.status}
+                        {sensor.status || 'unknown'}
                       </Badge>
                     </div>
                     <div className="text-2xl font-bold">
                       {sensor.value}
-                      {sensor.unit}
+                      {sensor.unit || ''}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {sensor.sensor_location}
+                      {sensor.location || 'Unknown location'}
                     </p>
                   </div>
                 ))}
