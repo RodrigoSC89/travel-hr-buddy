@@ -219,25 +219,25 @@ async function handleSAPWebhook(event: string, payload: Record<string, unknown>)
   switch (event) {
     case 'employee.created':
     case 'employee.updated':
-      logger.debug('SAP Employee event:', payload);
+      logger.debug('SAP Employee event:', { payload });
       break;
     case 'maintenance.created':
-      logger.debug('SAP Maintenance order:', payload);
+      logger.debug('SAP Maintenance order:', { payload });
       break;
     default:
-      logger.debug('SAP event:', event, payload);
+      logger.debug('SAP event:', { event, payload });
   }
 }
 
 async function handleOracleWebhook(event: string, payload: Record<string, unknown>): Promise<void> {
   switch (event) {
     case 'asset.updated':
-      logger.debug('Oracle Asset event:', payload);
+      logger.debug('Oracle Asset event:', { payload });
       break;
     case 'workorder.completed':
-      logger.debug('Oracle Work order:', payload);
+      logger.debug('Oracle Work order:', { payload });
       break;
     default:
-      logger.debug('Oracle event:', event, payload);
+      logger.debug('Oracle event:', { event, payload });
   }
 }

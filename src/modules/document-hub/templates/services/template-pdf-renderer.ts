@@ -68,7 +68,7 @@ export class TemplatePDFRenderer {
       }
 
       // 4. Substitute placeholders in content
-      let renderedContent = template.content;
+      let renderedContent: string = String(template.content || '');
       for (const [key, value] of Object.entries(placeholderValues)) {
         const placeholder = new RegExp(`{{\\s*${key}\\s*}}`, "g");
         renderedContent = renderedContent.replace(placeholder, String(value));
@@ -78,7 +78,7 @@ export class TemplatePDFRenderer {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { data: renderedDoc, error: docError } = await supabase
+      const { data: renderedDoc, error: docError } = await (supabase as any)
         .from("rendered_documents")
         .insert({
           template_id: templateId,

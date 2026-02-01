@@ -64,7 +64,7 @@ class AnalyticsTracker {
     
     try {
       // Could send to analytics backend
-      logger.debug('[Analytics] Flushing', eventsToSend.length, 'events');
+      logger.debug('[Analytics] Flushing', { count: eventsToSend.length });
     } catch (error) {
       // Re-add events on failure
       this.events.unshift(...eventsToSend);

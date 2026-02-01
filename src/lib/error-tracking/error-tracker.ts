@@ -202,7 +202,7 @@ class ErrorTracker {
           logger.error('[ErrorTracker] Flush failed:', error);
         }
       } else if (this.config.debug) {
-        logger.debug('[ErrorTracker] Flushed', errors.length, 'errors');
+        logger.debug('[ErrorTracker] Flushed', { count: errors.length });
       }
     } catch (err) {
       this.queue = [...errors, ...this.queue].slice(0, this.config.maxErrors);

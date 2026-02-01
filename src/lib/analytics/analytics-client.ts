@@ -104,7 +104,7 @@ class AnalyticsClient {
     this.queue.push(event);
 
     if (this.config.debug) {
-      logger.debug('[Analytics] Event tracked:', eventName, properties);
+      logger.debug('[Analytics] Event tracked:', { eventName, properties });
     }
 
     if (this.queue.length >= this.config.batchSize) {
@@ -178,7 +178,7 @@ class AnalyticsClient {
       }
 
       if (this.config.debug) {
-        logger.debug('[Analytics] Flushed', events.length, 'events');
+        logger.debug('[Analytics] Flushed', { count: events.length });
       }
     } catch (error) {
       // Re-queue events on failure

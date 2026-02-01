@@ -27,10 +27,8 @@ interface JsonRpcMessage {
   params?: unknown;
 }
 
-// Dynamic DB access for tables not in schema
-const dynamicDb = supabase as unknown as {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
+// Dynamic DB access for tables not in schema - use any for untyped tables
+const dynamicDb = supabase as any;
 
 // JSON-RPC Protocol Handler
 export async function handleJsonRpc(message: unknown): Promise<ProtocolResponse> {

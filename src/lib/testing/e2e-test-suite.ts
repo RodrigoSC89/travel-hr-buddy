@@ -202,7 +202,7 @@ export const performanceTests = {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
     const loadTime = navigation?.loadEventEnd - navigation?.startTime || 0;
     
-    logger.debug('[E2E] Page load time:', loadTime, 'ms');
+    logger.debug('[E2E] Page load time:', { loadTime, unit: 'ms' });
     
     return {
       passed: loadTime < 3000, // Should load in under 3 seconds
@@ -216,7 +216,7 @@ export const performanceTests = {
     const memory = perfUtils.getMemoryUsage();
     const usagePercent = memory ? (memory.used / memory.limit) * 100 : null;
     
-    logger.debug('[E2E] Memory usage:', usagePercent?.toFixed(2), '%');
+    logger.debug('[E2E] Memory usage:', { usagePercent: usagePercent?.toFixed(2), unit: '%' });
     
     return {
       passed: usagePercent === null || usagePercent < 80,
@@ -234,7 +234,7 @@ export const performanceTests = {
     
     const renderTime = performance.now() - start;
     
-    logger.debug('[E2E] List render time:', renderTime, 'ms');
+    logger.debug('[E2E] List render time:', { renderTime, unit: 'ms' });
     
     return {
       passed: renderTime < 1000,

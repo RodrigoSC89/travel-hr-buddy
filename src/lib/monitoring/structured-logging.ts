@@ -181,7 +181,7 @@ class StructuredLogger {
       // Re-add to buffer on failure
       this.buffer = [...logs, ...this.buffer].slice(-100);
       // Note: Using native console here to avoid circular dependency
-      if (import.meta.env.DEV) logger.warn('[Logger] Failed to flush logs:', error);
+      if (import.meta.env.DEV) baseLogger.warn('[Logger] Failed to flush logs:', error as Record<string, unknown>);
     }
   }
 

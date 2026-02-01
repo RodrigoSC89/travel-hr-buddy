@@ -228,7 +228,7 @@ export async function generatePDFBufferForVessel(vesselId: string): Promise<Buff
   });
 
   // Recommendations section
-  const finalY = (doc as unknown).lastAutoTable.finalY || 110;
+  const finalY = ((doc as unknown) as { lastAutoTable?: { finalY?: number } }).lastAutoTable?.finalY || 110;
   doc.setFontSize(14);
   doc.text("💡 Recomendações", 20, finalY + 15);
 

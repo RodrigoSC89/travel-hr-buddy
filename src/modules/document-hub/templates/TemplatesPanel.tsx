@@ -204,7 +204,7 @@ export default function TemplatesPanel() {
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
       toast.error("Erro ao exportar PDF");
-      logger.error(error);
+      logger.error("PDF export error:", error as Record<string, unknown>);
     }
   };
 

@@ -57,6 +57,7 @@ import {
   SkipForward,
   XCircle
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type EmergencyType = "fire" | "collision" | "man_overboard" | "medical" | "flooding" | "grounding" | "piracy" | "abandon_ship" | "other";
 

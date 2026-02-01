@@ -157,7 +157,7 @@ export default function DocumentHub() {
       logger.info("AI analysis completed", { confidence: aiResponse.confidence });
 
       // Store document metadata
-      const { error: dbError } = await supabase
+      const { error: dbError } = await (supabase as any)
         .from("documents")
         .insert({
           name: selectedFile.name,
