@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { MLC_CATEGORIES, getTotalMLCItems, getCriticalItems } from '@/data/mlc-checklist';
 import { supabase } from '@/integrations/supabase/client';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface ChecklistAnswer {
   answer: 'compliant' | 'non-compliant' | 'na' | null;
@@ -52,12 +53,9 @@ export const MLCInspectionDashboard: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-assistant`, {
+      const response = await fetch(getEdgeFunctionUrl('mlc-assistant'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({ messages: [...aiMessages, userMessage] }),
       });
 

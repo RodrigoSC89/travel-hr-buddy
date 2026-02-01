@@ -1,6 +1,6 @@
-// @ts-nocheck - Logger type compatibility
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -114,12 +114,9 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/preovid-ai-chat`, {
+      const response = await fetch(getEdgeFunctionUrl('preovid-ai-chat'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [...messages, userMessage],
           vesselType,
@@ -179,7 +176,7 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
       }
     } catch (error) {
       toast.error('Erro ao comunicar com assistente IA');
-      logger.error(error);
+      logger.error("PreOVID AI error", error instanceof Error ? error : new Error(String(error)));
     } finally {
       setIsLoading(false);
     }

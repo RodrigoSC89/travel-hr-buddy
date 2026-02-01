@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 import {
   Mic,
   MicOff,
@@ -137,14 +138,10 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
       const limitedText = words.slice(0, 60).join(' ') + (words.length > 60 ? '...' : '');
       
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-voice-tts`,
+        getEdgeFunctionUrl('mlc-voice-tts'),
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ text: limitedText }),
         }
       );
@@ -230,12 +227,9 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-assistant`, {
+      const response = await fetch(getEdgeFunctionUrl('mlc-assistant'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [...messages, userMessage].map(m => ({
             role: m.role,

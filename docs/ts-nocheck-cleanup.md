@@ -1,7 +1,7 @@
 # TypeScript @ts-nocheck Cleanup Plan
 
 **Project:** Nautilus One  
-**Last Updated:** 2026-02-01 - PATCH 866  
+**Last Updated:** 2026-02-01 - PATCH 867  
 **Status:** In Progress
 
 ## 🎯 Objective
@@ -18,11 +18,23 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | Edge Functions (Deno) | ~30 | 🔵 Low | Requires Deno types |
 
 **Total Files:** ~140  
-**Corrected:** 45 (32%)
+**Corrected:** 55 (39%)
 
-## 🔧 PATCH 864-866 - Edge Function Helper Migration
+## 🔧 PATCH 864-867 - Edge Function Helper Migration
 
 Migrated core components from `VITE_SUPABASE_*` env vars to centralized `edge-function-helper.ts`:
+
+### PATCH 867 Files Migrated (10 files):
+- `src/components/ovid/PreOVIDAIChat.tsx` - Removed @ts-nocheck, migrated to helper
+- `src/components/ovid/PreOVIDEvidenceGenerator.tsx` - Removed @ts-nocheck, migrated to helper
+- `src/components/mlc/MLCVoiceChat.tsx` - Migrated TTS and assistant calls
+- `src/components/mlc/MLCInspectionDashboard.tsx` - Migrated assistant call
+- `src/components/imca-audit/IMCADPAIAssistant.tsx` - Migrated assistant call
+- `src/lib/ai/unified-ai-service.ts` - Migrated ai-hub-chat streaming
+- `src/lib/ai/nautilus-command.ts` - Migrated nauti-command URL
+- `src/components/ai/UniversalAIChat.tsx` - Migrated ai-hub-voice call
+- `src/components/automation/ai-suggestions-panel.tsx` - Migrated automation-ai-copilot
+- `src/modules/crew-management/components/CrewAICopilot.tsx` - Migrated crew-ai-copilot
 
 ## ✅ Completed Corrections
 
