@@ -1,35 +1,47 @@
-// @ts-nocheck - Schema: due_diligence_reports type compatibility
 /**
  * Hook para Due Diligence - integração real com Supabase
  * CRUD completo para relatórios de due diligence
+ * PATCH v28: Fixed types - using proper null coalescing for optional fields
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
+import type { Database, Json } from '@/integrations/supabase/types';
+
+type DueDiligenceRow = Database['public']['Tables']['due_diligence_reports']['Row'];
+
+// Helper to safely cast Json to Record
+function jsonToRecord(value: Json | null): Record<string, unknown> | undefined {
+  if (value === null || value === undefined) return undefined;
+  if (typeof value === 'object' && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
+  return undefined;
+}
 
 export interface DueDiligenceReport {
   id: string;
   report_code: string;
   report_type: string;
   subject_type: string;
-  subject_id?: string;
+  subject_id: string | null;
   subject_name: string;
-  subject_details?: Record<string, unknown>;
-  screening_sources?: string[];
-  risk_score?: number;
-  risk_level?: string;
-  findings?: Record<string, unknown>;
-  sanctions_check?: Record<string, unknown>;
-  pep_check?: Record<string, unknown>;
-  adverse_media?: Record<string, unknown>;
-  recommendations?: string;
+  subject_details: Json | null;
+  screening_sources: string[] | null;
+  risk_score: number | null;
+  risk_level: string | null;
+  findings: Json | null;
+  sanctions_check: Json | null;
+  pep_check: Json | null;
+  adverse_media: Json | null;
+  recommendations: string | null;
   report_status: string;
-  reviewed_by?: string;
-  reviewed_at?: string;
-  valid_until?: string;
-  ai_analysis?: Record<string, unknown>;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  valid_until: string | null;
+  ai_analysis: Json | null;
   created_at: string;
   updated_at: string;
 }
@@ -38,19 +50,19 @@ export interface CreateDueDiligenceInput {
   report_code: string;
   report_type: string;
   subject_type: string;
-  subject_id?: string;
+  subject_id?: string | null;
   subject_name: string;
-  subject_details?: Record<string, unknown>;
-  screening_sources?: string[];
-  risk_score?: number;
-  risk_level?: string;
-  findings?: Record<string, unknown>;
-  sanctions_check?: Record<string, unknown>;
-  pep_check?: Record<string, unknown>;
-  adverse_media?: Record<string, unknown>;
-  recommendations?: string;
+  subject_details?: Json | null;
+  screening_sources?: string[] | null;
+  risk_score?: number | null;
+  risk_level?: string | null;
+  findings?: Json | null;
+  sanctions_check?: Json | null;
+  pep_check?: Json | null;
+  adverse_media?: Json | null;
+  recommendations?: string | null;
   report_status?: string;
-  valid_until?: string;
+  valid_until?: string | null;
 }
 
 export function useDueDiligenceReports(filters?: { 
@@ -84,7 +96,6 @@ export function useDueDiligenceReports(filters?: {
 
       if (error) {
         logger.error('Error fetching due diligence reports:', error);
-        // Return empty array - UI should show EmptyState
         return [];
       }
 
@@ -92,13 +103,13 @@ export function useDueDiligenceReports(filters?: {
         return [];
       }
 
-      return data.map(report => ({
+      return data.map((report: DueDiligenceRow): DueDiligenceReport => ({
         id: report.id,
-        report_code: report.report_code || `DD-${report.id.slice(0, 8)}`,
-        report_type: report.report_type || 'general',
-        subject_type: report.subject_type || 'company',
+        report_code: report.report_code ?? `DD-${report.id.slice(0, 8)}`,
+        report_type: report.report_type ?? 'general',
+        subject_type: report.subject_type ?? 'company',
         subject_id: report.subject_id,
-        subject_name: report.subject_name || 'N/A',
+        subject_name: report.subject_name ?? 'N/A',
         subject_details: report.subject_details,
         screening_sources: report.screening_sources,
         risk_score: report.risk_score,
@@ -108,13 +119,13 @@ export function useDueDiligenceReports(filters?: {
         pep_check: report.pep_check,
         adverse_media: report.adverse_media,
         recommendations: report.recommendations,
-        report_status: report.report_status || 'pending',
+        report_status: report.report_status ?? 'pending',
         reviewed_by: report.reviewed_by,
         reviewed_at: report.reviewed_at,
         valid_until: report.valid_until,
         ai_analysis: report.ai_analysis,
-        created_at: report.created_at,
-        updated_at: report.updated_at,
+        created_at: report.created_at ?? new Date().toISOString(),
+        updated_at: report.updated_at ?? new Date().toISOString(),
       }));
     },
     staleTime: 5 * 60 * 1000,
@@ -138,29 +149,30 @@ export function useDueDiligenceReport(id: string) {
 
       if (!data) return null;
 
+      const report = data as DueDiligenceRow;
       return {
-        id: data.id,
-        report_code: data.report_code || `DD-${data.id.slice(0, 8)}`,
-        report_type: data.report_type || 'general',
-        subject_type: data.subject_type || 'company',
-        subject_id: data.subject_id,
-        subject_name: data.subject_name || 'N/A',
-        subject_details: data.subject_details,
-        screening_sources: data.screening_sources,
-        risk_score: data.risk_score,
-        risk_level: data.risk_level,
-        findings: data.findings,
-        sanctions_check: data.sanctions_check,
-        pep_check: data.pep_check,
-        adverse_media: data.adverse_media,
-        recommendations: data.recommendations,
-        report_status: data.report_status || 'pending',
-        reviewed_by: data.reviewed_by,
-        reviewed_at: data.reviewed_at,
-        valid_until: data.valid_until,
-        ai_analysis: data.ai_analysis,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
+        id: report.id,
+        report_code: report.report_code ?? `DD-${report.id.slice(0, 8)}`,
+        report_type: report.report_type ?? 'general',
+        subject_type: report.subject_type ?? 'company',
+        subject_id: report.subject_id,
+        subject_name: report.subject_name ?? 'N/A',
+        subject_details: report.subject_details,
+        screening_sources: report.screening_sources,
+        risk_score: report.risk_score,
+        risk_level: report.risk_level,
+        findings: report.findings,
+        sanctions_check: report.sanctions_check,
+        pep_check: report.pep_check,
+        adverse_media: report.adverse_media,
+        recommendations: report.recommendations,
+        report_status: report.report_status ?? 'pending',
+        reviewed_by: report.reviewed_by,
+        reviewed_at: report.reviewed_at,
+        valid_until: report.valid_until,
+        ai_analysis: report.ai_analysis,
+        created_at: report.created_at ?? new Date().toISOString(),
+        updated_at: report.updated_at ?? new Date().toISOString(),
       };
     },
     enabled: !!id,
@@ -178,19 +190,19 @@ export function useCreateDueDiligence() {
           report_code: input.report_code,
           report_type: input.report_type,
           subject_type: input.subject_type,
-          subject_id: input.subject_id,
+          subject_id: input.subject_id ?? null,
           subject_name: input.subject_name,
-          subject_details: input.subject_details,
-          screening_sources: input.screening_sources,
-          risk_score: input.risk_score,
-          risk_level: input.risk_level,
-          findings: input.findings,
-          sanctions_check: input.sanctions_check,
-          pep_check: input.pep_check,
-          adverse_media: input.adverse_media,
-          recommendations: input.recommendations,
-          report_status: input.report_status || 'pending',
-          valid_until: input.valid_until,
+          subject_details: input.subject_details ?? null,
+          screening_sources: input.screening_sources ?? null,
+          risk_score: input.risk_score ?? null,
+          risk_level: input.risk_level ?? null,
+          findings: input.findings ?? null,
+          sanctions_check: input.sanctions_check ?? null,
+          pep_check: input.pep_check ?? null,
+          adverse_media: input.adverse_media ?? null,
+          recommendations: input.recommendations ?? null,
+          report_status: input.report_status ?? 'pending',
+          valid_until: input.valid_until ?? null,
         })
         .select()
         .single();
@@ -217,9 +229,28 @@ export function useUpdateDueDiligence() {
 
   return useMutation({
     mutationFn: async ({ id, ...input }: Partial<CreateDueDiligenceInput> & { id: string }) => {
+      // Build update object with only defined fields
+      const updateData: Record<string, unknown> = {};
+      if (input.report_code !== undefined) updateData.report_code = input.report_code;
+      if (input.report_type !== undefined) updateData.report_type = input.report_type;
+      if (input.subject_type !== undefined) updateData.subject_type = input.subject_type;
+      if (input.subject_id !== undefined) updateData.subject_id = input.subject_id;
+      if (input.subject_name !== undefined) updateData.subject_name = input.subject_name;
+      if (input.subject_details !== undefined) updateData.subject_details = input.subject_details;
+      if (input.screening_sources !== undefined) updateData.screening_sources = input.screening_sources;
+      if (input.risk_score !== undefined) updateData.risk_score = input.risk_score;
+      if (input.risk_level !== undefined) updateData.risk_level = input.risk_level;
+      if (input.findings !== undefined) updateData.findings = input.findings;
+      if (input.sanctions_check !== undefined) updateData.sanctions_check = input.sanctions_check;
+      if (input.pep_check !== undefined) updateData.pep_check = input.pep_check;
+      if (input.adverse_media !== undefined) updateData.adverse_media = input.adverse_media;
+      if (input.recommendations !== undefined) updateData.recommendations = input.recommendations;
+      if (input.report_status !== undefined) updateData.report_status = input.report_status;
+      if (input.valid_until !== undefined) updateData.valid_until = input.valid_until;
+
       const { data, error } = await supabase
         .from('due_diligence_reports')
-        .update(input)
+        .update(updateData)
         .eq('id', id)
         .select()
         .single();
