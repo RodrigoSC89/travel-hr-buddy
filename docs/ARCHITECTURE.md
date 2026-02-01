@@ -1,160 +1,202 @@
-# 🏗️ Architecture Overview
+# 🏗️ ARQUITETURA NAUTI ONE
 
-## System Architecture
+**Data:** 31/01/2026  
+**Versão:** v4.0  
+**Status:** PRODUÇÃO
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         CLIENT (Browser/PWA)                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │
-│  │   React 18  │  │  TanStack   │  │  Tailwind   │  │ TypeScript │ │
-│  │   + Vite    │  │   Query     │  │    CSS      │  │   Strict   │ │
-│  └──────┬──────┘  └──────┬──────┘  └─────────────┘  └────────────┘ │
-└─────────┼────────────────┼──────────────────────────────────────────┘
-          │                │
-          ▼                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                        SERVICE LAYER                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                  │
-│  │   API       │  │   Auth      │  │  Storage    │                  │
-│  │  Services   │  │  Service    │  │  Service    │                  │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘                  │
-└─────────┼────────────────┼────────────────┼─────────────────────────┘
-          │                │                │
-          ▼                ▼                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                     SUPABASE BACKEND                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │
-│  │ PostgreSQL  │  │    Auth     │  │   Storage   │  │   Edge     │ │
-│  │  + RLS      │  │   (JWT)     │  │  (Buckets)  │  │ Functions  │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘ │
-└─────────────────────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    EXTERNAL SERVICES                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                  │
-│  │   OpenAI    │  │   Sentry    │  │  Maritime   │                  │
-│  │   GPT-4o    │  │   Errors    │  │    APIs     │                  │
-│  └─────────────┘  └─────────────┘  └─────────────┘                  │
-└─────────────────────────────────────────────────────────────────────┘
-```
+---
 
-## Directory Structure Map
+## 📋 VISÃO GERAL
+
+NAUTI ONE é uma plataforma completa de gestão marítima que integra:
+- **Frontend:** React 18 + TypeScript + Tailwind CSS
+- **Backend:** Supabase (PostgreSQL + Edge Functions)
+- **IA:** 11 Edge Functions de IA com OpenAI GPT-4o
+- **Real-time:** Supabase Realtime + WebSocket
+
+---
+
+## 🏛️ ESTRUTURA DO PROJETO
 
 ```
-nautilus-one/
-│
-├── 📁 src/                      # Source code
-│   ├── 📁 components/           # React components
-│   │   ├── 📁 ui/               # Base UI (shadcn)
-│   │   ├── 📁 common/           # Shared components
-│   │   ├── 📁 layouts/          # Page layouts
-│   │   └── 📁 [feature]/        # Feature-specific
-│   │
-│   ├── 📁 pages/                # Route pages
-│   │   ├── Index.tsx            # Home page
-│   │   ├── Dashboard.tsx        # Main dashboard
-│   │   ├── Crew.tsx             # Crew management
-│   │   └── ...                  # Other pages
-│   │
-│   ├── 📁 hooks/                # Custom React hooks
-│   │   ├── use-auth.ts          # Authentication
-│   │   ├── use-mobile.ts        # Mobile detection
-│   │   └── index.ts             # Exports
-│   │
-│   ├── 📁 services/             # API layer
-│   │   ├── api.ts               # Base client
-│   │   └── [resource].ts        # Resource services
-│   │
-│   ├── 📁 lib/                  # Core utilities
-│   │   ├── utils.ts             # Helper functions
-│   │   ├── supabase.ts          # Supabase client
-│   │   └── 📁 performance/      # Performance utils
-│   │
-│   ├── 📁 types/                # TypeScript types
-│   │   └── index.ts             # Type definitions
-│   │
-│   ├── 📁 integrations/         # External integrations
-│   │   └── 📁 supabase/         # Supabase types
-│   │
-│   ├── App.tsx                  # Main app component
-│   ├── main.tsx                 # Entry point
-│   └── index.css                # Global styles + tokens
-│
-├── 📁 supabase/                 # Backend
-│   ├── 📁 functions/            # Edge Functions
-│   │   ├── 📁 ai-engine/        # AI processing
-│   │   ├── 📁 send-email/       # Email service
-│   │   └── ...                  # Other functions
-│   │
-│   └── 📁 migrations/           # Database migrations
-│
-├── 📁 docs/                     # Documentation
-│   ├── README.md                # Docs index
-│   ├── 📁 api/                  # API docs
-│   ├── 📁 development/          # Dev guides
-│   ├── 📁 deployment/           # Deploy guides
-│   └── 📁 handoff/              # Handoff docs
-│
-├── 📁 tests/                    # Test files
-├── 📁 e2e/                      # E2E tests
-├── 📁 public/                   # Static assets
-│
-├── 📄 README.md                 # Project overview
-├── 📄 CONTRIBUTING.md           # Contribution guide
-├── 📄 SECURITY.md               # Security policy
-└── 📄 package.json              # Dependencies
+travel-hr-buddy/
+├── src/
+│   ├── components/       # Componentes React reutilizáveis
+│   │   ├── ui/          # shadcn/ui components
+│   │   ├── v2/          # Componentes V2 (Cards, Tables, etc)
+│   │   ├── fleet/       # Componentes de frota
+│   │   ├── ai/          # Componentes de IA
+│   │   └── ...
+│   ├── pages/           # Páginas/Rotas da aplicação
+│   ├── hooks/           # React hooks customizados
+│   │   ├── useVessels*.ts
+│   │   ├── useCrew*.ts
+│   │   ├── useMaintenance*.ts
+│   │   └── ...
+│   ├── modules/         # Módulos de negócio
+│   │   ├── compliance-hub/
+│   │   ├── medical-infirmary/
+│   │   ├── nauti-people/
+│   │   └── ...
+│   ├── lib/             # Utilitários e bibliotecas
+│   │   ├── logger.ts    # Logger centralizado
+│   │   ├── db/          # IndexedDB para offline
+│   │   └── ...
+│   ├── integrations/    # Integrações externas
+│   │   └── supabase/    # Cliente Supabase
+│   └── config/          # Configurações
+│       └── sidebar-routes.ts
+├── supabase/
+│   ├── migrations/      # 420+ SQL migrations
+│   └── functions/       # 11 Edge Functions de IA
+├── docs/                # Documentação
+└── scripts/             # Scripts de CI/Gates
 ```
 
-## Data Flow
+---
 
-```
-User Action → Component → Hook → Service → Supabase → Database
-                                    ↓
-                              Edge Function
-                                    ↓
-                            External API/AI
-```
+## 🔌 INTEGRAÇÃO FRONTEND-BACKEND
 
-## Key Patterns
+### Padrão de Hooks
 
-### 1. Component Pattern
-```tsx
-// Smart component (container)
-const CrewList = () => {
-  const { data } = useCrewMembers();
-  return <CrewTable data={data} />;
-};
+Todos os hooks seguem o padrão:
 
-// Dumb component (presentational)
-const CrewTable = ({ data }) => (
-  <Table>{/* render data */}</Table>
-);
-```
-
-### 2. Hook Pattern
-```tsx
-// Custom hook for data fetching
-const useCrewMembers = () => {
+```typescript
+// src/hooks/useVesselsRealData.ts
+export function useVessels() {
   return useQuery({
-    queryKey: ['crew'],
-    queryFn: crewService.getAll,
+    queryKey: ["vessels"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vessels")
+        .select("*");
+      
+      if (error) throw error;
+      return data;
+    }
   });
-};
+}
 ```
 
-### 3. Service Pattern
-```tsx
-// Service encapsulates API calls
-const crewService = {
-  getAll: () => supabase.from('crew_members').select('*'),
-  getById: (id) => supabase.from('crew_members').select('*').eq('id', id),
-};
+### Edge Functions de IA
+
+| Edge Function | Descrição | Módulos |
+|---------------|-----------|---------|
+| `ai-hub-chat` | Chat central de IA | RAG, Copilot |
+| `ai-maintenance` | Manutenção preditiva | Maintenance |
+| `ai-compliance` | Verificação regulatória | Compliance |
+| `ai-safety` | Análise de segurança | Safety, SGSO |
+| `ai-crew` | Gestão de tripulação | Crew, HR |
+| `ai-voyage` | Otimização de viagens | Voyages |
+| `ai-document` | Análise documental | Documents |
+| `ai-training` | Treinamento IA | Academy |
+| `ai-audit` | Auditoria IA | Audit |
+| `safety-incident-ai` | Incidentes de segurança | Safety |
+| `inventory-spares-ai` | Inventário e peças | Inventory |
+
+---
+
+## 📊 BANCO DE DADOS
+
+### Tabelas Principais
+
+| Tabela | Descrição | RLS |
+|--------|-----------|-----|
+| `vessels` | Embarcações | ✅ |
+| `crew_members` | Tripulação | ✅ |
+| `maintenance_records` | Manutenções | ✅ |
+| `compliance_records` | Conformidade | ✅ |
+| `voyages` | Viagens | ✅ |
+| `maritime_certificates` | Certificados | ✅ |
+| `soc_alerts` | Alertas de segurança | ✅ |
+| `ai_chat_messages` | Mensagens de IA | ✅ |
+| `audit_logs` | Logs de auditoria | ✅ |
+
+### Políticas RLS
+
+- **2.395+ políticas** implementadas
+- Todas tabelas protegidas por organização
+- Segregação por `organization_id` ou `user_id`
+
+---
+
+## 🧪 QUALIDADE DE CÓDIGO
+
+### CI/CD Gates
+
+```bash
+# Verificar console.log
+npm run gate:no-console
+
+# Verificar mocks
+npm run gate:no-mock
+
+# Verificar @ts-ignore
+npm run gate:no-ts-ignore
 ```
 
-## Security Layers
+### Métricas Atuais
 
-1. **Frontend**: Input validation, XSS prevention
-2. **API**: Rate limiting, authentication
-3. **Database**: RLS policies, encryption
-4. **Network**: HTTPS, CSP headers
+| Métrica | Valor |
+|---------|-------|
+| `console.log` em prod | 0 (via logger) |
+| `@ts-ignore` em prod | 0 |
+| Mock data em hooks | 0 |
+| Cobertura de testes | ~60% |
+
+---
+
+## 🔐 SEGURANÇA
+
+### Autenticação
+
+- Supabase Auth (email/senha + OAuth)
+- MFA disponível
+- Session refresh automático
+
+### Autorização
+
+- RLS em todas tabelas
+- RBAC por organização
+- Audit logging em operações críticas
+
+---
+
+## 📱 FUNCIONALIDADES OFFLINE
+
+- **IndexedDB** para cache local
+- **Service Worker** para PWA
+- **Sync Engine** para sincronização
+- **Delta Sync** para eficiência
+
+---
+
+## 🚀 DEPLOY
+
+### Ambientes
+
+| Ambiente | URL | Status |
+|----------|-----|--------|
+| Produção | Lovable.dev | ✅ |
+| Staging | - | Em configuração |
+
+### Build
+
+```bash
+npm run build
+# Output: dist/
+# Tamanho: ~25MB (inclui WASM para OCR)
+```
+
+---
+
+## 📈 PRÓXIMOS PASSOS
+
+1. **Testes E2E** - Expandir cobertura Playwright
+2. **Documentação API** - Swagger/OpenAPI
+3. **Monitoramento** - Sentry/DataDog
+4. **Performance** - Otimização de bundles
+
+---
+
+**Última atualização:** 31/01/2026
