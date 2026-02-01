@@ -1,12 +1,12 @@
 /**
  * Delta Sync Service
- * Synchronizes only modified fields to reduce bandwidth
- * PATCH: Phase 2 - Technical Resilience
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { openDB, IDBPDatabase } from "idb";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 interface DeltaRecord {
   id: string;
@@ -61,14 +61,12 @@ class DeltaSyncService {
         this.worker.onmessage = this.handleWorkerMessage.bind(this);
         
         // Configure worker
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
-          "https://vnbptmixvwropvanyhdb.supabase.co";
         const { data: { session } } = await supabase.auth.getSession();
         
         this.worker.postMessage({
           type: "SET_CONFIG",
           payload: {
-            supabaseUrl,
+            supabaseUrl: SUPABASE_URL,
             supabaseKey: session?.access_token || "",
             batchSize: 10,
             interval: 30000,

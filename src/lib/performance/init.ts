@@ -1,12 +1,13 @@
 /**
- * Performance Initialization - Enhanced
- * Sets up all performance optimizations for 2Mbps networks
+ * Performance Initialization
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { memoryManager } from './memory-manager';
 import { resourceHints } from './resource-hints';
 import { bandwidthOptimizer } from './low-bandwidth-optimizer';
 import { Logger } from "@/lib/utils/logger";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 let isInitialized = false;
 let startTime = 0;
@@ -39,10 +40,7 @@ export function initializePerformance() {
   // 4. Resource hints
   try {
     resourceHints.initializeCommonHints();
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    if (supabaseUrl) {
-      resourceHints.preconnect(supabaseUrl);
-    }
+    resourceHints.preconnect(SUPABASE_URL);
   } catch (e) {
     Logger.warn("Resource hints setup failed", { error: e }, "PerfInit");
   }

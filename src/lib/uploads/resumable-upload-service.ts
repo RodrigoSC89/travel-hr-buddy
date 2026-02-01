@@ -1,13 +1,13 @@
 /**
  * Resumable Upload Service
- * Implements chunked uploads with automatic retry using tus-js-client
- * PATCH: Phase 2 - Technical Resilience
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import * as tus from "tus-js-client";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { openDB, IDBPDatabase } from "idb";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 const CHUNK_SIZE = 1024 * 1024; // 1MB chunks
 const MAX_RETRIES = 5;
@@ -96,9 +96,7 @@ class ResumableUploadService {
       throw new Error("User must be authenticated to upload files");
     }
 
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 
-      "https://vnbptmixvwropvanyhdb.supabase.co";
-    const tusEndpoint = `${supabaseUrl}/storage/v1/upload/resumable`;
+    const tusEndpoint = `${SUPABASE_URL}/storage/v1/upload/resumable`;
 
     return new Promise((resolve, reject) => {
       const upload = new tus.Upload(file, {
@@ -151,7 +149,7 @@ class ResumableUploadService {
           onProgress?.(progress);
         },
         onSuccess: async () => {
-          const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+          const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
           
           await this.updateUploadState(uploadId, { 
             status: "completed",
