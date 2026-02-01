@@ -6,6 +6,7 @@
 import React, { useEffect, useState, memo } from 'react';
 import { resourceHints } from '@/lib/performance/resource-hints';
 import { logger } from "@/lib/logger";
+import { SUPABASE_URL } from '@/lib/supabase/edge-function-helper';
 
 // Componente interno que usa os hooks de forma segura
 const PrefetchInitializer = memo(() => {
@@ -17,9 +18,8 @@ const PrefetchInitializer = memo(() => {
     try {
       resourceHints.initializeCommonHints();
       
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      if (supabaseUrl) {
-        resourceHints.preconnect(supabaseUrl);
+      if (SUPABASE_URL) {
+        resourceHints.preconnect(SUPABASE_URL);
       }
       
       setInitialized(true);

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { logger } from "@/lib/logger";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import {
   ArrowLeft, 
   Download, 
@@ -229,13 +230,10 @@ export default function AssistantLogsPage() {
       if (!confirmed) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-assistant-report`,
+        getEdgeFunctionUrl("send-assistant-report"),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
           body: JSON.stringify({ 
             logs: filteredLogs.map(log => ({
               id: log.id,

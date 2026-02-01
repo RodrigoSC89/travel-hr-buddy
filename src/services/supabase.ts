@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 export interface SupabaseTestResult {
   success: boolean;
@@ -18,16 +19,6 @@ export interface SupabaseTestResult {
  */
 export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   const startTime = Date.now();
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return {
-      success: false,
-      message: "Supabase credentials not configured",
-      error: "Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY",
-    };
-  }
 
   try {
     // Test 1: Check if we can get session (should not crash)
@@ -73,7 +64,7 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
       message: "Supabase connection successful",
       responseTime,
       data: {
-        url: supabaseUrl,
+        url: SUPABASE_URL,
         session: sessionData?.session ? "Active session" : "No active session",
         database: "Connected",
       },

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -100,13 +101,10 @@ export default function PersonalRestoreDashboard() {
 
       // Call the Supabase Edge Function
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-restore-dashboard`,
+        getEdgeFunctionUrl("send-restore-dashboard"),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.data.session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.data.session.access_token),
           body: JSON.stringify({
             email_input: email,
           }),

@@ -6,6 +6,7 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-helper";
 import { CheckCircle, XCircle, Clock, GitBranch, Volume2, VolumeX, WifiOff, Activity } from "lucide-react";
 import { format } from "date-fns";
 import { logger } from "@/lib/logger";
@@ -37,23 +38,10 @@ export default function AdminWallPage() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-        if (!supabaseUrl || !supabaseKey) {
-          logger.error("Supabase credentials not configured");
-          const cached = localStorage.getItem("ci-wall-data");
-          if (cached) {
-            setData(JSON.parse(cached));
-            setOffline(true);
-          }
-          return;
-        }
-
-        const res = await fetch(`${supabaseUrl}/rest/v1/test_results?select=*&order=created_at.desc&limit=50`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/test_results?select=*&order=created_at.desc&limit=50`, {
           headers: {
-            apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
           },
         });
 

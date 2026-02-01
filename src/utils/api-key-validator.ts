@@ -165,12 +165,9 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const supabaseStatus = determineStatus(supabaseResult);
   results.push({
     name: "Supabase",
-    key: "VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY",
+    key: "SUPABASE_URL / SUPABASE_ANON_KEY (hardcoded)",
     status: supabaseStatus,
-    configured: isConfigured(
-      import.meta.env.VITE_SUPABASE_URL,
-      import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-    ),
+    configured: true, // Always configured via hardcoded values
     responseTime: supabaseResult.responseTime,
     message: supabaseResult.message,
     error: supabaseResult.error,

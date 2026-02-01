@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -83,11 +84,9 @@ export default function RestoreAnalyticsPage() {
       if (filterEmail) params.append("email", filterEmail);
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/restore-analytics?${params.toString()}`,
+        `${getEdgeFunctionUrl("restore-analytics")}?${params.toString()}`,
         {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
         }
       );
 

@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -146,11 +147,9 @@ export default function AssistantReportLogsPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/assistant-report-logs?${params.toString()}`,
+        `${getEdgeFunctionUrl("assistant-report-logs")}?${params.toString()}`,
         {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
         }
       );
 
@@ -182,11 +181,9 @@ export default function AssistantReportLogsPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cron-status`,
+        getEdgeFunctionUrl("cron-status"),
         {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
         }
       );
 

@@ -3,6 +3,8 @@
  * PATCH 542 - Prepare for CDN integration (Cloudflare/Vercel/Supabase)
  */
 
+import { SUPABASE_URL } from '@/lib/supabase/edge-function-helper';
+
 export interface CDNConfig {
   provider: "cloudflare" | "vercel" | "supabase" | "local";
   baseUrl: string;
@@ -29,8 +31,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
   },
   supabase: {
     provider: "supabase",
-    baseUrl: import.meta.env.VITE_SUPABASE_URL || "",
-    enabled: !!import.meta.env.VITE_SUPABASE_URL,
+    baseUrl: SUPABASE_URL,
+    enabled: !!SUPABASE_URL,
     transformations: {
       webp: true,
       avif: false,
@@ -76,7 +78,7 @@ class CDNManager {
     if (import.meta.env.VITE_VERCEL_URL) {
       return CDN_CONFIGS.vercel;
     }
-    if (import.meta.env.VITE_SUPABASE_URL) {
+    if (SUPABASE_URL) {
       return CDN_CONFIGS.supabase;
     }
     return CDN_CONFIGS.local;

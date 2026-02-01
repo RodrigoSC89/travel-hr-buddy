@@ -6,6 +6,7 @@
 
 import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl } from '@/lib/supabase/edge-function-helper';
 
 // Thresholds based on Google's recommendations
 const THRESHOLDS = {
@@ -108,7 +109,7 @@ const flushVitals = async () => {
     });
     
     // If we have a Supabase edge function for analytics
-    const analyticsUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analytics`;
+    const analyticsUrl = getEdgeFunctionUrl("analytics");
     
     if (navigator.sendBeacon) {
       navigator.sendBeacon(analyticsUrl, data);
