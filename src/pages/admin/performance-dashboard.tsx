@@ -1,26 +1,22 @@
-// @ts-nocheck - Schema alignment pending
 /**
  * Performance Dashboard
- * NOTE: @ts-nocheck required - component uses UI fields (page_url, rating, is_resolved)
- * that don't match current performance_metrics/alerts DB schema.
- * Needs schema alignment before removing @ts-nocheck.
- * PATCH 850.5 - Migrated to LazyChart for bundle optimization
- * PATCH 856 - Documented schema requirements
+ * Real-time Web Vitals and performance metrics monitoring
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Activity, AlertTriangle, TrendingUp, TrendingDown, Monitor, Bell } from "lucide-react";
+import { Activity, AlertTriangle, Monitor, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LazyLineChart } from "@/components/charts/LazyChart";
 import { logger } from "@/lib/logger";
+import type { Database, Json } from "@/integrations/supabase/types";
 
 interface PerformanceMetric {
   id: string;
@@ -29,7 +25,7 @@ interface PerformanceMetric {
   metric_value: number;
   metric_unit: string;
   status: "normal" | "warning" | "critical";
-  metadata: Record<string, unknown> | null;
+  metadata: { page_url?: string; rating?: string } | null;
   created_at: string;
 }
 
@@ -43,6 +39,36 @@ interface PerformanceAlert {
   created_at: string;
 }
 
+function mapMetricRow(row: Record<string, unknown>): PerformanceMetric {
+  const metadata = row.metadata as Record<string, unknown> | null;
+  return {
+    id: row.id as string,
+    system_name: (row.system_name as string) || (row.category as string) || "web_vitals",
+    metric_name: (row.metric_name as string) || (row.metric_type as string) || "unknown",
+    metric_value: (row.metric_value as number) || (row.value as number) || 0,
+    metric_unit: (row.metric_unit as string) || "ms",
+    status: (row.status as "normal" | "warning" | "critical") || "normal",
+    metadata: metadata ? {
+      page_url: metadata.page_url as string | undefined,
+      rating: metadata.rating as string | undefined,
+    } : null,
+    created_at: row.created_at as string,
+  };
+}
+
+function mapAlertRow(row: Record<string, unknown>): PerformanceAlert {
+  return {
+    id: row.id as string,
+    system_name: (row.system_name as string) || "web_vitals",
+    alert_type: (row.alert_type as string) || "unknown",
+    severity: (row.severity as "info" | "warning" | "critical") || "info",
+    message: (row.message as string) || "",
+    is_resolved: (row.is_resolved as boolean) || false,
+    created_at: row.created_at as string,
+  };
+}
+
+
 export default function PerformanceDashboard() {
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
@@ -52,40 +78,7 @@ export default function PerformanceDashboard() {
   const [selectedMetric, setSelectedMetric] = useState<string>("all");
   const [timeRange, setTimeRange] = useState<string>("24h");
 
-  useEffect(() => {
-    loadDashboardData();
-    
-    // Subscribe to real-time updates
-    const metricsChannel = supabase
-      .channel("performance-metrics-changes")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_metrics" }, (payload) => {
-        setMetrics(prev => [payload.new as PerformanceMetric, ...prev].slice(0, 100));
-      })
-      .subscribe();
-
-    const alertsChannel = supabase
-      .channel("performance-alerts-changes")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_alerts" }, (payload) => {
-        const newAlert = payload.new as PerformanceAlert;
-        setAlerts(prev => [newAlert, ...prev]);
-        
-        if (newAlert.severity === "critical") {
-          toast({
-            title: "⚠️ Performance Alert",
-            description: newAlert.message,
-            variant: "destructive"
-          });
-        }
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(metricsChannel);
-      supabase.removeChannel(alertsChannel);
-    };
-  }, [timeRange]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       const hoursBack = timeRange === "1h" ? 1 : timeRange === "24h" ? 24 : timeRange === "7d" ? 168 : 720;
@@ -111,8 +104,8 @@ export default function PerformanceDashboard() {
       if (metricsResult.error) throw metricsResult.error;
       if (alertsResult.error) throw alertsResult.error;
 
-      setMetrics((metricsResult.data ?? []) as PerformanceMetric[]);
-      setAlerts((alertsResult.data ?? []) as PerformanceAlert[]);
+      setMetrics((metricsResult.data ?? []).map(mapMetricRow));
+      setAlerts((alertsResult.data ?? []).map(mapAlertRow));
     } catch (error) {
       logger.error("Error loading performance dashboard data", { error, timeRange });
       toast({
@@ -123,7 +116,40 @@ export default function PerformanceDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange, toast]);
+
+  useEffect(() => {
+    loadDashboardData();
+    
+    // Subscribe to real-time updates
+    const metricsChannel = supabase
+      .channel("performance-metrics-changes")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_metrics" }, (payload) => {
+        setMetrics(prev => [mapMetricRow(payload.new as PerformanceMetricRow), ...prev].slice(0, 100));
+      })
+      .subscribe();
+
+    const alertsChannel = supabase
+      .channel("performance-alerts-changes")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_alerts" }, (payload) => {
+        const newAlert = mapAlertRow(payload.new as PerformanceAlertRow);
+        setAlerts(prev => [newAlert, ...prev]);
+        
+        if (newAlert.severity === "critical") {
+          toast({
+            title: "⚠️ Performance Alert",
+            description: newAlert.message,
+            variant: "destructive"
+          });
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(metricsChannel);
+      supabase.removeChannel(alertsChannel);
+    };
+  }, [loadDashboardData, toast]);
 
   const getFilteredMetrics = () => {
     let filtered = metrics;
@@ -141,7 +167,7 @@ export default function PerformanceDashboard() {
 
   const getUniquePages = () => {
     const pages = new Set(metrics.map(m => m.metadata?.page_url).filter(Boolean));
-    return Array.from(pages);
+    return Array.from(pages) as string[];
   };
 
   const getMetricStats = (metricName: string) => {

@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema alignment pending
 /**
  * PATCH 565 - Dashboard Final de Qualidade
  * 
@@ -10,7 +9,7 @@
  * - Real-time updates via WebSocket
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -61,6 +60,25 @@ interface QualityMetrics {
   };
 }
 
+interface TestResults {
+  total: number;
+  passed: number;
+  failed: number;
+  successRate: number;
+}
+
+interface CoverageData {
+  modules: number;
+  totalModules: number;
+  percentage: number;
+}
+
+interface FeedbackData {
+  totalResponses: number;
+  averageRating: number;
+  lastUpdated: string;
+}
+
 export default function QualityDashboard() {
   const [metrics, setMetrics] = useState<QualityMetrics>({
     tests: { total: 0, passed: 0, failed: 0, successRate: 0 },
@@ -74,42 +92,121 @@ export default function QualityDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  // Load quality metrics
-  useEffect(() => {
-    loadMetrics();
+  const calculateHealthScore = useCallback((tests: TestResults, coverage: CoverageData, feedback: FeedbackData) => {
+    const testScore = (tests.successRate / 100) * 40;
+    const coverageScore = (coverage.percentage / 100) * 30;
+    const feedbackScore = (feedback.averageRating / 5) * 30;
+    const totalScore = testScore + coverageScore + feedbackScore;
     
-    // Setup real-time updates via WebSocket
-    const channel = supabase
-      .channel("quality-metrics")
-      .on("postgres_changes", 
-        { event: "*", schema: "public", table: "quality_metrics" },
-        () => {
-          loadMetrics();
-        }
-      )
-      .subscribe();
+    let status: "excellent" | "good" | "warning" | "critical" = "good";
+    if (totalScore >= 90) status = "excellent";
+    else if (totalScore >= 70) status = "good";
+    else if (totalScore >= 50) status = "warning";
+    else status = "critical";
+    
+    return { score: Math.round(totalScore), status };
+  }, []);
 
-    // Refresh every 30 seconds
-    const interval = setInterval(loadMetrics, 30000);
-
-    return () => {
-      channel.unsubscribe();
-      clearInterval(interval);
+  const calculateRiskLevel = useCallback((tests: TestResults) => {
+    const failureRate = tests.total > 0 ? (tests.failed / tests.total) * 100 : 0;
+    
+    let level: "low" | "medium" | "high" = "low";
+    if (failureRate > 20) level = "high";
+    else if (failureRate > 10) level = "medium";
+    
+    return {
+      level,
+      score: Math.round(failureRate),
+      issues: tests.failed,
     };
   }, []);
 
-  async function loadMetrics() {
+  const calculateConfidenceLevel = useCallback((tests: TestResults, feedback: FeedbackData) => {
+    const testConfidence = (tests.successRate / 100) * 50;
+    const feedbackConfidence = (feedback.averageRating / 5) * 50;
+    const totalConfidence = testConfidence + feedbackConfidence;
+    
+    return {
+      level: Math.round(totalConfidence),
+      trend: totalConfidence > 80 ? "up" as const : totalConfidence > 60 ? "stable" as const : "down" as const,
+    };
+  }, []);
+
+  const loadTestResults = useCallback(async (): Promise<TestResults> => {
     try {
-      // Load test results
+      const response = await fetch("/tests/results/regression-561.json");
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          total: data.summary?.total || 0,
+          passed: data.summary?.passed || 0,
+          failed: data.summary?.failed || 0,
+          successRate: parseFloat(data.summary?.successRate) || 0,
+        };
+      }
+    } catch {
+      logger.info("Could not load test results, using defaults");
+    }
+    
+    return {
+      total: 25,
+      passed: 23,
+      failed: 2,
+      successRate: 92,
+    };
+  }, []);
+
+  const loadCoverageData = useCallback(async (): Promise<CoverageData> => {
+    const totalModules = 50;
+    const coveredModules = 42;
+    
+    return {
+      modules: coveredModules,
+      totalModules,
+      percentage: (coveredModules / totalModules) * 100,
+    };
+  }, []);
+
+  const loadFeedbackData = useCallback(async (): Promise<FeedbackData> => {
+    try {
+      const { data, error } = await supabase
+        .from("beta_feedback")
+        .select("*");
+      
+      if (error) throw error;
+      
+      const ratings = (data || []).map(f => {
+        const row = f as Record<string, unknown>;
+        const ratingValue = typeof row.rating === "string" ? parseInt(row.rating, 10) : (row.rating as number);
+        return isNaN(ratingValue) ? 0 : ratingValue;
+      });
+      
+      const avgRating = ratings.length > 0 
+        ? ratings.reduce((a, b) => a + b, 0) / ratings.length 
+        : 0;
+      
+      const firstRow = data?.[0] as Record<string, unknown> | undefined;
+      
+      return {
+        totalResponses: data?.length || 0,
+        averageRating: avgRating,
+        lastUpdated: (firstRow?.created_at as string) || new Date().toISOString(),
+      };
+    } catch {
+      return {
+        totalResponses: 0,
+        averageRating: 0,
+        lastUpdated: new Date().toISOString(),
+      };
+    }
+  }, []);
+
+  const loadMetrics = useCallback(async () => {
+    try {
       const testResults = await loadTestResults();
-      
-      // Load coverage data
       const coverageData = await loadCoverageData();
-      
-      // Load feedback data
       const feedbackData = await loadFeedbackData();
       
-      // Calculate derived metrics
       const healthScore = calculateHealthScore(testResults, coverageData, feedbackData);
       const riskLevel = calculateRiskLevel(testResults);
       const confidenceLevel = calculateConfidenceLevel(testResults, feedbackData);
@@ -126,115 +223,30 @@ export default function QualityDashboard() {
       setLastUpdate(new Date());
       setIsLoading(false);
     } catch {
-      // Metrics loading failed - using fallback values
       setIsLoading(false);
     }
-  }
+  }, [loadTestResults, loadCoverageData, loadFeedbackData, calculateHealthScore, calculateRiskLevel, calculateConfidenceLevel]);
 
-  async function loadTestResults() {
-    // Try to load from test results file
-    try {
-      const response = await fetch("/tests/results/regression-561.json");
-      if (response.ok) {
-        const data = await response.json();
-        return {
-          total: data.summary.total || 0,
-          passed: data.summary.passed || 0,
-          failed: data.summary.failed || 0,
-          successRate: parseFloat(data.summary.successRate) || 0,
-        };
-      }
-    } catch (error) {
-      logger.warn("Could not load test results, using defaults");
-    }
+  useEffect(() => {
+    loadMetrics();
     
-    // Default values if file not found
-    return {
-      total: 25,
-      passed: 23,
-      failed: 2,
-      successRate: 92,
+    const channel = supabase
+      .channel("quality-metrics")
+      .on("postgres_changes", 
+        { event: "*", schema: "public", table: "beta_feedback" },
+        () => {
+          loadMetrics();
+        }
+      )
+      .subscribe();
+
+    const interval = setInterval(loadMetrics, 30000);
+
+    return () => {
+      channel.unsubscribe();
+      clearInterval(interval);
     };
-  }
-
-  async function loadCoverageData() {
-    // Calculate module coverage
-    const totalModules = 50; // Total modules in the system
-    const coveredModules = 42; // Modules with tests
-    
-    return {
-      modules: coveredModules,
-      totalModules,
-      percentage: (coveredModules / totalModules) * 100,
-    };
-  }
-
-  async function loadFeedbackData() {
-    try {
-      const { data, error } = await supabase
-        .from("beta_feedback")
-        .select("rating, timestamp");
-      
-      if (error) throw error;
-      
-      const ratings = data.map(f => parseInt(f.rating) || 0);
-      const avgRating = ratings.length > 0 
-        ? ratings.reduce((a, b) => a + b, 0) / ratings.length 
-        : 0;
-      
-      return {
-        totalResponses: data.length,
-        averageRating: avgRating,
-        lastUpdated: data[0]?.timestamp || new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        totalResponses: 0,
-        averageRating: 0,
-        lastUpdated: new Date().toISOString(),
-      };
-    }
-  }
-
-  function calculateHealthScore(tests: any, coverage: any, feedback: any) {
-    const testScore = (tests.successRate / 100) * 40;
-    const coverageScore = (coverage.percentage / 100) * 30;
-    const feedbackScore = (feedback.averageRating / 5) * 30;
-    const totalScore = testScore + coverageScore + feedbackScore;
-    
-    let status: "excellent" | "good" | "warning" | "critical" = "good";
-    if (totalScore >= 90) status = "excellent";
-    else if (totalScore >= 70) status = "good";
-    else if (totalScore >= 50) status = "warning";
-    else status = "critical";
-    
-    return { score: Math.round(totalScore), status };
-  }
-
-  function calculateRiskLevel(tests: any) {
-    const failureRate = (tests.failed / tests.total) * 100;
-    
-    let level: "low" | "medium" | "high" = "low";
-    if (failureRate > 20) level = "high";
-    else if (failureRate > 10) level = "medium";
-    
-    return {
-      level,
-      score: Math.round(failureRate),
-      issues: tests.failed,
-    };
-  }
-
-  function calculateConfidenceLevel(tests: any, feedback: any) {
-    const testConfidence = (tests.successRate / 100) * 50;
-    const feedbackConfidence = (feedback.averageRating / 5) * 50;
-    const totalConfidence = testConfidence + feedbackConfidence;
-    
-    return {
-      level: Math.round(totalConfidence),
-      trend: totalConfidence > 80 ? "up" : totalConfidence > 60 ? "stable" : "down",
-    };
-  }
+  }, [loadMetrics]);
 
   const getHealthColor = (status: string) => {
     switch (status) {
@@ -491,15 +503,11 @@ export default function QualityDashboard() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <span>Agregação de métricas de testes automatizados</span>
+              <span>Métricas de saúde, risco e confiança</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <span>Cobertura de módulos exibida</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <span>Feedback de usuários integrado</span>
+              <span>Resultados de testes automatizados</span>
             </div>
           </div>
         </CardContent>
