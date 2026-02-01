@@ -1,4 +1,8 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - Depends on language_usage_stats, translation_logs, translation_feedback tables
+/**
+ * PATCH 871.3 - i18n dashboard
+ * TODO: Create migrations for i18n tables
+ */
 /**
  * PATCH 851 - Dashboard de Internacionalização
  * Painel para monitorar uso multilíngue do sistema

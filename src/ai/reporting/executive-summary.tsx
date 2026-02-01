@@ -1,4 +1,8 @@
-// @ts-nocheck - Schema compatibility: ai_strategies, ai_strategy_proposals tables
+// @ts-nocheck - Depends on ai_strategies, ai_strategy_proposals tables not in schema
+/**
+ * PATCH 871.3 - Executive summary generator
+ * TODO: Create migrations for ai_strategies, ai_simulations tables
+ */
 /**
  * PATCH 585 - Executive Summary Generator AI
  * PATCH 547 - Removed @ts-nocheck directive (now restored for build stability)

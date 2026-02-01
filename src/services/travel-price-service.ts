@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - External API responses need dynamic typing
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
@@ -59,7 +59,7 @@ export interface HotelResult {
   location?: {
     latitude: number;
     longitude: number;
-    address?: any;
+    address?: Record<string, unknown>;
   };
   price: {
     total: number;
@@ -109,7 +109,7 @@ export interface HotelDestination {
 }
 
 class TravelPriceService {
-  private async invoke<T>(action: string, params: Record<string, any> = {}): Promise<T> {
+  private async invoke<T>(action: string, params: Record<string, unknown> = {}): Promise<T> {
     const { data, error } = await supabase.functions.invoke("travel-price-monitor", {
       body: { action, ...params },
     });
@@ -129,7 +129,7 @@ class TravelPriceService {
   /**
    * Search for flights using Amadeus API
    */
-  async searchFlights(params: FlightSearchParams): Promise<{ flights: FlightResult[]; dictionaries?: any }> {
+  async searchFlights(params: FlightSearchParams): Promise<{ flights: FlightResult[]; dictionaries?: Record<string, unknown> }> {
     return this.invoke("search_flights", params);
   }
 
@@ -143,7 +143,7 @@ class TravelPriceService {
   /**
    * Get AI-powered price prediction
    */
-  async getPrediction(productData: any, productType: "flight" | "hotel"): Promise<PricePrediction> {
+  async getPrediction(productData: FlightResult | HotelResult, productType: "flight" | "hotel"): Promise<PricePrediction> {
     return this.invoke("get_prediction", { productData, productType });
   }
 
@@ -188,7 +188,7 @@ class TravelPriceService {
   /**
    * Export data to CSV format
    */
-  exportToCSV(data: any[], filename: string): void {
+  exportToCSV(data: Record<string, unknown>[], filename: string): void {
     if (!data || data.length === 0) {
       logger.warn("No data to export");
       return;
@@ -220,7 +220,7 @@ class TravelPriceService {
   /**
    * Export data to PDF format using jsPDF
    */
-  async exportToPDF(data: any[], title: string, filename: string): Promise<void> {
+  async exportToPDF(data: Record<string, unknown>[], title: string, filename: string): Promise<void> {
     const [{ default: jsPDF }, autoTableModule] = await Promise.all([
       import("jspdf"),
       import("jspdf-autotable")

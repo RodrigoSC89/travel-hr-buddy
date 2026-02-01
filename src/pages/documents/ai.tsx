@@ -1,4 +1,7 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - ai_documents schema mismatch (title vs file_name)
+/**
+ * PATCH 871.3 - AI documents page
+ */
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,7 +39,7 @@ interface AIDocument {
   file_type: string;
   ocr_text: string;
   ocr_status: string;
-  extracted_keywords: any[];
+  extracted_keywords: Array<{ text: string; score: number }> | null;
   category: string;
   confidence_score: number;
   created_at: string;
