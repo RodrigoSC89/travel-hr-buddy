@@ -14,8 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/utils/production-logger";
+import { logger } from "@/lib/logger";
 import { 
   Key, 
   Plus, 
@@ -33,7 +32,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
 
 interface ApiKey {
   id: string;

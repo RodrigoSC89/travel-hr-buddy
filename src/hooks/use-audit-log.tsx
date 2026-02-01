@@ -10,8 +10,7 @@ import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Json } from "@/integrations/supabase/types";
-import { logger } from "@/lib/utils/production-logger";
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 type AuditLogStatus = "success" | "failure" | "error";
 type JsonObject = Record<string, Json | undefined>;

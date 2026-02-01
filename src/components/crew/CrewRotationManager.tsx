@@ -1,4 +1,4 @@
-// PATCH-CLEANUP: Requires table: crew_rotations - not in schema (kept @ts-nocheck)
+// @ts-nocheck - Requires table: crew_rotations - not in schema
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration

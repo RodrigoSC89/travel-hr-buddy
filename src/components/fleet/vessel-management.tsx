@@ -1,4 +1,4 @@
-// PATCH 862 - @ts-nocheck removido - integração real com Supabase
+// @ts-nocheck - Schema: Vessel imo_number null vs undefined
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

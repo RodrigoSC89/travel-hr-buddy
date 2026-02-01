@@ -54,20 +54,7 @@ function convertToTraining(record: TrainingRecord): Training {
   };
 }
 
-// SAMPLE_TRAININGS removido - usar useTrainingComplianceData()
-  },
-  {
-    id: "5",
-    name: "Integridade Mecânica",
-    category: "technical",
-    status: "pending",
-    completion_rate: 0,
-    certified: 0,
-    total: 25,
-    validity_months: 12,
-    next_due: "2025-12-31"
-  }
-];
+// SAMPLE_TRAININGS removido - dados vêm do hook useTrainingComplianceData()
 
 const getStatusConfig = (status: string) => {
   const configs = {
