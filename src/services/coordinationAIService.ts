@@ -8,65 +8,35 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
+import type { 
+  CoordinationAgent, 
+  CoordinationTask, 
+  CoordinationDecision,
+  AgentStatus,
+  TaskStatus,
+} from "@/types/patches-536-540";
 
 type AgentRegistryRow = Database["public"]["Tables"]["agent_registry"]["Row"];
 type AgentRegistryInsert = Database["public"]["Tables"]["agent_registry"]["Insert"];
 
-// Local interfaces for coordination logic
-interface CoordinationTask {
-  id: string;
-  task_name: string;
-  task_type: string;
-  priority: number;
-  required_capabilities: string[];
-  payload: Record<string, unknown>;
-  timeout_seconds: number;
-  status: TaskStatus;
-  assigned_agent_id?: string;
-  created_at: string;
-}
-
-type AgentStatus = "idle" | "active" | "busy" | "offline";
-type TaskStatus = "pending" | "assigned" | "running" | "completed" | "failed";
-
-interface CoordinationDecision {
-  task_id: string;
-  agent_id: string;
-  decision_type: string;
-  decision_data: Record<string, unknown>;
-  reasoning: string;
-  confidence_score: number;
-}
-
-// Use agent_registry as the coordination agent store
-interface CoordinationAgent {
-  id: string;
-  agent_name: string;
-  agent_type: string;
-  capabilities: string[];
-  status: AgentStatus;
-  priority_level: number;
-  max_concurrent_tasks: number;
-  current_task_count: number;
-  metadata: Record<string, unknown>;
-  last_heartbeat: string;
-}
-
 function mapRegistryToAgent(row: AgentRegistryRow): CoordinationAgent {
   const capabilities = row.capabilities as { list?: string[] } | null;
   const metadata = row.metadata as Record<string, unknown> | null;
+  const now = new Date().toISOString();
   
   return {
     id: row.id,
     agent_name: row.name,
-    agent_type: row.agent_id,
+    agent_type: (row.agent_id as CoordinationAgent["agent_type"]) || "analyzer",
     capabilities: capabilities?.list || [],
-    status: row.status as AgentStatus || "idle",
+    status: (row.status as AgentStatus) || "idle",
     priority_level: 5,
     max_concurrent_tasks: 3,
     current_task_count: 0,
     metadata: metadata || {},
-    last_heartbeat: row.last_heartbeat || new Date().toISOString(),
+    last_heartbeat: row.last_heartbeat || now,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
   };
 }
 
@@ -74,7 +44,7 @@ class CoordinationAIService {
   /**
    * Register a new agent in the coordination system
    */
-  async registerAgent(agent: Omit<CoordinationAgent, "id" | "last_heartbeat" | "current_task_count">): Promise<CoordinationAgent | null> {
+  async registerAgent(agent: Partial<CoordinationAgent> & { agent_name: string; agent_type: CoordinationAgent["agent_type"] }): Promise<CoordinationAgent | null> {
     const insert: AgentRegistryInsert = {
       agent_id: agent.agent_type,
       name: agent.agent_name,
@@ -149,7 +119,7 @@ class CoordinationAIService {
   /**
    * Create a coordination task using ai_commands table
    */
-  async createTask(task: Omit<CoordinationTask, "id" | "created_at" | "status">): Promise<CoordinationTask | null> {
+  async createTask(task: Partial<CoordinationTask> & { task_name: string; task_type: string }): Promise<CoordinationTask | null> {
     const { data: userData } = await supabase.auth.getUser();
     
     const commandHash = `task_${Date.now()}_${Math.random().toString(36).substring(7)}`;
@@ -188,6 +158,7 @@ class CoordinationAIService {
       timeout_seconds: (data.parameters as Record<string, unknown>)?.timeout_seconds as number || 300,
       status: "pending",
       created_at: data.created_at,
+      updated_at: data.updated_at,
     };
 
     // Auto-assign task
@@ -226,8 +197,11 @@ class CoordinationAIService {
         payload: params?.payload as Record<string, unknown> || {},
         timeout_seconds: params?.timeout_seconds as number || 300,
         status: row.execution_status as TaskStatus,
+        assigned_agent_id: params?.assigned_agent_id as string | undefined,
+        error_message: row.error_details || undefined,
         created_at: row.created_at,
-      };
+        updated_at: row.updated_at,
+      } as CoordinationTask;
     });
   }
 
@@ -348,6 +322,33 @@ class CoordinationAIService {
       completedTasks: tasks.filter(t => t.status === "completed").length,
       failedTasks: tasks.filter(t => t.status === "failed").length,
     };
+  }
+
+  /**
+   * Get all coordination decisions (from ai_decisions table)
+   */
+  async getAllDecisions(limit: number = 20): Promise<CoordinationDecision[]> {
+    const { data, error } = await supabase
+      .from("ai_decisions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      logger.error("Error fetching decisions", error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      id: row.id,
+      task_id: row.id,
+      agent_id: row.created_by || undefined,
+      decision_type: row.type,
+      decision_data: (row.action_payload as Record<string, unknown>) || {},
+      reasoning: row.justification_reasoning || undefined,
+      confidence_score: row.confidence || undefined,
+      timestamp: row.created_at,
+    }));
   }
 }
 
