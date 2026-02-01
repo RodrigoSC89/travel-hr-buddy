@@ -184,9 +184,22 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
+// Remove initial HTML loader before React mounts
+const removeInitialLoader = () => {
+  const loader = document.getElementById('initial-loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    loader.style.transition = 'opacity 0.3s ease-out';
+    setTimeout(() => loader.remove(), 300);
+  }
+};
+
 // Render the app
 const container = document.getElementById("root");
 if (container) {
+  // Remove loader immediately before render
+  removeInitialLoader();
+  
   createRoot(container).render(
     <React.StrictMode>
       <HelmetProvider>
@@ -194,4 +207,8 @@ if (container) {
       </HelmetProvider>
     </React.StrictMode>
   );
+} else {
+  // Fallback error display if root is missing
+  removeInitialLoader();
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;"><div style="text-align:center"><h1>Erro de inicialização</h1><p>Não foi possível carregar a aplicação.</p><button onclick="location.reload()" style="margin-top:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;">Recarregar</button></div></div>';
 }
