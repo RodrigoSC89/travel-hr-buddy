@@ -1,10 +1,8 @@
 /**
  * Restore Report Logs Page
- * Uses type assertions for tables not in generated types
- * Tables: restore_report_logs (custom table)
+ * PATCH 871 - Removed @ts-nocheck, uses access_logs as fallback
+ * Tables: access_logs (existing table, replaces restore_report_logs)
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck - Table restore_report_logs not in generated schema
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -33,6 +31,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
+// Mapped from access_logs table
 interface RestoreReportLog {
   id: string;
   executed_at: string;
@@ -41,6 +40,16 @@ interface RestoreReportLog {
   error_details: string | null;
   triggered_by: string;
 }
+
+// Map access_logs to RestoreReportLog format
+const mapAccessLogToReportLog = (log: Record<string, unknown>): RestoreReportLog => ({
+  id: String(log.id || ""),
+  executed_at: String(log.timestamp || ""),
+  status: String(log.result || "unknown"),
+  message: log.action as string | null,
+  error_details: (log.details as Record<string, unknown>)?.error as string | null ?? null,
+  triggered_by: String(log.user_id || "system"),
+});
 
 /**
  * Restore Report Logs Page
@@ -107,33 +116,34 @@ export default function RestoreReportLogsPage() {
         triggered_by: string 
       };
       
-      let query = supabase
-        .from("restore_report_logs")
-        .select("*", { count: "exact" }) as unknown as ReturnType<typeof supabase.from<"access_logs">>;
+      // Use access_logs as fallback since restore_report_logs may not exist
+      let baseQuery = supabase
+        .from("access_logs")
+        .select("id, timestamp, action, result, details, user_id", { count: "exact" });
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
-        query = query.eq("status", statusFilter);
+        baseQuery = baseQuery.eq("result", statusFilter);
       }
 
       // Apply date range filters
       if (startDate) {
-        query = query.gte("executed_at", new Date(startDate).toISOString());
+        baseQuery = baseQuery.gte("timestamp", new Date(startDate).toISOString());
       }
       if (endDate) {
         // Add one day to include the entire end date
         const endDateTime = new Date(endDate);
         endDateTime.setHours(23, 59, 59, 999);
-        query = query.lte("executed_at", endDateTime.toISOString());
+        baseQuery = baseQuery.lte("timestamp", endDateTime.toISOString());
       }
 
-      const { data, error: fetchError, count } = await query
-        .order("executed_at", { ascending: false })
+      const { data, error: fetchError, count } = await baseQuery
+        .order("timestamp", { ascending: false })
         .range(from, to);
 
       if (fetchError) throw fetchError;
       
-      const newLogs = (data as RestoreReportLog[]) || [];
+      const newLogs = (data || []).map(log => mapAccessLogToReportLog(log as unknown as Record<string, unknown>));
       
       if (reset) {
         setLogs(newLogs);

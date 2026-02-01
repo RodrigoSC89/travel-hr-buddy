@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema: Vessel imo_number null vs undefined
+// PATCH 871 - Removed @ts-nocheck, types properly defined
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,16 +26,31 @@ import {
 interface Vessel {
   id: string;
   name: string;
-  imo_number?: string;
+  imo_number: string | null;
   vessel_type: string;
   flag_state: string;
-  status: string;
-  current_location?: string;
-  next_port?: string;
-  eta?: string;
-  created_at: string;
-  organization_id?: string;
+  status: string | null;
+  current_location: string | null;
+  next_port: string | null;
+  eta: string | null;
+  created_at: string | null;
+  organization_id: string | null;
 }
+
+// Helper to map Supabase data to local Vessel type
+const mapToVessel = (data: Record<string, unknown>): Vessel => ({
+  id: String(data.id || ""),
+  name: String(data.name || ""),
+  imo_number: data.imo_number as string | null,
+  vessel_type: String(data.vessel_type || ""),
+  flag_state: String(data.flag_state || ""),
+  status: (data.status as string | null) ?? "active",
+  current_location: data.current_location as string | null,
+  next_port: data.next_port as string | null,
+  eta: data.eta as string | null,
+  created_at: data.created_at as string | null,
+  organization_id: data.organization_id as string | null,
+});
 
 const VesselManagement: React.FC = () => {
   const [vessels, setVessels] = useState<Vessel[]>([]);
@@ -77,7 +92,7 @@ const VesselManagement: React.FC = () => {
         });
         setVessels([]);
       } else {
-        setVessels(vessels || []);
+        setVessels((vessels || []).map(mapToVessel));
       }
     } catch (error) {
       logger.error("Unexpected error loading vessels:", error);
@@ -117,14 +132,21 @@ const VesselManagement: React.FC = () => {
         // Fallback to local state
         const vessel: Vessel = {
           id: Math.random().toString(),
-          ...newVessel,
+          name: newVessel.name,
+          imo_number: newVessel.imo_number || null,
+          vessel_type: newVessel.vessel_type,
+          flag_state: newVessel.flag_state,
+          next_port: newVessel.next_port || null,
+          eta: newVessel.eta || null,
           status: "active",
+          current_location: null,
+          organization_id: null,
           created_at: new Date().toISOString()
         };
         setVessels([...vessels, vessel]);
       } else {
         // Successfully added to database
-        setVessels([...vessels, data]);
+        setVessels([...vessels, mapToVessel(data as Record<string, unknown>)]);
       }
       
       setNewVessel({
@@ -150,16 +172,16 @@ const VesselManagement: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null): string => {
     switch (status) {
-    case "active": return "bg-green-500 text-azure-50";
-    case "maintenance": return "bg-yellow-500 text-azure-900";
-    case "inactive": return "bg-red-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+    case "active": return "bg-green-500 text-primary-foreground";
+    case "maintenance": return "bg-yellow-500 text-primary-foreground";
+    case "inactive": return "bg-red-500 text-primary-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string | null): string => {
     switch (status) {
     case "active": return "Ativa";
     case "maintenance": return "Manutenção";

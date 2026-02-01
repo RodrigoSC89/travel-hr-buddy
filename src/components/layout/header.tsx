@@ -1,4 +1,4 @@
-// @ts-nocheck - Logger function call signature
+// PATCH 871 - Removed @ts-nocheck, logger properly typed
 import type { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
@@ -30,7 +30,7 @@ export const Header: FC = () => {
     e.preventDefault();
     e.stopPropagation();
     
-    logger.debug('[Header] Menu clicked, isMobile:', isMobile, 'openMobile:', openMobile);
+    logger.debug(`[Header] Menu clicked, isMobile: ${isMobile}, openMobile: ${openMobile}`);
     
     if (isMobile) {
       setOpenMobile(!openMobile);
