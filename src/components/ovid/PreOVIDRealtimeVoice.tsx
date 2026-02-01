@@ -1,4 +1,7 @@
-// @ts-nocheck - Logger type compatibility
+/**
+ * PreOVID Realtime Voice Component
+ * PATCH 864 - Removed @ts-nocheck, added proper TypeScript types
+ */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,17 +10,18 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { 
-  Mic, Volume2, Brain, Camera, FileText,
-  Phone, PhoneOff, Loader2, Wifi,
-  MessageSquare, Wand2, AlertTriangle, Navigation,
+  Mic, Brain, Camera, FileText,
+  Phone, PhoneOff, Loader2, Wifi, Volume2,
+  Wand2, Navigation,
   ChevronRight, ChevronLeft, CheckCircle, XCircle, Headphones
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { PreOVIDRealtimeChat, RealtimeMessage } from '@/utils/PreOVIDRealtimeAudio';
+import { PreOVIDRealtimeChat, type RealtimeMessage } from '@/utils/PreOVIDRealtimeAudio';
 import { AnimatedAudioWaveform, PulseIndicator } from '@/components/ui/audio-waveform';
 import { PhotoCaptureModal, ObservationModal, ChapterNavigationModal } from './VoiceCommandModals';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface VoiceMessage {
   role: 'user' | 'assistant';
@@ -115,14 +119,10 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
       setIsPlayingAudio(true);
       
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/eleven-labs-voice`,
+        getEdgeFunctionUrl('eleven-labs-voice'),
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({
             text: text.substring(0, 500), // Limit to 500 chars for voice
             voice_name: 'sarah', // Clear female voice for ARIA

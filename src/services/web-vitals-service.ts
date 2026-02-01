@@ -1,6 +1,8 @@
-// @ts-nocheck - Schema alignment pending
-// Web Vitals Service - Collects and reports Web Vitals metrics
-import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from "web-vitals";
+/**
+ * Web Vitals Service - Collects and reports Web Vitals metrics
+ * PATCH 864 - Removed @ts-nocheck, proper TypeScript types
+ */
+import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from "web-vitals";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
