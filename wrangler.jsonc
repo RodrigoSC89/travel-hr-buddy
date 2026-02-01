@@ -1,7 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "travel-hr-buddy",
   "compatibility_date": "2026-02-01",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
   }
 }
