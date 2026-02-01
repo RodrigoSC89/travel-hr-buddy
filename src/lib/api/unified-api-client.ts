@@ -1,9 +1,10 @@
 /**
  * Unified API Client
- * PATCH 833: Complete API integration layer with caching, retries, and offline support
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-helper";
 
 interface RequestConfig {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -271,8 +272,8 @@ class UnifiedAPIClient {
   ): Promise<APIResponse<T[]>> {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const baseUrl = SUPABASE_URL;
+      const apiKey = SUPABASE_ANON_KEY;
       
       let url = `${baseUrl}/rest/v1/${table}?select=${query.select || '*'}`;
       
@@ -329,8 +330,8 @@ class UnifiedAPIClient {
   ): Promise<APIResponse<T>> {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const baseUrl = SUPABASE_URL;
+      const apiKey = SUPABASE_ANON_KEY;
       
       let url = `${baseUrl}/rest/v1/${table}`;
       let method = 'POST';

@@ -1,10 +1,12 @@
 /**
  * Workflows Copilot Suggest API - Uses named imports
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 export interface WorkflowSuggestionRequest {
   workflow: string;
@@ -27,15 +29,9 @@ export async function getWorkflowSuggestions(
       throw new Error("User not authenticated");
     }
 
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
-    const functionUrl = `${supabaseUrl}/functions/v1/workflows-copilot-suggest`;
-
-    const response = await fetch(functionUrl, {
+    const response = await fetch(getEdgeFunctionUrl("workflows-copilot-suggest"), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${session.access_token}`,
-      },
+      headers: getEdgeFunctionHeaders(session.access_token),
       body: JSON.stringify(request),
     });
 

@@ -1,10 +1,11 @@
 /**
  * Health Monitor - Continuous system health monitoring
- * Detects issues, tracks module health, and triggers healing
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { Logger } from "@/lib/utils/logger";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-helper";
 import type {
   ModuleHealth,
   SystemDiagnostic,
@@ -185,13 +186,13 @@ class HealthMonitor {
     try {
       const startTime = performance.now();
       
-      // Check Supabase functions endpoint
+      // Check Supabase REST endpoint
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL || ""}/rest/v1/`,
+        `${SUPABASE_URL}/rest/v1/`,
         {
           method: "HEAD",
           headers: {
-            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY || "",
+            apikey: SUPABASE_ANON_KEY,
           },
         }
       );

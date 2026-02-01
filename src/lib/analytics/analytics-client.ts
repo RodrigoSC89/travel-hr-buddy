@@ -1,9 +1,10 @@
 /**
  * Analytics Client
- * PATCH 833: Client-side analytics tracking with batching
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { getEdgeFunctionUrl } from "@/lib/supabase/edge-function-helper";
 
 interface AnalyticsEvent {
   event_name: string;
@@ -167,7 +168,7 @@ class AnalyticsClient {
       if (sync && navigator.sendBeacon) {
         // Use sendBeacon for synchronous sends (on page unload)
         navigator.sendBeacon(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-analytics`,
+          getEdgeFunctionUrl("track-analytics"),
           JSON.stringify({ events, metadata })
         );
       } else {

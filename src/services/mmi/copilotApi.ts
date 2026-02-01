@@ -1,5 +1,6 @@
 /**
- * MMI Copilot Service v1.1.0
+ * MMI Copilot Service v1.1.1
+ * PATCH 868: Migrated to edge-function-helper
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
  */
 
@@ -8,6 +9,7 @@ import { generateEmbedding } from "./embeddingService";
 import { AIRecommendation, SimilarCase } from "@/types/mmi";
 import OpenAI from "openai";
 import { logger } from "@/lib/logger";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 // RPC response type for match_mmi_job_history
 interface MatchJobHistoryResult {
@@ -181,24 +183,11 @@ export const streamCopilotSuggestions = async (
   onChunk: (text: string) => void
 ): Promise<void> => {
   try {
-    // Get the function URL from Supabase
     const { data: { session } } = await supabase.auth.getSession();
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     
-    if (!supabaseUrl) {
-      throw new Error("Supabase URL not configured");
-    }
-
-    const functionUrl = `${supabaseUrl}/functions/v1/mmi-copilot`;
-    
-    const response = await fetch(functionUrl, {
+    const response = await fetch(getEdgeFunctionUrl("mmi-copilot"), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${session?.access_token || supabaseAnonKey}`,
-        "apikey": supabaseAnonKey || "",
-      },
+      headers: getEdgeFunctionHeaders(session?.access_token),
       body: JSON.stringify({ prompt }),
     });
 

@@ -1,9 +1,10 @@
 /**
  * Startup Optimizer
- * Ensures fastest possible initial load
+ * PATCH 868: Migrated to edge-function-helper
  */
 
 import { Logger } from "@/lib/utils/logger";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 class StartupOptimizer {
   private startTime = performance.now();
@@ -47,10 +48,7 @@ class StartupOptimizer {
 
   private preloadCriticalResources() {
     // Preload Supabase connection
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    if (supabaseUrl) {
-      this.addPreconnect(supabaseUrl);
-    }
+    this.addPreconnect(SUPABASE_URL);
 
     // Preload fonts
     this.addPreconnect('https://fonts.googleapis.com');

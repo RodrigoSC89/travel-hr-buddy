@@ -1,7 +1,7 @@
 # TypeScript @ts-nocheck Cleanup Plan
 
 **Project:** Nautilus One  
-**Last Updated:** 2026-02-01 - PATCH 867  
+**Last Updated:** 2026-02-01 - PATCH 868  
 **Status:** In Progress
 
 ## 🎯 Objective
@@ -18,9 +18,25 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | Edge Functions (Deno) | ~30 | 🔵 Low | Requires Deno types |
 
 **Total Files:** ~140  
-**Corrected:** 55 (39%)
+**Corrected:** 65 (46%)
 
-## 🔧 PATCH 864-867 - Edge Function Helper Migration
+## 🔧 PATCH 868 - Edge Function Helper Migration
+
+Migrated 10 core services from `VITE_SUPABASE_*` env vars to centralized `edge-function-helper.ts`:
+
+### PATCH 868 Files Migrated:
+- `src/services/workflow-copilot.ts` - Migrated streaming API
+- `src/services/mmi/copilotApi.ts` - Migrated MMI Copilot service
+- `src/lib/api/unified-api-client.ts` - Migrated REST API client
+- `src/lib/auto-healing/HealthMonitor.ts` - Migrated health checks
+- `src/lib/ai/insight-reporter.ts` - Migrated to centralized client
+- `src/lib/analytics/analytics-client.ts` - Migrated sendBeacon URL
+- `src/lib/uploads/resumable-upload-service.ts` - Migrated tus endpoint
+- `src/lib/sync/delta-sync-service.ts` - Migrated sync worker config
+- `src/lib/performance/startup-optimizer.ts` - Migrated preconnect
+- `src/lib/performance/init.ts` - Migrated resource hints
+
+## 🔧 PATCH 864-867 - Previous Migrations
 
 Migrated core components from `VITE_SUPABASE_*` env vars to centralized `edge-function-helper.ts`:
 

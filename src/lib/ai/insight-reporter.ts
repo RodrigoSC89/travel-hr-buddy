@@ -1,11 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
+/**
+ * AI Insight Reporter
+ * PATCH 868: Migrated to centralized supabase client
+ */
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { initSecureMQTT } from "@/lib/mqtt/secure-client";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY!
-);
 
 /**
  * AI Insight Reporter
