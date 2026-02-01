@@ -417,7 +417,7 @@ export const WindyWeatherPage: React.FC = () => {
                 variant={isChatOpen ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  logger.debug('[WeatherChat] Toggle chat:', !isChatOpen);
+                  logger.debug('[WeatherChat] Toggle chat:', { open: !isChatOpen });
                   setIsChatOpen(!isChatOpen);
                 }}
                 className={`transition-all duration-200 ${isChatOpen ? "bg-primary ring-2 ring-primary/50" : "border-white/20 text-white hover:bg-white/10"}`}

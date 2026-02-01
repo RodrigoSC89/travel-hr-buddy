@@ -7,7 +7,6 @@
 import { agentOrchestrator, type Situation, type Decision } from './agent-orchestrator';
 import { vesselDigitalTwin, type VesselState, type Anomaly } from './digital-twin';
 import { blockchainLedger } from '@/lib/blockchain/compliance-ledger';
-import { logger } from '@/lib/utils/production-logger';
 import { logger } from '@/lib/logger';
 
 export interface AutonomousConfig {

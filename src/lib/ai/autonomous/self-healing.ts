@@ -4,7 +4,6 @@
  * NAUTILUS ONE v4.0 - Autonomous Platform
  */
 
-import { logger } from '@/lib/utils/production-logger';
 import { logger } from '@/lib/logger';
 
 export interface HealthIssue {

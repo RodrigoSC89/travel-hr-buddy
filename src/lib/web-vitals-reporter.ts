@@ -5,7 +5,6 @@
  */
 
 import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
-import { logger } from '@/lib/utils/production-logger';
 import { logger } from '@/lib/logger';
 
 // Thresholds based on Google's recommendations

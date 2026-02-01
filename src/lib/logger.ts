@@ -61,9 +61,9 @@ export const logger = {
   /**
    * Log debug messages (development only)
    */
-  debug: (message: string, context?: LogContext) => {
+  debug: (message: string, context?: unknown) => {
     if (isDevelopment) {
-      if (context) {
+      if (context !== undefined) {
         console.debug(`🐛 ${message}`, context);
       } else {
         console.debug(`🐛 ${message}`);
@@ -74,8 +74,8 @@ export const logger = {
   /**
    * Log warning messages
    */
-  warn: (message: string, context?: LogContext) => {
-    if (context) {
+  warn: (message: string, context?: unknown) => {
+    if (context !== undefined) {
       console.warn(`⚠️ ${message}`, context);
     } else {
       console.warn(`⚠️ ${message}`);
@@ -85,10 +85,10 @@ export const logger = {
   /**
    * Log error messages (always logged and sent to monitoring in production)
    */
-  error: (message: string, error?: any, context?: LogContext) => {
+  error: (message: string, error?: unknown, context?: Record<string, unknown>) => {
     const errorMessage = error ? getErrorMessage(error) : "";
-    const fullContext = {
-      ...context,
+    const fullContext: Record<string, unknown> = {
+      ...(context || {}),
       ...(error && isError(error) ? { stack: error.stack } : {}),
     };
 
@@ -106,7 +106,7 @@ export const logger = {
         const Sentry = (window as any).Sentry;
         if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
           Sentry.captureException(error, { 
-            extra: { message, ...context },
+            extra: { message, ...(context || {}) },
             tags: { source: "logger" }
           });
         }

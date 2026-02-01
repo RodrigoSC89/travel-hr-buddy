@@ -15,7 +15,6 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { PushNotifications } from '@capacitor/push-notifications';
-import { logger } from '@/lib/utils/production-logger';
 import { logger } from '@/lib/logger';
 
 // ============================================
