@@ -1,7 +1,10 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - Complex finance tables require schema alignment
 /**
  * PATCH 384: Finance Hub - CRUD + Reports Service
  * Complete financial management with transactions, budgets, and reporting
+ * 
+ * Technical Debt Note: Uses dynamic tables (finance_transactions, finance_categories,
+ * finance_budgets) that require dedicated type mapping for full type safety.
  */
 
 import { supabase } from "@/integrations/supabase/client";
