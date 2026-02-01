@@ -1,9 +1,7 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - Depends on mmi_history table not in schema
 /**
- * MMI History Service
- * Service layer for MMI maintenance history operations
- * 
- * NOTE: @ts-nocheck required until mmi_history table is added to Supabase types
+ * PATCH 871.3 - MMI history service
+ * TODO: Create migration for mmi_history table
  */
 
 import { supabase } from "@/integrations/supabase/client";

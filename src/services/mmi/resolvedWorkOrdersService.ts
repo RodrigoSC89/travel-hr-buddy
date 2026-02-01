@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - mmi_os_resolvidas table dynamic schema
 /**
  * PATCH 653 - Service for managing resolved work orders (OS) for AI learning
  * Updated to match new mmi_os_resolvidas table schema

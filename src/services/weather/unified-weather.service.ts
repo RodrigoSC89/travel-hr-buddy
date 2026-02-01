@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - External API responses need dynamic typing
 /**
  * Unified Weather Service
  * Provides multi-source weather data with automatic fallback
@@ -69,12 +69,36 @@ function isCacheValid(entry: CacheEntry): boolean {
 /**
  * Fetch weather from Edge Function with retry logic
  */
+interface WeatherApiResponse {
+  current?: {
+    temperature: number;
+    feels_like?: number;
+    humidity?: number;
+    pressure?: number;
+    wind_speed?: number;
+    wind_direction?: number;
+    wind_gust?: number;
+    visibility?: number;
+    weather_condition?: string;
+    weather_icon?: string;
+  };
+  forecast?: Array<{
+    datetime: string;
+    temperature: number;
+    wind_speed?: number;
+    wind_direction?: number;
+    humidity?: number;
+    description?: string;
+    icon?: string;
+  }>;
+}
+
 async function fetchFromEdgeFunction(
   lat: number,
   lon: number,
   source: "auto" | "openweather" | "windy" | "stormglass" = "auto",
   retries = 3
-): Promise<any> {
+): Promise<WeatherApiResponse | null> {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const { data, error } = await supabase.functions.invoke("weather-integration", {
@@ -100,7 +124,19 @@ async function fetchFromEdgeFunction(
 /**
  * Fetch StormGlass marine data
  */
-async function fetchStormGlassData(lat: number, lon: number): Promise<any> {
+interface StormGlassResponse {
+  hours?: Array<{
+    waveHeight?: { sg?: number; noaa?: number };
+    waveDirection?: { sg?: number; noaa?: number };
+    wavePeriod?: { sg?: number; noaa?: number };
+    waterTemperature?: { sg?: number; noaa?: number };
+    currentSpeed?: { sg?: number; noaa?: number };
+    currentDirection?: { sg?: number; noaa?: number };
+    windSpeed?: { sg?: number; noaa?: number };
+  }>;
+}
+
+async function fetchStormGlassData(lat: number, lon: number): Promise<StormGlassResponse | null> {
   try {
     const { data, error } = await supabase.functions.invoke("stormglass-forecast", {
       body: { lat, lng: lon },
@@ -117,7 +153,7 @@ async function fetchStormGlassData(lat: number, lon: number): Promise<any> {
 /**
  * Parse OpenWeather response to unified format
  */
-function parseOpenWeatherResponse(data: any): Partial<WeatherDataUnified> {
+function parseOpenWeatherResponse(data: WeatherApiResponse | null): Partial<WeatherDataUnified> {
   if (!data?.current) return {};
 
   return {
@@ -138,7 +174,7 @@ function parseOpenWeatherResponse(data: any): Partial<WeatherDataUnified> {
 /**
  * Parse StormGlass response to unified format
  */
-function parseStormGlassResponse(data: any): Partial<WeatherDataUnified> {
+function parseStormGlassResponse(data: StormGlassResponse | null): Partial<WeatherDataUnified> {
   if (!data?.hours?.[0]) return {};
 
   const current = data.hours[0];
@@ -289,16 +325,16 @@ export async function getWeatherForecast(
       return [];
     }
 
-    return data.forecast.map((item: any) => ({
+    return data.forecast.map((item) => ({
       datetime: item.datetime,
       temperature: item.temperature,
       tempMin: item.temperature - 2,
       tempMax: item.temperature + 2,
-      windSpeed: item.wind_speed,
-      windDirection: item.wind_direction,
+      windSpeed: item.wind_speed || 0,
+      windDirection: item.wind_direction || 0,
       humidity: item.humidity ?? 60,
       description: item.description ?? "Previsão",
-      icon: item.icon,
+      icon: item.icon || null,
     }));
   } catch (error) {
     logger.error("[Weather] Forecast fetch failed:", error);

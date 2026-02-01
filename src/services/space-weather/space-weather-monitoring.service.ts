@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - External API responses need dynamic typing
 /**
  * Space Weather Monitoring Service
  * 
