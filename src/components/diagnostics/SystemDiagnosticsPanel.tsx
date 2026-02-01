@@ -1,6 +1,7 @@
 /**
- * PATCH 1001 - System Diagnostics Panel
+ * PATCH 870 - System Diagnostics Panel
  * Real-time monitoring of system health, latency, errors, and services
+ * Migrated to edge-function-helper for stable environment handling
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -27,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { cn } from "@/lib/utils";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 interface ServiceStatus {
   name: string;
@@ -88,9 +90,9 @@ export function SystemDiagnosticsPanel() {
     // Check Edge Functions
     const efStart = performance.now();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/system-validation`, {
+      const response = await fetch(getEdgeFunctionUrl("system-validation"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({ test: true }),
       });
       const efLatency = performance.now() - efStart;

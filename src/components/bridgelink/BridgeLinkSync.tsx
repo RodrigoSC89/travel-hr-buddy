@@ -1,14 +1,16 @@
+/**
+ * BridgeLink Sync Component
+ * PATCH 870 - Migrated to use centralized Supabase client
+ */
+
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { RefreshCcw, Cloud, Database } from "lucide-react";
 import { publishEvent } from "@/lib/mqtt/publisher";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function BridgeLinkSync() {
   const [syncStatus, setSyncStatus] = useState("Sincronizando...");
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_KEY || "";
-  const supabase = createClient(supabaseUrl, supabaseKey);
 
   useEffect(() => {
     const channel = supabase
