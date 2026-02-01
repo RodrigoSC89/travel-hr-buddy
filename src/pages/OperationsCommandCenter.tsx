@@ -264,11 +264,11 @@ export default function OperationsCommandCenter() {
     try {
       const { data: vessels } = await supabase
         .from("vessels")
-        .select("id, name, status, type, fuel_capacity");
+        .select("id, name, status, vessel_type, fuel_capacity");
 
       const { data: crew } = await supabase
         .from("crew_members")
-        .select("id, name, status");
+        .select("id, full_name, status");
 
       const { count: maintenanceCount } = await supabase
         .from("operational_checklists")
@@ -286,8 +286,14 @@ export default function OperationsCommandCenter() {
         .order("created_at", { ascending: false })
         .limit(15);
 
-      const vesselsList = (vessels || []) as VesselRecord[];
-      const crewList = (crew || []) as CrewRecord[];
+      const vesselsList = ((vessels || []) as unknown as VesselRecord[]).map(v => ({
+        ...v,
+        name: (v as any).name || 'Unknown'
+      }));
+      const crewList = ((crew || []) as unknown as CrewRecord[]).map(c => ({
+        ...c,
+        full_name: (c as any).full_name || 'Unknown'
+      }));
       
       const activeVessels = vesselsList.filter((v) => v.status === "active" || v.status === "operational").length;
       const vesselsInOperation = vesselsList.filter((v) => v.status === "operational").length;

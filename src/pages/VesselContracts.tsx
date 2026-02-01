@@ -76,8 +76,8 @@ const VesselContracts = () => {
         supabase.from('downtime_events').select('*').order('start_time', { ascending: false }).limit(50)
       ]);
 
-      if (contractsRes.data) setContracts(contractsRes.data);
-      if (downtimeRes.data) setDowntimeEvents(downtimeRes.data);
+      if (contractsRes.data) setContracts(contractsRes.data as unknown as Contract[]);
+      if (downtimeRes.data) setDowntimeEvents(downtimeRes.data as unknown as DowntimeEvent[]);
     } catch (error) {
       logger.error('Error loading data:', error);
       toast.error('Erro ao carregar dados');

@@ -75,8 +75,8 @@ const VesselCTS = () => {
         supabase.from('crew_certifications').select('*').order('expiry_date', { ascending: true })
       ]);
 
-      if (ctsRes.data) setCtsRecords(ctsRes.data);
-      if (certRes.data) setCertifications(certRes.data);
+      if (ctsRes.data) setCtsRecords(ctsRes.data as unknown as CTSRecord[]);
+      if (certRes.data) setCertifications(certRes.data as unknown as Certification[]);
       
       // Calculate initial compliance score
       calculateComplianceScore(certRes.data || []);

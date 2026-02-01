@@ -300,13 +300,13 @@ export default function FleetCommandCenter() {
         .limit(50);
       
       // Enriquecer dados com campos de telemetria (fallback para simulados se não houver)
-      const enrichedVessels = (vesselsData || []).map(v => ({
+      const enrichedVessels = (vesselsData || []).map((v: any) => ({
         ...v,
-        speed: v.current_speed || Math.floor(Math.random() * 20),
-        fuel: v.fuel_level || Math.floor(70 + Math.random() * 30),
-        efficiency: v.efficiency_score || Math.floor(85 + Math.random() * 15),
-        crew_count: v.crew_count || Math.floor(15 + Math.random() * 15),
-        course: v.heading || Math.floor(Math.random() * 360)
+        speed: v.current_speed ?? Math.floor(Math.random() * 20),
+        fuel: v.current_fuel_level ?? Math.floor(70 + Math.random() * 30),
+        efficiency: v.efficiency ?? Math.floor(85 + Math.random() * 15),
+        crew_count: v.crew ?? Math.floor(15 + Math.random() * 15),
+        course: v.course ?? Math.floor(Math.random() * 360)
       }));
       setVessels(enrichedVessels);
 
@@ -322,7 +322,7 @@ export default function FleetCommandCenter() {
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
       
-      const { data: fuelData } = await supabase
+      const { data: fuelData } = await (supabase as any)
         .from("fuel_records")
         .select("record_date, quantity_consumed, efficiency_rating")
         .gte("record_date", sevenDaysAgo.toISOString())
@@ -332,7 +332,7 @@ export default function FleetCommandCenter() {
       if (fuelData && fuelData.length > 0) {
         // Agrupar por dia da semana
         const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-        const grouped = fuelData.reduce((acc: Record<string, { consumption: number; efficiency: number; count: number }>, record) => {
+        const grouped = (fuelData as any[]).reduce((acc: Record<string, { consumption: number; efficiency: number; count: number }>, record: any) => {
           const day = dayNames[new Date(record.record_date).getDay()];
           if (!acc[day]) acc[day] = { consumption: 0, efficiency: 0, count: 0 };
           acc[day].consumption += record.quantity_consumed || 0;
@@ -365,20 +365,20 @@ export default function FleetCommandCenter() {
         const safetyScore = totalIncidents ? Math.max(85, 100 - (totalIncidents * 2)) : 97;
         
         // Fetch crew wellbeing for crew score
-        const { data: wellbeingData } = await supabase
+        const { data: wellbeingData } = await (supabase as any)
           .from("crew_wellbeing")
           .select("score")
           .order("created_at", { ascending: false })
           .limit(50);
         const crewScore = wellbeingData && wellbeingData.length > 0
-          ? Math.round(wellbeingData.reduce((acc, w) => acc + (w.score || 80), 0) / wellbeingData.length)
+          ? Math.round((wellbeingData as any[]).reduce((acc: number, w: any) => acc + (w.score || 80), 0) / wellbeingData.length)
           : 94;
         
         // Fetch compliance records for compliance score
-        const { count: totalCompliance } = await supabase
+        const { count: totalCompliance } = await (supabase as any)
           .from("compliance_records")
           .select("id", { count: "exact", head: true });
-        const { count: passedCompliance } = await supabase
+        const { count: passedCompliance } = await (supabase as any)
           .from("compliance_records")
           .select("id", { count: "exact", head: true })
           .eq("status", "compliant");

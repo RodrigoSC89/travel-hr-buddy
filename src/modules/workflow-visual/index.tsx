@@ -416,7 +416,7 @@ const WorkflowVisual = () => {
                 >
                   <Controls />
                   <MiniMap />
-                  <Background variant="dots" gap={12} size={1} />
+                  <Background variant={"dots" as any} gap={12} size={1} />
                   
                   <Panel position="top-left" className="bg-background/80 backdrop-blur p-2 rounded-lg">
                     <div className="flex gap-2">

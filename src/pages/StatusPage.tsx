@@ -88,15 +88,15 @@ export default function StatusPage() {
     setIsLoading(true);
     try {
       // Fetch components - using type assertion for dynamic table
-      const { data: componentsData } = await (supabase
-        .from("status_components") as ReturnType<typeof supabase.from>)
+      const { data: componentsData } = await (supabase as any)
+        .from("status_components")
         .select("*")
         .order("display_order");
 
       // Fetch recent incidents (last 30 days)
       const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
-      const { data: incidentsData } = await (supabase
-        .from("status_incidents") as ReturnType<typeof supabase.from>)
+      const { data: incidentsData } = await (supabase as any)
+        .from("status_incidents")
         .select("*")
         .gte("started_at", thirtyDaysAgo)
         .order("started_at", { ascending: false });
@@ -105,8 +105,8 @@ export default function StatusPage() {
       const incidents = (incidentsData as unknown as Incident[]) || [];
       if (incidents.length > 0) {
         const incidentIds = incidents.map((i) => i.id);
-        const { data: updatesData } = await (supabase
-          .from("status_incident_updates") as ReturnType<typeof supabase.from>)
+        const { data: updatesData } = await (supabase as any)
+          .from("status_incident_updates")
           .select("*")
           .in("incident_id", incidentIds)
           .order("created_at", { ascending: false });
