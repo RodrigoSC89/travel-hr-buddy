@@ -1,4 +1,10 @@
-// @ts-nocheck - Schema: document_entities table mismatch
+/**
+ * AI Documents Analyzer
+ * Uses type assertions for custom views/tables not in generated types
+ * Tables: ai_documents, document_entities (custom)
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck - Tables document_entities and documents_with_entities not in generated schema
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

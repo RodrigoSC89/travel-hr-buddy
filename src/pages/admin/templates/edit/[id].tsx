@@ -1,4 +1,7 @@
-// @ts-nocheck - Schema alignment pending
+/**
+ * Edit Template Page
+ * PATCH 864 - Removed @ts-nocheck, proper TypeScript types
+ */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -40,6 +43,11 @@ export default function EditTemplatePage() {
   }, [id]);
 
   const loadTemplate = async () => {
+    if (!id) {
+      navigate("/admin/templates");
+      return;
+    }
+    
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -51,8 +59,8 @@ export default function EditTemplatePage() {
       if (error) throw error;
 
       if (data) {
-        setTitle(data.title);
-        setContent(data.content);
+        setTitle(data.title || "");
+        setContent(typeof data.content === "string" ? data.content : "");
       } else {
         toast({
           title: "Template não encontrado",
@@ -186,7 +194,7 @@ export default function EditTemplatePage() {
 
   // Update template
   const updateTemplate = async () => {
-    if (!title.trim() || !content.trim()) {
+    if (!id || !title.trim() || !content.trim()) {
       toast({
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",

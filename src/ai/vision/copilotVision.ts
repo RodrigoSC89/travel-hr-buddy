@@ -1,19 +1,42 @@
-// @ts-nocheck - TensorFlow type compatibility
+/**
+ * Copilot Vision Module - Camera-based AI analysis
+ * PATCH 864 - Removed @ts-nocheck, added proper TypeScript types
+ */
 import { logger } from "@/lib/logger";
-import type * as CocoSsdType from "@tensorflow-models/coco-ssd";
-import type * as TFType from "@tensorflow/tfjs";
 
-let cocoSsd: typeof CocoSsdType | null = null;
-const loadCocoSsd = async () => {
+// TensorFlow types
+interface TFBackend {
+  ready: () => Promise<void>;
+  getBackend: () => string;
+}
+
+interface CocoSsdPrediction {
+  class: string;
+  score: number;
+  bbox: [number, number, number, number];
+}
+
+interface CocoSsdModel {
+  detect: (input: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement) => Promise<CocoSsdPrediction[]>;
+}
+
+interface CocoSsdModule {
+  load: (config?: { base?: string }) => Promise<CocoSsdModel>;
+}
+
+// Lazy-loaded modules
+let cocoSsd: CocoSsdModule | null = null;
+const loadCocoSsd = async (): Promise<CocoSsdModule> => {
   if (!cocoSsd) {
-    cocoSsd = await import("@tensorflow-models/coco-ssd");
+    cocoSsd = await import("@tensorflow-models/coco-ssd") as unknown as CocoSsdModule;
   }
   return cocoSsd;
 };
-let tf: typeof TFType | null = null;
-const loadTF = async () => {
+
+let tf: TFBackend | null = null;
+const loadTF = async (): Promise<TFBackend> => {
   if (!tf) {
-    tf = await import("@tensorflow/tfjs");
+    tf = await import("@tensorflow/tfjs") as unknown as TFBackend;
   }
   return tf;
 };
@@ -56,7 +79,7 @@ export interface OCRResult {
  * Uses Tesseract.js for OCR and TensorFlow.js COCO-SSD for object detection
  */
 export class CopilotVision {
-  private cocoModel: CocoSsdType.ObjectDetection | null = null;
+  private cocoModel: CocoSsdModel | null = null;
   private isInitialized = false;
 
   constructor() {
@@ -150,12 +173,17 @@ export class CopilotVision {
         return [];
       }
 
-      const predictions = await this.cocoModel.detect(imageSource as any);
+      // ImageData is not directly supported - convert if needed
+      const inputElement = imageSource instanceof ImageData 
+        ? this.imageDataToCanvas(imageSource)
+        : imageSource;
+
+      const predictions = await this.cocoModel.detect(inputElement);
       
-      return predictions.map((pred: { class: string; score: number; bbox: [number, number, number, number] }) => ({
+      return predictions.map((pred) => ({
         class: pred.class,
         score: pred.score,
-        bbox: pred.bbox as [number, number, number, number],
+        bbox: pred.bbox,
       }));
     } catch (error) {
       logger.error("Error detecting objects:", error);
@@ -258,6 +286,20 @@ export class CopilotVision {
   }
 
   /**
+   * Convert ImageData to canvas for COCO-SSD compatibility
+   */
+  private imageDataToCanvas(imageData: ImageData): HTMLCanvasElement {
+    const canvas = document.createElement("canvas");
+    canvas.width = imageData.width;
+    canvas.height = imageData.height;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.putImageData(imageData, 0, 0);
+    }
+    return canvas;
+  }
+
+  /**
    * Capture frame from video stream
    */
   async captureFrameFromVideo(videoElement: HTMLVideoElement): Promise<HTMLCanvasElement> {
@@ -309,9 +351,19 @@ export class CopilotVision {
     };
   }
 
-  private async logPerformance(data: any) {
+  private async logPerformance(data: {
+    module_name: string;
+    operation_type: string;
+    response_time_ms: number;
+    context: Record<string, unknown>;
+  }): Promise<void> {
     try {
-      await (supabase as any).from("ia_performance_log").insert(data);
+      await supabase.from("ia_performance_log").insert({
+        module_name: data.module_name,
+        operation_type: data.operation_type,
+        execution_time_ms: data.response_time_ms,
+        context: data.context,
+      });
     } catch (error) {
       logger.error("Failed to log performance:", error);
     }

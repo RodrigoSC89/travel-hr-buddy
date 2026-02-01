@@ -1,4 +1,10 @@
-// @ts-nocheck - Schema alignment pending
+/**
+ * Restore Report Logs Page
+ * Uses type assertions for tables not in generated types
+ * Tables: restore_report_logs (custom table)
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck - Table restore_report_logs not in generated schema
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -91,10 +97,19 @@ export default function RestoreReportLogsPage() {
       const from = pageToFetch * 20;
       const to = from + 19;
 
-      // Use type assertion for tables not in generated types yet
-      let query = (supabase
-        .from("restore_report_logs" as never) as ReturnType<typeof supabase.from>)
-        .select("*", { count: "exact" });
+      // Use type assertion for custom tables not in generated types
+      type RestoreReportLogsTable = { 
+        id: string; 
+        executed_at: string; 
+        status: string; 
+        message: string | null; 
+        error_details: string | null; 
+        triggered_by: string 
+      };
+      
+      let query = supabase
+        .from("restore_report_logs")
+        .select("*", { count: "exact" }) as unknown as ReturnType<typeof supabase.from<"access_logs">>;
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
