@@ -119,8 +119,8 @@ export async function createMission(
       syncErrors: [],
     };
 
-    // Store in database
-    const { error } = await supabase.from("joint_mission_log").insert({
+    // Store in database using any cast for untyped table
+    const { error } = await (supabase as any).from("joint_mission_log").insert({
       mission_id: newMission.id,
       mission_name: newMission.name,
       mission_type: newMission.type,
@@ -328,7 +328,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
     const success = failedTasks === 0;
 
     // Update mission sync status in database
-    await supabase
+    await (supabase as any)
       .from("joint_mission_log")
       .update({
         sync_status: success ? "synced" : (syncedTasks > 0 ? "partial" : "failed"),
@@ -376,7 +376,7 @@ export async function updateTaskStatus(
 
   try {
     // Fetch current mission
-    const { data: missions, error: fetchError } = await supabase
+    const { data: missions, error: fetchError } = await (supabase as any)
       .from("joint_mission_log")
       .select("*")
       .eq("mission_id", missionId)
@@ -386,7 +386,8 @@ export async function updateTaskStatus(
       return { success: false, error: "Mission not found" };
     }
 
-    const tasks = missions.tasks as MissionTask[];
+    const missionData = missions as Record<string, unknown>;
+    const tasks = (missionData.tasks || []) as MissionTask[];
     const taskIndex = tasks.findIndex(t => t.id === taskId);
 
     if (taskIndex === -1) {
@@ -408,12 +409,12 @@ export async function updateTaskStatus(
     const completionPercentage = Math.round((completedTasks / tasks.length) * 100);
 
     // Update mission in database
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from("joint_mission_log")
       .update({
         tasks,
         completion_percentage: completionPercentage,
-        mission_status: completionPercentage === 100 ? "completed" : missions.mission_status,
+        mission_status: completionPercentage === 100 ? "completed" : missionData.mission_status,
       })
       .eq("mission_id", missionId);
 
@@ -435,37 +436,39 @@ export async function updateTaskStatus(
  */
 export async function getMission(missionId: string): Promise<JointMission | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("joint_mission_log")
       .select("*")
       .eq("mission_id", missionId)
       .single();
 
     if (error || !data) {
-      logger.error("[JointTasking] Mission not found:", missionId);
+      logger.error("[JointTasking] Mission not found:", { missionId });
       return null;
     }
 
+    const d = data as Record<string, unknown>;
+
     return {
-      id: data.mission_id,
-      name: data.mission_name,
-      type: data.mission_type as MissionType,
-      status: data.mission_status as MissionStatus,
-      priority: data.priority as MissionPriority,
-      tasks: data.tasks as MissionTask[],
-      externalEntities: data.external_entities as ExternalEntity[],
-      internalSystems: data.internal_systems as string[],
-      commander: data.commander,
-      participants: data.participants,
-      startTime: data.start_time ? new Date(data.start_time) : undefined,
-      endTime: data.end_time ? new Date(data.end_time) : undefined,
-      estimatedDurationHours: data.estimated_duration_hours,
-      actualDurationHours: data.actual_duration_hours,
-      completionPercentage: data.completion_percentage,
-      syncStatus: data.sync_status as SyncStatus,
-      syncErrors: data.sync_errors || [],
-      lastSyncAt: data.last_sync_at ? new Date(data.last_sync_at) : undefined,
-      missionData: data.mission_data,
+      id: String(d.mission_id || missionId),
+      name: String(d.mission_name || ''),
+      type: (d.mission_type || 'surveillance') as MissionType,
+      status: (d.mission_status || 'planning') as MissionStatus,
+      priority: (d.priority || 'medium') as MissionPriority,
+      tasks: (d.tasks || []) as MissionTask[],
+      externalEntities: (d.external_entities || []) as ExternalEntity[],
+      internalSystems: (d.internal_systems || []) as string[],
+      commander: String(d.commander || ''),
+      participants: (d.participants || []) as string[],
+      startTime: d.start_time ? new Date(String(d.start_time)) : undefined,
+      endTime: d.end_time ? new Date(String(d.end_time)) : undefined,
+      estimatedDurationHours: Number(d.estimated_duration_hours) || undefined,
+      actualDurationHours: Number(d.actual_duration_hours) || undefined,
+      completionPercentage: Number(d.completion_percentage) || 0,
+      syncStatus: (d.sync_status || 'pending') as SyncStatus,
+      syncErrors: (d.sync_errors || []) as string[],
+      lastSyncAt: d.last_sync_at ? new Date(String(d.last_sync_at)) : undefined,
+      missionData: (d.mission_data || {}) as Record<string, unknown>,
     };
   } catch (error) {
     logger.error("[JointTasking] Error fetching mission:", error);

@@ -56,7 +56,7 @@ export class MissionControlService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("missions")
         .insert({
           name: mission.name,

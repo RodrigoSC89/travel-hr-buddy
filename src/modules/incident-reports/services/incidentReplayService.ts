@@ -18,7 +18,7 @@ export interface IncidentData {
   reportedBy?: string;
   createdAt: string;
   updatedAt: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TimelineEvent {
@@ -27,7 +27,7 @@ export interface TimelineEvent {
   type: "creation" | "update" | "comment" | "status_change" | "escalation" | "resolution";
   actor: string;
   description: string;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 export interface AIAnalysis {
@@ -45,6 +45,16 @@ export interface AIAnalysis {
   timestamp: string;
 }
 
+type SeverityType = "low" | "medium" | "high" | "critical";
+
+function mapSeverity(severity: string | null): SeverityType {
+  const lower = (severity || "").toLowerCase();
+  if (lower === "critical") return "critical";
+  if (lower === "high") return "high";
+  if (lower === "medium") return "medium";
+  return "low";
+}
+
 class IncidentReplayService {
   /**
    * Get incident by ID
@@ -59,22 +69,26 @@ class IncidentReplayService {
 
       if (error) throw error;
 
-      return data
-        ? {
-          id: data.id,
-          title: data.title || "Untitled Incident",
-          description: data.description || "",
-          severity: data.severity || "medium",
-          status: data.status || "open",
-          incidentDate: data.incident_date || data.created_at,
-          location: data.location,
-          vesselId: data.vessel_id,
-          reportedBy: data.reported_by,
-          createdAt: data.created_at,
-          updatedAt: data.updated_at,
-          metadata: data.metadata,
-        }
-        : null;
+      if (!data) return null;
+
+      // Access metadata safely
+      const metadata = data.metadata as Record<string, unknown> | null;
+      const vesselId = metadata?.vessel_id ? String(metadata.vessel_id) : undefined;
+
+      return {
+        id: data.id,
+        title: data.title || "Untitled Incident",
+        description: data.description || "",
+        severity: mapSeverity(data.severity),
+        status: data.status || "open",
+        incidentDate: data.incident_date || data.created_at || new Date().toISOString(),
+        location: data.location || undefined,
+        vesselId,
+        reportedBy: data.reported_by || undefined,
+        createdAt: data.created_at || new Date().toISOString(),
+        updatedAt: data.updated_at || new Date().toISOString(),
+        metadata: metadata || undefined,
+      };
     } catch (error) {
       logger.error("Failed to fetch incident:", error);
       return null;
@@ -94,20 +108,25 @@ class IncidentReplayService {
 
       if (error) throw error;
 
-      return (data || []).map((item) => ({
-        id: item.id,
-        title: item.title || "Untitled Incident",
-        description: item.description || "",
-        severity: item.severity || "medium",
-        status: item.status || "open",
-        incidentDate: item.incident_date || item.created_at,
-        location: item.location,
-        vesselId: item.vessel_id,
-        reportedBy: item.reported_by,
-        createdAt: item.created_at,
-        updatedAt: item.updated_at,
-        metadata: item.metadata,
-      }));
+      return (data || []).map((item) => {
+        const metadata = item.metadata as Record<string, unknown> | null;
+        const vesselId = metadata?.vessel_id ? String(metadata.vessel_id) : undefined;
+
+        return {
+          id: item.id,
+          title: item.title || "Untitled Incident",
+          description: item.description || "",
+          severity: mapSeverity(item.severity),
+          status: item.status || "open",
+          incidentDate: item.incident_date || item.created_at || new Date().toISOString(),
+          location: item.location || undefined,
+          vesselId,
+          reportedBy: item.reported_by || undefined,
+          createdAt: item.created_at || new Date().toISOString(),
+          updatedAt: item.updated_at || new Date().toISOString(),
+          metadata: metadata || undefined,
+        };
+      });
     } catch (error) {
       logger.error("Failed to fetch incidents:", error);
       return [];
@@ -138,21 +157,21 @@ class IncidentReplayService {
         },
       });
 
-      // Get comments/notes
-      const { data: comments } = await supabase
+      // Get comments/notes using any cast for untyped table
+      const { data: comments } = await (supabase as any)
         .from("incident_comments")
         .select("*")
         .eq("incident_id", incidentId)
         .order("created_at", { ascending: true });
 
       if (comments) {
-        comments.forEach((comment) => {
+        (comments as Record<string, unknown>[]).forEach((comment) => {
           timeline.push({
-            id: comment.id,
-            timestamp: comment.created_at,
+            id: String(comment.id || ''),
+            timestamp: String(comment.created_at || new Date().toISOString()),
             type: "comment",
-            actor: comment.user_id || "Usuário",
-            description: comment.comment || comment.text || "Comentário adicionado",
+            actor: String(comment.created_by || comment.user_id || "Usuário"),
+            description: String(comment.comment_text || comment.comment || comment.text || "Comentário adicionado"),
             data: comment,
           });
         });
@@ -201,7 +220,7 @@ class IncidentReplayService {
 
     // Save analysis to database (optional)
     try {
-      await supabase.from("incident_analysis").insert({
+      await (supabase as any).from("incident_analysis").insert({
         incident_id: incident.id,
         probable_causes: analysis.probableCauses,
         recommendations: analysis.recommendations,
@@ -335,7 +354,7 @@ class IncidentReplayService {
     let score = 0;
 
     // Severity contributes 40%
-    const severityScores = {
+    const severityScores: Record<SeverityType, number> = {
       critical: 40,
       high: 30,
       medium: 20,
