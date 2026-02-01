@@ -40,7 +40,7 @@ import {
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
   ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar, Clock
+  Radar, Clock, Bot
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -104,27 +104,22 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 🚢 OPERAÇÕES MARÍTIMAS (2/16)
+  // 🚢 OPERAÇÕES MARÍTIMAS (2/16) - UNIFIED HUB
+  // PATCH V4.1: Fusão em Operations Command Hub
   // ============================================
   {
     title: "🚢 Operações Marítimas",
     defaultOpen: false,
     items: [
-      { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
-      { label: "Fleet Command Center", path: "/fleet-command", icon: Ship, emoji: "🚢" },
-      { label: "Voyage Command", path: "/voyage-command", icon: Map, emoji: "🗺️" },
-      { label: "Otimização de Rotas AI", path: "/route-optimizer", icon: Compass, emoji: "🧭", badge: "AI", status: "new" },
-      { label: "Mission Command", path: "/mission-command", icon: Target, emoji: "🎯" },
-      { label: "Bridge Link", path: "/bridge-link", icon: Link, emoji: "🌉" },
-      { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🏗️" },
+      { label: "🚀 Operations Command", path: "/operations-command-hub", icon: Compass, emoji: "🚀", badge: "HUB", status: "new" },
+      { label: "⚓ Maritime", path: "/operations-command-hub?tab=maritime", icon: Anchor, emoji: "⚓" },
+      { label: "🚢 Fleet", path: "/operations-command-hub?tab=fleet", icon: Ship, emoji: "🚢" },
+      { label: "🗺️ Voyage", path: "/operations-command-hub?tab=voyage", icon: Map, emoji: "🗺️" },
+      { label: "🎯 Mission", path: "/operations-command-hub?tab=mission", icon: Target, emoji: "🎯" },
+      { label: "📦 Logistics", path: "/operations-command-hub?tab=logistics", icon: Truck, emoji: "📦" },
       { label: "Contratos de Embarcação", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
       { label: "Charter Party", path: "/charter-party", icon: FileText, emoji: "📜" },
-      { label: "Cargo Management", path: "/cargo-management", icon: Ship, emoji: "📦" },
-      { label: "Port Call", path: "/port-call", icon: Anchor, emoji: "⚓" },
       { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
-      { label: "Histórico de Embarcação", path: "/vessel-history", icon: Activity, emoji: "📊" },
-      { label: "Digital Twin", path: "/digital-twin", icon: Cpu, emoji: "🎮", badge: "v4.0", status: "new" },
-      { label: "Logistics Command", path: "/logistics-command", icon: Truck, emoji: "📦", badge: "v4.0", status: "new" },
     ],
   },
 
@@ -163,24 +158,22 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // },
 
   // ============================================
-  // 🧠 IA & AUTOMAÇÃO
+  // 🧠 IA & AUTOMAÇÃO - UNIFIED HUB
+  // PATCH V4.1: Fusão em AI Control Tower
   // ============================================
   {
     title: "🧠 IA & Automação",
     defaultOpen: false,
     items: [
-      { label: "🌟 AI Modules Hub", path: "/ai-modules-hub", icon: Brain, emoji: "🌟", badge: "11 IAs", status: "new" },
-      { label: "🚀 AI Hub Central", path: "/ai-hub", icon: Brain, emoji: "🚀", badge: "REVOLUTION", status: "new" },
-      { label: "📊 AI Analytics", path: "/ai-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
-      { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
-      { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
-      { label: "🎯 Agent Orchestration", path: "/agent-orchestration", icon: Brain, emoji: "🎯", badge: "v4.0", status: "new" },
-      { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
-      { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
-      { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
-      { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
-      { label: "Journaling IA", path: "/ai-journaling", icon: FileText, emoji: "📝" },
-      { label: "Auditoria de IA", path: "/ai-audit", icon: Brain, emoji: "🔍" },
+      { label: "🧠 AI Control Tower", path: "/ai-control-tower", icon: Brain, emoji: "🧠", badge: "HUB", status: "new" },
+      { label: "🌟 AI Hub", path: "/ai-control-tower?tab=hub", icon: Brain, emoji: "🌟" },
+      { label: "💬 AI Chat", path: "/ai-control-tower?tab=chat", icon: MessageSquare, emoji: "💬" },
+      { label: "🤖 Agentes", path: "/ai-control-tower?tab=agents", icon: Bot, emoji: "🤖" },
+      { label: "🔄 Workflows", path: "/ai-control-tower?tab=workflows", icon: Zap, emoji: "🔄" },
+      { label: "📊 Analytics", path: "/ai-control-tower?tab=analytics", icon: BarChart3, emoji: "📊" },
+      { label: "👁️ Observability", path: "/ai-control-tower?tab=observability", icon: Activity, emoji: "👁️" },
+      { label: "📋 Auditoria", path: "/ai-control-tower?tab=audit", icon: FileText, emoji: "📋" },
+      { label: "📝 Journaling", path: "/ai-control-tower?tab=journaling", icon: FileText, emoji: "📝" },
       { label: "Voice Assistant IA", path: "/voice-assistant", icon: Mic, emoji: "🎙️" },
       { label: "Assistente de Voz", path: "/assistant/voice", icon: Mic, emoji: "🗣️" },
     ],
@@ -286,21 +279,20 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 📊 TELEMETRIA & MONITORAMENTO
+  // 📊 TELEMETRIA & MONITORAMENTO - UNIFIED HUB
+  // PATCH V4.1: Fusão em Tracking & Telemetry Hub
   // ============================================
   {
     title: "📊 Telemetria & Monitoramento",
     defaultOpen: false,
     items: [
-      { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
-      { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
-      { label: "Otimização Satélite", path: "/satellite-optimizer", icon: Satellite, emoji: "📡", badge: "NEW", status: "new" },
-      { label: "DGNSS Tracking", path: "/tracking", icon: Satellite, emoji: "📍", badge: "NEW" },
-      { label: "GNSS Live", path: "/tracking/gnss-live", icon: Radio, emoji: "📡" },
-      { label: "Tracking Alerts", path: "/tracking/alerts", icon: AlertTriangle, emoji: "🚨" },
+      { label: "📡 Tracking & Telemetry", path: "/tracking-telemetry", icon: Satellite, emoji: "📡", badge: "HUB", status: "new" },
+      { label: "🛰️ Visão Geral", path: "/tracking-telemetry?tab=overview", icon: Satellite, emoji: "🛰️" },
+      { label: "⚡ Tempo Real", path: "/tracking-telemetry?tab=realtime", icon: Activity, emoji: "⚡" },
+      { label: "📈 Preditiva", path: "/tracking-telemetry?tab=predictive", icon: TrendingUp, emoji: "📈" },
+      { label: "🚨 Alertas", path: "/tracking-telemetry?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
+      { label: "📅 Histórico", path: "/tracking-telemetry?tab=history", icon: Calendar, emoji: "📅" },
       { label: "Simulador Incidentes", path: "/simulador", icon: Target, emoji: "⚠️" },
-      { label: "Modo Emergência", path: "/emergency-mode", icon: AlertTriangle, emoji: "🚨" },
-      { label: "Calendário Operacional", path: "/operational-calendar", icon: Calendar, emoji: "📅" },
     ],
   },
 
@@ -326,34 +318,37 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 📁 RELATÓRIOS & DOCUMENTOS
+  // 📁 RELATÓRIOS & DOCUMENTOS - UNIFIED HUB
+  // PATCH V4.1: Fusão em Document Center Hub
   // ============================================
   {
     title: "📁 Relatórios & Documentos",
     defaultOpen: false,
     items: [
-      { label: "Reports Command", path: "/reports-command", icon: BarChart3, emoji: "📊" },
-      { label: "Documentos IA", path: "/documents", icon: FileText, emoji: "📄" },
-      { label: "Templates", path: "/templates", icon: FileText, emoji: "📋" },
-      { label: "Checklists Inteligentes", path: "/admin/checklists", icon: ClipboardList, emoji: "✅" },
-      { label: "Workflow Documentos ISM/MLC", path: "/document-workflow", icon: FileText, emoji: "📄" },
-      { label: "Centro de Exportação", path: "/export-center", icon: BarChart3, emoji: "📤", badge: "NEW" },
-      { label: "Busca Avançada", path: "/advanced-search", icon: Target, emoji: "🔍", badge: "NEW" },
+      { label: "📄 Document Center", path: "/document-center", icon: FileText, emoji: "📄", badge: "HUB", status: "new" },
+      { label: "📑 Documentos", path: "/document-center?tab=documents", icon: FileText, emoji: "📑" },
+      { label: "📋 Templates", path: "/document-center?tab=templates", icon: ClipboardList, emoji: "📋" },
+      { label: "✅ Checklists", path: "/document-center?tab=checklists", icon: ClipboardList, emoji: "✅" },
+      { label: "📊 Relatórios", path: "/document-center?tab=reports", icon: BarChart3, emoji: "📊" },
+      { label: "📤 Exportar", path: "/document-center?tab=export", icon: BarChart3, emoji: "📤" },
+      { label: "🔍 Busca Avançada", path: "/document-center?tab=search", icon: Target, emoji: "🔍" },
       { label: "🧠 Knowledge Hub IA", path: "/knowledge-hub", icon: Brain, emoji: "🧠", badge: "ENTERPRISE", status: "new" },
     ],
   },
 
   // ============================================
-  // 📢 COMUNICAÇÃO & ALERTAS
+  // 📢 COMUNICAÇÃO & ALERTAS - UNIFIED HUB
+  // PATCH V4.1: Fusão em Comms & Alerts Hub
   // ============================================
   {
     title: "📢 Comunicação & Alertas",
     defaultOpen: false,
     items: [
-      { label: "Communication Command", path: "/communication-command", icon: MessageSquare, emoji: "📡" },
-      { label: "Alerts Command", path: "/alerts-command", icon: Bell, emoji: "🚨" },
-      { label: "Conectividade Marítima", path: "/maritime-connectivity", icon: Radio, emoji: "📡" },
-      { label: "Workspace em Tempo Real", path: "/real-time-workspace", icon: Activity, emoji: "⏱️" },
+      { label: "🔔 Comms & Alerts", path: "/comms-alerts", icon: Bell, emoji: "🔔", badge: "HUB", status: "new" },
+      { label: "💬 Comunicação", path: "/comms-alerts?tab=comms", icon: MessageSquare, emoji: "💬" },
+      { label: "🚨 Alertas", path: "/comms-alerts?tab=alerts", icon: Bell, emoji: "🚨" },
+      { label: "💼 Workspace", path: "/comms-alerts?tab=workspace", icon: Activity, emoji: "💼" },
+      { label: "📡 Conectividade", path: "/comms-alerts?tab=connectivity", icon: Radio, emoji: "📡" },
     ],
   },
 
@@ -410,38 +405,23 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 👥 RH & PESSOAS
+  // 👥 RH & PESSOAS - UNIFIED HUB
+  // PATCH V4.1: Fusão em People Hub
   // ============================================
   {
     title: "👥 RH & Pessoas",
     defaultOpen: false,
     items: [
-      { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
-      { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
-      { label: "👤 Portal Colaborador", path: "/employee-portal", icon: Users, emoji: "👤", badge: "NEW", status: "new" },
-      { label: "Nauti People Hub", path: "/nautilus-people", icon: Users, emoji: "👥" },
-      { label: "Gestão de Tripulação", path: "/crew-management", icon: Users, emoji: "👤" },
-      { label: "Bem-estar AI", path: "/crew-wellness", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
-      { label: "Bem-estar Tripulação", path: "/crew-wellbeing", icon: Heart, emoji: "💚" },
+      { label: "👥 People Hub", path: "/people-hub", icon: Users, emoji: "👥", badge: "HUB", status: "new" },
+      { label: "📊 Visão Geral", path: "/people-hub?tab=overview", icon: Users, emoji: "📊" },
+      { label: "🎯 Talent & Recrutamento", path: "/people-hub?tab=talent", icon: Target, emoji: "🎯" },
+      { label: "📈 Performance", path: "/people-hub?tab=performance", icon: TrendingUp, emoji: "📈" },
+      { label: "❤️ Bem-estar", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
+      { label: "🎓 Treinamento", path: "/people-hub?tab=training", icon: BookOpen, emoji: "🎓" },
+      { label: "🛡️ Compliance", path: "/people-hub?tab=compliance", icon: Shield, emoji: "🛡️" },
+      { label: "📊 Analytics", path: "/people-hub?tab=analytics", icon: BarChart3, emoji: "📊" },
       { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Heart, emoji: "🏥" },
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
-      { label: "Recrutamento AI", path: "/recruitment", icon: Users, emoji: "🎯", badge: "v4.0", status: "new" },
-      { label: "MLC Scheduling", path: "/mlc-scheduling", icon: Calendar, emoji: "📅", badge: "MLC", status: "new" },
-    ],
-  },
-
-  // ============================================
-  // 🤖 RH & IA - Módulos Inteligentes (NEW!)
-  // ============================================
-  {
-    title: "🤖 RH & IA",
-    defaultOpen: false,
-    items: [
-      { label: "💬 Chatbot RH 24/7", path: "/hr-chatbot", icon: MessageSquare, emoji: "💬", badge: "AI", status: "new" },
-      { label: "📄 OCR Documentos", path: "/hr-ocr", icon: FileText, emoji: "📄", badge: "AI", status: "new" },
-      { label: "📉 Predição Turnover", path: "/hr-turnover", icon: TrendingUp, emoji: "📉", badge: "ML", status: "new" },
-      { label: "💰 Folha de Pagamento", path: "/hr-payroll", icon: DollarSign, emoji: "💰", badge: "NEW", status: "new" },
-      { label: "⏰ Ponto Eletrônico", path: "/hr-time-tracking", icon: Clock, emoji: "⏰", badge: "NEW", status: "new" },
     ],
   },
 
