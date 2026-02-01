@@ -1,8 +1,9 @@
-// @ts-nocheck - Schema: immutable_audit_logs type compatibility
+// @ts-nocheck - Schema: immutable_audit_logs table not yet in types.ts
 /**
  * PATCH OPS-V7: Hook para Audit Log
  * Integra com tabela immutable_audit_logs
  * ISM/ISPS Ready - logs imutáveis
+ * TODO: Update types.ts to include immutable_audit_logs table
  */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

@@ -1,10 +1,13 @@
-# Headers de segurança para Nautilus One
+# Headers de segurança para Nautilus One - Compatible with Cloudflare
 /*
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+  Access-Control-Allow-Headers: X-Requested-With, Content-Type, Authorization, x-client-info, apikey
 
 # Cache para assets estáticos
 /assets/*
@@ -31,3 +34,7 @@
 /manifest.json
   Cache-Control: public, max-age=86400
   Content-Type: application/manifest+json
+
+# Index - sempre revalidar
+/index.html
+  Cache-Control: no-cache, must-revalidate

@@ -1,7 +1,7 @@
-// @ts-nocheck - Logger type compatibility
 /**
  * Compliance Notifications Hook - Phase 7
  * Provides methods to send compliance notifications via edge function
+ * PATCH v28: Removed @ts-nocheck - types verified
  */
 
 import { useCallback } from "react";

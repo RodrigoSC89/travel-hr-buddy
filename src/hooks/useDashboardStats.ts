@@ -1,8 +1,9 @@
-// @ts-nocheck - Schema: compliance_records type compatibility
+// @ts-nocheck - Schema: compliance_records table not yet in types.ts
 /**
  * PATCH 548.1 - Dashboard Stats Hook
  * Optimized hook for loading dashboard statistics
  * Fixed: Removed hardcoded organization_id - now uses dynamic context
+ * TODO: Update types.ts to include compliance_records table
  */
 
 import { useState, useCallback, useEffect } from "react";

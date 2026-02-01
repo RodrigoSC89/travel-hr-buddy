@@ -57,7 +57,9 @@ const ALLOWED_REDIRECT_DOMAINS = [
   'www.nautione.com.br',
   'id-preview--ead06aad-a7d4-45d3-bdf7-e23796c6ac50.lovable.app',
   'travel-hr-buddy.lovable.app',
-  'localhost'
+  'travel-hr-buddy.vercel.app',
+  'localhost',
+  '127.0.0.1'
 ];
 
 function isAllowedRedirect(url: string): boolean {
@@ -73,11 +75,14 @@ function isAllowedRedirect(url: string): boolean {
 
 function getRedirectUrl(): string {
   const origin = window.location.origin;
+  
+  // Always validate origin
   if (isAllowedRedirect(origin)) {
-    return `${origin}/`;
+    return `${origin}/auth/callback`;
   }
-  // Fallback to production
-  return 'https://nautione.com.br/';
+  
+  // Fallback to production domain
+  return 'https://nautione.com.br/auth/callback';
 }
 
 // Clear corrupted auth tokens from storage
