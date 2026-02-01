@@ -17,6 +17,7 @@ import {
   Clock
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabase/edge-function-helper';
 import { useToast } from '@/hooks/use-toast';
 
 interface HealthMetric {
@@ -85,10 +86,10 @@ export const ProductionHealthDashboard: React.FC = () => {
     // API Check
     try {
       const start = performance.now();
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/`, {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
         method: 'HEAD',
         headers: {
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
+          'apikey': SUPABASE_ANON_KEY
         }
       });
       const latency = Math.round(performance.now() - start);

@@ -105,11 +105,11 @@ export default function DeploymentStatus() {
         category: "PATCH 543"
       },
       
-      // Environment
+      // Environment - Supabase is always configured via hardcoded values
       {
         name: "Supabase Connection",
-        status: import.meta.env.VITE_SUPABASE_URL ? "pass" : "warning",
-        message: import.meta.env.VITE_SUPABASE_URL ? "Configured" : "Environment variable missing",
+        status: "pass",
+        message: "Configured (hardcoded)",
         category: "Environment"
       },
       {

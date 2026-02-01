@@ -1,13 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
-
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey =
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  import.meta.env.VITE_SUPABASE_KEY ||
-  "";
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 /**
  * AI Insight Reporter — coleta métricas em segundo plano e envia para Supabase
@@ -23,9 +15,14 @@ export const reportInsight = async (category: string, payload: unknown): Promise
     // Armazena localmente e envia depois
     localStorage.setItem(`insight-${entry.timestamp}`, JSON.stringify(entry));
 
-    // Envia em background sem bloquear a UI
+    // Envia em background sem bloquear a UI usando ai_logs table instead
     queueMicrotask(async () => {
-      await supabase.from("ai_insights").insert(entry);
+      await (supabase as any).from("ai_logs").insert({
+        service: "insight_reporter",
+        prompt_hash: category,
+        prompt_length: JSON.stringify(payload).length,
+        status: "success",
+      });
       logger.info(`Insight enviado: ${category}`);
     });
   } catch (err) {

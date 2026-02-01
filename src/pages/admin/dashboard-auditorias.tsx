@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ArrowLeft, Download } from "lucide-react";
 import { logger } from "@/lib/logger";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-helper";
 import {
   ResponsiveContainer,
   BarChart,
@@ -53,17 +54,11 @@ export default function DashboardAuditorias() {
       if (dataFim) params.append("endDate", dataFim);
       if (userId) params.append("userId", userId);
 
-      const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-      const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
       const response = await fetch(
-        `${SUPABASE_URL}/functions/v1/resumo-auditorias-api?${params.toString()}`,
+        `${getEdgeFunctionUrl("resumo-auditorias-api")}?${params.toString()}`,
         {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            "Content-Type": "application/json",
-          },
+          headers: getEdgeFunctionHeaders(SUPABASE_ANON_KEY),
         }
       );
 

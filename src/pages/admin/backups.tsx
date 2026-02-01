@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Download, RefreshCw, Trash2, Database, Calendar, HardDrive } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 
@@ -100,13 +101,10 @@ export default function BackupsPage() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/weekly-backup`,
+        getEdgeFunctionUrl("weekly-backup"),
         {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${session.access_token}`,
-            "Content-Type": "application/json",
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
         }
       );
 

@@ -5,7 +5,7 @@
  */
 
 import { logger } from '@/lib/logger';
-
+import { SUPABASE_URL } from '@/lib/supabase/edge-function-helper';
 // Resource types and their priorities
 type ResourceType = 'script' | 'style' | 'image' | 'font' | 'data' | 'prefetch';
 
@@ -230,9 +230,8 @@ export const setupSmartPrefetch = (routes: string[]): void => {
  */
 export const initCriticalPathOptimizer = (): void => {
   // Preconnect to critical origins
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  if (supabaseUrl) {
-    preconnect(supabaseUrl, true);
+  if (SUPABASE_URL) {
+    preconnect(SUPABASE_URL, true);
   }
   preconnect('https://fonts.googleapis.com');
   preconnect('https://fonts.gstatic.com', true);

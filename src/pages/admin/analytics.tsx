@@ -7,6 +7,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { BarChart3 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import {
@@ -151,12 +152,6 @@ export default function AnalyticsPage() {
       const canvas = await html2canvas(node);
       const imageBase64 = canvas.toDataURL("image/png");
 
-      // Get Supabase URL from environment
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      if (!supabaseUrl) {
-        throw new Error("VITE_SUPABASE_URL não configurado");
-      }
-
       // Get current session for auth token
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -165,13 +160,10 @@ export default function AnalyticsPage() {
 
       // Send to backend edge function
       const response = await fetch(
-        `${supabaseUrl}/functions/v1/send-chart-report`,
+        getEdgeFunctionUrl("send-chart-report"),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.access_token}`,
-          },
+          headers: getEdgeFunctionHeaders(session.access_token),
           body: JSON.stringify({
             imageBase64,
             chartType: "CI Analytics",
