@@ -1,7 +1,6 @@
 /**
  * PATCH 479: Enhanced Sonar AI Service with ONNX Classification
  * Provides AI-powered sonar data analysis and risk assessment
- * @ts-nocheck - Required: sonar_events/sonar_risks tables use dynamic schemas not in generated types
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -44,6 +43,9 @@ export interface SpectrogramData {
   timeSteps: number[];
   intensities: number[][];
 }
+
+// Helper to get the dynamic supabase client for untyped tables
+const dynamicSupabase = () => supabase as any;
 
 class EnhancedSonarAIService {
   private modelVersion = "v1.0.0-onnx";
@@ -134,7 +136,7 @@ class EnhancedSonarAIService {
    * Save sonar event to database
    */
   async saveSonarEvent(event: SonarEvent): Promise<string | null> {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicSupabase()
       .from("sonar_events")
       .insert({
         ...event,
@@ -218,7 +220,7 @@ class EnhancedSonarAIService {
    * Save sonar risk to database
    */
   async saveSonarRisk(risk: SonarRisk): Promise<string | null> {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicSupabase()
       .from("sonar_risks")
       .insert(risk)
       .select("id")
@@ -236,7 +238,7 @@ class EnhancedSonarAIService {
    * Get recent sonar events
    */
   async getRecentEvents(limit: number = 50): Promise<SonarEvent[]> {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicSupabase()
       .from("sonar_events")
       .select("*")
       .order("detected_at", { ascending: false })
@@ -247,14 +249,30 @@ class EnhancedSonarAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((row: any) => ({
+      id: row.id,
+      vessel_id: row.vessel_id,
+      event_type: row.event_type,
+      detection_type: row.detection_type,
+      confidence_score: row.confidence_score,
+      distance_meters: row.distance_meters,
+      depth_meters: row.depth_meters,
+      bearing_degrees: row.bearing_degrees,
+      frequency_khz: row.frequency_khz,
+      amplitude_db: row.amplitude_db,
+      classification: row.classification,
+      ai_model_version: row.ai_model_version,
+      raw_data: row.raw_data,
+      metadata: row.metadata,
+      detected_at: row.detected_at,
+    })) as SonarEvent[];
   }
 
   /**
    * Get active risks
    */
   async getActiveRisks(vesselId?: string): Promise<SonarRisk[]> {
-    let query = supabase
+    let query = dynamicSupabase()
       .from("sonar_risks")
       .select("*")
       .eq("status", "active")
@@ -271,7 +289,19 @@ class EnhancedSonarAIService {
       return [];
     }
 
-    return data || [];
+    return (data || []).map((row: any) => ({
+      id: row.id,
+      event_id: row.event_id,
+      vessel_id: row.vessel_id,
+      risk_level: row.risk_level,
+      risk_type: row.risk_type,
+      risk_score: row.risk_score,
+      description: row.description,
+      recommended_action: row.recommended_action,
+      urgency: row.urgency,
+      status: row.status,
+      metadata: row.metadata,
+    })) as SonarRisk[];
   }
 
   /**
@@ -293,7 +323,7 @@ class EnhancedSonarAIService {
       }
     }
 
-    const { error } = await supabase
+    const { error } = await dynamicSupabase()
       .from("sonar_risks")
       .update(update)
       .eq("id", riskId);
@@ -314,7 +344,7 @@ class EnhancedSonarAIService {
     byLevel: Record<string, number>;
     byType: Record<string, number>;
   }> {
-    let query = supabase
+    let query = dynamicSupabase()
       .from("sonar_risks")
       .select("risk_level, risk_type")
       .eq("status", "active");
@@ -333,7 +363,7 @@ class EnhancedSonarAIService {
     const byLevel: Record<string, number> = {};
     const byType: Record<string, number> = {};
 
-    data?.forEach(risk => {
+    (data || []).forEach((risk: any) => {
       byLevel[risk.risk_level] = (byLevel[risk.risk_level] || 0) + 1;
       byType[risk.risk_type] = (byType[risk.risk_type] || 0) + 1;
     });

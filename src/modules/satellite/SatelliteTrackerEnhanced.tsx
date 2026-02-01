@@ -264,7 +264,7 @@ export const SatelliteTrackerEnhanced = () => {
       if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
         const eventType = Math.random() > 0.5 ? "entry" : "exit";
 
-        await supabase.from("satellite_coverage_events").insert({
+        await (supabase as any).from("satellite_coverage_events").insert({
           satellite_id: sat.satellite_id,
           satellite_name: sat.satellite_name,
           event_type: eventType,

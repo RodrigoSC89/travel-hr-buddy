@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plane, 
@@ -20,10 +19,7 @@ import {
   Download, 
   AlertTriangle, 
   MapPin, 
-  Calendar,
   Clock,
-  Users,
-  Ship,
   CheckCircle2,
   XCircle
 } from "lucide-react";
@@ -38,6 +34,9 @@ const loadJsPDF = async () => {
   await import("jspdf-autotable");
   return jsPDF;
 };
+
+// Helper to get dynamic supabase client for untyped tables
+const dynamicSupabase = () => supabase as any;
 
 interface TravelItinerary {
   id: string;
@@ -148,7 +147,27 @@ const TravelManagement = () => {
         .limit(50);
 
       if (error) throw error;
-      setItineraries(data || []);
+      
+      // Map database results to TravelItinerary interface
+      const mappedData: TravelItinerary[] = (data || []).map((row: any) => ({
+        id: row.id,
+        itinerary_number: row.itinerary_number || `ITN-${row.id?.slice(0, 8)}`,
+        status: row.status || "pending",
+        departure_location: row.origin || row.departure_location || "",
+        arrival_location: row.destination || row.arrival_location || "",
+        departure_date: row.departure_date || "",
+        arrival_date: row.return_date || row.arrival_date || "",
+        travel_purpose: row.trip_name || row.travel_purpose || "",
+        total_cost: row.total_cost || 0,
+        currency: row.currency || "USD",
+        crew_member_id: row.crew_member_id,
+        vessel_id: row.vessel_id,
+        mission_id: row.mission_id,
+        created_at: row.created_at,
+        legs: Array.isArray(row.legs) ? row.legs : [],
+      }));
+      
+      setItineraries(mappedData);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading itineraries:", errorMessage);
@@ -164,7 +183,7 @@ const TravelManagement = () => {
 
   const loadConflicts = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("travel_schedule_conflicts")
         .select("*")
         .eq("resolved", false)
@@ -172,7 +191,18 @@ const TravelManagement = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setConflicts(data || []);
+      
+      // Map database results to TravelConflict interface
+      const mappedData: TravelConflict[] = (data || []).map((row: any) => ({
+        id: row.id,
+        conflict_type: row.conflict_type || "unknown",
+        severity: row.severity || "low",
+        conflict_description: row.conflict_description || row.description || "",
+        resolved: row.resolved || false,
+        created_at: row.created_at,
+      }));
+      
+      setConflicts(mappedData);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading conflicts:", errorMessage);
@@ -181,10 +211,14 @@ const TravelManagement = () => {
 
   const createItinerary = async () => {
     try {
-      const { error } = await supabase
+      const { error } = await dynamicSupabase()
         .from("travel_itineraries")
         .insert({
-          ...formData,
+          origin: formData.departure_location,
+          destination: formData.arrival_location,
+          departure_date: formData.departure_date,
+          return_date: formData.arrival_date,
+          trip_name: formData.travel_purpose,
           status: "pending"
         });
 
@@ -215,74 +249,84 @@ const TravelManagement = () => {
     }
   };
 
-  const exportToPDF = (itinerary: TravelItinerary) => {
-    const doc = new jsPDF();
-    
-    // Header
-    doc.setFontSize(20);
-    doc.text("Travel Itinerary", 14, 20);
-    
-    // Itinerary details
-    doc.setFontSize(12);
-    doc.text(`Itinerary Number: ${itinerary.itinerary_number}`, 14, 35);
-    doc.text(`Status: ${itinerary.status}`, 14, 42);
-    doc.text(`Purpose: ${itinerary.travel_purpose || "N/A"}`, 14, 49);
-    
-    doc.setFontSize(10);
-    doc.text(`Departure: ${itinerary.departure_location}`, 14, 60);
-    doc.text(`Date: ${format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm")}`, 14, 66);
-    
-    doc.text(`Arrival: ${itinerary.arrival_location}`, 14, 76);
-    doc.text(`Date: ${format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm")}`, 14, 82);
-    
-    // Legs table
-    if (itinerary.legs && itinerary.legs.length > 0) {
-      doc.setFontSize(14);
-      doc.text("Travel Legs", 14, 95);
+  const exportToPDF = async (itinerary: TravelItinerary) => {
+    try {
+      const JsPDF = await loadJsPDF();
+      const doc = new JsPDF();
       
-      const tableData = itinerary.legs.map((leg: TravelLeg) => [
-        leg.leg_number.toString(),
-        leg.transport_type,
-        leg.carrier || "N/A",
-        leg.departure_location,
-        leg.arrival_location,
-        format(new Date(leg.departure_time), "dd/MM HH:mm"),
-        leg.status
-      ]);
+      // Header
+      doc.setFontSize(20);
+      doc.text("Travel Itinerary", 14, 20);
+      
+      // Itinerary details
+      doc.setFontSize(12);
+      doc.text(`Itinerary Number: ${itinerary.itinerary_number}`, 14, 35);
+      doc.text(`Status: ${itinerary.status}`, 14, 42);
+      doc.text(`Purpose: ${itinerary.travel_purpose || "N/A"}`, 14, 49);
+      
+      doc.setFontSize(10);
+      doc.text(`Departure: ${itinerary.departure_location}`, 14, 60);
+      doc.text(`Date: ${itinerary.departure_date ? format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm") : "N/A"}`, 14, 66);
+      
+      doc.text(`Arrival: ${itinerary.arrival_location}`, 14, 76);
+      doc.text(`Date: ${itinerary.arrival_date ? format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm") : "N/A"}`, 14, 82);
+      
+      // Legs table
+      if (itinerary.legs && itinerary.legs.length > 0) {
+        doc.setFontSize(14);
+        doc.text("Travel Legs", 14, 95);
+        
+        const tableData = itinerary.legs.map((leg: TravelLeg) => [
+          leg.leg_number.toString(),
+          leg.transport_type,
+          leg.carrier || "N/A",
+          leg.departure_location,
+          leg.arrival_location,
+          leg.departure_time ? format(new Date(leg.departure_time), "dd/MM HH:mm") : "N/A",
+          leg.status
+        ]);
 
-      (doc as any).autoTable({
-        startY: 100,
-        head: [["Leg", "Type", "Carrier", "From", "To", "Departure", "Status"]],
-        body: tableData,
-        theme: "striped",
-        headStyles: { fillColor: [59, 130, 246] },
+        (doc as any).autoTable({
+          startY: 100,
+          head: [["Leg", "Type", "Carrier", "From", "To", "Departure", "Status"]],
+          body: tableData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] },
+        });
+      }
+      
+      // Footer
+      const pageCount = (doc as any).internal.getNumberOfPages();
+      doc.setFontSize(8);
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 14, doc.internal.pageSize.height - 10);
+      doc.text(`Page ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
+      
+      doc.save(`travel-itinerary-${itinerary.itinerary_number}.pdf`);
+      
+      // Log export
+      await dynamicSupabase().from("travel_export_history").insert({
+        export_type: "pdf",
+        itinerary_id: itinerary.id,
+        file_name: `travel-itinerary-${itinerary.itinerary_number}.pdf`
+      });
+      
+      toast({
+        title: "✅ PDF Exported",
+        description: "Itinerary exported successfully",
+      });
+    } catch (error) {
+      logger.error("Error exporting PDF:", error);
+      toast({
+        title: "Error exporting PDF",
+        description: "Failed to generate PDF",
+        variant: "destructive",
       });
     }
-    
-    // Footer
-    const pageCount = (doc as any).internal.getNumberOfPages();
-    doc.setFontSize(8);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, doc.internal.pageSize.height - 10);
-    doc.text(`Page ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
-    
-    doc.save(`travel-itinerary-${itinerary.itinerary_number}.pdf`);
-    
-    // Log export
-    supabase.from("travel_export_history").insert({
-      export_type: "pdf",
-      itinerary_id: itinerary.id,
-      file_name: `travel-itinerary-${itinerary.itinerary_number}.pdf`
-    });
-    
-    toast({
-      title: "✅ PDF Exported",
-      description: "Itinerary exported successfully",
-    });
   };
 
   const resolveConflict = async (conflictId: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await dynamicSupabase()
         .from("travel_schedule_conflicts")
         .update({
           resolved: true,
@@ -499,9 +543,11 @@ const TravelManagement = () => {
                                   <div>
                                     <p className="text-xs text-muted-foreground">From</p>
                                     <p className="font-medium">{itinerary.departure_location}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                      {format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm")}
-                                    </p>
+                                    {itinerary.departure_date && (
+                                      <p className="text-xs text-muted-foreground">
+                                        {format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm")}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="flex items-start gap-2">
@@ -509,47 +555,35 @@ const TravelManagement = () => {
                                   <div>
                                     <p className="text-xs text-muted-foreground">To</p>
                                     <p className="font-medium">{itinerary.arrival_location}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                      {format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm")}
-                                    </p>
+                                    {itinerary.arrival_date && (
+                                      <p className="text-xs text-muted-foreground">
+                                        {format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm")}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                               </div>
 
                               {itinerary.travel_purpose && (
-                                <p className="text-sm text-muted-foreground mb-2">
-                                  Purpose: {itinerary.travel_purpose}
+                                <p className="text-sm text-muted-foreground">
+                                  {itinerary.travel_purpose}
                                 </p>
                               )}
 
                               {itinerary.legs && itinerary.legs.length > 0 && (
-                                <div className="mt-3 p-3 bg-muted rounded-md">
-                                  <p className="text-xs font-semibold mb-2">
-                                    {itinerary.legs.length} Travel Leg{itinerary.legs.length > 1 ? "s" : ""}
-                                  </p>
-                                  <div className="space-y-2">
-                                    {itinerary.legs.map((leg: TravelLeg) => (
-                                      <div key={leg.id} className="text-xs flex items-center gap-2">
-                                        <Badge variant="outline" className="text-xs">
-                                          Leg {leg.leg_number}
-                                        </Badge>
-                                        <span>{leg.transport_type}</span>
-                                        <span className="text-muted-foreground">•</span>
-                                        <span>{leg.departure_location} → {leg.arrival_location}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  {itinerary.legs.length} leg(s)
+                                </p>
                               )}
                             </div>
                           </div>
                           <Button
-                            size="sm"
                             variant="outline"
+                            size="sm"
                             onClick={() => exportToPDF(itinerary)}
                           >
                             <Download className="h-4 w-4 mr-1" />
-                            Export PDF
+                            PDF
                           </Button>
                         </div>
                       </CardContent>
@@ -562,20 +596,20 @@ const TravelManagement = () => {
         </TabsContent>
 
         <TabsContent value="conflicts">
-          <Card className="border-orange-200">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
-                Travel Conflicts ({conflicts.length})
+                <AlertTriangle className="h-5 w-5" />
+                Travel Conflicts
               </CardTitle>
               <CardDescription>
-                Auto-detected schedule conflicts and overlaps
+                Detected scheduling conflicts for review
               </CardDescription>
             </CardHeader>
             <CardContent>
               {conflicts.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">
-                  ✅ No conflicts detected
+                  No active conflicts
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -583,25 +617,22 @@ const TravelManagement = () => {
                     <Card key={conflict.id} className="border-l-4 border-l-orange-500">
                       <CardContent className="pt-6">
                         <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3 flex-1">
-                            <AlertTriangle className="h-5 w-5 text-orange-500" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Badge variant="outline">{conflict.conflict_type}</Badge>
-                                {getSeverityBadge(conflict.severity)}
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {conflict.conflict_description}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                Detected {format(new Date(conflict.created_at), "dd/MM/yyyy HH:mm")}
-                              </p>
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              {getSeverityBadge(conflict.severity)}
+                              <Badge variant="outline">{conflict.conflict_type}</Badge>
                             </div>
+                            <p className="text-sm">{conflict.conflict_description}</p>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              Detected: {format(new Date(conflict.created_at), "dd/MM/yyyy HH:mm")}
+                            </p>
                           </div>
                           <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => resolveConflict(conflict.id)}
                           >
+                            <CheckCircle2 className="h-4 w-4 mr-1" />
                             Resolve
                           </Button>
                         </div>

@@ -18,6 +18,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Hotel, Plus } from "lucide-react";
 import { logger } from '@/lib/logger';
 
+// Helper to get dynamic supabase client for untyped tables
+const dynamicSupabase = () => supabase as any;
+
 interface Reservation {
   id: string;
   reservation_number: string;
@@ -72,13 +75,34 @@ export const TravelReservations: React.FC = () => {
   const loadReservations = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("travel_reservations")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setReservations(data || []);
+      
+      // Map database results to Reservation interface
+      const mappedData: Reservation[] = (data || []).map((row: any) => ({
+        id: row.id,
+        reservation_number: row.reservation_number || `RES-${row.id?.slice(0, 8)}`,
+        itinerary_id: row.itinerary_id,
+        crew_member_id: row.crew_member_id,
+        reservation_type: row.reservation_type || "accommodation",
+        provider_name: row.provider_name || "",
+        booking_reference: row.booking_reference,
+        status: row.status || "pending",
+        check_in_date: row.check_in_date,
+        check_out_date: row.check_out_date,
+        location: row.location,
+        cost: row.cost,
+        currency: row.currency || "USD",
+        payment_status: row.payment_status || "pending",
+        notes: row.notes,
+        created_at: row.created_at,
+      }));
+      
+      setReservations(mappedData);
     } catch (error) {
       logger.error("Error loading reservations:", error);
       toast({
@@ -107,7 +131,7 @@ export const TravelReservations: React.FC = () => {
 
   const handleCreate = async () => {
     try {
-      const { error } = await supabase
+      const { error } = await dynamicSupabase()
         .from("travel_reservations")
         .insert([formData]);
 
