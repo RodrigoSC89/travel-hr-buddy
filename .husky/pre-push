@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🛡️ Running pre-push gates..."
+
+# Run all gates (full scan)
+node scripts/gates/gate-all.cjs
+
+# Run typecheck
+echo "📝 Running TypeScript check..."
+npx tsc --noEmit
+
+echo "✅ Pre-push gates passed!"

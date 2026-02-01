@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🛡️ Running pre-commit gates..."
+
+# Run lint-staged for formatting
+npx lint-staged
+
+# Run quick gates on staged files (P0 only)
+node scripts/gates/gate-console.cjs --staged
+node scripts/gates/gate-mocks.cjs --staged
+node scripts/gates/gate-fake-api.cjs --staged
+
+echo "✅ Pre-commit gates passed!"
