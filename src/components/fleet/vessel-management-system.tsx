@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema: Vessel imo_number null vs undefined
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,19 +36,19 @@ import { logger } from "@/lib/logger";
 interface Vessel {
   id: string;
   name: string;
-  imo_number?: string;
+  imo_number: string | null;
   vessel_type: string;
   flag_state: string;
-  status: string;
-  current_location?: string;
-  next_port?: string;
-  eta?: string;
-  created_at: string;
-  organization_id?: string;
-  crew_count?: number;
-  cargo_capacity?: number;
-  fuel_consumption?: number;
-  last_maintenance?: string;
+  status: string | null;
+  current_location: string | null;
+  next_port: string | null;
+  eta: string | null;
+  created_at: string | null;
+  organization_id: string | null;
+  crew_count: number | null;
+  cargo_capacity: number | null;
+  fuel_consumption: number | null;
+  last_maintenance: string | null;
 }
 
 interface VesselManagementProps {
@@ -140,7 +139,25 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         // Set empty array on error - no mock data fallback
         setVessels([]);
       } else {
-        setVessels(vessels || []);
+        // Map database response to Vessel interface
+        const mappedVessels: Vessel[] = (vessels || []).map(v => ({
+          id: v.id,
+          name: v.name,
+          imo_number: v.imo_number,
+          vessel_type: v.vessel_type,
+          flag_state: v.flag_state,
+          status: v.status,
+          current_location: v.current_location,
+          next_port: v.next_port,
+          eta: v.eta,
+          created_at: v.created_at,
+          organization_id: v.organization_id,
+          crew_count: null,
+          cargo_capacity: v.capacity,
+          fuel_consumption: null,
+          last_maintenance: null
+        }));
+        setVessels(mappedVessels);
       }
     } catch (error) {
       logger.error('Vessel load error', { error });
@@ -157,11 +174,24 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
   const handleAddVessel = async () => {
     try {
+      // Get current user
+      const { data: userData } = await supabase.auth.getUser();
+      const userId = userData.user?.id;
+      
+      if (!userId) {
+        toast({
+          title: "Erro",
+          description: "Usuário não autenticado",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // Get current organization ID
-      const { data: userOrg, error: orgError } = await supabase
+      const { data: userOrg } = await supabase
         .from("organization_users")
         .select("organization_id")
-        .eq("user_id", (await supabase.auth.getUser()).data.user?.id)
+        .eq("user_id", userId)
         .eq("status", "active")
         .single();
 
@@ -218,7 +248,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
     case "active": return "bg-success text-success-foreground";
     case "maintenance": return "bg-warning text-warning-foreground";
@@ -228,7 +258,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string | null) => {
     switch (status) {
     case "active": return "Operacional";
     case "maintenance": return "Manutenção";

@@ -1,9 +1,9 @@
 /**
  * Fleet Command Dashboard - PATCH INTERACTIVITY 100%
- * Actionable fleet management with workflows and real-time data
+ * Actionable fleet management with workflows and real-time data from Supabase
  */
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   Ship,
   AlertTriangle,
@@ -82,104 +84,16 @@ interface FleetAction {
   assignedTo: string;
 }
 
-const MOCK_VESSELS: FleetVessel[] = [
-  {
-    id: "v1",
-    name: "MV Atlantic Pioneer",
-    type: "Tanker",
-    status: "transit",
-    position: { lat: -23.9618, lng: -46.3322 },
-    destination: "Rotterdam",
-    eta: "2026-02-05 14:00",
-    speed: 14.5,
-    fuel: 72,
-    crew: 24,
-    alerts: 2,
-    lastContact: new Date()
-  },
-  {
-    id: "v2",
-    name: "MV Pacific Star",
-    type: "Container",
-    status: "operational",
-    position: { lat: -22.9068, lng: -43.1729 },
-    destination: "Santos",
-    eta: "2026-02-01 08:00",
-    speed: 16.2,
-    fuel: 85,
-    crew: 22,
-    alerts: 0,
-    lastContact: new Date()
-  },
-  {
-    id: "v3",
-    name: "MV Southern Cross",
-    type: "Bulk Carrier",
-    status: "alert",
-    position: { lat: -25.2637, lng: -48.5253 },
-    speed: 8.5,
-    fuel: 45,
-    crew: 20,
-    alerts: 5,
-    lastContact: new Date(Date.now() - 3600000)
-  },
-  {
-    id: "v4",
-    name: "MV Northern Light",
-    type: "AHTS",
-    status: "docked",
-    position: { lat: -23.0115, lng: -44.2979 },
-    speed: 0,
-    fuel: 95,
-    crew: 18,
-    alerts: 1,
-    lastContact: new Date()
-  }
-];
-
-const MOCK_ALERTS: FleetAlert[] = [
-  {
-    id: "a1",
-    vesselId: "v3",
-    vesselName: "MV Southern Cross",
-    type: "critical",
-    title: "Falha de Comunicação",
-    message: "Última comunicação há mais de 30 minutos",
-    timestamp: new Date(Date.now() - 1800000),
-    acknowledged: false
-  },
-  {
-    id: "a2",
-    vesselId: "v1",
-    vesselName: "MV Atlantic Pioneer",
-    type: "warning",
-    title: "Desvio de Rota",
-    message: "Embarcação 5nm fora da rota planejada",
-    timestamp: new Date(Date.now() - 3600000),
-    acknowledged: true,
-    acknowledgedBy: "Capitão Silva"
-  },
-  {
-    id: "a3",
-    vesselId: "v3",
-    vesselName: "MV Southern Cross",
-    type: "critical",
-    title: "Nível de Combustível Baixo",
-    message: "Combustível em 45% - abaixo do limite de segurança",
-    timestamp: new Date(Date.now() - 7200000),
-    acknowledged: false
-  }
-];
-
 export function FleetCommandDashboard() {
   const { toast } = useToast();
-  const [vessels] = useState<FleetVessel[]>(MOCK_VESSELS);
-  const [alerts, setAlerts] = useState<FleetAlert[]>(MOCK_ALERTS);
+  const [vessels, setVessels] = useState<FleetVessel[]>([]);
+  const [alerts, setAlerts] = useState<FleetAlert[]>([]);
   const [actions, setActions] = useState<FleetAction[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedVessel, setSelectedVessel] = useState<FleetVessel | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isLoading, setIsLoading] = useState(true);
   
   // Dialog states
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
@@ -187,6 +101,121 @@ export function FleetCommandDashboard() {
   const [actionType, setActionType] = useState("");
   const [actionNotes, setActionNotes] = useState("");
   const [messageText, setMessageText] = useState("");
+
+  // Load real data from Supabase
+  useEffect(() => {
+    loadFleetData();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel("fleet-command-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "vessels" },
+        () => loadFleetData()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const loadFleetData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Load vessels
+      const { data: vesselsData, error: vesselsError } = await supabase
+        .from("vessels")
+        .select("*")
+        .order("name");
+
+      if (vesselsError) throw vesselsError;
+
+      // Map to FleetVessel interface
+      const mappedVessels: FleetVessel[] = (vesselsData || []).map(v => ({
+        id: v.id,
+        name: v.name,
+        type: v.vessel_type || "Unknown",
+        status: mapVesselStatus(v.status),
+        position: { lat: -23.9618, lng: -46.3322 }, // Default position if not available
+        destination: v.next_port || undefined,
+        eta: v.eta || undefined,
+        speed: 0, // Not in schema
+        fuel: v.current_fuel_level || 0,
+        crew: 0, // Will be fetched separately if needed
+        alerts: 0,
+        lastContact: new Date(v.updated_at || v.created_at || Date.now())
+      }));
+
+      setVessels(mappedVessels);
+
+      // Load alerts from SOC alerts table
+      const { data: alertsData, error: alertsError } = await supabase
+        .from("soc_alerts")
+        .select("*")
+        .eq("status", "open")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (!alertsError && alertsData) {
+        const mappedAlerts: FleetAlert[] = alertsData.map(a => ({
+          id: a.id,
+          vesselId: a.vessel_id || "",
+          vesselName: mappedVessels.find(v => v.id === a.vessel_id)?.name || "Unknown",
+          type: a.severity === "critical" ? "critical" : a.severity === "warning" ? "warning" : "info",
+          title: a.title,
+          message: a.message || "",
+          timestamp: new Date(a.created_at),
+          acknowledged: a.is_acknowledged || false,
+          acknowledgedBy: a.acknowledged_by || undefined
+        }));
+        setAlerts(mappedAlerts);
+      }
+
+      // Load action items
+      const { data: actionsData, error: actionsError } = await supabase
+        .from("action_items")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (!actionsError && actionsData) {
+        const mappedActions: FleetAction[] = actionsData.map(a => ({
+          id: a.id,
+          vesselId: a.vessel_id || "",
+          vesselName: mappedVessels.find(v => v.id === a.vessel_id)?.name || "N/A",
+          action: a.title,
+          status: a.status as FleetAction["status"] || "pending",
+          createdAt: new Date(a.created_at || Date.now()),
+          completedAt: a.completion_date ? new Date(a.completion_date) : undefined,
+          assignedTo: a.assigned_to_name || "Não atribuído"
+        }));
+        setActions(mappedActions);
+      }
+
+    } catch (error) {
+      logger.error("Error loading fleet data", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível carregar dados da frota",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const mapVesselStatus = (status: string | null): FleetVessel["status"] => {
+    switch (status) {
+      case "active": return "operational";
+      case "maintenance": return "maintenance";
+      case "docked": return "docked";
+      case "in_transit": return "transit";
+      default: return "operational";
+    }
+  };
 
   // Filtered vessels
   const filteredVessels = useMemo(() => {
@@ -324,9 +353,9 @@ export function FleetCommandDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Operacionais</p>
-                <p className="text-2xl font-bold text-green-600">{stats.operational}</p>
+                <p className="text-2xl font-bold text-success">{stats.operational}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -335,9 +364,9 @@ export function FleetCommandDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas</p>
-                <p className="text-2xl font-bold text-red-600">{stats.alerts}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.alerts}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -535,9 +564,9 @@ export function FleetCommandDashboard() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-full ${
-                            alert.type === "critical" ? "bg-red-100 text-red-600" :
-                            alert.type === "warning" ? "bg-yellow-100 text-yellow-600" :
-                            "bg-blue-100 text-blue-600"
+                            alert.type === "critical" ? "bg-destructive/10 text-destructive" :
+                            alert.type === "warning" ? "bg-warning/10 text-warning" :
+                            "bg-info/10 text-info"
                           }`}>
                             <AlertTriangle className="h-4 w-4" />
                           </div>

@@ -1,4 +1,3 @@
-// @ts-nocheck - Realtime channel type compatibility
 /**
  * Compliance Realtime Alerts Hook
  * Syncs compliance alerts across multiple connected users via Supabase Realtime
@@ -74,13 +73,13 @@ export function useComplianceRealtimeAlerts(channelName = 'compliance-alerts'): 
         const state = realtimeChannel.presenceState();
         const userCount = Object.keys(state).length;
         setOnlineUsers(userCount);
-        logger.debug('[Realtime] Online users:', userCount);
+        logger.debug('[Realtime] Online users: ' + String(userCount));
       })
       .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-        logger.debug('[Realtime] User joined:', key, newPresences);
+        logger.debug('[Realtime] User joined: ' + String(key));
       })
       .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-        logger.debug('[Realtime] User left:', key, leftPresences);
+        logger.debug('[Realtime] User left: ' + String(key));
       })
       .subscribe(async (status) => {
         logger.debug('[Realtime] Channel status:', status);

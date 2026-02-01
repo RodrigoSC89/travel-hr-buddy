@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema: sensor_readings type compatibility
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -726,15 +725,15 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                                 const response = await supabase
                                   .from('iot_sensor_readings')
                                   .select('*')
-                                  .eq('sensor_id', item.iotSensorId)
-                                  .order('timestamp', { ascending: false })
+                                  .eq('sensor_id', item.iotSensorId ?? '')
+                                  .order('recorded_at', { ascending: false })
                                   .limit(1)
                                   .single();
                                 
                                 if (response.data) {
                                   toast({
                                     title: "Dados do sensor",
-                                    description: `Valor: ${response.data.value} | Última leitura: ${new Date(response.data.timestamp).toLocaleString()}`
+                                    description: `Valor: ${response.data.value} | Última leitura: ${new Date(response.data.recorded_at ?? '').toLocaleString()}`
                                   });
                                 } else {
                                   toast({
