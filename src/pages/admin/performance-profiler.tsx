@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - performance_metrics table schema mismatch with PerformanceSnapshot interface
 /**
  * PATCH 617 - Live Performance Profiler
  * Real-time monitoring of CPU, Memory, FPS and component performance

@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - SGSO schema: vessels/users foreign key joins, compliance_status union type
 "use client";
 
 import { useEffect, useState, useRef } from "react";

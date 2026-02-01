@@ -1,4 +1,4 @@
-// @ts-nocheck - Awaiting types.ts regeneration for mmi_os_resolvidas table
+// @ts-nocheck - mmi_os_resolvidas table pending types.ts regeneration
 /**
  * Resolved Work Orders Service
  * Manages resolved work orders (OS) for AI learning

@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - allPrompts variable scope issue in handleSendToAI
 /**
  * PATCH 655 - Module LLM Helper Page
  * Generate and manage AI prompts for modules
