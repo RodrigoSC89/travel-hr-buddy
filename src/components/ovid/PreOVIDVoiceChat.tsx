@@ -1,15 +1,41 @@
-// @ts-nocheck - Logger type compatibility
+/**
+ * PreOVID Voice Chat - PATCH 865
+ * Removed @ts-nocheck, migrated to edge-function-helper
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
-  Mic, MicOff, Volume2, VolumeX, Brain, 
-  MessageSquare, Loader2, Play, Square
+  Mic, MicOff, Volume2, Brain, 
+  Loader2, Square
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
+
+// SpeechRecognition types for Web Speech API
+interface WebSpeechRecognitionEvent extends Event {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface WebSpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface WebSpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: WebSpeechRecognitionEvent) => void) | null;
+  onerror: ((event: WebSpeechRecognitionErrorEvent) => void) | null;
+  start(): void;
+  stop(): void;
+}
+
+type SpeechRecognitionConstructor = new () => WebSpeechRecognition;
 
 interface VoiceMessage {
   role: 'user' | 'assistant';
@@ -33,19 +59,25 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [messages, setMessages] = useState<VoiceMessage[]>([]);
   const [transcript, setTranscript] = useState('');
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<WebSpeechRecognition | null>(null);
   const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     // Initialize speech recognition
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognitionClass();
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'pt-BR';
+    const windowWithSpeech = window as typeof window & {
+      SpeechRecognition?: SpeechRecognitionConstructor;
+      webkitSpeechRecognition?: SpeechRecognitionConstructor;
+    };
+    
+    const SpeechRecognitionClass = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
+    
+    if (SpeechRecognitionClass) {
+      const recognition = new SpeechRecognitionClass();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognition.onresult = (event: WebSpeechRecognitionEvent) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i];
@@ -61,10 +93,12 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
         }
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognition.onerror = (event: WebSpeechRecognitionErrorEvent) => {
         logger.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
+      
+      recognitionRef.current = recognition;
     }
 
     return () => {
@@ -87,12 +121,9 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
     setIsProcessing(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/preovid-ai-chat`, {
+      const response = await fetch(getEdgeFunctionUrl('preovid-ai-chat'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
           vesselType,
@@ -135,8 +166,8 @@ export const PreOVIDVoiceChat: React.FC<PreOVIDVoiceChatProps> = ({
 
       // Auto-speak response
       speakText(assistantContent);
-    } catch (error) {
-      logger.error(error);
+    } catch (err) {
+      logger.error(err instanceof Error ? err.message : String(err));
       toast.error('Erro ao processar mensagem');
     } finally {
       setIsProcessing(false);

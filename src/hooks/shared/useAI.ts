@@ -1,6 +1,7 @@
 /**
- * Unified AI Hooks
+ * Unified AI Hooks - PATCH 865
  * Consolidação de hooks de IA para evitar duplicação
+ * Migrated to edge-function-helper
  */
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -8,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLiteMode } from "@/components/performance/LiteMode";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 // =====================================
 // Types
@@ -78,13 +80,10 @@ export function useAIChat(options?: {
       abortControllerRef.current = new AbortController();
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co"}/functions/v1/chat`,
+        getEdgeFunctionUrl('chat'),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE"}`
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({
             messages: [
               ...(options?.systemPrompt ? [{ role: "system", content: options.systemPrompt }] : []),
