@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 export type AIOperation = "chat" | "predict" | "anomaly" | "insight" | "copilot" | "scenario";
 
@@ -78,8 +79,6 @@ export interface ScenarioResult {
   recommendations: string[];
 }
 
-const EDGE_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-intelligence`;
-
 /**
  * Chat with AI assistant
  */
@@ -88,12 +87,9 @@ export async function chatWithAI(
   context?: Record<string, unknown>,
   stream = false
 ): Promise<string | ReadableStream> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "chat",
       messages,
@@ -122,12 +118,9 @@ export async function predictTrends(
   data: Record<string, unknown>,
   context?: Record<string, unknown>
 ): Promise<PredictionResult> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "predict",
       data,
@@ -151,12 +144,9 @@ export async function detectAnomalies(
   data: Record<string, unknown>,
   context?: Record<string, unknown>
 ): Promise<AnomalyResult> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "anomaly",
       data,
@@ -180,12 +170,9 @@ export async function generateInsights(
   data: Record<string, unknown>,
   context?: Record<string, unknown>
 ): Promise<InsightResult> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "insight",
       data,
@@ -209,12 +196,9 @@ export async function getCopilotSuggestions(
   currentPage: string,
   userContext: Record<string, unknown>
 ): Promise<string> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "copilot",
       messages: [
@@ -243,12 +227,9 @@ export async function simulateScenario(
   scenario: string,
   parameters: Record<string, unknown>
 ): Promise<ScenarioResult> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "scenario",
       messages: [
@@ -279,12 +260,9 @@ export async function streamChat(
   onDelta: (text: string) => void,
   onDone: () => void
 ): Promise<void> {
-  const response = await fetch(EDGE_FUNCTION_URL, {
+  const response = await fetch(getEdgeFunctionUrl('nauti-intelligence'), {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: getEdgeFunctionHeaders(),
     body: JSON.stringify({
       operation: "chat",
       messages,

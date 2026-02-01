@@ -5,6 +5,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 interface SimulatorConfig {
   intervalMs: number;
@@ -74,13 +75,10 @@ export function useIoTSimulator(): UseIoTSimulatorReturn {
 
       // Use query params for bulk operation
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/iot-sensor-simulator?action=bulk&count=${count}&anomaly=${configRef.current.anomalyChance}`,
+        `${getEdgeFunctionUrl('iot-sensor-simulator')}?action=bulk&count=${count}&anomaly=${configRef.current.anomalyChance}`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
         }
       );
 

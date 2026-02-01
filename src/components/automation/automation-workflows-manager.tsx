@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 interface WorkflowStep {
   id: string;
@@ -161,13 +162,10 @@ export const AutomationWorkflowsManager = () => {
     try {
       // Call AI to simulate execution
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        getEdgeFunctionUrl('automation-ai-copilot'),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ 
             type: "execute_workflow",
             data: {
@@ -214,13 +212,10 @@ export const AutomationWorkflowsManager = () => {
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        getEdgeFunctionUrl('automation-ai-copilot'),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ type: "workflow_suggestions" }),
         }
       );
@@ -261,13 +256,10 @@ export const AutomationWorkflowsManager = () => {
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        getEdgeFunctionUrl('automation-ai-copilot'),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ 
             type: "optimize_workflow",
             data: {

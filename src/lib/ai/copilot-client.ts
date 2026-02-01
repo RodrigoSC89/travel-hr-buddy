@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 export type CopilotMode = "copilot" | "analyst" | "commander" | "auditor";
 
@@ -29,8 +30,6 @@ export interface StreamCopilotOptions {
   onError?: (error: Error) => void;
 }
 
-const COPILOT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-copilot-stream`;
-
 /**
  * Stream AI Copilot responses with real-time token delivery
  */
@@ -43,12 +42,9 @@ export async function streamCopilot({
   onError
 }: StreamCopilotOptions): Promise<void> {
   try {
-    const response = await fetch(COPILOT_URL, {
+    const response = await fetch(getEdgeFunctionUrl('ai-copilot-stream'), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-      },
+      headers: getEdgeFunctionHeaders(),
       body: JSON.stringify({
         messages: messages.map(m => ({ role: m.role, content: m.content })),
         context,
