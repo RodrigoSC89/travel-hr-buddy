@@ -30,7 +30,7 @@ interface HistoryEvent {
   event_date: string;
   title: string;
   description?: string | null;
-  documents: any;
+  documents: Array<{ name: string; url?: string }> | null;
   relevance_score: number | null;
 }
 

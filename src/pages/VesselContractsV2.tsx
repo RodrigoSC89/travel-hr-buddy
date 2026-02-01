@@ -57,7 +57,7 @@ interface DowntimeEvent {
   reason_category: string | null;
   impact_level: string | null;
   justification_status: string | null;
-  ai_analysis?: any;
+  ai_analysis?: { summary?: string; recommendations?: string[]; risk_level?: string } | null;
 }
 
 const QUICK_QUESTIONS = [

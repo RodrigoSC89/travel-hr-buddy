@@ -31,7 +31,7 @@ interface CTSRecord {
   classification_society?: string | null;
   issue_date: string | null;
   expiry_date: string | null;
-  required_positions: any;
+  required_positions: Array<{ position: string; count?: number }> | Record<string, number> | null;
   status: string | null;
 }
 

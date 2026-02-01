@@ -411,7 +411,7 @@ export default function PredictiveTelemetry() {
   // Prepare chart data
   const chartData = sensorData
     .filter(s => selectedSensor === "all" || s.sensorType === selectedSensor)
-    .reduce((acc: any[], reading) => {
+    .reduce((acc: Array<{ time: string; [key: string]: number | string }>, reading) => {
       const time = format(new Date(reading.timestamp), "HH:mm");
       const existing = acc.find(a => a.time === time);
       if (existing) {

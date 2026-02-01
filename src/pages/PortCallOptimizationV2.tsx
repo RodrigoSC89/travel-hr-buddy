@@ -35,6 +35,18 @@ interface PortCall {
   operations: string[];
 }
 
+// Database voyage record type
+interface VoyageRecord {
+  id: string;
+  vessels?: { name: string } | null;
+  vessel_name?: string;
+  destination_port?: string;
+  arrival_port?: string;
+  eta?: string;
+  etd?: string;
+  status?: string;
+}
+
 const QUICK_QUESTIONS = [
   "O que é Just-in-Time Arrival?",
   "Como otimizar tempo de espera?",
@@ -85,7 +97,7 @@ export default function PortCallOptimizationV2() {
         .limit(50);
 
       if (voyages && voyages.length > 0) {
-        const transformed = voyages.map((v: any, idx: number) => ({
+        const transformed = (voyages as VoyageRecord[]).map((v, idx: number) => ({
           id: v.id,
           vessel_name: v.vessels?.name || v.vessel_name || "Embarcação",
           port_name: v.destination_port || v.arrival_port || "Porto",
