@@ -5,6 +5,11 @@
 
 import { localCrypto } from '@/lib/security/local-crypto';
 import { logger } from '@/lib/logger';
+import type {
+  AuditResourceValue,
+  AuditEntryDetails,
+  StoredAuditEntry,
+} from '@/types/audit-protocol.types';
 
 export interface AuditEntry {
   id: string;
@@ -15,9 +20,9 @@ export interface AuditEntry {
   module: string;
   resourceType: string;
   resourceId?: string;
-  details: Record<string, any>;
-  previousValue?: any;
-  newValue?: any;
+  details: AuditEntryDetails;
+  previousValue?: AuditResourceValue;
+  newValue?: AuditResourceValue;
   ipAddress?: string;
   userAgent?: string;
   sessionId?: string;
@@ -76,22 +81,28 @@ class AuditProtocol {
           try {
             const encrypted = JSON.parse(stored);
             const decrypted = await localCrypto.decrypt(encrypted, getAuditPassword());
-            this.entries = JSON.parse(decrypted).map((e: any) => ({
+            const parsed = JSON.parse(decrypted) as StoredAuditEntry[];
+            this.entries = parsed.map((e) => ({
               ...e,
+              details: e.details as AuditEntryDetails,
               timestamp: new Date(e.timestamp),
               syncedAt: e.syncedAt ? new Date(e.syncedAt) : undefined
             }));
           } catch {
             // Fallback to unencrypted
-            this.entries = JSON.parse(stored).map((e: any) => ({
+            const parsed = JSON.parse(stored) as StoredAuditEntry[];
+            this.entries = parsed.map((e) => ({
               ...e,
+              details: e.details as AuditEntryDetails,
               timestamp: new Date(e.timestamp),
               syncedAt: e.syncedAt ? new Date(e.syncedAt) : undefined
             }));
           }
         } else {
-          this.entries = JSON.parse(stored).map((e: any) => ({
+          const parsed = JSON.parse(stored) as StoredAuditEntry[];
+          this.entries = parsed.map((e) => ({
             ...e,
+            details: e.details as AuditEntryDetails,
             timestamp: new Date(e.timestamp),
             syncedAt: e.syncedAt ? new Date(e.syncedAt) : undefined
           }));
@@ -196,7 +207,7 @@ class AuditProtocol {
   /**
    * Log common actions
    */
-  async logCreate(userId: string, module: string, resourceType: string, resourceId: string, data: any): Promise<AuditEntry> {
+  async logCreate(userId: string, module: string, resourceType: string, resourceId: string, data: AuditResourceValue): Promise<AuditEntry> {
     return this.log({
       userId,
       action: 'CREATE',
@@ -208,7 +219,7 @@ class AuditProtocol {
     });
   }
 
-  async logUpdate(userId: string, module: string, resourceType: string, resourceId: string, oldValue: any, newValue: any): Promise<AuditEntry> {
+  async logUpdate(userId: string, module: string, resourceType: string, resourceId: string, oldValue: AuditResourceValue, newValue: AuditResourceValue): Promise<AuditEntry> {
     return this.log({
       userId,
       action: 'UPDATE',
@@ -221,7 +232,7 @@ class AuditProtocol {
     });
   }
 
-  async logDelete(userId: string, module: string, resourceType: string, resourceId: string, data: any): Promise<AuditEntry> {
+  async logDelete(userId: string, module: string, resourceType: string, resourceId: string, data: AuditResourceValue): Promise<AuditEntry> {
     return this.log({
       userId,
       action: 'DELETE',
@@ -277,7 +288,7 @@ class AuditProtocol {
   /**
    * Get changed fields between two objects
    */
-  private getChangedFields(oldValue: any, newValue: any): string[] {
+  private getChangedFields(oldValue: AuditResourceValue | undefined, newValue: AuditResourceValue | undefined): string[] {
     if (!oldValue || !newValue) return [];
     
     const changes: string[] = [];
