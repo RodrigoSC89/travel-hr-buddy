@@ -125,14 +125,14 @@ export default function PerformanceDashboard() {
     const metricsChannel = supabase
       .channel("performance-metrics-changes")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_metrics" }, (payload) => {
-        setMetrics(prev => [mapMetricRow(payload.new as PerformanceMetricRow), ...prev].slice(0, 100));
+        setMetrics(prev => [mapMetricRow(payload.new as Record<string, unknown>), ...prev].slice(0, 100));
       })
       .subscribe();
 
     const alertsChannel = supabase
       .channel("performance-alerts-changes")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_alerts" }, (payload) => {
-        const newAlert = mapAlertRow(payload.new as PerformanceAlertRow);
+        const newAlert = mapAlertRow(payload.new as Record<string, unknown>);
         setAlerts(prev => [newAlert, ...prev]);
         
         if (newAlert.severity === "critical") {
