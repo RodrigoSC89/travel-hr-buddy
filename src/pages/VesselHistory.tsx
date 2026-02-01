@@ -65,8 +65,8 @@ const VesselHistory = () => {
         supabase.from('vessel_manuals').select('*').order('upload_date', { ascending: false })
       ]);
 
-      if (historyRes.data) setHistoryEvents(historyRes.data);
-      if (manualsRes.data) setManuals(manualsRes.data);
+      if (historyRes.data) setHistoryEvents(historyRes.data as unknown as HistoryEvent[]);
+      if (manualsRes.data) setManuals(manualsRes.data as unknown as Manual[]);
     } catch (error) {
       logger.error('Error loading data:', error);
       toast.error('Erro ao carregar dados');

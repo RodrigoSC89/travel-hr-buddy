@@ -140,7 +140,7 @@ const Auth: React.FC = () => {
       
       if (error) {
         const errorMsg = error.message.toLowerCase();
-        logger.error('[Auth] Login error:', error.message, error.status);
+        logger.error('[Auth] Login error:', { message: error.message, status: error.status });
         
         if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
