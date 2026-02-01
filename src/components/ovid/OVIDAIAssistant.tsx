@@ -1,4 +1,7 @@
-// @ts-nocheck - Logger function call signature
+/**
+ * OVID AI Assistant - PATCH 865
+ * Removed @ts-nocheck, migrated to edge-function-helper
+ */
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,9 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Brain, Send, Loader2, FileCheck, AlertTriangle, ClipboardList, Book } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -34,12 +37,9 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ovid-assistant`, {
+      const response = await fetch(getEdgeFunctionUrl('ovid-assistant'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [...messages, userMessage],
           vesselType,
@@ -78,9 +78,9 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
           }
         }
       }
-    } catch (error) {
+    } catch (err) {
       toast.error('Erro ao comunicar com assistente IA');
-      logger.error(error);
+      logger.error(err instanceof Error ? err.message : String(err));
     } finally {
       setIsLoading(false);
     }

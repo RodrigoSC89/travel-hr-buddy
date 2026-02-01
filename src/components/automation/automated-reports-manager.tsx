@@ -1,6 +1,7 @@
 /**
- * Automated Reports Manager
+ * Automated Reports Manager - PATCH 865
  * Fully functional with AI integration via edge function
+ * Migrated to edge-function-helper
  */
 
 import { useState } from 'react';
@@ -15,20 +16,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { 
   FileText, 
-  Clock, 
   Mail, 
   Plus, 
-  Play, 
-  Pause, 
+  Pause,
+  Play,
   Trash2,
   Calendar,
   Download,
   Bot,
   Loader2,
-  CheckCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface AutomatedReport {
   id: string;
@@ -151,13 +151,10 @@ export const AutomatedReportsManager = () => {
     try {
       if (report.aiEnabled) {
         const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+          getEdgeFunctionUrl('automation-ai-copilot'),
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-            },
+            headers: getEdgeFunctionHeaders(),
             body: JSON.stringify({ 
               type: "generate_report",
               data: {
@@ -208,13 +205,10 @@ export const AutomatedReportsManager = () => {
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/automation-ai-copilot`,
+        getEdgeFunctionUrl('automation-ai-copilot'),
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ type: "report_suggestions" }),
         }
       );
