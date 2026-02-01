@@ -1,13 +1,16 @@
 /**
  * useAIAutomation - Hook de IA para Automações
  * Zapier, Twilio SMS/WhatsApp, Email, Webhooks
- * PATCH: Removed mock fallbacks and as any casts
+ * PATCH: Removed mock fallbacks and as any casts - Fixed insert types
  */
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import type { Database } from '@/integrations/supabase/types';
+
+type ScheduledTaskInsert = Database['public']['Tables']['scheduled_tasks']['Insert'];
 
 interface Automation {
   id: string;
@@ -150,17 +153,24 @@ export function useAIAutomation(): UseAIAutomationReturn {
       const { data: user } = await supabase.auth.getUser();
       const { data: orgs } = await supabase.from('organization_members').select('organization_id').eq('user_id', user.user?.id || '').limit(1).single();
       
+      const orgId = orgs?.organization_id;
+      if (!orgId) {
+        throw new Error('Organization not found for user');
+      }
+      
+      const insertPayload: ScheduledTaskInsert = {
+        task_name: automation.name,
+        task_type: automation.type,
+        schedule_type: automation.trigger || 'manual',
+        task_config: automation.config as Database['public']['Tables']['scheduled_tasks']['Insert']['task_config'],
+        is_active: automation.enabled,
+        execution_count: 0,
+        organization_id: orgId,
+      };
+      
       const { data, error } = await supabase
         .from('scheduled_tasks')
-        .insert({
-          task_name: automation.name,
-          task_type: automation.type,
-          schedule_type: automation.trigger,
-          task_config: automation.config,
-          is_active: automation.enabled,
-          execution_count: 0,
-          organization_id: orgs?.organization_id || '',
-        })
+        .insert([insertPayload])
         .select()
         .single();
 

@@ -47,6 +47,11 @@ function getRedirectUrl(): string {
     return 'https://nautione.com.br/auth/callback';
   }
   
+  // Vercel production
+  if (hostname === 'travel-hr-buddy.vercel.app') {
+    return 'https://travel-hr-buddy.vercel.app/auth/callback';
+  }
+  
   // Lovable preview/published
   if (hostname.includes('lovable.app')) {
     return `${origin}/auth/callback`;
@@ -57,8 +62,8 @@ function getRedirectUrl(): string {
     return `${origin}/auth/callback`;
   }
   
-  // Default fallback
-  return `${origin}/auth/callback`;
+  // Default fallback - use production
+  return 'https://nautione.com.br/auth/callback';
 }
 
 /**

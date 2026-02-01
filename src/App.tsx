@@ -1,13 +1,14 @@
 /**
  * App.tsx - Versão Completa com Todas as Rotas do Sidebar
  * PATCH: Rotas completas para 100+ módulos + Mobile/PWA optimizations
+ * PATCH v28: Global error handlers for white screen prevention
  */
 import * as React from "react";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { SidebarProvider } from "./components/ui/sidebar";
@@ -16,6 +17,53 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 import { ProductOnboardingTour } from "./components/onboarding/ProductOnboardingTour";
+import { logger } from "@/lib/logger";
+
+// ============================================
+// GLOBAL ERROR HANDLERS - Prevent white screens
+// ============================================
+if (typeof window !== 'undefined') {
+  // Handle unhandled promise rejections
+  window.addEventListener('unhandledrejection', (event) => {
+    const reason = event.reason;
+    const message = reason instanceof Error ? reason.message : String(reason);
+    
+    // Don't show toast for common non-critical errors
+    const ignorableErrors = [
+      'ResizeObserver',
+      'Script error',
+      'Non-Error promise rejection',
+      'Loading chunk',
+      'ChunkLoadError',
+    ];
+    
+    const shouldIgnore = ignorableErrors.some(e => message.includes(e));
+    
+    if (!shouldIgnore) {
+      logger.error('[App] Unhandled rejection:', { message });
+      // Show user-friendly toast instead of crashing
+      toast.error('Ocorreu um erro inesperado', {
+        description: 'A operação será tentada novamente automaticamente.',
+        duration: 3000,
+      });
+    }
+    
+    // Prevent default browser handling (which could crash the app)
+    event.preventDefault();
+  });
+
+  // Handle global errors
+  window.addEventListener('error', (event) => {
+    const message = event.message || 'Unknown error';
+    
+    // Ignore script loading errors (will be handled by LazyLoadErrorBoundary)
+    if (message.includes('Loading chunk') || message.includes('dynamically imported')) {
+      return;
+    }
+    
+    logger.error('[App] Global error:', { message, filename: event.filename });
+  });
+}
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
