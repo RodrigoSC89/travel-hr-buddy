@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 export interface AIMessage {
   id: string;
@@ -24,8 +25,6 @@ export interface AIInsight {
   confidence: number;
   actions?: string[];
 }
-
-const AI_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
 
 export function useUnifiedCommandAI() {
   const [messages, setMessages] = useState<AIMessage[]>([]);
@@ -77,12 +76,9 @@ export function useUnifiedCommandAI() {
       
       messagesToSend.push({ role: "user", content });
 
-      const response = await fetch(AI_FUNCTION_URL, {
+      const response = await fetch(getEdgeFunctionUrl('nauti-command'), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           type: "chat",
           messages: messagesToSend,
@@ -183,12 +179,9 @@ export function useUnifiedCommandAI() {
     data: Record<string, unknown>
   ): Promise<AIInsight[]> => {
     try {
-      const response = await fetch(AI_FUNCTION_URL, {
+      const response = await fetch(getEdgeFunctionUrl('nauti-command'), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           type: "insights",
           data
@@ -211,12 +204,9 @@ export function useUnifiedCommandAI() {
     data: unknown[]
   ): Promise<string> => {
     try {
-      const response = await fetch(AI_FUNCTION_URL, {
+      const response = await fetch(getEdgeFunctionUrl('nauti-command'), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           type: "analysis",
           analysisType,

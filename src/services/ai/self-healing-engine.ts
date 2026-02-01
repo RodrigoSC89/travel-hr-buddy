@@ -5,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 import type { Database } from "@/integrations/supabase/types";
 
 type AISelfHealingLogInsert = Database["public"]["Tables"]["ai_self_healing_logs"]["Insert"];
@@ -128,9 +129,9 @@ class SelfHealingEngine {
         case "api-gateway":
           // Check if edge functions are reachable
           try {
-            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/`, {
+            const response = await fetch(getEdgeFunctionUrl(''), {
               method: "HEAD",
-              headers: { "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "" }
+              headers: getEdgeFunctionHeaders()
             });
             if (!response.ok && response.status !== 404) {
               issues.push(`API Gateway returned ${response.status}`);

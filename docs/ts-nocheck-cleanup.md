@@ -1,7 +1,7 @@
 # TypeScript @ts-nocheck Cleanup Plan
 
 **Project:** Nautilus One  
-**Last Updated:** 2026-01-07 18:30 UTC  
+**Last Updated:** 2026-02-01 - PATCH 866  
 **Status:** In Progress
 
 ## 🎯 Objective
@@ -18,7 +18,11 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | Edge Functions (Deno) | ~30 | 🔵 Low | Requires Deno types |
 
 **Total Files:** ~140  
-**Corrected:** 31 (22%)
+**Corrected:** 45 (32%)
+
+## 🔧 PATCH 864-866 - Edge Function Helper Migration
+
+Migrated core components from `VITE_SUPABASE_*` env vars to centralized `edge-function-helper.ts`:
 
 ## ✅ Completed Corrections
 

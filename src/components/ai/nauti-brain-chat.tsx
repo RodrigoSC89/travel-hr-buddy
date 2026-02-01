@@ -18,6 +18,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 interface Message {
   id: string;
@@ -99,13 +100,10 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
       const { data: { session } } = await supabase.auth.getSession();
       
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-brain`,
+        getEdgeFunctionUrl('nauti-brain'),
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(session?.access_token),
           body: JSON.stringify({
             messages: messages.slice(-10).map(m => ({ 
               role: m.role, 

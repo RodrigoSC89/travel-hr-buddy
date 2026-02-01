@@ -7,6 +7,7 @@ import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 
 export interface CommandMessage {
   id: string;
@@ -25,7 +26,6 @@ export interface SystemContext {
   compliance: { score: number; pendingAudits: number; expiringDocs: number };
 }
 
-const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 1000;
 
@@ -70,12 +70,9 @@ export function useNautilusCommandAI() {
         { role: "user" as const, content }
       ];
 
-      const resp = await fetch(COMMAND_URL, {
+      const resp = await fetch(getEdgeFunctionUrl('nautilus-command'), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({ 
           messages: messagesToSend,
           context 
