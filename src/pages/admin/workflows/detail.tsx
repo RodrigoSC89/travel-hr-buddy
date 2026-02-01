@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema alignment pending
+// @ts-nocheck - Complex schema: smart_workflow_steps has Json metadata, profiles join compatibility
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management

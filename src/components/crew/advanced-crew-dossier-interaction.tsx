@@ -1,4 +1,4 @@
-// @ts-nocheck - AIInsight type compatibility
+// @ts-nocheck - crew_ai_insights.confidence_score nullable vs AIInsight.confidence_score required
 import React, { useState, useEffect } from "react";
 import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
 import { Button } from "@/components/ui/button";
