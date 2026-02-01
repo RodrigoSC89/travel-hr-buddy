@@ -1,4 +1,3 @@
-// @ts-nocheck - logger.error expects string but receives unknown
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -364,7 +363,7 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
       pdf.save(filename);
       toast.success('Relatório PDF gerado com sucesso!');
     } catch (error) {
-      logger.error(error);
+      logger.error('Failed to generate Pre-OVID PDF report', error);
       toast.error('Erro ao gerar relatório');
     } finally {
       setIsGenerating(false);

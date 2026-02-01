@@ -11925,6 +11925,53 @@ export type Database = {
           },
         ]
       }
+      document_entities: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          document_id: string
+          entity_type: string
+          entity_value: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          position_end: number | null
+          position_start: number | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          document_id: string
+          entity_type: string
+          entity_value: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position_end?: number | null
+          position_start?: number | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          document_id?: string
+          entity_type?: string
+          entity_value?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position_end?: number | null
+          position_start?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_entities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_keywords: {
         Row: {
           created_at: string | null
@@ -28858,8 +28905,10 @@ export type Database = {
           category: string
           component: string | null
           connection_type: string | null
+          cpu_usage: number | null
           created_at: string
           device_type: string | null
+          fps: number | null
           id: string
           load_time: number | null
           measured_at: string | null
@@ -28870,10 +28919,12 @@ export type Database = {
           metric_unit: string
           metric_value: number
           network_latency: number | null
+          page_load_time: number | null
           page_url: string | null
           recorded_at: string
           score: number | null
           session_id: string | null
+          slow_components: Json | null
           status: string
           target_value: number | null
           unit: string | null
@@ -28884,8 +28935,10 @@ export type Database = {
           category: string
           component?: string | null
           connection_type?: string | null
+          cpu_usage?: number | null
           created_at?: string
           device_type?: string | null
+          fps?: number | null
           id?: string
           load_time?: number | null
           measured_at?: string | null
@@ -28896,10 +28949,12 @@ export type Database = {
           metric_unit: string
           metric_value: number
           network_latency?: number | null
+          page_load_time?: number | null
           page_url?: string | null
           recorded_at?: string
           score?: number | null
           session_id?: string | null
+          slow_components?: Json | null
           status: string
           target_value?: number | null
           unit?: string | null
@@ -28910,8 +28965,10 @@ export type Database = {
           category?: string
           component?: string | null
           connection_type?: string | null
+          cpu_usage?: number | null
           created_at?: string
           device_type?: string | null
+          fps?: number | null
           id?: string
           load_time?: number | null
           measured_at?: string | null
@@ -28922,10 +28979,12 @@ export type Database = {
           metric_unit?: string
           metric_value?: number
           network_latency?: number | null
+          page_load_time?: number | null
           page_url?: string | null
           recorded_at?: string
           score?: number | null
           session_id?: string | null
+          slow_components?: Json | null
           status?: string
           target_value?: number | null
           unit?: string | null
