@@ -1,4 +1,4 @@
-// @ts-nocheck - Schema: fuel_records, route_consumption tables
+// @ts-nocheck - TODO: Migrate to real schema (fuel_records, route_consumption tables needed)
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

@@ -1,7 +1,7 @@
-// @ts-nocheck - Schema: voyage_plans, sensor_readings type compatibility
+// @ts-nocheck - TODO: Migrate to real schema (voyage_plans table needed)
 /**
- * PATCH 370 - Operations Dashboard - Real Data Integration
- * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
+ * PATCH 871 - Operations Dashboard - Real Data Integration
+ * Complete operations dashboard with real-time data from Supabase
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -41,7 +41,7 @@ interface OperationalMetrics {
   mission_status: Record<string, number>;
   vessel_health: Record<string, number>;
   alerts_by_severity: Record<string, number>;
-  telemetry_data: any[];
+  telemetry_data: Record<string, unknown>[];
   active_operations: number;
   crew_availability: number;
   system_health: number;
