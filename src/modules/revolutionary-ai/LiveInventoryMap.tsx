@@ -1,6 +1,8 @@
 /**
  * REVOLUTIONARY AI - Live Inventory Map
  * Funcionalidade 4: Visualização Inteligente de Estoque Marítimo
+ * 
+ * PATCH: Integrado com Supabase - usa hooks reais de inventário
  */
 
 import React, { useState, useMemo } from 'react';
@@ -11,176 +13,64 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { 
   Package, MapPin, Ship, Warehouse, AlertTriangle, 
-  Search, Filter, TrendingDown, TrendingUp, Clock,
-  Brain, Truck, RotateCcw
+  Search, TrendingDown, Clock,
+  Brain, Truck, RotateCcw, Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface InventoryLocation {
-  id: string;
-  name: string;
-  type: 'vessel' | 'port' | 'warehouse';
-  location: { lat: number; lng: number; city: string };
-  itemCount: number;
-  criticalItems: number;
-  lowStockItems: number;
-  expiringItems: number;
-  totalValue: number;
-}
-
-interface InventoryItem {
-  id: string;
-  name: string;
-  sku: string;
-  category: string;
-  quantity: number;
-  minStock: number;
-  maxStock: number;
-  location: string;
-  locationType: 'vessel' | 'port' | 'warehouse';
-  expiryDate?: Date;
-  leadTime: number;
-  unitCost: number;
-  status: 'critical' | 'low' | 'ok' | 'excess';
-  lastMovement: Date;
-  predictedRunout?: Date;
-}
-
-const MOCK_LOCATIONS: InventoryLocation[] = [
-  {
-    id: '1',
-    name: 'Navio Atlas',
-    type: 'vessel',
-    location: { lat: -23.9, lng: -46.3, city: 'Santos' },
-    itemCount: 245,
-    criticalItems: 2,
-    lowStockItems: 12,
-    expiringItems: 5,
-    totalValue: 125000
-  },
-  {
-    id: '2',
-    name: 'Navio Vega',
-    type: 'vessel',
-    location: { lat: -22.9, lng: -43.1, city: 'Rio de Janeiro' },
-    itemCount: 198,
-    criticalItems: 0,
-    lowStockItems: 8,
-    expiringItems: 3,
-    totalValue: 98000
-  },
-  {
-    id: '3',
-    name: 'Base Santos',
-    type: 'warehouse',
-    location: { lat: -23.96, lng: -46.33, city: 'Santos' },
-    itemCount: 1520,
-    criticalItems: 5,
-    lowStockItems: 45,
-    expiringItems: 12,
-    totalValue: 850000
-  },
-  {
-    id: '4',
-    name: 'Porto Rio',
-    type: 'port',
-    location: { lat: -22.88, lng: -43.17, city: 'Rio de Janeiro' },
-    itemCount: 890,
-    criticalItems: 3,
-    lowStockItems: 28,
-    expiringItems: 8,
-    totalValue: 420000
-  }
-];
-
-const MOCK_ITEMS: InventoryItem[] = [
-  {
-    id: '1',
-    name: 'Filtro de Óleo Motor',
-    sku: 'FLT-OLM-001',
-    category: 'Filtros',
-    quantity: 2,
-    minStock: 5,
-    maxStock: 20,
-    location: 'Navio Atlas',
-    locationType: 'vessel',
-    leadTime: 7,
-    unitCost: 450,
-    status: 'critical',
-    lastMovement: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    predictedRunout: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: '2',
-    name: 'Óleo Hidráulico 20L',
-    sku: 'OLH-20L-002',
-    category: 'Lubrificantes',
-    quantity: 8,
-    minStock: 10,
-    maxStock: 50,
-    location: 'Base Santos',
-    locationType: 'warehouse',
-    leadTime: 3,
-    unitCost: 280,
-    status: 'low',
-    lastMovement: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: '3',
-    name: 'Extintor CO2 6kg',
-    sku: 'EXT-CO2-003',
-    category: 'Segurança',
-    quantity: 25,
-    minStock: 10,
-    maxStock: 40,
-    location: 'Porto Rio',
-    locationType: 'port',
-    expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    leadTime: 14,
-    unitCost: 320,
-    status: 'ok',
-    lastMovement: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: '4',
-    name: 'Junta Cabeçote Motor',
-    sku: 'JNT-CBT-004',
-    category: 'Peças Motor',
-    quantity: 0,
-    minStock: 2,
-    maxStock: 8,
-    location: 'Navio Vega',
-    locationType: 'vessel',
-    leadTime: 21,
-    unitCost: 1500,
-    status: 'critical',
-    lastMovement: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-  }
-];
+import { 
+  useInventoryLocations, 
+  useInventoryItems, 
+  useInventoryStats,
+  type InventoryLocation,
+  type InventoryItem
+} from '@/hooks/useLiveInventoryData';
 
 export function LiveInventoryMap() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<InventoryLocation | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
+  // Usar hooks reais do Supabase
+  const { data: locations = [], isLoading: locationsLoading } = useInventoryLocations();
+  const { data: items = [], isLoading: itemsLoading } = useInventoryItems(selectedLocation?.id);
+  const stats = useInventoryStats();
+
+  const isLoading = locationsLoading || itemsLoading;
+
   const filteredItems = useMemo(() => {
-    return MOCK_ITEMS.filter(item => {
+    return items.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            item.sku.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = filterStatus === 'all' || item.status === filterStatus;
       const matchesLocation = !selectedLocation || item.location === selectedLocation.name;
       return matchesSearch && matchesStatus && matchesLocation;
     });
-  }, [searchTerm, filterStatus, selectedLocation]);
+  }, [searchTerm, filterStatus, selectedLocation, items]);
 
-  const stats = useMemo(() => ({
-    totalLocations: MOCK_LOCATIONS.length,
-    totalItems: MOCK_LOCATIONS.reduce((acc, l) => acc + l.itemCount, 0),
-    criticalItems: MOCK_LOCATIONS.reduce((acc, l) => acc + l.criticalItems, 0),
-    lowStockItems: MOCK_LOCATIONS.reduce((acc, l) => acc + l.lowStockItems, 0),
-    expiringItems: MOCK_LOCATIONS.reduce((acc, l) => acc + l.expiringItems, 0),
-    totalValue: MOCK_LOCATIONS.reduce((acc, l) => acc + l.totalValue, 0)
-  }), []);
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando inventário...</span>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (!locations.length) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Package className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Nenhum local de inventário</h3>
+          <p className="text-muted-foreground text-center max-w-md">
+            Cadastre embarcações e armazéns para visualizar o inventário em tempo real.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -267,7 +157,7 @@ export function LiveInventoryMap() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {MOCK_LOCATIONS.map((location) => (
+              {locations.map((location) => (
                 <motion.div
                   key={location.id}
                   whileHover={{ scale: 1.02 }}
