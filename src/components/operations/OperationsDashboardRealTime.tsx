@@ -108,7 +108,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       : null;
 
     return () => {
-      cleanup();
+      cleanupConnections();
       if (refreshInterval) clearInterval(refreshInterval);
     };
   }, [filter]);
@@ -384,7 +384,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
     const alertPenalty = Math.min(criticalAlerts * 5, 30);
 
     return Math.max(0, Math.round(healthScore - alertPenalty));
-  }
+  };
+
+  const cleanupConnections = () => {
     if (mqttClientRef.current) {
       mqttClientRef.current.end();
     }
