@@ -74,7 +74,7 @@ export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
     <ErrorBoundary 
       FallbackComponent={ErrorFallback}
       onError={(error, errorInfo) => {
-        logger.error("Mobile app error:", error, errorInfo);
+        logger.error("Mobile app error:", error, { componentStack: errorInfo.componentStack });
       }}
     >
       <div className="min-h-screen bg-background">

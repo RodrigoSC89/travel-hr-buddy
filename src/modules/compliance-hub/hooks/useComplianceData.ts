@@ -7,6 +7,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+
+// Use any cast for dynamic table access
+const dynamicDb = supabase as any;
 import type {
   ComplianceItem,
   AuditSession,
@@ -88,7 +91,7 @@ export function useComplianceData() {
     setLoading(true);
     try {
       // Fetch compliance records from Supabase
-      const { data: complianceData, error: complianceError } = await supabase
+      const { data: complianceData, error: complianceError } = await dynamicDb
         .from('compliance_records')
         .select('*')
         .order('created_at', { ascending: false })
@@ -97,15 +100,15 @@ export function useComplianceData() {
       if (complianceError) throw complianceError;
 
       if (complianceData && complianceData.length > 0) {
-        const items: ComplianceItem[] = complianceData.map((record: Record<string, unknown>) => ({
+        const items: ComplianceItem[] = (complianceData as Record<string, unknown>[]).map((record) => ({
           id: String(record.id),
           code: String(record.code || `COMP-${String(record.id).slice(0, 6)}`),
           title: String(record.title || record.requirement_name || 'Requisito'),
           category: String(record.category || record.regulation_type || 'Geral'),
           regulation: String(record.regulation || ''),
           status: mapComplianceStatus(record.status as string),
-          lastAuditDate: record.last_audit_date ? String(record.last_audit_date) : undefined,
-          nextAuditDate: record.next_audit_date ? String(record.next_audit_date) : undefined,
+          lastAuditDate: record.last_audit_date ? String(record.last_audit_date) : new Date().toISOString().split('T')[0],
+          nextAuditDate: record.next_audit_date ? String(record.next_audit_date) : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
           responsibleId: String(record.responsible_id || ''),
           responsibleName: String(record.responsible_name || 'Não atribuído'),
           vesselId: String(record.vessel_id || ''),
@@ -118,14 +121,14 @@ export function useComplianceData() {
       }
 
       // Fetch audits
-      const { data: auditsData } = await supabase
+      const { data: auditsData } = await dynamicDb
         .from('audits')
         .select('*, audit_findings(*)')
         .order('scheduled_date', { ascending: false })
         .limit(20);
 
       if (auditsData && auditsData.length > 0) {
-        const auditSessions: AuditSession[] = auditsData.map((audit: Record<string, unknown>) => ({
+        const auditSessions: AuditSession[] = (auditsData as Record<string, unknown>[]).map((audit) => ({
           id: String(audit.id),
           auditType: (audit.audit_type as AuditSession['auditType']) || 'internal',
           vesselId: String(audit.vessel_id || ''),

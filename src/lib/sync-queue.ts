@@ -12,6 +12,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
+// Use any cast for dynamic table access
+const dynamicDb = supabase as any;
+
 export type SyncItemStatus = "queued" | "sending" | "sent" | "failed" | "conflict";
 
 export interface SyncItem {
@@ -219,7 +222,7 @@ class SyncQueue {
 
     switch (action) {
       case "INSERT": {
-        const { error } = await supabase.from(table).insert(data);
+        const { error } = await dynamicDb.from(table).insert(data);
         if (error) throw error;
         break;
       }
@@ -228,14 +231,15 @@ class SyncQueue {
         if (!data.id) throw new Error("UPDATE requires id");
         
         // Verificar conflito
-        const { data: serverData } = await supabase
+        const { data: serverData } = await dynamicDb
           .from(table)
           .select("*")
           .eq("id", data.id)
           .single();
 
-        if (serverData && serverData.updated_at) {
-          const serverTime = new Date(serverData.updated_at).getTime();
+        const serverRecord = serverData as Record<string, unknown> | null;
+        if (serverRecord && serverRecord.updated_at) {
+          const serverTime = new Date(String(serverRecord.updated_at)).getTime();
           const localTime = item.timestamp;
           
           if (serverTime > localTime) {
@@ -243,13 +247,13 @@ class SyncQueue {
             this.updateItemStatus(item.id, "conflict");
             const itemInState = this.state.items.find(i => i.id === item.id);
             if (itemInState) {
-              itemInState.conflictData = serverData as Record<string, unknown>;
+              itemInState.conflictData = serverRecord;
             }
             throw new Error("CONFLICT: Server has newer version");
           }
         }
 
-        const { error } = await supabase
+        const { error } = await dynamicDb
           .from(table)
           .update(data)
           .eq("id", data.id);
@@ -259,7 +263,7 @@ class SyncQueue {
       
       case "DELETE": {
         if (!data.id) throw new Error("DELETE requires id");
-        const { error } = await supabase
+        const { error } = await dynamicDb
           .from(table)
           .delete()
           .eq("id", data.id);

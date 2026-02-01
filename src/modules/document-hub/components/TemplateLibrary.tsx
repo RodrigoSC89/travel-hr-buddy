@@ -85,7 +85,20 @@ export const TemplateLibrary: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setTemplates(data || []);
+      // Map database data to Template interface
+      const mapped: Template[] = (data || []).map(d => ({
+        id: d.id,
+        name: d.name,
+        description: d.description || undefined,
+        category: d.category || 'general',
+        content: d.content,
+        placeholders: d.variables || [],
+        is_public: d.is_public ?? false,
+        version: 1,
+        created_at: d.created_at,
+        updated_at: d.updated_at,
+      }));
+      setTemplates(mapped);
     } catch (error) {
       logger.error("Error loading templates:", error);
       toast({
@@ -107,7 +120,16 @@ export const TemplateLibrary: React.FC = () => {
         .order("version_number", { ascending: false });
 
       if (error) throw error;
-      setVersions(data || []);
+      // Map database data to TemplateVersion interface
+      const mapped: TemplateVersion[] = (data || []).map(d => ({
+        id: d.id,
+        template_id: d.template_id || templateId,
+        version_number: d.version_number,
+        content: d.content,
+        change_summary: d.change_notes || undefined,
+        created_at: d.created_at || new Date().toISOString(),
+      }));
+      setVersions(mapped);
     } catch (error) {
       logger.error("Error loading versions:", error);
     }
@@ -224,7 +246,7 @@ export const TemplateLibrary: React.FC = () => {
     setIsGenerateOpen(true);
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     if (!selectedTemplate) return;
 
     try {
@@ -237,7 +259,8 @@ export const TemplateLibrary: React.FC = () => {
       });
 
       // Generate PDF
-      const doc = new jsPDF();
+      const JsPDF = await loadJsPDF();
+      const doc = new JsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const margin = 20;
       const maxWidth = pageWidth - 2 * margin;
@@ -256,8 +279,8 @@ export const TemplateLibrary: React.FC = () => {
       // Save PDF
       doc.save(`${selectedTemplate.name.replace(/\s+/g, "_")}_${Date.now()}.pdf`);
 
-      // Log export
-      supabase
+      // Log export (use any cast for untyped table)
+      (supabase as any)
         .from("itinerary_exports")
         .insert([{
           export_format: "pdf",

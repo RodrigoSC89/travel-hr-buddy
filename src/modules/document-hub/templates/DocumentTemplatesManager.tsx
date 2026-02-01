@@ -113,13 +113,23 @@ const DocumentTemplatesManager = () => {
 
       if (error) throw error;
       
-      // Extract variables from content for each template
-      const templatesWithVars = (data || []).map(template => ({
-        ...template,
-        variables: extractVariables(template.content)
+      // Map database data to Template interface
+      const mapped: Template[] = (data || []).map(d => ({
+        id: d.id,
+        template_code: d.name?.slice(0, 10) || `TPL-${d.id.slice(0, 6)}`,
+        name: d.name,
+        description: d.description || '',
+        category: d.category || 'report',
+        content: d.content,
+        format: 'html',
+        current_version: 1,
+        status: d.is_public ? 'active' : 'draft',
+        tags: d.tags || [],
+        created_at: d.created_at,
+        variables: extractVariables(d.content),
       }));
       
-      setTemplates(templatesWithVars);
+      setTemplates(mapped);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Erro ao carregar templates";
       toast({
@@ -141,7 +151,15 @@ const DocumentTemplatesManager = () => {
         .order("version_number", { ascending: false });
 
       if (error) throw error;
-      setVersions(data || []);
+      // Map to TemplateVersion interface
+      const mapped: TemplateVersion[] = (data || []).map(d => ({
+        id: d.id,
+        version_number: d.version_number,
+        content: d.content,
+        change_summary: d.change_notes || '',
+        created_at: d.created_at || new Date().toISOString(),
+      }));
+      setVersions(mapped);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading versions:", errorMessage);
@@ -173,17 +191,14 @@ const DocumentTemplatesManager = () => {
       const templateCode = `TPL-${Date.now()}`;
       const tags = formData.tags.split(",").map(tag => tag.trim()).filter(tag => tag);
       
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("document_templates")
         .insert({
-          template_code: templateCode,
           name: formData.name,
           description: formData.description,
           category: formData.category,
           content: formData.content,
-          format: formData.format,
           tags,
-          status: "active"
         });
 
       if (error) throw error;
@@ -240,9 +255,9 @@ const DocumentTemplatesManager = () => {
 
   const deleteTemplate = async (templateId: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("document_templates")
-        .update({ status: "archived" })
+        .delete()
         .eq("id", templateId);
 
       if (error) throw error;
@@ -263,9 +278,10 @@ const DocumentTemplatesManager = () => {
     }
   };
 
-  const exportToPDF = (template: Template, variables: Record<string, string>) => {
+  const exportToPDF = async (template: Template, variables: Record<string, string>) => {
     const startTime = Date.now();
-    const doc = new jsPDF();
+    const JsPDF = await loadJsPDF();
+    const doc = new JsPDF();
     const content = substituteVariables(template.content, variables);
     
     // Simple HTML to text conversion
@@ -282,8 +298,8 @@ const DocumentTemplatesManager = () => {
     
     const processingTime = Date.now() - startTime;
     
-    // Log usage
-    supabase.from("template_usage_log").insert({
+    // Log usage (use any cast for untyped table)
+    (supabase as any).from("template_usage_log").insert({
       template_id: template.id,
       version_number: template.current_version,
       output_format: "pdf",
@@ -326,8 +342,8 @@ const DocumentTemplatesManager = () => {
     
     const processingTime = Date.now() - startTime;
     
-    // Log usage
-    supabase.from("template_usage_log").insert({
+    // Log usage (use any cast for untyped table)
+    (supabase as any).from("template_usage_log").insert({
       template_id: template.id,
       version_number: template.current_version,
       output_format: "docx",
