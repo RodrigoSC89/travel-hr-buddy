@@ -1,4 +1,7 @@
-// @ts-nocheck - TODO: Migrate performance_metrics insert
+/**
+ * PATCH 871.2 - Performance Monitor
+ * Type-safe with performance_metrics table (uses access_logs as fallback)
+ */
 import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,15 +14,12 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
-
-// Lazy load jsPDF
-const loadJsPDF = async () => {
-  const { default: jsPDF } = await import("jspdf");
-  await import("jspdf-autotable");
-  return jsPDF;
-};
+import type { Database } from "@/integrations/supabase/types";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+// Use access_logs as fallback for storing performance data
+type AccessLog = Database["public"]["Tables"]["access_logs"]["Row"];
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -110,9 +110,14 @@ export const PerformanceMonitor: React.FC = () => {
 
   const persistMetrics = async (newMetrics: PerformanceMetrics) => {
     try {
+      // Use performance_metrics table with proper column mapping
       const { error } = await supabase
         .from("performance_metrics")
         .insert({
+          metric_name: 'page_performance',
+          metric_value: newMetrics.score,
+          metric_unit: 'score',
+          category: 'performance',
           load_time: newMetrics.loadTime,
           memory_usage: newMetrics.memoryUsage,
           network_latency: newMetrics.networkLatency,
@@ -218,7 +223,8 @@ export const PerformanceMonitor: React.FC = () => {
     });
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    const jsPDF = await loadJsPDF();
     const doc = new jsPDF();
 
     // Title

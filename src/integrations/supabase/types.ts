@@ -16134,6 +16134,79 @@ export type Database = {
           },
         ]
       }
+      fuel_consumption: {
+        Row: {
+          avg_speed_knots: number | null
+          consumption_date: string
+          cost_usd: number | null
+          created_at: string | null
+          distance_nm: number | null
+          fuel_type: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          quantity_liters: number
+          updated_at: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          weather_conditions: string | null
+        }
+        Insert: {
+          avg_speed_knots?: number | null
+          consumption_date: string
+          cost_usd?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          fuel_type: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          quantity_liters: number
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_conditions?: string | null
+        }
+        Update: {
+          avg_speed_knots?: number | null
+          consumption_date?: string
+          cost_usd?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          fuel_type?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          quantity_liters?: number
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_conditions?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_consumption_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_consumption_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_consumption_voyage_id_fkey"
+            columns: ["voyage_id"]
+            isOneToOne: false
+            referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fuel_logs: {
         Row: {
           consumption_rate_lph: number | null
@@ -16184,6 +16257,88 @@ export type Database = {
           weather_condition?: string | null
         }
         Relationships: []
+      }
+      fuel_optimization_runs: {
+        Row: {
+          applied_at: string | null
+          applied_by: string | null
+          baseline_consumption: number | null
+          created_at: string | null
+          id: string
+          optimization_type: string | null
+          optimized_consumption: number | null
+          organization_id: string | null
+          parameters_used: Json | null
+          recommendations: Json | null
+          run_date: string | null
+          savings_mt: number | null
+          savings_percentage: number | null
+          savings_usd: number | null
+          status: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          applied_at?: string | null
+          applied_by?: string | null
+          baseline_consumption?: number | null
+          created_at?: string | null
+          id?: string
+          optimization_type?: string | null
+          optimized_consumption?: number | null
+          organization_id?: string | null
+          parameters_used?: Json | null
+          recommendations?: Json | null
+          run_date?: string | null
+          savings_mt?: number | null
+          savings_percentage?: number | null
+          savings_usd?: number | null
+          status?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          applied_at?: string | null
+          applied_by?: string | null
+          baseline_consumption?: number | null
+          created_at?: string | null
+          id?: string
+          optimization_type?: string | null
+          optimized_consumption?: number | null
+          organization_id?: string | null
+          parameters_used?: Json | null
+          recommendations?: Json | null
+          run_date?: string | null
+          savings_mt?: number | null
+          savings_percentage?: number | null
+          savings_usd?: number | null
+          status?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_optimization_runs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_optimization_runs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_optimization_runs_voyage_id_fkey"
+            columns: ["voyage_id"]
+            isOneToOne: false
+            referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       fuel_optimizations: {
         Row: {
@@ -16246,6 +16401,106 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fuel_records: {
+        Row: {
+          bunker_delivery_note: string | null
+          bunkering_port: string | null
+          consumption_type: string | null
+          created_at: string | null
+          created_by: string | null
+          density: number | null
+          fuel_type: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          price_per_mt: number | null
+          quantity_liters: number | null
+          quantity_mt: number
+          record_date: string
+          rob_after: number | null
+          rob_before: number | null
+          sulfur_content: number | null
+          supplier: string | null
+          total_cost: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          viscosity: number | null
+          voyage_id: string | null
+        }
+        Insert: {
+          bunker_delivery_note?: string | null
+          bunkering_port?: string | null
+          consumption_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          density?: number | null
+          fuel_type: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          price_per_mt?: number | null
+          quantity_liters?: number | null
+          quantity_mt: number
+          record_date: string
+          rob_after?: number | null
+          rob_before?: number | null
+          sulfur_content?: number | null
+          supplier?: string | null
+          total_cost?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          viscosity?: number | null
+          voyage_id?: string | null
+        }
+        Update: {
+          bunker_delivery_note?: string | null
+          bunkering_port?: string | null
+          consumption_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          density?: number | null
+          fuel_type?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          price_per_mt?: number | null
+          quantity_liters?: number | null
+          quantity_mt?: number
+          record_date?: string
+          rob_after?: number | null
+          rob_before?: number | null
+          sulfur_content?: number | null
+          supplier?: string | null
+          total_cost?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          viscosity?: number | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_records_voyage_id_fkey"
+            columns: ["voyage_id"]
+            isOneToOne: false
+            referencedRelation: "voyage_plans"
             referencedColumns: ["id"]
           },
         ]
@@ -31592,6 +31847,81 @@ export type Database = {
         }
         Relationships: []
       }
+      route_consumption: {
+        Row: {
+          avg_speed_knots: number | null
+          created_at: string | null
+          current_factor: number | null
+          distance_nm: number | null
+          duration_hours: number | null
+          efficiency_score: number | null
+          fuel_consumed_mt: number | null
+          fuel_type: string | null
+          id: string
+          recorded_at: string | null
+          sea_state: number | null
+          segment_end: string | null
+          segment_start: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          weather_factor: number | null
+          wind_speed_knots: number | null
+        }
+        Insert: {
+          avg_speed_knots?: number | null
+          created_at?: string | null
+          current_factor?: number | null
+          distance_nm?: number | null
+          duration_hours?: number | null
+          efficiency_score?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          recorded_at?: string | null
+          sea_state?: number | null
+          segment_end?: string | null
+          segment_start?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_factor?: number | null
+          wind_speed_knots?: number | null
+        }
+        Update: {
+          avg_speed_knots?: number | null
+          created_at?: string | null
+          current_factor?: number | null
+          distance_nm?: number | null
+          duration_hours?: number | null
+          efficiency_score?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          recorded_at?: string | null
+          sea_state?: number | null
+          segment_end?: string | null
+          segment_start?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_factor?: number | null
+          wind_speed_knots?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_consumption_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_consumption_voyage_id_fkey"
+            columns: ["voyage_id"]
+            isOneToOne: false
+            referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       route_optimizations: {
         Row: {
           arrival_lat: number
@@ -31708,6 +32038,59 @@ export type Database = {
           weather_factor?: number | null
         }
         Relationships: []
+      }
+      route_waypoints: {
+        Row: {
+          ata: string | null
+          created_at: string | null
+          eta: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          notes: string | null
+          sequence_order: number
+          speed_knots: number | null
+          voyage_plan_id: string | null
+          waypoint_name: string | null
+        }
+        Insert: {
+          ata?: string | null
+          created_at?: string | null
+          eta?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          notes?: string | null
+          sequence_order: number
+          speed_knots?: number | null
+          voyage_plan_id?: string | null
+          waypoint_name?: string | null
+        }
+        Update: {
+          ata?: string | null
+          created_at?: string | null
+          eta?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          notes?: string | null
+          sequence_order?: number
+          speed_knots?: number | null
+          voyage_plan_id?: string | null
+          waypoint_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_waypoints_voyage_plan_id_fkey"
+            columns: ["voyage_plan_id"]
+            isOneToOne: false
+            referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       routes: {
         Row: {
@@ -42570,6 +42953,87 @@ export type Database = {
             columns: ["voyage_id"]
             isOneToOne: false
             referencedRelation: "voyage_accounting"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voyage_plans: {
+        Row: {
+          actual_fuel_consumption: number | null
+          arrival_date: string | null
+          cargo_quantity: number | null
+          cargo_type: string | null
+          created_at: string | null
+          created_by: string | null
+          departure_date: string | null
+          destination_port: string
+          distance_nm: number | null
+          estimated_fuel_consumption: number | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          origin_port: string
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          voyage_number: string | null
+          weather_conditions: Json | null
+        }
+        Insert: {
+          actual_fuel_consumption?: number | null
+          arrival_date?: string | null
+          cargo_quantity?: number | null
+          cargo_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          departure_date?: string | null
+          destination_port: string
+          distance_nm?: number | null
+          estimated_fuel_consumption?: number | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          origin_port: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_number?: string | null
+          weather_conditions?: Json | null
+        }
+        Update: {
+          actual_fuel_consumption?: number | null
+          arrival_date?: string | null
+          cargo_quantity?: number | null
+          cargo_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          departure_date?: string | null
+          destination_port?: string
+          distance_nm?: number | null
+          estimated_fuel_consumption?: number | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          origin_port?: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_number?: string | null
+          weather_conditions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voyage_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "voyage_plans_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
