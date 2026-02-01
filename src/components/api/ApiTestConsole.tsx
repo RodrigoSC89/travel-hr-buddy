@@ -1,6 +1,7 @@
 /**
  * API Test Console Component
  * Interactive console to test API endpoints with real requests
+ * PATCH 870 - Migrated to edge-function-helper for stable environment handling
  */
 
 import React, { useState, useCallback } from "react";
@@ -38,6 +39,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL } from "@/lib/supabase/edge-function-helper";
 
 interface ApiTestConsoleProps {
   open: boolean;
@@ -106,9 +108,8 @@ export function ApiTestConsole({
     const startTime = Date.now();
 
     try {
-      // Build the full URL
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
-      const fullUrl = `${baseUrl}/functions/v1/public-api${endpoint}`;
+      // Build the full URL using centralized constant
+      const fullUrl = `${SUPABASE_URL}/functions/v1/public-api${endpoint}`;
 
       // Parse headers
       let parsedHeaders: Record<string, string> = {};
@@ -202,8 +203,7 @@ export function ApiTestConsole({
   };
 
   const generateCurl = () => {
-    const baseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
-    let curl = `curl -X ${method} "${baseUrl}/functions/v1/public-api${endpoint}"`;
+    let curl = `curl -X ${method} "${SUPABASE_URL}/functions/v1/public-api${endpoint}"`;
     
     if (apiKey) {
       curl += ` \\\n  -H "x-api-key: ${apiKey}"`;

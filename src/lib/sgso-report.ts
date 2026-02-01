@@ -1,10 +1,11 @@
 /**
  * SGSO Report Generation Library
  * Helper functions for generating SGSO reports and PDF buffers
- * PATCH 653 - Lazy loading for jsPDF
+ * PATCH 870 - Migrated to use centralized Supabase constants
  */
 
 import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/supabase/edge-function-helper";
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
@@ -45,8 +46,8 @@ export interface SGSOMetrics {
  * @returns Array of vessel data
  */
 export async function getAllVessels(): Promise<VesselData[]> {
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_KEY;
+  const supabaseUrl = SUPABASE_URL;
+  const supabaseKey = SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Supabase configuration is missing");
@@ -75,8 +76,8 @@ export async function getAllVessels(): Promise<VesselData[]> {
 export async function getSGSOMetricsForVessel(
   vesselId: string
 ): Promise<SGSOMetrics | null> {
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_KEY;
+  const supabaseUrl = SUPABASE_URL;
+  const supabaseKey = SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Supabase configuration is missing");

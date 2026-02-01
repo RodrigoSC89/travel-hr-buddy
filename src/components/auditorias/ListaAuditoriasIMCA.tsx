@@ -1,3 +1,8 @@
+/**
+ * Lista Auditorias IMCA Component
+ * PATCH 870 - Migrated to edge-function-helper for stable environment handling
+ */
+
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +13,7 @@ import { format } from "date-fns";
 import html2canvas from "html2canvas";
 import { usePDFExport } from "@/hooks/use-pdf-export";
 import { logger } from '@/lib/logger';
-
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from "@/lib/supabase/edge-function-helper";
 interface Auditoria {
   id: string;
   navio: string;
@@ -37,25 +42,16 @@ export default function ListaAuditoriasIMCA() {
   const pdfRef = useRef<HTMLDivElement>(null);
   const { getJsPDF, isLoading: isPDFLoading } = usePDFExport();
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
   useEffect(() => {
     carregarDados();
   }, []);
 
   const carregarDados = async () => {
     try {
-      const response = await fetch(
-        `${supabaseUrl}/functions/v1/auditorias-lista`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${supabaseAnonKey}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(getEdgeFunctionUrl("auditorias-lista"), {
+        method: "GET",
+        headers: getEdgeFunctionHeaders(),
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao carregar dados");
@@ -135,29 +131,22 @@ export default function ListaAuditoriasIMCA() {
     setLoadingIA(id);
     try {
       // Get explanation
-      const resExplain = await fetch(`${supabaseUrl}/functions/v1/auditorias-explain`, {
+      const resExplain = await fetch(getEdgeFunctionUrl("auditorias-explain"), {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${supabaseAnonKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({ navio, item, norma }),
       });
       const dataExplain = await resExplain.json();
       setExplicacao((prev) => ({ ...prev, [id]: dataExplain.resultado }));
 
       // Get action plan
-      const resPlano = await fetch(`${supabaseUrl}/functions/v1/auditorias-plano`, {
+      const resPlano = await fetch(getEdgeFunctionUrl("auditorias-plano"), {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${supabaseAnonKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({ navio, item, norma }),
       });
       const dataPlano = await resPlano.json();
       setPlano((prev) => ({ ...prev, [id]: dataPlano.plano }));
-
       toast.success("Análise IA gerada com sucesso!");
     } catch (error) {
       logger.error("Erro ao gerar análise IA:", error);
