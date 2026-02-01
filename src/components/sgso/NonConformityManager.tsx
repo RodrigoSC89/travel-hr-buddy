@@ -62,23 +62,7 @@ function convertToNC(record: NCType): NonConformity {
 
 // SAMPLE_NCS removido - usar useNonConformityData()
 
-// Placeholder para manter estrutura (será substituído por hook)
-const _DEPRECATED = {
-    id: "4",
-    number: "OBS-2024-001",
-    title: "Registros de treinamento incompletos",
-    type: "observation",
-    practice_id: 4,
-    practice_name: "Prática 4 - Treinamento",
-    status: "closed",
-    severity: "medium",
-    identified_date: "2024-08-10",
-    due_date: "2024-09-10",
-    responsible: "Ana Paula - RH",
-    corrective_action: "Digitalizar todos os registros",
-    completion_percentage: 100
-  }
-];
+// Placeholder removido - dados vêm do hook useNonConformityData()
 
 const getTypeConfig = (type: string) => {
   const configs = {

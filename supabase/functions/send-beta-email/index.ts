@@ -1,7 +1,7 @@
 // @ts-nocheck - Deno Edge Function (TypeScript checks skipped for Deno-specific imports)
 // This file is deployed and executed in Deno runtime, not Node.js
 
-import { Resend } from "npm:resend@4.0.0";
+import { Resend } from "https://esm.sh/resend@4.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { edgeLogger } from "../_shared/edge-logger.ts";
 

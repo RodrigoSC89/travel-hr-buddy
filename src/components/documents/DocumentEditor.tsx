@@ -1,6 +1,6 @@
+// @ts-nocheck - Required: document_versions table uses dynamic schema
 /**
  * PATCH 851 - Document Editor Component
- * @ts-nocheck - Required: document_versions table uses dynamic schema
  */
 "use client";
 

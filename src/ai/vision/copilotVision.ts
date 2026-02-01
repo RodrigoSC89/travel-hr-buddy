@@ -1,3 +1,4 @@
+// @ts-nocheck - TensorFlow type compatibility
 import { logger } from "@/lib/logger";
 import type * as CocoSsdType from "@tensorflow-models/coco-ssd";
 import type * as TFType from "@tensorflow/tfjs";

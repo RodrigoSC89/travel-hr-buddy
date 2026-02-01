@@ -6,8 +6,7 @@
 
 import OpenAI from "openai";
 import type { Finding, AnalysisResult } from "./analyzer";
-import { logger } from "@/lib/utils/production-logger";
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface FixSuggestion {
   title: string;

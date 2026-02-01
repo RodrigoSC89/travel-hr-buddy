@@ -414,7 +414,7 @@ export function calculateVisibility(
       elevation: aer.elevation,
       azimuth: aer.azimuth,
       range: aer.range,
-      doppler: state.velocity ? calculateDoppler(state.velocity, aer.range) : 0
+      doppler: state.velocity ? calculateDoppler(state.velocity, aer.range) : 0,
       visible: aer.elevation >= maskAngle,
       timestamp: time.toISOString(),
     });
