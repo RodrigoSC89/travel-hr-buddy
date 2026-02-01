@@ -109,7 +109,22 @@ export const SatelliteTrackerEnhanced = () => {
         return;
       }
 
-      setSatellites(data);
+      setSatellites((data || []).map((s: Record<string, unknown>) => ({
+        id: String(s.id || ""),
+        satellite_id: String(s.satellite_id || ""),
+        satellite_name: String(s.satellite_name || ""),
+        tle_line1: s.tle_line1 != null ? String(s.tle_line1) : undefined,
+        tle_line2: s.tle_line2 != null ? String(s.tle_line2) : undefined,
+        latitude: Number(s.latitude || 0),
+        longitude: Number(s.longitude || 0),
+        altitude_km: Number(s.altitude_km || 0),
+        velocity_kmh: Number(s.velocity_kmh || 0),
+        visibility_status: String(s.visibility_status || "unknown"),
+        azimuth: Number(s.azimuth || 0),
+        elevation: Number(s.elevation || 0),
+        range_km: Number(s.range_km || 0),
+        timestamp: String(s.timestamp || s.created_at || new Date().toISOString()),
+      })));
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Erro ao carregar satélites";
       toast({
@@ -124,14 +139,23 @@ export const SatelliteTrackerEnhanced = () => {
 
   const loadCoverageEvents = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("satellite_coverage_events")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      setCoverageEvents(data || []);
+      setCoverageEvents((data || []).map((e: Record<string, unknown>) => ({
+        id: String(e.id || ""),
+        satellite_name: String(e.satellite_name || ""),
+        event_type: String(e.event_type || "pass"),
+        max_elevation: Number(e.max_elevation || 0),
+        duration_seconds: Number(e.duration_seconds || 0),
+        start_time: String(e.start_time || new Date().toISOString()),
+        end_time: String(e.end_time || new Date().toISOString()),
+        notified: Boolean(e.notified),
+      })));
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading coverage events:", errorMessage);

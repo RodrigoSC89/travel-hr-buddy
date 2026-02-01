@@ -259,9 +259,13 @@ const OperationalCalendar = () => {
   };
 
   const handleCreateEvent = () => {
+    const eventType = newEvent.type as CalendarEvent["type"];
+    const eventPriority = newEvent.priority as CalendarEvent["priority"];
     const event: CalendarEvent = {
       id: Date.now().toString(),
       ...newEvent,
+      type: eventType,
+      priority: eventPriority,
       status: "scheduled",
     };
     setEvents(prev => [...prev, event]);

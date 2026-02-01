@@ -84,8 +84,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
           timestamp: new Date(log.created_at),
           status: log.status as "success" | "failed" | "degraded" | "timeout",
           provider: log.provider,
-          signalStrength: log.signal_strength,
-          latency: log.latency_ms
+          signalStrength: log.signal_strength ?? undefined,
+          latency: log.latency_ms ?? undefined
         }));
         setMessages(logs);
       }
@@ -211,7 +211,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
     setMessages(prev => [...prev, newMessage]);
 
     // Log to database
-    supabase.from("satcom_logs").insert({
+    (supabase as any).from("satcom_logs").insert({
       vessel_id: vesselId,
       transmission_type: "receive",
       provider: activeProvider,
@@ -220,7 +220,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       latency_ms: latency,
       status,
       metadata: { simulated: true, auto_generated: true }
-    }).then(() => {}).catch(console.error);
+    }).then(() => {}).catch((err: unknown) => logger.error("Error inserting satcom log", err));
   };
 
   const getStatusColor = (status: string) => {

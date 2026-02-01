@@ -3,7 +3,6 @@
  * Integrates with N2YO API for real-time satellite tracking
  */
 
-import { logger } from "@/lib/utils/production-logger";
 import { logger } from '@/lib/logger';
 export interface SatelliteOrbitData {
   id: string;
