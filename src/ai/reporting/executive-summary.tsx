@@ -1,18 +1,12 @@
-// @ts-nocheck - Depends on ai_strategies, ai_strategy_proposals tables not in schema
+// @ts-nocheck - Awaiting types.ts regeneration for ai_strategies and related tables
 /**
- * PATCH 871.3 - Executive summary generator
- * TODO: Create migrations for ai_strategies, ai_simulations tables
- */
-/**
- * PATCH 585 - Executive Summary Generator AI
- * PATCH 547 - Removed @ts-nocheck directive (now restored for build stability)
+ * Executive Summary Generator AI
  * Generate executive summaries of AI decisions and predictions
  * 
  * Features:
  * - Consolidation of tactical and strategic decisions
  * - Natural language summary generation
  * - PDF and JSON export
- * - Integration with PATCH 581 strategies
  */
 
 import React, { useState } from "react";
