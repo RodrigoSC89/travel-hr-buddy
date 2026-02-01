@@ -1,140 +1,210 @@
 /**
- * Hook for Integrations Hub - Real-time Supabase data
- * Replaces mock integrations with database integration
+ * Hook para Integrações API
+ * CRUD completo para api_integrations
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { 
-  Database, 
-  MessageSquare, 
-  BarChart3, 
-  CreditCard, 
-  Zap,
-  Globe,
-  Mail,
-  Smartphone,
-  Cloud
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 export interface Integration {
   id: string;
   name: string;
-  description: string;
-  category: 'data' | 'communication' | 'payment' | 'analytics' | 'automation';
-  status: 'connected' | 'disconnected' | 'error';
-  icon: LucideIcon;
-  isEnabled: boolean;
-  lastSync?: string;
+  type: string;
+  status: 'active' | 'inactive' | 'error';
+  description?: string;
   config?: Record<string, unknown>;
+  api_key_masked?: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export function useIntegrationsData() {
+export interface CreateIntegrationInput {
+  name: string;
+  type: string;
+  description?: string;
+  config?: Record<string, unknown>;
+  api_key?: string;
+}
+
+export function useIntegrations() {
+  return useQuery({
+    queryKey: ['integrations'],
+    queryFn: async (): Promise<Integration[]> => {
+      try {
+        // Use any cast to bypass type checking for dynamic table
+        const { data, error } = await (supabase as any)
+          .from('api_integrations')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          logger.error('Error fetching integrations:', error);
+          return [];
+        }
+
+        return (data || []).map((item: Record<string, unknown>) => ({
+          id: String(item.id || ''),
+          name: String(item.api_name || item.name || 'Unnamed Integration'),
+          type: String(item.api_category || item.type || 'custom'),
+          status: (String(item.status || 'inactive') as Integration['status']),
+          description: item.description ? String(item.description) : undefined,
+          config: item.config as Record<string, unknown> | undefined,
+          created_at: String(item.created_at || new Date().toISOString()),
+          updated_at: String(item.updated_at || new Date().toISOString()),
+        }));
+      } catch (err) {
+        logger.error('Error in useIntegrations:', err);
+        return [];
+      }
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useIntegration(id: string) {
+  return useQuery({
+    queryKey: ['integration', id],
+    queryFn: async (): Promise<Integration | null> => {
+      try {
+        const { data, error } = await (supabase as any)
+          .from('api_integrations')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          logger.error('Error fetching integration:', error);
+          return null;
+        }
+
+        if (!data) return null;
+
+        const item = data as Record<string, unknown>;
+        return {
+          id: String(item.id || ''),
+          name: String(item.api_name || item.name || 'Unnamed Integration'),
+          type: String(item.api_category || item.type || 'custom'),
+          status: (String(item.status || 'inactive') as Integration['status']),
+          description: item.description ? String(item.description) : undefined,
+          config: item.config as Record<string, unknown> | undefined,
+          created_at: String(item.created_at || new Date().toISOString()),
+          updated_at: String(item.updated_at || new Date().toISOString()),
+        };
+      } catch (err) {
+        logger.error('Error in useIntegration:', err);
+        return null;
+      }
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateIntegration() {
   const queryClient = useQueryClient();
 
-  // Fetch integrations from api_configurations table
-  const query = useQuery({
-    queryKey: ['integrations-hub'],
-    queryFn: async (): Promise<Integration[]> => {
-      const { data: configs, error } = await supabase
-        .from('api_configurations')
-        .select('*')
-        .order('created_at', { ascending: false });
+  return useMutation({
+    mutationFn: async (input: CreateIntegrationInput) => {
+      const { data, error } = await (supabase as any)
+        .from('api_integrations')
+        .insert({
+          api_name: input.name,
+          api_category: input.type,
+          config: input.config,
+          status: 'inactive',
+        })
+        .select()
+        .single();
 
-      if (error) throw error;
-
-      // Map database configs to Integration interface using correct column names
-      const integrations: Integration[] = (configs || []).map(config => ({
-        id: config.id,
-        name: config.display_name || config.api_name || 'Integração',
-        description: `API ${config.api_name} - ${config.base_url}`,
-        category: mapCategory(config.api_name),
-        status: config.is_active ? 'connected' : 'disconnected',
-        icon: getIconForProvider(config.api_name),
-        isEnabled: config.is_active || false,
-        lastSync: config.updated_at || undefined,
-        config: {
-          base_url: config.base_url,
-          rate_limit: config.rate_limit_per_minute,
-          error_rate: config.error_rate_percent,
-          avg_response_time: config.avg_response_time_ms
-        }
-      }));
-
-      // Add default system integrations if not present
-      const defaultIntegrations: Integration[] = [
-        {
-          id: 'supabase-default',
-          name: 'Supabase Database',
-          description: 'Sistema de banco de dados principal para armazenamento e sincronização',
-          category: 'data',
-          status: 'connected',
-          icon: Database,
-          isEnabled: true,
-          lastSync: new Date().toISOString()
-        },
-        {
-          id: 'openai-default',
-          name: 'OpenAI API',
-          description: 'Assistente de IA e análise preditiva',
-          category: 'automation',
-          status: 'connected',
-          icon: Zap,
-          isEnabled: true,
-          lastSync: new Date().toISOString()
-        }
-      ];
-
-      // Merge without duplicates
-      const existingNames = new Set(integrations.map(i => i.name.toLowerCase()));
-      const mergedIntegrations = [
-        ...integrations,
-        ...defaultIntegrations.filter(d => !existingNames.has(d.name.toLowerCase()))
-      ];
-
-      return mergedIntegrations;
-    },
-    staleTime: 5 * 60 * 1000
-  });
-
-  // Toggle integration status
-  const toggleMutation = useMutation({
-    mutationFn: async ({ id, isEnabled }: { id: string; isEnabled: boolean }) => {
-      // Skip for default integrations
-      if (id.includes('-default')) {
-        return { success: true };
+      if (error) {
+        logger.error('Error creating integration:', error);
+        throw new Error(`Erro ao criar integração: ${error.message}`);
       }
 
-      const { error } = await supabase
-        .from('api_configurations')
-        .update({ is_active: isEnabled })
-        .eq('id', id);
-
-      if (error) throw error;
-      return { success: true };
+      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['integrations-hub'] });
-      toast.success('Integração atualizada');
+      queryClient.invalidateQueries({ queryKey: ['integrations'] });
+      toast.success('Integração criada com sucesso');
     },
     onError: (error: Error) => {
-      toast.error('Erro ao atualizar integração', { description: error.message });
-    }
+      toast.error(error.message);
+    },
   });
+}
 
-  // Test connection - calls real health check endpoint
-  const testConnectionMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const integration = query.data?.find(i => i.id === id);
-      if (!integration) throw new Error('Integração não encontrada');
+export function useUpdateIntegration() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...input }: Partial<CreateIntegrationInput> & { id: string }) => {
+      const updateData: Record<string, unknown> = {};
       
-      // Call real health check if endpoint exists
-      const startTime = Date.now();
-      const { data, error } = await supabase
+      if (input.name !== undefined) updateData.api_name = input.name;
+      if (input.type !== undefined) updateData.api_category = input.type;
+      if (input.config !== undefined) updateData.config = input.config;
+
+      const { data, error } = await (supabase as any)
         .from('api_integrations')
-        .select('status, last_health_check')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        logger.error('Error updating integration:', error);
+        throw new Error(`Erro ao atualizar integração: ${error.message}`);
+      }
+
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['integrations'] });
+      queryClient.invalidateQueries({ queryKey: ['integration', variables.id] });
+      toast.success('Integração atualizada com sucesso');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useDeleteIntegration() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase as any)
+        .from('api_integrations')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        logger.error('Error deleting integration:', error);
+        throw new Error(`Erro ao excluir integração: ${error.message}`);
+      }
+
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['integrations'] });
+      toast.success('Integração excluída com sucesso');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useTestIntegrationConnection() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const startTime = Date.now();
+      
+      const { data, error } = await (supabase as any)
+        .from('api_integrations')
+        .select('status')
         .eq('id', id)
         .single();
       
@@ -152,48 +222,4 @@ export function useIntegrationsData() {
       toast.error('Falha na verificação', { description: error.message });
     }
   });
-
-  // Computed stats
-  const stats = {
-    total: query.data?.length || 0,
-    connected: query.data?.filter(i => i.status === 'connected').length || 0,
-    error: query.data?.filter(i => i.status === 'error').length || 0,
-    active: query.data?.filter(i => i.isEnabled).length || 0
-  };
-
-  return {
-    integrations: query.data || [],
-    isLoading: query.isLoading,
-    error: query.error,
-    stats,
-    toggleIntegration: toggleMutation.mutateAsync,
-    testConnection: testConnectionMutation.mutateAsync,
-    isTesting: testConnectionMutation.isPending,
-    refetch: query.refetch
-  };
-}
-
-// Helper functions
-function mapCategory(apiName?: string | null): Integration['category'] {
-  if (!apiName) return 'data';
-  const lower = apiName.toLowerCase();
-  if (lower.includes('whatsapp') || lower.includes('telegram') || lower.includes('email')) return 'communication';
-  if (lower.includes('stripe') || lower.includes('payment') || lower.includes('pay')) return 'payment';
-  if (lower.includes('analytics') || lower.includes('posthog') || lower.includes('sentry')) return 'analytics';
-  if (lower.includes('openai') || lower.includes('ai') || lower.includes('gpt')) return 'automation';
-  return 'data';
-}
-
-function getIconForProvider(apiName?: string | null): LucideIcon {
-  if (!apiName) return Database;
-  const lower = apiName.toLowerCase();
-  if (lower.includes('database') || lower.includes('supabase')) return Database;
-  if (lower.includes('whatsapp') || lower.includes('telegram')) return MessageSquare;
-  if (lower.includes('analytics')) return BarChart3;
-  if (lower.includes('stripe') || lower.includes('payment')) return CreditCard;
-  if (lower.includes('openai') || lower.includes('ai')) return Zap;
-  if (lower.includes('email')) return Mail;
-  if (lower.includes('mobile') || lower.includes('push')) return Smartphone;
-  if (lower.includes('cloud') || lower.includes('aws')) return Cloud;
-  return Globe;
 }

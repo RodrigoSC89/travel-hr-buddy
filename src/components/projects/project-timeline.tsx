@@ -77,12 +77,22 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const [viewMode, setViewMode] = useState<"gantt" | "list">("gantt");
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    project_name: string;
+    task_name: string;
+    description: string;
+    status: "pending" | "in_progress" | "completed" | "blocked" | "cancelled";
+    priority: "low" | "medium" | "high" | "critical";
+    assigned_to: string;
+    start_date: string;
+    end_date: string;
+    progress: number;
+  }>({
     project_name: "",
     task_name: "",
     description: "",
-    status: "pending" as const,
-    priority: "medium" as const,
+    status: "pending",
+    priority: "medium",
     assigned_to: "",
     start_date: new Date().toISOString().split("T")[0],
     end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
@@ -245,8 +255,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       project_name: task.project_name,
       task_name: task.task_name,
       description: task.description,
-      status: task.status,
-      priority: task.priority,
+      status: task.status as "pending" | "in_progress" | "completed" | "blocked" | "cancelled",
+      priority: task.priority as "low" | "medium" | "high" | "critical",
       assigned_to: task.assigned_to || "",
       start_date: task.start_date.split("T")[0],
       end_date: task.end_date.split("T")[0],
@@ -274,7 +284,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     toast({ title: "Success", description: "Timeline exported to Excel" });
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    const jsPDF = await loadJsPDF();
     const doc = new jsPDF();
     
     doc.setFontSize(16);

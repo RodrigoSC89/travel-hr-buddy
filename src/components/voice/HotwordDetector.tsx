@@ -157,7 +157,7 @@ export function HotwordDetector({
           const transcript = results[i][0].transcript.toLowerCase().trim();
           const confidence = results[i][0].confidence;
 
-          logger.debug('[HotwordDetector] Transcript:', transcript, 'Confidence:', confidence);
+          logger.debug('[HotwordDetector] Transcript:', { transcript, confidence });
 
           // Check for hotword patterns with sensitivity threshold
           const adjustedThreshold = DETECTION_THRESHOLD * (1 - sensitivity * 0.3);

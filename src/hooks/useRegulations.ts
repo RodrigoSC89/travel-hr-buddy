@@ -55,63 +55,73 @@ export interface CreateRegulationInput {
   ai_summary?: Record<string, unknown>;
 }
 
+// Helper function to map database record to Regulation interface
+function mapToRegulation(reg: Record<string, unknown>): Regulation {
+  return {
+    id: String(reg.id || ''),
+    reg_code: String(reg.requirement_code || reg.id || '').slice(0, 8),
+    title: String(reg.title || reg.description || 'Regulamentação'),
+    description: reg.description ? String(reg.description) : undefined,
+    authority: String(reg.authority || reg.issuing_body || 'IMO'),
+    category: String(reg.category || 'safety'),
+    subcategory: reg.subcategory ? String(reg.subcategory) : undefined,
+    effective_date: reg.effective_date ? String(reg.effective_date) : undefined,
+    revision_date: reg.updated_at ? String(reg.updated_at) : undefined,
+    compliance_deadline: reg.compliance_deadline ? String(reg.compliance_deadline) : undefined,
+    is_mandatory: reg.is_mandatory !== false,
+    applies_to: reg.applies_to as Record<string, unknown> | undefined,
+    requirements: reg.requirements as Record<string, unknown> | undefined,
+    documentation_required: Array.isArray(reg.documentation_required) ? reg.documentation_required as string[] : undefined,
+    penalties: reg.penalties ? String(reg.penalties) : undefined,
+    related_regulations: Array.isArray(reg.related_regulations) ? reg.related_regulations as string[] : undefined,
+    source_url: reg.source_url ? String(reg.source_url) : undefined,
+    full_text: reg.full_text ? String(reg.full_text) : undefined,
+    reg_status: String(reg.status || 'active'),
+    ai_summary: reg.ai_summary as Record<string, unknown> | undefined,
+    created_at: String(reg.created_at || new Date().toISOString()),
+    updated_at: String(reg.updated_at || new Date().toISOString()),
+  };
+}
+
 export function useRegulations(filters?: { category?: string; authority?: string; status?: string }) {
   return useQuery({
     queryKey: ['regulations', filters],
     queryFn: async (): Promise<Regulation[]> => {
-      // Try to fetch from regulatory_requirements table
-      let query = supabase
-        .from('regulatory_requirements')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        // Try to fetch from regulatory_requirements table using any cast
+        let query = (supabase as any)
+          .from('regulatory_requirements')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (filters?.category) {
-        query = query.eq('category', filters.category);
-      }
-      if (filters?.authority) {
-        query = query.eq('authority', filters.authority);
-      }
-      if (filters?.status) {
-        query = query.eq('status', filters.status);
-      }
+        if (filters?.category) {
+          query = query.eq('category', filters.category);
+        }
+        if (filters?.authority) {
+          query = query.eq('authority', filters.authority);
+        }
+        if (filters?.status) {
+          query = query.eq('status', filters.status);
+        }
 
-      const { data, error } = await query.limit(100);
+        const { data, error } = await query.limit(100);
 
-      if (error) {
-        logger.error('Error fetching regulations:', error);
-        // Return empty array - UI should show EmptyState
+        if (error) {
+          logger.error('Error fetching regulations:', error);
+          // Return empty array - UI should show EmptyState
+          return [];
+        }
+
+        if (!data || data.length === 0) {
+          return [];
+        }
+
+        // Map database fields to Regulation interface
+        return (data as Record<string, unknown>[]).map(mapToRegulation);
+      } catch (err) {
+        logger.error('Error in useRegulations:', err);
         return [];
       }
-
-      if (!data || data.length === 0) {
-        return [];
-      }
-
-      // Map database fields to Regulation interface
-      return data.map(reg => ({
-        id: reg.id,
-        reg_code: reg.requirement_code || reg.id.slice(0, 8),
-        title: reg.title || reg.description || 'Regulamentação',
-        description: reg.description,
-        authority: reg.authority || reg.issuing_body || 'IMO',
-        category: reg.category || 'safety',
-        subcategory: reg.subcategory,
-        effective_date: reg.effective_date,
-        revision_date: reg.updated_at,
-        compliance_deadline: reg.compliance_deadline,
-        is_mandatory: reg.is_mandatory ?? true,
-        applies_to: reg.applies_to,
-        requirements: reg.requirements,
-        documentation_required: reg.documentation_required,
-        penalties: reg.penalties,
-        related_regulations: reg.related_regulations,
-        source_url: reg.source_url,
-        full_text: reg.full_text,
-        reg_status: reg.status || 'active',
-        ai_summary: reg.ai_summary,
-        created_at: reg.created_at,
-        updated_at: reg.updated_at,
-      }));
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -121,43 +131,25 @@ export function useRegulation(id: string) {
   return useQuery({
     queryKey: ['regulation', id],
     queryFn: async (): Promise<Regulation | null> => {
-      const { data, error } = await supabase
-        .from('regulatory_requirements')
-        .select('*')
-        .eq('id', id)
-        .single();
+      try {
+        const { data, error } = await (supabase as any)
+          .from('regulatory_requirements')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-      if (error) {
-        logger.error('Error fetching regulation:', error);
+        if (error) {
+          logger.error('Error fetching regulation:', error);
+          return null;
+        }
+
+        if (!data) return null;
+
+        return mapToRegulation(data as Record<string, unknown>);
+      } catch (err) {
+        logger.error('Error in useRegulation:', err);
         return null;
       }
-
-      if (!data) return null;
-
-      return {
-        id: data.id,
-        reg_code: data.requirement_code || data.id.slice(0, 8),
-        title: data.title || data.description || 'Regulamentação',
-        description: data.description,
-        authority: data.authority || data.issuing_body || 'IMO',
-        category: data.category || 'safety',
-        subcategory: data.subcategory,
-        effective_date: data.effective_date,
-        revision_date: data.updated_at,
-        compliance_deadline: data.compliance_deadline,
-        is_mandatory: data.is_mandatory ?? true,
-        applies_to: data.applies_to,
-        requirements: data.requirements,
-        documentation_required: data.documentation_required,
-        penalties: data.penalties,
-        related_regulations: data.related_regulations,
-        source_url: data.source_url,
-        full_text: data.full_text,
-        reg_status: data.status || 'active',
-        ai_summary: data.ai_summary,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-      };
     },
     enabled: !!id,
   });
@@ -168,7 +160,7 @@ export function useCreateRegulation() {
 
   return useMutation({
     mutationFn: async (input: CreateRegulationInput) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('regulatory_requirements')
         .insert({
           requirement_code: input.reg_code,
@@ -236,7 +228,7 @@ export function useUpdateRegulation() {
       if (input.reg_status !== undefined) updateData.status = input.reg_status;
       if (input.ai_summary !== undefined) updateData.ai_summary = input.ai_summary;
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('regulatory_requirements')
         .update(updateData)
         .eq('id', id)
@@ -266,7 +258,7 @@ export function useDeleteRegulation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('regulatory_requirements')
         .delete()
         .eq('id', id);

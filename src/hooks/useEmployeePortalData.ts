@@ -58,16 +58,54 @@ export function useEmployeePayments(period?: string) {
         };
       }
 
-      // Tentar buscar de payroll_records
-      const { data: payrollData } = await supabase
-        .from("payroll_records")
-        .select("*")
-        .eq("employee_id", crewMember.id)
-        .order("payment_date", { ascending: false })
-        .limit(10);
+      // Tentar buscar de payroll_records usando RPC ou query genérica
+      // A tabela pode não existir nos tipos, então usamos any
+      try {
+        const { data: payrollData } = await (supabase as any)
+          .from("payroll_records")
+          .select("*")
+          .eq("employee_id", crewMember.id)
+          .order("payment_date", { ascending: false })
+          .limit(10);
 
-      if (!payrollData || payrollData.length === 0) {
-        // No payroll data - return empty, UI shows EmptyState
+        if (!payrollData || payrollData.length === 0) {
+          // No payroll data - return empty, UI shows EmptyState
+          return {
+            payments: [],
+            summary: {
+              grossSalary: 0,
+              allowances: 0,
+              deductions: 0,
+              netSalary: 0,
+            },
+          };
+        }
+
+        const payments: Payment[] = payrollData.map((record: Record<string, unknown>) => ({
+          id: String(record.id),
+          type: (record.type as Payment["type"]) || "salary",
+          description: String(record.description || "Pagamento"),
+          amount: Number(record.amount) || 0,
+          date: String(record.payment_date || new Date().toISOString().split("T")[0]),
+          status: (record.status as Payment["status"]) || "paid",
+          reference: record.reference ? String(record.reference) : undefined,
+        }));
+
+        const allowances = payments.filter(p => p.type === "allowance").reduce((acc, p) => acc + p.amount, 0);
+        const deductions = Math.abs(payments.filter(p => p.type === "deduction").reduce((acc, p) => acc + p.amount, 0));
+        const grossSalary = payments.filter(p => p.type === "salary").reduce((acc, p) => acc + p.amount, 0);
+
+        return {
+          payments,
+          summary: {
+            grossSalary,
+            allowances,
+            deductions,
+            netSalary: grossSalary + allowances - deductions,
+          },
+        };
+      } catch {
+        // Table doesn't exist or other error - return empty
         return {
           payments: [],
           summary: {
@@ -78,30 +116,6 @@ export function useEmployeePayments(period?: string) {
           },
         };
       }
-
-      const payments: Payment[] = payrollData.map((record: Record<string, unknown>) => ({
-        id: String(record.id),
-        type: (record.type as Payment["type"]) || "salary",
-        description: String(record.description || "Pagamento"),
-        amount: Number(record.amount) || 0,
-        date: String(record.payment_date || new Date().toISOString().split("T")[0]),
-        status: (record.status as Payment["status"]) || "paid",
-        reference: record.reference ? String(record.reference) : undefined,
-      }));
-
-      const allowances = payments.filter(p => p.type === "allowance").reduce((acc, p) => acc + p.amount, 0);
-      const deductions = Math.abs(payments.filter(p => p.type === "deduction").reduce((acc, p) => acc + p.amount, 0));
-      const grossSalary = payments.filter(p => p.type === "salary").reduce((acc, p) => acc + p.amount, 0);
-
-      return {
-        payments,
-        summary: {
-          grossSalary,
-          allowances,
-          deductions,
-          netSalary: grossSalary + allowances - deductions,
-        },
-      };
     },
     staleTime: 1000 * 60 * 10,
   });

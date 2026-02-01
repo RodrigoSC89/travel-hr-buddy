@@ -4,7 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/utils/production-logger';
+import { logger } from '@/lib/logger';
 
 interface ErrorReport {
   type: 'error' | 'warning' | 'unhandled_rejection' | 'network_error';
@@ -234,7 +234,7 @@ export const errorTracker = new ErrorTracker();
 
 // React hook
 import { useEffect, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+// logger already imported at top
 
 export function useErrorTracking(componentName?: string) {
   useEffect(() => {

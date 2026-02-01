@@ -1,4 +1,4 @@
-import { logger } from '@/lib/logger';
+import { logger as baseLogger } from '@/lib/logger';
 
 /**
  * Structured Logging System

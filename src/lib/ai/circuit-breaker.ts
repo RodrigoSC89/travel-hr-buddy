@@ -3,7 +3,6 @@
  * Production-grade failure handling with multi-provider fallback
  */
 
-import { logger } from "@/lib/utils/production-logger";
 import { logger } from '@/lib/logger';
 
 export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
