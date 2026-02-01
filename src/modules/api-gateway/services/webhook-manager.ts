@@ -3,6 +3,7 @@
  */
 
 import { Webhook, WebhookLog } from "../types";
+import type { WebhookPayload } from "@/types/webhook.types";
 
 class WebhookManagerService {
   private webhooks: Map<string, Webhook> = new Map();
@@ -30,7 +31,7 @@ class WebhookManagerService {
     return webhook;
   }
 
-  async triggerWebhook(event: string, payload: any): Promise<void> {
+  async triggerWebhook(event: string, payload: WebhookPayload): Promise<void> {
     const relevantWebhooks = Array.from(this.webhooks.values()).filter(
       wh => wh.isActive && wh.events.includes(event)
     );
@@ -73,7 +74,7 @@ class WebhookManagerService {
     }
   }
 
-  private async simulateWebhookCall(url: string, event: string, payload: any): Promise<void> {
+  private async simulateWebhookCall(_url: string, _event: string, _payload: WebhookPayload): Promise<void> {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, Math.random() * 500 + 100));
     

@@ -6,6 +6,21 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type {
+  RouteOptimizationInput,
+  RouteOptimizationOutput,
+  FailureDetectionInput,
+  FailureDetectionOutput,
+  QuickResponseInput,
+  QuickResponseOutput,
+  AnomalyDetectionInput,
+  AnomalyDetectionOutput,
+  PredictiveMaintenanceInput,
+  PredictiveMaintenanceOutput,
+  EdgeAIInput,
+  EdgeAIOutput,
+} from "@/types/edge-ai.types";
+import { hasScore } from "@/types/edge-ai.types";
 
 export type EdgeAITask = "route_optimization" | "failure_detection" | "quick_response" | "anomaly_detection" | "predictive_maintenance";
 export type ModelFormat = "ggml" | "onnx-lite" | "tflite" | "wasm";
@@ -24,14 +39,14 @@ export interface EdgeModel {
 
 export interface InferenceRequest {
   task: EdgeAITask;
-  input: any;
+  input: EdgeAIInput;
   priority: "low" | "normal" | "high" | "urgent";
   timeout?: number; // ms
 }
 
 export interface InferenceResult {
   task: EdgeAITask;
-  output: any;
+  output: EdgeAIOutput;
   confidence: number;
   inferenceTimeMs: number;
   modelUsed: string;
@@ -53,7 +68,7 @@ class EdgeAICore {
   private gpuCapabilities: GPUCapabilities | null = null;
   private inferenceQueue: InferenceRequest[] = [];
   private resultsCache = new Map<string, InferenceResult>();
-  private webGPUDevice: any = null;
+  private webGPUDevice: GPUDevice | null = null;
 
   /**
    * Initialize Edge AI Core
@@ -97,9 +112,9 @@ class EdgeAICore {
     };
 
     // Check WebGPU support
-    if ("gpu" in navigator) {
+    if ("gpu" in navigator && navigator.gpu) {
       try {
-        const adapter = await (navigator as any).gpu.requestAdapter();
+        const adapter = await navigator.gpu.requestAdapter();
         if (adapter) {
           capabilities.webGPUSupported = true;
           const device = await adapter.requestDevice();
@@ -134,11 +149,11 @@ class EdgeAICore {
    */
   private async initializeWebGPU(): Promise<void> {
     try {
-      if (!("gpu" in navigator)) {
+      if (!("gpu" in navigator) || !navigator.gpu) {
         throw new Error("WebGPU not supported");
       }
 
-      const adapter = await (navigator as any).gpu.requestAdapter();
+      const adapter = await navigator.gpu.requestAdapter();
       if (!adapter) {
         throw new Error("No WebGPU adapter found");
       }
@@ -288,23 +303,23 @@ class EdgeAICore {
   /**
    * Execute model-specific inference
    */
-  private async executeInference(model: EdgeModel, input: any): Promise<any> {
+  private async executeInference(model: EdgeModel, input: EdgeAIInput): Promise<EdgeAIOutput> {
     // Simulate inference based on task
     switch (model.task) {
     case "route_optimization":
-      return this.optimizeRoute(input);
+      return this.optimizeRoute(input as RouteOptimizationInput);
       
     case "failure_detection":
-      return this.detectFailure(input);
+      return this.detectFailure(input as FailureDetectionInput);
       
     case "quick_response":
-      return this.generateQuickResponse(input);
+      return this.generateQuickResponse(input as QuickResponseInput);
       
     case "anomaly_detection":
-      return this.detectAnomaly(input);
+      return this.detectAnomaly(input as AnomalyDetectionInput);
       
     case "predictive_maintenance":
-      return this.predictMaintenance(input);
+      return this.predictMaintenance(input as PredictiveMaintenanceInput);
       
     default:
       throw new Error(`Unknown task: ${model.task}`);
@@ -314,7 +329,7 @@ class EdgeAICore {
   /**
    * Task-specific inference implementations (simplified)
    */
-  private optimizeRoute(input: any): any {
+  private optimizeRoute(input: RouteOptimizationInput): RouteOptimizationOutput {
     // Simplified route optimization
     return {
       optimizedRoute: input.waypoints || [],
@@ -324,7 +339,7 @@ class EdgeAICore {
     };
   }
 
-  private detectFailure(input: any): any {
+  private detectFailure(input: FailureDetectionInput): FailureDetectionOutput {
     // Simplified failure detection
     const failureScore = Math.random();
     return {
@@ -336,7 +351,7 @@ class EdgeAICore {
     };
   }
 
-  private generateQuickResponse(input: any): any {
+  private generateQuickResponse(input: QuickResponseInput): QuickResponseOutput {
     // Simplified response generation
     const responses = [
       "Acknowledged. Processing request.",
@@ -351,7 +366,7 @@ class EdgeAICore {
     };
   }
 
-  private detectAnomaly(input: any): any {
+  private detectAnomaly(input: AnomalyDetectionInput): AnomalyDetectionOutput {
     // Simplified anomaly detection
     const anomalyScore = Math.random();
     return {
@@ -366,7 +381,7 @@ class EdgeAICore {
     };
   }
 
-  private predictMaintenance(input: any): any {
+  private predictMaintenance(input: PredictiveMaintenanceInput): PredictiveMaintenanceOutput {
     // Simplified predictive maintenance
     const riskScore = Math.random();
     return {
@@ -385,12 +400,12 @@ class EdgeAICore {
   /**
    * Calculate confidence score
    */
-  private calculateConfidence(output: any, model: EdgeModel): number {
+  private calculateConfidence(output: EdgeAIOutput, model: EdgeModel): number {
     // Base confidence on model accuracy
     let confidence = model.accuracy;
 
     // Adjust based on output characteristics
-    if (output.score !== undefined) {
+    if (hasScore(output)) {
       confidence = (confidence + output.score) / 2;
     }
 

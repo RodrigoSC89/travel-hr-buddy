@@ -8,6 +8,12 @@
 
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
+import type {
+  LearningEventData,
+  LearningEventContext,
+  LearningEventDbRow,
+} from "@/types/learning-core.types";
 
 export interface LearningConfig {
   learning_enabled: boolean;
@@ -20,11 +26,11 @@ export interface LearningEvent {
   module_name: string;
   user_id?: string | null;
   tenant_id?: string | null;
-  event_data: Record<string, any>;
-  context: Record<string, any>;
+  event_data: LearningEventData;
+  context: LearningEventContext;
   outcome?: "success" | "failure" | "partial" | null;
   timestamp?: string;
-  metadata?: Record<string, any>;
+  metadata?: Json;
   created_at?: string;
 }
 
@@ -43,7 +49,7 @@ export interface UsagePattern {
   module: string;
   confidence: number;
   description: string;
-  examples: any[];
+  examples: LearningEventData[];
 }
 
 class LearningCore {
@@ -312,16 +318,17 @@ class LearningCore {
   /**
    * Analyze usage patterns from events
    */
-  private analyzeUsagePatterns(events: any[]): UsagePattern[] {
+  private analyzeUsagePatterns(events: LearningEventDbRow[]): UsagePattern[] {
     const patterns: UsagePattern[] = [];
-    const moduleInteractions: Record<string, any[]> = {};
+    const moduleInteractions: Record<string, LearningEventDbRow[]> = {};
 
     // Group by module
     events.forEach(event => {
-      if (!moduleInteractions[event.module_name]) {
-        moduleInteractions[event.module_name] = [];
+      const moduleName = event.module_name || 'unknown';
+      if (!moduleInteractions[moduleName]) {
+        moduleInteractions[moduleName] = [];
       }
-      moduleInteractions[event.module_name].push(event);
+      moduleInteractions[moduleName].push(event);
     });
 
     // Analyze each module
@@ -329,7 +336,8 @@ class LearningCore {
       const actionFrequency: Record<string, number> = {};
 
       moduleEvents.forEach(event => {
-        const action = event.event_data?.action || "unknown";
+        const metadata = event.metadata as Record<string, unknown> | null;
+        const action = (metadata?.action as string) || "unknown";
         actionFrequency[action] = (actionFrequency[action] || 0) + 1;
       });
 
@@ -345,9 +353,12 @@ class LearningCore {
             confidence: count / moduleEvents.length,
             description: `Users frequently perform "${action}" in ${module}`,
             examples: moduleEvents
-              .filter(e => e.event_data?.action === action)
+              .filter(e => {
+                const m = e.metadata as Record<string, unknown> | null;
+                return m?.action === action;
+              })
               .slice(0, 3)
-              .map(e => e.event_data),
+              .map(e => (e.metadata || {}) as LearningEventData),
           });
         });
     });
@@ -358,7 +369,7 @@ class LearningCore {
   /**
    * Count event types for statistics
    */
-  private countEventTypes(events: any[]): Record<string, number> {
+  private countEventTypes(events: LearningEventDbRow[]): Record<string, number> {
     const counts: Record<string, number> = {};
     
     events.forEach(event => {

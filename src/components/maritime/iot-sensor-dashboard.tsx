@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logger } from "@/lib/logger";
 import {
   Thermometer, 
-  Zap, 
   Fuel, 
   Gauge,
   Activity,
@@ -15,12 +13,16 @@ import {
   TrendingUp,
   Wifi,
   Battery,
-  Waves,
   Settings,
   Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useVesselSensors } from "@/hooks/useVesselsData";
+import type { 
+  SensorProcessingRequest,
+  SensorProcessingResponse,
+  ComponentAlert,
+} from "@/types/iot-sensor.types";
 
 interface SensorReading {
   id: string;
@@ -45,7 +47,7 @@ export const IoTSensorDashboard = () => {
   const { data: vesselSensorData = [], isLoading } = useVesselSensors();
   
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [alerts, setAlerts] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<ComponentAlert[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Transform hook data to local interface
@@ -114,20 +116,37 @@ export const IoTSensorDashboard = () => {
     );
   }
 
-  const processSensorData = async (vesselId: string, sensorData: any) => {
+  const processSensorData = async (vesselId: string, sensorData: SensorReading): Promise<void> => {
     try {
-      const { data, error } = await supabase.functions.invoke("iot-sensor-processing", {
-        body: {
-          sensorData,
-          vesselId,
-          sensorType: sensorData.sensorType
-        }
+      const request: SensorProcessingRequest = {
+        sensorData: {
+          id: sensorData.id,
+          sensorType: sensorData.sensorType,
+          value: sensorData.value,
+          unit: sensorData.unit,
+          timestamp: sensorData.timestamp,
+          status: sensorData.status,
+          location: sensorData.location,
+        },
+        vesselId,
+        sensorType: sensorData.sensorType
+      };
+
+      const { data, error } = await supabase.functions.invoke<SensorProcessingResponse>("iot-sensor-processing", {
+        body: request
       });
 
       if (error) throw error;
       
-      if (data.alerts && data.alerts.length > 0) {
-        setAlerts(prev => [...prev, ...data.alerts]);
+      if (data?.alerts && data.alerts.length > 0) {
+        const newAlerts: ComponentAlert[] = data.alerts.map(a => ({
+          id: a.id,
+          type: a.type,
+          message: a.message,
+          value: a.value,
+          unit: a.unit
+        }));
+        setAlerts(prev => [...prev, ...newAlerts]);
       }
       
     } catch (error) {
