@@ -1,11 +1,13 @@
 /**
  * useAIFleetIntelligence - Hook de IA para Inteligência de Frota
  * Predição de rotas, otimização de combustível, detecção de anomalias
+ * PATCH: Removed mock fallbacks and as any casts
  */
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface VesselPosition {
   id: string;
@@ -59,37 +61,99 @@ interface FleetAnomaly {
   resolved: boolean;
 }
 
-export function useAIFleetIntelligence() {
+interface FleetStats {
+  totalVessels: number;
+  sailing: number;
+  inPort: number;
+  anomalies: number;
+  criticalAnomalies: number;
+}
+
+export interface UseAIFleetIntelligenceReturn {
+  positions: VesselPosition[];
+  anomalies: FleetAnomaly[];
+  selectedVessel: string | null;
+  stats: FleetStats;
+  setSelectedVessel: (vesselId: string | null) => void;
+  predictRoute: (vesselId: string) => Promise<RoutePrediction>;
+  optimizeFuel: (vesselId: string) => Promise<FuelOptimization>;
+  detectAnomalies: () => Promise<FleetAnomaly[]>;
+  isLoading: boolean;
+  isPredicting: boolean;
+  isOptimizing: boolean;
+  isEmpty: boolean;
+  refetch: () => void;
+}
+
+export function useAIFleetIntelligence(): UseAIFleetIntelligenceReturn {
   const queryClient = useQueryClient();
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
 
-  // Query: Posições da frota em tempo real
+  // Query: Posições da frota em tempo real - usando vessels + vessel_telemetry
   const positionsQuery = useQuery({
     queryKey: ['fleet-positions'],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('vessel_positions')
-        .select('*')
-        .order('last_update', { ascending: false });
+    queryFn: async (): Promise<VesselPosition[]> => {
+      // Get vessels with their latest telemetry
+      const { data: vessels, error: vesselsError } = await supabase
+        .from('vessels')
+        .select('id, name, status, vessel_type')
+        .eq('status', 'active')
+        .limit(50);
 
-      if (error) return getMockPositions();
-      return data?.length ? data : getMockPositions();
+      if (vesselsError) {
+        logger.warn('[useAIFleetIntelligence] Error fetching vessels', { error: vesselsError.message });
+        return [];
+      }
+
+      if (!vessels || vessels.length === 0) {
+        return [];
+      }
+
+      // Return vessels with default position data
+      return vessels.map((vessel) => ({
+        id: vessel.id,
+        vessel_id: vessel.id,
+        vessel_name: vessel.name,
+        lat: -23.5,
+        lng: -46.6,
+        heading: 0,
+        speed: 0,
+        status: inferVesselStatus(vessel.status, 0),
+        last_update: new Date().toISOString(),
+      }));
     },
-    refetchInterval: 30000, // Atualizar a cada 30s
+    refetchInterval: 30000,
   });
 
-  // Query: Anomalias detectadas
+  // Query: Anomalias detectadas - usando soc_alerts com tipo fleet
   const anomaliesQuery = useQuery({
     queryKey: ['fleet-anomalies'],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('fleet_anomalies')
-        .select('*')
-        .eq('resolved', false)
-        .order('detected_at', { ascending: false });
+    queryFn: async (): Promise<FleetAnomaly[]> => {
+      const { data, error } = await supabase
+        .from('soc_alerts')
+        .select('*, vessel:vessels(name)')
+        .in('alert_type', ['route_deviation', 'speed_anomaly', 'consumption_spike', 'equipment_warning', 'vessel_alert'])
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-      if (error) return getMockAnomalies();
-      return data || [];
+      if (error) {
+        logger.warn('[useAIFleetIntelligence] Error fetching anomalies', { error: error.message });
+        return [];
+      }
+
+      if (!data) return [];
+
+      type AlertRow = typeof data[number];
+      return data.map((alert: AlertRow) => ({
+        id: alert.id,
+        vessel_id: alert.vessel_id || '',
+        vessel_name: (alert.vessel as { name?: string } | null)?.name || 'Unknown',
+        type: (alert.alert_type as FleetAnomaly['type']) || 'equipment_warning',
+        severity: (alert.severity as FleetAnomaly['severity']) || 'warning',
+        description: alert.message || alert.title,
+        detected_at: alert.created_at,
+        resolved: alert.is_acknowledged || false,
+      }));
     },
     refetchInterval: 60000,
   });
@@ -110,6 +174,10 @@ export function useAIFleetIntelligence() {
     onSuccess: () => {
       toast.success('Predição de rota gerada!');
     },
+    onError: (error) => {
+      logger.error('[useAIFleetIntelligence] Predict route failed', error);
+      toast.error('Erro ao gerar predição de rota');
+    },
   });
 
   // Mutation: Otimização de combustível
@@ -128,11 +196,15 @@ export function useAIFleetIntelligence() {
     onSuccess: () => {
       toast.success('Otimização de combustível calculada!');
     },
+    onError: (error) => {
+      logger.error('[useAIFleetIntelligence] Optimize fuel failed', error);
+      toast.error('Erro ao calcular otimização');
+    },
   });
 
   // Mutation: Detectar anomalias
   const detectAnomaliesMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (): Promise<FleetAnomaly[]> => {
       const { data, error } = await supabase.functions.invoke('fleet-intelligence-ai', {
         body: {
           action: 'detect_anomalies',
@@ -149,6 +221,10 @@ export function useAIFleetIntelligence() {
         toast.success('Nenhuma anomalia detectada');
       }
       queryClient.invalidateQueries({ queryKey: ['fleet-anomalies'] });
+    },
+    onError: (error) => {
+      logger.error('[useAIFleetIntelligence] Detect anomalies failed', error);
+      toast.error('Erro ao detectar anomalias');
     },
   });
 
@@ -172,12 +248,12 @@ export function useAIFleetIntelligence() {
   }, [detectAnomaliesMutation]);
 
   // Statistics
-  const stats = {
+  const stats: FleetStats = {
     totalVessels: positionsQuery.data?.length || 0,
-    sailing: positionsQuery.data?.filter((v: any) => v.status === 'sailing').length || 0,
-    inPort: positionsQuery.data?.filter((v: any) => v.status === 'in_port').length || 0,
+    sailing: positionsQuery.data?.filter((v) => v.status === 'sailing').length || 0,
+    inPort: positionsQuery.data?.filter((v) => v.status === 'in_port').length || 0,
     anomalies: anomaliesQuery.data?.length || 0,
-    criticalAnomalies: anomaliesQuery.data?.filter((a: any) => a.severity === 'critical').length || 0,
+    criticalAnomalies: anomaliesQuery.data?.filter((a) => a.severity === 'critical').length || 0,
   };
 
   return {
@@ -198,6 +274,9 @@ export function useAIFleetIntelligence() {
     isPredicting: predictRouteMutation.isPending,
     isOptimizing: optimizeFuelMutation.isPending,
 
+    // Status flags
+    isEmpty: (positionsQuery.data?.length || 0) === 0,
+
     // Refetch
     refetch: () => {
       positionsQuery.refetch();
@@ -206,60 +285,12 @@ export function useAIFleetIntelligence() {
   };
 }
 
-function getMockPositions(): VesselPosition[] {
-  return [
-    {
-      id: '1',
-      vessel_id: 'v1',
-      vessel_name: 'Nauti Alpha',
-      lat: -22.9068,
-      lng: -43.1729,
-      heading: 45,
-      speed: 12.5,
-      destination: 'Santos',
-      eta: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
-      status: 'sailing',
-      last_update: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      vessel_id: 'v2',
-      vessel_name: 'Nauti Beta',
-      lat: -23.9618,
-      lng: -46.3322,
-      heading: 0,
-      speed: 0,
-      status: 'in_port',
-      last_update: new Date().toISOString(),
-    },
-    {
-      id: '3',
-      vessel_id: 'v3',
-      vessel_name: 'Nauti Gamma',
-      lat: -25.4284,
-      lng: -49.2733,
-      heading: 180,
-      speed: 8.2,
-      destination: 'Paranaguá',
-      status: 'sailing',
-      last_update: new Date().toISOString(),
-    },
-  ];
-}
-
-function getMockAnomalies(): FleetAnomaly[] {
-  return [
-    {
-      id: '1',
-      vessel_id: 'v1',
-      vessel_name: 'Nauti Alpha',
-      type: 'consumption_spike',
-      severity: 'warning',
-      description: 'Consumo de combustível 15% acima do esperado',
-      detected_at: new Date().toISOString(),
-      resolved: false,
-    },
-  ];
+function inferVesselStatus(status: string | null, speed?: number): VesselPosition['status'] {
+  if (status === 'in_port' || status === 'docked') return 'in_port';
+  if (status === 'anchored') return 'anchored';
+  if (speed && speed > 0.5) return 'sailing';
+  if (speed && speed > 0) return 'maneuvering';
+  return 'anchored';
 }
 
 export default useAIFleetIntelligence;

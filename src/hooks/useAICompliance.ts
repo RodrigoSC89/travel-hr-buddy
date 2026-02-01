@@ -1,11 +1,13 @@
 /**
  * useAICompliance - Hook de IA para Monitoramento de Compliance 24/7
  * Alertas em tempo real, conformidade automática, evidências
+ * PATCH: Removed mock fallbacks and as any casts
  */
 import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ComplianceStatus {
   module: string;
@@ -53,62 +55,128 @@ interface ComplianceMetrics {
   trend: 'improving' | 'stable' | 'declining';
 }
 
-export function useAICompliance(vesselId?: string) {
+export interface UseAIComplianceReturn {
+  status: ComplianceStatus[];
+  alerts: ComplianceAlert[];
+  metrics: ComplianceMetrics | undefined;
+  isMonitoring: boolean;
+  setIsMonitoring: (value: boolean) => void;
+  checkCompliance: (module?: string) => Promise<unknown>;
+  generateEvidence: (module: string, itemReference: string) => Promise<ComplianceEvidence>;
+  resolveAlert: (alertId: string) => Promise<void>;
+  isLoading: boolean;
+  isChecking: boolean;
+  isEmpty: boolean;
+  hasError: boolean;
+  refetch: () => void;
+}
+
+export function useAICompliance(vesselId?: string): UseAIComplianceReturn {
   const queryClient = useQueryClient();
   const [isMonitoring, setIsMonitoring] = useState(true);
 
-  // Query: Status de compliance por módulo
+  // Query: Status de compliance por módulo - usando tabela existente
   const statusQuery = useQuery({
     queryKey: ['compliance-status', vesselId],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('compliance_status')
-        .select('*')
-        .order('score', { ascending: true });
+    queryFn: async (): Promise<ComplianceStatus[]> => {
+      // Try to get from ai_behavior_snapshots as compliance metrics source
+      const { data, error } = await supabase
+        .from('ai_behavior_snapshots')
+        .select('module_name, accuracy_score, behavior_type, snapshot_date')
+        .order('snapshot_date', { ascending: false })
+        .limit(20);
 
-      if (error) return getMockComplianceStatus();
-      return data?.length ? data : getMockComplianceStatus();
+      if (error) {
+        logger.warn('[useAICompliance] Error fetching compliance status', { error: error.message });
+        return [];
+      }
+
+      if (!data || data.length === 0) {
+        return [];
+      }
+
+      // Transform AI behavior data into compliance status
+      const moduleMap = new Map<string, ComplianceStatus>();
+      
+      for (const record of data) {
+        if (!moduleMap.has(record.module_name)) {
+          const score = Math.round((record.accuracy_score || 0.75) * 100);
+          moduleMap.set(record.module_name, {
+            module: record.module_name,
+            score,
+            status: score >= 85 ? 'compliant' : score >= 60 ? 'at_risk' : 'non_compliant',
+            last_check: record.snapshot_date,
+            open_items: score < 85 ? Math.floor((100 - score) / 10) : 0,
+            critical_items: score < 60 ? 1 : 0,
+          });
+        }
+      }
+
+      return Array.from(moduleMap.values());
     },
-    refetchInterval: 60000, // Verificar a cada minuto
+    refetchInterval: 60000,
   });
 
-  // Query: Alertas ativos
+  // Query: Alertas ativos - usando soc_alerts
   const alertsQuery = useQuery({
     queryKey: ['compliance-alerts', vesselId],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('compliance_alerts')
+    queryFn: async (): Promise<ComplianceAlert[]> => {
+      let query = supabase
+        .from('soc_alerts')
         .select('*')
-        .eq('resolved', false)
+        .eq('status', 'open')
         .order('severity', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-      if (error) return getMockAlerts();
-      return data || getMockAlerts();
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        logger.warn('[useAICompliance] Error fetching alerts', { error: error.message });
+        return [];
+      }
+
+      if (!data) return [];
+
+      type SocAlertRow = typeof data[number];
+
+      return data.map((alert: SocAlertRow) => ({
+        id: alert.id,
+        type: (alert.alert_type as ComplianceAlert['type']) || 'non_conformity',
+        severity: (alert.severity as ComplianceAlert['severity']) || 'warning',
+        module: alert.source_module || 'general',
+        title: alert.title,
+        description: alert.message || '',
+        vessel_id: alert.vessel_id || undefined,
+        resolved: alert.is_acknowledged || false,
+        created_at: alert.created_at,
+      }));
     },
-    refetchInterval: 30000, // Verificar a cada 30s
+    refetchInterval: 30000,
   });
 
   // Query: Métricas gerais
   const metricsQuery = useQuery({
     queryKey: ['compliance-metrics', vesselId],
-    queryFn: async () => {
+    queryFn: async (): Promise<ComplianceMetrics> => {
       const status = statusQuery.data || [];
       const alerts = alertsQuery.data || [];
 
-      const metrics: ComplianceMetrics = {
+      return {
         overall_score: status.length
-          ? Math.round(status.reduce((sum: number, s: any) => sum + s.score, 0) / status.length)
+          ? Math.round(status.reduce((sum, s) => sum + s.score, 0) / status.length)
           : 0,
-        modules_compliant: status.filter((s: any) => s.status === 'compliant').length,
-        modules_at_risk: status.filter((s: any) => s.status === 'at_risk').length,
-        modules_non_compliant: status.filter((s: any) => s.status === 'non_compliant').length,
+        modules_compliant: status.filter((s) => s.status === 'compliant').length,
+        modules_at_risk: status.filter((s) => s.status === 'at_risk').length,
+        modules_non_compliant: status.filter((s) => s.status === 'non_compliant').length,
         open_alerts: alerts.length,
-        critical_alerts: alerts.filter((a: any) => a.severity === 'critical').length,
+        critical_alerts: alerts.filter((a) => a.severity === 'critical').length,
         trend: 'stable',
       };
-
-      return metrics;
     },
     enabled: !!statusQuery.data && !!alertsQuery.data,
   });
@@ -132,6 +200,10 @@ export function useAICompliance(vesselId?: string) {
       queryClient.invalidateQueries({ queryKey: ['compliance-alerts'] });
       toast.success('✅ Verificação de compliance concluída!');
     },
+    onError: (error) => {
+      logger.error('[useAICompliance] Check compliance failed', error);
+      toast.error('Erro ao verificar compliance');
+    },
   });
 
   // Mutation: Gerar evidência automática
@@ -151,14 +223,21 @@ export function useAICompliance(vesselId?: string) {
     onSuccess: () => {
       toast.success('📄 Evidência gerada com sucesso!');
     },
+    onError: (error) => {
+      logger.error('[useAICompliance] Generate evidence failed', error);
+      toast.error('Erro ao gerar evidência');
+    },
   });
 
   // Mutation: Resolver alerta
   const resolveAlertMutation = useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await (supabase as any)
-        .from('compliance_alerts')
-        .update({ resolved: true, resolved_at: new Date().toISOString() })
+      const { error } = await supabase
+        .from('soc_alerts')
+        .update({ 
+          status: 'resolved', 
+          resolved_at: new Date().toISOString() 
+        })
         .eq('id', alertId);
 
       if (error) throw error;
@@ -166,6 +245,10 @@ export function useAICompliance(vesselId?: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['compliance-alerts'] });
       toast.success('✅ Alerta resolvido!');
+    },
+    onError: (error) => {
+      logger.error('[useAICompliance] Resolve alert failed', error);
+      toast.error('Erro ao resolver alerta');
     },
   });
 
@@ -180,10 +263,10 @@ export function useAICompliance(vesselId?: string) {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'compliance_alerts',
+          table: 'soc_alerts',
         },
         (payload) => {
-          const alert = payload.new as ComplianceAlert;
+          const alert = payload.new as { severity?: string; title?: string };
           if (alert.severity === 'critical') {
             toast.error(`🚨 ALERTA CRÍTICO: ${alert.title}`);
           } else if (alert.severity === 'warning') {
@@ -240,62 +323,16 @@ export function useAICompliance(vesselId?: string) {
     isLoading: statusQuery.isLoading,
     isChecking: checkComplianceMutation.isPending,
 
+    // Status flags
+    isEmpty: (statusQuery.data?.length || 0) === 0,
+    hasError: !!statusQuery.error || !!alertsQuery.error,
+
     // Refetch
     refetch: () => {
       statusQuery.refetch();
       alertsQuery.refetch();
     },
   };
-}
-
-function getMockComplianceStatus(): ComplianceStatus[] {
-  return [
-    { module: 'PEOTRAM', score: 87, status: 'compliant', last_check: new Date().toISOString(), open_items: 2, critical_items: 0 },
-    { module: 'PEO-DP', score: 92, status: 'compliant', last_check: new Date().toISOString(), open_items: 1, critical_items: 0 },
-    { module: 'MLC 2006', score: 78, status: 'at_risk', last_check: new Date().toISOString(), open_items: 5, critical_items: 1 },
-    { module: 'SGSO', score: 95, status: 'compliant', last_check: new Date().toISOString(), open_items: 0, critical_items: 0 },
-    { module: 'ISM Code', score: 65, status: 'at_risk', last_check: new Date().toISOString(), open_items: 8, critical_items: 2 },
-    { module: 'STCW', score: 88, status: 'compliant', last_check: new Date().toISOString(), open_items: 3, critical_items: 0 },
-  ];
-}
-
-function getMockAlerts(): ComplianceAlert[] {
-  return [
-    {
-      id: '1',
-      type: 'expiry',
-      severity: 'critical',
-      module: 'STCW',
-      title: 'Certificado STCW expirando',
-      description: 'Certificado de João Silva expira em 7 dias',
-      due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      vessel_name: 'Nauti Alpha',
-      resolved: false,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      type: 'audit_due',
-      severity: 'warning',
-      module: 'PEOTRAM',
-      title: 'Auditoria PEOTRAM pendente',
-      description: 'Auditoria do ciclo 2024 deve ser realizada em 15 dias',
-      due_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-      resolved: false,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: '3',
-      type: 'document_missing',
-      severity: 'warning',
-      module: 'MLC 2006',
-      title: 'Documento faltando',
-      description: 'Contrato de trabalho de Maria Costa não encontrado',
-      assigned_to: 'RH',
-      resolved: false,
-      created_at: new Date().toISOString(),
-    },
-  ];
 }
 
 export default useAICompliance;

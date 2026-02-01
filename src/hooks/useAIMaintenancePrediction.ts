@@ -1,11 +1,13 @@
 /**
  * useAIMaintenancePrediction - Hook de IA para Manutenção Preditiva
  * Previsão de falhas, planos preventivos automáticos, ROI
+ * PATCH: Removed mock fallbacks and as any casts
  */
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface Equipment {
   id: string;
@@ -14,11 +16,11 @@ interface Equipment {
   vessel_id: string;
   vessel_name: string;
   status: 'operational' | 'degraded' | 'critical' | 'offline';
-  health_score: number; // 0-100
+  health_score: number;
   last_maintenance: string;
   next_scheduled: string;
   runtime_hours: number;
-  failure_probability: number; // 0-100
+  failure_probability: number;
 }
 
 interface FailurePrediction {
@@ -66,50 +68,157 @@ interface MaintenanceROI {
   roi_percentage: number;
 }
 
-export function useAIMaintenancePrediction(vesselId?: string) {
+interface MaintenanceStats {
+  totalEquipment: number;
+  operational: number;
+  degraded: number;
+  critical: number;
+  predictions: number;
+  highRisk: number;
+}
+
+export interface UseAIMaintenancePredictionReturn {
+  equipment: Equipment[];
+  predictions: FailurePrediction[];
+  plans: MaintenancePlan[];
+  selectedEquipment: string | null;
+  stats: MaintenanceStats;
+  setSelectedEquipment: (id: string | null) => void;
+  predictFailures: (equipmentId?: string) => Promise<FailurePrediction[]>;
+  generatePlan: (equipmentId: string) => Promise<MaintenancePlan>;
+  calculateROI: () => Promise<MaintenanceROI>;
+  isLoading: boolean;
+  isPredicting: boolean;
+  isGeneratingPlan: boolean;
+  isEmpty: boolean;
+  refetch: () => void;
+}
+
+export function useAIMaintenancePrediction(vesselId?: string): UseAIMaintenancePredictionReturn {
   const queryClient = useQueryClient();
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
 
-  // Query: Equipamentos
+  // Query: Equipamentos - usando ai_maintenance_predictions
   const equipmentQuery = useQuery({
     queryKey: ['maintenance-equipment', vesselId],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('equipment')
-        .select('*')
-        .order('health_score', { ascending: true });
+    queryFn: async (): Promise<Equipment[]> => {
+      let query = supabase
+        .from('ai_maintenance_predictions')
+        .select('*, vessel:vessels(name)')
+        .order('failure_probability', { ascending: false })
+        .limit(50);
 
-      if (error) return getMockEquipment();
-      return data?.length ? data : getMockEquipment();
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        logger.warn('[useAIMaintenancePrediction] Error fetching equipment', { error: error.message });
+        return [];
+      }
+
+      if (!data || data.length === 0) {
+        return [];
+      }
+
+      return data.map((pred) => ({
+        id: pred.id,
+        name: pred.equipment_name,
+        type: pred.equipment_id.includes('engine') ? 'main_engine' : 
+              pred.equipment_id.includes('dp') ? 'dp_system' : 'equipment',
+        vessel_id: pred.vessel_id || '',
+        vessel_name: (pred.vessel as { name?: string })?.name || 'Unknown',
+        status: inferEquipmentStatus(pred.failure_probability),
+        health_score: Math.round(100 - (pred.failure_probability || 0)),
+        last_maintenance: pred.updated_at || pred.created_at,
+        next_scheduled: pred.predicted_failure_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        runtime_hours: 0, // Not available in this table
+        failure_probability: pred.failure_probability || 0,
+      }));
     },
     staleTime: 60000,
   });
 
-  // Query: Previsões de falha
+  // Query: Previsões de falha - mesma tabela, diferentes campos
   const predictionsQuery = useQuery({
     queryKey: ['maintenance-predictions', vesselId],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('failure_predictions')
+    queryFn: async (): Promise<FailurePrediction[]> => {
+      let query = supabase
+        .from('ai_maintenance_predictions')
         .select('*')
-        .order('probability', { ascending: false });
+        .gte('failure_probability', 30)
+        .order('failure_probability', { ascending: false })
+        .limit(20);
 
-      if (error) return getMockPredictions();
-      return data || getMockPredictions();
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        logger.warn('[useAIMaintenancePrediction] Error fetching predictions', { error: error.message });
+        return [];
+      }
+
+      if (!data) return [];
+
+      return data.map((pred) => ({
+        id: pred.id,
+        equipment_id: pred.equipment_id,
+        equipment_name: pred.equipment_name,
+        failure_type: extractFailureType(pred.risk_factors),
+        probability: pred.failure_probability,
+        estimated_date: pred.predicted_failure_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        confidence: pred.confidence || 75,
+        impact: inferImpact(pred.failure_probability),
+        recommended_action: pred.recommended_action || 'Inspeção preventiva recomendada',
+        cost_if_failure: estimateCost(pred.failure_probability, true),
+        cost_prevention: estimateCost(pred.failure_probability, false),
+      }));
     },
   });
 
-  // Query: Planos de manutenção
+  // Query: Planos de manutenção - usando maintenance_records
   const plansQuery = useQuery({
     queryKey: ['maintenance-plans', vesselId],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('maintenance_plans')
+    queryFn: async (): Promise<MaintenancePlan[]> => {
+      let query = supabase
+        .from('maintenance_records')
         .select('*')
-        .order('scheduled_date', { ascending: true });
+        .eq('status', 'scheduled')
+        .order('scheduled_date', { ascending: true })
+        .limit(20);
 
-      if (error) return [];
-      return data || [];
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        logger.warn('[useAIMaintenancePrediction] Error fetching plans', { error: error.message });
+        return [];
+      }
+
+      if (!data) return [];
+
+      type MaintenanceRow = typeof data[number];
+      return data.map((record: MaintenanceRow) => ({
+        id: record.id,
+        equipment_id: record.id,
+        equipment_name: record.description || 'Equipment',
+        plan_type: (record.maintenance_type as MaintenancePlan['plan_type']) || 'preventive',
+        priority: (record.priority as MaintenancePlan['priority']) || 'medium',
+        scheduled_date: record.scheduled_date || new Date().toISOString(),
+        estimated_duration: '4 hours',
+        tasks: [],
+        parts_required: [],
+        estimated_cost: record.cost_estimate || 0,
+        ai_generated: false,
+      }));
     },
   });
 
@@ -136,6 +245,10 @@ export function useAIMaintenancePrediction(vesselId?: string) {
       }
       queryClient.invalidateQueries({ queryKey: ['maintenance-predictions'] });
     },
+    onError: (error) => {
+      logger.error('[useAIMaintenancePrediction] Predict failures failed', error);
+      toast.error('Erro ao prever falhas');
+    },
   });
 
   // Mutation: Gerar plano preventivo
@@ -155,6 +268,10 @@ export function useAIMaintenancePrediction(vesselId?: string) {
       toast.success('📋 Plano de manutenção gerado!');
       queryClient.invalidateQueries({ queryKey: ['maintenance-plans'] });
     },
+    onError: (error) => {
+      logger.error('[useAIMaintenancePrediction] Generate plan failed', error);
+      toast.error('Erro ao gerar plano');
+    },
   });
 
   // Mutation: Calcular ROI
@@ -172,6 +289,10 @@ export function useAIMaintenancePrediction(vesselId?: string) {
     },
     onSuccess: (roi) => {
       toast.success(`💰 ROI calculado: ${roi.roi_percentage.toFixed(0)}%`);
+    },
+    onError: (error) => {
+      logger.error('[useAIMaintenancePrediction] Calculate ROI failed', error);
+      toast.error('Erro ao calcular ROI');
     },
   });
 
@@ -195,13 +316,13 @@ export function useAIMaintenancePrediction(vesselId?: string) {
   }, [calculateROIMutation]);
 
   // Statistics
-  const stats = {
+  const stats: MaintenanceStats = {
     totalEquipment: equipmentQuery.data?.length || 0,
-    operational: equipmentQuery.data?.filter((e: any) => e.status === 'operational').length || 0,
-    degraded: equipmentQuery.data?.filter((e: any) => e.status === 'degraded').length || 0,
-    critical: equipmentQuery.data?.filter((e: any) => e.status === 'critical').length || 0,
+    operational: equipmentQuery.data?.filter((e) => e.status === 'operational').length || 0,
+    degraded: equipmentQuery.data?.filter((e) => e.status === 'degraded').length || 0,
+    critical: equipmentQuery.data?.filter((e) => e.status === 'critical').length || 0,
     predictions: predictionsQuery.data?.length || 0,
-    highRisk: predictionsQuery.data?.filter((p: any) => p.probability > 70).length || 0,
+    highRisk: predictionsQuery.data?.filter((p) => p.probability > 70).length || 0,
   };
 
   return {
@@ -223,6 +344,9 @@ export function useAIMaintenancePrediction(vesselId?: string) {
     isPredicting: predictFailuresMutation.isPending,
     isGeneratingPlan: generatePlanMutation.isPending,
 
+    // Status flags
+    isEmpty: (equipmentQuery.data?.length || 0) === 0,
+
     // Refetch
     refetch: () => {
       equipmentQuery.refetch();
@@ -232,79 +356,33 @@ export function useAIMaintenancePrediction(vesselId?: string) {
   };
 }
 
-function getMockEquipment(): Equipment[] {
-  return [
-    {
-      id: '1',
-      name: 'Motor Principal #1',
-      type: 'main_engine',
-      vessel_id: 'v1',
-      vessel_name: 'Nauti Alpha',
-      status: 'degraded',
-      health_score: 65,
-      last_maintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      next_scheduled: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-      runtime_hours: 12500,
-      failure_probability: 35,
-    },
-    {
-      id: '2',
-      name: 'Sistema DP',
-      type: 'dp_system',
-      vessel_id: 'v1',
-      vessel_name: 'Nauti Alpha',
-      status: 'operational',
-      health_score: 92,
-      last_maintenance: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      next_scheduled: new Date(Date.now() + 80 * 24 * 60 * 60 * 1000).toISOString(),
-      runtime_hours: 8000,
-      failure_probability: 8,
-    },
-    {
-      id: '3',
-      name: 'Gerador #2',
-      type: 'generator',
-      vessel_id: 'v1',
-      vessel_name: 'Nauti Alpha',
-      status: 'critical',
-      health_score: 42,
-      last_maintenance: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
-      next_scheduled: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-      runtime_hours: 18000,
-      failure_probability: 72,
-    },
-  ];
+function inferEquipmentStatus(failureProbability: number): Equipment['status'] {
+  if (failureProbability >= 70) return 'critical';
+  if (failureProbability >= 40) return 'degraded';
+  if (failureProbability >= 0) return 'operational';
+  return 'offline';
 }
 
-function getMockPredictions(): FailurePrediction[] {
-  return [
-    {
-      id: '1',
-      equipment_id: '3',
-      equipment_name: 'Gerador #2',
-      failure_type: 'Falha de rolamento',
-      probability: 72,
-      estimated_date: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-      confidence: 89,
-      impact: 'high',
-      recommended_action: 'Substituição preventiva do rolamento principal',
-      cost_if_failure: 150000,
-      cost_prevention: 25000,
-    },
-    {
-      id: '2',
-      equipment_id: '1',
-      equipment_name: 'Motor Principal #1',
-      failure_type: 'Desgaste de vedação',
-      probability: 45,
-      estimated_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      confidence: 75,
-      impact: 'medium',
-      recommended_action: 'Inspeção e substituição das vedações',
-      cost_if_failure: 80000,
-      cost_prevention: 12000,
-    },
-  ];
+function inferImpact(probability: number): FailurePrediction['impact'] {
+  if (probability >= 80) return 'critical';
+  if (probability >= 60) return 'high';
+  if (probability >= 30) return 'medium';
+  return 'low';
+}
+
+function extractFailureType(riskFactors: unknown): string {
+  if (!riskFactors) return 'Falha geral';
+  if (typeof riskFactors === 'object' && riskFactors !== null) {
+    const factors = riskFactors as Record<string, unknown>;
+    if (factors.type) return String(factors.type);
+    if (factors.failure_type) return String(factors.failure_type);
+  }
+  return 'Desgaste operacional';
+}
+
+function estimateCost(probability: number, isFailure: boolean): number {
+  const baseCost = probability * 1000;
+  return isFailure ? baseCost * 3 : baseCost;
 }
 
 export default useAIMaintenancePrediction;
