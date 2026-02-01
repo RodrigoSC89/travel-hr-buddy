@@ -1,10 +1,13 @@
 /**
  * AIS (Automatic Identification System) Client
  * Integrates with MarineTraffic API for real-time vessel tracking
- * Patch 141.0
+ * 
+ * PATCH OPS-V7: IntegrationStatus obrigatório
+ * REGRA: Não exibir dados fake como se fossem reais
  */
 
 import { logger } from "@/lib/logger";
+import type { IntegrationStatus, IntegrationHealthCheck } from "@/types/integration-status";
 
 export interface VesselPosition {
   mmsi: string;
@@ -25,12 +28,24 @@ export interface AISClientConfig {
   timeout?: number;
 }
 
+export interface AISClientResult<T> {
+  data: T | null;
+  status: IntegrationStatus;
+  error?: string;
+}
+
 /**
  * AIS Client for vessel tracking
  * Can be configured to use MarineTraffic or OpenAIS APIs
+ * 
+ * OPS-V7: Retorna status da integração junto com os dados
  */
 export class AISClient {
   private config: Required<AISClientConfig>;
+  private _status: IntegrationStatus = 'NOT_CONFIGURED';
+  private _lastError?: string;
+  private _lastCheck: Date = new Date();
+  private _latencyMs?: number;
 
   constructor(config: AISClientConfig = {}) {
     this.config = {
@@ -38,25 +53,62 @@ export class AISClient {
       baseUrl: config.baseUrl || "https://api.marinetraffic.com/api/exportvessel/v:5",
       timeout: config.timeout || 10000,
     };
+    
+    // Definir status inicial baseado na configuração
+    this._status = this.config.apiKey ? 'DISCONNECTED' : 'NOT_CONFIGURED';
+  }
+
+  /**
+   * Retorna o status atual da integração
+   */
+  getStatus(): IntegrationStatus {
+    return this._status;
+  }
+
+  /**
+   * Retorna health check completo
+   */
+  getHealthCheck(): IntegrationHealthCheck {
+    return {
+      name: 'AIS (MarineTraffic)',
+      status: this._status,
+      lastCheck: this._lastCheck,
+      latencyMs: this._latencyMs,
+      errorMessage: this._lastError,
+    };
+  }
+
+  /**
+   * Verifica se a integração pode retornar dados
+   */
+  isOperational(): boolean {
+    return this._status === 'CONNECTED' || this._status === 'DEGRADED';
   }
 
   /**
    * Fetches vessel positions in a given area
-   * @param bounds Geographic bounds {minLat, maxLat, minLon, maxLon}
-   * @returns Array of vessel positions
+   * OPS-V7: Retorna resultado com status da integração
    */
   async getVesselsInArea(bounds: {
     minLat: number;
     maxLat: number;
     minLon: number;
     maxLon: number;
-  }): Promise<VesselPosition[]> {
-    // For demo purposes, return mock data when no API key is configured
+  }): Promise<AISClientResult<VesselPosition[]>> {
+    this._lastCheck = new Date();
+
+    // Se não configurado, retornar status apropriado (SEM dados fake)
     if (!this.config.apiKey) {
-      return this.getMockVessels(bounds);
+      this._status = 'NOT_CONFIGURED';
+      return {
+        data: null,
+        status: 'NOT_CONFIGURED',
+        error: 'API key não configurada. Configure MARINE_TRAFFIC_API_KEY.',
+      };
     }
 
     try {
+      const startTime = Date.now();
       const url = `${this.config.baseUrl}/${this.config.apiKey}/MINLAT:${bounds.minLat}/MAXLAT:${bounds.maxLat}/MINLON:${bounds.minLon}/MAXLON:${bounds.maxLon}`;
       
       const controller = new AbortController();
@@ -70,36 +122,60 @@ export class AISClient {
       });
 
       clearTimeout(timeoutId);
+      this._latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
-        throw new Error(`AIS API error: ${response.status}`);
+        this._status = 'ERROR';
+        this._lastError = `API retornou status ${response.status}`;
+        return {
+          data: null,
+          status: 'ERROR',
+          error: this._lastError,
+        };
       }
 
       const data = await response.json();
-      return this.parseVesselData(data);
+      const vessels = this.parseVesselData(data);
+      
+      // Verificar se latência está degradada (> 2s)
+      this._status = this._latencyMs > 2000 ? 'DEGRADED' : 'CONNECTED';
+      this._lastError = undefined;
+
+      return {
+        data: vessels,
+        status: this._status,
+      };
     } catch (error) {
+      this._status = 'DISCONNECTED';
+      this._lastError = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error("Error fetching AIS data", error as Error, { bounds });
-      // Fallback to mock data on error
-      return this.getMockVessels(bounds);
+      
+      return {
+        data: null,
+        status: 'DISCONNECTED',
+        error: this._lastError,
+      };
     }
   }
 
   /**
    * Gets a specific vessel by MMSI
-   * @param mmsi Maritime Mobile Service Identity
+   * OPS-V7: Retorna resultado com status da integração
    */
-  async getVesselByMMSI(mmsi: string): Promise<VesselPosition | null> {
+  async getVesselByMMSI(mmsi: string): Promise<AISClientResult<VesselPosition>> {
+    this._lastCheck = new Date();
+
     if (!this.config.apiKey) {
-      const mockVessels = this.getMockVessels({
-        minLat: -90,
-        maxLat: 90,
-        minLon: -180,
-        maxLon: 180,
-      });
-      return mockVessels.find(v => v.mmsi === mmsi) || null;
+      this._status = 'NOT_CONFIGURED';
+      return {
+        data: null,
+        status: 'NOT_CONFIGURED',
+        error: 'API key não configurada',
+      };
     }
 
     try {
+      const startTime = Date.now();
       const url = `${this.config.baseUrl}/${this.config.apiKey}/MMSI:${mmsi}`;
       
       const controller = new AbortController();
@@ -113,17 +189,35 @@ export class AISClient {
       });
 
       clearTimeout(timeoutId);
+      this._latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
-        return null;
+        this._status = 'ERROR';
+        return {
+          data: null,
+          status: 'ERROR',
+          error: `API retornou status ${response.status}`,
+        };
       }
 
       const data = await response.json();
       const vessels = this.parseVesselData(data);
-      return vessels[0] || null;
+      this._status = this._latencyMs > 2000 ? 'DEGRADED' : 'CONNECTED';
+
+      return {
+        data: vessels[0] || null,
+        status: this._status,
+      };
     } catch (error) {
+      this._status = 'DISCONNECTED';
+      this._lastError = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error("Error fetching vessel by MMSI", error as Error, { mmsi });
-      return null;
+      
+      return {
+        data: null,
+        status: 'DISCONNECTED',
+        error: this._lastError,
+      };
     }
   }
 
@@ -164,69 +258,9 @@ export class AISClient {
     return "underway";
   }
 
-  /**
-   * Generates mock vessel data for testing/demo purposes
-   */
-  private getMockVessels(bounds: {
-    minLat: number;
-    maxLat: number;
-    minLon: number;
-    maxLon: number;
-  }): VesselPosition[] {
-    const centerLat = (bounds.minLat + bounds.maxLat) / 2;
-    const centerLon = (bounds.minLon + bounds.maxLon) / 2;
-    
-    return [
-      {
-        mmsi: "211234567",
-        name: "MV Atlantic Pioneer",
-        latitude: centerLat + 0.5,
-        longitude: centerLon + 0.5,
-        speed: 12.5,
-        course: 45,
-        heading: 45,
-        timestamp: new Date().toISOString(),
-        status: "underway",
-        type: "Cargo",
-      },
-      {
-        mmsi: "211234568",
-        name: "Pacific Explorer",
-        latitude: centerLat - 0.3,
-        longitude: centerLon + 0.8,
-        speed: 8.2,
-        course: 180,
-        heading: 180,
-        timestamp: new Date().toISOString(),
-        status: "underway",
-        type: "Tanker",
-      },
-      {
-        mmsi: "211234569",
-        name: "Ocean Spirit",
-        latitude: centerLat + 0.8,
-        longitude: centerLon - 0.4,
-        speed: 0,
-        course: 0,
-        heading: 270,
-        timestamp: new Date().toISOString(),
-        status: "at_anchor",
-        type: "Passenger",
-      },
-      {
-        mmsi: "211234570",
-        name: "Coastal Guardian",
-        latitude: centerLat - 0.6,
-        longitude: centerLon - 0.7,
-        speed: 15.8,
-        course: 315,
-        heading: 315,
-        timestamp: new Date().toISOString(),
-        status: "underway",
-        type: "Service Vessel",
-      },
-    ];
-  }
+  // OPS-V7: Métodos getMockVessels REMOVIDOS
+  // REGRA: Proibido exibir dados fake como se fossem reais
+  // Se a integração não está configurada, a UI deve mostrar status NOT_CONFIGURED
 }
 
 // Export singleton instance with default config

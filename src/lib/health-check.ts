@@ -1,321 +1,249 @@
 /**
- * PATCH-601: Health Check Validation System
- * PATCH v12: Removed navigator.onLine checks - always reports healthy network
- * Comprehensive system health monitoring and validation
+ * PATCH OPS-V7 — System Health Check
+ * 
+ * Verifica saúde de todas as integrações e serviços
+ * Endpoint: /api/health ou componente SystemHealthDashboard
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { Json } from "@/integrations/supabase/types";
+import type { IntegrationStatus, IntegrationHealthCheck } from "@/types/integration-status";
 
-export interface HealthCheckResult {
-  service: string;
-  status: "healthy" | "degraded" | "unhealthy";
-  responseTime: number;
+export interface SystemHealth {
+  overall: IntegrationStatus;
   timestamp: Date;
-  details?: Record<string, unknown>;
-  error?: string;
-}
-
-export interface SystemHealthStatus {
-  overall: "healthy" | "degraded" | "unhealthy";
-  checks: HealthCheckResult[];
-  uptime: number;
-  lastChecked: Date;
+  checks: IntegrationHealthCheck[];
+  summary: {
+    total: number;
+    connected: number;
+    degraded: number;
+    disconnected: number;
+    notConfigured: number;
+    error: number;
+  };
 }
 
 /**
- * Check Supabase connection health
+ * Verifica conexão com Supabase
  */
-export async function checkSupabaseHealth(): Promise<HealthCheckResult> {
+async function checkSupabase(): Promise<IntegrationHealthCheck> {
   const startTime = Date.now();
   
   try {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("count")
-      .limit(1)
-      .single();
-
-    const responseTime = Date.now() - startTime;
-
+    const { error } = await supabase.from('vessels').select('id').limit(1);
+    const latencyMs = Date.now() - startTime;
+    
     if (error) {
       return {
-        service: "supabase",
-        status: "unhealthy",
-        responseTime,
-        timestamp: new Date(),
-        error: error.message,
+        name: 'Supabase Database',
+        status: 'ERROR',
+        lastCheck: new Date(),
+        latencyMs,
+        errorMessage: error.message,
       };
     }
-
+    
     return {
-      service: "supabase",
-      status: responseTime < 1000 ? "healthy" : "degraded",
-      responseTime,
-      timestamp: new Date(),
-      details: { connected: true },
+      name: 'Supabase Database',
+      status: latencyMs > 2000 ? 'DEGRADED' : 'CONNECTED',
+      lastCheck: new Date(),
+      latencyMs,
     };
   } catch (error) {
     return {
-      service: "supabase",
-      status: "unhealthy",
-      responseTime: Date.now() - startTime,
-      timestamp: new Date(),
-      error: error instanceof Error ? error.message : "Unknown error",
+      name: 'Supabase Database',
+      status: 'DISCONNECTED',
+      lastCheck: new Date(),
+      latencyMs: Date.now() - startTime,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
 
 /**
- * Check API endpoints health
+ * Verifica conexão com Edge Functions
  */
-export async function checkAPIHealth(): Promise<HealthCheckResult> {
+async function checkEdgeFunctions(): Promise<IntegrationHealthCheck> {
   const startTime = Date.now();
   
   try {
-    // Check if Supabase is accessible via a simple query
-    const { error } = await supabase
-      .from("profiles")
-      .select("id")
-      .limit(1);
-
-    const responseTime = Date.now() - startTime;
-
+    // Tentar chamar uma edge function de health
+    const { error } = await supabase.functions.invoke('health-check', {
+      body: { ping: true },
+    });
+    
+    const latencyMs = Date.now() - startTime;
+    
+    // Se a função não existe, ainda assim Supabase Functions está ok
+    if (error && error.message?.includes('not found')) {
+      return {
+        name: 'Edge Functions',
+        status: 'CONNECTED',
+        lastCheck: new Date(),
+        latencyMs,
+      };
+    }
+    
     if (error) {
       return {
-        service: "api",
-        status: "degraded",
-        responseTime,
-        timestamp: new Date(),
-        details: { message: "Some endpoints may be unavailable" },
+        name: 'Edge Functions',
+        status: 'DEGRADED',
+        lastCheck: new Date(),
+        latencyMs,
+        errorMessage: error.message,
       };
     }
-
+    
     return {
-      service: "api",
-      status: "healthy",
-      responseTime,
-      timestamp: new Date(),
-      details: { status: "available" },
+      name: 'Edge Functions',
+      status: latencyMs > 3000 ? 'DEGRADED' : 'CONNECTED',
+      lastCheck: new Date(),
+      latencyMs,
     };
   } catch (error) {
     return {
-      service: "api",
-      status: "degraded",
-      responseTime: Date.now() - startTime,
-      timestamp: new Date(),
-      error: error instanceof Error ? error.message : "Unknown error",
+      name: 'Edge Functions',
+      status: 'DISCONNECTED',
+      lastCheck: new Date(),
+      latencyMs: Date.now() - startTime,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
 
 /**
- * Check authentication service health
+ * Verifica configuração de AIS
  */
-export async function checkAuthHealth(): Promise<HealthCheckResult> {
-  const startTime = Date.now();
+function checkAISConfig(): IntegrationHealthCheck {
+  const apiKey = import.meta.env.VITE_MARINE_TRAFFIC_API_KEY;
   
-  try {
-    const { data: { session }, error } = await supabase.auth.getSession();
-
-    const responseTime = Date.now() - startTime;
-
-    if (error) {
-      return {
-        service: "auth",
-        status: "unhealthy",
-        responseTime,
-        timestamp: new Date(),
-        error: error.message,
-      };
-    }
-
-    return {
-      service: "auth",
-      status: "healthy",
-      responseTime,
-      timestamp: new Date(),
-      details: {
-        authenticated: !!session,
-        userId: session?.user?.id,
-      },
-    };
-  } catch (error) {
-    return {
-      service: "auth",
-      status: "unhealthy",
-      responseTime: Date.now() - startTime,
-      timestamp: new Date(),
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
-}
-
-/**
- * Check browser storage health
- */
-export async function checkStorageHealth(): Promise<HealthCheckResult> {
-  const startTime = Date.now();
-  
-  try {
-    const testKey = "__health_check_test__";
-    const testValue = Date.now().toString();
-
-    // Test localStorage
-    localStorage.setItem(testKey, testValue);
-    const retrieved = localStorage.getItem(testKey);
-    localStorage.removeItem(testKey);
-
-    const responseTime = Date.now() - startTime;
-
-    if (retrieved !== testValue) {
-      return {
-        service: "storage",
-        status: "degraded",
-        responseTime,
-        timestamp: new Date(),
-        error: "localStorage read/write inconsistency",
-      };
-    }
-
-    return {
-      service: "storage",
-      status: "healthy",
-      responseTime,
-      timestamp: new Date(),
-      details: { localStorage: true },
-    };
-  } catch (error) {
-    return {
-      service: "storage",
-      status: "unhealthy",
-      responseTime: Date.now() - startTime,
-      timestamp: new Date(),
-      error: error instanceof Error ? error.message : "Storage not available",
-    };
-  }
-}
-
-/**
- * Check network connectivity
- * PATCH v12: Always returns healthy - navigator.onLine is unreliable on iOS PWA
- */
-export async function checkNetworkHealth(): Promise<HealthCheckResult> {
-  const startTime = Date.now();
-  const responseTime = Date.now() - startTime;
-
-  // PATCH v12: Always report healthy network
-  // navigator.onLine is unreliable on iOS PWA and causes false positives
   return {
-    service: "network",
-    status: "healthy",
-    responseTime,
-    timestamp: new Date(),
-    details: {
-      online: true,
-      effectiveType: (navigator as any).connection?.effectiveType || '4g',
-      downlink: (navigator as any).connection?.downlink || 10,
-    },
+    name: 'AIS (MarineTraffic)',
+    status: apiKey ? 'CONNECTED' : 'NOT_CONFIGURED',
+    lastCheck: new Date(),
+    errorMessage: apiKey ? undefined : 'VITE_MARINE_TRAFFIC_API_KEY não configurada',
   };
 }
 
 /**
- * Perform comprehensive system health check
+ * Verifica configuração de Weather
  */
-export async function performHealthCheck(): Promise<SystemHealthStatus> {
-  logger.info("Starting system health check");
-
-  const checks = await Promise.all([
-    checkSupabaseHealth(),
-    checkAPIHealth(),
-    checkAuthHealth(),
-    checkStorageHealth(),
-    checkNetworkHealth(),
-  ]);
-
-  // Determine overall status
-  const unhealthyCount = checks.filter((c) => c.status === "unhealthy").length;
-  const degradedCount = checks.filter((c) => c.status === "degraded").length;
-
-  let overall: "healthy" | "degraded" | "unhealthy";
-  if (unhealthyCount > 2) {
-    overall = "unhealthy";
-  } else if (unhealthyCount > 0 || degradedCount > 1) {
-    overall = "degraded";
-  } else {
-    overall = "healthy";
-  }
-
-  const result: SystemHealthStatus = {
-    overall,
-    checks,
-    uptime: performance.now(),
-    lastChecked: new Date(),
-  };
-
-  logger.info("Health check completed", { status: overall, checks: checks.length });
-
-  // Log to Supabase if available (optional - skip if table doesn't match)
-  logger.info("Health check result", { status: overall, checks: checks.length });
-
-  return result;
-}
-
-/**
- * Monitor health continuously
- */
-export class HealthMonitor {
-  private interval: number | null = null;
-  private callbacks: Array<(status: SystemHealthStatus) => void> = [];
-
-  start(intervalMs: number = 60000): void {
-    if (this.interval) {
-      logger.warn("Health monitor already running");
-      return;
+async function checkWeather(): Promise<IntegrationHealthCheck> {
+  const startTime = Date.now();
+  
+  try {
+    // OpenMeteo não requer API key
+    const response = await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude=-23.5&longitude=-46.6&current_weather=true',
+      { signal: AbortSignal.timeout(5000) }
+    );
+    
+    const latencyMs = Date.now() - startTime;
+    
+    if (!response.ok) {
+      return {
+        name: 'Weather (OpenMeteo)',
+        status: 'ERROR',
+        lastCheck: new Date(),
+        latencyMs,
+        errorMessage: `HTTP ${response.status}`,
+      };
     }
-
-    logger.info("Starting health monitor", { intervalMs });
-
-    // Initial check
-    this.runCheck();
-
-    // Schedule periodic checks
-    this.interval = window.setInterval(() => {
-      this.runCheck();
-    }, intervalMs);
-  }
-
-  stop(): void {
-    if (this.interval) {
-      window.clearInterval(this.interval);
-      this.interval = null;
-      logger.info("Health monitor stopped");
-    }
-  }
-
-  subscribe(callback: (status: SystemHealthStatus) => void): () => void {
-    this.callbacks.push(callback);
-    return () => {
-      this.callbacks = this.callbacks.filter((cb) => cb !== callback);
+    
+    return {
+      name: 'Weather (OpenMeteo)',
+      status: latencyMs > 2000 ? 'DEGRADED' : 'CONNECTED',
+      lastCheck: new Date(),
+      latencyMs,
+    };
+  } catch (error) {
+    return {
+      name: 'Weather (OpenMeteo)',
+      status: 'DISCONNECTED',
+      lastCheck: new Date(),
+      latencyMs: Date.now() - startTime,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
     };
   }
-
-  private async runCheck(): Promise<void> {
-    try {
-      const status = await performHealthCheck();
-      this.callbacks.forEach((callback) => {
-        try {
-          callback(status);
-        } catch (error) {
-          logger.error("Error in health monitor callback", error);
-        }
-      });
-    } catch (error) {
-      logger.error("Error performing health check", error);
-    }
-  }
 }
 
-// Export singleton instance
-export const healthMonitor = new HealthMonitor();
+/**
+ * Verifica configuração de Satellite/DGNSS
+ */
+function checkSatelliteConfig(): IntegrationHealthCheck {
+  const apiKey = import.meta.env.VITE_N2YO_API_KEY;
+  
+  return {
+    name: 'Satellite (N2YO)',
+    status: apiKey ? 'CONNECTED' : 'NOT_CONFIGURED',
+    lastCheck: new Date(),
+    errorMessage: apiKey ? undefined : 'VITE_N2YO_API_KEY não configurada',
+  };
+}
+
+/**
+ * Executa health check completo do sistema
+ */
+export async function performHealthCheck(): Promise<SystemHealth> {
+  logger.info('Iniciando health check do sistema...');
+  
+  const checks: IntegrationHealthCheck[] = [];
+  
+  // Executar checks em paralelo
+  const [supabaseCheck, edgeFunctionsCheck, weatherCheck] = await Promise.all([
+    checkSupabase(),
+    checkEdgeFunctions(),
+    checkWeather(),
+  ]);
+  
+  // Checks síncronos (configuração)
+  const aisCheck = checkAISConfig();
+  const satelliteCheck = checkSatelliteConfig();
+  
+  checks.push(supabaseCheck, edgeFunctionsCheck, aisCheck, weatherCheck, satelliteCheck);
+  
+  // Calcular resumo
+  const summary = {
+    total: checks.length,
+    connected: checks.filter(c => c.status === 'CONNECTED').length,
+    degraded: checks.filter(c => c.status === 'DEGRADED').length,
+    disconnected: checks.filter(c => c.status === 'DISCONNECTED').length,
+    notConfigured: checks.filter(c => c.status === 'NOT_CONFIGURED').length,
+    error: checks.filter(c => c.status === 'ERROR').length,
+  };
+  
+  // Determinar status geral
+  let overall: IntegrationStatus = 'CONNECTED';
+  
+  if (summary.error > 0 || summary.disconnected > 0) {
+    // Se Supabase está fora, é crítico
+    if (supabaseCheck.status === 'DISCONNECTED' || supabaseCheck.status === 'ERROR') {
+      overall = 'ERROR';
+    } else {
+      overall = 'DEGRADED';
+    }
+  } else if (summary.degraded > 0 || summary.notConfigured > 0) {
+    overall = 'DEGRADED';
+  }
+  
+  const health: SystemHealth = {
+    overall,
+    timestamp: new Date(),
+    checks,
+    summary,
+  };
+  
+  logger.info('Health check concluído', { overall, summary });
+  
+  return health;
+}
+
+/**
+ * Hook para usar em componentes
+ */
+export function useSystemHealth() {
+  // Retorna função para executar health check sob demanda
+  return {
+    performHealthCheck,
+  };
+}
