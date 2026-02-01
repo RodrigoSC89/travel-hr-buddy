@@ -1,6 +1,6 @@
-// @ts-nocheck - Logger type compatibility
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -53,12 +53,9 @@ export const PreOVIDEvidenceGenerator: React.FC<PreOVIDEvidenceGeneratorProps> =
     setIsGenerating(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/preovid-ai-chat`, {
+      const response = await fetch(getEdgeFunctionUrl('preovid-ai-chat'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [{
             role: 'user',
@@ -124,7 +121,7 @@ Responda APENAS com o JSON, sem texto adicional.`
         throw new Error('Formato de resposta inválido');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error("Evidence generation error", error instanceof Error ? error : new Error(String(error)));
       toast.error('Erro ao gerar evidência');
     } finally {
       setIsGenerating(false);

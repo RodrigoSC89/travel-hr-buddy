@@ -5,8 +5,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
-const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
+const COMMAND_URL = getEdgeFunctionUrl('nauti-command');
 
 export interface Message {
   role: "user" | "assistant" | "system";
@@ -40,8 +41,7 @@ export async function streamCommandChat({
     const resp = await fetch(COMMAND_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        ...getEdgeFunctionHeaders(),
         "x-user-id": user?.id || "anonymous",
       },
       body: JSON.stringify({ messages, context }),

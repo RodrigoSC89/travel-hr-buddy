@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Send, Loader2, FileCheck, AlertTriangle, Users, Wrench } from "lucide-react";
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface Message {
   role: "user" | "assistant";
@@ -34,12 +35,9 @@ export function IMCADPAIAssistant({ selectedDPClass }: Props) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/imca-dp-assistant`, {
+      const response = await fetch(getEdgeFunctionUrl('imca-dp-assistant'), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers: getEdgeFunctionHeaders(),
         body: JSON.stringify({
           messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
           context: { dpClass: selectedDPClass }

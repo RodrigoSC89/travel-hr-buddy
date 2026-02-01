@@ -7,6 +7,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { AI_MODULES, type AIModuleKey, getSystemPrompt } from '@/lib/ai-prompts';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 export interface AIMessage {
   role: 'user' | 'assistant' | 'system';
@@ -131,13 +132,10 @@ export class UnifiedAIService {
       
       // Use ai-hub-chat for unified routing
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-hub-chat`,
+        getEdgeFunctionUrl('ai-hub-chat'),
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({
             module: request.module,
             messages: request.conversationHistory || [],

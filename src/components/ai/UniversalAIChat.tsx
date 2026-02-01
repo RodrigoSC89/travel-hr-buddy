@@ -32,6 +32,7 @@ import { AI_MODULES, type AIModuleKey } from '@/lib/ai-prompts';
 import { useToast } from '@/hooks/use-toast';
 import ReactMarkdown from 'react-markdown';
 import { logger } from '@/lib/logger';
+import { getEdgeFunctionUrl, getEdgeFunctionHeaders } from '@/lib/supabase/edge-function-helper';
 
 interface AIMessage {
   role: 'user' | 'assistant' | 'system';
@@ -104,13 +105,10 @@ export function UniversalAIChat({
       setIsSpeaking(true);
       
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-hub-voice`,
+        getEdgeFunctionUrl('ai-hub-voice'),
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
+          headers: getEdgeFunctionHeaders(),
           body: JSON.stringify({ text: text.slice(0, 500), module }),
         }
       );
