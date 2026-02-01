@@ -1,7 +1,7 @@
-// @ts-nocheck - mmi_os_resolvidas table dynamic schema
+// @ts-nocheck - Awaiting types.ts regeneration for mmi_os_resolvidas table
 /**
- * PATCH 653 - Service for managing resolved work orders (OS) for AI learning
- * Updated to match new mmi_os_resolvidas table schema
+ * Resolved Work Orders Service
+ * Manages resolved work orders (OS) for AI learning
  */
 
 import { supabase } from "@/integrations/supabase/client";

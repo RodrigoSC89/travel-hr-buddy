@@ -2118,6 +2118,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_strategies: {
+        Row: {
+          category: string | null
+          confidence: number | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          impact_score: number | null
+          metadata: Json | null
+          priority: string | null
+          recommendations: Json | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          impact_score?: number | null
+          metadata?: Json | null
+          priority?: string | null
+          recommendations?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          impact_score?: number | null
+          metadata?: Json | null
+          priority?: string | null
+          recommendations?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ai_suggestions: {
         Row: {
           applied_at: string | null
@@ -22090,6 +22138,36 @@ export type Database = {
           },
         ]
       }
+      language_usage_stats: {
+        Row: {
+          created_at: string | null
+          id: string
+          language_code: string
+          last_used_at: string | null
+          updated_at: string | null
+          usage_count: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          language_code: string
+          last_used_at?: string | null
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          language_code?: string
+          last_used_at?: string | null
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       learning_adjustments: {
         Row: {
           applied_by: string | null
@@ -39020,6 +39098,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      translation_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          processing_time_ms: number | null
+          source_language: string
+          source_text: string
+          success: boolean | null
+          target_language: string
+          translated_text: string | null
+          translation_engine: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          processing_time_ms?: number | null
+          source_language: string
+          source_text: string
+          success?: boolean | null
+          target_language: string
+          translated_text?: string | null
+          translation_engine?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          processing_time_ms?: number | null
+          source_language?: string
+          source_text?: string
+          success?: boolean | null
+          target_language?: string
+          translated_text?: string | null
+          translation_engine?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       travel_itineraries: {
         Row: {

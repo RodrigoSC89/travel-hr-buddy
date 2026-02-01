@@ -1,10 +1,6 @@
-// @ts-nocheck - Depends on language_usage_stats, translation_logs, translation_feedback tables
+// @ts-nocheck - Awaiting types.ts regeneration for language_usage_stats/translation_logs
 /**
- * PATCH 871.3 - i18n dashboard
- * TODO: Create migrations for i18n tables
- */
-/**
- * PATCH 851 - Dashboard de Internacionalização
+ * Dashboard de Internacionalização
  * Painel para monitorar uso multilíngue do sistema
  */
 

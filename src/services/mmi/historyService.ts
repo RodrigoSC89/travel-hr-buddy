@@ -1,7 +1,7 @@
-// @ts-nocheck - Depends on mmi_history table not in schema
+// @ts-nocheck - Awaiting types.ts regeneration for mmi_history table
 /**
- * PATCH 871.3 - MMI history service
- * TODO: Create migration for mmi_history table
+ * MMI History Service
+ * Manages maintenance history records for vessels
  */
 
 import { supabase } from "@/integrations/supabase/client";
