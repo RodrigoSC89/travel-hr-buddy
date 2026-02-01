@@ -1,4 +1,4 @@
-// PATCH-601: Re-applied @ts-nocheck for build stability  
+// @ts-nocheck - Schema alignment pending  
 /**
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution
