@@ -58,8 +58,7 @@ export const FleetCommandCenter: React.FC = () => {
   const { data: vessels, isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
     queryKey: ["fleet-vessels", filterStatus],
     queryFn: async (): Promise<VesselWithMission[]> => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let data: any[] | null = null;
+      let data: Array<Record<string, unknown>> | null = null;
       let error: Error | null = null;
 
       if (filterStatus !== "all") {

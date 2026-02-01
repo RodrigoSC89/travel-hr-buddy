@@ -31,9 +31,9 @@ interface VesselPosition {
 }
 
 interface FleetMapBoxProps {
-  vessels?: any[];
-  onSelectVessel?: (vessel: any) => void;
-  selectedVessel?: any;
+  vessels?: VesselPosition[];
+  onSelectVessel?: (vessel: VesselPosition) => void;
+  selectedVessel?: VesselPosition | null;
   height?: string;
   showList?: boolean;
 }
@@ -46,8 +46,8 @@ export function FleetMapBox({
   showList = true
 }: FleetMapBoxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
   const mapboxRef = useRef<MapboxGLInterface | null>(null);
   
   const [mapboxToken, setMapboxToken] = useState<string>("");

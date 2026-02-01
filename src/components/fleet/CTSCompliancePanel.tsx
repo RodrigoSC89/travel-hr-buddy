@@ -49,6 +49,24 @@ interface ComplianceResult {
   risk_level: string;
 }
 
+// Database types
+interface CTSData {
+  approved_positions?: Record<string, number>;
+  [key: string]: unknown;
+}
+
+interface CrewMemberData {
+  id: string;
+  full_name: string;
+  rank?: string;
+  category?: string;
+  crew_certifications?: Array<{ expiry_date?: string }>;
+}
+
+interface CertificationData {
+  expiry_date?: string;
+}
+
 interface Props {
   vesselId?: string;
   vesselName?: string;
@@ -126,7 +144,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
     }
   };
 
-  const runLocalComplianceCheck = (cts: any, crewData: any[]) => {
+  const runLocalComplianceCheck = (cts: CTSData, crewData: CrewMemberData[]) => {
     const violations: CTSViolation[] = [];
     const positions: CTSPosition[] = [];
     
@@ -250,7 +268,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
     }
   };
 
-  const checkValidCertifications = (certs: any[]): boolean => {
+  const checkValidCertifications = (certs: CertificationData[] | undefined): boolean => {
     if (!certs || certs.length === 0) return false;
     const now = new Date();
     return certs.some(cert => {
@@ -259,7 +277,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
     });
   };
 
-  const getNextExpiry = (certs: any[]): string | undefined => {
+  const getNextExpiry = (certs: CertificationData[] | undefined): string | undefined => {
     if (!certs || certs.length === 0) return undefined;
     const validCerts = certs.filter(c => c.expiry_date);
     if (validCerts.length === 0) return undefined;
