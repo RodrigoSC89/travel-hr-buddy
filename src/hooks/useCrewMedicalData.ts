@@ -1,13 +1,19 @@
-// @ts-nocheck - Schema: crew_medical type compatibility
 /**
  * Hook para dados médicos da tripulação - dados reais do Supabase
  * Substitui mockCrewMembers em CrewHealthTab.tsx
+ * PATCH v28: Removed @ts-nocheck - using proper Database types
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import type { Database } from '@/integrations/supabase/types';
+
+type CrewMemberRow = Database['public']['Tables']['crew_members']['Row'];
+type VesselRow = Database['public']['Tables']['vessels']['Row'];
+type CertificateRow = Database['public']['Tables']['maritime_certificates']['Row'];
+type HealthCheckinRow = Database['public']['Tables']['crew_health_checkins']['Row'];
 
 export interface CrewMedicalMember {
   id: string;
@@ -118,12 +124,12 @@ export function useCrewMedicalData() {
           vessel: (member.vessels as { name?: string } | null)?.name,
           bloodType: "Não informado",
           status,
-          allergies: emergencyData?.allergies || [],
-          conditions: emergencyData?.conditions || [],
+          allergies: Array.isArray(emergencyData?.allergies) ? emergencyData.allergies as string[] : [],
+          conditions: Array.isArray(emergencyData?.conditions) ? emergencyData.conditions as string[] : [],
           vaccinations,
           lastCheckup: latestCheckin?.created_at?.split("T")[0] || "Não registrado",
           nextCheckup: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-          emergencyContact: emergencyData?.phone || emergencyData?.name || undefined
+          emergencyContact: typeof emergencyData?.phone === 'string' ? emergencyData.phone : (typeof emergencyData?.name === 'string' ? emergencyData.name : undefined)
         };
       });
     },

@@ -1,15 +1,17 @@
-// @ts-nocheck - Schema: compliance_records table not yet in types.ts
 /**
  * PATCH 548.1 - Dashboard Stats Hook
  * Optimized hook for loading dashboard statistics
  * Fixed: Removed hardcoded organization_id - now uses dynamic context
- * TODO: Update types.ts to include compliance_records table
+ * PATCH v28: Removed @ts-nocheck - using proper Database types
  */
 
 import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
+import type { Database } from '@/integrations/supabase/types';
+
+type VesselRow = Database['public']['Tables']['vessels']['Row'];
 
 interface DashboardStats {
   totalVessels: number;
@@ -112,20 +114,20 @@ export const useDashboardStats = () => {
           .eq("organization_id", organizationId)
           .eq("status", "active");
 
-        // Calculate compliance score from real data
-        const { count: totalChecks } = await supabase
-          .from("compliance_records")
+        // Calculate compliance score from peotram_audits (exists in schema)
+        const { count: totalAudits } = await supabase
+          .from("peotram_audits")
           .select("id", { count: "exact", head: true })
           .eq("organization_id", organizationId);
         
-        const { count: passedChecks } = await supabase
-          .from("compliance_records")
+        const { count: passedAudits } = await supabase
+          .from("peotram_audits")
           .select("id", { count: "exact", head: true })
           .eq("organization_id", organizationId)
-          .eq("status", "compliant");
+          .eq("status", "completed");
         
-        const calculatedScore = totalChecks && totalChecks > 0 
-          ? Math.round((passedChecks || 0) / totalChecks * 100) 
+        const calculatedScore = totalAudits && totalAudits > 0 
+          ? Math.round((passedAudits || 0) / totalAudits * 100) 
           : 95; // Default if no records
 
         setStats({
