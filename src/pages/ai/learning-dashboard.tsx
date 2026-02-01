@@ -1,10 +1,9 @@
-// @ts-nocheck - Schema alignment pending
 /**
  * PATCH 509: AI Learning Dashboard
  * Visualize AI self-reflection and continuous learning metrics
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,14 +15,16 @@ import {
   Brain, 
   Target, 
   AlertCircle, 
-  CheckCircle,
   RefreshCw,
   Download
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type AIBehaviorSnapshotRow = Database["public"]["Tables"]["ai_behavior_snapshots"]["Row"];
 
 interface LearningInsight {
   action_type: string;
@@ -48,6 +49,45 @@ interface LearningProgress {
   actions_count: number;
 }
 
+function mapSnapshotToInsight(row: AIBehaviorSnapshotRow): LearningInsight {
+  return {
+    action_type: row.behavior_type || row.module_name,
+    avg_composite_score: ((row.accuracy_score || 0) + (row.precision_score || 0)) / 2,
+    avg_accuracy: row.accuracy_score || 0,
+    avg_utility: row.recall_score || 0,
+    avg_user_rating: row.confidence_avg || 0,
+    total_actions: row.decisions_count || 0,
+    improvement_trend: row.accuracy_score && row.accuracy_score >= 0.8 ? "excellent" : 
+      row.accuracy_score && row.accuracy_score >= 0.6 ? "good" : "needs_improvement",
+  };
+}
+
+function generateSuggestions(insights: LearningInsight[]): ImprovementSuggestion[] {
+  const suggestions: ImprovementSuggestion[] = [];
+  
+  insights.forEach(insight => {
+    if (insight.avg_accuracy < 0.7) {
+      suggestions.push({
+        action_type: insight.action_type,
+        suggestion: `Improve accuracy for ${insight.action_type} actions - currently at ${(insight.avg_accuracy * 100).toFixed(0)}%`,
+        priority: insight.avg_accuracy < 0.5 ? 1 : 2,
+        based_on_samples: insight.total_actions,
+      });
+    }
+    
+    if (insight.avg_user_rating < 3.5) {
+      suggestions.push({
+        action_type: insight.action_type,
+        suggestion: `User satisfaction is low for ${insight.action_type} - consider reviewing output quality`,
+        priority: 2,
+        based_on_samples: insight.total_actions,
+      });
+    }
+  });
+  
+  return suggestions.sort((a, b) => a.priority - b.priority);
+}
+
 export default function AILearningDashboard() {
   const [insights, setInsights] = useState<LearningInsight[]>([]);
   const [suggestions, setSuggestions] = useState<ImprovementSuggestion[]>([]);
@@ -56,34 +96,68 @@ export default function AILearningDashboard() {
   const [timeRange, setTimeRange] = useState(30);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadData();
-  }, [timeRange]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
 
-      // Load learning insights
-      const { data: insightsData, error: insightsError } = await supabase
-        .rpc("get_ai_learning_insights", { p_days: timeRange });
+      // Load learning insights from ai_behavior_snapshots
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - timeRange);
+      
+      const { data: snapshotsData, error: snapshotsError } = await supabase
+        .from("ai_behavior_snapshots")
+        .select("*")
+        .gte("snapshot_date", startDate.toISOString().split("T")[0])
+        .order("snapshot_date", { ascending: false })
+        .limit(100);
 
-      if (insightsError) throw insightsError;
-      setInsights(insightsData || []);
+      if (snapshotsError) {
+        logger.warn("Could not load AI behavior snapshots", snapshotsError);
+      }
+      
+      const mappedInsights = (snapshotsData || []).map(mapSnapshotToInsight);
+      
+      // Aggregate by action_type
+      const insightMap = new Map<string, LearningInsight>();
+      mappedInsights.forEach(insight => {
+        const existing = insightMap.get(insight.action_type);
+        if (existing) {
+          existing.avg_composite_score = (existing.avg_composite_score + insight.avg_composite_score) / 2;
+          existing.avg_accuracy = (existing.avg_accuracy + insight.avg_accuracy) / 2;
+          existing.avg_utility = (existing.avg_utility + insight.avg_utility) / 2;
+          existing.avg_user_rating = (existing.avg_user_rating + insight.avg_user_rating) / 2;
+          existing.total_actions += insight.total_actions;
+        } else {
+          insightMap.set(insight.action_type, { ...insight });
+        }
+      });
+      
+      const aggregatedInsights = Array.from(insightMap.values());
+      setInsights(aggregatedInsights);
+      
+      // Generate improvement suggestions
+      setSuggestions(generateSuggestions(aggregatedInsights));
 
-      // Load improvement suggestions
-      const { data: suggestionsData, error: suggestionsError } = await supabase
-        .rpc("get_ai_improvement_suggestions", { p_limit: 10 });
-
-      if (suggestionsError) throw suggestionsError;
-      setSuggestions(suggestionsData || []);
-
-      // Load learning progress
-      const { data: progressData, error: progressError } = await supabase
-        .rpc("get_ai_learning_progress", { p_days: timeRange });
-
-      if (progressError) throw progressError;
-      setProgress(progressData || []);
+      // Calculate progress over time
+      const progressMap = new Map<string, { score: number; count: number; actions: number }>();
+      (snapshotsData || []).forEach(row => {
+        const date = row.snapshot_date;
+        const existing = progressMap.get(date) || { score: 0, count: 0, actions: 0 };
+        existing.score += row.accuracy_score || 0;
+        existing.count += 1;
+        existing.actions += row.decisions_count || 0;
+        progressMap.set(date, existing);
+      });
+      
+      const progressData = Array.from(progressMap.entries())
+        .map(([date, data]) => ({
+          date,
+          avg_score: data.count > 0 ? data.score / data.count : 0,
+          actions_count: data.actions,
+        }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+      
+      setProgress(progressData);
     } catch (error) {
       logger.error("Error loading AI learning data:", error);
       toast({
@@ -94,7 +168,11 @@ export default function AILearningDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange, toast]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -351,7 +429,7 @@ export default function AILearningDashboard() {
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={progress.slice().reverse()}>
+                  <LineChart data={progress}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
                     <YAxis domain={[0, 1]} />
@@ -378,7 +456,7 @@ export default function AILearningDashboard() {
             <CardContent>
               {progress.length > 0 && (
                 <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={progress.slice().reverse()}>
+                  <BarChart data={progress}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
                     <YAxis />

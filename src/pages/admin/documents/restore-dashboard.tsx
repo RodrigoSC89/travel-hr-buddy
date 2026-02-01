@@ -1,11 +1,12 @@
-// @ts-nocheck - Schema alignment pending
-// ✅ Comprehensive Restore Audit Dashboard
-// Path: /admin/documents/restore-dashboard
-// Features: Interactive charts, CSV/PDF export, email reports, public view mode
+/**
+ * Restore Audit Dashboard
+ * Path: /admin/documents/restore-dashboard
+ * Features: Interactive charts, CSV/PDF export, email reports, public view mode
+ */
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -26,15 +27,6 @@ import {
   Legend,
 } from "chart.js";
 import { QRCodeSVG } from "qrcode.react";
-
-// Lazy load jsPDF
-const loadJsPDF = async () => {
-  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
-    import("jspdf"),
-    import("jspdf-autotable")
-  ]);
-  return { jsPDF, autoTable: autoTableModule.default };
-};
 
 // Register Chart.js components
 ChartJS.register(
@@ -81,17 +73,7 @@ export default function RestoreDashboard() {
     ? `${window.location.origin}/admin/documents/restore-dashboard?public=1`
     : "";
 
-  // Auto-refresh every 10 seconds
-  useEffect(() => {
-    fetchStats();
-    const interval = setInterval(() => {
-      fetchStats(true);
-    }, 10000); // 10 seconds
-
-    return () => clearInterval(interval);
-  }, [filterEmail]);
-
-  async function fetchStats(isAutoRefresh = false) {
+  const fetchStats = useCallback(async (isAutoRefresh = false) => {
     if (isAutoRefresh) {
       setRefreshing(true);
     } else {
@@ -99,29 +81,60 @@ export default function RestoreDashboard() {
     }
     
     try {
-      // Get summary statistics
-      const { data: summaryData, error: summaryError } = await supabase
-        .rpc("get_restore_summary", { email_input: filterEmail || null });
+      // Get restore audit logs from access_logs table
+      const { data: logsData, error: logsError } = await supabase
+        .from("access_logs")
+        .select("*")
+        .eq("action", "restore")
+        .order("timestamp", { ascending: false })
+        .limit(500);
 
-      if (summaryError) throw summaryError;
+      if (logsError) throw logsError;
 
-      setSummary(summaryData?.[0] || { total: 0, unique_docs: 0, avg_per_day: 0 });
+      const logs = logsData || [];
+      
+      // Calculate summary
+      const uniqueDocs = new Set(logs.map(l => {
+        const details = l.details as Record<string, unknown> | null;
+        return details?.document_id as string || l.id;
+      })).size;
+      
+      const daysWithData = new Set(logs.map(l => 
+        format(new Date(l.timestamp), "yyyy-MM-dd")
+      )).size;
 
-      // Get daily data for the last 15 days
-      const { data: dailyDataResult, error: dailyError } = await supabase
-        .rpc("get_restore_count_by_day_with_email", { email_input: filterEmail || null });
+      setSummary({
+        total: logs.length,
+        unique_docs: uniqueDocs,
+        avg_per_day: daysWithData > 0 ? logs.length / daysWithData : 0,
+      });
 
-      if (dailyError) throw dailyError;
+      // Calculate daily data
+      const dailyMap = new Map<string, number>();
+      logs.forEach(log => {
+        const day = format(new Date(log.timestamp), "yyyy-MM-dd");
+        dailyMap.set(day, (dailyMap.get(day) || 0) + 1);
+      });
 
-      setDailyData(dailyDataResult || []);
+      const dailyDataPoints = Array.from(dailyMap.entries())
+        .map(([day, count]) => ({ day, count }))
+        .sort((a, b) => a.day.localeCompare(b.day))
+        .slice(-15);
 
-      // Get monthly department summary
-      const { data: deptData, error: deptError } = await supabase
-        .rpc("get_monthly_restore_summary_by_department");
+      setDailyData(dailyDataPoints);
 
-      if (!deptError && deptData) {
-        setDepartmentSummary(deptData);
-      }
+      // Calculate department summary
+      const deptMap = new Map<string, number>();
+      logs.forEach(log => {
+        const dept = log.module_accessed || "Unknown";
+        deptMap.set(dept, (deptMap.get(dept) || 0) + 1);
+      });
+
+      setDepartmentSummary(
+        Array.from(deptMap.entries())
+          .map(([department, count]) => ({ department, count }))
+          .sort((a, b) => b.count - a.count)
+      );
 
       setLastUpdate(new Date());
     } catch (error) {
@@ -137,7 +150,17 @@ export default function RestoreDashboard() {
       setLoading(false);
       setRefreshing(false);
     }
-  }
+  }, []);
+
+  // Auto-refresh every 10 seconds
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(() => {
+      fetchStats(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [fetchStats, filterEmail]);
 
   function exportToCSV() {
     if (dailyData.length === 0) {
@@ -150,21 +173,15 @@ export default function RestoreDashboard() {
     }
 
     try {
-      // Create CSV header
       const csvHeader = "Data,Restaurações\n";
-      
-      // Create CSV rows
       const csvRows = dailyData
         .map((d) => `${format(new Date(d.day), "dd/MM/yyyy")},${d.count}`)
         .join("\n");
       
       const csvContent = csvHeader + csvRows;
-      
-      // Create blob with UTF-8 BOM for proper encoding
       const BOM = "\uFEFF";
       const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
       
-      // Download file
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
@@ -188,7 +205,7 @@ export default function RestoreDashboard() {
     }
   }
 
-  function exportToPDF() {
+  async function exportToPDF() {
     if (dailyData.length === 0) {
       toast({
         title: "Sem dados",
@@ -199,19 +216,22 @@ export default function RestoreDashboard() {
     }
 
     try {
+      const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable")
+      ]);
+      const autoTable = autoTableModule.default;
+      
       const doc = new jsPDF();
       
-      // Add title
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
       doc.text("Restore Analytics Dashboard", 14, 20);
       
-      // Add generation date
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 28);
       
-      // Add summary statistics
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
       doc.text("Estatísticas Resumidas", 14, 40);
@@ -229,7 +249,6 @@ export default function RestoreDashboard() {
         yPosition += 12;
       }
       
-      // Add table with daily data
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
       doc.text("Restaurações Diárias", 14, yPosition);
@@ -252,7 +271,6 @@ export default function RestoreDashboard() {
         },
       });
       
-      // Save PDF with date-stamped filename
       const filename = `restore-analytics-${format(new Date(), "yyyy-MM-dd")}.pdf`;
       doc.save(filename);
       
@@ -283,7 +301,6 @@ export default function RestoreDashboard() {
     setEmailSending(true);
     
     try {
-      // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -295,24 +312,14 @@ export default function RestoreDashboard() {
         return;
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-restore-dashboard`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            summary,
-            dailyData,
-          }),
-        }
-      );
+      const { error } = await supabase.functions.invoke("send-restore-dashboard", {
+        body: {
+          summary,
+          dailyData,
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to send email");
-      }
+      if (error) throw error;
 
       toast({
         title: "Email enviado",
@@ -402,7 +409,7 @@ export default function RestoreDashboard() {
         </p>
       </div>
 
-      {/* Search and Export Controls - Hidden in public view */}
+      {/* Search and Export Controls */}
       {!isPublicView && (
         <Card>
           <CardHeader>
@@ -501,7 +508,7 @@ export default function RestoreDashboard() {
                 {summary.avg_per_day.toFixed(1)}
               </div>
               <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                Restaurações em média diária
+                Restaurações por dia
               </p>
             </CardContent>
           </Card>
@@ -511,130 +518,59 @@ export default function RestoreDashboard() {
       {/* Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5" />
-            Atividade de Restauração (Últimos 15 Dias)
-          </CardTitle>
-          <CardDescription>
-            Visualização das restaurações realizadas por dia
-          </CardDescription>
+          <CardTitle>Restaurações por Dia</CardTitle>
+          <CardDescription>Últimos 15 dias de atividade</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-80 md:h-96">
-            {loading ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center">
-                  <RefreshCw className="w-8 h-8 animate-spin mx-auto text-muted-foreground" />
-                  <p className="mt-2 text-muted-foreground">Carregando dados...</p>
-                </div>
-              </div>
-            ) : dailyData.length > 0 ? (
+          <div className="h-64">
+            {dailyData.length > 0 ? (
               <Bar data={chartData} options={chartOptions} />
             ) : (
               <div className="flex items-center justify-center h-full text-muted-foreground">
-                <div className="text-center">
-                  <BarChart3 className="w-12 h-12 mx-auto opacity-50" />
-                  <p className="mt-2">Nenhum dado disponível para o período selecionado</p>
-                </div>
+                Nenhum dado disponível
               </div>
             )}
           </div>
         </CardContent>
       </Card>
 
-      {/* Monthly Department Summary Chart */}
+      {/* Department Summary */}
       {departmentSummary.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              📆 Comparativo Mensal por Departamento
-            </CardTitle>
-            <CardDescription>
-              Restaurações do mês atual agrupadas por departamento
-            </CardDescription>
+            <CardTitle>Resumo por Módulo</CardTitle>
+            <CardDescription>Distribuição de restaurações por módulo</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
-              <Bar
-                data={{
-                  labels: departmentSummary.map(d => d.department),
-                  datasets: [
-                    {
-                      label: "Restaurações",
-                      data: departmentSummary.map(d => d.count),
-                      backgroundColor: "rgba(34, 197, 94, 0.8)",
-                      borderColor: "rgba(34, 197, 94, 1)",
-                      borderWidth: 1,
-                    },
-                  ],
-                }}
-                options={{
-                  indexAxis: "y" as const,
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      display: false,
-                    },
-                    title: {
-                      display: false,
-                    },
-                  },
-                  scales: {
-                    x: {
-                      beginAtZero: true,
-                      ticks: {
-                        stepSize: 1,
-                      },
-                    },
-                  },
-                }}
-              />
+            <div className="space-y-2">
+              {departmentSummary.slice(0, 10).map((dept) => (
+                <div key={dept.department} className="flex items-center justify-between p-2 border rounded">
+                  <span className="font-medium">{dept.department}</span>
+                  <span className="text-muted-foreground">{dept.count} restaurações</span>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* QR Code for Public Access - Hidden in public view */}
-      {!isPublicView && publicUrl && (
+      {/* Public View QR Code */}
+      {!isPublicView && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              🔗 Link Público com QR Code
-            </CardTitle>
+            <CardTitle>Compartilhar Dashboard</CardTitle>
             <CardDescription>
-              Compartilhe este painel com acesso de leitura em TV Walls ou monitores
+              Escaneie o QR code para acessar a versão pública do dashboard
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">
-                Link de acesso público (somente leitura):
-              </p>
-              <p className="text-sm text-blue-600 font-mono bg-blue-50 dark:bg-blue-950 p-3 rounded-md break-all">
+          <CardContent className="flex items-center gap-4">
+            <QRCodeSVG value={publicUrl} size={128} />
+            <div className="flex-1">
+              <p className="text-sm text-muted-foreground mb-2">URL Pública:</p>
+              <code className="text-xs bg-muted p-2 rounded block break-all">
                 {publicUrl}
-              </p>
+              </code>
             </div>
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-sm">
-                <QRCodeSVG value={publicUrl} size={128} level="H" />
-              </div>
-            </div>
-            <p className="text-xs text-center text-muted-foreground">
-              🖥️ TV Wall Ready - Escaneie o QR Code ou use o link para visualização pública
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Public view indicator */}
-      {isPublicView && (
-        <Card className="border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10 dark:border-yellow-800">
-          <CardContent className="pt-6">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center font-medium">
-              🔒 Modo público somente leitura (TV Wall Ativado) - Atualização automática a cada 10 segundos
-            </p>
           </CardContent>
         </Card>
       )}
