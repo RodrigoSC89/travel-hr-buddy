@@ -84,31 +84,135 @@ export function UnifiedLogisticsDashboard() {
   const [activeTab, setActiveTab] = useState("cargo");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch cargo data
-  const { data: cargoData = [], isLoading: cargoLoading } = useQuery({
+  // Fetch cargo data from Supabase shipments table
+  const { data: cargoData = [], isLoading: cargoLoading, refetch: refetchCargo } = useQuery({
     queryKey: ["logistics-cargo"],
     queryFn: async (): Promise<Cargo[]> => {
-      // Use mock data - table may not exist yet
-      return getMockCargo();
+      const { data, error } = await supabase
+        .from("shipments")
+        .select("*")
+        .order("created_at", { ascending: false });
+      
+      if (error) {
+        toast.error("Erro ao carregar cargas");
+        return [];
+      }
+      
+      if (!data || data.length === 0) return [];
+      
+      return data.map((s: Record<string, unknown>) => ({
+        id: String(s.id),
+        tracking_number: String(s.shipment_number || s.tracking_number || ""),
+        cargo_type: String(s.carrier || "Container"),
+        weight_tons: Number(s.total_weight) || 0,
+        origin_port: String(s.origin || ""),
+        destination_port: String(s.destination || ""),
+        vessel_name: String(s.carrier || "N/A"),
+        status: mapShipmentStatus(String(s.status)),
+        eta: String(s.estimated_arrival || new Date().toISOString()),
+        temperature_controlled: false,
+        hazmat: false,
+        value_usd: Number(s.cost) || 0,
+      }));
     },
   });
 
-  // Fetch suppliers
-  const { data: suppliers = [], isLoading: suppliersLoading } = useQuery({
+  // Fetch suppliers from Supabase
+  const { data: suppliers = [], isLoading: suppliersLoading, refetch: refetchSuppliers } = useQuery({
     queryKey: ["logistics-suppliers"],
     queryFn: async (): Promise<Supplier[]> => {
-      // Use mock data - table schema differs
-      return getMockSuppliers();
+      const { data, error } = await supabase
+        .from("suppliers")
+        .select("*")
+        .order("rating", { ascending: false });
+      
+      if (error) {
+        toast.error("Erro ao carregar fornecedores");
+        return [];
+      }
+      
+      if (!data || data.length === 0) return [];
+      
+      return data.map((s: Record<string, unknown>) => ({
+        id: String(s.id),
+        name: String(s.name || ""),
+        category: String(s.payment_terms || "General"),
+        rating: Number(s.rating) || 0,
+        total_orders: Number(s.delivery_time_days) || 0,
+        on_time_delivery_rate: Number(s.rating) * 20 || 0,
+        contact_email: String(s.email || ""),
+        contact_phone: String(s.phone || ""),
+        location: String(s.country || s.address || ""),
+        status: mapSupplierStatus(String(s.status)),
+      }));
     },
   });
 
-  // Fetch port calls
-  const { data: portCalls = [], isLoading: portCallsLoading } = useQuery({
+  // Fetch port calls from Supabase
+  const { data: portCalls = [], isLoading: portCallsLoading, refetch: refetchPortCalls } = useQuery({
     queryKey: ["port-calls"],
     queryFn: async (): Promise<PortCall[]> => {
-      return getMockPortCalls();
+      const { data, error } = await supabase
+        .from("port_calls")
+        .select("*, vessels(name)")
+        .order("eta", { ascending: true });
+      
+      if (error) {
+        toast.error("Erro ao carregar port calls");
+        return [];
+      }
+      
+      if (!data || data.length === 0) return [];
+      
+      return data.map((p: Record<string, unknown>) => ({
+        id: String(p.id),
+        port_name: String(p.port_name || ""),
+        port_code: String(p.port_code || ""),
+        vessel_name: (p.vessels as Record<string, unknown>)?.name as string || String(p.vessel_id || ""),
+        eta: String(p.eta || new Date().toISOString()),
+        etd: String(p.etd || new Date().toISOString()),
+        berth: String(p.berth_number || "TBD"),
+        operations: Array.isArray(p.operations) ? p.operations as string[] : ["Loading"],
+        status: mapPortCallStatus(String(p.status)),
+        bunker_required: Boolean(p.bunker_required),
+        cargo_operations: Number(p.cargo_volume) || 0,
+      }));
     },
   });
+
+  // Status mapping functions
+  function mapShipmentStatus(status: string): Cargo["status"] {
+    const map: Record<string, Cargo["status"]> = {
+      preparing: "loading",
+      in_transit: "in_transit",
+      customs: "at_port",
+      delivered: "delivered",
+      delayed: "delayed",
+      cancelled: "delayed",
+    };
+    return map[status] || "loading";
+  }
+
+  function mapSupplierStatus(status: string): Supplier["status"] {
+    const map: Record<string, Supplier["status"]> = {
+      active: "active",
+      inactive: "inactive",
+      suspended: "pending",
+    };
+    return map[status] || "pending";
+  }
+
+  function mapPortCallStatus(status: string): PortCall["status"] {
+    const map: Record<string, PortCall["status"]> = {
+      scheduled: "scheduled",
+      approaching: "approaching",
+      berthed: "berthed",
+      departed: "departed",
+      arrived: "berthed",
+      completed: "departed",
+    };
+    return map[status] || "scheduled";
+  }
 
   // Calculate stats
   const stats = {
@@ -202,7 +306,12 @@ export function UnifiedLogisticsDashboard() {
             <Plus className="h-4 w-4" />
             Nova Carga
           </Button>
-          <Button variant="outline" onClick={() => toast.success("Data refreshed")}>
+          <Button variant="outline" onClick={() => {
+            refetchCargo();
+            refetchSuppliers();
+            refetchPortCalls();
+            toast.success("Dados atualizados!");
+          }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
@@ -630,204 +739,6 @@ export function UnifiedLogisticsDashboard() {
       </Tabs>
     </div>
   );
-}
-
-// Mock data functions
-function getMockCargo(): Cargo[] {
-  return [
-    {
-      id: "1",
-      tracking_number: "NAUTI-2026-00145",
-      cargo_type: "Container",
-      weight_tons: 2500,
-      origin_port: "Shanghai",
-      destination_port: "Rotterdam",
-      vessel_name: "MV Nautilus Pioneer",
-      status: "in_transit",
-      eta: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      temperature_controlled: false,
-      hazmat: false,
-      value_usd: 1250000,
-    },
-    {
-      id: "2",
-      tracking_number: "NAUTI-2026-00146",
-      cargo_type: "Bulk",
-      weight_tons: 45000,
-      origin_port: "Santos",
-      destination_port: "Singapore",
-      vessel_name: "MV Atlantic Carrier",
-      status: "loading",
-      eta: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-      temperature_controlled: false,
-      hazmat: false,
-      value_usd: 2800000,
-    },
-    {
-      id: "3",
-      tracking_number: "NAUTI-2026-00147",
-      cargo_type: "Tanker",
-      weight_tons: 80000,
-      origin_port: "Ras Tanura",
-      destination_port: "Yokohama",
-      vessel_name: "MT Gulf Voyager",
-      status: "in_transit",
-      eta: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-      temperature_controlled: false,
-      hazmat: true,
-      value_usd: 48000000,
-    },
-    {
-      id: "4",
-      tracking_number: "NAUTI-2026-00148",
-      cargo_type: "Reefer",
-      weight_tons: 1200,
-      origin_port: "Valparaiso",
-      destination_port: "Los Angeles",
-      vessel_name: "MV Pacific Fresh",
-      status: "delayed",
-      eta: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-      temperature_controlled: true,
-      hazmat: false,
-      value_usd: 890000,
-    },
-    {
-      id: "5",
-      tracking_number: "NAUTI-2026-00149",
-      cargo_type: "Container",
-      weight_tons: 3200,
-      origin_port: "Hamburg",
-      destination_port: "New York",
-      vessel_name: "MV Europa Express",
-      status: "delivered",
-      eta: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      temperature_controlled: false,
-      hazmat: false,
-      value_usd: 1650000,
-    },
-  ];
-}
-
-function getMockSuppliers(): Supplier[] {
-  return [
-    {
-      id: "1",
-      name: "Marine Fuel Services Ltd",
-      category: "Fuel & Lubricants",
-      rating: 5,
-      total_orders: 245,
-      on_time_delivery_rate: 98,
-      contact_email: "orders@marinefuel.com",
-      contact_phone: "+65 6789 0123",
-      location: "Singapore",
-      status: "active",
-    },
-    {
-      id: "2",
-      name: "Global Ship Provisions",
-      category: "Provisions & Stores",
-      rating: 4,
-      total_orders: 189,
-      on_time_delivery_rate: 92,
-      contact_email: "supply@globalship.com",
-      contact_phone: "+31 20 555 6789",
-      location: "Rotterdam",
-      status: "active",
-    },
-    {
-      id: "3",
-      name: "Pacific Marine Parts",
-      category: "Spare Parts",
-      rating: 4,
-      total_orders: 156,
-      on_time_delivery_rate: 88,
-      contact_email: "parts@pacificmarine.com",
-      contact_phone: "+1 562 555 0199",
-      location: "Long Beach, CA",
-      status: "active",
-    },
-    {
-      id: "4",
-      name: "SeaTech Electronics",
-      category: "Navigation Equipment",
-      rating: 5,
-      total_orders: 78,
-      on_time_delivery_rate: 95,
-      contact_email: "sales@seatech.no",
-      contact_phone: "+47 22 55 66 77",
-      location: "Oslo",
-      status: "active",
-    },
-    {
-      id: "5",
-      name: "Maritime Safety Corp",
-      category: "Safety Equipment",
-      rating: 3,
-      total_orders: 67,
-      on_time_delivery_rate: 85,
-      contact_email: "info@maritimesafety.ae",
-      contact_phone: "+971 4 555 8888",
-      location: "Dubai",
-      status: "pending",
-    },
-  ];
-}
-
-function getMockPortCalls(): PortCall[] {
-  return [
-    {
-      id: "1",
-      port_name: "Singapore",
-      port_code: "SGSIN",
-      vessel_name: "MV Nautilus Pioneer",
-      eta: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-      etd: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-      berth: "PSA Terminal 4, Berth 12",
-      operations: ["Discharge", "Loading", "Crew Change"],
-      status: "approaching",
-      bunker_required: true,
-      cargo_operations: 450,
-    },
-    {
-      id: "2",
-      port_name: "Rotterdam",
-      port_code: "NLRTM",
-      vessel_name: "MV Europa Express",
-      eta: new Date().toISOString(),
-      etd: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
-      berth: "Europoort, Berth 7",
-      operations: ["Discharge", "Loading"],
-      status: "berthed",
-      bunker_required: false,
-      cargo_operations: 320,
-    },
-    {
-      id: "3",
-      port_name: "Shanghai",
-      port_code: "CNSHA",
-      vessel_name: "MV Pacific Fresh",
-      eta: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-      etd: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
-      berth: "Yangshan Terminal, Berth 22",
-      operations: ["Loading", "Provisions"],
-      status: "scheduled",
-      bunker_required: true,
-      cargo_operations: 580,
-    },
-    {
-      id: "4",
-      port_name: "Houston",
-      port_code: "USHOU",
-      vessel_name: "MT Gulf Voyager",
-      eta: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
-      etd: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000).toISOString(),
-      berth: "Galveston Terminal A",
-      operations: ["Discharge"],
-      status: "scheduled",
-      bunker_required: false,
-      cargo_operations: 1,
-    },
-  ];
 }
 
 export default UnifiedLogisticsDashboard;

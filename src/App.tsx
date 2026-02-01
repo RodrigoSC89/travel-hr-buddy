@@ -218,6 +218,17 @@ const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCent
 const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenter"));
 const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
 const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAIPage"));
+
+// ============================================
+// UNIFIED HUBS - PROMPT MASTER V4.1
+// ============================================
+const OperationsCommandHub = lazy(() => import("@/pages/OperationsCommandHub"));
+const AIControlTowerHub = lazy(() => import("@/pages/AIControlTowerHub"));
+const PeopleHub = lazy(() => import("@/pages/PeopleHub"));
+const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryHub"));
+const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHub"));
+const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
+
 // ============================================
 // ESG & SUSTENTABILIDADE
 // ============================================
@@ -741,6 +752,16 @@ const AppRoutes = () => (
       <Route path="/system/interactivity" element={<InteractivityScoreboard />} />
       <Route path="/system/qa-scoreboard" element={<InteractivityScoreboard />} />
       <Route path="/qa-dashboard" element={<InteractivityScoreboard />} />
+      
+      {/* ============================================ */}
+      {/* UNIFIED HUBS - PROMPT MASTER V4.1 */}
+      {/* ============================================ */}
+      <Route path="/operations-command-hub" element={<OperationsCommandHub />} />
+      <Route path="/ai-control-tower" element={<AIControlTowerHub />} />
+      <Route path="/people-hub" element={<PeopleHub />} />
+      <Route path="/tracking-telemetry" element={<TrackingTelemetryHub />} />
+      <Route path="/document-center" element={<DocumentCenterHub />} />
+      <Route path="/comms-alerts" element={<CommsAlertsHub />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
