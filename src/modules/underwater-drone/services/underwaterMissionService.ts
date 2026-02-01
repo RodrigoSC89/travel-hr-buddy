@@ -5,7 +5,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { Mission } from "../missionUploadSub";
+import type { Mission, Waypoint } from "../missionUploadSub";
+
+// Helper to get dynamic supabase client for untyped tables
+const dynamicSupabase = () => supabase as any;
 
 export interface UnderwaterMissionRecord {
   id: string;
@@ -91,28 +94,27 @@ class UnderwaterMissionService {
 
       const missionData = {
         user_id: userId || user.id,
-        name: mission.name,
+        mission_name: mission.name,
         description: mission.description,
-        mission_type: mission.missionType || "survey",
+        mission_type: mission.metadata?.missionType || "survey",
         status: mission.status,
         start_location: mission.waypoints[0]?.position || { lat: 0, lon: 0, depth: 0 },
-        waypoints: mission.waypoints.map(wp => ({
+        waypoints: mission.waypoints.map((wp: Waypoint) => ({
           id: wp.id,
           position: wp.position,
-          actions: wp.actions,
+          action: wp.action,
           description: wp.description,
           completed: wp.completed,
         })),
         progress: mission.progress,
-        scheduled_start: mission.scheduledStart,
-        objectives: mission.objectives,
+        scheduled_start: mission.startTime,
         metadata: {
           createdAt: new Date().toISOString(),
           waypointCount: mission.waypoints.length,
         },
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("underwater_missions")
         .insert(missionData)
         .select()
@@ -124,7 +126,7 @@ class UnderwaterMissionService {
       }
 
       logger.info("Underwater mission saved successfully:", data.id);
-      return data as UnderwaterMissionRecord;
+      return this.mapMissionFromDB(data);
     } catch (error) {
       logger.error("Error saving underwater mission:", error);
       return null;
@@ -166,7 +168,7 @@ class UnderwaterMissionService {
         timestamp: new Date().toISOString(),
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("drone_telemetry")
         .insert(telemetryData)
         .select()
@@ -177,7 +179,7 @@ class UnderwaterMissionService {
         return null;
       }
 
-      return data as DroneTelemetryRecord;
+      return this.mapTelemetryFromDB(data);
     } catch (error) {
       logger.error("Error saving telemetry:", error);
       return null;
@@ -211,7 +213,7 @@ class UnderwaterMissionService {
         timestamp: new Date().toISOString(),
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("mission_events")
         .insert(eventData)
         .select()
@@ -222,7 +224,7 @@ class UnderwaterMissionService {
         return null;
       }
 
-      return data as MissionEventRecord;
+      return this.mapEventFromDB(data);
     } catch (error) {
       logger.error("Error saving mission event:", error);
       return null;
@@ -240,7 +242,7 @@ class UnderwaterMissionService {
         return [];
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("underwater_missions")
         .select("*")
         .eq("user_id", user.id)
@@ -252,7 +254,7 @@ class UnderwaterMissionService {
         return [];
       }
 
-      return (data as UnderwaterMissionRecord[]) || [];
+      return (data || []).map((row: any) => this.mapMissionFromDB(row));
     } catch (error) {
       logger.error("Error fetching missions:", error);
       return [];
@@ -278,7 +280,7 @@ class UnderwaterMissionService {
         return null;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicSupabase()
         .from("underwater_missions")
         .select("*")
         .eq("user_id", user.id);
@@ -288,25 +290,109 @@ class UnderwaterMissionService {
         return null;
       }
 
-      const missions = (data as UnderwaterMissionRecord[]) || [];
+      const missions: UnderwaterMissionRecord[] = (data || []).map((row: any) => this.mapMissionFromDB(row));
 
       return {
         totalMissions: missions.length,
-        completedMissions: missions.filter(m => m.status === "completed").length,
-        activeMissions: missions.filter(m => m.status === "active").length,
+        completedMissions: missions.filter((m: UnderwaterMissionRecord) => m.status === "completed").length,
+        activeMissions: missions.filter((m: UnderwaterMissionRecord) => m.status === "active").length,
         avgProgress: missions.length > 0 
-          ? missions.reduce((sum, m) => sum + m.progress, 0) / missions.length 
+          ? missions.reduce((sum: number, m: UnderwaterMissionRecord) => sum + m.progress, 0) / missions.length 
           : 0,
-        avgSuccessRate: missions.filter(m => m.success_rate).length > 0
-          ? missions.reduce((sum, m) => sum + (m.success_rate || 0), 0) / missions.filter(m => m.success_rate).length
+        avgSuccessRate: missions.filter((m: UnderwaterMissionRecord) => m.success_rate).length > 0
+          ? missions.reduce((sum: number, m: UnderwaterMissionRecord) => sum + (m.success_rate || 0), 0) / missions.filter((m: UnderwaterMissionRecord) => m.success_rate).length
           : 0,
-        totalDistance: missions.reduce((sum, m) => sum + (m.distance_covered_m || 0), 0),
-        maxDepth: Math.max(...missions.map(m => m.max_depth_reached || 0), 0),
+        totalDistance: missions.reduce((sum: number, m: UnderwaterMissionRecord) => sum + (m.distance_covered_m || 0), 0),
+        maxDepth: Math.max(...missions.map((m: UnderwaterMissionRecord) => m.max_depth_reached || 0), 0),
       };
     } catch (error) {
       logger.error("Error fetching mission stats:", error);
       return null;
     }
+  }
+
+  /**
+   * Map database record to UnderwaterMissionRecord
+   */
+  private mapMissionFromDB(data: any): UnderwaterMissionRecord {
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      drone_id: data.drone_id,
+      name: data.mission_name || data.name || "",
+      description: data.description,
+      mission_type: data.mission_type || "survey",
+      status: data.status || "pending",
+      priority: data.priority,
+      start_location: data.start_location || {},
+      current_location: data.current_location,
+      waypoints: data.waypoints || [],
+      trajectory: data.trajectory,
+      scheduled_start: data.scheduled_start,
+      actual_start: data.actual_start,
+      estimated_end: data.estimated_end,
+      actual_end: data.actual_end || data.end_time,
+      progress: data.progress || data.completion_percentage || 0,
+      distance_covered_m: data.distance_covered_m,
+      max_depth_reached: data.max_depth_reached || data.max_depth,
+      duration_minutes: data.duration_minutes,
+      objectives: data.objectives,
+      findings: data.findings,
+      samples_collected: data.samples_collected,
+      incidents: data.incidents,
+      success_rate: data.success_rate,
+      result_summary: data.result_summary,
+      metadata: data.metadata,
+      created_at: data.created_at,
+      updated_at: data.updated_at || data.created_at,
+    };
+  }
+
+  /**
+   * Map database record to DroneTelemetryRecord
+   */
+  private mapTelemetryFromDB(data: any): DroneTelemetryRecord {
+    return {
+      id: data.id,
+      mission_id: data.mission_id,
+      drone_id: data.drone_id,
+      user_id: data.user_id || "",
+      position: data.position || { x: data.position_x, y: data.position_y, z: data.position_z },
+      orientation: data.orientation || { heading: data.heading_degrees, pitch: data.pitch_degrees, roll: data.roll_degrees },
+      velocity: data.velocity,
+      water_temperature: data.water_temperature || data.water_temperature_celsius,
+      pressure: data.pressure || data.pressure_bar,
+      visibility: data.visibility,
+      current_speed: data.current_speed,
+      current_direction: data.current_direction,
+      battery_level: data.battery_level || data.battery_percentage || 0,
+      battery_time_remaining: data.battery_time_remaining,
+      signal_strength: data.signal_strength || 0,
+      connection_type: data.connection_type,
+      thruster_status: data.thruster_status,
+      sensor_status: data.sensor_status,
+      system_alerts: data.system_alerts || data.alerts,
+      timestamp: data.timestamp,
+      created_at: data.created_at,
+    };
+  }
+
+  /**
+   * Map database record to MissionEventRecord
+   */
+  private mapEventFromDB(data: any): MissionEventRecord {
+    return {
+      id: data.id,
+      mission_id: data.mission_id || "",
+      user_id: data.user_id || "",
+      event_type: data.event_type,
+      severity: data.severity || "info",
+      message: data.message,
+      location: data.location,
+      details: data.details || data.event_data,
+      timestamp: data.timestamp || data.created_at,
+      created_at: data.created_at,
+    };
   }
 }
 
