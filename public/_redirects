@@ -1,1 +1,3 @@
-/* /index.html 200!
+# SPA fallback - serve index.html for all routes
+# Using splat syntax to avoid infinite loop
+/*  /index.html  200

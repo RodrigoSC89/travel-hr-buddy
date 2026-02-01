@@ -1,12 +1,8 @@
 # Cloudflare Pages Configuration
-# For static sites (SPA) - NOT Workers
+# Static SPA deployment - NOT Workers
 
 name = "travel-hr-buddy"
 compatibility_date = "2024-01-01"
 
-# Assets directory for Cloudflare Pages
-[assets]
-directory = "./dist"
-
-[build]
-command = "npm run build"
+# Pages-specific configuration
+pages_build_output_dir = "./dist"
