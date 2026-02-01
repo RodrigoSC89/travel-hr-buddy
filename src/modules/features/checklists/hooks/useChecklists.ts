@@ -50,11 +50,12 @@ export function useChecklists(userId: string) {
       const items = await AIChecklistService.generateChecklistItems(prompt);
       
       // Create the checklist and get the created checklist ID
-      const checklist = await ChecklistService.createChecklist(prompt, userId);
+      const checklist = await ChecklistService.createChecklist(prompt, userId) as { id?: string } | null;
       
-      // Add AI-generated items to the checklist
+      // Add AI-generated items to the checklist - transform strings to objects
       if (checklist?.id && items.length > 0) {
-        await ChecklistService.addItemsToChecklist(checklist.id, items);
+        const itemObjects = items.map(title => ({ title, required: true }));
+        await ChecklistService.addItemsToChecklist(checklist.id, itemObjects);
       }
       
       toast.success(`Checklist created with ${items.length} AI-generated items`);

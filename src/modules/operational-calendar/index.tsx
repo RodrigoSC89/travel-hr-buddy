@@ -33,6 +33,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 import {
   CalendarDays,

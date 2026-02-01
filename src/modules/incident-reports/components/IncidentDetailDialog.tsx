@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { SignatureDialog, SignatureData } from "./SignatureDialog";
+import { SignatureDialog } from "./SignatureDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { FileDown, PenTool, Plus, CheckCircle } from "lucide-react";
@@ -24,9 +24,26 @@ import { logger } from '@/lib/logger';
 // Lazy load jsPDF
 const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
-  const { default: autoTable } = await import("jspdf-autotable");
-  return { jsPDF, autoTable };
+  await import("jspdf-autotable");
+  return { jsPDF };
 };
+
+// Local interfaces for this component
+interface SignatureDataLocal {
+  id?: string;
+  signature_image: string;
+  signatory_name: string;
+  signatory_role: string;
+  signed_at: string;
+}
+
+interface CorrectiveAction {
+  id?: string;
+  action_description: string;
+  assigned_to: string;
+  due_date: string;
+  status: string;
+}
 
 interface Incident {
   id: string;
@@ -44,14 +61,6 @@ interface Incident {
   impact_level?: string;
 }
 
-interface CorrectiveAction {
-  id?: string;
-  action_description: string;
-  assigned_to: string;
-  due_date: string;
-  status: string;
-}
-
 interface IncidentDetailDialogProps {
   incident: Incident | null;
   open: boolean;
@@ -66,7 +75,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
   onUpdate,
 }) => {
   const [showSignatureDialog, setShowSignatureDialog] = useState(false);
-  const [signatures, setSignatures] = useState<SignatureData[]>([]);
+  const [signatures, setSignatures] = useState<SignatureDataLocal[]>([]);
   const [correctiveActions, setCorrectiveActions] = useState<CorrectiveAction[]>([]);
   const [newAction, setNewAction] = useState<CorrectiveAction>({
     action_description: "",
@@ -90,34 +99,55 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
 
     try {
       // Load signatures
-      const { data: sigData } = await supabase
+      const { data: sigData } = await (supabase as any)
         .from("incident_signatures")
         .select("*")
         .eq("incident_id", incident.id);
       
-      if (sigData) setSignatures(sigData);
+      if (sigData) {
+        const mappedSignatures: SignatureDataLocal[] = sigData.map((sig: Record<string, unknown>) => ({
+          id: String(sig.id || ''),
+          signature_image: String(sig.signature_data || sig.signature_image || ''),
+          signatory_name: String(sig.signer_name || sig.signatory_name || ''),
+          signatory_role: String(sig.signer_role || sig.signatory_role || ''),
+          signed_at: String(sig.signed_at || sig.created_at || new Date().toISOString()),
+        }));
+        setSignatures(mappedSignatures);
+      }
 
       // Load corrective actions
-      const { data: actionData } = await supabase
+      const { data: actionData } = await (supabase as any)
         .from("incident_actions")
         .select("*")
         .eq("incident_id", incident.id);
       
-      if (actionData) setCorrectiveActions(actionData);
+      if (actionData) {
+        const mappedActions: CorrectiveAction[] = actionData.map((action: Record<string, unknown>) => ({
+          id: String(action.id || ''),
+          action_description: String(action.description || action.action_description || ''),
+          assigned_to: String(action.assigned_to || action.assigned_to_name || ''),
+          due_date: String(action.due_date || ''),
+          status: String(action.status || 'pending'),
+        }));
+        setCorrectiveActions(mappedActions);
+      }
     } catch (error) {
       logger.error("Error loading data:", error);
     }
   };
 
-  const handleSignatureSave = async (signatureData: SignatureData) => {
+  const handleSignatureSave = async (signatureData: { signature_image: string; signatory_name: string; signatory_role: string; signed_at: string }) => {
     if (!incident) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("incident_signatures")
         .insert({
           incident_id: incident.id,
-          ...signatureData
+          signature_data: signatureData.signature_image,
+          signer_name: signatureData.signatory_name,
+          signer_role: signatureData.signatory_role,
+          signed_at: signatureData.signed_at
         });
 
       if (error) throw error;
@@ -149,11 +179,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("incident_actions")
         .insert({
           incident_id: incident.id,
-          ...newAction
+          description: newAction.action_description,
+          assigned_to: newAction.assigned_to,
+          due_date: newAction.due_date,
+          status: newAction.status
         });
 
       if (error) throw error;
@@ -207,10 +240,11 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
   };
 
   // PDF Export for individual incident
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     if (!incident) return;
 
     try {
+      const { jsPDF } = await loadPDFLibs();
       const doc = new jsPDF();
       
       // Title
@@ -269,7 +303,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           action.status
         ]);
         
-        autoTable(doc, {
+        (doc as any).autoTable({
           startY: yPos,
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
@@ -281,332 +315,290 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       
       // Signatures
       if (signatures.length > 0) {
-        if (yPos > 250) {
-          doc.addPage();
-          yPos = 20;
-        }
-        
+        yPos += 5;
         doc.setFontSize(12);
         doc.text("Assinaturas:", 14, yPos);
         yPos += 10;
         
         signatures.forEach((sig, index) => {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          doc.setFontSize(9);
-          doc.text(`${sig.signatory_name} - ${sig.signatory_role}`, 14, yPos);
-          yPos += 6;
-          doc.text(`Data: ${format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}`, 14, yPos);
-          yPos += 6;
-          
-          if (sig.signature_image) {
-            try {
-              doc.addImage(sig.signature_image, "PNG", 14, yPos, 80, 30);
-              yPos += 35;
-            } catch (err) {
-              logger.error("Error adding signature image:", err);
-            }
-          }
-          
+          doc.setFontSize(10);
+          doc.text(`${index + 1}. ${sig.signatory_name} (${sig.signatory_role})`, 14, yPos);
           yPos += 5;
+          doc.text(`   Assinado em: ${format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}`, 14, yPos);
+          yPos += 10;
         });
       }
       
-      // Save
       doc.save(`incident-${incident.incident_number}.pdf`);
       
       toast({
-        title: "PDF gerado",
-        description: "Download iniciado"
+        title: "PDF Exportado",
+        description: "O relatório foi exportado com sucesso"
       });
     } catch (error) {
-      logger.error("Error generating PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
-        title: "Erro ao gerar PDF",
-        description: "Tente novamente",
+        title: "Erro ao exportar",
+        description: "Não foi possível gerar o PDF",
         variant: "destructive"
       });
     }
   };
 
+  const getSeverityColor = (severity: string) => {
+    const colors: Record<string, string> = {
+      low: "bg-green-500",
+      medium: "bg-yellow-500",
+      high: "bg-orange-500",
+      critical: "bg-red-500"
+    };
+    return colors[severity?.toLowerCase()] || "bg-gray-500";
+  };
+
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      new: "bg-blue-500",
+      investigating: "bg-yellow-500",
+      resolved: "bg-green-500",
+      closed: "bg-gray-500"
+    };
+    return colors[status?.toLowerCase()] || "bg-gray-500";
+  };
+
+  if (!incident) return null;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="flex items-center gap-2">
-              <span>{incident.title}</span>
-              <Badge variant="outline">{incident.incident_number}</Badge>
-            </DialogTitle>
-            <Badge variant={incident.severity === "critical" ? "destructive" : "default"}>
-              {incident.severity}
-            </Badge>
-          </div>
+          <DialogTitle className="flex items-center justify-between">
+            <span>Incidente {incident.incident_number}</span>
+            <div className="flex gap-2">
+              <Badge className={getSeverityColor(incident.severity)}>
+                {incident.severity}
+              </Badge>
+              <Badge className={getStatusColor(currentStatus)}>
+                {currentStatus}
+              </Badge>
+            </div>
+          </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="details">
-          <TabsList className="grid w-full grid-cols-5">
+        <Tabs defaultValue="details" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="details">Detalhes</TabsTrigger>
-            <TabsTrigger value="actions">Ações Corretivas</TabsTrigger>
+            <TabsTrigger value="actions">Ações</TabsTrigger>
             <TabsTrigger value="signatures">Assinaturas</TabsTrigger>
-            <TabsTrigger value="attachments">Anexos</TabsTrigger>
-            <TabsTrigger value="workflow">Workflow</TabsTrigger>
+            <TabsTrigger value="export">Exportar</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Informações do Incidente</CardTitle>
+                <CardTitle>{incident.title}</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="font-medium">Status:</span>{" "}
-                    <Badge>{currentStatus.replace("_", " ")}</Badge>
+                    <Label className="text-muted-foreground">Categoria</Label>
+                    <p>{incident.category}</p>
                   </div>
                   <div>
-                    <span className="font-medium">Categoria:</span> {incident.category}
+                    <Label className="text-muted-foreground">Tipo</Label>
+                    <p>{incident.incident_type || "Não especificado"}</p>
                   </div>
                   <div>
-                    <span className="font-medium">Severidade:</span> {incident.severity}
+                    <Label className="text-muted-foreground">Data do Incidente</Label>
+                    <p>{format(new Date(incident.incident_date), "dd/MM/yyyy HH:mm")}</p>
                   </div>
-                  {incident.incident_type && (
-                    <div>
-                      <span className="font-medium">Tipo:</span> {incident.incident_type}
-                    </div>
-                  )}
-                  <div className="col-span-2">
-                    <span className="font-medium">Data:</span>{" "}
-                    {new Date(incident.incident_date).toLocaleString()}
+                  <div>
+                    <Label className="text-muted-foreground">Local</Label>
+                    <p>{incident.incident_location || "Não especificado"}</p>
                   </div>
-                  {incident.incident_location && (
-                    <div className="col-span-2">
-                      <span className="font-medium">Local:</span> {incident.incident_location}
-                    </div>
-                  )}
                   {incident.gps_coordinates && (
-                    <div className="col-span-2">
-                      <span className="font-medium">GPS:</span> {incident.gps_coordinates}
+                    <div>
+                      <Label className="text-muted-foreground">Coordenadas GPS</Label>
+                      <p>{incident.gps_coordinates}</p>
+                    </div>
+                  )}
+                  {incident.impact_level && (
+                    <div>
+                      <Label className="text-muted-foreground">Nível de Impacto</Label>
+                      <p>{incident.impact_level}</p>
                     </div>
                   )}
                 </div>
+                
                 {incident.description && (
-                  <div className="pt-4 border-t">
-                    <span className="font-medium">Descrição:</span>
-                    <p className="mt-2 text-muted-foreground whitespace-pre-wrap">{incident.description}</p>
+                  <div>
+                    <Label className="text-muted-foreground">Descrição</Label>
+                    <p className="mt-1 whitespace-pre-wrap">{incident.description}</p>
                   </div>
                 )}
+
+                <div className="pt-4 border-t">
+                  <Label className="text-muted-foreground mb-2 block">Atualizar Status</Label>
+                  <div className="flex gap-2 flex-wrap">
+                    {["new", "investigating", "resolved", "closed"].map((status) => (
+                      <Button
+                        key={status}
+                        size="sm"
+                        variant={currentStatus === status ? "default" : "outline"}
+                        onClick={() => handleStatusUpdate(status)}
+                      >
+                        {status}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Corrective Actions Tab - PATCH 393 */}
           <TabsContent value="actions" className="space-y-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Ações Corretivas</CardTitle>
-                <Button onClick={() => setShowActionForm(!showActionForm)} size="sm">
-                  <Plus className="mr-2 h-4 w-4" />
+                <Button size="sm" onClick={() => setShowActionForm(!showActionForm)}>
+                  <Plus className="h-4 w-4 mr-2" />
                   Nova Ação
                 </Button>
               </CardHeader>
               <CardContent className="space-y-4">
                 {showActionForm && (
-                  <div className="border rounded-lg p-4 bg-muted/50 space-y-4">
-                    <div>
-                      <Label>Descrição da Ação *</Label>
-                      <Textarea
-                        value={newAction.action_description}
-                        onChange={(e) => setNewAction({ ...newAction, action_description: e.target.value })}
-                        placeholder="Descreva a ação corretiva necessária"
-                        rows={3}
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+                  <Card className="bg-muted/50">
+                    <CardContent className="pt-4 space-y-4">
                       <div>
-                        <Label>Responsável *</Label>
-                        <Input
-                          value={newAction.assigned_to}
-                          onChange={(e) => setNewAction({ ...newAction, assigned_to: e.target.value })}
-                          placeholder="Nome do responsável"
+                        <Label>Descrição da Ação *</Label>
+                        <Textarea
+                          value={newAction.action_description}
+                          onChange={(e) => setNewAction({ ...newAction, action_description: e.target.value })}
+                          placeholder="Descreva a ação corretiva..."
                         />
                       </div>
-                      <div>
-                        <Label>Prazo</Label>
-                        <Input
-                          type="date"
-                          value={newAction.due_date}
-                          onChange={(e) => setNewAction({ ...newAction, due_date: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button onClick={handleAddAction} size="sm">Adicionar</Button>
-                      <Button onClick={() => setShowActionForm(false)} variant="outline" size="sm">Cancelar</Button>
-                    </div>
-                  </div>
-                )}
-                
-                {correctiveActions.length > 0 ? (
-                  <div className="space-y-3">
-                    {correctiveActions.map((action, index) => (
-                      <div key={index} className="border rounded-lg p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <p className="font-medium">{action.action_description}</p>
-                            <div className="mt-2 text-sm text-muted-foreground space-y-1">
-                              <div>Responsável: {action.assigned_to}</div>
-                              {action.due_date && (
-                                <div>Prazo: {format(new Date(action.due_date), "dd/MM/yyyy")}</div>
-                              )}
-                            </div>
-                          </div>
-                          <Badge>{action.status}</Badge>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Responsável *</Label>
+                          <Input
+                            value={newAction.assigned_to}
+                            onChange={(e) => setNewAction({ ...newAction, assigned_to: e.target.value })}
+                            placeholder="Nome do responsável"
+                          />
+                        </div>
+                        <div>
+                          <Label>Prazo</Label>
+                          <Input
+                            type="date"
+                            value={newAction.due_date}
+                            onChange={(e) => setNewAction({ ...newAction, due_date: e.target.value })}
+                          />
                         </div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setShowActionForm(false)}>
+                          Cancelar
+                        </Button>
+                        <Button onClick={handleAddAction}>
+                          Adicionar Ação
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {correctiveActions.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
                     Nenhuma ação corretiva registrada
                   </p>
+                ) : (
+                  <div className="space-y-2">
+                    {correctiveActions.map((action, index) => (
+                      <Card key={action.id || index}>
+                        <CardContent className="pt-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium">{action.action_description}</p>
+                              <p className="text-sm text-muted-foreground">
+                                Responsável: {action.assigned_to}
+                              </p>
+                              {action.due_date && (
+                                <p className="text-sm text-muted-foreground">
+                                  Prazo: {format(new Date(action.due_date), "dd/MM/yyyy")}
+                                </p>
+                              )}
+                            </div>
+                            <Badge variant={action.status === "completed" ? "default" : "secondary"}>
+                              {action.status}
+                            </Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Signatures Tab - PATCH 393 */}
           <TabsContent value="signatures" className="space-y-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Assinaturas Digitais</CardTitle>
-                <Button onClick={() => setShowSignatureDialog(true)} size="sm">
-                  <PenTool className="mr-2 h-4 w-4" />
+                <Button size="sm" onClick={() => setShowSignatureDialog(true)}>
+                  <PenTool className="h-4 w-4 mr-2" />
                   Assinar
                 </Button>
               </CardHeader>
               <CardContent>
-                {signatures.length > 0 ? (
+                {signatures.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
+                    Nenhuma assinatura registrada
+                  </p>
+                ) : (
                   <div className="space-y-4">
                     {signatures.map((sig, index) => (
-                      <div key={index} className="border rounded-lg p-4">
-                        <div className="flex items-start gap-4">
-                          {sig.signature_image && (
-                            <img 
-                              src={sig.signature_image} 
-                              alt="Signature" 
-                              className="w-32 h-20 object-contain border rounded"
-                            />
-                          )}
-                          <div>
-                            <p className="font-medium">{sig.signatory_name}</p>
-                            <p className="text-sm text-muted-foreground">{sig.signatory_role}</p>
-                            <p className="text-xs text-muted-foreground mt-2">
-                              {format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}
-                            </p>
-                          </div>
+                      <div key={sig.id || index} className="flex items-center gap-4 p-4 border rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <div className="flex-1">
+                          <p className="font-medium">{sig.signatory_name}</p>
+                          <p className="text-sm text-muted-foreground">{sig.signatory_role}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Assinado em: {format(new Date(sig.signed_at), "dd/MM/yyyy HH:mm")}
+                          </p>
                         </div>
+                        {sig.signature_image && (
+                          <img 
+                            src={sig.signature_image} 
+                            alt="Assinatura" 
+                            className="h-12 max-w-[120px] object-contain border rounded"
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">
-                    Nenhuma assinatura registrada
-                  </p>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="attachments">
+          <TabsContent value="export" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Fotos e Anexos</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {incident.photo_urls && incident.photo_urls.length > 0 ? (
-                  <div className="grid grid-cols-3 gap-4">
-                    {incident.photo_urls.map((url, index) => (
-                      <img 
-                        key={index}
-                        src={url}
-                        alt={`Attachment ${index + 1}`}
-                        className="w-full h-48 object-cover rounded border"
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">
-                    Nenhum anexo disponível
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Workflow Status - PATCH 393 */}
-          <TabsContent value="workflow">
-            <Card>
-              <CardHeader>
-                <CardTitle>Fluxo de Status</CardTitle>
+                <CardTitle>Exportar Relatório</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <span className="font-medium">Status Atual:</span>
-                  <Badge className="text-base px-4 py-2">{currentStatus}</Badge>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Alterar Status:</Label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Button
-                      variant={currentStatus === "new" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("new")}
-                      className="w-full"
-                    >
-                      Novo
-                    </Button>
-                    <Button
-                      variant={currentStatus === "under_analysis" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("under_analysis")}
-                      className="w-full"
-                    >
-                      Em Análise
-                    </Button>
-                    <Button
-                      variant={currentStatus === "resolved" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("resolved")}
-                      className="w-full"
-                    >
-                      Resolvido
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Fluxo:</strong> Novo → Em Análise → Resolvido
-                  </p>
-                </div>
+                <p className="text-muted-foreground">
+                  Exporte o relatório completo do incidente incluindo todas as ações corretivas e assinaturas.
+                </p>
+                <Button onClick={exportToPDF} className="w-full">
+                  <FileDown className="h-4 w-4 mr-2" />
+                  Exportar para PDF
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-between gap-2 mt-4">
-          <Button variant="outline" onClick={exportToPDF}>
-            <FileDown className="mr-2 h-4 w-4" />
-            Exportar PDF
-          </Button>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Fechar
-          </Button>
-        </div>
-
-        {/* Signature Dialog */}
         <SignatureDialog
           open={showSignatureDialog}
           onOpenChange={setShowSignatureDialog}

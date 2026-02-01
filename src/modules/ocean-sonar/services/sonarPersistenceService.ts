@@ -63,23 +63,22 @@ class SonarPersistenceService {
       const readingsToInsert = data.readings.map((reading) => ({
         mission_id: missionId,
         user_id: user.id,
-        location: { lat: reading.lat, lon: reading.lon },
+        location: { lat: reading.latitude, lon: reading.longitude },
         depth: reading.depth,
         terrain_type: reading.terrain,
         risk_level: reading.riskLevel,
         reading_data: {
           id: reading.id,
-          frequency: reading.frequency,
+          obstacles: reading.obstacles,
         },
         metadata: {
-          scanId: data.scanId,
-          centerLat: data.centerLat,
-          centerLon: data.centerLon,
-          radiusKm: data.radiusKm,
+          minDepth: data.minDepth,
+          maxDepth: data.maxDepth,
+          avgDepth: data.avgDepth,
         },
       }));
 
-      const { data: insertedReadings, error } = await supabase
+      const { data: insertedReadings, error } = await (supabase as any)
         .from("sonar_readings")
         .insert(readingsToInsert)
         .select();
