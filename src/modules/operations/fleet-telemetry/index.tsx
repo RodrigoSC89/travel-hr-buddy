@@ -96,28 +96,32 @@ export default function FleetTelemetryModule() {
 
       setSensorData(sensors?.map(s => ({
         id: s.id,
-        vessel_id: s.vessel_id,
+        vessel_id: s.vessel_id || "",
         vessel_name: s.vessel?.name || "Unknown",
         sensor_type: s.sensor_type,
         value: s.value,
-        unit: s.unit,
-        threshold_min: s.threshold_min,
-        threshold_max: s.threshold_max,
-        status: determineStatus(s.value, s.threshold_min, s.threshold_max),
+        unit: s.unit || "",
+        threshold_min: s.threshold_min ?? undefined,
+        threshold_max: s.threshold_max ?? undefined,
+        status: determineStatus(s.value, s.threshold_min ?? undefined, s.threshold_max ?? undefined),
         timestamp: s.timestamp
       })) || []);
 
-      setAlerts(maintenanceAlerts?.map(a => ({
-        id: a.id,
-        vessel_id: a.vessel_id,
-        vessel_name: a.vessel?.name || "Unknown",
-        alert_type: a.alert_type,
-        component: a.component,
-        severity: a.severity,
-        message: a.message,
-        predicted_failure_date: a.predicted_failure_date,
-        created_at: a.created_at
-      })) || []);
+      setAlerts(maintenanceAlerts?.map(a => {
+        const alertType = (a.alert_type || "scheduled") as MaintenanceAlert["alert_type"];
+        const severity = (a.severity || "medium") as MaintenanceAlert["severity"];
+        return {
+          id: a.id,
+          vessel_id: a.vessel_id || "",
+          vessel_name: a.vessel?.name || "Unknown",
+          alert_type: ["predictive", "scheduled", "emergency"].includes(alertType) ? alertType : "scheduled",
+          component: a.component || "",
+          severity: ["low", "medium", "high", "critical"].includes(severity) ? severity : "medium",
+          message: a.description || "",
+          predicted_failure_date: a.due_date ?? undefined,
+          created_at: a.created_at || ""
+        };
+      }) || []);
 
     } catch (error) {
       logger.error("Error loading telemetry:", error);

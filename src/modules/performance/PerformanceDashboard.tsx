@@ -90,20 +90,20 @@ const PerformanceDashboard: React.FC = () => {
       const startDate = subDays(endDate, parseInt(selectedPeriod));
 
       // Fetch real data from existing tables
-      const { data: fleetLogs } = await supabase
+      const { data: fleetLogs } = await (supabase as any)
         .from("system_audit_logs")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false })
         .limit(100);
       
-      const { data: missionActivities } = await supabase
+      const { data: missionActivities } = await (supabase as any)
         .from("missions")
         .select("*")
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: false });
       
-      const { data: fuelUsage } = await supabase
+      const { data: fuelUsage } = await (supabase as any)
         .from("fuel_records")
         .select("*")
         .gte("created_at", startDate.toISOString())

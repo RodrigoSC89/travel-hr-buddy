@@ -71,11 +71,28 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
 
       if (alertsError) throw alertsError;
 
-      setMetrics(metricsData || []);
-      setAlerts(alertsData || []);
+      // Map data to expected interfaces
+      setMetrics((metricsData || []).map((m: Record<string, unknown>) => ({
+        id: String(m.id || ""),
+        system_name: String(m.metric_name || m.component || "System"),
+        metric_name: String(m.metric_name || ""),
+        metric_value: Number(m.metric_value || m.response_time || 0),
+        metric_unit: String(m.metric_unit || "ms"),
+        status: String(m.status || "normal"),
+        created_at: String(m.created_at || new Date().toISOString()),
+      })));
+      
+      setAlerts((alertsData || []).map((a: Record<string, unknown>) => ({
+        id: String(a.id || ""),
+        system_name: String(a.system_name || a.metric_name || "System"),
+        severity: String(a.severity || "medium"),
+        message: String(a.message || a.alert_type || "Alert"),
+        is_resolved: Boolean(a.is_resolved),
+        created_at: String(a.created_at || new Date().toISOString()),
+      })));
 
       // Show toast for new critical alerts
-      const criticalAlerts = alertsData?.filter((a) => a.severity === "critical") || [];
+      const criticalAlerts = alertsData?.filter((a: Record<string, unknown>) => a.severity === "critical") || [];
       if (criticalAlerts.length > 0) {
         toast({
           title: "Critical Alert",

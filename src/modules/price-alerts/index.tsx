@@ -126,15 +126,32 @@ export const CompletePriceAlertsUI: React.FC = () => {
   const loadAlerts = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
+      if (!user?.id) return;
+      
+      const { data, error } = await (supabase as any)
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      setAlerts(data || []);
+      // Map data to expected interface
+      setAlerts((data || []).map((a: Record<string, unknown>) => ({
+        id: String(a.id || ""),
+        route: String(a.route || a.product_name || ""),
+        origin: String(a.origin || ""),
+        destination: String(a.destination || ""),
+        target_price: Number(a.target_price || 0),
+        current_price: a.current_price != null ? Number(a.current_price) : undefined,
+        threshold_type: String(a.threshold_type || "below"),
+        is_active: Boolean(a.is_active),
+        email_notifications: Boolean(a.email_notifications),
+        visual_notifications: Boolean(a.visual_notifications),
+        created_at: String(a.created_at || new Date().toISOString()),
+        last_checked: a.last_checked ? String(a.last_checked) : undefined,
+        triggered_at: a.triggered_at ? String(a.triggered_at) : undefined,
+      })));
     } catch (error) {
       logger.error("Error loading alerts:", error);
       toast.error("Failed to load price alerts");
@@ -168,10 +185,8 @@ export const CompletePriceAlertsUI: React.FC = () => {
     try {
       const route = `${newAlert.origin} → ${newAlert.destination}`;
       
-      const { error } = await supabase.from("price_alerts").insert({
-        route,
-        origin: newAlert.origin,
-        destination: newAlert.destination,
+      const { error } = await (supabase as any).from("price_alerts").insert({
+        product_name: route,
         target_price: parseFloat(newAlert.target_price),
         threshold_type: newAlert.threshold_type,
         email_notifications: newAlert.email_notifications,

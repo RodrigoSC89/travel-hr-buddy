@@ -253,13 +253,14 @@ export class MissionControlService {
     metadata?: Record<string, any>;
   }): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("mission_logs")
         .insert({
-          event_type: event.eventType,
-          severity: event.severity,
-          message: event.message,
-          timestamp: new Date().toISOString(),
+          mission_name: event.eventType,
+          mission_date: new Date().toISOString().split("T")[0],
+          crew_members: [],
+          status: event.severity === "critical" ? "cancelled" : "in-progress",
+          description: event.message,
           metadata: event.metadata || {}
         });
 

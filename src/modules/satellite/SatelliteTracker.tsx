@@ -75,7 +75,12 @@ const SatelliteTracker = () => {
           minLon: -60,
           maxLon: 20,
         });
-        setVessels(vesselData);
+        // Extract vessels array from result
+        if (Array.isArray(vesselData)) {
+          setVessels(vesselData);
+        } else if (vesselData && Array.isArray((vesselData as any).data)) {
+          setVessels((vesselData as any).data);
+        }
       } catch (error) {
         logger.error("Error fetching AIS data:", error);
       } finally {
