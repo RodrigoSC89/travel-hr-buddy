@@ -398,7 +398,7 @@ function ResultSection({
   onCopy,
   accentColor = "blue"
 }: { 
-  icon: any; 
+  icon: React.ElementType; 
   label: string; 
   content: string; 
   onCopy: () => void;
