@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema: VesselPosition type compatibility
 /**
  * FleetMapBox Component
  * Real-time vessel tracking with Mapbox integration
@@ -17,6 +16,7 @@ import { logger } from '@/lib/logger';
 
 interface VesselPosition {
   vesselId?: string;
+  id?: string;
   mmsi: string;
   imo?: string;
   name: string;
@@ -29,12 +29,15 @@ interface VesselPosition {
   shipType: string;
   destination?: string;
   lastUpdate: string;
+  status?: string;
+  vessel_type?: string;
+  current_location?: string;
 }
 
 interface FleetMapBoxProps {
   vessels?: VesselPosition[];
-  onSelectVessel?: (vessel: VesselPosition) => void;
-  selectedVessel?: VesselPosition | null;
+  onSelectVessel?: (vessel: Partial<VesselPosition>) => void;
+  selectedVessel?: Partial<VesselPosition> | null;
   height?: string;
   showList?: boolean;
 }

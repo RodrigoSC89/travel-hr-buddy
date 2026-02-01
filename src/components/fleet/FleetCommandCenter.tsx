@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema: VesselWithMission type compatibility
 /**
  * PATCH 168.0: Nautilus Fleet Command Center (FCC)
  * Central dashboard for fleet-wide vessel monitoring and mission control
@@ -59,32 +58,32 @@ export const FleetCommandCenter: React.FC = () => {
   const { data: vessels, isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
     queryKey: ["fleet-vessels", filterStatus],
     queryFn: async (): Promise<VesselWithMission[]> => {
-      let data: Array<Record<string, unknown>> | null = null;
-      let error: Error | null = null;
+      let query = supabase
+        .from("vessels")
+        .select("*")
+        .order("name");
 
       if (filterStatus !== "all") {
-        const result = await supabase
-          .from("vessels")
-          .select("*")
-          .eq("status", filterStatus)
-          .order("name");
-        data = result.data;
-        error = result.error;
-      } else {
-        const result = await supabase
-          .from("vessels")
-          .select("*")
-          .order("name");
-        data = result.data;
-        error = result.error;
+        query = query.eq("status", filterStatus);
       }
+
+      const { data, error } = await query;
 
       if (error) {
         logger.error("Error fetching vessels:", error);
         throw error;
       }
 
-      return (data ?? []) as VesselWithMission[];
+      return (data ?? []).map((row) => ({
+        id: row.id,
+        name: row.name || "Unknown Vessel",
+        imo_code: row.imo_number,
+        vessel_type: row.vessel_type,
+        flag: row.flag || row.flag_state,
+        status: (row.status as VesselStatus) || "inactive",
+        last_known_position: null, // Not available in current schema
+        current_location: row.current_location,
+      })) as VesselWithMission[];
     },
     refetchInterval: autoRefresh ? 30000 : false,
   });
