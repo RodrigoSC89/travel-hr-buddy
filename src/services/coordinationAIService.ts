@@ -1,7 +1,10 @@
-// @ts-nocheck - Schema alignment pending  
+// @ts-nocheck - Complex multi-table coordination types require schema alignment
 /**
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution
+ * 
+ * Technical Debt Note: Uses dynamic tables (coordination_agents, coordination_tasks,
+ * coordination_decisions, coordination_mission_links) that require dedicated type mapping.
  */
 
 import { supabase } from "@/integrations/supabase/client";

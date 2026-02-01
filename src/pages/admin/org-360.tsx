@@ -1,12 +1,10 @@
-// @ts-nocheck - Schema alignment pending
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, Activity, Users, Brain, AlertTriangle, TrendingUp } from "lucide-react";
+import { Loader2, Activity, Users, Brain, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Bar, Line, Pie } from "react-chartjs-2";
 
 /**
  * PATCH 641: Organization 360° Dashboard
@@ -34,14 +32,14 @@ export default function Org360Dashboard() {
         apiHealth = 85; // Edge function may not exist, but system is working
       }
 
-      // Calculate AI health based on recent usage
+      // Calculate AI health based on recent usage (using ai_audit_logs which exists in schema)
       const { data: aiLogs } = await supabase
-        .from("ai_interaction_logs")
-        .select("success_indicator")
+        .from("ai_audit_logs")
+        .select("quality_score")
         .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
         .limit(100);
       
-      const aiSuccesses = aiLogs?.filter((l) => l.success_indicator === true).length || 0;
+      const aiSuccesses = aiLogs?.filter((l) => (l.quality_score ?? 0) > 0.7).length || 0;
       const aiTotal = aiLogs?.length || 1;
       const aiHealth = Math.round((aiSuccesses / aiTotal) * 100) || 92;
 
@@ -85,23 +83,23 @@ export default function Org360Dashboard() {
   const { data: aiUsage, isLoading: loadingAI } = useQuery({
     queryKey: ["ai-usage-360"],
     queryFn: async () => {
-      // Fetch AI interaction logs for metrics
+      // Fetch AI audit logs for metrics (using ai_audit_logs which exists in schema)
       const { data: logs, error } = await supabase
-        .from("ai_interaction_logs")
+        .from("ai_audit_logs")
         .select("*")
         .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
       if (error) throw error;
 
       const totalRequests = logs?.length || 0;
-      const successfulRequests = logs?.filter((l) => l.success_indicator === true).length || 0;
+      const successfulRequests = logs?.filter((l) => (l.quality_score ?? 0) > 0.7).length || 0;
       const avgResponseTime = logs?.reduce((sum, l) => sum + (l.response_time_ms || 250), 0) / (totalRequests || 1);
       const successRate = totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 97;
 
-      // Group by module/sector
+      // Group by module
       const byModule: Record<string, number> = {};
       logs?.forEach((log) => {
-        const module = log.module_id || "General";
+        const module = log.module_name || "General";
         byModule[module] = (byModule[module] || 0) + 1;
       });
 

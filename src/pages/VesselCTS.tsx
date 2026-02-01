@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema alignment pending
 /**
  * Módulo 2: CTS & Verificação de Tripulação
  * Verificação de conformidade de certificados vs funções
@@ -77,7 +76,7 @@ const VesselCTS = () => {
       ]);
 
       if (ctsRes.data) setCtsRecords(ctsRes.data as unknown as CTSRecord[]);
-      if (certRes.data) setCertifications(certRes.data as unknown as Certification[]);
+      if (certRes.data) setCertifications(certRes.data as unknown as CrewCertification[]);
       
       // Calculate initial compliance score
       calculateComplianceScore(certRes.data || []);

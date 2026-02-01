@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema alignment pending
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ApplyTemplate from "./apply-template";
@@ -42,7 +41,19 @@ export default function ApplyTemplateDemo() {
 
       if (error) throw error;
 
-      setTemplates(data || []);
+      // Map database results to Template interface
+      const mappedTemplates: Template[] = (data || []).map(row => ({
+        id: row.id,
+        title: row.title ?? 'Untitled',
+        content: typeof row.content === 'string' ? row.content : JSON.stringify(row.content ?? ''),
+        created_by: row.created_by ?? '',
+        created_at: row.created_at ?? '',
+        updated_at: row.updated_at ?? '',
+        is_favorite: row.is_favorite ?? false,
+        is_private: row.is_private ?? false,
+      }));
+
+      setTemplates(mappedTemplates);
     } catch (error) {
       logger.error("Error loading templates:", error);
       toast({

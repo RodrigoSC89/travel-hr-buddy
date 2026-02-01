@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema alignment pending
 /**
  * VesselContractsV2 - Contratos de Embarcação
  * Módulo completo com IA, predição, alertas, analytics, documentos, rastreamento e ERP
@@ -111,8 +110,35 @@ export default function VesselContractsV2() {
         supabase.from('downtime_events').select('*').order('start_time', { ascending: false }).limit(50)
       ]);
 
-      if (contractsRes.data) setContracts(contractsRes.data);
-      if (downtimeRes.data) setDowntimeEvents(downtimeRes.data);
+      if (contractsRes.data) {
+        setContracts(contractsRes.data.map(c => ({
+          id: c.id,
+          contract_number: c.contract_number ?? '',
+          client_name: c.client_name ?? '',
+          operator_name: c.operator_name,
+          start_date: c.start_date ?? '',
+          end_date: c.end_date ?? '',
+          sla_downtime_percent: c.sla_downtime_percent,
+          penalty_per_hour: c.penalty_per_hour,
+          status: c.status,
+          vessel_id: c.vessel_id,
+        })));
+      }
+      if (downtimeRes.data) {
+        setDowntimeEvents(downtimeRes.data.map(d => ({
+          id: d.id,
+          start_time: d.start_time ?? '',
+          end_time: d.end_time,
+          duration_hours: d.duration_hours,
+          reason: d.reason,
+          reason_category: d.reason_category,
+          impact_level: d.impact_level,
+          justification_status: d.justification_status,
+          ai_analysis: d.ai_analysis && typeof d.ai_analysis === 'object' && !Array.isArray(d.ai_analysis)
+            ? d.ai_analysis as { summary?: string; recommendations?: string[]; risk_level?: string }
+            : null,
+        })));
+      }
     } catch (error) {
       logger.error('Error loading contracts data', error);
       toast.error('Erro ao carregar dados');

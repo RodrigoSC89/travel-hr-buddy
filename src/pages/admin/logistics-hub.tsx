@@ -1,4 +1,3 @@
-// @ts-nocheck - Schema alignment pending
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,24 +71,34 @@ export default function LogisticsHub() {
   };
 
   const loadRequests = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as unknown as { from: (table: string) => { select: (cols: string) => { order: (col: string, opts: { ascending: boolean }) => Promise<{ data: unknown[]; error: Error | null }> } } })
       .from("logistics_requests")
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    setRequests(data || []);
+    setRequests((data || []) as unknown as MaterialRequest[]);
     logger.info("Material requests loaded", { count: data?.length });
   };
 
   const loadInventory = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as unknown as { from: (table: string) => { select: (cols: string) => { order: (col: string) => Promise<{ data: unknown[]; error: Error | null }> } } })
       .from("logistics_inventory")
       .select("*")
       .order("item_name");
 
     if (error) throw error;
-    setInventory(data || []);
+    // Map to interface with computed fields
+    const mappedInventory: InventoryItem[] = ((data || []) as unknown as Array<{ id?: string; item_name: string; quantity: number; unit: string; location: string | null; min_stock_level?: number }>).map(item => ({
+      id: item.id,
+      item_name: item.item_name,
+      quantity: item.quantity,
+      unit: item.unit,
+      location: item.location ?? '',
+      stock_status: item.quantity <= 0 ? 'out_of_stock' : item.quantity <= (item.min_stock_level ?? 10) ? 'low_stock' : 'in_stock',
+      reorder_level: item.min_stock_level ?? 10,
+    }));
+    setInventory(mappedInventory);
     logger.info("Inventory items loaded", { count: data?.length });
   };
 
@@ -101,10 +110,12 @@ export default function LogisticsHub() {
       const eta = new Date();
       eta.setDate(eta.getDate() + 7);
 
-      const { error } = await supabase.from("logistics_requests").insert({
-        ...requestForm,
-        estimated_delivery: eta.toISOString(),
-      });
+      const { error } = await (supabase as unknown as { from: (table: string) => { insert: (data: Record<string, unknown>) => Promise<{ error: Error | null }> } })
+        .from("logistics_requests")
+        .insert({
+          ...requestForm,
+          estimated_delivery: eta.toISOString(),
+        });
 
       if (error) throw error;
 
@@ -127,7 +138,7 @@ export default function LogisticsHub() {
 
   const handleApproval = async (id: string, approved: boolean) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as unknown as { from: (table: string) => { update: (data: Record<string, unknown>) => { eq: (col: string, val: string) => Promise<{ error: Error | null }> } } })
         .from("logistics_requests")
         .update({
           status: approved ? "approved" : "rejected",
@@ -147,7 +158,7 @@ export default function LogisticsHub() {
 
   const handleDelivered = async (id: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as unknown as { from: (table: string) => { update: (data: Record<string, unknown>) => { eq: (col: string, val: string) => Promise<{ error: Error | null }> } } })
         .from("logistics_requests")
         .update({ status: "delivered" })
         .eq("id", id);
