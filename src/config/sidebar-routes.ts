@@ -40,7 +40,7 @@ import {
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
   ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar, Clock, Bot
+  Radar, Clock, Bot, Smartphone
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -186,18 +186,19 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🤖 AI Enterprise Engines",
     defaultOpen: false,
     items: [
-      { label: "🗺️ Voyage & Logistics AI", path: "/ai/voyage-logistics", icon: Ship, emoji: "🗺️", badge: "AI", status: "new" },
-      { label: "⚠️ Safety & Incident AI", path: "/ai/safety-incident", icon: AlertTriangle, emoji: "⚠️", badge: "AI", status: "new" },
-      { label: "📦 Inventory & Spares AI", path: "/ai/inventory-spares", icon: HardDrive, emoji: "📦", badge: "AI", status: "new" },
-      { label: "💰 Finance & Procurement AI", path: "/finance-procurement-ai", icon: DollarSign, emoji: "💰", badge: "AI", status: "new" },
-      { label: "🛡️ Compliance AI", path: "/compliance-ai", icon: Shield, emoji: "🛡️", badge: "AI", status: "new" },
-      { label: "🌱 Environmental AI", path: "/environmental-ai", icon: Leaf, emoji: "🌱", badge: "AI", status: "new" },
-      { label: "📋 Quality Management AI", path: "/quality-ai", icon: ClipboardList, emoji: "📋", badge: "AI", status: "new" },
-      { label: "📝 Contract & Legal AI", path: "/contract-legal-ai", icon: FileText, emoji: "📝", badge: "AI", status: "new" },
-      { label: "❤️ Insurance & Claims AI", path: "/insurance-claims-ai", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
-      { label: "👥 Crewing & Payroll AI", path: "/crewing-payroll-ai", icon: Users, emoji: "👥", badge: "AI", status: "new" },
-      { label: "📊 Reporting & Analytics AI", path: "/reporting-analytics-ai", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
-      { label: "📱 Mobile & Offline AI", path: "/mobile-offline-ai", icon: HardDrive, emoji: "📱", badge: "AI", status: "new" },
+      { label: "🧠 AI Engines Hub", path: "/ai-enterprise-engines", icon: Brain, emoji: "🧠", badge: "12 ENGINES", status: "new" },
+      { label: "🗺️ Voyage & Logistics AI", path: "/ai-enterprise-engines?tab=voyage", icon: Ship, emoji: "🗺️", badge: "AI", status: "new" },
+      { label: "⚠️ Safety & Incident AI", path: "/ai-enterprise-engines?tab=safety", icon: AlertTriangle, emoji: "⚠️", badge: "AI", status: "new" },
+      { label: "📦 Inventory & Spares AI", path: "/ai-enterprise-engines?tab=inventory", icon: HardDrive, emoji: "📦", badge: "AI", status: "new" },
+      { label: "💰 Finance & Procurement AI", path: "/ai-enterprise-engines?tab=finance", icon: DollarSign, emoji: "💰", badge: "AI", status: "new" },
+      { label: "🛡️ Compliance AI", path: "/ai-enterprise-engines?tab=compliance", icon: Shield, emoji: "🛡️", badge: "AI", status: "new" },
+      { label: "🌱 Environmental AI", path: "/ai-enterprise-engines?tab=environmental", icon: Leaf, emoji: "🌱", badge: "AI", status: "new" },
+      { label: "📋 Quality Management AI", path: "/ai-enterprise-engines?tab=quality", icon: ClipboardList, emoji: "📋", badge: "AI", status: "new" },
+      { label: "📝 Contract & Legal AI", path: "/ai-enterprise-engines?tab=contract", icon: FileText, emoji: "📝", badge: "AI", status: "new" },
+      { label: "❤️ Insurance & Claims AI", path: "/ai-enterprise-engines?tab=insurance", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
+      { label: "👥 Crewing & Payroll AI", path: "/ai-enterprise-engines?tab=crewing", icon: Users, emoji: "👥", badge: "AI", status: "new" },
+      { label: "📊 Reporting & Analytics AI", path: "/ai-enterprise-engines?tab=reporting", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
+      { label: "📱 Mobile & Offline AI", path: "/ai-enterprise-engines?tab=mobile", icon: HardDrive, emoji: "📱", badge: "AI", status: "new" },
     ],
   },
 
@@ -359,50 +360,36 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
-      // ===== DIAGNÓSTICO RÁPIDO - 5 SOLUÇÕES =====
-      { label: "🔔 Alertas Certificados", path: "/diagnostic-certificates", icon: Bell, emoji: "🔔", badge: "NEW", status: "new" },
-      { label: "📊 Dashboard Compliance", path: "/diagnostic-dashboard", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
-      { label: "📁 Repositório Docs", path: "/diagnostic-documents", icon: FileText, emoji: "📁", badge: "NEW", status: "new" },
-      { label: "⚠️ Workflow NCs", path: "/diagnostic-ncs", icon: AlertTriangle, emoji: "⚠️", badge: "NEW", status: "new" },
-      { label: "📈 Relatórios Auto", path: "/diagnostic-reports", icon: FileText, emoji: "📈", badge: "NEW", status: "new" },
-      // Dashboard Executivo de Compliance (NOVO)
-      { label: "📊 Dashboard Executivo", path: "/compliance-executive", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
-      // Centro de Compliance Avançado (NOVO - Roadmap Completo)
-      { label: "🚀 Compliance Avançado", path: "/compliance-roadmap", icon: Shield, emoji: "🚀", badge: "NEW", status: "new" },
-      // Chat IA Agêntico (NOVO)
-      { label: "🤖 Audit AI Chat", path: "/audit-ai-chat", icon: Brain, emoji: "🤖", badge: "NEW", status: "new" },
-      // Central de Agentes de Auditoria (NOVO)
-      { label: "🧠 Central Agentes Auditoria", path: "/audit-agents", icon: Bot, emoji: "🧠", badge: "10 AGENTS", status: "new" },
-      // Auditorias Marítimas Regulatórias
+      // Hub Unificado de Compliance
+      { label: "🛡️ Compliance Hub", path: "/compliance-unified", icon: Shield, emoji: "🛡️", badge: "HUB", status: "new" },
+      { label: "📊 Dashboard", path: "/compliance-unified?tab=dashboard", icon: BarChart3, emoji: "📊" },
+      { label: "🤖 Agentes IA", path: "/compliance-unified?tab=agents", icon: Bot, emoji: "🤖", badge: "10 AGENTS" },
+      { label: "📋 Auditorias", path: "/compliance-unified?tab=audits", icon: ClipboardList, emoji: "📋" },
+      { label: "🏆 Certificações", path: "/compliance-unified?tab=certificates", icon: Award, emoji: "🏆" },
+      { label: "⚠️ NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
+      { label: "📜 Regulamentos", path: "/compliance-unified?tab=regulations", icon: BookOpen, emoji: "📜" },
+      { label: "🎯 Matriz de Riscos", path: "/compliance-unified?tab=risks", icon: Target, emoji: "🎯" },
+      { label: "📈 Relatórios Auto", path: "/compliance-unified?tab=reports", icon: FileText, emoji: "📈" },
+      // Rotas diretas (mantidas para compatibilidade)
+      { label: "🚀 Compliance Avançado", path: "/compliance-roadmap", icon: Shield, emoji: "🚀" },
+      { label: "📊 Dashboard Executivo", path: "/compliance-executive", icon: BarChart3, emoji: "📊" },
+      // Auditorias específicas (acesso direto)
       { label: "PEO-DP", path: "/peo-dp", icon: FileText, emoji: "📋" },
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },
       { label: "SGSO", path: "/sgso", icon: FileText, emoji: "📋" },
-      { label: "IMCA Audit", path: "/imca-audit", icon: Shield, emoji: "🔍" },
-      { label: "Pre-OVID Inspection", path: "/pre-ovid", icon: Eye, emoji: "🚢" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
+      { label: "Pre-OVID Inspection", path: "/pre-ovid", icon: Eye, emoji: "🚢" },
+      { label: "IMCA Audit", path: "/imca-audit", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
-      // Gestão de Mudanças & Responsabilidades (Consolidado)
+      // Gestão
       { label: "GMUD", path: "/gmud", icon: Settings, emoji: "🔄" },
       { label: "Matriz de Responsabilidades", path: "/responsibility-matrix", icon: Users, emoji: "📊" },
-      // Segurança & Fatores Humanos (Consolidado)
       { label: "Safety Human Factors", path: "/safety-human-factors", icon: Brain, emoji: "🧠" },
-      { label: "Safety IMCA", path: "/safety-imca", icon: Shield, emoji: "🛡️" },
       { label: "ISPS Security & Cyber", path: "/isps-security", icon: Lock, emoji: "🔐" },
       { label: "Drill Simulator", path: "/drill-simulator", icon: Target, emoji: "🎯" },
-      // Compliance One - ISO 37301 (Consolidado)
-      { label: "Compliance One", path: "/compliance-one", icon: Shield, emoji: "🛡️" },
-      { label: "Regulamentos", path: "/regulations", icon: FileText, emoji: "📜" },
-      { label: "Matriz de Riscos", path: "/risk-matrix", icon: AlertTriangle, emoji: "⚠️" },
-      { label: "Evidências", path: "/evidences", icon: FileText, emoji: "📁" },
-      { label: "Due Diligence", path: "/due-diligence", icon: Users, emoji: "🔍" },
-      { label: "Canal de Denúncias", path: "/whistleblower", icon: Bell, emoji: "📢" },
-      // Segurança & Compliance
+      // Segurança
       { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", requiredRoles: ['admin'] },
-      { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
-      { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },
       { label: "Security Scanner", path: "/security-scanner", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
-      { label: "Compliance Hub", path: "/compliance-hub", icon: Shield, emoji: "✅", requiredRoles: ['admin', 'auditor', 'manager'] },
-      { label: "Safety Guardian", path: "/safety-guardian", icon: Shield, emoji: "⛑️" },
     ],
   },
 
