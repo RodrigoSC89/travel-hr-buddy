@@ -1,4 +1,4 @@
-// @ts-nocheck - Json type casting for organization settings
+// @ts-nocheck - Json to Record<string, unknown> casting for updateBranding compatibility
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,12 +83,12 @@ export const OrganizationCustomization: React.FC = () => {
         default_language: currentBranding.default_language || "pt-BR",
         default_currency: currentBranding.default_currency || "BRL",
         timezone: currentBranding.timezone || "America/Sao_Paulo",
-        custom_fields: currentBranding.custom_fields || {},
-        business_rules: currentBranding.business_rules || {},
+        custom_fields: (currentBranding.custom_fields as Record<string, unknown>) || {},
+        business_rules: (currentBranding.business_rules as Record<string, unknown>) || {},
         enabled_modules: typeof currentBranding.enabled_modules === "object" && !Array.isArray(currentBranding.enabled_modules)
-          ? currentBranding.enabled_modules
+          ? (currentBranding.enabled_modules as Record<string, unknown>)
           : {},
-        module_settings: currentBranding.module_settings || {}
+        module_settings: (currentBranding.module_settings as Record<string, unknown>) || {}
       });
     }
   }, [currentBranding]);
