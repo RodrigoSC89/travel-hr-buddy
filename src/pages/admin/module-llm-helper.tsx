@@ -1,4 +1,4 @@
-// @ts-nocheck - allPrompts variable scope issue in handleSendToAI
+// PATCH 871.5 - Fixed allPrompts scope issue
 /**
  * PATCH 655 - Module LLM Helper Page
  * Generate and manage AI prompts for modules
@@ -131,6 +131,7 @@ export const ModuleLLMHelper: React.FC = () => {
   };
 
   const handleSendToAI = async () => {
+    const allPrompts = generateBatchPrompts(filteredModules);
     try {
       const response = await supabase.functions.invoke('ai-hub-chat', {
         body: {
@@ -144,7 +145,7 @@ export const ModuleLLMHelper: React.FC = () => {
 
       toast({
         title: 'Processado pela IA',
-        description: response.data?.response?.substring(0, 100) || 'Resposta recebida com sucesso',
+        description: (response.data as { response?: string })?.response?.substring(0, 100) || 'Resposta recebida com sucesso',
       });
     } catch {
       toast({

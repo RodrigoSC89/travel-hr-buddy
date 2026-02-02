@@ -1,4 +1,4 @@
-// @ts-nocheck - Logger function signature compatibility
+// PATCH 871.5 - Fixed logger signatures and type safety
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -211,7 +211,7 @@ export default function MentorDPProfessional() {
 
   // Call AI Edge Function with enhanced error handling
   const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
-    logger.debug("[MentorDP] Calling edge function:", action, params);
+    logger.debug("[MentorDP] Calling edge function", { action, params });
     
     try {
       const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
@@ -223,11 +223,11 @@ export default function MentorDPProfessional() {
         body: JSON.stringify({ action, ...params }),
       });
 
-      logger.debug("[MentorDP] Response status:", response.status);
+      logger.debug("[MentorDP] Response status", { status: response.status });
 
       if (!response.ok) {
         const errorText = await response.text();
-        logger.error("[MentorDP] Response error:", errorText);
+        logger.error("[MentorDP] Response error", new Error(errorText));
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -239,7 +239,7 @@ export default function MentorDPProfessional() {
       }
 
       const data = await response.json();
-      logger.debug("[MentorDP] Response data:", { success: data.success, hasContent: !!data.content });
+      logger.debug("[MentorDP] Response data", { success: data.success, hasContent: !!data.content });
 
       if (!data.success && data.error) {
         throw new Error(data.error);
@@ -248,7 +248,7 @@ export default function MentorDPProfessional() {
       return data;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      logger.error("[MentorDP] callMentorAI error:", errorMessage);
+      logger.error("[MentorDP] callMentorAI error", new Error(errorMessage));
       throw error;
     }
   };

@@ -1,4 +1,4 @@
-// @ts-nocheck - Awaiting types.ts regeneration for mmi_history table
+// @ts-nocheck - Pending: MMIHistory interface null vs undefined mismatch with DB schema
 /**
  * MMI History Service
  * Manages maintenance history records for vessels

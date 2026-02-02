@@ -1,4 +1,4 @@
-// @ts-nocheck - mmi_os_resolvidas table pending types.ts regeneration
+// @ts-nocheck - Pending: CreateResolvedWorkOrderInput index signature for insert
 /**
  * Resolved Work Orders Service
  * Manages resolved work orders (OS) for AI learning

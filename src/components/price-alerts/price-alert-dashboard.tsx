@@ -1,4 +1,4 @@
-// @ts-nocheck - Supabase client type compatibility
+// @ts-nocheck - Schema mismatch: PriceAlert interface fields don't match DB columns (last_checked_at null vs undefined)
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedAlertManagement } from "./enhanced-alert-management";
@@ -10,9 +10,8 @@ import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, 
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase as supabaseClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-const supabase: unknown = supabaseClient;
 
 
 interface PriceAlert {
