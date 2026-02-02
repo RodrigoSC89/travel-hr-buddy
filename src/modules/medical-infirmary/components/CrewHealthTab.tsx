@@ -1,5 +1,6 @@
 /**
  * Crew Health Management Tab
+ * INTEGRADO: Usa useCrewHealthData hook para dados reais do Supabase
  */
 
 import React, { useState } from 'react';
@@ -13,33 +14,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Users, Search, User, Heart, Syringe, AlertTriangle, 
   Calendar, FileText, Phone, CheckCircle2, Clock, Filter,
-  Plus, Download, Brain
+  Plus, Download, Brain, Loader2, RefreshCw
 } from 'lucide-react';
-import { mockCrewMembers } from '../data/mockData';
-import { CrewMember } from '../types';
 import { toast } from 'sonner';
 import { useMedicalAI } from '../hooks/useMedicalAI';
+import { useCrewHealthData, useCrewHealthStats, type CrewHealthMember } from '@/hooks/useCrewHealthData';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 export default function CrewHealthTab() {
-  const { predictHealthIssues, isLoading } = useMedicalAI();
+  const { predictHealthIssues, isLoading: aiLoading } = useMedicalAI();
+  const { data: crewMembers = [], isLoading, refetch } = useCrewHealthData();
+  const stats = useCrewHealthStats();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
-  const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+  const [selectedCrew, setSelectedCrew] = useState<CrewHealthMember | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [aiPrediction, setAiPrediction] = useState<any>(null);
 
-  const filteredCrew = mockCrewMembers.filter(member => {
+  const filteredCrew = crewMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.position.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = !statusFilter || member.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
-
-  const statusCounts = {
-    fit: mockCrewMembers.filter(m => m.status === 'fit').length,
-    restricted: mockCrewMembers.filter(m => m.status === 'restricted').length,
-    unfit: mockCrewMembers.filter(m => m.status === 'unfit').length
-  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -60,7 +58,7 @@ export default function CrewHealthTab() {
   };
 
   const handleAIAnalysis = async () => {
-    const result = await predictHealthIssues(mockCrewMembers, []);
+    const result = await predictHealthIssues(crewMembers, []);
     if (result) {
       setAiPrediction(result);
       toast.success('Análise preditiva concluída');
@@ -72,6 +70,38 @@ export default function CrewHealthTab() {
   const handleExport = () => {
     toast.success('Exportando fichas médicas...');
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando dados de saúde...</span>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (crewMembers.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Saúde da Tripulação</h2>
+          <Button variant="outline" onClick={() => refetch()}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Atualizar
+          </Button>
+        </div>
+        <EmptyState
+          icon={Heart}
+          title="Nenhum tripulante encontrado"
+          description="Cadastre tripulantes no sistema para gerenciar suas fichas médicas."
+          actionLabel="Cadastrar Tripulante"
+          onAction={() => toast.info("Navegue para a seção de Tripulação para cadastrar novos membros")}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -92,8 +122,12 @@ export default function CrewHealthTab() {
           </Button>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleAIAnalysis} disabled={isLoading}>
-            <Brain className="h-4 w-4 mr-2" />
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
+          <Button variant="outline" onClick={handleAIAnalysis} disabled={aiLoading}>
+            {aiLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Brain className="h-4 w-4 mr-2" />}
             Análise Preditiva
           </Button>
           <Button variant="outline" onClick={handleExport}>
@@ -117,28 +151,28 @@ export default function CrewHealthTab() {
                 size="sm"
                 onClick={() => setStatusFilter(null)}
               >
-                Todos ({mockCrewMembers.length})
+                Todos ({stats.total})
               </Button>
               <Button 
                 variant={statusFilter === 'fit' ? "default" : "outline"} 
                 size="sm"
                 onClick={() => setStatusFilter('fit')}
               >
-                Aptos ({statusCounts.fit})
+                Aptos ({stats.fit})
               </Button>
               <Button 
                 variant={statusFilter === 'restricted' ? "default" : "outline"} 
                 size="sm"
                 onClick={() => setStatusFilter('restricted')}
               >
-                Com Restrição ({statusCounts.restricted})
+                Com Restrição ({stats.restricted})
               </Button>
               <Button 
                 variant={statusFilter === 'unfit' ? "default" : "outline"} 
                 size="sm"
                 onClick={() => setStatusFilter('unfit')}
               >
-                Inaptos ({statusCounts.unfit})
+                Inaptos ({stats.unfit})
               </Button>
             </div>
           </CardContent>
@@ -200,7 +234,7 @@ export default function CrewHealthTab() {
                 <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{mockCrewMembers.length}</p>
+                <p className="text-2xl font-bold">{stats.total}</p>
                 <p className="text-xs text-muted-foreground">Total Tripulação</p>
               </div>
             </div>
@@ -213,7 +247,7 @@ export default function CrewHealthTab() {
                 <Heart className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{statusCounts.fit}</p>
+                <p className="text-2xl font-bold">{stats.fit}</p>
                 <p className="text-xs text-muted-foreground">Aptos</p>
               </div>
             </div>
@@ -226,10 +260,7 @@ export default function CrewHealthTab() {
                 <Syringe className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
-                  {mockCrewMembers.reduce((acc, m) => 
-                    acc + m.vaccinations.filter(v => v.status === 'expiring').length, 0)}
-                </p>
+                <p className="text-2xl font-bold">{stats.expiringVaccines}</p>
                 <p className="text-xs text-muted-foreground">Vacinas a Vencer</p>
               </div>
             </div>
@@ -242,14 +273,7 @@ export default function CrewHealthTab() {
                 <Calendar className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
-                  {mockCrewMembers.filter(m => {
-                    const next = new Date(m.nextCheckup);
-                    const today = new Date();
-                    const diff = (next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
-                    return diff <= 30;
-                  }).length}
-                </p>
+                <p className="text-2xl font-bold">{stats.upcomingCheckups}</p>
                 <p className="text-xs text-muted-foreground">Exames Próximos</p>
               </div>
             </div>
@@ -381,47 +405,48 @@ export default function CrewHealthTab() {
                       
                       <TabsContent value="vaccines" className="mt-4">
                         <div className="space-y-3">
-                          {member.vaccinations.map((vaccine, i) => (
-                            <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                              <div className="flex items-center gap-3">
-                                {getVaccinationStatus(vaccine.status)}
-                                <div>
-                                  <p className="font-medium">{vaccine.name}</p>
+                          {member.vaccinations.length > 0 ? (
+                            member.vaccinations.map((vaccine, i) => (
+                              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                                <div className="flex items-center gap-3">
+                                  {getVaccinationStatus(vaccine.status)}
+                                  <div>
+                                    <p className="font-medium">{vaccine.name}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      Aplicada: {new Date(vaccine.date).toLocaleDateString('pt-BR')}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <p className="text-sm">Validade</p>
                                   <p className="text-xs text-muted-foreground">
-                                    Aplicada: {new Date(vaccine.date).toLocaleDateString('pt-BR')}
+                                    {new Date(vaccine.expiryDate).toLocaleDateString('pt-BR')}
                                   </p>
                                 </div>
                               </div>
-                              <div className="text-right">
-                                <p className="text-sm">Validade: {new Date(vaccine.expiryDate).toLocaleDateString('pt-BR')}</p>
-                                <Badge variant={
-                                  vaccine.status === 'valid' ? 'default' :
-                                  vaccine.status === 'expiring' ? 'secondary' : 'destructive'
-                                }>
-                                  {vaccine.status === 'valid' ? 'Válida' :
-                                   vaccine.status === 'expiring' ? 'A vencer' : 'Vencida'}
-                                </Badge>
-                              </div>
-                            </div>
-                          ))}
+                            ))
+                          ) : (
+                            <p className="text-sm text-muted-foreground text-center py-4">
+                              Nenhum registro de vacinação
+                            </p>
+                          )}
                         </div>
                       </TabsContent>
                       
                       <TabsContent value="history" className="mt-4">
-                        <p className="text-center text-muted-foreground py-8">
-                          Ver aba de Prontuários para histórico completo de atendimentos
-                        </p>
+                        <div className="text-center py-8 text-muted-foreground">
+                          <FileText className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                          <p>Histórico de atendimentos</p>
+                          <p className="text-sm">Consulte a aba de Registros para ver o histórico completo</p>
+                        </div>
                       </TabsContent>
                     </Tabs>
                     
                     <DialogFooter className="mt-4">
-                      <Button variant="outline">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Imprimir Ficha
-                      </Button>
+                      <Button variant="outline">Editar Ficha</Button>
                       <Button>
-                        <Phone className="h-4 w-4 mr-2" />
-                        Telemedicina
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Agendar Exame
                       </Button>
                     </DialogFooter>
                   </DialogContent>
