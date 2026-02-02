@@ -3,7 +3,7 @@
  * =========================================================
  * 10 HUBs CANÔNICOS - Estrutura Definitiva
  * 
- * Redução: 134 → 52 itens (61%)
+ * Meta: ~100+ itens → 45 itens visíveis (55% redução)
  * Todos os módulos acessíveis via tabs internas
  * 
  * Documentação: docs/FUSION_REPORT_FINAL.md
@@ -44,6 +44,7 @@ export interface SidebarGroup {
   items: SidebarRoute[];
 }
 
+// Role hierarchy
 export const ROLE_HIERARCHY: Record<UserRole, number> = {
   admin: 100,
   hr_manager: 80,
@@ -58,9 +59,22 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
 
 /**
  * SIDEBAR v6.0 - 10 HUBs CANÔNICOS DEFINITIVOS
+ * ============================================
+ * 1. Central de Comando
+ * 2. Operations Command (Hub)
+ * 3. Maintenance Hub
+ * 4. AI Control Tower (Hub)
+ * 5. Tracking & Telemetry (Hub)
+ * 6. Compliance & Audits (Hub)
+ * 7. Document Center (Hub)
+ * 8. People Hub
+ * 9. Finance & Contracts
+ * 10. Settings
  */
-export const SIDEBAR_ROUTES: SidebarGroup[] = [
+export const SIDEBAR_ROUTES_V6: SidebarGroup[] = [
+  // ============================================
   // 1. 🧠 CENTRAL DE COMANDO
+  // ============================================
   {
     title: "🧠 Central de Comando",
     defaultOpen: true,
@@ -73,7 +87,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 2. 🚀 OPERATIONS COMMAND (Hub)
+  // ============================================
+  // 2. 🚀 OPERATIONS COMMAND (Hub Unificado)
+  // Fusão: Maritime + Fleet + Voyage + Mission + Logistics + Cargo + Port
+  // ============================================
   {
     title: "🚀 Operations Command",
     defaultOpen: false,
@@ -89,7 +106,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 3. 🔧 MAINTENANCE
+  // ============================================
+  // 3. 🔧 MAINTENANCE HUB
+  // ============================================
   {
     title: "🔧 Manutenção",
     defaultOpen: false,
@@ -100,7 +119,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 4. 🤖 AI CONTROL TOWER (Hub)
+  // ============================================
+  // 4. 🤖 AI CONTROL TOWER (Hub Unificado)
+  // Fusão: AI Hub + Chat + Agents + Workflows + Analytics + Observability + Audit + Journaling
+  // ============================================
   {
     title: "🤖 AI Control Tower",
     defaultOpen: false,
@@ -117,7 +139,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 5. 📡 TRACKING & TELEMETRY (Hub)
+  // ============================================
+  // 5. 📡 TRACKING & TELEMETRY (Hub Unificado)
+  // Fusão: GNSS + DGNSS + AIS + Satellite + Telemetry + Alerts
+  // ============================================
   {
     title: "📡 Tracking & Telemetry",
     defaultOpen: false,
@@ -131,7 +156,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 6. 🛡️ COMPLIANCE & AUDITS (Hub)
+  // ============================================
+  // 6. 🛡️ COMPLIANCE & AUDITS (Hub Unificado)
+  // Fusão: PEO-DP + PEOTRAM + SGSO + IMCA + MLC + Pre-OVID + PSC + GMUD + Risk Matrix
+  // ============================================
   {
     title: "🛡️ Compliance & Audits",
     defaultOpen: false,
@@ -148,7 +176,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 7. 📄 DOCUMENT CENTER (Hub)
+  // ============================================
+  // 7. 📄 DOCUMENT CENTER (Hub Unificado)
+  // Fusão: Documents + Templates + Checklists + Reports + Export + Search + OCR
+  // ============================================
   {
     title: "📄 Document Center",
     defaultOpen: false,
@@ -164,7 +195,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 8. 👥 PEOPLE HUB
+  // ============================================
+  // 8. 👥 PEOPLE HUB (Hub Unificado)
+  // Fusão: RH + Crew + Wellness + Training + Payroll + Talent + Medical
+  // ============================================
   {
     title: "👥 People Hub",
     defaultOpen: false,
@@ -181,7 +215,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
+  // ============================================
   // 9. 💰 FINANCE & CONTRACTS
+  // ============================================
   {
     title: "💰 Finance & Contracts",
     defaultOpen: false,
@@ -195,7 +231,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 10. ⚙️ SETTINGS
+  // ============================================
+  // 10. ⚙️ SETTINGS & SYSTEM
+  // ============================================
   {
     title: "⚙️ Sistema",
     defaultOpen: false,
@@ -208,11 +246,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 ];
+
 /**
  * Get all routes flattened for search/validation
  */
 export function getAllRoutes(): SidebarRoute[] {
-  return SIDEBAR_ROUTES.flatMap(group => group.items);
+  return SIDEBAR_ROUTES_V6.flatMap(group => group.items);
 }
 
 /**
@@ -226,28 +265,9 @@ export function getModuleCount(): number {
  * Find group containing a specific path
  */
 export function findGroupByPath(path: string): SidebarGroup | undefined {
-  return SIDEBAR_ROUTES.find(group => 
+  return SIDEBAR_ROUTES_V6.find(group => 
     group.items.some(item => item.path === path)
   );
 }
 
-/**
- * Check if a path exists in the sidebar routes
- */
-export function isValidRoute(path: string): boolean {
-  return getAllRoutes().some(route => route.path === path);
-}
-
-/**
- * Get routes by status
- */
-export function getRoutesByStatus(status: 'active' | 'beta' | 'new' | 'deprecated'): SidebarRoute[] {
-  return getAllRoutes().filter(route => route.status === status);
-}
-
-/**
- * Get routes with badges
- */
-export function getRoutesWithBadges(): SidebarRoute[] {
-  return getAllRoutes().filter(route => route.badge);
-}
+export default SIDEBAR_ROUTES_V6;
