@@ -108,7 +108,7 @@ Formate sua resposta como JSON com esta estrutura:
           hourometer_current: component.current_hours,
           maintenance_history: maintenance_history.slice(0, 5).map((h) => ({
             date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
-            action: h.task_description,
+            action: h.task_description ?? "Manutenção realizada",
           })),
         };
       } else {
@@ -127,7 +127,7 @@ Formate sua resposta como JSON com esta estrutura:
         hourometer_current: component.current_hours,
         maintenance_history: maintenance_history.slice(0, 5).map((h) => ({
           date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
-          action: h.task_description,
+          action: h.task_description ?? "Manutenção realizada",
         })),
       };
     }
@@ -146,7 +146,7 @@ Formate sua resposta como JSON com esta estrutura:
       hourometer_current: input.component.current_hours,
       maintenance_history: input.maintenance_history.slice(0, 5).map((h) => ({
         date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
-        action: h.task_description,
+        action: h.task_description ?? "Manutenção realizada",
       })),
     };
   }

@@ -3,14 +3,17 @@ import type { MMIHistory, MMITask, AIForecast } from "@/types/mmi";
 
 describe("MMI Types", () => {
   describe("MMIHistory", () => {
-    it("should accept valid history object", () => {
+    it("should accept valid history object with all required fields", () => {
       const history: MMIHistory = {
         id: "test-id",
+        vessel_id: null,
         system_name: "Sistema Hidráulico",
         task_description: "Manutenção preventiva realizada",
         status: "executado",
         executed_at: "2025-10-19T10:00:00Z",
+        pdf_url: null,
         created_at: "2025-10-19T09:00:00Z",
+        updated_at: "2025-10-19T10:00:00Z",
       };
 
       expect(history.id).toBe("test-id");
@@ -27,9 +30,14 @@ describe("MMI Types", () => {
       validStatuses.forEach((status) => {
         const history: MMIHistory = {
           id: "test-id",
+          vessel_id: null,
           system_name: "Test System",
           task_description: "Test task",
           status,
+          executed_at: null,
+          pdf_url: null,
+          created_at: null,
+          updated_at: null,
         };
         expect(history.status).toBe(status);
       });
