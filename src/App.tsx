@@ -144,6 +144,8 @@ const AIObservabilityDashboard = lazy(() => import("@/pages/AIObservabilityDashb
 const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter"));
 const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
+const VoiceAssistantAIPage = lazy(() => import("@/pages/VoiceAssistantAIPage"));
+const PortugueseVoiceAssistantPage = lazy(() => import("@/pages/PortugueseVoiceAssistantPage"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
 
@@ -151,6 +153,7 @@ const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
 // INTELIGÊNCIA AVANÇADA
 // ============================================
 const Optimization = lazy(() => import("@/pages/Optimization"));
+const UnifiedOptimizationPage = lazy(() => import("@/pages/UnifiedOptimizationPage"));
 
 // ============================================
 // TELEMETRIA & MONITORAMENTO
@@ -556,6 +559,8 @@ const AppRoutes = () => (
       <Route path="/ai-journaling" element={<Documents />} />
       <Route path="/ai-audit" element={<AIAudit />} />
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
+      <Route path="/voice-assistant-ai" element={<VoiceAssistantAIPage />} />
+      <Route path="/assistente-voz" element={<PortugueseVoiceAssistantPage />} />
       <Route path="/assistant/voice" element={<VoiceAssistant />} />
       
       {/* AI Modules Hub - 11 Complete AI Modules */}
@@ -577,6 +582,7 @@ const AppRoutes = () => (
       {/* INTELIGÊNCIA AVANÇADA */}
       {/* ============================================ */}
       <Route path="/optimization-dashboard" element={<Optimization />} />
+      <Route path="/unified-optimization" element={<UnifiedOptimizationPage />} />
       <Route path="/intelligence/opec" element={<Optimization />} />
       <Route path="/intelligence/wellness" element={<CrewWellnessPage />} />
       <Route path="/intelligence/documents" element={<Documents />} />
@@ -728,7 +734,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/nautilus-academy" element={<AITraining />} />
       <Route path="/solas-isps-training" element={<SOLASISPSTrainingPage />} />
-      <Route path="/solas-isps-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
       
@@ -749,7 +754,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/esg-emissions" element={<ESGEmissionsPage />} />
       <Route path="/waste-management" element={<WasteManagementPage />} />
-      <Route path="/waste-management" element={<SustainabilityScorePage />} />
       <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
       
       {/* ============================================ */}
