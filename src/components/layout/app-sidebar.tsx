@@ -1,34 +1,21 @@
 /**
- * AppSidebar Component
- * REFACTORED: Now consumes centralized routes from src/config/sidebar-routes.ts
- * v4.0.0 - Added logout button and stable hooks
+ * AppSidebar Component - v6.0 FUSÃO TOTAL
+ * REFACTORED: Uses only SIDEBAR_ROUTES (10 HUBs consolidados)
+ * Removed all hardcoded duplicates
  */
 import React, { useState } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
-  LayoutDashboard, 
-  Users, 
-  BarChart3,
-  Database,
-  FileText, 
-  Settings,
   ChevronDown,
-  Bell,
-  UserCog,
-  Building2,
-  Ship,
-  Zap,
-  Activity,
-  Brain,
-  MessageSquare,
-  TestTube,
-  LogOut
+  LogOut,
+  Building2
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import nautiLogo from "@/assets/nauti-one-logo.png";
-import { usePermissions, Permission } from "@/hooks/use-permissions";
+import { usePermissions } from "@/hooks/use-permissions";
 import { useOrganization } from "@/contexts/OrganizationContext";
+import { Badge } from "@/components/ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -55,36 +42,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-// Import centralized sidebar routes
-import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup } from "@/config/sidebar-routes";
-
-// Quick access items that appear at the top
-const quickAccessItems = [
-  {
-    title: "Nauti Command",
-    url: "/nautilus-command",
-    icon: Brain,
-  },
-  {
-    title: "IA Revolucionária",
-    url: "/revolutionary-ai",
-    icon: Zap,
-  },
-  {
-    title: "Dashboard",
-    url: "/",
-    icon: LayoutDashboard,
-  },
-];
-
-// Admin-only items
-const adminItems = [
-  { title: "Painel Admin", url: "/admin", icon: Settings },
-  { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
-  { title: "Usuários", url: "/users", icon: Users },
-  { title: "Testes & Homologação", url: "/testing", icon: TestTube },
-  { title: "Feedback Sistema", url: "/feedback", icon: MessageSquare },
-];
+// Import centralized sidebar routes - SINGLE SOURCE OF TRUTH
+import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup, type SidebarRoute } from "@/config/sidebar-routes";
 
 interface AppSidebarProps {
   activeItem?: string;
@@ -103,7 +62,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { state, isMobile, setOpenMobile } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
-  const { canAccessModule, getRoleDisplayName, userRole } = usePermissions();
+  const { getRoleDisplayName, userRole } = usePermissions();
   const { handleNavigation } = useSidebarActions();
   const { currentBranding } = useOrganization();
   const { signOut } = useAuth();
@@ -127,7 +86,9 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   const isItemActive = (path: string) => {
-    return location.pathname === path;
+    // Handle paths with query params
+    const basePath = path.split('?')[0];
+    return location.pathname === basePath || location.pathname === path;
   };
 
   const handleItemClick = (url: string) => {
@@ -140,12 +101,45 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   // Render label with emoji
-  const renderLabel = (item: { label: string; emoji?: string }) => {
+  const renderLabel = (item: SidebarRoute) => {
     if (item.emoji) {
       return `${item.emoji} ${item.label}`;
     }
     return item.label;
   };
+
+  // Render badge if present
+  const renderBadge = (item: SidebarRoute) => {
+    if (item.badge) {
+      return (
+        <Badge variant="secondary" className="ml-auto text-[10px] px-1.5 py-0">
+          {item.badge}
+        </Badge>
+      );
+    }
+    return null;
+  };
+
+  // Check if user can access route based on roles
+  const canAccessRoute = (item: SidebarRoute): boolean => {
+    if (!item.requiredRoles || item.requiredRoles.length === 0) {
+      return true;
+    }
+    if (!userRole) return false;
+    return item.requiredRoles.includes(userRole as any);
+  };
+
+  // Check if user can access group
+  const canAccessGroup = (group: SidebarRouteGroup): boolean => {
+    if (!group.requiredRoles || group.requiredRoles.length === 0) {
+      return true;
+    }
+    if (!userRole) return false;
+    return group.requiredRoles.includes(userRole as any);
+  };
+
+  // Filter routes based on user role
+  const filteredRoutes = SIDEBAR_ROUTES.filter(group => canAccessGroup(group));
 
   return (
     <Sidebar 
@@ -168,44 +162,21 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                 NAUTI ONE
               </h1>
               <span className="text-xs text-muted-foreground font-medium truncate">
-                Sistema Corporativo
+                Sistema Marítimo v6.0
               </span>
             </div>
           )}
         </div>
       </SidebarHeader>
 
-      {/* Content */}
+      {/* Content - SINGLE SOURCE: SIDEBAR_ROUTES */}
       <SidebarContent>
         <ScrollArea className="flex-1 overflow-hidden">
-          {/* Quick Access Section */}
           <SidebarGroup>
-            {!collapsed && <SidebarGroupLabel>Acesso Rápido</SidebarGroupLabel>}
+            {!collapsed && <SidebarGroupLabel>Navegação</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>
-                {quickAccessItems.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton 
-                      onClick={() => handleItemClick(item.url)}
-                      isActive={isItemActive(item.url)}
-                      className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                      title={collapsed ? item.title : undefined}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">{item.title}</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-
-          {/* Main Navigation from SIDEBAR_ROUTES */}
-          <SidebarGroup>
-            {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {SIDEBAR_ROUTES.map((group: SidebarRouteGroup) => (
+                {filteredRoutes.map((group: SidebarRouteGroup) => (
                   <Collapsible 
                     key={group.title}
                     open={openItems.includes(group.title)}
@@ -218,7 +189,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                           aria-label={`Expandir ${group.title}`}
                         >
                           <div className="flex items-center">
-                            <span className={collapsed ? "text-xs" : ""}>{group.title}</span>
+                            <span className={collapsed ? "text-xs" : "font-medium"}>{group.title}</span>
                           </div>
                           {!collapsed && (
                             <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -228,7 +199,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                       {!collapsed && (
                         <CollapsibleContent>
                           <SidebarMenuSub>
-                            {group.items.map((item) => (
+                            {group.items.filter(canAccessRoute).map((item) => (
                               <SidebarMenuSubItem key={`${group.title}-${item.path}`}>
                                 <SidebarMenuSubButton 
                                   onClick={() => handleItemClick(item.path)}
@@ -237,8 +208,9 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                                   aria-label={`Navegar para ${item.label}`}
                                   aria-current={isItemActive(item.path) ? "page" : undefined}
                                 >
-                                  {item.icon && <item.icon className="h-4 w-4" />}
-                                  <span className="ml-2">{renderLabel(item)}</span>
+                                  {item.icon && <item.icon className="h-4 w-4 flex-shrink-0" />}
+                                  <span className="ml-2 truncate">{renderLabel(item)}</span>
+                                  {renderBadge(item)}
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             ))}
@@ -252,71 +224,21 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          {/* Admin Section */}
-          {canAccessModule("admin") && (
+          {/* SaaS Manager - Super Admin Only */}
+          {userRole === "admin" && (
             <SidebarGroup>
-              {!collapsed && <SidebarGroupLabel>Administração</SidebarGroupLabel>}
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {adminItems.map((item) => (
-                    <SidebarMenuItem key={item.url}>
-                      <SidebarMenuButton 
-                        onClick={() => handleItemClick(item.url)}
-                        isActive={isItemActive(item.url)}
-                        className="w-full justify-start"
-                        title={collapsed ? item.title : undefined}
-                      >
-                        <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="ml-2">{item.title}</span>}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                  
-                  {/* SaaS Manager - Super Admin Only */}
-                  {userRole === "admin" && (
-                    <SidebarMenuItem>
-                      <SidebarMenuButton 
-                        onClick={() => navigate("/saas-manager")}
-                        isActive={location.pathname === "/saas-manager"}
-                        className="w-full justify-start"
-                        title={collapsed ? "SaaS Manager" : undefined}
-                      >
-                        <Building2 className="h-4 w-4" />
-                        {!collapsed && <span className="ml-2">SaaS Manager</span>}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  )}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          )}
-
-          {/* Executive Dashboard - Managers */}
-          {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && (
-            <SidebarGroup>
-              {!collapsed && <SidebarGroupLabel>Executivo</SidebarGroupLabel>}
+              {!collapsed && <SidebarGroupLabel>Admin</SidebarGroupLabel>}
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("/executive-dashboard")}
-                      isActive={isItemActive("/executive-dashboard")}
+                      onClick={() => handleItemClick("/saas-manager")}
+                      isActive={isItemActive("/saas-manager")}
                       className="w-full justify-start"
-                      title={collapsed ? "Dashboard Executivo" : undefined}
+                      title={collapsed ? "SaaS Manager" : undefined}
                     >
-                      <BarChart3 className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">Dashboard Executivo</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton 
-                      onClick={() => handleItemClick("/system-overview")}
-                      isActive={isItemActive("/system-overview")}
-                      className="w-full justify-start"
-                      title={collapsed ? "Visão Geral" : undefined}
-                    >
-                      <Activity className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">Visão Geral</span>}
+                      <Building2 className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">SaaS Manager</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
@@ -344,8 +266,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </button>
             
             <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border">
-              <p>Versão 4.0.0</p>
-              <p className="mt-1">© 2024-2025 Nauti One</p>
+              <p>Versão 6.0.0</p>
+              <p className="mt-1">© 2024-2026 Nauti One</p>
             </div>
           </div>
         ) : (
