@@ -345,6 +345,9 @@ const RiskClausesPage = lazy(() => import("@/pages/enterprise/RiskClausesPage"))
 const NCPredictionPage = lazy(() => import("@/pages/enterprise/NCPredictionPage"));
 const CompliancePredictorPage = lazy(() => import("@/pages/enterprise/CompliancePredictorPage"));
 
+// Audit Agents Hub
+const AuditAgentsPage = lazy(() => import("@/pages/AuditAgentsPage"));
+
 // ============================================
 // ADVANCED MARITIME MODULES - 12 REVOLUTIONARY FEATURES
 // ============================================
@@ -679,6 +682,7 @@ const AppRoutes = () => (
       <Route path="/compliance-executive" element={<ExecutiveCompliancePage />} />
       <Route path="/executive-compliance" element={<ExecutiveCompliancePage />} />
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
+      <Route path="/audit-agents" element={<AuditAgentsPage />} />
       
       {/* Diagnostic Components - 5 Soluções */}
       <Route path="/diagnostic-certificates" element={<DiagnosticCertificatesPage />} />
