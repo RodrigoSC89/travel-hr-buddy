@@ -1,7 +1,7 @@
-// @ts-nocheck - Pending: MMIHistory interface null vs undefined mismatch with DB schema
 /**
  * MMI History Service
  * Manages maintenance history records for vessels
+ * Type-safe with Supabase schema (null vs undefined aligned)
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -58,7 +58,14 @@ export async function fetchMMIHistory(
       throw new Error(`Failed to fetch MMI history: ${error.message}`);
     }
 
-    return data || [];
+    // Transform nullable DB fields to application-level types
+    // system_name and task_description are required at application level
+    return (data || []).map(row => ({
+      ...row,
+      system_name: row.system_name ?? "Sistema Desconhecido",
+      task_description: row.task_description ?? "Sem descrição",
+      status: (row.status as "executado" | "pendente" | "atrasado") ?? "pendente",
+    })) as MMIHistory[];
   } catch (error) {
     logger.error("[MMIHistory] Unexpected error in fetchMMIHistory", error as Error);
     throw error;
@@ -100,9 +107,18 @@ export async function getMMIHistoryStats(): Promise<MMIHistoryStats> {
 export async function createMMIHistory(
   history: Omit<MMIHistory, "id" | "created_at" | "updated_at">
 ): Promise<MMIHistory> {
+  const insertData = {
+    vessel_id: history.vessel_id,
+    system_name: history.system_name,
+    task_description: history.task_description,
+    executed_at: history.executed_at,
+    status: history.status,
+    pdf_url: history.pdf_url,
+  };
+
   const { data, error } = await supabase
     .from("mmi_history")
-    .insert(history)
+    .insert([insertData])
     .select(`
       *,
       vessel:vessels(id, name)
@@ -114,7 +130,12 @@ export async function createMMIHistory(
     throw new Error(`Failed to create MMI history: ${error.message}`);
   }
 
-  return data as unknown as MMIHistory;
+  return {
+    ...data,
+    system_name: data.system_name ?? "Sistema Desconhecido",
+    task_description: data.task_description ?? "Sem descrição",
+    status: (data.status as "executado" | "pendente" | "atrasado") ?? "pendente",
+  } as MMIHistory;
 }
 
 /**
@@ -124,9 +145,18 @@ export async function updateMMIHistory(
   id: string,
   updates: Partial<Omit<MMIHistory, "id" | "created_at" | "updated_at">>
 ): Promise<MMIHistory> {
+  // Create update object with proper typing
+  const updateData: Record<string, unknown> = {};
+  if (updates.vessel_id !== undefined) updateData.vessel_id = updates.vessel_id;
+  if (updates.system_name !== undefined) updateData.system_name = updates.system_name;
+  if (updates.task_description !== undefined) updateData.task_description = updates.task_description;
+  if (updates.executed_at !== undefined) updateData.executed_at = updates.executed_at;
+  if (updates.status !== undefined) updateData.status = updates.status;
+  if (updates.pdf_url !== undefined) updateData.pdf_url = updates.pdf_url;
+
   const { data, error } = await supabase
     .from("mmi_history")
-    .update(updates)
+    .update(updateData)
     .eq("id", id)
     .select(`
       *,
@@ -139,7 +169,12 @@ export async function updateMMIHistory(
     throw new Error(`Failed to update MMI history: ${error.message}`);
   }
 
-  return data as unknown as MMIHistory;
+  return {
+    ...data,
+    system_name: data.system_name ?? "Sistema Desconhecido",
+    task_description: data.task_description ?? "Sem descrição",
+    status: (data.status as "executado" | "pendente" | "atrasado") ?? "pendente",
+  } as MMIHistory;
 }
 
 /**

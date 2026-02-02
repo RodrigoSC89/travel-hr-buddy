@@ -1,4 +1,7 @@
-// @ts-nocheck - Schema mismatch: PriceAlert interface fields don't match DB columns (last_checked_at null vs undefined)
+/**
+ * Price Alert Dashboard
+ * Schema-aligned with Supabase (null for nullable DB columns)
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedAlertManagement } from "./enhanced-alert-management";
@@ -13,7 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 
-
+/** Interface aligned with Supabase price_alerts table schema */
 interface PriceAlert {
   id: string;
   product_name: string;
@@ -22,7 +25,7 @@ interface PriceAlert {
   product_url: string;
   is_active: boolean;
   created_at: string;
-  last_checked_at?: string;
+  last_checked_at: string | null;
   user_id: string;
 }
 
@@ -74,11 +77,13 @@ export const PriceAlertDashboardLegacy = () => {
   }, [user, supabase]);
 
   const loadAlerts = async () => {
+    if (!user?.id) return;
+    
     try {
       const { data, error } = await supabase
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -95,11 +100,13 @@ export const PriceAlertDashboardLegacy = () => {
   };
 
   const loadNotifications = async () => {
+    if (!user?.id) return;
+    
     try {
       const { data, error } = await supabase
         .from("price_notifications")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .eq("is_read", false)
         .order("created_at", { ascending: false })
         .limit(10);
@@ -107,6 +114,7 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
+      // Silent error for notifications
     }
   };
 
@@ -138,6 +146,15 @@ export const PriceAlertDashboardLegacy = () => {
       return;
     }
 
+    if (!user?.id) {
+      toast({
+        title: "Erro",
+        description: "Usuário não autenticado",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsCreatingAlert(true);
     
     try {
@@ -151,7 +168,7 @@ export const PriceAlertDashboardLegacy = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .insert([{
-          user_id: user?.id,
+          user_id: user.id,
           product_name: newAlert.product_name,
           target_price: parseFloat(newAlert.target_price),
           product_url: newAlert.product_url,

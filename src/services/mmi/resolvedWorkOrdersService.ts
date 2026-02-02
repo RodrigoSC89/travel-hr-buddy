@@ -1,12 +1,13 @@
-// @ts-nocheck - Pending: CreateResolvedWorkOrderInput index signature for insert
 /**
  * Resolved Work Orders Service
  * Manages resolved work orders (OS) for AI learning
+ * Type-safe with explicit Supabase casting
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Json } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/types";
 
 export interface MmiOsResolvidasRow {
   id: string;
@@ -54,14 +55,32 @@ export const createResolvedWorkOrder = async (
   data: CreateResolvedWorkOrderInput
 ): Promise<{ data: MmiOsResolvidasRow | null; error: Error | null }> => {
   try {
+    // Cast input to match Supabase Insert type
+    const insertData: Database["public"]["Tables"]["mmi_os_resolvidas"]["Insert"] = {
+      titulo: data.titulo,
+      acao_tomada: data.acao_tomada,
+      job_id: data.job_id ?? null,
+      descricao: data.descricao ?? null,
+      componente_id: data.componente_id ?? null,
+      componente_nome: data.componente_nome ?? null,
+      resultado: data.resultado ?? null,
+      tempo_resolucao_horas: data.tempo_resolucao_horas ?? null,
+      custo_estimado: data.custo_estimado ?? null,
+      tecnico_responsavel: data.tecnico_responsavel ?? null,
+      tags: data.tags ?? null,
+      criticidade: data.criticidade ?? null,
+      origem: data.origem ?? null,
+      metadata: data.metadata ?? null,
+    };
+
     const { data: result, error } = await supabase
       .from("mmi_os_resolvidas")
-      .insert(data)
+      .insert(insertData)
       .select()
       .single();
 
     if (error) {
-      logger.error("Error creating resolved work order", error as Error, data);
+      logger.error("Error creating resolved work order", error as Error, { titulo: data.titulo });
       return { data: null, error };
     }
 

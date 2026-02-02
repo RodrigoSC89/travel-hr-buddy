@@ -219,22 +219,24 @@ export interface MMIJobEnhanced {
 
 /**
  * MMI History - Historical maintenance records
+ * Application-level interface (uses string for required display fields)
+ * Note: Supabase returns nullable fields, we cast after validation
  */
 export interface MMIHistory {
   id: string;
-  vessel_id?: string;
+  vessel_id: string | null;
   system_name: string;
   task_description: string;
-  executed_at?: string;
+  executed_at: string | null;
   status: "executado" | "pendente" | "atrasado";
-  pdf_url?: string;
-  created_at?: string;
-  updated_at?: string;
-  // Relations
+  pdf_url: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  // Relations (optional as they come from joins)
   vessel?: {
     id: string;
     name: string;
-  };
+  } | null;
 }
 
 /**

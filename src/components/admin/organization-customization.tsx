@@ -1,4 +1,7 @@
-// @ts-nocheck - Json to Record<string, unknown> casting for updateBranding compatibility
+/**
+ * Organization Customization Component
+ * Type-safe Json to Record casting with proper null handling
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +23,16 @@ import {
   Eye,
   RefreshCw
 } from "lucide-react";
+import type { Json } from "@/integrations/supabase/types";
+
+/** Safely converts Json type to Record<string, unknown> */
+function jsonToRecord(json: Json | null | undefined): Record<string, unknown> {
+  if (json === null || json === undefined) return {};
+  if (typeof json === "object" && !Array.isArray(json)) {
+    return json as Record<string, unknown>;
+  }
+  return {};
+}
 
 interface BusinessRules {
   max_reservations?: string;
@@ -187,8 +200,10 @@ export const OrganizationCustomization: React.FC = () => {
       setIsLoading(true);
       await updateBranding({
         ...customization,
-        enabled_modules: customization.enabled_modules,
-        business_rules: customization.business_rules
+        custom_fields: customization.custom_fields as Json,
+        module_settings: customization.module_settings as Json,
+        enabled_modules: customization.enabled_modules as Json,
+        business_rules: customization.business_rules as Json
       });
       
       toast({
