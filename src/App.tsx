@@ -281,6 +281,13 @@ const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
 // ESG & SUSTENTABILIDADE
 // ============================================
 const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
+const ESGEmissionsPage = lazy(() => import("@/pages/ESGEmissionsPage"));
+const WasteManagementPage = lazy(() => import("@/pages/WasteManagementPage"));
+
+// ============================================
+// SOLAS/ISPS/ISM TRAINING (dedicated page)
+// ============================================
+const SOLASISPSTrainingPage = lazy(() => import("@/pages/SOLASISPSTrainingPage"));
 
 // ============================================
 // VIAGENS & LOGÍSTICA
@@ -324,10 +331,15 @@ const MobileOfflineAIPage = lazy(() => import("@/pages/ai/MobileOfflineAIPage"))
 const RAGAssistantPage = lazy(() => import("@/pages/enterprise/RAGAssistantPage"));
 const OCRCenterPage = lazy(() => import("@/pages/enterprise/OCRCenterPage"));
 const FormsBuilderPage = lazy(() => import("@/pages/enterprise/FormsBuilderPage"));
+const ChecklistsBuilderPage = lazy(() => import("@/pages/enterprise/ChecklistsBuilderPage"));
 const OCIMFAssessmentPage = lazy(() => import("@/pages/enterprise/OCIMFAssessmentPage"));
+const TMSAAnalyticsPage = lazy(() => import("@/pages/enterprise/TMSAAnalyticsPage"));
 const FatigueRiskPage = lazy(() => import("@/pages/enterprise/FatigueRiskPage"));
+const MLCWorkHoursPage = lazy(() => import("@/pages/enterprise/MLCWorkHoursPage"));
 const CrewMatchingPage = lazy(() => import("@/pages/enterprise/CrewMatchingPage"));
 const ContractAnalysisPage = lazy(() => import("@/pages/enterprise/ContractAnalysisPage"));
+const RiskClausesPage = lazy(() => import("@/pages/enterprise/RiskClausesPage"));
+const NCPredictionPage = lazy(() => import("@/pages/enterprise/NCPredictionPage"));
 const CompliancePredictorPage = lazy(() => import("@/pages/enterprise/CompliancePredictorPage"));
 
 // ============================================
@@ -715,6 +727,7 @@ const AppRoutes = () => (
       {/* TREINAMENTOS */}
       {/* ============================================ */}
       <Route path="/nautilus-academy" element={<AITraining />} />
+      <Route path="/solas-isps-training" element={<SOLASISPSTrainingPage />} />
       <Route path="/solas-isps-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
@@ -734,7 +747,8 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* ESG & SUSTENTABILIDADE */}
       {/* ============================================ */}
-      <Route path="/esg-emissions" element={<SustainabilityScorePage />} />
+      <Route path="/esg-emissions" element={<ESGEmissionsPage />} />
+      <Route path="/waste-management" element={<WasteManagementPage />} />
       <Route path="/waste-management" element={<SustainabilityScorePage />} />
       <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
       
@@ -766,17 +780,17 @@ const AppRoutes = () => (
       <Route path="/enterprise/ocr-center" element={<OCRCenterPage />} />
       <Route path="/enterprise/document-processor" element={<OCRCenterPage />} />
       <Route path="/enterprise/forms-builder" element={<FormsBuilderPage />} />
-      <Route path="/enterprise/checklists-builder" element={<FormsBuilderPage />} />
+      <Route path="/enterprise/checklists-builder" element={<ChecklistsBuilderPage />} />
       <Route path="/enterprise/ocimf-assessment" element={<OCIMFAssessmentPage />} />
-      <Route path="/enterprise/tmsa-analytics" element={<OCIMFAssessmentPage />} />
+      <Route path="/enterprise/tmsa-analytics" element={<TMSAAnalyticsPage />} />
       <Route path="/enterprise/fatigue-risk" element={<FatigueRiskPage />} />
-      <Route path="/enterprise/mlc-hours" element={<FatigueRiskPage />} />
+      <Route path="/enterprise/mlc-hours" element={<MLCWorkHoursPage />} />
       <Route path="/enterprise/crew-matching" element={<CrewMatchingPage />} />
       <Route path="/enterprise/talent-pool" element={<CrewMatchingPage />} />
       <Route path="/enterprise/contract-analysis" element={<ContractAnalysisPage />} />
-      <Route path="/enterprise/risk-clauses" element={<ContractAnalysisPage />} />
+      <Route path="/enterprise/risk-clauses" element={<RiskClausesPage />} />
       <Route path="/enterprise/compliance-predictor" element={<CompliancePredictorPage />} />
-      <Route path="/enterprise/nc-prediction" element={<CompliancePredictorPage />} />
+      <Route path="/enterprise/nc-prediction" element={<NCPredictionPage />} />
       
       {/* ============================================ */}
       {/* ADVANCED MARITIME MODULES - 12 REVOLUTIONARY FEATURES */}
