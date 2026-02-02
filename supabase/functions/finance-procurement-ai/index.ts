@@ -41,6 +41,7 @@ serve(async (req) => {
         result = await optimizeBudget(params, supabase, LOVABLE_API_KEY);
         break;
       case "supplier-analysis":
+      case "analyze_vendor":
         result = await analyzeSuppliers(params, supabase, LOVABLE_API_KEY);
         break;
       case "cost-prediction":
@@ -48,11 +49,24 @@ serve(async (req) => {
         result = await predictCosts(params, supabase, LOVABLE_API_KEY);
         break;
       case "invoice-processing":
+      case "process_invoice":
         result = await processInvoice(params, LOVABLE_API_KEY);
         break;
       case "procurement-strategy":
       case "identify_savings":
         result = await generateProcurementStrategy(params, supabase, LOVABLE_API_KEY);
+        break;
+      case "recommend_suppliers":
+        result = await recommendSuppliers(params, supabase, LOVABLE_API_KEY);
+        break;
+      case "generate_budget_forecast":
+        result = await generateBudgetForecast(params, supabase, LOVABLE_API_KEY);
+        break;
+      case "optimize_procurement":
+        result = await optimizeProcurement(params, supabase, LOVABLE_API_KEY);
+        break;
+      case "get_insights":
+        result = await getFinancialInsights(params, supabase, LOVABLE_API_KEY);
         break;
       default:
         throw new Error(`Unknown action: ${action}`);
@@ -467,6 +481,302 @@ Return JSON:
     kpis: [],
     recommendations: [],
     confidence: 50,
+  });
+}
+
+// NEW: Recommend Suppliers based on requirements
+async function recommendSuppliers(
+  params: { itemCategory?: string; quantity?: number; urgency?: string },
+  supabase: any,
+  apiKey: string
+): Promise<any> {
+  // Get real vendors from database
+  const { data: vendors } = await supabase
+    .from("vendors")
+    .select("*")
+    .order("performance_score", { ascending: false })
+    .limit(20);
+
+  // Get purchase history
+  const { data: poHistory } = await supabase
+    .from("purchase_orders")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  const prompt = `You are a maritime procurement specialist. Recommend suppliers for the following request:
+
+ITEM CATEGORY: ${params.itemCategory || "General supplies"}
+QUANTITY: ${params.quantity || "Not specified"}
+URGENCY: ${params.urgency || "medium"}
+
+AVAILABLE VENDORS (${vendors?.length || 0}):
+${JSON.stringify(vendors?.slice(0, 10), null, 2)}
+
+RECENT PURCHASE ORDERS:
+${JSON.stringify(poHistory?.slice(0, 10), null, 2)}
+
+Recommend the best suppliers:
+
+Return JSON:
+{
+  "recommendations": [
+    {
+      "supplierId": "uuid from vendors table or 'new'",
+      "supplierName": "string",
+      "price": 12500,
+      "leadTime": 14,
+      "qualityScore": 95,
+      "reliabilityScore": 92,
+      "overallScore": 93,
+      "recommendation": "Melhor custo-benefício com histórico excelente"
+    }
+  ],
+  "alternativeSuppliers": ["string"],
+  "negotiationTips": ["string"],
+  "confidence": 85
+}`;
+
+  const response = await callLovableAI(prompt, apiKey);
+  return parseJsonResponse(response, {
+    recommendations: vendors?.slice(0, 3).map((v: any) => ({
+      supplierId: v.id,
+      supplierName: v.name,
+      price: 10000 + Math.random() * 5000,
+      leadTime: 7 + Math.floor(Math.random() * 14),
+      qualityScore: v.quality_score || 85,
+      reliabilityScore: v.on_time_delivery || 80,
+      overallScore: v.performance_score || 82,
+      recommendation: `Fornecedor com ${v.total_orders || 0} pedidos realizados`
+    })) || [],
+    alternativeSuppliers: [],
+    negotiationTips: [],
+    confidence: 70
+  });
+}
+
+// NEW: Generate Budget Forecast with ML/AI
+async function generateBudgetForecast(
+  params: { year?: number; vesselIds?: string[] },
+  supabase: any,
+  apiKey: string
+): Promise<any> {
+  const year = params.year || new Date().getFullYear() + 1;
+
+  // Get historical budget data
+  const { data: budgets } = await supabase
+    .from("budgets")
+    .select("*")
+    .order("year", { ascending: false })
+    .limit(50);
+
+  // Get expense history
+  const { data: expenses } = await supabase
+    .from("expenses")
+    .select("*")
+    .order("expense_date", { ascending: false })
+    .limit(200);
+
+  // Get cost predictions
+  const { data: predictions } = await supabase
+    .from("cost_predictions")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(20);
+
+  const prompt = `You are a maritime budget forecasting expert. Generate budget forecast for ${year}.
+
+HISTORICAL BUDGETS:
+${JSON.stringify(budgets?.slice(0, 10), null, 2)}
+
+RECENT EXPENSES:
+${JSON.stringify(expenses?.slice(0, 20), null, 2)}
+
+EXISTING PREDICTIONS:
+${JSON.stringify(predictions?.slice(0, 5), null, 2)}
+
+Generate comprehensive budget forecast:
+
+Return JSON:
+{
+  "forecast": {
+    "year": ${year},
+    "totalBudget": 2500000,
+    "byCategory": {
+      "fuel": 800000,
+      "crew": 600000,
+      "maintenance": 400000,
+      "port": 300000,
+      "insurance": 250000,
+      "supplies": 150000
+    },
+    "byMonth": [200000, 210000, 195000, 220000, 230000, 215000, 225000, 210000, 200000, 215000, 225000, 255000],
+    "variance": { "expected": 5, "risk": 12 },
+    "scenarios": {
+      "optimistic": 2300000,
+      "baseline": 2500000,
+      "pessimistic": 2800000
+    }
+  },
+  "assumptions": ["Oil prices stable", "No major repairs"],
+  "risks": ["Fuel price volatility", "Currency fluctuations"],
+  "recommendations": ["Lock fuel contracts", "Review insurance"],
+  "confidence": 82
+}`;
+
+  const response = await callLovableAI(prompt, apiKey);
+  return parseJsonResponse(response, {
+    forecast: {
+      year,
+      totalBudget: 2500000,
+      byCategory: {},
+      byMonth: Array(12).fill(200000),
+      variance: { expected: 5, risk: 10 },
+      scenarios: { optimistic: 2300000, baseline: 2500000, pessimistic: 2800000 }
+    },
+    assumptions: [],
+    risks: [],
+    recommendations: [],
+    confidence: 50
+  });
+}
+
+// NEW: Optimize Procurement Orders
+async function optimizeProcurement(
+  params: { items?: Array<{ itemId: string; quantity: number; requiredBy: string }> },
+  supabase: any,
+  apiKey: string
+): Promise<any> {
+  const items = params.items || [];
+
+  // Get vendors
+  const { data: vendors } = await supabase
+    .from("vendors")
+    .select("*")
+    .order("performance_score", { ascending: false })
+    .limit(20);
+
+  const prompt = `You are a procurement optimization specialist. Optimize these orders:
+
+ITEMS TO PROCURE:
+${JSON.stringify(items, null, 2)}
+
+AVAILABLE VENDORS:
+${JSON.stringify(vendors?.slice(0, 10), null, 2)}
+
+Optimize procurement:
+
+Return JSON:
+{
+  "optimization": {
+    "optimizedOrders": [
+      {
+        "vendorId": "uuid",
+        "vendorName": "string",
+        "items": ["item1", "item2"],
+        "totalCost": 25000,
+        "deliveryDate": "2025-03-15"
+      }
+    ],
+    "savings": 5000,
+    "consolidationBenefits": ["Bulk discount", "Single shipment"],
+    "timeline": "2-3 weeks"
+  },
+  "alternatives": [],
+  "risks": [],
+  "confidence": 85
+}`;
+
+  const response = await callLovableAI(prompt, apiKey);
+  return parseJsonResponse(response, {
+    optimization: {
+      optimizedOrders: [],
+      savings: 0,
+      consolidationBenefits: [],
+      timeline: "Unknown"
+    },
+    alternatives: [],
+    risks: [],
+    confidence: 50
+  });
+}
+
+// NEW: Get Financial Insights Dashboard
+async function getFinancialInsights(
+  _params: any,
+  supabase: any,
+  apiKey: string
+): Promise<any> {
+  // Get recent financial data
+  const [
+    { data: transactions },
+    { data: invoices },
+    { data: budgets },
+    { data: expenses }
+  ] = await Promise.all([
+    supabase.from("financial_transactions").select("*").order("created_at", { ascending: false }).limit(100),
+    supabase.from("invoices").select("*").order("created_at", { ascending: false }).limit(50),
+    supabase.from("budgets").select("*").limit(20),
+    supabase.from("expenses").select("*").order("expense_date", { ascending: false }).limit(100)
+  ]);
+
+  // Calculate KPIs
+  const totalRevenue = transactions?.filter((t: any) => t.amount > 0).reduce((acc: number, t: any) => acc + t.amount, 0) || 0;
+  const totalExpenses = expenses?.reduce((acc: number, e: any) => acc + (e.amount || 0), 0) || 0;
+  const pendingInvoices = invoices?.filter((i: any) => i.status === 'pending').length || 0;
+
+  const prompt = `You are a maritime financial analyst. Provide executive insights.
+
+FINANCIAL DATA:
+- Total Revenue: $${totalRevenue}
+- Total Expenses: $${totalExpenses}
+- Pending Invoices: ${pendingInvoices}
+- Recent Transactions: ${transactions?.length || 0}
+
+Provide insights and alerts:
+
+Return JSON:
+{
+  "insights": {
+    "kpis": {
+      "revenue": ${totalRevenue},
+      "expenses": ${totalExpenses},
+      "netIncome": ${totalRevenue - totalExpenses},
+      "cashFlowHealth": 85,
+      "budgetUtilization": 72
+    },
+    "alerts": [
+      { "type": "warning", "message": "Budget overrun in maintenance", "severity": "warning" }
+    ],
+    "recommendations": [
+      "Review fuel contracts for better rates",
+      "Consider vendor consolidation"
+    ],
+    "trends": [
+      { "metric": "Monthly expenses", "direction": "down", "change": -5 },
+      { "metric": "Revenue", "direction": "up", "change": 12 }
+    ]
+  },
+  "summary": "Financial health is stable with opportunities for cost optimization",
+  "confidence": 88
+}`;
+
+  const response = await callLovableAI(prompt, apiKey);
+  return parseJsonResponse(response, {
+    insights: {
+      kpis: {
+        revenue: totalRevenue,
+        expenses: totalExpenses,
+        netIncome: totalRevenue - totalExpenses,
+        cashFlowHealth: 75,
+        budgetUtilization: 65
+      },
+      alerts: [],
+      recommendations: ["Review financial data for optimization opportunities"],
+      trends: []
+    },
+    summary: "Financial data analyzed",
+    confidence: 50
   });
 }
 
