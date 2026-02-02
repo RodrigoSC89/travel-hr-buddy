@@ -8,31 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Ship, MapPin, Navigation, Activity, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { logger } from '@/lib/logger';
-
-interface VesselLocation {
-  id: string;
-  name: string;
-  type: string;
-  latitude: number;
-  longitude: number;
-  course: number;
-  speed: number;
-  status: "active" | "anchored" | "maintenance" | "emergency";
-  last_update: string;
-  captain: string;
-  destination?: string;
-}
+import { useFleetTracking, VesselLocation } from "@/hooks/useFleetTrackingData";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 const VesselTrackingMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const mapboxRef = useRef<any>(null);
-  const [vessels, setVessels] = useState<VesselLocation[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>("");
   const [isMapLoading, setIsMapLoading] = useState(true);
   const { toast } = useToast();
+  
+  // Use real fleet data hook
+  const { vessels, isLoading: isFleetLoading, refetch } = useFleetTracking();
 
   useEffect(() => {
     // Fetch Mapbox token from edge function
@@ -83,11 +72,12 @@ const VesselTrackingMap = () => {
         mapInstance.on("load", () => {
           if (mounted) {
             setIsMapLoading(false);
-            loadVesselData();
+            // Markers will be updated via useEffect when vessels change
+            updateVesselMarkers(vessels);
           }
         });
       } catch (error) {
-        logger.error("Failed to load map:", error);
+        console.error("Failed to load map:", error);
         if (mounted) setIsMapLoading(false);
       }
     };
@@ -100,77 +90,12 @@ const VesselTrackingMap = () => {
     };
   }, [mapboxToken]);
 
-  const loadVesselData = async () => {
-    try {
-      // Simulate vessel data - in real app, this would come from GPS trackers
-      const mockVessels: VesselLocation[] = [
-        {
-          id: "1",
-          name: "Nautilus Explorer",
-          type: "Cargo",
-          latitude: -23.5505,
-          longitude: -46.6333,
-          course: 45,
-          speed: 12.5,
-          status: "active",
-          last_update: new Date().toISOString(),
-          captain: "Capitão Silva",
-          destination: "Porto de Santos"
-        },
-        {
-          id: "2",
-          name: "Atlantic Pioneer",
-          type: "Tanker",
-          latitude: -22.9068,
-          longitude: -43.1729,
-          course: 180,
-          speed: 0,
-          status: "anchored",
-          last_update: new Date().toISOString(),
-          captain: "Capitão Costa",
-          destination: "Porto do Rio de Janeiro"
-        },
-        {
-          id: "3",
-          name: "Pacific Star",
-          type: "Container",
-          latitude: -8.0476,
-          longitude: -34.8770,
-          course: 270,
-          speed: 15.2,
-          status: "active",
-          last_update: new Date().toISOString(),
-          captain: "Capitão Oliveira",
-          destination: "Porto de Recife"
-        },
-        {
-          id: "4",
-          name: "Ocean Guardian",
-          type: "Fishing",
-          latitude: -25.4284,
-          longitude: -49.2733,
-          course: 90,
-          speed: 8.0,
-          status: "maintenance",
-          last_update: new Date().toISOString(),
-          captain: "Capitão Santos",
-          destination: "Porto de Paranaguá"
-        }
-      ];
-
-      setVessels(mockVessels);
-
-      if (map.current) {
-        updateVesselMarkers(mockVessels);
-      }
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Falha ao carregar dados das embarcações",
-        variant: "destructive"
-      });
+  // Update markers when vessels data changes
+  useEffect(() => {
+    if (map.current && vessels.length > 0) {
+      updateVesselMarkers(vessels);
     }
-  };
+  }, [vessels]);
 
   const updateVesselMarkers = (vesselData: VesselLocation[]) => {
     if (!map.current || !mapboxRef.current) return;
@@ -221,7 +146,7 @@ const VesselTrackingMap = () => {
   // Real-time updates with optimized polling
   useOptimizedPolling({
     id: "vessel-tracking-map-updates",
-    callback: loadVesselData,
+    callback: refetch,
     interval: 30000,
   });
 
@@ -391,7 +316,7 @@ const VesselTrackingMap = () => {
               <Button size="sm" variant="outline" onClick={() => map.current?.flyTo({ zoom: 2 })}>
                 Visão Geral
               </Button>
-              <Button size="sm" variant="outline" onClick={() => loadVesselData()}>
+              <Button size="sm" variant="outline" onClick={() => refetch()}>
                 Atualizar
               </Button>
             </div>
