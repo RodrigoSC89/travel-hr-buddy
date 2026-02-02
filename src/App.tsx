@@ -347,6 +347,8 @@ const CompliancePredictorPage = lazy(() => import("@/pages/enterprise/Compliance
 
 // Audit Agents Hub
 const AuditAgentsPage = lazy(() => import("@/pages/AuditAgentsPage"));
+const AgentsDashboard = lazy(() => import("@/pages/audit-agents/AgentsDashboard"));
+const AgentDetailPage = lazy(() => import("@/pages/audit-agents/AgentDetailPage"));
 
 // ============================================
 // ADVANCED MARITIME MODULES - 12 REVOLUTIONARY FEATURES
@@ -682,7 +684,8 @@ const AppRoutes = () => (
       <Route path="/compliance-executive" element={<ExecutiveCompliancePage />} />
       <Route path="/executive-compliance" element={<ExecutiveCompliancePage />} />
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
-      <Route path="/audit-agents" element={<AuditAgentsPage />} />
+      <Route path="/audit-agents" element={<AgentsDashboard />} />
+      <Route path="/audit-agents/:agentId" element={<AgentDetailPage />} />
       
       {/* Diagnostic Components - 5 Soluções */}
       <Route path="/diagnostic-certificates" element={<DiagnosticCertificatesPage />} />
