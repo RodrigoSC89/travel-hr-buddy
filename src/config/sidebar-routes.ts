@@ -371,6 +371,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🚀 Compliance Avançado", path: "/compliance-roadmap", icon: Shield, emoji: "🚀", badge: "NEW", status: "new" },
       // Chat IA Agêntico (NOVO)
       { label: "🤖 Audit AI Chat", path: "/audit-ai-chat", icon: Brain, emoji: "🤖", badge: "NEW", status: "new" },
+      // Central de Agentes de Auditoria (NOVO)
+      { label: "🧠 Central Agentes Auditoria", path: "/audit-agents", icon: Bot, emoji: "🧠", badge: "10 AGENTS", status: "new" },
       // Auditorias Marítimas Regulatórias
       { label: "PEO-DP", path: "/peo-dp", icon: FileText, emoji: "📋" },
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },

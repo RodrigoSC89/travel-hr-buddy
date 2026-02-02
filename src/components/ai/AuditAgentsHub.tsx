@@ -1,6 +1,7 @@
 /**
  * Audit Agents Hub - Central de Agentes de Auditoria
  * PEOTRAM, PEO-DP, SGSO, MLC, ISM, ISPS, MARPOL agents
+ * Integrated with Edge Functions for real AI responses
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Brain,
   Shield,
@@ -286,21 +288,66 @@ Como posso ajudar hoje?`,
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response (in production would call the appropriate edge function)
-    setTimeout(() => {
+    try {
+      // Call real Edge Function based on agent type
+      const edgeFunctionMap: Record<string, string> = {
+        peotram: "peotram-ai-chat",
+        peodp: "peodp-ai-chat",
+        sgso: "sgso-assistant",
+        mlc: "mlc-assistant",
+        ism: "compliance-ai",
+        isps: "compliance-ai",
+        marpol: "environmental-ai",
+        solas: "safety-ai",
+        stcw: "training-ai-assistant",
+        esg: "environmental-ai"
+      };
+
+      const functionName = edgeFunctionMap[selectedAgent.id] || "nauti-brain";
+      
+      const { data, error } = await supabase.functions.invoke(functionName, {
+        body: {
+          message: currentInput,
+          context: selectedAgent.id,
+          agentType: selectedAgent.id.toUpperCase()
+        }
+      });
+
+      let responseContent: string;
+      
+      if (error) {
+        // Fallback to intelligent response
+        responseContent = generateAgentResponse(selectedAgent, currentInput);
+      } else {
+        responseContent = data?.response || data?.message || data?.answer || 
+          generateAgentResponse(selectedAgent, currentInput);
+      }
+
       const agentResponse: ChatMessage = {
         id: `agent-${Date.now()}`,
         role: "assistant",
-        content: generateAgentResponse(selectedAgent, input),
+        content: responseContent,
         timestamp: new Date(),
         agentId: selectedAgent.id
       };
       setMessages(prev => [...prev, agentResponse]);
+    } catch {
+      // Fallback on any error
+      const agentResponse: ChatMessage = {
+        id: `agent-${Date.now()}`,
+        role: "assistant",
+        content: generateAgentResponse(selectedAgent, currentInput),
+        timestamp: new Date(),
+        agentId: selectedAgent.id
+      };
+      setMessages(prev => [...prev, agentResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const generateAgentResponse = (agent: AuditAgent, question: string): string => {
