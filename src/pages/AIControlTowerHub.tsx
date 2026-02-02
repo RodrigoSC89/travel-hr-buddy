@@ -36,7 +36,8 @@ import {
 const AIModulesHub = lazy(() => import("@/pages/ai/AIModulesHub"));
 const AICommandCenter = lazy(() => import("@/pages/mission-control/ai-command-center"));
 const AutonomousCommandCenter = lazy(() => import("@/pages/AutonomousCommandCenter"));
-const AgentOrchestration = lazy(() => import("@/pages/AgentOrchestration"));
+// Use full AgentOrchestrationDashboard with all 8 specialized agents
+const AgentOrchestrationDashboard = lazy(() => import("@/components/ai/AgentOrchestrationDashboard"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
 const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
 const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
@@ -173,10 +174,10 @@ export default function AIControlTowerHub() {
           </Suspense>
         </TabsContent>
 
-        {/* Agents Tab */}
+        {/* Agents Tab - Full Dashboard with 8 Specialized Agents */}
         <TabsContent value="agents" className="mt-6">
           <Suspense fallback={<TabLoadingSkeleton />}>
-            <AgentOrchestration />
+            <AgentOrchestrationDashboard />
           </Suspense>
         </TabsContent>
 
