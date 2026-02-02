@@ -65,18 +65,26 @@ serve(async (req: Request) => {
     console.log("Generated embedding, searching for similar jobs...");
 
     // Step 2: Search for similar historical jobs using vector similarity
-    const { data: similarJobs, error: matchError } = await supabase.rpc('match_mmi_jobs', {
-      query_embedding: embedding,
-      match_threshold: 0.78,
-      match_count: 3
-    });
+    let similarJobs: any[] = [];
+    try {
+      const { data, error: matchError } = await supabase.rpc('match_mmi_job_history', {
+        query_embedding: embedding,
+        match_threshold: 0.7,
+        match_count: 3
+      });
 
-    if (matchError) {
-      console.error("Error matching jobs:", matchError);
-      throw new Error(`Failed to match similar jobs: ${matchError.message}`);
+      if (matchError) {
+        console.warn("Vector search not available, continuing without historical context:", matchError.message);
+        // Continue without historical context - don't throw
+      } else {
+        similarJobs = data || [];
+      }
+    } catch (vectorError) {
+      console.warn("Vector extension not enabled, continuing without historical context");
+      // Continue without historical context
     }
 
-    console.log(`Found ${similarJobs?.length || 0} similar jobs`);
+    console.log(`Found ${similarJobs.length} similar jobs`);
 
     // Step 3: Build enriched prompt with historical context
     const historicalContext = similarJobs && similarJobs.length > 0
