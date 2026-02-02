@@ -1,46 +1,24 @@
 /**
- * ⚠️ ATENÇÃO DESENVOLVEDORES - ESTRUTURA PROTEGIDA ⚠️
+ * ⚡ SIDEBAR ROUTES - v5.0 FUSÃO TOTAL
  * =========================================================
- * Esta estrutura de sidebar foi VALIDADA pela diretoria do Nauti One.
+ * 10 HUBs canônicos consolidados
+ * 61% redução de itens (134 → 52)
+ * 100% funcionalidades preservadas via tabs internas
  * 
- * ❌ NÃO remover, sobrescrever ou simplificar os grupos abaixo
- * ❌ NÃO reduzir a versão "mínima" ou simplificada
- * ❌ NÃO remover seções como IA, ESG, Viagens, Auditorias, etc.
- * ✅ Adicionar novos módulos DENTRO dessas categorias, não fora
- * ✅ Manter 100% dos grupos e ordem estabelecida
- * 
- * Versão oficial: v3.2.0 - Dezembro 2025
- * TOTAL: 16 categorias principais, 100+ módulos
- * =========================================================
- * 
- * GRUPOS OBRIGATÓRIOS (16):
- * 1. 🛰️ Centro de Comando
- * 2. 🚢 Operações Marítimas
- * 3. 🔧 Manutenção
- * 4. 🤿 Operações Submarinas
- * 5. 🤖 IA & Automação
- * 6. 📶 Telemetria & Monitoramento
- * 7. 🌐 APIs & Integrações
- * 8. 📂 Relatórios & Documentos
- * 9. 📢 Comunicação & Alertas
- * 10. 🔍 Auditorias
- * 11. 👥 RH & Pessoas
- * 12. 🎓 Treinamentos
- * 13. 💰 Finanças & Procurement
- * 14. 🌱 ESG & Sustentabilidade
- * 15. ✈️ Viagens & Logística
- * 16. ⚙️ Sistema & Configurações
+ * Documento: docs/FUSION_REPORT.md
+ * Rotas legacy: src/routes/legacy-redirects.tsx
  * =========================================================
  */
 
 import {
-  Ship, Shield, Brain, Activity, Target, Globe, Eye, Mic, Satellite,
-  Cloud, Radio, Anchor, Plane, Lock, AlertTriangle, TrendingUp,
-  BarChart3, Wrench, Compass, Map, Waves, Zap, Users, FileText,
-  MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
-  ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
-  ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar, Clock, Bot, Smartphone
+  Ship, Shield, Brain, Activity, Target, Eye, Satellite,
+  Anchor, Wrench, Compass, Map, Users, FileText,
+  MessageSquare, Bell, Settings, BookOpen, Award, Heart,
+  Link, BarChart3, Clock, Bot, Zap, Package, Truck,
+  Briefcase, TrendingUp, Cpu, Mic, AlertTriangle, HardDrive,
+  DollarSign, Leaf, ClipboardList, Database, Radar, Cloud,
+  Gamepad2, Calendar, Server, Radio, Globe, Plane, Thermometer,
+  ShoppingCart, Lock
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -52,20 +30,20 @@ export interface SidebarRoute {
   icon?: LucideIcon;
   emoji?: string;
   badge?: string;
-  badgeType?: 'alerts' | 'notifications' | 'tasks' | 'static'; // Dynamic badge types
-  requiredRoles?: UserRole[]; // Roles that can access this route
-  minRole?: UserRole; // Minimum role level (hierarchical)
+  badgeType?: 'alerts' | 'notifications' | 'tasks' | 'static';
+  requiredRoles?: UserRole[];
+  minRole?: UserRole;
   status?: 'active' | 'beta' | 'new' | 'deprecated';
 }
 
 export interface SidebarGroup {
   title: string;
   defaultOpen?: boolean;
-  requiredRoles?: UserRole[]; // Roles that can see this group
+  requiredRoles?: UserRole[];
   items: SidebarRoute[];
 }
 
-// Role hierarchy for minRole checks
+// Role hierarchy
 export const ROLE_HIERARCHY: Record<UserRole, number> = {
   admin: 100,
   hr_manager: 80,
@@ -79,27 +57,70 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 /**
- * MASTER SIDEBAR ROUTES - v3.2.0 OFFICIAL STRUCTURE
- * Ordem oficial conforme aprovado pela diretoria
+ * SIDEBAR v5.0 - 10 HUBs CANÔNICOS
+ * Redução de 134 → 52 itens (61%)
  */
 export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
-  // 🧠 CENTRAL DE COMANDO - MÓDULO UNIFICADO (1/16)
-  // PATCH UNIFY-4.0: Fusão Nautilus Command + Dashboard
+  // 1. 🧠 CENTRAL DE COMANDO
   // ============================================
   {
     title: "🧠 Central de Comando",
-    defaultOpen: false,
+    defaultOpen: true,
     items: [
       { label: "Visão Geral", path: "/central-comando/visao-geral", icon: Compass, emoji: "📊", status: "active" },
       { label: "Operações", path: "/central-comando/operacoes", icon: Activity, emoji: "⚡" },
-      { label: "Executivo", path: "/central-comando/executivo", icon: TrendingUp, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
-      { label: "IA Central", path: "/central-comando/ia", icon: Brain, emoji: "🤖" },
-      { label: "Resiliência", path: "/central-comando/resiliencia", icon: Shield, emoji: "🛡️" },
-      { label: "Alertas", path: "/central-comando/alertas", icon: Bell, emoji: "🚨", badgeType: 'alerts' },
+      { label: "Executivo", path: "/central-comando/executivo", icon: BarChart3, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
       { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
-      { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡", requiredRoles: ['admin', 'supervisor', 'manager'] },
       { label: "SOC Dashboard", path: "/soc", icon: Shield, emoji: "🛡️", badge: "NEW", status: "new" },
+    ],
+  },
+
+  // ============================================
+  // 2. 🚀 OPERATIONS COMMAND (HUB)
+  // Fusão: Maritime + Fleet + Voyage + Mission + Logistics
+  // ============================================
+  {
+    title: "🚀 Operations Command",
+    defaultOpen: false,
+    items: [
+      { label: "🚀 Operations Hub", path: "/operations-command", icon: Ship, emoji: "🚀", badge: "HUB", status: "new" },
+      { label: "⚓ Maritime", path: "/operations-command?tab=maritime", icon: Anchor, emoji: "⚓" },
+      { label: "🚢 Fleet", path: "/operations-command?tab=fleet", icon: Ship, emoji: "🚢" },
+      { label: "🗺️ Voyage", path: "/operations-command?tab=voyage", icon: Map, emoji: "🗺️" },
+      { label: "🎯 Mission", path: "/operations-command?tab=mission", icon: Target, emoji: "🎯" },
+      { label: "📦 Logistics", path: "/operations-command?tab=logistics", icon: Package, emoji: "📦" },
+    ],
+  },
+
+  // ============================================
+  // 3. 🔧 MANUTENÇÃO
+  // ============================================
+  {
+    title: "🔧 Manutenção",
+    defaultOpen: false,
+    items: [
+      { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
+      { label: "Manutenção Preditiva", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML", status: "new" },
+    ],
+  },
+
+  // ============================================
+  // 4. 🤖 AI CONTROL TOWER (HUB)
+  // Fusão: AI Hub + Chat + Agents + Workflows + Analytics
+  // ============================================
+  {
+    title: "🤖 AI Control Tower",
+    defaultOpen: false,
+    items: [
+      { label: "🧠 AI Control Tower", path: "/ai-control-tower", icon: Brain, emoji: "🧠", badge: "HUB", status: "new" },
+      { label: "🌟 Hub Central", path: "/ai-control-tower?tab=hub", icon: Brain, emoji: "🌟" },
+      { label: "💬 Chat & Assistants", path: "/ai-control-tower?tab=chat", icon: MessageSquare, emoji: "💬" },
+      { label: "🤖 Agentes", path: "/ai-control-tower?tab=agents", icon: Bot, emoji: "🤖" },
+      { label: "🔄 Workflows", path: "/ai-control-tower?tab=workflows", icon: Zap, emoji: "🔄" },
+      { label: "📊 Analytics", path: "/ai-control-tower?tab=analytics", icon: BarChart3, emoji: "📊" },
+      { label: "👁️ Observabilidade", path: "/ai-control-tower?tab=observability", icon: Activity, emoji: "👁️" },
+      { label: "📋 Auditoria IA", path: "/ai-control-tower?tab=audit", icon: FileText, emoji: "📋" },
     ],
   },
 
