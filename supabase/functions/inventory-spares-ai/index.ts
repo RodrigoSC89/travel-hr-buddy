@@ -32,12 +32,14 @@ serve(async (req) => {
 
     switch (action) {
       case "inventory-status":
+      case "get_inventory_status":
         result = await getInventoryStatus(params, supabase, LOVABLE_API_KEY);
         break;
       case "demand-forecast":
         result = await forecastDemand(params, supabase, LOVABLE_API_KEY);
         break;
       case "reorder-optimization":
+      case "get_reorder_suggestions":
         result = await optimizeReorder(params, supabase, LOVABLE_API_KEY);
         break;
       case "cost-analysis":

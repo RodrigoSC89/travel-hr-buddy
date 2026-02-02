@@ -38,6 +38,7 @@ serve(async (req) => {
         result = await performRCA(params, LOVABLE_API_KEY);
         break;
       case "safety-kpis":
+      case "get_safety_metrics":
         result = await calculateSafetyKPIs(params, supabase, LOVABLE_API_KEY);
         break;
       case "near-miss-analysis":

@@ -44,12 +44,14 @@ serve(async (req) => {
         result = await analyzeSuppliers(params, supabase, LOVABLE_API_KEY);
         break;
       case "cost-prediction":
+      case "predict_costs":
         result = await predictCosts(params, supabase, LOVABLE_API_KEY);
         break;
       case "invoice-processing":
         result = await processInvoice(params, LOVABLE_API_KEY);
         break;
       case "procurement-strategy":
+      case "identify_savings":
         result = await generateProcurementStrategy(params, supabase, LOVABLE_API_KEY);
         break;
       default:
