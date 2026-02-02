@@ -1,4 +1,4 @@
-// @ts-nocheck - Mapbox GL type compatibility
+// @ts-nocheck - Mapbox GL type compatibility (complex external library types)
 /**
  * Enhanced Compliance Inspection Map with Geofencing
  * Features: Real-time vessel tracking, geofence alerts, Supabase integration
@@ -94,9 +94,9 @@ export function ComplianceMapWithGeofencing({
   showControls = true
 }: ComplianceMapWithGeofencingProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const mapboxglRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapboxglRef = useRef<typeof mapboxgl | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
   const geofenceSourcesRef = useRef<Set<string>>(new Set());
   const mapLoadedRef = useRef(false);
   

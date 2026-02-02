@@ -1,9 +1,43 @@
 /**
  * PATCH 634: Offline Cache and Sync System
  * IndexedDB-based offline storage for PWA-like functionality
+ * PATCH 872: Type safety improvements - replaced any with proper types
  */
 
 import { openDB, DBSchema, IDBPDatabase } from "idb";
+
+// Typed session data structure
+interface SessionData {
+  moduleContext?: string;
+  preferences?: Record<string, unknown>;
+  cachedQueries?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+// Typed document content structure
+interface DocumentContent {
+  text?: string;
+  metadata?: Record<string, unknown>;
+  extractedData?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+// Typed log data structure
+interface LogData {
+  message?: string;
+  level?: 'info' | 'warn' | 'error' | 'debug';
+  context?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+// Typed pending action payload
+interface ActionPayload {
+  entityType?: string;
+  entityId?: string;
+  operation?: 'create' | 'update' | 'delete';
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
 
 interface NautilusDB extends DBSchema {
   sessions: {
@@ -11,7 +45,7 @@ interface NautilusDB extends DBSchema {
     value: {
       id: string;
       userId: string;
-      data: any;
+      data: SessionData;
       timestamp: number;
       synced: boolean;
     };
@@ -21,7 +55,7 @@ interface NautilusDB extends DBSchema {
     value: {
       id: string;
       title: string;
-      content: any;
+      content: DocumentContent;
       lastModified: number;
       synced: boolean;
     };
@@ -31,17 +65,18 @@ interface NautilusDB extends DBSchema {
     value: {
       id: string;
       type: string;
-      data: any;
+      data: LogData;
       timestamp: number;
       synced: boolean;
     };
+    indexes: { 'timestamp': number };
   };
   pendingActions: {
     key: string;
     value: {
       id: string;
       action: string;
-      payload: any;
+      payload: ActionPayload;
       timestamp: number;
       retries: number;
     };
@@ -67,7 +102,7 @@ class OfflineCacheManager {
         }
         if (!db.objectStoreNames.contains("logs")) {
           const logsStore = db.createObjectStore("logs", { keyPath: "id" });
-          (logsStore as any).createIndex("timestamp", "timestamp");
+          logsStore.createIndex("timestamp", "timestamp");
         }
         if (!db.objectStoreNames.contains("pendingActions")) {
           db.createObjectStore("pendingActions", { keyPath: "id" });
@@ -77,7 +112,7 @@ class OfflineCacheManager {
   }
 
   // Session Management
-  async saveSession(sessionId: string, userId: string, data: any): Promise<void> {
+  async saveSession(sessionId: string, userId: string, data: SessionData): Promise<void> {
     if (!this.db) await this.initialize();
     
     await this.db!.put("sessions", {
@@ -89,18 +124,18 @@ class OfflineCacheManager {
     });
   }
 
-  async getSession(sessionId: string): Promise<any> {
+  async getSession(sessionId: string): Promise<NautilusDB['sessions']['value'] | undefined> {
     if (!this.db) await this.initialize();
     return await this.db!.get("sessions", sessionId);
   }
 
-  async getAllSessions(): Promise<any[]> {
+  async getAllSessions(): Promise<NautilusDB['sessions']['value'][]> {
     if (!this.db) await this.initialize();
     return await this.db!.getAll("sessions");
   }
 
   // Document Management
-  async saveDocument(documentId: string, title: string, content: any): Promise<void> {
+  async saveDocument(documentId: string, title: string, content: DocumentContent): Promise<void> {
     if (!this.db) await this.initialize();
     
     await this.db!.put("documents", {
@@ -112,24 +147,24 @@ class OfflineCacheManager {
     });
   }
 
-  async getDocument(documentId: string): Promise<any> {
+  async getDocument(documentId: string): Promise<NautilusDB['documents']['value'] | undefined> {
     if (!this.db) await this.initialize();
     return await this.db!.get("documents", documentId);
   }
 
-  async getAllDocuments(): Promise<any[]> {
+  async getAllDocuments(): Promise<NautilusDB['documents']['value'][]> {
     if (!this.db) await this.initialize();
     return await this.db!.getAll("documents");
   }
 
-  async getUnsyncedDocuments(): Promise<any[]> {
+  async getUnsyncedDocuments(): Promise<NautilusDB['documents']['value'][]> {
     if (!this.db) await this.initialize();
     const docs = await this.db!.getAll("documents");
     return docs.filter(doc => !doc.synced);
   }
 
   // Logs Management
-  async saveLog(logId: string, type: string, data: any): Promise<void> {
+  async saveLog(logId: string, type: string, data: LogData): Promise<void> {
     if (!this.db) await this.initialize();
     
     await this.db!.put("logs", {
@@ -141,14 +176,14 @@ class OfflineCacheManager {
     });
   }
 
-  async getUnsyncedLogs(): Promise<any[]> {
+  async getUnsyncedLogs(): Promise<NautilusDB['logs']['value'][]> {
     if (!this.db) await this.initialize();
     const logs = await this.db!.getAll("logs");
     return logs.filter(log => !log.synced);
   }
 
   // Pending Actions
-  async addPendingAction(actionId: string, action: string, payload: any): Promise<void> {
+  async addPendingAction(actionId: string, action: string, payload: ActionPayload): Promise<void> {
     if (!this.db) await this.initialize();
     
     await this.db!.put("pendingActions", {
@@ -160,7 +195,7 @@ class OfflineCacheManager {
     });
   }
 
-  async getPendingActions(): Promise<any[]> {
+  async getPendingActions(): Promise<NautilusDB['pendingActions']['value'][]> {
     if (!this.db) await this.initialize();
     return await this.db!.getAll("pendingActions");
   }

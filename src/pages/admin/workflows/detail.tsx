@@ -362,9 +362,9 @@ export default function WorkflowDetailPage() {
 
   function openEditDialog(step: WorkflowStep) {
     setTaskForm({
-      title: step.title,
+      title: step.title || "",
       description: step.description || "",
-      status: step.status,
+      status: step.status || "pendente",
       assigned_to: step.assigned_to || "",
       due_date: step.due_date || "",
       priority: step.priority || "medium"
