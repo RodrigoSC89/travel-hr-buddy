@@ -1,9 +1,9 @@
 /**
  * Recruitment Pipeline - Pipeline de Recrutamento com IA
- * Versão funcional com drag-and-drop e todas as ações
+ * INTEGRADO: Usa hooks useRecruitmentData para dados reais do Supabase
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,18 +38,22 @@ import {
   MessageSquare,
   X,
   Loader2,
-  CheckCircle
+  CheckCircle,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mockCandidatos, mockVagas, departamentos } from '../data/mockData';
+import { departamentos } from '../data/mockData';
 import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
-import type { Candidato, Vaga } from '../types';
+import { useRecruitmentData, type Candidato, type Vaga } from '@/hooks/useRecruitmentData';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const RecruitmentPipeline: React.FC = () => {
-  const [selectedVaga, setSelectedVaga] = useState<Vaga | null>(mockVagas[0]);
+  const { vagas: dbVagas, candidatos: dbCandidatos, isLoading: dataLoading, refetch, updateCandidatoEtapa } = useRecruitmentData();
+  
+  const [selectedVaga, setSelectedVaga] = useState<Vaga | null>(null);
   const [isNewVagaOpen, setIsNewVagaOpen] = useState(false);
-  const [candidatos, setCandidatos] = useState<Candidato[]>(mockCandidatos);
-  const [vagas, setVagas] = useState<Vaga[]>(mockVagas);
+  const [candidatos, setCandidatos] = useState<Candidato[]>([]);
+  const [vagas, setVagas] = useState<Vaga[]>([]);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -59,6 +63,20 @@ const RecruitmentPipeline: React.FC = () => {
   const [draggedCandidate, setDraggedCandidate] = useState<string | null>(null);
   
   const { isLoading, screenCandidate, generateJobDescription } = useNautilusPeopleAI();
+
+  // Sync from DB
+  useEffect(() => {
+    if (dbVagas.length > 0) {
+      setVagas(dbVagas);
+      if (!selectedVaga) setSelectedVaga(dbVagas[0]);
+    }
+  }, [dbVagas]);
+
+  useEffect(() => {
+    if (dbCandidatos.length > 0) {
+      setCandidatos(dbCandidatos);
+    }
+  }, [dbCandidatos]);
 
   const [newVaga, setNewVaga] = useState({
     titulo: '',
@@ -103,13 +121,18 @@ const RecruitmentPipeline: React.FC = () => {
 
   const handleDrop = (etapaId: string) => {
     if (draggedCandidate) {
-      setCandidatos(prev => prev.map(c => {
-        if (c.id === draggedCandidate) {
-          toast.success(`${c.nome} movido para ${etapas.find(e => e.id === etapaId)?.label}`);
-          return { ...c, etapa: etapaId as Candidato['etapa'] };
-        }
-        return c;
-      }));
+      const candidato = candidatos.find(c => c.id === draggedCandidate);
+      if (candidato) {
+        setCandidatos(prev => prev.map(c => {
+          if (c.id === draggedCandidate) {
+            toast.success(`${c.nome} movido para ${etapas.find(e => e.id === etapaId)?.label}`);
+            return { ...c, etapa: etapaId as Candidato['etapa'] };
+          }
+          return c;
+        }));
+        // Persist to DB
+        updateCandidatoEtapa({ candidatoId: draggedCandidate, novaEtapa: etapaId });
+      }
     }
     setDraggedCandidate(null);
   };
@@ -131,9 +154,12 @@ const RecruitmentPipeline: React.FC = () => {
       );
       
       if (result) {
+        const insights = typeof result === 'string' 
+          ? { strengths: [], concerns: [], recommendation: result }
+          : result;
         setCandidatos(prev => prev.map(c => 
           c.id === candidato.id 
-            ? { ...c, aiInsights: result, matchScore: Math.floor(70 + Math.random() * 30) } 
+            ? { ...c, aiInsights: insights, matchScore: Math.floor(70 + Math.random() * 30) } 
             : c
         ));
       }
@@ -205,6 +231,125 @@ const RecruitmentPipeline: React.FC = () => {
     filterStatus === 'todas' || v.status === filterStatus
   );
 
+  // Loading state
+  if (dataLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando dados...</span>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (vagas.length === 0 && candidatos.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Pipeline de Recrutamento</h2>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => refetch()}>
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Atualizar
+            </Button>
+            <Dialog open={isNewVagaOpen} onOpenChange={setIsNewVagaOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Vaga
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg">
+                <DialogHeader>
+                  <DialogTitle>Criar Nova Vaga</DialogTitle>
+                  <DialogDescription>Preencha as informações da vaga</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label>Título da Vaga *</Label>
+                    <Input 
+                      placeholder="Ex: Engenheiro de Produção Sênior"
+                      value={newVaga.titulo}
+                      onChange={(e) => setNewVaga({...newVaga, titulo: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Departamento *</Label>
+                      <Select 
+                        value={newVaga.departamento}
+                        onValueChange={(v) => setNewVaga({...newVaga, departamento: v})}
+                      >
+                        <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                        <SelectContent>
+                          {departamentos.map(dep => (
+                            <SelectItem key={dep} value={dep}>{dep}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Urgência</Label>
+                      <Select 
+                        value={newVaga.urgencia}
+                        onValueChange={(v) => setNewVaga({...newVaga, urgencia: v})}
+                      >
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="baixa">Baixa</SelectItem>
+                          <SelectItem value="media">Média</SelectItem>
+                          <SelectItem value="alta">Alta</SelectItem>
+                          <SelectItem value="critica">Crítica</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <Label>Descrição da Vaga</Label>
+                      <Button type="button" variant="ghost" size="sm" onClick={handleGenerateDescription} disabled={isLoading}>
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Gerar com IA
+                      </Button>
+                    </div>
+                    <Textarea 
+                      placeholder="Descreva as responsabilidades e requisitos..." 
+                      rows={4}
+                      value={newVaga.descricao}
+                      onChange={(e) => setNewVaga({...newVaga, descricao: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Requisitos (separados por vírgula)</Label>
+                    <Input 
+                      placeholder="Python, SQL, 3+ anos experiência"
+                      value={newVaga.requisitos}
+                      onChange={(e) => setNewVaga({...newVaga, requisitos: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsNewVagaOpen(false)}>Cancelar</Button>
+                  <Button onClick={handleCreateVaga} disabled={isLoading}>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Criar Vaga
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+        <EmptyState
+          icon={Users}
+          title="Nenhuma vaga ou candidato encontrado"
+          description="Comece criando uma nova vaga para iniciar o processo de recrutamento."
+          actionLabel="Criar Primeira Vaga"
+          onAction={() => setIsNewVagaOpen(true)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -233,6 +378,10 @@ const RecruitmentPipeline: React.FC = () => {
           </Select>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Atualizar
+          </Button>
           <Button variant="outline" size="sm" onClick={handleTriagemIA} disabled={isLoading}>
             {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
             Triagem com IA
@@ -427,33 +576,35 @@ const RecruitmentPipeline: React.FC = () => {
                         {candidato.aiInsights && (
                           <div className="mt-2 p-2 bg-primary/5 rounded text-xs flex items-start gap-1">
                             <Brain className="w-3 h-3 text-primary mt-0.5 shrink-0" />
-                            <span className="line-clamp-2">{candidato.aiInsights}</span>
+                            <span className="text-muted-foreground line-clamp-2">
+                              {candidato.aiInsights.recommendation}
+                            </span>
                           </div>
                         )}
                         <div className="flex gap-1 mt-2">
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="flex-1 h-6 text-xs"
+                            className="h-6 w-6 p-0"
                             onClick={(e) => { e.stopPropagation(); handleViewDetails(candidato); }}
                           >
-                            Ver
+                            <FileText className="w-3 h-3" />
                           </Button>
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="flex-1 h-6 text-xs"
+                            className="h-6 w-6 p-0"
                             onClick={(e) => { e.stopPropagation(); handleScheduleMeeting(candidato); }}
                           >
-                            <Calendar className="w-3 h-3" />
+                            <Video className="w-3 h-3" />
                           </Button>
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="flex-1 h-6 text-xs"
+                            className="h-6 w-6 p-0"
                             onClick={(e) => { e.stopPropagation(); handleSendMessage(candidato); }}
                           >
-                            <Mail className="w-3 h-3" />
+                            <MessageSquare className="w-3 h-3" />
                           </Button>
                         </div>
                       </motion.div>
@@ -466,131 +617,79 @@ const RecruitmentPipeline: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* AI Insights */}
-      <Card className="bg-gradient-to-r from-primary/5 to-blue-500/5 border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Insights de Recrutamento (IA)
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-card rounded-lg border">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-green-500" />
-                <span className="font-medium">Tempo Médio de Contratação</span>
-              </div>
-              <p className="text-2xl font-bold">18 dias</p>
-              <p className="text-xs text-muted-foreground">-3 dias vs mês anterior</p>
-            </div>
-            <div className="p-4 bg-card rounded-lg border">
-              <div className="flex items-center gap-2 mb-2">
-                <Target className="w-4 h-4 text-blue-500" />
-                <span className="font-medium">Taxa de Conversão</span>
-              </div>
-              <p className="text-2xl font-bold">12%</p>
-              <p className="text-xs text-muted-foreground">Triagem → Contratação</p>
-            </div>
-            <div className="p-4 bg-card rounded-lg border">
-              <div className="flex items-center gap-2 mb-2">
-                <Star className="w-4 h-4 text-yellow-500" />
-                <span className="font-medium">Candidatos Recomendados</span>
-              </div>
-              <p className="text-2xl font-bold">{candidatos.filter(c => c.matchScore >= 90).length}</p>
-              <p className="text-xs text-muted-foreground">Score acima de 90%</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Candidate Detail Dialog */}
+      {/* Detail Dialog */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Detalhes do Candidato</DialogTitle>
+            <DialogTitle className="flex items-center gap-3">
+              <Avatar className="w-10 h-10">
+                <AvatarFallback className="bg-primary/10 text-primary">
+                  {selectedCandidato?.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+              {selectedCandidato?.nome}
+            </DialogTitle>
+            <DialogDescription>Detalhes do candidato</DialogDescription>
           </DialogHeader>
           {selectedCandidato && (
             <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="w-16 h-16">
-                  <AvatarFallback className="text-lg bg-primary/10 text-primary">
-                    {selectedCandidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-xl font-semibold">{selectedCandidato.nome}</h3>
-                  <p className="text-muted-foreground">{selectedCandidato.cargo}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge>Match: {selectedCandidato.matchScore}%</Badge>
-                    <Badge variant="outline">{selectedCandidato.origem}</Badge>
-                  </div>
-                </div>
-              </div>
-              
               <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail className="w-4 h-4 text-muted-foreground" />
-                  {selectedCandidato.email}
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="font-medium">{selectedCandidato.email}</p>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Phone className="w-4 h-4 text-muted-foreground" />
-                  {selectedCandidato.telefone}
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Briefcase className="w-4 h-4 text-muted-foreground" />
-                  {selectedCandidato.experiencia} de experiência
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  Aplicou em {new Date(selectedCandidato.dataAplicacao).toLocaleDateString('pt-BR')}
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground">Experiência</p>
+                  <p className="font-medium">{selectedCandidato.experiencia}</p>
                 </div>
               </div>
-
-              <div>
-                <Label className="text-sm font-medium">Habilidades</Label>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {selectedCandidato.skills.map((skill, idx) => (
-                    <Badge key={idx} variant="secondary">{skill}</Badge>
+              <div className="p-3 bg-muted/50 rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Competências</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedCandidato.skills.map((skill, i) => (
+                    <Badge key={i} variant="secondary">{skill}</Badge>
                   ))}
                 </div>
               </div>
-
               {selectedCandidato.aiInsights && (
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Brain className="w-4 h-4 text-primary" />
-                    <span className="font-medium">Análise da IA</span>
-                  </div>
-                  <p className="text-sm">{selectedCandidato.aiInsights}</p>
+                <div className="p-3 bg-primary/5 rounded-lg border border-primary/20">
+                  <p className="text-sm font-medium text-primary mb-2 flex items-center gap-2">
+                    <Brain className="w-4 h-4" />
+                    Análise IA
+                  </p>
+                  <p className="text-sm">{selectedCandidato.aiInsights.recommendation}</p>
+                  {selectedCandidato.aiInsights.strengths && (
+                    <div className="mt-2">
+                      <p className="text-xs text-muted-foreground">Pontos fortes:</p>
+                      <ul className="text-xs list-disc list-inside">
+                        {selectedCandidato.aiInsights.strengths.map((s, i) => (
+                          <li key={i}>{s}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
-
-              <div className="flex gap-2">
-                <Button className="flex-1" onClick={() => { handleSendReminder(selectedCandidato); setIsDetailOpen(false); }}>
-                  <Send className="w-4 h-4 mr-2" />
-                  Enviar Lembrete
-                </Button>
-                <Button variant="outline" className="flex-1" onClick={() => { setIsDetailOpen(false); handleScheduleMeeting(selectedCandidato); }}>
-                  <Video className="w-4 h-4 mr-2" />
-                  Agendar Reunião
-                </Button>
-                <Button variant="outline" className="flex-1" onClick={() => { setIsDetailOpen(false); handleSendMessage(selectedCandidato); }}>
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Enviar Mensagem
-                </Button>
-              </div>
             </div>
           )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDetailOpen(false)}>Fechar</Button>
+            <Button onClick={() => { setIsDetailOpen(false); handleScheduleMeeting(selectedCandidato!); }}>
+              <Calendar className="w-4 h-4 mr-2" />
+              Agendar Entrevista
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Schedule Meeting Dialog */}
+      {/* Schedule Dialog */}
       <Dialog open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Agendar Reunião</DialogTitle>
-            <DialogDescription>Agende uma entrevista com {selectedCandidato?.nome}</DialogDescription>
+            <DialogTitle>Agendar Entrevista</DialogTitle>
+            <DialogDescription>
+              Agendar entrevista com {selectedCandidato?.nome}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -602,7 +701,7 @@ const RecruitmentPipeline: React.FC = () => {
               <Input type="time" />
             </div>
             <div className="space-y-2">
-              <Label>Tipo de Entrevista</Label>
+              <Label>Tipo</Label>
               <Select defaultValue="video">
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -612,47 +711,39 @@ const RecruitmentPipeline: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label>Observações</Label>
-              <Textarea placeholder="Notas adicionais..." />
-            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsScheduleOpen(false)}>Cancelar</Button>
-            <Button onClick={() => {
-              toast.success(`Reunião agendada com ${selectedCandidato?.nome}`);
-              setIsScheduleOpen(false);
-            }}>
-              <Calendar className="w-4 h-4 mr-2" />
-              Agendar
+            <Button onClick={() => { toast.success('Entrevista agendada!'); setIsScheduleOpen(false); }}>
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Confirmar
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Send Message Dialog */}
+      {/* Message Dialog */}
       <Dialog open={isMessageOpen} onOpenChange={setIsMessageOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Enviar Mensagem</DialogTitle>
-            <DialogDescription>Envie uma mensagem para {selectedCandidato?.nome}</DialogDescription>
+            <DialogDescription>
+              Mensagem para {selectedCandidato?.nome}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Assunto</Label>
-              <Input placeholder="Assunto da mensagem" />
+              <Input placeholder="Processo seletivo - Próximos passos" />
             </div>
             <div className="space-y-2">
               <Label>Mensagem</Label>
-              <Textarea placeholder="Digite sua mensagem..." rows={5} />
+              <Textarea rows={4} placeholder="Escreva sua mensagem..." />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsMessageOpen(false)}>Cancelar</Button>
-            <Button onClick={() => {
-              toast.success(`Mensagem enviada para ${selectedCandidato?.nome}`);
-              setIsMessageOpen(false);
-            }}>
+            <Button onClick={() => { toast.success('Mensagem enviada!'); setIsMessageOpen(false); }}>
               <Send className="w-4 h-4 mr-2" />
               Enviar
             </Button>
