@@ -3,6 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   Ship, 
   MapPin, 
@@ -12,7 +19,12 @@ import {
   Eye,
   MoreHorizontal,
   Anchor,
-  Navigation
+  Navigation,
+  Pencil,
+  Trash2,
+  Copy,
+  Archive,
+  ExternalLink
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -36,6 +48,8 @@ interface Vessel {
 interface VesselGridProps {
   vessels: Vessel[];
   onViewDetails: (vessel: Vessel) => void;
+  onEditVessel?: (vessel: Vessel) => void;
+  onDeleteVessel?: (vessel: Vessel) => void;
   isLoading?: boolean;
 }
 
@@ -48,9 +62,17 @@ const statusConfig: Record<string, { color: string; label: string; bgColor: stri
   inactive: { color: "text-gray-500", label: "Inativo", bgColor: "bg-gray-500" },
 };
 
-const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void; index: number }> = ({
+const VesselCard: React.FC<{ 
+  vessel: Vessel; 
+  onViewDetails: (v: Vessel) => void; 
+  onEditVessel?: (v: Vessel) => void;
+  onDeleteVessel?: (v: Vessel) => void;
+  index: number 
+}> = ({
   vessel,
   onViewDetails,
+  onEditVessel,
+  onDeleteVessel,
   index
 }) => {
   const status = statusConfig[vessel.status] || statusConfig.inactive;
@@ -142,9 +164,35 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
               <Eye className="h-4 w-4 mr-2" />
               Detalhes
             </Button>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => onEditVessel?.(vessel)}>
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Editar
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Copy className="h-4 w-4 mr-2" />
+                  Duplicar
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Archive className="h-4 w-4 mr-2" />
+                  Arquivar
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => onDeleteVessel?.(vessel)}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Excluir
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardContent>
       </Card>
@@ -152,7 +200,7 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
   );
 };
 
-export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, isLoading }) => {
+export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, onEditVessel, onDeleteVessel, isLoading }) => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -200,6 +248,8 @@ export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, 
           key={vessel.id}
           vessel={vessel}
           onViewDetails={onViewDetails}
+          onEditVessel={onEditVessel}
+          onDeleteVessel={onDeleteVessel}
           index={index}
         />
       ))}
