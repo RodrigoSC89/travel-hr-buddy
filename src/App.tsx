@@ -279,6 +279,8 @@ const PeopleHub = lazy(() => import("@/pages/PeopleHub"));
 const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryHub"));
 const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHub"));
 const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
+const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
+const ComplianceHubPage = lazy(() => import("@/pages/ComplianceHubPage"));
 
 // ============================================
 // ESG & SUSTENTABILIDADE
@@ -835,6 +837,8 @@ const AppRoutes = () => (
       <Route path="/tracking-telemetry" element={<TrackingTelemetryHub />} />
       <Route path="/document-center" element={<DocumentCenterHub />} />
       <Route path="/comms-alerts" element={<CommsAlertsHub />} />
+      <Route path="/ai-enterprise-engines" element={<AIEnterpriseEnginesHub />} />
+      <Route path="/compliance-unified" element={<ComplianceHubPage />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
