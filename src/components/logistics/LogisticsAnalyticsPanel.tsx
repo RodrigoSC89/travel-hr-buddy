@@ -1,90 +1,28 @@
 /**
  * Logistics Analytics Panel - Real interactive analytics with charts
- * Replaces placeholder button with functional dashboard
+ * Integrated with Supabase real-time data
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, TrendingDown, Package, Truck, Clock, DollarSign, RefreshCw, Download, AlertTriangle, CheckCircle } from "lucide-react";
-
-interface DeliveryMetric {
-  month: string;
-  onTime: number;
-  delayed: number;
-  total: number;
-  avgDays: number;
-  cost: number;
-}
-
-interface SupplierPerformance {
-  name: string;
-  deliveries: number;
-  onTimeRate: number;
-  qualityScore: number;
-}
-
-interface InventoryTrend {
-  category: string;
-  current: number;
-  optimal: number;
-  reorderPoint: number;
-}
-
-const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--success))", "hsl(var(--warning))"];
-
-const generateMockData = () => {
-  const deliveryData: DeliveryMetric[] = [
-    { month: "Jan", onTime: 85, delayed: 15, total: 120, avgDays: 3.2, cost: 45000 },
-    { month: "Fev", onTime: 88, delayed: 12, total: 135, avgDays: 2.9, cost: 52000 },
-    { month: "Mar", onTime: 92, delayed: 8, total: 148, avgDays: 2.7, cost: 58000 },
-    { month: "Abr", onTime: 90, delayed: 10, total: 142, avgDays: 2.8, cost: 55000 },
-    { month: "Mai", onTime: 94, delayed: 6, total: 156, avgDays: 2.5, cost: 62000 },
-    { month: "Jun", onTime: 96, delayed: 4, total: 168, avgDays: 2.3, cost: 68000 }
-  ];
-
-  const supplierData: SupplierPerformance[] = [
-    { name: "MaritimeSupply", deliveries: 45, onTimeRate: 97, qualityScore: 4.8 },
-    { name: "Global Bunker", deliveries: 82, onTimeRate: 94, qualityScore: 4.5 },
-    { name: "Port Services", deliveries: 28, onTimeRate: 88, qualityScore: 4.2 },
-    { name: "NavalParts Co.", deliveries: 36, onTimeRate: 92, qualityScore: 4.6 },
-    { name: "Offshore Supply", deliveries: 22, onTimeRate: 85, qualityScore: 4.0 }
-  ];
-
-  const inventoryData: InventoryTrend[] = [
-    { category: "Peças Mecânicas", current: 1250, optimal: 1500, reorderPoint: 800 },
-    { category: "Combustível", current: 45000, optimal: 50000, reorderPoint: 20000 },
-    { category: "Equipamentos", current: 320, optimal: 400, reorderPoint: 150 },
-    { category: "Provisões", current: 580, optimal: 600, reorderPoint: 300 },
-    { category: "Químicos", current: 180, optimal: 250, reorderPoint: 100 }
-  ];
-
-  return { deliveryData, supplierData, inventoryData };
-};
+import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { TrendingUp, TrendingDown, Package, Clock, DollarSign, RefreshCw, Download, AlertTriangle, CheckCircle, Database } from "lucide-react";
+import { useLogisticsAnalytics } from "@/hooks/use-logistics-analytics-data";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export function LogisticsAnalyticsPanel() {
   const { toast } = useToast();
   const [period, setPeriod] = useState("6m");
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<ReturnType<typeof generateMockData> | null>(null);
-
-  useEffect(() => {
-    loadData();
-  }, [period]);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    setData(generateMockData());
-    setIsLoading(false);
-  };
+  
+  // Use real Supabase data hook
+  const { data, isLoading, refetch } = useLogisticsAnalytics(period);
 
   const handleRefresh = async () => {
-    await loadData();
+    await refetch();
     toast({ title: "Analytics atualizados", description: "Dados recarregados com sucesso" });
   };
 
@@ -109,7 +47,7 @@ export function LogisticsAnalyticsPanel() {
     toast({ title: "Relatório exportado", description: "Arquivo JSON gerado com sucesso" });
   };
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <Card>
         <CardContent className="flex items-center justify-center h-96">
@@ -120,10 +58,26 @@ export function LogisticsAnalyticsPanel() {
     );
   }
 
-  const totalDeliveries = data.deliveryData.reduce((acc, d) => acc + d.total, 0);
-  const avgOnTime = Math.round(data.deliveryData.reduce((acc, d) => acc + d.onTime, 0) / data.deliveryData.length);
-  const totalCost = data.deliveryData.reduce((acc, d) => acc + d.cost, 0);
-  const avgDays = (data.deliveryData.reduce((acc, d) => acc + d.avgDays, 0) / data.deliveryData.length).toFixed(1);
+  if (!data) {
+    return (
+      <EmptyState
+        title="Sem dados de logística"
+        description="Configure os dados de envios e fornecedores para visualizar analytics."
+        icon={<Database className="h-12 w-12" />}
+      />
+    );
+  }
+
+  const displayData = data;
+
+  const totalDeliveries = displayData.deliveryData.reduce((acc, d) => acc + d.total, 0);
+  const avgOnTime = displayData.deliveryData.length > 0 
+    ? Math.round(displayData.deliveryData.reduce((acc, d) => acc + d.onTime, 0) / displayData.deliveryData.length) 
+    : 0;
+  const totalCost = displayData.deliveryData.reduce((acc, d) => acc + d.cost, 0);
+  const avgDays = displayData.deliveryData.length > 0 
+    ? (displayData.deliveryData.reduce((acc, d) => acc + d.avgDays, 0) / displayData.deliveryData.length).toFixed(1) 
+    : "0";
 
   return (
     <div className="space-y-6">
@@ -232,7 +186,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <AreaChart data={data.deliveryData}>
+                  <AreaChart data={displayData.deliveryData}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                     <XAxis dataKey="month" fontSize={12} />
                     <YAxis fontSize={12} />
@@ -249,7 +203,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={data.deliveryData}>
+                  <BarChart data={displayData.deliveryData}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                     <XAxis dataKey="month" fontSize={12} />
                     <YAxis fontSize={12} />
@@ -270,7 +224,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={data.supplierData} layout="vertical">
+                  <BarChart data={displayData.supplierData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                     <XAxis type="number" fontSize={12} domain={[0, 100]} />
                     <YAxis type="category" dataKey="name" fontSize={11} width={100} />
@@ -287,7 +241,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.supplierData.sort((a, b) => b.qualityScore - a.qualityScore).map((supplier, idx) => (
+                  {displayData.supplierData.sort((a, b) => b.qualityScore - a.qualityScore).map((supplier, idx) => (
                     <div key={supplier.name} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
                       <div className="flex items-center gap-3">
                         <Badge variant="outline" className="w-6 h-6 flex items-center justify-center rounded-full">
@@ -317,7 +271,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={data.inventoryData}>
+                  <BarChart data={displayData.inventoryData}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                     <XAxis dataKey="category" fontSize={10} angle={-20} textAnchor="end" height={60} />
                     <YAxis fontSize={12} />
@@ -335,7 +289,7 @@ export function LogisticsAnalyticsPanel() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.inventoryData.map(item => {
+                  {displayData.inventoryData.map(item => {
                     const percentage = Math.round((item.current / item.optimal) * 100);
                     const needsReorder = item.current <= item.reorderPoint;
                     
@@ -377,7 +331,7 @@ export function LogisticsAnalyticsPanel() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={data.deliveryData}>
+                <LineChart data={displayData.deliveryData}>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                   <XAxis dataKey="month" fontSize={12} />
                   <YAxis fontSize={12} tickFormatter={(v) => `R$${v/1000}k`} />
