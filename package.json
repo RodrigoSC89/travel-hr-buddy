@@ -142,6 +142,7 @@
     "@tanstack/react-virtual": "^3.13.12",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.22.0",
+    "@testing-library/user-event": "^14.6.1",
     "@tiptap/extension-collaboration": "^2.26.3",
     "@tiptap/extension-collaboration-cursor": "^2.26.2",
     "@tiptap/react": "^2.26.3",
