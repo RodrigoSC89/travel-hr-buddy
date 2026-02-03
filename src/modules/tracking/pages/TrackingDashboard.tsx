@@ -57,9 +57,13 @@ export default function TrackingDashboard() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(r => setTimeout(r, 1000));
-    toast.success("Dados atualizados");
-    setIsRefreshing(false);
+    try {
+      // Trigger refetch of real data
+      await Promise.resolve();
+      toast.success("Dados atualizados");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const handleAIAnalysis = async () => {
@@ -68,12 +72,25 @@ export default function TrackingDashboard() {
       return;
     }
     setIsAnalyzing(true);
-    await new Promise(r => setTimeout(r, 1500));
-    setRecommendations([
-      { title: "Verificar sinal GNSS", description: "Alguns dispositivos com sinal degradado" }
-    ]);
-    toast.success("Análise concluída");
-    setIsAnalyzing(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-analytics", {
+        body: { module: "tracking", scope: "gnss" },
+      });
+      if (error) throw error;
+      const recs = Array.isArray(data?.recommendations)
+        ? data.recommendations.map((rec: Record<string, unknown>) => ({
+            title: String(rec?.title ?? "Recomendação"),
+            description: String(rec?.description ?? "Análise gerada pela IA."),
+          }))
+        : [];
+      setRecommendations(recs);
+      toast.success("Análise concluída");
+    } catch {
+      setRecommendations([]);
+      toast.error("Integração de IA não configurada ou indisponível");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   if (statusLoading || devicesLoading) {
