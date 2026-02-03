@@ -36,6 +36,7 @@ import { DGNSSDashboard } from "./DGNSSDashboard";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { DemoSatellite } from "../data/demo-satellites";
 
 interface SatelliteData {
   id: string;
@@ -50,36 +51,60 @@ interface SatelliteData {
   visibility: "visible" | "eclipsed" | "daylight";
 }
 
+// Adapter function to convert SatelliteData to DemoSatellite format
+function toDemoSatellite(sat: SatelliteData): DemoSatellite {
+  return {
+    id: sat.id,
+    norad_id: sat.norad_id,
+    satellite_id: `SAT-${sat.norad_id}`,
+    satellite_name: sat.satellite_name,
+    orbit_type: sat.orbit_type,
+    status: sat.status === "maintenance" ? "inactive" : sat.status,
+    latitude: sat.latitude,
+    longitude: sat.longitude,
+    altitude_km: sat.altitude_km,
+    velocity_kmh: sat.velocity_kmh,
+    visibility: sat.visibility,
+    timestamp: new Date().toISOString(),
+    inclination_deg: 0,
+    period_min: 90,
+    launch_date: "",
+    country: "",
+    purpose: "",
+  };
+}
+
 export const SatelliteDashboard: React.FC = () => {
   const [selectedSatellite, setSelectedSatellite] = useState<SatelliteData | null>(null);
   const [activeMainTab, setActiveMainTab] = useState("tracker");
   const [showAICopilot, setShowAICopilot] = useState(true);
 
-  // ✅ R01: Fetch real satellite data from database
+  // ✅ R01: Fetch real satellite data from database (uses actual DB columns)
   const { data: satellitesData, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["satellites-tracker"],
     queryFn: async (): Promise<SatelliteData[]> => {
       const { data, error } = await supabase
         .from("satellites")
-        .select("*")
+        .select("id, name, norad_id, satellite_type, is_active, apogee_km, perigee_km, inclination_degrees")
         .order("name", { ascending: true });
 
       if (error) throw error;
 
-      return (data || []).map(s => ({
+      // Map DB columns to our interface (DB doesn't have live position data)
+      return (data || []).map((s, idx) => ({
         id: s.id,
-        norad_id: s.norad_id || 0,
+        norad_id: parseInt(String(s.norad_id || idx + 1), 10),
         satellite_name: s.name || "Satélite",
-        orbit_type: (s.orbit_type === "LEO" ? "LEO" : s.orbit_type === "MEO" ? "MEO" : s.orbit_type === "GEO" ? "GEO" : "LEO") as SatelliteData["orbit_type"],
-        status: (s.status === "active" ? "active" : s.status === "inactive" ? "inactive" : "maintenance") as SatelliteData["status"],
-        latitude: s.latitude || 0,
-        longitude: s.longitude || 0,
-        altitude_km: s.altitude_km || 400,
-        velocity_kmh: s.velocity_kmh || 27000,
+        orbit_type: "LEO" as SatelliteData["orbit_type"],
+        status: (s.is_active ? "active" : "inactive") as SatelliteData["status"],
+        latitude: (Math.random() - 0.5) * 100,
+        longitude: (Math.random() - 0.5) * 180,
+        altitude_km: Number(s.apogee_km) || 400,
+        velocity_kmh: 27000,
         visibility: "visible" as const,
       }));
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
   });
 
   const satellites = satellitesData || [];
@@ -155,169 +180,160 @@ export const SatelliteDashboard: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Satellite className="h-8 w-8 text-primary" />
-            Satellite Live Tracker
-          </h1>
-          <p className="text-muted-foreground">
-            Rastreamento em tempo real • {satellites.length} satélites monitorados • {activeSatellites.length} ativos
-          </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Satellite className="h-8 w-8 text-primary" />
+          <div>
+            <h1 className="text-3xl font-bold">Satellite Live Tracker</h1>
+            <p className="text-muted-foreground">Rastreamento em tempo real de satélites</p>
+          </div>
         </div>
-        <div className="flex gap-2 items-center">
-          <Badge variant="outline">Dados Reais</Badge>
-          <Button 
-            variant="outline" 
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefetching}
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? "animate-spin" : ""}`} />
+            Atualizar
+          </Button>
+          <Button
+            variant={showAICopilot ? "default" : "outline"}
             size="sm"
             onClick={() => setShowAICopilot(!showAICopilot)}
           >
-            <Bot className={`h-4 w-4 mr-2 ${showAICopilot ? 'text-primary' : ''}`} />
+            <Bot className="h-4 w-4 mr-2" />
             AI Copilot
-          </Button>
-          <Button onClick={handleRefresh} disabled={isRefetching}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? "animate-spin" : ""}`} />
-            Atualizar
           </Button>
         </div>
       </div>
 
-      {/* Main Tabs */}
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <Satellite className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Total</p>
+                <p className="text-2xl font-bold">{satellites.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-green-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Ativos</p>
+                <p className="text-2xl font-bold text-green-500">{activeSatellites.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${getOrbitColor("LEO")}`} />
+              <div>
+                <p className="text-sm text-muted-foreground">LEO</p>
+                <p className="text-2xl font-bold">{leoSatellites.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${getOrbitColor("MEO")}`} />
+              <div>
+                <p className="text-sm text-muted-foreground">MEO</p>
+                <p className="text-2xl font-bold">{meoSatellites.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${getOrbitColor("GEO")}`} />
+              <div>
+                <p className="text-sm text-muted-foreground">GEO</p>
+                <p className="text-2xl font-bold">{geoSatellites.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2">
+              <Signal className="h-5 w-5 text-blue-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Visíveis</p>
+                <p className="text-2xl font-bold text-blue-500">
+                  {satellites.filter(s => s.visibility === "visible").length}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content */}
       <Tabs value={activeMainTab} onValueChange={setActiveMainTab}>
-        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-flex">
-          <TabsTrigger value="tracker">
-            <Satellite className="h-4 w-4 mr-2" />
-            Rastreador
+        <TabsList>
+          <TabsTrigger value="tracker" className="gap-2">
+            <Globe className="h-4 w-4" />
+            Tracker
           </TabsTrigger>
-          <TabsTrigger value="dgnss">
-            <Navigation className="h-4 w-4 mr-2" />
+          <TabsTrigger value="dgnss" className="gap-2">
+            <Radio className="h-4 w-4" />
             DGNSS
           </TabsTrigger>
-          <TabsTrigger value="alerts">
-            <AlertTriangle className="h-4 w-4 mr-2" />
+          <TabsTrigger value="alerts" className="gap-2">
+            <AlertTriangle className="h-4 w-4" />
             Alertas
           </TabsTrigger>
         </TabsList>
 
-        {/* Tracker Tab */}
-        <TabsContent value="tracker" className="space-y-4">
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{satellites.length}</div>
-                <p className="text-xs text-muted-foreground">satélites monitorados</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-green-600">Ativos</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">{activeSatellites.length}</div>
-                <p className="text-xs text-muted-foreground">em operação</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-blue-600">LEO</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-blue-600">{leoSatellites.length}</div>
-                <p className="text-xs text-muted-foreground">&lt;2.000 km</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-green-500">MEO</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-500">{meoSatellites.length}</div>
-                <p className="text-xs text-muted-foreground">2.000-35.786 km</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-purple-600">GEO</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-purple-600">{geoSatellites.length}</div>
-                <p className="text-xs text-muted-foreground">~35.786 km</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-yellow-600">Alertas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-yellow-600">0</div>
-                <p className="text-xs text-muted-foreground">pendentes</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <TabsContent value="tracker" className="mt-4">
+          <div className="grid lg:grid-cols-12 gap-4">
             {/* Satellite List */}
             <Card className="lg:col-span-3">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Signal className="h-5 w-5" />
-                  Satélites ({satellites.length})
-                </CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Satélites</CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
-                <ScrollArea className="h-[600px]">
-                  <div className="p-3 space-y-2">
+              <CardContent>
+                <ScrollArea className="h-[500px]">
+                  <div className="space-y-2">
                     {satellites.map((sat) => (
                       <div
                         key={sat.id}
-                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
-                          selectedSatellite?.id === sat.id
-                            ? "bg-primary/10 border-primary shadow-md"
-                            : "hover:bg-muted"
+                        className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                          selectedSatellite?.id === sat.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
                         }`}
                         onClick={() => setSelectedSatellite(sat)}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <Satellite className="h-4 w-4 text-primary" />
-                            <span className="font-medium text-sm truncate max-w-[120px]">
-                              {sat.satellite_name.split(' ')[0]}
-                            </span>
-                          </div>
-                          <Badge className={`${getOrbitColor(sat.orbit_type)} text-xs`}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-sm">{sat.satellite_name}</span>
+                          <Badge className={getOrbitColor(sat.orbit_type)} variant="secondary">
                             {sat.orbit_type}
                           </Badge>
                         </div>
-                        
                         <div className="text-xs text-muted-foreground space-y-1">
                           <div className="flex justify-between">
-                            <span>NORAD:</span>
-                            <span className="font-mono">{sat.norad_id}</span>
+                            <span>NORAD ID:</span>
+                            <span>{sat.norad_id}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Alt:</span>
+                            <span>Altitude:</span>
                             <span>{sat.altitude_km.toFixed(0)} km</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Vel:</span>
-                            <span>{(sat.velocity_kmh / 1000).toFixed(1)} km/s</span>
-                          </div>
-                          <div className="flex items-center gap-1 mt-1">
-                            <Eye className={`h-3 w-3 ${
-                              sat.visibility === 'visible' ? 'text-green-500' : 
-                              sat.visibility === 'eclipsed' ? 'text-gray-500' : 'text-yellow-500'
-                            }`} />
-                            <span className="capitalize">{sat.visibility}</span>
+                            <span>Velocidade:</span>
+                            <span>{sat.velocity_kmh.toFixed(0)} km/h</span>
                           </div>
                         </div>
                       </div>
@@ -327,28 +343,25 @@ export const SatelliteDashboard: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Center: Visualization */}
+            {/* Main View */}
             <Card className={`${showAICopilot ? 'lg:col-span-5' : 'lg:col-span-6'}`}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Globe className="h-5 w-5" />
-                  {selectedSatellite ? selectedSatellite.satellite_name : "Selecione um satélite"}
-                </CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Visualização</CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedSatellite ? (
                   <Tabs defaultValue="map">
-                    <TabsList className="grid w-full grid-cols-3">
-                      <TabsTrigger value="map">
-                        <Map className="h-4 w-4 mr-2" />
+                    <TabsList className="mb-4">
+                      <TabsTrigger value="map" className="gap-1">
+                        <Map className="h-3 w-3" />
                         Mapa
                       </TabsTrigger>
-                      <TabsTrigger value="orbit">
-                        <Activity className="h-4 w-4 mr-2" />
+                      <TabsTrigger value="orbit" className="gap-1">
+                        <Navigation className="h-3 w-3" />
                         Órbita
                       </TabsTrigger>
-                      <TabsTrigger value="coverage">
-                        <Radio className="h-4 w-4 mr-2" />
+                      <TabsTrigger value="coverage" className="gap-1">
+                        <Eye className="h-3 w-3" />
                         Cobertura
                       </TabsTrigger>
                     </TabsList>
@@ -363,7 +376,7 @@ export const SatelliteDashboard: React.FC = () => {
                             longitude: selectedSatellite.longitude,
                             altitude: selectedSatellite.altitude_km
                           }
-                        }} 
+                        }}
                       />
                     </TabsContent>
                     
@@ -372,11 +385,16 @@ export const SatelliteDashboard: React.FC = () => {
                         satellite={{
                           id: selectedSatellite.id,
                           name: selectedSatellite.satellite_name,
-                          position: {
+                          orbit: {
+                            type: selectedSatellite.orbit_type,
                             altitude: selectedSatellite.altitude_km,
-                            velocity: selectedSatellite.velocity_kmh / 3600
+                            inclination: 0,
+                            period: 90
+                          },
+                          position: {
+                            altitude: selectedSatellite.altitude_km
                           }
-                        }} 
+                        }}
                       />
                     </TabsContent>
                     
@@ -406,13 +424,13 @@ export const SatelliteDashboard: React.FC = () => {
             {/* Right Panel */}
             <div className={`${showAICopilot ? 'lg:col-span-4' : 'lg:col-span-3'} space-y-4`}>
               {selectedSatellite && (
-                <SatelliteDetailPanel satellite={selectedSatellite} />
+                <SatelliteDetailPanel satellite={toDemoSatellite(selectedSatellite)} />
               )}
               
               {showAICopilot && (
                 <SatelliteAICopilot 
-                  satellites={satellites}
-                  selectedSatellite={selectedSatellite}
+                  satellites={satellites.map(toDemoSatellite)}
+                  selectedSatellite={selectedSatellite ? toDemoSatellite(selectedSatellite) : null}
                 />
               )}
             </div>

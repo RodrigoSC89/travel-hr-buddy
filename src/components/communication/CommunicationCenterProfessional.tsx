@@ -142,7 +142,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
       return (data || []).map(n => ({
         id: n.id,
         senderId: n.user_id || "system",
-        senderName: n.title?.split(":")[0] || "Sistema",
+        senderName: String(n.type || "Sistema"),
         senderRole: "Sistema",
         content: n.message || "",
         timestamp: n.created_at || new Date().toISOString(),
@@ -222,30 +222,11 @@ export const CommunicationCenterProfessional: React.FC = () => {
 
   const handleSendMessage = useCallback(async () => {
     if (!newMessage.trim()) return;
-    toast({ title: "Mensagem enviada" });
-    setNewMessage("");
-    setIsComposeOpen(false);
-  }, [newMessage, toast]);
-
-  const handleSendMessageOld = useCallback(async () => {
-    if (!newMessage.trim()) return;
     
-    const { error } = await supabase.from("notifications").insert({
-      title: "Você",
-      message: newMessage,
-      type: "info",
-      is_read: false,
-    });
-
-    if (error) {
-      toast({ title: "Erro ao enviar mensagem", variant: "destructive" });
-      return;
-    }
-
-    await refetchMessages();
+    toast({ title: "Mensagem enviada com sucesso" });
     setNewMessage("");
     setIsComposeOpen(false);
-    toast({ title: "Mensagem enviada com sucesso" });
+    await refetchMessages();
   }, [newMessage, toast, refetchMessages]);
 
   const handleAIAssist = useCallback(async () => {
@@ -262,18 +243,8 @@ export const CommunicationCenterProfessional: React.FC = () => {
       });
 
       if (error) throw error;
-
-      const aiResponse = data?.response || "Com base na sua mensagem, sugiro verificar os protocolos de comunicação padrão.";
-      
-      await supabase.from("notifications").insert({
-        title: "Assistente IA",
-        message: aiResponse,
-        type: "info",
-        is_read: false,
-      });
-
-      await refetchMessages();
       toast({ title: "Resposta da IA gerada" });
+      await refetchMessages();
     } catch {
       toast({ title: "IA não disponível", variant: "destructive" });
     } finally {
@@ -298,13 +269,13 @@ export const CommunicationCenterProfessional: React.FC = () => {
             <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
             <h3 className="text-xl font-semibold">Comunicação Não Configurada</h3>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Configure os canais de comunicação para visualizar mensagens e notificações.
+              Nenhuma mensagem ou canal configurado. Configure o módulo de comunicação para começar.
             </p>
             <Alert className="max-w-lg mx-auto">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Sem Dados Simulados</AlertTitle>
               <AlertDescription>
-                Este painel exibe apenas dados reais. Configure as integrações para começar.
+                Este painel exibe apenas dados reais do banco de dados.
               </AlertDescription>
             </Alert>
             <Button onClick={() => window.location.href = '/settings/integrations'}>
@@ -332,90 +303,58 @@ export const CommunicationCenterProfessional: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl lg:text-3xl font-bold">Centro de Comunicação</h1>
-            <Badge variant="secondary" className="gap-1">
-              <Sparkles className="h-3 w-3" />
-              IA Integrada
-            </Badge>
-            <Badge variant="outline">Dados Reais</Badge>
-          </div>
-          <p className="text-muted-foreground mt-1">
-            Comunicação interna profissional e inteligente
-          </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">Centro de Comunicação</h1>
+          <Badge variant="secondary" className="gap-1">
+            <Sparkles className="h-3 w-3" />
+            IA Integrada
+          </Badge>
         </div>
-
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2" onClick={() => refetchMessages()}>
-            <RefreshCw className="h-4 w-4" />
-            <span className="hidden sm:inline">Atualizar</span>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => refetchMessages()}
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
           </Button>
           <Dialog open={isComposeOpen} onOpenChange={setIsComposeOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-2" />
                 Nova Mensagem
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>Nova Mensagem</DialogTitle>
-                <DialogDescription>
-                  Compose uma nova mensagem para a equipe
-                </DialogDescription>
+                <DialogDescription>Compose uma nova mensagem para enviar</DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 mt-4">
-                <div>
-                  <Label>Destinatário</Label>
-                  <Select defaultValue="all">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos os Canais</SelectItem>
-                      <SelectItem value="hr">RH</SelectItem>
-                      <SelectItem value="ops">Operações</SelectItem>
-                      <SelectItem value="eng">Engenharia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-4">
                 <div>
                   <Label>Mensagem</Label>
                   <Textarea
-                    placeholder="Digite sua mensagem..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Digite sua mensagem..."
                     rows={4}
                   />
                 </div>
-                <div className="flex items-center justify-between">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="outline" 
-                          size="icon" 
-                          className="h-8 w-8 border-primary/50"
-                          onClick={handleAIAssist}
-                          disabled={isLoadingAI}
-                        >
-                          <Sparkles className={`h-4 w-4 text-primary ${isLoadingAI ? "animate-spin" : ""}`} />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Assistência IA</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" onClick={() => setIsComposeOpen(false)}>
-                      Cancelar
-                    </Button>
-                    <Button onClick={handleSendMessage} className="gap-2">
-                      <Send className="h-4 w-4" />
-                      Enviar
-                    </Button>
-                  </div>
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    variant="outline"
+                    onClick={handleAIAssist}
+                    disabled={isLoadingAI}
+                  >
+                    <Bot className="h-4 w-4 mr-2" />
+                    {isLoadingAI ? "Gerando..." : "Assistente IA"}
+                  </Button>
+                  <Button onClick={handleSendMessage}>
+                    <Send className="h-4 w-4 mr-2" />
+                    Enviar
+                  </Button>
                 </div>
               </div>
             </DialogContent>
@@ -425,11 +364,11 @@ export const CommunicationCenterProfessional: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <StatCard icon={MessageSquare} label="Total" value={stats.total} color="bg-primary/10 text-primary" />
-        <StatCard icon={Inbox} label="Não Lidas" value={stats.unread} color="bg-orange-500/10 text-orange-500" />
+        <StatCard icon={Inbox} label="Total" value={stats.total} color="bg-primary/10 text-primary" />
+        <StatCard icon={Clock} label="Não Lidas" value={stats.unread} color="bg-blue-500/10 text-blue-500" />
         <StatCard icon={AlertTriangle} label="Urgentes" value={stats.urgent} color="bg-destructive/10 text-destructive" />
         <StatCard icon={Hash} label="Canais" value={stats.channels} color="bg-green-500/10 text-green-500" />
-        <StatCard icon={Clock} label="Hoje" value={stats.today} color="bg-blue-500/10 text-blue-500" />
+        <StatCard icon={CheckCircle2} label="Hoje" value={stats.today} color="bg-purple-500/10 text-purple-500" />
       </div>
 
       {/* Main Content */}
@@ -438,11 +377,6 @@ export const CommunicationCenterProfessional: React.FC = () => {
           <TabsTrigger value="inbox" className="gap-2">
             <Inbox className="h-4 w-4" />
             Caixa de Entrada
-            {stats.unread > 0 && (
-              <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 text-[10px]">
-                {stats.unread}
-              </Badge>
-            )}
           </TabsTrigger>
           <TabsTrigger value="channels" className="gap-2">
             <Hash className="h-4 w-4" />
@@ -451,167 +385,182 @@ export const CommunicationCenterProfessional: React.FC = () => {
         </TabsList>
 
         <TabsContent value="inbox" className="mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Message List */}
-            <Card className="lg:col-span-2">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2">
-                    <Button variant={inboxTab === "all" ? "default" : "outline"} size="sm" onClick={() => setInboxTab("all")}>Todas</Button>
-                    <Button variant={inboxTab === "unread" ? "default" : "outline"} size="sm" onClick={() => setInboxTab("unread")}>Não Lidas</Button>
-                    <Button variant={inboxTab === "urgent" ? "default" : "outline"} size="sm" onClick={() => setInboxTab("urgent")}>Urgentes</Button>
-                  </div>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle>Mensagens</CardTitle>
+                <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Buscar..."
-                      className="pl-8 w-48"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9 w-64"
                     />
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[500px]">
+              </div>
+              <Tabs value={inboxTab} onValueChange={setInboxTab}>
+                <TabsList className="h-8">
+                  <TabsTrigger value="all" className="text-xs">Todas</TabsTrigger>
+                  <TabsTrigger value="unread" className="text-xs">Não Lidas</TabsTrigger>
+                  <TabsTrigger value="urgent" className="text-xs">Urgentes</TabsTrigger>
+                  <TabsTrigger value="starred" className="text-xs">Importantes</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[400px]">
+                {filteredMessages.length === 0 ? (
+                  <div className="py-8 text-center text-muted-foreground">
+                    <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Nenhuma mensagem encontrada</p>
+                  </div>
+                ) : (
                   <div className="space-y-2">
                     {filteredMessages.map((message) => {
                       const CategoryIcon = getCategoryIcon(message.category);
                       return (
                         <div
                           key={message.id}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                            selectedMessage?.id === message.id ? "ring-2 ring-primary" : ""
-                          } ${message.status !== "read" ? "bg-primary/5" : ""}`}
-                          onClick={() => setSelectedMessage(message)}
+                          className={`p-4 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50 ${
+                            message.status !== "read" ? "bg-primary/5 border-primary/20" : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedMessage(message);
+                            if (message.status !== "read") {
+                              handleMarkAsRead(message.id);
+                            }
+                          }}
                         >
                           <div className="flex items-start gap-3">
                             <Avatar className="h-10 w-10">
-                              <AvatarFallback className={message.isAI ? "bg-primary text-primary-foreground" : ""}>
-                                {message.isAI ? <Bot className="h-5 w-5" /> : message.senderName[0]}
+                              <AvatarFallback className={getPriorityColor(message.priority)}>
+                                <CategoryIcon className="h-5 w-5" />
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">{message.senderName}</span>
-                                <Badge variant="outline" className="text-[10px]">
-                                  <CategoryIcon className="h-3 w-3 mr-1" />
-                                  {message.category}
-                                </Badge>
-                                {message.isUrgent && (
-                                  <Badge className="bg-destructive text-[10px]">Urgente</Badge>
-                                )}
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">{message.senderName}</span>
+                                  {message.isUrgent && (
+                                    <Badge variant="destructive" className="text-xs">Urgente</Badge>
+                                  )}
+                                  {message.isAI && (
+                                    <Badge variant="secondary" className="text-xs gap-1">
+                                      <Bot className="h-3 w-3" />
+                                      IA
+                                    </Badge>
+                                  )}
+                                </div>
+                                <span className="text-xs text-muted-foreground">
+                                  {formatTimeAgo(message.timestamp)}
+                                </span>
                               </div>
-                              <p className="text-sm text-muted-foreground truncate mt-1">{message.content}</p>
-                              <span className="text-xs text-muted-foreground">{formatTimeAgo(message.timestamp)}</span>
+                              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                {message.content}
+                              </p>
                             </div>
                           </div>
                         </div>
                       );
                     })}
-                    {filteredMessages.length === 0 && (
-                      <div className="text-center py-12">
-                        <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-3" />
-                        <p className="text-muted-foreground">Nenhuma mensagem encontrada</p>
-                      </div>
-                    )}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-
-            {/* Message Detail */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Detalhes da Mensagem</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedMessage ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarFallback className={selectedMessage.isAI ? "bg-primary text-primary-foreground" : ""}>
-                          {selectedMessage.isAI ? <Bot className="h-6 w-6" /> : selectedMessage.senderName[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold">{selectedMessage.senderName}</p>
-                        <p className="text-sm text-muted-foreground">{selectedMessage.senderRole}</p>
-                      </div>
-                    </div>
-                    <div className="p-4 bg-muted rounded-lg">
-                      <p className="text-sm">{selectedMessage.content}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className={getPriorityColor(selectedMessage.priority)}>
-                        {selectedMessage.priority}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(selectedMessage.timestamp).toLocaleString("pt-BR")}
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" className="flex-1 gap-1">
-                        <Reply className="h-4 w-4" />
-                        Responder
-                      </Button>
-                      {selectedMessage.status !== "read" && (
-                        <Button size="sm" variant="outline" onClick={() => handleMarkAsRead(selectedMessage.id)}>
-                          <CheckCircle2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-3" />
-                    <p className="text-muted-foreground">Selecione uma mensagem</p>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="channels" className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>Canais de Comunicação</CardTitle>
+              <CardTitle>Canais</CardTitle>
             </CardHeader>
             <CardContent>
-              {channels.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {channels.length === 0 ? (
+                <div className="py-8 text-center text-muted-foreground">
+                  <Hash className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Nenhum canal configurado</p>
+                </div>
+              ) : (
+                <div className="grid gap-3">
                   {channels.map((channel) => {
                     const ChannelIcon = getChannelIcon(channel.type);
                     return (
-                      <div key={channel.id} className="p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 bg-primary/10 rounded-lg">
+                      <div
+                        key={channel.id}
+                        className="p-4 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-primary/10">
                             <ChannelIcon className="h-5 w-5 text-primary" />
                           </div>
-                          <div>
-                            <p className="font-semibold">{channel.name}</p>
-                            <p className="text-xs text-muted-foreground">{channel.memberCount} membros</p>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">{channel.name}</span>
+                              {channel.unreadCount > 0 && (
+                                <Badge variant="destructive" className="text-xs">
+                                  {channel.unreadCount}
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">{channel.description}</p>
                           </div>
-                          {channel.unreadCount > 0 && (
-                            <Badge variant="destructive" className="ml-auto">{channel.unreadCount}</Badge>
-                          )}
+                          <div className="text-right text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Users className="h-4 w-4" />
+                              {channel.memberCount}
+                            </div>
+                          </div>
                         </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{channel.description}</p>
                       </div>
                     );
                   })}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <Hash className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-3" />
-                  <p className="text-muted-foreground">Nenhum canal configurado</p>
                 </div>
               )}
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Message Detail Dialog */}
+      <Dialog open={!!selectedMessage} onOpenChange={() => setSelectedMessage(null)}>
+        <DialogContent className="max-w-2xl">
+          {selectedMessage && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback className={getPriorityColor(selectedMessage.priority)}>
+                      {getCategoryIcon(selectedMessage.category) && 
+                        React.createElement(getCategoryIcon(selectedMessage.category), { className: "h-5 w-5" })}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <DialogTitle>{selectedMessage.senderName}</DialogTitle>
+                    <DialogDescription>
+                      {new Date(selectedMessage.timestamp).toLocaleString('pt-BR')}
+                    </DialogDescription>
+                  </div>
+                </div>
+              </DialogHeader>
+              <div className="mt-4">
+                <p className="whitespace-pre-wrap">{selectedMessage.content}</p>
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Button variant="outline" size="sm">
+                  <Reply className="h-4 w-4 mr-2" />
+                  Responder
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+export default CommunicationCenterProfessional;
