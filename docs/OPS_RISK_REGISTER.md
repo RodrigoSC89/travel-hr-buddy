@@ -73,13 +73,11 @@ EM PROGRESSO: 0
 
 ---
 
-## ⚠️ AÇÃO MANUAL PENDENTE
+## ✅ AÇÃO MANUAL CONCLUÍDA
 
-**Ativar Leaked Password Protection:**
-1. Acesse: https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb/auth/providers
-2. Role até "Password Settings"
-3. Ative "Leaked password protection"
-4. Salve
+**Leaked Password Protection:** ✅ ATIVO
+- Configurado para BLOQUEAR sign-ups e alterações de senha com senhas vazadas
+- Segurança enterprise-grade para contas marítimas
 
 ---
 
