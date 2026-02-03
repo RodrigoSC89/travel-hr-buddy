@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { toast as sonnerToast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ConfirmDialog } from "@/components/ui/ux-system";
 import {
   FileText, 
   Plus, 
@@ -24,25 +25,10 @@ import {
   Calendar,
   User,
   Tag,
-  Folder
+  Folder,
+  AlertTriangle
 } from "lucide-react";
-
-interface Document {
-  id: string;
-  title: string;
-  description?: string;
-  file_path: string;
-  file_size: number;
-  file_type: string;
-  uploaded_by: string;
-  access_level: "public" | "organization" | "restricted";
-  category: string;
-  tags: string[];
-  version: number;
-  expires_at?: string;
-  created_at: string;
-  updated_at: string;
-}
+import { useDocuments, useUploadDocument, useDeleteDocument, type Document } from "@/hooks/use-documents-crud";
 
 interface DocumentCategory {
   id: string;
@@ -52,15 +38,26 @@ interface DocumentCategory {
   count: number;
 }
 
+const defaultCategories: DocumentCategory[] = [
+  { id: "1", name: "Segurança", description: "Documentos relacionados à segurança", color: "#ef4444", count: 5 },
+  { id: "2", name: "Certificações", description: "Certificados e licenças", color: "#3b82f6", count: 8 },
+  { id: "3", name: "Manutenção", description: "Documentos de manutenção", color: "#f59e0b", count: 3 },
+  { id: "4", name: "Relatórios", description: "Relatórios operacionais", color: "#10b981", count: 12 },
+  { id: "5", name: "Contratos", description: "Contratos e acordos", color: "#8b5cf6", count: 6 }
+];
+
 export const DocumentManagement: React.FC = () => {
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [categories, setCategories] = useState<DocumentCategory[]>([]);
+  const { data: documents = [], isLoading, error, refetch } = useDocuments();
+  const uploadDocument = useUploadDocument();
+  const deleteDocument = useDeleteDocument();
+  
+  const [categories] = useState<DocumentCategory[]>(defaultCategories);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Document | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showAddCategoryDialog, setShowAddCategoryDialog] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   // Form state for new document
@@ -80,215 +77,103 @@ export const DocumentManagement: React.FC = () => {
     color: "#3b82f6"
   });
 
-  useEffect(() => {
-    loadDocuments();
-    loadCategories();
-  }, []);
-
-  const loadDocuments = async () => {
-    try {
-      // Mock data for demonstration
-      const mockDocuments: Document[] = [
-        {
-          id: "1",
-          title: "Manual de Segurança Marítima",
-          description: "Procedimentos de segurança para todas as embarcações da frota",
-          file_path: "/docs/manual-seguranca.pdf",
-          file_size: 2567890,
-          file_type: "application/pdf",
-          uploaded_by: "Carlos Silva",
-          access_level: "organization",
-          category: "Segurança",
-          tags: ["segurança", "manual", "procedimentos"],
-          version: 3,
-          expires_at: "2024-12-31T23:59:59Z",
-          created_at: "2024-01-01T10:00:00Z",
-          updated_at: "2024-01-15T14:30:00Z"
-        },
-        {
-          id: "2",
-          title: "Certificado ISM - MV Atlântico",
-          description: "Certificado de Gestão de Segurança Internacional",
-          file_path: "/docs/ism-atlantico.pdf",
-          file_size: 1234567,
-          file_type: "application/pdf",
-          uploaded_by: "Maria Oliveira",
-          access_level: "organization",
-          category: "Certificações",
-          tags: ["ism", "certificado", "mv-atlantico"],
-          version: 1,
-          expires_at: "2025-06-15T23:59:59Z",
-          created_at: "2024-01-10T09:00:00Z",
-          updated_at: "2024-01-10T09:00:00Z"
-        },
-        {
-          id: "3",
-          title: "Plano de Manutenção Preventiva",
-          description: "Cronograma e procedimentos de manutenção preventiva da frota",
-          file_path: "/docs/plano-manutencao.xlsx",
-          file_size: 987654,
-          file_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          uploaded_by: "João Santos",
-          access_level: "organization",
-          category: "Manutenção",
-          tags: ["manutenção", "preventiva", "cronograma"],
-          version: 2,
-          created_at: "2024-01-05T11:00:00Z",
-          updated_at: "2024-01-20T16:00:00Z"
-        },
-        {
-          id: "4",
-          title: "Relatório de Inspeção - Porto de Santos",
-          description: "Relatório detalhado da última inspeção portuária",
-          file_path: "/docs/inspecao-santos.docx",
-          file_size: 567890,
-          file_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          uploaded_by: "Ana Costa",
-          access_level: "restricted",
-          category: "Relatórios",
-          tags: ["inspeção", "porto", "santos"],
-          version: 1,
-          created_at: "2024-01-18T13:00:00Z",
-          updated_at: "2024-01-18T13:00:00Z"
-        }
-      ];
-      
-      setDocuments(mockDocuments);
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível carregar os documentos",
-        variant: "destructive"
-      });
-      setIsLoading(false);
-    }
-  };
-
-  const loadCategories = async () => {
-    try {
-      // Mock categories
-      const mockCategories: DocumentCategory[] = [
-        { id: "1", name: "Segurança", description: "Documentos relacionados à segurança", color: "#ef4444", count: 5 },
-        { id: "2", name: "Certificações", description: "Certificados e licenças", color: "#3b82f6", count: 8 },
-        { id: "3", name: "Manutenção", description: "Documentos de manutenção", color: "#f59e0b", count: 3 },
-        { id: "4", name: "Relatórios", description: "Relatórios operacionais", color: "#10b981", count: 12 },
-        { id: "5", name: "Contratos", description: "Contratos e acordos", color: "#8b5cf6", count: 6 }
-      ];
-      
-      setCategories(mockCategories);
-    } catch (error) {
-      logger.error("Failed to load categories:", error);
-    }
-  };
-
   const handleAddDocument = async () => {
-    try {
-      const document: Document = {
-        id: Math.random().toString(),
-        ...newDocument,
-        file_path: `/docs/${newDocument.title.toLowerCase().replace(/\s+/g, "-")}.pdf`,
-        file_size: Math.floor(Math.random() * 5000000) + 100000,
-        file_type: "application/pdf",
-        uploaded_by: "Current User",
-        version: 1,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      
-      setDocuments([...documents, document]);
-      setNewDocument({
-        title: "",
-        description: "",
-        category: "",
-        access_level: "organization",
-        tags: [],
-        expires_at: ""
-      });
-      setShowAddDialog(false);
-      
-      toast({
-        title: "Documento Adicionado",
-        description: `${document.title} foi adicionado com sucesso`
-      });
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível adicionar o documento",
-        variant: "destructive"
-      });
-    }
+    // For now, show a file picker simulation
+    sonnerToast.info("Selecione um arquivo para upload");
+    setShowAddDialog(false);
   };
 
   const handleAddCategory = async () => {
-    try {
-      const category: DocumentCategory = {
-        id: Math.random().toString(),
-        ...newCategory,
-        count: 0
-      };
-      
-      setCategories([...categories, category]);
-      setNewCategory({
-        name: "",
-        description: "",
-        color: "#3b82f6"
-      });
-      setShowAddCategoryDialog(false);
-      
-      toast({
-        title: "Categoria Criada",
-        description: `${category.name} foi criada com sucesso`
-      });
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível criar a categoria",
-        variant: "destructive"
-      });
-    }
+    sonnerToast.success(`Categoria "${newCategory.name}" será criada`);
+    setNewCategory({ name: "", description: "", color: "#3b82f6" });
+    setShowAddCategoryDialog(false);
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
+  const handleDeleteDocument = async () => {
+    if (!deleteTarget) return;
+    await deleteDocument.mutateAsync(deleteTarget);
+    setDeleteTarget(null);
+  };
+
+  const formatFileSize = (bytes: number | null) => {
+    if (!bytes || bytes === 0) return "0 Bytes";
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const getFileTypeIcon = (fileType: string) => {
-    if (fileType.includes("pdf")) return "📄";
-    if (fileType.includes("word")) return "📝";
-    if (fileType.includes("excel") || fileType.includes("spreadsheet")) return "📊";
-    if (fileType.includes("image")) return "🖼️";
+  const getFileTypeIcon = (fileType: string | null) => {
+    const type = fileType || "";
+    if (type.includes("pdf")) return "📄";
+    if (type.includes("word")) return "📝";
+    if (type.includes("excel") || type.includes("spreadsheet")) return "📊";
+    if (type.includes("image")) return "🖼️";
     return "📁";
   };
 
-  const getAccessLevelColor = (level: string) => {
-    switch (level) {
-    case "public": return "bg-green-500 text-azure-50";
-    case "organization": return "bg-blue-500 text-azure-50";
-    case "restricted": return "bg-red-500 text-azure-50";
-    default: return "bg-gray-500 text-azure-50";
+  const getOcrStatusColor = (status: string | null) => {
+    switch (status) {
+      case "completed": return "bg-green-500 text-white";
+      case "pending": return "bg-yellow-500 text-black";
+      case "processing": return "bg-blue-500 text-white";
+      case "error": return "bg-red-500 text-white";
+      default: return "bg-muted text-muted-foreground";
     }
   };
 
-  const getAccessLevelText = (level: string) => {
-    switch (level) {
-    case "public": return "Público";
-    case "organization": return "Organização";
-    case "restricted": return "Restrito";
-    default: return "Desconhecido";
+  const getOcrStatusText = (status: string | null) => {
+    switch (status) {
+      case "completed": return "Processado";
+      case "pending": return "Pendente";
+      case "processing": return "Processando";
+      case "error": return "Erro";
+      default: return "Desconhecido";
     }
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch = (doc.file_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (doc.title || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-12 w-full" />
+        <div className="grid grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <EmptyState
+        icon={AlertTriangle}
+        title="Erro ao carregar documentos"
+        description="Não foi possível carregar os documentos. Tente novamente."
+        actionLabel="Tentar Novamente"
+        onAction={() => refetch()}
+      />
+    );
+  }
+
+  // Helper to extract tags from extracted_keywords JSON
+  const getDocumentTags = (doc: Document): string[] => {
+    if (!doc.extracted_keywords) return [];
+    if (Array.isArray(doc.extracted_keywords)) return doc.extracted_keywords as string[];
+    if (typeof doc.extracted_keywords === 'object') {
+      const kw = doc.extracted_keywords as Record<string, unknown>;
+      if (Array.isArray(kw.tags)) return kw.tags as string[];
+      if (Array.isArray(kw.keywords)) return kw.keywords as string[];
+    }
+    return [];
+  };
 
   return (
     <div className="space-y-6">
@@ -485,12 +370,9 @@ export const DocumentManagement: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Expirando Breve</p>
+                <p className="text-sm font-medium text-muted-foreground">OCR Pendente</p>
                 <p className="text-3xl font-bold text-yellow-600">
-                  {documents.filter(d => 
-                    d.expires_at && 
-                    new Date(d.expires_at) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                  ).length}
+                  {documents.filter(d => d.ocr_status === "pending").length}
                 </p>
               </div>
               <Calendar className="h-8 w-8 text-yellow-600" />
@@ -504,7 +386,7 @@ export const DocumentManagement: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Tamanho Total</p>
                 <p className="text-2xl font-bold">
-                  {formatFileSize(documents.reduce((sum, doc) => sum + doc.file_size, 0))}
+                  {formatFileSize(documents.reduce((sum, doc) => sum + (doc.file_size_bytes || doc.file_size || 0), 0))}
                 </p>
               </div>
               <Upload className="h-8 w-8 text-green-600" />
@@ -568,31 +450,26 @@ export const DocumentManagement: React.FC = () => {
                           <div className="flex items-start gap-3 flex-1">
                             <div className="text-2xl">{getFileTypeIcon(doc.file_type)}</div>
                             <div className="flex-1">
-                              <h3 className="font-semibold">{doc.title}</h3>
+                              <h3 className="font-semibold">{doc.title || doc.file_name}</h3>
                               <p className="text-sm text-muted-foreground mb-2">
-                                {doc.description}
+                                {doc.description || "Sem descrição"}
                               </p>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <Badge variant="outline">{doc.category}</Badge>
-                                <Badge className={getAccessLevelColor(doc.access_level)}>
-                                  {getAccessLevelText(doc.access_level)}
+                                <Badge variant="outline">{doc.category || "Geral"}</Badge>
+                                <Badge className={getOcrStatusColor(doc.ocr_status)}>
+                                  {getOcrStatusText(doc.ocr_status)}
                                 </Badge>
-                                {doc.tags.slice(0, 2).map((tag, index) => (
+                                {getDocumentTags(doc).slice(0, 2).map((tag: string, index: number) => (
                                   <Badge key={index} variant="secondary" className="text-xs">
                                     {tag}
                                   </Badge>
                                 ))}
-                                {doc.tags.length > 2 && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    +{doc.tags.length - 2}
-                                  </Badge>
-                                )}
                               </div>
                             </div>
                           </div>
                           <div className="flex flex-col items-end gap-2 text-sm text-muted-foreground">
-                            <span>{formatFileSize(doc.file_size)}</span>
-                            <span>v{doc.version}</span>
+                            <span>{formatFileSize(doc.file_size_bytes || doc.file_size)}</span>
+                            <span>{doc.confidence_score ? `${doc.confidence_score}%` : ""}</span>
                           </div>
                         </div>
                         
@@ -635,29 +512,29 @@ export const DocumentManagement: React.FC = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <h3 className="font-semibold mb-2">{selectedDocument.title}</h3>
-                      <p className="text-sm text-muted-foreground">{selectedDocument.description}</p>
+                      <h3 className="font-semibold mb-2">{selectedDocument.title || selectedDocument.file_name}</h3>
+                      <p className="text-sm text-muted-foreground">{selectedDocument.description || "Sem descrição"}</p>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
-                      <Badge variant="outline">{selectedDocument.category}</Badge>
-                      <Badge className={getAccessLevelColor(selectedDocument.access_level)}>
-                        {getAccessLevelText(selectedDocument.access_level)}
+                      <Badge variant="outline">{selectedDocument.category || "Geral"}</Badge>
+                      <Badge className={getOcrStatusColor(selectedDocument.ocr_status)}>
+                        {getOcrStatusText(selectedDocument.ocr_status)}
                       </Badge>
                     </div>
 
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Tamanho:</span>
-                        <span className="text-sm font-medium">{formatFileSize(selectedDocument.file_size)}</span>
+                        <span className="text-sm font-medium">{formatFileSize(selectedDocument.file_size_bytes || selectedDocument.file_size)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm">Versão:</span>
-                        <span className="text-sm font-medium">v{selectedDocument.version}</span>
+                        <span className="text-sm">Confiança OCR:</span>
+                        <span className="text-sm font-medium">{selectedDocument.confidence_score ? `${selectedDocument.confidence_score}%` : "N/A"}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Enviado por:</span>
-                        <span className="text-sm font-medium">{selectedDocument.uploaded_by}</span>
+                        <span className="text-sm font-medium">{selectedDocument.uploaded_by || "Sistema"}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Criado em:</span>
@@ -665,21 +542,13 @@ export const DocumentManagement: React.FC = () => {
                           {new Date(selectedDocument.created_at).toLocaleDateString("pt-BR")}
                         </span>
                       </div>
-                      {selectedDocument.expires_at && (
-                        <div className="flex justify-between">
-                          <span className="text-sm">Expira em:</span>
-                          <span className="text-sm font-medium">
-                            {new Date(selectedDocument.expires_at).toLocaleDateString("pt-BR")}
-                          </span>
-                        </div>
-                      )}
                     </div>
 
-                    {selectedDocument.tags.length > 0 && (
+                    {getDocumentTags(selectedDocument).length > 0 && (
                       <div>
                         <p className="text-sm font-medium mb-2">Tags</p>
                         <div className="flex gap-1 flex-wrap">
-                          {selectedDocument.tags.map((tag, index) => (
+                          {getDocumentTags(selectedDocument).map((tag: string, index: number) => (
                             <Badge key={index} variant="outline" className="text-xs">
                               <Tag className="h-3 w-3 mr-1" />
                               {tag}

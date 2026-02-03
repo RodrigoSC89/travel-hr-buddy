@@ -7,6 +7,8 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
 import {
   Globe,
   Ship,
@@ -31,127 +33,24 @@ import {
   RefreshCw,
   Download
 } from "lucide-react";
-
-interface VesselStatus {
-  id: string;
-  name: string;
-  type: string;
-  dpClass: string;
-  location: { lat: number; lon: number };
-  heading: number;
-  dpMode: "Auto DP" | "TAM" | "CAM" | "Joystick" | "Manual" | "Standby";
-  asogStatus: "green" | "yellow" | "red";
-  operationType: string;
-  environmental: {
-    windSpeed: number;
-    waveHeight: number;
-    current: number;
-  };
-  power: {
-    available: number;
-    consumed: number;
-  };
-  alerts: number;
-  lastUpdate: string;
-  crew: number;
-  onlineStatus: "online" | "degraded" | "offline";
-}
-
-interface FleetAlert {
-  id: string;
-  vesselId: string;
-  vesselName: string;
-  type: "critical" | "warning" | "info";
-  message: string;
-  timestamp: string;
-  acknowledged: boolean;
-}
-
-const mockVessels: VesselStatus[] = [
-  {
-    id: "VES-001",
-    name: "MV Atlantic Explorer",
-    type: "PSV",
-    dpClass: "DP-2",
-    location: { lat: -22.9068, lon: -43.1729 },
-    heading: 145,
-    dpMode: "Auto DP",
-    asogStatus: "green",
-    operationType: "Offloading",
-    environmental: { windSpeed: 18, waveHeight: 1.2, current: 0.8 },
-    power: { available: 12000, consumed: 7500 },
-    alerts: 0,
-    lastUpdate: "2024-12-04T15:30:00",
-    crew: 24,
-    onlineStatus: "online"
-  },
-  {
-    id: "VES-002",
-    name: "OSV Petrobras XXI",
-    type: "AHTS",
-    dpClass: "DP-2",
-    location: { lat: -23.1234, lon: -42.9876 },
-    heading: 270,
-    dpMode: "TAM",
-    asogStatus: "yellow",
-    operationType: "Anchor Handling",
-    environmental: { windSpeed: 25, waveHeight: 2.1, current: 1.2 },
-    power: { available: 18000, consumed: 14000 },
-    alerts: 2,
-    lastUpdate: "2024-12-04T15:28:00",
-    crew: 32,
-    onlineStatus: "online"
-  },
-  {
-    id: "VES-003",
-    name: "DSV Ocean Pioneer",
-    type: "DSV",
-    dpClass: "DP-3",
-    location: { lat: -22.5432, lon: -40.8765 },
-    heading: 90,
-    dpMode: "Auto DP",
-    asogStatus: "green",
-    operationType: "Diving Operations",
-    environmental: { windSpeed: 12, waveHeight: 0.8, current: 0.5 },
-    power: { available: 24000, consumed: 12000 },
-    alerts: 0,
-    lastUpdate: "2024-12-04T15:31:00",
-    crew: 48,
-    onlineStatus: "online"
-  },
-  {
-    id: "VES-004",
-    name: "PLSV Campos Star",
-    type: "PLSV",
-    dpClass: "DP-3",
-    location: { lat: -22.7654, lon: -41.2345 },
-    heading: 180,
-    dpMode: "Auto DP",
-    asogStatus: "red",
-    operationType: "Pipelay",
-    environmental: { windSpeed: 32, waveHeight: 3.5, current: 1.8 },
-    power: { available: 30000, consumed: 25000 },
-    alerts: 5,
-    lastUpdate: "2024-12-04T15:25:00",
-    crew: 120,
-    onlineStatus: "degraded"
-  }
-];
-
-const mockAlerts: FleetAlert[] = [
-  { id: "ALT-001", vesselId: "VES-004", vesselName: "PLSV Campos Star", type: "critical", message: "ASOG excedido - Operação suspensa", timestamp: "2024-12-04T15:25:00", acknowledged: false },
-  { id: "ALT-002", vesselId: "VES-004", vesselName: "PLSV Campos Star", type: "critical", message: "Vento acima do limite operacional", timestamp: "2024-12-04T15:24:00", acknowledged: false },
-  { id: "ALT-003", vesselId: "VES-002", vesselName: "OSV Petrobras XXI", type: "warning", message: "Corrente aproximando-se do limite ASOG", timestamp: "2024-12-04T15:20:00", acknowledged: true },
-  { id: "ALT-004", vesselId: "VES-002", vesselName: "OSV Petrobras XXI", type: "warning", message: "Consumo de potência acima de 75%", timestamp: "2024-12-04T15:18:00", acknowledged: true },
-  { id: "ALT-005", vesselId: "VES-001", vesselName: "MV Atlantic Explorer", type: "info", message: "Troca de turno registrada", timestamp: "2024-12-04T14:00:00", acknowledged: true }
-];
+import { useFleetTracking, useFleetStats, type VesselLocation, type FleetAlert } from "@/hooks/useFleetTrackingData";
 
 export const FleetOperationsCenter: React.FC = () => {
-  const [vessels] = useState<VesselStatus[]>(mockVessels);
-  const [alerts, setAlerts] = useState<FleetAlert[]>(mockAlerts);
-  const [selectedVessel, setSelectedVessel] = useState<VesselStatus | null>(null);
+  const { vessels, alerts, isLoading, error, refetch } = useFleetTracking();
+  const stats = useFleetStats();
+  const [localAlerts, setLocalAlerts] = useState<FleetAlert[]>([]);
+  const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
+
+  // Sync remote alerts with local state for acknowledgement
+  React.useEffect(() => {
+    if (alerts.length > 0 && localAlerts.length === 0) {
+      setLocalAlerts(alerts);
+    }
+  }, [alerts]);
+
+  const displayAlerts = localAlerts.length > 0 ? localAlerts : alerts;
 
   const filteredVessels = vessels.filter(v => 
     v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -159,11 +58,11 @@ export const FleetOperationsCenter: React.FC = () => {
   );
 
   const handleAcknowledgeAlert = (alertId: string) => {
-    setAlerts(alerts.map(a => a.id === alertId ? { ...a, acknowledged: true } : a));
+    setLocalAlerts(prev => prev.map(a => a.id === alertId ? { ...a, acknowledged: true } : a));
     toast.success("Alerta reconhecido");
   };
 
-  const getAsogStatusColor = (status: string) => {
+  const getAsogStatusColor = (status: string | undefined) => {
     switch (status) {
       case "green": return "bg-green-500";
       case "yellow": return "bg-yellow-500";
@@ -172,7 +71,7 @@ export const FleetOperationsCenter: React.FC = () => {
     }
   };
 
-  const getDPModeBadge = (mode: string) => {
+  const getDPModeBadge = (mode: string | undefined) => {
     switch (mode) {
       case "Auto DP": return <Badge className="bg-green-500">Auto DP</Badge>;
       case "TAM": return <Badge className="bg-blue-500">TAM</Badge>;
@@ -180,12 +79,51 @@ export const FleetOperationsCenter: React.FC = () => {
       case "Joystick": return <Badge className="bg-yellow-500 text-black">Joystick</Badge>;
       case "Manual": return <Badge variant="destructive">Manual</Badge>;
       case "Standby": return <Badge variant="secondary">Standby</Badge>;
-      default: return <Badge variant="outline">{mode}</Badge>;
+      default: return <Badge variant="outline">{mode || "N/A"}</Badge>;
     }
   };
 
-  const unacknowledgedAlerts = alerts.filter(a => !a.acknowledged).length;
-  const criticalAlerts = alerts.filter(a => a.type === "critical" && !a.acknowledged).length;
+  const unacknowledgedAlerts = displayAlerts.filter(a => !a.acknowledged).length;
+  const criticalAlerts = displayAlerts.filter(a => a.type === "critical" && !a.acknowledged).length;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid grid-cols-5 gap-4">
+          {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <EmptyState
+        icon={AlertTriangle}
+        title="Erro ao carregar frota"
+        description="Não foi possível carregar os dados da frota. Tente novamente."
+        actionLabel="Tentar Novamente"
+        onAction={refetch}
+      />
+    );
+  }
+
+  if (vessels.length === 0) {
+    return (
+      <EmptyState
+        icon={Ship}
+        title="Nenhuma embarcação cadastrada"
+        description="Adicione embarcações ao sistema para visualizar o centro de operações."
+        actionLabel="Ir para Frota"
+        onAction={() => window.location.href = "/fleet"}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -207,8 +145,8 @@ export const FleetOperationsCenter: React.FC = () => {
               {criticalAlerts} Alertas Críticos
             </Badge>
           )}
-          <Button variant="outline"><RefreshCw className="w-4 h-4 mr-2" />Atualizar</Button>
-          <Button><Download className="w-4 h-4 mr-2" />Relatório</Button>
+          <Button variant="outline" onClick={() => refetch()}><RefreshCw className="w-4 h-4 mr-2" />Atualizar</Button>
+          <Button onClick={() => toast.info("Relatório será gerado em breve")}><Download className="w-4 h-4 mr-2" />Relatório</Button>
         </div>
       </div>
 
@@ -219,7 +157,7 @@ export const FleetOperationsCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Embarcações</p>
-                <p className="text-2xl font-bold">{vessels.length}</p>
+                <p className="text-2xl font-bold">{stats.total}</p>
               </div>
               <Ship className="h-8 w-8 text-blue-500" />
             </div>
@@ -230,7 +168,7 @@ export const FleetOperationsCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Operação</p>
-                <p className="text-2xl font-bold">{vessels.filter(v => v.dpMode !== "Standby").length}</p>
+                <p className="text-2xl font-bold">{stats.activeVessels}</p>
               </div>
               <Activity className="h-8 w-8 text-green-500" />
             </div>
@@ -241,7 +179,7 @@ export const FleetOperationsCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">ASOG Alerta</p>
-                <p className="text-2xl font-bold">{vessels.filter(v => v.asogStatus !== "green").length}</p>
+                <p className="text-2xl font-bold">{stats.asogAlerts}</p>
               </div>
               <AlertTriangle className="h-8 w-8 text-yellow-500" />
             </div>
@@ -252,7 +190,7 @@ export const FleetOperationsCenter: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulação Total</p>
-                <p className="text-2xl font-bold">{vessels.reduce((acc, v) => acc + v.crew, 0)}</p>
+                <p className="text-2xl font-bold">{stats.totalCrew}</p>
               </div>
               <Users className="h-8 w-8 text-purple-500" />
             </div>
@@ -322,30 +260,30 @@ export const FleetOperationsCenter: React.FC = () => {
                   <div className="grid grid-cols-3 gap-3 mb-3">
                     <div className="p-2 bg-muted/50 rounded text-center">
                       <Wind className="h-4 w-4 mx-auto text-muted-foreground" />
-                      <p className="text-sm font-medium">{vessel.environmental.windSpeed}kn</p>
+                      <p className="text-sm font-medium">{vessel.environmental?.windSpeed ?? 0}kn</p>
                     </div>
                     <div className="p-2 bg-muted/50 rounded text-center">
                       <Waves className="h-4 w-4 mx-auto text-muted-foreground" />
-                      <p className="text-sm font-medium">{vessel.environmental.waveHeight}m</p>
+                      <p className="text-sm font-medium">{vessel.environmental?.waveHeight ?? 0}m</p>
                     </div>
                     <div className="p-2 bg-muted/50 rounded text-center">
                       <Activity className="h-4 w-4 mx-auto text-muted-foreground" />
-                      <p className="text-sm font-medium">{vessel.environmental.current}kn</p>
+                      <p className="text-sm font-medium">{vessel.environmental?.current ?? 0}kn</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Potência</span>
-                      <span className="font-medium">{Math.round(vessel.power.consumed / vessel.power.available * 100)}%</span>
+                      <span className="font-medium">{vessel.power ? Math.round((vessel.power.consumed / vessel.power.available) * 100) : 0}%</span>
                     </div>
-                    <Progress value={vessel.power.consumed / vessel.power.available * 100} className="h-2" />
+                    <Progress value={vessel.power ? (vessel.power.consumed / vessel.power.available) * 100 : 0} className="h-2" />
                   </div>
 
                   <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1"><Anchor className="h-3 w-3" />{vessel.operationType}</span>
-                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{new Date(vessel.lastUpdate).toLocaleTimeString("pt-BR")}</span>
-                    {vessel.alerts > 0 && (
+                    <span className="flex items-center gap-1"><Anchor className="h-3 w-3" />{vessel.operationType || "Operação"}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{new Date(vessel.last_update).toLocaleTimeString("pt-BR")}</span>
+                    {(vessel.alerts || 0) > 0 && (
                       <Badge variant="destructive" className="text-xs">{vessel.alerts} alertas</Badge>
                     )}
                   </div>
@@ -363,50 +301,57 @@ export const FleetOperationsCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {alerts.map((alert) => (
-                    <div 
-                      key={alert.id} 
-                      className={`p-4 rounded-lg border ${
-                        alert.type === "critical" && !alert.acknowledged 
-                          ? "border-red-500/50 bg-red-500/5" 
-                          : alert.type === "warning" && !alert.acknowledged 
-                          ? "border-yellow-500/50 bg-yellow-500/5" 
-                          : "border-border bg-card"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-lg ${
-                            alert.type === "critical" ? "bg-red-500/10" : 
-                            alert.type === "warning" ? "bg-yellow-500/10" : "bg-blue-500/10"
-                          }`}>
-                            <AlertTriangle className={`h-5 w-5 ${
-                              alert.type === "critical" ? "text-red-500" : 
-                              alert.type === "warning" ? "text-yellow-500" : "text-blue-500"
-                            }`} />
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="outline">{alert.vesselName}</Badge>
-                              <Badge variant={alert.type === "critical" ? "destructive" : alert.type === "warning" ? "default" : "secondary"}>
-                                {alert.type === "critical" ? "Crítico" : alert.type === "warning" ? "Atenção" : "Info"}
-                              </Badge>
-                              {alert.acknowledged && <Badge variant="outline" className="text-green-500 border-green-500">✓ Reconhecido</Badge>}
+                {displayAlerts.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                    <p>Nenhum alerta ativo no momento</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {displayAlerts.map((alert) => (
+                      <div 
+                        key={alert.id} 
+                        className={`p-4 rounded-lg border ${
+                          alert.type === "critical" && !alert.acknowledged 
+                            ? "border-red-500/50 bg-red-500/5" 
+                            : alert.type === "warning" && !alert.acknowledged 
+                            ? "border-yellow-500/50 bg-yellow-500/5" 
+                            : "border-border bg-card"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-lg ${
+                              alert.type === "critical" ? "bg-red-500/10" : 
+                              alert.type === "warning" ? "bg-yellow-500/10" : "bg-blue-500/10"
+                            }`}>
+                              <AlertTriangle className={`h-5 w-5 ${
+                                alert.type === "critical" ? "text-red-500" : 
+                                alert.type === "warning" ? "text-yellow-500" : "text-blue-500"
+                              }`} />
                             </div>
-                            <p className="text-sm mt-1">{alert.message}</p>
-                            <p className="text-xs text-muted-foreground mt-1">{new Date(alert.timestamp).toLocaleString("pt-BR")}</p>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <Badge variant="outline">{alert.vesselName}</Badge>
+                                <Badge variant={alert.type === "critical" ? "destructive" : alert.type === "warning" ? "default" : "secondary"}>
+                                  {alert.type === "critical" ? "Crítico" : alert.type === "warning" ? "Atenção" : "Info"}
+                                </Badge>
+                                {alert.acknowledged && <Badge variant="outline" className="text-green-500 border-green-500">✓ Reconhecido</Badge>}
+                              </div>
+                              <p className="text-sm mt-1">{alert.message}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{new Date(alert.timestamp).toLocaleString("pt-BR")}</p>
+                            </div>
                           </div>
+                          {!alert.acknowledged && (
+                            <Button size="sm" variant="outline" onClick={() => handleAcknowledgeAlert(alert.id)}>
+                              Reconhecer
+                            </Button>
+                          )}
                         </div>
-                        {!alert.acknowledged && (
-                          <Button size="sm" variant="outline" onClick={() => handleAcknowledgeAlert(alert.id)}>
-                            Reconhecer
-                          </Button>
-                        )}
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </ScrollArea>
             </CardContent>
           </Card>
