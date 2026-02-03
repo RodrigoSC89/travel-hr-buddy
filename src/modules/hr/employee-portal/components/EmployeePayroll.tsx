@@ -47,38 +47,6 @@ interface PayrollRecord {
   created_at: string;
 }
 
-// Mock data for demo - in production this would come from crew_payroll table
-const MOCK_PAYROLL_DATA: PayrollRecord[] = [
-  {
-    id: "1",
-    pay_period_start: "2024-12-01",
-    pay_period_end: "2024-12-15",
-    payment_date: "2024-12-20",
-    gross_salary: 5000,
-    deductions: 1000,
-    bonuses: 500,
-    net_salary: 4500,
-    currency: "USD",
-    status: "paid",
-    breakdown: { tax: 800, insurance: 200 },
-    created_at: "2024-12-20T00:00:00Z"
-  },
-  {
-    id: "2",
-    pay_period_start: "2024-11-16",
-    pay_period_end: "2024-11-30",
-    payment_date: "2024-12-05",
-    gross_salary: 5000,
-    deductions: 1000,
-    bonuses: 0,
-    net_salary: 4000,
-    currency: "USD",
-    status: "paid",
-    breakdown: { tax: 800, insurance: 200 },
-    created_at: "2024-12-05T00:00:00Z"
-  }
-];
-
 export const EmployeePayroll: React.FC = () => {
   const [payrollRecords, setPayrollRecords] = useState<PayrollRecord[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<PayrollRecord | null>(null);
@@ -95,14 +63,42 @@ export const EmployeePayroll: React.FC = () => {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        // Use mock data for demo
-        setPayrollRecords(MOCK_PAYROLL_DATA);
+        setPayrollRecords([]);
         return;
       }
 
-      // In production, this would query crew_payroll table
-      // For now, use mock data
-      setPayrollRecords(MOCK_PAYROLL_DATA);
+      // Query real data from crew_payroll table
+      const { data, error } = await supabase
+        .from("crew_payroll")
+        .select("*")
+        .order("payment_date", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        logger.error("Error loading payroll", { error: error.message });
+        setPayrollRecords([]);
+        return;
+      }
+
+      // Map database fields to local interface
+      const mappedRecords: PayrollRecord[] = (data || []).map((record: Record<string, unknown>) => ({
+        id: String(record.id || ""),
+        pay_period_start: String(record.pay_period_start || record.period_start || ""),
+        pay_period_end: String(record.pay_period_end || record.period_end || ""),
+        payment_date: String(record.payment_date || record.created_at || ""),
+        gross_salary: Number(record.gross_amount || record.base_salary || 0),
+        deductions: Number(record.deductions || 0),
+        bonuses: Number(record.bonuses || record.allowances || 0),
+        net_salary: Number(record.net_amount || record.net_salary || 0),
+        currency: String(record.currency || "BRL"),
+        status: String(record.status || "pending"),
+        payslip_url: record.payslip_url ? String(record.payslip_url) : undefined,
+        breakdown: (record.breakdown as PayrollBreakdown) || {},
+        notes: record.notes ? String(record.notes) : undefined,
+        created_at: String(record.created_at || ""),
+      }));
+
+      setPayrollRecords(mappedRecords);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       logger.error("Error loading payroll", { error: errorMessage });
@@ -111,6 +107,7 @@ export const EmployeePayroll: React.FC = () => {
         description: errorMessage,
         variant: "destructive",
       });
+      setPayrollRecords([]);
     } finally {
       setLoading(false);
     }

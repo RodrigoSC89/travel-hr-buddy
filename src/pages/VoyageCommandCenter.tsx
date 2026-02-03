@@ -91,18 +91,14 @@ const DEFAULT_PORTS: Port[] = [
 // Empty initial voyages - loaded from Supabase
 const EMPTY_VOYAGES: VoyageRoute[] = [];
 
-const DEMO_WEATHER: WeatherCondition[] = [
-  { location: "Atlântico Norte", condition: "Parcialmente nublado", windSpeed: 15, waveHeight: 2.5, visibility: "Boa", risk: "low" },
-  { location: "Golfo do México", condition: "Tempestade tropical", windSpeed: 35, waveHeight: 5.2, visibility: "Ruim", risk: "high" },
-  { location: "Oceano Índico", condition: "Céu limpo", windSpeed: 10, waveHeight: 1.8, visibility: "Excelente", risk: "low" },
-  { location: "Mar do Norte", condition: "Neblina", windSpeed: 20, waveHeight: 3.0, visibility: "Moderada", risk: "medium" },
-  { location: "Costa Brasileira", condition: "Ensolarado", windSpeed: 8, waveHeight: 1.2, visibility: "Excelente", risk: "low" },
-];
+// Weather data - empty by default, loaded from API
+const DEFAULT_WEATHER: WeatherCondition[] = [];
 
 export default function VoyageCommandCenter() {
   const { toast: shadcnToast } = useToast();
   const [voyages, setVoyages] = useState<VoyageRoute[]>(EMPTY_VOYAGES);
   const [ports] = useState<Port[]>(DEFAULT_PORTS);
+  const [weather] = useState<WeatherCondition[]>(DEFAULT_WEATHER);
   const [activeTab, setActiveTab] = useState("overview");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -452,20 +448,25 @@ export default function VoyageCommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {DEMO_WEATHER.map((weather, idx) => (
-                  <div key={idx} className={`p-4 rounded-lg ${getWeatherBgColor(weather.risk)}`}>
-                    <p className="font-medium text-sm">{weather.location}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{weather.condition}</p>
+                {weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
+                  <div key={idx} className={`p-4 rounded-lg ${getWeatherBgColor(w.risk)}`}>
+                    <p className="font-medium text-sm">{w.location}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{w.condition}</p>
                     <div className="flex items-center gap-2 mt-2">
-                      <Wind className={`h-4 w-4 ${getWeatherColor(weather.risk)}`} />
-                      <span className="text-sm">{weather.windSpeed} nós</span>
+                      <Wind className={`h-4 w-4 ${getWeatherColor(w.risk)}`} />
+                      <span className="text-sm">{w.windSpeed} nós</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Waves className={`h-4 w-4 ${getWeatherColor(weather.risk)}`} />
-                      <span className="text-sm">{weather.waveHeight}m</span>
+                      <Waves className={`h-4 w-4 ${getWeatherColor(w.risk)}`} />
+                      <span className="text-sm">{w.waveHeight}m</span>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="col-span-full text-center py-8 text-muted-foreground">
+                    <Cloud className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                    <p>Configure integração meteorológica para visualizar dados</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -715,49 +716,54 @@ export default function VoyageCommandCenter() {
         {/* Weather Tab */}
         <TabsContent value="weather" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {DEMO_WEATHER.map((weather, idx) => (
-              <Card key={idx} className={getWeatherBgColor(weather.risk)}>
+            {weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
+              <Card key={idx} className={getWeatherBgColor(w.risk)}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    {weather.risk === "low" && <ThermometerSun className="h-5 w-5 text-green-500" />}
-                    {weather.risk === "medium" && <Cloud className="h-5 w-5 text-amber-500" />}
-                    {weather.risk === "high" && <AlertTriangle className="h-5 w-5 text-red-500" />}
-                    {weather.location}
+                    {w.risk === "low" && <ThermometerSun className="h-5 w-5 text-green-500" />}
+                    {w.risk === "medium" && <Cloud className="h-5 w-5 text-amber-500" />}
+                    {w.risk === "high" && <AlertTriangle className="h-5 w-5 text-red-500" />}
+                    {w.location}
                   </CardTitle>
-                  <CardDescription>{weather.condition}</CardDescription>
+                  <CardDescription>{w.condition}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Wind className={`h-4 w-4 ${getWeatherColor(weather.risk)}`} />
+                      <Wind className={`h-4 w-4 ${getWeatherColor(w.risk)}`} />
                       <span>Vento</span>
                     </div>
-                    <span className="font-bold">{weather.windSpeed} nós</span>
+                    <span className="font-bold">{w.windSpeed} nós</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Waves className={`h-4 w-4 ${getWeatherColor(weather.risk)}`} />
+                      <Waves className={`h-4 w-4 ${getWeatherColor(w.risk)}`} />
                       <span>Ondas</span>
                     </div>
-                    <span className="font-bold">{weather.waveHeight}m</span>
+                    <span className="font-bold">{w.waveHeight}m</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Eye className={`h-4 w-4 ${getWeatherColor(weather.risk)}`} />
+                      <Eye className={`h-4 w-4 ${getWeatherColor(w.risk)}`} />
                       <span>Visibilidade</span>
                     </div>
-                    <span className="font-bold">{weather.visibility}</span>
+                    <span className="font-bold">{w.visibility}</span>
                   </div>
                   <Badge className={`w-full justify-center ${
-                    weather.risk === "low" ? "bg-green-500/20 text-green-600" :
-                    weather.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
+                    w.risk === "low" ? "bg-green-500/20 text-green-600" :
+                    w.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
                     "bg-red-500/20 text-red-600"
                   }`}>
-                    Risco {weather.risk === "low" ? "Baixo" : weather.risk === "medium" ? "Médio" : "Alto"}
+                    Risco {w.risk === "low" ? "Baixo" : w.risk === "medium" ? "Médio" : "Alto"}
                   </Badge>
                 </CardContent>
               </Card>
-            ))}
+            )) : (
+              <div className="col-span-full text-center py-12">
+                <Cloud className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+                <p className="text-muted-foreground">Configure integração meteorológica para visualizar dados</p>
+              </div>
+            )}
           </div>
         </TabsContent>
 

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, FileText, Brain, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DPIncident {
   id: string;
@@ -38,76 +39,6 @@ interface DPIncident {
   } | null;
 }
 
-// Demo data for development/testing
-const DEMO_INCIDENTS: DPIncident[] = [
-  {
-    id: "imca-2025-014",
-    title: "Loss of Position Due to Gyro Drift",
-    vessel: "DP Shuttle Tanker X",
-    location: "Campos Basin",
-    dp_class: "DP-2",
-    severity: "critical",
-    status: "analyzed",
-    root_cause: "Gyro sensor drift without proper monitoring",
-    tags: ["gyro", "positioning", "sensors"],
-    imca_report_url: "https://www.imca-int.com/safety-events/",
-    ai_analysis: {
-      summary: "Critical incident involving gyro drift leading to loss of position",
-      standards: ["IMCA M103", "IMCA M117"],
-      root_causes: ["Sensor drift", "Inadequate monitoring"],
-      preventive_measures: ["Regular gyro calibration", "Enhanced monitoring"],
-      corrective_actions: ["Immediate position recovery", "System reset"]
-    },
-    plan_of_action: null
-  },
-  {
-    id: "imca-2025-023",
-    title: "Thruster Control Software Failure",
-    vessel: "DP DSV Subsea Alpha",
-    location: "North Sea",
-    dp_class: "DP-3",
-    severity: "high",
-    status: "pending",
-    root_cause: "Software bug in thruster control system",
-    tags: ["thruster", "software", "control"],
-    imca_report_url: "https://www.imca-int.com/safety-events/",
-    plan_of_action: null
-  },
-  {
-    id: "imca-2025-031",
-    title: "Power Management System Overload",
-    vessel: "DP Construction Vessel B",
-    location: "Gulf of Mexico",
-    dp_class: "DP-2",
-    severity: "high",
-    status: "analyzed",
-    root_cause: "Inadequate power distribution management",
-    tags: ["pms", "power", "electrical"],
-    imca_report_url: "https://www.imca-int.com/safety-events/",
-    ai_analysis: {
-      summary: "Power management system experienced overload conditions",
-      standards: ["IMCA M103", "IMO MSC.1/Circ.1580"],
-      root_causes: ["Power distribution issues", "Load imbalance"],
-      preventive_measures: ["Power system review", "Load management"],
-      corrective_actions: ["System reconfiguration", "Load balancing"]
-    },
-    plan_of_action: null
-  },
-  {
-    id: "imca-2025-042",
-    title: "Reference System Failure",
-    vessel: "DP Platform Supply Vessel",
-    location: "West Africa",
-    dp_class: "DP-2",
-    severity: "medium",
-    status: "pending",
-    root_cause: "Multiple reference system failures",
-    tags: ["reference", "positioning", "redundancy"],
-    imca_report_url: "https://www.imca-int.com/safety-events/",
-    plan_of_action: null
-  }
-];
-
 export default function DPIntelligenceCenter() {
   const [loading, setLoading] = useState(true);
   const [incidents, setIncidents] = useState<DPIncident[]>([]);
@@ -129,17 +60,39 @@ export default function DPIntelligenceCenter() {
   async function loadIncidents() {
     setLoading(true);
     try {
-      // Try to fetch from API, fallback to demo data
-      const response = await fetch("/api/dp-incidents");
-      if (response.ok) {
-        const data = await response.json();
-        setIncidents(data);
-      } else {
-        setIncidents(DEMO_INCIDENTS);
+      // Try to load from Supabase
+      const { data, error } = await supabase
+        .from("incidents")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        toast.error("Erro ao carregar incidentes");
+        setIncidents([]);
+        return;
       }
-    } catch (error) {
-      // Use demo data on error
-      setIncidents(DEMO_INCIDENTS);
+
+      // Map database fields to local interface
+      const mapped: DPIncident[] = (data || []).map((item: Record<string, unknown>) => ({
+        id: String(item.id || ""),
+        title: String(item.title || item.incident_type || "Incidente"),
+        vessel: String(item.vessel_name || ""),
+        location: String(item.location || ""),
+        dp_class: String(item.dp_class || "DP-2"),
+        severity: String(item.severity || "medium"),
+        status: String(item.status || "pending"),
+        root_cause: String(item.root_cause || item.description || ""),
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        imca_report_url: String(item.imca_report_url || ""),
+        ai_analysis: item.ai_analysis as DPIncident["ai_analysis"],
+        plan_of_action: item.plan_of_action as DPIncident["plan_of_action"],
+      }));
+
+      setIncidents(mapped);
+    } catch {
+      toast.error("Erro ao carregar incidentes");
+      setIncidents([]);
     } finally {
       setLoading(false);
     }
