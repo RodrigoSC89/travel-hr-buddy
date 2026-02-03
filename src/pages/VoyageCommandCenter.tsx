@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
+import { usePorts } from "@/hooks/usePortsData";
 
 // Types
 interface Port {
@@ -77,28 +78,25 @@ interface WeatherCondition {
   risk: "low" | "medium" | "high";
 }
 
-// Port data - loaded from Supabase in production
-const DEFAULT_PORTS: Port[] = [
-  { id: "1", name: "Santos", country: "Brasil", code: "BRSSZ", lat: -23.95, lng: -46.3, type: "origin" },
-  { id: "2", name: "Rio de Janeiro", country: "Brasil", code: "BRRIO", lat: -22.9, lng: -43.2, type: "origin" },
-  { id: "3", name: "Rotterdam", country: "Holanda", code: "NLRTM", lat: 51.9, lng: 4.5, type: "destination" },
-  { id: "4", name: "Hamburgo", country: "Alemanha", code: "DEHAM", lat: 53.5, lng: 9.99, type: "destination" },
-  { id: "5", name: "Singapura", country: "Singapura", code: "SGSIN", lat: 1.3, lng: 103.8, type: "destination" },
-  { id: "6", name: "Houston", country: "EUA", code: "USHOU", lat: 29.8, lng: -95.3, type: "destination" },
-  { id: "7", name: "Las Palmas", country: "Espanha", code: "ESLPA", lat: 28.1, lng: -15.4, type: "waypoint" },
-];
-
-// Empty initial voyages - loaded from Supabase
-const EMPTY_VOYAGES: VoyageRoute[] = [];
-
-// Weather data - empty by default, loaded from API
-const DEFAULT_WEATHER: WeatherCondition[] = [];
+// ✅ R01: Dados reais do Supabase (import movido para o topo)
 
 export default function VoyageCommandCenter() {
   const { toast: shadcnToast } = useToast();
-  const [voyages, setVoyages] = useState<VoyageRoute[]>(EMPTY_VOYAGES);
-  const [ports] = useState<Port[]>(DEFAULT_PORTS);
-  const [weather] = useState<WeatherCondition[]>(DEFAULT_WEATHER);
+  
+  // ✅ Dados reais do Supabase
+  const { data: portsData = [], isLoading: portsLoading } = usePorts();
+  const ports: Port[] = portsData.map(p => ({
+    id: p.id,
+    name: p.name,
+    country: p.country,
+    code: p.code,
+    lat: p.lat,
+    lng: p.lng,
+    type: p.type
+  }));
+  
+  const [voyages, setVoyages] = useState<VoyageRoute[]>([]);
+  const [weather] = useState<WeatherCondition[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);

@@ -65,26 +65,37 @@ interface Vessel {
 }
 
 // ✅ Mapper: VesselData → Vessel local
-function mapToLocalVessel(v: VesselData): Vessel {
+// ✅ R01: Mapper sem dados aleatórios - sensores vêm de telemetria real
+function mapToLocalVessel(v: VesselData, sensorData?: Record<string, number>): Vessel {
   const statusMap: Record<string, Vessel['status']> = {
     at_sea: 'operational', in_port: 'docked', anchored: 'docked', 
     maintenance: 'maintenance', emergency: 'maintenance', active: 'operational'
   };
+  
+  // ⚠️ Sensores: usar dados reais de telemetria quando disponíveis
+  // Se não houver telemetria, exibir 0 ou null (não simular)
+  const sensors = sensorData || {
+    engineTemp: 0,
+    fuelLevel: v.fuel?.current ? (v.fuel.current / (v.fuel.capacity || 1)) * 100 : 0,
+    rpm: 0,
+    pressure: 0,
+  };
+  
   return {
     id: v.id,
     name: v.name,
     imo: v.imo,
     type: v.type,
     status: statusMap[v.status] || 'docked',
-    position: { lat: v.location?.lat || -23.96, lng: v.location?.lng || -46.33 },
+    position: { lat: v.location?.lat || 0, lng: v.location?.lng || 0 },
     speed: v.speed || 0,
     heading: v.heading || 0,
     lastUpdate: new Date(v.lastUpdate),
     sensors: {
-      engineTemp: 85 + Math.random() * 10,
-      fuelLevel: v.fuel?.current ? (v.fuel.current / (v.fuel.capacity || 1)) * 100 : 70,
-      rpm: 1400 + Math.random() * 200,
-      pressure: 4 + Math.random(),
+      engineTemp: sensors.engineTemp || 0,
+      fuelLevel: sensors.fuelLevel || 0,
+      rpm: sensors.rpm || 0,
+      pressure: sensors.pressure || 0,
     },
     alerts: 0,
     createdAt: new Date(v.lastUpdate),
@@ -101,8 +112,8 @@ export function DigitalTwinInteractive() {
   const updateVesselMutation = useUpdateVessel();
   const deleteVesselMutation = useDeleteVessel();
 
-  // Mapear para formato local
-  const vessels = useMemo(() => rawVessels.map(mapToLocalVessel), [rawVessels]);
+  // Mapear para formato local (sem dados aleatórios)
+  const vessels = useMemo(() => rawVessels.map(v => mapToLocalVessel(v)), [rawVessels]);
 
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
