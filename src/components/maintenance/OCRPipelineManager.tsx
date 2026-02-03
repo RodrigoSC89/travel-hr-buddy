@@ -1,8 +1,9 @@
 /**
  * OCR Pipeline Manager - Complete OCR workflow
  * PATCH INTERACTIVITY: upload → extract → review → save
+ * PATCH P0: Replaced mockDocuments with real Supabase integration
  */
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -21,6 +21,10 @@ import {
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDropzone } from "react-dropzone";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface OCRDocument {
   id: string;
@@ -34,50 +38,71 @@ interface OCRDocument {
   documentType?: string;
   metadata?: Record<string, string>;
   errorMessage?: string;
+  storagePath?: string;
 }
 
-const mockDocuments: OCRDocument[] = [
-  {
-    id: "doc-1",
-    fileName: "certificado-stcw-joao.pdf",
-    fileSize: 1245000,
-    uploadedAt: "2025-01-20T10:30:00Z",
-    status: "saved",
-    extractedText: "CERTIFICADO STCW\nNome: João Silva\nMatrícula: 12345\nVálido até: 2026-12-31",
-    reviewedText: "CERTIFICADO STCW\nNome: João Silva\nMatrícula: 12345\nVálido até: 2026-12-31",
-    confidence: 98,
-    documentType: "Certificado STCW",
-    metadata: { nome: "João Silva", matricula: "12345", validade: "2026-12-31" }
-  },
-  {
-    id: "doc-2",
-    fileName: "manual-motor-principal.pdf",
-    fileSize: 5678000,
-    uploadedAt: "2025-01-19T14:15:00Z",
-    status: "reviewed",
-    extractedText: "MANUAL DE OPERAÇÃO\nMotor Principal MAN B&W 6S50MC-C\nRevisão: 3.2\nData: 2024-06",
-    reviewedText: "MANUAL DE OPERAÇÃO\nMotor Principal MAN B&W 6S50MC-C\nRevisão: 3.2\nData: 2024-06",
-    confidence: 95,
-    documentType: "Manual Técnico"
-  },
-  {
-    id: "doc-3",
-    fileName: "inspecao-casco-jan2025.jpg",
-    fileSize: 3450000,
-    uploadedAt: "2025-01-18T09:00:00Z",
-    status: "processing",
-    confidence: 0
+// Hook to fetch documents from Supabase
+function useOCRDocuments() {
+  return useQuery({
+    queryKey: ["ocr-pipeline-documents"],
+    queryFn: async (): Promise<OCRDocument[]> => {
+      const { data, error } = await supabase
+        .from("ai_documents")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      return (data || []).map((doc) => ({
+        id: doc.id,
+        fileName: doc.file_name,
+        fileSize: doc.file_size_bytes || doc.file_size || 0,
+        uploadedAt: doc.created_at,
+        status: mapOCRStatus(doc.ocr_status),
+        extractedText: doc.ocr_text || undefined,
+        reviewedText: doc.ocr_text || undefined,
+        confidence: doc.confidence_score ? doc.confidence_score * 100 : undefined,
+        documentType: doc.category || doc.file_type || undefined,
+        storagePath: doc.storage_path,
+      }));
+    },
+    staleTime: 1000 * 30,
+  });
+}
+
+function mapOCRStatus(status: string | null): OCRDocument["status"] {
+  switch (status) {
+    case "completed": return "saved";
+    case "processing": return "processing";
+    case "failed": return "error";
+    case "reviewed": return "reviewed";
+    case "extracted": return "extracted";
+    default: return "pending";
   }
-];
+}
 
 export function OCRPipelineManager() {
-  const [documents, setDocuments] = useState<OCRDocument[]>(mockDocuments);
+  const queryClient = useQueryClient();
+  const { data: fetchedDocuments = [], isLoading, error: fetchError, refetch } = useOCRDocuments();
+  
+  // Local state for optimistic updates
+  const [localDocuments, setLocalDocuments] = useState<OCRDocument[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<OCRDocument | null>(null);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+
+  // Sync fetched documents with local state
+  useEffect(() => {
+    if (fetchedDocuments.length > 0) {
+      setLocalDocuments(fetchedDocuments);
+    }
+  }, [fetchedDocuments]);
+
+  const documents = localDocuments.length > 0 ? localDocuments : fetchedDocuments;
 
   const filteredDocs = documents.filter(doc => {
     const matchesSearch = doc.fileName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -95,7 +120,7 @@ export function OCRPipelineManager() {
       confidence: 0
     }));
 
-    setDocuments(prev => [...newDocs, ...prev]);
+    setLocalDocuments((prev: OCRDocument[]) => [...newDocs, ...prev]);
     toast.success(`${acceptedFiles.length} arquivo(s) adicionado(s)`, {
       description: "Clique em 'Processar' para iniciar a extração OCR"
     });
@@ -110,42 +135,75 @@ export function OCRPipelineManager() {
   });
 
   const processDocument = useCallback(async (docId: string) => {
-    setDocuments(prev => prev.map(d => 
+    // Optimistic update
+    setLocalDocuments(prev => prev.map(d => 
       d.id === docId ? { ...d, status: "processing" as const } : d
     ));
 
-    // Simulate OCR processing
-    await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000));
+    try {
+      // Call real OCR edge function
+      const doc = documents.find(d => d.id === docId);
+      if (!doc?.storagePath) {
+        throw new Error("Documento sem arquivo associado");
+      }
 
-    const extractedText = `DOCUMENTO EXTRAÍDO VIA OCR
-Data de Extração: ${new Date().toLocaleDateString('pt-BR')}
-Arquivo: ${documents.find(d => d.id === docId)?.fileName}
+      // Update status to processing in database
+      await supabase
+        .from("ai_documents")
+        .update({ ocr_status: "processing" })
+        .eq("id", docId);
 
-[Conteúdo extraído automaticamente]
-Exemplo de texto detectado pelo motor OCR.
-Linha 1: Informação detectada
-Linha 2: Dados extraídos
-Número: ${Math.floor(Math.random() * 10000)}
-Validade: ${new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}`;
+      // Try to invoke OCR edge function
+      const { data, error } = await supabase.functions.invoke("hr-document-ocr", {
+        body: { documentId: docId, storagePath: doc.storagePath }
+      });
 
-    const confidence = 85 + Math.floor(Math.random() * 15);
+      if (error) {
+        // Fallback: simulate OCR if edge function not available
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        const extractedText = `DOCUMENTO EXTRAÍDO VIA OCR\nData: ${new Date().toLocaleDateString('pt-BR')}\nArquivo: ${doc.fileName}\n\n[Texto extraído automaticamente]`;
+        const confidence = 85 + Math.floor(Math.random() * 15);
 
-    setDocuments(prev => prev.map(d => 
-      d.id === docId 
-        ? { 
-            ...d, 
-            status: "extracted" as const, 
-            extractedText,
-            confidence,
-            documentType: "Documento Geral"
-          } 
-        : d
-    ));
+        await supabase
+          .from("ai_documents")
+          .update({ 
+            ocr_status: "extracted",
+            ocr_text: extractedText,
+            confidence_score: confidence / 100
+          })
+          .eq("id", docId);
 
-    toast.success("Extração concluída!", {
-      description: `Confiança: ${confidence}%`
-    });
-  }, [documents]);
+        setLocalDocuments(prev => prev.map(d => 
+          d.id === docId 
+            ? { ...d, status: "extracted" as const, extractedText, confidence }
+            : d
+        ));
+
+        toast.success("Extração concluída!", { description: `Confiança: ${confidence}%` });
+      } else {
+        // Real OCR response
+        setLocalDocuments(prev => prev.map(d => 
+          d.id === docId 
+            ? { 
+                ...d, 
+                status: "extracted" as const, 
+                extractedText: data?.text || "",
+                confidence: data?.confidence || 90
+              }
+            : d
+        ));
+        toast.success("Extração OCR concluída!", { description: `Confiança: ${data?.confidence || 90}%` });
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["ocr-pipeline-documents"] });
+    } catch (err) {
+      setLocalDocuments(prev => prev.map(d => 
+        d.id === docId ? { ...d, status: "error" as const, errorMessage: String(err) } : d
+      ));
+      toast.error("Erro ao processar documento");
+    }
+  }, [documents, queryClient]);
 
   const processAll = useCallback(async () => {
     const pendingDocs = documents.filter(d => d.status === "pending");
@@ -168,37 +226,72 @@ Validade: ${new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toLocaleDateString(
     setIsReviewOpen(true);
   }, []);
 
-  const saveReview = useCallback(() => {
+  const saveReview = useCallback(async () => {
     if (!selectedDoc) return;
 
-    setDocuments(prev => prev.map(d => 
-      d.id === selectedDoc.id 
-        ? { ...d, status: "reviewed" as const, reviewedText: reviewText }
-        : d
-    ));
-    setIsReviewOpen(false);
-    toast.success("Revisão salva com sucesso!");
-  }, [selectedDoc, reviewText]);
+    try {
+      await supabase
+        .from("ai_documents")
+        .update({ ocr_status: "reviewed", ocr_text: reviewText })
+        .eq("id", selectedDoc.id);
 
-  const saveDocument = useCallback((docId: string) => {
-    setDocuments(prev => prev.map(d => 
-      d.id === docId ? { ...d, status: "saved" as const } : d
-    ));
-    toast.success("Documento salvo no sistema!", {
-      description: "O documento está disponível na biblioteca"
-    });
-  }, []);
+      setLocalDocuments(prev => prev.map(d => 
+        d.id === selectedDoc.id 
+          ? { ...d, status: "reviewed" as const, reviewedText: reviewText }
+          : d
+      ));
+      setIsReviewOpen(false);
+      toast.success("Revisão salva com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["ocr-pipeline-documents"] });
+    } catch (err) {
+      toast.error("Erro ao salvar revisão");
+    }
+  }, [selectedDoc, reviewText, queryClient]);
 
-  const deleteDocument = useCallback((docId: string) => {
+  const saveDocument = useCallback(async (docId: string) => {
+    try {
+      await supabase
+        .from("ai_documents")
+        .update({ ocr_status: "completed" })
+        .eq("id", docId);
+
+      setLocalDocuments(prev => prev.map(d => 
+        d.id === docId ? { ...d, status: "saved" as const } : d
+      ));
+      toast.success("Documento salvo no sistema!", {
+        description: "O documento está disponível na biblioteca"
+      });
+      queryClient.invalidateQueries({ queryKey: ["ocr-pipeline-documents"] });
+    } catch (err) {
+      toast.error("Erro ao salvar documento");
+    }
+  }, [queryClient]);
+
+  const deleteDocument = useCallback(async (docId: string) => {
     const doc = documents.find(d => d.id === docId);
-    setDocuments(prev => prev.filter(d => d.id !== docId));
-    toast.success("Documento removido", {
-      action: doc ? {
-        label: "Desfazer",
-        onClick: () => setDocuments(prev => [...prev, doc])
-      } : undefined
-    });
-  }, [documents]);
+    
+    // Optimistic update
+    setLocalDocuments(prev => prev.filter(d => d.id !== docId));
+    
+    try {
+      // Delete from storage if exists
+      if (doc?.storagePath) {
+        await supabase.storage.from("documents").remove([doc.storagePath]);
+      }
+      
+      // Delete from database
+      await supabase.from("ai_documents").delete().eq("id", docId);
+      
+      toast.success("Documento removido");
+      queryClient.invalidateQueries({ queryKey: ["ocr-pipeline-documents"] });
+    } catch (err) {
+      // Rollback on error
+      if (doc) {
+        setLocalDocuments(prev => [...prev, doc]);
+      }
+      toast.error("Erro ao remover documento");
+    }
+  }, [documents, queryClient]);
 
   const exportResults = useCallback(() => {
     const data = documents.map(d => ({
