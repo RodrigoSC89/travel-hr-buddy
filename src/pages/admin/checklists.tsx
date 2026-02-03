@@ -26,6 +26,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
+import { useChecklists, useCreateChecklist, useUpdateChecklist, useDeleteChecklist } from "@/hooks/useChecklistsData";
 
 interface ChecklistItem {
   id: string;
@@ -61,69 +62,23 @@ const CHECKLIST_TYPES = [
   { id: "custom", name: "Personalizado", icon: Target },
 ];
 
-// Sample data
-const SAMPLE_CHECKLISTS: Checklist[] = [
-  {
-    id: "1",
-    title: "Inspeção Pré-Partida - Motor Principal",
-    description: "Checklist completo para verificação antes da partida do motor principal",
-    type: "pre-operation",
-    items: [
-      { id: "1-1", title: "Verificar nível de óleo lubrificante", completed: true, criticality: "high" },
-      { id: "1-2", title: "Checar temperatura da água de resfriamento", completed: true, criticality: "high" },
-      { id: "1-3", title: "Inspecionar vazamentos visíveis", completed: false, criticality: "medium" },
-      { id: "1-4", title: "Verificar pressão do ar de partida", completed: false, criticality: "critical" },
-      { id: "1-5", title: "Testar alarmes do motor", completed: false, criticality: "high" },
-    ],
-    created_at: "2024-12-06T10:00:00Z",
-    created_by: "João Silva",
-    status: "active",
-    source: "ai",
-    vessel: "Navio Sirius",
-    dueDate: "2024-12-07",
-  },
-  {
-    id: "2",
-    title: "Checklist de Segurança - Operação de Mergulho",
-    description: "Verificações obrigatórias antes de operações de mergulho",
-    type: "safety",
-    items: [
-      { id: "2-1", title: "Briefing de segurança realizado", completed: true, criticality: "critical" },
-      { id: "2-2", title: "Equipamentos de emergência verificados", completed: true, criticality: "critical" },
-      { id: "2-3", title: "Comunicação testada", completed: true, criticality: "high" },
-      { id: "2-4", title: "Condições meteorológicas avaliadas", completed: true, criticality: "high" },
-    ],
-    created_at: "2024-12-05T14:30:00Z",
-    created_by: "Maria Santos",
-    status: "completed",
-    source: "template",
-    vessel: "Navio Vega",
-    completedAt: "2024-12-05T16:45:00Z",
-  },
-  {
-    id: "3",
-    title: "Manutenção Preventiva - Sistema Hidráulico",
-    description: "Rotina de manutenção mensal do sistema hidráulico",
-    type: "maintenance",
-    items: [
-      { id: "3-1", title: "Verificar nível do fluido hidráulico", completed: false, criticality: "high" },
-      { id: "3-2", title: "Inspecionar mangueiras e conexões", completed: false, criticality: "medium" },
-      { id: "3-3", title: "Limpar filtros", completed: false, criticality: "medium" },
-      { id: "3-4", title: "Testar pressão do sistema", completed: false, criticality: "high" },
-      { id: "3-5", title: "Verificar cilindros por vazamentos", completed: false, criticality: "medium" },
-      { id: "3-6", title: "Documentar leituras de pressão", completed: false, criticality: "low" },
-    ],
-    created_at: "2024-12-04T09:00:00Z",
-    created_by: "Carlos Mendes",
-    status: "draft",
-    source: "manual",
-    vessel: "Navio Polaris",
-    dueDate: "2024-12-10",
-  },
-];
+// ✅ R01: Dados reais via hooks (import movido para o topo)
 
 export default function SmartChecklistsPage() {
-  const [checklists, setChecklists] = useState<Checklist[]>(SAMPLE_CHECKLISTS);
+  // ✅ Dados reais do Supabase
+  const { data: checklistsData = [], isLoading: checklistsLoading } = useChecklists();
+  const createMutation = useCreateChecklist();
+  const updateMutation = useUpdateChecklist();
+  const deleteMutation = useDeleteChecklist();
+  
+  const [checklists, setChecklists] = useState<Checklist[]>([]);
+  
+  // Sync with real data
+  React.useEffect(() => {
+    if (checklistsData.length > 0) {
+      setChecklists(checklistsData);
+    }
+  }, [checklistsData]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
