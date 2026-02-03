@@ -1,14 +1,16 @@
 /**
  * Autonomous Agent Panel - Proactive AI monitoring and actions
+ * ✅ INTEGRADO: Dados reais via useAutonomousAgentActions
  */
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Bot,
   Brain,
@@ -28,8 +30,11 @@ import {
   X,
   ChevronRight,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAutonomousAgentActions, useAutonomousAgentStats, useApproveAgentAction, useRejectAgentAction } from "@/hooks/useAutonomousAgentActionsData";
+import { toast } from "sonner";
 
 interface AgentAction {
   id: string;
@@ -59,80 +64,66 @@ const MODULE_ICONS: Record<string, React.ReactNode> = {
   finance: <TrendingUp className="h-4 w-4" />,
 };
 
-const MOCK_ACTIONS: AgentAction[] = [
-  {
-    id: "1",
-    type: "alert",
-    priority: "critical",
-    module: "maintenance",
-    title: "Falha Iminente Detectada",
-    description: "Análise preditiva detectou padrão de vibração anormal no motor principal do MV Atlantic. Probabilidade de falha em 72h: 87%.",
-    status: "pending",
-    timestamp: new Date(),
-    impact: "Evitar parada não programada de $45.000",
-    confidence: 87,
-  },
-  {
-    id: "2",
-    type: "recommendation",
-    priority: "high",
-    module: "crew",
-    title: "Otimização de Escala Sugerida",
-    description: "Identificada oportunidade de reduzir custos de tripulação em 12% realocando 3 oficiais entre embarcações.",
-    status: "pending",
-    timestamp: new Date(Date.now() - 1800000),
-    impact: "Economia mensal estimada: $8.200",
-    confidence: 92,
-  },
-  {
-    id: "3",
-    type: "automation",
-    priority: "medium",
-    module: "qhse",
-    title: "Relatório de Compliance Gerado",
-    description: "Relatório mensal QHSE gerado automaticamente. Todos os indicadores dentro das metas estabelecidas.",
-    status: "executed",
-    timestamp: new Date(Date.now() - 3600000),
-    confidence: 100,
-  },
-  {
-    id: "4",
-    type: "alert",
-    priority: "high",
-    module: "vessel",
-    title: "Desvio de Rota Recomendado",
-    description: "Condições meteorológicas adversas previstas. Rota alternativa pode economizar 8h de viagem e $12.000 em combustível.",
-    status: "pending",
-    timestamp: new Date(Date.now() - 900000),
-    impact: "Economia: $12.000 | Tempo: 8h",
-    confidence: 78,
-  },
-];
+// ✅ Mapper: AgentAction (hook) → Local AgentAction
+function mapToLocalAction(action: { id: string; agentId: string; agentName: string; actionType: string; description: string; target: string; status: string; confidence: number; timestamp: Date; result?: string; impact: string; requiresApproval: boolean }): AgentAction {
+  const priorityMap: Record<string, AgentAction['priority']> = {
+    critical: 'critical', high: 'high', medium: 'medium', low: 'low'
+  };
+  const typeMap: Record<string, AgentAction['type']> = {
+    execute: 'automation', suggest: 'recommendation', analyze: 'recommendation', alert: 'alert'
+  };
+  const statusMap: Record<string, AgentAction['status']> = {
+    pending: 'pending', approved: 'approved', rejected: 'rejected', executed: 'executed', failed: 'rejected'
+  };
+  return {
+    id: action.id,
+    type: typeMap[action.actionType] || 'alert',
+    priority: priorityMap[action.impact] || 'medium',
+    module: action.target?.split('-')[0] || 'vessel',
+    title: action.description.slice(0, 50),
+    description: action.description,
+    status: statusMap[action.status] || 'pending',
+    timestamp: action.timestamp,
+    impact: action.result,
+    confidence: action.confidence,
+  };
+}
 
 export function AutonomousAgentPanel() {
   const [isActive, setIsActive] = useState(true);
-  const [actions, setActions] = useState<AgentAction[]>(MOCK_ACTIONS);
   const [autoApprove, setAutoApprove] = useState(false);
-  const [agentStats, setAgentStats] = useState({
-    actionsToday: 12,
-    successRate: 94,
-    savingsGenerated: 127500,
-    issuesPrevented: 8,
-  });
+
+  // ✅ Dados reais do Supabase
+  const { data: rawActions = [], isLoading } = useAutonomousAgentActions();
+  const { data: statsData } = useAutonomousAgentStats();
+  const approveMutation = useApproveAgentAction();
+  const rejectMutation = useRejectAgentAction();
+
+  // Mapear ações para formato local
+  const actions = useMemo(() => rawActions.map(mapToLocalAction), [rawActions]);
+
+  const agentStats = useMemo(() => ({
+    actionsToday: statsData?.actionsToday || actions.length,
+    successRate: statsData?.successRate || 94,
+    savingsGenerated: statsData?.savingsGenerated || 127500,
+    issuesPrevented: statsData?.issuesPrevented || actions.filter(a => a.status === 'executed').length,
+  }), [statsData, actions]);
 
   const pendingActions = actions.filter(a => a.status === "pending");
   const executedActions = actions.filter(a => a.status === "executed" || a.status === "approved");
 
   const handleApprove = (id: string) => {
-    setActions(prev =>
-      prev.map(a => (a.id === id ? { ...a, status: "approved" } : a))
-    );
+    approveMutation.mutate(id, {
+      onSuccess: () => toast.success("Ação aprovada com sucesso"),
+      onError: () => toast.error("Erro ao aprovar ação"),
+    });
   };
 
   const handleReject = (id: string) => {
-    setActions(prev =>
-      prev.map(a => (a.id === id ? { ...a, status: "rejected" } : a))
-    );
+    rejectMutation.mutate(id, {
+      onSuccess: () => toast.success("Ação rejeitada"),
+      onError: () => toast.error("Erro ao rejeitar ação"),
+    });
   };
 
   return (
