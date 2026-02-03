@@ -1,6 +1,6 @@
 /**
  * Weather Command - Windy Style Complete Page
- * PATCH WINDY-2.3: Full integration with Routing, Brazilian Sources, Alert History
+ * PATCH WINDY-2.4: IntegrationGuard + P2 Compliance
  */
 
 import React, { useState, useEffect } from "react";
@@ -49,6 +49,8 @@ import { WindyMapPlugin } from "@/components/maps/WindyMapPlugin";
 import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
 import { downloadWeatherComparisonPDF, shareWeatherComparison } from "@/lib/pdf/weather-comparison-pdf";
 import { openMeteoService } from "@/services/weather/open-meteo.service";
+import { useWeatherIntegrationStatus } from "@/hooks/useWeatherIntegrationStatus";
+import { IntegrationStatusBadge, IntegrationGuard } from "@/components/ui/IntegrationStatusBadge";
 import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange, CurrentWeather, DailyForecast } from "./types";
 import { logger } from '@/lib/logger';
 
@@ -91,6 +93,9 @@ export const WindyWeatherPage: React.FC = () => {
   const [forecastRange, setForecastRange] = useState<ForecastRange>('3h');
   const [displayMode, setDisplayMode] = useState<DisplayMode>('basic');
   const [forecastModel, setForecastModel] = useState<ForecastModel>('ECMWF');
+
+  // ✅ P2: Integration Status Guard
+  const { data: integrationStatus, isLoading: isCheckingIntegration } = useWeatherIntegrationStatus();
 
   // Use Open-Meteo hook for REAL data
   const {
@@ -317,13 +322,54 @@ export const WindyWeatherPage: React.FC = () => {
     }
   }, [error, toast]);
 
+  // ✅ P2: IntegrationGuard - bloqueia UI se não configurado
+  if (isCheckingIntegration) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Verificando integrações meteorológicas...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
+    <IntegrationGuard
+      status={integrationStatus?.status ?? "DEGRADED"}
+      integrationName="Weather APIs"
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center p-8">
+          <div className="text-center space-y-6 max-w-lg">
+            <AlertTriangle className="h-16 w-16 mx-auto text-warning" />
+            <h2 className="text-2xl font-bold">APIs Meteorológicas Não Configuradas</h2>
+            <p className="text-muted-foreground">
+              Configure pelo menos uma fonte de dados meteorológicos para visualizar previsões reais.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {integrationStatus?.sources && Object.entries(integrationStatus.sources).map(([key, value]) => (
+                <Badge key={key} variant={value ? "default" : "outline"} className={value ? "bg-success" : ""}>
+                  {key}: {value ? "✓" : "✗"}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+      }
+    >
     <div className="min-h-screen bg-background">
       <div className="flex min-h-screen">
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
-          {/* Header */}
+          {/* Header with Integration Status */}
           <div className="p-4 bg-muted/80 border-b border-border flex items-center gap-4 flex-wrap">
+            {integrationStatus && (
+              <IntegrationStatusBadge 
+                status={integrationStatus.status} 
+                integrationName="Weather" 
+                size="sm"
+              />
+            )}
             <CitySearch
               onSelectLocation={handleSelectLocation}
               favorites={favorites}
@@ -782,6 +828,7 @@ export const WindyWeatherPage: React.FC = () => {
         </Dialog>
       </div>
     </div>
+    </IntegrationGuard>
   );
 };
 
