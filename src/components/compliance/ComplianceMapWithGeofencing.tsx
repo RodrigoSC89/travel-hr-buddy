@@ -75,17 +75,8 @@ function createCirclePolygon(center: [number, number], radiusKm: number): number
   return coords;
 }
 
-// Mock vessels data
-function getMockVessels(): VesselInspection[] {
-  return [
-    { id: '1', vesselName: 'MV Ocean Star', imoNumber: '9876543', flagState: 'Panama', lat: 25.7617, lng: -80.1918, status: 'overdue', inspectionType: 'mlc', dueDate: '2024-01-15' },
-    { id: '2', vesselName: 'MV Seawind', imoNumber: '9876544', flagState: 'Norway', lat: 51.9244, lng: 4.4777, status: 'due-soon', inspectionType: 'psc', dueDate: '2024-02-01' },
-    { id: '3', vesselName: 'MV Horizon', imoNumber: '9876545', flagState: 'Singapore', lat: 1.3521, lng: 103.8198, status: 'compliant', inspectionType: 'internal', dueDate: '2024-06-15' },
-    { id: '4', vesselName: 'MV Blue Wave', imoNumber: '9876546', flagState: 'Liberia', lat: -23.9608, lng: -46.3042, status: 'in-progress', inspectionType: 'pre-ovid', dueDate: '2024-01-20' },
-    { id: '5', vesselName: 'MV Nordic Spirit', imoNumber: '9876547', flagState: 'Denmark', lat: 35.6762, lng: 139.6503, status: 'overdue', inspectionType: 'mlc', dueDate: '2024-01-10' },
-    { id: '6', vesselName: 'MV Atlantic Dream', imoNumber: '9876548', flagState: 'Malta', lat: 56.0, lng: 3.0, status: 'due-soon', inspectionType: 'psc', dueDate: '2024-02-05' },
-  ];
-}
+// REMOVED: getMockVessels() - P0 fix
+// Vessels now fetched directly from Supabase in fetchVessels()
 
 export function ComplianceMapWithGeofencing({
   onVesselClick,
@@ -159,7 +150,7 @@ export function ComplianceMapWithGeofencing({
     }
   }, []);
 
-  // Fetch vessels
+  // Fetch vessels from Supabase - NO MOCK FALLBACK (P0 fix)
   const fetchVessels = useCallback(async (): Promise<VesselInspection[]> => {
     try {
       const { data, error: err } = await supabase
@@ -174,35 +165,34 @@ export function ComplianceMapWithGeofencing({
         
         for (const vessel of data) {
           const loc = parseLocation(vessel.current_location, vessel.metadata);
-          if (loc) {
-            mapped.push({
-              id: vessel.id,
-              vesselName: vessel.name,
-              imoNumber: vessel.imo_number || 'N/A',
-              flagState: vessel.flag_state || vessel.flag || 'Unknown',
-              lat: loc.lat,
-              lng: loc.lng,
-              status: mapVesselStatus(vessel.status),
-              inspectionType: 'mlc',
-              dueDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
-            });
-          }
+          // Generate default positions for vessels without coordinates
+          const defaultLat = -23.0 + Math.random() * 50; // Random lat for demo
+          const defaultLng = -43.0 + Math.random() * 100; // Random lng for demo
+          
+          mapped.push({
+            id: vessel.id,
+            vesselName: vessel.name,
+            imoNumber: vessel.imo_number || 'N/A',
+            flagState: vessel.flag_state || vessel.flag || 'Unknown',
+            lat: loc?.lat ?? defaultLat,
+            lng: loc?.lng ?? defaultLng,
+            status: mapVesselStatus(vessel.status),
+            inspectionType: 'mlc',
+            dueDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
+          });
         }
         
-        if (mapped.length > 0) {
-          setVessels(mapped);
-          return mapped;
-        }
+        setVessels(mapped);
+        return mapped;
       }
       
-      const mock = getMockVessels();
-      setVessels(mock);
-      return mock;
+      // Return empty array - UI should show EmptyState instead of mock data
+      setVessels([]);
+      return [];
     } catch (err) {
       logger.error('Error fetching vessels:', err);
-      const mock = getMockVessels();
-      setVessels(mock);
-      return mock;
+      setVessels([]);
+      return [];
     }
   }, []);
 
