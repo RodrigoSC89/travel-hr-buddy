@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Target, 
   Plus,
@@ -21,91 +22,14 @@ import {
   Brain,
   Sparkles,
   Calendar,
-  Users
+  Users,
+  Inbox
 } from "lucide-react";
-
-interface KeyResult {
-  id: string;
-  title: string;
-  current: number;
-  target: number;
-  unit: string;
-  status: "on_track" | "at_risk" | "behind" | "achieved";
-}
-
-interface OKR {
-  id: string;
-  objective: string;
-  owner: string;
-  level: "company" | "team" | "individual";
-  quarter: string;
-  progress: number;
-  status: "on_track" | "at_risk" | "behind" | "achieved";
-  key_results: KeyResult[];
-  children?: OKR[];
-}
-
-const mockOKRs: OKR[] = [
-  {
-    id: "1",
-    objective: "Ser líder em satisfação de colaboradores no setor marítimo",
-    owner: "CEO",
-    level: "company",
-    quarter: "Q1 2026",
-    progress: 72,
-    status: "on_track",
-    key_results: [
-      { id: "1-1", title: "Aumentar eNPS para 75+", current: 68, target: 75, unit: "pontos", status: "on_track" },
-      { id: "1-2", title: "Reduzir turnover para <8%", current: 9.2, target: 8, unit: "%", status: "at_risk" },
-      { id: "1-3", title: "95% participação em pesquisas", current: 92, target: 95, unit: "%", status: "on_track" },
-    ],
-    children: [
-      {
-        id: "1-a",
-        objective: "Implementar programa de bem-estar corporativo",
-        owner: "VP RH",
-        level: "team",
-        quarter: "Q1 2026",
-        progress: 85,
-        status: "on_track",
-        key_results: [
-          { id: "1-a-1", title: "Lançar app de bem-estar", current: 1, target: 1, unit: "", status: "achieved" },
-          { id: "1-a-2", title: "80% adesão ao programa", current: 72, target: 80, unit: "%", status: "on_track" },
-        ],
-      },
-      {
-        id: "1-b",
-        objective: "Melhorar comunicação interna",
-        owner: "Gerente Comunicação",
-        level: "team",
-        quarter: "Q1 2026",
-        progress: 60,
-        status: "at_risk",
-        key_results: [
-          { id: "1-b-1", title: "Lançar newsletter semanal", current: 8, target: 12, unit: "edições", status: "on_track" },
-          { id: "1-b-2", title: "90% leitura de comunicados", current: 65, target: 90, unit: "%", status: "behind" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "2",
-    objective: "Acelerar transformação digital do RH",
-    owner: "CTO",
-    level: "company",
-    quarter: "Q1 2026",
-    progress: 45,
-    status: "at_risk",
-    key_results: [
-      { id: "2-1", title: "100% processos digitalizados", current: 45, target: 100, unit: "%", status: "behind" },
-      { id: "2-2", title: "Reduzir tempo de admissão para 1 dia", current: 3, target: 1, unit: "dias", status: "at_risk" },
-      { id: "2-3", title: "Zero papel em processos de RH", current: 60, target: 100, unit: "%", status: "on_track" },
-    ],
-  },
-];
+import { useOKRsData, type OKR, type KeyResult } from "@/hooks/useOKRsData";
 
 export function HROKRsManager() {
-  const [expandedOKRs, setExpandedOKRs] = useState<string[]>(["1"]);
+  const { data: okrs = [], isLoading } = useOKRsData();
+  const [expandedOKRs, setExpandedOKRs] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("tree");
 
   const toggleExpand = (id: string) => {
@@ -352,7 +276,29 @@ export function HROKRsManager() {
         </TabsList>
 
         <TabsContent value="tree" className="space-y-4 mt-4">
-          {mockOKRs.map(okr => renderOKR(okr))}
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-32 w-full" />
+              ))}
+            </div>
+          ) : okrs.length === 0 ? (
+            <Card className="p-8">
+              <div className="text-center space-y-4">
+                <Inbox className="h-12 w-12 mx-auto text-muted-foreground" />
+                <h3 className="font-semibold text-lg">Nenhum OKR Configurado</h3>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  Configure os Objetivos e Resultados-Chave da sua organização para começar a acompanhar o progresso estratégico.
+                </p>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Primeiro OKR
+                </Button>
+              </div>
+            </Card>
+          ) : (
+            okrs.map((okr: OKR) => renderOKR(okr))
+          )}
         </TabsContent>
 
         <TabsContent value="my-okrs" className="space-y-4 mt-4">
