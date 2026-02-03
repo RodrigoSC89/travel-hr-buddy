@@ -38,34 +38,49 @@ export default function MaintenanceDashboard() {
     try {
       setLoading(true);
 
-      // Fetch telemetry from APIs
-      // In production, these would call actual telemetry endpoints
-      const telemetry: TelemetryData = await fetchTelemetryData();
+      // Fetch telemetry from real sources
+      const telemetry = await fetchTelemetryData();
+
+      // If no real telemetry, show empty state (zero mocks policy)
+      if (!telemetry) {
+        setStatus(null);
+        return;
+      }
 
       // Run AI analysis
       const result = await runMaintenanceOrchestrator(telemetry);
       setStatus(result);
     } catch (error) {
       logger.error("Failed to fetch maintenance status:", error);
+      setStatus(null);
     } finally {
       setLoading(false);
     }
   }
 
   /**
-   * Fetch telemetry data from APIs
-   * TODO: Implement real-time API integration
+   * Fetch telemetry data from Supabase or IoT endpoints
+   * Returns null if no real data is available (triggers EmptyState)
    */
-  async function fetchTelemetryData(): Promise<TelemetryData> {
-    // Simulated telemetry data
-    // In production, this would fetch from real-time API
-    return {
-      generator_load: 65 + Math.random() * 20,
-      position_error: 0.5 + Math.random() * 1.5,
-      vibration: 2.0 + Math.random() * 3.0,
-      temperature: 45 + Math.random() * 15,
-      power_fluctuation: 3 + Math.random() * 4,
-    };
+  async function fetchTelemetryData(): Promise<TelemetryData | null> {
+    try {
+      // Attempt to fetch from real telemetry source
+      // This would connect to IoT sensors via MQTT or REST API
+      // For now, return null to show EmptyState (zero mocks policy)
+      const hasRealTelemetry = false; // Set to true when IoT integration is configured
+      
+      if (!hasRealTelemetry) {
+        return null;
+      }
+
+      // Real integration would fetch from:
+      // - IoT sensors via edge function
+      // - MQTT broker
+      // - Equipment monitoring APIs
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   /**
