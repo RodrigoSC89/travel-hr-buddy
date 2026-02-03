@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Map, 
   Route, 
@@ -12,7 +14,8 @@ import {
   Ship, 
   Bot,
   Cloud,
-  Fuel
+  Fuel,
+  AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -21,11 +24,13 @@ import CreateVoyageDialog from "./components/CreateVoyageDialog";
 import VoyageDetailsDialog from "./components/VoyageDetailsDialog";
 import VoyageAICopilot from "./components/VoyageAICopilot";
 import WeatherPanel from "./components/WeatherPanel";
-import { DEMO_VOYAGES, DEMO_WEATHER } from "./data/demo-data";
+import { useVoyageRoutes, useWeatherConditions } from "./hooks/useVoyageData";
 import type { VoyageRoute } from "./types";
 
 const VoyagePlanner = () => {
-  const [voyages, setVoyages] = useState<VoyageRoute[]>(DEMO_VOYAGES);
+  const { data: voyages = [], isLoading: voyagesLoading, refetch } = useVoyageRoutes();
+  const { data: weatherConditions = [], isLoading: weatherLoading } = useWeatherConditions();
+  
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [selectedVoyage, setSelectedVoyage] = useState<VoyageRoute | null>(null);
@@ -36,13 +41,15 @@ const VoyagePlanner = () => {
     planned: voyages.filter((v) => v.status === "planned").length,
     totalDistance: voyages.reduce((sum, v) => sum + v.distanceNm, 0),
     totalFuel: voyages.reduce((sum, v) => sum + v.fuelConsumption, 0),
-    avgDays: Math.round(voyages.reduce((sum, v) => sum + v.estimatedDays, 0) / voyages.length),
+    avgDays: voyages.length > 0 
+      ? Math.round(voyages.reduce((sum, v) => sum + v.estimatedDays, 0) / voyages.length)
+      : 0,
     onTimeRate: 94,
   };
 
-  const handleCreateVoyage = (voyage: VoyageRoute) => {
-    setVoyages((prev) => [voyage, ...prev]);
-    toast.success(`Viagem ${voyage.name} criada com sucesso!`);
+  const handleCreateVoyage = () => {
+    refetch();
+    toast.success("Viagem criada com sucesso!");
   };
 
   const handleViewDetails = (voyage: VoyageRoute) => {
@@ -50,10 +57,24 @@ const VoyagePlanner = () => {
     setDetailsDialogOpen(true);
   };
 
-  const handleDeleteVoyage = (id: string) => {
-    setVoyages((prev) => prev.filter((v) => v.id !== id));
+  const handleDeleteVoyage = () => {
+    refetch();
     toast.success("Viagem removida");
   };
+
+  if (voyagesLoading) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <Skeleton className="h-12 w-64" />
+        <div className="grid grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -73,6 +94,16 @@ const VoyagePlanner = () => {
           Nova Viagem
         </Button>
       </div>
+
+      {/* Empty State Warning */}
+      {voyages.length === 0 && (
+        <Alert>
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            Nenhuma viagem cadastrada. Clique em "Nova Viagem" para começar o planejamento.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -221,7 +252,19 @@ const VoyagePlanner = () => {
         </TabsContent>
 
         <TabsContent value="weather" className="mt-6">
-          <WeatherPanel conditions={DEMO_WEATHER} />
+          {weatherLoading ? (
+            <Skeleton className="h-64" />
+          ) : weatherConditions.length === 0 ? (
+            <Card className="border-dashed">
+              <CardContent className="py-10 text-center text-muted-foreground">
+                <Cloud className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>Dados meteorológicos não disponíveis.</p>
+                <p className="text-sm">Configure a integração de API meteorológica nas configurações.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <WeatherPanel conditions={weatherConditions} />
+          )}
         </TabsContent>
 
         <TabsContent value="analytics" className="mt-6">
@@ -239,7 +282,9 @@ const VoyagePlanner = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Média por Viagem</span>
                     <span className="font-bold">
-                      {Math.round(stats.totalFuel / voyages.length).toLocaleString()} ton
+                      {voyages.length > 0 
+                        ? Math.round(stats.totalFuel / voyages.length).toLocaleString() 
+                        : 0} ton
                     </span>
                   </div>
                   <div className="flex justify-between items-center">

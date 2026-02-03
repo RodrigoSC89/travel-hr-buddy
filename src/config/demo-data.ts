@@ -1,7 +1,19 @@
 /**
  * Configuração de dados demo do sistema
- * Centraliza todos os dados fictícios usados durante desenvolvimento e demonstração
+ * PROTEGIDO: Este arquivo só pode ser usado em modo DEMO
+ * 
+ * @see src/lib/ops-mode.ts para controle de modos
  */
+
+import { allowDemoData } from '@/lib/ops-mode';
+
+// Verificação de segurança em produção
+if (typeof window !== 'undefined' && import.meta.env.MODE === 'production') {
+  const isDemoAllowed = allowDemoData();
+  if (!isDemoAllowed) {
+    console.warn('⚠️ DEMO DATA: Este módulo não deve ser usado em produção OPS_REAL');
+  }
+}
 
 export const DEMO_TENANT = {
   id: "550e8400-e29b-41d4-a716-446655440000",
@@ -73,7 +85,15 @@ export const DEMO_BRANDING = {
   }
 } as const;
 
+/**
+ * Retorna dados de uso demo SOMENTE se permitido pelo modo
+ */
 export function getDemoUsage(tenantId: string) {
+  if (!allowDemoData()) {
+    console.warn('getDemoUsage chamado fora do modo DEMO');
+    return null;
+  }
+
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
   startOfMonth.setHours(0, 0, 0, 0);
@@ -95,7 +115,15 @@ export function getDemoUsage(tenantId: string) {
   };
 }
 
+/**
+ * Retorna usuário demo SOMENTE se permitido pelo modo
+ */
 export function getDemoUser(userId: string, tenantId: string, userEmail?: string, userName?: string) {
+  if (!allowDemoData()) {
+    console.warn('getDemoUser chamado fora do modo DEMO');
+    return null;
+  }
+
   return {
     id: "demo-user",
     tenant_id: tenantId,
@@ -110,4 +138,11 @@ export function getDemoUser(userId: string, tenantId: string, userEmail?: string
     last_active_at: new Date().toISOString(),
     metadata: {}
   };
+}
+
+/**
+ * Verificação explícita se dados demo podem ser usados
+ */
+export function canUseDemoData(): boolean {
+  return allowDemoData();
 }

@@ -1,11 +1,14 @@
 /**
  * Voyage Planner Hooks - Connected to Supabase
+ * PATCH P0: Removido fallback para DEMO_PORTS
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { VoyageRoute, Port } from '../types';
-import { DEMO_PORTS } from '../data/demo-data';
+
+// Default empty ports when none configured
+const EMPTY_PORTS: Port[] = [];
 
 export function useVoyageRoutes() {
   return useQuery({
@@ -71,12 +74,14 @@ export function usePorts() {
         .order('name');
 
       if (error) {
-        // Fallback to demo ports if table doesn't exist or no data
-        return DEMO_PORTS;
+        // Return empty - no fallback to demo data
+        console.warn('Ports table not accessible:', error.message);
+        return EMPTY_PORTS;
       }
 
       if (!data || data.length === 0) {
-        return DEMO_PORTS;
+        // Return empty - no fallback to demo data
+        return EMPTY_PORTS;
       }
 
       return data.map(row => {
@@ -155,5 +160,26 @@ export function useDeleteVoyageRoute() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['voyage-routes'] });
     }
+  });
+}
+
+export function useWeatherConditions() {
+  return useQuery({
+    queryKey: ['weather-conditions'],
+    queryFn: async () => {
+      // Fetch real weather from edge function or return empty
+      try {
+        const { data, error } = await supabase.functions.invoke('maritime-weather', {
+          body: { regions: ['atlantic-north', 'atlantic-south', 'indian', 'north-sea'] }
+        });
+        
+        if (error) throw error;
+        return data?.conditions || [];
+      } catch {
+        // No fallback to mock - return empty
+        return [];
+      }
+    },
+    staleTime: 10 * 60 * 1000 // 10 min
   });
 }
