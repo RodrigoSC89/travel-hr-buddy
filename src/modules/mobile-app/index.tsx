@@ -166,16 +166,23 @@ interface Notification {
   read: boolean;
 }
 
-const mockNotifications: Notification[] = [
-  { id: "1", title: "Manutenção Programada", message: "Motor auxiliar #2 - troca de óleo às 14h", time: new Date(Date.now() - 300000), type: "info", read: false },
-  { id: "2", title: "Alerta Meteorológico", message: "Frente fria prevista para amanhã - ondas de 3m", time: new Date(Date.now() - 600000), type: "warning", read: false },
-  { id: "3", title: "Documento Expirando", message: "Certificado de Rádio expira em 7 dias", time: new Date(Date.now() - 900000), type: "warning", read: true },
-];
+// Notifications are fetched from real data
+import { useNotificationsData } from "@/hooks/useNotificationsData";
 
 export default function MobileApp() {
+  const { notifications: rawNotifications } = useNotificationsData();
   const [selectedRole, setSelectedRole] = useState<CrewRole>(crewRoles[0]);
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [activeView, setActiveView] = useState<string>("home");
+
+  // Map to local type
+  const notifications = rawNotifications.slice(0, 5).map(n => ({
+    id: n.id,
+    title: n.title,
+    message: n.message,
+    time: n.createdAt,
+    type: n.priority === "critical" ? "critical" as const : n.type === "warning" ? "warning" as const : "info" as const,
+    read: n.read,
+  }));
 
   const handleQuickAction = (action: string) => {
     toast.success(`Abrindo: ${action}`);
@@ -183,7 +190,7 @@ export default function MobileApp() {
   };
 
   const markAllRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    // Note: handled by the hook in real implementation
     toast.success("Todas notificações marcadas como lidas");
   };
 

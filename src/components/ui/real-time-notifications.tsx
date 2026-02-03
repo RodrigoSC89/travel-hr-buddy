@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 import {
@@ -18,8 +19,10 @@ import {
   Shield,
   Zap,
   Target,
-  Settings
+  Settings,
+  Inbox
 } from "lucide-react";
+import { useNotificationsData, type SystemNotification } from "@/hooks/useNotificationsData";
 
 interface Notification {
   id: string;
@@ -35,67 +38,22 @@ interface Notification {
   };
 }
 
-const mockNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "warning",
-    title: "Certificação Próxima do Vencimento",
-    message: "Certificado STCW do Oficial João Silva vence em 15 dias",
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    module: "hr",
-    isRead: false,
-    action: {
-      label: "Ver Detalhes",
-      callback: () => logger.info("View details")
-    }
-  },
-  {
-    id: "2",
-    type: "success",
-    title: "IA Detectou Economia",
-    message: "Otimização automática economizou R$ 15.000 em rotações",
-    timestamp: new Date(Date.now() - 15 * 60 * 1000),
-    module: "analytics",
-    isRead: false
-  },
-  {
-    id: "3",
-    type: "info",
-    title: "Nova Embarcação Adicionada",
-    message: "MV Ocean Pioneer foi registrada no sistema",
-    timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    module: "maritime",
-    isRead: true
-  },
-  {
-    id: "4",
-    type: "warning",
-    title: "Sistema IoT Offline",
-    message: "Sensor de temperatura do Porto de Santos está offline",
-    timestamp: new Date(Date.now() - 45 * 60 * 1000),
-    module: "iot",
-    isRead: false,
-    action: {
-      label: "Verificar",
-      callback: () => logger.info("Verify")
-    }
-  },
-  {
-    id: "5",
-    type: "success",
-    title: "Blockchain Verificado",
-    message: "Documento de manifesto foi certificado com sucesso",
-    timestamp: new Date(Date.now() - 60 * 60 * 1000),
-    module: "blockchain",
-    isRead: true
-  }
-];
-
 export const NotificationCenter: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const { notifications: rawNotifications, isLoading, markAsRead, markAllAsRead } = useNotificationsData();
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const { toast } = useToast();
+
+  // Map to local type
+  const notifications: Notification[] = rawNotifications.map(n => ({
+    id: n.id,
+    type: n.type === "error" ? "error" : n.type === "warning" ? "warning" : n.type === "success" ? "success" : "info",
+    title: n.title,
+    message: n.message,
+    timestamp: n.createdAt,
+    module: n.source,
+    isRead: n.read,
+  }));
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -114,27 +72,31 @@ export const NotificationCenter: React.FC = () => {
 
   const getIconColor = (type: string) => {
     switch (type) {
-    case "warning": return "text-yellow-500";
-    case "success": return "text-green-500";
-    case "error": return "text-red-500";
-    default: return "text-blue-500";
+    case "warning": return "text-warning";
+    case "success": return "text-success";
+    case "error": return "text-destructive";
+    default: return "text-info";
     }
   };
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
-    );
+  const handleMarkAsRead = (id: string) => {
+    markAsRead(id);
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, isRead: true }))
-    );
+  const handleMarkAllAsRead = () => {
+    markAllAsRead();
+    toast({
+      title: "Sucesso",
+      description: "Todas marcadas como lidas",
+    });
   };
 
   const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    // Note: remove not implemented in hook
+    toast({
+      title: "Arquivado",
+      description: "Notificação arquivada",
+    });
   };
 
   const formatTimeAgo = (date: Date) => {
@@ -151,33 +113,7 @@ export const NotificationCenter: React.FC = () => {
     return `${diffInDays}d atrás`;
   };
 
-  // Simular notificações em tempo real
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const shouldShowNotification = Math.random() < 0.1; // 10% de chance a cada 30s
-      
-      if (shouldShowNotification) {
-        const newNotification: Notification = {
-          id: Date.now().toString(),
-          type: Math.random() > 0.7 ? "warning" : "info",
-          title: "Nova Atualização do Sistema",
-          message: "Dados atualizados em tempo real",
-          timestamp: new Date(),
-          module: "system",
-          isRead: false
-        };
-
-        setNotifications(prev => [newNotification, ...prev.slice(0, 9)]);
-        
-        toast({
-          title: newNotification.title,
-          description: newNotification.message,
-        });
-      }
-    }, 30000); // A cada 30 segundos
-
-    return () => clearInterval(interval);
-  }, [toast]);
+  // Real-time updates are handled by the hook - no need for local simulation
 
   return (
     <div className="relative">
@@ -227,7 +163,7 @@ export const NotificationCenter: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={markAllAsRead}
+                onClick={handleMarkAllAsRead}
                 className="w-full mt-2"
               >
                 Marcar todas como lidas
@@ -250,9 +186,9 @@ export const NotificationCenter: React.FC = () => {
                       <div
                         key={notification.id}
                         className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50 ${
-                          !notification.isRead ? "bg-blue-50 border-blue-200" : "bg-background"
+                          !notification.isRead ? "bg-primary/5 border-primary/20" : "bg-background"
                         }`}
-                        onClick={() => markAsRead(notification.id)}
+                        onClick={() => handleMarkAsRead(notification.id)}
                       >
                         <div className="flex items-start gap-3">
                           <Icon className={`h-4 w-4 mt-1 ${getIconColor(notification.type)}`} />

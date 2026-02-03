@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ShieldAlert,
   Calendar,
@@ -24,37 +25,19 @@ import {
   TrendingUp,
   Award,
   Target,
-  Activity
+  Activity,
+  Inbox
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTrainingDrills, type Drill } from "@/hooks/useTrainingDrillsData";
 
 interface Props {
   searchQuery?: string;
 }
 
-interface Drill {
-  id: string;
-  name: string;
-  type: "fire" | "abandon" | "mob" | "blackout" | "collision" | "pollution" | "isps";
-  frequency: string;
-  lastExecution: string;
-  nextDue: string;
-  status: "completed" | "due" | "overdue";
-  participants: number;
-  totalCrew: number;
-}
-
-const mockDrills: Drill[] = [
-  { id: "1", name: "Exercício de Incêndio", type: "fire", frequency: "Mensal", lastExecution: "2024-01-10", nextDue: "2024-02-10", status: "completed", participants: 24, totalCrew: 24 },
-  { id: "2", name: "Abandono de Embarcação", type: "abandon", frequency: "Mensal", lastExecution: "2024-01-05", nextDue: "2024-02-05", status: "completed", participants: 24, totalCrew: 24 },
-  { id: "3", name: "Homem ao Mar (MOB)", type: "mob", frequency: "Trimestral", lastExecution: "2023-11-15", nextDue: "2024-02-15", status: "due", participants: 0, totalCrew: 24 },
-  { id: "4", name: "Blackout Recovery", type: "blackout", frequency: "Semestral", lastExecution: "2023-08-20", nextDue: "2024-02-20", status: "due", participants: 0, totalCrew: 24 },
-  { id: "5", name: "Combate à Poluição", type: "pollution", frequency: "Trimestral", lastExecution: "2023-10-01", nextDue: "2024-01-01", status: "overdue", participants: 0, totalCrew: 24 },
-  { id: "6", name: "ISPS Security Drill", type: "isps", frequency: "Trimestral", lastExecution: "2023-12-15", nextDue: "2024-03-15", status: "completed", participants: 20, totalCrew: 24 },
-];
-
 export default function TrainingDashboardSection({ searchQuery }: Props) {
   const { toast } = useToast();
+  const { data: drills = [], isLoading: isLoadingDrills } = useTrainingDrills();
   const [chatMessage, setChatMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
@@ -178,14 +161,14 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
     }, 1500);
   };
 
-  const filteredDrills = mockDrills.filter(drill => 
+  const filteredDrills = drills.filter((drill: Drill) => 
     !searchQuery || drill.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const overdueDrills = mockDrills.filter(d => d.status === "overdue").length;
-  const dueDrills = mockDrills.filter(d => d.status === "due").length;
-  const completedDrills = mockDrills.filter(d => d.status === "completed").length;
-  const complianceRate = Math.round((completedDrills / mockDrills.length) * 100);
+  const overdueDrills = drills.filter((d: Drill) => d.status === "overdue").length;
+  const dueDrills = drills.filter((d: Drill) => d.status === "due").length;
+  const completedDrills = drills.filter((d: Drill) => d.status === "completed").length;
+  const complianceRate = drills.length > 0 ? Math.round((completedDrills / drills.length) * 100) : 0;
 
   const handleScheduleDrill = (drill: Drill) => {
     toast({
@@ -391,10 +374,10 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
           <CardContent>
             <ScrollArea className="h-[400px]">
               <div className="space-y-3">
-                {filteredDrills.map((drill) => (
+                {filteredDrills.map((drill: Drill) => (
                   <div key={drill.id} className={`p-4 rounded-lg border transition-all hover:shadow-md ${
-                    drill.status === "overdue" ? "bg-red-500/10 border-red-500/30" :
-                    drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
+                    drill.status === "overdue" ? "bg-destructive/10 border-destructive/30" :
+                    drill.status === "due" ? "bg-warning/10 border-warning/30" :
                     "bg-muted/30 border-border"
                   }`}>
                     <div className="flex items-start justify-between mb-2">
