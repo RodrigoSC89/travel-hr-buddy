@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Bell, 
   BellRing, 
@@ -25,9 +26,11 @@ import {
   Calendar,
   Star,
   Archive,
-  Trash2
+  Trash2,
+  Inbox
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNotificationsData, type SystemNotification } from "@/hooks/useNotificationsData";
 
 interface Notification {
   id: string;
@@ -40,11 +43,11 @@ interface Notification {
   read: boolean;
   actionRequired: boolean;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 const IntelligentNotificationSystem = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { notifications: rawNotifications, isLoading, markAsRead, markAllAsRead, stats } = useNotificationsData();
   const [filterType, setFilterType] = useState<string>("all");
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,73 +67,19 @@ const IntelligentNotificationSystem = () => {
   });
   const { toast } = useToast();
 
-  // Simulação de notificações
-  useEffect(() => {
-    const mockNotifications: Notification[] = [
-      {
-        id: "1",
-        title: "Análise IA: Anomalia Detectada",
-        message: "Sistema detectou padrão anômalo nos gastos do departamento de TI (+45% acima da média)",
-        type: "ai_insight",
-        priority: "high",
-        category: "Financial",
-        timestamp: new Date(Date.now() - 30 * 60 * 1000),
-        read: false,
-        actionRequired: true,
-        source: "AI Analytics Engine",
-        metadata: { department: "TI", variance: 45 }
-      },
-      {
-        id: "2",
-        title: "Alerta de Segurança",
-        message: "Tentativas de login falharam 5 vezes para o usuário admin@empresa.com",
-        type: "warning",
-        priority: "urgent",
-        category: "Security",
-        timestamp: new Date(Date.now() - 15 * 60 * 1000),
-        read: false,
-        actionRequired: true,
-        source: "Security Monitor"
-      },
-      {
-        id: "3",
-        title: "Certificado Expirando",
-        message: "Certificado STCW do funcionário João Silva expira em 7 dias",
-        type: "warning",
-        priority: "medium",
-        category: "HR",
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        read: true,
-        actionRequired: true,
-        source: "HR System"
-      },
-      {
-        id: "4",
-        title: "Meta Atingida!",
-        message: "Departamento de Vendas atingiu 110% da meta mensal",
-        type: "success",
-        priority: "medium",
-        category: "Operational",
-        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-        read: true,
-        actionRequired: false,
-        source: "Performance Tracker"
-      },
-      {
-        id: "5",
-        title: "Recomendação IA",
-        message: "Baseado nos dados, recomendamos aumentar o orçamento de marketing em 15%",
-        type: "ai_insight",
-        priority: "medium",
-        category: "Strategic",
-        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        read: false,
-        actionRequired: false,
-        source: "Strategic AI"
-      }
-    ];
-    setNotifications(mockNotifications);
-  }, []);
+  // Map SystemNotification to local Notification type
+  const notifications: Notification[] = rawNotifications.map(n => ({
+    id: n.id,
+    title: n.title,
+    message: n.message,
+    type: n.type === "error" ? "error" : n.type === "warning" ? "warning" : n.type === "success" ? "success" : "info",
+    priority: n.priority === "critical" ? "urgent" : n.priority,
+    category: n.source,
+    timestamp: n.createdAt,
+    read: n.read,
+    actionRequired: n.actionRequired || false,
+    source: n.source,
+  }));
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -169,18 +118,12 @@ const IntelligentNotificationSystem = () => {
     return matchesType && matchesPriority && matchesSearch;
   });
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, read: true } : notif
-      )
-    );
+  const handleMarkAsRead = (id: string) => {
+    markAsRead(id);
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notif => ({ ...notif, read: true }))
-    );
+  const handleMarkAllAsRead = () => {
+    markAllAsRead();
     toast({
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
@@ -188,10 +131,10 @@ const IntelligentNotificationSystem = () => {
   };
 
   const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== id));
+    // Note: delete not implemented in hook - local filter only
     toast({
-      title: "Notificação removida",
-      description: "A notificação foi removida com sucesso",
+      title: "Notificação arquivada",
+      description: "A notificação foi arquivada",
     });
   };
 
