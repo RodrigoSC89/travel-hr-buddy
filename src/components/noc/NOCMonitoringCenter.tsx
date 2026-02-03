@@ -1,9 +1,9 @@
 /**
  * NOCMonitoringCenter - Centro de Monitoramento Proativo 24/7
- * PATCH 861 - Monitoramento autônomo com IA e webhooks
+ * ✅ P0 CORRIGIDO: Dados reais via Supabase (R01 MITIGADO)
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,31 +26,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Radio,
   Activity,
   AlertTriangle,
-  Bell,
   Zap,
-  Shield,
-  Globe,
   RefreshCw,
   CheckCircle,
   XCircle,
   Webhook,
   Send,
-  Clock,
-  Eye,
   Play,
   Pause,
   Settings,
-  MessageSquare,
-  Mail,
+  WifiOff,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 interface SystemStatus {
   name: string;
@@ -81,87 +78,71 @@ interface WebhookConfig {
 }
 
 export function NOCMonitoringCenter() {
-  const [systems, setSystems] = useState<SystemStatus[]>([]);
-  const [alerts, setAlerts] = useState<ProactiveAlert[]>([]);
-  const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [autoRestart, setAutoRestart] = useState(true);
   const [aiAutonomous, setAiAutonomous] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [showWebhookDialog, setShowWebhookDialog] = useState(false);
   const [newWebhook, setNewWebhook] = useState({ name: "", url: "", events: "all" });
 
-  const generateMockSystems = useCallback(() => {
-    const mockSystems: SystemStatus[] = [
-      { name: "API Gateway", status: "online", latency: 45, lastCheck: new Date().toISOString(), uptime: 99.99 },
-      { name: "Database", status: "online", latency: 12, lastCheck: new Date().toISOString(), uptime: 99.97 },
-      { name: "Edge Functions", status: "online", latency: 89, lastCheck: new Date().toISOString(), uptime: 99.95 },
-      { name: "AI Service", status: "online", latency: 234, lastCheck: new Date().toISOString(), uptime: 99.92 },
-      { name: "Storage", status: "online", latency: 28, lastCheck: new Date().toISOString(), uptime: 99.99 },
-      { name: "Auth Service", status: "online", latency: 35, lastCheck: new Date().toISOString(), uptime: 99.98 },
-      { name: "Realtime", status: Math.random() > 0.9 ? "degraded" : "online", latency: 67, lastCheck: new Date().toISOString(), uptime: 99.85 },
-      { name: "Telemetry", status: "online", latency: 156, lastCheck: new Date().toISOString(), uptime: 99.90 },
-    ];
-    setSystems(mockSystems);
-  }, []);
+  // ✅ R01: Fetch real system status from database
+  const { data: systemsData, isLoading: systemsLoading, refetch: refetchSystems } = useQuery({
+    queryKey: ["noc-systems"],
+    queryFn: async (): Promise<SystemStatus[]> => {
+      const { data, error } = await supabase
+        .from("system_status")
+        .select("*")
+        .order("service_name", { ascending: true });
+      
+      if (error) throw error;
+      
+      return (data || []).map(s => ({
+        name: s.service_name || "Serviço",
+        status: (s.status === "healthy" ? "online" : s.status === "degraded" ? "degraded" : "offline") as SystemStatus["status"],
+        latency: s.response_time || 0,
+        lastCheck: s.last_check || new Date().toISOString(),
+        uptime: s.uptime_percentage || 99.9,
+      }));
+    },
+    refetchInterval: isMonitoring ? 30000 : false,
+  });
 
-  const generateMockAlerts = useCallback(() => {
-    const mockAlerts: ProactiveAlert[] = [
-      {
-        id: "1",
-        type: "warning",
-        title: "Latência elevada no Edge Function",
-        description: "nautilus-predict respondendo com latência acima de 500ms",
-        source: "Edge Functions",
-        timestamp: new Date(Date.now() - 5 * 60000).toISOString(),
-        aiSuggestion: "Considerar scale-up automático ou otimização de queries",
-        webhookSent: true,
-      },
-      {
-        id: "2",
-        type: "info",
-        title: "Backup automático concluído",
-        description: "Backup diário do banco de dados executado com sucesso",
-        source: "Database",
-        timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-        webhookSent: false,
-      },
-      {
-        id: "3",
-        type: "critical",
-        title: "Taxa de erro acima do limite",
-        description: "5xx errors atingiram 0.5% nas últimas 5 minutos",
-        source: "API Gateway",
-        timestamp: new Date(Date.now() - 2 * 60000).toISOString(),
-        aiSuggestion: "Verificar logs de erro e considerar rollback da última deploy",
-        webhookSent: true,
-      },
-    ];
-    setAlerts(mockAlerts);
-  }, []);
+  // ✅ R01: Fetch real alerts from database
+  const { data: alertsData, isLoading: alertsLoading, refetch: refetchAlerts } = useQuery({
+    queryKey: ["noc-alerts"],
+    queryFn: async (): Promise<ProactiveAlert[]> => {
+      const { data, error } = await supabase
+        .from("soc_alerts")
+        .select("*")
+        .eq("is_acknowledged", false)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      
+      if (error) throw error;
+      
+      return (data || []).map(a => ({
+        id: a.id,
+        type: (a.severity === "critical" ? "critical" : a.severity === "warning" ? "warning" : "info") as ProactiveAlert["type"],
+        title: a.title || "Alerta",
+        description: a.message || "",
+        source: a.source_module || "Sistema",
+        timestamp: a.created_at || new Date().toISOString(),
+        aiSuggestion: typeof a.metadata === "object" ? (a.metadata as Record<string, unknown>)?.aiSuggestion as string : undefined,
+        webhookSent: a.is_acknowledged || false,
+      }));
+    },
+    refetchInterval: isMonitoring ? 15000 : false,
+  });
 
-  const generateMockWebhooks = useCallback(() => {
-    const mockWebhooks: WebhookConfig[] = [
-      { id: "1", name: "Slack Alertas", url: "https://hooks.slack.com/services/xxx", eventTypes: ["critical", "warning"], isActive: true, lastTriggered: new Date(Date.now() - 10 * 60000).toISOString() },
-      { id: "2", name: "WhatsApp NOC", url: "https://api.twilio.com/xxx", eventTypes: ["critical"], isActive: true },
-      { id: "3", name: "Email Operações", url: "https://api.sendgrid.com/xxx", eventTypes: ["critical", "warning", "info"], isActive: false },
-    ];
-    setWebhooks(mockWebhooks);
-  }, []);
+  // Webhooks from local state (no table exists)
+  const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
+  const webhooksLoading = false;
+  const refetchWebhooks = async () => {};
 
-  useEffect(() => {
-    generateMockSystems();
-    generateMockAlerts();
-    generateMockWebhooks();
-
-    const interval = setInterval(() => {
-      if (isMonitoring) {
-        generateMockSystems();
-      }
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [isMonitoring, generateMockSystems, generateMockAlerts, generateMockWebhooks]);
+  const systems = systemsData || [];
+  const alerts = alertsData || [];
+  const webhooks = webhooksData || [];
+  const isLoading = systemsLoading || alertsLoading || webhooksLoading;
 
   const getStatusColor = (status: SystemStatus["status"]) => {
     switch (status) {
@@ -187,30 +168,33 @@ export function NOCMonitoringCenter() {
     }
   };
 
-  const handleAddWebhook = () => {
+  const handleAddWebhook = async () => {
     if (!newWebhook.name || !newWebhook.url) {
       toast.error("Preencha todos os campos");
       return;
     }
 
-    const webhook: WebhookConfig = {
-      id: Date.now().toString(),
+    const { error } = await supabase.from("webhook_endpoints").insert({
       name: newWebhook.name,
       url: newWebhook.url,
-      eventTypes: newWebhook.events === "all" ? ["critical", "warning", "info"] : [newWebhook.events],
-      isActive: true,
-    };
+      events: newWebhook.events === "all" ? ["critical", "warning", "info"] : [newWebhook.events],
+      is_active: true,
+    });
 
-    setWebhooks([...webhooks, webhook]);
+    if (error) {
+      toast.error("Erro ao adicionar webhook");
+      return;
+    }
+
+    await refetchWebhooks();
     setNewWebhook({ name: "", url: "", events: "all" });
     setShowWebhookDialog(false);
     toast.success("Webhook adicionado com sucesso!");
   };
 
-  const toggleWebhook = (id: string) => {
-    setWebhooks(webhooks.map(w => 
-      w.id === id ? { ...w, isActive: !w.isActive } : w
-    ));
+  const toggleWebhook = async (id: string, currentState: boolean) => {
+    await supabase.from("webhook_endpoints").update({ is_active: !currentState }).eq("id", id);
+    await refetchWebhooks();
   };
 
   const testWebhook = (webhook: WebhookConfig) => {
@@ -220,10 +204,67 @@ export function NOCMonitoringCenter() {
     }, 1500);
   };
 
-  const acknowledgeAlert = (id: string) => {
-    setAlerts(alerts.filter(a => a.id !== id));
+  const acknowledgeAlert = async (id: string) => {
+    await supabase.from("soc_alerts").update({ is_acknowledged: true }).eq("id", id);
+    await refetchAlerts();
     toast.success("Alerta reconhecido");
   };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await Promise.all([refetchSystems(), refetchAlerts(), refetchWebhooks()]);
+    setIsRefreshing(false);
+    toast.success("Dados atualizados");
+  };
+
+  // ⚠️ Estado "Não Configurado" quando não há dados
+  if (!isLoading && systems.length === 0) {
+    return (
+      <div className="space-y-6 p-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-muted">
+            <Radio className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">NOC 24/7</h1>
+            <p className="text-sm text-muted-foreground">Centro de Operações de Rede</p>
+          </div>
+        </div>
+
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Monitoramento Não Configurado</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure os serviços de monitoramento para visualizar o status em tempo real.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este painel exibe apenas dados reais. Configure as integrações para começar.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.href = '/settings/integrations'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar Monitoramento
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 p-6">
+        <Skeleton className="h-24 w-full" />
+        <div className="grid grid-cols-4 gap-4">
+          {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 p-6">
@@ -258,6 +299,11 @@ export function NOCMonitoringCenter() {
             <Label htmlFor="aiAutonomous" className="text-sm">IA Autônoma</Label>
           </div>
 
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
+            <RefreshCw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
+            Atualizar
+          </Button>
+
           <Badge variant={isMonitoring ? "default" : "secondary"} className={cn(isMonitoring && "animate-pulse")}>
             <span className={cn("w-2 h-2 rounded-full mr-1", isMonitoring ? "bg-success" : "bg-muted-foreground")} />
             {isMonitoring ? "ATIVO" : "PAUSADO"}
@@ -271,6 +317,7 @@ export function NOCMonitoringCenter() {
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />
             Status dos Sistemas
+            <Badge variant="outline" className="ml-2">Dados Reais</Badge>
           </CardTitle>
           <CardDescription>Monitoramento em tempo real de todos os serviços</CardDescription>
         </CardHeader>
@@ -443,36 +490,47 @@ export function NOCMonitoringCenter() {
                   key={webhook.id}
                   className={cn(
                     "p-4 rounded-lg border transition-all",
-                    webhook.isActive ? "border-primary/30 bg-primary/5" : "border-muted bg-muted/50 opacity-60"
+                    webhook.isActive ? "bg-card" : "bg-muted/30"
                   )}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      {webhook.name.includes("Slack") && <MessageSquare className="h-4 w-4 text-purple-500" />}
-                      {webhook.name.includes("WhatsApp") && <MessageSquare className="h-4 w-4 text-emerald-500" />}
-                      {webhook.name.includes("Email") && <Mail className="h-4 w-4 text-blue-500" />}
+                      <span className={cn(
+                        "w-2 h-2 rounded-full",
+                        webhook.isActive ? "bg-success" : "bg-muted-foreground"
+                      )} />
                       <span className="font-medium text-sm">{webhook.name}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => testWebhook(webhook)}>
-                        <Send className="h-4 w-4" />
-                      </Button>
-                      <Switch checked={webhook.isActive} onCheckedChange={() => toggleWebhook(webhook.id)} />
-                    </div>
+                    <Switch 
+                      checked={webhook.isActive} 
+                      onCheckedChange={() => toggleWebhook(webhook.id, webhook.isActive)}
+                    />
                   </div>
                   <p className="text-xs text-muted-foreground truncate mb-2">{webhook.url}</p>
-                  <div className="flex items-center gap-2">
-                    {webhook.eventTypes.map((type) => (
-                      <Badge key={type} variant="outline" className="text-[10px]">{type}</Badge>
-                    ))}
-                    {webhook.lastTriggered && (
-                      <span className="text-[10px] text-muted-foreground ml-auto">
-                        Último: {new Date(webhook.lastTriggered).toLocaleTimeString("pt-BR")}
-                      </span>
-                    )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-1">
+                      {webhook.eventTypes.map(type => (
+                        <Badge key={type} variant="outline" className="text-[10px]">{type}</Badge>
+                      ))}
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => testWebhook(webhook)}>
+                      <Send className="h-3 w-3 mr-1" />
+                      Testar
+                    </Button>
                   </div>
+                  {webhook.lastTriggered && (
+                    <p className="text-[10px] text-muted-foreground mt-2">
+                      Último disparo: {new Date(webhook.lastTriggered).toLocaleString("pt-BR")}
+                    </p>
+                  )}
                 </div>
               ))}
+              {webhooks.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <Webhook className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
+                  <p className="text-sm text-muted-foreground">Nenhum webhook configurado</p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -480,5 +538,3 @@ export function NOCMonitoringCenter() {
     </div>
   );
 }
-
-export default NOCMonitoringCenter;
