@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck - Custom views documents_with_entities and search_documents not in generated schema
+// @ts-nocheck - Uses custom views (documents_with_entities) and RPCs (search_documents) not in generated schema
 /**
  * AI Documents Analyzer
  * Uses type assertions for custom views/tables not in generated types
