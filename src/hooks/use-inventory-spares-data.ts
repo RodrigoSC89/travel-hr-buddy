@@ -1,7 +1,7 @@
 /**
  * Inventory & Spares Real-Time Data Hooks
  * Smart inventory, demand forecasting, auto-reordering
- * @ts-nocheck - Tables may not exist in schema yet
+ * Uses inventory_items table with proper type casts
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

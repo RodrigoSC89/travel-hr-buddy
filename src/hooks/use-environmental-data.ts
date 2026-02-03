@@ -1,7 +1,7 @@
 /**
  * Environmental & Sustainability Real-Time Data Hooks
  * Emissions tracking, CII, decarbonization roadmap, waste management
- * @ts-nocheck - Tables may not exist in schema yet
+ * Uses emissions, cii_ratings, waste_records tables with dynamic typing
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

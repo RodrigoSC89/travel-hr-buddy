@@ -1,7 +1,7 @@
 /**
  * Quality Management Real-Time Data Hooks
  * NCR management, CAPA tracking, internal audits, continuous improvement
- * @ts-nocheck - Tables may not exist in schema yet
+ * Uses non_conformities, corrective_actions, internal_audits tables
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
