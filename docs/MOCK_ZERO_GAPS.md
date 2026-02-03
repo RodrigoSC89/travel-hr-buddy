@@ -48,10 +48,11 @@ Nenhum - todos os mocks críticos foram removidos!
 
 | Categoria | Arquivos | Status | Ação |
 |-----------|----------|--------|------|
-| `@ts-nocheck` | 3 arquivos | ⚠️ Justificados | Views customizadas não no schema |
+| `@ts-nocheck` | 3 arquivos | ✅ Justificados | Views customizadas não no schema |
 | `@ts-ignore` Edge Functions | ~35 | ✅ Aceitável | Deno runtime |
 | `console.*` | ~47 ocorrências | ⚠️ | Migrar para logger |
 | `TODO/FIXME` | ~23 críticos | ⚠️ | Converter em issues |
+| ComplianceIntegrationHub | ✅ CORRIGIDO | Mocks removidos | `useComplianceIntegrationData` |
 
 ### @ts-nocheck Justificados (3 arquivos)
 
@@ -68,6 +69,7 @@ Nenhum - todos os mocks críticos foram removidos!
 | Tracking Dashboard | ✅ Implementado | - |
 | Fleet Digital Twin | ✅ Implementado | - |
 | Satellite Tracker | ✅ Implementado | - |
+| Compliance Hub | ✅ Implementado | `useComplianceIntegrationData` |
 | Weather Dashboard | ⚠️ Parcial | Adicionar guard |
 
 ---

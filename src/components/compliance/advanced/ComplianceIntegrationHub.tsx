@@ -1,25 +1,31 @@
 /**
  * Compliance Integration Hub
  * Central hub connecting all compliance functionalities
+ * PATCH: Removed mocks, uses real data hooks
  */
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Layout, Grid3X3, AlertTriangle, Sparkles, Calendar, 
+  Grid3X3, AlertTriangle, Sparkles, Calendar, 
   FileText, CheckCircle2, Clock, TrendingUp, Shield,
-  Ship, Users, ArrowRight, Zap, Target, BarChart3
+  Ship, Zap, Target, BarChart3
 } from 'lucide-react';
 
 import { TraceabilityMatrix } from './TraceabilityMatrix';
 import { UnifiedEvidenceGenerator } from './UnifiedEvidenceGenerator';
 import { AutomaticReportsScheduler } from './AutomaticReportsScheduler';
+import { 
+  useIntegrationStatus, 
+  useRecentActivities, 
+  useComplianceStats 
+} from '@/hooks/useComplianceIntegrationData';
 
 type HubView = 'overview' | 'matrix' | 'evidence' | 'reports' | 'workflow';
 
@@ -67,24 +73,13 @@ const QUICK_ACTIONS: QuickAction[] = [
   }
 ];
 
-const INTEGRATION_STATUS = [
-  { system: 'PEOTRAM', status: 'connected', lastSync: '2 min atrás', records: 195 },
-  { system: 'PEO-DP', status: 'connected', lastSync: '5 min atrás', records: 114 },
-  { system: 'Supabase', status: 'connected', lastSync: 'Real-time', records: 565 },
-  { system: 'Email (Resend)', status: 'connected', lastSync: 'On-demand', records: null },
-  { system: 'AI (Claude/Gemini)', status: 'connected', lastSync: 'On-demand', records: null }
-];
-
-const RECENT_ACTIVITIES = [
-  { id: '1', action: 'NC Aberta', item: 'NC-2025-00045', module: 'PEOTRAM', time: '5 min atrás', type: 'nc' },
-  { id: '2', action: 'Evidência Gerada', item: 'EV-1737123456', module: 'PEO-DP', time: '15 min atrás', type: 'evidence' },
-  { id: '3', action: 'Relatório Enviado', item: 'Conformidade Mensal', module: 'PEOTRAM', time: '1h atrás', type: 'report' },
-  { id: '4', action: 'NC Fechada', item: 'NC-2025-00042', module: 'PEO-DP', time: '2h atrás', type: 'nc' },
-  { id: '5', action: 'Auditoria Concluída', item: 'AUD-2025-012', module: 'PEOTRAM', time: '3h atrás', type: 'audit' }
-];
-
 export function ComplianceIntegrationHub() {
   const [activeView, setActiveView] = useState<HubView>('overview');
+  
+  // Real data hooks
+  const { data: integrations = [], isLoading: loadingIntegrations } = useIntegrationStatus();
+  const { data: activities = [], isLoading: loadingActivities } = useRecentActivities();
+  const { data: stats, isLoading: loadingStats } = useComplianceStats();
 
   const renderContent = () => {
     switch (activeView) {
@@ -207,18 +202,28 @@ export function ComplianceIntegrationHub() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {INTEGRATION_STATUS.map(int => (
-                <div key={int.system} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${int.status === 'connected' ? 'bg-green-500' : 'bg-red-500'}`} />
-                    <span className="font-medium">{int.system}</span>
+              {loadingIntegrations ? (
+                Array(5).fill(0).map((_, i) => (
+                  <Skeleton key={i} className="h-10 w-full" />
+                ))
+              ) : integrations.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Nenhuma integração configurada
+                </p>
+              ) : (
+                integrations.map((int) => (
+                  <div key={int.system} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2 h-2 rounded-full ${int.status === 'CONNECTED' ? 'bg-green-500' : int.status === 'DEGRADED' ? 'bg-yellow-500' : 'bg-red-500'}`} />
+                      <span className="font-medium">{int.system}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      {int.records !== null && <span>{int.records} registros</span>}
+                      <span>{int.lastSync}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    {int.records && <span>{int.records} registros</span>}
-                    <span>{int.lastSync}</span>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
@@ -234,30 +239,40 @@ export function ComplianceIntegrationHub() {
           <CardContent>
             <ScrollArea className="h-64">
               <div className="space-y-3">
-                {RECENT_ACTIVITIES.map(activity => (
-                  <div key={activity.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        activity.type === 'nc' ? 'bg-orange-500/10' :
-                        activity.type === 'evidence' ? 'bg-purple-500/10' :
-                        activity.type === 'report' ? 'bg-green-500/10' : 'bg-blue-500/10'
-                      }`}>
-                        {activity.type === 'nc' ? <AlertTriangle className="h-4 w-4 text-orange-500" /> :
-                         activity.type === 'evidence' ? <Sparkles className="h-4 w-4 text-purple-500" /> :
-                         activity.type === 'report' ? <FileText className="h-4 w-4 text-green-500" /> :
-                         <CheckCircle2 className="h-4 w-4 text-blue-500" />}
+                {loadingActivities ? (
+                  Array(5).fill(0).map((_, i) => (
+                    <Skeleton key={i} className="h-14 w-full" />
+                  ))
+                ) : activities.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    Nenhuma atividade recente
+                  </p>
+                ) : (
+                  activities.map((activity) => (
+                    <div key={activity.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          activity.type === 'nc' ? 'bg-orange-500/10' :
+                          activity.type === 'evidence' ? 'bg-purple-500/10' :
+                          activity.type === 'report' ? 'bg-green-500/10' : 'bg-blue-500/10'
+                        }`}>
+                          {activity.type === 'nc' ? <AlertTriangle className="h-4 w-4 text-orange-500" /> :
+                           activity.type === 'evidence' ? <Sparkles className="h-4 w-4 text-purple-500" /> :
+                           activity.type === 'report' ? <FileText className="h-4 w-4 text-green-500" /> :
+                           <CheckCircle2 className="h-4 w-4 text-blue-500" />}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{activity.action}</p>
+                          <p className="text-xs text-muted-foreground">{activity.item}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-sm">{activity.action}</p>
-                        <p className="text-xs text-muted-foreground">{activity.item}</p>
+                      <div className="text-right">
+                        <Badge variant="outline" className="text-xs">{activity.module}</Badge>
+                        <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="text-xs">{activity.module}</Badge>
-                      <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </ScrollArea>
           </CardContent>
@@ -341,7 +356,7 @@ export function ComplianceIntegrationHub() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Layout className="h-6 w-6 text-primary" />
+            <BarChart3 className="h-6 w-6 text-primary" />
             Hub de Integração Compliance
           </h2>
           <p className="text-muted-foreground">
