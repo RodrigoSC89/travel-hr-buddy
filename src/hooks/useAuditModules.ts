@@ -36,6 +36,16 @@ function mapStatus(s: string | null): Audit['status'] {
   return 'draft';
 }
 
+function mapComplianceStatus(s: string | null): AuditItem['status'] {
+  if (!s) return 'pending';
+  const lower = s.toLowerCase();
+  if (lower === 'compliant' || lower === 'conforme') return 'compliant';
+  if (lower === 'non-compliant' || lower === 'non_compliant' || lower === 'nao_conforme') return 'non_compliant';
+  if (lower === 'partial') return 'pending';
+  if (lower === 'not_applicable') return 'not_applicable';
+  return 'pending';
+}
+
 // === PEO-DP/SGSO Hooks ===
 export function usePEODPAudits() {
   return useQuery({
@@ -62,16 +72,18 @@ export function usePEODPAuditItems(auditId: string) {
   return useQuery({
     queryKey: ['peo-dp-items', auditId],
     queryFn: async (): Promise<AuditItem[]> => {
-      // Use sgso_audit_items with correct columns
       const { data, error } = await supabase
         .from('sgso_audit_items')
-        .select('id, item_description, status, corrective_action')
+        .select('id, requirement_number, requirement_title, compliance_status, corrective_action')
         .eq('audit_id', auditId);
       if (error) throw error;
-      return (data || []).map((r, i) => ({
-        id: r.id, category: 'Sistema DP', item_number: `1.${i + 1}`,
-        description: r.item_description || 'Verificação', evidence_count: r.corrective_action ? 1 : 0,
-        status: r.status === 'conforme' ? 'compliant' : r.status === 'nao_conforme' ? 'non_compliant' : 'pending',
+      return (data || []).map((r) => ({
+        id: r.id, 
+        category: 'Sistema DP', 
+        item_number: `1.${r.requirement_number}`,
+        description: r.requirement_title || 'Verificação', 
+        evidence_count: r.corrective_action ? 1 : 0,
+        status: mapComplianceStatus(r.compliance_status),
       }));
     },
     enabled: !!auditId,
@@ -121,12 +133,16 @@ export function useSGSOItems(auditId: string) {
     queryKey: ['sgso-items', auditId],
     queryFn: async (): Promise<AuditItem[]> => {
       const { data, error } = await supabase.from('sgso_audit_items')
-        .select('id, item_description, status, corrective_action').eq('audit_id', auditId);
+        .select('id, requirement_number, requirement_title, compliance_status, corrective_action')
+        .eq('audit_id', auditId);
       if (error) throw error;
-      return (data || []).map((r, i) => ({
-        id: r.id, category: `Prática ${i + 1}`, item_number: `${i + 1}.1`,
-        description: r.item_description || 'Verificação SGSO', evidence_count: r.corrective_action ? 1 : 0,
-        status: r.status === 'conforme' ? 'compliant' : r.status === 'nao_conforme' ? 'non_compliant' : 'pending',
+      return (data || []).map((r) => ({
+        id: r.id, 
+        category: `Prática ${r.requirement_number}`, 
+        item_number: `${r.requirement_number}.1`,
+        description: r.requirement_title || 'Verificação SGSO', 
+        evidence_count: r.corrective_action ? 1 : 0,
+        status: mapComplianceStatus(r.compliance_status),
       }));
     },
     enabled: !!auditId,
@@ -176,14 +192,17 @@ export function usePSCPackages() {
     queryKey: ['psc-packages'],
     queryFn: async () => {
       const { data, error } = await supabase.from('psc_inspections')
-        .select('id, inspection_date, port_name, deficiencies_count, detention_status, vessel_id')
+        .select('id, inspection_date, port_name, deficiencies_count, detention, vessel_id')
         .order('inspection_date', { ascending: false }).limit(50);
       if (error) throw error;
       return (data || []).map(r => ({
-        id: r.id, vessel_name: 'N/A', port: r.port_name || 'N/A',
+        id: r.id, 
+        vessel_name: 'N/A', 
+        port: r.port_name || 'N/A',
         scheduled_date: r.inspection_date || new Date().toISOString(),
-        documents_ready: 45, documents_total: 50,
-        status: r.detention_status === 'detained' ? 'detained' : 'ready',
+        documents_ready: 45, 
+        documents_total: 50,
+        status: r.detention === true ? 'detained' : 'ready',
       }));
     },
     staleTime: 60000,
@@ -196,7 +215,7 @@ export function useCreateAudit() {
   return useMutation({
     mutationFn: async (audit: { type: Audit['type'] }) => {
       const { data, error } = await supabase.from('sgso_audits')
-        .insert({ audit_type: audit.type, audit_date: new Date().toISOString().split('T')[0], status: 'draft' })
+        .insert({ audit_type: audit.type, audit_date: new Date().toISOString().split('T')[0] })
         .select().single();
       if (error) throw error;
       return data;
@@ -209,8 +228,8 @@ export function useUpdateAuditItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ itemId, status }: { auditId: string; itemId: string; status: string }) => {
-      const dbStatus = status === 'compliant' ? 'conforme' : status === 'non_compliant' ? 'nao_conforme' : 'pendente';
-      const { error } = await supabase.from('sgso_audit_items').update({ status: dbStatus }).eq('id', itemId);
+      const dbStatus = status === 'compliant' ? 'compliant' : status === 'non_compliant' ? 'non-compliant' : 'partial';
+      const { error } = await supabase.from('sgso_audit_items').update({ compliance_status: dbStatus }).eq('id', itemId);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['sgso-items'] }); toast.success('Item atualizado!'); },
