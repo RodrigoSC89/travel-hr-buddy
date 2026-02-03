@@ -20,6 +20,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { IncidentAIClassificationModal } from "@/components/sgso/IncidentAIClassificationModal";
 import { IncidentClassification } from "@/lib/ai/classifyIncidentWithAI";
+import { useSGSOIncidentsData, SGSOIncident } from "@/hooks/useSGSOData";
+import { Loader2 } from "lucide-react";
 import {
   Bell,
   AlertTriangle,
@@ -47,52 +49,32 @@ interface Incident {
   reportedBy: string;
 }
 
-const SAMPLE_INCIDENTS: Incident[] = [
-  {
-    id: "1",
-    number: "INC-2024-001",
-    type: "near_miss",
-    severity: "high",
-    status: "investigating",
-    title: "Quase colisão durante manobra de aproximação",
-    date: "2024-10-05",
-    vessel: "MV Atlântico",
-    reportedBy: "Capitão Silva"
-  },
-  {
-    id: "2",
-    number: "INC-2024-002",
-    type: "environmental",
-    severity: "medium",
-    status: "resolved",
-    title: "Pequeno vazamento de óleo hidráulico",
-    date: "2024-10-03",
-    vessel: "MV Pacífico",
-    reportedBy: "Eng. Santos"
-  },
-  {
-    id: "3",
-    number: "INC-2024-003",
-    type: "accident",
-    severity: "low",
-    status: "closed",
-    title: "Lesão menor em membro da tripulação",
-    date: "2024-10-01",
-    vessel: "MV Índico",
-    reportedBy: "Médico de Bordo"
-  },
-  {
-    id: "4",
-    number: "INC-2024-004",
-    type: "operational",
-    severity: "critical",
-    status: "reported",
-    title: "Falha temporária sistema DP durante operação crítica",
-    date: "2024-10-06",
-    vessel: "MV Atlântico",
-    reportedBy: "DPO João"
-  }
-];
+// ✅ R01: Função para converter SGSOIncident para Incident
+function mapSGSOToIncident(sgso: SGSOIncident): Incident {
+  const typeMap: Record<string, Incident["type"]> = {
+    accident: "accident",
+    incident: "other",
+    near_miss: "near_miss",
+    deviation: "operational"
+  };
+  const statusMap: Record<string, Incident["status"]> = {
+    reported: "reported",
+    investigating: "investigating",
+    analyzed: "resolved",
+    closed: "closed"
+  };
+  return {
+    id: sgso.id,
+    number: sgso.number,
+    type: typeMap[sgso.type] || "other",
+    severity: sgso.severity === "critical" ? "critical" : sgso.severity === "high" ? "high" : sgso.severity === "medium" ? "medium" : "low",
+    status: statusMap[sgso.status] || "reported",
+    title: sgso.description,
+    date: sgso.date,
+    vessel: sgso.location,
+    reportedBy: "Sistema SGSO"
+  };
+}
 
 const getSeverityColor = (severity: string) => {
   const colors = {
@@ -149,6 +131,10 @@ const getSeverityLabel = (severity: string) => {
 };
 
 export const IncidentReporting: React.FC = () => {
+  // ✅ R01: Dados reais via hook Supabase
+  const { data: sgsoIncidents, isLoading } = useSGSOIncidentsData();
+  const incidents: Incident[] = (sgsoIncidents || []).map(mapSGSOToIncident);
+
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchDialog, setShowSearchDialog] = useState(false);
@@ -181,9 +167,9 @@ export const IncidentReporting: React.FC = () => {
   });
   const { toast } = useToast();
 
-  const criticalCount = SAMPLE_INCIDENTS.filter(i => i.severity === "critical").length;
-  const highCount = SAMPLE_INCIDENTS.filter(i => i.severity === "high").length;
-  const openCount = SAMPLE_INCIDENTS.filter(i => i.status === "reported" || i.status === "investigating").length;
+  const criticalCount = incidents.filter((i: Incident) => i.severity === "critical").length;
+  const highCount = incidents.filter((i: Incident) => i.severity === "high").length;
+  const openCount = incidents.filter((i: Incident) => i.status === "reported" || i.status === "investigating").length;
 
   const handleSearch = () => {
     setShowSearchDialog(!showSearchDialog);
@@ -223,14 +209,14 @@ export const IncidentReporting: React.FC = () => {
     setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "", reportedBy: "" });
   };
 
-  const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
+  const filteredIncidents = incidents.filter((incident: Incident) => {
     const matchesSearch = searchQuery === "" || 
       incident.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       incident.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (incident.vessel && incident.vessel.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    const matchesSeverity = filterSeverity[incident.severity];
-    const matchesType = filterType[incident.type];
+    const matchesSeverity = filterSeverity[incident.severity as keyof typeof filterSeverity];
+    const matchesType = filterType[incident.type as keyof typeof filterType];
     
     return matchesSearch && matchesSeverity && matchesType;
   });
@@ -280,7 +266,7 @@ export const IncidentReporting: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-700">Total</p>
-                <p className="text-3xl font-bold text-gray-900">{SAMPLE_INCIDENTS.length}</p>
+                <p className="text-3xl font-bold text-gray-900">{incidents.length}</p>
               </div>
               <FileText className="h-12 w-12 text-muted-foreground opacity-70" />
             </div>
