@@ -116,11 +116,11 @@ export const SatelliteDashboard: React.FC = () => {
 
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
-      case "LEO": return "bg-blue-500";
-      case "MEO": return "bg-green-500";
-      case "GEO": return "bg-purple-500";
-      case "HEO": return "bg-orange-500";
-      default: return "bg-gray-500";
+      case "LEO": return "bg-primary";
+      case "MEO": return "bg-accent";
+      case "GEO": return "bg-secondary";
+      case "HEO": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
@@ -225,10 +225,10 @@ export const SatelliteDashboard: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-500" />
+              <Activity className="h-5 w-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Ativos</p>
-                <p className="text-2xl font-bold text-green-500">{activeSatellites.length}</p>
+                <p className="text-2xl font-bold text-primary">{activeSatellites.length}</p>
               </div>
             </div>
           </CardContent>
@@ -269,10 +269,10 @@ export const SatelliteDashboard: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Signal className="h-5 w-5 text-blue-500" />
+              <Signal className="h-5 w-5 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Visíveis</p>
-                <p className="text-2xl font-bold text-blue-500">
+                <p className="text-2xl font-bold text-primary">
                   {satellites.filter(s => s.visibility === "visible").length}
                 </p>
               </div>
@@ -385,14 +385,9 @@ export const SatelliteDashboard: React.FC = () => {
                         satellite={{
                           id: selectedSatellite.id,
                           name: selectedSatellite.satellite_name,
-                          orbit: {
-                            type: selectedSatellite.orbit_type,
-                            altitude: selectedSatellite.altitude_km,
-                            inclination: 0,
-                            period: 90
-                          },
                           position: {
-                            altitude: selectedSatellite.altitude_km
+                            altitude: selectedSatellite.altitude_km,
+                            velocity: selectedSatellite.velocity_kmh ? selectedSatellite.velocity_kmh / 3600 : undefined
                           }
                         }}
                       />
