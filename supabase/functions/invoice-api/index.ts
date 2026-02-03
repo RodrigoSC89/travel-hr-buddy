@@ -52,13 +52,23 @@ serve(async (req) => {
     const { operation, payload, invoice_id } = await req.json();
     console.log(`[invoice-api] Operation: ${operation}, User: ${user.id}`);
 
-    // Get user's organization
-    const { data: orgUser } = await supabase
-      .from("organization_users")
+    // Get user's organization - try organization_members first
+    let { data: orgUser } = await supabase
+      .from("organization_members")
       .select("organization_id")
       .eq("user_id", user.id)
       .eq("status", "active")
       .single();
+    
+    if (!orgUser) {
+      const { data: legacyOrg } = await supabase
+        .from("organization_users")
+        .select("organization_id")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
+      orgUser = legacyOrg;
+    }
 
     if (!orgUser) {
       throw new Error("User not associated with any organization");

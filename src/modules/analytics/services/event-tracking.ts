@@ -31,13 +31,24 @@ class EventTrackingService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Fetch organization_id from organization_users table (established pattern)
-        const { data: orgData, error } = await supabase
-          .from('organization_users')
+        // Try organization_members first, fallback to organization_users
+        let { data: orgData, error } = await supabase
+          .from('organization_members')
           .select('organization_id')
           .eq('user_id', user.id)
           .eq('status', 'active')
           .maybeSingle();
+        
+        if (!orgData) {
+          const { data: legacyOrg, error: legacyError } = await supabase
+            .from('organization_users')
+            .select('organization_id')
+            .eq('user_id', user.id)
+            .eq('status', 'active')
+            .maybeSingle();
+          orgData = legacyOrg;
+          error = legacyError;
+        }
         
         if (error) {
           logger.warn("Failed to fetch organization, using user_id as fallback:", error.message);

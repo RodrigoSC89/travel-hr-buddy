@@ -38,12 +38,24 @@ serve(async (req) => {
     const { operation, payload } = await req.json();
     console.log(`[soc-dashboard] Operation: ${operation}, User: ${user.id}`);
 
-    const { data: orgUser } = await supabase
-      .from("organization_users")
+    // Try organization_members first (canonical table), fallback to organization_users
+    let { data: orgUser } = await supabase
+      .from("organization_members")
       .select("organization_id")
       .eq("user_id", user.id)
       .eq("status", "active")
       .single();
+    
+    // Fallback to legacy organization_users table if not found
+    if (!orgUser) {
+      const { data: legacyOrgUser } = await supabase
+        .from("organization_users")
+        .select("organization_id")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
+      orgUser = legacyOrgUser;
+    }
 
     if (!orgUser) {
       throw new Error("User not associated with any organization");
