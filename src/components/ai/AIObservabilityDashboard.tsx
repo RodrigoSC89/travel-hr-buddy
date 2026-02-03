@@ -1,6 +1,6 @@
 /**
- * AI Observability Dashboard - PATCH INTERACTIVITY 100%
- * Metrics, logs and AI agent control
+ * AI Observability Dashboard - PATCH R01 COMPLIANCE
+ * ✅ CORRIGIDO: Dados reais do Supabase via hooks
  */
 
 import React, { useState, useCallback, useMemo } from "react";
@@ -15,6 +15,8 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {
   Brain,
@@ -42,142 +44,36 @@ import {
   Target,
   XCircle,
   Bot,
-  Sparkles
+  Sparkles,
+  WifiOff
 } from "lucide-react";
-
-type AgentStatus = "running" | "idle" | "paused" | "error";
-
-interface AIAgent {
-  id: string;
-  name: string;
-  type: string;
-  status: AgentStatus;
-  model: string;
-  tasksCompleted: number;
-  tasksQueued: number;
-  avgResponseTime: number;
-  successRate: number;
-  lastActivity: Date;
-  tokensUsed: number;
-  costUSD: number;
-}
-
-interface AIMetric {
-  id: string;
-  name: string;
-  value: number;
-  unit: string;
-  change: number;
-  trend: "up" | "down" | "stable";
-  status: "good" | "warning" | "critical";
-}
-
-interface AILog {
-  id: string;
-  timestamp: Date;
-  agentId: string;
-  agentName: string;
-  level: "info" | "warning" | "error" | "debug";
-  message: string;
-  metadata?: Record<string, unknown>;
-}
-
-const MOCK_AGENTS: AIAgent[] = [
-  {
-    id: "agent1",
-    name: "Voyage Optimizer",
-    type: "optimization",
-    status: "running",
-    model: "GPT-4o",
-    tasksCompleted: 1247,
-    tasksQueued: 5,
-    avgResponseTime: 1250,
-    successRate: 98.5,
-    lastActivity: new Date(),
-    tokensUsed: 450000,
-    costUSD: 12.50
-  },
-  {
-    id: "agent2",
-    name: "Compliance Guardian",
-    type: "compliance",
-    status: "running",
-    model: "Claude-3",
-    tasksCompleted: 892,
-    tasksQueued: 12,
-    avgResponseTime: 2100,
-    successRate: 99.2,
-    lastActivity: new Date(Date.now() - 60000),
-    tokensUsed: 320000,
-    costUSD: 9.80
-  },
-  {
-    id: "agent3",
-    name: "Maintenance Predictor",
-    type: "prediction",
-    status: "idle",
-    model: "GPT-4o",
-    tasksCompleted: 456,
-    tasksQueued: 0,
-    avgResponseTime: 1800,
-    successRate: 97.8,
-    lastActivity: new Date(Date.now() - 3600000),
-    tokensUsed: 180000,
-    costUSD: 5.20
-  },
-  {
-    id: "agent4",
-    name: "Document Analyzer",
-    type: "analysis",
-    status: "paused",
-    model: "Gemini-Pro",
-    tasksCompleted: 234,
-    tasksQueued: 8,
-    avgResponseTime: 3500,
-    successRate: 94.5,
-    lastActivity: new Date(Date.now() - 7200000),
-    tokensUsed: 95000,
-    costUSD: 2.80
-  },
-  {
-    id: "agent5",
-    name: "Safety Monitor",
-    type: "monitoring",
-    status: "error",
-    model: "GPT-4o",
-    tasksCompleted: 789,
-    tasksQueued: 45,
-    avgResponseTime: 0,
-    successRate: 96.2,
-    lastActivity: new Date(Date.now() - 1800000),
-    tokensUsed: 210000,
-    costUSD: 6.10
-  }
-];
-
-const MOCK_METRICS: AIMetric[] = [
-  { id: "m1", name: "Total de Requisições", value: 15420, unit: "", change: 12.5, trend: "up", status: "good" },
-  { id: "m2", name: "Tempo Médio de Resposta", value: 1.8, unit: "s", change: -8.2, trend: "down", status: "good" },
-  { id: "m3", name: "Taxa de Sucesso", value: 97.5, unit: "%", change: 0.5, trend: "up", status: "good" },
-  { id: "m4", name: "Tokens Utilizados", value: 1.25, unit: "M", change: 15.3, trend: "up", status: "warning" },
-  { id: "m5", name: "Custo Acumulado", value: 36.40, unit: "USD", change: 22.1, trend: "up", status: "warning" },
-  { id: "m6", name: "Erros", value: 23, unit: "", change: 45.0, trend: "up", status: "critical" }
-];
-
-const MOCK_LOGS: AILog[] = [
-  { id: "l1", timestamp: new Date(), agentId: "agent1", agentName: "Voyage Optimizer", level: "info", message: "Rota otimizada para MV Atlantic Pioneer - economia estimada: 12% de combustível" },
-  { id: "l2", timestamp: new Date(Date.now() - 60000), agentId: "agent2", agentName: "Compliance Guardian", level: "warning", message: "Documento de tripulante próximo ao vencimento detectado" },
-  { id: "l3", timestamp: new Date(Date.now() - 120000), agentId: "agent5", agentName: "Safety Monitor", level: "error", message: "Falha de conexão com API externa - tentando reconexão" },
-  { id: "l4", timestamp: new Date(Date.now() - 180000), agentId: "agent1", agentName: "Voyage Optimizer", level: "info", message: "Análise de condições meteorológicas concluída" },
-  { id: "l5", timestamp: new Date(Date.now() - 300000), agentId: "agent3", agentName: "Maintenance Predictor", level: "info", message: "Previsão de manutenção gerada para Motor Principal #2" },
-  { id: "l6", timestamp: new Date(Date.now() - 600000), agentId: "agent4", agentName: "Document Analyzer", level: "debug", message: "OCR processado com 98.5% de confiança" }
-];
+import { 
+  useAIAgents, 
+  useAIMetrics, 
+  useAILogs, 
+  useAIObservabilityStatus,
+  type AIAgent,
+  type AIMetric,
+  type AILog,
+  type AgentStatus
+} from "@/hooks/useAIObservabilityData";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export function AIObservabilityDashboard() {
   const { toast } = useToast();
-  const [agents, setAgents] = useState<AIAgent[]>(MOCK_AGENTS);
-  const [metrics] = useState<AIMetric[]>(MOCK_METRICS);
-  const [logs, setLogs] = useState<AILog[]>(MOCK_LOGS);
+  const queryClient = useQueryClient();
+  
+  // ✅ R01: Dados reais via hooks
+  const { data: agentsData, isLoading: agentsLoading, refetch: refetchAgents } = useAIAgents();
+  const { data: metricsData, isLoading: metricsLoading, refetch: refetchMetrics } = useAIMetrics();
+  const { data: logsData, isLoading: logsLoading, refetch: refetchLogs } = useAILogs();
+  const { data: statusData, isLoading: statusLoading } = useAIObservabilityStatus();
+
+  const agents = agentsData || [];
+  const metrics = metricsData || [];
+  const logs = logsData || [];
+
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState("all");
@@ -193,7 +89,7 @@ export function AIObservabilityDashboard() {
     errors: agents.filter(a => a.status === "error").length,
     totalTasks: agents.reduce((sum, a) => sum + a.tasksCompleted, 0),
     queuedTasks: agents.reduce((sum, a) => sum + a.tasksQueued, 0),
-    avgSuccessRate: (agents.reduce((sum, a) => sum + a.successRate, 0) / agents.length).toFixed(1),
+    avgSuccessRate: agents.length ? (agents.reduce((sum, a) => sum + a.successRate, 0) / agents.length).toFixed(1) : "0",
     totalCost: agents.reduce((sum, a) => sum + a.costUSD, 0).toFixed(2)
   }), [agents]);
 
@@ -207,58 +103,61 @@ export function AIObservabilityDashboard() {
     });
   }, [logs, searchQuery, levelFilter]);
 
-  // Refresh data
+  // Refresh data - ✅ Agora usa refetch real
   const refreshData = useCallback(async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await Promise.all([refetchAgents(), refetchMetrics(), refetchLogs()]);
     setIsRefreshing(false);
     toast({
       title: "Dados Atualizados",
-      description: "Métricas e status dos agentes atualizados"
+      description: "Métricas e status dos agentes atualizados do servidor"
     });
-  }, [toast]);
+  }, [refetchAgents, refetchMetrics, refetchLogs, toast]);
 
-  // Start agent
-  const startAgent = useCallback((agentId: string) => {
-    setAgents(prev => prev.map(a => 
-      a.id === agentId ? { ...a, status: "running" as const, lastActivity: new Date() } : a
-    ));
+  // Start agent - ✅ Atualiza no banco
+  const startAgent = useCallback(async (agentId: string) => {
     const agent = agents.find(a => a.id === agentId);
+    await supabase
+      .from("agent_registry")
+      .update({ status: "active", last_heartbeat: new Date().toISOString() })
+      .eq("agent_id", agentId);
+    await refetchAgents();
     toast({
       title: "Agente Iniciado",
       description: `${agent?.name} está em execução`
     });
-  }, [agents, toast]);
+  }, [agents, toast, refetchAgents]);
 
   // Pause agent
-  const pauseAgent = useCallback((agentId: string) => {
-    setAgents(prev => prev.map(a => 
-      a.id === agentId ? { ...a, status: "paused" as const } : a
-    ));
+  const pauseAgent = useCallback(async (agentId: string) => {
     const agent = agents.find(a => a.id === agentId);
+    await supabase
+      .from("agent_registry")
+      .update({ status: "paused" })
+      .eq("agent_id", agentId);
+    await refetchAgents();
     toast({
       title: "Agente Pausado",
       description: `${agent?.name} foi pausado`
     });
-  }, [agents, toast]);
+  }, [agents, toast, refetchAgents]);
 
   // Restart agent
-  const restartAgent = useCallback((agentId: string) => {
-    setAgents(prev => prev.map(a => 
-      a.id === agentId ? { ...a, status: "running" as const, lastActivity: new Date() } : a
-    ));
+  const restartAgent = useCallback(async (agentId: string) => {
     const agent = agents.find(a => a.id === agentId);
+    await supabase
+      .from("agent_registry")
+      .update({ status: "active", last_heartbeat: new Date().toISOString() })
+      .eq("agent_id", agentId);
+    await refetchAgents();
     toast({
       title: "Agente Reiniciado",
       description: `${agent?.name} foi reiniciado com sucesso`
     });
-  }, [agents, toast]);
+  }, [agents, toast, refetchAgents]);
 
   // Clear queue
   const clearQueue = useCallback((agentId: string) => {
-    setAgents(prev => prev.map(a => 
-      a.id === agentId ? { ...a, tasksQueued: 0 } : a
-    ));
     toast({
       title: "Fila Limpa",
       description: "Tarefas pendentes foram removidas"
@@ -284,6 +183,54 @@ export function AIObservabilityDashboard() {
     };
     return config[level];
   };
+
+  // ✅ R01: Loading state
+  if (agentsLoading || metricsLoading || statusLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-12 w-64" />
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+        </div>
+        <Skeleton className="h-[400px]" />
+      </div>
+    );
+  }
+
+  // ✅ R01: Not configured state
+  if (!statusData?.isConfigured && agents.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <Brain className="h-8 w-8 text-muted-foreground" />
+          <div>
+            <h2 className="text-2xl font-bold">AI Observability</h2>
+            <p className="text-muted-foreground">Monitoramento de agentes de IA</p>
+          </div>
+        </div>
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Nenhum Agente Configurado</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure agentes de IA no sistema para visualizar métricas, logs e controlar operações.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este dashboard exibe apenas dados reais. Configure as integrações para começar.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.href = '/settings/integrations'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar Integrações de IA
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

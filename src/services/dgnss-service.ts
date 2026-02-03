@@ -203,78 +203,22 @@ class DGNSSService {
   }
 
   /**
-   * Get all DGNSS reference stations (mock data for demo)
+   * Get all DGNSS reference stations from Edge Function
+   * ✅ R01 CORRIGIDO: Dados reais via API
    */
   async getDGNSSStations(): Promise<DGNSSStation[]> {
-    // In production, this would fetch from a real DGNSS network API
-    return [
-      {
-        id: "RBMC-BRAZ",
-        name: "Brasília RBMC",
-        latitude: -15.9474,
-        longitude: -47.8778,
-        altitude: 1106,
-        status: "online",
-        accuracy: 2.5,
-        lastUpdate: new Date().toISOString(),
-        corrections: { type: "RTCM 3.2", age: 1, quality: 98 },
-      },
-      {
-        id: "RBMC-RIOD",
-        name: "Rio de Janeiro RBMC",
-        latitude: -22.8175,
-        longitude: -43.3064,
-        altitude: 8,
-        status: "online",
-        accuracy: 1.8,
-        lastUpdate: new Date().toISOString(),
-        corrections: { type: "RTCM 3.2", age: 2, quality: 95 },
-      },
-      {
-        id: "RBMC-SPAR",
-        name: "São Paulo RBMC",
-        latitude: -23.5875,
-        longitude: -46.6575,
-        altitude: 730,
-        status: "online",
-        accuracy: 2.0,
-        lastUpdate: new Date().toISOString(),
-        corrections: { type: "RTCM 3.2", age: 1, quality: 97 },
-      },
-      {
-        id: "RBMC-SALV",
-        name: "Salvador RBMC",
-        latitude: -13.0061,
-        longitude: -38.5083,
-        altitude: 51,
-        status: "online",
-        accuracy: 2.2,
-        lastUpdate: new Date().toISOString(),
-        corrections: { type: "RTCM 3.2", age: 3, quality: 92 },
-      },
-      {
-        id: "RBMC-FORZ",
-        name: "Fortaleza RBMC",
-        latitude: -3.8772,
-        longitude: -38.4253,
-        altitude: 22,
-        status: "maintenance",
-        accuracy: 3.0,
-        lastUpdate: new Date(Date.now() - 3600000).toISOString(),
-        corrections: { type: "RTCM 3.2", age: 60, quality: 75 },
-      },
-      {
-        id: "RBMC-MANA",
-        name: "Manaus RBMC",
-        latitude: -3.1190,
-        longitude: -60.0217,
-        altitude: 40,
-        status: "online",
-        accuracy: 2.8,
-        lastUpdate: new Date().toISOString(),
-        corrections: { type: "RTCM 3.2", age: 2, quality: 90 },
-      },
-    ];
+    try {
+      const { data, error } = await supabase.functions.invoke("dgnss-tracking", {
+        body: { action: "stations" },
+      });
+
+      if (error) throw error;
+      return Array.isArray(data?.stations) ? data.stations : [];
+    } catch (error) {
+      logger.error("Error fetching DGNSS stations:", error);
+      // Retorna array vazio em vez de mock - UI deve mostrar "Não configurado"
+      return [];
+    }
   }
 
   /**
@@ -321,33 +265,19 @@ class DGNSSService {
     return results;
   }
 
-  // Mock data generators for fallback
-  private getMockSatellites(lat: number, lng: number): DGNSSSatellite[] {
-    return DGNSS_SATELLITES.GPS.map((sat, i) => ({
-      satid: sat.noradId,
-      satname: sat.name,
-      intDesignator: `2020-0${i + 1}A`,
-      launchDate: "2020-01-01",
-      satlat: lat + (Math.random() - 0.5) * 20,
-      satlng: lng + (Math.random() - 0.5) * 20,
-      satalt: 20200 + Math.random() * 100,
-    }));
+  /**
+   * ⚠️ REMOVIDO: Mock data generators
+   * R01 COMPLIANCE: Retorna null em vez de dados simulados
+   * A UI deve mostrar "Não configurado" quando não há dados reais
+   */
+  private getMockSatellites(_lat: number, _lng: number): DGNSSSatellite[] {
+    logger.warn("getMockSatellites called - returning empty array per R01 policy");
+    return [];
   }
 
-  private getMockPosition(noradId: number): DGNSSPosition {
-    const now = Date.now();
-    return {
-      satid: noradId,
-      satname: `SAT-${noradId}`,
-      satlatitude: (Math.sin(now / 100000) * 55),
-      satlongitude: ((now / 10000) % 360) - 180,
-      sataltitude: 20200,
-      azimuth: (now / 1000) % 360,
-      elevation: 30 + Math.random() * 50,
-      ra: Math.random() * 360,
-      dec: (Math.random() - 0.5) * 180,
-      timestamp: Math.floor(now / 1000),
-    };
+  private getMockPosition(_noradId: number): DGNSSPosition | null {
+    logger.warn("getMockPosition called - returning null per R01 policy");
+    return null;
   }
 }
 
