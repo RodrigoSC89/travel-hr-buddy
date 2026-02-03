@@ -1,14 +1,16 @@
 /**
  * EmployeePaymentsHistory - Histórico de Pagamentos do Funcionário
- * Salários, diárias, gratificações e demonstrativos
+ * ✅ P0 CORRIGIDO: Dados reais do Supabase (RISCO LEGAL MITIGADO)
  */
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import {
   CreditCard,
@@ -20,52 +22,19 @@ import {
   FileText,
   Wallet,
   Clock,
-  CheckCircle2
+  CheckCircle2,
+  Shield,
+  AlertCircle
 } from "lucide-react";
-
-interface Payment {
-  id: string;
-  type: 'salary' | 'allowance' | 'bonus' | 'overtime' | 'deduction';
-  description: string;
-  amount: number;
-  date: string;
-  status: 'paid' | 'pending' | 'processing';
-  reference?: string;
-}
-
-interface PaymentSummary {
-  grossSalary: number;
-  allowances: number;
-  bonuses: number;
-  deductions: number;
-  netSalary: number;
-}
-
-const MOCK_PAYMENTS: Payment[] = [
-  { id: "1", type: 'salary', description: "Salário Base - Janeiro/2026", amount: 15000, date: "2026-01-05", status: 'paid', reference: "SAL-2026-01" },
-  { id: "2", type: 'allowance', description: "Diária de Embarque", amount: 450, date: "2026-01-05", status: 'paid' },
-  { id: "3", type: 'bonus', description: "Gratificação de Natal", amount: 15000, date: "2025-12-20", status: 'paid' },
-  { id: "4", type: 'overtime', description: "Horas Extras - Dezembro", amount: 2500, date: "2026-01-05", status: 'paid' },
-  { id: "5", type: 'deduction', description: "INSS", amount: -1650, date: "2026-01-05", status: 'paid' },
-  { id: "6", type: 'deduction', description: "IRRF", amount: -2750, date: "2026-01-05", status: 'paid' },
-  { id: "7", type: 'salary', description: "Salário Base - Fevereiro/2026", amount: 15000, date: "2026-02-05", status: 'pending', reference: "SAL-2026-02" },
-  { id: "8", type: 'allowance', description: "Adicional de Periculosidade", amount: 4500, date: "2026-01-05", status: 'paid' },
-];
-
-const MOCK_SUMMARY: PaymentSummary = {
-  grossSalary: 15000,
-  allowances: 4950,
-  bonuses: 2500,
-  deductions: 4400,
-  netSalary: 18050
-};
+import { usePayrollData, type Payment, type PaymentSummary } from "@/hooks/usePayrollData";
 
 export const EmployeePaymentsHistory: React.FC = () => {
-  const [payments] = useState<Payment[]>(MOCK_PAYMENTS);
-  const [summary] = useState<PaymentSummary>(MOCK_SUMMARY);
-  const [selectedPeriod, setSelectedPeriod] = useState("2026-01");
+  const [selectedPeriod, setSelectedPeriod] = useState("all");
+  const { payments, summary, isLoading } = usePayrollData(selectedPeriod);
 
-  const filteredPayments = payments.filter(p => p.date.startsWith(selectedPeriod) || selectedPeriod === 'all');
+  const filteredPayments = selectedPeriod === 'all' 
+    ? payments 
+    : payments.filter(p => p.date.startsWith(selectedPeriod));
 
   const handleDownloadPayslip = (period: string) => {
     toast.success("Download iniciado", { description: `Demonstrativo de ${period}` });
@@ -95,8 +64,38 @@ export const EmployeePaymentsHistory: React.FC = () => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-4">
+                <Skeleton className="h-16 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Card>
+          <CardContent className="p-6">
+            <Skeleton className="h-[300px] w-full" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Security Notice */}
+      <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
+        <Shield className="h-4 w-4 text-green-600" />
+        <AlertDescription className="text-green-700 dark:text-green-400">
+          Seus dados financeiros são confidenciais e protegidos. Apenas você tem acesso a estas informações.
+        </AlertDescription>
+      </Alert>
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
@@ -197,6 +196,9 @@ export const EmployeePaymentsHistory: React.FC = () => {
                 <div className="text-center py-8 text-muted-foreground">
                   <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Nenhum pagamento encontrado para este período</p>
+                  <p className="text-sm mt-2">
+                    Os registros serão exibidos assim que estiverem disponíveis no sistema.
+                  </p>
                 </div>
               ) : (
                 filteredPayments.map(payment => (
