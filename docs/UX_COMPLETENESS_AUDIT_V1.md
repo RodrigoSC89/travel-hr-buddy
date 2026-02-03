@@ -42,8 +42,8 @@ Componentes padrão criados em `src/components/ui/ux-system/`:
 ### P1 — UX Incompleto
 | Módulo | Problema | Status |
 |--------|----------|--------|
-| Training tab (PeopleHub) | Usa HRDashboard como placeholder | 🔄 Backlog |
-| Compliance tab (PeopleHub) | Usa HRDashboard como placeholder | 🔄 Backlog |
+| Training tab (PeopleHub) | Usa HRDashboard como placeholder | ✅ CORRIGIDO - CrewTrainingTab |
+| Compliance tab (PeopleHub) | Usa HRDashboard como placeholder | ✅ CORRIGIDO - CrewComplianceTab |
 | Vários módulos | Faltam toasts de feedback | ✅ MELHORADO |
 
 ### P2 — Melhorias
@@ -89,6 +89,11 @@ Componentes padrão criados em `src/components/ui/ux-system/`:
 ### Fase 5: Logistics & Voyage
 - `LogisticsAnalyticsPanel.tsx` → `useLogisticsAnalytics()`
 - `use-voyage-logistics-data.ts` → Hooks tipados com Supabase
+
+### Fase 6: PeopleHub Tabs (P1 Resolved)
+- `CrewTrainingTab.tsx` → Componente real com `useTrainingData()`, catálogo de cursos, matrículas, certificados
+- `CrewComplianceTab.tsx` → Componente real com `useCrewCertifications()`, alertas de vencimento, scores
+- Substituídos placeholders HRDashboard por componentes funcionais com dados reais
 
 ---
 
