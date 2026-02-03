@@ -72,132 +72,32 @@ export function Predictive30_60_90() {
   const runPredictiveAnalysis = async () => {
     setIsAnalyzing(true);
     try {
-      // Simulate AI analysis - in production, this calls the AI edge function
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { data, error } = await supabase.functions.invoke("ai-predictive-maintenance", {
+        body: { horizonDays: [30, 60, 90] },
+      });
 
-      const mockPredictions: PredictionItem[] = [
-        // 30 Days
-        {
-          id: "pred-1",
-          equipmentId: "603.0004.02",
-          equipmentName: "Bomba Hidráulica Popa",
-          componentCode: "SEAL-HYD-001",
-          failureProbability: 78,
-          predictedDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 12,
-          severity: "high",
-          category: "30days",
-          maintenanceType: "preventive",
-          estimatedCost: 4500,
-          estimatedDowntime: 8,
-          confidence: 89,
-          aiRecommendation: "Substituir selos e rolamentos. Histórico indica desgaste acelerado devido a operação contínua.",
-          riskFactors: ["Alta vibração detectada", "Temperatura elevada", "15.000h sem overhaul"]
-        },
-        {
-          id: "pred-2",
-          equipmentId: "605.0001.03",
-          equipmentName: "Sistema Sprinkler",
-          componentCode: "VALVE-SPK-003",
-          failureProbability: 65,
-          predictedDate: new Date(Date.now() + 22 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 22,
-          severity: "medium",
-          category: "30days",
-          maintenanceType: "condition-based",
-          estimatedCost: 1200,
-          estimatedDowntime: 4,
-          confidence: 82,
-          aiRecommendation: "Inspeção e teste de válvulas. Possível corrosão interna detectada por análise de vibração.",
-          riskFactors: ["Corrosão potencial", "Última inspeção há 8 meses"]
-        },
-        // 60 Days
-        {
-          id: "pred-3",
-          equipmentId: "601.0001.02",
-          equipmentName: "Motor Principal STBD",
-          componentCode: "TURBO-ME-002",
-          failureProbability: 55,
-          predictedDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 45,
-          severity: "high",
-          category: "60days",
-          maintenanceType: "preventive",
-          estimatedCost: 18000,
-          estimatedDowntime: 24,
-          confidence: 76,
-          aiRecommendation: "Overhaul do turbocompressor recomendado. Padrão de degradação similar ao histórico de falhas anteriores.",
-          riskFactors: ["Perda de eficiência 8%", "Temperatura de escape elevada", "12.000h desde último overhaul"]
-        },
-        {
-          id: "pred-4",
-          equipmentId: "604.0002.01",
-          equipmentName: "Gerador Diesel 1",
-          componentCode: "INJ-GEN-001",
-          failureProbability: 48,
-          predictedDate: new Date(Date.now() + 52 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 52,
-          severity: "medium",
-          category: "60days",
-          maintenanceType: "condition-based",
-          estimatedCost: 3200,
-          estimatedDowntime: 6,
-          confidence: 71,
-          aiRecommendation: "Verificar e recalibrar injetores. Análise de combustão indica possível desbalanceamento.",
-          riskFactors: ["Consumo de combustível +5%", "Emissões acima do normal"]
-        },
-        // 90 Days
-        {
-          id: "pred-5",
-          equipmentId: "601.0001.01",
-          equipmentName: "Motor Principal BB",
-          componentCode: "COOL-SYS-001",
-          failureProbability: 42,
-          predictedDate: new Date(Date.now() + 75 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 75,
-          severity: "medium",
-          category: "90days",
-          maintenanceType: "preventive",
-          estimatedCost: 5800,
-          estimatedDowntime: 12,
-          confidence: 68,
-          aiRecommendation: "Manutenção do sistema de arrefecimento. Tendência de aumento de temperatura detectada.",
-          riskFactors: ["Temperatura +3°C vs baseline", "Fluido com contaminação leve"]
-        },
-        {
-          id: "pred-6",
-          equipmentId: "602.0003.01",
-          equipmentName: "Thruster de Proa",
-          componentCode: "MOTOR-THR-001",
-          failureProbability: 35,
-          predictedDate: new Date(Date.now() + 85 * 24 * 60 * 60 * 1000),
-          daysUntilFailure: 85,
-          severity: "low",
-          category: "90days",
-          maintenanceType: "condition-based",
-          estimatedCost: 8500,
-          estimatedDowntime: 16,
-          confidence: 64,
-          aiRecommendation: "Monitorar vibração do motor elétrico. Tendência de aumento gradual identificada.",
-          riskFactors: ["Vibração +15% vs baseline", "6.500h de operação"]
-        }
-      ];
+      if (error) throw error;
 
-      setPredictions(mockPredictions);
+      const normalized = Array.isArray(data?.predictions) ? data.predictions : [];
+      const mappedPredictions = normalized.map((item: Record<string, unknown>, index: number) => normalizePrediction(item, index));
+
+      setPredictions(mappedPredictions);
       setSummary({
-        total30Days: mockPredictions.filter(p => p.category === "30days").length,
-        total60Days: mockPredictions.filter(p => p.category === "60days").length,
-        total90Days: mockPredictions.filter(p => p.category === "90days").length,
-        criticalCount: mockPredictions.filter(p => p.severity === "critical" || p.severity === "high").length,
-        estimatedTotalCost: mockPredictions.reduce((sum, p) => sum + p.estimatedCost, 0),
-        preventedDowntime: mockPredictions.reduce((sum, p) => sum + p.estimatedDowntime, 0)
+        total30Days: mappedPredictions.filter((p: PredictionItem) => p.category === "30days").length,
+        total60Days: mappedPredictions.filter((p: PredictionItem) => p.category === "60days").length,
+        total90Days: mappedPredictions.filter((p: PredictionItem) => p.category === "90days").length,
+        criticalCount: mappedPredictions.filter((p: PredictionItem) => p.severity === "critical" || p.severity === "high").length,
+        estimatedTotalCost: mappedPredictions.reduce((sum: number, p: PredictionItem) => sum + p.estimatedCost, 0),
+        preventedDowntime: mappedPredictions.reduce((sum: number, p: PredictionItem) => sum + p.estimatedDowntime, 0)
       });
 
       toast.success("Análise preditiva concluída", {
-        description: `${mockPredictions.length} previsões geradas para 90 dias`
+        description: `${mappedPredictions.length} previsões geradas para 90 dias`
       });
     } catch (error) {
-      toast.error("Erro na análise preditiva");
+      setPredictions([]);
+      setSummary(null);
+      toast.error("Não foi possível obter previsões reais. Verifique a integração.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -496,6 +396,30 @@ export function Predictive30_60_90() {
       </Card>
     </div>
   );
+}
+
+function normalizePrediction(item: Record<string, unknown>, index: number): PredictionItem {
+  const predictedDateValue = (item?.predictedDate ?? item?.predicted_date ?? new Date().toISOString()) as string;
+  const predictedDate = new Date(predictedDateValue);
+  const daysUntilFailure = Math.max(0, Math.ceil((predictedDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+
+  return {
+    id: String(item?.id ?? `prediction-${index}`),
+    equipmentId: String(item?.equipmentId ?? item?.equipment_id ?? "unknown"),
+    equipmentName: String(item?.equipmentName ?? item?.equipment_name ?? "Equipamento"),
+    componentCode: String(item?.componentCode ?? item?.component_code ?? "N/A"),
+    failureProbability: Number(item?.failureProbability ?? item?.failure_probability ?? 0),
+    predictedDate,
+    daysUntilFailure,
+    severity: (item?.severity ?? "low") as PredictionItem["severity"],
+    category: (item?.category ?? "30days") as PredictionItem["category"],
+    maintenanceType: (item?.maintenanceType ?? item?.maintenance_type ?? "preventive") as PredictionItem["maintenanceType"],
+    estimatedCost: Number(item?.estimatedCost ?? item?.estimated_cost ?? 0),
+    estimatedDowntime: Number(item?.estimatedDowntime ?? item?.estimated_downtime ?? 0),
+    confidence: Number(item?.confidence ?? 0),
+    aiRecommendation: String(item?.aiRecommendation ?? item?.ai_recommendation ?? "Revisar equipamento conforme plano."),
+    riskFactors: Array.isArray(item?.riskFactors) ? item.riskFactors as string[] : [],
+  };
 }
 
 export default Predictive30_60_90;
