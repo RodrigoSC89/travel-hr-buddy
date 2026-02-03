@@ -1,6 +1,6 @@
 /**
  * Unit Tests: Security Utilities
- * PATCH: Security function testing
+ * PATCH: Security function testing - Fixed import path
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -14,7 +14,7 @@ import {
   isSessionExpiringSoon,
   escapeHtml,
   validateFileUpload,
-} from "@/lib/security";
+} from "@/lib/security/index";
 
 describe("Security Utilities", () => {
   describe("sanitizeForDisplay", () => {
