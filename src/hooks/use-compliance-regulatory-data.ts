@@ -1,7 +1,7 @@
 /**
  * Compliance & Regulatory Real-Time Data Hooks
  * SOLAS, MARPOL, MLC 2006, ISM, ISPS auto-compliance tracking
- * @ts-nocheck - Tables may not exist in schema yet
+ * Uses maritime_regulations, peotram_audits, psc_inspections tables
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
