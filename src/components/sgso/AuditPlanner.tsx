@@ -1,9 +1,15 @@
+/**
+ * Audit Planner - R01 COMPLIANCE
+ * ✅ Dados reais via Supabase
+ */
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Calendar,
   CheckCircle,
@@ -13,79 +19,11 @@ import {
   Users,
   Target,
   TrendingUp,
-  Plus
+  Plus,
+  WifiOff,
+  Settings
 } from "lucide-react";
-
-interface Audit {
-  id: string;
-  type: "internal" | "external" | "regulatory" | "certification";
-  title: string;
-  scope: string;
-  status: "planned" | "in_progress" | "completed" | "overdue";
-  scheduled_date: string;
-  completion_date?: string;
-  auditor: string;
-  findings_count?: number;
-  non_conformities?: number;
-  practices_covered: number[];
-}
-
-const SAMPLE_AUDITS: Audit[] = [
-  {
-    id: "1",
-    type: "internal",
-    title: "Auditoria Prática 13 - Gestão de Mudanças",
-    scope: "Verificação MOC procedures",
-    status: "planned",
-    scheduled_date: "2024-10-15",
-    auditor: "Eng. Roberto Santos",
-    practices_covered: [13]
-  },
-  {
-    id: "2",
-    type: "regulatory",
-    title: "Auditoria ANP - Compliance Geral",
-    scope: "Verificação 17 práticas ANP",
-    status: "in_progress",
-    scheduled_date: "2024-10-08",
-    auditor: "Auditor ANP - Maria Costa",
-    findings_count: 5,
-    practices_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-  },
-  {
-    id: "3",
-    type: "internal",
-    title: "Auditoria Integridade Mecânica",
-    scope: "Prática 17 - Equipamentos críticos",
-    status: "overdue",
-    scheduled_date: "2024-09-30",
-    auditor: "Eng. João Oliveira",
-    practices_covered: [17]
-  },
-  {
-    id: "4",
-    type: "certification",
-    title: "ISO 45001 - Recertificação",
-    scope: "Sistema de gestão completo",
-    status: "completed",
-    scheduled_date: "2024-09-15",
-    completion_date: "2024-09-20",
-    auditor: "Bureau Veritas - Carlos Lima",
-    findings_count: 3,
-    non_conformities: 0,
-    practices_covered: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12]
-  },
-  {
-    id: "5",
-    type: "internal",
-    title: "Auditoria Treinamento e Competência",
-    scope: "Prática 4 - Compliance treinamentos",
-    status: "planned",
-    scheduled_date: "2024-11-05",
-    auditor: "RH - Ana Paula",
-    practices_covered: [4]
-  }
-];
+import { useAuditPlannerData, type Audit } from "@/hooks/useAuditPlannerData";
 
 const getStatusConfig = (status: string) => {
   const configs = {
@@ -129,20 +67,61 @@ const getTypeLabel = (type: string) => {
 
 export const AuditPlanner: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [isLoading, setIsLoading] = useState(false);
   const { handleViewDetails, showInfo, handleCreate, handleGenerateReport } = useMaritimeActions();
+  
+  // ✅ R01: Dados reais via hook
+  const { data: audits = [], isLoading } = useAuditPlannerData();
 
-  const plannedCount = SAMPLE_AUDITS.filter(a => a.status === "planned").length;
-  const inProgressCount = SAMPLE_AUDITS.filter(a => a.status === "in_progress").length;
-  const completedCount = SAMPLE_AUDITS.filter(a => a.status === "completed").length;
-  const overdueCount = SAMPLE_AUDITS.filter(a => a.status === "overdue").length;
+  const plannedCount = audits.filter(a => a.status === "planned").length;
+  const inProgressCount = audits.filter(a => a.status === "in_progress").length;
+  const completedCount = audits.filter(a => a.status === "completed").length;
+  const overdueCount = audits.filter(a => a.status === "overdue").length;
 
   const filteredAudits = selectedType === "all"
-    ? SAMPLE_AUDITS
-    : SAMPLE_AUDITS.filter(a => a.type === selectedType);
+    ? audits
+    : audits.filter(a => a.type === selectedType);
 
-  const totalAudits = SAMPLE_AUDITS.length;
+  const totalAudits = audits.length || 1;
   const completionRate = Math.round((completedCount / totalAudits) * 100);
+
+  // Empty state
+  if (!isLoading && audits.length === 0) {
+    return (
+      <div className="space-y-6">
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Nenhuma Auditoria Configurada</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure auditorias SGSO para visualizar o planejamento.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este módulo exibe apenas auditorias reais cadastradas no sistema.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => handleCreate("audit")}>
+              <Plus className="h-4 w-4 mr-2" />
+              Criar Auditoria
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32" />)}
+        </div>
+        <Skeleton className="h-64" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
