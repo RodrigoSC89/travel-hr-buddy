@@ -1,6 +1,16 @@
-// @ts-nocheck - External API responses need dynamic typing
+/**
+ * Travel Price Service
+ * PATCH 900 - Removed @ts-nocheck, added proper typing for API responses
+ */
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+
+// Edge function response type
+interface EdgeFunctionResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
 export interface FlightSearchParams {
   origin: string;
@@ -109,7 +119,7 @@ export interface HotelDestination {
 }
 
 class TravelPriceService {
-  private async invoke<T>(action: string, params: Record<string, unknown> = {}): Promise<T> {
+  private async invoke<T>(action: string, params: object = {}): Promise<T> {
     const { data, error } = await supabase.functions.invoke("travel-price-monitor", {
       body: { action, ...params },
     });
@@ -165,7 +175,7 @@ class TravelPriceService {
     currentPrice: number;
     targetPrice: number;
     triggered: boolean;
-    productData: any;
+    productData: FlightResult | HotelResult;
     checkedAt: string;
   }> {
     return this.invoke("check_price_alert", params);

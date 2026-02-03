@@ -1,7 +1,7 @@
-// @ts-nocheck - Schema: ia_performance_log columns mismatch
 /**
  * Behavioral Evolution Dashboard
  * Real-time AI behavior tracking with System Watchdog integration
+ * PATCH 900 - Removed @ts-nocheck, added proper PerformanceLogRecord typing
  */
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,19 +85,27 @@ export function BehavioralEvolutionDashboard() {
 
       if (alertsError) throw alertsError;
 
-      // Fetch performance data
+      // Fetch performance data from ai_behavior_snapshots (has correct columns)
       const { data: perfData, error: perfError } = await supabase
-        .from("ia_performance_log")
-        .select("module_name, precision_score, recall_score")
+        .from("ai_behavior_snapshots")
+        .select("module_name, precision_score, recall_score, created_at")
         .order("created_at", { ascending: false })
         .limit(100);
 
       if (perfError) throw perfError;
 
+      // Cast to our interface
+      const typedData: PerformanceLogRecord[] = (perfData || []).map(d => ({
+        module_name: d.module_name,
+        precision_score: d.precision_score,
+        recall_score: d.recall_score,
+        created_at: d.created_at
+      }));
+
       // Calculate system status
-      const modules = new Set(perfData?.map(d => d.module_name) || []);
-      const avgAlignment = calculateAverageAlignment(perfData || []);
-      const trend = determineEvolutionTrend(perfData || []);
+      const modules = new Set(typedData.map(d => d.module_name).filter(Boolean));
+      const avgAlignment = calculateAverageAlignment(typedData);
+      const trend = determineEvolutionTrend(typedData);
 
       setSystemStatus({
         total_modules: modules.size,
@@ -107,7 +115,7 @@ export function BehavioralEvolutionDashboard() {
       });
 
       // Generate recent evolution data
-      const evolutions = generateEvolutionData(perfData || []);
+      const evolutions = generateEvolutionData(typedData);
       setRecentEvolutions(evolutions);
 
     } catch (error) {
@@ -118,7 +126,7 @@ export function BehavioralEvolutionDashboard() {
     }
   };
 
-  const calculateAverageAlignment = (data: any[]): number => {
+  const calculateAverageAlignment = (data: PerformanceLogRecord[]): number => {
     if (data.length === 0) return 0;
     const sum = data.reduce((acc, d) => {
       const precision = d.precision_score || 0;
@@ -128,7 +136,7 @@ export function BehavioralEvolutionDashboard() {
     return (sum / data.length) * 100;
   };
 
-  const determineEvolutionTrend = (data: any[]): "improving" | "stable" | "degrading" => {
+  const determineEvolutionTrend = (data: PerformanceLogRecord[]): "improving" | "stable" | "degrading" => {
     if (data.length < 10) return "stable";
     
     const recent = data.slice(0, 5);
@@ -145,14 +153,15 @@ export function BehavioralEvolutionDashboard() {
     return "stable";
   };
 
-  const generateEvolutionData = (data: any[]): BehaviorEvolution[] => {
-    const moduleData = new Map<string, any[]>();
+  const generateEvolutionData = (data: PerformanceLogRecord[]): BehaviorEvolution[] => {
+    const moduleData = new Map<string, PerformanceLogRecord[]>();
     
     data.forEach(d => {
-      if (!moduleData.has(d.module_name)) {
-        moduleData.set(d.module_name, []);
+      const moduleName = d.module_name || 'unknown';
+      if (!moduleData.has(moduleName)) {
+        moduleData.set(moduleName, []);
       }
-      moduleData.get(d.module_name)?.push(d);
+      moduleData.get(moduleName)?.push(d);
     });
 
     const evolutions: BehaviorEvolution[] = [];

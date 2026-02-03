@@ -1,7 +1,7 @@
-// @ts-nocheck - Schema: crew_certifications type compatibility
 /**
  * CTSCompliancePanel - Real-time CTS compliance validation
  * Integrates with Supabase for crew data and AI for STCW validation
+ * PATCH 900 - Removed @ts-nocheck, added proper typing
  */
 
 import { useState, useEffect } from "react";
@@ -26,7 +26,7 @@ interface CTSPosition {
   crew_members: Array<{
     id: string;
     name: string;
-    category: string;
+    category: string | null;
     has_valid_certificate: boolean;
     expiry_date?: string;
   }>;
@@ -59,13 +59,19 @@ interface CTSData {
 interface CrewMemberData {
   id: string;
   full_name: string;
-  rank?: string;
-  category?: string;
-  crew_certifications?: Array<{ expiry_date?: string }>;
+  rank?: string | null;
+  category?: string | null;
+  crew_certifications?: Array<{ 
+    expiry_date?: string;
+    certification_name?: string;
+    certification_number?: string;
+  }>;
 }
 
 interface CertificationData {
   expiry_date?: string;
+  certification_name?: string;
+  certification_number?: string;
 }
 
 interface Props {
@@ -74,12 +80,23 @@ interface Props {
   onComplianceCheck?: (result: ComplianceResult) => void;
 }
 
+// CTS Record shape from database
+interface CTSRecord {
+  id: string;
+  vessel_id: string | null;
+  cts_number: string;
+  approved_positions: Record<string, number>;
+  expiry_date: string;
+  flag_state: string;
+  classification_society: string | null;
+}
+
 export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: Props) {
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
   const [compliance, setCompliance] = useState<ComplianceResult | null>(null);
-  const [ctsRecord, setCtsRecord] = useState<any>(null);
-  const [crew, setCrew] = useState<any[]>([]);
+  const [ctsRecord, setCtsRecord] = useState<CTSRecord | null>(null);
+  const [crew, setCrew] = useState<CrewMemberData[]>([]);
 
   useEffect(() => {
     if (vesselId) loadData();
@@ -164,7 +181,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
         crew_members: crewInPosition.map(c => ({
           id: c.id,
           name: c.full_name,
-          category: c.category,
+          category: c.category ?? null,
           has_valid_certificate: checkValidCertifications(c.crew_certifications),
           expiry_date: getNextExpiry(c.crew_certifications)
         }))
@@ -282,7 +299,7 @@ export function CTSCompliancePanel({ vesselId, vesselName, onComplianceCheck }: 
     if (!certs || certs.length === 0) return undefined;
     const validCerts = certs.filter(c => c.expiry_date);
     if (validCerts.length === 0) return undefined;
-    validCerts.sort((a, b) => new Date(a.expiry_date).getTime() - new Date(b.expiry_date).getTime());
+    validCerts.sort((a, b) => new Date(a.expiry_date || '').getTime() - new Date(b.expiry_date || '').getTime());
     return validCerts[0].expiry_date;
   };
 
