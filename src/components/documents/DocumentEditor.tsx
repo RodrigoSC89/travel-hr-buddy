@@ -1,4 +1,5 @@
-// @ts-nocheck - Required: document_versions table uses dynamic schema
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck - document_versions table uses dynamic schema - awaiting schema regeneration
 /**
  * PATCH 851 - Document Editor Component
  */

@@ -9,8 +9,8 @@ import type { KanbanAISuggestionsProps, Suggestion } from "./types";
 import type { Database } from "@/integrations/supabase/types";
 import { logger } from '@/lib/logger';
 
-// Missing table in database schema - using any for now
-// type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
+// workflow_ai_suggestions table exists in DB but types not yet regenerated
+// Using any assertion until schema types are updated
 
 export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);

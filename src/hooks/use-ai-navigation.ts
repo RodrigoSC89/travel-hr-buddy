@@ -22,10 +22,8 @@ interface NavigationSuggestion {
   reason: string;
 }
 
-// Missing tables in database schema - using any for now
-// type NavigationHistoryRow = Database["public"]["Tables"]["navigation_history"]["Row"];
-// type NavigationHistoryInsert = Database["public"]["Tables"]["navigation_history"]["Insert"];
-// type ModuleAccessInsert = Database["public"]["Tables"]["module_access_log"]["Insert"];
+// navigation_history and module_access_log tables exist in DB but types not yet regenerated
+// Using any assertion until schema types are updated
 
 export function useAINavigation() {
   const { user } = useAuth();

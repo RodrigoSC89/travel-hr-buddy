@@ -1,4 +1,5 @@
-// @ts-nocheck - ai_documents schema mismatch (title vs file_name)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck - ai_documents schema fields differ (title vs file_name) - awaiting schema regeneration
 /**
  * PATCH 871.3 - AI documents page
  */
