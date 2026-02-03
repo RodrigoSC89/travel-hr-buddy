@@ -82,70 +82,84 @@ interface PIIField {
   accessCount: number;
 }
 
-const DEMO_THREAT_EVENTS: ThreatEvent[] = [
-  {
-    id: "threat_1",
-    timestamp: new Date(Date.now() - 300000).toISOString(),
-    type: "auth_failure",
-    severity: "medium",
-    source: "192.168.1.105",
-    details: "5 tentativas de login falhadas consecutivas para admin@nautilus.app",
-    resolved: false
-  },
-  {
-    id: "threat_2",
-    timestamp: new Date(Date.now() - 1800000).toISOString(),
-    type: "rls_violation",
-    severity: "high",
-    source: "user_abc123",
-    details: "Tentativa de acesso a dados de outro organization_id",
-    resolved: true
-  },
-  {
-    id: "threat_3",
-    timestamp: new Date(Date.now() - 3600000).toISOString(),
-    type: "api_abuse",
-    severity: "low",
-    source: "api_key_xyz",
-    details: "Rate limit atingido: 150 req/min (limite: 100)",
-    resolved: true
-  }
-];
+// Hook para buscar dados reais de segurança
+function useSecurityData() {
+  const [threats, setThreats] = useState<ThreatEvent[]>([]);
+  const [policies, setPolicies] = useState<RLSPolicy[]>([]);
+  const [piiFields, setPiiFields] = useState<PIIField[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const DEMO_RLS_POLICIES: RLSPolicy[] = [
-  { table: "profiles", policyName: "Users can view own profile", operation: "SELECT", definition: "auth.uid() = id", enabled: true },
-  { table: "profiles", policyName: "HR can view all profiles", operation: "SELECT", definition: "has_role(auth.uid(), 'hr')", enabled: true },
-  { table: "crew_members", policyName: "Org isolation", operation: "ALL", definition: "organization_id = get_user_org()", enabled: true },
-  { table: "crew_payroll", policyName: "Finance access only", operation: "SELECT", definition: "has_role(auth.uid(), 'finance')", enabled: true },
-  { table: "documents", policyName: "Document owner access", operation: "ALL", definition: "user_id = auth.uid()", enabled: true },
-  { table: "active_sessions", policyName: "Own sessions only", operation: "SELECT", definition: "user_id = auth.uid()", enabled: true }
-];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Buscar eventos de acesso/ameaças
+        const { data: accessLogs } = await supabase
+          .from("access_logs")
+          .select("*")
+          .in("severity", ["warning", "error", "critical"])
+          .order("timestamp", { ascending: false })
+          .limit(50);
 
-const DEMO_PII_FIELDS: PIIField[] = [
-  { table: "profiles", column: "email", type: "email", masked: true, accessCount: 245 },
-  { table: "profiles", column: "phone", type: "phone", masked: true, accessCount: 89 },
-  { table: "crew_members", column: "passport_number", type: "document", masked: true, accessCount: 34 },
-  { table: "crew_payroll", column: "salary", type: "financial", masked: true, accessCount: 12 },
-  { table: "crew_health_metrics", column: "health_data", type: "health", masked: true, accessCount: 8 }
+        const mappedThreats: ThreatEvent[] = (accessLogs || []).map(log => ({
+          id: log.id,
+          timestamp: log.timestamp,
+          type: mapLogToThreatType(log.action),
+          severity: mapSeverity(log.severity),
+          source: log.user_id || "unknown",
+          details: log.details ? JSON.stringify(log.details) : log.action,
+          resolved: log.result === "success"
+        }));
+        setThreats(mappedThreats);
+
+        // RLS policies - dados estáticos de referência (são definidas no schema)
+        setPolicies([]);
+        
+        // PII fields - dados estáticos de referência (são definidos no schema)
+        setPiiFields([]);
+      } catch (error) {
+        console.error("Error fetching security data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  return { threats, policies, piiFields, loading, setThreats };
+}
+
+function mapLogToThreatType(action: string): ThreatEvent["type"] {
+  if (action.includes("auth") || action.includes("login")) return "auth_failure";
+  if (action.includes("rls") || action.includes("policy")) return "rls_violation";
+  if (action.includes("api") || action.includes("rate")) return "api_abuse";
+  if (action.includes("pii") || action.includes("personal")) return "pii_access";
+  return "suspicious_query";
+}
+
+function mapSeverity(severity: string): ThreatEvent["severity"] {
+  if (severity === "critical") return "critical";
+  if (severity === "error") return "high";
+  if (severity === "warning") return "medium";
+  return "low";
+}
+
+const DEFAULT_METRICS: SecurityMetric[] = [
+  { name: "RLS Coverage", value: 98, trend: "up", status: "good" },
+  { name: "PII Protection", value: 100, trend: "stable", status: "good" },
+  { name: "API Token Health", value: 92, trend: "down", status: "warning" },
+  { name: "Auth Success Rate", value: 99.2, trend: "stable", status: "good" }
 ];
 
 export default function SecurityCenter() {
   const navigate = useNavigate();
+  const { threats, policies, piiFields, loading: dataLoading, setThreats } = useSecurityData();
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [riskScore, setRiskScore] = useState(85);
-  const [threats, setThreats] = useState<ThreatEvent[]>(DEMO_THREAT_EVENTS);
-  const [policies, setPolicies] = useState<RLSPolicy[]>(DEMO_RLS_POLICIES);
-  const [piiFields, setPiiFields] = useState<PIIField[]>(DEMO_PII_FIELDS);
   const [activityData, setActivityData] = useState<{ time: string; requests: number; threats: number }[]>([]);
 
-  const metrics: SecurityMetric[] = [
-    { name: "RLS Coverage", value: 98, trend: "up", status: "good" },
-    { name: "PII Protection", value: 100, trend: "stable", status: "good" },
-    { name: "API Token Health", value: 92, trend: "down", status: "warning" },
-    { name: "Auth Success Rate", value: 99.2, trend: "stable", status: "good" }
-  ];
+  const metrics = DEFAULT_METRICS;
 
   useEffect(() => {
     // Generate activity data

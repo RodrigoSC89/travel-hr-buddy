@@ -132,21 +132,36 @@ export function SatelliteOptimizerDashboard() {
   const handleOptimizeData = async () => {
     setLoading(true);
     try {
-      // Demo: optimize sample data
-      const sampleData = {
-        type: 'report',
-        vessel_id: 'vessel-001',
-        timestamp: new Date().toISOString(),
-        data: Array(100).fill({ sensor: 'temp', value: 25 }),
-      };
+      // Buscar dados reais da fila de sync para otimizar
+      const currentQueue = SatelliteOptimizer.getSyncQueue();
       
-      const result = await SatelliteOptimizer.optimizeForSatellite(sampleData);
-      
-      setStats(prev => ({
-        ...prev,
-        totalCompressed: prev.totalCompressed + result.totalSize - result.compressedSize,
-        costSaved: prev.costSaved + result.estimatedCost * 0.6, // 60% compression savings
-      }));
+      if (currentQueue.length === 0) {
+        // Se não há dados na fila, criar entrada de teste com dados mínimos
+        const testPayload = {
+          type: 'connectivity_test',
+          vessel_id: 'test',
+          timestamp: new Date().toISOString(),
+          data: { ping: true },
+        };
+        
+        const result = await SatelliteOptimizer.optimizeForSatellite(testPayload);
+        
+        setStats(prev => ({
+          ...prev,
+          totalCompressed: prev.totalCompressed + Math.max(0, result.totalSize - result.compressedSize),
+          costSaved: prev.costSaved + result.estimatedCost * 0.6,
+        }));
+      } else {
+        // Processar itens reais da fila
+        for (const item of currentQueue.slice(0, 5)) {
+          const result = await SatelliteOptimizer.optimizeForSatellite(item);
+          setStats(prev => ({
+            ...prev,
+            totalCompressed: prev.totalCompressed + Math.max(0, result.totalSize - result.compressedSize),
+            costSaved: prev.costSaved + result.estimatedCost * 0.6,
+          }));
+        }
+      }
     } catch (error) {
       logger.error('Failed to optimize:', error);
     } finally {
