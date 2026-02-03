@@ -1,6 +1,6 @@
 /**
  * Climate & Engagement - Clima Organizacional e Engajamento
- * Versão funcional completa com todas as ações
+ * ✅ P0 CORRIGIDO: Integração real com Supabase (R01 MITIGADO)
  */
 
 import React, { useState } from 'react';
@@ -13,6 +13,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import {
   Heart,
@@ -30,24 +32,13 @@ import {
   Sparkles,
   AlertTriangle,
   CheckCircle,
-  Loader2
+  Loader2,
+  WifiOff,
+  Settings
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
-import { departamentos } from '../data/mockData';
-
-interface ClimateResult {
-  categoria: string;
-  score: number;
-  trend: 'up' | 'down' | 'stable';
-  participacao: number;
-}
-
-interface PulseSurveyQuestion {
-  id: string;
-  pergunta: string;
-  categoria: string;
-}
+import { useClimateData, DEPARTAMENTOS, DEFAULT_PULSE_QUESTIONS, type ClimateResult, type PulseSurveyQuestion } from '@/hooks/useClimateData';
 
 const ClimateEngagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -57,52 +48,25 @@ const ClimateEngagement: React.FC = () => {
   const [feedbackType, setFeedbackType] = useState<'elogio' | 'sugestao' | 'critica'>('sugestao');
   const [moodComment, setMoodComment] = useState('');
   
-  const { isLoading, analyzeFeedback, analyzeClimate } = useNautilusPeopleAI();
+  const { isLoading: aiLoading, analyzeFeedback, analyzeClimate } = useNautilusPeopleAI();
+  const { 
+    surveys, 
+    climateResults, 
+    feedback: recentFeedback, 
+    isLoading: dataLoading, 
+    isEmpty,
+    submitSurveyResponse,
+    registerMood 
+  } = useClimateData();
 
-  const climateResults: ClimateResult[] = [
-    { categoria: 'Satisfação Geral', score: 87, trend: 'up', participacao: 92 },
-    { categoria: 'Liderança', score: 82, trend: 'up', participacao: 88 },
-    { categoria: 'Comunicação', score: 78, trend: 'stable', participacao: 90 },
-    { categoria: 'Desenvolvimento', score: 75, trend: 'down', participacao: 85 },
-    { categoria: 'Ambiente de Trabalho', score: 89, trend: 'up', participacao: 94 },
-    { categoria: 'Equilíbrio Vida-Trabalho', score: 72, trend: 'down', participacao: 87 },
-    { categoria: 'Reconhecimento', score: 80, trend: 'stable', participacao: 89 },
-    { categoria: 'Colaboração', score: 85, trend: 'up', participacao: 91 }
-  ];
+  const isLoading = aiLoading || dataLoading;
 
-  const pulseSurveyQuestions: PulseSurveyQuestion[] = [
-    { id: '1', pergunta: 'Como você avalia sua semana de trabalho?', categoria: 'Bem-estar' },
-    { id: '2', pergunta: 'Você se sentiu reconhecido pelo seu trabalho?', categoria: 'Reconhecimento' },
-    { id: '3', pergunta: 'A comunicação com sua liderança foi clara?', categoria: 'Comunicação' },
-    { id: '4', pergunta: 'Você teve os recursos necessários para seu trabalho?', categoria: 'Recursos' }
-  ];
+  // Usar perguntas do survey do DB ou fallback para default
+  const activeSurvey = surveys.find(s => s.status === 'active');
+  const pulseSurveyQuestions: PulseSurveyQuestion[] = 
+    activeSurvey?.questions?.length ? activeSurvey.questions : DEFAULT_PULSE_QUESTIONS;
 
-  const recentFeedback = [
-    {
-      id: '1',
-      tipo: 'sugestao',
-      texto: 'Seria interessante ter mais opções de horário flexível para quem tem filhos.',
-      departamento: 'Operações',
-      data: '2025-12-05',
-      status: 'em_analise'
-    },
-    {
-      id: '2',
-      tipo: 'elogio',
-      texto: 'A nova política de home office melhorou muito minha qualidade de vida!',
-      departamento: 'TI',
-      data: '2025-12-04',
-      status: 'respondido'
-    },
-    {
-      id: '3',
-      tipo: 'critica',
-      texto: 'Os computadores do setor precisam de atualização urgente.',
-      departamento: 'Financeiro',
-      data: '2025-12-03',
-      status: 'resolvido'
-    }
-  ];
+  // Feedback recente vem do hook useClimateData (já mapeado)
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -142,10 +106,14 @@ const ClimateEngagement: React.FC = () => {
       return;
     }
 
-    toast.info('Enviando respostas...');
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const avgScore = Object.values(surveyResponses).reduce((a, b) => a + b, 0) / answeredQuestions;
     
-    toast.success('Respostas enviadas com sucesso! Obrigado pela participação.');
+    await submitSurveyResponse.mutateAsync({
+      surveyId: activeSurvey?.id || '',
+      answers: surveyResponses,
+      npsScore: Math.round(avgScore * 2), // Converte 1-5 para 0-10
+    });
+    
     setSurveyResponses({});
   };
 
@@ -155,18 +123,11 @@ const ClimateEngagement: React.FC = () => {
       return;
     }
 
-    toast.info('Registrando seu humor...');
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await registerMood.mutateAsync({
+      mood: selectedMood,
+      comment: moodComment,
+    });
     
-    const moodLabels: Record<string, string> = {
-      great: 'Ótimo',
-      good: 'Bem',
-      neutral: 'Neutro',
-      bad: 'Ruim',
-      terrible: 'Péssimo'
-    };
-    
-    toast.success(`Humor "${moodLabels[selectedMood]}" registrado com sucesso!`);
     setSelectedMood(null);
     setMoodComment('');
   };
@@ -204,65 +165,112 @@ const ClimateEngagement: React.FC = () => {
     }
   };
 
+  // Loading state
+  if (dataLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  // Empty state
+  if (isEmpty) {
+    return (
+      <div className="space-y-6">
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Nenhuma Pesquisa de Clima</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure pesquisas de clima para coletar feedback dos colaboradores.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este dashboard exibe apenas dados reais de pesquisas cadastradas.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.href = '/nautilus-people'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Criar Pesquisa
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Calcular stats a partir dos dados reais
+  const satisfacaoGeral = climateResults.find(r => r.categoria === 'Satisfação Geral')?.score || 0;
+  const npsScore = climateResults.find(r => r.categoria === 'NPS Score')?.score || 0;
+  const participacao = climateResults[0]?.participacao || 0;
+
   return (
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-green-500">87%</p>
+                <p className="text-3xl font-bold text-primary">{satisfacaoGeral}%</p>
                 <p className="text-sm text-muted-foreground">Satisfação Geral</p>
               </div>
-              <Heart className="w-8 h-8 text-green-500" />
+              <Heart className="w-8 h-8 text-primary" />
             </div>
-            <div className="flex items-center gap-1 mt-2 text-xs text-green-600">
+            <div className="flex items-center gap-1 mt-2 text-xs text-primary">
               <TrendingUp className="w-3 h-3" />
-              +3% vs mês anterior
+              Dados reais
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-blue-500">82%</p>
-                <p className="text-sm text-muted-foreground">Engajamento</p>
+                <p className="text-3xl font-bold text-secondary-foreground">{npsScore}%</p>
+                <p className="text-sm text-muted-foreground">NPS Score</p>
               </div>
-              <Users className="w-8 h-8 text-blue-500" />
+              <Users className="w-8 h-8 text-secondary-foreground" />
             </div>
-            <div className="flex items-center gap-1 mt-2 text-xs text-blue-600">
+            <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
               <TrendingUp className="w-3 h-3" />
-              +5% vs mês anterior
+              Agregado
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-purple-500">91%</p>
+                <p className="text-3xl font-bold text-accent-foreground">{participacao}%</p>
                 <p className="text-sm text-muted-foreground">Participação</p>
               </div>
-              <BarChart3 className="w-8 h-8 text-purple-500" />
+              <BarChart3 className="w-8 h-8 text-accent-foreground" />
             </div>
-            <p className="text-xs text-muted-foreground mt-2">1,134 respostas</p>
+            <p className="text-xs text-muted-foreground mt-2">{recentFeedback.length} respostas</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-orange-500">+47</p>
+                <p className="text-3xl font-bold text-warning-foreground">+{Math.round(npsScore / 10)}</p>
                 <p className="text-sm text-muted-foreground">eNPS Score</p>
               </div>
-              <Sparkles className="w-8 h-8 text-orange-500" />
+              <Sparkles className="w-8 h-8 text-warning-foreground" />
             </div>
-            <Badge className="mt-2 bg-orange-500/20 text-orange-600">Excelente</Badge>
+            <Badge className="mt-2 bg-warning/20 text-warning-foreground">
+              {npsScore >= 70 ? 'Excelente' : npsScore >= 50 ? 'Bom' : 'A melhorar'}
+            </Badge>
           </CardContent>
         </Card>
       </div>

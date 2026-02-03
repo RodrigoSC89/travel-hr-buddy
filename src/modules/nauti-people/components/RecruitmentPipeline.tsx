@@ -42,7 +42,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { departamentos } from '../data/mockData';
+import { DEPARTAMENTOS } from '@/hooks/useClimateData';
 import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
 import { useRecruitmentData, type Candidato, type Vaga } from '@/hooks/useRecruitmentData';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -282,7 +282,7 @@ const RecruitmentPipeline: React.FC = () => {
                       >
                         <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                         <SelectContent>
-                          {departamentos.map(dep => (
+                          {DEPARTAMENTOS.map((dep: string) => (
                             <SelectItem key={dep} value={dep}>{dep}</SelectItem>
                           ))}
                         </SelectContent>
@@ -416,7 +416,7 @@ const RecruitmentPipeline: React.FC = () => {
                     >
                       <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
-                        {departamentos.map(dep => (
+                        {DEPARTAMENTOS.map((dep: string) => (
                           <SelectItem key={dep} value={dep}>{dep}</SelectItem>
                         ))}
                       </SelectContent>
