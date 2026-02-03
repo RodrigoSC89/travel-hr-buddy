@@ -28,6 +28,8 @@ const HRDashboard = lazy(() => import("@/pages/hr/HRDashboard"));
 const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
 const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
 const PeopleAnalytics = lazy(() => import("@/pages/PeopleAnalytics"));
+const CrewTrainingTab = lazy(() => import("@/components/people/CrewTrainingTab"));
+const CrewComplianceTab = lazy(() => import("@/components/people/CrewComplianceTab"));
 
 function TabLoadingSkeleton() {
   return (
@@ -118,13 +120,13 @@ export default function PeopleHub() {
 
         <TabsContent value="training" className="mt-6">
           <Suspense fallback={<TabLoadingSkeleton />}>
-            <HRDashboard />
+            <CrewTrainingTab />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="compliance" className="mt-6">
           <Suspense fallback={<TabLoadingSkeleton />}>
-            <HRDashboard />
+            <CrewComplianceTab />
           </Suspense>
         </TabsContent>
 
