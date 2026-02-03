@@ -77,40 +77,33 @@ Nenhum - todos os mocks críticos foram removidos!
 
 ## 🟢 P2 - Audit Trail CORE Tables
 
-### ✅ IMPLEMENTADO
+### ✅ IMPLEMENTADO (PATCH 1001 - 18 tabelas)
 
-| Tabela | Trigger | Status |
-|--------|---------|--------|
-| `audit_log` | - | ✅ Tabela criada |
-| `vessels` | `audit_vessels_trigger` | ✅ Implementado |
-| `crew_members` | `audit_crew_members_trigger` | ✅ Implementado |
-| `maintenance_orders` | `audit_maintenance_orders_trigger` | ✅ Implementado |
-| `documents` | `audit_documents_trigger` | ✅ Implementado |
+| Grupo | Tabelas com Trigger |
+|-------|---------------------|
+| **Embarcações** | `vessels` |
+| **Tripulação** | `crew_members`, `crew_payroll`, `crew_health_metrics`, `training_records` |
+| **Manutenção** | `maintenance_orders` |
+| **Operações** | `voyage_plans`, `incidents`, `dp_incidents` |
+| **Documentação** | `documents`, `certificates` |
+| **Compliance** | `sgso_audits`, `psc_inspections`, `peotram_audits`, `internal_audits` |
+| **Qualidade** | `non_conformities`, `corrective_actions`, `improvement_suggestions` |
 
 ### Infraestrutura Audit Trail
 
 ```sql
--- Tabela centralizada de auditoria
-CREATE TABLE audit_log (
-  id UUID PRIMARY KEY,
-  event_timestamp TIMESTAMPTZ,
-  user_id UUID,
-  module TEXT,
-  entity_type TEXT,
-  entity_id TEXT,
-  action TEXT CHECK (action IN ('CREATE','UPDATE','DELETE','APPROVE','REJECT')),
-  before_state JSONB,
-  after_state JSONB,
-  correlation_id UUID,
-  ip_address INET,
-  metadata JSONB
-);
+-- Tabela centralizada (já existente)
+audit_log (
+  entity_type, entity_id, action, before_state, after_state, 
+  user_id, event_timestamp, correlation_id
+)
 
--- Função trigger genérica
-CREATE FUNCTION audit_trigger_function() RETURNS TRIGGER;
+-- Função trigger SECURITY DEFINER
+CREATE FUNCTION core_audit_trigger() RETURNS TRIGGER;
 
--- Helper para consultar trail
-CREATE FUNCTION get_entity_audit_trail(entity_type, entity_id, limit);
+-- Aplicado via:
+CREATE TRIGGER audit_{table} AFTER INSERT/UPDATE/DELETE ON {table}
+  FOR EACH ROW EXECUTE FUNCTION core_audit_trigger();
 ```
 
 ### Cobertura de Testes
