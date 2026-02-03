@@ -29,12 +29,12 @@ Componentes padrão criados em `src/components/ui/ux-system/`:
 ## 📋 GAPS IDENTIFICADOS (P0-P2)
 
 ### P0 — Bloqueadores Críticos
-| Arquivo | Problema | Correção |
-|---------|----------|----------|
-| `fleet-operations-center.tsx:70-147` | Mock hardcoded mockVessels | Usar useFleetTracking() |
-| `document-management.tsx:88-156` | Mock loadDocuments() | Usar useDocuments() |
-| `OCRPipelineManager.tsx:39-71` | Mock mockDocuments[] | Integrar ai_documents |
-| `ComplianceMapWithGeofencing.tsx:79-84` | getMockVessels() fake | Usar vessel_positions |
+| Arquivo | Problema | Status |
+|---------|----------|--------|
+| `fleet-operations-center.tsx` | Mock hardcoded mockVessels | ✅ CORRIGIDO - useFleetTracking() |
+| `document-management.tsx` | Mock loadDocuments() | ✅ CORRIGIDO - useDocuments() |
+| `OCRPipelineManager.tsx` | Mock mockDocuments[] | 🔄 Pendente |
+| `ComplianceMapWithGeofencing.tsx` | getMockVessels() fake | 🔄 Pendente |
 
 ### P1 — UX Incompleto
 | Módulo | Problema |
