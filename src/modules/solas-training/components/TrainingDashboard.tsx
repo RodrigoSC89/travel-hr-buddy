@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ShieldAlert,
   Calendar,
@@ -20,45 +21,13 @@ import {
   Anchor,
   LifeBuoy,
   Siren,
+  Inbox,
 } from "lucide-react";
-
-interface Drill {
-  id: string;
-  name: string;
-  type: "fire" | "abandon" | "mob" | "blackout" | "collision" | "pollution";
-  frequency: string;
-  lastExecution: string;
-  nextDue: string;
-  status: "completed" | "due" | "overdue";
-  participants: number;
-  totalCrew: number;
-}
-
-interface TrainingRecord {
-  id: string;
-  crewMember: string;
-  training: string;
-  certDate: string;
-  expiryDate: string;
-  status: "valid" | "expiring" | "expired";
-}
-
-const mockDrills: Drill[] = [
-  { id: "1", name: "Exercício de Incêndio", type: "fire", frequency: "Mensal", lastExecution: "2024-01-10", nextDue: "2024-02-10", status: "completed", participants: 24, totalCrew: 24 },
-  { id: "2", name: "Abandono de Embarcação", type: "abandon", frequency: "Mensal", lastExecution: "2024-01-05", nextDue: "2024-02-05", status: "completed", participants: 24, totalCrew: 24 },
-  { id: "3", name: "Homem ao Mar (MOB)", type: "mob", frequency: "Trimestral", lastExecution: "2023-11-15", nextDue: "2024-02-15", status: "due", participants: 0, totalCrew: 24 },
-  { id: "4", name: "Blackout Recovery", type: "blackout", frequency: "Semestral", lastExecution: "2023-08-20", nextDue: "2024-02-20", status: "due", participants: 0, totalCrew: 24 },
-  { id: "5", name: "Combate à Poluição", type: "pollution", frequency: "Trimestral", lastExecution: "2023-10-01", nextDue: "2024-01-01", status: "overdue", participants: 0, totalCrew: 24 },
-];
-
-const mockTrainings: TrainingRecord[] = [
-  { id: "1", crewMember: "João Silva", training: "STCW Basic Safety", certDate: "2022-05-15", expiryDate: "2027-05-15", status: "valid" },
-  { id: "2", crewMember: "Maria Santos", training: "Advanced Fire Fighting", certDate: "2021-08-20", expiryDate: "2024-08-20", status: "expiring" },
-  { id: "3", crewMember: "Carlos Lima", training: "Medical First Aid", certDate: "2020-03-10", expiryDate: "2024-03-10", status: "expiring" },
-  { id: "4", crewMember: "Ana Costa", training: "Survival Craft", certDate: "2019-11-25", expiryDate: "2024-01-25", status: "expired" },
-];
+import { useTrainingDrills, useTrainingRecords, type Drill, type TrainingRecord } from "@/hooks/useTrainingDrillsData";
 
 export default function TrainingDashboard() {
+  const { data: drills = [], isLoading: isLoadingDrills } = useTrainingDrills();
+  const { data: trainings = [], isLoading: isLoadingTrainings } = useTrainingRecords();
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
     { role: "assistant", content: "Olá! Sou o assistente de treinamentos SOLAS/ISM. Posso ajudar com procedimentos de drills, planejamento e relatórios. Como posso ajudar?" },
@@ -72,7 +41,7 @@ export default function TrainingDashboard() {
       const responses: Record<string, string> = {
         incendio: "Procedimento Exercício de Incêndio: 1) Acionar alarme geral, 2) Tripulação assume estações, 3) Isolar área, 4) Equipe de combate com EPIs, 5) Simular combate, 6) Debrief. Registrar no Safety Drill Log com assinaturas.",
         abandono: "Procedimento de Abandono: 1) 7 toques curtos + 1 longo, 2) Tripulação com coletes, 3) Muster stations, 4) Verificar lista de presença, 5) Preparar balsas/botes, 6) Simular embarque ordenado. Duração máxima: 30 minutos.",
-        vencimentos: "Certificados expirando (90 dias): 3 tripulantes. 1 STCW expirado (Ana Costa). Recomendo agendar reciclagem imediata para manter conformidade ISM.",
+        vencimentos: `Certificados expirando (90 dias): ${trainings.filter(t => t.status === 'expiring').length} tripulantes. ${trainings.filter(t => t.status === 'expired').length} STCW expirado. Recomendo agendar reciclagem imediata para manter conformidade ISM.`,
         default: "Posso ajudar com procedimentos de drills, verificar vencimentos, gerar plano anual de treinamentos ou explicar requisitos SOLAS/ISM. O que precisa?",
       };
       
@@ -87,9 +56,11 @@ export default function TrainingDashboard() {
     setChatMessage("");
   };
 
-  const overdueDrills = mockDrills.filter(d => d.status === "overdue").length;
-  const dueDrills = mockDrills.filter(d => d.status === "due").length;
-  const expiringCerts = mockTrainings.filter(t => t.status === "expiring" || t.status === "expired").length;
+  const overdueDrills = drills.filter(d => d.status === "overdue").length;
+  const dueDrills = drills.filter(d => d.status === "due").length;
+  const expiringCerts = trainings.filter(t => t.status === "expiring" || t.status === "expired").length;
+
+  const isLoading = isLoadingDrills || isLoadingTrainings;
 
   return (
     <div className="space-y-6">
@@ -226,7 +197,7 @@ export default function TrainingDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockDrills.map((drill) => (
+              {drills.map((drill: Drill) => (
                 <div key={drill.id} className={`p-4 rounded-lg border ${
                   drill.status === "overdue" ? "bg-red-500/10 border-red-500/30" :
                   drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
@@ -293,7 +264,7 @@ export default function TrainingDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mockTrainings.map((training) => (
+            {trainings.map((training: TrainingRecord) => (
               <div key={training.id} className={`p-4 rounded-lg border ${
                 training.status === "expired" ? "bg-red-500/10 border-red-500/30" :
                 training.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :

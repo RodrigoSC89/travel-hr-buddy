@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Calendar } from "@/components/ui/calendar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Shield, 
   AlertTriangle, 
@@ -22,106 +23,18 @@ import {
   Globe,
   Award,
   BookOpen,
-  Zap
+  Zap,
+  Inbox
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface Certification {
-  id: string;
-  name: string;
-  type: "STCW" | "Medical" | "Security" | "Safety" | "Technical";
-  issuingAuthority: string;
-  issueDate: Date;
-  expiryDate: Date;
-  status: "valid" | "expiring" | "expired" | "pending";
-  crewMember: {
-    name: string;
-    rank: string;
-    vessel: string;
-  };
-  documentUrl?: string;
-  renewalCost: number;
-  mandatoryFor: string[];
-}
-
-interface ComplianceMetric {
-  category: string;
-  compliance: number;
-  total: number;
-  critical: number;
-}
+import { useCertifications, useComplianceMetrics, type Certification, type ComplianceMetric } from "@/hooks/useCertificationData";
 
 export const CertificationManager: React.FC = () => {
-  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const { data: certifications = [], isLoading: isLoadingCerts } = useCertifications();
+  const { data: complianceMetrics = [], isLoading: isLoadingMetrics } = useComplianceMetrics();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [activeTab, setActiveTab] = useState("overview");
-  const [complianceMetrics, setComplianceMetrics] = useState<ComplianceMetric[]>([]);
   const { toast } = useToast();
-
-  useEffect(() => {
-    // Mock data para demonstração
-    const mockCertifications: Certification[] = [
-      {
-        id: "1",
-        name: "Basic Safety Training (BST)",
-        type: "STCW",
-        issuingAuthority: "Marinha do Brasil",
-        issueDate: new Date("2023-01-15"),
-        expiryDate: new Date("2028-01-15"),
-        status: "valid",
-        crewMember: {
-          name: "João Silva",
-          rank: "AB Seaman",
-          vessel: "MV Ocean Pioneer"
-        },
-        renewalCost: 1500,
-        mandatoryFor: ["All Crew"]
-      },
-      {
-        id: "2",
-        name: "Medical Certificate",
-        type: "Medical",
-        issuingAuthority: "Authorized Medical Examiner",
-        issueDate: new Date("2023-06-01"),
-        expiryDate: new Date("2024-06-01"),
-        status: "expiring",
-        crewMember: {
-          name: "Maria Santos",
-          rank: "Cook",
-          vessel: "MV Atlantic Star"
-        },
-        renewalCost: 300,
-        mandatoryFor: ["All Crew"]
-      },
-      {
-        id: "3",
-        name: "Ship Security Officer (SSO)",
-        type: "Security",
-        issuingAuthority: "Maritime Security Agency",
-        issueDate: new Date("2022-03-10"),
-        expiryDate: new Date("2024-03-10"),
-        status: "expired",
-        crewMember: {
-          name: "Carlos Lima",
-          rank: "Chief Officer",
-          vessel: "MV Ocean Pioneer"
-        },
-        renewalCost: 2500,
-        mandatoryFor: ["Officers"]
-      }
-    ];
-
-    const mockMetrics: ComplianceMetric[] = [
-      { category: "STCW", compliance: 87, total: 45, critical: 3 },
-      { category: "Medical", compliance: 92, total: 38, critical: 1 },
-      { category: "Security", compliance: 78, total: 25, critical: 5 },
-      { category: "Safety", compliance: 94, total: 52, critical: 2 },
-      { category: "Technical", compliance: 89, total: 31, critical: 1 }
-    ];
-
-    setCertifications(mockCertifications);
-    setComplianceMetrics(mockMetrics);
-  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   FileSearch, 
   Brain, 
@@ -28,135 +29,17 @@ import {
   Settings,
   Database,
   Loader2,
-  Sparkles
+  Sparkles,
+  Inbox
 } from "lucide-react";
 import { toast } from "sonner";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
-
-interface AuditEntry {
-  id: string;
-  timestamp: Date;
-  userId: string;
-  userName: string;
-  action: string;
-  module: string;
-  details: string;
-  severity: "info" | "warning" | "critical";
-  ipAddress: string;
-  metadata?: Record<string, any>;
-}
-
-interface AIInsight {
-  id: string;
-  type: "anomaly" | "pattern" | "recommendation" | "risk";
-  title: string;
-  description: string;
-  confidence: number;
-  affectedEntries: number;
-  timestamp: Date;
-}
-
-const mockAuditEntries: AuditEntry[] = [
-  {
-    id: "1",
-    timestamp: new Date(Date.now() - 60000),
-    userId: "u1",
-    userName: "Carlos Silva",
-    action: "UPDATE",
-    module: "Manutenção",
-    details: "Alterou status de ordem de serviço #1234",
-    severity: "info",
-    ipAddress: "192.168.1.100"
-  },
-  {
-    id: "2",
-    timestamp: new Date(Date.now() - 120000),
-    userId: "u2",
-    userName: "João Santos",
-    action: "DELETE",
-    module: "Documentos",
-    details: "Removeu documento de certificação",
-    severity: "warning",
-    ipAddress: "192.168.1.101"
-  },
-  {
-    id: "3",
-    timestamp: new Date(Date.now() - 180000),
-    userId: "u3",
-    userName: "Admin Sistema",
-    action: "PERMISSION_CHANGE",
-    module: "Segurança",
-    details: "Alterou permissões de acesso crítico",
-    severity: "critical",
-    ipAddress: "192.168.1.1"
-  },
-  {
-    id: "4",
-    timestamp: new Date(Date.now() - 300000),
-    userId: "u4",
-    userName: "Maria Oliveira",
-    action: "CREATE",
-    module: "Tripulação",
-    details: "Criou novo registro de tripulante",
-    severity: "info",
-    ipAddress: "192.168.1.102"
-  },
-  {
-    id: "5",
-    timestamp: new Date(Date.now() - 600000),
-    userId: "u1",
-    userName: "Carlos Silva",
-    action: "EXPORT",
-    module: "Relatórios",
-    details: "Exportou relatório financeiro completo",
-    severity: "warning",
-    ipAddress: "192.168.1.100"
-  },
-];
-
-const mockAIInsights: AIInsight[] = [
-  {
-    id: "i1",
-    type: "anomaly",
-    title: "Padrão de acesso incomum detectado",
-    description: "Usuário Carlos Silva realizou 15 operações de exportação nas últimas 2 horas, acima da média de 3 por dia.",
-    confidence: 87,
-    affectedEntries: 15,
-    timestamp: new Date()
-  },
-  {
-    id: "i2",
-    type: "risk",
-    title: "Alterações críticas fora do horário",
-    description: "3 modificações de permissões foram realizadas entre 22h e 6h na última semana.",
-    confidence: 92,
-    affectedEntries: 3,
-    timestamp: new Date(Date.now() - 3600000)
-  },
-  {
-    id: "i3",
-    type: "pattern",
-    title: "Padrão de workflow identificado",
-    description: "80% das atualizações de manutenção são seguidas por criação de documentos em até 1 hora.",
-    confidence: 78,
-    affectedEntries: 45,
-    timestamp: new Date(Date.now() - 7200000)
-  },
-  {
-    id: "i4",
-    type: "recommendation",
-    title: "Oportunidade de automação",
-    description: "Ações repetitivas de backup manual podem ser automatizadas, economizando ~4h/semana.",
-    confidence: 85,
-    affectedEntries: 28,
-    timestamp: new Date(Date.now() - 86400000)
-  },
-];
+import { useAuditEntries, useAIInsights, type AuditEntry, type AIInsight } from "@/hooks/useAuditTrailData";
 
 export default function AuditTrail() {
-  const { analyzeAudit, isLoading } = useNautilusEnhancementAI();
-  const [auditEntries, setAuditEntries] = useState<AuditEntry[]>(mockAuditEntries);
-  const [aiInsights, setAIInsights] = useState<AIInsight[]>(mockAIInsights);
+  const { analyzeAudit, isLoading: isAnalyzing } = useNautilusEnhancementAI();
+  const { data: auditEntries = [], isLoading: isLoadingEntries } = useAuditEntries();
+  const { data: aiInsights = [], isLoading: isLoadingInsights } = useAIInsights();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState<string | null>(null);
 
@@ -178,29 +61,6 @@ export default function AuditTrail() {
     const result = await analyzeAudit(auditEntries);
     
     if (result?.response) {
-      const aiResponse = result.response;
-      const newInsight: AIInsight = {
-        id: Date.now().toString(),
-        type: aiResponse.riskLevel === 'high' ? "risk" : aiResponse.riskLevel === 'medium' ? "anomaly" : "pattern",
-        title: aiResponse.summary || "Análise de IA concluída",
-        description: aiResponse.findings?.join(' ') || `Análise de ${auditEntries.length} registros concluída.`,
-        confidence: aiResponse.confidence || 85,
-        affectedEntries: aiResponse.affectedCount || auditEntries.length,
-        timestamp: new Date()
-      };
-      
-      // Add anomaly insights if present
-      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: any, idx: number) => ({
-        id: `anomaly-${Date.now()}-${idx}`,
-        type: "anomaly" as const,
-        title: a.title || "Anomalia detectada",
-        description: a.description || a,
-        confidence: a.confidence || 75,
-        affectedEntries: a.count || 1,
-        timestamp: new Date()
-      }));
-      
-      setAIInsights(prev => [newInsight, ...anomalyInsights, ...prev]);
       toast.success("Análise de IA concluída!");
     } else {
       toast.error("Erro na análise de IA");
@@ -314,9 +174,9 @@ ANÁLISE DE SEGURANÇA
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={runAIAnalysis} disabled={isLoading}>
-            {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
-            {isLoading ? "Analisando..." : "Análise IA"}
+          <Button onClick={runAIAnalysis} disabled={isAnalyzing || isLoadingEntries}>
+            {isAnalyzing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
+            {isAnalyzing ? "Analisando..." : "Análise IA"}
           </Button>
         </div>
       </div>
