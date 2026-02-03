@@ -9,8 +9,7 @@ import type { KanbanAISuggestionsProps, Suggestion } from "./types";
 import type { Database } from "@/integrations/supabase/types";
 import { logger } from '@/lib/logger';
 
-// workflow_ai_suggestions table exists in DB but types not yet regenerated
-// Using any assertion until schema types are updated
+type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
 export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);
@@ -20,16 +19,19 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
     try {
       setAccepted((prev) => [...prev, etapa]);
 
-      const payload: any = {
-        etapa: s.etapa,
-        tipo_sugestao: s.tipo_sugestao,
-        conteudo: s.conteudo,
-        criticidade: s.criticidade,
-        responsavel_sugerido: s.responsavel_sugerido,
-        origem: "Copilot",
+      const payload: WorkflowAISuggestionInsert = {
+        title: s.etapa,
+        suggestion_type: s.tipo_sugestao,
+        description: s.conteudo,
+        action_data: {
+          criticidade: s.criticidade,
+          responsavel_sugerido: s.responsavel_sugerido,
+          origem: "Copilot",
+        },
+        status: "accepted",
       };
 
-      const { error } = await (supabase as any).from("workflow_ai_suggestions").insert(payload);
+      const { error } = await supabase.from("workflow_ai_suggestions").insert(payload);
 
       if (error) {
         logger.error("Error inserting AI suggestion:", error);

@@ -1,6 +1,7 @@
 /**
  * PATCH 636: AI Navigation Hook
  * Provides intelligent navigation suggestions based on user behavior
+ * Fully typed with navigation_history and module_access_log tables
  */
 
 import { useQuery } from "@tanstack/react-query";
@@ -10,20 +11,15 @@ import { useEffect } from "react";
 import type { Database } from "@/integrations/supabase/types";
 import { logger } from '@/lib/logger';
 
-interface NavigationEntry {
-  from: string;
-  to: string;
-  timestamp: string;
-}
+type NavigationHistoryRow = Database["public"]["Tables"]["navigation_history"]["Row"];
+type NavigationHistoryInsert = Database["public"]["Tables"]["navigation_history"]["Insert"];
+type ModuleAccessInsert = Database["public"]["Tables"]["module_access_log"]["Insert"];
 
 interface NavigationSuggestion {
   module: string;
   confidence: number;
   reason: string;
 }
-
-// navigation_history and module_access_log tables exist in DB but types not yet regenerated
-// Using any assertion until schema types are updated
 
 export function useAINavigation() {
   const { user } = useAuth();
@@ -38,14 +34,14 @@ export function useAINavigation() {
 
       if (previousPath && previousPath !== currentPath) {
         try {
-          const payload: any = {
+          const payload: NavigationHistoryInsert = {
             user_id: user.id,
-            from_path: previousPath,
-            to_path: currentPath,
-            timestamp: new Date().toISOString(),
+            module_path: currentPath,
+            module_name: currentPath.split('/').pop() || 'unknown',
+            metadata: { from_path: previousPath },
           };
 
-          await (supabase as any).from("navigation_history").insert(payload);
+          await supabase.from("navigation_history").insert(payload);
         } catch (error) {
           logger.error("Failed to track navigation:", error);
         }
@@ -65,16 +61,16 @@ export function useAINavigation() {
 
       try {
         // Get user's navigation history
-        const { data: history, error } = await (supabase as any)
+        const { data: history, error } = await supabase
           .from("navigation_history")
           .select("*")
           .eq("user_id", user.id)
-          .order("timestamp", { ascending: false })
+          .order("last_visited_at", { ascending: false })
           .limit(100);
 
         if (error) throw error;
 
-        return analyzePatternsAndSuggest((history ?? []) as any[]);
+        return analyzePatternsAndSuggest(history || []);
       } catch (error) {
         logger.error("Failed to get navigation suggestions:", error);
         return [];
@@ -87,7 +83,7 @@ export function useAINavigation() {
   return { suggestions };
 }
 
-function analyzePatternsAndSuggest(history: any[]): NavigationSuggestion[] {
+function analyzePatternsAndSuggest(history: NavigationHistoryRow[]): NavigationSuggestion[] {
   if (history.length === 0) return [];
 
   const suggestions: NavigationSuggestion[] = [];
@@ -97,14 +93,19 @@ function analyzePatternsAndSuggest(history: any[]): NavigationSuggestion[] {
   const patterns = new Map<string, number>();
 
   for (let i = 0; i < history.length - 1; i++) {
-    if (history[i].from_path === currentPath) {
-      const nextPath = history[i].to_path;
+    const metadata = history[i].metadata as Record<string, unknown> | null;
+    const fromPath = metadata?.from_path as string | undefined;
+    
+    if (fromPath === currentPath) {
+      const nextPath = history[i].module_path;
       patterns.set(nextPath, (patterns.get(nextPath) || 0) + 1);
     }
   }
 
   // Convert patterns to suggestions
   const totalTransitions = Array.from(patterns.values()).reduce((sum, count) => sum + count, 0);
+
+  if (totalTransitions === 0) return [];
 
   patterns.forEach((count, path) => {
     const confidence = count / totalTransitions;
@@ -133,13 +134,12 @@ export function useRecordModuleAccess(moduleName: string) {
 
     const recordAccess = async () => {
       try {
-        const payload: any = {
+        const payload: ModuleAccessInsert = {
           user_id: user.id,
           module_name: moduleName,
-          accessed_at: new Date().toISOString(),
         };
 
-        await (supabase as any).from("module_access_log").insert(payload);
+        await supabase.from("module_access_log").insert(payload);
       } catch (error) {
         logger.error("Failed to record module access:", error);
       }
