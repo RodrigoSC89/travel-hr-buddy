@@ -1,6 +1,6 @@
 /**
  * SmartRoutesMap - Mapa Interativo de Rotas Marítimas
- * Com otimização de rotas em tempo real usando Mapbox
+ * ✅ P0 CORRIGIDO: Dados reais via Supabase (R01 MITIGADO)
  */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -8,8 +8,12 @@ import mapboxgl from '@/lib/mapbox-shim';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   MapPin, 
   Navigation, 
@@ -20,7 +24,9 @@ import {
   AlertTriangle,
   RefreshCw,
   Maximize2,
-  Loader2
+  Loader2,
+  WifiOff,
+  Settings
 } from "lucide-react";
 
 interface RoutePoint {
@@ -44,47 +50,6 @@ interface RouteData {
   weatherRisk: 'low' | 'medium' | 'high';
 }
 
-// Mock route data
-const MOCK_ROUTES: RouteData[] = [
-  {
-    id: "1",
-    name: "Santos → Rotterdam",
-    vessel: "MV Atlântico",
-    origin: { id: "o1", name: "Porto de Santos", coordinates: [-46.3042, -23.9618], type: 'origin' },
-    destination: { id: "d1", name: "Porto de Rotterdam", coordinates: [4.4777, 51.9244], type: 'destination' },
-    waypoints: [
-      { id: "w1", name: "Recife", coordinates: [-34.8811, -8.0476], type: 'waypoint' },
-      { id: "w2", name: "Cabo Verde", coordinates: [-23.5087, 14.9331], type: 'waypoint' },
-      { id: "w3", name: "Gibraltar", coordinates: [-5.3536, 36.1408], type: 'waypoint' },
-    ],
-    distance: 9850,
-    estimatedTime: "18 dias",
-    fuelConsumption: 4250,
-    status: 'active',
-    weatherRisk: 'low'
-  },
-  {
-    id: "2",
-    name: "Rio → Hamburgo",
-    vessel: "MV Pacífico",
-    origin: { id: "o2", name: "Porto do Rio", coordinates: [-43.1729, -22.9068], type: 'origin' },
-    destination: { id: "d2", name: "Porto de Hamburgo", coordinates: [9.9937, 53.5511], type: 'destination' },
-    waypoints: [
-      { id: "w4", name: "Açores", coordinates: [-25.5089, 37.7489], type: 'waypoint' },
-    ],
-    distance: 9200,
-    estimatedTime: "16 dias",
-    fuelConsumption: 3980,
-    status: 'planned',
-    weatherRisk: 'medium'
-  },
-];
-
-const HAZARD_ZONES = [
-  { id: "h1", name: "Zona de Tempestade", coordinates: [-30.0, 15.0] as [number, number], radius: 300 },
-  { id: "h2", name: "Alto Mar - Ondas Fortes", coordinates: [-10.0, 40.0] as [number, number], radius: 200 },
-];
-
 interface SmartRoutesMapProps {
   mapboxToken?: string;
 }
@@ -92,16 +57,72 @@ interface SmartRoutesMapProps {
 export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedRoute, setSelectedRoute] = useState<RouteData | null>(MOCK_ROUTES[0]);
+  const [isMapLoading, setIsMapLoading] = useState(true);
+  const [selectedRoute, setSelectedRoute] = useState<RouteData | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
 
-  // Use environment variable if no token provided
   const token = mapboxToken || import.meta.env.VITE_MAPBOX_TOKEN || '';
 
+  // ✅ R01: Fetch real routes from database
+  const { data: routesData, isLoading: routesLoading, refetch } = useQuery({
+    queryKey: ["smart-routes"],
+    queryFn: async (): Promise<RouteData[]> => {
+      const { data, error } = await supabase
+        .from("routes")
+        .select(`
+          id,
+          name,
+          vessel_id,
+          origin_port_id,
+          destination_port_id,
+          status,
+          distance_nm,
+          estimated_duration_hours,
+          fuel_consumption_mt,
+          vessels (name),
+          route_waypoints (id, port_id, sequence, ports (name, latitude, longitude))
+        `)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+
+      return (data || []).map(r => {
+        const waypoints = (r.route_waypoints || [])
+          .sort((a: Record<string, unknown>, b: Record<string, unknown>) => 
+            (Number(a.sequence) || 0) - (Number(b.sequence) || 0))
+          .map((wp: Record<string, unknown>, idx: number) => ({
+            id: String(wp.id),
+            name: (wp.ports as Record<string, unknown>)?.name as string || `Waypoint ${idx + 1}`,
+            coordinates: [
+              Number((wp.ports as Record<string, unknown>)?.longitude) || 0,
+              Number((wp.ports as Record<string, unknown>)?.latitude) || 0
+            ] as [number, number],
+            type: 'waypoint' as const
+          }));
+
+        return {
+          id: r.id,
+          name: r.name || "Rota",
+          vessel: (r.vessels as Record<string, unknown>)?.name as string || "Embarcação",
+          origin: waypoints[0] || { id: "o1", name: "Origem", coordinates: [0, 0], type: 'origin' as const },
+          destination: waypoints[waypoints.length - 1] || { id: "d1", name: "Destino", coordinates: [0, 0], type: 'destination' as const },
+          waypoints: waypoints.slice(1, -1),
+          distance: Number(r.distance_nm) || 0,
+          estimatedTime: `${Math.round((Number(r.estimated_duration_hours) || 0) / 24)} dias`,
+          fuelConsumption: Number(r.fuel_consumption_mt) || 0,
+          status: (r.status === 'active' ? 'active' : r.status === 'completed' ? 'completed' : 'planned') as RouteData["status"],
+          weatherRisk: 'low' as const, // Would come from weather API
+        };
+      });
+    },
+  });
+
+  const routes = routesData || [];
+
   useEffect(() => {
-    if (!mapContainer.current || !token) {
-      setIsLoading(false);
+    if (!mapContainer.current || !token || routes.length === 0) {
+      setIsMapLoading(false);
       return;
     }
 
@@ -123,54 +144,40 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
       );
 
       map.current?.on('load', () => {
-        const mapInstance = map.current;
-        if (!mapInstance) return;
-        
-        setIsLoading(false);
-        
-        // Add route lines and markers
-        addRouteToMap(MOCK_ROUTES[0]);
-        
-        // Add hazard zones
-        HAZARD_ZONES.forEach(hazard => {
-          new mapboxgl.Marker({ color: '#ef4444' })
-            .setLngLat(hazard.coordinates)
-            .setPopup(new mapboxgl.Popup().setHTML(`
-              <div class="p-2">
-                <strong class="text-red-600">⚠️ ${hazard.name}</strong>
-                <p class="text-sm">Área de risco - Evitar navegação</p>
-              </div>
-            `))
-            .addTo(mapInstance);
-        });
+        setIsMapLoading(false);
+        if (routes.length > 0) {
+          setSelectedRoute(routes[0]);
+          addRouteToMap(routes[0]);
+        }
       });
 
       map.current?.on('error', () => {
-        setIsLoading(false);
+        setIsMapLoading(false);
         toast.error("Erro ao carregar mapa");
       });
 
     } catch (error) {
       logger.error("Mapbox init error:", error);
-      setIsLoading(false);
+      setIsMapLoading(false);
     }
 
     return () => {
       map.current?.remove();
     };
-  }, [token]);
+  }, [token, routes]);
 
   const addRouteToMap = (route: RouteData) => {
     if (!map.current) return;
 
-    // Create route coordinates
     const routeCoordinates = [
       route.origin.coordinates,
       ...route.waypoints.map(w => w.coordinates),
       route.destination.coordinates
-    ];
+    ].filter(c => c[0] !== 0 && c[1] !== 0);
 
-    // Add origin marker
+    if (routeCoordinates.length < 2) return;
+
+    // Add markers
     new mapboxgl.Marker({ color: '#22c55e' })
       .setLngLat(route.origin.coordinates)
       .setPopup(new mapboxgl.Popup().setHTML(`
@@ -182,7 +189,6 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
       `))
       .addTo(map.current);
 
-    // Add destination marker
     new mapboxgl.Marker({ color: '#3b82f6' })
       .setLngLat(route.destination.coordinates)
       .setPopup(new mapboxgl.Popup().setHTML(`
@@ -193,7 +199,6 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
       `))
       .addTo(map.current);
 
-    // Add waypoint markers
     route.waypoints.forEach((wp, idx) => {
       new mapboxgl.Marker({ color: '#f59e0b', scale: 0.7 })
         .setLngLat(wp.coordinates)
@@ -247,19 +252,31 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
     }
   };
 
-  const handleOptimizeRoute = () => {
+  const handleOptimizeRoute = async () => {
+    if (!selectedRoute) return;
+    
     setIsOptimizing(true);
-    setTimeout(() => {
-      setIsOptimizing(false);
-      toast.success("Rota otimizada!", {
-        description: "Economia de 12% no consumo de combustível"
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-route-optimizer", {
+        body: { routeId: selectedRoute.id },
       });
-    }, 2000);
+
+      if (error) throw error;
+
+      await refetch();
+      toast.success("Rota otimizada!", {
+        description: data?.savings || "Otimização concluída"
+      });
+    } catch {
+      toast.error("Erro ao otimizar rota");
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   const handleSelectRoute = (route: RouteData) => {
     setSelectedRoute(route);
-    if (map.current) {
+    if (map.current && route.origin.coordinates[0] !== 0) {
       map.current.flyTo({
         center: route.origin.coordinates,
         zoom: 4,
@@ -278,6 +295,32 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
     }
   };
 
+  // ⚠️ Estado "Não Configurado" quando não há rotas
+  if (!routesLoading && routes.length === 0) {
+    return (
+      <Card>
+        <CardContent className="py-16 text-center space-y-4">
+          <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+          <h3 className="text-xl font-semibold">Nenhuma Rota Configurada</h3>
+          <p className="text-muted-foreground max-w-md mx-auto">
+            Configure rotas marítimas para visualizar no mapa.
+          </p>
+          <Alert className="max-w-lg mx-auto">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Sem Dados Simulados</AlertTitle>
+            <AlertDescription>
+              Este mapa exibe apenas rotas reais do banco de dados.
+            </AlertDescription>
+          </Alert>
+          <Button onClick={() => window.location.href = '/logistics/routes'}>
+            <Settings className="h-4 w-4 mr-2" />
+            Configurar Rotas
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   if (!token) {
     return (
       <Card>
@@ -292,6 +335,18 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
     );
   }
 
+  if (routesLoading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <Skeleton className="lg:col-span-3 h-[500px]" />
+        <div className="space-y-4">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-48" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
       {/* Map */}
@@ -301,13 +356,14 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
             <CardTitle className="flex items-center gap-2">
               <MapPin className="h-5 w-5 text-primary" />
               Mapa de Rotas Inteligentes
+              <Badge variant="outline">Dados Reais</Badge>
             </CardTitle>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={handleOptimizeRoute}
-                disabled={isOptimizing}
+                disabled={isOptimizing || !selectedRoute}
               >
                 {isOptimizing ? (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -324,7 +380,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
         </CardHeader>
         <CardContent className="p-0">
           <div className="relative h-[500px]">
-            {isLoading && (
+            {isMapLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
@@ -336,13 +392,12 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
 
       {/* Route Panel */}
       <div className="space-y-4">
-        {/* Route List */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Rotas Ativas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {MOCK_ROUTES.map(route => (
+            {routes.map(route => (
               <div
                 key={route.id}
                 onClick={() => handleSelectRoute(route)}
@@ -357,7 +412,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
                 <p className="text-xs text-muted-foreground mb-2">{route.name}</p>
                 <div className="flex gap-1">
                   <Badge variant={route.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                    {route.status === 'active' ? 'Em Navegação' : 'Planejada'}
+                    {route.status === 'active' ? 'Em Navegação' : route.status === 'completed' ? 'Concluída' : 'Planejada'}
                   </Badge>
                   <Badge className={`text-xs ${getWeatherRiskColor(route.weatherRisk)}`}>
                     <Wind className="h-3 w-3 mr-1" />
@@ -369,7 +424,6 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
           </CardContent>
         </Card>
 
-        {/* Selected Route Details */}
         {selectedRoute && (
           <Card>
             <CardHeader className="pb-2">

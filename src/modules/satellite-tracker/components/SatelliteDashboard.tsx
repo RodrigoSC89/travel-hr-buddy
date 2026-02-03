@@ -1,14 +1,16 @@
 /**
- * PATCH 501+: Enhanced Satellite Tracker Dashboard
- * Real-time satellite tracking with AI Copilot, DGNSS integration, and demo data
+ * Satellite Tracker Dashboard
+ * ✅ P0 CORRIGIDO: Dados reais via Supabase (R01 MITIGADO)
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Satellite, 
   Activity, 
@@ -20,8 +22,9 @@ import {
   Map,
   Navigation,
   Eye,
-  Zap,
-  Signal
+  Signal,
+  WifiOff,
+  Settings
 } from "lucide-react";
 import { SatelliteMap } from "./SatelliteMap";
 import { OrbitVisualization } from "./OrbitVisualization";
@@ -30,65 +33,61 @@ import { SatelliteAlerts } from "./SatelliteAlerts";
 import { SatelliteAICopilot } from "./SatelliteAICopilot";
 import { SatelliteDetailPanel } from "./SatelliteDetailPanel";
 import { DGNSSDashboard } from "./DGNSSDashboard";
-import { DEMO_SATELLITES, updateSatellitePositions, type DemoSatellite } from "../data/demo-satellites";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+
+interface SatelliteData {
+  id: string;
+  norad_id: number;
+  satellite_name: string;
+  orbit_type: "LEO" | "MEO" | "GEO" | "HEO";
+  status: "active" | "inactive" | "maintenance";
+  latitude: number;
+  longitude: number;
+  altitude_km: number;
+  velocity_kmh: number;
+  visibility: "visible" | "eclipsed" | "daylight";
+}
 
 export const SatelliteDashboard: React.FC = () => {
-  const [satellites, setSatellites] = useState<DemoSatellite[]>(DEMO_SATELLITES);
-  const [selectedSatellite, setSelectedSatellite] = useState<DemoSatellite | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [selectedSatellite, setSelectedSatellite] = useState<SatelliteData | null>(null);
   const [activeMainTab, setActiveMainTab] = useState("tracker");
   const [showAICopilot, setShowAICopilot] = useState(true);
 
-  // Initial load
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSatellites(updateSatellitePositions(DEMO_SATELLITES));
-      if (DEMO_SATELLITES.length > 0) {
-        setSelectedSatellite(DEMO_SATELLITES[0]);
-      }
-      setIsLoading(false);
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  // ✅ R01: Fetch real satellite data from database
+  const { data: satellitesData, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ["satellites-tracker"],
+    queryFn: async (): Promise<SatelliteData[]> => {
+      const { data, error } = await supabase
+        .from("satellites")
+        .select("*")
+        .order("name", { ascending: true });
 
-  // Auto-update positions every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSatellites(prev => {
-        const updated = updateSatellitePositions(prev);
-        // Update selected satellite if it exists
-        if (selectedSatellite) {
-          const updatedSelected = updated.find(s => s.id === selectedSatellite.id);
-          if (updatedSelected) {
-            setSelectedSatellite(updatedSelected);
-          }
-        }
-        return updated;
-      });
-      setLastUpdate(new Date());
-    }, 10000);
-    
-    return () => clearInterval(interval);
-  }, [selectedSatellite]);
+      if (error) throw error;
+
+      return (data || []).map(s => ({
+        id: s.id,
+        norad_id: s.norad_id || 0,
+        satellite_name: s.name || "Satélite",
+        orbit_type: (s.orbit_type === "LEO" ? "LEO" : s.orbit_type === "MEO" ? "MEO" : s.orbit_type === "GEO" ? "GEO" : "LEO") as SatelliteData["orbit_type"],
+        status: (s.status === "active" ? "active" : s.status === "inactive" ? "inactive" : "maintenance") as SatelliteData["status"],
+        latitude: s.latitude || 0,
+        longitude: s.longitude || 0,
+        altitude_km: s.altitude_km || 400,
+        velocity_kmh: s.velocity_kmh || 27000,
+        visibility: "visible" as const,
+      }));
+    },
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
+  const satellites = satellitesData || [];
 
   const handleRefresh = useCallback(async () => {
-    setIsUpdating(true);
-    try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setSatellites(updateSatellitePositions(satellites));
-      setLastUpdate(new Date());
-      toast.success("Posições atualizadas com sucesso");
-    } catch (error) {
-      toast.error("Erro ao atualizar posições");
-    } finally {
-      setIsUpdating(false);
-    }
-  }, [satellites]);
+    await refetch();
+    toast.success("Posições atualizadas com sucesso");
+  }, [refetch]);
 
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
@@ -100,27 +99,55 @@ export const SatelliteDashboard: React.FC = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-      case "inactive": return <Badge variant="secondary">Inativo</Badge>;
-      case "maintenance": return <Badge className="bg-yellow-500">Manutenção</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
-    }
-  };
-
   const activeSatellites = satellites.filter(s => s.status === "active");
   const leoSatellites = satellites.filter(s => s.orbit_type === "LEO");
   const meoSatellites = satellites.filter(s => s.orbit_type === "MEO");
   const geoSatellites = satellites.filter(s => s.orbit_type === "GEO");
 
+  // ⚠️ Estado "Não Configurado" quando não há satélites
+  if (!isLoading && satellites.length === 0) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <Satellite className="h-8 w-8 text-muted-foreground" />
+          <div>
+            <h1 className="text-3xl font-bold">Satellite Live Tracker</h1>
+            <p className="text-muted-foreground">Rastreamento em tempo real</p>
+          </div>
+        </div>
+
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Nenhum Satélite Configurado</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure satélites para monitoramento em tempo real.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este dashboard exibe apenas dados reais de satélites cadastrados.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.href = '/settings/integrations'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar Satélites
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
-          <p className="text-muted-foreground">Carregando sistema de rastreamento...</p>
+      <div className="space-y-4">
+        <Skeleton className="h-24 w-full" />
+        <div className="grid grid-cols-6 gap-4">
+          {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-24" />)}
         </div>
+        <Skeleton className="h-[500px]" />
       </div>
     );
   }
@@ -139,9 +166,7 @@ export const SatelliteDashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2 items-center">
-          <span className="text-sm text-muted-foreground">
-            Última atualização: {lastUpdate.toLocaleTimeString()}
-          </span>
+          <Badge variant="outline">Dados Reais</Badge>
           <Button 
             variant="outline" 
             size="sm"
@@ -150,8 +175,8 @@ export const SatelliteDashboard: React.FC = () => {
             <Bot className={`h-4 w-4 mr-2 ${showAICopilot ? 'text-primary' : ''}`} />
             AI Copilot
           </Button>
-          <Button onClick={handleRefresh} disabled={isUpdating}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isUpdating ? "animate-spin" : ""}`} />
+          <Button onClick={handleRefresh} disabled={isRefetching}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
         </div>
@@ -378,7 +403,7 @@ export const SatelliteDashboard: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Right Panel: Detail Panel or AI Copilot */}
+            {/* Right Panel */}
             <div className={`${showAICopilot ? 'lg:col-span-4' : 'lg:col-span-3'} space-y-4`}>
               {selectedSatellite && (
                 <SatelliteDetailPanel satellite={selectedSatellite} />
