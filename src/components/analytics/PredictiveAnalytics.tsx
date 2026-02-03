@@ -68,61 +68,13 @@ const PredictiveAnalytics: React.FC = () => {
       }
     } catch (error) {
       
-      // Mock data for demonstration
-      const mockPredictions: PredictionData[] = [
-        {
-          metric: "Receita Mensal",
-          current: 125432,
-          predicted: 142850,
-          confidence: 87,
-          trend: "up",
-          timeframe: selectedTimeframe,
-          factors: ["Sazonalidade", "Novos clientes", "Expansão de mercado"]
-        },
-        {
-          metric: "Satisfação do Cliente",
-          current: 94,
-          predicted: 96.5,
-          confidence: 92,
-          trend: "up",
-          timeframe: selectedTimeframe,
-          factors: ["Melhoria no atendimento", "Novos treinamentos", "Feedback proativo"]
-        },
-        {
-          metric: "Rotatividade de Funcionários",
-          current: 8.5,
-          predicted: 6.2,
-          confidence: 78,
-          trend: "down",
-          timeframe: selectedTimeframe,
-          factors: ["Programa de retenção", "Melhores benefícios", "Cultura organizacional"]
-        },
-        {
-          metric: "Produtividade da Equipe",
-          current: 89,
-          predicted: 93.8,
-          confidence: 85,
-          trend: "up",
-          timeframe: selectedTimeframe,
-          factors: ["Automatização", "Novos processos", "Capacitação técnica"]
-        },
-        {
-          metric: "Custos Operacionais",
-          current: 89500,
-          predicted: 92300,
-          confidence: 81,
-          trend: "up",
-          timeframe: selectedTimeframe,
-          factors: ["Inflação", "Expansão da equipe", "Investimentos em tecnologia"]
-        }
-      ];
-
-      setPredictions(mockPredictions);
+      // Estado vazio quando API falha - sem mock data
+      setPredictions([]);
       setLastUpdated(new Date());
       
       toast({
-        title: "Usando dados simulados",
-        description: "Conecte-se à API para obter previsões reais",
+        title: "Análise preditiva indisponível",
+        description: "Configure a integração de IA para obter previsões reais",
         variant: "destructive",
       });
     } finally {
@@ -136,24 +88,24 @@ const PredictiveAnalytics: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-green-600" />;
-    case "down": return <TrendingDown className="w-4 h-4 text-red-600" />;
-    default: return <Target className="w-4 h-4 text-yellow-600" />;
+    case "up": return <TrendingUp className="w-4 h-4 text-success" />;
+    case "down": return <TrendingDown className="w-4 h-4 text-destructive" />;
+    default: return <Target className="w-4 h-4 text-warning" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-    case "up": return "text-green-600";
-    case "down": return "text-red-600";
-    default: return "text-yellow-600";
+    case "up": return "text-success";
+    case "down": return "text-destructive";
+    default: return "text-warning";
     }
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 85) return "text-green-600";
-    if (confidence >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (confidence >= 85) return "text-success";
+    if (confidence >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const formatValue = (value: number, metric: string) => {
@@ -298,13 +250,13 @@ const PredictiveAnalytics: React.FC = () => {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-3">
-                <h4 className="font-medium text-green-600">Oportunidades</h4>
+                <h4 className="font-medium text-success">Oportunidades</h4>
                 {predictions
                   .filter(p => p.trend === "up" && p.confidence > 80)
                   .slice(0, 3)
                   .map((p, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <TrendingUp className="w-4 h-4 text-green-600 mt-0.5" />
+                      <TrendingUp className="w-4 h-4 text-success mt-0.5" />
                       <p className="text-sm">
                         {p.metric} deve aumentar {Math.abs(calculateChange(p.current, p.predicted)).toFixed(1)}%
                       </p>
@@ -313,13 +265,13 @@ const PredictiveAnalytics: React.FC = () => {
               </div>
               
               <div className="space-y-3">
-                <h4 className="font-medium text-red-600">Pontos de Atenção</h4>
+                <h4 className="font-medium text-destructive">Pontos de Atenção</h4>
                 {predictions
                   .filter(p => (p.trend === "up" && p.metric.includes("Custos")) || (p.trend === "down" && !p.metric.includes("Rotatividade")))
                   .slice(0, 3)
                   .map((p, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-red-600 mt-0.5" />
+                      <AlertTriangle className="w-4 h-4 text-destructive mt-0.5" />
                       <p className="text-sm">
                         {p.metric}: monitorar tendência de 
                         {p.trend === "up" ? " aumento" : " redução"}

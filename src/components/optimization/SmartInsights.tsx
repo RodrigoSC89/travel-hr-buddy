@@ -197,50 +197,14 @@ export const SmartInsights: React.FC = () => {
   };
 
   const generateMockPredictions = () => {
-    const mockPredictions: PredictiveMetric[] = [
-      {
-        id: "vessels_utilization",
-        name: "Utilização de Embarcações",
-        currentValue: 78,
-        predictedValue: 85,
-        trend: "up",
-        confidence: 88,
-        timeFrame: "30 dias",
-        unit: "%"
-      },
-      {
-        id: "operational_costs",
-        name: "Custos Operacionais",
-        currentValue: 245000,
-        predictedValue: 235000,
-        trend: "down",
-        confidence: 82,
-        timeFrame: "60 dias",
-        unit: "R$"
-      },
-      {
-        id: "crew_satisfaction",
-        name: "Satisfação da Tripulação",
-        currentValue: 4.2,
-        predictedValue: 4.5,
-        trend: "up",
-        confidence: 75,
-        timeFrame: "90 dias",
-        unit: "/5"
-      },
-      {
-        id: "maintenance_efficiency",
-        name: "Eficiência de Manutenção",
-        currentValue: 92,
-        predictedValue: 96,
-        trend: "up",
-        confidence: 91,
-        timeFrame: "45 dias",
-        unit: "%"
-      }
-    ];
-
-    setPredictions(mockPredictions);
+    // Fallback: estado vazio quando API falha
+    // UI deve mostrar mensagem apropriada
+    setPredictions([]);
+    toast({
+      title: "Dados preditivos indisponíveis",
+      description: "Configure a integração de IA para obter métricas preditivas",
+      variant: "destructive",
+    });
   };
 
   const implementInsight = async (insight: SmartInsight) => {

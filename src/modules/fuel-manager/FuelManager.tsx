@@ -1,5 +1,5 @@
 /**
- * Fuel Manager Module - PATCH 839
+ * Fuel Manager Module - Refatorado para dados reais
  * Módulo de gestão de combustível com IA e previsão de preços
  */
 
@@ -13,8 +13,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Fuel, 
@@ -52,82 +53,77 @@ interface FuelConsumption {
   created_at: string;
 }
 
-interface FuelPrediction {
-  vessel_id: string;
-  predicted_consumption: number;
-  confidence: number;
-  recommended_refuel_date: string;
-  estimated_cost: number;
-  savings_opportunity: number;
+// Hook para dados de consumo de combustível
+function useFuelConsumptionData() {
+  return useQuery({
+    queryKey: ["fuel-consumption-data"],
+    queryFn: async (): Promise<FuelConsumption[]> => {
+      const { data, error } = await supabase
+        .from("fuel_consumption")
+        .select(`
+          id,
+          vessel_id,
+          consumption_date,
+          fuel_type,
+          quantity_liters,
+          cost_usd,
+          distance_nm,
+          avg_speed_knots,
+          weather_conditions,
+          notes,
+          created_at,
+          vessels:vessel_id (name)
+        `)
+        .order("consumption_date", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+      
+      return (data || []).map((item: any) => ({
+        id: item.id,
+        vessel_id: item.vessel_id,
+        vessel_name: item.vessels?.name || "N/A",
+        consumption_date: item.consumption_date,
+        fuel_type: item.fuel_type,
+        quantity_liters: item.quantity_liters || 0,
+        cost_usd: item.cost_usd || 0,
+        distance_nm: item.distance_nm || 0,
+        avg_speed_knots: item.avg_speed_knots || 0,
+        weather_conditions: item.weather_conditions,
+        notes: item.notes,
+        created_at: item.created_at
+      }));
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 }
 
-// Mock data for demo
-const mockConsumptions: FuelConsumption[] = [
-  {
-    id: "1",
-    vessel_id: "v1",
-    vessel_name: "MV Atlantic Star",
-    consumption_date: "2025-12-08",
-    fuel_type: "MGO",
-    quantity_liters: 45000,
-    cost_usd: 67500,
-    distance_nm: 850,
-    avg_speed_knots: 14.5,
-    weather_conditions: "Calm",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    vessel_id: "v2",
-    vessel_name: "MV Pacific Dawn",
-    consumption_date: "2025-12-07",
-    fuel_type: "HFO",
-    quantity_liters: 62000,
-    cost_usd: 74400,
-    distance_nm: 1200,
-    avg_speed_knots: 12.8,
-    weather_conditions: "Moderate",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "3",
-    vessel_id: "v1",
-    vessel_name: "MV Atlantic Star",
-    consumption_date: "2025-12-06",
-    fuel_type: "MGO",
-    quantity_liters: 38000,
-    cost_usd: 57000,
-    distance_nm: 720,
-    avg_speed_knots: 15.2,
-    weather_conditions: "Calm",
-    created_at: new Date().toISOString(),
-  },
-];
-
-const mockPredictions: FuelPrediction[] = [
-  {
-    vessel_id: "v1",
-    predicted_consumption: 42500,
-    confidence: 0.89,
-    recommended_refuel_date: "2025-12-15",
-    estimated_cost: 63750,
-    savings_opportunity: 4200,
-  },
-  {
-    vessel_id: "v2",
-    predicted_consumption: 58000,
-    confidence: 0.82,
-    recommended_refuel_date: "2025-12-12",
-    estimated_cost: 69600,
-    savings_opportunity: 2800,
-  },
-];
+// Hook para embarcações
+function useVesselsData() {
+  return useQuery({
+    queryKey: ["vessels-for-fuel"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vessels")
+        .select("id, name")
+        .order("name");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+}
 
 // Components
-const FuelDashboard = () => {
-  const totalConsumption = mockConsumptions.reduce((acc, c) => acc + c.quantity_liters, 0);
-  const totalCost = mockConsumptions.reduce((acc, c) => acc + c.cost_usd, 0);
-  const avgEfficiency = mockConsumptions.reduce((acc, c) => acc + (c.distance_nm / c.quantity_liters * 1000), 0) / mockConsumptions.length;
+const FuelDashboard = ({ consumptions }: { consumptions: FuelConsumption[] }) => {
+  const totalConsumption = consumptions.reduce((acc, c) => acc + (c.quantity_liters || 0), 0);
+  const totalCost = consumptions.reduce((acc, c) => acc + (c.cost_usd || 0), 0);
+  const avgEfficiency = consumptions.length > 0 
+    ? consumptions.reduce((acc, c) => {
+        const efficiency = c.quantity_liters > 0 ? (c.distance_nm / c.quantity_liters * 1000) : 0;
+        return acc + efficiency;
+      }, 0) / consumptions.length 
+    : 0;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -137,10 +133,16 @@ const FuelDashboard = () => {
           <Fuel className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{(totalConsumption / 1000).toFixed(1)}k L</div>
+          <div className="text-2xl font-bold">
+            {totalConsumption > 0 ? `${(totalConsumption / 1000).toFixed(1)}k L` : "—"}
+          </div>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
-            <TrendingDown className="h-3 w-3 text-green-500" />
-            -8% vs mês anterior
+            {totalConsumption > 0 ? (
+              <>
+                <TrendingDown className="h-3 w-3 text-success" />
+                Dados do período
+              </>
+            ) : "Sem dados"}
           </p>
         </CardContent>
       </Card>
@@ -151,10 +153,11 @@ const FuelDashboard = () => {
           <BarChart3 className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${(totalCost / 1000).toFixed(1)}k</div>
+          <div className="text-2xl font-bold">
+            {totalCost > 0 ? `$${(totalCost / 1000).toFixed(1)}k` : "—"}
+          </div>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
-            <TrendingDown className="h-3 w-3 text-green-500" />
-            -5% vs mês anterior
+            {totalCost > 0 ? "Custo acumulado" : "Sem dados"}
           </p>
         </CardContent>
       </Card>
@@ -165,10 +168,16 @@ const FuelDashboard = () => {
           <Zap className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{avgEfficiency.toFixed(2)} NM/L</div>
+          <div className="text-2xl font-bold">
+            {avgEfficiency > 0 ? `${avgEfficiency.toFixed(2)} NM/L` : "—"}
+          </div>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
-            <TrendingUp className="h-3 w-3 text-green-500" />
-            +3% vs mês anterior
+            {avgEfficiency > 0 ? (
+              <>
+                <TrendingUp className="h-3 w-3 text-success" />
+                Eficiência calculada
+              </>
+            ) : "Sem dados suficientes"}
           </p>
         </CardContent>
       </Card>
@@ -179,9 +188,9 @@ const FuelDashboard = () => {
           <Brain className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">$7.0k</div>
+          <div className="text-2xl font-bold text-success">—</div>
           <p className="text-xs text-muted-foreground">
-            Economia sugerida pela IA
+            Configure IA para otimizações
           </p>
         </CardContent>
       </Card>
@@ -189,7 +198,7 @@ const FuelDashboard = () => {
   );
 };
 
-const ConsumptionTable = () => {
+const ConsumptionTable = ({ consumptions, isLoading }: { consumptions: FuelConsumption[]; isLoading: boolean }) => {
   return (
     <Card>
       <CardHeader>
@@ -197,48 +206,64 @@ const ConsumptionTable = () => {
         <CardDescription>Registros de consumo por viagem</CardDescription>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Data</TableHead>
-              <TableHead>Embarcação</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead className="text-right">Litros</TableHead>
-              <TableHead className="text-right">Custo (USD)</TableHead>
-              <TableHead className="text-right">Distância (NM)</TableHead>
-              <TableHead className="text-right">Eficiência</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {mockConsumptions.map((consumption) => (
-              <TableRow key={consumption.id}>
-                <TableCell>
-                  {format(new Date(consumption.consumption_date), "dd/MM/yyyy", { locale: ptBR })}
-                </TableCell>
-                <TableCell className="font-medium">{consumption.vessel_name}</TableCell>
-                <TableCell>
-                  <Badge variant="outline">{consumption.fuel_type}</Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  {consumption.quantity_liters.toLocaleString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  ${consumption.cost_usd.toLocaleString()}
-                </TableCell>
-                <TableCell className="text-right">{consumption.distance_nm}</TableCell>
-                <TableCell className="text-right">
-                  {(consumption.distance_nm / consumption.quantity_liters * 1000).toFixed(3)} NM/L
-                </TableCell>
-              </TableRow>
+        {isLoading ? (
+          <div className="space-y-2">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
             ))}
-          </TableBody>
-        </Table>
+          </div>
+        ) : consumptions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-48 text-muted-foreground">
+            <Fuel className="h-12 w-12 mb-2 opacity-30" />
+            <p>Nenhum registro de consumo</p>
+            <p className="text-xs">Adicione registros usando o botão acima</p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Data</TableHead>
+                <TableHead>Embarcação</TableHead>
+                <TableHead>Tipo</TableHead>
+                <TableHead className="text-right">Litros</TableHead>
+                <TableHead className="text-right">Custo (USD)</TableHead>
+                <TableHead className="text-right">Distância (NM)</TableHead>
+                <TableHead className="text-right">Eficiência</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {consumptions.map((consumption) => (
+                <TableRow key={consumption.id}>
+                  <TableCell>
+                    {format(new Date(consumption.consumption_date), "dd/MM/yyyy", { locale: ptBR })}
+                  </TableCell>
+                  <TableCell className="font-medium">{consumption.vessel_name}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{consumption.fuel_type}</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {consumption.quantity_liters.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    ${consumption.cost_usd.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">{consumption.distance_nm}</TableCell>
+                  <TableCell className="text-right">
+                    {consumption.quantity_liters > 0 
+                      ? (consumption.distance_nm / consumption.quantity_liters * 1000).toFixed(3) 
+                      : "—"} NM/L
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   );
 };
 
-const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
+const ConsumptionForm = ({ onClose, vessels }: { onClose: () => void; vessels: any[] }) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     vessel_id: "",
@@ -251,8 +276,30 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     notes: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const { error } = await supabase.from("fuel_consumption").insert({
+      vessel_id: formData.vessel_id,
+      fuel_type: formData.fuel_type,
+      quantity_liters: parseFloat(formData.quantity_liters) || 0,
+      cost_usd: parseFloat(formData.cost_usd) || 0,
+      distance_nm: parseFloat(formData.distance_nm) || 0,
+      avg_speed_knots: parseFloat(formData.avg_speed_knots) || 0,
+      weather_conditions: formData.weather_conditions,
+      notes: formData.notes || null,
+      consumption_date: new Date().toISOString()
+    });
+
+    if (error) {
+      toast({
+        title: "Erro ao registrar",
+        description: error.message,
+        variant: "destructive"
+      });
+      return;
+    }
+
     toast({
       title: "Consumo registrado",
       description: "O registro de consumo foi salvo com sucesso.",
@@ -270,9 +317,9 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
               <SelectValue placeholder="Selecione a embarcação" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="v1">MV Atlantic Star</SelectItem>
-              <SelectItem value="v2">MV Pacific Dawn</SelectItem>
-              <SelectItem value="v3">MV Nordic Light</SelectItem>
+              {vessels.map((vessel) => (
+                <SelectItem key={vessel.id} value={vessel.id}>{vessel.name}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -351,8 +398,8 @@ const AIPredictions = () => {
 
   const handleRefreshPredictions = () => {
     toast({
-      title: "Previsões atualizadas",
-      description: "A IA recalculou as previsões de consumo.",
+      title: "Previsões IA",
+      description: "Configure a integração de IA para obter previsões de consumo.",
     });
   };
 
@@ -373,62 +420,21 @@ const AIPredictions = () => {
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {mockPredictions.map((prediction, index) => (
-          <div key={prediction.vessel_id} className="border rounded-lg p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Ship className="h-5 w-5 text-primary" />
-                <span className="font-medium">
-                  {index === 0 ? "MV Atlantic Star" : "MV Pacific Dawn"}
-                </span>
-              </div>
-              <Badge variant={prediction.confidence > 0.85 ? "default" : "secondary"}>
-                {(prediction.confidence * 100).toFixed(0)}% confiança
-              </Badge>
-            </div>
+      <CardContent>
+        <div className="flex flex-col items-center justify-center h-48 text-muted-foreground">
+          <Brain className="h-12 w-12 mb-2 opacity-30" />
+          <p>Nenhuma previsão disponível</p>
+          <p className="text-xs">Configure a integração de IA para análise preditiva</p>
+        </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <p className="text-sm text-muted-foreground">Consumo Previsto</p>
-                <p className="text-xl font-bold">{(prediction.predicted_consumption / 1000).toFixed(1)}k L</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Custo Estimado</p>
-                <p className="text-xl font-bold">${(prediction.estimated_cost / 1000).toFixed(1)}k</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Economia Potencial</p>
-                <p className="text-xl font-bold text-green-600">${prediction.savings_opportunity.toLocaleString()}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-950 rounded-lg">
-              <Calendar className="h-4 w-4 text-amber-600" />
-              <span className="text-sm">
-                <strong>Reabastecimento recomendado:</strong>{" "}
-                {format(new Date(prediction.recommended_refuel_date), "dd/MM/yyyy", { locale: ptBR })}
-              </span>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-muted-foreground">Nível de Confiança</span>
-                <span className="text-sm font-medium">{(prediction.confidence * 100).toFixed(0)}%</span>
-              </div>
-              <Progress value={prediction.confidence * 100} className="h-2" />
-            </div>
-          </div>
-        ))}
-
-        <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+        <div className="p-4 bg-accent/20 rounded-lg mt-4">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-blue-600 mt-0.5" />
+            <AlertTriangle className="h-5 w-5 text-primary mt-0.5" />
             <div>
-              <p className="font-medium text-blue-900 dark:text-blue-100">Dica de Otimização</p>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
+              <p className="font-medium">Dica de Otimização</p>
+              <p className="text-sm text-muted-foreground">
                 Reduzir a velocidade em 1 nó durante viagens longas pode economizar até 12% de combustível. 
-                A IA identificou 3 rotas onde esta otimização é viável.
+                Configure a análise de IA para identificar rotas otimizáveis.
               </p>
             </div>
           </div>
@@ -441,6 +447,8 @@ const AIPredictions = () => {
 // Main Component
 const FuelManager = () => {
   const [showForm, setShowForm] = useState(false);
+  const { data: consumptions = [], isLoading } = useFuelConsumptionData();
+  const { data: vessels = [] } = useVesselsData();
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -467,12 +475,12 @@ const FuelManager = () => {
             <CardDescription>Adicione um novo registro de consumo de combustível</CardDescription>
           </CardHeader>
           <CardContent>
-            <ConsumptionForm onClose={() => setShowForm(false)} />
+            <ConsumptionForm onClose={() => setShowForm(false)} vessels={vessels} />
           </CardContent>
         </Card>
       )}
 
-      <FuelDashboard />
+      <FuelDashboard consumptions={consumptions} />
 
       <Tabs defaultValue="history" className="space-y-4">
         <TabsList>
@@ -486,7 +494,7 @@ const FuelManager = () => {
         </TabsList>
 
         <TabsContent value="history">
-          <ConsumptionTable />
+          <ConsumptionTable consumptions={consumptions} isLoading={isLoading} />
         </TabsContent>
 
         <TabsContent value="predictions">
@@ -506,7 +514,11 @@ const FuelManager = () => {
             </CardHeader>
             <CardContent>
               <div className="h-64 flex items-center justify-center text-muted-foreground">
-                Gráficos de análise serão exibidos aqui
+                <div className="text-center">
+                  <BarChart3 className="h-12 w-12 mx-auto mb-2 opacity-30" />
+                  <p>Gráficos de análise serão exibidos aqui</p>
+                  <p className="text-xs">Adicione mais dados para análise</p>
+                </div>
               </div>
             </CardContent>
           </Card>
