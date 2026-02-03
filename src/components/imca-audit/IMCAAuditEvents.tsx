@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   AlertTriangle, 
   AlertCircle, 
@@ -20,7 +22,8 @@ import {
   CheckCircle2,
   BookOpen,
   Lightbulb,
-  ExternalLink
+  ExternalLink,
+  Inbox
 } from "lucide-react";
 
 type EventType = 'incident' | 'undesired' | 'observation';
@@ -47,58 +50,76 @@ interface DPEvent {
   createdAt: Date;
 }
 
-const SAMPLE_EVENTS: DPEvent[] = [
-  {
-    id: "EVT-001",
-    type: "incident",
-    title: "Perda temporária de posição durante operação de diving",
-    description: "Durante operação de mergulho em DP2, houve drift de 15m devido a falha simultânea de dois sensores de posição. Sistema recuperou após 3 minutos.",
-    severity: "high",
-    status: "investigating",
-    dateOccurred: new Date(2024, 11, 1),
-    location: "Campos Basin, Brazil",
-    vesselName: "DSV Ocean Explorer",
-    dpClass: "DP2",
-    systemsAffected: ["GPS Primary", "GPS Secondary", "DP Controller A"],
-    rootCause: "Interferência de sinal GPS não prevista no FMEA",
-    imcaSubmitted: false,
-    createdAt: new Date()
-  },
-  {
-    id: "EVT-002",
-    type: "undesired",
-    title: "Alarme de thruster não atendido em tempo adequado",
-    description: "Alarme de superaquecimento do thruster #3 foi reconhecido com 5 minutos de atraso. Não houve impacto operacional.",
-    severity: "medium",
-    status: "closed",
-    dateOccurred: new Date(2024, 10, 28),
-    location: "Santos Basin",
-    vesselName: "PSV Support One",
-    dpClass: "DP2",
-    systemsAffected: ["Thruster #3", "Alarm System"],
-    correctiveAction: "Reforço no treinamento de watchkeeping e revisão do layout de alarmes",
-    lessonsLearned: "Priorização de alarmes críticos deve ser revisada conforme IMCA M182",
-    imcaSubmitted: true,
-    imcaReference: "IMCA-2024-BR-0142",
-    createdAt: new Date()
-  },
-  {
-    id: "EVT-003",
-    type: "observation",
-    title: "Procedimento de changeover não seguiu checklist",
-    description: "Durante troca de turno, checklist de handover não foi completamente preenchido. Items de configuração DP não verificados.",
-    severity: "low",
-    status: "closed",
-    dateOccurred: new Date(2024, 10, 25),
-    location: "Offshore",
-    vesselName: "PLSV Constructor",
-    dpClass: "DP3",
-    systemsAffected: ["Procedures"],
-    correctiveAction: "Briefing com equipe sobre importância do checklist de handover",
-    imcaSubmitted: false,
-    createdAt: new Date()
-  }
-];
+// Hook para buscar eventos reais do Supabase
+function useDPEvents() {
+  const [events, setEvents] = useState<DPEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const { data, error } = await supabase
+          .from("safety_incidents")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(100);
+
+        if (error) throw error;
+
+        const mapped: DPEvent[] = (data || []).map(incident => ({
+          id: incident.id,
+          type: mapIncidentType(incident.incident_type),
+          title: incident.title || "Evento DP",
+          description: incident.description || "",
+          severity: mapSeverityLevel(incident.severity),
+          status: mapIncidentStatus(incident.status),
+          dateOccurred: new Date(incident.incident_date || incident.created_at),
+          location: incident.incident_location || "N/A",
+          vesselName: "N/A",
+          dpClass: "DP2" as const,
+          systemsAffected: [],
+          rootCause: incident.root_cause || undefined,
+          correctiveAction: typeof incident.corrective_actions === 'string' 
+            ? incident.corrective_actions 
+            : incident.corrective_actions 
+              ? JSON.stringify(incident.corrective_actions) 
+              : undefined,
+          lessonsLearned: undefined,
+          imcaSubmitted: false,
+          createdAt: new Date(incident.created_at)
+        }));
+
+        setEvents(mapped);
+      } catch (error) {
+        console.error("Error fetching DP events:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEvents();
+  }, []);
+
+  return { events, loading, setEvents };
+}
+
+function mapIncidentType(type: string | null): EventType {
+  if (type?.includes("incident")) return "incident";
+  if (type?.includes("undesired")) return "undesired";
+  return "observation";
+}
+
+function mapSeverityLevel(severity: string | null): EventSeverity {
+  if (severity === "critical" || severity === "high") return "high";
+  if (severity === "medium" || severity === "moderate") return "medium";
+  return "low";
+}
+
+function mapIncidentStatus(status: string | null): EventStatus {
+  if (status === "open" || status === "new") return "open";
+  if (status === "investigating" || status === "in_progress") return "investigating";
+  if (status === "closed" || status === "resolved") return "closed";
+  return "open";
+}
 
 interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
@@ -106,7 +127,7 @@ interface Props {
 
 export function IMCAAuditEvents({ selectedDPClass }: Props) {
   const { toast } = useToast();
-  const [events, setEvents] = useState<DPEvent[]>(SAMPLE_EVENTS);
+  const { events, loading, setEvents } = useDPEvents();
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<DPEvent | null>(null);
 
