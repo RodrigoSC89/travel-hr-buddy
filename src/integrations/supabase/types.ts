@@ -4135,6 +4135,78 @@ export type Database = {
           },
         ]
       }
+      audit_trail: {
+        Row: {
+          action: string
+          changes: Json | null
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          module: string | null
+          new_state: Json | null
+          organization_id: string | null
+          previous_state: Json | null
+          resource_id: string | null
+          resource_name: string | null
+          resource_type: string
+          session_id: string | null
+          severity: string | null
+          timestamp: string
+          user_agent: string | null
+          user_email: string | null
+          user_id: string
+          user_role: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          action: string
+          changes?: Json | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          module?: string | null
+          new_state?: Json | null
+          organization_id?: string | null
+          previous_state?: Json | null
+          resource_id?: string | null
+          resource_name?: string | null
+          resource_type: string
+          session_id?: string | null
+          severity?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id: string
+          user_role?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          action?: string
+          changes?: Json | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          module?: string | null
+          new_state?: Json | null
+          organization_id?: string | null
+          previous_state?: Json | null
+          resource_id?: string | null
+          resource_name?: string | null
+          resource_type?: string
+          session_id?: string | null
+          severity?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string
+          user_role?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       autofix_history: {
         Row: {
           applied_at: string
@@ -45009,6 +45081,22 @@ export type Database = {
       }
       cleanup_expired_cache: { Args: never; Returns: number }
       cleanup_old_logs: { Args: never; Returns: undefined }
+      create_audit_entry: {
+        Args: {
+          p_action: string
+          p_changes?: Json
+          p_metadata?: Json
+          p_module?: string
+          p_new_state?: Json
+          p_previous_state?: Json
+          p_resource_id?: string
+          p_resource_name?: string
+          p_resource_type: string
+          p_severity?: string
+          p_vessel_id?: string
+        }
+        Returns: string
+      }
       create_autonomous_task: {
         Args: {
           p_autonomy_level?: number

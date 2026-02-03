@@ -17,14 +17,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Ship, MapPin } from "lucide-react";
+import { Loader2, Ship, MapPin, AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { Port, VoyageRoute } from "../types";
-import { DEMO_PORTS } from "../data/demo-data";
+import { usePorts, useCreateVoyageRoute } from "../hooks/useVoyageData";
+import { toast } from "sonner";
 
 interface CreateVoyageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreateVoyage: (voyage: VoyageRoute) => void;
+  onCreateVoyage: () => void;
 }
 
 const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
@@ -32,7 +34,9 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
   onOpenChange,
   onCreateVoyage,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { data: ports = [], isLoading: portsLoading } = usePorts();
+  const createMutation = useCreateVoyageRoute();
+  
   const [formData, setFormData] = useState({
     originId: "",
     destinationId: "",
@@ -40,15 +44,17 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
     departureDate: "",
   });
 
+  const origins = ports.filter((p) => p.type === "origin" || p.type === "waypoint" || p.type === "destination");
+  const destinations = ports.filter((p) => p.type === "destination" || p.type === "waypoint");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
-    const origin = DEMO_PORTS.find((p) => p.id === formData.originId);
-    const destination = DEMO_PORTS.find((p) => p.id === formData.destinationId);
+    const origin = ports.find((p) => p.id === formData.originId);
+    const destination = ports.find((p) => p.id === formData.destinationId);
 
     if (!origin || !destination) {
-      setLoading(false);
+      toast.error("Selecione origem e destino");
       return;
     }
 
@@ -57,8 +63,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
     const estimatedDays = Math.ceil(distance / 400); // ~400nm per day average
     const fuelConsumption = Math.round(distance * 0.52); // fuel factor
 
-    const newVoyage: VoyageRoute = {
-      id: `v${Date.now()}`,
+    const newVoyage: Partial<VoyageRoute> = {
       name: `${origin.name} → ${destination.name}`,
       origin,
       destination,
@@ -66,19 +71,20 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
       distanceNm: Math.round(distance),
       estimatedDays,
       fuelConsumption,
-      status: "planned",
       vesselName: formData.vesselName,
       departureDate: formData.departureDate,
       arrivalDate: calculateArrivalDate(formData.departureDate, estimatedDays),
       weatherRisk: "low",
-      createdAt: new Date().toISOString(),
     };
 
-    await new Promise((r) => setTimeout(r, 500));
-    onCreateVoyage(newVoyage);
-    setLoading(false);
-    onOpenChange(false);
-    setFormData({ originId: "", destinationId: "", vesselName: "", departureDate: "" });
+    try {
+      await createMutation.mutateAsync(newVoyage);
+      onCreateVoyage();
+      onOpenChange(false);
+      setFormData({ originId: "", destinationId: "", vesselName: "", departureDate: "" });
+    } catch (error) {
+      toast.error("Erro ao criar viagem");
+    }
   };
 
   const calculateDistance = (origin: Port, destination: Port): number => {
@@ -103,8 +109,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
     return date.toISOString().split("T")[0];
   };
 
-  const origins = DEMO_PORTS.filter((p) => p.type === "origin" || p.type === "waypoint");
-  const destinations = DEMO_PORTS.filter((p) => p.type === "destination" || p.type === "waypoint");
+  const noPorts = ports.length === 0 && !portsLoading;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -119,15 +124,25 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
 
+        {noPorts && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Nenhum porto cadastrado. Configure os portos nas configurações do sistema primeiro.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label>Porto de Origem</Label>
             <Select
               value={formData.originId}
               onValueChange={(v) => setFormData((p) => ({ ...p, originId: v }))}
+              disabled={noPorts || portsLoading}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Selecione o porto de origem" />
+                <SelectValue placeholder={portsLoading ? "Carregando portos..." : "Selecione o porto de origem"} />
               </SelectTrigger>
               <SelectContent>
                 {origins.map((port) => (
@@ -147,9 +162,10 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
             <Select
               value={formData.destinationId}
               onValueChange={(v) => setFormData((p) => ({ ...p, destinationId: v }))}
+              disabled={noPorts || portsLoading}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Selecione o porto de destino" />
+                <SelectValue placeholder={portsLoading ? "Carregando portos..." : "Selecione o porto de destino"} />
               </SelectTrigger>
               <SelectContent>
                 {destinations
@@ -192,9 +208,9 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
             </Button>
             <Button 
               type="submit" 
-              disabled={loading || !formData.originId || !formData.destinationId}
+              disabled={createMutation.isPending || !formData.originId || !formData.destinationId || noPorts}
             >
-              {loading ? (
+              {createMutation.isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Criando...
