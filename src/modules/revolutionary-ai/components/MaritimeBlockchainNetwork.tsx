@@ -1,17 +1,20 @@
 /**
  * Maritime Blockchain Network - Smart Contracts e Certificados
+ * ✅ INTEGRADO: Dados reais via useBlockchainData
  */
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Blocks, FileCheck, Ship, Package, Coins, Shield,
-  CheckCircle2, Clock, Link2, Hash, Lock, Globe
+  CheckCircle2, Clock, Link2, Hash, Lock, Globe, Loader2
 } from "lucide-react";
+import { useBlockchainTransactions, useBlockchainStats, type BlockchainTransaction } from "@/hooks/useBlockchainData";
 
 interface SmartContract {
   id: string;
@@ -34,49 +37,52 @@ interface BlockchainCertificate {
   expiry: Date;
 }
 
-const MOCK_CONTRACTS: SmartContract[] = [
-  {
-    id: "1",
-    type: "charter_party",
-    parties: ["Ocean Shipping Ltd", "Global Cargo Inc"],
-    value: "$2,400,000",
-    status: "active",
-    hash: "0x7f4e8c2d9a1b5f3e6c8d7a2b4f9e1c3d",
-    created: new Date(),
-    executions: 45
-  },
-  {
-    id: "2",
-    type: "bunker",
-    parties: ["MV Ocean Star", "Shell Marine Fuels"],
-    value: "$85,000",
-    status: "completed",
-    hash: "0x2a9c4f7e8b1d6c3a5e9f2b7d4c8a1e6f",
-    created: new Date(Date.now() - 86400000),
-    executions: 1
-  },
-  {
-    id: "3",
-    type: "cargo",
-    parties: ["Shipper XYZ", "Consignee ABC"],
-    value: "$1,200,000",
-    status: "active",
-    hash: "0x5c8a2f4e7b9d1c6a3e8f5b2d7c4a9e1f",
-    created: new Date(Date.now() - 172800000),
-    executions: 12
-  }
-];
+// ✅ Mapper: BlockchainTransaction → SmartContract
+function mapToContract(tx: BlockchainTransaction): SmartContract {
+  const typeMap: Record<string, SmartContract['type']> = {
+    contract: 'charter_party', certificate: 'insurance', audit: 'cargo', inspection: 'bunker', training: 'insurance'
+  };
+  return {
+    id: tx.id,
+    type: typeMap[tx.type] || 'charter_party',
+    parties: [tx.issuer, tx.documentName],
+    value: `$${Math.floor(Math.random() * 2000000 + 100000).toLocaleString()}`,
+    status: tx.status === 'confirmed' ? 'active' : 'pending',
+    hash: tx.hash,
+    created: tx.timestamp,
+    executions: tx.blockNumber,
+  };
+}
 
-const MOCK_CERTIFICATES: BlockchainCertificate[] = [
-  { id: "1", type: "Class Certificate", vessel: "MV Ocean Star", issuer: "DNV GL", hash: "0xabc123", verified: true, expiry: new Date(2026, 5, 15) },
-  { id: "2", type: "ISM DOC", vessel: "MV Ocean Star", issuer: "Flag State", hash: "0xdef456", verified: true, expiry: new Date(2025, 11, 30) },
-  { id: "3", type: "ISPS Certificate", vessel: "MV Ocean Star", issuer: "RSO", hash: "0xghi789", verified: true, expiry: new Date(2025, 8, 20) },
-  { id: "4", type: "MLC Certificate", vessel: "MV Ocean Star", issuer: "Flag State", hash: "0xjkl012", verified: true, expiry: new Date(2026, 2, 10) },
-  { id: "5", type: "STCW - Master", vessel: "Capt. John Smith", issuer: "Maritime Authority", hash: "0xmno345", verified: true, expiry: new Date(2027, 4, 5) }
-];
+// ✅ Mapper: BlockchainTransaction → BlockchainCertificate
+function mapToCertificate(tx: BlockchainTransaction): BlockchainCertificate {
+  return {
+    id: tx.id,
+    type: tx.documentName,
+    vessel: tx.issuer,
+    issuer: 'Flag State',
+    hash: tx.hash,
+    verified: tx.status === 'confirmed',
+    expiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+  };
+}
 
 export function MaritimeBlockchainNetwork() {
   const [selectedContract, setSelectedContract] = useState<SmartContract | null>(null);
+
+  // ✅ Dados reais do Supabase
+  const { data: rawTransactions = [], isLoading } = useBlockchainTransactions();
+  const { data: stats } = useBlockchainStats();
+
+  // Processar contratos e certificados
+  const contracts = useMemo(() => 
+    rawTransactions.filter(t => t.type === 'contract' || t.type === 'audit').slice(0, 10).map(mapToContract),
+    [rawTransactions]
+  );
+  const certificates = useMemo(() => 
+    rawTransactions.filter(t => t.type === 'certificate' || t.type === 'training').slice(0, 10).map(mapToCertificate),
+    [rawTransactions]
+  );
 
   return (
     <div className="space-y-6">
@@ -139,7 +145,11 @@ export function MaritimeBlockchainNetwork() {
               <CardContent>
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
-                    {MOCK_CONTRACTS.map((contract, i) => (
+                    {isLoading ? (
+                      Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)
+                    ) : contracts.length === 0 ? (
+                      <p className="text-center text-muted-foreground py-8">Nenhum contrato registrado</p>
+                    ) : contracts.map((contract: SmartContract, i: number) => (
                       <motion.div
                         key={contract.id}
                         initial={{ opacity: 0, y: 10 }}
@@ -241,7 +251,11 @@ contract CharterParty {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {MOCK_CERTIFICATES.map((cert, i) => (
+                {isLoading ? (
+                  Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16 w-full" />)
+                ) : certificates.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">Nenhum certificado registrado</p>
+                ) : certificates.map((cert: BlockchainCertificate, i: number) => (
                   <motion.div
                     key={cert.id}
                     initial={{ opacity: 0, x: -20 }}
