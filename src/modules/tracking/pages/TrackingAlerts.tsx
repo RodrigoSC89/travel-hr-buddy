@@ -3,6 +3,7 @@
  * CRUD completo para regras de alerta
  */
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -287,13 +288,25 @@ export default function TrackingAlerts() {
 
   const handleAIAnalysis = async () => {
     setIsAnalyzing(true);
-    await new Promise(r => setTimeout(r, 1500));
-    setRecommendations([
-      { title: "Priorizar alerta crítico", description: "Verificar dispositivo RTK Alpha imediatamente" },
-      { title: "Padrão identificado", description: "Degradação de sinal recorrente às 14h - verificar interferência" }
-    ]);
-    toast.success("Análise IA concluída");
-    setIsAnalyzing(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-analytics", {
+        body: { module: "tracking", scope: "alerts", alerts: alerts.slice(0, 10) },
+      });
+      if (error) throw error;
+      const recs = Array.isArray(data?.recommendations)
+        ? data.recommendations.map((r: Record<string, unknown>) => ({
+            title: String(r?.title ?? "Recomendação"),
+            description: String(r?.description ?? "Análise gerada pela IA."),
+          }))
+        : [];
+      setRecommendations(recs);
+      toast.success("Análise IA concluída");
+    } catch {
+      setRecommendations([]);
+      toast.error("Integração IA não configurada");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const getSeverityConfig = (severity: string) => {
