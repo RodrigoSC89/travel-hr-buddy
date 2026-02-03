@@ -47,8 +47,8 @@ export default function TrackingDashboard() {
     queryFn: async () => {
       const { data } = await supabase
         .from("soc_alerts")
-        .select("id, title, message, severity, status, created_at")
-        .eq("status", "new")
+        .select("id, title, message, severity, is_acknowledged, created_at")
+        .eq("is_acknowledged", false)
         .order("created_at", { ascending: false })
         .limit(10);
       return data || [];
