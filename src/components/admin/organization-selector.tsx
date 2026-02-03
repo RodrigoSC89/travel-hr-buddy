@@ -40,14 +40,28 @@ export const OrganizationSelector: React.FC = () => {
         return;
       }
       
-      const { data, error } = await supabase
-        .from("organization_users")
+      // Try organization_members first, fallback to organization_users
+      let { data, error } = await supabase
+        .from("organization_members")
         .select(`
           role,
           organization:organizations(id, name)
         `)
         .eq("user_id", user.id)
         .eq("status", "active");
+      
+      if (!data || data.length === 0) {
+        const { data: legacyData, error: legacyError } = await supabase
+          .from("organization_users")
+          .select(`
+            role,
+            organization:organizations(id, name)
+          `)
+          .eq("user_id", user.id)
+          .eq("status", "active");
+        data = legacyData;
+        error = legacyError;
+      }
 
       if (error) throw error;
 

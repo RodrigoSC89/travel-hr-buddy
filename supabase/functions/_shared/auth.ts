@@ -49,13 +49,23 @@ export async function verifyAuth(req: Request): Promise<AuthResult> {
     return { user: null, error: error?.message || 'Invalid token' };
   }
 
-  // Get user organization and role
-  const { data: orgUser } = await getServiceClient()
-    .from('organization_users')
+  // Get user organization and role - try organization_members first, fallback to organization_users
+  let { data: orgUser } = await getServiceClient()
+    .from('organization_members')
     .select('organization_id, role')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .single();
+  
+  if (!orgUser) {
+    const { data: legacyOrgUser } = await getServiceClient()
+      .from('organization_users')
+      .select('organization_id, role')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .single();
+    orgUser = legacyOrgUser;
+  }
 
   return {
     user,

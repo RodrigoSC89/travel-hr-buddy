@@ -78,13 +78,23 @@ export function useVesselDowntimes(vesselId?: string) {
       // Get current user info
       const { data: userData } = await supabase.auth.getUser();
       
-      // Get organization from organization_users table
-      const { data: orgUser } = await supabase
-        .from('organization_users')
+      // Get organization - try organization_members first
+      let { data: orgUser } = await supabase
+        .from('organization_members')
         .select('organization_id')
         .eq('user_id', userData.user?.id || '')
         .eq('status', 'active')
         .single();
+      
+      if (!orgUser) {
+        const { data: legacyOrg } = await supabase
+          .from('organization_users')
+          .select('organization_id')
+          .eq('user_id', userData.user?.id || '')
+          .eq('status', 'active')
+          .single();
+        orgUser = legacyOrg;
+      }
 
       const insertData = {
         ...data,

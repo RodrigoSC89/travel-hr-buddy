@@ -72,13 +72,23 @@ serve(async (req) => {
       );
     }
 
-    // Check user has access to this organization
-    const { data: userOrg } = await adminSupabase
-      .from("organization_users")
+    // Check user has access - try organization_members first
+    let { data: userOrg } = await adminSupabase
+      .from("organization_members")
       .select("role")
       .eq("user_id", user.id)
       .eq("organization_id", params.organization_id)
       .single();
+    
+    if (!userOrg) {
+      const { data: legacyOrg } = await adminSupabase
+        .from("organization_users")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("organization_id", params.organization_id)
+        .single();
+      userOrg = legacyOrg;
+    }
 
     if (!userOrg) {
       return new Response(

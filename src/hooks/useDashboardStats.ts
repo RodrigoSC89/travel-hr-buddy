@@ -49,12 +49,23 @@ export const useDashboardStats = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const { data: orgUser } = await supabase
-          .from("organization_users")
+        // Try organization_members first, fallback to organization_users
+        let { data: orgUser } = await supabase
+          .from("organization_members")
           .select("organization_id")
           .eq("user_id", user.id)
           .eq("status", "active")
           .maybeSingle();
+        
+        if (!orgUser) {
+          const { data: legacyOrg } = await supabase
+            .from("organization_users")
+            .select("organization_id")
+            .eq("user_id", user.id)
+            .eq("status", "active")
+            .maybeSingle();
+          orgUser = legacyOrg;
+        }
 
         if (orgUser?.organization_id) {
           setOrganizationId(orgUser.organization_id);

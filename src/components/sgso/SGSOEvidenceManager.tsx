@@ -235,12 +235,24 @@ export const SGSOEvidenceManager: React.FC = () => {
         return;
       }
 
-      const { data: orgData, error: orgError } = await supabase
-        .from('organization_users')
+      // Try organization_members first, fallback to organization_users
+      let { data: orgData, error: orgError } = await supabase
+        .from('organization_members')
         .select('organization_id')
         .eq('user_id', user.id)
         .eq('status', 'active')
         .maybeSingle();
+      
+      if (!orgData) {
+        const { data: legacyOrg, error: legacyError } = await supabase
+          .from('organization_users')
+          .select('organization_id')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .maybeSingle();
+        orgData = legacyOrg;
+        if (!orgData) orgError = legacyError;
+      }
 
       if (orgError || !orgData?.organization_id) {
         toast({

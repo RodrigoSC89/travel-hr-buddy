@@ -64,13 +64,23 @@ serve(async (req) => {
     const { operation, payload, transmission_id } = await req.json();
     // Silent logging - operation tracked via audit_log
 
-    // Get user's organization
-    const { data: orgUser } = await supabase
-      .from("organization_users")
+    // Get user's organization - try organization_members first
+    let { data: orgUser } = await supabase
+      .from("organization_members")
       .select("organization_id")
       .eq("user_id", user.id)
       .eq("status", "active")
       .maybeSingle();
+    
+    if (!orgUser) {
+      const { data: legacyOrg } = await supabase
+        .from("organization_users")
+        .select("organization_id")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .maybeSingle();
+      orgUser = legacyOrg;
+    }
 
     if (!orgUser) {
       throw new Error("User not associated with any organization");
