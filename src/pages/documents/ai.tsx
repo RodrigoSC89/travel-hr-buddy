@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck - ai_documents schema fields differ (title vs file_name) - awaiting schema regeneration
+// @ts-nocheck - Uses ai_documents with Json extracted_keywords field that needs runtime casting
 /**
  * PATCH 871.3 - AI documents page
  */
@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from "tesseract.js";
 import { AIDocumentsAnalyzer } from "@/components/documents/ai-documents-analyzer";
 import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
 import { createSafeHTML } from "@/lib/utils/safe-html";
+import { logger } from "@/lib/logger";
 import {
   FileText,
   Upload,
@@ -34,15 +35,16 @@ import {
 
 interface AIDocument {
   id: string;
-  title: string;
-  description: string;
-  file_url: string;
+  title: string | null;
+  file_name: string;
+  description: string | null;
+  file_url: string | null;
   file_type: string;
-  ocr_text: string;
+  ocr_text: string | null;
   ocr_status: string;
   extracted_keywords: Array<{ text: string; score: number }> | null;
-  category: string;
-  confidence_score: number;
+  category: string | null;
+  confidence_score: number | null;
   created_at: string;
 }
 

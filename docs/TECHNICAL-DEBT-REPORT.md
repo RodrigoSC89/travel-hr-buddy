@@ -1,8 +1,8 @@
 # 📊 Relatório de Dívidas Técnicas - Nautilus One v4.0
 
-**Data:** 30 de Janeiro de 2026  
+**Data:** 03 de Fevereiro de 2026  
 **Status:** Em Monitoramento  
-**Score de Qualidade:** 9.2/10  
+**Score de Qualidade:** 9.4/10  
 
 ---
 
@@ -12,8 +12,8 @@
 |-----------|-------|-------|---------|
 | **Dívidas Críticas** | 15 | 0 | 100% ✅ |
 | **Dívidas Altas** | 45 | 0 | 100% ✅ |
-| **Dívidas Médias** | 120 | 12 | 90% |
-| **Dívidas Baixas** | 500+ | ~200 | 60% |
+| **Dívidas Médias** | 120 | 5 | 96% ✅ |
+| **Dívidas Baixas** | 500+ | ~180 | 64% |
 
 ---
 
@@ -25,9 +25,17 @@
 |---------|------|-------|--------|
 | Strict Mode | ✅ | ✅ | ✅ |
 | Coverage | 100% | 100% | ✅ |
-| `: any` Types | 0 | ~5,859 | ⚠️ Low Priority |
-| `@ts-nocheck` | 0 | ~627 | ⚠️ Mostly in tests |
+| `: any` Types | 0 | ~5,800 | ⚠️ Low Priority |
+| `@ts-nocheck` | 0 | 3 | ✅ Justificados |
 | `@ts-ignore` | 0 | ~50 | ⚠️ Documented |
+
+### @ts-nocheck Restantes (3 arquivos - Justificados)
+
+| Arquivo | Motivo |
+|---------|--------|
+| `src/pages/documents/ai.tsx` | Json extracted_keywords precisa de cast em runtime |
+| `src/components/documents/ai-documents-analyzer.tsx` | Views customizadas (documents_with_entities, search_documents) não no schema |
+| `src/components/documents/DocumentEditor.tsx` | document_versions schema diferente (document_id vs document_registry_id) |
 
 ### Testes
 
