@@ -4849,6 +4849,72 @@ export type Database = {
         }
         Relationships: []
       }
+      ballast_water_records: {
+        Row: {
+          compliant: boolean | null
+          created_at: string | null
+          id: string
+          location_lat: number | null
+          location_lng: number | null
+          operation_date: string | null
+          operation_type: string
+          org_id: string | null
+          salinity_ppt: number | null
+          temperature_c: number | null
+          treatment_method: string | null
+          vessel_id: string | null
+          volume_m3: number | null
+          water_depth_m: number | null
+        }
+        Insert: {
+          compliant?: boolean | null
+          created_at?: string | null
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          operation_date?: string | null
+          operation_type?: string
+          org_id?: string | null
+          salinity_ppt?: number | null
+          temperature_c?: number | null
+          treatment_method?: string | null
+          vessel_id?: string | null
+          volume_m3?: number | null
+          water_depth_m?: number | null
+        }
+        Update: {
+          compliant?: boolean | null
+          created_at?: string | null
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          operation_date?: string | null
+          operation_type?: string
+          org_id?: string | null
+          salinity_ppt?: number | null
+          temperature_c?: number | null
+          treatment_method?: string | null
+          vessel_id?: string | null
+          volume_m3?: number | null
+          water_depth_m?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ballast_water_records_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ballast_water_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       behavioral_risk_assessments: {
         Row: {
           assessment_date: string | null
@@ -6678,6 +6744,69 @@ export type Database = {
           },
           {
             foreignKeyName: "checklists_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cii_ratings: {
+        Row: {
+          annual_cargo_mt: number | null
+          annual_co2_tonnes: number | null
+          annual_distance_nm: number | null
+          attained_cii: number | null
+          created_at: string | null
+          id: string
+          improvement_plan: Json | null
+          org_id: string | null
+          rating: string | null
+          required_cii: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          year: number
+        }
+        Insert: {
+          annual_cargo_mt?: number | null
+          annual_co2_tonnes?: number | null
+          annual_distance_nm?: number | null
+          attained_cii?: number | null
+          created_at?: string | null
+          id?: string
+          improvement_plan?: Json | null
+          org_id?: string | null
+          rating?: string | null
+          required_cii?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          year: number
+        }
+        Update: {
+          annual_cargo_mt?: number | null
+          annual_co2_tonnes?: number | null
+          annual_distance_nm?: number | null
+          attained_cii?: number | null
+          created_at?: string | null
+          id?: string
+          improvement_plan?: Json | null
+          org_id?: string | null
+          rating?: string | null
+          required_cii?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cii_ratings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cii_ratings_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -8901,6 +9030,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      corrective_actions: {
+        Row: {
+          action_type: string | null
+          completed_date: string | null
+          created_at: string | null
+          description: string
+          due_date: string | null
+          effectiveness_verified: boolean | null
+          id: string
+          ncr_id: string | null
+          org_id: string | null
+          responsible: string | null
+          status: string | null
+          updated_at: string | null
+          verification_notes: string | null
+        }
+        Insert: {
+          action_type?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          description: string
+          due_date?: string | null
+          effectiveness_verified?: boolean | null
+          id?: string
+          ncr_id?: string | null
+          org_id?: string | null
+          responsible?: string | null
+          status?: string | null
+          updated_at?: string | null
+          verification_notes?: string | null
+        }
+        Update: {
+          action_type?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          description?: string
+          due_date?: string | null
+          effectiveness_verified?: boolean | null
+          id?: string
+          ncr_id?: string | null
+          org_id?: string | null
+          responsible?: string | null
+          status?: string | null
+          updated_at?: string | null
+          verification_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corrective_actions_ncr_id_fkey"
+            columns: ["ncr_id"]
+            isOneToOne: false
+            referencedRelation: "non_conformities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "corrective_actions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cost_predictions: {
         Row: {
@@ -14329,6 +14521,75 @@ export type Database = {
           },
           {
             foreignKeyName: "emergency_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      emissions_records: {
+        Row: {
+          carbon_intensity: number | null
+          cargo_carried_mt: number | null
+          co2_tonnes: number | null
+          created_at: string | null
+          distance_nm: number | null
+          fuel_consumed_mt: number | null
+          fuel_type: string | null
+          id: string
+          nox_kg: number | null
+          org_id: string | null
+          pm_kg: number | null
+          recorded_date: string
+          sox_kg: number | null
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          carbon_intensity?: number | null
+          cargo_carried_mt?: number | null
+          co2_tonnes?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          nox_kg?: number | null
+          org_id?: string | null
+          pm_kg?: number | null
+          recorded_date?: string
+          sox_kg?: number | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          carbon_intensity?: number | null
+          cargo_carried_mt?: number | null
+          co2_tonnes?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          nox_kg?: number | null
+          org_id?: string | null
+          pm_kg?: number | null
+          recorded_date?: string
+          sox_kg?: number | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emissions_records_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emissions_records_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -19920,6 +20181,69 @@ export type Database = {
           },
         ]
       }
+      improvement_suggestions: {
+        Row: {
+          actual_benefit: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          estimated_benefit: string | null
+          id: string
+          implementation_cost: number | null
+          org_id: string | null
+          status: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_benefit?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_benefit?: string | null
+          id?: string
+          implementation_cost?: number | null
+          org_id?: string | null
+          status?: string | null
+          submitted_by?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_benefit?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_benefit?: string | null
+          id?: string
+          implementation_cost?: number | null
+          org_id?: string | null
+          status?: string | null
+          submitted_by?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "improvement_suggestions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "improvement_suggestions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incident_actions: {
         Row: {
           action_type: string
@@ -20853,6 +21177,78 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      internal_audits: {
+        Row: {
+          audit_number: string
+          audit_type: string | null
+          auditor_name: string | null
+          checklist_id: string | null
+          completed_date: string | null
+          created_at: string | null
+          department: string | null
+          findings_count: number | null
+          id: string
+          org_id: string | null
+          report_url: string | null
+          scheduled_date: string | null
+          score: number | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          audit_number: string
+          audit_type?: string | null
+          auditor_name?: string | null
+          checklist_id?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          department?: string | null
+          findings_count?: number | null
+          id?: string
+          org_id?: string | null
+          report_url?: string | null
+          scheduled_date?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          audit_number?: string
+          audit_type?: string | null
+          auditor_name?: string | null
+          checklist_id?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          department?: string | null
+          findings_count?: number | null
+          id?: string
+          org_id?: string | null
+          report_url?: string | null
+          scheduled_date?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "internal_audits_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "internal_audits_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       interop_log: {
         Row: {
@@ -23618,6 +24014,72 @@ export type Database = {
           },
         ]
       }
+      maritime_regulations: {
+        Row: {
+          ai_score: number | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          evidence_files: string[] | null
+          id: string
+          last_verified: string | null
+          org_id: string | null
+          regulation_type: string | null
+          requirement_code: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          last_verified?: string | null
+          org_id?: string | null
+          regulation_type?: string | null
+          requirement_code?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          last_verified?: string | null
+          org_id?: string | null
+          regulation_type?: string | null
+          requirement_code?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maritime_regulations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maritime_regulations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       medical_records: {
         Row: {
           allergies: string[] | null
@@ -25333,6 +25795,36 @@ export type Database = {
         }
         Relationships: []
       }
+      module_access_log: {
+        Row: {
+          action: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          module_name: string
+          timestamp: string | null
+          user_id: string
+        }
+        Insert: {
+          action?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_name: string
+          timestamp?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_name?: string
+          timestamp?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       module_health: {
         Row: {
           cpu_usage: number | null
@@ -25644,6 +26136,42 @@ export type Database = {
           name?: string
           steps?: Json
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      navigation_history: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_visited_at: string | null
+          metadata: Json | null
+          module_name: string | null
+          module_path: string
+          session_id: string | null
+          user_id: string
+          visit_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_visited_at?: string | null
+          metadata?: Json | null
+          module_name?: string | null
+          module_path: string
+          session_id?: string | null
+          user_id: string
+          visit_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_visited_at?: string | null
+          metadata?: Json | null
+          module_name?: string | null
+          module_path?: string
+          session_id?: string | null
+          user_id?: string
+          visit_count?: number | null
         }
         Relationships: []
       }
@@ -43394,6 +43922,66 @@ export type Database = {
           },
         ]
       }
+      waste_records: {
+        Row: {
+          certificate_number: string | null
+          created_at: string | null
+          disposal_date: string | null
+          disposal_method: string | null
+          id: string
+          marpol_annex: string | null
+          org_id: string | null
+          port_code: string | null
+          quantity: number | null
+          unit: string | null
+          vessel_id: string | null
+          waste_type: string
+        }
+        Insert: {
+          certificate_number?: string | null
+          created_at?: string | null
+          disposal_date?: string | null
+          disposal_method?: string | null
+          id?: string
+          marpol_annex?: string | null
+          org_id?: string | null
+          port_code?: string | null
+          quantity?: number | null
+          unit?: string | null
+          vessel_id?: string | null
+          waste_type?: string
+        }
+        Update: {
+          certificate_number?: string | null
+          created_at?: string | null
+          disposal_date?: string | null
+          disposal_method?: string | null
+          id?: string
+          marpol_annex?: string | null
+          org_id?: string | null
+          port_code?: string | null
+          quantity?: number | null
+          unit?: string | null
+          vessel_id?: string | null
+          waste_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_records_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waste_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       watchdog_behavior_alerts: {
         Row: {
           actual_behavior: string | null
@@ -44387,6 +44975,59 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      workflow_ai_suggestions: {
+        Row: {
+          action_data: Json | null
+          applied_at: string | null
+          applied_by: string | null
+          confidence: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          org_id: string | null
+          status: string | null
+          suggestion_type: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          org_id?: string | null
+          status?: string | null
+          suggestion_type?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          org_id?: string | null
+          status?: string | null
+          suggestion_type?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_ai_suggestions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workflow_execution_logs: {
         Row: {

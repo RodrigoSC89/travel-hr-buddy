@@ -1,4 +1,3 @@
-// @ts-nocheck - External API responses need dynamic typing
 /**
  * Space Weather Monitoring Service
  * 
@@ -218,7 +217,7 @@ export async function getSpaceWeatherStatus(
     
     // Solar Wind
     solar_wind_speed: noaaSummary.solar_wind_speed || 0,
-    solar_wind_density: noaaSummary.solar_wind_density || 5.0, // Default ~5 protons/cm³
+    solar_wind_density: 5.0, // Default ~5 protons/cm³ (solar_wind_density not in summary type)
     bz_gsm: noaaSummary.bz_gsm || 0,
     
     // Ionosphere (TEC from regional estimates based on Kp index)

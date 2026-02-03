@@ -1,4 +1,3 @@
-// @ts-nocheck - External API responses need dynamic typing
 /**
  * Unified Weather Service
  * Provides multi-source weather data with automatic fallback
@@ -111,14 +110,15 @@ async function fetchFromEdgeFunction(
       });
 
       if (error) throw error;
-      return data;
+      return data as WeatherApiResponse;
     } catch (err) {
       logger.warn(`[Weather] Attempt ${attempt}/${retries} failed`, { error: err instanceof Error ? err.message : String(err) });
-      if (attempt === retries) throw err;
+      if (attempt === retries) return null;
       // Exponential backoff: 1s, 2s, 4s
       await new Promise((r) => setTimeout(r, Math.pow(2, attempt - 1) * 1000));
     }
   }
+  return null;
 }
 
 /**
