@@ -4076,6 +4076,60 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_log: {
+        Row: {
+          action: string
+          after_state: Json | null
+          before_state: Json | null
+          correlation_id: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          event_timestamp: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          module: string
+          user_agent: string | null
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          action: string
+          after_state?: Json | null
+          before_state?: Json | null
+          correlation_id?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          event_timestamp?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          module: string
+          user_agent?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          action?: string
+          after_state?: Json | null
+          before_state?: Json | null
+          correlation_id?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          event_timestamp?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          module?: string
+          user_agent?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -23284,6 +23338,108 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "maintenance_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_orders: {
+        Row: {
+          actual_hours: number | null
+          assigned_to: string | null
+          assigned_to_name: string | null
+          attachments: Json | null
+          category: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          equipment_id: string | null
+          equipment_name: string | null
+          estimated_hours: number | null
+          id: string
+          labor_cost: number | null
+          notes: string | null
+          order_number: string
+          organization_id: string | null
+          parts_cost: number | null
+          parts_required: Json | null
+          priority: string | null
+          status: string | null
+          title: string
+          total_cost: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_hours?: number | null
+          assigned_to?: string | null
+          assigned_to_name?: string | null
+          attachments?: Json | null
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          equipment_id?: string | null
+          equipment_name?: string | null
+          estimated_hours?: number | null
+          id?: string
+          labor_cost?: number | null
+          notes?: string | null
+          order_number: string
+          organization_id?: string | null
+          parts_cost?: number | null
+          parts_required?: Json | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          total_cost?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_hours?: number | null
+          assigned_to?: string | null
+          assigned_to_name?: string | null
+          attachments?: Json | null
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          equipment_id?: string | null
+          equipment_name?: string | null
+          estimated_hours?: number | null
+          id?: string
+          labor_cost?: number | null
+          notes?: string | null
+          order_number?: string
+          organization_id?: string | null
+          parts_cost?: number | null
+          parts_required?: Json | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          total_cost?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_orders_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -45857,6 +46013,17 @@ export type Database = {
       get_drill_statistics: {
         Args: { p_organization_id: string }
         Returns: Json
+      }
+      get_entity_audit_trail: {
+        Args: { p_entity_id: string; p_entity_type: string; p_limit?: number }
+        Returns: {
+          log_action: string
+          log_after: Json
+          log_before: Json
+          log_id: string
+          log_timestamp: string
+          log_user_id: string
+        }[]
       }
       get_expiring_certificates_v2: {
         Args: { p_days?: number }
