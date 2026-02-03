@@ -50,65 +50,66 @@ interface AIMetric {
   unit: string;
 }
 
-// Demo data for real-time insights
-const DEMO_INSIGHTS: RealTimeInsight[] = [
-  {
-    id: "1",
-    type: "opportunity",
-    title: "Otimização de Combustível",
-    description: "Detectada oportunidade de reduzir consumo em 12% na rota Santos-Rio",
-    impact: "high",
-    confidence: 94,
-    timestamp: new Date(Date.now() - 5 * 60000),
-    actionable: true
-  },
-  {
-    id: "2",
-    type: "risk",
-    title: "Certificação Expirando",
-    description: "3 tripulantes com certificações expirando nos próximos 30 dias",
-    impact: "medium",
-    confidence: 100,
-    timestamp: new Date(Date.now() - 15 * 60000),
-    actionable: true
-  },
-  {
-    id: "3",
-    type: "optimization",
-    title: "Manutenção Preditiva",
-    description: "Motor #2 do navio Atlântico Sul requer atenção preventiva",
-    impact: "medium",
-    confidence: 87,
-    timestamp: new Date(Date.now() - 30 * 60000),
-    actionable: true
-  },
-  {
-    id: "4",
-    type: "info",
-    title: "Performance Acima da Média",
-    description: "Eficiência operacional 15% acima do benchmark do setor",
-    impact: "low",
-    confidence: 92,
-    timestamp: new Date(Date.now() - 45 * 60000),
-    actionable: false
-  }
-];
-
-const DEMO_METRICS: AIMetric[] = [
-  { label: "Precisão Preditiva", value: 94.7, change: 2.3, trend: "up", unit: "%" },
-  { label: "Tempo de Resposta", value: 1.2, change: -0.3, trend: "down", unit: "s" },
-  { label: "Insights Gerados", value: 847, change: 156, trend: "up", unit: "" },
-  { label: "Economia Detectada", value: 2.4, change: 0.8, trend: "up", unit: "M" }
-];
-
 export function IASection() {
   const [input, setInput] = useState("");
   const [activeTab, setActiveTab] = useState("chat");
-  const [insights, setInsights] = useState<RealTimeInsight[]>(DEMO_INSIGHTS);
-  const [metrics, setMetrics] = useState<AIMetric[]>(DEMO_METRICS);
+  const [insights, setInsights] = useState<RealTimeInsight[]>([]);
+  const [metrics, setMetrics] = useState<AIMetric[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { messages, isLoading, sendMessage, clearMessages, generateInsights } = useUnifiedCommandAI();
+
+  // Load real insights from Supabase
+  const loadRealInsights = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("ai_insights")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mapped: RealTimeInsight[] = data.map((item: Record<string, unknown>) => ({
+          id: String(item.id || ""),
+          type: (item.category || "info") as RealTimeInsight["type"],
+          title: String(item.title || "Insight"),
+          description: String(item.description || ""),
+          impact: (item.priority || "low") as RealTimeInsight["impact"],
+          confidence: Number(item.confidence || 80),
+          timestamp: new Date(String(item.created_at || Date.now())),
+          actionable: Boolean(item.actionable),
+        }));
+        setInsights(mapped);
+      }
+
+      // Load metrics from ai_behavior_snapshots
+      const { data: metricsData } = await supabase
+        .from("ai_behavior_snapshots")
+        .select("*")
+        .order("snapshot_date", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (metricsData) {
+        setMetrics([
+          { label: "Precisão Preditiva", value: Number(metricsData.accuracy_score || 0) * 100, change: 0, trend: "up", unit: "%" },
+          { label: "Confiança Média", value: Number(metricsData.confidence_avg || 0) * 100, change: 0, trend: "up", unit: "%" },
+          { label: "Decisões", value: Number(metricsData.decisions_count || 0), change: 0, trend: "up", unit: "" },
+          { label: "F1 Score", value: Number(metricsData.f1_score || 0) * 100, change: 0, trend: "up", unit: "%" }
+        ]);
+      }
+    } catch {
+      // Empty state if no data
+      setInsights([]);
+      setMetrics([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRealInsights();
+  }, [loadRealInsights]);
 
   useEffect(() => {
     if (scrollRef.current) {

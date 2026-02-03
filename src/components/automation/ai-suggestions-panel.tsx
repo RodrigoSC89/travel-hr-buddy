@@ -63,58 +63,6 @@ const mapDbToSuggestion = (dbItem: Record<string, unknown>): AISuggestion => ({
   valid_until: dbItem.valid_until ? String(dbItem.valid_until) : undefined,
 });
 
-// Mock suggestions to use when API fails or no data
-const MOCK_SUGGESTIONS: AISuggestion[] = [
-  {
-    id: "mock-1",
-    type: "action",
-    title: "Renovar Certificados Críticos",
-    description: "3 certificados de tripulação vencem nos próximos 30 dias. Inicie o processo de renovação.",
-    priority: 4,
-    action_data: { route: "/certifications", action: "renew_certificates" },
-    is_read: false,
-    is_dismissed: false,
-    is_acted_upon: false,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-2",
-    type: "optimization",
-    title: "Otimizar Escala de Manutenção",
-    description: "Análise sugere reagendar 2 manutenções para reduzir tempo de parada em 15%.",
-    priority: 3,
-    action_data: { route: "/maintenance", action: "optimize" },
-    is_read: false,
-    is_dismissed: false,
-    is_acted_upon: false,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-3",
-    type: "insight",
-    title: "Tendência de Consumo de Combustível",
-    description: "Consumo aumentou 8% no último mês. Verifique eficiência operacional.",
-    priority: 2,
-    action_data: { route: "/fuel-optimizer", action: "analyze" },
-    is_read: false,
-    is_dismissed: false,
-    is_acted_upon: false,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-4",
-    type: "reminder",
-    title: "Auditoria ISM Programada",
-    description: "Auditoria interna ISM agendada para próxima semana. Prepare documentação.",
-    priority: 3,
-    action_data: { route: "/compliance", action: "prepare_audit" },
-    is_read: false,
-    is_dismissed: false,
-    is_acted_upon: false,
-    created_at: new Date().toISOString(),
-  },
-];
-
 export const AISuggestionsPanel: React.FC = () => {
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,7 +73,7 @@ export const AISuggestionsPanel: React.FC = () => {
 
   const loadSuggestions = useCallback(async (showToast = false) => {
     try {
-      // First try to load from database
+      // Load from database - no mock fallback
       const { data, error } = await supabase
         .from("ai_suggestions")
         .select("*")
@@ -135,9 +83,8 @@ export const AISuggestionsPanel: React.FC = () => {
         .limit(20);
 
       if (error) {
-        logger.warn("Error loading from database, using mock data", { error });
-        // Use mock data if database fails
-        setSuggestions(MOCK_SUGGESTIONS);
+        logger.warn("Error loading suggestions from database", { error });
+        setSuggestions([]);
         return;
       }
 
@@ -146,8 +93,8 @@ export const AISuggestionsPanel: React.FC = () => {
         const mappedSuggestions = data.map(item => mapDbToSuggestion(item as Record<string, unknown>));
         setSuggestions(mappedSuggestions);
       } else {
-        // If no data in DB, use mock suggestions
-        setSuggestions(MOCK_SUGGESTIONS);
+        // Empty state - no mock data
+        setSuggestions([]);
       }
 
       if (showToast) {
@@ -158,8 +105,8 @@ export const AISuggestionsPanel: React.FC = () => {
       }
     } catch (error) {
       logger.error("Error loading suggestions:", error);
-      // Fallback to mock data
-      setSuggestions(MOCK_SUGGESTIONS);
+      // Empty state on error - no mock fallback
+      setSuggestions([]);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
