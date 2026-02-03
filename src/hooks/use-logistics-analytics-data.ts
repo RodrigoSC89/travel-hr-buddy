@@ -1,6 +1,7 @@
 /**
  * Logistics Analytics Data Hook
  * Fetches real delivery, supplier and inventory data from Supabase
+ * ✅ R01 COMPLIANCE: Zero mock data fallbacks in production
  */
 
 import { useQuery } from '@tanstack/react-query';
@@ -35,33 +36,39 @@ export interface LogisticsData {
   supplierData: SupplierPerformance[];
   inventoryData: InventoryTrend[];
   hasRealData: boolean;
+  status: 'loading' | 'ok' | 'empty' | 'error' | 'not_configured';
 }
 
 export function useLogisticsAnalytics(period: string = '6m') {
   return useQuery({
     queryKey: ['logistics-analytics', period],
     queryFn: async (): Promise<LogisticsData> => {
-      let hasRealData = false;
+      try {
+        const deliveryData = await fetchDeliveryMetrics(period);
+        const supplierData = await fetchSupplierPerformance();
+        const inventoryData = await fetchInventoryTrends();
 
-      const deliveryData = await fetchDeliveryMetrics(period);
-      if (deliveryData.length > 0) hasRealData = true;
+        const hasRealData = deliveryData.length > 0 || supplierData.length > 0 || inventoryData.length > 0;
 
-      const supplierData = await fetchSupplierPerformance();
-      if (supplierData.length > 0) hasRealData = true;
-
-      const inventoryData = await fetchInventoryTrends();
-      if (inventoryData.length > 0) hasRealData = true;
-
-      if (!hasRealData) {
-        return generateSampleData();
+        // ✅ R01 COMPLIANCE: Retorna dados vazios em vez de mocks
+        // UI deve exibir EmptyState quando não há dados
+        return {
+          deliveryData,
+          supplierData,
+          inventoryData,
+          hasRealData,
+          status: hasRealData ? 'ok' : 'empty',
+        };
+      } catch (error) {
+        logger.error('Error fetching logistics analytics:', error);
+        return {
+          deliveryData: [],
+          supplierData: [],
+          inventoryData: [],
+          hasRealData: false,
+          status: 'error',
+        };
       }
-
-      return {
-        deliveryData: deliveryData.length > 0 ? deliveryData : generateSampleDeliveries(),
-        supplierData: supplierData.length > 0 ? supplierData : generateSampleSuppliers(),
-        inventoryData: inventoryData.length > 0 ? inventoryData : generateSampleInventory(),
-        hasRealData,
-      };
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
@@ -133,9 +140,9 @@ async function fetchSupplierPerformance(): Promise<SupplierPerformance[]> {
 
     return vendors.map(vendor => ({
       name: vendor.name || 'Unknown',
-      deliveries: vendor.total_orders || Math.floor(Math.random() * 100) + 10,
-      onTimeRate: Number(vendor.on_time_delivery) || (vendor.rating ? vendor.rating * 20 : 85),
-      qualityScore: Number(vendor.quality_score) || vendor.rating || 4.0,
+      deliveries: vendor.total_orders || 0,
+      onTimeRate: Number(vendor.on_time_delivery) || (vendor.rating ? vendor.rating * 20 : 0),
+      qualityScore: Number(vendor.quality_score) || vendor.rating || 0,
     }));
   } catch (err) {
     logger.error('Error fetching supplier performance:', err);
@@ -175,35 +182,4 @@ async function fetchInventoryTrends(): Promise<InventoryTrend[]> {
     logger.error('Error fetching inventory trends:', err);
     return [];
   }
-}
-
-function generateSampleData(): LogisticsData {
-  return { deliveryData: generateSampleDeliveries(), supplierData: generateSampleSuppliers(), inventoryData: generateSampleInventory(), hasRealData: false };
-}
-
-function generateSampleDeliveries(): DeliveryMetric[] {
-  return [
-    { month: "Jan", onTime: 85, delayed: 15, total: 120, avgDays: 3.2, cost: 45000 },
-    { month: "Fev", onTime: 88, delayed: 12, total: 135, avgDays: 2.9, cost: 52000 },
-    { month: "Mar", onTime: 92, delayed: 8, total: 148, avgDays: 2.7, cost: 58000 },
-    { month: "Abr", onTime: 90, delayed: 10, total: 142, avgDays: 2.8, cost: 55000 },
-    { month: "Mai", onTime: 94, delayed: 6, total: 156, avgDays: 2.5, cost: 62000 },
-    { month: "Jun", onTime: 96, delayed: 4, total: 168, avgDays: 2.3, cost: 68000 },
-  ];
-}
-
-function generateSampleSuppliers(): SupplierPerformance[] {
-  return [
-    { name: "MaritimeSupply", deliveries: 45, onTimeRate: 97, qualityScore: 4.8 },
-    { name: "Global Bunker", deliveries: 82, onTimeRate: 94, qualityScore: 4.5 },
-    { name: "Port Services", deliveries: 28, onTimeRate: 88, qualityScore: 4.2 },
-  ];
-}
-
-function generateSampleInventory(): InventoryTrend[] {
-  return [
-    { category: "Peças Mecânicas", current: 1250, optimal: 1500, reorderPoint: 800 },
-    { category: "Combustível", current: 45000, optimal: 50000, reorderPoint: 20000 },
-    { category: "Equipamentos", current: 320, optimal: 400, reorderPoint: 150 },
-  ];
 }
