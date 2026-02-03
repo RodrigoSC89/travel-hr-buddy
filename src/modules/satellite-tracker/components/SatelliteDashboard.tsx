@@ -36,7 +36,7 @@ import { DGNSSDashboard } from "./DGNSSDashboard";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { DemoSatellite } from "../data/demo-satellites";
+import type { DemoSatellite } from "../types/satellite";
 
 interface SatelliteData {
   id: string;

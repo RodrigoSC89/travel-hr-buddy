@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import type { DemoSatellite } from "../data/demo-satellites";
+import type { DemoSatellite } from "../types/satellite";
 import { logger } from '@/lib/logger';
 
 interface Message {

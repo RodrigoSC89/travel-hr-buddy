@@ -19,7 +19,7 @@ import {
   Target,
   Calendar
 } from "lucide-react";
-import type { DemoSatellite } from "../data/demo-satellites";
+import type { DemoSatellite } from "../types/satellite";
 
 interface SatelliteDetailPanelProps {
   satellite: DemoSatellite;

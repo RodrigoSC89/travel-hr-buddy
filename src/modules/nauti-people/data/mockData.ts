@@ -1,53 +1,17 @@
 /**
- * Data Exports for Nautilus People Hub
- * MIGRATED: Now exports empty arrays - real data comes from Supabase hooks
+ * Reference Data Exports for Nautilus People Hub
+ * ✅ P0 CORRIGIDO: Mock arrays removidos - dados reais via Supabase hooks
  * 
- * @deprecated Use hooks instead:
- * - useColaboradores() for employees
- * - useVagas() for job openings  
- * - useCandidatos() for candidates
- * - useAvaliacoes() for evaluations
+ * @deprecated Para dados dinâmicos, use hooks:
+ * - useClimateData() para pesquisas de clima
+ * - useRecruitmentData() para vagas e candidatos
+ * - useNautiPeopleData() para colaboradores
  */
 
-import type { 
-  Colaborador, 
-  Candidato, 
-  Vaga, 
-  Avaliacao, 
-  OKR, 
-  TimeRecord, 
-  BankHours,
-  AIInsight,
-  Notification,
-  NineBoxPosition
-} from '../types';
+// Re-export reference data from central hook
+export { DEPARTAMENTOS as departamentos } from '@/hooks/useClimateData';
 
-// Empty arrays - components should use hooks for real Supabase data
-export const mockColaboradores: Colaborador[] = [];
-export const mockVagas: Vaga[] = [];
-export const mockCandidatos: Candidato[] = [];
-export const mockAvaliacoes: Avaliacao[] = [];
-export const mockOKRs: OKR[] = [];
-export const mockTimeRecords: TimeRecord[] = [];
-export const mockBankHours: BankHours[] = [];
-export const mockNineBox: NineBoxPosition[] = [];
-export const mockAIInsights: AIInsight[] = [];
-export const mockNotifications: Notification[] = [];
-
-// Reference data - kept as these are static options
-export const departamentos = [
-  'Operações',
-  'Recursos Humanos',
-  'QSMS',
-  'Financeiro',
-  'TI',
-  'Jurídico',
-  'Comercial',
-  'Engenharia',
-  'Manutenção',
-  'Navegação'
-];
-
+// Static reference data (not mock - these are configuration options)
 export const unidades = [
   'Escritório Central',
   'Plataforma Nautilus-A',

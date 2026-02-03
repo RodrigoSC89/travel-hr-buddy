@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Globe, Satellite } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
-import type { DemoSatellite } from "../data/demo-satellites";
+import type { DemoSatellite } from "../types/satellite";
 import { logger } from '@/lib/logger';
 
 interface SatelliteGlobeMapProps {
