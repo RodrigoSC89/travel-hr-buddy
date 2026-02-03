@@ -1,6 +1,6 @@
 /**
- * NOC Command Center - PATCH INTERACTIVITY 100%
- * Network Operations Center with alerts, acknowledge and workflows
+ * NOC Command Center - ✅ R01 CORRIGIDO
+ * Network Operations Center com dados reais do Supabase
  */
 
 import React, { useState, useCallback, useMemo } from "react";
@@ -16,6 +16,8 @@ import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {
   Activity,
@@ -45,38 +47,11 @@ import {
   Pause,
   RotateCcw,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  WifiOff
 } from "lucide-react";
-
-type ServiceStatus = "operational" | "degraded" | "outage" | "maintenance";
-type AlertSeverity = "critical" | "warning" | "info";
-type AlertStatus = "active" | "acknowledged" | "resolved" | "muted";
-
-interface Service {
-  id: string;
-  name: string;
-  type: "database" | "api" | "auth" | "storage" | "edge" | "realtime";
-  status: ServiceStatus;
-  uptime: number;
-  latency: number;
-  lastCheck: Date;
-  incidents: number;
-}
-
-interface NOCAlert {
-  id: string;
-  serviceId: string;
-  serviceName: string;
-  severity: AlertSeverity;
-  title: string;
-  message: string;
-  timestamp: Date;
-  status: AlertStatus;
-  acknowledgedBy?: string;
-  acknowledgedAt?: Date;
-  resolvedAt?: Date;
-  notes: string[];
-}
+import { useNOCServices, useNOCAlerts, type NOCService, type NOCAlert, type ServiceStatus } from "@/hooks/useNOCData";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Webhook {
   id: string;
@@ -87,64 +62,17 @@ interface Webhook {
   lastTriggered?: Date;
 }
 
-const MOCK_SERVICES: Service[] = [
-  { id: "s1", name: "Supabase Database", type: "database", status: "operational", uptime: 99.99, latency: 45, lastCheck: new Date(), incidents: 0 },
-  { id: "s2", name: "Auth Service", type: "auth", status: "operational", uptime: 99.95, latency: 120, lastCheck: new Date(), incidents: 1 },
-  { id: "s3", name: "Edge Functions", type: "edge", status: "degraded", uptime: 98.50, latency: 850, lastCheck: new Date(), incidents: 3 },
-  { id: "s4", name: "Storage API", type: "storage", status: "operational", uptime: 99.90, latency: 200, lastCheck: new Date(), incidents: 0 },
-  { id: "s5", name: "Realtime", type: "realtime", status: "operational", uptime: 99.85, latency: 50, lastCheck: new Date(), incidents: 2 },
-  { id: "s6", name: "REST API", type: "api", status: "maintenance", uptime: 99.00, latency: 0, lastCheck: new Date(), incidents: 0 }
-];
-
-const MOCK_ALERTS: NOCAlert[] = [
-  {
-    id: "a1",
-    serviceId: "s3",
-    serviceName: "Edge Functions",
-    severity: "critical",
-    title: "Alta Latência Detectada",
-    message: "Latência acima de 800ms nos últimos 5 minutos",
-    timestamp: new Date(Date.now() - 300000),
-    status: "active",
-    notes: []
-  },
-  {
-    id: "a2",
-    serviceId: "s3",
-    serviceName: "Edge Functions",
-    severity: "warning",
-    title: "Taxa de Erro Elevada",
-    message: "5% das requisições retornando erro 500",
-    timestamp: new Date(Date.now() - 600000),
-    status: "acknowledged",
-    acknowledgedBy: "Admin",
-    acknowledgedAt: new Date(Date.now() - 500000),
-    notes: ["Investigando causa raiz"]
-  },
-  {
-    id: "a3",
-    serviceId: "s6",
-    serviceName: "REST API",
-    severity: "info",
-    title: "Manutenção Programada",
-    message: "Manutenção programada para atualização de segurança",
-    timestamp: new Date(Date.now() - 3600000),
-    status: "active",
-    notes: []
-  }
-];
-
-const MOCK_WEBHOOKS: Webhook[] = [
-  { id: "w1", name: "Slack Alerts", url: "https://hooks.slack.com/...", events: ["critical", "outage"], enabled: true, lastTriggered: new Date(Date.now() - 300000) },
-  { id: "w2", name: "PagerDuty", url: "https://events.pagerduty.com/...", events: ["critical"], enabled: true },
-  { id: "w3", name: "Email Notifications", url: "https://api.sendgrid.com/...", events: ["critical", "warning"], enabled: false }
-];
-
 export function NOCCommandCenter() {
   const { toast } = useToast();
-  const [services, setServices] = useState<Service[]>(MOCK_SERVICES);
-  const [alerts, setAlerts] = useState<NOCAlert[]>(MOCK_ALERTS);
-  const [webhooks, setWebhooks] = useState<Webhook[]>(MOCK_WEBHOOKS);
+  const queryClient = useQueryClient();
+  
+  // ✅ R01: Dados reais via hooks
+  const { data: servicesData, isLoading: servicesLoading, refetch: refetchServices } = useNOCServices();
+  const { data: alertsData, isLoading: alertsLoading, refetch: refetchAlerts } = useNOCAlerts();
+  
+  const services = servicesData || [];
+  const [alerts, setAlerts] = useState<NOCAlert[]>([]);
+  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
   const [severityFilter, setSeverityFilter] = useState("all");
@@ -152,6 +80,60 @@ export function NOCCommandCenter() {
   const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
   const [newNote, setNewNote] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Sync alerts from query
+  React.useEffect(() => {
+    if (alertsData) setAlerts(alertsData);
+  }, [alertsData]);
+  
+  const isLoading = servicesLoading || alertsLoading;
+  
+  // ⚠️ Estado "Não Configurado"
+  if (!isLoading && services.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <Activity className="h-6 w-6 text-muted-foreground" />
+          <div>
+            <h2 className="text-2xl font-bold">NOC Command Center</h2>
+            <p className="text-muted-foreground">Monitoramento 24/7</p>
+          </div>
+        </div>
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Monitoramento Não Configurado</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Configure os serviços de monitoramento para visualizar o status em tempo real.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sem Dados Simulados</AlertTitle>
+              <AlertDescription>
+                Este painel exibe apenas dados reais da tabela system_status.
+              </AlertDescription>
+            </Alert>
+            <Button onClick={() => window.location.href = '/settings/integrations'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar Monitoramento
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-12 w-full" />
+        <div className="grid grid-cols-7 gap-4">
+          {[...Array(7)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+        </div>
+        <Skeleton className="h-[400px]" />
+      </div>
+    );
+  }
 
   // Stats
   const stats = useMemo(() => ({
