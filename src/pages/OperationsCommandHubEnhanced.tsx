@@ -41,6 +41,8 @@ const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
 const MissionCommandCenter = lazy(() => import("@/pages/MissionCommandCenter"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
 const MissionControlCenter = lazy(() => import("@/modules/operations/components/MissionControlCenter"));
+const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/FleetCommandCenter"));
+const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
 
 function TabLoadingSkeleton() {
   return (
@@ -56,6 +58,8 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📊", description: "Dashboard operacional" },
   { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões", badge: "NEW" },
+  { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
+  { id: "analytics", label: "BI Analytics", icon: TrendingUp, emoji: "📈", description: "Business Intelligence", badge: "NOVO" },
   { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
   { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
   { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
@@ -470,6 +474,20 @@ export default function OperationsCommandHubEnhanced() {
           <TabsContent value="missions" className="space-y-4 mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <MissionControlCenter />
+            </Suspense>
+          </TabsContent>
+
+          {/* Fleet Premium Command Center */}
+          <TabsContent value="fleetpremium" className="space-y-4 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <FleetPremiumCommand />
+            </Suspense>
+          </TabsContent>
+
+          {/* Analytics Dashboard */}
+          <TabsContent value="analytics" className="space-y-4 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <AnalyticsDashboard />
             </Suspense>
           </TabsContent>
 

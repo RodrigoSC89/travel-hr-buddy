@@ -4,3 +4,4 @@
 export { default } from "./FinancePremium";
 export { default as FinanceHub } from "./FinancePremium";
 export { default as FinancePremium } from "./FinancePremium";
+export { default as FinancialDashboard } from "./components/FinancialDashboard";

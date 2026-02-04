@@ -41,6 +41,8 @@ const PeopleAnalytics = lazy(() => import("@/pages/PeopleAnalytics"));
 const CrewTrainingTab = lazy(() => import("@/components/people/CrewTrainingTab"));
 const CrewComplianceTab = lazy(() => import("@/components/people/CrewComplianceTab"));
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
+const CrewSchedulingDashboard = lazy(() => import("@/modules/crew-scheduling/components/CrewSchedulingDashboard"));
+const AcademyDashboard = lazy(() => import("@/modules/academy/components/AcademyDashboard"));
 
 function TabLoadingSkeleton() {
   return (
@@ -54,10 +56,11 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "crew", label: "Tripulação", icon: Users },
+  { id: "scheduling", label: "Escalas", icon: Calendar },
   { id: "competency", label: "Competências", icon: Award },
+  { id: "academy", label: "Academia", icon: GraduationCap },
   { id: "recruitment", label: "Recrutamento", icon: UserPlus },
   { id: "wellness", label: "Bem-estar", icon: Heart },
-  { id: "training", label: "Treinamento", icon: GraduationCap },
   { id: "compliance", label: "Compliance", icon: Shield },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
 ];
@@ -466,12 +469,23 @@ export default function PeopleHubEnhanced() {
             </Suspense>
           </TabsContent>
 
+          <TabsContent value="scheduling" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <CrewSchedulingDashboard />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="academy" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <AcademyDashboard />
+            </Suspense>
+          </TabsContent>
+
           <TabsContent value="training" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <CrewTrainingTab />
             </Suspense>
           </TabsContent>
-
           <TabsContent value="compliance" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <CrewComplianceTab />
