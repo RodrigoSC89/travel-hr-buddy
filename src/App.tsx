@@ -387,18 +387,28 @@ const queryClient = new QueryClient({
 });
 
 // Loader com timeout de segurança para prevenir loading infinito
+/**
+ * Loader with delayed visibility to prevent flash during fast transitions
+ */
 const Loader = () => {
   const [showRetry, setShowRetry] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
   
   React.useEffect(() => {
-    // Se ficar mais de 15s no loader, mostrar botão de retry
-    const timeout = setTimeout(() => setShowRetry(true), 15000);
-    return () => clearTimeout(timeout);
+    // Delay showing loader to prevent flash on fast loads (200ms threshold)
+    const visibilityTimeout = setTimeout(() => setIsVisible(true), 200);
+    // Show retry button after 15s
+    const retryTimeout = setTimeout(() => setShowRetry(true), 15000);
+    
+    return () => {
+      clearTimeout(visibilityTimeout);
+      clearTimeout(retryTimeout);
+    };
   }, []);
   
   const handleRetry = async () => {
     try {
-      // Limpar caches do SW
+      // Clear SW caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
@@ -412,8 +422,13 @@ const Loader = () => {
     window.location.href = window.location.origin + '/?_sw=' + Date.now();
   };
   
+  // Don't render anything until delay passes - prevents flash
+  if (!isVisible) {
+    return <div className="min-h-screen bg-background" />;
+  }
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="min-h-screen flex items-center justify-center bg-background animate-fade-in">
       <div className="text-center space-y-4">
         <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
         <p className="text-foreground">Carregando Nautilus One...</p>
@@ -448,9 +463,11 @@ const AuthenticatedLayout = () => {
           {/* Header with mobile menu trigger */}
           <Header />
           
-          {/* Main content with padding for mobile bottom nav */}
+          {/* Main content with padding for mobile bottom nav - smooth transitions */}
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
-            <Outlet />
+            <div className="animate-fade-in">
+              <Outlet />
+            </div>
           </main>
         </div>
         
@@ -467,11 +484,30 @@ const AuthenticatedLayout = () => {
   );
 };
 
-// Componente de rota protegida
+/**
+ * Protected Route wrapper - prevents flash during auth check
+ */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
+  const [showLoader, setShowLoader] = React.useState(false);
   
-  if (isLoading) return <Loader />;
+  React.useEffect(() => {
+    // Only show loader after 300ms of loading to prevent flash
+    let timeout: ReturnType<typeof setTimeout>;
+    if (isLoading) {
+      timeout = setTimeout(() => setShowLoader(true), 300);
+    } else {
+      setShowLoader(false);
+    }
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
+  
+  // During initial auth check, render empty div to prevent flash
+  if (isLoading) {
+    if (showLoader) return <Loader />;
+    return <div className="min-h-screen bg-background" />;
+  }
+  
   if (!user) return <Navigate to="/auth" replace />;
   
   return <>{children}</>;
