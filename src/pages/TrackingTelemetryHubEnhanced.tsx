@@ -35,6 +35,8 @@ const Telemetria360 = lazy(() => import("@/pages/Telemetria360"));
 const PredictiveTelemetry = lazy(() => import("@/pages/PredictiveTelemetry"));
 const DGNSSTracking = lazy(() => import("@/pages/DGNSSTracking"));
 const TrackingAlerts = lazy(() => import("@/pages/tracking/TrackingAlerts"));
+const FleetTrackingDashboard = lazy(() => import("@/modules/tracking/components/FleetTrackingDashboard"));
+const VesselAlertsCenter = lazy(() => import("@/modules/tracking/components/VesselAlertsCenter"));
 
 function TabLoadingSkeleton() {
   return (
@@ -47,10 +49,12 @@ function TabLoadingSkeleton() {
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: Activity },
+  { id: "fleet", label: "Frota", icon: Ship, badge: "NEW" },
   { id: "map", label: "Mapa", icon: Globe },
   { id: "realtime", label: "Tempo Real", icon: Radio },
   { id: "predictive", label: "Preditiva", icon: Target, badge: "AI" },
   { id: "alerts", label: "Alertas", icon: AlertTriangle },
+  { id: "geofence", label: "Geofence", icon: MapPin },
   { id: "history", label: "Histórico", icon: History },
 ];
 
@@ -469,6 +473,12 @@ export default function TrackingTelemetryHubEnhanced() {
             </div>
           </TabsContent>
 
+          <TabsContent value="fleet" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <FleetTrackingDashboard />
+            </Suspense>
+          </TabsContent>
+
           <TabsContent value="map" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <Telemetria360 />
@@ -490,6 +500,12 @@ export default function TrackingTelemetryHubEnhanced() {
           <TabsContent value="alerts" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <TrackingAlerts />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="geofence" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <VesselAlertsCenter />
             </Suspense>
           </TabsContent>
 

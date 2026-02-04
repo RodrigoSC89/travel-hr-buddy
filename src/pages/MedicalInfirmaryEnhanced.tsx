@@ -3,7 +3,7 @@
  * PATCH PREMIUM-2.0
  */
 
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +14,12 @@ import {
   Stethoscope, Heart, Users, Pill, FileText, 
   AlertTriangle, Activity, Brain, Calendar,
   Plus, Search, Clock, CheckCircle, TrendingUp,
-  ThermometerSun, Syringe, Clipboard, Phone
+  ThermometerSun, Syringe, Clipboard, Phone, Loader2, Video
 } from "lucide-react";
 import { toast } from "sonner";
+
+// Lazy load premium component
+const MedicalDashboard = lazy(() => import("@/modules/medical-infirmary/components/MedicalDashboard"));
 
 const healthStats = [
   { id: "crew", label: "Tripulantes Ativos", value: 247, icon: Users, color: "primary" },
@@ -124,8 +127,12 @@ export default function MedicalInfirmaryEnhanced() {
           ))}
         </div>
 
-        <Tabs defaultValue="consultations" className="space-y-6">
+        <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Dashboard
+            </TabsTrigger>
             <TabsTrigger value="consultations" className="flex items-center gap-2">
               <Stethoscope className="h-4 w-4" />
               Atendimentos
@@ -139,11 +146,27 @@ export default function MedicalInfirmaryEnhanced() {
               <Calendar className="h-4 w-4" />
               Exames
             </TabsTrigger>
+            <TabsTrigger value="telemedicine" className="flex items-center gap-2">
+              <Video className="h-4 w-4" />
+              Telemedicina
+            </TabsTrigger>
             <TabsTrigger value="emergency" className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" />
               Emergência
             </TabsTrigger>
           </TabsList>
+
+          {/* Dashboard Premium */}
+          <TabsContent value="dashboard">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando dashboard...</span>
+              </div>
+            }>
+              <MedicalDashboard />
+            </Suspense>
+          </TabsContent>
 
           {/* Atendimentos */}
           <TabsContent value="consultations">
