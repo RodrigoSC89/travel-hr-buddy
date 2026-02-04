@@ -1,0 +1,160 @@
+/**
+ * ESG & Emissions Premium - Centro de Sustentabilidade Completo
+ * Integra todos os componentes ESG com monitoramento amançado
+ */
+
+import React, { Suspense, lazy } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { 
+  LayoutDashboard, Leaf, Factory, Droplets, Fuel,
+  Globe, BarChart3, FileText, Settings, Shield
+} from "lucide-react";
+
+// Lazy load components
+const ESGCommandCenter = lazy(() => import("@/modules/esg-emissions/components/ESGCommandCenter"));
+const CarbonTrackingPanel = lazy(() => import("@/modules/esg-emissions/components/CarbonTrackingPanel"));
+const MARPOLCompliancePanel = lazy(() => import("@/modules/esg-emissions/components/MARPOLCompliancePanel"));
+const ESGFuelOptimizationPanel = lazy(() => import("@/modules/esg-emissions/components/ESGFuelOptimizationPanel"));
+const SocialSustainabilityPanel = lazy(() => import("@/modules/esg-emissions/components/SocialSustainabilityPanel"));
+const GovernanceESGPanel = lazy(() => import("@/modules/esg-emissions/components/GovernanceESGPanel"));
+const ESGAnalyticsBenchmark = lazy(() => import("@/modules/esg-emissions/components/ESGAnalyticsBenchmark"));
+const ESGReports = lazy(() => import("@/modules/esg-emissions/components/ESGReports").then(m => ({ default: m.ESGReports })));
+const ESGSettings = lazy(() => import("@/modules/esg-emissions/components/ESGSettings").then(m => ({ default: m.ESGSettings })));
+
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-6 gap-4">
+        {[...Array(6)].map((_, i) => (
+          <Skeleton key={i} className="h-24" />
+        ))}
+      </div>
+      <Skeleton className="h-96" />
+    </div>
+  );
+}
+
+export default function ESGEmissionsPremium() {
+  return (
+    <div className="container mx-auto py-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-3">
+            <Leaf className="h-8 w-8 text-green-500" />
+            ESG & Emissões
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Monitoramento ambiental, Carbon Footprint e Compliance IMO/MARPOL
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-green-500/10 text-green-600">
+            CII Rating: B
+          </Badge>
+          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600">
+            87/100 ESG Score
+          </Badge>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <Tabs defaultValue="command" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-9 h-auto p-1">
+          <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
+            <LayoutDashboard className="h-4 w-4" />
+            <span className="text-xs">Comando</span>
+          </TabsTrigger>
+          <TabsTrigger value="carbon" className="flex flex-col items-center gap-1 py-2">
+            <Factory className="h-4 w-4" />
+            <span className="text-xs">Carbono</span>
+          </TabsTrigger>
+          <TabsTrigger value="marpol" className="flex flex-col items-center gap-1 py-2">
+            <Globe className="h-4 w-4" />
+            <span className="text-xs">MARPOL</span>
+          </TabsTrigger>
+          <TabsTrigger value="fuel" className="flex flex-col items-center gap-1 py-2">
+            <Fuel className="h-4 w-4" />
+            <span className="text-xs">Combustível</span>
+          </TabsTrigger>
+          <TabsTrigger value="social" className="flex flex-col items-center gap-1 py-2">
+            <Droplets className="h-4 w-4" />
+            <span className="text-xs">Social</span>
+          </TabsTrigger>
+          <TabsTrigger value="governance" className="flex flex-col items-center gap-1 py-2">
+            <Shield className="h-4 w-4" />
+            <span className="text-xs">Governança</span>
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex flex-col items-center gap-1 py-2">
+            <BarChart3 className="h-4 w-4" />
+            <span className="text-xs">Analytics</span>
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="flex flex-col items-center gap-1 py-2">
+            <FileText className="h-4 w-4" />
+            <span className="text-xs">Relatórios</span>
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="flex flex-col items-center gap-1 py-2">
+            <Settings className="h-4 w-4" />
+            <span className="text-xs">Config</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="command">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ESGCommandCenter />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="carbon">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <CarbonTrackingPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="marpol">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MARPOLCompliancePanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="fuel">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ESGFuelOptimizationPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="social">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <SocialSustainabilityPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="governance">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <GovernanceESGPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ESGAnalyticsBenchmark />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ESGReports />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="settings">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ESGSettings />
+          </Suspense>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
