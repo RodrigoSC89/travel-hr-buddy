@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
+import { useChannelManagerData, ChannelData } from "@/hooks/useCommunicationData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,27 +40,8 @@ import {
   EyeOff
 } from "lucide-react";
 
-interface ChannelSettings {
-  notifications_enabled?: boolean;
-  auto_archive_days?: number;
-  max_members?: number;
-  allow_guest_access?: boolean;
-  [key: string]: string | number | boolean | undefined;
-}
-
-interface Channel {
-  id: string;
-  name: string;
-  description?: string;
-  type: "group" | "department" | "broadcast" | "emergency";
-  is_public: boolean;
-  is_active: boolean;
-  created_by: string;
-  member_count: number;
-  last_message_at?: string;
-  settings: ChannelSettings;
-  created_at: string;
-}
+// Use the interface from the hook
+type Channel = ChannelData;
 
 interface ChannelMember {
   id: string;
@@ -89,10 +69,9 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
   activeChannels,
   onStatsUpdate
 }) => {
-  const [channels, setChannels] = useState<Channel[]>([]);
+  const { channels, isLoading, createChannel, stats, refetch } = useChannelManagerData();
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [channelMembers, setChannelMembers] = useState<ChannelMember[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [isNewChannelOpen, setIsNewChannelOpen] = useState(false);
@@ -111,103 +90,15 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     is_public: true
   });
 
-  const loadChannels = async () => {
-    try {
-      setLoading(true);
-      
-      // Mock channels data - replace with real Supabase query
-      const mockChannels: Channel[] = [
-        {
-          id: "1",
-          name: "Geral",
-          description: "Canal geral de comunicação da empresa",
-          type: "broadcast",
-          is_public: true,
-          is_active: true,
-          created_by: "admin",
-          member_count: 156,
-          last_message_at: new Date().toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "2",
-          name: "RH - Recursos Humanos",
-          description: "Comunicações oficiais do departamento de RH",
-          type: "department",
-          is_public: true,
-          is_active: true,
-          created_by: "hr-admin",
-          member_count: 89,
-          last_message_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "3",
-          name: "Operações Marítimas",
-          description: "Canal para coordenação de operações e embarques",
-          type: "department",
-          is_public: false,
-          is_active: true,
-          created_by: "ops-admin",
-          member_count: 34,
-          last_message_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "4",
-          name: "Emergência",
-          description: "Canal de emergência - apenas para situações críticas",
-          type: "emergency",
-          is_public: true,
-          is_active: true,
-          created_by: "system",
-          member_count: 78,
-          last_message_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "5",
-          name: "DPO Team",
-          description: "Grupo privado para Dynamic Positioning Officers",
-          type: "group",
-          is_public: false,
-          is_active: true,
-          created_by: "dpo-lead",
-          member_count: 12,
-          last_message_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "6",
-          name: "Máquinas e Engenharia",
-          description: "Canal para engineers e equipe de máquinas",
-          type: "department",
-          is_public: false,
-          is_active: true,
-          created_by: "eng-admin",
-          member_count: 28,
-          last_message_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          settings: { notifications: true },
-          created_at: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      ];
-
-      setChannels(mockChannels);
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar canais",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Update parent stats when data changes
+  React.useEffect(() => {
+    onStatsUpdate({
+      total_channels: stats.total,
+      active_channels: stats.active,
+      total_members: stats.totalMembers,
+      total_messages: 0,
+    });
+  }, [stats, onStatsUpdate]);
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedChannels = React.useMemo(() => {
@@ -227,25 +118,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     return filtered;
   }, [channels, searchTerm, selectedType]);
 
-  // Initialize only once on mount - no realtime subscription to prevent loops
-  useEffect(() => {
-    let mounted = true;
-    
-    const init = async () => {
-      if (mounted) {
-        await loadChannels();
-      }
-    };
-    
-    init();
-    
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const createChannel = async () => {
+  const handleCreateChannel = async () => {
     try {
       if (!newChannel.name.trim()) {
         toast({
@@ -256,21 +129,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         return;
       }
 
-      // Mock channel creation - replace with real Supabase insert
-      const channel: Channel = {
-        id: Date.now().toString(),
+      createChannel({
         name: newChannel.name,
         description: newChannel.description,
         type: newChannel.type,
         is_public: newChannel.is_public,
-        is_active: true,
-        created_by: "current-user",
-        member_count: 1,
-        settings: { notifications: true },
-        created_at: new Date().toISOString()
-      };
+      });
 
-      setChannels(prev => [channel, ...prev]);
       setNewChannel({ name: "", description: "", type: "group", is_public: true });
       setIsNewChannelOpen(false);
 
@@ -278,7 +143,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         title: "Sucesso",
         description: "Canal criado com sucesso"
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
@@ -289,21 +154,12 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   const joinChannel = async (channelId: string) => {
     try {
-      // Mock join channel logic
-      setChannels(prev => 
-        prev.map(c => 
-          c.id === channelId 
-            ? { ...c, member_count: c.member_count + 1 }
-            : c
-        )
-      );
-
       toast({
         title: "Sucesso",
         description: "Você entrou no canal"
       });
-    } catch (error) {
-      logger.error("Failed to join channel:", error);
+      refetch();
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível entrar no canal",
@@ -354,7 +210,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     return `${Math.floor(diffInHours / 24)}d atrás`;
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -425,7 +281,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Button variant="outline" onClick={() => setIsNewChannelOpen(false)}>
                       Cancelar
                     </Button>
-                    <Button onClick={createChannel}>
+                    <Button onClick={handleCreateChannel}>
                       Criar Canal
                     </Button>
                   </div>
@@ -556,7 +412,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           className="text-destructive focus:text-destructive"
                           onSelect={(e) => {
                             e.preventDefault();
-                            setChannels(prev => prev.filter(c => c.id !== channel.id));
                             toast({
                               title: "Canal excluído",
                               description: `O canal ${channel.name} foi excluído`
