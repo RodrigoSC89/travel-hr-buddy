@@ -275,13 +275,13 @@ const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
 const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAIPage"));
 
 // ============================================
-// UNIFIED HUBS - PROMPT MASTER V4.1
+// UNIFIED HUBS - PROMPT MASTER V4.1 (ENHANCED)
 // ============================================
-const OperationsCommandHub = lazy(() => import("@/pages/OperationsCommandHub"));
-const AIControlTowerHub = lazy(() => import("@/pages/AIControlTowerHub"));
-const PeopleHub = lazy(() => import("@/pages/PeopleHub"));
-const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryHub"));
-const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHub"));
+const OperationsCommandHub = lazy(() => import("@/pages/OperationsCommandHubEnhanced"));
+const AIControlTowerHub = lazy(() => import("@/pages/AIControlTowerHubEnhanced"));
+const PeopleHub = lazy(() => import("@/pages/PeopleHubEnhanced"));
+const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryHubEnhanced"));
+const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHubEnhanced"));
 const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
 const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
 const ComplianceHubPage = lazy(() => import("@/pages/ComplianceHubPage"));

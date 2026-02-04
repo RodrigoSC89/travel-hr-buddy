@@ -22,13 +22,15 @@ interface AlertAction {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary';
 }
 
-interface ActionableAlertProps {
+export interface ActionableAlertProps {
   id: string;
   title: string;
-  message: string;
-  severity: 'critical' | 'warning' | 'info' | 'success';
+  message?: string;
+  description?: string;
+  severity: 'critical' | 'high' | 'warning' | 'medium' | 'info' | 'success';
   timestamp?: Date;
   source?: string;
+  module?: string;
   actions?: AlertAction[];
   onDismiss?: (id: string) => void;
   className?: string;
@@ -38,43 +40,65 @@ export const ActionableAlert: React.FC<ActionableAlertProps> = ({
   id,
   title,
   message,
+  description,
   severity,
   timestamp,
   source,
+  module,
   actions = [],
   onDismiss,
   className
 }) => {
+  const displayMessage = message || description || '';
+  const displaySource = source || module;
+
   const getSeverityConfig = () => {
     switch (severity) {
       case 'critical':
+      case 'high':
         return {
           icon: <AlertTriangle className="h-5 w-5" />,
-          bg: 'bg-red-500/10 border-red-500/30',
-          iconColor: 'text-red-500',
-          badgeClass: 'bg-red-500 text-white'
+          bg: 'bg-destructive/10 border-destructive/30',
+          iconColor: 'text-destructive',
+          badgeClass: 'bg-destructive text-destructive-foreground'
         };
       case 'warning':
+      case 'medium':
         return {
           icon: <AlertCircle className="h-5 w-5" />,
           bg: 'bg-yellow-500/10 border-yellow-500/30',
-          iconColor: 'text-yellow-500',
-          badgeClass: 'bg-yellow-500 text-black'
+          iconColor: 'text-yellow-600 dark:text-yellow-400',
+          badgeClass: 'bg-yellow-500 text-yellow-950'
         };
       case 'success':
         return {
           icon: <CheckCircle className="h-5 w-5" />,
           bg: 'bg-green-500/10 border-green-500/30',
-          iconColor: 'text-green-500',
+          iconColor: 'text-green-600 dark:text-green-400',
           badgeClass: 'bg-green-500 text-white'
         };
       default:
         return {
           icon: <Info className="h-5 w-5" />,
           bg: 'bg-blue-500/10 border-blue-500/30',
-          iconColor: 'text-blue-500',
+          iconColor: 'text-blue-600 dark:text-blue-400',
           badgeClass: 'bg-blue-500 text-white'
         };
+    }
+  };
+
+  const getSeverityLabel = () => {
+    switch (severity) {
+      case 'critical':
+      case 'high':
+        return 'Crítico';
+      case 'warning':
+      case 'medium':
+        return 'Atenção';
+      case 'success':
+        return 'Sucesso';
+      default:
+        return 'Info';
     }
   };
 
@@ -104,12 +128,12 @@ export const ActionableAlert: React.FC<ActionableAlertProps> = ({
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-semibold text-sm">{title}</h4>
                     <Badge className={cn("text-xs", config.badgeClass)}>
-                      {severity === 'critical' ? 'Crítico' : 
-                       severity === 'warning' ? 'Atenção' :
-                       severity === 'success' ? 'Sucesso' : 'Info'}
+                      {getSeverityLabel()}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{message}</p>
+                  {displayMessage && (
+                    <p className="text-sm text-muted-foreground">{displayMessage}</p>
+                  )}
                 </div>
                 
                 {onDismiss && (
@@ -132,7 +156,7 @@ export const ActionableAlert: React.FC<ActionableAlertProps> = ({
                       {formatDistanceToNow(timestamp, { addSuffix: true, locale: ptBR })}
                     </span>
                   )}
-                  {source && <span>• {source}</span>}
+                  {displaySource && <span>• {displaySource}</span>}
                 </div>
 
                 {actions.length > 0 && (
@@ -164,9 +188,21 @@ export const ActionableAlertList: React.FC<{
   alerts: ActionableAlertProps[];
   onDismiss?: (id: string) => void;
   maxVisible?: number;
+  emptyMessage?: string;
   className?: string;
-}> = ({ alerts, onDismiss, maxVisible = 5, className }) => {
+}> = ({ alerts, onDismiss, maxVisible = 5, emptyMessage = "Nenhum alerta pendente.", className }) => {
   const visibleAlerts = alerts.slice(0, maxVisible);
+
+  if (alerts.length === 0) {
+    return (
+      <Card className="border-dashed">
+        <CardContent className="p-6 text-center text-muted-foreground">
+          <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+          <p>{emptyMessage}</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className={cn("space-y-3", className)}>
