@@ -26,7 +26,7 @@
  * - Tarefas de manutenção
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,8 +34,8 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Wrench, Calendar, CheckCircle, AlertTriangle, Plus, Download, 
   Bell, Bot, Ship, Activity, LayoutGrid, Clock, FileText, Box,
-  BarChart3, Sparkles, History, TrendingUp, Target, Settings,
-  Zap, Shield, Search, Filter, RefreshCw, Brain
+  BarChart3, Sparkles, History, TrendingUp, Target,
+  Zap, Brain
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -66,6 +66,9 @@ import { logger } from '@/lib/logger';
 // Premium Maintenance Command Center
 import MaintenanceCommandDashboard from "@/modules/maintenance-planner/components/MaintenanceCommandCenter";
 
+// Data hook - importação estática correta
+import { useMaintenanceCommandData } from "@/hooks/useMaintenanceCommandData";
+
 interface MaintenanceStats {
   scheduled: number;
   completed: number;
@@ -82,8 +85,7 @@ const MaintenanceCommandCenter = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Import real data hook
-  const { useMaintenanceCommandData } = require("@/hooks/useMaintenanceCommandData");
+  // Hook de dados - chamado no topo do componente
   const {
     tasks,
     equipment,
