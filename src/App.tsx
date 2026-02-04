@@ -118,6 +118,13 @@ const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
 const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
 const EnhancedWasteManagement = lazy(() => import("@/modules/waste-management/EnhancedWasteManagement"));
 
+// PATCH PREMIUM-2.0 - Módulos Aprimorados
+const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
+const SystemHubAprimorado = lazy(() => import("@/pages/SystemHubAprimorado"));
+const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
+const WasteManagementEnhanced = lazy(() => import("@/pages/WasteManagementEnhanced"));
+const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanced"));
+
 // ============================================
 // MANUTENÇÃO
 // ============================================
