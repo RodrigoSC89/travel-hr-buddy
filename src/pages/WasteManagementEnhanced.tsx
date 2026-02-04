@@ -3,7 +3,7 @@
  * PATCH PREMIUM-2.0
  */
 
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +12,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Recycle, Droplets, Trash2, FileText, Leaf,
   AlertTriangle, TrendingDown, MapPin, Calendar,
-  CheckCircle, Brain, Plus, Download, BarChart3
+  CheckCircle, Brain, Plus, Download, BarChart3, Loader2, ClipboardList
 } from "lucide-react";
 import { toast } from "sonner";
+
+// Lazy load premium component
+const WasteManagementDashboard = lazy(() => import("@/modules/waste-management/components/WasteManagementDashboard"));
 
 const wasteKPIs = [
   { id: "compliance", label: "Conformidade MARPOL", value: "100%", icon: CheckCircle, color: "success" },
@@ -115,26 +118,46 @@ export default function WasteManagementEnhanced() {
           ))}
         </div>
 
-        <Tabs defaultValue="tanks" className="space-y-6">
+        <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Dashboard
+            </TabsTrigger>
             <TabsTrigger value="tanks" className="flex items-center gap-2">
               <Droplets className="h-4 w-4" />
               Tanques
               <Badge variant="destructive" className="h-5 w-5 p-0 text-[10px]">1</Badge>
             </TabsTrigger>
+            <TabsTrigger value="orb" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Oil Record Book
+            </TabsTrigger>
+            <TabsTrigger value="grb" className="flex items-center gap-2">
+              <ClipboardList className="h-4 w-4" />
+              Garbage Record
+            </TabsTrigger>
             <TabsTrigger value="records" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              Record Books
+              Histórico
             </TabsTrigger>
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               MARPOL
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Analytics
-            </TabsTrigger>
           </TabsList>
+
+          {/* Dashboard Premium */}
+          <TabsContent value="dashboard">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando dashboard...</span>
+              </div>
+            }>
+              <WasteManagementDashboard />
+            </Suspense>
+          </TabsContent>
 
           {/* Tanques */}
           <TabsContent value="tanks">
