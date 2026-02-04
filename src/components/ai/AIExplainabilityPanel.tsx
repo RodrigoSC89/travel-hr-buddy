@@ -47,13 +47,18 @@ interface InfluenceFactors {
   impact: 'positive' | 'negative' | 'neutral';
 }
 
-const SAMPLE_FACTORS: InfluenceFactors[] = [
-  { name: 'Histórico de Incidentes', weight: 35, impact: 'positive' },
-  { name: 'Dados de Sensor IoT', weight: 25, impact: 'positive' },
-  { name: 'Padrões de Manutenção', weight: 20, impact: 'neutral' },
-  { name: 'Condições Climáticas', weight: 15, impact: 'negative' },
-  { name: 'Feedback Anterior', weight: 5, impact: 'positive' },
-];
+// ✅ P0: Removed static SAMPLE_FACTORS - now dynamically generated from decision evidence
+const generateInfluenceFactors = (decision: AIDecision | null): InfluenceFactors[] => {
+  if (!decision?.justification_evidence || !Array.isArray(decision.justification_evidence)) {
+    return [];
+  }
+  
+  return decision.justification_evidence.map((evidence, index) => ({
+    name: String(evidence.name || evidence.factor || `Fator ${index + 1}`),
+    weight: Number(evidence.weight || evidence.importance || Math.max(10, 100 - index * 15)),
+    impact: (evidence.impact as InfluenceFactors['impact']) || 'neutral',
+  }));
+};
 
 export function AIExplainabilityPanel() {
   const [decisions, setDecisions] = useState<AIDecision[]>([]);
@@ -96,45 +101,10 @@ export function AIExplainabilityPanel() {
         setSelectedDecision(mappedDecisions[0]);
       }
     } catch (error) {
-      // Use sample data if table doesn't exist
-      const sampleDecisions: AIDecision[] = [
-        {
-          id: '1',
-          title: 'Alerta de Manutenção Preventiva',
-          description: 'Motor principal do Navio A apresenta sinais de degradação',
-          confidence: 87,
-          type: 'maintenance',
-          status: 'executed',
-          created_at: new Date().toISOString(),
-          justification_reasoning: 'Análise de vibração e temperatura indicam desgaste acima do normal nos rolamentos. Padrão similar a falhas anteriores detectadas.',
-          justification_risks: ['Falha em alto mar', 'Custo de reparo emergencial 3x maior'],
-          feedback_was_correct: true
-        },
-        {
-          id: '2',
-          title: 'Otimização de Rota',
-          description: 'Sugestão de rota alternativa para economia de combustível',
-          confidence: 72,
-          type: 'optimization',
-          status: 'approved',
-          created_at: new Date(Date.now() - 86400000).toISOString(),
-          justification_reasoning: 'Condições de vento e corrente favorecem rota sul. Economia estimada de 12% no consumo.',
-          justification_risks: ['Atraso de 2h no ETA']
-        },
-        {
-          id: '3',
-          title: 'Alerta de Compliance',
-          description: 'Certificado STCW de tripulante vence em 30 dias',
-          confidence: 95,
-          type: 'compliance',
-          status: 'pending',
-          created_at: new Date(Date.now() - 172800000).toISOString(),
-          justification_reasoning: 'Verificação automática de validade de documentos detectou proximidade do vencimento.',
-          justification_risks: ['Tripulante não poderá embarcar', 'Multa por não conformidade']
-        }
-      ];
-      setDecisions(sampleDecisions);
-      setSelectedDecision(sampleDecisions[0]);
+      // ✅ P0: No fallback mock data - show empty state instead
+      console.warn('Failed to load AI decisions:', error);
+      setDecisions([]);
+      setSelectedDecision(null);
     } finally {
       setLoading(false);
     }
@@ -300,34 +270,49 @@ export function AIExplainabilityPanel() {
                     Fatores de Influência
                   </h4>
                   
-                  <div className="space-y-3">
-                    {SAMPLE_FACTORS.map((factor, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm">{factor.name}</span>
-                            <div className="flex items-center gap-2">
-                              {factor.impact === 'positive' && (
-                                <TrendingUp className="h-4 w-4 text-green-500" />
-                              )}
-                              {factor.impact === 'negative' && (
-                                <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />
-                              )}
-                              <span className="text-sm font-medium">{factor.weight}%</span>
+                  {(() => {
+                    const factors = generateInfluenceFactors(selectedDecision);
+                    if (factors.length === 0) {
+                      return (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <BarChart3 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">Nenhum fator de influência registrado para esta decisão.</p>
+                          <p className="text-xs mt-1">Fatores são extraídos das evidências da decisão.</p>
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <div className="space-y-3">
+                        {factors.map((factor, i) => (
+                          <div key={i} className="flex items-center gap-3">
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-sm">{factor.name}</span>
+                                <div className="flex items-center gap-2">
+                                  {factor.impact === 'positive' && (
+                                    <TrendingUp className="h-4 w-4 text-green-500" />
+                                  )}
+                                  {factor.impact === 'negative' && (
+                                    <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />
+                                  )}
+                                  <span className="text-sm font-medium">{factor.weight}%</span>
+                                </div>
+                              </div>
+                              <Progress 
+                                value={factor.weight} 
+                                className={cn(
+                                  factor.impact === 'positive' && '[&>div]:bg-green-500',
+                                  factor.impact === 'negative' && '[&>div]:bg-red-500',
+                                  factor.impact === 'neutral' && '[&>div]:bg-gray-500'
+                                )}
+                              />
                             </div>
                           </div>
-                          <Progress 
-                            value={factor.weight} 
-                            className={cn(
-                              factor.impact === 'positive' && '[&>div]:bg-green-500',
-                              factor.impact === 'negative' && '[&>div]:bg-red-500',
-                              factor.impact === 'neutral' && '[&>div]:bg-gray-500'
-                            )}
-                          />
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })()}
                 </div>
               </TabsContent>
 

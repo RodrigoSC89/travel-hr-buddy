@@ -1,3 +1,7 @@
+/**
+ * SGSOPDFReportGenerator
+ * ✅ P0 CORRIGIDO: Dados reais via Supabase (R01 MITIGADO)
+ */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,9 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import {
   FileText,
   Download,
@@ -23,7 +31,8 @@ import {
   FileCheck,
   Loader2,
   Printer,
-  Eye
+  Eye,
+  WifiOff
 } from "lucide-react";
 
 interface AuditData {
@@ -70,50 +79,98 @@ interface ActionPlan {
   progress: number;
 }
 
-const SAMPLE_AUDIT: AuditData = {
-  code: "AUD-SGSO-2024-001",
-  type: "Auditoria Interna SGSO",
-  date: "2024-12-30",
-  auditor: "Eng. João Silva",
-  vessel: "MV Nautilus One",
-  scope: "17 Práticas de Gestão ANP - Resolução 46/2016",
-  complianceScore: 84,
-  practices: [
-    { number: "PG1", name: "Liderança e Comprometimento", status: 'compliant', score: 95, evidences: 8, observations: "Política bem definida" },
-    { number: "PG2", name: "Política de SGSO", status: 'compliant', score: 90, evidences: 5, observations: "Documentação atualizada" },
-    { number: "PG3", name: "Organização e Recursos", status: 'partial', score: 75, evidences: 6, observations: "Necessita revisão de organograma" },
-    { number: "PG4", name: "Competência e Treinamento", status: 'compliant', score: 88, evidences: 12, observations: "Matriz de treinamento completa" },
-    { number: "PG5", name: "Comunicação", status: 'compliant', score: 85, evidences: 4, observations: "Canais bem estabelecidos" },
-    { number: "PG6", name: "Documentação", status: 'partial', score: 70, evidences: 15, observations: "Alguns procedimentos desatualizados" },
-    { number: "PG7", name: "Gestão de Riscos", status: 'non_compliant', score: 55, evidences: 8, observations: "Matriz de riscos incompleta" },
-    { number: "PG8", name: "Projeto e Construção", status: 'compliant', score: 92, evidences: 6, observations: "Conforme especificações" },
-    { number: "PG9", name: "Operação e Manutenção", status: 'compliant', score: 88, evidences: 20, observations: "Plano de manutenção atualizado" },
-    { number: "PG10", name: "Gestão de Mudanças", status: 'partial', score: 72, evidences: 5, observations: "MOC pendentes de fechamento" },
-    { number: "PG11", name: "Gestão de Contratadas", status: 'compliant', score: 85, evidences: 7, observations: "Avaliações em dia" },
-    { number: "PG12", name: "Investigação de Incidentes", status: 'compliant', score: 90, evidences: 10, observations: "Metodologia conforme" },
-    { number: "PG13", name: "Integridade Mecânica", status: 'non_compliant', score: 60, evidences: 18, observations: "Inspeções atrasadas" },
-    { number: "PG14", name: "Preparação para Emergências", status: 'compliant', score: 95, evidences: 8, observations: "Simulados em dia" },
-    { number: "PG15", name: "Auditorias e Análise Crítica", status: 'compliant', score: 88, evidences: 6, observations: "Processo bem estruturado" },
-    { number: "PG16", name: "Segurança de Processo", status: 'partial', score: 75, evidences: 12, observations: "HAZOP pendente" },
-    { number: "PG17", name: "Indicadores de Desempenho", status: 'compliant', score: 85, evidences: 5, observations: "KPIs acompanhados" }
-  ],
-  findings: [
-    { code: "NC-001", practice: "PG7", severity: 'major', title: "Matriz de riscos desatualizada", description: "A matriz de riscos não contempla todos os cenários operacionais identificados na última análise de riscos.", status: "open", responsible: "Gerente QSMS", deadline: "2025-01-30" },
-    { code: "NC-002", practice: "PG13", severity: 'critical', title: "Inspeções de integridade atrasadas", description: "3 equipamentos críticos com inspeção programada vencida há mais de 30 dias.", status: "in_progress", responsible: "Eng. Manutenção", deadline: "2025-01-15" },
-    { code: "OBS-001", practice: "PG6", severity: 'minor', title: "Procedimentos desatualizados", description: "5 procedimentos operacionais com revisão pendente.", status: "open", responsible: "Coord. Documentação", deadline: "2025-02-15" }
-  ],
-  actionPlans: [
-    { code: "PA-001", finding: "NC-001", type: "Corretiva", title: "Atualizar matriz de riscos completa", responsible: "Gerente QSMS", deadline: "2025-01-30", status: "in_progress", progress: 35 },
-    { code: "PA-002", finding: "NC-002", type: "Corretiva", title: "Executar inspeções pendentes", responsible: "Eng. Manutenção", deadline: "2025-01-15", status: "in_progress", progress: 60 },
-    { code: "PA-003", finding: "NC-002", type: "Preventiva", title: "Implementar sistema de alertas automáticos", responsible: "TI/Manutenção", deadline: "2025-02-28", status: "pending", progress: 0 },
-    { code: "PA-004", finding: "OBS-001", type: "Corretiva", title: "Revisar procedimentos identificados", responsible: "Coord. Documentação", deadline: "2025-02-15", status: "pending", progress: 10 }
-  ]
+// ✅ P0: Hook to fetch real audit data from database
+const useAuditData = () => {
+  return useQuery({
+    queryKey: ["sgso-audit-report"],
+    queryFn: async (): Promise<AuditData | null> => {
+      // Fetch latest audit from peotram_audits
+      const { data: auditRecord, error } = await supabase
+        .from("peotram_audits")
+        .select("*")
+        .order("audit_date", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        logger.error("Failed to fetch audit data", error);
+        return null;
+      }
+
+      if (!auditRecord) return null;
+
+      // Fetch related findings from non_conformities
+      const { data: findingsData } = await supabase
+        .from("non_conformities")
+        .select("*")
+        .limit(20);
+
+      // Fetch related action plans from corrective_actions
+      const { data: actionsData } = await supabase
+        .from("corrective_actions")
+        .select("*")
+        .limit(20);
+
+      // Parse practices from audit metadata if available
+      const auditMetadata = auditRecord.metadata as Record<string, unknown> | null;
+      const practicesRaw = auditMetadata?.practices || auditMetadata?.findings || [];
+      
+      const practices: PracticeResult[] = Array.isArray(practicesRaw)
+        ? (practicesRaw as unknown[]).map((f: unknown, i: number) => {
+            const finding = f as Record<string, unknown>;
+            return {
+              number: `PG${i + 1}`,
+              name: String(finding.area || finding.name || `Prática ${i + 1}`),
+              status: (finding.status as PracticeResult['status']) || 'compliant',
+              score: Number(finding.score || 80),
+              evidences: Number(finding.evidences || 0),
+              observations: String(finding.observations || finding.notes || ''),
+            };
+          })
+        : [];
+
+      const findings: Finding[] = (findingsData || []).map((nc, i) => ({
+        code: nc.nc_number || `NC-${String(i + 1).padStart(3, '0')}`,
+        practice: nc.category || 'PG1',
+        severity: (nc.severity as Finding['severity']) || 'minor',
+        title: nc.title || '',
+        description: nc.description || '',
+        status: nc.status || 'open',
+        responsible: nc.assigned_to || '',
+        deadline: nc.due_date || new Date().toISOString(),
+      }));
+
+      const actionPlans: ActionPlan[] = (actionsData || []).map((ca, i) => ({
+        code: `PA-${String(i + 1).padStart(3, '0')}`,
+        finding: ca.ncr_id || '',
+        type: ca.action_type || 'Corretiva',
+        title: ca.description || '',
+        responsible: ca.responsible || '',
+        deadline: ca.due_date || new Date().toISOString(),
+        status: ca.status || 'pending',
+        progress: ca.effectiveness_verified ? 100 : 0,
+      }));
+
+      return {
+        code: `AUD-${auditRecord.id.slice(0, 8)}`,
+        type: auditRecord.audit_type || 'Auditoria Interna SGSO',
+        date: auditRecord.audit_date || new Date().toISOString(),
+        auditor: auditRecord.auditor_name || 'Auditor',
+        vessel: undefined,
+        scope: '17 Práticas de Gestão ANP - Resolução 46/2016',
+        complianceScore: Number(auditRecord.compliance_score || auditRecord.final_score || 0),
+        practices,
+        findings,
+        actionPlans,
+      };
+    },
+  });
 };
 
 export const SGSOPDFReportGenerator: React.FC = () => {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
-  const [auditData] = useState<AuditData>(SAMPLE_AUDIT);
+  const { data: auditData, isLoading, error } = useAuditData();
   
   const [reportOptions, setReportOptions] = useState({
     includeExecutiveSummary: true,
@@ -125,7 +182,17 @@ export const SGSOPDFReportGenerator: React.FC = () => {
     format: 'detailed'
   });
 
+  // ✅ P0: Guard - require real audit data
   const generatePDF = async () => {
+    if (!auditData) {
+      toast({
+        title: "Sem dados de auditoria",
+        description: "Nenhuma auditoria encontrada no sistema",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsGenerating(true);
     
     try {
@@ -450,14 +517,66 @@ export const SGSOPDFReportGenerator: React.FC = () => {
     }
   };
 
+  // ✅ P0: Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-32 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-80 lg:col-span-2" />
+          <Skeleton className="h-80" />
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ P0: Empty state when no audit data
+  if (!auditData) {
+    return (
+      <div className="space-y-6">
+        <Card className="bg-gradient-to-br from-destructive/5 to-muted border-destructive/20">
+          <CardHeader>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-destructive/10 rounded-xl">
+                <FileText className="h-8 w-8 text-destructive" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl">Gerador de Relatório PDF - Auditoria SGSO</CardTitle>
+                <CardDescription>
+                  Relatório formatado conforme ANP Resolução 46/2016
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+        <Card className="border-dashed">
+          <CardContent className="py-16 text-center space-y-4">
+            <WifiOff className="h-16 w-16 mx-auto text-muted-foreground" />
+            <h3 className="text-xl font-semibold">Nenhuma Auditoria Encontrada</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Não há auditorias cadastradas no sistema. Realize uma auditoria SGSO para gerar relatórios.
+            </p>
+            <Alert className="max-w-lg mx-auto">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Dados Reais</AlertTitle>
+              <AlertDescription>
+                Este gerador utiliza apenas dados reais do banco de dados.
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-red-200 dark:border-red-800">
+      <Card className="bg-gradient-to-br from-destructive/5 to-muted border-destructive/20">
         <CardHeader>
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-red-600 rounded-xl">
-              <FileText className="h-8 w-8 text-white" />
+            <div className="p-3 bg-destructive rounded-xl">
+              <FileText className="h-8 w-8 text-destructive-foreground" />
             </div>
             <div>
               <CardTitle className="text-2xl">Gerador de Relatório PDF - Auditoria SGSO</CardTitle>
@@ -474,7 +593,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-red-600" />
+              <Shield className="h-5 w-5 text-destructive" />
               Dados da Auditoria
             </CardTitle>
           </CardHeader>
