@@ -14,3 +14,4 @@ export { useAIControlTowerData } from "./useAIControlTowerData";
 export { useDocumentCenterData } from "./useDocumentCenterData";
 export { useSystemHubData } from "./useSystemHubData";
 export { useWasteManagementData } from "./useWasteManagementData";
+export { useMedicalInfirmaryData } from "./useMedicalInfirmaryData";
