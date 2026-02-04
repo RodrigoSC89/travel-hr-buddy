@@ -4,7 +4,6 @@
  */
 
 // Premium Components
+export { default } from './components/PeopleCommandCenter';
+export { default as PeopleCommandCenter } from './components/PeopleCommandCenter';
 export { default as CompetencyMatrix } from './components/CompetencyMatrix';
-
-// Re-export types if needed
-export type { } from './types';
