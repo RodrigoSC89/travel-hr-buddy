@@ -19,7 +19,7 @@ import {
   Briefcase, TrendingUp, Cpu, Mic, AlertTriangle, HardDrive,
   DollarSign, Leaf, ClipboardList, Database, Radar, Cloud,
   Gamepad2, Calendar, Server, Radio, Globe, Plane, Thermometer,
-  ShoppingCart, Lock, GraduationCap
+  ShoppingCart, Lock, GraduationCap, Trash2, Fuel, Stethoscope
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -97,6 +97,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧" },
       { label: "Manutenção Preditiva", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML" },
       { label: "Digital Twin 3D", path: "/digital-twin", icon: Cpu, emoji: "🎮" },
+      { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🔩" },
+      { label: "Combustível", path: "/fuel-management", icon: Fuel, emoji: "⛽" },
     ],
   },
 
@@ -128,6 +130,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Preditiva", path: "/tracking-telemetry?tab=predictive", icon: TrendingUp, emoji: "📈" },
       { label: "Alertas", path: "/tracking-telemetry?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
       { label: "AIS Tracker", path: "/ais-tracker-page", icon: Ship, emoji: "🚢" },
+      { label: "SATCOM Dashboard", path: "/satcom-dashboard", icon: Radio, emoji: "📻", badge: "NEW" },
     ],
   },
 
@@ -144,6 +147,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
       { label: "Regulamentos", path: "/compliance-unified?tab=regulations", icon: BookOpen, emoji: "📜" },
       { label: "Matriz de Riscos", path: "/compliance-unified?tab=risks", icon: Target, emoji: "🎯" },
+      { label: "Gestão de Resíduos", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "MARPOL" },
       { label: "Security Center", path: "/security-center", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
     ],
   },
@@ -176,8 +180,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Bem-estar", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
       { label: "Treinamento", path: "/people-hub?tab=training", icon: GraduationCap, emoji: "🎓" },
       { label: "Analytics", path: "/people-hub?tab=analytics", icon: BarChart3, emoji: "📊" },
-      { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Heart, emoji: "🏥" },
+      { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥", badge: "MLC" },
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
+      { label: "Escalas & Rotações", path: "/crew-scheduling", icon: Calendar, emoji: "📅" },
     ],
   },
 
