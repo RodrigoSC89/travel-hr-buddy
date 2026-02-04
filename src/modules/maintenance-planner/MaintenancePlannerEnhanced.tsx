@@ -42,7 +42,6 @@ import DigitalTwin from "./components/DigitalTwin";
 
 const MaintenancePlannerEnhanced = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);
   const [showNewWorkOrder, setShowNewWorkOrder] = useState(false);
@@ -146,23 +145,7 @@ const MaintenancePlannerEnhanced = () => {
     }
   ]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="container mx-auto p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-32 bg-muted rounded-lg" />
-          <div className="grid grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => <div key={i} className="h-32 bg-muted rounded-lg" />)}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Removed artificial loading state that caused flickering
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -173,12 +156,8 @@ const MaintenancePlannerEnhanced = () => {
         steps={onboardingSteps}
       />
 
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-center justify-between gap-4"
-      >
+      {/* Header - NO motion to prevent flickering */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 border border-orange-500/20">
             <Wrench className="h-8 w-8 text-orange-500" />
@@ -193,16 +172,12 @@ const MaintenancePlannerEnhanced = () => {
           </Badge>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setLoading(true)}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Atualizar
-          </Button>
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Plano
           </Button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Quick Actions */}
       <QuickActionsBar actions={quickActions} />
@@ -433,7 +408,7 @@ const MaintenancePlannerEnhanced = () => {
         </TabsContent>
 
         <TabsContent value="tasks" className="mt-6">
-          <MaintenanceTasksTable onRefresh={() => setLoading(true)} />
+          <MaintenanceTasksTable onRefresh={() => toast.info('Dados atualizados')} />
         </TabsContent>
       </Tabs>
 
@@ -442,7 +417,6 @@ const MaintenancePlannerEnhanced = () => {
         onOpenChange={setShowCreateDialog}
         onSuccess={() => {
           toast.success('Plano criado com sucesso!');
-          setLoading(true);
         }}
       />
 
