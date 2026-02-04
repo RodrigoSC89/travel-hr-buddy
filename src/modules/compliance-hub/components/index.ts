@@ -1,3 +1,4 @@
+export { ComplianceCommandCenter } from './ComplianceCommandCenter';
 /**
  * Compliance Hub Components Index
  * Exporta todos os componentes do módulo
