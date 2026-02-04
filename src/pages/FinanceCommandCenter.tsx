@@ -42,8 +42,9 @@ import {
 } from "recharts";
 import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 import { logger } from '@/lib/logger';
+import { useFinanceCommandData } from "@/hooks/useFinanceCommandData";
 
-// Types
+// Types - definições locais compatíveis com o componente
 interface Transaction {
   id: string;
   description: string;
@@ -169,8 +170,7 @@ const FinanceCommandCenter: React.FC = () => {
   const { toast } = useToast();
   const { analyzeRouteCost, isLoading: isAILoading } = useNautilusEnhancementAI();
 
-  // Import real data hook
-  const { useFinanceCommandData } = require("@/hooks/useFinanceCommandData");
+  // Hook de dados - chamado no topo do componente
   const {
     transactions: realTransactions,
     financialSummary: realSummary,
@@ -350,9 +350,8 @@ const FinanceCommandCenter: React.FC = () => {
       description: newExpense.description,
       amount: Math.abs(parseFloat(newExpense.amount)),
       date: format(new Date(), "yyyy-MM-dd"),
-      category: newExpense.category,
       type: "expense",
-    });
+    } as any);
     
     setNewExpense({ description: "", amount: "", category: "other", notes: "" });
     setShowNewExpense(false);
@@ -378,8 +377,8 @@ const FinanceCommandCenter: React.FC = () => {
       a.click();
     } else {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
-      transactions.forEach((tx: Transaction) => {
-        csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
+      (transactions as any[]).forEach((tx) => {
+        csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category || 'other'}","${tx.status}"`);
       });
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
@@ -796,7 +795,7 @@ const FinanceCommandCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {transactions.slice(0, 5).map((tx: Transaction) => (
+                {(transactions as any[]).slice(0, 5).map((tx) => (
                   <div key={tx.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       {React.createElement(CATEGORY_ICONS[tx.category] || DollarSign, { className: "h-5 w-5 text-muted-foreground" })}
@@ -833,7 +832,7 @@ const FinanceCommandCenter: React.FC = () => {
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-2">
-                  {transactions.map((tx: Transaction) => (
+                  {(transactions as any[]).map((tx) => (
                     <div key={tx.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className={`p-2 rounded-lg ${tx.type === "income" ? "bg-green-500/20" : "bg-red-500/20"}`}>
@@ -1150,7 +1149,7 @@ const FinanceCommandCenter: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {pendingApprovals.map((approval: Transaction) => (
+                  {(pendingApprovals as any[]).map((approval) => (
                     <div key={approval.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-amber-500/20">
