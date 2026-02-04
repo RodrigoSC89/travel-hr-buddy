@@ -9,12 +9,16 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Stethoscope, Video, Pill, 
-  FileText, Heart, ShieldCheck
+  FileText, Heart, ShieldCheck, AlertTriangle, Activity
 } from "lucide-react";
 
 // Lazy load components
 const EnhancedInfirmaryDashboard = lazy(() => import("@/modules/medical-infirmary/components/EnhancedInfirmaryDashboard"));
 const TelemedicineConsult = lazy(() => import("@/modules/medical-infirmary/components/TelemedicineConsult"));
+const MedicalConsultationsTab = lazy(() => import("@/modules/medical-infirmary/components/MedicalConsultationsTab"));
+const EmergencyProtocolsPanel = lazy(() => import("@/modules/medical-infirmary/components/EmergencyProtocolsPanel"));
+const PharmacyManagementPanel = lazy(() => import("@/modules/medical-infirmary/components/PharmacyManagementPanel"));
+const SuppliesTab = lazy(() => import("@/modules/medical-infirmary/components/SuppliesTab"));
 
 function LoadingSkeleton() {
   return (
@@ -51,22 +55,30 @@ export default function MedicalInfirmaryPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-8 h-auto p-1">
           <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
             <LayoutDashboard className="h-4 w-4" />
             <span className="text-xs">Dashboard</span>
+          </TabsTrigger>
+          <TabsTrigger value="consultations" className="flex flex-col items-center gap-1 py-2">
+            <Activity className="h-4 w-4" />
+            <span className="text-xs">Atendimentos</span>
           </TabsTrigger>
           <TabsTrigger value="telemedicine" className="flex flex-col items-center gap-1 py-2">
             <Video className="h-4 w-4" />
             <span className="text-xs">Telemedicina</span>
           </TabsTrigger>
-          <TabsTrigger value="records" className="flex flex-col items-center gap-1 py-2">
-            <FileText className="h-4 w-4" />
-            <span className="text-xs">Prontuários</span>
+          <TabsTrigger value="emergency" className="flex flex-col items-center gap-1 py-2">
+            <AlertTriangle className="h-4 w-4" />
+            <span className="text-xs">Emergência</span>
           </TabsTrigger>
           <TabsTrigger value="pharmacy" className="flex flex-col items-center gap-1 py-2">
             <Pill className="h-4 w-4" />
             <span className="text-xs">Farmácia</span>
+          </TabsTrigger>
+          <TabsTrigger value="records" className="flex flex-col items-center gap-1 py-2">
+            <FileText className="h-4 w-4" />
+            <span className="text-xs">Prontuários</span>
           </TabsTrigger>
           <TabsTrigger value="wellness" className="flex flex-col items-center gap-1 py-2">
             <Heart className="h-4 w-4" />
@@ -84,26 +96,34 @@ export default function MedicalInfirmaryPremium() {
           </Suspense>
         </TabsContent>
 
+        <TabsContent value="consultations">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MedicalConsultationsTab />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="telemedicine">
           <Suspense fallback={<LoadingSkeleton />}>
             <TelemedicineConsult />
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="records">
-          <div className="text-center py-12 text-muted-foreground">
-            <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Prontuários Eletrônicos</p>
-            <p className="text-sm">Histórico médico da tripulação</p>
-          </div>
+        <TabsContent value="emergency">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <EmergencyProtocolsPanel />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="pharmacy">
-          <div className="text-center py-12 text-muted-foreground">
-            <Pill className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Gestão de Farmácia</p>
-            <p className="text-sm">Estoque, validades e dispensação</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <PharmacyManagementPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="records">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <SuppliesTab />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="wellness">
