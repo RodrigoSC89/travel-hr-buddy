@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -10,10 +10,14 @@ import { useSystemActions } from "@/hooks/use-system-actions";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { SEOWrapper } from "@/components/layout/seo-wrapper";
-import { OfflineIndicator } from "@/components/ui/offline-indicator";
 import GlobalSearch from "@/components/ui/global-search";
 
 import EnhancedNotifications from "@/components/ui/enhanced-notifications";
+
+// Lazy load offline components
+const OfflineStatusBar = lazy(() => 
+  import('@/components/offline/OfflineStatusBar').then(m => ({ default: m.OfflineStatusBar }))
+);
 
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -24,7 +28,10 @@ export const AppLayout: FC = () => {
       <SEOWrapper>
         <SidebarProvider defaultOpen={true}>
           <div className="min-h-screen flex w-full bg-background">
-            <OfflineIndicator />
+            {/* Offline Status Bar */}
+            <Suspense fallback={null}>
+              <OfflineStatusBar position="bottom" />
+            </Suspense>
             
             {/* Sidebar - renders as Sheet on mobile, fixed on desktop */}
             <AppSidebar />
