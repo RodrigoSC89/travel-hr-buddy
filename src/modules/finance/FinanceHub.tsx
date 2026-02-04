@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity, Brain } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity, Brain, HelpCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -13,6 +13,9 @@ import { FinanceAIPanel } from "./components/FinanceAIPanel";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { logger } from '@/lib/logger';
+import { ModuleOnboarding, QuickActionsBar } from "@/components/ux/ModuleOnboarding";
+import { InteractiveKPICard, KPIGrid } from "@/components/ux/InteractiveKPICard";
+import { toast } from "sonner";
 
 interface Transaction {
   id: string;

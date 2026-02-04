@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Stethoscope, LayoutDashboard, Users, Pill, FileText, Brain, ClipboardList } from "lucide-react";
-import InfirmaryDashboard from "./components/InfirmaryDashboard";
+import EnhancedInfirmaryDashboard from "./components/EnhancedInfirmaryDashboard";
 import CrewHealthTab from "./components/CrewHealthTab";
 import SuppliesTab from "./components/SuppliesTab";
 import RecordsTab from "./components/RecordsTab";
@@ -59,7 +59,7 @@ export default function MedicalInfirmary() {
           </TabsList>
 
           <TabsContent value="dashboard">
-            <InfirmaryDashboard />
+            <EnhancedInfirmaryDashboard />
           </TabsContent>
 
           <TabsContent value="crew">
