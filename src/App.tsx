@@ -304,7 +304,8 @@ const MedicalInfirmaryPremium = lazy(() => import("@/pages/MedicalInfirmaryPremi
 // ESG & SUSTENTABILIDADE
 // ============================================
 const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
-const ESGEmissionsPage = lazy(() => import("@/pages/ESGEmissionsPage"));
+const ESGEmissionsPage = lazy(() => import("@/pages/ESGEmissionsPremium"));
+const ESGEmissionsPremium = lazy(() => import("@/pages/ESGEmissionsPremium"));
 const WasteManagementPage = lazy(() => import("@/pages/WasteManagementPage"));
 
 // ============================================
@@ -315,7 +316,8 @@ const SOLASISPSTrainingPage = lazy(() => import("@/pages/SOLASISPSTrainingPage")
 // ============================================
 // VIAGENS & LOGÍSTICA
 // ============================================
-const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandCenter"));
+const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandPremium"));
+const TravelCommandPremium = lazy(() => import("@/pages/TravelCommandPremium"));
 const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
 
 // ============================================
