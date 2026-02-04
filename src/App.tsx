@@ -757,7 +757,7 @@ const AppRoutes = () => (
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
       <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
-      <Route path="/medical-infirmary" element={<MedicalInfirmary />} />
+      <Route path="/medical-infirmary" element={<MedicalInfirmaryEnhanced />} />
       <Route path="/users" element={<Users />} />
       
       {/* HR/DP Module - New Routes */}
