@@ -3,9 +3,11 @@
  * Monitoramento ambiental, carbon footprint e compliance regulatório
  */
 
+import React, { Suspense, lazy } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { EmissionsDashboard } from "./components/EmissionsDashboard";
 import { EmissionsRegistry } from "./components/EmissionsRegistry";
 import { ComplianceManagement } from "./components/ComplianceManagement";
@@ -19,7 +21,12 @@ import {
   Settings,
   Globe,
   Droplets,
+  Activity,
+  Sparkles,
 } from "lucide-react";
+
+// Premium Command Center
+const ESGCommandCenter = lazy(() => import("./components/ESGCommandCenter"));
 
 const ESGEmissionsModule = () => {
   return (
@@ -37,8 +44,13 @@ const ESGEmissionsModule = () => {
         ]}
       />
 
-      <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full max-w-3xl grid-cols-5">
+      <Tabs defaultValue="command" className="space-y-6">
+        <TabsList className="grid w-full max-w-4xl grid-cols-6">
+          <TabsTrigger value="command" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Comando
+            <Badge variant="secondary" className="ml-1 text-[10px]">PREMIUM</Badge>
+          </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Dashboard
@@ -60,6 +72,12 @@ const ESGEmissionsModule = () => {
             Config
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="command">
+          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+            <ESGCommandCenter />
+          </Suspense>
+        </TabsContent>
 
         <TabsContent value="dashboard">
           <EmissionsDashboard />
