@@ -1,0 +1,498 @@
+/**
+ * Enhanced AI Control Tower - AI Command Center
+ * PATCH AI-2.0 - Complete AI orchestration experience
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Brain, Sparkles, Activity, TrendingUp, AlertTriangle, CheckCircle,
+  RefreshCw, Send, Bot, Zap, Target, BarChart3, Lightbulb,
+  Settings, Shield, Clock, MessageSquare, Cpu, Network, Database,
+  Eye, Play, Pause, ChevronRight
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+
+interface AIAgent {
+  id: string;
+  name: string;
+  type: string;
+  status: 'active' | 'idle' | 'processing' | 'error';
+  tasksCompleted: number;
+  accuracy: number;
+  lastActive: Date;
+  description: string;
+}
+
+interface AIInsight {
+  id: string;
+  type: 'optimization' | 'prediction' | 'alert' | 'recommendation';
+  module: string;
+  title: string;
+  description: string;
+  confidence: number;
+  potentialImpact: string;
+  actionable: boolean;
+  timestamp: Date;
+}
+
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+interface AIMetric {
+  label: string;
+  value: number;
+  unit: string;
+  trend: 'up' | 'down' | 'stable';
+  change: number;
+}
+
+export const EnhancedAIControlTower: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [loading, setLoading] = useState(true);
+  const [chatInput, setChatInput] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const [agents, setAgents] = useState<AIAgent[]>([]);
+  const [insights, setInsights] = useState<AIInsight[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [metrics, setMetrics] = useState<AIMetric[]>([]);
+
+  useEffect(() => {
+    loadAIData();
+  }, []);
+
+  const loadAIData = async () => {
+    setLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      setAgents([
+        { id: '1', name: 'Agente de Manutenção Preditiva', type: 'Predictive', status: 'active', tasksCompleted: 1247, accuracy: 94.2, lastActive: new Date(), description: 'Análise preditiva de equipamentos' },
+        { id: '2', name: 'Agente de Otimização de Rotas', type: 'Optimization', status: 'processing', tasksCompleted: 892, accuracy: 89.7, lastActive: new Date(), description: 'Otimização de rotas e consumo' },
+        { id: '3', name: 'Agente de Compliance', type: 'Audit', status: 'active', tasksCompleted: 2341, accuracy: 97.1, lastActive: new Date(), description: 'Verificação automática de conformidade' },
+        { id: '4', name: 'Agente de Segurança', type: 'Security', status: 'idle', tasksCompleted: 567, accuracy: 91.5, lastActive: new Date(), description: 'Monitoramento de anomalias' },
+        { id: '5', name: 'Agente Financeiro', type: 'Finance', status: 'active', tasksCompleted: 1823, accuracy: 92.8, lastActive: new Date(), description: 'Análise e previsão financeira' },
+        { id: '6', name: 'Agente de Tripulação', type: 'HR', status: 'active', tasksCompleted: 445, accuracy: 88.3, lastActive: new Date(), description: 'Gestão inteligente de tripulação' },
+      ]);
+
+      setInsights([
+        { id: '1', type: 'optimization', module: 'Combustível', title: 'Oportunidade de economia de combustível', description: 'Otimização de velocidade pode reduzir consumo em 12% no trajeto atual', confidence: 92, potentialImpact: 'Economia de $45,000/mês', actionable: true, timestamp: new Date() },
+        { id: '2', type: 'prediction', module: 'Manutenção', title: 'Falha prevista em equipamento', description: 'Motor auxiliar #2 apresenta sinais de desgaste anormal', confidence: 87, potentialImpact: 'Evitar parada não programada', actionable: true, timestamp: new Date() },
+        { id: '3', type: 'alert', module: 'Compliance', title: 'Certificado expirando', description: '3 certificados expiram nos próximos 30 dias', confidence: 100, potentialImpact: 'Risco de não conformidade', actionable: true, timestamp: new Date() },
+        { id: '4', type: 'recommendation', module: 'Tripulação', title: 'Sugestão de escala otimizada', description: 'Nova distribuição de escalas pode melhorar satisfação em 15%', confidence: 78, potentialImpact: 'Melhoria no bem-estar', actionable: true, timestamp: new Date() },
+      ]);
+
+      setMetrics([
+        { label: 'Taxa de Adoção IA', value: 78, unit: '%', trend: 'up', change: 12 },
+        { label: 'Precisão Média', value: 92.4, unit: '%', trend: 'up', change: 3.2 },
+        { label: 'Insights Gerados/Dia', value: 47, unit: '', trend: 'up', change: 15 },
+        { label: 'Tempo Médio de Resposta', value: 1.2, unit: 's', trend: 'down', change: -25 },
+      ]);
+
+      setChatMessages([
+        { id: '1', role: 'assistant', content: 'Olá! Sou o assistente IA do Nautilus One. Como posso ajudá-lo hoje?', timestamp: new Date() }
+      ]);
+
+    } catch (error) {
+      console.error('Error loading AI data:', error);
+      toast.error('Erro ao carregar dados de IA');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!chatInput.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: chatInput,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+    setChatInput('');
+    setIsProcessing(true);
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      const responses: Record<string, string> = {
+        default: `Analisei sua solicitação sobre "${chatInput}". Com base nos dados disponíveis, posso ajudar com análises preditivas, otimização de operações, conformidade regulatória e muito mais. Seja mais específico sobre o que você precisa.`,
+        manutençao: 'Analisando os dados de manutenção... Identifiquei 3 equipamentos que precisam de atenção nos próximos 7 dias. O Motor Auxiliar #2 tem 85% de probabilidade de necessitar intervenção.',
+        combustivel: 'Com base na análise de rotas e condições climáticas, identifico potencial de economia de 12% no consumo de combustível através de ajuste de velocidade e otimização de rota.',
+        tripulaçao: 'O sistema identificou que 4 tripulantes têm certificados expirando nos próximos 30 dias. Recomendo iniciar o processo de renovação imediatamente.'
+      };
+
+      const key = Object.keys(responses).find(k => 
+        chatInput.toLowerCase().includes(k)
+      ) || 'default';
+
+      const assistantMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responses[key],
+        timestamp: new Date()
+      };
+
+      setChatMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      toast.error('Erro ao processar mensagem');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-500/20 text-green-500';
+      case 'processing': return 'bg-blue-500/20 text-blue-500';
+      case 'idle': return 'bg-yellow-500/20 text-yellow-500';
+      case 'error': return 'bg-red-500/20 text-red-500';
+      default: return 'bg-muted';
+    }
+  };
+
+  const getInsightIcon = (type: string) => {
+    switch (type) {
+      case 'optimization': return <Zap className="h-5 w-5 text-blue-500" />;
+      case 'prediction': return <TrendingUp className="h-5 w-5 text-purple-500" />;
+      case 'alert': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      case 'recommendation': return <Lightbulb className="h-5 w-5 text-green-500" />;
+      default: return <Brain className="h-5 w-5" />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6 p-6">
+        <Skeleton className="h-10 w-64" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 p-6">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/10 border border-purple-500/20">
+            <Brain className="h-8 w-8 text-purple-500" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">AI Control Tower</h1>
+            <p className="text-muted-foreground">Centro de comando de inteligência artificial</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-500">
+            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            {agents.filter(a => a.status === 'active').length} agentes ativos
+          </Badge>
+          <Button variant="outline" onClick={loadAIData}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {metrics.map((metric, index) => (
+          <motion.div
+            key={metric.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">{metric.label}</span>
+                  <Badge variant="outline" className={metric.trend === 'up' ? 'text-green-500' : metric.trend === 'down' && metric.label.includes('Tempo') ? 'text-green-500' : 'text-red-500'}>
+                    {metric.change > 0 ? '+' : ''}{metric.change}%
+                  </Badge>
+                </div>
+                <p className="text-3xl font-bold">{metric.value}{metric.unit}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Main Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="agents" className="flex items-center gap-2">
+            <Bot className="h-4 w-4" />
+            Agentes
+          </TabsTrigger>
+          <TabsTrigger value="insights" className="flex items-center gap-2">
+            <Lightbulb className="h-4 w-4" />
+            Insights
+            {insights.filter(i => i.actionable).length > 0 && (
+              <Badge className="ml-1">{insights.filter(i => i.actionable).length}</Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Assistente
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Dashboard Tab */}
+        <TabsContent value="dashboard" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Agent Performance */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-primary" />
+                  Performance dos Agentes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {agents.slice(0, 4).map((agent) => (
+                    <div key={agent.id} className="flex items-center gap-4">
+                      <div className={`p-2 rounded-lg ${getStatusColor(agent.status)}`}>
+                        <Bot className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{agent.name}</p>
+                        <p className="text-xs text-muted-foreground">{agent.tasksCompleted} tarefas</p>
+                      </div>
+                      <div className="w-24">
+                        <Progress value={agent.accuracy} className="h-2" />
+                      </div>
+                      <span className="text-sm font-medium">{agent.accuracy}%</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Recent Insights */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  Insights Recentes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[250px]">
+                  <div className="space-y-3">
+                    {insights.slice(0, 4).map((insight) => (
+                      <div key={insight.id} className="p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                        <div className="flex items-start gap-3">
+                          {getInsightIcon(insight.type)}
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{insight.title}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant="outline">{insight.module}</Badge>
+                              <Badge variant="outline">{insight.confidence}% confiança</Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Agents Tab */}
+        <TabsContent value="agents" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {agents.map((agent) => (
+              <Card key={agent.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${getStatusColor(agent.status)}`}>
+                        <Bot className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-sm">{agent.name}</h3>
+                        <Badge variant="outline" className="mt-1">{agent.type}</Badge>
+                      </div>
+                    </div>
+                    <Badge className={getStatusColor(agent.status)}>
+                      {agent.status === 'active' ? 'Ativo' :
+                       agent.status === 'processing' ? 'Processando' :
+                       agent.status === 'idle' ? 'Ocioso' : 'Erro'}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Tarefas</p>
+                      <p className="font-bold">{agent.tasksCompleted}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Precisão</p>
+                      <p className="font-bold">{agent.accuracy}%</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Settings className="h-4 w-4 mr-1" />
+                      Config
+                    </Button>
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Eye className="h-4 w-4 mr-1" />
+                      Logs
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Insights Tab */}
+        <TabsContent value="insights" className="space-y-4">
+          <div className="grid gap-4">
+            {insights.map((insight) => (
+              <Card key={insight.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-muted">
+                        {getInsightIcon(insight.type)}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold">{insight.title}</h4>
+                          <Badge variant="outline">{insight.module}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">{insight.description}</p>
+                        <div className="flex items-center gap-4 mt-3">
+                          <Badge variant="outline">
+                            <Brain className="h-3 w-3 mr-1" />
+                            {insight.confidence}% confiança
+                          </Badge>
+                          <span className="text-sm text-muted-foreground">
+                            Impacto: {insight.potentialImpact}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {insight.actionable && (
+                      <Button>
+                        Aplicar
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Chat Tab */}
+        <TabsContent value="chat" className="space-y-4">
+          <Card className="h-[600px] flex flex-col">
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                Assistente IA
+              </CardTitle>
+              <CardDescription>Converse com a IA para obter insights e realizar ações</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-hidden p-0">
+              <ScrollArea className="h-full p-4">
+                <div className="space-y-4">
+                  <AnimatePresence>
+                    {chatMessages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      >
+                        <div className={`max-w-[80%] p-4 rounded-lg ${
+                          message.role === 'user' 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-muted'
+                        }`}>
+                          <p className="text-sm">{message.content}</p>
+                          <p className={`text-xs mt-2 ${message.role === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                            {format(message.timestamp, 'HH:mm')}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  {isProcessing && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                      <span className="text-sm">Processando...</span>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </CardContent>
+            <div className="p-4 border-t">
+              <div className="flex gap-2">
+                <Textarea 
+                  placeholder="Digite sua mensagem..."
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  className="min-h-[44px] max-h-[120px]"
+                />
+                <Button onClick={handleSendMessage} disabled={isProcessing}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default EnhancedAIControlTower;
