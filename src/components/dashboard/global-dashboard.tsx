@@ -124,12 +124,12 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
             <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-secondary/2 rounded-3xl" />
             <div className="relative backdrop-blur-sm rounded-3xl border border-border/50 bg-card/30 p-6 shadow-xl">
               
-              <TabsContent value="overview" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="overview" className="mt-0 space-y-6">
                 <EnhancedDashboard />
                 <ResponsiveDashboard />
               </TabsContent>
 
-              <TabsContent value="collaboration" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="collaboration" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-info/20">
@@ -144,7 +144,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="ai-assistant" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="ai-assistant" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-info/20 to-primary/20">
@@ -159,7 +159,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="advanced-ai" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="advanced-ai" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-info/20">
@@ -174,7 +174,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="workflows" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="workflows" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-success/20 to-success/10">
@@ -189,7 +189,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="business-intelligence" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="business-intelligence" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-destructive/20">
@@ -204,7 +204,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="gamification" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="gamification" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20">
@@ -219,7 +219,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="system-health" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="system-health" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-info/20 to-primary/20">
@@ -234,7 +234,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="recommendations" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="recommendations" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-secondary/20 to-primary/20">
@@ -252,7 +252,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="notifications" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="notifications" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-destructive/20 to-warning/20">
@@ -267,7 +267,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                 </div>
               </TabsContent>
 
-              <TabsContent value="insights" className="mt-0 space-y-6 animate-fade-in">
+              <TabsContent value="insights" className="mt-0 space-y-6">
                 <div className="grid gap-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-muted to-muted/50">
