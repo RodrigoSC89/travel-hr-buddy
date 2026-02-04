@@ -1,0 +1,731 @@
+/**
+ * Compliance Command Center - Centro de Controle de Conformidade Premium
+ * Painel unificado para gestão completa de compliance marítimo
+ */
+
+import { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { 
+  Shield, 
+  AlertTriangle, 
+  CheckCircle2, 
+  Clock, 
+  FileCheck, 
+  Calendar,
+  TrendingUp,
+  TrendingDown,
+  Filter,
+  Download,
+  Plus,
+  Eye,
+  Bell,
+  Target,
+  Award,
+  BarChart3,
+  Sparkles,
+  FileWarning,
+  ClipboardCheck,
+  Ship,
+  Users,
+  BookOpen
+} from 'lucide-react';
+import { format, addDays, differenceInDays, isBefore } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+
+interface ComplianceItem {
+  id: string;
+  code: string;
+  title: string;
+  regulation: string;
+  vessel: string;
+  status: 'compliant' | 'non-compliant' | 'partial' | 'pending';
+  score: number;
+  lastAudit: string;
+  nextAudit: string;
+  responsible: string;
+  priority: 'high' | 'medium' | 'low';
+  findings: number;
+}
+
+interface Certificate {
+  id: string;
+  name: string;
+  type: string;
+  vessel: string;
+  issueDate: string;
+  expiryDate: string;
+  status: 'valid' | 'expiring' | 'expired';
+  authority: string;
+}
+
+interface Audit {
+  id: string;
+  type: string;
+  vessel: string;
+  scheduledDate: string;
+  auditor: string;
+  status: 'scheduled' | 'in-progress' | 'completed';
+  score?: number;
+  findings?: number;
+}
+
+// Mock data
+const mockComplianceItems: ComplianceItem[] = [
+  {
+    id: '1',
+    code: 'ISM-01',
+    title: 'Sistema de Gestão de Segurança',
+    regulation: 'ISM Code',
+    vessel: 'MV Atlantic Pioneer',
+    status: 'compliant',
+    score: 98,
+    lastAudit: '2024-01-15',
+    nextAudit: '2025-01-15',
+    responsible: 'Cap. João Silva',
+    priority: 'high',
+    findings: 0
+  },
+  {
+    id: '2',
+    code: 'ISPS-02',
+    title: 'Plano de Proteção do Navio',
+    regulation: 'ISPS Code',
+    vessel: 'MV Pacific Star',
+    status: 'partial',
+    score: 75,
+    lastAudit: '2024-02-20',
+    nextAudit: '2024-08-20',
+    responsible: 'SSO Pedro Costa',
+    priority: 'high',
+    findings: 3
+  },
+  {
+    id: '3',
+    code: 'MLC-03',
+    title: 'Condições de Trabalho Marítimo',
+    regulation: 'MLC 2006',
+    vessel: 'MV Ocean Voyager',
+    status: 'compliant',
+    score: 92,
+    lastAudit: '2024-03-10',
+    nextAudit: '2024-09-10',
+    responsible: 'RH Maria Santos',
+    priority: 'medium',
+    findings: 1
+  },
+  {
+    id: '4',
+    code: 'MARPOL-04',
+    title: 'Prevenção de Poluição',
+    regulation: 'MARPOL 73/78',
+    vessel: 'MV Atlantic Pioneer',
+    status: 'non-compliant',
+    score: 45,
+    lastAudit: '2024-04-05',
+    nextAudit: '2024-07-05',
+    responsible: 'Eng. Carlos Lima',
+    priority: 'high',
+    findings: 5
+  },
+  {
+    id: '5',
+    code: 'STCW-05',
+    title: 'Certificações de Tripulação',
+    regulation: 'STCW 95',
+    vessel: 'MV Pacific Star',
+    status: 'pending',
+    score: 60,
+    lastAudit: '2024-05-01',
+    nextAudit: '2024-11-01',
+    responsible: 'Cap. Ana Rocha',
+    priority: 'medium',
+    findings: 2
+  }
+];
+
+const mockCertificates: Certificate[] = [
+  { id: '1', name: 'DOC', type: 'ISM', vessel: 'MV Atlantic Pioneer', issueDate: '2023-06-15', expiryDate: '2028-06-15', status: 'valid', authority: 'DNV GL' },
+  { id: '2', name: 'SMC', type: 'ISM', vessel: 'MV Pacific Star', issueDate: '2022-03-20', expiryDate: '2024-09-20', status: 'expiring', authority: 'Lloyd\'s' },
+  { id: '3', name: 'ISSC', type: 'ISPS', vessel: 'MV Ocean Voyager', issueDate: '2023-01-10', expiryDate: '2024-07-10', status: 'expiring', authority: 'Bureau Veritas' },
+  { id: '4', name: 'MLC Certificate', type: 'MLC', vessel: 'MV Atlantic Pioneer', issueDate: '2023-08-01', expiryDate: '2024-06-01', status: 'expired', authority: 'DNV GL' },
+  { id: '5', name: 'IOPP Certificate', type: 'MARPOL', vessel: 'MV Pacific Star', issueDate: '2022-12-15', expiryDate: '2027-12-15', status: 'valid', authority: 'ClassNK' }
+];
+
+const mockAudits: Audit[] = [
+  { id: '1', type: 'ISM Internal', vessel: 'MV Atlantic Pioneer', scheduledDate: '2024-07-15', auditor: 'QSMS Team', status: 'scheduled' },
+  { id: '2', type: 'Port State Control', vessel: 'MV Pacific Star', scheduledDate: '2024-06-28', auditor: 'External', status: 'scheduled' },
+  { id: '3', type: 'Flag State Inspection', vessel: 'MV Ocean Voyager', scheduledDate: '2024-06-20', auditor: 'ANTAQ', status: 'in-progress', score: 85, findings: 2 },
+  { id: '4', type: 'Class Survey', vessel: 'MV Atlantic Pioneer', scheduledDate: '2024-05-10', auditor: 'DNV GL', status: 'completed', score: 94, findings: 1 }
+];
+
+const statusConfig = {
+  compliant: { label: 'Conforme', color: 'bg-success text-success-foreground', icon: CheckCircle2 },
+  'non-compliant': { label: 'Não Conforme', color: 'bg-destructive text-destructive-foreground', icon: AlertTriangle },
+  partial: { label: 'Parcial', color: 'bg-warning text-warning-foreground', icon: Clock },
+  pending: { label: 'Pendente', color: 'bg-muted text-muted-foreground', icon: Clock }
+};
+
+const certStatusConfig = {
+  valid: { label: 'Válido', color: 'bg-success/10 text-success border-success' },
+  expiring: { label: 'Expirando', color: 'bg-warning/10 text-warning border-warning' },
+  expired: { label: 'Expirado', color: 'bg-destructive/10 text-destructive border-destructive' }
+};
+
+export function ComplianceCommandCenter() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRegulation, setSelectedRegulation] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState('overview');
+
+  // Calculate KPIs
+  const kpis = useMemo(() => {
+    const total = mockComplianceItems.length;
+    const compliant = mockComplianceItems.filter(i => i.status === 'compliant').length;
+    const nonCompliant = mockComplianceItems.filter(i => i.status === 'non-compliant').length;
+    const avgScore = mockComplianceItems.reduce((acc, i) => acc + i.score, 0) / total;
+    
+    const expiringCerts = mockCertificates.filter(c => c.status === 'expiring').length;
+    const expiredCerts = mockCertificates.filter(c => c.status === 'expired').length;
+    const upcomingAudits = mockAudits.filter(a => a.status === 'scheduled').length;
+    const totalFindings = mockComplianceItems.reduce((acc, i) => acc + i.findings, 0);
+
+    return {
+      complianceRate: Math.round((compliant / total) * 100),
+      avgScore: Math.round(avgScore),
+      nonCompliant,
+      expiringCerts,
+      expiredCerts,
+      upcomingAudits,
+      totalFindings,
+      trend: 5.2 // Simulated positive trend
+    };
+  }, []);
+
+  // Filter items
+  const filteredItems = useMemo(() => {
+    return mockComplianceItems.filter(item => {
+      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           item.vessel.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesRegulation = selectedRegulation === 'all' || item.regulation === selectedRegulation;
+      return matchesSearch && matchesRegulation;
+    });
+  }, [searchTerm, selectedRegulation]);
+
+  const regulations = [...new Set(mockComplianceItems.map(i => i.regulation))];
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      {/* Header com KPIs principais */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <Card className="col-span-2 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Taxa de Conformidade</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold">{kpis.complianceRate}%</span>
+                  <span className="text-sm text-success flex items-center">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    +{kpis.trend}%
+                  </span>
+                </div>
+              </div>
+              <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center">
+                <Shield className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+            <Progress value={kpis.complianceRate} className="mt-3 h-2" />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Score Médio</p>
+                <p className="text-2xl font-bold">{kpis.avgScore}</p>
+              </div>
+              <Target className="h-5 w-5 text-primary" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={kpis.nonCompliant > 0 ? 'border-destructive/50' : ''}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Não Conformes</p>
+                <p className="text-2xl font-bold text-destructive">{kpis.nonCompliant}</p>
+              </div>
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={kpis.expiredCerts > 0 ? 'border-destructive/50' : ''}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Cert. Expirados</p>
+                <p className="text-2xl font-bold text-destructive">{kpis.expiredCerts}</p>
+              </div>
+              <FileWarning className="h-5 w-5 text-destructive" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={kpis.expiringCerts > 0 ? 'border-warning/50' : ''}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Cert. Expirando</p>
+                <p className="text-2xl font-bold text-warning">{kpis.expiringCerts}</p>
+              </div>
+              <Clock className="h-5 w-5 text-warning" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Auditorias</p>
+                <p className="text-2xl font-bold">{kpis.upcomingAudits}</p>
+              </div>
+              <ClipboardCheck className="h-5 w-5 text-primary" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Findings</p>
+                <p className="text-2xl font-bold">{kpis.totalFindings}</p>
+              </div>
+              <FileCheck className="h-5 w-5 text-muted-foreground" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabs de conteúdo */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <TabsList>
+            <TabsTrigger value="overview" className="gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Visão Geral
+            </TabsTrigger>
+            <TabsTrigger value="items" className="gap-2">
+              <Shield className="h-4 w-4" />
+              Itens de Compliance
+            </TabsTrigger>
+            <TabsTrigger value="certificates" className="gap-2">
+              <Award className="h-4 w-4" />
+              Certificados
+            </TabsTrigger>
+            <TabsTrigger value="audits" className="gap-2">
+              <ClipboardCheck className="h-4 w-4" />
+              Auditorias
+            </TabsTrigger>
+            <TabsTrigger value="ai" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              AI Insights
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-[200px]"
+            />
+            <Button variant="outline" size="icon">
+              <Filter className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon">
+              <Download className="h-4 w-4" />
+            </Button>
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              Novo Item
+            </Button>
+          </div>
+        </div>
+
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Compliance by Regulation */}
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Conformidade por Regulamentação
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {regulations.map(reg => {
+                    const items = mockComplianceItems.filter(i => i.regulation === reg);
+                    const compliant = items.filter(i => i.status === 'compliant').length;
+                    const rate = Math.round((compliant / items.length) * 100);
+                    
+                    return (
+                      <div key={reg} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{reg}</span>
+                          <span className={`text-sm font-semibold ${rate >= 80 ? 'text-success' : rate >= 60 ? 'text-warning' : 'text-destructive'}`}>
+                            {rate}%
+                          </span>
+                        </div>
+                        <Progress value={rate} className="h-2" />
+                        <p className="text-xs text-muted-foreground">
+                          {compliant} de {items.length} itens conformes
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Próximas Auditorias */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  Próximas Auditorias
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[300px]">
+                  <div className="space-y-3">
+                    {mockAudits.filter(a => a.status !== 'completed').map(audit => (
+                      <div key={audit.id} className="p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors cursor-pointer">
+                        <div className="flex items-center justify-between mb-2">
+                          <Badge variant="outline">{audit.type}</Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {format(new Date(audit.scheduledDate), 'dd MMM', { locale: ptBR })}
+                          </span>
+                        </div>
+                        <p className="text-sm font-medium">{audit.vessel}</p>
+                        <p className="text-xs text-muted-foreground">{audit.auditor}</p>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Items Tab */}
+        <TabsContent value="items" className="mt-6">
+          <Card>
+            <CardContent className="p-0">
+              <ScrollArea className="h-[500px]">
+                <table className="w-full">
+                  <thead className="bg-muted/50 sticky top-0">
+                    <tr>
+                      <th className="text-left p-4 font-medium">Código</th>
+                      <th className="text-left p-4 font-medium">Item</th>
+                      <th className="text-left p-4 font-medium">Regulamentação</th>
+                      <th className="text-left p-4 font-medium">Embarcação</th>
+                      <th className="text-left p-4 font-medium">Status</th>
+                      <th className="text-left p-4 font-medium">Score</th>
+                      <th className="text-left p-4 font-medium">Findings</th>
+                      <th className="text-left p-4 font-medium">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredItems.map(item => {
+                      const StatusIcon = statusConfig[item.status].icon;
+                      return (
+                        <motion.tr 
+                          key={item.id}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="border-b hover:bg-accent/30 transition-colors"
+                        >
+                          <td className="p-4 font-mono text-sm">{item.code}</td>
+                          <td className="p-4">
+                            <div>
+                              <p className="font-medium">{item.title}</p>
+                              <p className="text-xs text-muted-foreground">{item.responsible}</p>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <Badge variant="outline">{item.regulation}</Badge>
+                          </td>
+                          <td className="p-4 text-sm">{item.vessel}</td>
+                          <td className="p-4">
+                            <Badge className={statusConfig[item.status].color}>
+                              <StatusIcon className="h-3 w-3 mr-1" />
+                              {statusConfig[item.status].label}
+                            </Badge>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              <Progress value={item.score} className="w-16 h-2" />
+                              <span className="text-sm font-medium">{item.score}%</span>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            {item.findings > 0 ? (
+                              <Badge variant="destructive">{item.findings}</Badge>
+                            ) : (
+                              <Badge variant="secondary">0</Badge>
+                            )}
+                          </td>
+                          <td className="p-4">
+                            <Button variant="ghost" size="sm">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Certificates Tab */}
+        <TabsContent value="certificates" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {mockCertificates.map(cert => {
+              const daysUntil = differenceInDays(new Date(cert.expiryDate), new Date());
+              const config = certStatusConfig[cert.status];
+              
+              return (
+                <motion.div
+                  key={cert.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <Card className={`border-2 ${config.color}`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-bold text-lg">{cert.name}</h3>
+                          <p className="text-sm text-muted-foreground">{cert.type}</p>
+                        </div>
+                        <Badge className={config.color}>{config.label}</Badge>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Ship className="h-4 w-4 text-muted-foreground" />
+                          <span>{cert.vessel}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Award className="h-4 w-4 text-muted-foreground" />
+                          <span>{cert.authority}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          <span>Expira: {format(new Date(cert.expiryDate), 'dd/MM/yyyy')}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t flex items-center justify-between">
+                        <span className={`text-sm font-medium ${daysUntil < 0 ? 'text-destructive' : daysUntil < 90 ? 'text-warning' : 'text-success'}`}>
+                          {daysUntil < 0 ? `Expirado há ${Math.abs(daysUntil)} dias` : `${daysUntil} dias restantes`}
+                        </span>
+                        <Button variant="outline" size="sm">Renovar</Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </TabsContent>
+
+        {/* Audits Tab */}
+        <TabsContent value="audits" className="mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Auditorias Agendadas */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Auditorias Agendadas</CardTitle>
+                <CardDescription>Próximas inspeções e auditorias</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {mockAudits.filter(a => a.status === 'scheduled').map(audit => (
+                    <div key={audit.id} className="p-4 border rounded-lg hover:bg-accent/30 transition-colors">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge>{audit.type}</Badge>
+                        <span className="text-sm font-medium">
+                          {format(new Date(audit.scheduledDate), 'dd/MM/yyyy')}
+                        </span>
+                      </div>
+                      <p className="font-medium">{audit.vessel}</p>
+                      <p className="text-sm text-muted-foreground">Auditor: {audit.auditor}</p>
+                      <div className="mt-3 flex gap-2">
+                        <Button size="sm" variant="outline">Preparar</Button>
+                        <Button size="sm">Iniciar</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Auditorias Concluídas */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Auditorias Recentes</CardTitle>
+                <CardDescription>Histórico de auditorias</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {mockAudits.filter(a => a.status === 'completed').map(audit => (
+                    <div key={audit.id} className="p-4 border rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary">{audit.type}</Badge>
+                        <Badge variant="outline" className="bg-success/10 text-success">
+                          Score: {audit.score}%
+                        </Badge>
+                      </div>
+                      <p className="font-medium">{audit.vessel}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(audit.scheduledDate), 'dd/MM/yyyy')} • {audit.findings} findings
+                      </p>
+                      <Button size="sm" variant="link" className="mt-2 p-0">
+                        Ver Relatório Completo
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* AI Insights Tab */}
+        <TabsContent value="ai" className="mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  Análise Preditiva de Compliance
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertTriangle className="h-5 w-5 text-warning" />
+                      <span className="font-medium">Risco Identificado</span>
+                    </div>
+                    <p className="text-sm">
+                      O certificado MLC do MV Atlantic Pioneer está 15 dias vencido. 
+                      Isso pode resultar em detenção em inspeções PSC.
+                    </p>
+                    <Button size="sm" className="mt-3">Iniciar Renovação</Button>
+                  </div>
+
+                  <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertTriangle className="h-5 w-5 text-destructive" />
+                      <span className="font-medium">Não Conformidade Crítica</span>
+                    </div>
+                    <p className="text-sm">
+                      MARPOL-04 apresenta 5 findings abertos. Com base no histórico, 
+                      há 78% de chance de falha na próxima inspeção PSC.
+                    </p>
+                    <Button size="sm" variant="destructive" className="mt-3">Plano de Ação</Button>
+                  </div>
+
+                  <div className="p-4 bg-success/10 border border-success/30 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 className="h-5 w-5 text-success" />
+                      <span className="font-medium">Tendência Positiva</span>
+                    </div>
+                    <p className="text-sm">
+                      A taxa de conformidade aumentou 5.2% nos últimos 30 dias. 
+                      Continue o bom trabalho com ISM e ISPS.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Recomendações da IA
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    {
+                      priority: 'high',
+                      title: 'Renovar MLC Certificate',
+                      description: 'Prioridade máxima - certificado vencido',
+                      action: 'Agendar agora'
+                    },
+                    {
+                      priority: 'high',
+                      title: 'Resolver Findings MARPOL',
+                      description: '5 não conformidades abertas',
+                      action: 'Ver plano'
+                    },
+                    {
+                      priority: 'medium',
+                      title: 'Preparar para PSC',
+                      description: 'Inspeção prevista para MV Pacific Star',
+                      action: 'Preparar'
+                    },
+                    {
+                      priority: 'low',
+                      title: 'Atualizar Documentação ISM',
+                      description: 'Revisão semestral pendente',
+                      action: 'Revisar'
+                    }
+                  ].map((rec, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/30 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          rec.priority === 'high' ? 'bg-destructive' : 
+                          rec.priority === 'medium' ? 'bg-warning' : 'bg-muted-foreground'
+                        }`} />
+                        <div>
+                          <p className="font-medium text-sm">{rec.title}</p>
+                          <p className="text-xs text-muted-foreground">{rec.description}</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline">{rec.action}</Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+export default ComplianceCommandCenter;
