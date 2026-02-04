@@ -17040,6 +17040,114 @@ export type Database = {
           },
         ]
       }
+      garbage_record_book: {
+        Row: {
+          category_code: string
+          category_description: string
+          created_at: string | null
+          created_by: string | null
+          disposal_method: string
+          end_position_lat: string | null
+          end_position_lon: string | null
+          entry_date: string
+          entry_time: string | null
+          estimated_quantity: number
+          id: string
+          master_name: string | null
+          master_signature: boolean | null
+          officer_name: string
+          officer_rank: string | null
+          organization_id: string | null
+          port_facility: string | null
+          reception_certificate: string | null
+          remarks: string | null
+          special_area: boolean | null
+          start_position_lat: string | null
+          start_position_lon: string | null
+          unit: string | null
+          verified: boolean | null
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          category_code: string
+          category_description: string
+          created_at?: string | null
+          created_by?: string | null
+          disposal_method: string
+          end_position_lat?: string | null
+          end_position_lon?: string | null
+          entry_date: string
+          entry_time?: string | null
+          estimated_quantity: number
+          id?: string
+          master_name?: string | null
+          master_signature?: boolean | null
+          officer_name: string
+          officer_rank?: string | null
+          organization_id?: string | null
+          port_facility?: string | null
+          reception_certificate?: string | null
+          remarks?: string | null
+          special_area?: boolean | null
+          start_position_lat?: string | null
+          start_position_lon?: string | null
+          unit?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          category_code?: string
+          category_description?: string
+          created_at?: string | null
+          created_by?: string | null
+          disposal_method?: string
+          end_position_lat?: string | null
+          end_position_lon?: string | null
+          entry_date?: string
+          entry_time?: string | null
+          estimated_quantity?: number
+          id?: string
+          master_name?: string | null
+          master_signature?: boolean | null
+          officer_name?: string
+          officer_rank?: string | null
+          organization_id?: string | null
+          port_facility?: string | null
+          reception_certificate?: string | null
+          remarks?: string | null
+          special_area?: boolean | null
+          start_position_lat?: string | null
+          start_position_lon?: string | null
+          unit?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "garbage_record_book_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "garbage_record_book_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       geofence_zones: {
         Row: {
           active: boolean
@@ -24236,6 +24344,106 @@ export type Database = {
           },
         ]
       }
+      medical_consultations: {
+        Row: {
+          ai_suggestions: Json | null
+          attachments: Json | null
+          attending_officer: string | null
+          attending_officer_id: string | null
+          chief_complaint: string
+          consultation_type: string
+          created_at: string | null
+          crew_member_id: string | null
+          crew_member_name: string
+          diagnosis: string | null
+          follow_up_date: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          prescribed_medications: Json | null
+          severity: string | null
+          status: string | null
+          symptoms: Json | null
+          telemedicine_session_id: string | null
+          treatment: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          vital_signs: Json | null
+        }
+        Insert: {
+          ai_suggestions?: Json | null
+          attachments?: Json | null
+          attending_officer?: string | null
+          attending_officer_id?: string | null
+          chief_complaint: string
+          consultation_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name: string
+          diagnosis?: string | null
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          prescribed_medications?: Json | null
+          severity?: string | null
+          status?: string | null
+          symptoms?: Json | null
+          telemedicine_session_id?: string | null
+          treatment?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vital_signs?: Json | null
+        }
+        Update: {
+          ai_suggestions?: Json | null
+          attachments?: Json | null
+          attending_officer?: string | null
+          attending_officer_id?: string | null
+          chief_complaint?: string
+          consultation_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name?: string
+          diagnosis?: string | null
+          follow_up_date?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          prescribed_medications?: Json | null
+          severity?: string | null
+          status?: string | null
+          symptoms?: Json | null
+          telemedicine_session_id?: string | null
+          treatment?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vital_signs?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_consultations_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_consultations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_consultations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       medical_records: {
         Row: {
           allergies: string[] | null
@@ -24322,6 +24530,8 @@ export type Database = {
         Row: {
           batch_number: string | null
           category: string
+          controlled_substance: boolean | null
+          cost_per_unit: number | null
           created_at: string | null
           created_by: string | null
           expiry_date: string | null
@@ -24331,8 +24541,13 @@ export type Database = {
           min_stock: number | null
           name: string
           organization_id: string | null
+          purchase_date: string | null
           quantity: number | null
+          requires_prescription: boolean | null
           status: string | null
+          storage_conditions: string | null
+          supplier: string | null
+          total_cost: number | null
           unit: string | null
           updated_at: string | null
           vessel_id: string | null
@@ -24340,6 +24555,8 @@ export type Database = {
         Insert: {
           batch_number?: string | null
           category: string
+          controlled_substance?: boolean | null
+          cost_per_unit?: number | null
           created_at?: string | null
           created_by?: string | null
           expiry_date?: string | null
@@ -24349,8 +24566,13 @@ export type Database = {
           min_stock?: number | null
           name: string
           organization_id?: string | null
+          purchase_date?: string | null
           quantity?: number | null
+          requires_prescription?: boolean | null
           status?: string | null
+          storage_conditions?: string | null
+          supplier?: string | null
+          total_cost?: number | null
           unit?: string | null
           updated_at?: string | null
           vessel_id?: string | null
@@ -24358,6 +24580,8 @@ export type Database = {
         Update: {
           batch_number?: string | null
           category?: string
+          controlled_substance?: boolean | null
+          cost_per_unit?: number | null
           created_at?: string | null
           created_by?: string | null
           expiry_date?: string | null
@@ -24367,8 +24591,13 @@ export type Database = {
           min_stock?: number | null
           name?: string
           organization_id?: string | null
+          purchase_date?: string | null
           quantity?: number | null
+          requires_prescription?: boolean | null
           status?: string | null
+          storage_conditions?: string | null
+          supplier?: string | null
+          total_cost?: number | null
           unit?: string | null
           updated_at?: string | null
           vessel_id?: string | null
@@ -24386,6 +24615,89 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medication_dispensations: {
+        Row: {
+          batch_number: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          dispensed_at: string | null
+          dispensed_by: string | null
+          dispensed_by_name: string | null
+          id: string
+          medical_record_id: string | null
+          medication_name: string
+          notes: string | null
+          organization_id: string | null
+          quantity_dispensed: number
+          reason: string | null
+          supply_id: string | null
+          unit: string
+        }
+        Insert: {
+          batch_number?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          dispensed_at?: string | null
+          dispensed_by?: string | null
+          dispensed_by_name?: string | null
+          id?: string
+          medical_record_id?: string | null
+          medication_name: string
+          notes?: string | null
+          organization_id?: string | null
+          quantity_dispensed: number
+          reason?: string | null
+          supply_id?: string | null
+          unit?: string
+        }
+        Update: {
+          batch_number?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          dispensed_at?: string | null
+          dispensed_by?: string | null
+          dispensed_by_name?: string | null
+          id?: string
+          medical_record_id?: string | null
+          medication_name?: string
+          notes?: string | null
+          organization_id?: string | null
+          quantity_dispensed?: number
+          reason?: string | null
+          supply_id?: string | null
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medication_dispensations_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medication_dispensations_medical_record_id_fkey"
+            columns: ["medical_record_id"]
+            isOneToOne: false
+            referencedRelation: "medical_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medication_dispensations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medication_dispensations_supply_id_fkey"
+            columns: ["supply_id"]
+            isOneToOne: false
+            referencedRelation: "medical_supplies"
             referencedColumns: ["id"]
           },
         ]
@@ -26857,6 +27169,105 @@ export type Database = {
           vessel_id?: string
         }
         Relationships: []
+      }
+      oil_record_book: {
+        Row: {
+          attachments: Json | null
+          created_at: string | null
+          created_by: string | null
+          entry_date: string
+          entry_time: string | null
+          id: string
+          master_name: string | null
+          master_signature: boolean | null
+          officer_name: string
+          officer_rank: string | null
+          operation_code: string
+          operation_description: string
+          organization_id: string | null
+          position_lat: string | null
+          position_lon: string | null
+          ppm_reading: number | null
+          quantity: number | null
+          remarks: string | null
+          tank_involved: string | null
+          unit: string | null
+          verified: boolean | null
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          entry_date: string
+          entry_time?: string | null
+          id?: string
+          master_name?: string | null
+          master_signature?: boolean | null
+          officer_name: string
+          officer_rank?: string | null
+          operation_code: string
+          operation_description: string
+          organization_id?: string | null
+          position_lat?: string | null
+          position_lon?: string | null
+          ppm_reading?: number | null
+          quantity?: number | null
+          remarks?: string | null
+          tank_involved?: string | null
+          unit?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          entry_date?: string
+          entry_time?: string | null
+          id?: string
+          master_name?: string | null
+          master_signature?: boolean | null
+          officer_name?: string
+          officer_rank?: string | null
+          operation_code?: string
+          operation_description?: string
+          organization_id?: string | null
+          position_lat?: string | null
+          position_lon?: string | null
+          ppm_reading?: number | null
+          quantity?: number | null
+          remarks?: string | null
+          tank_involved?: string | null
+          unit?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oil_record_book_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oil_record_book_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       onboarding_progress: {
         Row: {
@@ -44131,6 +44542,87 @@ export type Database = {
           },
           {
             foreignKeyName: "waste_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      waste_tanks: {
+        Row: {
+          alert_threshold_percent: number | null
+          capacity: number
+          created_at: string | null
+          current_level: number | null
+          id: string
+          last_discharge_date: string | null
+          last_discharge_location: string | null
+          last_discharge_quantity: number | null
+          last_reading_at: string | null
+          level_percentage: number | null
+          organization_id: string | null
+          sensor_id: string | null
+          status: string | null
+          tank_name: string
+          tank_type: string
+          unit: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          alert_threshold_percent?: number | null
+          capacity: number
+          created_at?: string | null
+          current_level?: number | null
+          id?: string
+          last_discharge_date?: string | null
+          last_discharge_location?: string | null
+          last_discharge_quantity?: number | null
+          last_reading_at?: string | null
+          level_percentage?: number | null
+          organization_id?: string | null
+          sensor_id?: string | null
+          status?: string | null
+          tank_name: string
+          tank_type: string
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          alert_threshold_percent?: number | null
+          capacity?: number
+          created_at?: string | null
+          current_level?: number | null
+          id?: string
+          last_discharge_date?: string | null
+          last_discharge_location?: string | null
+          last_discharge_quantity?: number | null
+          last_reading_at?: string | null
+          level_percentage?: number | null
+          organization_id?: string | null
+          sensor_id?: string | null
+          status?: string | null
+          tank_name?: string
+          tank_type?: string
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_tanks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waste_tanks_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
