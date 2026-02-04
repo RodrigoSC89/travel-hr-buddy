@@ -20,6 +20,8 @@ const HotelReservationPanel = lazy(() => import("./components/HotelReservationPa
 const TravelApprovalWorkflow = lazy(() => import("./components/TravelApprovalWorkflow"));
 const ExpenseManagementPanel = lazy(() => import("./components/ExpenseManagementPanel"));
 const CrewTrackingPanel = lazy(() => import("./components/CrewTrackingPanel"));
+const TravelerSafetyPanel = lazy(() => import("./components/TravelerSafetyPanel"));
+const TravelAnalyticsPanel = lazy(() => import("./components/TravelAnalyticsPanel"));
 
 const LoadingFallback = () => (
   <div className="h-96 flex items-center justify-center">
@@ -44,11 +46,10 @@ const TravelCommandModule = () => {
       />
 
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full max-w-5xl grid-cols-7">
+        <TabsList className="grid w-full max-w-6xl grid-cols-8">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             Comando
-            <Badge variant="secondary" className="ml-1 text-[10px]">PREMIUM</Badge>
           </TabsTrigger>
           <TabsTrigger value="flights" className="flex items-center gap-2">
             <Plane className="h-4 w-4" />
@@ -65,6 +66,10 @@ const TravelCommandModule = () => {
           <TabsTrigger value="expenses" className="flex items-center gap-2">
             <Receipt className="h-4 w-4" />
             Despesas
+          </TabsTrigger>
+          <TabsTrigger value="safety" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Segurança
           </TabsTrigger>
           <TabsTrigger value="tracking" className="flex items-center gap-2">
             <Navigation className="h-4 w-4" />
@@ -106,6 +111,12 @@ const TravelCommandModule = () => {
           </Suspense>
         </TabsContent>
 
+        <TabsContent value="safety">
+          <Suspense fallback={<LoadingFallback />}>
+            <TravelerSafetyPanel />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="tracking">
           <Suspense fallback={<LoadingFallback />}>
             <CrewTrackingPanel />
@@ -114,7 +125,7 @@ const TravelCommandModule = () => {
 
         <TabsContent value="analytics">
           <Suspense fallback={<LoadingFallback />}>
-            <TravelCommandDashboard />
+            <TravelAnalyticsPanel />
           </Suspense>
         </TabsContent>
       </Tabs>

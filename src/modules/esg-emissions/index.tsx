@@ -31,6 +31,9 @@ import {
 const ESGCommandCenter = lazy(() => import("./components/ESGCommandCenter"));
 const ESGFuelOptimizationPanel = lazy(() => import("./components/ESGFuelOptimizationPanel"));
 const MARPOLCompliancePanel = lazy(() => import("./components/MARPOLCompliancePanel"));
+const CarbonTrackingPanel = lazy(() => import("./components/CarbonTrackingPanel"));
+const SocialSustainabilityPanel = lazy(() => import("./components/SocialSustainabilityPanel"));
+const GovernanceESGPanel = lazy(() => import("./components/GovernanceESGPanel"));
 
 const ESGEmissionsModule = () => {
   return (
@@ -49,23 +52,30 @@ const ESGEmissionsModule = () => {
       />
 
       <Tabs defaultValue="command" className="space-y-6">
-        <TabsList className="grid w-full max-w-4xl grid-cols-6">
+        <TabsList className="grid w-full max-w-6xl grid-cols-8">
           <TabsTrigger value="command" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             Comando
-            <Badge variant="secondary" className="ml-1 text-[10px]">PREMIUM</Badge>
           </TabsTrigger>
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+          <TabsTrigger value="carbon" className="flex items-center gap-2">
+            <Factory className="h-4 w-4" />
+            Carbono
+          </TabsTrigger>
+          <TabsTrigger value="emissions" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Dashboard
           </TabsTrigger>
-          <TabsTrigger value="emissions" className="flex items-center gap-2">
-            <Factory className="h-4 w-4" />
-            Emissões
+          <TabsTrigger value="social" className="flex items-center gap-2">
+            <Droplets className="h-4 w-4" />
+            Social
+          </TabsTrigger>
+          <TabsTrigger value="governance" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Governança
           </TabsTrigger>
           <TabsTrigger value="compliance" className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
-            Compliance
+            MARPOL
           </TabsTrigger>
           <TabsTrigger value="reports" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
@@ -83,16 +93,32 @@ const ESGEmissionsModule = () => {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="dashboard">
-          <EmissionsDashboard />
+        <TabsContent value="carbon">
+          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+            <CarbonTrackingPanel />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="emissions">
-          <EmissionsRegistry />
+          <EmissionsDashboard />
+        </TabsContent>
+
+        <TabsContent value="social">
+          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+            <SocialSustainabilityPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="governance">
+          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+            <GovernanceESGPanel />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="compliance">
-          <ComplianceManagement />
+          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+            <MARPOLCompliancePanel />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="reports">
