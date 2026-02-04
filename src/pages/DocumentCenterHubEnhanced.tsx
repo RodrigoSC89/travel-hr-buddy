@@ -38,6 +38,7 @@ const TemplatesPage = lazy(() => import("@/pages/Templates"));
 const ChecklistsPage = lazy(() => import("@/pages/admin/checklists"));
 const ExportCenter = lazy(() => import("@/pages/ExportCenter"));
 const AdvancedSearch = lazy(() => import("@/pages/AdvancedSearch"));
+const DocumentWorkflowComponent = lazy(() => import("@/modules/document-center/components/DocumentWorkflow"));
 
 function TabLoadingSkeleton() {
   return (
@@ -51,6 +52,7 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "documents", label: "Documentos", icon: FileText },
+  { id: "workflow", label: "Workflow", icon: GitBranch, badge: "NEW" },
   { id: "templates", label: "Templates", icon: LayoutTemplate },
   { id: "checklists", label: "Checklists", icon: CheckSquare },
   { id: "reports", label: "Relatórios", icon: FileCheck },
@@ -468,6 +470,12 @@ export default function DocumentCenterHubEnhanced() {
           <TabsContent value="documents" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <DocumentsPage />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="workflow" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <DocumentWorkflowComponent />
             </Suspense>
           </TabsContent>
 

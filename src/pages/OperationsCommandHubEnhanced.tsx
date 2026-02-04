@@ -40,6 +40,7 @@ const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
 const MissionCommandCenter = lazy(() => import("@/pages/MissionCommandCenter"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
+const MissionControlCenter = lazy(() => import("@/modules/operations/components/MissionControlCenter"));
 
 function TabLoadingSkeleton() {
   return (
@@ -54,6 +55,7 @@ function TabLoadingSkeleton() {
 
 const TABS = [
   { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📊", description: "Dashboard operacional" },
+  { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões", badge: "NEW" },
   { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
   { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
   { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
@@ -462,6 +464,13 @@ export default function OperationsCommandHubEnhanced() {
                 </Card>
               </div>
             </div>
+          </TabsContent>
+
+          {/* Missions Control Center - Premium */}
+          <TabsContent value="missions" className="space-y-4 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <MissionControlCenter />
+            </Suspense>
           </TabsContent>
 
           {/* Maritime Command Tab */}
