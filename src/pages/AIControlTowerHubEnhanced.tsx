@@ -34,6 +34,7 @@ import { useAIControlTowerData } from "@/hooks/useAIControlTowerData";
 const AIModulesHub = lazy(() => import("@/pages/ai/AIModulesHub"));
 const AICommandCenter = lazy(() => import("@/pages/mission-control/ai-command-center"));
 const AgentOrchestrationDashboard = lazy(() => import("@/components/ai/AgentOrchestrationDashboard"));
+const AIAgentsDashboard = lazy(() => import("@/modules/ai-control-tower/components/AIAgentsDashboard"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
 const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
 const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
@@ -424,7 +425,7 @@ export default function AIControlTowerHubEnhanced() {
 
           <TabsContent value="agents" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
-              <AgentOrchestrationDashboard />
+              <AIAgentsDashboard />
             </Suspense>
           </TabsContent>
 

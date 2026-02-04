@@ -40,6 +40,7 @@ const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
 const PeopleAnalytics = lazy(() => import("@/pages/PeopleAnalytics"));
 const CrewTrainingTab = lazy(() => import("@/components/people/CrewTrainingTab"));
 const CrewComplianceTab = lazy(() => import("@/components/people/CrewComplianceTab"));
+const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
 
 function TabLoadingSkeleton() {
   return (
@@ -53,6 +54,7 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "crew", label: "Tripulação", icon: Users },
+  { id: "competency", label: "Competências", icon: Award },
   { id: "recruitment", label: "Recrutamento", icon: UserPlus },
   { id: "wellness", label: "Bem-estar", icon: Heart },
   { id: "training", label: "Treinamento", icon: GraduationCap },
@@ -455,6 +457,12 @@ export default function PeopleHubEnhanced() {
           <TabsContent value="wellness" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <CrewWellnessPage />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="competency" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <CompetencyMatrix />
             </Suspense>
           </TabsContent>
 

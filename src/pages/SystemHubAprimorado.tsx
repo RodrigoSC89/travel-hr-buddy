@@ -3,8 +3,12 @@
  * PATCH PREMIUM-2.0
  */
 
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+
+// Lazy load premium component
+const IntegrationsDashboard = lazy(() => import("@/modules/system-hub/components/IntegrationsDashboard"));
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -93,8 +97,12 @@ export default function SystemHubAprimorado() {
       </div>
 
       <div className="container mx-auto px-4 py-6">
-        <Tabs defaultValue="integrations" className="space-y-6">
+        <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Dashboard
+            </TabsTrigger>
             <TabsTrigger value="integrations" className="flex items-center gap-2">
               <Link className="h-4 w-4" />
               Integrações
@@ -116,6 +124,18 @@ export default function SystemHubAprimorado() {
               Segurança
             </TabsTrigger>
           </TabsList>
+
+          {/* Premium Dashboard */}
+          <TabsContent value="dashboard">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando dashboard...</span>
+              </div>
+            }>
+              <IntegrationsDashboard />
+            </Suspense>
+          </TabsContent>
 
           {/* Integrações */}
           <TabsContent value="integrations">
