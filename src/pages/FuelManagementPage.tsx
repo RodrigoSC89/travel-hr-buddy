@@ -13,6 +13,8 @@ import {
   DollarSign, BarChart3, Calendar, FileText, Droplets,
   Gauge, Thermometer, Clock, MapPin, Plus
 } from "lucide-react";
+import { ModuleOnboarding } from "@/components/ux/ModuleOnboarding";
+import { MODULE_TOURS } from "@/config/module-tours";
 
 // Mock data for fuel tanks
 const fuelTanks = [
@@ -29,6 +31,9 @@ const bunkerHistory = [
   { id: 3, date: "2026-01-15", port: "Fujairah", type: "LSFO", quantity: 320, price: 590, supplier: "ADNOC" },
 ];
 
+// Get tour config
+const tourConfig = MODULE_TOURS["fuel-management"];
+
 export default function FuelManagementPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
 
@@ -38,6 +43,15 @@ export default function FuelManagementPage() {
 
   return (
     <div className="space-y-6 py-4">
+      {/* Module Onboarding Tour */}
+      <div className="flex justify-end">
+        <ModuleOnboarding
+          moduleKey="fuel-management"
+          moduleName={tourConfig.name}
+          steps={tourConfig.steps}
+        />
+      </div>
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
