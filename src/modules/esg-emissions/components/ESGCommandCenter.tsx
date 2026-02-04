@@ -164,7 +164,7 @@ const ciiDistribution = [
   { rating: "E", count: 0, color: "#ef4444" },
 ];
 
-const ESGCommandCenter: React.FC = () => {
+export function ESGCommandCenter() {
   const [selectedVessel, setSelectedVessel] = useState("all");
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([
