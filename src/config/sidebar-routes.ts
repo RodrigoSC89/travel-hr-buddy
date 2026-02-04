@@ -205,10 +205,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "⚙️ Sistema",
     defaultOpen: false,
     items: [
+      { label: "System Hub", path: "/system-hub", icon: Server, emoji: "🖥️", badge: "HUB" },
       { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
       { label: "Integrações", path: "/integrations", icon: Link, emoji: "🔗" },
       { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
       { label: "IoT Dashboard", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️" },
+      { label: "Quality Dashboard", path: "/quality-dashboard", icon: BarChart3, emoji: "📊" },
       { label: "Roadmap", path: "/roadmap", icon: Map, emoji: "🗺️" },
     ],
   },
