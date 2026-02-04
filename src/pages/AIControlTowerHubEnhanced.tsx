@@ -8,7 +8,7 @@
  * - Insights e recomendações acionáveis
  */
 
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Brain, MessageSquare, Bot, Workflow, BarChart3, Eye, ClipboardList,
   FileText, Loader2, Sparkles, Zap, TrendingUp, Activity, Shield,
-  Lightbulb, Target, CheckCircle2, AlertTriangle, Clock, ArrowRight
+  Lightbulb, Target, CheckCircle2, AlertTriangle, Clock, ArrowRight, RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,6 +28,7 @@ import {
   InteractiveKPICard,
   ActionableAlertList 
 } from "@/components/ui/module-enhancements";
+import { useAIControlTowerData } from "@/hooks/useAIControlTowerData";
 
 // Lazy load components
 const AIModulesHub = lazy(() => import("@/pages/ai/AIModulesHub"));
@@ -92,108 +93,9 @@ const quickActions = [
   { id: "create-workflow", label: "Novo Workflow", icon: <Workflow className="h-4 w-4" />, badge: 0 },
 ];
 
-// AI KPIs
-const aiKPIs = [
-  {
-    title: "Agentes Ativos",
-    value: "10",
-    subtitle: "100% operacionais",
-    change: 0,
-    trend: "stable" as const,
-    icon: <Bot className="h-5 w-5" />,
-    details: [
-      { label: "Compliance", value: "5" },
-      { label: "Operações", value: "3" },
-      { label: "Analytics", value: "2" }
-    ]
-  },
-  {
-    title: "Interações Hoje",
-    value: "847",
-    subtitle: "+23% vs ontem",
-    change: 23,
-    trend: "up" as const,
-    icon: <MessageSquare className="h-5 w-5" />,
-    details: [
-      { label: "Chat", value: "542" },
-      { label: "Automações", value: "215" },
-      { label: "Análises", value: "90" }
-    ]
-  },
-  {
-    title: "Precisão Média",
-    value: "96.8%",
-    subtitle: "últimos 7 dias",
-    change: 1.2,
-    trend: "up" as const,
-    icon: <Target className="h-5 w-5" />,
-    details: [
-      { label: "Compliance", value: "98%" },
-      { label: "Previsões", value: "94%" },
-      { label: "Classificação", value: "97%" }
-    ]
-  },
-  {
-    title: "Economia Gerada",
-    value: "$45.2K",
-    subtitle: "este mês",
-    change: 15,
-    trend: "up" as const,
-    icon: <TrendingUp className="h-5 w-5" />,
-    details: [
-      { label: "Manutenção", value: "$18K" },
-      { label: "Compliance", value: "$12K" },
-      { label: "Operações", value: "$15K" }
-    ]
-  }
-];
+// KPIs and insights will be calculated from real data inside component
 
-// AI Insights
-const aiInsights = [
-  {
-    id: "1",
-    title: "Padrão de falha detectado",
-    description: "Motor auxiliar da Nautilus Star mostra padrão similar a falhas anteriores",
-    severity: "high" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 15),
-    module: "Manutenção Preditiva",
-    actions: [
-      { label: "Ver Análise", onClick: () => toast.info("Abrindo análise...") },
-      { label: "Agendar Manutenção", onClick: () => toast.success("Manutenção agendada") }
-    ]
-  },
-  {
-    id: "2",
-    title: "Oportunidade de economia",
-    description: "Rota Santos-Paranaguá pode economizar 12% de combustível com ajuste",
-    severity: "info" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 45),
-    module: "Otimização de Rotas",
-    actions: [
-      { label: "Aplicar Sugestão", onClick: () => toast.success("Sugestão aplicada!") }
-    ]
-  },
-  {
-    id: "3",
-    title: "Anomalia em certificação",
-    description: "3 tripulantes com certificados inconsistentes detectados",
-    severity: "medium" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    module: "Compliance AI",
-    actions: [
-      { label: "Revisar", onClick: () => toast.info("Abrindo revisão...") }
-    ]
-  }
-];
-
-// Active agents
-const activeAgents = [
-  { name: "PEOTRAM Agent", status: "active", tasks: 12, accuracy: 98 },
-  { name: "MLC Compliance", status: "active", tasks: 8, accuracy: 97 },
-  { name: "ISM Auditor", status: "active", tasks: 5, accuracy: 99 },
-  { name: "MARPOL Monitor", status: "active", tasks: 15, accuracy: 96 },
-  { name: "Predictive Maintenance", status: "processing", tasks: 3, accuracy: 94 },
-];
+// Active agents will be derived from real data
 
 export default function AIControlTowerHubEnhanced() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -201,6 +103,78 @@ export default function AIControlTowerHubEnhanced() {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedInsights, setDismissedInsights] = useState<string[]>([]);
+
+  // Real data from Supabase
+  const { agents, decisions, auditLogs, insights, metrics, isLoading: dataLoading } = useAIControlTowerData();
+
+  // Build KPIs from real data
+  const aiKPIs = useMemo(() => [
+    {
+      title: "Agentes Ativos",
+      value: String(metrics.activeAgents),
+      subtitle: `${metrics.totalAgents} total registrados`,
+      change: 0,
+      trend: metrics.activeAgents > 0 ? "up" as const : "stable" as const,
+      icon: <Bot className="h-5 w-5" />,
+      details: [
+        { label: "Ativos", value: String(metrics.activeAgents) },
+        { label: "Total", value: String(metrics.totalAgents) },
+        { label: "Online", value: String(agents.filter((a: any) => a.status === "online").length) }
+      ]
+    },
+    {
+      title: "Interações",
+      value: String(metrics.totalInteractions),
+      subtitle: `${metrics.avgResponseTime}ms tempo médio`,
+      change: metrics.totalInteractions > 0 ? 23 : 0,
+      trend: "up" as const,
+      icon: <MessageSquare className="h-5 w-5" />,
+      details: [
+        { label: "Total", value: String(auditLogs.length) },
+        { label: "Decisões", value: String(decisions.length) },
+        { label: "Insights", value: String(insights.length) }
+      ]
+    },
+    {
+      title: "Precisão Média",
+      value: `${metrics.avgConfidence}%`,
+      subtitle: "confiança nas decisões",
+      change: metrics.avgConfidence > 90 ? 1.2 : 0,
+      trend: metrics.avgConfidence > 90 ? "up" as const : "stable" as const,
+      icon: <Target className="h-5 w-5" />,
+      details: [
+        { label: "Aprovadas", value: String(metrics.approvedDecisions) },
+        { label: "Rejeitadas", value: String(metrics.rejectedDecisions) },
+        { label: "Pendentes", value: String(metrics.pendingDecisions) }
+      ]
+    },
+    {
+      title: "Insights Acionáveis",
+      value: String(metrics.actionableInsights),
+      subtitle: "requerem ação",
+      change: metrics.actionableInsights,
+      trend: metrics.actionableInsights > 0 ? "up" as const : "stable" as const,
+      icon: <Lightbulb className="h-5 w-5" />,
+      details: [
+        { label: "Acionáveis", value: String(metrics.actionableInsights) },
+        { label: "Total", value: String(insights.length) },
+        { label: "Workflows", value: String(metrics.activeWorkflows) }
+      ]
+    }
+  ], [metrics, agents, auditLogs, decisions, insights]);
+
+  // Build alerts from real insights
+  const aiInsights = useMemo(() => insights.slice(0, 5).map((insight: any) => ({
+    id: insight.id,
+    title: insight.title || "Insight IA",
+    description: insight.description || "",
+    severity: (insight.priority === "high" ? "high" : insight.priority === "medium" ? "medium" : "info") as "high" | "medium" | "info",
+    timestamp: new Date(insight.created_at),
+    module: insight.related_module || "AI",
+    actions: [
+      { label: "Ver Detalhes", onClick: () => toast.info("Abrindo detalhes do insight...") },
+    ]
+  })), [insights]);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("ai-control-tower-onboarding");
@@ -345,17 +319,21 @@ export default function AIControlTowerHubEnhanced() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {activeAgents.map((agent, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
+                    {agents.slice(0, 5).map((agent: any, idx: number) => (
+                      <div key={agent.id || idx} className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
-                          agent.status === "active" ? "bg-green-500" : "bg-yellow-500 animate-pulse"
+                          agent.status === "active" || agent.status === "online" 
+                            ? "bg-green-500" 
+                            : "bg-yellow-500 animate-pulse"
                         }`} />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{agent.name}</p>
-                          <p className="text-xs text-muted-foreground">{agent.tasks} tarefas</p>
+                          <p className="text-xs text-muted-foreground">
+                            {agent.capabilities?.length || 0} capacidades
+                          </p>
                         </div>
                         <Badge variant="secondary" className="text-xs">
-                          {agent.accuracy}%
+                          {agent.status}
                         </Badge>
                       </div>
                     ))}

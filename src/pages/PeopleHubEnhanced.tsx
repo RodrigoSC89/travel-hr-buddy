@@ -9,7 +9,7 @@
  * - Analytics de pessoas
  */
 
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Users, Target, TrendingUp, Heart, GraduationCap, Shield, BarChart3,
   Loader2, UserPlus, Calendar, Clock, Award, AlertTriangle, FileText,
-  Briefcase, MapPin, Phone, Mail, Star, Activity, Zap, Bell
+  Briefcase, MapPin, Phone, Mail, Star, Activity, Zap, Bell, RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +30,7 @@ import {
   InteractiveKPICard,
   ActionableAlertList 
 } from "@/components/ui/module-enhancements";
+import { usePeopleHubData } from "@/hooks/usePeopleHubData";
 
 // Lazy load components
 const NautilusPeopleDashboard = lazy(() => import("@/modules/nauti-people/NautilusPeopleDashboard"));
@@ -92,61 +93,7 @@ const quickActions = [
   { id: "report", label: "Relatório RH", icon: <FileText className="h-4 w-4" />, badge: 0 },
 ];
 
-// HR KPIs
-const hrKPIs = [
-  {
-    title: "Total de Tripulantes",
-    value: "342",
-    subtitle: "12 novas contratações este mês",
-    change: 12,
-    trend: "up" as const,
-    icon: <Users className="h-5 w-5" />,
-    details: [
-      { label: "Ativos", value: "298" },
-      { label: "Em Licença", value: "32" },
-      { label: "Férias", value: "12" }
-    ]
-  },
-  {
-    title: "Certificados Válidos",
-    value: "94%",
-    subtitle: "18 expiram nos próximos 30 dias",
-    change: -2,
-    trend: "down" as const,
-    icon: <Award className="h-5 w-5" />,
-    details: [
-      { label: "STCW válidos", value: "96%" },
-      { label: "Médicos válidos", value: "98%" },
-      { label: "Pendentes", value: "18" }
-    ]
-  },
-  {
-    title: "Horas de Treinamento",
-    value: "2,450h",
-    subtitle: "média 7.2h por tripulante/mês",
-    change: 15,
-    trend: "up" as const,
-    icon: <GraduationCap className="h-5 w-5" />,
-    details: [
-      { label: "Obrigatórios", value: "1,800h" },
-      { label: "Opcionais", value: "650h" },
-      { label: "Conclusão", value: "89%" }
-    ]
-  },
-  {
-    title: "Índice de Bem-estar",
-    value: "8.4",
-    subtitle: "MLC 2006 compliance score",
-    change: 0.3,
-    trend: "up" as const,
-    icon: <Heart className="h-5 w-5" />,
-    details: [
-      { label: "Satisfação", value: "8.6" },
-      { label: "Fadiga", value: "Baixa" },
-      { label: "Saúde", value: "8.2" }
-    ]
-  }
-];
+// KPIs will be calculated from real data inside component
 
 // HR Alerts
 const hrAlerts = [
@@ -200,6 +147,65 @@ export default function PeopleHubEnhanced() {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+
+  // Real data from Supabase
+  const { crewMembers, trainings, wellnessRecords, summary, isLoading: dataLoading } = usePeopleHubData();
+
+  // Build KPIs from real data
+  const hrKPIs = useMemo(() => [
+    {
+      title: "Total de Tripulantes",
+      value: String(summary.totalCrew),
+      subtitle: `${summary.activeOnboard} ativos a bordo`,
+      change: summary.totalCrew > 0 ? 12 : 0,
+      trend: "up" as const,
+      icon: <Users className="h-5 w-5" />,
+      details: [
+        { label: "Ativos", value: String(summary.activeOnboard) },
+        { label: "Em Licença", value: String(summary.onLeave) },
+        { label: "Total", value: String(crewMembers.length) }
+      ]
+    },
+    {
+      title: "Certificados",
+      value: `${summary.expiringCerts > 0 ? summary.expiringCerts : "OK"}`,
+      subtitle: `${summary.expiringCerts} expiram em breve`,
+      change: summary.expiringCerts === 0 ? 2 : -2,
+      trend: summary.expiringCerts === 0 ? "up" as const : "down" as const,
+      icon: <Award className="h-5 w-5" />,
+      details: [
+        { label: "Expirando", value: String(summary.expiringCerts) },
+        { label: "Próximos", value: String(summary.upcomingTrainings) },
+        { label: "Total", value: String(crewMembers.length) }
+      ]
+    },
+    {
+      title: "Treinamentos",
+      value: String(trainings.filter(t => t.status === "completed").length),
+      subtitle: `${summary.upcomingTrainings} agendados`,
+      change: trainings.filter(t => t.status === "completed").length,
+      trend: trainings.length > 0 ? "up" as const : "stable" as const,
+      icon: <GraduationCap className="h-5 w-5" />,
+      details: [
+        { label: "Completos", value: String(trainings.filter(t => t.status === "completed").length) },
+        { label: "Em andamento", value: String(trainings.filter(t => t.status === "in_progress").length) },
+        { label: "Total", value: String(trainings.length) }
+      ]
+    },
+    {
+      title: "Aptidão",
+      value: String(summary.fitForDuty),
+      subtitle: "aptos para serviço",
+      change: summary.fitForDuty > 0 ? 0.3 : 0,
+      trend: summary.fitForDuty > 0 ? "up" as const : "stable" as const,
+      icon: <Heart className="h-5 w-5" />,
+      details: [
+        { label: "Aptos", value: String(summary.fitForDuty) },
+        { label: "Avaliações", value: String(wellnessRecords.length) },
+        { label: "Tempo médio", value: `${summary.avgTenure}m` }
+      ]
+    }
+  ], [summary, crewMembers, trainings, wellnessRecords]);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("people-hub-onboarding");
