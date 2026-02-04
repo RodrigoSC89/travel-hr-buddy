@@ -35,6 +35,7 @@ const AIModulesHub = lazy(() => import("@/pages/ai/AIModulesHub"));
 const AICommandCenter = lazy(() => import("@/pages/mission-control/ai-command-center"));
 const AgentOrchestrationDashboard = lazy(() => import("@/components/ai/AgentOrchestrationDashboard"));
 const AIAgentsDashboard = lazy(() => import("@/modules/ai-control-tower/components/AIAgentsDashboard"));
+const AICommandDashboard = lazy(() => import("@/modules/ai-control-tower/components/AICommandDashboard"));
 const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
 const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
 const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
@@ -52,6 +53,7 @@ function TabLoadingSkeleton() {
 
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: Activity },
+  { id: "command", label: "Comando IA", icon: Brain, badge: "NOVO" },
   { id: "hub", label: "Hub IA", icon: Sparkles },
   { id: "chat", label: "Chat", icon: MessageSquare },
   { id: "agents", label: "Agentes", icon: Bot },
@@ -409,6 +411,12 @@ export default function AIControlTowerHubEnhanced() {
                 </Card>
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="command" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <AICommandDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="hub" className="mt-6">
