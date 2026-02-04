@@ -218,6 +218,18 @@ export class NautiOneDB extends Dexie {
 // Instância global do banco
 export const db = new NautiOneDB();
 
+/**
+ * Inicializar o banco de dados (criar se não existir)
+ */
+export async function initNautiOneDB(): Promise<NautiOneDB> {
+  // Dexie abre automaticamente, mas podemos forçar
+  if (!db.isOpen()) {
+    await db.open();
+  }
+  console.log('✅ NautiOneDB initialized');
+  return db;
+}
+
 // ===================================================================
 // HELPERS DE PERSISTÊNCIA
 // ===================================================================
