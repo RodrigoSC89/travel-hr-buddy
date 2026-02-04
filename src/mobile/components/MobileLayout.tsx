@@ -3,14 +3,16 @@
  * Provides navigation, error handling, and offline support
  */
 
-import React, { Suspense, ReactNode } from "react";
+import React, { Suspense, ReactNode, lazy } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Loader2, RefreshCw, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { OfflineIndicator } from "./OfflineIndicator";
-import { useOfflineSync } from "../hooks/useOfflineSync";
+import { useSyncStatus } from "@/lib/offline/hooks/useOfflineData";
 import { logger } from '@/lib/logger';
+
+// Lazy load offline indicator
+const OfflineIndicator = lazy(() => import("./OfflineIndicator"));
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -68,7 +70,7 @@ function LoadingFallback() {
 }
 
 export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
-  const { isOnline, pendingChanges, isSyncing } = useOfflineSync();
+  const { isOnline, pendingCount, status } = useSyncStatus();
 
   return (
     <ErrorBoundary 
@@ -79,7 +81,9 @@ export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
     >
       <div className="min-h-screen bg-background">
         {/* Offline indicator */}
-        <OfflineIndicator />
+        <Suspense fallback={null}>
+          <OfflineIndicator position="bottom-left" />
+        </Suspense>
         
         {/* Main content */}
         <Suspense fallback={<LoadingFallback />}>
@@ -89,10 +93,10 @@ export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
         </Suspense>
         
         {/* Sync status bar (when syncing) */}
-        {isSyncing && (
+        {status === 'syncing' && (
           <div className="fixed bottom-0 left-0 right-0 bg-primary text-primary-foreground py-2 px-4 flex items-center justify-center gap-2 z-50">
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm">Sincronizando {pendingChanges} alterações...</span>
+            <span className="text-sm">Sincronizando {pendingCount} alterações...</span>
           </div>
         )}
       </div>

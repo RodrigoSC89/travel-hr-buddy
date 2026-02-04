@@ -9,8 +9,11 @@ import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
 
-// Lazy load notification prompt
+// Lazy load notification prompt and offline status
 const NotificationPrompt = lazy(() => import("@/components/notifications/NotificationPrompt"));
+const OfflineStatusBar = lazy(() => 
+  import("@/components/offline/OfflineStatusBar").then(m => ({ default: m.OfflineStatusBar }))
+);
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -61,6 +64,11 @@ export function SmartLayout() {
           {/* Push Notification Prompt */}
           <Suspense fallback={null}>
             <NotificationPrompt />
+          </Suspense>
+          
+          {/* Offline Status Bar */}
+          <Suspense fallback={null}>
+            <OfflineStatusBar position="bottom" />
           </Suspense>
         </div>
       </TooltipProvider>

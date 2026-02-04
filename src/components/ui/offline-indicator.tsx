@@ -1,2 +1,7 @@
-// Re-exportar o novo componente OfflineBanner como OfflineIndicator para compatibilidade
-export { OfflineBanner as OfflineIndicator } from './OfflineBanner';
+/**
+ * PATCH 1001: Re-export unified offline components
+ */
+
+// Re-export from the main offline module for backward compatibility
+export { OfflineStatusBar as OfflineIndicator, OfflineStatusBadge } from '@/components/offline/OfflineStatusBar';
+export { OfflineBanner, CacheIndicator } from './OfflineBanner';
