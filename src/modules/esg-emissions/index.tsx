@@ -34,6 +34,13 @@ const MARPOLCompliancePanel = lazy(() => import("./components/MARPOLCompliancePa
 const CarbonTrackingPanel = lazy(() => import("./components/CarbonTrackingPanel"));
 const SocialSustainabilityPanel = lazy(() => import("./components/SocialSustainabilityPanel"));
 const GovernanceESGPanel = lazy(() => import("./components/GovernanceESGPanel"));
+const ESGAnalyticsBenchmark = lazy(() => import("./components/ESGAnalyticsBenchmark"));
+
+const LoadingFallback = () => (
+  <div className="h-96 flex items-center justify-center">
+    <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+  </div>
+);
 
 const ESGEmissionsModule = () => {
   return (
@@ -61,10 +68,6 @@ const ESGEmissionsModule = () => {
             <Factory className="h-4 w-4" />
             Carbono
           </TabsTrigger>
-          <TabsTrigger value="emissions" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Dashboard
-          </TabsTrigger>
           <TabsTrigger value="social" className="flex items-center gap-2">
             <Droplets className="h-4 w-4" />
             Social
@@ -77,6 +80,10 @@ const ESGEmissionsModule = () => {
             <Globe className="h-4 w-4" />
             MARPOL
           </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            Analytics
+          </TabsTrigger>
           <TabsTrigger value="reports" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
             Relatórios
@@ -88,36 +95,38 @@ const ESGEmissionsModule = () => {
         </TabsList>
 
         <TabsContent value="command">
-          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+          <Suspense fallback={<LoadingFallback />}>
             <ESGCommandCenter />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="carbon">
-          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+          <Suspense fallback={<LoadingFallback />}>
             <CarbonTrackingPanel />
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="emissions">
-          <EmissionsDashboard />
-        </TabsContent>
-
         <TabsContent value="social">
-          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+          <Suspense fallback={<LoadingFallback />}>
             <SocialSustainabilityPanel />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="governance">
-          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+          <Suspense fallback={<LoadingFallback />}>
             <GovernanceESGPanel />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="compliance">
-          <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+          <Suspense fallback={<LoadingFallback />}>
             <MARPOLCompliancePanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <Suspense fallback={<LoadingFallback />}>
+            <ESGAnalyticsBenchmark />
           </Suspense>
         </TabsContent>
 
