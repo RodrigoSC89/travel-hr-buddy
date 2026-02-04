@@ -14,7 +14,7 @@ interface QuickAction {
   id: string;
   label: string;
   icon: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
   badge?: string | number;
   disabled?: boolean;
@@ -23,16 +23,26 @@ interface QuickAction {
 
 interface QuickActionsBarProps {
   actions: QuickAction[];
+  onActionClick?: (actionId: string) => void;
   title?: string;
   className?: string;
 }
 
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
   actions,
+  onActionClick,
   title = "Ações Rápidas",
   className
 }) => {
   if (actions.length === 0) return null;
+
+  const handleClick = (action: QuickAction) => {
+    if (action.onClick) {
+      action.onClick();
+    } else if (onActionClick) {
+      onActionClick(action.id);
+    }
+  };
 
   return (
     <motion.div
@@ -56,17 +66,17 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
                 <Button
                   variant={action.variant || 'outline'}
                   size="sm"
-                  onClick={action.onClick}
+                  onClick={() => handleClick(action)}
                   disabled={action.disabled}
                   className={cn(
                     "relative gap-2",
-                    action.badge && "pr-8"
+                    action.badge && typeof action.badge === 'number' && action.badge > 0 && "pr-8"
                   )}
                   title={action.tooltip}
                 >
                   {action.icon}
                   {action.label}
-                  {action.badge && (
+                  {action.badge && typeof action.badge === 'number' && action.badge > 0 && (
                     <Badge 
                       variant="secondary" 
                       className="absolute -top-2 -right-2 h-5 min-w-5 flex items-center justify-center text-xs"
