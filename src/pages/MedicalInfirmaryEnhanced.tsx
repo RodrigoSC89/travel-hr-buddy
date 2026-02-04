@@ -18,8 +18,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Lazy load premium component
-const MedicalDashboard = lazy(() => import("@/modules/medical-infirmary/components/MedicalDashboard"));
+// Lazy load premium components
+const MedicalDashboard = lazy(() => import("@/modules/medical-infirmary/components/MedicalDashboard").catch(() => ({ default: () => <div className="text-center py-12 text-muted-foreground">Dashboard em desenvolvimento</div> })));
+const InfirmaryCommandCenter = lazy(() => import("@/modules/digital-infirmary/components/InfirmaryCommandCenter"));
 
 const healthStats = [
   { id: "crew", label: "Tripulantes Ativos", value: 247, icon: Users, color: "primary" },
@@ -127,8 +128,13 @@ export default function MedicalInfirmaryEnhanced() {
           ))}
         </div>
 
-        <Tabs defaultValue="dashboard" className="space-y-6">
+        <Tabs defaultValue="command" className="space-y-6">
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
+            <TabsTrigger value="command" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              Comando
+              <Badge variant="secondary" className="text-[10px] px-1">PREMIUM</Badge>
+            </TabsTrigger>
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Dashboard
@@ -155,6 +161,18 @@ export default function MedicalInfirmaryEnhanced() {
               Emergência
             </TabsTrigger>
           </TabsList>
+
+          {/* Command Center Premium */}
+          <TabsContent value="command">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando Centro de Comando...</span>
+              </div>
+            }>
+              <InfirmaryCommandCenter />
+            </Suspense>
+          </TabsContent>
 
           {/* Dashboard Premium */}
           <TabsContent value="dashboard">

@@ -16,8 +16,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Lazy load premium component
+// Lazy load premium components
 const WasteManagementDashboard = lazy(() => import("@/modules/waste-management/components/WasteManagementDashboard"));
+const WasteCommandCenter = lazy(() => import("@/modules/waste-management/components/WasteCommandCenter"));
 
 const wasteKPIs = [
   { id: "compliance", label: "Conformidade MARPOL", value: "100%", icon: CheckCircle, color: "success" },
@@ -118,8 +119,13 @@ export default function WasteManagementEnhanced() {
           ))}
         </div>
 
-        <Tabs defaultValue="dashboard" className="space-y-6">
+        <Tabs defaultValue="command" className="space-y-6">
           <TabsList className="inline-flex h-10 items-center gap-1 rounded-lg bg-muted/50 p-1">
+            <TabsTrigger value="command" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              Comando
+              <Badge variant="secondary" className="text-[10px] px-1">PREMIUM</Badge>
+            </TabsTrigger>
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Dashboard
@@ -146,6 +152,18 @@ export default function WasteManagementEnhanced() {
               MARPOL
             </TabsTrigger>
           </TabsList>
+
+          {/* Command Center Premium */}
+          <TabsContent value="command">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando Centro de Comando...</span>
+              </div>
+            }>
+              <WasteCommandCenter />
+            </Suspense>
+          </TabsContent>
 
           {/* Dashboard Premium */}
           <TabsContent value="dashboard">
