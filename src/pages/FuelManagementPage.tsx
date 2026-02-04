@@ -11,10 +11,8 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Fuel, TrendingUp, TrendingDown, AlertTriangle, Ship, 
   DollarSign, BarChart3, Calendar, FileText, Droplets,
-  Gauge, Thermometer, Clock, MapPin, Plus
+  Gauge, Thermometer, Clock, MapPin, Plus, HelpCircle
 } from "lucide-react";
-import { ModuleOnboarding } from "@/components/ux/ModuleOnboarding";
-import { MODULE_TOURS } from "@/config/module-tours";
 
 // Mock data for fuel tanks
 const fuelTanks = [
@@ -31,11 +29,9 @@ const bunkerHistory = [
   { id: 3, date: "2026-01-15", port: "Fujairah", type: "LSFO", quantity: 320, price: 590, supplier: "ADNOC" },
 ];
 
-// Get tour config
-const tourConfig = MODULE_TOURS["fuel-management"];
-
 export default function FuelManagementPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showHelp, setShowHelp] = useState(false);
 
   const totalCapacity = fuelTanks.reduce((acc, t) => acc + t.capacity, 0);
   const totalCurrent = fuelTanks.reduce((acc, t) => acc + t.current, 0);
@@ -43,13 +39,12 @@ export default function FuelManagementPage() {
 
   return (
     <div className="space-y-6 py-4">
-      {/* Module Onboarding Tour */}
+      {/* Help Button */}
       <div className="flex justify-end">
-        <ModuleOnboarding
-          moduleKey="fuel-management"
-          moduleName={tourConfig.name}
-          steps={tourConfig.steps}
-        />
+        <Button variant="outline" size="sm" onClick={() => setShowHelp(!showHelp)}>
+          <HelpCircle className="h-4 w-4 mr-2" />
+          Ajuda
+        </Button>
       </div>
 
       {/* Header */}
