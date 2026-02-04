@@ -43,6 +43,7 @@ const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
 const MissionControlCenter = lazy(() => import("@/modules/operations/components/MissionControlCenter"));
 const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/FleetCommandCenter"));
 const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
+const OperationsCommandDashboard = lazy(() => import("@/modules/operations-command/components/OperationsCommandDashboard"));
 
 function TabLoadingSkeleton() {
   return (
@@ -56,6 +57,7 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
+  { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium", badge: "PREMIUM" },
   { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📊", description: "Dashboard operacional" },
   { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões", badge: "NEW" },
   { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
@@ -342,6 +344,13 @@ export default function OperationsCommandHubEnhanced() {
               </TabsTrigger>
             ))}
           </TabsList>
+
+          {/* Command Center Tab - PREMIUM */}
+          <TabsContent value="command" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <OperationsCommandDashboard />
+            </Suspense>
+          </TabsContent>
 
           {/* Overview Tab - NEW */}
           <TabsContent value="overview" className="space-y-6 mt-6">

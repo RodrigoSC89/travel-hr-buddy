@@ -43,6 +43,7 @@ const CrewComplianceTab = lazy(() => import("@/components/people/CrewComplianceT
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
 const CrewSchedulingDashboard = lazy(() => import("@/modules/crew-scheduling/components/CrewSchedulingDashboard"));
 const AcademyDashboard = lazy(() => import("@/modules/academy/components/AcademyDashboard"));
+const PeopleCommandCenter = lazy(() => import("@/modules/people-hub/components/PeopleCommandCenter"));
 
 function TabLoadingSkeleton() {
   return (
@@ -54,6 +55,7 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
+  { id: "command", label: "Comando", icon: Activity, badge: "PREMIUM" },
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "crew", label: "Tripulação", icon: Users },
   { id: "scheduling", label: "Escalas", icon: Calendar },
@@ -312,6 +314,13 @@ export default function PeopleHubEnhanced() {
               </TabsTrigger>
             ))}
           </TabsList>
+
+          {/* Command Center Tab - PREMIUM */}
+          <TabsContent value="command" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <PeopleCommandCenter />
+            </Suspense>
+          </TabsContent>
 
           {/* Dashboard Tab - NEW */}
           <TabsContent value="dashboard" className="space-y-6 mt-6">
