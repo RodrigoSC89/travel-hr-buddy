@@ -9,7 +9,7 @@
  * - Ações rápidas contextuais
  */
 
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -21,7 +21,7 @@ import {
   Anchor, Ship, Map, Target, Package, Compass, Loader2,
   AlertTriangle, CheckCircle2, Clock, Users, Fuel, Navigation,
   Calendar, ArrowRight, Bell, TrendingUp, Activity, Zap,
-  MapPin, Waves, Wind, Thermometer
+  MapPin, Waves, Wind, Thermometer, RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,6 +32,7 @@ import {
   ActionableAlert,
   ActionableAlertList 
 } from "@/components/ui/module-enhancements";
+import { useOperationsCommandData } from "@/hooks/useOperationsCommandData";
 
 // Lazy load original components
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
@@ -93,61 +94,7 @@ const quickActions = [
   { id: "checklist", label: "Checklist", icon: <CheckCircle2 className="h-4 w-4" />, badge: 5 },
 ];
 
-// Mock operational KPIs
-const operationalKPIs = [
-  {
-    title: "Embarcações Ativas",
-    value: "12",
-    subtitle: "de 15 na frota",
-    change: 2,
-    trend: "up" as const,
-    icon: <Ship className="h-5 w-5" />,
-    details: [
-      { label: "Em operação", value: "10" },
-      { label: "Em manutenção", value: "2" },
-      { label: "Docadas", value: "3" }
-    ]
-  },
-  {
-    title: "Viagens em Andamento",
-    value: "8",
-    subtitle: "previsão: 3 chegadas hoje",
-    change: 1,
-    trend: "up" as const,
-    icon: <Navigation className="h-5 w-5" />,
-    details: [
-      { label: "Viagens hoje", value: "8" },
-      { label: "Esta semana", value: "23" },
-      { label: "Este mês", value: "67" }
-    ]
-  },
-  {
-    title: "Tripulantes a Bordo",
-    value: "284",
-    subtitle: "96% da capacidade",
-    change: -5,
-    trend: "down" as const,
-    icon: <Users className="h-5 w-5" />,
-    details: [
-      { label: "Oficiais", value: "48" },
-      { label: "Marinheiros", value: "180" },
-      { label: "Técnicos", value: "56" }
-    ]
-  },
-  {
-    title: "Eficiência Operacional",
-    value: "94.2%",
-    subtitle: "+2.1% vs mês anterior",
-    change: 2.1,
-    trend: "up" as const,
-    icon: <TrendingUp className="h-5 w-5" />,
-    details: [
-      { label: "Pontualidade", value: "96%" },
-      { label: "Disponibilidade", value: "92%" },
-      { label: "Utilização", value: "89%" }
-    ]
-  }
-];
+// KPIs will be calculated from real data inside component
 
 // Mock alerts
 const operationalAlerts = [
@@ -216,6 +163,65 @@ export default function OperationsCommandHubEnhanced() {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+
+  // Real data from Supabase
+  const { voyages, missions, vessels, ports, metrics, isLoading: dataLoading } = useOperationsCommandData();
+
+  // Build KPIs from real data
+  const operationalKPIs = useMemo(() => [
+    {
+      title: "Embarcações Ativas",
+      value: String(metrics.operationalVessels),
+      subtitle: `de ${metrics.totalVessels} na frota`,
+      change: metrics.operationalVessels > 0 ? 2 : 0,
+      trend: "up" as const,
+      icon: <Ship className="h-5 w-5" />,
+      details: [
+        { label: "Em operação", value: String(metrics.operationalVessels) },
+        { label: "Total", value: String(metrics.totalVessels) },
+        { label: "Portos", value: String(metrics.totalPorts) }
+      ]
+    },
+    {
+      title: "Viagens em Andamento",
+      value: String(metrics.activeVoyages),
+      subtitle: `${metrics.plannedVoyages} planejadas`,
+      change: metrics.activeVoyages,
+      trend: metrics.activeVoyages > 0 ? "up" as const : "stable" as const,
+      icon: <Navigation className="h-5 w-5" />,
+      details: [
+        { label: "Ativas", value: String(metrics.activeVoyages) },
+        { label: "Planejadas", value: String(metrics.plannedVoyages) },
+        { label: "Completas", value: String(metrics.completedVoyages) }
+      ]
+    },
+    {
+      title: "Missões Ativas",
+      value: String(metrics.activeMissions),
+      subtitle: `${missions.length} total registradas`,
+      change: metrics.activeMissions,
+      trend: metrics.activeMissions > 0 ? "up" as const : "stable" as const,
+      icon: <Target className="h-5 w-5" />,
+      details: [
+        { label: "Ativas", value: String(metrics.activeMissions) },
+        { label: "Total", value: String(missions.length) },
+        { label: "Planejadas", value: String(missions.filter((m: any) => m.status === "planning").length) }
+      ]
+    },
+    {
+      title: "Portos Disponíveis",
+      value: String(metrics.totalPorts),
+      subtitle: "locais operacionais",
+      change: 0,
+      trend: "stable" as const,
+      icon: <MapPin className="h-5 w-5" />,
+      details: [
+        { label: "Total", value: String(ports.length) },
+        { label: "Ativos", value: String(ports.filter((p: any) => p.status === "active").length) },
+        { label: "Países", value: String(new Set(ports.map((p: any) => p.country)).size) }
+      ]
+    }
+  ], [metrics, missions, ports, vessels]);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("operations-command-onboarding");
