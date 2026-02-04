@@ -46,7 +46,7 @@ function OptimizedListInner<T>({
 
   const renderListItem = useCallback((item: T, index: number) => {
     return (
-      <div key={keyExtractor(item, index)} className="animate-fade-in">
+      <div key={keyExtractor(item, index)}>
         {renderItem(item, index)}
       </div>
     );

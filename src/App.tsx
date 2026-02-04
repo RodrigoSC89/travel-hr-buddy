@@ -401,25 +401,21 @@ const queryClient = new QueryClient({
 /**
  * Loader with delayed visibility to prevent flash during fast transitions
  */
+/**
+ * Loader INSTANTÂNEO - Sem delays ou animações que causam flickering
+ * PATCH: Anti-flickering v3.0
+ */
 const Loader = () => {
   const [showRetry, setShowRetry] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(false);
   
   React.useEffect(() => {
-    // Delay showing loader to prevent flash on fast loads (200ms threshold)
-    const visibilityTimeout = setTimeout(() => setIsVisible(true), 200);
-    // Show retry button after 15s
+    // Show retry button after 15s only
     const retryTimeout = setTimeout(() => setShowRetry(true), 15000);
-    
-    return () => {
-      clearTimeout(visibilityTimeout);
-      clearTimeout(retryTimeout);
-    };
+    return () => clearTimeout(retryTimeout);
   }, []);
   
   const handleRetry = async () => {
     try {
-      // Clear SW caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
@@ -429,17 +425,12 @@ const Loader = () => {
         await Promise.all(regs.map(r => r.unregister()));
       }
     } catch {}
-    // Hard reload
     window.location.href = window.location.origin + '/?_sw=' + Date.now();
   };
   
-  // Don't render anything until delay passes - prevents flash
-  if (!isVisible) {
-    return <div className="min-h-screen bg-background" />;
-  }
-  
+  // RENDER IMEDIATO - Sem delay de visibilidade
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background animate-fade-in">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-4">
         <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
         <p className="text-foreground">Carregando Nauti One...</p>
