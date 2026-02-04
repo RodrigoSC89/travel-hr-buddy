@@ -1,5 +1,5 @@
 /**
- * Central Data Hooks Export - PATCH DATA-3.0
+ * Central Data Hooks Export - PATCH DATA-4.0
  * Unified export for all module data hooks with Supabase integration
  */
 
@@ -15,6 +15,7 @@ export { useDocumentCenterData } from "./useDocumentCenterData";
 export { useSystemHubData } from "./useSystemHubData";
 export { useWasteManagementData } from "./useWasteManagementData";
 export { useMedicalInfirmaryData } from "./useMedicalInfirmaryData";
+export { useNotificationsCenter, useCommunicationMessages, useCommunicationChannels, useInboxMessages, useChannelManagerData } from "./useCommunicationData";
 
 // Re-export types for convenience
 export type { VoyageData, MissionData, PortData } from "./useOperationsCommandData";
@@ -22,3 +23,4 @@ export type { AIAgent, AIDecision, AIAuditLog } from "./useAIControlTowerData";
 export type { CrewMember, Training, WellnessRecord, PeopleSummary } from "./usePeopleHubData";
 export type { Document, DocumentStats, DocumentCategory } from "./useDocumentCenterData";
 export type { WasteTank, DischargeRecord } from "./useWasteManagementData";
+export type { Notification, Message, Channel, InboxMessage, ChannelData } from "./useCommunicationData";

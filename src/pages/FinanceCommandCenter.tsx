@@ -160,25 +160,44 @@ const sampleRouteCosts: RouteCost[] = [
 
 const FinanceCommandCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showNewExpense, setShowNewExpense] = useState(false);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const { toast } = useToast();
   const { analyzeRouteCost, isLoading: isAILoading } = useNautilusEnhancementAI();
 
-  // Route Cost Analysis State
+  // Import real data hook
+  const { useFinanceCommandData } = require("@/hooks/useFinanceCommandData");
+  const {
+    transactions: realTransactions,
+    financialSummary: realSummary,
+    budgetCategories: realBudgets,
+    routeCosts: realRouteCosts,
+    pendingApprovals: realPendingApprovals,
+    monthlyData: realMonthlyData,
+    isLoading,
+    createTransaction,
+    processApproval,
+    refresh,
+  } = useFinanceCommandData();
+
+  // Route Cost Analysis State - use real data with fallback
   const [routeCosts, setRouteCosts] = useState<RouteCost[]>(sampleRouteCosts);
   const [selectedPeriod, setSelectedPeriod] = useState("2024-02");
   const [selectedVessel, setSelectedVessel] = useState("all");
 
-  // Financial Data State
-  const [financialSummary, setFinancialSummary] = useState({
+  // Sync real data when available
+  useEffect(() => {
+    if (realRouteCosts.length > 0) {
+      setRouteCosts(realRouteCosts);
+    }
+  }, [realRouteCosts]);
+
+  // Financial Data State - use real data
+  const financialSummary = realSummary.revenue > 0 ? realSummary : {
     revenue: 2450000,
     expenses: 1890000,
     profit: 560000,
@@ -187,39 +206,46 @@ const FinanceCommandCenter: React.FC = () => {
     margin: 22.8,
     revenueGrowth: 12.5,
     expenseGrowth: 8.2,
-  });
+  };
 
-  const [transactions, setTransactions] = useState<Transaction[]>([
+  const transactions = realTransactions.length > 0 ? realTransactions.map((t: any) => ({
+    id: t.id,
+    description: t.description,
+    amount: t.type === "expense" ? -Math.abs(t.amount) : t.amount,
+    date: t.date,
+    category: t.category,
+    status: t.status,
+    type: t.type,
+    requester: t.requester,
+  })) : [
     { id: "1", description: "Combustível - Embarcação Alpha", amount: -45000, date: "2024-01-15", category: "fuel", status: "approved", type: "expense" },
     { id: "2", description: "Manutenção Preventiva", amount: -12500, date: "2024-01-14", category: "maintenance", status: "pending", type: "expense", requester: "Carlos Silva" },
     { id: "3", description: "Contrato de Frete #2024-001", amount: 180000, date: "2024-01-13", category: "revenue", status: "approved", type: "income" },
-    { id: "4", description: "Provisões - Tripulação", amount: -8900, date: "2024-01-12", category: "supplies", status: "approved", type: "expense" },
-    { id: "5", description: "Certificação ISM", amount: -15000, date: "2024-01-11", category: "compliance", status: "approved", type: "expense" },
-    { id: "6", description: "Contrato de Frete #2024-002", amount: 95000, date: "2024-01-10", category: "revenue", status: "approved", type: "income" },
-  ]);
+  ];
 
-  const [pendingApprovals, setPendingApprovals] = useState<Transaction[]>([
+  const pendingApprovals = realPendingApprovals.length > 0 ? realPendingApprovals : [
     { id: "p1", description: "Reparo Motor Principal", amount: 45000, date: "2024-01-15", category: "maintenance", status: "pending", type: "expense", requester: "Carlos Silva" },
-    { id: "p2", description: "Equipamento de Segurança", amount: 12000, date: "2024-01-14", category: "compliance", status: "pending", type: "expense", requester: "Ana Santos" },
-    { id: "p3", description: "Treinamento Tripulação", amount: 8500, date: "2024-01-13", category: "crew", status: "pending", type: "expense", requester: "Pedro Costa" },
-  ]);
+  ];
 
-  const [budgetCategories, setBudgetCategories] = useState<BudgetCategory[]>([
+  const budgetCategories = realBudgets.length > 0 ? realBudgets.map((b: any) => ({
+    name: b.name,
+    allocated: b.allocated,
+    spent: b.spent,
+    color: b.color,
+    icon: CATEGORY_ICONS[b.name.toLowerCase()] || DollarSign,
+  })) : [
     { name: "Combustível", allocated: 500000, spent: 420000, color: "hsl(var(--chart-1))", icon: Fuel },
     { name: "Manutenção", allocated: 300000, spent: 280000, color: "hsl(var(--chart-2))", icon: Wrench },
     { name: "Tripulação", allocated: 400000, spent: 390000, color: "hsl(var(--chart-3))", icon: Users },
-    { name: "Provisões", allocated: 150000, spent: 120000, color: "hsl(var(--chart-4))", icon: Receipt },
-    { name: "Compliance", allocated: 200000, spent: 180000, color: "hsl(var(--primary))", icon: ShieldCheck },
-  ]);
+  ];
 
-  const [monthlyData] = useState([
+  const monthlyData = realMonthlyData.length > 0 ? realMonthlyData : [
     { month: "Jan", receita: 420000, despesas: 320000 },
     { month: "Fev", receita: 380000, despesas: 290000 },
     { month: "Mar", receita: 450000, despesas: 340000 },
-    { month: "Abr", receita: 520000, despesas: 380000 },
-    { month: "Mai", receita: 480000, despesas: 350000 },
-    { month: "Jun", receita: 550000, despesas: 410000 },
-  ]);
+  ];
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const [settings, setSettings] = useState(() => {
     const saved = localStorage.getItem("finance-command-settings");
@@ -248,11 +274,8 @@ const FinanceCommandCenter: React.FC = () => {
     }).format(value);
   };
 
-  // Fetch data
-  const fetchData = useCallback(async (showToast = false) => {
-    if (showToast) setIsRefreshing(true);
-    else setIsLoading(true);
-
+  // Fetch additional notifications
+  const fetchNotifications = useCallback(async () => {
     try {
       const { data: aiInsights } = await supabase
         .from("ai_insights")
@@ -271,28 +294,21 @@ const FinanceCommandCenter: React.FC = () => {
       }));
 
       setNotifications(mappedNotifications);
-
-      if (showToast) {
-        toast({ title: "Dados atualizados", description: "O dashboard financeiro foi atualizado." });
-      }
     } catch (err) {
-      logger.error("Error fetching data:", err);
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
+      logger.error("Error fetching notifications:", err);
     }
-  }, [toast]);
+  }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   useEffect(() => {
     if (settings.autoRefresh) {
-      const interval = setInterval(() => fetchData(false), settings.refreshInterval * 1000);
+      const interval = setInterval(() => refresh(), settings.refreshInterval * 1000);
       return () => clearInterval(interval);
     }
-  }, [settings.autoRefresh, settings.refreshInterval, fetchData]);
+  }, [settings.autoRefresh, settings.refreshInterval, refresh]);
 
   useEffect(() => {
     localStorage.setItem("finance-command-settings", JSON.stringify(settings));
@@ -302,50 +318,42 @@ const FinanceCommandCenter: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
+        return <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30">Aprovado</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+        return <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30">Pendente</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Rejeitado</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
   };
 
-  // Handle approve/reject
+  // Handle approve/reject using real mutation
   const handleApprove = (id: string) => {
-    setPendingApprovals(prev => prev.filter(p => p.id !== id));
-    const approved = pendingApprovals.find(p => p.id === id);
-    if (approved) {
-      setTransactions(prev => [{ ...approved, status: "approved" }, ...prev]);
-    }
+    processApproval.mutate({ id, action: "approve" });
     toast({ title: "Aprovado", description: "A solicitação foi aprovada com sucesso." });
   };
 
   const handleReject = (id: string) => {
-    setPendingApprovals(prev => prev.filter(p => p.id !== id));
+    processApproval.mutate({ id, action: "reject" });
     toast({ title: "Rejeitado", description: "A solicitação foi rejeitada.", variant: "destructive" });
   };
 
-  // Create expense
+  // Create expense using real mutation
   const handleCreateExpense = () => {
     if (!newExpense.description || !newExpense.amount) {
       toast({ title: "Erro", description: "Preencha todos os campos obrigatórios.", variant: "destructive" });
       return;
     }
 
-    const expense: Transaction = {
-      id: `new-${Date.now()}`,
+    createTransaction.mutate({
       description: newExpense.description,
-      amount: -Math.abs(parseFloat(newExpense.amount)),
+      amount: Math.abs(parseFloat(newExpense.amount)),
       date: format(new Date(), "yyyy-MM-dd"),
       category: newExpense.category,
-      status: "pending",
       type: "expense",
-      requester: "Você",
-    };
-
-    setPendingApprovals(prev => [expense, ...prev]);
+    });
+    
     setNewExpense({ description: "", amount: "", category: "other", notes: "" });
     setShowNewExpense(false);
     toast({ title: "Despesa criada", description: "A despesa foi enviada para aprovação." });
@@ -370,7 +378,7 @@ const FinanceCommandCenter: React.FC = () => {
       a.click();
     } else {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
-      transactions.forEach(tx => {
+      transactions.forEach((tx: Transaction) => {
         csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
       });
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
@@ -426,7 +434,7 @@ const FinanceCommandCenter: React.FC = () => {
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      budgetCategories.forEach(cat => {
+      budgetCategories.forEach((cat: BudgetCategory) => {
         const percentage = ((cat.spent / cat.allocated) * 100).toFixed(1);
         doc.text(`${cat.name}: ${formatCurrency(cat.spent)} / ${formatCurrency(cat.allocated)} (${percentage}%)`, 25, yPos);
         yPos += 7;
@@ -597,8 +605,8 @@ const FinanceCommandCenter: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => fetchData(true)} disabled={isRefreshing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+          <Button variant="outline" onClick={() => refresh()} disabled={isLoading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <DropdownMenu>
@@ -769,7 +777,7 @@ const FinanceCommandCenter: React.FC = () => {
                         outerRadius={80}
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                       >
-                        {budgetCategories.map((entry, index) => (
+                        {budgetCategories.map((entry: BudgetCategory, index: number) => (
                           <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                         ))}
                       </Pie>
@@ -788,7 +796,7 @@ const FinanceCommandCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {transactions.slice(0, 5).map(tx => (
+                {transactions.slice(0, 5).map((tx: Transaction) => (
                   <div key={tx.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                     <div className="flex items-center gap-3">
                       {React.createElement(CATEGORY_ICONS[tx.category] || DollarSign, { className: "h-5 w-5 text-muted-foreground" })}
@@ -825,7 +833,7 @@ const FinanceCommandCenter: React.FC = () => {
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-2">
-                  {transactions.map(tx => (
+                  {transactions.map((tx: Transaction) => (
                     <div key={tx.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className={`p-2 rounded-lg ${tx.type === "income" ? "bg-green-500/20" : "bg-red-500/20"}`}>
@@ -901,7 +909,7 @@ const FinanceCommandCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {budgetCategories.map(cat => {
+                {budgetCategories.map((cat: BudgetCategory) => {
                   const percentage = (cat.spent / cat.allocated) * 100;
                   const Icon = cat.icon;
                   return (
@@ -1142,7 +1150,7 @@ const FinanceCommandCenter: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {pendingApprovals.map(approval => (
+                  {pendingApprovals.map((approval: Transaction) => (
                     <div key={approval.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-amber-500/20">

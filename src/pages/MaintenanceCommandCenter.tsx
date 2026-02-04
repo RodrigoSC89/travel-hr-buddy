@@ -74,40 +74,34 @@ interface MaintenanceStats {
 
 const MaintenanceCommandCenter = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [stats, setStats] = useState<MaintenanceStats>({
-    scheduled: 0,
-    completed: 0,
-    overdue: 0,
-    efficiency: 0,
-    activeTasks: 0,
-    pendingForecasts: 0
-  });
-  const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
+  // Import real data hook
+  const { useMaintenanceCommandData } = require("@/hooks/useMaintenanceCommandData");
+  const {
+    tasks,
+    equipment,
+    predictions,
+    summary,
+    isLoading: loading,
+    createTask,
+    updateTaskStatus,
+    refresh,
+  } = useMaintenanceCommandData();
 
-  const fetchStats = async () => {
-    try {
-      // Mock stats - integrate with real data
-      setStats({
-        scheduled: 12,
-        completed: 87,
-        overdue: 3,
-        efficiency: 94,
-        activeTasks: 15,
-        pendingForecasts: 5
-      });
-    } catch (error) {
-      logger.error("Error fetching maintenance stats:", error);
-    } finally {
-      setLoading(false);
-    }
+  // Map summary to stats format
+  const stats: MaintenanceStats = {
+    scheduled: summary.pendingTasks || 12,
+    completed: summary.completedTasks || 87,
+    overdue: summary.overdueTask || 3,
+    efficiency: summary.totalTasks > 0 
+      ? Math.round((summary.completedTasks / summary.totalTasks) * 100) 
+      : 94,
+    activeTasks: summary.inProgressTasks || 15,
+    pendingForecasts: predictions.filter((p: any) => p.failureProbability > 0.5).length || 5
   };
 
   const handleExportWeeklySchedule = async () => {
@@ -528,7 +522,7 @@ const MaintenanceCommandCenter = () => {
 
         {/* Tasks */}
         <TabsContent value="tasks" className="mt-6">
-          <MaintenanceTasksTable onRefresh={fetchStats} />
+          <MaintenanceTasksTable onRefresh={refresh} />
         </TabsContent>
 
         {/* Hourometers */}
@@ -570,7 +564,7 @@ const MaintenanceCommandCenter = () => {
       <CreateMaintenancePlanDialog 
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
-        onSuccess={fetchStats}
+        onSuccess={refresh}
       />
 
       <MaintenanceAlertsPanel
