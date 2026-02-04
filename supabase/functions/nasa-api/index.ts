@@ -8,6 +8,9 @@ const corsHeaders = {
 /**
  * NASA Open API - Environmental and satellite data
  * Earth observation, space weather, and maritime environmental data
+ * 
+ * REQUIRES: NASA_API_KEY secret to be configured
+ * Get your free key at: https://api.nasa.gov/
  */
 
 interface NASARequest {
@@ -25,10 +28,24 @@ serve(async (req) => {
   }
 
   try {
+    const apiKey = Deno.env.get("NASA_API_KEY");
+    
+    // Enforce real API key - no demo fallback in production
+    if (!apiKey) {
+      console.error("[nasa-api] NASA_API_KEY not configured");
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "NOT_CONFIGURED",
+          message: "NASA API key not configured. Get a free key at https://api.nasa.gov/",
+          configRequired: ["NASA_API_KEY"],
+        }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const payload: NASARequest = await req.json();
     const { operation, lat, lng, date, startDate, endDate } = payload;
-
-    const apiKey = Deno.env.get("NASA_API_KEY") || "DEMO_KEY";
     
     console.log(`[nasa-api] Operation: ${operation}`);
 
@@ -37,35 +54,17 @@ serve(async (req) => {
         // Astronomy Picture of the Day
         const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}${date ? `&date=${date}` : ""}`;
         
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            return new Response(
-              JSON.stringify({
-                success: true,
-                source: "nasa",
-                apod: data,
-                timestamp: new Date().toISOString(),
-              }),
-              { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
-          }
-        } catch (e) {
-          console.log("[nasa-api] APOD fetch failed");
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`NASA API returned ${response.status}`);
         }
-
+        
+        const data = await response.json();
         return new Response(
           JSON.stringify({
             success: true,
-            source: "demo",
-            apod: {
-              title: "Ocean Currents from Space",
-              explanation: "This visualization shows global ocean currents as observed from NASA satellites.",
-              url: "https://apod.nasa.gov/apod/image/ocean_currents.jpg",
-              date: new Date().toISOString().split("T")[0],
-              media_type: "image",
-            },
+            source: "nasa",
+            apod: data,
             timestamp: new Date().toISOString(),
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -75,16 +74,19 @@ serve(async (req) => {
       case "earth-imagery": {
         if (!lat || !lng) {
           return new Response(
-            JSON.stringify({ error: "Coordinates required" }),
+            JSON.stringify({ error: "Coordinates required (lat, lng)" }),
             { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
 
+        const url = `https://api.nasa.gov/planetary/earth/imagery?lon=${lng}&lat=${lat}&api_key=${apiKey}${date ? `&date=${date}` : ""}`;
+        
+        const response = await fetch(url);
+        
         const imagery = {
           location: { lat, lng },
           date: date || new Date().toISOString().split("T")[0],
-          cloudScore: Math.random() * 30,
-          imageUrl: `https://api.nasa.gov/planetary/earth/imagery?lon=${lng}&lat=${lat}&api_key=${apiKey}`,
+          imageUrl: url,
           satellite: "Landsat 8",
           resolution: "30m",
           bands: ["Red", "Green", "Blue", "NIR"],
@@ -99,7 +101,7 @@ serve(async (req) => {
         return new Response(
           JSON.stringify({
             success: true,
-            source: apiKey !== "DEMO_KEY" ? "nasa" : "demo",
+            source: "nasa",
             imagery,
             timestamp: new Date().toISOString(),
           }),
@@ -114,31 +116,18 @@ serve(async (req) => {
         
         const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${start}&end_date=${end}&api_key=${apiKey}`;
         
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            return new Response(
-              JSON.stringify({
-                success: true,
-                source: "nasa",
-                elementCount: data.element_count,
-                nearEarthObjects: data.near_earth_objects,
-                timestamp: new Date().toISOString(),
-              }),
-              { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
-          }
-        } catch (e) {
-          console.log("[nasa-api] NEO fetch failed");
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`NASA NEO API returned ${response.status}`);
         }
-
+        
+        const data = await response.json();
         return new Response(
           JSON.stringify({
             success: true,
-            source: "demo",
-            elementCount: 12,
-            message: "Demo data - connect NASA API key for real data",
+            source: "nasa",
+            elementCount: data.element_count,
+            nearEarthObjects: data.near_earth_objects,
             timestamp: new Date().toISOString(),
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -146,21 +135,26 @@ serve(async (req) => {
       }
 
       case "donki": {
-        // Space Weather Database
+        // Space Weather Database Of Notifications, Knowledge, Information
         const start = startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+        const end = new Date().toISOString().split("T")[0];
         
+        // Fetch solar flares
+        const flareUrl = `https://api.nasa.gov/DONKI/FLR?startDate=${start}&endDate=${end}&api_key=${apiKey}`;
+        const flareResponse = await fetch(flareUrl);
+        const solarFlares = flareResponse.ok ? await flareResponse.json() : [];
+        
+        // Fetch geomagnetic storms
+        const gstUrl = `https://api.nasa.gov/DONKI/GST?startDate=${start}&endDate=${end}&api_key=${apiKey}`;
+        const gstResponse = await fetch(gstUrl);
+        const geomagneticStorms = gstResponse.ok ? await gstResponse.json() : [];
+
         const spaceWeather = {
-          solarFlares: [
-            { classType: "M1.2", startTime: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), sourceLocation: "N15W20" },
-            { classType: "C5.0", startTime: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), sourceLocation: "S10E30" },
-          ],
-          geomagneticStorms: [
-            { kpIndex: 5, startTime: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), allKpIndex: [4, 5, 5, 4, 3] },
-          ],
-          cme: [],
+          solarFlares: solarFlares.slice(0, 10),
+          geomagneticStorms: geomagneticStorms.slice(0, 10),
           impact: {
-            gpsAccuracy: "Normal",
-            hfRadio: "Minor degradation possible",
+            gpsAccuracy: geomagneticStorms.length > 0 ? "Minor degradation possible" : "Normal",
+            hfRadio: solarFlares.length > 0 ? "Minor degradation possible" : "Normal",
             satelliteOps: "Normal",
             recommendation: "Monitor for updates during active periods",
           },
@@ -169,8 +163,8 @@ serve(async (req) => {
         return new Response(
           JSON.stringify({
             success: true,
-            source: apiKey !== "DEMO_KEY" ? "nasa-donki" : "demo",
-            period: { start, end: new Date().toISOString().split("T")[0] },
+            source: "nasa-donki",
+            period: { start, end },
             spaceWeather,
             timestamp: new Date().toISOString(),
           }),
@@ -180,17 +174,24 @@ serve(async (req) => {
 
       case "epic": {
         // Earth Polychromatic Imaging Camera
+        const epicUrl = `https://api.nasa.gov/EPIC/api/natural?api_key=${apiKey}`;
+        
+        const response = await fetch(epicUrl);
+        if (!response.ok) {
+          throw new Error(`NASA EPIC API returned ${response.status}`);
+        }
+        
+        const images = await response.json();
+        
         const epicData = {
           date: date || new Date().toISOString().split("T")[0],
-          images: [
-            {
-              identifier: "epic_1b_20231215001234",
-              caption: "Earth from DSCOVR",
-              centroid_coordinates: { lat: 0, lon: -120 },
-              sun_j2000_position: { x: 148500000, y: 0, z: 0 },
-              lunar_j2000_position: { x: 384000, y: 0, z: 0 },
-            },
-          ],
+          images: images.slice(0, 5).map((img: any) => ({
+            identifier: img.identifier,
+            caption: img.caption,
+            centroid_coordinates: img.centroid_coordinates,
+            sun_j2000_position: img.sun_j2000_position,
+            lunar_j2000_position: img.lunar_j2000_position,
+          })),
           satellite: "DSCOVR",
           distance: "1.5 million km from Earth",
         };
@@ -198,7 +199,7 @@ serve(async (req) => {
         return new Response(
           JSON.stringify({
             success: true,
-            source: apiKey !== "DEMO_KEY" ? "nasa-epic" : "demo",
+            source: "nasa-epic",
             epic: epicData,
             timestamp: new Date().toISOString(),
           }),
@@ -207,19 +208,31 @@ serve(async (req) => {
       }
 
       case "mars-weather": {
-        // InSight Mars Weather
+        // InSight Mars Weather Service
+        const url = `https://api.nasa.gov/insight_weather/?api_key=${apiKey}&feedtype=json&ver=1.0`;
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`NASA InSight API returned ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const sols = data.sol_keys || [];
+        const latestSol = sols[sols.length - 1];
+        const solData = data[latestSol] || {};
+
         const marsWeather = {
-          sol: 1000 + Math.floor(Math.random() * 100),
-          season: "winter",
+          sol: parseInt(latestSol) || 0,
+          season: solData.Season || "unknown",
           temperature: {
-            average: -60 + Math.random() * 20,
-            min: -95 + Math.random() * 10,
-            max: -20 + Math.random() * 15,
+            average: solData.AT?.av || null,
+            min: solData.AT?.mn || null,
+            max: solData.AT?.mx || null,
           },
-          pressure: 700 + Math.random() * 100,
+          pressure: solData.PRE?.av || null,
           wind: {
-            speed: 5 + Math.random() * 15,
-            direction: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.floor(Math.random() * 8)],
+            speed: solData.HWS?.av || null,
+            direction: solData.WD?.most_common?.compass_point || null,
           },
           note: "Data from InSight lander (reference for space operations planning)",
         };
@@ -227,7 +240,7 @@ serve(async (req) => {
         return new Response(
           JSON.stringify({
             success: true,
-            source: "demo",
+            source: "nasa-insight",
             mars: marsWeather,
             timestamp: new Date().toISOString(),
           }),
@@ -245,7 +258,10 @@ serve(async (req) => {
   } catch (error) {
     console.error("[nasa-api] Error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ 
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error" 
+      }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
