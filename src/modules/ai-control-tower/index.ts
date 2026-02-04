@@ -5,6 +5,7 @@
 
 // Premium Components
 export { default as AIAgentsDashboard } from './components/AIAgentsDashboard';
+export { default as AICommandDashboard } from './components/AICommandDashboard';
 
 // Re-export types if needed
 export type { } from './types';
