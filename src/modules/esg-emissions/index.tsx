@@ -1,6 +1,6 @@
 /**
- * ESG & Emissions Module
- * Monitoramento ambiental, carbon footprint e compliance regulatório
+ * ESG & Emissions Module - Enhanced
+ * Monitoramento ambiental, carbon footprint, compliance MARPOL e otimização de combustível
  */
 
 import React, { Suspense, lazy } from "react";
@@ -23,10 +23,14 @@ import {
   Droplets,
   Activity,
   Sparkles,
+  Fuel,
+  Shield,
 } from "lucide-react";
 
-// Premium Command Center
+// Premium Components (Lazy loaded)
 const ESGCommandCenter = lazy(() => import("./components/ESGCommandCenter"));
+const ESGFuelOptimizationPanel = lazy(() => import("./components/ESGFuelOptimizationPanel"));
+const MARPOLCompliancePanel = lazy(() => import("./components/MARPOLCompliancePanel"));
 
 const ESGEmissionsModule = () => {
   return (
