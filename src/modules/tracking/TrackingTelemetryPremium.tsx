@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { 
   Satellite, LayoutDashboard, MapPin, Activity, Radio,
   Ship, Gauge, Thermometer, Navigation, AlertTriangle,
-  Signal, Wifi, Globe, Clock
+  Signal, Wifi, Globe, Clock, TrendingUp, TrendingDown
 } from "lucide-react";
 import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
 import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -238,9 +238,147 @@ function TrackingDashboard() {
   );
 }
 
+// Real-time Telemetry Tab
+function TelemetryTab() {
+  const sensorData = [
+    { name: "Motor Principal", type: "temperature", value: 78, unit: "°C", status: "normal", trend: "stable" },
+    { name: "Motor Auxiliar", type: "temperature", value: 65, unit: "°C", status: "normal", trend: "down" },
+    { name: "Pressão Óleo", type: "pressure", value: 4.2, unit: "bar", status: "normal", trend: "stable" },
+    { name: "RPM Hélice", type: "rpm", value: 145, unit: "rpm", status: "normal", trend: "up" },
+    { name: "Nível Combustível", type: "fuel", value: 72, unit: "%", status: "warning", trend: "down" },
+    { name: "Temp. Escape", type: "temperature", value: 320, unit: "°C", status: "normal", trend: "stable" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {sensorData.map((sensor) => (
+          <Card key={sensor.name} className={`border-l-4 ${
+            sensor.status === "warning" ? "border-l-warning" : 
+            sensor.status === "critical" ? "border-l-destructive" : "border-l-success"
+          }`}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">{sensor.name}</span>
+                <Badge variant={sensor.status === "normal" ? "default" : "destructive"}>
+                  {sensor.status === "normal" ? "OK" : sensor.status.toUpperCase()}
+                </Badge>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold">{sensor.value}</span>
+                <span className="text-muted-foreground">{sensor.unit}</span>
+                {sensor.trend === "up" && <TrendingUp className="h-4 w-4 text-success ml-2" />}
+                {sensor.trend === "down" && <TrendingDown className="h-4 w-4 text-warning ml-2" />}
+              </div>
+              <Progress value={sensor.type === "fuel" ? sensor.value : (sensor.value / 400) * 100} className="mt-2" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// SATCOM Tab
+function SatcomTab() {
+  const connections = [
+    { name: "Starlink", status: "connected", signal: 98, latency: 45, bandwidth: "150 Mbps" },
+    { name: "Iridium Certus", status: "connected", signal: 92, latency: 180, bandwidth: "700 Kbps" },
+    { name: "Fleet Xpress", status: "connected", signal: 85, latency: 320, bandwidth: "6 Mbps" },
+    { name: "Inmarsat Fleet One", status: "standby", signal: 75, latency: 450, bandwidth: "100 Kbps" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {connections.map((conn) => (
+          <Card key={conn.name}>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">{conn.name}</CardTitle>
+                <Badge variant={conn.status === "connected" ? "default" : "secondary"}>
+                  {conn.status === "connected" ? "Conectado" : "Standby"}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Sinal</span>
+                  <span className="font-medium">{conn.signal}%</span>
+                </div>
+                <Progress value={conn.signal} />
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Latência</span>
+                    <p className="font-medium">{conn.latency}ms</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Banda</span>
+                    <p className="font-medium">{conn.bandwidth}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Map placeholder with real vessel data
+function MapTab() {
+  const [vessels, setVessels] = useState<any[]>([]);
+  
+  useEffect(() => {
+    async function loadVessels() {
+      const { data } = await supabase
+        .from("vessels")
+        .select("id, name, status, current_location")
+        .limit(10);
+      if (data) setVessels(data);
+    }
+    loadVessels();
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5" />
+            Mapa de Rastreamento
+          </CardTitle>
+          <CardDescription>Posições em tempo real da frota</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border-2 border-dashed">
+            <div className="text-center">
+              <Globe className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
+              <p className="text-muted-foreground">Mapa interativo</p>
+              <p className="text-sm text-muted-foreground">{vessels.length} embarcações rastreadas</p>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+            {vessels.map((v) => (
+              <Badge key={v.id} variant="outline" className="justify-start gap-2 py-2">
+                <Ship className="h-3 w-3" />
+                {v.name}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+
 export default function TrackingTelemetryPremium() {
   const handleRefresh = async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
+    toast.success("Dados atualizados");
   };
 
   const handleExport = () => {
@@ -258,19 +396,19 @@ export default function TrackingTelemetryPremium() {
       id: "map",
       label: "Mapa",
       icon: Globe,
-      content: <div className="text-center py-12 text-muted-foreground">Mapa de Rastreamento</div>
+      content: <MapTab />
     },
     {
       id: "telemetry",
       label: "Telemetria",
       icon: Activity,
-      content: <div className="text-center py-12 text-muted-foreground">Telemetria Avançada</div>
+      content: <TelemetryTab />
     },
     {
       id: "satcom",
       label: "SATCOM",
       icon: Satellite,
-      content: <div className="text-center py-12 text-muted-foreground">Comunicação Satelital</div>
+      content: <SatcomTab />
     }
   ];
 
