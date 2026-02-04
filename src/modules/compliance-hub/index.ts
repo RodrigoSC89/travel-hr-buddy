@@ -1,11 +1,10 @@
 /**
- * Compliance Hub Module - Main Entry Point
- * Centro de Gestão de Conformidade com IA Integrada
- * PATCH COMPLIANCE-2.0 - Enhanced version
+ * Compliance Hub Module - Enhanced Entry Point
+ * PATCH COMPLIANCE-3.0
  */
 
-export { EnhancedComplianceCenter as default } from './components/EnhancedComplianceCenter';
-export { EnhancedComplianceCenter } from './components/EnhancedComplianceCenter';
+export { default } from './components/ComplianceHubEnhanced';
+export { default as EnhancedComplianceCenter } from './components/ComplianceHubEnhanced';
 export { ComplianceHubDashboard } from './components/ComplianceHubDashboard';
 export { useComplianceData } from './hooks/useComplianceData';
 export { useComplianceAI } from './hooks/useComplianceAI';
