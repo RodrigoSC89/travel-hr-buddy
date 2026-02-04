@@ -287,15 +287,18 @@ const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAI
 // ============================================
 const OperationsCommandHub = lazy(() => import("@/pages/OperationsCommandHubEnhanced"));
 const AIControlTowerHub = lazy(() => import("@/pages/AIControlTowerHubEnhanced"));
-const PeopleHub = lazy(() => import("@/pages/PeopleHubEnhanced"));
-const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryHubEnhanced"));
-const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHubEnhanced"));
+const PeopleHub = lazy(() => import("@/pages/PeopleHubPremium"));
+const TrackingTelemetryHub = lazy(() => import("@/pages/TrackingTelemetryPremium"));
+const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterPremium"));
 const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
 const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
-const ComplianceHubPage = lazy(() => import("@/pages/ComplianceHubPage"));
+const ComplianceHubPage = lazy(() => import("@/pages/ComplianceHubPremium"));
 const SystemHubPremium = lazy(() => import("@/pages/SystemHubPremium"));
-const MaintenanceHub = lazy(() => import("@/pages/MaintenanceCommandCenter"));
-const FinanceHub = lazy(() => import("@/pages/FinanceCommandCenter"));
+const MaintenanceHub = lazy(() => import("@/pages/MaintenanceHubPremium"));
+const FinanceHub = lazy(() => import("@/pages/FinanceCommandCenterPremium"));
+
+// Medical Infirmary Premium
+const MedicalInfirmaryPremium = lazy(() => import("@/pages/MedicalInfirmaryPremium"));
 
 // ============================================
 // ESG & SUSTENTABILIDADE
@@ -760,7 +763,8 @@ const AppRoutes = () => (
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
       <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
-      <Route path="/medical-infirmary" element={<MedicalInfirmaryEnhanced />} />
+      <Route path="/medical-infirmary" element={<MedicalInfirmaryPremium />} />
+      <Route path="/enfermaria-digital" element={<MedicalInfirmaryPremium />} />
       <Route path="/users" element={<Users />} />
       
       {/* HR/DP Module - New Routes */}
