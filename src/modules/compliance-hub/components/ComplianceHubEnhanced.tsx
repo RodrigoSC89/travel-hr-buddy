@@ -31,7 +31,6 @@ import { ModuleOnboarding, QuickActionsBar, InteractiveKPICard, ActionableAlertL
 
 const ComplianceHubEnhanced: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [loading, setLoading] = useState(true);
   const [showNewAudit, setShowNewAudit] = useState(false);
   const [showNewNC, setShowNewNC] = useState(false);
 
@@ -153,23 +152,7 @@ const ComplianceHubEnhanced: React.FC = () => {
     return Math.round(total / complianceScores.length);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-32 bg-muted rounded-lg" />
-          <div className="grid grid-cols-6 gap-4">
-            {[1,2,3,4,5,6].map(i => <div key={i} className="h-24 bg-muted rounded-lg" />)}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Removed artificial loading state that caused flickering
 
   return (
     <div className="p-6 space-y-6">
@@ -180,12 +163,8 @@ const ComplianceHubEnhanced: React.FC = () => {
         steps={onboardingSteps}
       />
 
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-center justify-between gap-4"
-      >
+      {/* Header - NO motion to prevent flickering */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/10 border border-blue-500/20">
             <Shield className="h-8 w-8 text-blue-500" />
@@ -200,16 +179,12 @@ const ComplianceHubEnhanced: React.FC = () => {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setLoading(true)}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Atualizar
-          </Button>
           <Button onClick={() => setShowNewAudit(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Auditoria
           </Button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Quick Actions */}
       <QuickActionsBar actions={quickActions} />

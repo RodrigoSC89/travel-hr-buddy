@@ -31,7 +31,6 @@ import { ModuleOnboarding, QuickActionsBar, InteractiveKPICard, ActionableAlertL
 
 const FinanceHubEnhanced: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [loading, setLoading] = useState(true);
   const [showNewTransaction, setShowNewTransaction] = useState(false);
   const [showNewInvoice, setShowNewInvoice] = useState(false);
 
@@ -123,23 +122,7 @@ const FinanceHubEnhanced: React.FC = () => {
     }
   ]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-32 bg-muted rounded-lg" />
-          <div className="grid grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => <div key={i} className="h-32 bg-muted rounded-lg" />)}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Removed artificial loading state that caused flickering
 
   return (
     <div className="p-6 space-y-6">
@@ -150,12 +133,8 @@ const FinanceHubEnhanced: React.FC = () => {
         steps={onboardingSteps}
       />
 
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row md:items-center justify-between gap-4"
-      >
+      {/* Header - NO motion to prevent flickering */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/20">
             <DollarSign className="h-8 w-8 text-green-500" />
@@ -170,16 +149,12 @@ const FinanceHubEnhanced: React.FC = () => {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setLoading(true)}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Atualizar
-          </Button>
           <Button onClick={() => setShowNewTransaction(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Quick Actions */}
       <QuickActionsBar actions={quickActions} />

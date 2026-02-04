@@ -271,12 +271,8 @@ export default function OperationsCommandHubEnhanced() {
       </AnimatePresence>
 
       <div className="container mx-auto py-6 space-y-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between"
-        >
+        {/* Header - NO motion to prevent flickering */}
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
               <Compass className="h-8 w-8 text-primary" />
@@ -304,7 +300,7 @@ export default function OperationsCommandHubEnhanced() {
               Tour
             </Button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Actions Bar */}
         <QuickActionsBar
@@ -337,17 +333,10 @@ export default function OperationsCommandHubEnhanced() {
 
           {/* Overview Tab - NEW */}
           <TabsContent value="overview" className="space-y-6 mt-6">
-            {/* KPIs Row */}
+            {/* KPIs Row - NO staggered animations to prevent flickering */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {operationalKPIs.map((kpi, index) => (
-                <motion.div
-                  key={kpi.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <InteractiveKPICard {...kpi} />
-                </motion.div>
+              {operationalKPIs.map((kpi) => (
+                <InteractiveKPICard key={kpi.title} {...kpi} />
               ))}
             </div>
 

@@ -249,12 +249,8 @@ export default function TrackingTelemetryHubEnhanced() {
       </AnimatePresence>
 
       <div className="container mx-auto py-6 space-y-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between"
-        >
+        {/* Header - NO motion to prevent flickering */}
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5">
               <Satellite className="h-8 w-8 text-cyan-600" />
@@ -282,7 +278,7 @@ export default function TrackingTelemetryHubEnhanced() {
               Tour
             </Button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Actions */}
         <QuickActionsBar
@@ -308,17 +304,10 @@ export default function TrackingTelemetryHubEnhanced() {
 
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-6 mt-6">
-            {/* KPIs */}
+            {/* KPIs - NO staggered animations to prevent flickering */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {telemetryKPIs.map((kpi, index) => (
-                <motion.div
-                  key={kpi.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <InteractiveKPICard {...kpi} />
-                </motion.div>
+              {telemetryKPIs.map((kpi) => (
+                <InteractiveKPICard key={kpi.title} {...kpi} />
               ))}
             </div>
 

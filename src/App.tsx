@@ -472,11 +472,9 @@ const AuthenticatedLayout = () => {
           {/* Header with mobile menu trigger */}
           <Header />
           
-          {/* Main content with padding for mobile bottom nav - smooth transitions */}
+          {/* Main content with padding for mobile bottom nav - NO animation wrapper to prevent flickering */}
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
-            <div className="animate-fade-in">
-              <Outlet />
-            </div>
+            <Outlet />
           </main>
         </div>
         
