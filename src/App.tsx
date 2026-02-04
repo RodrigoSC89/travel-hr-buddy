@@ -130,6 +130,7 @@ const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanc
 // ============================================
 const MaintenanceCommandCenter = lazy(() => import("@/pages/MaintenanceCommandCenter"));
 const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenancePage"));
+const FuelManagementPage = lazy(() => import("@/pages/FuelManagementPage"));
 
 // ============================================
 // OPERAÇÕES SUBMARINAS - DESABILITADO (100% mockado)
@@ -578,13 +579,16 @@ const AppRoutes = () => (
       <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
       <Route path="/mlc-scheduling" element={<MLCSchedulingPage />} />
+      <Route path="/crew-scheduling" element={<MLCSchedulingPage />} />
       <Route path="/supplier-portal" element={<SupplierPortalPage />} />
       <Route path="/iot-dashboard" element={<IoTDashboardPage />} />
+      <Route path="/satcom-dashboard" element={<SatcomDashboardEnhanced />} />
       {/* ============================================ */}
       {/* MANUTENÇÃO */}
       {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
+      <Route path="/fuel-management" element={<FuelManagementPage />} />
       
       {/* ============================================ */}
       {/* OPERAÇÕES SUBMARINAS - DESABILITADO (100% mockado) */}
