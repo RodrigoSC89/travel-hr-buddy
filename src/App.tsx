@@ -114,6 +114,10 @@ const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
 const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
 const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
 
+// Módulos Completos - Enhanced
+const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
+const EnhancedWasteManagement = lazy(() => import("@/modules/waste-management/EnhancedWasteManagement"));
+
 // ============================================
 // MANUTENÇÃO
 // ============================================
@@ -753,7 +757,7 @@ const AppRoutes = () => (
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
       <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
-      <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
+      <Route path="/medical-infirmary" element={<MedicalInfirmary />} />
       <Route path="/users" element={<Users />} />
       
       {/* HR/DP Module - New Routes */}
@@ -808,7 +812,7 @@ const AppRoutes = () => (
       {/* ESG & SUSTENTABILIDADE */}
       {/* ============================================ */}
       <Route path="/esg-emissions" element={<ESGEmissionsPage />} />
-      <Route path="/waste-management" element={<WasteManagementPage />} />
+      <Route path="/waste-management" element={<EnhancedWasteManagement />} />
       <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
       
       {/* ============================================ */}
