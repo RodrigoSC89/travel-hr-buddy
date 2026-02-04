@@ -1,12 +1,22 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Stethoscope, LayoutDashboard, Users, Pill, FileText, Brain, ClipboardList } from "lucide-react";
+import { 
+  Stethoscope, 
+  LayoutDashboard, 
+  Users, 
+  Pill, 
+  FileText, 
+  Brain, 
+  ClipboardList,
+  Activity
+} from "lucide-react";
 import EnhancedInfirmaryDashboard from "./components/EnhancedInfirmaryDashboard";
 import CrewHealthTab from "./components/CrewHealthTab";
 import SuppliesTab from "./components/SuppliesTab";
 import RecordsTab from "./components/RecordsTab";
 import ReportsTab from "./components/ReportsTab";
+import MedicalConsultationsTab from "./components/MedicalConsultationsTab";
 
 export default function MedicalInfirmary() {
   return (
@@ -35,10 +45,14 @@ export default function MedicalInfirmary() {
 
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full max-w-3xl grid-cols-5">
+          <TabsList className="grid w-full max-w-4xl grid-cols-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
+            </TabsTrigger>
+            <TabsTrigger value="consultations" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              <span className="hidden sm:inline">Atendimentos</span>
             </TabsTrigger>
             <TabsTrigger value="crew" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -60,6 +74,10 @@ export default function MedicalInfirmary() {
 
           <TabsContent value="dashboard">
             <EnhancedInfirmaryDashboard />
+          </TabsContent>
+
+          <TabsContent value="consultations">
+            <MedicalConsultationsTab />
           </TabsContent>
 
           <TabsContent value="crew">

@@ -1,6 +1,6 @@
 /**
  * Medical Supplies Management Tab
- * MIGRATED: Uses Supabase hooks
+ * ENHANCED: Complete inventory with dispensation & restocking
  */
 
 import React, { useState, useEffect } from 'react';
@@ -11,17 +11,20 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Pill, Search, Package, AlertTriangle, Calendar, 
   Plus, Download, Filter, Brain, ShoppingCart, BarChart3,
-  CheckCircle2, Clock, MapPin, Trash2, Loader2
+  CheckCircle2, Clock, MapPin, Trash2, Loader2, Syringe,
+  PackagePlus, History, ClipboardList, User
 } from 'lucide-react';
 import { useMedicalSupplies } from '../hooks/useMedicalData';
 import { MedicalSupply } from '../types';
 import { toast } from 'sonner';
 import { useMedicalAI } from '../hooks/useMedicalAI';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const medicalCategories = [
   'Analgésicos', 'Anti-inflamatórios', 'Antibióticos', 'Antieméticos',
@@ -39,6 +42,10 @@ export default function SuppliesTab() {
   const [showFilters, setShowFilters] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showDispenseDialog, setShowDispenseDialog] = useState(false);
+  const [showRestockDialog, setShowRestockDialog] = useState(false);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
+  const [selectedSupply, setSelectedSupply] = useState<MedicalSupply | null>(null);
   const [newItem, setNewItem] = useState({
     name: '',
     category: '',
@@ -126,6 +133,53 @@ export default function SuppliesTab() {
 
   const handleRequestRestock = (supply: MedicalSupply) => {
     toast.success(`Solicitação de reposição enviada: ${supply.name}`);
+  };
+
+  const handleDispense = (supply: MedicalSupply) => {
+    setSelectedSupply(supply);
+    setShowDispenseDialog(true);
+  };
+
+  const handleRestock = (supply: MedicalSupply) => {
+    setSelectedSupply(supply);
+    setShowRestockDialog(true);
+  };
+
+  const handleDispenseSubmit = (quantity: number, patientName: string, reason: string) => {
+    if (selectedSupply) {
+      setSupplies(prev => prev.map(s => 
+        s.id === selectedSupply.id 
+          ? { 
+              ...s, 
+              quantity: Math.max(0, s.quantity - quantity),
+              status: s.quantity - quantity < s.minStock ? 'low' : s.status
+            }
+          : s
+      ));
+      toast.success(`${quantity} ${selectedSupply.unit} dispensado(s) para ${patientName}`);
+      setShowDispenseDialog(false);
+      setSelectedSupply(null);
+    }
+  };
+
+  const handleRestockSubmit = (quantity: number, batchNumber: string, expiryDate: string) => {
+    if (selectedSupply) {
+      setSupplies(prev => prev.map(s => 
+        s.id === selectedSupply.id 
+          ? { 
+              ...s, 
+              quantity: s.quantity + quantity,
+              batchNumber: batchNumber || s.batchNumber,
+              expiryDate: expiryDate || s.expiryDate,
+              status: 'ok',
+              lastRestock: new Date().toISOString().split('T')[0]
+            }
+          : s
+      ));
+      toast.success(`Estoque de ${selectedSupply.name} atualizado: +${quantity}`);
+      setShowRestockDialog(false);
+      setSelectedSupply(null);
+    }
   };
 
   const handleExport = () => {
@@ -486,15 +540,37 @@ export default function SuppliesTab() {
                     </div>
                   </div>
                   
-                  {(supply.status === 'low' || supply.status === 'critical') && (
+                  {/* Action Buttons */}
+                  <div className="mt-3 pt-3 border-t border-border/50 flex gap-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full mt-3"
+                      className="flex-1"
+                      onClick={(e) => { e.stopPropagation(); handleDispense(supply); }}
+                    >
+                      <Syringe className="h-3 w-3 mr-1" />
+                      Dispensar
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={(e) => { e.stopPropagation(); handleRestock(supply); }}
+                    >
+                      <PackagePlus className="h-3 w-3 mr-1" />
+                      Reabastecer
+                    </Button>
+                  </div>
+                  
+                  {(supply.status === 'low' || supply.status === 'critical') && (
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      className="w-full mt-2"
                       onClick={() => handleRequestRestock(supply)}
                     >
                       <ShoppingCart className="h-3 w-3 mr-2" />
-                      Solicitar Reposição
+                      Solicitar Reposição Urgente
                     </Button>
                   )}
                 </div>
@@ -503,6 +579,167 @@ export default function SuppliesTab() {
           </ScrollArea>
         </CardContent>
       </Card>
+
+      {/* Dispense Dialog */}
+      <Dialog open={showDispenseDialog} onOpenChange={setShowDispenseDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Syringe className="h-5 w-5 text-primary" />
+              Dispensar Medicamento
+            </DialogTitle>
+            <DialogDescription>
+              {selectedSupply?.name} - Estoque atual: {selectedSupply?.quantity} {selectedSupply?.unit}
+            </DialogDescription>
+          </DialogHeader>
+          <DispenseForm 
+            supply={selectedSupply}
+            onSubmit={handleDispenseSubmit}
+            onCancel={() => setShowDispenseDialog(false)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Restock Dialog */}
+      <Dialog open={showRestockDialog} onOpenChange={setShowRestockDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PackagePlus className="h-5 w-5 text-primary" />
+              Reabastecer Estoque
+            </DialogTitle>
+            <DialogDescription>
+              {selectedSupply?.name} - Estoque atual: {selectedSupply?.quantity} {selectedSupply?.unit}
+            </DialogDescription>
+          </DialogHeader>
+          <RestockForm 
+            supply={selectedSupply}
+            onSubmit={handleRestockSubmit}
+            onCancel={() => setShowRestockDialog(false)}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+// Dispense Form Component
+function DispenseForm({ supply, onSubmit, onCancel }: { 
+  supply: MedicalSupply | null; 
+  onSubmit: (qty: number, patient: string, reason: string) => void;
+  onCancel: () => void;
+}) {
+  const [quantity, setQuantity] = useState(1);
+  const [patientName, setPatientName] = useState('');
+  const [reason, setReason] = useState('');
+
+  if (!supply) return null;
+
+  return (
+    <div className="space-y-4 py-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Quantidade</Label>
+          <Input
+            type="number"
+            min={1}
+            max={supply.quantity}
+            value={quantity}
+            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+          />
+          <p className="text-xs text-muted-foreground">Máx: {supply.quantity}</p>
+        </div>
+        <div className="space-y-2">
+          <Label>Lote</Label>
+          <Input value={supply.batchNumber} disabled />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label>Paciente / Tripulante</Label>
+        <Input
+          value={patientName}
+          onChange={(e) => setPatientName(e.target.value)}
+          placeholder="Nome do paciente"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Motivo / Indicação</Label>
+        <Textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Descreva o motivo da dispensação..."
+          rows={2}
+        />
+      </div>
+      <DialogFooter>
+        <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+        <Button 
+          onClick={() => onSubmit(quantity, patientName, reason)}
+          disabled={!patientName || quantity < 1 || quantity > supply.quantity}
+        >
+          <Syringe className="h-4 w-4 mr-2" />
+          Confirmar Dispensação
+        </Button>
+      </DialogFooter>
+    </div>
+  );
+}
+
+// Restock Form Component
+function RestockForm({ supply, onSubmit, onCancel }: { 
+  supply: MedicalSupply | null; 
+  onSubmit: (qty: number, batch: string, expiry: string) => void;
+  onCancel: () => void;
+}) {
+  const [quantity, setQuantity] = useState(10);
+  const [batchNumber, setBatchNumber] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+
+  if (!supply) return null;
+
+  return (
+    <div className="space-y-4 py-4">
+      <div className="space-y-2">
+        <Label>Quantidade a Adicionar</Label>
+        <Input
+          type="number"
+          min={1}
+          value={quantity}
+          onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Número do Lote (novo)</Label>
+          <Input
+            value={batchNumber}
+            onChange={(e) => setBatchNumber(e.target.value)}
+            placeholder={supply.batchNumber}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Nova Validade</Label>
+          <Input
+            type="date"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="p-3 rounded-lg bg-muted/50 text-sm">
+        <p><strong>Estoque atual:</strong> {supply.quantity} {supply.unit}</p>
+        <p><strong>Após reabastecimento:</strong> {supply.quantity + quantity} {supply.unit}</p>
+      </div>
+      <DialogFooter>
+        <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+        <Button 
+          onClick={() => onSubmit(quantity, batchNumber, expiryDate)}
+          disabled={quantity < 1}
+        >
+          <PackagePlus className="h-4 w-4 mr-2" />
+          Confirmar Reabastecimento
+        </Button>
+      </DialogFooter>
     </div>
   );
 }
