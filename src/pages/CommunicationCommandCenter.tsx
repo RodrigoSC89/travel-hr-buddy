@@ -46,41 +46,31 @@ interface CommandStats {
 
 const CommunicationCommandCenter = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [stats, setStats] = useState<CommandStats>({
-    totalMessages: 0,
-    unreadMessages: 0,
-    totalChannels: 0,
-    activeChannels: 0,
-    totalNotifications: 0,
-    criticalNotifications: 0,
-    urgentMessages: 0,
-    todayMessages: 0
-  });
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Simulate loading stats
-    const loadStats = async () => {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setStats({
-        totalMessages: 156,
-        unreadMessages: 12,
-        totalChannels: 8,
-        activeChannels: 6,
-        totalNotifications: 24,
-        criticalNotifications: 2,
-        urgentMessages: 3,
-        todayMessages: 18
-      });
-      
-      setIsLoading(false);
-    };
-    
-    loadStats();
-  }, []);
+  // Use real data hooks from useCommunicationData
+  const { useNotificationsCenter, useCommunicationMessages, useCommunicationChannels } = require("@/hooks/useCommunicationData");
+  
+  const { notifications, unreadCount: unreadNotifications, isLoading: isLoadingNotifications } = useNotificationsCenter();
+  const { data: messages = [], isLoading: isLoadingMessages } = useCommunicationMessages();
+  const { data: channels = [], isLoading: isLoadingChannels } = useCommunicationChannels();
+
+  // Calculate stats from real data
+  const stats: CommandStats = useMemo(() => ({
+    totalMessages: messages.length,
+    unreadMessages: messages.filter((m: any) => !m.read).length,
+    totalChannels: channels.length,
+    activeChannels: channels.filter((c: any) => c.memberCount > 0 || c.lastMessageTime).length,
+    totalNotifications: notifications.length,
+    criticalNotifications: notifications.filter((n: any) => n.priority === "urgent" || n.priority === "high").length,
+    urgentMessages: messages.filter((m: any) => m.priority === "high").length,
+    todayMessages: messages.filter((m: any) => {
+      const msgDate = new Date(m.timestamp).toDateString();
+      return msgDate === new Date().toDateString();
+    }).length,
+  }), [messages, channels, notifications]);
+
+  const isLoading = isLoadingNotifications || isLoadingMessages || isLoadingChannels;
 
   return (
     <ModulePageWrapper gradient="purple">
