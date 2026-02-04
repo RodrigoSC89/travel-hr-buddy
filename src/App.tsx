@@ -452,6 +452,11 @@ const Loader = () => {
 
 // Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
+  // Importar OfflineStatusBar dinamicamente para evitar erros se não existir
+  const OfflineStatusBar = lazy(() => 
+    import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
+  );
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
@@ -476,6 +481,11 @@ const AuthenticatedLayout = () => {
         
         {/* Onboarding Tour for new users */}
         <ProductOnboardingTour />
+        
+        {/* Offline Status Bar - shows connection status */}
+        <Suspense fallback={null}>
+          <OfflineStatusBar position="bottom" showDetails={true} />
+        </Suspense>
         
         {/* Toast Notifications */}
         <Toaster />
