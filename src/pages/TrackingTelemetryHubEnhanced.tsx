@@ -37,6 +37,7 @@ const DGNSSTracking = lazy(() => import("@/pages/DGNSSTracking"));
 const TrackingAlerts = lazy(() => import("@/pages/tracking/TrackingAlerts"));
 const FleetTrackingDashboard = lazy(() => import("@/modules/tracking/components/FleetTrackingDashboard"));
 const VesselAlertsCenter = lazy(() => import("@/modules/tracking/components/VesselAlertsCenter"));
+const TrackingCommandCenter = lazy(() => import("@/modules/tracking-telemetry/components/TrackingCommandCenter"));
 
 function TabLoadingSkeleton() {
   return (
@@ -48,6 +49,7 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
+  { id: "command", label: "Comando", icon: Activity, badge: "PREMIUM" },
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "fleet", label: "Frota", icon: Ship, badge: "NEW" },
   { id: "map", label: "Mapa", icon: Globe },
@@ -292,7 +294,7 @@ export default function TrackingTelemetryHubEnhanced() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-9 h-auto p-1">
             {TABS.map((tab) => (
               <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-2 py-2">
                 <tab.icon className="h-4 w-4" />
@@ -305,6 +307,13 @@ export default function TrackingTelemetryHubEnhanced() {
               </TabsTrigger>
             ))}
           </TabsList>
+
+          {/* Command Center Tab */}
+          <TabsContent value="command" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <TrackingCommandCenter />
+            </Suspense>
+          </TabsContent>
 
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-6 mt-6">
