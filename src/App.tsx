@@ -293,6 +293,9 @@ const DocumentCenterHub = lazy(() => import("@/pages/DocumentCenterHubEnhanced")
 const CommsAlertsHub = lazy(() => import("@/pages/CommsAlertsHub"));
 const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
 const ComplianceHubPage = lazy(() => import("@/pages/ComplianceHubPage"));
+const SystemHubPremium = lazy(() => import("@/pages/SystemHubPremium"));
+const MaintenanceHub = lazy(() => import("@/pages/MaintenanceCommandCenter"));
+const FinanceHub = lazy(() => import("@/pages/FinanceCommandCenter"));
 
 // ============================================
 // ESG & SUSTENTABILIDADE
@@ -889,6 +892,9 @@ const AppRoutes = () => (
       <Route path="/comms-alerts" element={<CommsAlertsHub />} />
       <Route path="/ai-enterprise-engines" element={<AIEnterpriseEnginesHub />} />
       <Route path="/compliance-unified" element={<ComplianceHubPage />} />
+      <Route path="/system-hub" element={<SystemHubPremium />} />
+      <Route path="/maintenance-hub" element={<MaintenanceHub />} />
+      <Route path="/finance-hub" element={<FinanceHub />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
