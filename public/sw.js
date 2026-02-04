@@ -1,4 +1,4 @@
-// Service Worker Nautilus One v19 - PATCH v27 PRODUCTION FIX
+// Service Worker Nauti One v19 - PATCH v27 PRODUCTION FIX
 // ESTRATÉGIA: SW MÍNIMO - Apenas notificações push
 // NENHUM cache, nenhuma interceptação de fetch
 // Isso garante que TODAS as requisições vão direto para a rede
@@ -126,7 +126,7 @@ self.addEventListener('message', (event) => {
 self.addEventListener('push', (event) => {
   const data = event.data?.json() || {};
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Nautilus One', {
+    self.registration.showNotification(data.title || 'Nauti One', {
       body: data.body || 'Nova notificação',
       icon: '/favicon.ico',
       badge: '/favicon.ico',

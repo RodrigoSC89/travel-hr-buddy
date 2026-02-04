@@ -431,7 +431,7 @@ const Loader = () => {
     <div className="min-h-screen flex items-center justify-center bg-background animate-fade-in">
       <div className="text-center space-y-4">
         <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-        <p className="text-foreground">Carregando Nautilus One...</p>
+        <p className="text-foreground">Carregando Nauti One...</p>
         {showRetry && (
           <div className="space-y-2 pt-4">
             <p className="text-sm text-muted-foreground">
