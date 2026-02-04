@@ -1,0 +1,313 @@
+/**
+ * System Hub Premium - v2.0
+ * Centro de Configurações e Integrações
+ */
+
+import React, { useState, useEffect } from "react";
+import { 
+  Settings, LayoutDashboard, Plug, Shield, Users,
+  Database, Cloud, Key, Bell, Activity, CheckCircle,
+  AlertTriangle, Server, Cpu, HardDrive, Wifi
+} from "lucide-react";
+import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
+import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+
+// System Dashboard
+function SystemDashboard() {
+  const services = [
+    { name: "Supabase", status: "connected", uptime: 99.99 },
+    { name: "OpenAI API", status: "connected", uptime: 99.95 },
+    { name: "Mapbox", status: "connected", uptime: 99.98 },
+    { name: "Resend Email", status: "connected", uptime: 99.90 },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Card className="border-l-4 border-l-success">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Sistema</p>
+                <p className="text-2xl font-bold text-success">Online</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-success opacity-60" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-primary">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Uptime</p>
+                <p className="text-2xl font-bold">99.9%</p>
+              </div>
+              <Activity className="h-8 w-8 text-primary opacity-60" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-info">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Integrações</p>
+                <p className="text-2xl font-bold">12</p>
+              </div>
+              <Plug className="h-8 w-8 text-info opacity-60" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-warning">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Usuários</p>
+                <p className="text-2xl font-bold">45</p>
+              </div>
+              <Users className="h-8 w-8 text-warning opacity-60" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-violet-500">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground">Storage</p>
+                <p className="text-2xl font-bold">24 GB</p>
+              </div>
+              <Database className="h-8 w-8 text-violet-500 opacity-60" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Services Status */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Cloud className="h-5 w-5" />
+            Status dos Serviços
+          </CardTitle>
+          <CardDescription>Monitoramento em tempo real das integrações</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {services.map((service) => (
+              <div key={service.name} className="flex items-center justify-between p-4 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className={`h-3 w-3 rounded-full ${
+                    service.status === "connected" ? "bg-success" : "bg-destructive"
+                  }`} />
+                  <div>
+                    <p className="font-medium">{service.name}</p>
+                    <p className="text-xs text-muted-foreground">Uptime: {service.uptime}%</p>
+                  </div>
+                </div>
+                <Badge variant={service.status === "connected" ? "default" : "destructive"}>
+                  {service.status === "connected" ? "Conectado" : "Offline"}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Quick Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Configurações Rápidas
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              { name: "Notificações Push", enabled: true },
+              { name: "Modo Offline", enabled: true },
+              { name: "Sincronização Automática", enabled: true },
+              { name: "Backup Automático", enabled: false },
+              { name: "Modo Debug", enabled: false },
+            ].map((setting) => (
+              <div key={setting.name} className="flex items-center justify-between">
+                <span className="font-medium">{setting.name}</span>
+                <Switch defaultChecked={setting.enabled} onCheckedChange={() => toast.success(`${setting.name} alterado`)} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Resource Usage */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Server className="h-5 w-5" />
+              Uso de Recursos
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { name: "CPU", icon: Cpu, usage: 35 },
+                { name: "Memória", icon: HardDrive, usage: 62 },
+                { name: "Storage", icon: Database, usage: 48 },
+                { name: "Rede", icon: Wifi, usage: 25 },
+              ].map((resource) => (
+                <div key={resource.name} className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium flex items-center gap-2">
+                      <resource.icon className="h-4 w-4" />
+                      {resource.name}
+                    </span>
+                    <span>{resource.usage}%</span>
+                  </div>
+                  <Progress 
+                    value={resource.usage} 
+                    className={resource.usage > 80 ? "[&>div]:bg-destructive" : resource.usage > 60 ? "[&>div]:bg-warning" : ""}
+                  />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Security Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Segurança
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { name: "2FA Ativo", value: "85%", status: "good" },
+              { name: "Sessões Ativas", value: "23", status: "normal" },
+              { name: "Último Backup", value: "2h atrás", status: "good" },
+              { name: "Tentativas Bloqueadas", value: "0", status: "good" },
+            ].map((item) => (
+              <div key={item.name} className="p-4 border rounded-lg text-center">
+                <p className="text-sm text-muted-foreground">{item.name}</p>
+                <p className={`text-2xl font-bold ${
+                  item.status === "good" ? "text-success" : ""
+                }`}>{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* API Keys */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Key className="h-5 w-5" />
+            Chaves de API
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[
+              { name: "LOVABLE_API_KEY", status: "configured", lastUsed: "Agora" },
+              { name: "SUPABASE_URL", status: "configured", lastUsed: "Agora" },
+              { name: "MAPBOX_TOKEN", status: "configured", lastUsed: "5 min atrás" },
+            ].map((key) => (
+              <div key={key.name} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Key className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="font-mono text-sm">{key.name}</p>
+                    <p className="text-xs text-muted-foreground">Usado: {key.lastUsed}</p>
+                  </div>
+                </div>
+                <Badge variant="default">
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                  Configurado
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function SystemHubPremium() {
+  const handleRefresh = async () => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+  };
+
+  const handleExport = () => {
+    toast.success("Configurações exportadas");
+  };
+
+  const tabs: ModuleTab[] = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      content: <SystemDashboard />
+    },
+    {
+      id: "integrations",
+      label: "Integrações",
+      icon: Plug,
+      badge: 12,
+      content: <div className="text-center py-12 text-muted-foreground">Gestão de Integrações</div>
+    },
+    {
+      id: "security",
+      label: "Segurança",
+      icon: Shield,
+      content: <div className="text-center py-12 text-muted-foreground">Configurações de Segurança</div>
+    },
+    {
+      id: "notifications",
+      label: "Notificações",
+      icon: Bell,
+      content: <div className="text-center py-12 text-muted-foreground">Configurações de Notificações</div>
+    }
+  ];
+
+  const actions = (
+    <>
+      <Button variant="outline" size="sm" className="gap-2">
+        <Shield className="h-4 w-4" />
+        Segurança
+      </Button>
+      <Button size="sm" className="gap-2">
+        <Plug className="h-4 w-4" />
+        Nova Integração
+      </Button>
+    </>
+  );
+
+  return (
+    <PremiumModuleShell
+      title="System Hub"
+      subtitle="Configurações e integrações do sistema"
+      icon={Settings}
+      iconGradient="from-slate-500 to-gray-600"
+      tabs={tabs}
+      defaultTab="dashboard"
+      actions={actions}
+      onRefresh={handleRefresh}
+      onExport={handleExport}
+      showAIBadge={false}
+    />
+  );
+}
