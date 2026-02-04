@@ -3,11 +3,11 @@
  * Centro de Configurações e Integrações
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { 
   Settings, LayoutDashboard, Plug, Shield, Users,
   Database, Cloud, Key, Bell, Activity, CheckCircle,
-  AlertTriangle, Server, Cpu, HardDrive, Wifi
+  AlertTriangle, Server, Cpu, HardDrive, Wifi, Terminal, Loader2
 } from "lucide-react";
 import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
 import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -17,6 +17,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+
+// Lazy load premium components
+const SystemCommandCenter = lazy(() => import("@/modules/system-hub/components/SystemCommandCenter"));
 
 // System Dashboard
 function SystemDashboard() {
@@ -261,6 +264,22 @@ export default function SystemHubPremium() {
       label: "Dashboard",
       icon: LayoutDashboard,
       content: <SystemDashboard />
+    },
+    {
+      id: "command",
+      label: "Centro de Controle",
+      icon: Terminal,
+      badge: "PREMIUM",
+      content: (
+        <Suspense fallback={
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2 text-muted-foreground">Carregando...</span>
+          </div>
+        }>
+          <SystemCommandCenter />
+        </Suspense>
+      )
     },
     {
       id: "integrations",

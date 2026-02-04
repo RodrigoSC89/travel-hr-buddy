@@ -63,6 +63,9 @@ import MMIJobsPanelSection from "@/modules/intelligent-maintenance/components/MM
 import MMIDashboardSection from "@/modules/intelligent-maintenance/components/MMIDashboardSection";
 import { logger } from '@/lib/logger';
 
+// Premium Maintenance Command Center
+import MaintenanceCommandDashboard from "@/modules/maintenance-planner/components/MaintenanceCommandCenter";
+
 interface MaintenanceStats {
   scheduled: number;
   completed: number;
@@ -252,9 +255,14 @@ const MaintenanceCommandCenter = () => {
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="flex flex-wrap gap-1 h-auto p-1 bg-muted/50">
-          <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-orange-500 data-[state=active]:text-white">
+          <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             <LayoutGrid className="h-4 w-4" />
             Visão Geral
+          </TabsTrigger>
+          <TabsTrigger value="command" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <Sparkles className="h-4 w-4" />
+            Comando
+            <Badge variant="secondary" className="ml-1 text-[10px]">PREMIUM</Badge>
           </TabsTrigger>
           <TabsTrigger value="saude" className="flex items-center gap-2">
             <Ship className="h-4 w-4" />
@@ -309,6 +317,11 @@ const MaintenanceCommandCenter = () => {
             Dashboard BI
           </TabsTrigger>
         </TabsList>
+
+        {/* Premium Command Tab */}
+        <TabsContent value="command" className="mt-6">
+          <MaintenanceCommandDashboard />
+        </TabsContent>
 
         {/* Overview - Quick Access Cards */}
         <TabsContent value="overview" className="mt-6">
