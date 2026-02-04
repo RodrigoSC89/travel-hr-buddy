@@ -57,8 +57,63 @@ serve(async (req) => {
       orgUser = legacyOrgUser;
     }
 
+    // If user has no organization, auto-associate with default demo organization
     if (!orgUser) {
-      throw new Error("User not associated with any organization");
+      console.log(`[soc-dashboard] User ${user.id} not in any org, auto-associating with demo org`);
+      
+      // Get the demo organization
+      const { data: demoOrg } = await supabase
+        .from("organizations")
+        .select("id")
+        .eq("name", "Nautilus Demo")
+        .single();
+
+      if (demoOrg) {
+        // Auto-create association
+        const { error: insertError } = await supabase
+          .from("organization_members")
+          .insert({
+            user_id: user.id,
+            organization_id: demoOrg.id,
+            role: "member",
+            status: "active",
+          });
+
+        if (!insertError) {
+          orgUser = { organization_id: demoOrg.id };
+          console.log(`[soc-dashboard] User ${user.id} auto-associated with demo org ${demoOrg.id}`);
+        } else {
+          console.error(`[soc-dashboard] Failed to auto-associate: ${insertError.message}`);
+        }
+      }
+    }
+
+    // Final fallback: use first available organization (for development/demo purposes)
+    if (!orgUser) {
+      const { data: anyOrg } = await supabase
+        .from("organizations")
+        .select("id")
+        .limit(1)
+        .single();
+
+      if (anyOrg) {
+        // Auto-create association with any available org
+        await supabase
+          .from("organization_members")
+          .insert({
+            user_id: user.id,
+            organization_id: anyOrg.id,
+            role: "member",
+            status: "active",
+          });
+
+        orgUser = { organization_id: anyOrg.id };
+        console.log(`[soc-dashboard] User ${user.id} auto-associated with fallback org ${anyOrg.id}`);
+      }
+    }
+
+    if (!orgUser) {
+      throw new Error("No organizations available. Please contact administrator.");
     }
 
     const organizationId = orgUser.organization_id;
