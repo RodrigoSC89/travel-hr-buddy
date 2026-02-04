@@ -26,11 +26,14 @@ import {
   Ship,
   Gauge,
   Activity,
+  Fuel,
 } from "lucide-react";
 import { TanksManagement } from "./components/TanksManagement";
 import { GarbageRegistry } from "./components/GarbageRegistry";
 import { RecordBooks } from "./components/RecordBooks";
 import { WasteReports } from "./components/WasteReports";
+import { OilRecordBookComplete } from "./components/OilRecordBookComplete";
+import { GarbageRecordBookComplete } from "./components/GarbageRecordBookComplete";
 import { ESGAIChat } from "@/components/shared/ESGAIChat";
 import { ModuleOnboarding, QuickActionsBar, FeatureHighlight } from "@/components/ux/ModuleOnboarding";
 import { InteractiveKPICard, KPIGrid } from "@/components/ux/InteractiveKPICard";
@@ -330,7 +333,7 @@ export default function EnhancedWasteManagement() {
         <QuickActionsBar actions={quickActions} />
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-5">
+          <TabsList className="grid w-full max-w-4xl grid-cols-7">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -339,13 +342,21 @@ export default function EnhancedWasteManagement() {
               <Droplets className="h-4 w-4" />
               <span className="hidden sm:inline">Tanques</span>
             </TabsTrigger>
-            <TabsTrigger value="garbage" className="flex items-center gap-2">
+            <TabsTrigger value="oil-record" className="flex items-center gap-2">
+              <Fuel className="h-4 w-4" />
+              <span className="hidden sm:inline">Oil Record</span>
+            </TabsTrigger>
+            <TabsTrigger value="garbage-record" className="flex items-center gap-2">
               <Trash2 className="h-4 w-4" />
-              <span className="hidden sm:inline">Resíduos</span>
+              <span className="hidden sm:inline">Garbage Record</span>
+            </TabsTrigger>
+            <TabsTrigger value="garbage" className="flex items-center gap-2">
+              <Recycle className="h-4 w-4" />
+              <span className="hidden sm:inline">Registros</span>
             </TabsTrigger>
             <TabsTrigger value="records" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Records</span>
+              <span className="hidden sm:inline">Legado</span>
             </TabsTrigger>
             <TabsTrigger value="reports" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -454,6 +465,14 @@ export default function EnhancedWasteManagement() {
 
           <TabsContent value="tanks">
             <TanksManagement />
+          </TabsContent>
+
+          <TabsContent value="oil-record">
+            <OilRecordBookComplete />
+          </TabsContent>
+
+          <TabsContent value="garbage-record">
+            <GarbageRecordBookComplete />
           </TabsContent>
 
           <TabsContent value="garbage">
