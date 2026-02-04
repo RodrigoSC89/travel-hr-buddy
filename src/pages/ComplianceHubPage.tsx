@@ -36,6 +36,8 @@ const DiagnosticReportsPage = lazy(() => import("@/pages/DiagnosticReportsPage")
 const ComplianceRoadmapPage = lazy(() => import("@/pages/ComplianceRoadmapPage"));
 const RiskMatrixV2 = lazy(() => import("@/pages/RiskMatrixV2"));
 const RegulationsV2 = lazy(() => import("@/pages/RegulationsV2"));
+const ComplianceCommandCenter = lazy(() => import("@/modules/compliance-hub/components/ComplianceCommandCenter"));
+const SafetyCommandCenter = lazy(() => import("@/modules/safety-guardian/components/SafetyCommandCenter"));
 
 // Legacy audit pages (preserved)
 const PEODP = lazy(() => import("@/pages/PEODP"));
@@ -62,6 +64,20 @@ const TABS = [
     label: "Dashboard",
     icon: BarChart3,
     description: "Visão geral e KPIs",
+  },
+  {
+    id: "command",
+    label: "Centro de Controle",
+    icon: Shield,
+    description: "Compliance Premium",
+    badge: "NOVO",
+  },
+  {
+    id: "safety",
+    label: "Segurança",
+    icon: AlertTriangle,
+    description: "Safety Guardian",
+    badge: "NOVO",
   },
   {
     id: "agents",
@@ -191,6 +207,18 @@ export default function ComplianceHubPage() {
               <TabsContent value="dashboard" className="m-0">
                 <Suspense fallback={<TabLoadingSkeleton />}>
                   <DiagnosticDashboardPage />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="command" className="m-0">
+                <Suspense fallback={<TabLoadingSkeleton />}>
+                  <ComplianceCommandCenter />
+                </Suspense>
+              </TabsContent>
+
+              <TabsContent value="safety" className="m-0">
+                <Suspense fallback={<TabLoadingSkeleton />}>
+                  <SafetyCommandCenter />
                 </Suspense>
               </TabsContent>
 
