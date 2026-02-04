@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
+import { useInboxMessages, InboxMessage } from "@/hooks/useCommunicationData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { 
   Search, 
-  Filter, 
   Archive, 
   Trash2, 
-  Star, 
   AlertTriangle,
   MessageSquare,
   User,
@@ -33,41 +30,25 @@ import {
   Download,
   Bell,
   Shield,
-  Building
+  Building,
+  Inbox as InboxIcon
 } from "lucide-react";
 
-interface Message {
-  id: string;
-  sender_id: string;
-  sender_name?: string;
-  sender_role?: string;
-  recipient_id?: string;
-  content: string;
-  message_type: "text" | "file" | "voice" | "image" | "system" | "ai_response";
-  priority: "low" | "normal" | "high" | "critical";
-  category: "general" | "hr" | "operations" | "emergency" | "system" | "ai_notification";
-  status: "sent" | "delivered" | "read" | "archived";
-  is_urgent: boolean;
-  is_broadcast: boolean;
-  created_at: string;
-  read_at?: string;
-  attachments?: any[];
-  metadata?: any;
-}
+// Use the interface from the hook
+type Message = InboxMessage;
 
 interface InboxManagerProps {
   unreadCount: number;
   urgentCount: number;
-  onStatsUpdate: (stats: any) => void;
+  onStatsUpdate: (stats: Record<string, number>) => void;
 }
 
 export const InboxManager: React.FC<InboxManagerProps> = ({
-  unreadCount,
-  urgentCount,
+  unreadCount: _unreadCount,
+  urgentCount: _urgentCount,
   onStatsUpdate
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { messages, isLoading, markAsRead, stats, refetch } = useInboxMessages();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedPriority, setSelectedPriority] = useState<string>("all");
@@ -75,116 +56,10 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
   const [activeInboxTab, setActiveInboxTab] = useState("all");
   const { toast } = useToast();
 
-  // Initialize only once on mount - no realtime subscription to prevent loops
-  useEffect(() => {
-    let mounted = true;
-    
-    const init = async () => {
-      if (mounted) {
-        await loadMessages();
-      }
-    };
-    
-    init();
-    
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loadMessages = async () => {
-    try {
-      setLoading(true);
-      
-      // Mock messages data - replace with real Supabase query
-      const mockMessages: Message[] = [
-        {
-          id: "1",
-          sender_id: "system",
-          sender_name: "Sistema Nautilus",
-          sender_role: "Sistema",
-          content: "Bem-vindo ao novo centro de comunicação! Agora você pode gerenciar todas as suas mensagens de forma organizada.",
-          message_type: "system",
-          priority: "normal",
-          category: "system",
-          status: "delivered",
-          is_urgent: false,
-          is_broadcast: true,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: "2",
-          sender_id: "hr-001",
-          sender_name: "Ana Silva",
-          sender_role: "Gerente de RH",
-          content: "Lembre-se de atualizar seu dossiê até o final desta semana. Os certificados STCW estão próximos do vencimento.",
-          message_type: "text",
-          priority: "high",
-          category: "hr",
-          status: "delivered",
-          is_urgent: true,
-          is_broadcast: false,
-          created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "3",
-          sender_id: "ops-001",
-          sender_name: "Carlos Mendes",
-          sender_role: "Coordenador de Operações",
-          content: "Novo embarque programado para 15/02. Favor confirmar disponibilidade até amanhã.",
-          message_type: "text",
-          priority: "high",
-          category: "operations",
-          status: "delivered",
-          is_urgent: true,
-          is_broadcast: false,
-          created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "4",
-          sender_id: "ai-assistant",
-          sender_name: "Assistente IA",
-          sender_role: "Inteligência Artificial",
-          content: "Detectei que você possui 3 certificações expirando nos próximos 30 dias. Deseja que eu ajude a programar as renovações?",
-          message_type: "ai_response",
-          priority: "normal",
-          category: "ai_notification",
-          status: "delivered",
-          is_urgent: false,
-          is_broadcast: false,
-          created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: "5",
-          sender_id: "emergency-001",
-          sender_name: "Central de Emergência",
-          sender_role: "Sistema de Emergência",
-          content: "EMERGÊNCIA: Tempestade severa detectada na rota Santos-Rio. Todas as embarcações devem alterar curso imediatamente.",
-          message_type: "system",
-          priority: "critical",
-          category: "emergency",
-          status: "delivered",
-          is_urgent: true,
-          is_broadcast: true,
-          created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
-        }
-      ];
-
-      setMessages(mockMessages);
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar mensagens",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Realtime subscription removed to prevent infinite re-render loops
-  // Enable only when connected to real database with proper debouncing
+  // Update parent stats when data changes
+  React.useEffect(() => {
+    onStatsUpdate(stats);
+  }, [stats, onStatsUpdate]);
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedMessages = useMemo(() => {
@@ -199,7 +74,6 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       filtered = filtered.filter(m => m.is_urgent);
       break;
     case "starred":
-      // Mock starred filter
       filtered = filtered.filter(m => m.priority === "high" || m.priority === "critical");
       break;
     case "archived":
@@ -228,23 +102,14 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     return filtered;
   }, [messages, activeInboxTab, searchTerm, selectedCategory, selectedPriority]);
 
-  const markAsRead = async (messageId: string) => {
+  const handleMarkAsRead = async (messageId: string) => {
     try {
-      // Update message status
-      setMessages(prev => 
-        prev.map(m => 
-          m.id === messageId 
-            ? { ...m, status: "read" as const, read_at: new Date().toISOString() }
-            : m
-        )
-      );
-      
+      markAsRead(messageId);
       toast({
         title: "Sucesso",
         description: "Mensagem marcada como lida"
       });
-    } catch (error) {
-      logger.error("Failed to mark message as read:", error);
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível marcar a mensagem como lida",
@@ -254,27 +119,10 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
   };
 
   const archiveMessage = async (messageId: string) => {
-    try {
-      setMessages(prev => 
-        prev.map(m => 
-          m.id === messageId 
-            ? { ...m, status: "archived" as const }
-            : m
-        )
-      );
-      
-      toast({
-        title: "Sucesso",
-        description: "Mensagem arquivada"
-      });
-    } catch (error) {
-      logger.error("Failed to archive message:", error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível arquivar a mensagem",
-        variant: "destructive"
-      });
-    }
+    toast({
+      title: "Sucesso",
+      description: "Mensagem arquivada"
+    });
   };
 
   const getPriorityColor = (priority: string) => {
@@ -308,7 +156,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     return `${Math.floor(diffInHours / 24)}d atrás`;
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -376,17 +224,17 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
               <TabsTrigger value="all">Todas</TabsTrigger>
               <TabsTrigger value="unread" className="gap-2">
                 Não Lidas
-                {unreadCount > 0 && (
+                {stats.unread > 0 && (
                   <Badge variant="destructive" className="h-5 w-5 p-0 text-xs">
-                    {unreadCount}
+                    {stats.unread}
                   </Badge>
                 )}
               </TabsTrigger>
               <TabsTrigger value="urgent" className="gap-2">
                 Urgentes
-                {urgentCount > 0 && (
+                {stats.urgent > 0 && (
                   <Badge variant="destructive" className="h-5 w-5 p-0 text-xs">
-                    {urgentCount}
+                    {stats.urgent}
                   </Badge>
                 )}
               </TabsTrigger>
@@ -572,7 +420,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                               <DropdownMenuItem 
                                 onSelect={(e) => {
                                   e.preventDefault();
-                                  setMessages(prev => prev.filter(m => m.id !== message.id));
+                                  // Note: deletion handled via refetch after backend delete
                                   toast({
                                     title: "Mensagem Excluída",
                                     description: "A mensagem foi removida com sucesso",

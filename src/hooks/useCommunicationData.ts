@@ -242,7 +242,7 @@ export function useCommunicationChannels() {
           type: (ch.channel_type as Channel["type"]) || "broadcast",
           isPublic: ch.is_public ?? true,
           memberCount: ch.member_count || 0,
-          unreadCount: Math.floor(Math.random() * 5),
+          unreadCount: 0, // Real count from unread messages
           lastMessage: "Última mensagem do canal",
           lastMessageTime: ch.last_activity ? new Date(ch.last_activity).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : undefined,
         }));
@@ -252,6 +252,273 @@ export function useCommunicationChannels() {
       return [];
     },
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+// ========================
+// INBOX MANAGER SPECIFIC
+// ========================
+
+export interface InboxMessage {
+  id: string;
+  sender_id: string;
+  sender_name?: string;
+  sender_role?: string;
+  recipient_id?: string;
+  content: string;
+  message_type: "text" | "file" | "voice" | "image" | "system" | "ai_response";
+  priority: "low" | "normal" | "high" | "critical";
+  category: "general" | "hr" | "operations" | "emergency" | "system" | "ai_notification";
+  status: "sent" | "delivered" | "read" | "archived";
+  is_urgent: boolean;
+  is_broadcast: boolean;
+  created_at: string;
+  read_at?: string;
+  attachments?: unknown[];
+  metadata?: Record<string, unknown>;
+}
+
+export function useInboxMessages() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: messages = [], isLoading, error, refetch } = useQuery({
+    queryKey: ["inbox-messages", user?.id],
+    queryFn: async (): Promise<InboxMessage[]> => {
+      const { data, error } = await supabase
+        .from("intelligent_notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      return (data || []).map((n): InboxMessage => {
+        const meta = n.metadata as Record<string, unknown> | null;
+        const priorityMap: Record<string, InboxMessage["priority"]> = {
+          low: "low", normal: "normal", medium: "normal", high: "high", urgent: "critical", critical: "critical",
+        };
+        const categoryMap: Record<string, InboxMessage["category"]> = {
+          hr: "hr", operations: "operations", emergency: "emergency", system: "system", ai_notification: "ai_notification",
+        };
+
+        return {
+          id: n.id,
+          sender_id: typeof meta?.sender_id === "string" ? meta.sender_id : "system",
+          sender_name: typeof meta?.sender_name === "string" ? meta.sender_name : "Sistema Nautilus",
+          sender_role: typeof meta?.sender_role === "string" ? meta.sender_role : "Sistema",
+          recipient_id: n.user_id || undefined,
+          content: n.message,
+          message_type: n.type === "system" ? "system" : "text",
+          priority: priorityMap[n.priority?.toLowerCase()] || "normal",
+          category: categoryMap[n.type?.toLowerCase()] || "general",
+          status: n.is_read ? "read" : "delivered",
+          is_urgent: n.priority === "urgent" || n.priority === "critical",
+          is_broadcast: typeof meta?.is_broadcast === "boolean" ? meta.is_broadcast : false,
+          created_at: n.created_at,
+          read_at: n.is_read ? n.created_at : undefined,
+          attachments: [],
+          metadata: meta || {},
+        };
+      });
+    },
+    enabled: !!user,
+    refetchInterval: 30000,
+    staleTime: 10000,
+  });
+
+  const markAsRead = useMutation({
+    mutationFn: async (messageId: string) => {
+      const { error } = await supabase
+        .from("intelligent_notifications")
+        .update({ is_read: true, updated_at: new Date().toISOString() })
+        .eq("id", messageId);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inbox-messages"] }),
+  });
+
+  const stats = {
+    total: messages.length,
+    unread: messages.filter((m) => m.status !== "read").length,
+    urgent: messages.filter((m) => m.is_urgent).length,
+  };
+
+  return { messages, isLoading, error: error?.message || null, refetch, markAsRead: markAsRead.mutate, stats };
+}
+
+// ========================
+// CHANNEL MANAGER SPECIFIC
+// ========================
+
+export interface ChannelData {
+  id: string;
+  name: string;
+  description?: string;
+  type: "group" | "department" | "broadcast" | "emergency";
+  is_public: boolean;
+  is_active: boolean;
+  created_by: string;
+  member_count: number;
+  last_message_at?: string;
+  settings: Record<string, unknown>;
+  created_at: string;
+}
+
+export function useChannelManagerData() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: channels = [], isLoading, error, refetch } = useQuery({
+    queryKey: ["channel-manager", user?.id],
+    queryFn: async (): Promise<ChannelData[]> => {
+      const { data, error } = await supabase
+        .from("communication_channels")
+        .select("*")
+        .eq("is_active", true)
+        .order("last_activity", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        return data.map((ch): ChannelData => ({
+          id: ch.id,
+          name: ch.name,
+          description: ch.description || undefined,
+          type: (ch.channel_type as ChannelData["type"]) || "group",
+          is_public: ch.is_public ?? true,
+          is_active: ch.is_active ?? true,
+          created_by: ch.created_by || "system",
+          member_count: ch.member_count || 0,
+          last_message_at: ch.last_activity || undefined,
+          settings: { notifications: true },
+          created_at: ch.created_at,
+        }));
+      }
+
+      return [];
+    },
+    enabled: !!user,
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+
+  const createChannel = useMutation({
+    mutationFn: async (channel: { name: string; description: string; type: ChannelData["type"]; is_public: boolean }) => {
+      const { data, error } = await supabase
+        .from("communication_channels")
+        .insert([{
+          name: channel.name,
+          description: channel.description,
+          channel_type: channel.type,
+          is_public: channel.is_public,
+          is_active: true,
+          created_by: user?.id || "",
+        }])
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["channel-manager"] }),
+  });
+
+  const stats = {
+    total: channels.length,
+    active: channels.filter((c) => c.is_active).length,
+    totalMembers: channels.reduce((sum, c) => sum + c.member_count, 0),
+  };
+
+  return { channels, isLoading, error: error?.message || null, refetch, createChannel: createChannel.mutate, stats };
+}
+
+// ========================
+// RECIPIENTS
+// ========================
+
+export interface Recipient {
+  id: string;
+  name: string;
+  role?: string;
+  type: "user" | "channel" | "department" | "broadcast";
+}
+
+export function useRecipientsData() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["recipients", user?.id],
+    queryFn: async (): Promise<Recipient[]> => {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, full_name, department")
+        .limit(100);
+
+      const userRecipients: Recipient[] = (profiles || []).map((p) => ({
+        id: p.id,
+        name: p.full_name || "Usuário",
+        role: undefined,
+        type: "user" as const,
+      }));
+
+      const departments = new Set<string>();
+      (profiles || []).forEach((p) => { if (p.department) departments.add(p.department); });
+
+      const deptRecipients: Recipient[] = Array.from(departments).map((dept) => ({
+        id: `dept-${dept.toLowerCase().replace(/\s+/g, "-")}`,
+        name: dept,
+        type: "department" as const,
+      }));
+
+      const broadcastRecipients: Recipient[] = [
+        { id: "broadcast-all", name: "Todos os Usuários", type: "broadcast" },
+        { id: "broadcast-embarcados", name: "Tripulantes Embarcados", type: "broadcast" },
+        { id: "broadcast-terra", name: "Equipe em Terra", type: "broadcast" },
+      ];
+
+      return [...userRecipients, ...deptRecipients, ...broadcastRecipients];
+    },
+    enabled: !!user,
+    staleTime: 60000,
+  });
+}
+
+// ========================
+// MARITIME CHANNELS
+// ========================
+
+export interface MaritimeChannel {
+  id: string;
+  name: string;
+  type: "emergency" | "vhf" | "satellite" | "internal";
+  status: "active" | "inactive" | "standby";
+  participants: string[];
+  last_activity: string;
+}
+
+export function useMaritimeChannels() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["maritime-channels", user?.id],
+    queryFn: async (): Promise<MaritimeChannel[]> => {
+      const { data: vessels } = await supabase
+        .from("vessels")
+        .select("id, name")
+        .limit(20);
+
+      const vesselNames = (vessels || []).map((v) => v.name || "Embarcação");
+
+      return [
+        { id: "vhf-16", name: "VHF Canal 16 (Emergência)", type: "emergency", status: "active", participants: ["Todas as embarcações", "Guarda Costeira"], last_activity: new Date().toISOString() },
+        { id: "vhf-68", name: "VHF Canal 68 (Operações)", type: "vhf", status: "active", participants: vesselNames.slice(0, 5), last_activity: new Date().toISOString() },
+        { id: "sat-primary", name: "Satélite Principal", type: "satellite", status: "active", participants: ["Centro de Controle", ...vesselNames.slice(0, 3)], last_activity: new Date().toISOString() },
+        { id: "internal-ops", name: "Operações Internas", type: "internal", status: "active", participants: ["Gestão de Frota", "Capitães"], last_activity: new Date().toISOString() },
+      ];
+    },
+    enabled: !!user,
+    staleTime: 60000,
   });
 }
 

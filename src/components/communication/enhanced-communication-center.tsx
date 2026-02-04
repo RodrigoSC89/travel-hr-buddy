@@ -284,7 +284,14 @@ export const EnhancedCommunicationCenter = () => {
           <InboxManager 
             unreadCount={stats.unreadMessages}
             urgentCount={stats.urgentMessages}
-            onStatsUpdate={setStats}
+            onStatsUpdate={(inboxStats) => {
+              setStats(prevStats => ({
+                ...prevStats,
+                unreadMessages: inboxStats.unread || 0,
+                urgentMessages: inboxStats.urgent || 0,
+                totalMessages: inboxStats.total || prevStats.totalMessages,
+              }));
+            }}
           />
         </TabsContent>
 
