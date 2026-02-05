@@ -112,10 +112,20 @@ const quickActions = [
 
 export default function AIControlTowerHubEnhanced() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "dashboard";
-  const [activeTab, setActiveTab] = useState(initialTab);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedInsights, setDismissedInsights] = useState<string[]>([]);
+
+  // Get active tab directly from URL
+  const activeTab = useMemo(() => {
+    const tabFromUrl = searchParams.get("tab");
+    const validTab = TABS.find(t => t.id === tabFromUrl);
+    return validTab ? tabFromUrl : "dashboard";
+  }, [searchParams]);
+
+  // Handle tab change by updating URL
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
 
   // Real data from Supabase
   const { agents, decisions, auditLogs, insights, metrics, isLoading: dataLoading } = useAIControlTowerData();
@@ -196,19 +206,7 @@ export default function AIControlTowerHubEnhanced() {
     }
   }, []);
 
-  useEffect(() => {
-    const currentTab = searchParams.get("tab");
-    if (currentTab !== activeTab) {
-      setSearchParams({ tab: activeTab });
-    }
-  }, [activeTab, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    const urlTab = searchParams.get("tab");
-    if (urlTab && urlTab !== activeTab && TABS.some(t => t.id === urlTab)) {
-      setActiveTab(urlTab);
-    }
-  }, [searchParams]);
+  // No need for sync effects - activeTab comes directly from URL
 
   const handleOnboardingComplete = () => {
     localStorage.setItem("ai-control-tower-onboarding", "true");
@@ -280,7 +278,7 @@ export default function AIControlTowerHubEnhanced() {
         />
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab || "dashboard"} onValueChange={handleTabChange} className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto p-1">
             {TABS.map((tab) => (
               <TabsTrigger
@@ -354,7 +352,7 @@ export default function AIControlTowerHubEnhanced() {
                       variant="outline" 
                       size="sm" 
                       className="w-full mt-2"
-                      onClick={() => setActiveTab("agents")}
+                      onClick={() => handleTabChange("agents")}
                     >
                       Ver Todos os Agentes
                       <ArrowRight className="h-4 w-4 ml-2" />

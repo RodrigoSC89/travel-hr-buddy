@@ -170,10 +170,20 @@ const weatherData = {
 
 export default function OperationsCommandHubEnhanced() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "overview";
-  const [activeTab, setActiveTab] = useState(initialTab);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+
+  // Get active tab directly from URL - use useMemo to avoid stale closures
+  const activeTab = useMemo(() => {
+    const tabFromUrl = searchParams.get("tab");
+    const validTab = TABS.find(t => t.id === tabFromUrl);
+    return validTab ? tabFromUrl : "overview";
+  }, [searchParams]);
+
+  // Handle tab change by updating URL
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
 
   // Real data from Supabase
   const { voyages, missions, vessels, ports, metrics, isLoading: dataLoading } = useOperationsCommandData();
@@ -241,19 +251,7 @@ export default function OperationsCommandHubEnhanced() {
     }
   }, []);
 
-  useEffect(() => {
-    const currentTab = searchParams.get("tab");
-    if (currentTab !== activeTab) {
-      setSearchParams({ tab: activeTab });
-    }
-  }, [activeTab, searchParams, setSearchParams]);
-
-  useEffect(() => {
-    const urlTab = searchParams.get("tab");
-    if (urlTab && urlTab !== activeTab && TABS.some(t => t.id === urlTab)) {
-      setActiveTab(urlTab);
-    }
-  }, [searchParams]);
+  // No need for sync effects - activeTab comes directly from URL
 
   const handleOnboardingComplete = () => {
     localStorage.setItem("operations-command-onboarding", "true");
@@ -326,7 +324,7 @@ export default function OperationsCommandHubEnhanced() {
         />
 
         {/* Main Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab || "overview"} onValueChange={handleTabChange} className="space-y-6">
            <TabsList className="grid w-full grid-cols-7 h-auto p-1">
              {TABS.slice(0, 7).map((tab) => (
               <TabsTrigger
@@ -455,7 +453,7 @@ export default function OperationsCommandHubEnhanced() {
                       </div>
                       <Progress value={20} className="h-2 [&>div]:bg-blue-500" />
                     </div>
-                    <Button variant="outline" size="sm" className="w-full mt-2" onClick={() => setActiveTab("fleet")}>
+                    <Button variant="outline" size="sm" className="w-full mt-2" onClick={() => handleTabChange("fleet")}>
                       Ver Detalhes da Frota
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
