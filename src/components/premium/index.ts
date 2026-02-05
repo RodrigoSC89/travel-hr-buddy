@@ -1,11 +1,10 @@
-/**
- * Premium Components - Central Export
- * Componentes premium reutilizáveis para todos os módulos
- */
-
-export { QuickActionsHub } from "./QuickActionsHub";
-export { InteractiveOnboardingWizard } from "./InteractiveOnboardingWizard";
-export { SmartNotificationCenter } from "./SmartNotificationCenter";
-export { AIInsightWidget } from "./AIInsightWidget";
-export { DataExportManager } from "./DataExportManager";
-export { AdvancedFilterPanel, type FilterField, type FilterValue } from "./AdvancedFilterPanel";
+ /**
+  * Premium Components Index
+  * Exports all premium intelligence components
+  */
+ 
+ export { default as VesselContractsAdvanced } from "./VesselContractsAdvanced";
+ export { default as MaintenanceIntelligence } from "./MaintenanceIntelligence";
+ export { default as CrewIntelligenceHub } from "./CrewIntelligenceHub";
+ export { default as ComplianceIntelligence } from "./ComplianceIntelligence";
+ export { default as TrackingIntelligence } from "./TrackingIntelligence";
