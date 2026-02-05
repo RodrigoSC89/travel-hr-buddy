@@ -15,134 +15,32 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Wrench, Ship, Calendar, Clock, AlertTriangle, CheckCircle2, 
   Settings, FileText, Search, Filter, Plus, RefreshCw,
-  TrendingUp, BarChart3, Timer, Target, Gauge, ArrowRight
+  TrendingUp, BarChart3, Timer, Target, Gauge, ArrowRight, Loader2
 } from "lucide-react";
+import { usePMSJobs, usePMSStats, PMSJob, PMSStats } from "@/hooks/usePMSData";
 
-interface PMSJob {
-  id: string;
-  jobCode: string;
-  title: string;
-  component: string;
-  system: string;
-  interval: {
-    type: "hours" | "calendar" | "both";
-    hours?: number;
-    days?: number;
-  };
-  status: "due" | "overdue" | "upcoming" | "completed" | "in_progress";
-  priority: "critical" | "high" | "medium" | "low";
-  lastDone?: Date;
-  nextDue: Date;
-  currentHours?: number;
-  dueHours?: number;
-  classRequired: boolean;
-  estimatedTime: number;
-  spareParts: string[];
-  assignedTo?: string;
-}
-
-const pmsJobs: PMSJob[] = [
-  {
-    id: "PMS001",
-    jobCode: "ME-001-A",
-    title: "Main Engine Cylinder Liner Inspection",
-    component: "Cylinder Liner Unit 1-6",
-    system: "Main Engine",
-    interval: { type: "hours", hours: 8000 },
-    status: "overdue",
-    priority: "critical",
-    lastDone: new Date("2024-10-15"),
-    nextDue: new Date("2025-01-15"),
-    currentHours: 8450,
-    dueHours: 8000,
-    classRequired: true,
-    estimatedTime: 16,
-    spareParts: ["Piston rings", "Cylinder liner", "O-rings"],
-    assignedTo: "Chief Engineer"
-  },
-  {
-    id: "PMS002",
-    jobCode: "GE-002-B",
-    title: "Generator Overhaul",
-    component: "Auxiliary Generator No.2",
-    system: "Power Generation",
-    interval: { type: "hours", hours: 12000 },
-    status: "upcoming",
-    priority: "high",
-    lastDone: new Date("2024-06-20"),
-    nextDue: new Date("2025-03-20"),
-    currentHours: 11200,
-    dueHours: 12000,
-    classRequired: true,
-    estimatedTime: 24,
-    spareParts: ["Injector nozzles", "Bearings", "Filters"],
-    assignedTo: "2nd Engineer"
-  },
-  {
-    id: "PMS003",
-    jobCode: "NAV-003-C",
-    title: "ECDIS Annual Calibration",
-    component: "ECDIS System",
-    system: "Navigation",
-    interval: { type: "calendar", days: 365 },
-    status: "due",
-    priority: "high",
-    lastDone: new Date("2024-02-10"),
-    nextDue: new Date("2025-02-10"),
-    classRequired: true,
-    estimatedTime: 4,
-    spareParts: [],
-    assignedTo: "ETO"
-  },
-  {
-    id: "PMS004",
-    jobCode: "LS-004-A",
-    title: "Lifeboat Davit Load Test",
-    component: "Lifeboat Davits Port/Starboard",
-    system: "Life Saving",
-    interval: { type: "calendar", days: 365 },
-    status: "upcoming",
-    priority: "critical",
-    lastDone: new Date("2024-06-15"),
-    nextDue: new Date("2025-06-15"),
-    classRequired: true,
-    estimatedTime: 8,
-    spareParts: ["Wire ropes", "Shackles"],
-    assignedTo: "Bosun"
-  },
-  {
-    id: "PMS005",
-    jobCode: "HV-005-B",
-    title: "HVAC System Filter Replacement",
-    component: "Accommodation HVAC",
-    system: "HVAC",
-    interval: { type: "calendar", days: 90 },
-    status: "completed",
-    priority: "low",
-    lastDone: new Date("2025-01-20"),
-    nextDue: new Date("2025-04-20"),
-    classRequired: false,
-    estimatedTime: 2,
-    spareParts: ["Air filters"],
-    assignedTo: "Motorman"
-  }
-];
-
-const pmsStats = {
-  totalJobs: 245,
-  overdue: 8,
-  dueThisWeek: 12,
-  dueThisMonth: 34,
-  completed: 198,
-  complianceRate: 96.7,
-  classJobs: 42,
-  avgCompletionTime: 4.2
+// Default stats for loading state
+const defaultStats: PMSStats = {
+  totalJobs: 0,
+  overdue: 0,
+  dueThisWeek: 0,
+  dueThisMonth: 0,
+  completed: 0,
+  complianceRate: 100,
+  classJobs: 0,
+  avgCompletionTime: 0
 };
 
 export function PMSEngine() {
   const [activeTab, setActiveTab] = useState("jobs");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSystem, setFilterSystem] = useState("all");
+  
+  // Use real data hooks
+  const { data: pmsJobs = [], isLoading: jobsLoading } = usePMSJobs();
+  const { data: pmsStats = defaultStats, isLoading: statsLoading } = usePMSStats();
+  
+  const isLoading = jobsLoading || statsLoading;
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; className: string }> = {
