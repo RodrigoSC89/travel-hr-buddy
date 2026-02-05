@@ -1,6 +1,7 @@
 /**
  * Invoice Approval Workflow - Fluxo de Aprovação Financeira
  * Workflow multi-nível com delegação e histórico
+ * PATCH: Usando dados reais do Supabase
  */
 
 import React, { useState } from "react";
@@ -48,121 +49,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-interface Invoice {
-  id: string;
-  number: string;
-  vendor: string;
-  description: string;
-  amount: number;
-  currency: string;
-  dueDate: Date;
-  submittedAt: Date;
-  status: "pending" | "approved" | "rejected" | "on_hold" | "paid";
-  category: string;
-  attachments: number;
-  currentStep: number;
-  totalSteps: number;
-  approvers: Approver[];
-  comments: Comment[];
-  urgency: "normal" | "high" | "critical";
-}
-
-interface Approver {
-  id: string;
-  name: string;
-  role: string;
-  status: "pending" | "approved" | "rejected" | "skipped";
-  approvedAt?: Date;
-  comment?: string;
-}
-
-interface Comment {
-  id: string;
-  author: string;
-  message: string;
-  timestamp: Date;
-}
-
-const MOCK_INVOICES: Invoice[] = [
-  {
-    id: "1",
-    number: "INV-2024-0156",
-    vendor: "Marine Supplies Co.",
-    description: "Suprimentos de manutenção para motor principal",
-    amount: 45000,
-    currency: "USD",
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    status: "pending",
-    category: "Manutenção",
-    attachments: 3,
-    currentStep: 2,
-    totalSteps: 3,
-    urgency: "high",
-    approvers: [
-      { id: "1", name: "Carlos Mendes", role: "Gerente de Operações", status: "approved", approvedAt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
-      { id: "2", name: "Ana Silva", role: "Diretora Financeira", status: "pending" },
-      { id: "3", name: "Roberto Lima", role: "CEO", status: "pending" },
-    ],
-    comments: [
-      { id: "1", author: "Carlos Mendes", message: "Aprovado. Valores dentro do orçamento.", timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000) },
-    ],
-  },
-  {
-    id: "2",
-    number: "INV-2024-0157",
-    vendor: "Port Services Ltd.",
-    description: "Taxas portuárias - Porto de Rotterdam",
-    amount: 12500,
-    currency: "EUR",
-    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    submittedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    status: "pending",
-    category: "Operacional",
-    attachments: 2,
-    currentStep: 1,
-    totalSteps: 2,
-    urgency: "critical",
-    approvers: [
-      { id: "1", name: "Pedro Costa", role: "Coordenador Portuário", status: "pending" },
-      { id: "2", name: "Ana Silva", role: "Diretora Financeira", status: "pending" },
-    ],
-    comments: [],
-  },
-  {
-    id: "3",
-    number: "INV-2024-0148",
-    vendor: "Crew Training Institute",
-    description: "Treinamento STCW - 12 tripulantes",
-    amount: 28000,
-    currency: "USD",
-    dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    submittedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    status: "approved",
-    category: "Treinamento",
-    attachments: 5,
-    currentStep: 3,
-    totalSteps: 3,
-    urgency: "normal",
-    approvers: [
-      { id: "1", name: "Maria Santos", role: "RH Manager", status: "approved", approvedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000) },
-      { id: "2", name: "Carlos Mendes", role: "Gerente de Operações", status: "approved", approvedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) },
-      { id: "3", name: "Ana Silva", role: "Diretora Financeira", status: "approved", approvedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-    ],
-    comments: [],
-  },
-];
+import { useInvoicesData, Invoice, Approver, Comment } from "@/hooks/useInvoicesData";
 
 export default function InvoiceApprovalWorkflow() {
+  const { invoices, pendingInvoices, totalPendingAmount, approvedThisMonth, isLoading, approve, reject } = useInvoicesData();
+  
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [approvalAction, setApprovalAction] = useState<"approve" | "reject" | null>(null);
   const [comment, setComment] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const pendingInvoices = MOCK_INVOICES.filter((i) => i.status === "pending");
-  const totalPendingAmount = pendingInvoices.reduce((acc, i) => acc + i.amount, 0);
 
   const handleApproval = (action: "approve" | "reject") => {
     setApprovalAction(action);
@@ -170,16 +66,26 @@ export default function InvoiceApprovalWorkflow() {
   };
 
   const confirmApproval = () => {
-    if (approvalAction === "approve") {
-      toast.success("Fatura aprovada com sucesso!");
-    } else {
-      toast.error("Fatura rejeitada");
+    if (selectedInvoice) {
+      if (approvalAction === "approve") {
+        approve({ invoiceId: selectedInvoice.id, comment: comment || undefined });
+      } else {
+        reject({ invoiceId: selectedInvoice.id, reason: comment || "Sem motivo especificado" });
+      }
     }
     setShowApprovalDialog(false);
     setApprovalAction(null);
     setComment("");
     setSelectedInvoice(null);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
 
   const getStatusBadge = (status: Invoice["status"]) => {
     switch (status) {
@@ -225,6 +131,10 @@ export default function InvoiceApprovalWorkflow() {
         <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Aprovadas (mês)</p>
+                <p className="text-2xl font-bold">{approvedThisMonth}</p>
+              </div>
               <div>
                 <p className="text-sm text-muted-foreground">Aprovadas (mês)</p>
                 <p className="text-2xl font-bold">47</p>
@@ -297,7 +207,7 @@ export default function InvoiceApprovalWorkflow() {
               <TabsContent value="pending">
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-3">
-                    {MOCK_INVOICES.filter((i) => i.status === "pending").map((invoice) => (
+                    {pendingInvoices.map((invoice) => (
                       <motion.div
                         key={invoice.id}
                         whileHover={{ scale: 1.01 }}
@@ -354,7 +264,7 @@ export default function InvoiceApprovalWorkflow() {
               <TabsContent value="approved">
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-3">
-                    {MOCK_INVOICES.filter((i) => i.status === "approved").map((invoice) => (
+                    {invoices.filter((i) => i.status === "approved").map((invoice) => (
                       <div
                         key={invoice.id}
                         className="p-4 border rounded-lg"
