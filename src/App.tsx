@@ -486,6 +486,9 @@ const AuthenticatedLayout = () => {
     import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
   );
 
+  // Command Palette for global search
+  const CommandPalette = lazy(() => import("@/components/shared/CommandPalette"));
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
@@ -512,6 +515,11 @@ const AuthenticatedLayout = () => {
         {/* Offline Status Bar - shows connection status */}
         <Suspense fallback={null}>
           <OfflineStatusBar position="bottom" showDetails={true} />
+        </Suspense>
+        
+        {/* Command Palette - Global Module Search (Ctrl+K) */}
+        <Suspense fallback={null}>
+          <CommandPalette />
         </Suspense>
         
         {/* Toast Notifications */}
