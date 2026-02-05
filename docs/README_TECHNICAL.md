@@ -1197,63 +1197,164 @@ CREATE POLICY "self_view"
 
 ## 6. Dívidas Técnicas
 
-### 6.1 Resumo por Categoria
+### 6.1 Inventário Completo
 
-| Categoria | Severidade | Items | Estimativa |
-|-----------|------------|-------|------------|
-| **TypeScript Typing** | 🔴 Alta | ~150 @ts-nocheck, ~1.300 any | 4-6 sprints |
-| **Mock Data** | 🔴 Alta | ~40% still mocked | 3-4 sprints |
-| **API Integrations** | 🟡 Média | 5 APIs não implementadas | 4-6 sprints |
-| **Test Coverage** | 🟡 Média | 68% (meta: 85%) | 2-3 sprints |
-| **Security** | 🔴 Alta | 3 issues críticos | 1 sprint |
-| **Performance** | 🟡 Média | Bundle 2-3MB, TTI 4-5s | 2 sprints |
-| **Documentation** | 🟢 Baixa | Incompleta | 1-2 sprints |
+#### CATEGORIA 1: TypeScript Typing 🔴 CRÍTICO
 
-### 6.2 Detalhamento
+**1.1 @ts-nocheck (~150 arquivos)**
 
-#### 🔴 P0 - CRÍTICO (Resolver em 2 semanas)
+| Problema | Impacto | Solução |
+|----------|---------|---------|
+| Type checking desabilitado | Bugs não detectados em compile-time | Remover um arquivo por vez |
+| Zero segurança de tipos | Refactoring perigoso | Adicionar tipos corretos |
+| | Developer experience ruim | Validar: `npx tsc --noEmit` |
 
-```
-1. Security Issues
-   ├── [ ] Leaked Password Protection não ativado
-   ├── [ ] Rate limiting básico (melhorar)
-   └── [ ] Audit trail incompleto
-
-2. TypeScript Strictness
-   ├── [ ] Remover @ts-nocheck em arquivos críticos (auth, payments)
-   └── [ ] Corrigir types em hooks de data fetching
-
-3. Mock Data em Módulos Críticos
-   ├── [ ] Fleet Management - 40% mock
-   ├── [ ] Compliance Dashboard - 30% mock
-   └── [ ] Finance - 50% mock
+```bash
+# Encontrar todos arquivos com @ts-nocheck
+find src -name "*.tsx" -o -name "*.ts" | xargs grep -l "@ts-nocheck"
 ```
 
-#### 🟡 P1 - ALTO (Resolver em 6 semanas)
+**Esforço:** 40-60 horas | **Prioridade:** P0
+
+**1.2 any Types (~1.300 ocorrências)**
+
+```typescript
+// ❌ BAD - Type safety comprometido
+function processData(data: any) {
+  return data.something; // No type checking!
+}
+
+// ✅ GOOD - Type-safe
+interface Data {
+  something: string;
+}
+function processData(data: Data) {
+  return data.something;
+}
+```
+
+**Esforço:** 60-80 horas | **Prioridade:** P1
+
+---
+
+#### CATEGORIA 2: Dados Mock 🔴 CRÍTICO
+
+**Status por Módulo:**
+
+| Módulo | % Mock | % Real | Status |
+|--------|--------|--------|--------|
+| Fleet Management | 30% | 70% | 🟡 Em progresso |
+| Crew Management | 20% | 80% | 🟢 Quase pronto |
+| Maintenance | 40% | 60% | 🟡 Em progresso |
+| Compliance | 30% | 70% | 🟡 Em progresso |
+| ESG/Emissions | 50% | 50% | 🟡 Em progresso |
+| Financial | 40% | 60% | 🟡 Em progresso |
+
+```typescript
+// ❌ BAD - Dados mockados
+export function useVessels() {
+  return useQuery({
+    queryKey: ['vessels'],
+    queryFn: async () => Promise.resolve([
+      { id: '1', name: 'MV Example', imo: '1234567' },
+    ]),
+  });
+}
+
+// ✅ GOOD - Dados reais do Supabase
+export function useVessels() {
+  return useQuery({
+    queryKey: ['vessels'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('*')
+        .order('name');
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+```
+
+**Esforço:** 80-120 horas | **Prioridade:** P0
+
+---
+
+#### CATEGORIA 3: Integrações Externas 🟡 ALTO
+
+| API | Provider | Status | Esforço |
+|-----|----------|--------|---------|
+| AIS Tracking | MarineTraffic | 🟡 Planejado | 40h |
+| Weather | StormGeo/OpenWeather | 🟡 Planejado | 20h |
+| Telemedicine | VIKAND | 🟡 Planejado | 60h |
+| ESG/Carbon | Climatiq | 🟡 Planejado | 40h |
+| Accounting | QuickBooks/Xero | 🔴 Não iniciado | 80h |
+
+**Total:** 240 horas
+
+---
+
+#### CATEGORIA 4: Testes 🟡 ALTO
+
+| Tipo | Atual | Meta | Framework |
+|------|-------|------|-----------|
+| Unit Tests | ~70% | >85% | Vitest |
+| Integration Tests | ~50% | >70% | Vitest + MSW |
+| E2E Tests | ~30% | >50% | Playwright |
+
+**Esforço:** 100 horas | **Prioridade:** P1
+
+---
+
+#### CATEGORIA 5: Segurança 🔴 CRÍTICO
+
+| Issue | Severidade | Solução | Esforço |
+|-------|------------|---------|---------|
+| Leaked Password Protection | 🔴 Crítico | Ativar no Supabase | 5 min |
+| Audit Trail incompleto | 🟡 Alto | Implementar triggers | 40h |
+| RLS não validado | 🟡 Alto | Testes E2E | 60h |
+
+---
+
+### 6.2 Priorização
+
+#### 🔴 P0 - CRÍTICO (2 semanas)
+
+```
+1. Security
+   ├── [x] Leaked Password Protection ativado
+   ├── [ ] Rate limiting melhorado
+   └── [ ] Audit trail básico
+
+2. TypeScript
+   └── [ ] @ts-nocheck em 20 arquivos críticos (auth, payments)
+
+3. Mock Data
+   ├── [ ] Fleet Management → 100% real
+   └── [ ] Crew Management → 100% real
+```
+
+#### 🟡 P1 - ALTO (6 semanas)
 
 ```
 1. TypeScript Cleanup
    ├── [ ] Remover todos @ts-nocheck (150 arquivos)
-   ├── [ ] Reduzir 'any' para < 100 ocorrências
-   └── [ ] Adicionar strict null checks
+   ├── [ ] Reduzir 'any' para < 100
+   └── [ ] Strict null checks
 
 2. Data Integration
-   ├── [ ] Eliminar todos dados mock
-   ├── [ ] Implementar real-time subscriptions
-   └── [ ] Adicionar offline sync
+   ├── [ ] Eliminar todos mocks
+   ├── [ ] Real-time subscriptions
+   └── [ ] Offline sync foundation
 
 3. Test Coverage
-   ├── [ ] Unit tests: 68% → 85%
-   ├── [ ] Integration tests para fluxos críticos
-   └── [ ] E2E tests para happy paths
-
-4. API Integrations
-   ├── [ ] AIS (MarineTraffic/VesselFinder)
-   ├── [ ] Weather (StormGeo/OpenWeather)
-   └── [ ] ESG (Climatiq)
+   ├── [ ] Unit: 70% → 85%
+   ├── [ ] Integration: 50% → 70%
+   └── [ ] E2E: 30% → 50%
 ```
 
-#### 🟢 P2 - IMPORTANTE (Resolver em 12 semanas)
+#### 🟢 P2 - IMPORTANTE (12 semanas)
 
 ```
 1. Performance
@@ -1262,39 +1363,45 @@ CREATE POLICY "self_view"
    ├── [ ] Lazy loading routes
    └── [ ] Query optimization
 
-2. Offline Mode
+2. API Integrations
+   ├── [ ] AIS (MarineTraffic)
+   ├── [ ] Weather (StormGeo)
+   └── [ ] ESG (Climatiq)
+
+3. Offline Mode
    ├── [ ] Service Worker v2
    ├── [ ] IndexedDB sync
    └── [ ] Conflict resolution
-
-3. Documentation
-   ├── [ ] API documentation
-   ├── [ ] Component storybook
-   └── [ ] Architecture diagrams
 ```
 
 ### 6.3 Roadmap de Correção
 
 ```
-Sprint 1-2 (Semanas 1-4):
-├── Security fixes (P0)
-├── Critical mock data removal
-└── Auth flow hardening
-
-Sprint 3-4 (Semanas 5-8):
-├── TypeScript cleanup (50%)
-├── Test coverage boost
-└── Remaining mock data
-
-Sprint 5-6 (Semanas 9-12):
-├── TypeScript cleanup (100%)
-├── API integrations (AIS, Weather)
-└── Performance optimization
-
-Sprint 7-8 (Semanas 13-16):
-├── Offline mode
-├── Remaining integrations
-└── Documentation complete
+┌─────────────────────────────────────────────────────────────────┐
+│  SPRINT 1-2 (Semanas 1-4) - P0 CRÍTICO                         │
+│  ├── Security fixes                                             │
+│  ├── Critical mock data removal                                 │
+│  └── Auth flow hardening                                        │
+│  Esforço: 80h | Impacto: Sistema seguro para produção          │
+├─────────────────────────────────────────────────────────────────┤
+│  SPRINT 3-4 (Semanas 5-8) - P1 ALTO                            │
+│  ├── TypeScript cleanup (50%)                                   │
+│  ├── Test coverage boost                                        │
+│  └── Remaining mock data                                        │
+│  Esforço: 120h | Impacto: Sistema estável                      │
+├─────────────────────────────────────────────────────────────────┤
+│  SPRINT 5-6 (Semanas 9-12) - P1 ALTO                           │
+│  ├── TypeScript cleanup (100%)                                  │
+│  ├── API integrations (AIS, Weather)                            │
+│  └── Performance optimization                                   │
+│  Esforço: 120h | Impacto: Features completas                   │
+├─────────────────────────────────────────────────────────────────┤
+│  SPRINT 7-8 (Semanas 13-16) - P2 IMPORTANTE                    │
+│  ├── Offline mode                                               │
+│  ├── Remaining integrations                                     │
+│  └── Documentation complete                                     │
+│  Esforço: 160h | Impacto: Sistema tier-1                       │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
