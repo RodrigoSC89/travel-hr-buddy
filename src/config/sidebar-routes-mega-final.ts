@@ -18,8 +18,6 @@
  * ✅ 12 Auditorias Marítimas PRESERVADAS
  * ✅ 10 Agentes de Auditoria IA PRESERVADOS
  * ✅ Zero funcionalidades perdidas
- * 
- * Legacy Redirects: src/routes/legacy-redirects-mega.tsx
  * =========================================================
  */
 
@@ -32,7 +30,7 @@ import {
   DollarSign, Leaf, ClipboardList, Cloud,
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
-  Briefcase
+  Briefcase, Building2
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -73,7 +71,7 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
  * SIDEBAR v8.0 FINAL - 7 MEGA-HUBs CANÔNICOS
  * Rotas canônicas: /command, /ops, /maintenance, /ai, /tracking, /compliance, /workbench
  */
-export const SIDEBAR_ROUTES: SidebarGroup[] = [
+export const SIDEBAR_ROUTES_MEGA_FINAL: SidebarGroup[] = [
   // ═══════════════════════════════════════════════════════════
   // A. 🎯 COMMAND - Central Operacional Unificada
   // ═══════════════════════════════════════════════════════════
@@ -82,10 +80,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: true,
     items: [
       { label: "Command Center", path: "/command", icon: Compass, emoji: "📊", badge: "HUB" },
-      { label: "Operations", path: "/command?tab=operations", icon: Activity, emoji: "⚡" },
-      { label: "Executive", path: "/command?tab=executive", icon: BarChart3, emoji: "📈" },
-      { label: "NOC 24/7", path: "/command?tab=noc", icon: Eye, emoji: "🖥️" },
-      { label: "SOC Security", path: "/command?tab=soc", icon: Shield, emoji: "🛡️" },
+      { label: "Operations", path: "/command/operations", icon: Activity, emoji: "⚡" },
+      { label: "Executive", path: "/command/executive", icon: BarChart3, emoji: "📈" },
+      { label: "NOC 24/7", path: "/command/noc", icon: Eye, emoji: "🖥️" },
+      { label: "SOC Security", path: "/command/soc", icon: Shield, emoji: "🛡️" },
     ],
   },
 
@@ -97,12 +95,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Operations Hub", path: "/ops", icon: Compass, emoji: "🚀", badge: "HUB" },
-      { label: "Maritime", path: "/ops?tab=maritime", icon: Anchor, emoji: "⚓" },
-      { label: "Fleet", path: "/ops?tab=fleet", icon: Ship, emoji: "🚢" },
-      { label: "Voyage", path: "/ops?tab=voyage", icon: Map, emoji: "🗺️" },
-      { label: "Missions", path: "/ops?tab=missions", icon: Target, emoji: "🎯" },
-      { label: "Logistics", path: "/ops?tab=logistics", icon: Package, emoji: "📦" },
-      { label: "Contracts", path: "/ops?tab=contracts", icon: FileText, emoji: "📝" },
+      { label: "Maritime", path: "/ops/maritime", icon: Anchor, emoji: "⚓" },
+      { label: "Fleet", path: "/ops/fleet", icon: Ship, emoji: "🚢" },
+      { label: "Voyage", path: "/ops/voyage", icon: Map, emoji: "🗺️" },
+      { label: "Missions", path: "/ops/missions", icon: Target, emoji: "🎯" },
+      { label: "Logistics", path: "/ops/logistics", icon: Package, emoji: "📦" },
+      { label: "Contracts", path: "/ops/contracts", icon: FileText, emoji: "📝" },
     ],
   },
 
@@ -114,13 +112,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Maintenance Hub", path: "/maintenance", icon: Wrench, emoji: "🔧", badge: "HUB" },
-      { label: "Class Surveys", path: "/maintenance?tab=surveys", icon: Shield, emoji: "🛡️", badge: "DNV" },
-      { label: "Predictive", path: "/maintenance?tab=predictive", icon: Brain, emoji: "🧠", badge: "ML" },
-      { label: "Drydock", path: "/maintenance?tab=drydock", icon: Anchor, emoji: "🔩" },
-      { label: "Fuel & ROB", path: "/maintenance?tab=fuel", icon: Fuel, emoji: "⛽" },
-      { label: "Digital Twin", path: "/maintenance?tab=digital-twin", icon: Cpu, emoji: "🎮", badge: "3D" },
-      { label: "MARPOL & Waste", path: "/maintenance?tab=waste-marpol", icon: Trash2, emoji: "♻️" },
-      { label: "ESG Emissions", path: "/maintenance?tab=esg", icon: Leaf, emoji: "🌱" },
+      { label: "Class Surveys", path: "/maintenance/surveys", icon: Shield, emoji: "🛡️", badge: "DNV" },
+      { label: "Predictive", path: "/maintenance/predictive", icon: Brain, emoji: "🧠", badge: "ML" },
+      { label: "Drydock", path: "/maintenance/drydock", icon: Anchor, emoji: "🔩" },
+      { label: "Fuel & ROB", path: "/maintenance/fuel", icon: Fuel, emoji: "⛽" },
+      { label: "Digital Twin", path: "/maintenance/digital-twin", icon: Cpu, emoji: "🎮", badge: "3D" },
+      { label: "MARPOL & Waste", path: "/maintenance/waste-marpol", icon: Trash2, emoji: "♻️" },
+      { label: "ESG Emissions", path: "/maintenance/esg", icon: Leaf, emoji: "🌱" },
     ],
   },
 
@@ -132,13 +130,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "AI Hub", path: "/ai", icon: Brain, emoji: "🧠", badge: "HUB" },
-      { label: "Chat & Assistants", path: "/ai?tab=chat", icon: MessageSquare, emoji: "💬" },
-      { label: "AI Agents", path: "/ai?tab=agents", icon: Bot, emoji: "🤖", badge: "25+" },
-      { label: "Workflows", path: "/ai?tab=workflows", icon: Zap, emoji: "🔄" },
-      { label: "Voice", path: "/ai?tab=voice", icon: Mic, emoji: "🎙️" },
-      { label: "11 AI Modules", path: "/ai?tab=modules", icon: Brain, emoji: "🌟", badge: "11" },
-      { label: "RAG & OCR", path: "/ai?tab=rag", icon: FileText, emoji: "📄" },
-      { label: "Analytics", path: "/ai?tab=analytics", icon: BarChart3, emoji: "📊" },
+      { label: "Chat & Assistants", path: "/ai/chat", icon: MessageSquare, emoji: "💬" },
+      { label: "AI Agents", path: "/ai/agents", icon: Bot, emoji: "🤖", badge: "25+" },
+      { label: "Workflows", path: "/ai/workflows", icon: Zap, emoji: "🔄" },
+      { label: "Voice", path: "/ai/voice", icon: Mic, emoji: "🎙️" },
+      { label: "11 AI Modules", path: "/ai/modules", icon: Brain, emoji: "🌟", badge: "11" },
+      { label: "RAG & OCR", path: "/ai/rag", icon: FileText, emoji: "📄" },
+      { label: "Analytics", path: "/ai/analytics", icon: BarChart3, emoji: "📊" },
     ],
   },
 
@@ -150,11 +148,11 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Tracking Hub", path: "/tracking", icon: Satellite, emoji: "📡", badge: "HUB" },
-      { label: "Real-time", path: "/tracking?tab=realtime", icon: Activity, emoji: "⚡" },
-      { label: "AIS Fleet", path: "/tracking?tab=ais", icon: Ship, emoji: "🚢" },
-      { label: "SATCOM", path: "/tracking?tab=satcom", icon: Radio, emoji: "📻" },
-      { label: "Weather AI", path: "/tracking?tab=weather", icon: Cloud, emoji: "🌤️", badge: "AI" },
-      { label: "Alerts", path: "/tracking?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
+      { label: "Real-time", path: "/tracking/realtime", icon: Activity, emoji: "⚡" },
+      { label: "AIS Fleet", path: "/tracking/ais", icon: Ship, emoji: "🚢" },
+      { label: "SATCOM", path: "/tracking/satcom", icon: Radio, emoji: "📻" },
+      { label: "Weather AI", path: "/tracking/weather", icon: Cloud, emoji: "🌤️", badge: "AI" },
+      { label: "Alerts", path: "/tracking/alerts", icon: AlertTriangle, emoji: "🚨" },
     ],
   },
 
@@ -166,18 +164,18 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Compliance Hub", path: "/compliance", icon: Shield, emoji: "🛡️", badge: "HUB" },
-      { label: "Scorecard", path: "/compliance?tab=scorecard", icon: BarChart3, emoji: "📊" },
-      { label: "🤖 10 AI Agents", path: "/compliance?tab=audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
-      { label: "Certificates", path: "/compliance?tab=certificates", icon: Award, emoji: "🏆" },
-      { label: "Risk Matrix", path: "/compliance?tab=risk-matrix", icon: Target, emoji: "🎯" },
-      { label: "NCs & CAPAs", path: "/compliance?tab=ncs-capas", icon: AlertTriangle, emoji: "⚠️" },
+      { label: "Scorecard", path: "/compliance/scorecard", icon: BarChart3, emoji: "📊" },
+      { label: "🤖 10 AI Agents", path: "/compliance/audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
+      { label: "Certificates", path: "/compliance/certificates", icon: Award, emoji: "🏆" },
+      { label: "Risk Matrix", path: "/compliance/risk-matrix", icon: Target, emoji: "🎯" },
+      { label: "NCs & CAPAs", path: "/compliance/ncs-capas", icon: AlertTriangle, emoji: "⚠️" },
       // === 12 AUDITORIAS MARÍTIMAS ===
-      { label: "PEO-DP", path: "/compliance?standard=peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
-      { label: "PEOTRAM", path: "/compliance?standard=peotram", icon: Shield, emoji: "🚢", badge: "13E" },
-      { label: "ISM/ISPS", path: "/compliance?standard=ism", icon: Shield, emoji: "🛡️", badge: "SMS" },
-      { label: "SOLAS/LSA", path: "/compliance?standard=solas", icon: Ship, emoji: "🚢", badge: "SOLAS" },
-      { label: "MARPOL", path: "/compliance?standard=marpol", icon: Trash2, emoji: "♻️", badge: "I-VI" },
-      { label: "SGSO", path: "/compliance?standard=sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
+      { label: "PEO-DP", path: "/compliance/standards/peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
+      { label: "PEOTRAM", path: "/compliance/standards/peotram", icon: Shield, emoji: "🚢", badge: "13E" },
+      { label: "ISM/ISPS", path: "/compliance/standards/ism", icon: Shield, emoji: "🛡️", badge: "SMS" },
+      { label: "SOLAS/LSA", path: "/compliance/standards/solas", icon: Ship, emoji: "🚢", badge: "SOLAS" },
+      { label: "MARPOL", path: "/compliance/standards/marpol", icon: Trash2, emoji: "♻️", badge: "I-VI" },
+      { label: "SGSO", path: "/compliance/standards/sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
     ],
   },
 
@@ -188,12 +186,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "📚 Workbench",
     defaultOpen: false,
     items: [
-      { label: "📄 Documents", path: "/workbench?section=docs", icon: FileText, emoji: "📄", badge: "HUB" },
-      { label: "👥 People", path: "/workbench?section=people", icon: Users, emoji: "👥" },
-      { label: "💰 Finance", path: "/workbench?section=finance", icon: DollarSign, emoji: "💰" },
-      { label: "✈️ Travel", path: "/workbench?section=travel", icon: Plane, emoji: "✈️" },
-      { label: "⚙️ System", path: "/workbench?section=system", icon: Settings, emoji: "⚙️" },
-      { label: "🛠️ Dev Tools", path: "/workbench?section=system&view=dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
+      { label: "📄 Documents", path: "/workbench/docs", icon: FileText, emoji: "📄", badge: "HUB" },
+      { label: "👥 People", path: "/workbench/people", icon: Users, emoji: "👥" },
+      { label: "💰 Finance", path: "/workbench/finance", icon: DollarSign, emoji: "💰" },
+      { label: "✈️ Travel", path: "/workbench/finance/travel", icon: Plane, emoji: "✈️" },
+      { label: "⚙️ System", path: "/workbench/system", icon: Settings, emoji: "⚙️" },
+      { label: "🛠️ Dev Tools", path: "/workbench/system/dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
     ],
   },
 ];
@@ -201,15 +199,15 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
 /**
  * Get all routes flattened for search/validation
  */
-export function getAllRoutes(): SidebarRoute[] {
-  return SIDEBAR_ROUTES.flatMap(group => group.items);
+export function getAllRoutesMega(): SidebarRoute[] {
+  return SIDEBAR_ROUTES_MEGA_FINAL.flatMap(group => group.items);
 }
 
 /**
  * Find which group a path belongs to
  */
-export function findGroupByPath(path: string): SidebarGroup | undefined {
-  return SIDEBAR_ROUTES.find(group => 
+export function findGroupByPathMega(path: string): SidebarGroup | undefined {
+  return SIDEBAR_ROUTES_MEGA_FINAL.find(group => 
     group.items.some(item => {
       const basePath = item.path.split('?')[0];
       const searchPath = path.split('?')[0];
@@ -221,15 +219,15 @@ export function findGroupByPath(path: string): SidebarGroup | undefined {
 /**
  * Get total module count
  */
-export function getModuleCount(): number {
-  return getAllRoutes().length;
+export function getModuleCountMega(): number {
+  return getAllRoutesMega().length;
 }
 
 /**
  * Get hub count
  */
-export function getHubCount(): number {
-  return SIDEBAR_ROUTES.length;
+export function getHubCountMega(): number {
+  return SIDEBAR_ROUTES_MEGA_FINAL.length;
 }
 
-export default SIDEBAR_ROUTES;
+export default SIDEBAR_ROUTES_MEGA_FINAL;

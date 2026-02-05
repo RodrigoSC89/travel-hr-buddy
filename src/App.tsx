@@ -397,6 +397,17 @@ const ExecutiveDashboardAdvancedPage = lazy(() => import("@/pages/advanced/Execu
 const InteractivityScoreboard = lazy(() => import("@/pages/System/InteractivityScoreboard"));
 
 // ============================================
+// 7 MEGA-HUBS CANÔNICOS - v8.0 MEGA-FUSION
+// ============================================
+const CommandMegaHub = lazy(() => import("@/pages/mega-hubs/CommandMegaHub"));
+const OpsMegaHub = lazy(() => import("@/pages/mega-hubs/OpsMegaHub"));
+const MaintenanceMegaHub = lazy(() => import("@/pages/mega-hubs/MaintenanceMegaHub"));
+const AIMegaHub = lazy(() => import("@/pages/mega-hubs/AIMegaHub"));
+const TrackingMegaHub = lazy(() => import("@/pages/mega-hubs/TrackingMegaHub"));
+const ComplianceMegaHub = lazy(() => import("@/pages/mega-hubs/ComplianceMegaHub"));
+const WorkbenchMegaHub = lazy(() => import("@/pages/mega-hubs/WorkbenchMegaHub"));
+
+// ============================================
 // ADMIN & DASHBOARDS
 // ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
@@ -547,7 +558,26 @@ const AppRoutes = () => (
     
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
-      <Route path="/" element={<Navigate to="/central-comando" replace />} />
+      <Route path="/" element={<Navigate to="/command" replace />} />
+      
+      {/* ============================================ */}
+      {/* 7 MEGA-HUBS CANÔNICOS - v8.0 MEGA-FUSION */}
+      {/* ============================================ */}
+      <Route path="/command" element={<CommandMegaHub />} />
+      <Route path="/command/*" element={<CommandMegaHub />} />
+      <Route path="/ops" element={<OpsMegaHub />} />
+      <Route path="/ops/*" element={<OpsMegaHub />} />
+      <Route path="/maintenance" element={<MaintenanceMegaHub />} />
+      <Route path="/maintenance/*" element={<MaintenanceMegaHub />} />
+      <Route path="/ai" element={<AIMegaHub />} />
+      <Route path="/ai/*" element={<AIMegaHub />} />
+      <Route path="/tracking" element={<TrackingMegaHub />} />
+      <Route path="/tracking/*" element={<TrackingMegaHub />} />
+      <Route path="/compliance" element={<ComplianceMegaHub />} />
+      <Route path="/compliance/*" element={<ComplianceMegaHub />} />
+      <Route path="/workbench" element={<WorkbenchMegaHub />} />
+      <Route path="/workbench/*" element={<WorkbenchMegaHub />} />
+      
       <Route path="/billing" element={<Billing />} />
       <Route path="/billing-portal" element={<BillingPortal />} />
       <Route path="/planos" element={<Billing />} />
