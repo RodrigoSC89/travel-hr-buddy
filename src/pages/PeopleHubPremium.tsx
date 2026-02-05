@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Users, Calendar, GraduationCap, 
-  Heart, Award, UserPlus
+  Heart, Award, UserPlus, Brain, Activity
 } from "lucide-react";
 
 // Lazy load components
@@ -17,6 +17,7 @@ const PeopleCommandCenter = lazy(() => import("@/modules/people-hub/components/P
 const CrewScheduler = lazy(() => import("@/modules/people-hub/components/CrewScheduler"));
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
 const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/CrewWellnessPanel"));
+const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
 
 function LoadingSkeleton() {
   return (
@@ -45,17 +46,24 @@ export default function PeopleHubPremium() {
             Centro de gestão de tripulação e recursos humanos
           </p>
         </div>
-        <Badge variant="outline" className="text-sm">
-          247 tripulantes ativos
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-success/10 text-success">
+            <Activity className="h-3 w-3 mr-1 animate-pulse" />
+            247 ativos
+          </Badge>
+          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+            <Brain className="h-3 w-3 mr-1" />
+            STCW/MLC AI
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="command" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
-          <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="text-xs">Comando</span>
+      <Tabs defaultValue="intelligence" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-7 h-auto p-1">
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+            <Brain className="h-4 w-4" />
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
           <TabsTrigger value="scheduler" className="flex flex-col items-center gap-1 py-2">
             <Calendar className="h-4 w-4" />
@@ -77,7 +85,17 @@ export default function PeopleHubPremium() {
             <UserPlus className="h-4 w-4" />
             <span className="text-xs">Recrutamento</span>
           </TabsTrigger>
+          <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
+            <LayoutDashboard className="h-4 w-4" />
+            <span className="text-xs">Dashboard</span>
+          </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="intelligence">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <CrewIntelligenceHub />
+          </Suspense>
+        </TabsContent>
 
         <TabsContent value="command">
           <Suspense fallback={<LoadingSkeleton />}>

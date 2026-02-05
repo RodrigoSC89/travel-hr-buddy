@@ -80,6 +80,12 @@ export { default as SGSOSystem } from "./compliance/sgso";
 export { default as AnalyticsCore } from "./analytics";
 
 // ============================================
+// TRACKING & TELEMETRY (UNIFIED)
+// ============================================
+export { default as TrackingTelemetry } from "./tracking-telemetry";
+export { default as TrackingCommandCenter } from "./tracking-telemetry/components/TrackingCommandCenter";
+
+// ============================================
 // HR & TRAINING (UNIFIED → NAUTILUS ACADEMY & PEOPLE HUB)
 // ============================================
 export { default as NautilusAcademy } from "./nauti-academy";

@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Wrench, Brain, Calendar, 
-  ClipboardList, BarChart3, Package
+  ClipboardList, BarChart3, Package, Activity, AlertTriangle
 } from "lucide-react";
 
 // Lazy load components
 const PredictiveMaintenanceAI = lazy(() => import("@/modules/maintenance-planner/components/PredictiveMaintenanceAI"));
+const MaintenanceIntelligence = lazy(() => import("@/components/premium/MaintenanceIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -42,22 +43,28 @@ export default function MaintenanceHubPremium() {
             Centro de manutenção com IA preditiva e PMS integrado
           </p>
         </div>
-        <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
-          <Brain className="h-3 w-3 mr-1" />
-          IA Preditiva
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-success/10 text-success">
+            <Activity className="h-3 w-3 mr-1 animate-pulse" />
+            94% Health Score
+          </Badge>
+          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+            <Brain className="h-3 w-3 mr-1" />
+            IA Preditiva
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="predictive" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
-          <TabsTrigger value="predictive" className="flex flex-col items-center gap-1 py-2">
+      <Tabs defaultValue="intelligence" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-7 h-auto p-1">
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
-            <span className="text-xs">Preditiva</span>
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
-          <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="text-xs">Dashboard</span>
+          <TabsTrigger value="predictive" className="flex flex-col items-center gap-1 py-2">
+            <Activity className="h-4 w-4" />
+            <span className="text-xs">Preditiva</span>
           </TabsTrigger>
           <TabsTrigger value="orders" className="flex flex-col items-center gap-1 py-2">
             <ClipboardList className="h-4 w-4" />
@@ -71,24 +78,26 @@ export default function MaintenanceHubPremium() {
             <Package className="h-4 w-4" />
             <span className="text-xs">Peças</span>
           </TabsTrigger>
+          <TabsTrigger value="drydock" className="flex flex-col items-center gap-1 py-2">
+            <Wrench className="h-4 w-4" />
+            <span className="text-xs">Drydock</span>
+          </TabsTrigger>
           <TabsTrigger value="analytics" className="flex flex-col items-center gap-1 py-2">
             <BarChart3 className="h-4 w-4" />
             <span className="text-xs">Analytics</span>
           </TabsTrigger>
         </TabsList>
 
+        <TabsContent value="intelligence">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MaintenanceIntelligence />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="predictive">
           <Suspense fallback={<LoadingSkeleton />}>
             <PredictiveMaintenanceAI />
           </Suspense>
-        </TabsContent>
-
-        <TabsContent value="dashboard">
-          <div className="text-center py-12 text-muted-foreground">
-            <LayoutDashboard className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Dashboard de Manutenção</p>
-            <p className="text-sm">Visão geral do PMS e métricas</p>
-          </div>
         </TabsContent>
 
         <TabsContent value="orders">
@@ -112,6 +121,14 @@ export default function MaintenanceHubPremium() {
             <Package className="h-12 w-12 mx-auto mb-3 opacity-50" />
             <p className="font-medium">Inventário de Peças</p>
             <p className="text-sm">Estoque e requisições de materiais</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="drydock">
+          <div className="text-center py-12 text-muted-foreground">
+            <Wrench className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p className="font-medium">Drydock Management</p>
+            <p className="text-sm">Planejamento de docagem e overhauls</p>
           </div>
         </TabsContent>
 
