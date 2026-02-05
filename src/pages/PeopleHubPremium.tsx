@@ -24,6 +24,10 @@ const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleInte
 const TrainingAcademyIntelligence = lazy(() => import("@/components/premium/TrainingAcademyIntelligence"));
 const MentorDPUnified = lazy(() => import("@/components/mentor-dp/MentorDPUnified"));
 
+// Tier-1 Components - STCW/MLC
+const STCWCompetencyMatrix = lazy(() => import("@/components/tier1/people/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix })));
+const SeaTimeCalculator = lazy(() => import("@/components/tier1/people/SeaTimeCalculator").then(m => ({ default: m.SeaTimeCalculator })));
+
 // Enterprise Components - Phase 7
 import { 
   TalentPipeline,
@@ -83,13 +87,17 @@ export default function PeopleHubPremium() {
 
       {/* Tabs */}
       <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-6 lg:grid-cols-13 h-auto p-1">
           <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">Intelligence</span>
           </TabsTrigger>
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Activity className="h-4 w-4" />
+            <span className="text-xs">Crew Intel</span>
+          </TabsTrigger>
+          <TabsTrigger value="stcw-mlc" className="flex flex-col items-center gap-1 py-2">
+            <Award className="h-4 w-4" />
             <span className="text-xs">STCW/MLC</span>
           </TabsTrigger>
           <TabsTrigger value="talent" className="flex flex-col items-center gap-1 py-2">
@@ -144,6 +152,18 @@ export default function PeopleHubPremium() {
           <Suspense fallback={<LoadingSkeleton />}>
             <CrewIntelligenceHub />
           </Suspense>
+        </TabsContent>
+
+        {/* STCW/MLC Compliance Tab */}
+        <TabsContent value="stcw-mlc">
+          <div className="space-y-6">
+            <Suspense fallback={<LoadingSkeleton />}>
+              <STCWCompetencyMatrix />
+            </Suspense>
+            <Suspense fallback={<LoadingSkeleton />}>
+              <SeaTimeCalculator />
+            </Suspense>
+          </div>
         </TabsContent>
 
         {/* Enterprise Components - Phase 7 */}
