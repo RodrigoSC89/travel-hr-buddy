@@ -242,7 +242,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   {
     title: "🚀 Enterprise Intelligence",
     defaultOpen: false,
-    requiredRoles: ['admin', 'manager'],
+    // REMOVED role restriction - all users can see these modules
     items: [
       { label: "AI Modules Hub", path: "/ai-modules", icon: Brain, emoji: "🧠", badge: "11 AI" },
       { label: "RAG Assistant", path: "/enterprise/rag-assistant", icon: Bot, emoji: "🤖", badge: "RAG" },
@@ -263,7 +263,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   {
     title: "🎮 Advanced Maritime",
     defaultOpen: false,
-    requiredRoles: ['admin', 'manager'],
+    // REMOVED role restriction - all users can see these modules
     items: [
       { label: "Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Cpu, emoji: "🎮", badge: "3D" },
       { label: "Weather Intelligence", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
