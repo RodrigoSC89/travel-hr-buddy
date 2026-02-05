@@ -82,7 +82,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Maritime", path: "/operations-command-hub?tab=maritime", icon: Anchor, emoji: "⚓" },
       { label: "Fleet", path: "/operations-command-hub?tab=fleet", icon: Ship, emoji: "🚢" },
       { label: "Voyage", path: "/operations-command-hub?tab=voyage", icon: Map, emoji: "🗺️" },
-      { label: "Mission", path: "/operations-command-hub?tab=mission", icon: Target, emoji: "🎯" },
+      { label: "Mission", path: "/operations-command-hub?tab=missions", icon: Target, emoji: "🎯" },
       { label: "Logistics", path: "/operations-command-hub?tab=logistics", icon: Package, emoji: "📦" },
       { label: "Vessel Contracts", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
       { label: "Charter Party", path: "/charter-party", icon: FileText, emoji: "📜" },
