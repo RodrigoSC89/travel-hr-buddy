@@ -15,6 +15,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // Lazy load sub-components
 const CentralComando = lazy(() => import('@/pages/CentralComando'));
+const OperationsOverviewPage = lazy(() => import('@/pages/command/OperationsOverviewPage'));
+const ExecutiveDashboardPage = lazy(() => import('@/pages/command/ExecutiveDashboardPage'));
 const NOC = lazy(() => import('@/pages/NOC'));
 const SOCPage = lazy(() => import('@/pages/SOCPage'));
 const CommunicationCommandCenter = lazy(() => import('@/pages/CommunicationCommandCenter'));
@@ -99,11 +101,11 @@ export default function CommandMegaHub() {
             </TabsContent>
             
             <TabsContent value="operations" className="mt-0">
-              <CentralComando />
+              <OperationsOverviewPage />
             </TabsContent>
             
             <TabsContent value="executive" className="mt-0">
-              <CentralComando />
+              <ExecutiveDashboardPage />
             </TabsContent>
             
             <TabsContent value="noc" className="mt-0">

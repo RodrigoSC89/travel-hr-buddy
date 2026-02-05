@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceHubPremium'));
+const ClassSurveysPage = lazy(() => import('@/pages/maintenance/ClassSurveysPage'));
 const DrydockManagement = lazy(() => import('@/pages/DrydockManagement'));
 const PredictiveMaintenancePage = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const FuelManagementPage = lazy(() => import('@/pages/FuelManagementPage'));
@@ -106,7 +107,7 @@ export default function MaintenanceMegaHub() {
             </TabsContent>
             
             <TabsContent value="surveys" className="mt-0">
-              <MaintenanceHub />
+              <ClassSurveysPage />
             </TabsContent>
             
             <TabsContent value="predictive" className="mt-0">
