@@ -20,6 +20,9 @@ const AuditWorkflow = lazy(() => import("@/modules/compliance-hub/components/Aud
 const ComplianceIntelligence = lazy(() => import("@/components/premium/ComplianceIntelligence"));
 const ComplianceAuditIntelligence = lazy(() => import("@/components/premium/ComplianceAuditIntelligence"));
 
+// Tier-1 Components
+const ISMISPSAuditCenter = lazy(() => import("@/components/tier1/compliance/ISMISPSAuditCenter"));
+
 // Enterprise Components - Phase 5
 import { 
   ComplianceScorecard,
@@ -170,12 +173,11 @@ export default function ComplianceHubPremiumPage() {
           </div>
         </TabsContent>
 
+        {/* Tier-1: ISM/ISPS Audit Center */}
         <TabsContent value="ism">
-          <div className="text-center py-12 text-muted-foreground">
-            <Shield className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">ISM/ISPS Code</p>
-            <p className="text-sm">Gestão de segurança e proteção marítima</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ISMISPSAuditCenter />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
