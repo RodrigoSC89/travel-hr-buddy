@@ -54,7 +54,7 @@ export default function PeopleHubPremium() {
             <Activity className="h-3 w-3 mr-1 animate-pulse" />
             247 ativos
           </Badge>
-          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             <Brain className="h-3 w-3 mr-1" />
             STCW/MLC AI
           </Badge>
@@ -62,11 +62,11 @@ export default function PeopleHubPremium() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="intelligence" className="space-y-6">
-         <TabsList className="grid w-full grid-cols-8 h-auto p-1">
+      <Tabs defaultValue="advanced" className="space-y-6">
+         <TabsList className="grid w-full grid-cols-9 h-auto p-1">
            <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
-             <span className="text-xs">Advanced</span>
+             <span className="text-xs">Intelligence</span>
           </TabsTrigger>
            <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
              <Activity className="h-4 w-4" />
@@ -83,6 +83,10 @@ export default function PeopleHubPremium() {
           <TabsTrigger value="training" className="flex flex-col items-center gap-1 py-2">
             <GraduationCap className="h-4 w-4" />
             <span className="text-xs">Treinamento</span>
+          </TabsTrigger>
+          <TabsTrigger value="mentor-dp" className="flex flex-col items-center gap-1 py-2">
+            <Award className="h-4 w-4" />
+            <span className="text-xs">Mentor DP</span>
           </TabsTrigger>
           <TabsTrigger value="wellness" className="flex flex-col items-center gap-1 py-2">
             <Heart className="h-4 w-4" />
@@ -131,6 +135,12 @@ export default function PeopleHubPremium() {
         <TabsContent value="training">
           <Suspense fallback={<LoadingSkeleton />}>
             <TrainingAcademyIntelligence />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="mentor-dp">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <DPMentorIntelligence />
           </Suspense>
         </TabsContent>
 
