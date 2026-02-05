@@ -1,7 +1,6 @@
 /**
- * ESG & Emissions Tier-1 Components
- * IMO 2023+ / EU ETS / CSRD Compliant
+ * ESG & Emissions Tier-1 Components Index
+ * Carbon tracking, CII, EU ETS compliance
  */
 
-export { CarbonIntensityIndicator } from './CarbonIntensityIndicator';
-export { EUETSCompliance } from './EUETSCompliance';
+export { default as CIIMonitorDashboard } from './CIIMonitorDashboard';

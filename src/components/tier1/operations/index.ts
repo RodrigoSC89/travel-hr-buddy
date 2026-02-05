@@ -1,8 +1,7 @@
 /**
- * Tier-1 Operations Components Index
- * Based on: Veson IMOS, Danaos, MarineTraffic, StormGeo
+ * Operations Tier-1 Components Index
+ * Fleet, Voyage, and Logistics management
  */
 
-export { PortCallManager } from "./PortCallManager";
-export { VoyageOptimizer } from "./VoyageOptimizer";
-export { default as OverviewDashboard } from "./OverviewDashboard";
+export { default as OverviewDashboard } from './OverviewDashboard';
+export { default as VoyagePnLDashboard } from './VoyagePnLDashboard';
