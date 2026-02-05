@@ -41,6 +41,14 @@ const AdvancedSearch = lazy(() => import("@/pages/AdvancedSearch"));
 const DocumentWorkflowComponent = lazy(() => import("@/modules/document-center/components/DocumentWorkflow"));
 const DocumentCommandCenter = lazy(() => import("@/modules/document-center/components/DocumentCommandCenter"));
 
+// Enterprise Components - Phase 6
+import { 
+  DocumentViewer,
+  TemplateManager,
+  ChecklistBuilder,
+  KnowledgeHub
+} from "@/components/enterprise";
+
 function TabLoadingSkeleton() {
   return (
     <div className="flex items-center justify-center py-20">
@@ -53,10 +61,14 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "command", label: "Central", icon: FileText, badge: "PREMIUM" },
+  { id: "viewer", label: "Viewer", icon: Eye, badge: "NEW" },
   { id: "documents", label: "Documentos", icon: FileText },
-  { id: "workflow", label: "Workflow", icon: GitBranch, badge: "NEW" },
+  { id: "workflow", label: "Workflow", icon: GitBranch },
   { id: "templates", label: "Templates", icon: LayoutTemplate },
+  { id: "template-mgr", label: "Gestor", icon: LayoutTemplate, badge: "NEW" },
   { id: "checklists", label: "Checklists", icon: CheckSquare },
+  { id: "checklist-builder", label: "Builder", icon: CheckSquare, badge: "NEW" },
+  { id: "knowledge", label: "Knowledge", icon: Brain, badge: "NEW" },
   { id: "reports", label: "Relatórios", icon: FileCheck },
   { id: "export", label: "Exportar", icon: Download },
   { id: "search", label: "Busca IA", icon: Search, badge: "AI" },
@@ -475,6 +487,11 @@ export default function DocumentCenterHubEnhanced() {
             </Suspense>
           </TabsContent>
 
+          {/* Enterprise Components - Phase 6 */}
+          <TabsContent value="viewer" className="mt-6">
+            <DocumentViewer />
+          </TabsContent>
+
           <TabsContent value="documents" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <DocumentsPage />
@@ -493,10 +510,22 @@ export default function DocumentCenterHubEnhanced() {
             </Suspense>
           </TabsContent>
 
+          <TabsContent value="template-mgr" className="mt-6">
+            <TemplateManager />
+          </TabsContent>
+
           <TabsContent value="checklists" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <ChecklistsPage />
             </Suspense>
+          </TabsContent>
+
+          <TabsContent value="checklist-builder" className="mt-6">
+            <ChecklistBuilder />
+          </TabsContent>
+
+          <TabsContent value="knowledge" className="mt-6">
+            <KnowledgeHub />
           </TabsContent>
 
           <TabsContent value="reports" className="mt-6">

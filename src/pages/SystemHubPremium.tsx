@@ -24,7 +24,15 @@ const SystemCommandCenter = lazy(() => import("@/modules/system-hub/components/S
 const SystemHealthMonitor = lazy(() => import("@/modules/system-hub/components/SystemHealthMonitor"));
 const UserActivityPanel = lazy(() => import("@/modules/system-hub/components/UserActivityPanel"));
 const IntegrationsManager = lazy(() => import("@/modules/system-hub/components/IntegrationsManager"));
- const APIGatewayIntelligence = lazy(() => import("@/components/premium/APIGatewayIntelligence"));
+const APIGatewayIntelligence = lazy(() => import("@/components/premium/APIGatewayIntelligence"));
+
+// Enterprise Components - Phase 9
+import { 
+  IntegrationsDashboard,
+  APIGatewayMonitor,
+  IoTSensorDashboard,
+  SystemSettings
+} from "@/components/enterprise";
 
 // Suspense Fallback
 function LoadingFallback() {
@@ -334,6 +342,27 @@ export default function SystemHubPremium() {
       )
     },
     {
+      id: "integrations-ent",
+      label: "Int. Enterprise",
+      icon: Plug,
+      badge: "NEW",
+      content: <IntegrationsDashboard />
+    },
+    {
+      id: "api-monitor",
+      label: "API Monitor",
+      icon: Terminal,
+      badge: "NEW",
+      content: <APIGatewayMonitor />
+    },
+    {
+      id: "iot",
+      label: "IoT Sensors",
+      icon: Cpu,
+      badge: "NEW",
+      content: <IoTSensorDashboard />
+    },
+    {
       id: "users",
       label: "Atividade",
       icon: Users,
@@ -355,10 +384,16 @@ export default function SystemHubPremium() {
       )
     },
     {
+      id: "settings",
+      label: "Configurações",
+      icon: Settings,
+      badge: "NEW",
+      content: <SystemSettings />
+    },
+    {
       id: "api-gateway",
       label: "API Gateway",
       icon: Zap,
-      badge: "NOVO",
       content: (
         <Suspense fallback={<LoadingFallback />}>
           <APIGatewayIntelligence />

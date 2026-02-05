@@ -1,6 +1,7 @@
 /**
  * Finance Command Center Premium - Hub Financeiro Completo
  * Integra todos os componentes financeiros com abas
+ * ENTERPRISE UPGRADE - Phase 8
  */
 
 import React, { Suspense, lazy } from "react";
@@ -10,13 +11,21 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, FileText, DollarSign, BarChart3, 
-  TrendingUp, CreditCard, PiggyBank, Ship, Anchor
+  TrendingUp, CreditCard, PiggyBank, Ship, Anchor, ShoppingCart, Users
 } from "lucide-react";
 
-// Lazy load components
+// Lazy load original components
 const FinanceCommandDashboard = lazy(() => import("@/modules/finance-hub/components/FinanceCommandDashboard"));
 const ContractManagement = lazy(() => import("@/modules/finance-hub/components/ContractManagement"));
- const FinanceIntelligenceHub = lazy(() => import("@/components/premium/FinanceIntelligenceHub"));
+const FinanceIntelligenceHub = lazy(() => import("@/components/premium/FinanceIntelligenceHub"));
+
+// Enterprise Components - Phase 8
+import { 
+  VoyageAccounting,
+  SupplierPortal,
+  ProcurementHub,
+  FinanceExecutiveDashboard
+} from "@/components/enterprise";
 
 function LoadingSkeleton() {
   return (
@@ -144,10 +153,18 @@ export default function FinanceCommandCenterPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="voyage-pnl" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="voyage-pnl" className="flex flex-col items-center gap-1 py-2">
             <Ship className="h-4 w-4" />
             <span className="text-xs">Voyage P&L</span>
+          </TabsTrigger>
+          <TabsTrigger value="voyage-acct" className="flex flex-col items-center gap-1 py-2">
+            <BarChart3 className="h-4 w-4" />
+            <span className="text-xs">Contabilidade</span>
+          </TabsTrigger>
+          <TabsTrigger value="executive" className="flex flex-col items-center gap-1 py-2">
+            <TrendingUp className="h-4 w-4" />
+            <span className="text-xs">Executivo</span>
           </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
             <LayoutDashboard className="h-4 w-4" />
@@ -156,6 +173,14 @@ export default function FinanceCommandCenterPremium() {
           <TabsTrigger value="contracts" className="flex flex-col items-center gap-1 py-2">
             <FileText className="h-4 w-4" />
             <span className="text-xs">Contratos</span>
+          </TabsTrigger>
+          <TabsTrigger value="suppliers" className="flex flex-col items-center gap-1 py-2">
+            <Users className="h-4 w-4" />
+            <span className="text-xs">Fornecedores</span>
+          </TabsTrigger>
+          <TabsTrigger value="procurement" className="flex flex-col items-center gap-1 py-2">
+            <ShoppingCart className="h-4 w-4" />
+            <span className="text-xs">Compras</span>
           </TabsTrigger>
           <TabsTrigger value="budget" className="flex flex-col items-center gap-1 py-2">
             <PiggyBank className="h-4 w-4" />
@@ -177,6 +202,15 @@ export default function FinanceCommandCenterPremium() {
           </Suspense>
         </TabsContent>
 
+        {/* Enterprise Components - Phase 8 */}
+        <TabsContent value="voyage-acct">
+          <VoyageAccounting />
+        </TabsContent>
+
+        <TabsContent value="executive">
+          <FinanceExecutiveDashboard />
+        </TabsContent>
+
         <TabsContent value="dashboard">
           <Suspense fallback={<LoadingSkeleton />}>
             <FinanceCommandDashboard />
@@ -187,6 +221,14 @@ export default function FinanceCommandCenterPremium() {
           <Suspense fallback={<LoadingSkeleton />}>
             <ContractManagement />
           </Suspense>
+        </TabsContent>
+
+        <TabsContent value="suppliers">
+          <SupplierPortal />
+        </TabsContent>
+
+        <TabsContent value="procurement">
+          <ProcurementHub />
         </TabsContent>
 
         <TabsContent value="budget">

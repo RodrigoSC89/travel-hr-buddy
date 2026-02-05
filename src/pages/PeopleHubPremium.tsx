@@ -1,6 +1,7 @@
 /**
  * People Hub Premium - Centro de Gestão de Pessoas Completo
  * Integra todos os componentes de RH com abas
+ * ENTERPRISE UPGRADE - Phase 7
  */
 
 import React, { Suspense, lazy } from "react";
@@ -9,18 +10,26 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Users, Calendar, GraduationCap, 
-  Heart, Award, UserPlus, Brain, Activity
+  Heart, Award, UserPlus, Brain, Activity, Star, ClipboardList
 } from "lucide-react";
 
-// Lazy load components
+// Lazy load original components
 const PeopleCommandCenter = lazy(() => import("@/modules/people-hub/components/PeopleCommandCenter"));
-const CrewScheduler = lazy(() => import("@/modules/people-hub/components/CrewScheduler"));
+const CrewSchedulerOriginal = lazy(() => import("@/modules/people-hub/components/CrewScheduler"));
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
 const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/CrewWellnessPanel"));
 const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
- const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
+const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
 const TrainingAcademyIntelligence = lazy(() => import("@/components/premium/TrainingAcademyIntelligence"));
 const MentorDPUnified = lazy(() => import("@/components/mentor-dp/MentorDPUnified"));
+
+// Enterprise Components - Phase 7
+import { 
+  TalentPipeline,
+  PerformanceReviews,
+  TrainingMatrix,
+  CrewScheduler
+} from "@/components/enterprise";
 
 function LoadingSkeleton() {
   return (
@@ -63,18 +72,34 @@ export default function PeopleHubPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="advanced" className="space-y-6">
-         <TabsList className="grid w-full grid-cols-9 h-auto p-1">
-           <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
+        <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 h-auto p-1">
+          <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
-             <span className="text-xs">Intelligence</span>
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
-           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
-             <Activity className="h-4 w-4" />
-             <span className="text-xs">STCW/MLC</span>
-           </TabsTrigger>
-          <TabsTrigger value="scheduler" className="flex flex-col items-center gap-1 py-2">
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+            <Activity className="h-4 w-4" />
+            <span className="text-xs">STCW/MLC</span>
+          </TabsTrigger>
+          <TabsTrigger value="talent" className="flex flex-col items-center gap-1 py-2">
+            <UserPlus className="h-4 w-4" />
+            <span className="text-xs">Talentos</span>
+          </TabsTrigger>
+          <TabsTrigger value="performance" className="flex flex-col items-center gap-1 py-2">
+            <Star className="h-4 w-4" />
+            <span className="text-xs">Performance</span>
+          </TabsTrigger>
+          <TabsTrigger value="training-matrix" className="flex flex-col items-center gap-1 py-2">
+            <ClipboardList className="h-4 w-4" />
+            <span className="text-xs">Matriz</span>
+          </TabsTrigger>
+          <TabsTrigger value="crew-scheduler" className="flex flex-col items-center gap-1 py-2">
             <Calendar className="h-4 w-4" />
             <span className="text-xs">Escalas</span>
+          </TabsTrigger>
+          <TabsTrigger value="scheduler" className="flex flex-col items-center gap-1 py-2">
+            <Calendar className="h-4 w-4" />
+            <span className="text-xs">Rotações</span>
           </TabsTrigger>
           <TabsTrigger value="competency" className="flex flex-col items-center gap-1 py-2">
             <Award className="h-4 w-4" />
@@ -92,26 +117,39 @@ export default function PeopleHubPremium() {
             <Heart className="h-4 w-4" />
             <span className="text-xs">Bem-estar</span>
           </TabsTrigger>
-          <TabsTrigger value="recruitment" className="flex flex-col items-center gap-1 py-2">
-            <UserPlus className="h-4 w-4" />
-            <span className="text-xs">Recrutamento</span>
-          </TabsTrigger>
           <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
             <LayoutDashboard className="h-4 w-4" />
             <span className="text-xs">Dashboard</span>
           </TabsTrigger>
         </TabsList>
 
-         <TabsContent value="advanced">
-           <Suspense fallback={<LoadingSkeleton />}>
-             <PeopleIntelligenceHub />
-           </Suspense>
-         </TabsContent>
- 
+        <TabsContent value="advanced">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <PeopleIntelligenceHub />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
             <CrewIntelligenceHub />
           </Suspense>
+        </TabsContent>
+
+        {/* Enterprise Components - Phase 7 */}
+        <TabsContent value="talent">
+          <TalentPipeline />
+        </TabsContent>
+
+        <TabsContent value="performance">
+          <PerformanceReviews />
+        </TabsContent>
+
+        <TabsContent value="training-matrix">
+          <TrainingMatrix />
+        </TabsContent>
+
+        <TabsContent value="crew-scheduler">
+          <CrewScheduler />
         </TabsContent>
 
         <TabsContent value="command">
@@ -122,7 +160,7 @@ export default function PeopleHubPremium() {
 
         <TabsContent value="scheduler">
           <Suspense fallback={<LoadingSkeleton />}>
-            <CrewScheduler />
+            <CrewSchedulerOriginal />
           </Suspense>
         </TabsContent>
 
@@ -148,14 +186,6 @@ export default function PeopleHubPremium() {
           <Suspense fallback={<LoadingSkeleton />}>
             <CrewWellnessPanel />
           </Suspense>
-        </TabsContent>
-
-        <TabsContent value="recruitment">
-          <div className="text-center py-12 text-muted-foreground">
-            <UserPlus className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Recrutamento e Seleção</p>
-            <p className="text-sm">Pipeline de candidatos e processos seletivos</p>
-          </div>
         </TabsContent>
       </Tabs>
     </div>

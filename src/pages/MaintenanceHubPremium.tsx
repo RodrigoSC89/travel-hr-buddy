@@ -1,6 +1,7 @@
 /**
  * Maintenance Hub Premium - Centro de Manutenção Completo
  * Integra todos os componentes de manutenção com IA preditiva
+ * ENTERPRISE UPGRADE - Phase 2
  */
 
 import React, { Suspense, lazy } from "react";
@@ -9,13 +10,22 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Wrench, Brain, Calendar, 
-  ClipboardList, BarChart3, Package, Activity, AlertTriangle
+  ClipboardList, BarChart3, Package, Activity, AlertTriangle, Fuel, Leaf, Anchor
 } from "lucide-react";
 
-// Lazy load components
+// Lazy load original components
 const PredictiveMaintenanceAI = lazy(() => import("@/modules/maintenance-planner/components/PredictiveMaintenanceAI"));
 const MaintenanceIntelligence = lazy(() => import("@/components/premium/MaintenanceIntelligence"));
 const DrydockMaintenanceIntelligence = lazy(() => import("@/components/premium/DrydockMaintenanceIntelligence"));
+
+// Enterprise Components - Phase 2
+import { 
+  MaintenanceCalendarView,
+  DrydockPlanningTimeline,
+  FuelConsumptionDashboard,
+  WasteManagementMARPOL,
+  ESGEmissionsDashboard
+} from "@/components/enterprise";
 
 function LoadingSkeleton() {
   return (
@@ -58,7 +68,7 @@ export default function MaintenanceHubPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="intelligence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">DNV Class</span>
@@ -67,21 +77,33 @@ export default function MaintenanceHubPremium() {
             <Activity className="h-4 w-4" />
             <span className="text-xs">Preditiva</span>
           </TabsTrigger>
+          <TabsTrigger value="calendar" className="flex flex-col items-center gap-1 py-2">
+            <Calendar className="h-4 w-4" />
+            <span className="text-xs">Calendário</span>
+          </TabsTrigger>
+          <TabsTrigger value="drydock" className="flex flex-col items-center gap-1 py-2">
+            <Anchor className="h-4 w-4" />
+            <span className="text-xs">Drydock</span>
+          </TabsTrigger>
+          <TabsTrigger value="fuel" className="flex flex-col items-center gap-1 py-2">
+            <Fuel className="h-4 w-4" />
+            <span className="text-xs">Combustível</span>
+          </TabsTrigger>
+          <TabsTrigger value="waste" className="flex flex-col items-center gap-1 py-2">
+            <AlertTriangle className="h-4 w-4" />
+            <span className="text-xs">MARPOL</span>
+          </TabsTrigger>
+          <TabsTrigger value="esg" className="flex flex-col items-center gap-1 py-2">
+            <Leaf className="h-4 w-4" />
+            <span className="text-xs">ESG</span>
+          </TabsTrigger>
           <TabsTrigger value="orders" className="flex flex-col items-center gap-1 py-2">
             <ClipboardList className="h-4 w-4" />
             <span className="text-xs">Ordens</span>
           </TabsTrigger>
-          <TabsTrigger value="schedule" className="flex flex-col items-center gap-1 py-2">
-            <Calendar className="h-4 w-4" />
-            <span className="text-xs">Calendário</span>
-          </TabsTrigger>
           <TabsTrigger value="inventory" className="flex flex-col items-center gap-1 py-2">
             <Package className="h-4 w-4" />
             <span className="text-xs">Peças</span>
-          </TabsTrigger>
-          <TabsTrigger value="drydock" className="flex flex-col items-center gap-1 py-2">
-            <Wrench className="h-4 w-4" />
-            <span className="text-xs">Drydock</span>
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex flex-col items-center gap-1 py-2">
             <BarChart3 className="h-4 w-4" />
@@ -101,6 +123,27 @@ export default function MaintenanceHubPremium() {
           </Suspense>
         </TabsContent>
 
+        {/* Enterprise Components */}
+        <TabsContent value="calendar">
+          <MaintenanceCalendarView />
+        </TabsContent>
+
+        <TabsContent value="drydock">
+          <DrydockPlanningTimeline />
+        </TabsContent>
+
+        <TabsContent value="fuel">
+          <FuelConsumptionDashboard />
+        </TabsContent>
+
+        <TabsContent value="waste">
+          <WasteManagementMARPOL />
+        </TabsContent>
+
+        <TabsContent value="esg">
+          <ESGEmissionsDashboard />
+        </TabsContent>
+
         <TabsContent value="orders">
           <div className="text-center py-12 text-muted-foreground">
             <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-50" />
@@ -109,27 +152,11 @@ export default function MaintenanceHubPremium() {
           </div>
         </TabsContent>
 
-        <TabsContent value="schedule">
-          <div className="text-center py-12 text-muted-foreground">
-            <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Calendário de Manutenção</p>
-            <p className="text-sm">Planejamento e dry-docking</p>
-          </div>
-        </TabsContent>
-
         <TabsContent value="inventory">
           <div className="text-center py-12 text-muted-foreground">
             <Package className="h-12 w-12 mx-auto mb-3 opacity-50" />
             <p className="font-medium">Inventário de Peças</p>
             <p className="text-sm">Estoque e requisições de materiais</p>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="drydock">
-          <div className="text-center py-12 text-muted-foreground">
-            <Wrench className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Drydock Management</p>
-            <p className="text-sm">Planejamento de docagem e overhauls</p>
           </div>
         </TabsContent>
 
