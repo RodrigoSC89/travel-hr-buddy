@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Plane, Hotel, ClipboardCheck, Receipt,
-  Navigation, BarChart3, Users, Shield, MapPin
+  Navigation, BarChart3, Shield, Calendar
 } from "lucide-react";
 
 // Lazy load components
@@ -42,7 +42,7 @@ export default function TravelCommandPremium() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Plane className="h-8 w-8 text-blue-500" />
+            <Plane className="h-8 w-8 text-primary" />
             Travel Command
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -50,11 +50,11 @@ export default function TravelCommandPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-blue-500/10 text-blue-600">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             <Plane className="h-3 w-3 mr-1" />
             23 Viagens Ativas
           </Badge>
-          <Badge variant="outline" className="bg-green-500/10 text-green-600">
+          <Badge variant="outline" className="bg-success/10 text-success">
             94.2% Pontualidade
           </Badge>
         </div>
