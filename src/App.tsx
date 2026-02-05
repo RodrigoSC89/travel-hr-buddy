@@ -278,7 +278,7 @@ const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenter"));
 const VoyageAccountingPage = lazy(() => import("@/pages/VoyageAccountingPage"));
 const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter"));
 const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
-const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenter"));
+ const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenterPremium"));
 const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
 const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAIPage"));
 
