@@ -12,13 +12,17 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, FileText, DollarSign, BarChart3, 
-  TrendingUp, CreditCard, PiggyBank, Ship, Anchor, ShoppingCart, Users
+  TrendingUp, CreditCard, PiggyBank, Ship, Anchor, ShoppingCart, Users, Clock
 } from "lucide-react";
 
 // Lazy load original components
 const FinanceCommandDashboard = lazy(() => import("@/modules/finance-hub/components/FinanceCommandDashboard"));
 const ContractManagement = lazy(() => import("@/modules/finance-hub/components/ContractManagement"));
 const FinanceIntelligenceHub = lazy(() => import("@/components/premium/FinanceIntelligenceHub"));
+
+// Tier-1 Components
+const VoyagePnLCalculator = lazy(() => import("@/components/tier1/finance/VoyagePnLCalculator"));
+const LaytimeDemurrageModule = lazy(() => import("@/components/tier1/finance/LaytimeDemurrageModule"));
 
 // Enterprise Components - Phase 8
 import { 
@@ -166,10 +170,14 @@ export default function FinanceCommandCenterPremium() {
 
       {/* Tabs */}
       <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 h-auto p-1">
           <TabsTrigger value="voyage-pnl" className="flex flex-col items-center gap-1 py-2">
             <Ship className="h-4 w-4" />
             <span className="text-xs">Voyage P&L</span>
+          </TabsTrigger>
+          <TabsTrigger value="laytime" className="flex flex-col items-center gap-1 py-2">
+            <Clock className="h-4 w-4" />
+            <span className="text-xs">Laytime</span>
           </TabsTrigger>
           <TabsTrigger value="voyage-acct" className="flex flex-col items-center gap-1 py-2">
             <BarChart3 className="h-4 w-4" />
@@ -209,9 +217,17 @@ export default function FinanceCommandCenterPremium() {
           </TabsTrigger>
         </TabsList>
 
+        {/* Tier-1: Voyage P&L Calculator */}
         <TabsContent value="voyage-pnl">
           <Suspense fallback={<LoadingSkeleton />}>
-            <FinanceIntelligenceHub />
+            <VoyagePnLCalculator />
+          </Suspense>
+        </TabsContent>
+
+        {/* Tier-1: Laytime & Demurrage */}
+        <TabsContent value="laytime">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <LaytimeDemurrageModule />
           </Suspense>
         </TabsContent>
 
