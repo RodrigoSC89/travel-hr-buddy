@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { Suspense } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Ship, Wrench, DollarSign, FileText, Plus, AlertTriangle, CheckCircle2, Clock, Anchor } from "lucide-react";
+import { Calendar, Ship, Wrench, DollarSign, FileText, Plus, AlertTriangle, CheckCircle2, Clock, Anchor, Brain, Sparkles } from "lucide-react";
 import { GanttSchedule } from "@/components/drydock/GanttSchedule";
 import { format, differenceInDays, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Loading } from "@/components/ui/Loading";
+
+const DrydockMaintenanceIntelligence = React.lazy(() => import("@/components/premium/DrydockMaintenanceIntelligence"));
 
 interface DrydockEvent {
   id: string;
@@ -67,7 +66,7 @@ const conditionColors: Record<string, string> = {
 };
 
 export default function DrydockManagement() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("intelligence");
   const [showNewDrydockDialog, setShowNewDrydockDialog] = useState(false);
   const queryClient = useQueryClient();
 
@@ -200,11 +199,21 @@ export default function DrydockManagement() {
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="bg-muted/50">
+            <TabsTrigger value="intelligence" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              Intelligence
+            </TabsTrigger>
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="schedule">Cronograma</TabsTrigger>
             <TabsTrigger value="hull">Inspeções de Casco</TabsTrigger>
             <TabsTrigger value="costs">Custos</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="intelligence">
+            <Suspense fallback={<Loading fullScreen={false} message="Carregando..." />}>
+              <DrydockMaintenanceIntelligence />
+            </Suspense>
+          </TabsContent>
 
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

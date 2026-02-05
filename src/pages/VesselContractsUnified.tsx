@@ -1,17 +1,19 @@
 /**
- * VesselContractsUnified - Wrapper para V1/V2
- * Usa feature flag 'use-v2-modules' para alternar automaticamente
- * 
- * @deprecated V1 será removido em v4.0.0
+ * VesselContractsUnified - Premium Vessel Contracts Hub
+ * Unified interface with Intelligence Premium features
  */
 
-import { lazy, Suspense } from "react";
-import { useFeatureFlag } from "@/lib/feature-flags/hooks";
+import React, { lazy, Suspense, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loading } from "@/components/ui/Loading";
+import { FileText, Brain, Shield, Clock, Scale, DollarSign } from "lucide-react";
 
-// Lazy load both versions
-const VesselContractsV1 = lazy(() => import("./VesselContracts"));
+// Lazy load components
 const VesselContractsV2 = lazy(() => import("./VesselContractsV2"));
+const ContractProcurementIntelligence = lazy(() => import("@/components/premium/ContractProcurementIntelligence"));
 
 function LoadingFallback() {
   return (
@@ -28,15 +30,45 @@ function LoadingFallback() {
 }
 
 export default function VesselContractsUnified() {
-  // ALWAYS use V2 with AI features - V1 is deprecated
-  const useV2 = true; // Force V2 - useFeatureFlag('use-v2-modules');
+  const [activeTab, setActiveTab] = useState("intelligence");
 
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <VesselContractsV2 />
-    </Suspense>
+    <ModulePageWrapper gradient="blue">
+      <ModuleHeader
+        icon={FileText}
+        title="Vessel Contracts & Charter Party Hub"
+        description="Gestão completa de contratos BIMCO, charter party, laytime e demurrage"
+        gradient="blue"
+        badges={[
+          { icon: Brain, label: "AI Analysis" },
+          { icon: Scale, label: "BIMCO Standard" },
+          { icon: Clock, label: "Laytime/Demurrage" },
+          { icon: DollarSign, label: "TCE Analytics" },
+        ]}
+      />
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="intelligence" className="flex items-center gap-2">
+            <Brain className="h-4 w-4" />
+            Intelligence (PREMIUM)
+          </TabsTrigger>
+          <TabsTrigger value="contracts" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Contracts & Downtime
+          </TabsTrigger>
+        </TabsList>
+
+        <Suspense fallback={<Loading fullScreen={false} message="Carregando..." />}>
+          <TabsContent value="intelligence">
+            <ContractProcurementIntelligence />
+          </TabsContent>
+
+          <TabsContent value="contracts">
+            <VesselContractsV2 />
+          </TabsContent>
+        </Suspense>
+      </Tabs>
+    </ModulePageWrapper>
   );
 }
-
-// Export for type inference
-export type { default as VesselContractsUnifiedType } from "./VesselContractsUnified";

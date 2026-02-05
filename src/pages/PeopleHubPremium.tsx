@@ -19,6 +19,8 @@ const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/Comp
 const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/CrewWellnessPanel"));
 const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
  const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
+const TrainingAcademyIntelligence = lazy(() => import("@/components/premium/TrainingAcademyIntelligence"));
+const DPMentorIntelligence = lazy(() => import("@/components/premium/DPMentorIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -127,11 +129,9 @@ export default function PeopleHubPremium() {
         </TabsContent>
 
         <TabsContent value="training">
-          <div className="text-center py-12 text-muted-foreground">
-            <GraduationCap className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Centro de Treinamento</p>
-            <p className="text-sm">Gestão de cursos STCW e certificações</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrainingAcademyIntelligence />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="wellness">
