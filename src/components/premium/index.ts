@@ -18,3 +18,7 @@ export { default as DocumentIntelligenceHub } from "./DocumentIntelligenceHub";
  export { default as OperationsIntelligenceHub } from "./OperationsIntelligenceHub";
  export { default as PeopleIntelligenceHub } from "./PeopleIntelligenceHub";
  export { default as ProcurementIntelligenceHub } from "./ProcurementIntelligenceHub";
+ export { default as DPMentorIntelligence } from "./DPMentorIntelligence";
+ export { default as DrydockMaintenanceIntelligence } from "./DrydockMaintenanceIntelligence";
+ export { default as ComplianceAuditIntelligence } from "./ComplianceAuditIntelligence";
+ export { default as ContractProcurementIntelligence } from "./ContractProcurementIntelligence";
