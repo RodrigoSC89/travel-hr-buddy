@@ -542,13 +542,6 @@ const AppRoutes = () => (
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
     
-    {/* Rota de demonstração pública para Mentor DP */}
-    <Route path="/demo/mentor-dp" element={
-      <Suspense fallback={<Loader />}>
-        <MentorDP />
-      </Suspense>
-    } />
-    
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
       <Route path="/" element={<Navigate to="/central-comando" replace />} />
@@ -809,7 +802,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/nautilus-academy" element={<AITraining />} />
       <Route path="/solas-isps-training" element={<SOLASISPSTrainingPage />} />
-      <Route path="/mentor-dp" element={<MentorDP />} />
+      <Route path="/mentor-dp" element={<Navigate to="/people-hub?tab=mentor-dp" replace />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
       
       {/* ============================================ */}
