@@ -45,6 +45,7 @@ const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/Fl
 const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
 const OperationsCommandDashboard = lazy(() => import("@/modules/operations-command/components/OperationsCommandDashboard"));
 const VesselContractsAdvanced = lazy(() => import("@/components/premium/VesselContractsAdvanced"));
+ const OperationsIntelligenceHub = lazy(() => import("@/components/premium/OperationsIntelligenceHub"));
 
 function TabLoadingSkeleton() {
   return (
@@ -58,12 +59,13 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
-  { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium", badge: "PREMIUM" },
+   { id: "intelligence", label: "Intelligence", icon: Zap, emoji: "🧠", description: "Operations Intelligence Hub", badge: "AI" },
+   { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium" },
   { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📊", description: "Dashboard operacional" },
-  { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões", badge: "NEW" },
+   { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões" },
   { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
-  { id: "analytics", label: "BI Analytics", icon: TrendingUp, emoji: "📈", description: "Business Intelligence", badge: "NOVO" },
-  { id: "contracts", label: "Contratos", icon: Navigation, emoji: "📋", description: "Charter Party & Vessel Contracts", badge: "AI" },
+   { id: "analytics", label: "BI Analytics", icon: TrendingUp, emoji: "📈", description: "Business Intelligence" },
+   { id: "contracts", label: "Contratos", icon: Navigation, emoji: "📋", description: "Charter Party & Vessel Contracts" },
   { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
   { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
   { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
@@ -325,8 +327,8 @@ export default function OperationsCommandHubEnhanced() {
 
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 h-auto p-1">
-            {TABS.slice(0, 6).map((tab) => (
+           <TabsList className="grid w-full grid-cols-7 h-auto p-1">
+             {TABS.slice(0, 7).map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
@@ -346,6 +348,13 @@ export default function OperationsCommandHubEnhanced() {
             ))}
           </TabsList>
 
+           {/* Intelligence Tab - NEW AI HUB */}
+           <TabsContent value="intelligence" className="space-y-6 mt-6">
+             <Suspense fallback={<TabLoadingSkeleton />}>
+               <OperationsIntelligenceHub />
+             </Suspense>
+           </TabsContent>
+ 
           {/* Command Center Tab - PREMIUM */}
           <TabsContent value="command" className="space-y-6 mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
