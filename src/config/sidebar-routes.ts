@@ -190,7 +190,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Matriz Treinamento", path: "/people-hub?tab=training-matrix", icon: ClipboardList, emoji: "📋", badge: "ENT" },
       { label: "Crew Scheduler", path: "/people-hub?tab=crew-scheduler", icon: Calendar, emoji: "📅", badge: "ENT" },
       { label: "Crew Intelligence", path: "/people-hub?tab=intelligence", icon: Brain, emoji: "🧠" },
-      { label: "STCW/MLC Compliance", path: "/people-hub?tab=stcw-mlc", icon: Award, emoji: "🏆" },
+      { label: "STCW/MLC Compliance", path: "/stcw-mlc", icon: Award, emoji: "🏆", badge: "NEW" },
       { label: "Bem-estar", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
       { label: "Mentor DP", path: "/people-hub?tab=mentor-dp", icon: GraduationCap, emoji: "🎓" },
       { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥", badge: "MLC" },
