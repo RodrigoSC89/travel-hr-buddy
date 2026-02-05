@@ -44,6 +44,7 @@ const MissionControlCenter = lazy(() => import("@/modules/operations/components/
 const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/FleetCommandCenter"));
 const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
 const OperationsCommandDashboard = lazy(() => import("@/modules/operations-command/components/OperationsCommandDashboard"));
+const VesselContractsAdvanced = lazy(() => import("@/components/premium/VesselContractsAdvanced"));
 
 function TabLoadingSkeleton() {
   return (
@@ -62,10 +63,10 @@ const TABS = [
   { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões", badge: "NEW" },
   { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
   { id: "analytics", label: "BI Analytics", icon: TrendingUp, emoji: "📈", description: "Business Intelligence", badge: "NOVO" },
+  { id: "contracts", label: "Contratos", icon: Navigation, emoji: "📋", description: "Charter Party & Vessel Contracts", badge: "AI" },
   { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
   { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
   { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
-  { id: "mission", label: "Mission", icon: Target, emoji: "🎯", description: "Controle de missões" },
   { id: "logistics", label: "Logistics", icon: Package, emoji: "📦", description: "Cargas, fornecedores" },
 ];
 
@@ -325,7 +326,7 @@ export default function OperationsCommandHubEnhanced() {
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6 h-auto p-1">
-            {TABS.map((tab) => (
+            {TABS.slice(0, 6).map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
@@ -532,6 +533,13 @@ export default function OperationsCommandHubEnhanced() {
           <TabsContent value="logistics" className="space-y-4 mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <LogisticsCommandPage />
+            </Suspense>
+          </TabsContent>
+
+          {/* Vessel Contracts Tab */}
+          <TabsContent value="contracts" className="space-y-4 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <VesselContractsAdvanced />
             </Suspense>
           </TabsContent>
         </Tabs>

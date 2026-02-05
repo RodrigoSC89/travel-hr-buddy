@@ -9,12 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Shield, ClipboardCheck, Award, 
-  FileText, Users, AlertTriangle
+  FileText, Users, AlertTriangle, Brain, Target
 } from "lucide-react";
 
 // Lazy load components - use the existing ComplianceHubPremium as dashboard
 const ComplianceDashboard = lazy(() => import("@/modules/compliance-hub/ComplianceHubPremium"));
 const AuditWorkflow = lazy(() => import("@/modules/compliance-hub/components/AuditWorkflow"));
+const ComplianceIntelligence = lazy(() => import("@/components/premium/ComplianceIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -43,17 +44,23 @@ export default function ComplianceHubPremiumPage() {
             Centro de conformidade MLC 2006, STCW, ISM/ISPS
           </p>
         </div>
-        <Badge variant="outline" className="bg-success/10 text-success">
-          98% Conforme
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-success/10 text-success">
+            98% Conforme
+          </Badge>
+          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+            <Brain className="h-3 w-3 mr-1" />
+            IA Preditiva
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="dashboard" className="space-y-6">
+      <Tabs defaultValue="intelligence" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6 h-auto p-1">
-          <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="text-xs">Dashboard</span>
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+            <Brain className="h-4 w-4" />
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
           <TabsTrigger value="audits" className="flex flex-col items-center gap-1 py-2">
             <ClipboardCheck className="h-4 w-4" />
@@ -71,15 +78,15 @@ export default function ComplianceHubPremiumPage() {
             <Shield className="h-4 w-4" />
             <span className="text-xs">ISM/ISPS</span>
           </TabsTrigger>
-          <TabsTrigger value="reports" className="flex flex-col items-center gap-1 py-2">
-            <FileText className="h-4 w-4" />
-            <span className="text-xs">Relatórios</span>
+          <TabsTrigger value="risk" className="flex flex-col items-center gap-1 py-2">
+            <Target className="h-4 w-4" />
+            <span className="text-xs">Matriz Risco</span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="dashboard">
+        <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
-            <ComplianceDashboard />
+            <ComplianceIntelligence />
           </Suspense>
         </TabsContent>
 
@@ -90,11 +97,9 @@ export default function ComplianceHubPremiumPage() {
         </TabsContent>
 
         <TabsContent value="certificates">
-          <div className="text-center py-12 text-muted-foreground">
-            <Award className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Gestão de Certificados</p>
-            <p className="text-sm">Controle de certificados estatutários e de classe</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ComplianceDashboard />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="mlc">
@@ -113,11 +118,11 @@ export default function ComplianceHubPremiumPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="reports">
+        <TabsContent value="risk">
           <div className="text-center py-12 text-muted-foreground">
-            <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Relatórios de Conformidade</p>
-            <p className="text-sm">DMLC, PSC Reports, KPIs de conformidade</p>
+            <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p className="font-medium">Matriz de Riscos</p>
+            <p className="text-sm">Análise de riscos operacionais e mitigações</p>
           </div>
         </TabsContent>
       </Tabs>

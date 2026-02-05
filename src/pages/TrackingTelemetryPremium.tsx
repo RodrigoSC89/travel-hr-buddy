@@ -9,12 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, MapPin, Satellite, Activity, 
-  History, Bell, Radio
+  History, Bell, Radio, Brain, Fuel
 } from "lucide-react";
 
 // Lazy load components
 const TrackingCommandCenter = lazy(() => import("@/modules/tracking-telemetry/components/TrackingCommandCenter"));
 const VesselTrackingMap = lazy(() => import("@/modules/tracking-telemetry/components/VesselTrackingMap"));
+const TrackingIntelligence = lazy(() => import("@/components/premium/TrackingIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -43,18 +44,24 @@ export default function TrackingTelemetryPremium() {
             Centro de rastreamento AIS e telemetria em tempo real
           </p>
         </div>
-        <Badge variant="outline" className="bg-success/10 text-success">
-          <Radio className="h-3 w-3 mr-1 animate-pulse" />
-          14/15 Online
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-success/10 text-success">
+            <Radio className="h-3 w-3 mr-1 animate-pulse" />
+            14/15 Online
+          </Badge>
+          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+            <Brain className="h-3 w-3 mr-1" />
+            AIS Intelligence
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="command" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 h-auto p-1">
-          <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="text-xs">Comando</span>
+      <Tabs defaultValue="intelligence" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+            <Brain className="h-4 w-4" />
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
           <TabsTrigger value="map" className="flex flex-col items-center gap-1 py-2">
             <MapPin className="h-4 w-4" />
@@ -63,6 +70,10 @@ export default function TrackingTelemetryPremium() {
           <TabsTrigger value="telemetry" className="flex flex-col items-center gap-1 py-2">
             <Activity className="h-4 w-4" />
             <span className="text-xs">Telemetria</span>
+          </TabsTrigger>
+          <TabsTrigger value="fuel" className="flex flex-col items-center gap-1 py-2">
+            <Fuel className="h-4 w-4" />
+            <span className="text-xs">Combustível</span>
           </TabsTrigger>
           <TabsTrigger value="history" className="flex flex-col items-center gap-1 py-2">
             <History className="h-4 w-4" />
@@ -74,9 +85,9 @@ export default function TrackingTelemetryPremium() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="command">
+        <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TrackingCommandCenter />
+            <TrackingIntelligence />
           </Suspense>
         </TabsContent>
 
@@ -87,10 +98,16 @@ export default function TrackingTelemetryPremium() {
         </TabsContent>
 
         <TabsContent value="telemetry">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrackingCommandCenter />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="fuel">
           <div className="text-center py-12 text-muted-foreground">
-            <Activity className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Painel de Telemetria Avançada</p>
-            <p className="text-sm">Sensores IoT e métricas em tempo real</p>
+            <Fuel className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p className="font-medium">Gestão de Combustível</p>
+            <p className="text-sm">Consumo, bunkering e eficiência energética</p>
           </div>
         </TabsContent>
 
