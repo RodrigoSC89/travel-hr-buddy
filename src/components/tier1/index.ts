@@ -15,3 +15,12 @@ export * from './finance';
 
 // Compliance - ISM/ISPS, MLC, STCW
 export * from './compliance';
+
+// Operations - Port Calls, Voyage Optimization
+export * from './operations';
+
+// Maintenance - PMS, Spare Parts
+export * from './maintenance';
+
+// People Hub - STCW Matrix, Sea Time
+export * from './people';
