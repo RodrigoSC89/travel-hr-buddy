@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TrackingTelemetryPremium'));
+const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
 const AISTrackerPage = lazy(() => import('@/pages/AISTrackerPage'));
 const SatcomDashboardEnhanced = lazy(() => import('@/pages/SatcomDashboardEnhanced'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
@@ -99,7 +100,7 @@ export default function TrackingMegaHub() {
             </TabsContent>
             
             <TabsContent value="realtime" className="mt-0">
-              <TrackingTelemetryHub />
+              <RealTimeTrackingPage />
             </TabsContent>
             
             <TabsContent value="ais" className="mt-0">
