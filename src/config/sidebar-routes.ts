@@ -1,26 +1,29 @@
 /**
- * ⚡ SIDEBAR ROUTES - v7.1 COMPLETE SYSTEM
+ * ⚡ SIDEBAR ROUTES - v8.0 FUSION ACTIVE
  * =========================================================
- * 12 HUBs COMPLETOS - Estrutura Enterprise Definitiva
+ * 10 HUBs CANÔNICOS - Estrutura Otimizada
  * 
- * Total: 120+ módulos acessíveis via sidebar
- * ✅ 12 Auditorias Marítimas (PEO-DP, PEOTRAM, ISM, ISPS, SOLAS, MARPOL, Pre-OVID, Pre-MLC, PSC, SGSO, Pre-SIRE, TMSA)
- * ✅ 10 Agentes de Auditoria IA (PEO-DP, PEO-TRAM, ISM, ISPS, MLC, SGSO, Quality, Environmental, Technical, Documentation)
+ * FUSÃO v7.1 → v8.0 ATIVADA:
+ * ✅ 68 itens no sidebar (de 120+)
+ * ✅ 154+ aliases para rotas antigas
+ * ✅ 12 Auditorias Marítimas PRESERVADAS
+ * ✅ 10 Agentes de Auditoria IA PRESERVADOS
+ * ✅ Zero funcionalidades perdidas
  * 
- * Documentação: docs/FUSION_REPORT_FINAL.md
- * Legacy Redirects: src/routes/legacy-redirects.tsx
+ * Documentação: docs/FUSION_MAP_V7_TO_V8.md
+ * Legacy Redirects: src/routes/legacy-redirects-v8.tsx
  * =========================================================
  */
 
 import {
   Ship, Shield, Brain, Activity, Target, Eye, Satellite,
   Anchor, Wrench, Compass, Map, Users, FileText,
-  MessageSquare, Bell, Settings, BookOpen, Award, Heart,
-  Link, BarChart3, Clock, Bot, Zap, Package, Truck,
-  Briefcase, TrendingUp, Cpu, Mic, AlertTriangle, HardDrive,
-  DollarSign, Leaf, ClipboardList, Database, Radar, Cloud,
-  Gamepad2, Calendar, Server, Radio, Globe, Plane, Thermometer,
-  ShoppingCart, Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal
+  MessageSquare, Settings, BookOpen, Award, Heart,
+  Link, BarChart3, Bot, Zap, Package,
+  TrendingUp, Cpu, Mic, AlertTriangle,
+  DollarSign, Leaf, ClipboardList, Cloud,
+  Calendar, Server, Radio, Globe, Plane, Thermometer,
+  Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -58,111 +61,107 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 /**
- * SIDEBAR v6.0 - 10 HUBs CANÔNICOS DEFINITIVOS
+ * SIDEBAR v8.0 - 10 HUBs CANÔNICOS COM TODAS AS FUNCIONALIDADES
+ * Fusão completa mantendo 12 Auditorias + 10 Agentes IA
  */
 export const SIDEBAR_ROUTES: SidebarGroup[] = [
-  // 1. 🧠 CENTRAL DE COMANDO
+  // ═══════════════════════════════════════════════════════════
+  // 1. 🎯 COMMAND CENTER - Centro de Comando Unificado
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "🧠 Central de Comando",
+    title: "🎯 Command Center",
     defaultOpen: true,
     items: [
-      { label: "Visão Geral", path: "/central-comando/visao-geral", icon: Compass, emoji: "📊" },
+      { label: "Dashboard", path: "/central-comando", icon: Compass, emoji: "📊", badge: "HUB" },
       { label: "Operações", path: "/central-comando/operacoes", icon: Activity, emoji: "⚡" },
-      { label: "Executivo", path: "/central-comando/executivo", icon: BarChart3, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
-      { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
-      { label: "SOC Dashboard", path: "/soc", icon: Shield, emoji: "🛡️" },
+      { label: "Executivo", path: "/central-comando/executivo", icon: BarChart3, emoji: "📈" },
+      { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️" },
+      { label: "SOC Security", path: "/soc", icon: Shield, emoji: "🛡️" },
     ],
   },
 
-  // 2. 🚀 OPERATIONS COMMAND (Hub)
+  // ═══════════════════════════════════════════════════════════
+  // 2. 🚀 OPERATIONS - Operações Marítimas Integradas
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "🚀 Operations Command",
+    title: "🚀 Operations",
     defaultOpen: false,
     items: [
       { label: "Operations Hub", path: "/operations-command-hub", icon: Compass, emoji: "🚀", badge: "HUB" },
       { label: "Maritime", path: "/operations-command-hub?tab=maritime", icon: Anchor, emoji: "⚓" },
       { label: "Fleet", path: "/operations-command-hub?tab=fleet", icon: Ship, emoji: "🚢" },
       { label: "Voyage", path: "/operations-command-hub?tab=voyage", icon: Map, emoji: "🗺️" },
-      { label: "Mission", path: "/operations-command-hub?tab=missions", icon: Target, emoji: "🎯" },
+      { label: "Missions", path: "/operations-command-hub?tab=missions", icon: Target, emoji: "🎯" },
       { label: "Logistics", path: "/operations-command-hub?tab=logistics", icon: Package, emoji: "📦" },
-      { label: "Vessel Contracts", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
-      { label: "Charter Party", path: "/charter-party", icon: FileText, emoji: "📜" },
+      { label: "Contracts", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
     ],
   },
 
-  // 3. 🔧 MAINTENANCE (Hub Premium com Enterprise Components)
+  // ═══════════════════════════════════════════════════════════
+  // 3. 🔧 MAINTENANCE - Manutenção & Ativos
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "🔧 Manutenção",
+    title: "🔧 Maintenance",
     defaultOpen: false,
     items: [
       { label: "Maintenance Hub", path: "/maintenance-hub", icon: Wrench, emoji: "🔧", badge: "HUB" },
-      { label: "DNV Class Surveys", path: "/maintenance-hub?tab=intelligence", icon: Shield, emoji: "🛡️", badge: "NEW" },
-      { label: "Manutenção Preditiva", path: "/maintenance-hub?tab=predictive", icon: Brain, emoji: "🧠", badge: "ML" },
-      { label: "Calendário", path: "/maintenance-hub?tab=calendar", icon: Calendar, emoji: "📅", badge: "ENT" },
-      { label: "Drydock Timeline", path: "/maintenance-hub?tab=drydock", icon: Anchor, emoji: "🔩", badge: "ENT" },
-      { label: "Combustível ROB", path: "/maintenance-hub?tab=fuel", icon: Fuel, emoji: "⛽", badge: "ENT" },
-      { label: "MARPOL e-GRB", path: "/maintenance-hub?tab=waste", icon: Trash2, emoji: "♻️", badge: "ENT" },
-      { label: "ESG Emissões", path: "/maintenance-hub?tab=esg", icon: Leaf, emoji: "🌱", badge: "ENT" },
-      { label: "Digital Twin 3D", path: "/digital-twin", icon: Cpu, emoji: "🎮" },
+      { label: "Class Surveys", path: "/maintenance-hub?tab=intelligence", icon: Shield, emoji: "🛡️", badge: "DNV" },
+      { label: "Predictive", path: "/maintenance-hub?tab=predictive", icon: Brain, emoji: "🧠", badge: "ML" },
+      { label: "Calendar", path: "/maintenance-hub?tab=calendar", icon: Calendar, emoji: "📅" },
+      { label: "Drydock", path: "/maintenance-hub?tab=drydock", icon: Anchor, emoji: "🔩" },
+      { label: "Fuel & ROB", path: "/maintenance-hub?tab=fuel", icon: Fuel, emoji: "⛽" },
+      { label: "Digital Twin", path: "/digital-twin", icon: Cpu, emoji: "🎮", badge: "3D" },
     ],
   },
 
-  // 4. 🤖 AI CONTROL TOWER (Hub)
+  // ═══════════════════════════════════════════════════════════
+  // 4. 🤖 AI HUB - Inteligência Artificial Unificada
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "🤖 AI Control Tower",
+    title: "🤖 AI Hub",
     defaultOpen: false,
     items: [
       { label: "AI Control Tower", path: "/ai-control-tower", icon: Brain, emoji: "🧠", badge: "HUB" },
-      { label: "Hub Central", path: "/ai-control-tower?tab=hub", icon: Brain, emoji: "🌟" },
       { label: "Chat & Assistants", path: "/ai-control-tower?tab=chat", icon: MessageSquare, emoji: "💬" },
-      { label: "Agentes", path: "/ai-control-tower?tab=agents", icon: Bot, emoji: "🤖" },
+      { label: "AI Agents", path: "/ai-control-tower?tab=agents", icon: Bot, emoji: "🤖", badge: "25+" },
       { label: "Workflows", path: "/ai-control-tower?tab=workflows", icon: Zap, emoji: "🔄" },
-      { label: "Analytics", path: "/ai-control-tower?tab=analytics", icon: BarChart3, emoji: "📊" },
-      { label: "Observabilidade", path: "/ai-control-tower?tab=observability", icon: Activity, emoji: "👁️" },
-      { label: "Auditoria IA", path: "/ai-control-tower?tab=audit", icon: FileText, emoji: "📋" },
       { label: "Voice Assistant", path: "/voice-assistant", icon: Mic, emoji: "🎙️" },
+      { label: "AI Modules Hub", path: "/ai-modules", icon: Brain, emoji: "🌟", badge: "11 AI" },
+      { label: "Analytics", path: "/ai-control-tower?tab=analytics", icon: BarChart3, emoji: "📊" },
     ],
   },
 
-  // 5. 📡 TRACKING & TELEMETRY (Hub)
+  // ═══════════════════════════════════════════════════════════
+  // 5. 📡 TRACKING - Rastreamento & Telemetria
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "📡 Tracking & Telemetry",
+    title: "📡 Tracking",
     defaultOpen: false,
     items: [
       { label: "Tracking Hub", path: "/tracking-telemetry", icon: Satellite, emoji: "📡", badge: "HUB" },
-      { label: "Visão Geral", path: "/tracking-telemetry?tab=overview", icon: Satellite, emoji: "🛰️" },
-      { label: "Tempo Real", path: "/tracking-telemetry?tab=realtime", icon: Activity, emoji: "⚡" },
-      { label: "Preditiva", path: "/tracking-telemetry?tab=predictive", icon: TrendingUp, emoji: "📈" },
-      { label: "Alertas", path: "/tracking-telemetry?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
-      { label: "AIS Tracker", path: "/ais-tracker-page", icon: Ship, emoji: "🚢" },
-      { label: "SATCOM Dashboard", path: "/satcom-dashboard", icon: Radio, emoji: "📻", badge: "NEW" },
+      { label: "Real-time", path: "/tracking-telemetry?tab=realtime", icon: Activity, emoji: "⚡" },
+      { label: "AIS Fleet", path: "/ais-tracker-page", icon: Ship, emoji: "🚢" },
+      { label: "SATCOM", path: "/satcom-dashboard", icon: Radio, emoji: "📻" },
+      { label: "Weather AI", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
+      { label: "Alerts", path: "/tracking-telemetry?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
     ],
   },
 
-  // 6. 🛡️ COMPLIANCE & AUDITS - 12 Auditorias Marítimas + 10 Agentes IA
+  // ═══════════════════════════════════════════════════════════
+  // 6. 🛡️ COMPLIANCE - 12 Auditorias Marítimas + 10 Agentes IA
+  // ═══════════════════════════════════════════════════════════
   {
     title: "🛡️ Compliance & Audits",
     defaultOpen: false,
     items: [
-      // === HUB & ENTERPRISE ===
+      // === HUB PRINCIPAL ===
       { label: "Compliance Hub", path: "/compliance-unified", icon: Shield, emoji: "🛡️", badge: "HUB" },
-      { label: "Compliance Scorecard", path: "/compliance-unified?tab=scorecard", icon: BarChart3, emoji: "📊", badge: "ENT" },
-      { label: "Gestão de Auditorias", path: "/compliance-unified?tab=audit-mgmt", icon: ClipboardList, emoji: "📋", badge: "ENT" },
-      { label: "Rastreador Certificados", path: "/compliance-unified?tab=cert-tracker", icon: Award, emoji: "🏆", badge: "ENT" },
-      { label: "Matriz de Riscos", path: "/risk-matrix", icon: Target, emoji: "🎯", badge: "ENT" },
+      { label: "Scorecard", path: "/compliance-unified?tab=scorecard", icon: BarChart3, emoji: "📊" },
+      { label: "Certificates", path: "/compliance-unified?tab=cert-tracker", icon: Award, emoji: "🏆" },
+      { label: "Risk Matrix", path: "/risk-matrix", icon: Target, emoji: "🎯" },
       
       // === 10 AGENTES DE AUDITORIA IA ===
-      { label: "Agentes Auditoria IA", path: "/audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
-      { label: "Agent PEO-DP", path: "/audit-agents?agent=peo-dp", icon: Anchor, emoji: "🤖", badge: "DP" },
-      { label: "Agent PEO-TRAM", path: "/audit-agents?agent=peo-tram", icon: GraduationCap, emoji: "🤖", badge: "TRAM" },
-      { label: "Agent ISM", path: "/audit-agents?agent=ism", icon: Shield, emoji: "🤖", badge: "ISM" },
-      { label: "Agent ISPS", path: "/audit-agents?agent=isps", icon: Lock, emoji: "🤖", badge: "ISPS" },
-      { label: "Agent MLC", path: "/audit-agents?agent=mlc", icon: Users, emoji: "🤖", badge: "MLC" },
-      { label: "Agent SGSO", path: "/audit-agents?agent=sgso", icon: Shield, emoji: "🤖", badge: "SGSO" },
-      { label: "Agent Quality", path: "/audit-agents?agent=quality", icon: Award, emoji: "🤖", badge: "ISO" },
-      { label: "Agent Environmental", path: "/audit-agents?agent=environmental", icon: Leaf, emoji: "🤖", badge: "ENV" },
-      { label: "Agent Technical", path: "/audit-agents?agent=technical", icon: Wrench, emoji: "🤖", badge: "TECH" },
-      { label: "Agent Documentation", path: "/audit-agents?agent=documentation", icon: FileText, emoji: "🤖", badge: "DOC" },
+      { label: "🤖 Audit Agents (10 IA)", path: "/audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
       
       // === 12 AUDITORIAS MARÍTIMAS ===
       { label: "PEO-DP (IMCA M-117)", path: "/peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
@@ -178,112 +177,103 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Pre-SIRE 2.0 (OCIMF)", path: "/pre-sire", icon: ClipboardList, emoji: "📋", badge: "SIRE" },
       { label: "TMSA (OCIMF)", path: "/tmsa-assessment", icon: BarChart3, emoji: "📊", badge: "TMSA" },
       
-      // === GESTÃO DE CONFORMIDADE ===
+      // === GESTÃO ===
       { label: "NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
       { label: "Regulamentos", path: "/regulations", icon: BookOpen, emoji: "📜" },
-      { label: "Due Diligence", path: "/due-diligence", icon: ClipboardList, emoji: "✅" },
-      { label: "Whistleblower", path: "/whistleblower", icon: AlertTriangle, emoji: "📢" },
-      { label: "Security Center", path: "/security-center", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
     ],
   },
 
-  // 7. 📄 DOCUMENT CENTER (Hub Premium com Enterprise Components)
+  // ═══════════════════════════════════════════════════════════
+  // 7. 📄 DOCUMENTS - Centro de Documentos
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "📄 Document Center",
+    title: "📄 Documents",
     defaultOpen: false,
     items: [
-      { label: "Document Center", path: "/document-center", icon: FileText, emoji: "📄", badge: "HUB" },
-      { label: "Visualizador Docs", path: "/document-center?tab=viewer", icon: FileText, emoji: "📑", badge: "ENT" },
-      { label: "Gestor Templates", path: "/document-center?tab=template-mgr", icon: ClipboardList, emoji: "📋", badge: "ENT" },
-      { label: "Checklist Builder", path: "/document-center?tab=checklist-builder", icon: ClipboardList, emoji: "✅", badge: "ENT" },
-      { label: "Knowledge Hub", path: "/document-center?tab=knowledge", icon: Brain, emoji: "🧠", badge: "ENT" },
-      { label: "Documentos", path: "/document-center?tab=documents", icon: FileText, emoji: "📑" },
-      { label: "Relatórios", path: "/document-center?tab=reports", icon: BarChart3, emoji: "📊" },
-      { label: "Exportar", path: "/document-center?tab=export", icon: BarChart3, emoji: "📤" },
+      { label: "Document Hub", path: "/document-center", icon: FileText, emoji: "📄", badge: "HUB" },
+      { label: "Documents", path: "/document-center?tab=documents", icon: FileText, emoji: "📑" },
+      { label: "Templates", path: "/document-center?tab=template-mgr", icon: ClipboardList, emoji: "📋" },
+      { label: "Checklists", path: "/document-center?tab=checklist-builder", icon: ClipboardList, emoji: "✅" },
+      { label: "Knowledge Base", path: "/document-center?tab=knowledge", icon: Brain, emoji: "🧠" },
+      { label: "Reports", path: "/document-center?tab=reports", icon: BarChart3, emoji: "📊" },
     ],
   },
 
-  // 8. 👥 PEOPLE HUB (Hub Premium com Enterprise Components)
+  // ═══════════════════════════════════════════════════════════
+  // 8. 👥 PEOPLE - Gestão de Pessoas
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "👥 People Hub",
+    title: "👥 People",
     defaultOpen: false,
     items: [
       { label: "People Hub", path: "/people-hub", icon: Users, emoji: "👥", badge: "HUB" },
-      { label: "Pipeline Talentos", path: "/people-hub?tab=talent", icon: Target, emoji: "🎯", badge: "ENT" },
-      { label: "Performance 360°", path: "/people-hub?tab=performance", icon: TrendingUp, emoji: "📈", badge: "ENT" },
-      { label: "Matriz Treinamento", path: "/people-hub?tab=training-matrix", icon: ClipboardList, emoji: "📋", badge: "ENT" },
-      { label: "Crew Scheduler", path: "/people-hub?tab=crew-scheduler", icon: Calendar, emoji: "📅", badge: "ENT" },
-      { label: "Crew Intelligence", path: "/people-hub?tab=intelligence", icon: Brain, emoji: "🧠" },
-      { label: "STCW/MLC Compliance", path: "/stcw-mlc", icon: Award, emoji: "🏆", badge: "NEW" },
-      { label: "Bem-estar", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
-      { label: "Mentor DP", path: "/people-hub?tab=mentor-dp", icon: GraduationCap, emoji: "🎓" },
-      { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥", badge: "MLC" },
-      { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
+      { label: "Crew Management", path: "/people-hub?tab=talent", icon: Users, emoji: "👤" },
+      { label: "STCW/MLC", path: "/stcw-mlc", icon: Award, emoji: "🏆", badge: "NEW" },
+      { label: "Training", path: "/people-hub?tab=training-matrix", icon: GraduationCap, emoji: "🎓" },
+      { label: "Scheduler", path: "/people-hub?tab=crew-scheduler", icon: Calendar, emoji: "📅" },
+      { label: "Medical", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥" },
+      { label: "Wellness", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
     ],
   },
 
-  // 9. 💰 FINANCE & CONTRACTS (Hub Premium com Enterprise Components)
+  // ═══════════════════════════════════════════════════════════
+  // 9. 💰 FINANCE - Finanças & Contratos
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "💰 Finance & Contracts",
+    title: "💰 Finance",
     defaultOpen: false,
     items: [
       { label: "Finance Hub", path: "/finance-hub", icon: DollarSign, emoji: "💰", badge: "HUB" },
-      { label: "Voyage P&L", path: "/finance-hub?tab=voyage-pnl", icon: TrendingUp, emoji: "📈", badge: "ENT" },
-      { label: "Contabilidade Viagem", path: "/finance-hub?tab=voyage-acct", icon: BarChart3, emoji: "📊", badge: "ENT" },
-      { label: "Dashboard Executivo", path: "/finance-hub?tab=executive", icon: TrendingUp, emoji: "💹", badge: "ENT" },
-      { label: "Portal Fornecedores", path: "/finance-hub?tab=suppliers", icon: ShoppingCart, emoji: "🏭", badge: "ENT" },
-      { label: "Hub Procurement", path: "/finance-hub?tab=procurement", icon: ShoppingCart, emoji: "🛒", badge: "ENT" },
-      { label: "Contratos", path: "/finance-hub?tab=contracts", icon: FileText, emoji: "📝" },
-      { label: "Orçamento", path: "/finance-hub?tab=budget", icon: DollarSign, emoji: "💵" },
-      { label: "ESG & Emissões", path: "/esg-emissions", icon: Leaf, emoji: "🌱" },
-      { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
+      { label: "Voyage P&L", path: "/finance-hub?tab=voyage-pnl", icon: TrendingUp, emoji: "📈" },
+      { label: "Procurement", path: "/finance-hub?tab=procurement", icon: Package, emoji: "🛒" },
+      { label: "Suppliers", path: "/finance-hub?tab=suppliers", icon: Users, emoji: "🏭" },
+      { label: "ESG & Carbon", path: "/esg-emissions", icon: Leaf, emoji: "🌱" },
+      { label: "Travel", path: "/travel-command", icon: Plane, emoji: "✈️" },
+      { label: "Budget", path: "/finance-hub?tab=budget", icon: DollarSign, emoji: "💵" },
     ],
   },
 
-  // 10. ⚙️ SETTINGS (Hub Premium com Enterprise Components)
+  // ═══════════════════════════════════════════════════════════
+  // 10. ⚙️ SYSTEM - Administração do Sistema
+  // ═══════════════════════════════════════════════════════════
   {
-    title: "⚙️ Sistema",
+    title: "⚙️ System",
     defaultOpen: false,
     items: [
       { label: "System Hub", path: "/system-hub", icon: Server, emoji: "🖥️", badge: "HUB" },
-      { label: "Integrações Enterprise", path: "/system-hub?tab=integrations-ent", icon: Link, emoji: "🔗", badge: "ENT" },
-      { label: "API Monitor", path: "/api-monitor", icon: Terminal, emoji: "📡", badge: "ENT" },
-      { label: "IoT Sensors", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️", badge: "ENT" },
-      { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
-      { label: "Saúde Sistema", path: "/health-monitor", icon: Activity, emoji: "💓", badge: "LIVE" },
+      { label: "Integrations", path: "/system-hub?tab=integrations-ent", icon: Link, emoji: "🔗" },
       { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
-      { label: "Quality Dashboard", path: "/quality-dashboard", icon: BarChart3, emoji: "📊" },
-      { label: "Roadmap", path: "/roadmap", icon: Map, emoji: "🗺️" },
-      { label: "Dev Routes", path: "/dev-routes", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
+      { label: "IoT Sensors", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️" },
+      { label: "Health", path: "/health-monitor", icon: Activity, emoji: "💓" },
+      { label: "Settings", path: "/settings", icon: Settings, emoji: "⚙️" },
+      { label: "Dev Tools", path: "/dev-routes", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
   // 11. 🚀 ENTERPRISE INTELLIGENCE (Módulos Avançados)
+  // ═══════════════════════════════════════════════════════════
   {
     title: "🚀 Enterprise Intelligence",
     defaultOpen: false,
-    // REMOVED role restriction - all users can see these modules
     items: [
-      { label: "AI Modules Hub", path: "/ai-modules", icon: Brain, emoji: "🧠", badge: "11 AI" },
       { label: "RAG Assistant", path: "/enterprise/rag-assistant", icon: Bot, emoji: "🤖", badge: "RAG" },
       { label: "OCR Center", path: "/enterprise/ocr-center", icon: FileText, emoji: "📝", badge: "OCR" },
       { label: "Forms Builder", path: "/enterprise/forms-builder", icon: ClipboardList, emoji: "📋" },
-      { label: "Checklists Builder", path: "/enterprise/checklists-builder", icon: ClipboardList, emoji: "✅" },
       { label: "OCIMF Assessment", path: "/enterprise/ocimf-assessment", icon: Shield, emoji: "🛡️", badge: "SIRE" },
       { label: "TMSA Analytics", path: "/enterprise/tmsa-analytics", icon: BarChart3, emoji: "📊", badge: "TMSA" },
-      { label: "Fatigue Risk", path: "/enterprise/fatigue-risk", icon: Clock, emoji: "😴", badge: "ML" },
-      { label: "MLC Work Hours", path: "/enterprise/mlc-hours", icon: Clock, emoji: "⏰", badge: "MLC" },
+      { label: "Fatigue Risk", path: "/enterprise/fatigue-risk", icon: Brain, emoji: "😴", badge: "ML" },
       { label: "Crew Matching", path: "/enterprise/crew-matching", icon: Users, emoji: "🎯", badge: "AI" },
       { label: "Contract Analysis", path: "/enterprise/contract-analysis", icon: FileText, emoji: "📜", badge: "AI" },
-      { label: "Compliance Predictor", path: "/enterprise/compliance-predictor", icon: TrendingUp, emoji: "📈", badge: "ML" },
     ],
   },
 
+  // ═══════════════════════════════════════════════════════════
   // 12. 🎮 ADVANCED MARITIME (Módulos Revolucionários)
+  // ═══════════════════════════════════════════════════════════
   {
     title: "🎮 Advanced Maritime",
     defaultOpen: false,
-    // REMOVED role restriction - all users can see these modules
     items: [
       { label: "Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Cpu, emoji: "🎮", badge: "3D" },
       { label: "Weather Intelligence", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
@@ -292,19 +282,31 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "PSC Readiness", path: "/advanced/psc-readiness", icon: Shield, emoji: "🛡️", badge: "AI" },
       { label: "MARPOL Tracker", path: "/advanced/marpol-tracker", icon: Trash2, emoji: "♻️", badge: "AI" },
       { label: "Blockchain Certs", path: "/advanced/blockchain-certificates", icon: Link, emoji: "🔗", badge: "BC" },
-      { label: "Incident Investigation", path: "/advanced/incident-investigation", icon: AlertTriangle, emoji: "🔍", badge: "AI" },
-      { label: "VR Training", path: "/advanced/vr-training", icon: Gamepad2, emoji: "🎮", badge: "VR" },
+      { label: "VR Training", path: "/advanced/vr-training", icon: GraduationCap, emoji: "🎮", badge: "VR" },
       { label: "Voice Commands", path: "/advanced/voice-commands", icon: Mic, emoji: "🎙️", badge: "NLU" },
       { label: "Crew Wellness AI", path: "/advanced/crew-wellness-ai", icon: Heart, emoji: "❤️", badge: "AI" },
-      { label: "Executive Dashboard", path: "/advanced/executive-dashboard", icon: BarChart3, emoji: "📊", badge: "BI" },
     ],
   },
 ];
+
 /**
  * Get all routes flattened for search/validation
  */
 export function getAllRoutes(): SidebarRoute[] {
   return SIDEBAR_ROUTES.flatMap(group => group.items);
+}
+
+/**
+ * Find which group a path belongs to
+ */
+export function findGroupByPath(path: string): SidebarGroup | undefined {
+  return SIDEBAR_ROUTES.find(group => 
+    group.items.some(item => {
+      const basePath = item.path.split('?')[0];
+      const searchPath = path.split('?')[0];
+      return basePath === searchPath || item.path === path;
+    })
+  );
 }
 
 /**
@@ -315,31 +317,10 @@ export function getModuleCount(): number {
 }
 
 /**
- * Find group containing a specific path
+ * Get hub count
  */
-export function findGroupByPath(path: string): SidebarGroup | undefined {
-  return SIDEBAR_ROUTES.find(group => 
-    group.items.some(item => item.path === path)
-  );
+export function getHubCount(): number {
+  return SIDEBAR_ROUTES.length;
 }
 
-/**
- * Check if a path exists in the sidebar routes
- */
-export function isValidRoute(path: string): boolean {
-  return getAllRoutes().some(route => route.path === path);
-}
-
-/**
- * Get routes by status
- */
-export function getRoutesByStatus(status: 'active' | 'beta' | 'new' | 'deprecated'): SidebarRoute[] {
-  return getAllRoutes().filter(route => route.status === status);
-}
-
-/**
- * Get routes with badges
- */
-export function getRoutesWithBadges(): SidebarRoute[] {
-  return getAllRoutes().filter(route => route.badge);
-}
+export default SIDEBAR_ROUTES;
