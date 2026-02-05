@@ -5,6 +5,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,6 +42,13 @@ function LoadingSkeleton() {
 }
 
 export default function ComplianceHubPremiumPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "intelligence";
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -62,11 +70,14 @@ export default function ComplianceHubPremiumPage() {
             <Brain className="h-3 w-3 mr-1" />
             IA Preditiva
           </Badge>
+          <Badge variant="outline" className="text-sm">
+            Enterprise
+          </Badge>
         </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="intelligence" className="space-y-6">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
@@ -76,21 +87,29 @@ export default function ComplianceHubPremiumPage() {
             <CheckCircle className="h-4 w-4" />
             <span className="text-xs">Scorecard</span>
           </TabsTrigger>
-          <TabsTrigger value="audits" className="flex flex-col items-center gap-1 py-2">
+          <TabsTrigger value="audit-mgmt" className="flex flex-col items-center gap-1 py-2">
             <ClipboardCheck className="h-4 w-4" />
             <span className="text-xs">Auditorias</span>
           </TabsTrigger>
-          <TabsTrigger value="audit-mgmt" className="flex flex-col items-center gap-1 py-2">
-            <FileText className="h-4 w-4" />
-            <span className="text-xs">Gestão</span>
-          </TabsTrigger>
-          <TabsTrigger value="certificates" className="flex flex-col items-center gap-1 py-2">
+          <TabsTrigger value="cert-tracker" className="flex flex-col items-center gap-1 py-2">
             <Award className="h-4 w-4" />
             <span className="text-xs">Certificados</span>
           </TabsTrigger>
-          <TabsTrigger value="cert-tracker" className="flex flex-col items-center gap-1 py-2">
-            <Award className="h-4 w-4" />
-            <span className="text-xs">Tracker</span>
+          <TabsTrigger value="risk-matrix" className="flex flex-col items-center gap-1 py-2">
+            <Target className="h-4 w-4" />
+            <span className="text-xs">Matriz Riscos</span>
+          </TabsTrigger>
+          <TabsTrigger value="agents" className="flex flex-col items-center gap-1 py-2">
+            <Brain className="h-4 w-4" />
+            <span className="text-xs">Agentes IA</span>
+          </TabsTrigger>
+          <TabsTrigger value="ncs" className="flex flex-col items-center gap-1 py-2">
+            <AlertTriangle className="h-4 w-4" />
+            <span className="text-xs">NCs</span>
+          </TabsTrigger>
+          <TabsTrigger value="regulations" className="flex flex-col items-center gap-1 py-2">
+            <FileText className="h-4 w-4" />
+            <span className="text-xs">Regulamentos</span>
           </TabsTrigger>
           <TabsTrigger value="mlc" className="flex flex-col items-center gap-1 py-2">
             <Users className="h-4 w-4" />
@@ -100,14 +119,6 @@ export default function ComplianceHubPremiumPage() {
             <Shield className="h-4 w-4" />
             <span className="text-xs">ISM/ISPS</span>
           </TabsTrigger>
-          <TabsTrigger value="risk" className="flex flex-col items-center gap-1 py-2">
-            <Target className="h-4 w-4" />
-            <span className="text-xs">Riscos</span>
-          </TabsTrigger>
-          <TabsTrigger value="risk-matrix" className="flex flex-col items-center gap-1 py-2">
-            <AlertTriangle className="h-4 w-4" />
-            <span className="text-xs">Matriz</span>
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="intelligence">
@@ -116,29 +127,39 @@ export default function ComplianceHubPremiumPage() {
           </Suspense>
         </TabsContent>
 
-        {/* Enterprise Components */}
+        {/* Enterprise Components - Phase 5 */}
         <TabsContent value="scorecard">
           <ComplianceScorecard />
-        </TabsContent>
-
-        <TabsContent value="audits">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <AuditWorkflow />
-          </Suspense>
         </TabsContent>
 
         <TabsContent value="audit-mgmt">
           <AuditManagement />
         </TabsContent>
 
-        <TabsContent value="certificates">
+        <TabsContent value="cert-tracker">
+          <CertificateTracker />
+        </TabsContent>
+
+        <TabsContent value="risk-matrix">
+          <RiskMatrix />
+        </TabsContent>
+
+        <TabsContent value="agents">
           <Suspense fallback={<LoadingSkeleton />}>
-            <ComplianceDashboard />
+            <ComplianceIntelligence />
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="cert-tracker">
-          <CertificateTracker />
+        <TabsContent value="ncs">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <AuditWorkflow />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="regulations">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ComplianceDashboard />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="mlc">
@@ -155,18 +176,6 @@ export default function ComplianceHubPremiumPage() {
             <p className="font-medium">ISM/ISPS Code</p>
             <p className="text-sm">Gestão de segurança e proteção marítima</p>
           </div>
-        </TabsContent>
-
-        <TabsContent value="risk">
-          <div className="text-center py-12 text-muted-foreground">
-            <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Análise de Riscos</p>
-            <p className="text-sm">Identificação e mitigação de riscos operacionais</p>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="risk-matrix">
-          <RiskMatrix />
         </TabsContent>
       </Tabs>
     </div>

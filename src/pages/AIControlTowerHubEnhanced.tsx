@@ -41,7 +41,13 @@ const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
 const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
 const AIJournalingPage = lazy(() => import("@/pages/AIJournalingPage"));
 const WorkflowCommand = lazy(() => import("@/pages/mission-control/workflow-engine"));
- const VoiceAssistantIntelligence = lazy(() => import("@/components/premium/VoiceAssistantIntelligence"));
+const VoiceAssistantIntelligence = lazy(() => import("@/components/premium/VoiceAssistantIntelligence"));
+
+// Enterprise Components - Phase 3
+import { 
+  AIAgentOrchestrator,
+  AIAuditTrail
+} from "@/components/enterprise";
 
 function TabLoadingSkeleton() {
   return (
@@ -55,6 +61,7 @@ function TabLoadingSkeleton() {
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: Activity },
   { id: "command", label: "Comando IA", icon: Brain, badge: "NOVO" },
+  { id: "orchestrator", label: "Orchestrator", icon: Zap, badge: "ENT" },
   { id: "hub", label: "Hub IA", icon: Sparkles },
   { id: "chat", label: "Chat", icon: MessageSquare },
   { id: "voice", label: "Voice AI", icon: Mic, badge: "NOVO" },
@@ -63,6 +70,7 @@ const TABS = [
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "observability", label: "Monitor", icon: Eye },
   { id: "audit", label: "Auditoria", icon: ClipboardList },
+  { id: "blockchain", label: "Blockchain", icon: Shield, badge: "ENT" },
 ];
 
 // Onboarding
@@ -421,6 +429,11 @@ export default function AIControlTowerHubEnhanced() {
             </Suspense>
           </TabsContent>
 
+          {/* Enterprise Component - Phase 3 */}
+          <TabsContent value="orchestrator" className="mt-6">
+            <AIAgentOrchestrator />
+          </TabsContent>
+
           <TabsContent value="hub" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <AIModulesHub />
@@ -467,6 +480,11 @@ export default function AIControlTowerHubEnhanced() {
             <Suspense fallback={<TabLoadingSkeleton />}>
               <AIAuditPage />
             </Suspense>
+          </TabsContent>
+
+          {/* Enterprise Component - Phase 3 (Blockchain Audit Trail) */}
+          <TabsContent value="blockchain" className="mt-6">
+            <AIAuditTrail />
           </TabsContent>
         </Tabs>
       </div>

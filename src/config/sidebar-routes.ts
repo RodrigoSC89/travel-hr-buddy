@@ -19,7 +19,7 @@ import {
   Briefcase, TrendingUp, Cpu, Mic, AlertTriangle, HardDrive,
   DollarSign, Leaf, ClipboardList, Database, Radar, Cloud,
   Gamepad2, Calendar, Server, Radio, Globe, Plane, Thermometer,
-  ShoppingCart, Lock, GraduationCap, Trash2, Fuel, Stethoscope
+  ShoppingCart, Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -89,16 +89,20 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 3. 🔧 MAINTENANCE
+  // 3. 🔧 MAINTENANCE (Hub Premium com Enterprise Components)
   {
     title: "🔧 Manutenção",
     defaultOpen: false,
     items: [
-      { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧" },
-      { label: "Manutenção Preditiva", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML" },
+      { label: "Maintenance Hub", path: "/maintenance-hub", icon: Wrench, emoji: "🔧", badge: "HUB" },
+      { label: "DNV Class Surveys", path: "/maintenance-hub?tab=intelligence", icon: Shield, emoji: "🛡️", badge: "NEW" },
+      { label: "Manutenção Preditiva", path: "/maintenance-hub?tab=predictive", icon: Brain, emoji: "🧠", badge: "ML" },
+      { label: "Calendário", path: "/maintenance-hub?tab=calendar", icon: Calendar, emoji: "📅", badge: "ENT" },
+      { label: "Drydock Timeline", path: "/maintenance-hub?tab=drydock", icon: Anchor, emoji: "🔩", badge: "ENT" },
+      { label: "Combustível ROB", path: "/maintenance-hub?tab=fuel", icon: Fuel, emoji: "⛽", badge: "ENT" },
+      { label: "MARPOL e-GRB", path: "/maintenance-hub?tab=waste", icon: Trash2, emoji: "♻️", badge: "ENT" },
+      { label: "ESG Emissões", path: "/maintenance-hub?tab=esg", icon: Leaf, emoji: "🌱", badge: "ENT" },
       { label: "Digital Twin 3D", path: "/digital-twin", icon: Cpu, emoji: "🎮" },
-      { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🔩" },
-      { label: "Combustível", path: "/fuel-management", icon: Fuel, emoji: "⛽" },
     ],
   },
 
@@ -134,82 +138,89 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 6. 🛡️ COMPLIANCE & AUDITS (Hub)
+  // 6. 🛡️ COMPLIANCE & AUDITS (Hub Premium com Enterprise Components)
   {
     title: "🛡️ Compliance & Audits",
     defaultOpen: false,
     items: [
       { label: "Compliance Hub", path: "/compliance-unified", icon: Shield, emoji: "🛡️", badge: "HUB" },
-      { label: "Dashboard", path: "/compliance-unified?tab=dashboard", icon: BarChart3, emoji: "📊" },
+      { label: "Compliance Scorecard", path: "/compliance-unified?tab=scorecard", icon: BarChart3, emoji: "📊", badge: "ENT" },
+      { label: "Gestão de Auditorias", path: "/compliance-unified?tab=audit-mgmt", icon: ClipboardList, emoji: "📋", badge: "ENT" },
+      { label: "Rastreador Certificados", path: "/compliance-unified?tab=cert-tracker", icon: Award, emoji: "🏆", badge: "ENT" },
+      { label: "Matriz de Riscos", path: "/compliance-unified?tab=risk-matrix", icon: Target, emoji: "🎯", badge: "ENT" },
       { label: "Agentes IA", path: "/compliance-unified?tab=agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
-      { label: "Auditorias", path: "/compliance-unified?tab=audits", icon: ClipboardList, emoji: "📋" },
-      { label: "Certificações", path: "/compliance-unified?tab=certificates", icon: Award, emoji: "🏆" },
       { label: "NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
       { label: "Regulamentos", path: "/compliance-unified?tab=regulations", icon: BookOpen, emoji: "📜" },
-      { label: "Matriz de Riscos", path: "/compliance-unified?tab=risks", icon: Target, emoji: "🎯" },
       { label: "Gestão de Resíduos", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "MARPOL" },
       { label: "Security Center", path: "/security-center", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
     ],
   },
 
-  // 7. 📄 DOCUMENT CENTER (Hub)
+  // 7. 📄 DOCUMENT CENTER (Hub Premium com Enterprise Components)
   {
     title: "📄 Document Center",
     defaultOpen: false,
     items: [
       { label: "Document Center", path: "/document-center", icon: FileText, emoji: "📄", badge: "HUB" },
+      { label: "Visualizador Docs", path: "/document-center?tab=viewer", icon: FileText, emoji: "📑", badge: "ENT" },
+      { label: "Gestor Templates", path: "/document-center?tab=template-mgr", icon: ClipboardList, emoji: "📋", badge: "ENT" },
+      { label: "Checklist Builder", path: "/document-center?tab=checklist-builder", icon: ClipboardList, emoji: "✅", badge: "ENT" },
+      { label: "Knowledge Hub", path: "/document-center?tab=knowledge", icon: Brain, emoji: "🧠", badge: "ENT" },
       { label: "Documentos", path: "/document-center?tab=documents", icon: FileText, emoji: "📑" },
-      { label: "Templates", path: "/document-center?tab=templates", icon: ClipboardList, emoji: "📋" },
-      { label: "Checklists", path: "/document-center?tab=checklists", icon: ClipboardList, emoji: "✅" },
       { label: "Relatórios", path: "/document-center?tab=reports", icon: BarChart3, emoji: "📊" },
       { label: "Exportar", path: "/document-center?tab=export", icon: BarChart3, emoji: "📤" },
-      { label: "Busca Avançada", path: "/document-center?tab=search", icon: Target, emoji: "🔍" },
-      { label: "Knowledge Hub", path: "/knowledge-hub", icon: Brain, emoji: "🧠", badge: "RAG" },
     ],
   },
 
-  // 8. 👥 PEOPLE HUB
+  // 8. 👥 PEOPLE HUB (Hub Premium com Enterprise Components)
   {
     title: "👥 People Hub",
     defaultOpen: false,
     items: [
       { label: "People Hub", path: "/people-hub", icon: Users, emoji: "👥", badge: "HUB" },
-      { label: "Visão Geral", path: "/people-hub?tab=overview", icon: Users, emoji: "📊" },
-      { label: "Talent & Recruitment", path: "/people-hub?tab=talent", icon: Target, emoji: "🎯" },
-      { label: "Performance", path: "/people-hub?tab=performance", icon: TrendingUp, emoji: "📈" },
+      { label: "Pipeline Talentos", path: "/people-hub?tab=talent", icon: Target, emoji: "🎯", badge: "ENT" },
+      { label: "Performance 360°", path: "/people-hub?tab=performance", icon: TrendingUp, emoji: "📈", badge: "ENT" },
+      { label: "Matriz Treinamento", path: "/people-hub?tab=training-matrix", icon: ClipboardList, emoji: "📋", badge: "ENT" },
+      { label: "Crew Scheduler", path: "/people-hub?tab=crew-scheduler", icon: Calendar, emoji: "📅", badge: "ENT" },
+      { label: "Crew Intelligence", path: "/people-hub?tab=intelligence", icon: Brain, emoji: "🧠" },
+      { label: "STCW/MLC", path: "/people-hub?tab=stcw", icon: Award, emoji: "🏆" },
       { label: "Bem-estar", path: "/people-hub?tab=wellness", icon: Heart, emoji: "❤️" },
-      { label: "Treinamento", path: "/people-hub?tab=training", icon: GraduationCap, emoji: "🎓" },
-      { label: "Analytics", path: "/people-hub?tab=analytics", icon: BarChart3, emoji: "📊" },
+      { label: "Mentor DP", path: "/people-hub?tab=mentor-dp", icon: GraduationCap, emoji: "🎓" },
       { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥", badge: "MLC" },
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
-      { label: "Escalas & Rotações", path: "/crew-scheduling", icon: Calendar, emoji: "📅" },
     ],
   },
 
-  // 9. 💰 FINANCE & CONTRACTS
+  // 9. 💰 FINANCE & CONTRACTS (Hub Premium com Enterprise Components)
   {
     title: "💰 Finance & Contracts",
     defaultOpen: false,
     items: [
-      { label: "Finance Command", path: "/finance-command", icon: DollarSign, emoji: "💰" },
-      { label: "Voyage Accounting", path: "/voyage-accounting", icon: DollarSign, emoji: "📊" },
-      { label: "Procurement", path: "/procurement-command", icon: ShoppingCart, emoji: "🛒" },
-      { label: "Supplier Portal", path: "/supplier-portal", icon: ShoppingCart, emoji: "🏭" },
+      { label: "Finance Hub", path: "/finance-hub", icon: DollarSign, emoji: "💰", badge: "HUB" },
+      { label: "Voyage P&L", path: "/finance-hub?tab=voyage-pnl", icon: TrendingUp, emoji: "📈", badge: "ENT" },
+      { label: "Contabilidade Viagem", path: "/finance-hub?tab=voyage-acct", icon: BarChart3, emoji: "📊", badge: "ENT" },
+      { label: "Dashboard Executivo", path: "/finance-hub?tab=executive", icon: TrendingUp, emoji: "💹", badge: "ENT" },
+      { label: "Portal Fornecedores", path: "/finance-hub?tab=suppliers", icon: ShoppingCart, emoji: "🏭", badge: "ENT" },
+      { label: "Hub Procurement", path: "/finance-hub?tab=procurement", icon: ShoppingCart, emoji: "🛒", badge: "ENT" },
+      { label: "Contratos", path: "/finance-hub?tab=contracts", icon: FileText, emoji: "📝" },
+      { label: "Orçamento", path: "/finance-hub?tab=budget", icon: DollarSign, emoji: "💵" },
       { label: "ESG & Emissões", path: "/esg-emissions", icon: Leaf, emoji: "🌱" },
       { label: "Travel Command", path: "/travel-command", icon: Plane, emoji: "✈️" },
     ],
   },
 
-  // 10. ⚙️ SETTINGS
+  // 10. ⚙️ SETTINGS (Hub Premium com Enterprise Components)
   {
     title: "⚙️ Sistema",
     defaultOpen: false,
     items: [
       { label: "System Hub", path: "/system-hub", icon: Server, emoji: "🖥️", badge: "HUB" },
-      { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
-      { label: "Integrações", path: "/integrations", icon: Link, emoji: "🔗" },
-      { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
-      { label: "IoT Dashboard", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️" },
+      { label: "Integrações Enterprise", path: "/system-hub?tab=integrations-ent", icon: Link, emoji: "🔗", badge: "ENT" },
+      { label: "API Monitor", path: "/system-hub?tab=api-monitor", icon: Terminal, emoji: "📡", badge: "ENT" },
+      { label: "IoT Sensors", path: "/system-hub?tab=iot", icon: Thermometer, emoji: "🌡️", badge: "ENT" },
+      { label: "Configurações", path: "/system-hub?tab=settings", icon: Settings, emoji: "⚙️", badge: "ENT" },
+      { label: "Saúde Sistema", path: "/system-hub?tab=health", icon: Activity, emoji: "💓", badge: "LIVE" },
+      { label: "API Gateway", path: "/system-hub?tab=api-gateway", icon: Globe, emoji: "🌐" },
       { label: "Quality Dashboard", path: "/quality-dashboard", icon: BarChart3, emoji: "📊" },
       { label: "Roadmap", path: "/roadmap", icon: Map, emoji: "🗺️" },
     ],

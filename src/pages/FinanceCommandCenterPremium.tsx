@@ -5,6 +5,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +64,7 @@ function BudgetManagement() {
             <p className="text-2xl font-bold text-warning">R$ 6.3M</p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-secondary">
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Variância</p>
             <p className="text-2xl font-bold text-success">-2.5%</p>
@@ -133,6 +134,13 @@ function FinanceReports() {
 }
 
 export default function FinanceCommandCenterPremium() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "voyage-pnl";
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -146,13 +154,18 @@ export default function FinanceCommandCenterPremium() {
             Centro de comando financeiro e gestão de contratos
           </p>
         </div>
-        <Badge variant="outline" className="text-sm">
-          Premium
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-sm">
+            Premium
+          </Badge>
+          <Badge variant="outline" className="text-sm">
+            Enterprise
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="voyage-pnl" className="space-y-6">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="voyage-pnl" className="flex flex-col items-center gap-1 py-2">
             <Ship className="h-4 w-4" />

@@ -5,6 +5,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,6 +42,13 @@ function LoadingSkeleton() {
 }
 
 export default function MaintenanceHubPremium() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "intelligence";
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -59,15 +67,18 @@ export default function MaintenanceHubPremium() {
             <Activity className="h-3 w-3 mr-1 animate-pulse" />
             94% Health Score
           </Badge>
-          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             <Brain className="h-3 w-3 mr-1" />
             IA Preditiva
+          </Badge>
+          <Badge variant="outline" className="text-sm">
+            Enterprise
           </Badge>
         </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="intelligence" className="space-y-6">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
@@ -123,7 +134,7 @@ export default function MaintenanceHubPremium() {
           </Suspense>
         </TabsContent>
 
-        {/* Enterprise Components */}
+        {/* Enterprise Components - Phase 2 */}
         <TabsContent value="calendar">
           <MaintenanceCalendarView />
         </TabsContent>
@@ -161,11 +172,9 @@ export default function MaintenanceHubPremium() {
         </TabsContent>
 
         <TabsContent value="analytics">
-          <div className="text-center py-12 text-muted-foreground">
-            <BarChart3 className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Analytics de Manutenção</p>
-            <p className="text-sm">KPIs, tendências e relatórios</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MaintenanceIntelligence />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
