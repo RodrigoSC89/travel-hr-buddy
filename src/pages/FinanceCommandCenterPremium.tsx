@@ -10,12 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, FileText, DollarSign, BarChart3, 
-  TrendingUp, CreditCard, PiggyBank
+  TrendingUp, CreditCard, PiggyBank, Ship, Anchor
 } from "lucide-react";
 
 // Lazy load components
 const FinanceCommandDashboard = lazy(() => import("@/modules/finance-hub/components/FinanceCommandDashboard"));
 const ContractManagement = lazy(() => import("@/modules/finance-hub/components/ContractManagement"));
+ const FinanceIntelligenceHub = lazy(() => import("@/components/premium/FinanceIntelligenceHub"));
 
 function LoadingSkeleton() {
   return (
@@ -142,8 +143,12 @@ export default function FinanceCommandCenterPremium() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 h-auto p-1">
+      <Tabs defaultValue="voyage-pnl" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+          <TabsTrigger value="voyage-pnl" className="flex flex-col items-center gap-1 py-2">
+            <Ship className="h-4 w-4" />
+            <span className="text-xs">Voyage P&L</span>
+          </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
             <LayoutDashboard className="h-4 w-4" />
             <span className="text-xs">Dashboard</span>
@@ -165,6 +170,12 @@ export default function FinanceCommandCenterPremium() {
             <span className="text-xs">Relatórios</span>
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="voyage-pnl">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <FinanceIntelligenceHub />
+          </Suspense>
+        </TabsContent>
 
         <TabsContent value="dashboard">
           <Suspense fallback={<LoadingSkeleton />}>

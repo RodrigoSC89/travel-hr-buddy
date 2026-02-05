@@ -12,3 +12,6 @@ export { default as MedicalIntelligenceHub } from "./MedicalIntelligenceHub";
 export { default as WasteManagementIntelligence } from "./WasteManagementIntelligence";
 export { default as IoTDashboardIntelligence } from "./IoTDashboardIntelligence";
 export { default as DocumentIntelligenceHub } from "./DocumentIntelligenceHub";
+ export { default as FinanceIntelligenceHub } from "./FinanceIntelligenceHub";
+ export { default as VoiceAssistantIntelligence } from "./VoiceAssistantIntelligence";
+ export { default as APIGatewayIntelligence } from "./APIGatewayIntelligence";

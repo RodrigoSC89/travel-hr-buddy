@@ -19,6 +19,7 @@ import { toast } from "sonner";
 // Lazy load premium components
 const WasteManagementDashboard = lazy(() => import("@/modules/waste-management/components/WasteManagementDashboard"));
 const WasteCommandCenter = lazy(() => import("@/modules/waste-management/components/WasteCommandCenter"));
+ const WasteManagementIntelligence = lazy(() => import("@/components/premium/WasteManagementIntelligence"));
 
 const wasteKPIs = [
   { id: "compliance", label: "Conformidade MARPOL", value: "100%", icon: CheckCircle, color: "success" },
@@ -126,6 +127,11 @@ export default function WasteManagementEnhanced() {
               Comando
               <Badge variant="secondary" className="text-[10px] px-1">PREMIUM</Badge>
             </TabsTrigger>
+            <TabsTrigger value="intelligence" className="flex items-center gap-2">
+              <Leaf className="h-4 w-4" />
+              e-GRB Intelligence
+              <Badge variant="secondary" className="text-[10px] px-1">NOVO</Badge>
+            </TabsTrigger>
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Dashboard
@@ -162,6 +168,18 @@ export default function WasteManagementEnhanced() {
               </div>
             }>
               <WasteCommandCenter />
+            </Suspense>
+          </TabsContent>
+
+          {/* e-GRB Intelligence */}
+          <TabsContent value="intelligence">
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Carregando Intelligence...</span>
+              </div>
+            }>
+              <WasteManagementIntelligence />
             </Suspense>
           </TabsContent>
 
