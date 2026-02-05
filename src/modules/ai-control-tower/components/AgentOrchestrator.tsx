@@ -1,9 +1,10 @@
 /**
  * Agent Orchestrator - Orquestração de Agentes de IA
  * Controle e monitoramento de agentes especializados
+ * UPDATED: Usando dados reais do Supabase
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,31 +41,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
-
-interface Agent {
-  id: string;
-  name: string;
-  type: string;
-  status: "active" | "idle" | "processing" | "error" | "disabled";
-  tasksCompleted: number;
-  avgResponseTime: number;
-  successRate: number;
-  lastActivity: Date;
-  capabilities: string[];
-  autonomyLevel: 0 | 1 | 2 | 3;
-  currentTask?: string;
-}
-
-interface AgentLog {
-  id: string;
-  agentId: string;
-  agentName: string;
-  action: string;
-  status: "success" | "error" | "warning" | "info";
-  timestamp: Date;
-  duration?: number;
-  details?: string;
-}
+import { useAgentOrchestratorData, Agent, AgentLog } from "@/hooks/useAgentOrchestratorData";
 
 interface Conversation {
   id: string;
@@ -75,92 +52,9 @@ interface Conversation {
   confidence?: number;
 }
 
-const MOCK_AGENTS: Agent[] = [
-  {
-    id: "1",
-    name: "Nautilus Navigator",
-    type: "Navegação",
-    status: "active",
-    tasksCompleted: 1256,
-    avgResponseTime: 450,
-    successRate: 98.5,
-    lastActivity: new Date(),
-    capabilities: ["Otimização de rotas", "Previsão meteorológica", "Cálculo de ETA"],
-    autonomyLevel: 2,
-    currentTask: "Calculando rota otimizada para Rotterdam",
-  },
-  {
-    id: "2",
-    name: "Safety Guardian",
-    type: "Segurança",
-    status: "active",
-    tasksCompleted: 892,
-    avgResponseTime: 320,
-    successRate: 99.2,
-    lastActivity: new Date(Date.now() - 5 * 60 * 1000),
-    capabilities: ["Análise de riscos", "Monitoramento de compliance", "Alertas de segurança"],
-    autonomyLevel: 3,
-  },
-  {
-    id: "3",
-    name: "Crew Wellness",
-    type: "RH",
-    status: "idle",
-    tasksCompleted: 456,
-    avgResponseTime: 520,
-    successRate: 97.8,
-    lastActivity: new Date(Date.now() - 30 * 60 * 1000),
-    capabilities: ["Análise de fadiga", "Gestão de escalas", "Previsão de turnover"],
-    autonomyLevel: 1,
-  },
-  {
-    id: "4",
-    name: "Maintenance Predictor",
-    type: "Manutenção",
-    status: "processing",
-    tasksCompleted: 678,
-    avgResponseTime: 890,
-    successRate: 96.4,
-    lastActivity: new Date(),
-    capabilities: ["Previsão de falhas", "Otimização de estoque", "Planejamento de manutenção"],
-    autonomyLevel: 2,
-    currentTask: "Analisando dados de sensores do motor principal",
-  },
-  {
-    id: "5",
-    name: "Finance Analyst",
-    type: "Financeiro",
-    status: "idle",
-    tasksCompleted: 234,
-    avgResponseTime: 1200,
-    successRate: 99.1,
-    lastActivity: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    capabilities: ["Análise de custos", "Previsão de orçamento", "Otimização de procurement"],
-    autonomyLevel: 1,
-  },
-  {
-    id: "6",
-    name: "Document Processor",
-    type: "Documentação",
-    status: "disabled",
-    tasksCompleted: 1890,
-    avgResponseTime: 280,
-    successRate: 98.8,
-    lastActivity: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    capabilities: ["OCR inteligente", "Classificação de documentos", "Extração de dados"],
-    autonomyLevel: 2,
-  },
-];
-
-const MOCK_LOGS: AgentLog[] = [
-  { id: "1", agentId: "1", agentName: "Nautilus Navigator", action: "Rota otimizada calculada", status: "success", timestamp: new Date(), duration: 2340 },
-  { id: "2", agentId: "4", agentName: "Maintenance Predictor", action: "Análise de sensor iniciada", status: "info", timestamp: new Date(Date.now() - 2 * 60 * 1000) },
-  { id: "3", agentId: "2", agentName: "Safety Guardian", action: "Alerta de compliance gerado", status: "warning", timestamp: new Date(Date.now() - 5 * 60 * 1000), details: "Certificado SOLAS expirando em 30 dias" },
-  { id: "4", agentId: "1", agentName: "Nautilus Navigator", action: "Previsão meteorológica atualizada", status: "success", timestamp: new Date(Date.now() - 10 * 60 * 1000), duration: 1200 },
-  { id: "5", agentId: "3", agentName: "Crew Wellness", action: "Escala de tripulação otimizada", status: "success", timestamp: new Date(Date.now() - 30 * 60 * 1000), duration: 4500 },
-];
-
 export default function AgentOrchestrator() {
+  const { agents, logs, stats, isLoading, sendCommand, toggleAgentStatus, isSending } = useAgentOrchestratorData();
+  
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [userMessage, setUserMessage] = useState("");
   const [conversation, setConversation] = useState<Conversation[]>([
@@ -172,13 +66,6 @@ export default function AgentOrchestrator() {
     },
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const activeAgents = MOCK_AGENTS.filter((a) => a.status !== "disabled").length;
-  const processingAgents = MOCK_AGENTS.filter((a) => a.status === "processing").length;
-  const totalTasks = MOCK_AGENTS.reduce((acc, a) => acc + a.tasksCompleted, 0);
-  const avgSuccessRate = Math.round(
-    MOCK_AGENTS.reduce((acc, a) => acc + a.successRate, 0) / MOCK_AGENTS.length * 10
-  ) / 10;
 
   const getStatusBadge = (status: Agent["status"]) => {
     const config = {
@@ -208,22 +95,27 @@ export default function AgentOrchestrator() {
     };
 
     setConversation((prev) => [...prev, newUserMessage]);
+    const messageToSend = userMessage;
     setUserMessage("");
     setIsProcessing(true);
 
+    // Send to backend
+    sendCommand({ message: messageToSend });
+
     // Simulate agent response
     setTimeout(() => {
+      const targetAgent = agents.length > 0 ? agents[0] : null;
       const agentResponse: Conversation = {
         id: (Date.now() + 1).toString(),
         role: "agent",
-        content: `Analisando sua solicitação: "${userMessage}"\n\nO agente Nautilus Navigator foi designado para processar esta tarefa. Estimativa de conclusão: 30 segundos.`,
+        content: `Analisando sua solicitação: "${messageToSend}"\n\n${targetAgent ? `O agente ${targetAgent.name} foi designado para processar esta tarefa.` : "Comando registrado para processamento."} Estimativa de conclusão: 30 segundos.`,
         timestamp: new Date(),
-        agentId: "1",
+        agentId: targetAgent?.id,
         confidence: 0.92,
       };
       setConversation((prev) => [...prev, agentResponse]);
       setIsProcessing(false);
-      toast.success("Tarefa atribuída ao agente Nautilus Navigator");
+      toast.success(targetAgent ? `Tarefa atribuída ao agente ${targetAgent.name}` : "Comando enviado");
     }, 1500);
   };
 
@@ -240,6 +132,15 @@ export default function AgentOrchestrator() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2">Carregando agentes...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Stats */}
@@ -249,7 +150,7 @@ export default function AgentOrchestrator() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Agentes Ativos</p>
-                <p className="text-2xl font-bold">{activeAgents}/{MOCK_AGENTS.length}</p>
+                <p className="text-2xl font-bold">{stats.activeAgents}/{stats.totalAgents}</p>
               </div>
               <Bot className="h-8 w-8 text-green-500" />
             </div>
@@ -260,7 +161,7 @@ export default function AgentOrchestrator() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Processando</p>
-                <p className="text-2xl font-bold">{processingAgents}</p>
+                <p className="text-2xl font-bold">{stats.processingAgents}</p>
               </div>
               <Cpu className="h-8 w-8 text-blue-500" />
             </div>
@@ -271,7 +172,7 @@ export default function AgentOrchestrator() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tarefas (total)</p>
-                <p className="text-2xl font-bold">{totalTasks.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{stats.totalTasks.toLocaleString()}</p>
               </div>
               <Zap className="h-8 w-8 text-purple-500" />
             </div>
@@ -282,7 +183,7 @@ export default function AgentOrchestrator() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
-                <p className="text-2xl font-bold">{avgSuccessRate}%</p>
+                <p className="text-2xl font-bold">{stats.avgSuccessRate}%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-amber-500" />
             </div>
@@ -302,7 +203,7 @@ export default function AgentOrchestrator() {
           <CardContent>
             <ScrollArea className="h-[450px]">
               <div className="space-y-2">
-                {MOCK_AGENTS.map((agent) => (
+                {agents.map((agent: Agent) => (
                   <motion.div
                     key={agent.id}
                     whileHover={{ scale: 1.02 }}
@@ -387,7 +288,7 @@ export default function AgentOrchestrator() {
                             <div className="flex items-center gap-2 mb-1">
                               <Bot className="h-4 w-4" />
                               <span className="text-xs font-medium">
-                                {MOCK_AGENTS.find((a) => a.id === msg.agentId)?.name || "Agent"}
+                                {agents.find((a: Agent) => a.id === msg.agentId)?.name || "Agent"}
                               </span>
                               {msg.confidence && (
                                 <Badge variant="outline" className="text-xs">
@@ -527,7 +428,7 @@ export default function AgentOrchestrator() {
           <CardContent>
             <ScrollArea className="h-[300px]">
               <div className="space-y-2">
-                {MOCK_LOGS.map((log) => (
+                {logs.map((log: AgentLog) => (
                   <div key={log.id} className="flex items-start gap-3 p-2 rounded hover:bg-muted/50">
                     {getLogStatusIcon(log.status)}
                     <div className="flex-1 min-w-0">

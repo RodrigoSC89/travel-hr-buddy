@@ -16,6 +16,9 @@ export { useSystemHubData } from "./useSystemHubData";
 export { useWasteManagementData } from "./useWasteManagementData";
 export { useMedicalInfirmaryData } from "./useMedicalInfirmaryData";
 export { useNotificationsCenter, useCommunicationMessages, useCommunicationChannels, useInboxMessages, useChannelManagerData } from "./useCommunicationData";
+export { useAgentOrchestratorData } from "./useAgentOrchestratorData";
+export { useVesselTrackingData } from "./useVesselTrackingData";
+export { usePharmacyData } from "./usePharmacyData";
 
 // Re-export types for convenience
 export type { VoyageData, MissionData, PortData } from "./useOperationsCommandData";
