@@ -16,6 +16,7 @@ import nautiLogo from "@/assets/nauti-one-logo.png";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +29,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
   useSidebar,
@@ -201,17 +201,19 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                           <SidebarMenuSub>
                             {group.items.filter(canAccessRoute).map((item) => (
                               <SidebarMenuSubItem key={`${group.title}-${item.path}`}>
-                                <SidebarMenuSubButton 
+                                <button
                                   onClick={() => handleItemClick(item.path)}
-                                  isActive={isItemActive(item.path)}
-                                  className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                  className={cn(
+                                    "flex h-7 w-full min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground text-sm cursor-pointer",
+                                    isItemActive(item.path) && "bg-sidebar-accent text-sidebar-accent-foreground"
+                                  )}
                                   aria-label={`Navegar para ${item.label}`}
                                   aria-current={isItemActive(item.path) ? "page" : undefined}
                                 >
                                   {item.icon && <item.icon className="h-4 w-4 flex-shrink-0" />}
                                   <span className="ml-2 truncate">{renderLabel(item)}</span>
                                   {renderBadge(item)}
-                                </SidebarMenuSubButton>
+                                </button>
                               </SidebarMenuSubItem>
                             ))}
                           </SidebarMenuSub>
