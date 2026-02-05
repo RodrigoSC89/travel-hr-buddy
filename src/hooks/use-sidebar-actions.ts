@@ -52,8 +52,15 @@ export function useSidebarActions() {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string): void => {
-    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-    navigate(normalizedPath);
+    // Handle paths with query params correctly
+    if (path.includes('?')) {
+      const [basePath, queryString] = path.split('?');
+      const normalizedPath = basePath.startsWith("/") ? basePath : `/${basePath}`;
+      navigate({ pathname: normalizedPath, search: `?${queryString}` });
+    } else {
+      const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+      navigate(normalizedPath);
+    }
   };
 
   const handleModuleAccess = (moduleKey: string): void => {
