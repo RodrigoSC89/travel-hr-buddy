@@ -211,7 +211,7 @@ const CommunicationCommandCenter = lazy(() => import("@/pages/CommunicationComma
 const AlertsCommandCenter = lazy(() => import("@/pages/AlertsCommandCenter"));
 
 // ============================================
-// AUDITORIAS & COMPLIANCE
+// AUDITORIAS & COMPLIANCE - 12 AUDITORIAS MARÍTIMAS COMPLETAS
 // ============================================
 const PEODP = lazy(() => import("@/pages/PEODP"));
 const PEOTRAM = lazy(() => import("@/pages/PEOTRAM"));
@@ -237,6 +237,10 @@ const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
 const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
 const AuditAIChatPage = lazy(() => import("@/pages/AuditAIChatPage"));
 const ComplianceRoadmapPage = lazy(() => import("@/pages/ComplianceRoadmapPage"));
+// NOVAS AUDITORIAS - Pre-SIRE 2.0, TMSA, SOLAS/LSA/FFE
+const PreSIREInspection = lazy(() => import("@/pages/PreSIREInspection"));
+const TMSAAssessment = lazy(() => import("@/pages/TMSAAssessment"));
+const SOLASInspection = lazy(() => import("@/pages/SOLASInspection"));
 
 // Diagnostic Components Pages
 const DiagnosticCertificatesPage = lazy(() => import("@/pages/DiagnosticCertificatesPage"));
@@ -779,6 +783,14 @@ const AppRoutes = () => (
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
       <Route path="/audit-agents" element={<AgentsDashboard />} />
       <Route path="/audit-agents/:agentId" element={<AgentDetailPage />} />
+      
+      {/* === 12 AUDITORIAS MARÍTIMAS COMPLETAS === */}
+      <Route path="/pre-sire" element={<PreSIREInspection />} />
+      <Route path="/pre-sire-2" element={<PreSIREInspection />} />
+      <Route path="/tmsa-assessment" element={<TMSAAssessment />} />
+      <Route path="/tmsa" element={<TMSAAssessment />} />
+      <Route path="/solas-inspection" element={<SOLASInspection />} />
+      <Route path="/solas-lsa-ffe" element={<SOLASInspection />} />
       
       {/* Diagnostic Components - 5 Soluções */}
       <Route path="/diagnostic-certificates" element={<DiagnosticCertificatesPage />} />

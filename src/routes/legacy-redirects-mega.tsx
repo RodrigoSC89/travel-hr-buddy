@@ -75,7 +75,6 @@ export const LEGACY_ROUTES_MEGA: Record<string, string> = {
   "/advanced/digital-twin-3d": "/maintenance/digital-twin?mode=3d",
   "/advanced/bunker-optimization": "/maintenance/fuel",
   "/esg-emissions": "/maintenance/esg",
-  "/waste-management": "/maintenance/waste-marpol",
   "/advanced/marpol-tracker": "/maintenance/waste-marpol",
   "/pms": "/maintenance/predictive",
   "/spare-parts": "/maintenance",
@@ -151,25 +150,39 @@ export const LEGACY_ROUTES_MEGA: Record<string, string> = {
   "/compliance-executive": "/compliance",
   
   // 10 Agentes de Auditoria IA
-  "/audit-agents": "/compliance/audit-agents",
-  "/audit-ai-chat": "/compliance/audit-agents",
+  "/audit-agents": "/audit-agents",
+  "/audit-ai-chat": "/audit-agents",
   
-  // 12 Auditorias Marítimas (TODAS PRESERVADAS)
-  "/peo-dp": "/compliance/standards/peo-dp",
-  "/peotram": "/compliance/standards/peotram",
-  "/safety-imca": "/compliance/standards/ism",
-  "/isps-security": "/compliance/standards/isps",
-  "/drill-simulator": "/compliance/standards/solas",
-  "/pre-ovid": "/compliance/standards/pre-ovid",
-  "/mlc-inspection": "/compliance/standards/pre-mlc",
-  "/psc-package": "/compliance/standards/psc",
-  "/sgso": "/compliance/standards/sgso",
-  "/pre-sire": "/compliance/standards/pre-sire",
-  "/tmsa-assessment": "/compliance/standards/tmsa",
+  // 12 Auditorias Marítimas (TODAS COM ROTAS DIRETAS)
+  // 1. PEO-DP (IMCA M-117)
+  "/peo-dp": "/peo-dp",
+  // 2. PEOTRAM 13 Elementos (ANP)
+  "/peotram": "/peotram",
+  // 3. ISM Code (SMS)
+  "/safety-imca": "/safety-imca",
+  // 4. ISPS Security (SSP)
+  "/isps-security": "/isps-security",
+  // 5. SOLAS/LSA/FFE
+  "/drill-simulator": "/drill-simulator",
+  "/solas-inspection": "/solas-inspection",
+  // 6. MARPOL I-VI
+  "/waste-management": "/waste-management",
+  // 7. Pre-OVID (OCIMF)
+  "/pre-ovid": "/pre-ovid",
+  // 8. Pre-MLC 2006 (ILO)
+  "/mlc-inspection": "/mlc-inspection",
+  // 9. PSC Package (MoU)
+  "/psc-package": "/psc-package",
+  // 10. SGSO ANP 17 Práticas
+  "/sgso": "/sgso",
+  // 11. Pre-SIRE 2.0 (OCIMF)
+  "/pre-sire": "/pre-sire",
+  // 12. TMSA (OCIMF)
+  "/tmsa-assessment": "/tmsa-assessment",
   
-  // OCIMF Assessments
-  "/enterprise/ocimf-assessment": "/compliance/standards/pre-sire",
-  "/enterprise/tmsa-analytics": "/compliance/standards/tmsa",
+  // OCIMF Assessments (aliases)
+  "/enterprise/ocimf-assessment": "/pre-sire",
+  "/enterprise/tmsa-analytics": "/tmsa-assessment",
   
   // Outras conformidades
   "/imca-audit": "/compliance/audit-management",
@@ -320,18 +333,18 @@ export function getLegacyRouteCountMega(): number {
  */
 export function getMaritimeAuditsPaths(): Record<string, string> {
   return {
-    "PEO-DP": "/compliance/standards/peo-dp",
-    "PEOTRAM": "/compliance/standards/peotram",
-    "ISM Code": "/compliance/standards/ism",
-    "ISPS Security": "/compliance/standards/isps",
-    "SOLAS/LSA/FFE": "/compliance/standards/solas",
-    "MARPOL I-VI": "/compliance/standards/marpol",
-    "Pre-OVID": "/compliance/standards/pre-ovid",
-    "Pre-MLC 2006": "/compliance/standards/pre-mlc",
-    "PSC Package": "/compliance/standards/psc",
-    "SGSO ANP": "/compliance/standards/sgso",
-    "Pre-SIRE 2.0": "/compliance/standards/pre-sire",
-    "TMSA": "/compliance/standards/tmsa",
+    "PEO-DP": "/peo-dp",
+    "PEOTRAM": "/peotram",
+    "ISM Code": "/safety-imca",
+    "ISPS Security": "/isps-security",
+    "SOLAS/LSA/FFE": "/solas-inspection",
+    "MARPOL I-VI": "/waste-management",
+    "Pre-OVID": "/pre-ovid",
+    "Pre-MLC 2006": "/mlc-inspection",
+    "PSC Package": "/psc-package",
+    "SGSO ANP": "/sgso",
+    "Pre-SIRE 2.0": "/pre-sire",
+    "TMSA": "/tmsa-assessment",
   };
 }
 
