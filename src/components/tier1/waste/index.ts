@@ -4,3 +4,4 @@
  */
 
 export { default as WasteManagementMARPOLPro } from './WasteManagementMARPOLPro';
+export { default as ElectronicGarbageRecordBook } from './ElectronicGarbageRecordBook';

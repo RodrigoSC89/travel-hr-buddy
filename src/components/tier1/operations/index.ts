@@ -5,3 +5,4 @@
 
 export { PortCallManager } from "./PortCallManager";
 export { VoyageOptimizer } from "./VoyageOptimizer";
+export { default as OverviewDashboard } from "./OverviewDashboard";
