@@ -1,15 +1,9 @@
 /**
  * Operations Command Hub
- * Unified hub for: Maritime, Fleet, Voyage, Mission, Logistics
+ * Unified hub for: Overview, Maritime, Fleet, Voyage, Mission, Logistics
  * 
  * FUSION GROUP A - PROMPT MASTER V4.1
- * 
- * Consolidates 15 modules into 1 hub with tabs:
- * - Maritime Command (+ Bridge Link)
- * - Fleet Command Center (+ Drydock, Histórico, Digital Twin)
- * - Voyage Command (+ Route Optimization)
- * - Mission Command
- * - Logistics Command
+ * TIER-1 UPGRADE with DNV/Veson benchmarks
  */
 
 import React, { Suspense, lazy, useEffect, useState } from "react";
@@ -26,10 +20,12 @@ import {
   Package,
   Compass,
   Settings,
-  Loader2
+  Loader2,
+  LayoutDashboard
 } from "lucide-react";
 
 // Lazy load original components (preserving all functionality)
+const OverviewDashboard = lazy(() => import("@/components/tier1/operations/OverviewDashboard"));
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
 const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
@@ -50,6 +46,14 @@ function TabLoadingSkeleton() {
 
 // Tab configuration
 const TABS = [
+  {
+    id: "overview",
+    label: "Overview",
+    icon: LayoutDashboard,
+    emoji: "📊",
+    description: "Visão geral da frota em tempo real",
+    badge: "AI",
+  },
   {
     id: "maritime",
     label: "Maritime",
@@ -94,7 +98,7 @@ const TABS = [
 
 export default function OperationsCommandHub() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "maritime";
+  const initialTab = searchParams.get("tab") || "overview";
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // Sync URL with tab changes
@@ -133,7 +137,7 @@ export default function OperationsCommandHub() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
           {TABS.map((tab) => (
             <TabsTrigger
               key={tab.id}
@@ -156,6 +160,13 @@ export default function OperationsCommandHub() {
             </TabsTrigger>
           ))}
         </TabsList>
+
+        {/* Overview Tab - NEW */}
+        <TabsContent value="overview" className="space-y-4 mt-6">
+          <Suspense fallback={<TabLoadingSkeleton />}>
+            <OverviewDashboard />
+          </Suspense>
+        </TabsContent>
 
         {/* Maritime Command Tab */}
         <TabsContent value="maritime" className="space-y-4 mt-6">

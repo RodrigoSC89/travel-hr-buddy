@@ -4,3 +4,4 @@
  */
 
 export { default as ISMISPSAuditCenter } from './ISMISPSAuditCenter';
+export { default as MLCComplianceModule } from './MLCComplianceModule';

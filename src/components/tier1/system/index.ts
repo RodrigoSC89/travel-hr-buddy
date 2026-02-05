@@ -4,3 +4,5 @@
  */
 
 export { IntegrationHub } from './IntegrationHub';
+export { default as APIGatewayDashboard } from './APIGatewayDashboard';
+export { default as IoTDashboard } from './IoTDashboard';

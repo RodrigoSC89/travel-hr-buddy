@@ -5,3 +5,4 @@
 
 export { default as TelemedicinePortal } from './TelemedicinePortal';
 export { default as MedicalRecordsEHR } from './MedicalRecordsEHR';
+export { default as WellnessProgram } from './WellnessProgram';
