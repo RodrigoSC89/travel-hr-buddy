@@ -45,7 +45,13 @@ const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/Fl
 const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
 const OperationsCommandDashboard = lazy(() => import("@/modules/operations-command/components/OperationsCommandDashboard"));
 const VesselContractsAdvanced = lazy(() => import("@/components/premium/VesselContractsAdvanced"));
- const OperationsIntelligenceHub = lazy(() => import("@/components/premium/OperationsIntelligenceHub"));
+const OperationsIntelligenceHub = lazy(() => import("@/components/premium/OperationsIntelligenceHub"));
+
+// NEW Premium Phase 1 Components
+const ProcurementWorkflowEngine = lazy(() => import("@/components/premium/operations/ProcurementWorkflowEngine"));
+const OperationsGanttAdvanced = lazy(() => import("@/components/premium/operations/OperationsGanttAdvanced"));
+const LogisticsIntelligenceHub = lazy(() => import("@/components/premium/operations/LogisticsIntelligenceHub"));
+const VesselContractsIntelligence = lazy(() => import("@/components/premium/operations/VesselContractsIntelligence"));
 
 function TabLoadingSkeleton() {
   return (
@@ -59,17 +65,18 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
-   { id: "intelligence", label: "Intelligence", icon: Zap, emoji: "🧠", description: "Operations Intelligence Hub", badge: "AI" },
-   { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium" },
-  { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📊", description: "Dashboard operacional" },
-   { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões" },
+  { id: "intelligence", label: "Intelligence", icon: Zap, emoji: "🧠", description: "Operations Intelligence Hub", badge: "AI" },
+  { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium" },
+  { id: "gantt", label: "Gantt", icon: Activity, emoji: "📊", description: "Gantt interativo com weather overlay", badge: "NEW" },
+  { id: "procurement", label: "Procurement", icon: Target, emoji: "🛒", description: "Workflow de aprovação multinível", badge: "NEW" },
+  { id: "logistics-ai", label: "Logistics", icon: Package, emoji: "📦", description: "Supply chain com IA preditiva", badge: "AI" },
+  { id: "contracts-bimco", label: "Contratos", icon: Navigation, emoji: "📋", description: "BIMCO, Laytime/Demurrage", badge: "NEW" },
+  { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📈", description: "Dashboard operacional" },
+  { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões" },
   { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
-   { id: "analytics", label: "BI Analytics", icon: TrendingUp, emoji: "📈", description: "Business Intelligence" },
-   { id: "contracts", label: "Contratos", icon: Navigation, emoji: "📋", description: "Charter Party & Vessel Contracts" },
   { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
   { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
   { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
-  { id: "logistics", label: "Logistics", icon: Package, emoji: "📦", description: "Cargas, fornecedores" },
 ];
 
 // Onboarding steps
@@ -360,7 +367,33 @@ export default function OperationsCommandHubEnhanced() {
             </Suspense>
           </TabsContent>
 
-          {/* Overview Tab - NEW */}
+          {/* NEW: Gantt Advanced Tab */}
+          <TabsContent value="gantt" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <OperationsGanttAdvanced />
+            </Suspense>
+          </TabsContent>
+
+          {/* NEW: Procurement Workflow Tab */}
+          <TabsContent value="procurement" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <ProcurementWorkflowEngine />
+            </Suspense>
+          </TabsContent>
+
+          {/* NEW: Logistics Intelligence Tab */}
+          <TabsContent value="logistics-ai" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <LogisticsIntelligenceHub />
+            </Suspense>
+          </TabsContent>
+
+          {/* NEW: Contracts BIMCO Tab */}
+          <TabsContent value="contracts-bimco" className="space-y-6 mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <VesselContractsIntelligence />
+            </Suspense>
+          </TabsContent>
           <TabsContent value="overview" className="space-y-6 mt-6">
             {/* KPIs Row - NO staggered animations to prevent flickering */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
