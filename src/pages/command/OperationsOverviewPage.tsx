@@ -1,102 +1,30 @@
 /**
  * Operations Overview Page - Visão Operacional em Tempo Real
- * Dashboard de operações marítimas consolidado
+ * Dashboard de operações marítimas consolidado com dados reais
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
-  Activity, Ship, Anchor, Navigation, AlertTriangle, CheckCircle2,
+  Activity, Ship, Anchor, Navigation, AlertTriangle, 
   Clock, MapPin, Fuel, Users, TrendingUp, RefreshCw, MoreVertical,
-  ArrowUp, ArrowDown, Minus
+  ArrowUp, ArrowDown, Minus, Download, AlertCircle
 } from 'lucide-react';
-
-interface VesselOperation {
-  id: string;
-  name: string;
-  imo: string;
-  status: 'Navigating' | 'Port' | 'Anchored' | 'Drydock' | 'Emergency';
-  position: { lat: number; lng: number };
-  destination?: string;
-  eta?: Date;
-  speed?: number;
-  heading?: number;
-  fuelROB?: number;
-  crewOnboard: number;
-  lastUpdate: Date;
-  alerts: number;
-}
-
-const mockOperations: VesselOperation[] = [
-  {
-    id: 'V001',
-    name: 'Atlantic Pioneer',
-    imo: '9876543',
-    status: 'Navigating',
-    position: { lat: -23.5505, lng: -46.6333 },
-    destination: 'Rotterdam',
-    eta: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-    speed: 14.2,
-    heading: 45,
-    fuelROB: 78,
-    crewOnboard: 28,
-    lastUpdate: new Date(),
-    alerts: 0
-  },
-  {
-    id: 'V002',
-    name: 'Pacific Voyager',
-    imo: '8765432',
-    status: 'Port',
-    position: { lat: 1.3521, lng: 103.8198 },
-    destination: 'Singapore',
-    fuelROB: 45,
-    crewOnboard: 32,
-    lastUpdate: new Date(Date.now() - 15 * 60 * 1000),
-    alerts: 2
-  },
-  {
-    id: 'V003',
-    name: 'Northern Star',
-    imo: '7654321',
-    status: 'Anchored',
-    position: { lat: 51.9244, lng: 4.4777 },
-    destination: 'Awaiting berth',
-    fuelROB: 62,
-    crewOnboard: 25,
-    lastUpdate: new Date(Date.now() - 30 * 60 * 1000),
-    alerts: 1
-  },
-  {
-    id: 'V004',
-    name: 'Coral Queen',
-    imo: '6543210',
-    status: 'Drydock',
-    position: { lat: 35.6762, lng: 139.6503 },
-    crewOnboard: 8,
-    lastUpdate: new Date(Date.now() - 60 * 60 * 1000),
-    alerts: 0
-  }
-];
-
-const operationalKPIs = {
-  activeVessels: 45,
-  navigating: 28,
-  inPort: 12,
-  anchored: 4,
-  maintenance: 1,
-  totalAlerts: 15,
-  criticalAlerts: 3,
-  avgSpeed: 13.8,
-  fleetUtilization: 89,
-  onTimePerformance: 94
-};
+import { useFleetOperations, VesselOperation } from '@/hooks/useFleetOperations';
 
 export default function OperationsOverviewPage() {
-  const [operations] = useState<VesselOperation[]>(mockOperations);
+  const { 
+    operations, 
+    kpis, 
+    isLoading, 
+    error, 
+    refetch, 
+    exportData 
+  } = useFleetOperations();
 
   const getStatusColor = (status: VesselOperation['status']) => {
     switch (status) {
@@ -120,6 +48,69 @@ export default function OperationsOverviewPage() {
     }
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <Card key={i}>
+              <CardContent className="pt-4">
+                <Skeleton className="h-16 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-48" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="h-24 w-full" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Card className="border-destructive">
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Erro ao carregar operações</h3>
+            <p className="text-muted-foreground mb-4">{(error as Error).message}</p>
+            <Button onClick={refetch} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Tentar novamente
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Empty state
+  if (operations.length === 0) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <Ship className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Nenhuma embarcação cadastrada</h3>
+            <p className="text-muted-foreground">Cadastre embarcações para visualizar operações em tempo real.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* KPI Dashboard */}
@@ -129,13 +120,13 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Navegando</p>
-                <p className="text-2xl font-bold text-green-500">{operationalKPIs.navigating}</p>
+                <p className="text-2xl font-bold text-green-500">{kpis?.navigating || 0}</p>
               </div>
               <Navigation className="h-8 w-8 text-green-500" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-xs text-green-500">
               <ArrowUp className="h-3 w-3" />
-              <span>+3 desde ontem</span>
+              <span>Tempo real</span>
             </div>
           </CardContent>
         </Card>
@@ -145,13 +136,13 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Porto</p>
-                <p className="text-2xl font-bold text-blue-500">{operationalKPIs.inPort}</p>
+                <p className="text-2xl font-bold text-blue-500">{kpis?.inPort || 0}</p>
               </div>
               <Anchor className="h-8 w-8 text-blue-500" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
               <Minus className="h-3 w-3" />
-              <span>Estável</span>
+              <span>Atracados</span>
             </div>
           </CardContent>
         </Card>
@@ -161,28 +152,28 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
-                <p className="text-2xl font-bold text-yellow-500">{operationalKPIs.anchored}</p>
+                <p className="text-2xl font-bold text-yellow-500">{kpis?.anchored || 0}</p>
               </div>
               <Clock className="h-8 w-8 text-yellow-500" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-xs text-yellow-500">
               <ArrowDown className="h-3 w-3" />
-              <span>-1 desde ontem</span>
+              <span>Aguardando</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={operationalKPIs.criticalAlerts > 0 ? 'border-red-500/50' : ''}>
+        <Card className={(kpis?.criticalAlerts || 0) > 0 ? 'border-red-500/50' : ''}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
-                <p className="text-2xl font-bold text-red-500">{operationalKPIs.totalAlerts}</p>
+                <p className="text-2xl font-bold text-red-500">{kpis?.totalAlerts || 0}</p>
               </div>
               <AlertTriangle className="h-8 w-8 text-red-500" />
             </div>
             <div className="text-xs text-red-500 mt-2">
-              {operationalKPIs.criticalAlerts} críticos
+              {kpis?.criticalAlerts || 0} críticos
             </div>
           </CardContent>
         </Card>
@@ -192,11 +183,11 @@ export default function OperationsOverviewPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Utilização</p>
-                <p className="text-2xl font-bold">{operationalKPIs.fleetUtilization}%</p>
+                <p className="text-2xl font-bold">{kpis?.fleetUtilization || 0}%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-primary" />
             </div>
-            <Progress value={operationalKPIs.fleetUtilization} className="mt-2 h-1.5" />
+            <Progress value={kpis?.fleetUtilization || 0} className="mt-2 h-1.5" />
           </CardContent>
         </Card>
       </div>
@@ -211,13 +202,19 @@ export default function OperationsOverviewPage() {
                 Operações em Tempo Real
               </CardTitle>
               <CardDescription>
-                Status operacional de toda a frota
+                Status operacional de toda a frota ({operations.length} embarcações)
               </CardDescription>
             </div>
-            <Button variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Atualizar
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={exportData}>
+                <Download className="h-4 w-4 mr-2" />
+                Exportar
+              </Button>
+              <Button variant="outline" size="sm" onClick={refetch}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Atualizar
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -247,16 +244,18 @@ export default function OperationsOverviewPage() {
                             <MapPin className="h-3 w-3" />
                             {vessel.destination || 'N/A'}
                           </span>
-                          {vessel.speed && (
+                          {vessel.speed !== undefined && (
                             <span className="flex items-center gap-1">
                               <Navigation className="h-3 w-3" />
-                              {vessel.speed} kn
+                              {vessel.speed.toFixed(1)} kn
                             </span>
                           )}
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            {vessel.crewOnboard} tripulantes
-                          </span>
+                          {vessel.crewOnboard && (
+                            <span className="flex items-center gap-1">
+                              <Users className="h-3 w-3" />
+                              {vessel.crewOnboard} tripulantes
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -299,23 +298,23 @@ export default function OperationsOverviewPage() {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>On-Time Performance</span>
-                  <span className="font-medium">{operationalKPIs.onTimePerformance}%</span>
+                  <span className="font-medium">{kpis?.onTimePerformance || 0}%</span>
                 </div>
-                <Progress value={operationalKPIs.onTimePerformance} className="h-2" />
+                <Progress value={kpis?.onTimePerformance || 0} className="h-2" />
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Fleet Utilization</span>
-                  <span className="font-medium">{operationalKPIs.fleetUtilization}%</span>
+                  <span className="font-medium">{kpis?.fleetUtilization || 0}%</span>
                 </div>
-                <Progress value={operationalKPIs.fleetUtilization} className="h-2" />
+                <Progress value={kpis?.fleetUtilization || 0} className="h-2" />
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Velocidade Média</span>
-                  <span className="font-medium">{operationalKPIs.avgSpeed} knots</span>
+                  <span className="font-medium">{kpis?.avgSpeed?.toFixed(1) || 0} knots</span>
                 </div>
-                <Progress value={(operationalKPIs.avgSpeed / 20) * 100} className="h-2" />
+                <Progress value={((kpis?.avgSpeed || 0) / 20) * 100} className="h-2" />
               </div>
             </div>
           </CardContent>
@@ -328,19 +327,19 @@ export default function OperationsOverviewPage() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-green-500">{operationalKPIs.navigating}</p>
+                <p className="text-3xl font-bold text-green-500">{kpis?.navigating || 0}</p>
                 <p className="text-sm text-muted-foreground">Navegando</p>
               </div>
               <div className="text-center p-4 bg-blue-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-blue-500">{operationalKPIs.inPort}</p>
+                <p className="text-3xl font-bold text-blue-500">{kpis?.inPort || 0}</p>
                 <p className="text-sm text-muted-foreground">Em Porto</p>
               </div>
               <div className="text-center p-4 bg-yellow-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-yellow-500">{operationalKPIs.anchored}</p>
+                <p className="text-3xl font-bold text-yellow-500">{kpis?.anchored || 0}</p>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
               </div>
               <div className="text-center p-4 bg-orange-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-orange-500">{operationalKPIs.maintenance}</p>
+                <p className="text-3xl font-bold text-orange-500">{kpis?.maintenance || 0}</p>
                 <p className="text-sm text-muted-foreground">Manutenção</p>
               </div>
             </div>

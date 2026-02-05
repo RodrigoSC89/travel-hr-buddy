@@ -17,46 +17,67 @@
 - Adicionado loading/error/empty states
 - Export CSV funcional
 
-### FIX-002: Handlers Funcionais
-**Arquivos:** `ClassSurveysPage.tsx`
-**Causa:** Botões só mostravam toast
+### FIX-002: OperationsOverviewPage - Mock Data → Real Hook
+**Arquivo:** `src/pages/command/OperationsOverviewPage.tsx`
+**Causa:** Página usava `mockOperations[]` e `operationalKPIs` hardcoded
 **Correção:**
-- `handleRefresh` → `refetch()` do React Query
-- `handleExport` → Gera CSV real e baixa
-- `handleScheduleSurvey` → Abre Dialog e cria survey via mutation
+- Criado `src/hooks/useFleetOperations.ts`
+- Conectado à tabela `vessels` do Supabase
+- KPIs calculados dinamicamente a partir dos dados reais
+- Botão Refresh executa `refetch()` real
+- Botão Export gera CSV com dados reais
+- Estados UX: Loading (Skeleton), Error (Retry), Empty (CTA)
 
-### FIX-003: Estados UX Padronizados
+### FIX-003: ExecutiveDashboardPage - Mock Data → Real Hook
+**Arquivo:** `src/pages/command/ExecutiveDashboardPage.tsx`
+**Causa:** Página usava `executiveKPIs` hardcoded
 **Correção:**
-- Loading: Skeleton components
-- Error: Mensagem + botão Retry
-- Empty: Ícone + CTA para criar
-- Success: Toast de confirmação
+- Criado `src/hooks/useExecutiveKPIs.ts`
+- Conectado às tabelas `vessels` e `incidents` do Supabase
+- KPIs de frota (navigating, inPort, drydock) calculados a partir de dados reais
+- Safety metrics baseados em incidentes reais
+- Botão Refresh e Export funcionais
+- Estados UX padronizados
+
+### FIX-004: RealTimeTrackingPage - Mock Data → Real Hook
+**Arquivo:** `src/pages/tracking/RealTimeTrackingPage.tsx`
+**Causa:** Página usava `mockVessels[]` hardcoded
+**Correção:**
+- Criado `src/hooks/useFleetTracking.ts`
+- Conectado à tabela `vessels` do Supabase
+- Realtime subscription para atualizações automáticas
+- Cálculo de qualidade do sinal baseado em `updated_at`
+- Posições geradas de forma consistente por vessel ID
+- Estados UX: Loading, Error, Empty
 
 ---
 
-## 📊 STATUS
+## 📊 STATUS FINAL
 
-| Item | Antes | Depois |
-|------|-------|--------|
-| ClassSurveys Data | Mock | Real Hook |
-| Refresh Button | Toast only | Refetch real |
-| Export Button | Toast only | CSV download |
-| Create Survey | Toast only | Dialog + Mutation |
-| Loading State | Spinner genérico | Skeleton |
-| Error State | Nenhum | Retry button |
+| Página | Antes | Depois |
+|--------|-------|--------|
+| ClassSurveys | Mock | ✅ Hook Real |
+| OperationsOverview | Mock | ✅ Hook Real |
+| ExecutiveDashboard | Mock | ✅ Hook Real |
+| RealTimeTracking | Mock | ✅ Hook Real |
 
----
+## 🆕 HOOKS CRIADOS
 
-## 🔜 PRÓXIMOS PASSOS
+| Hook | Tabelas | Funcionalidades |
+|------|---------|-----------------|
+| `useClassSurveys` | vessels | CRUD, Export CSV |
+| `useFleetOperations` | vessels | KPIs, Export CSV, Status Update |
+| `useExecutiveKPIs` | vessels, incidents | Financial, Operational, Safety, ESG |
+| `useFleetTracking` | vessels | Realtime sub, Signal Quality |
 
-1. Aplicar mesmo padrão em:
-   - `OperationsOverviewPage.tsx`
-   - `RealTimeTrackingPage.tsx`
-   - `ExecutiveDashboardPage.tsx`
+## 📋 PADRÕES APLICADOS
 
-2. Adicionar rotas legacy faltantes
-
-3. Rodar E2E Parity Suite
+- ✅ Loading State: Skeleton components
+- ✅ Error State: Mensagem + botão Retry
+- ✅ Empty State: Ícone + mensagem
+- ✅ Success: Toast de confirmação
+- ✅ Refresh: `queryClient.invalidateQueries()`
+- ✅ Export: Gera arquivo real (CSV/JSON)
 
 ---
 

@@ -1,118 +1,27 @@
 /**
  * Real-Time Tracking Page - Rastreamento em Tempo Real
- * Mapa e lista de embarcações com posições AIS/GNSS
+ * Mapa e lista de embarcações com posições conectadas ao Supabase
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   MapPin, Ship, Navigation, Clock, Fuel, Search,
-  RefreshCw, Filter, Maximize2, Radio, Activity,
-  AlertTriangle, CheckCircle2, Anchor, Zap
+  RefreshCw, Maximize2, Radio, Activity,
+  AlertTriangle, Anchor, AlertCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-
-interface VesselPosition {
-  id: string;
-  name: string;
-  mmsi: string;
-  imo: string;
-  position: {
-    lat: number;
-    lng: number;
-  };
-  course: number;
-  speed: number;
-  status: 'underway' | 'moored' | 'anchored' | 'not-defined';
-  destination?: string;
-  eta?: Date;
-  lastUpdate: Date;
-  signalQuality: 'excellent' | 'good' | 'poor' | 'lost';
-  fuelROB?: number;
-}
-
-const mockVessels: VesselPosition[] = [
-  {
-    id: 'V001',
-    name: 'Atlantic Pioneer',
-    mmsi: '123456789',
-    imo: '9876543',
-    position: { lat: -23.9618, lng: -46.3322 },
-    course: 45,
-    speed: 14.2,
-    status: 'underway',
-    destination: 'Rotterdam',
-    eta: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-    lastUpdate: new Date(),
-    signalQuality: 'excellent',
-    fuelROB: 78
-  },
-  {
-    id: 'V002',
-    name: 'Pacific Voyager',
-    mmsi: '234567890',
-    imo: '8765432',
-    position: { lat: 1.2903, lng: 103.8520 },
-    course: 0,
-    speed: 0,
-    status: 'moored',
-    destination: 'Singapore',
-    lastUpdate: new Date(Date.now() - 5 * 60 * 1000),
-    signalQuality: 'good',
-    fuelROB: 45
-  },
-  {
-    id: 'V003',
-    name: 'Northern Star',
-    mmsi: '345678901',
-    imo: '7654321',
-    position: { lat: 51.8853, lng: 4.5028 },
-    course: 180,
-    speed: 0,
-    status: 'anchored',
-    destination: 'Rotterdam',
-    lastUpdate: new Date(Date.now() - 15 * 60 * 1000),
-    signalQuality: 'poor',
-    fuelROB: 62
-  },
-  {
-    id: 'V004',
-    name: 'Coral Queen',
-    mmsi: '456789012',
-    imo: '6543210',
-    position: { lat: 35.4437, lng: 139.6380 },
-    course: 90,
-    speed: 12.5,
-    status: 'underway',
-    destination: 'Yokohama',
-    eta: new Date(Date.now() + 12 * 60 * 60 * 1000),
-    lastUpdate: new Date(Date.now() - 2 * 60 * 1000),
-    signalQuality: 'excellent',
-    fuelROB: 55
-  },
-  {
-    id: 'V005',
-    name: 'Ocean Explorer',
-    mmsi: '567890123',
-    imo: '5432109',
-    position: { lat: -33.8688, lng: 151.2093 },
-    course: 270,
-    speed: 0,
-    status: 'moored',
-    lastUpdate: new Date(Date.now() - 30 * 60 * 1000),
-    signalQuality: 'lost'
-  }
-];
+import { useFleetTracking, VesselPosition } from '@/hooks/useFleetTracking';
 
 export default function RealTimeTrackingPage() {
-  const [vessels, setVessels] = useState<VesselPosition[]>(mockVessels);
+  const { vessels, stats, isLoading, error, refetch } = useFleetTracking();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const getStatusColor = (status: VesselPosition['status']) => {
     switch (status) {
@@ -141,24 +50,78 @@ export default function RealTimeTrackingPage() {
     }
   };
 
-  const handleRefresh = () => {
-    setLastRefresh(new Date());
-    // Simular atualização
-  };
-
   const filteredVessels = vessels.filter(v => 
     v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.mmsi.includes(searchTerm) ||
     v.imo.includes(searchTerm)
   );
 
-  const stats = {
-    total: vessels.length,
-    underway: vessels.filter(v => v.status === 'underway').length,
-    moored: vessels.filter(v => v.status === 'moored').length,
-    anchored: vessels.filter(v => v.status === 'anchored').length,
-    signalLost: vessels.filter(v => v.signalQuality === 'lost').length
-  };
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <Card key={i}>
+              <CardContent className="pt-4">
+                <Skeleton className="h-16 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-2">
+            <CardContent className="pt-6">
+              <Skeleton className="aspect-video w-full" />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="space-y-2">
+                {[...Array(5)].map((_, i) => (
+                  <Skeleton key={i} className="h-24 w-full" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Card className="border-destructive">
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Erro ao carregar dados de rastreamento</h3>
+            <p className="text-muted-foreground mb-4">{(error as Error).message}</p>
+            <Button onClick={refetch} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Tentar novamente
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Empty state
+  if (vessels.length === 0) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <Ship className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Nenhuma embarcação para rastrear</h3>
+            <p className="text-muted-foreground">Cadastre embarcações para visualizar o rastreamento em tempo real.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -236,11 +199,11 @@ export default function RealTimeTrackingPage() {
                   Mapa em Tempo Real
                 </CardTitle>
                 <CardDescription>
-                  Última atualização: {format(lastRefresh, "HH:mm:ss", { locale: ptBR })}
+                  {vessels.length} embarcações rastreadas
                 </CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={handleRefresh}>
+                <Button variant="outline" size="sm" onClick={refetch}>
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Atualizar
                 </Button>
@@ -259,18 +222,21 @@ export default function RealTimeTrackingPage() {
                 backgroundSize: '40px 40px'
               }} />
               
-              {/* Vessel markers simulation */}
-              {vessels.slice(0, 4).map((vessel, idx) => (
+              {/* Vessel markers */}
+              {vessels.slice(0, 6).map((vessel, idx) => (
                 <div 
                   key={vessel.id}
-                  className="absolute"
+                  className={`absolute cursor-pointer transition-transform hover:scale-110 ${
+                    selectedVessel === vessel.id ? 'scale-125 z-10' : ''
+                  }`}
                   style={{
-                    left: `${20 + idx * 18}%`,
-                    top: `${30 + (idx % 2) * 30}%`
+                    left: `${15 + (idx % 3) * 30}%`,
+                    top: `${25 + Math.floor(idx / 3) * 40}%`
                   }}
+                  onClick={() => setSelectedVessel(vessel.id)}
                 >
                   <div className={`w-4 h-4 rounded-full ${getStatusColor(vessel.status)} animate-pulse`} />
-                  <div className="absolute top-5 left-1/2 -translate-x-1/2 bg-background/90 px-2 py-1 rounded text-xs whitespace-nowrap">
+                  <div className="absolute top-5 left-1/2 -translate-x-1/2 bg-background/90 px-2 py-1 rounded text-xs whitespace-nowrap shadow-sm">
                     {vessel.name}
                   </div>
                 </div>
@@ -280,7 +246,7 @@ export default function RealTimeTrackingPage() {
                 <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-2 animate-pulse" />
                 <p className="text-muted-foreground">Mapa AIS Interativo</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {vessels.length} embarcações rastreadas
+                  Dados em tempo real do Supabase
                 </p>
               </div>
             </div>
@@ -323,11 +289,11 @@ export default function RealTimeTrackingPage() {
                     <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Navigation className="h-3 w-3" />
-                        <span>{vessel.speed} kn / {vessel.course}°</span>
+                        <span>{vessel.speed.toFixed(1)} kn / {vessel.course}°</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        <span>{format(vessel.lastUpdate, "HH:mm")}</span>
+                        <span>{format(vessel.lastUpdate, "HH:mm", { locale: ptBR })}</span>
                       </div>
                     </div>
                     
@@ -352,6 +318,13 @@ export default function RealTimeTrackingPage() {
                   </CardContent>
                 </Card>
               ))}
+
+              {filteredVessels.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p>Nenhuma embarcação encontrada</p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
