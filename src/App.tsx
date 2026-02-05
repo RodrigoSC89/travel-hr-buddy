@@ -300,6 +300,9 @@ const FinanceHub = lazy(() => import("@/pages/FinanceCommandCenterPremium"));
 // Medical Infirmary Premium
 const MedicalInfirmaryPremium = lazy(() => import("@/pages/MedicalInfirmaryPremium"));
 
+// STCW/MLC Compliance Center - Separated from Crew Intelligence
+const STCWMLCCompliance = lazy(() => import("@/pages/STCWMLCCompliance"));
+
 // ============================================
 // ESG & SUSTENTABILIDADE
 // ============================================
@@ -901,6 +904,9 @@ const AppRoutes = () => (
       <Route path="/system-hub" element={<SystemHubPremium />} />
       <Route path="/maintenance-hub" element={<MaintenanceHub />} />
       <Route path="/finance-hub" element={<FinanceHub />} />
+      
+      {/* STCW/MLC Dedicated Route - Separated from Crew Intelligence */}
+      <Route path="/stcw-mlc" element={<STCWMLCCompliance />} />
       
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
