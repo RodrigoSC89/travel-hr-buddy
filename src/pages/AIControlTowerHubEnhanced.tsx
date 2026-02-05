@@ -18,7 +18,7 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Brain, MessageSquare, Bot, Workflow, BarChart3, Eye, ClipboardList,
   FileText, Loader2, Sparkles, Zap, TrendingUp, Activity, Shield,
-  Lightbulb, Target, CheckCircle2, AlertTriangle, Clock, ArrowRight, RefreshCw
+  Lightbulb, Target, CheckCircle2, AlertTriangle, Clock, ArrowRight, RefreshCw, Mic
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,6 +41,7 @@ const AIObservabilityPage = lazy(() => import("@/pages/AIObservabilityPage"));
 const AIAuditPage = lazy(() => import("@/pages/AIAuditPage"));
 const AIJournalingPage = lazy(() => import("@/pages/AIJournalingPage"));
 const WorkflowCommand = lazy(() => import("@/pages/mission-control/workflow-engine"));
+ const VoiceAssistantIntelligence = lazy(() => import("@/components/premium/VoiceAssistantIntelligence"));
 
 function TabLoadingSkeleton() {
   return (
@@ -56,6 +57,7 @@ const TABS = [
   { id: "command", label: "Comando IA", icon: Brain, badge: "NOVO" },
   { id: "hub", label: "Hub IA", icon: Sparkles },
   { id: "chat", label: "Chat", icon: MessageSquare },
+  { id: "voice", label: "Voice AI", icon: Mic, badge: "NOVO" },
   { id: "agents", label: "Agentes", icon: Bot },
   { id: "workflows", label: "Workflows", icon: Workflow },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
@@ -428,6 +430,12 @@ export default function AIControlTowerHubEnhanced() {
           <TabsContent value="chat" className="mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <AICommandCenter />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="voice" className="mt-6">
+            <Suspense fallback={<TabLoadingSkeleton />}>
+              <VoiceAssistantIntelligence />
             </Suspense>
           </TabsContent>
 

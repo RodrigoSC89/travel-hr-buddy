@@ -7,7 +7,7 @@ import React, { useState, Suspense, lazy } from "react";
 import { 
   Settings, LayoutDashboard, Plug, Shield, Users,
   Database, Cloud, Key, Bell, Activity, CheckCircle,
-  AlertTriangle, Server, Cpu, HardDrive, Wifi, Terminal, Loader2
+  AlertTriangle, Server, Cpu, HardDrive, Wifi, Terminal, Loader2, Zap
 } from "lucide-react";
 import { PremiumModuleShell } from "@/components/ui/premium-module-kit";
 import type { ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -24,6 +24,7 @@ const SystemCommandCenter = lazy(() => import("@/modules/system-hub/components/S
 const SystemHealthMonitor = lazy(() => import("@/modules/system-hub/components/SystemHealthMonitor"));
 const UserActivityPanel = lazy(() => import("@/modules/system-hub/components/UserActivityPanel"));
 const IntegrationsManager = lazy(() => import("@/modules/system-hub/components/IntegrationsManager"));
+ const APIGatewayIntelligence = lazy(() => import("@/components/premium/APIGatewayIntelligence"));
 
 // Suspense Fallback
 function LoadingFallback() {
@@ -350,6 +351,17 @@ export default function SystemHubPremium() {
       content: (
         <Suspense fallback={<LoadingFallback />}>
           <SystemCommandCenter />
+        </Suspense>
+      )
+    },
+    {
+      id: "api-gateway",
+      label: "API Gateway",
+      icon: Zap,
+      badge: "NOVO",
+      content: (
+        <Suspense fallback={<LoadingFallback />}>
+          <APIGatewayIntelligence />
         </Suspense>
       )
     }
