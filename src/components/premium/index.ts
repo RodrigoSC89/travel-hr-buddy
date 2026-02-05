@@ -22,3 +22,4 @@ export { default as DocumentIntelligenceHub } from "./DocumentIntelligenceHub";
  export { default as DrydockMaintenanceIntelligence } from "./DrydockMaintenanceIntelligence";
  export { default as ComplianceAuditIntelligence } from "./ComplianceAuditIntelligence";
  export { default as ContractProcurementIntelligence } from "./ContractProcurementIntelligence";
+ export { default as TrainingAcademyIntelligence } from "./TrainingAcademyIntelligence";

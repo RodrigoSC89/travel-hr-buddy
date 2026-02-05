@@ -15,6 +15,7 @@ import {
 // Lazy load components
 const PredictiveMaintenanceAI = lazy(() => import("@/modules/maintenance-planner/components/PredictiveMaintenanceAI"));
 const MaintenanceIntelligence = lazy(() => import("@/components/premium/MaintenanceIntelligence"));
+const DrydockMaintenanceIntelligence = lazy(() => import("@/components/premium/DrydockMaintenanceIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -60,7 +61,7 @@ export default function MaintenanceHubPremium() {
         <TabsList className="grid w-full grid-cols-7 h-auto p-1">
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
-            <span className="text-xs">Intelligence</span>
+            <span className="text-xs">DNV Class</span>
           </TabsTrigger>
           <TabsTrigger value="predictive" className="flex flex-col items-center gap-1 py-2">
             <Activity className="h-4 w-4" />
@@ -90,7 +91,7 @@ export default function MaintenanceHubPremium() {
 
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
-            <MaintenanceIntelligence />
+            <DrydockMaintenanceIntelligence />
           </Suspense>
         </TabsContent>
 

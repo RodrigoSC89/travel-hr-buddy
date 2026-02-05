@@ -16,6 +16,7 @@ import {
 const ComplianceDashboard = lazy(() => import("@/modules/compliance-hub/ComplianceHubPremium"));
 const AuditWorkflow = lazy(() => import("@/modules/compliance-hub/components/AuditWorkflow"));
 const ComplianceIntelligence = lazy(() => import("@/components/premium/ComplianceIntelligence"));
+const ComplianceAuditIntelligence = lazy(() => import("@/components/premium/ComplianceAuditIntelligence"));
 
 function LoadingSkeleton() {
   return (
@@ -86,7 +87,7 @@ export default function ComplianceHubPremiumPage() {
 
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
-            <ComplianceIntelligence />
+            <ComplianceAuditIntelligence />
           </Suspense>
         </TabsContent>
 
