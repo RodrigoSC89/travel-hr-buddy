@@ -1,7 +1,6 @@
 /**
- * Tier-1 Maintenance Components Index
- * Based on: DNV ShipManager, SERTICA, Bass Maritime, ShipServ
+ * Maintenance Tier-1 Components Index
+ * PMS, Drydock, and Equipment management
  */
 
-export { PMSEngine } from "./PMSEngine";
-export { SparePartsInventory } from "./SparePartsInventory";
+export { default as DrydockPlanningPro } from './DrydockPlanningPro';

@@ -1,7 +1,6 @@
 /**
- * Tier-1 People Hub Components Index
- * Based on: Helm CONNECT, CrewInspector, Marine Training Center
+ * People Hub Tier-1 Components Index
+ * Crew management and HR functions
  */
 
-export { STCWCompetencyMatrix } from "./STCWCompetencyMatrix";
-export { SeaTimeCalculator } from "./SeaTimeCalculator";
+export { default as CrewSchedulerGantt } from './CrewSchedulerGantt';

@@ -1,6 +1,6 @@
 /**
- * Tracking & Telemetry Tier-1 Components
- * Real-time AIS, Geofencing, Fleet Monitoring
+ * Tracking & Telemetry Tier-1 Components Index
+ * AIS, SATCOM, and real-time monitoring
  */
 
-export { AISFleetTracker } from './AISFleetTracker';
+export { default as TrackingCommandPro } from './TrackingCommandPro';
