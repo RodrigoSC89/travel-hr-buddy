@@ -61,76 +61,8 @@ interface Intervention {
   scheduledDate?: Date;
 }
 
-// Mock data
-const MOCK_CREW: CrewMember[] = [
-  {
-    id: '1',
-    name: 'Carlos Silva',
-    rank: 'Chief Engineer',
-    department: 'Engine',
-    daysOnboard: 75,
-    wellnessScore: 42,
-    burnoutRisk: 68,
-    trend: 'declining',
-    lastCheckIn: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    alerts: [
-      { type: 'burnout', severity: 'warning', message: 'Risco elevado de burnout' },
-      { type: 'sleep', severity: 'warning', message: 'Qualidade de sono baixa' },
-    ],
-  },
-  {
-    id: '2',
-    name: 'Ana Costa',
-    rank: '2nd Officer',
-    department: 'Deck',
-    daysOnboard: 45,
-    wellnessScore: 78,
-    burnoutRisk: 22,
-    trend: 'stable',
-    lastCheckIn: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    alerts: [],
-  },
-  {
-    id: '3',
-    name: 'Roberto Ferreira',
-    rank: 'Electrician',
-    department: 'Engine',
-    daysOnboard: 95,
-    wellnessScore: 35,
-    burnoutRisk: 75,
-    trend: 'declining',
-    lastCheckIn: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    alerts: [
-      { type: 'burnout', severity: 'critical', message: 'Intervenção imediata necessária' },
-    ],
-  },
-  {
-    id: '4',
-    name: 'Marina Santos',
-    rank: 'Cook',
-    department: 'Catering',
-    daysOnboard: 30,
-    wellnessScore: 85,
-    burnoutRisk: 15,
-    trend: 'improving',
-    lastCheckIn: new Date(Date.now() - 1 * 60 * 60 * 1000),
-    alerts: [],
-  },
-  {
-    id: '5',
-    name: 'João Oliveira',
-    rank: 'AB Seaman',
-    department: 'Deck',
-    daysOnboard: 60,
-    wellnessScore: 55,
-    burnoutRisk: 45,
-    trend: 'stable',
-    lastCheckIn: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    alerts: [
-      { type: 'stress', severity: 'info', message: 'Níveis de estresse moderados' },
-    ],
-  },
-];
+// Hook para dados reais
+import { useCrewWellnessData, useCrewWellnessStats } from '@/hooks/useCrewWellnessData';
 
 const urgencyColors = {
   critical: 'bg-destructive text-destructive-foreground',
@@ -140,31 +72,48 @@ const urgencyColors = {
 };
 
 export function CrewWellnessDashboard() {
-  const [crew] = useState<CrewMember[]>(MOCK_CREW);
+  const { data: crewData = [], isLoading } = useCrewWellnessData();
+  const statsData = useCrewWellnessStats();
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
-  const [loading, setLoading] = useState(false);
+
+  // Mapear dados do hook para o formato do componente
+  const crew: CrewMember[] = crewData.map((c) => ({
+    id: c.id,
+    name: c.name,
+    rank: c.position,
+    department: c.vessel || "Deck",
+    daysOnboard: c.daysOnBoard,
+    wellnessScore: c.wellnessScore,
+    burnoutRisk: c.fatigueLevel === "critical" ? 80 : c.fatigueLevel === "high" ? 60 : c.fatigueLevel === "moderate" ? 40 : 20,
+    trend: c.fatigueLevel === "critical" || c.fatigueLevel === "high" ? "declining" : c.fatigueLevel === "moderate" ? "stable" : "improving",
+    lastCheckIn: c.lastCheckIn,
+    alerts: c.alerts.map(a => ({ type: "wellness", severity: "warning" as const, message: a })),
+  }));
 
   const stats = {
-    total: crew.length,
-    healthy: crew.filter(c => c.wellnessScore >= 70).length,
-    atRisk: crew.filter(c => c.burnoutRisk > 50).length,
-    critical: crew.filter(c => c.alerts.some(a => a.severity === 'critical')).length,
+    total: statsData.totalCrew,
+    healthy: statsData.healthyCount,
+    atRisk: statsData.highRiskCount,
+    critical: statsData.criticalCount,
   };
 
-  const avgWellness = Math.round(crew.reduce((sum, c) => sum + c.wellnessScore, 0) / crew.length);
-  const avgBurnoutRisk = Math.round(crew.reduce((sum, c) => sum + c.burnoutRisk, 0) / crew.length);
+  const avgWellness = statsData.avgWellnessScore;
+  const avgBurnoutRisk = crew.length > 0 
+    ? Math.round(crew.reduce((sum, c) => sum + c.burnoutRisk, 0) / crew.length)
+    : 0;
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-emerald-500" />;
+      case 'improving': return <TrendingUp className="h-4 w-4 text-success" />;
       case 'declining': return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getMoodIcon = (score: number) => {
-    if (score >= 70) return <Smile className="h-5 w-5 text-emerald-500" />;
-    if (score >= 50) return <Meh className="h-5 w-5 text-amber-500" />;
+    if (score >= 70) return <Smile className="h-5 w-5 text-success" />;
+    if (score >= 50) return <Meh className="h-5 w-5 text-warning" />;
+    return <Frown className="h-5 w-5 text-destructive" />;
     return <Frown className="h-5 w-5 text-destructive" />;
   };
 
