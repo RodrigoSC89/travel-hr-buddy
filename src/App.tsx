@@ -542,6 +542,13 @@ const AppRoutes = () => (
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
     
+    {/* Rota de demonstração pública para Mentor DP */}
+    <Route path="/demo/mentor-dp" element={
+      <Suspense fallback={<Loader />}>
+        <MentorDP />
+      </Suspense>
+    } />
+    
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
       <Route path="/" element={<Navigate to="/central-comando" replace />} />
