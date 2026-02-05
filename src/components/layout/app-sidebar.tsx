@@ -1,7 +1,7 @@
 /**
- * AppSidebar Component - v6.0 FUSÃO TOTAL
- * REFACTORED: Uses only SIDEBAR_ROUTES (10 HUBs consolidados)
- * Removed all hardcoded duplicates
+ * AppSidebar Component - v7.0 COMPLETE SYSTEM
+ * REFACTORED: Uses only SIDEBAR_ROUTES (12 HUBs completos)
+ * Total: 100+ modules visible
  */
 import React, { useState } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
@@ -162,7 +162,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                 NAUTI ONE
               </h1>
               <span className="text-xs text-muted-foreground font-medium truncate">
-                Sistema Marítimo v6.0
+                Sistema Marítimo v7.0
               </span>
             </div>
           )}
@@ -268,7 +268,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </button>
             
             <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border">
-              <p>Versão 6.0.0</p>
+              <p>Versão 7.0.0</p>
               <p className="mt-1">© 2024-2026 Nauti One</p>
             </div>
           </div>
