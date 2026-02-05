@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Stethoscope, Video, Pill, 
-  FileText, Heart, ShieldCheck, AlertTriangle, Activity
+  FileText, Heart, ShieldCheck, AlertTriangle, Activity, Package
 } from "lucide-react";
 
 // Lazy load components
@@ -40,7 +40,7 @@ export default function MedicalInfirmaryPremium() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Stethoscope className="h-8 w-8 text-red-500" />
+            <Stethoscope className="h-8 w-8 text-destructive" />
             Enfermaria Digital
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -76,9 +76,9 @@ export default function MedicalInfirmaryPremium() {
             <Pill className="h-4 w-4" />
             <span className="text-xs">Farmácia</span>
           </TabsTrigger>
-          <TabsTrigger value="records" className="flex flex-col items-center gap-1 py-2">
-            <FileText className="h-4 w-4" />
-            <span className="text-xs">Prontuários</span>
+          <TabsTrigger value="supplies" className="flex flex-col items-center gap-1 py-2">
+            <Package className="h-4 w-4" />
+            <span className="text-xs">Suprimentos</span>
           </TabsTrigger>
           <TabsTrigger value="wellness" className="flex flex-col items-center gap-1 py-2">
             <Heart className="h-4 w-4" />
@@ -120,7 +120,7 @@ export default function MedicalInfirmaryPremium() {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="records">
+        <TabsContent value="supplies">
           <Suspense fallback={<LoadingSkeleton />}>
             <SuppliesTab />
           </Suspense>

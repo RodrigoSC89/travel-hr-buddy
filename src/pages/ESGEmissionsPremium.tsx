@@ -1,6 +1,6 @@
 /**
  * ESG & Emissions Premium - Centro de Sustentabilidade Completo
- * Integra todos os componentes ESG com monitoramento amançado
+ * Integra todos os componentes ESG com monitoramento avançado
  */
 
 import React, { Suspense, lazy } from "react";
@@ -43,7 +43,7 @@ export default function ESGEmissionsPremium() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Leaf className="h-8 w-8 text-green-500" />
+            <Leaf className="h-8 w-8 text-success" />
             ESG & Emissões
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -51,10 +51,10 @@ export default function ESGEmissionsPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-green-500/10 text-green-600">
+          <Badge variant="outline" className="bg-success/10 text-success">
             CII Rating: B
           </Badge>
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             87/100 ESG Score
           </Badge>
         </div>
