@@ -1,9 +1,11 @@
 /**
  * Premium Module Shell - Container universal para módulos
  * Estrutura padronizada com header, tabs e áreas de conteúdo
+ * Suporta sincronização com URL query params (?tab=xxx)
  */
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +39,7 @@ export interface PremiumModuleShellProps {
   aiStatus?: "active" | "learning" | "offline";
   alerts?: number;
   children?: React.ReactNode;
+  syncWithUrl?: boolean; // New: sync tab state with URL
 }
 
 export function PremiumModuleShell({
@@ -52,11 +55,37 @@ export function PremiumModuleShell({
   showAIBadge = false,
   aiStatus = "active",
   alerts = 0,
-  children
+  children,
+  syncWithUrl = true // Default to true for URL sync
 }: PremiumModuleShellProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlTab = searchParams.get("tab");
+  
+  // Determine initial tab: URL param > defaultTab > first tab
+  const getInitialTab = () => {
+    if (urlTab && tabs.some(t => t.id === urlTab)) {
+      return urlTab;
+    }
+    return defaultTab || tabs[0]?.id;
+  };
+  
+  const [activeTab, setActiveTab] = useState(getInitialTab);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+
+  // Sync with URL changes
+  useEffect(() => {
+    if (syncWithUrl && urlTab && tabs.some(t => t.id === urlTab)) {
+      setActiveTab(urlTab);
+    }
+  }, [urlTab, tabs, syncWithUrl]);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (syncWithUrl) {
+      setSearchParams({ tab: value });
+    }
+  };
 
   const handleRefresh = async () => {
     if (!onRefresh) return;
@@ -159,7 +188,7 @@ export function PremiumModuleShell({
 
       {/* Tab Navigation */}
       <div className="container mx-auto px-4 py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
           <TabsList className="inline-flex h-11 items-center gap-1 rounded-lg bg-muted/50 p-1">
             {tabs.map((tab) => (
               <TabsTrigger

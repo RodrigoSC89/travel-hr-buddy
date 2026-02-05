@@ -4,12 +4,13 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, MapPin, Satellite, Activity, 
-  History, Bell, Radio, Brain, Fuel
+  History, Bell, Radio, Brain, Fuel, TrendingUp, Eye
 } from "lucide-react";
 
 // Lazy load components
@@ -31,6 +32,13 @@ function LoadingSkeleton() {
 }
 
 export default function TrackingTelemetryPremium() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "overview";
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -57,8 +65,24 @@ export default function TrackingTelemetryPremium() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="intelligence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto p-1">
+          <TabsTrigger value="overview" className="flex flex-col items-center gap-1 py-2">
+            <Eye className="h-4 w-4" />
+            <span className="text-xs">Visão Geral</span>
+          </TabsTrigger>
+          <TabsTrigger value="realtime" className="flex flex-col items-center gap-1 py-2">
+            <Activity className="h-4 w-4" />
+            <span className="text-xs">Tempo Real</span>
+          </TabsTrigger>
+          <TabsTrigger value="predictive" className="flex flex-col items-center gap-1 py-2">
+            <TrendingUp className="h-4 w-4" />
+            <span className="text-xs">Preditiva</span>
+          </TabsTrigger>
+          <TabsTrigger value="alerts" className="flex flex-col items-center gap-1 py-2">
+            <Bell className="h-4 w-4" />
+            <span className="text-xs">Alertas</span>
+          </TabsTrigger>
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">Intelligence</span>
@@ -66,10 +90,6 @@ export default function TrackingTelemetryPremium() {
           <TabsTrigger value="map" className="flex flex-col items-center gap-1 py-2">
             <MapPin className="h-4 w-4" />
             <span className="text-xs">Mapa AIS</span>
-          </TabsTrigger>
-          <TabsTrigger value="telemetry" className="flex flex-col items-center gap-1 py-2">
-            <Activity className="h-4 w-4" />
-            <span className="text-xs">Telemetria</span>
           </TabsTrigger>
           <TabsTrigger value="fuel" className="flex flex-col items-center gap-1 py-2">
             <Fuel className="h-4 w-4" />
@@ -79,11 +99,33 @@ export default function TrackingTelemetryPremium() {
             <History className="h-4 w-4" />
             <span className="text-xs">Histórico</span>
           </TabsTrigger>
-          <TabsTrigger value="alerts" className="flex flex-col items-center gap-1 py-2">
-            <Bell className="h-4 w-4" />
-            <span className="text-xs">Alertas</span>
-          </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="overview">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrackingIntelligence />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="realtime">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrackingCommandCenter />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="predictive">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrackingIntelligence />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="alerts">
+          <div className="text-center py-12 text-muted-foreground">
+            <Bell className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p className="font-medium">Central de Alertas</p>
+            <p className="text-sm">Gestão de notificações e geofencing</p>
+          </div>
+        </TabsContent>
 
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
@@ -94,12 +136,6 @@ export default function TrackingTelemetryPremium() {
         <TabsContent value="map">
           <Suspense fallback={<LoadingSkeleton />}>
             <VesselTrackingMap />
-          </Suspense>
-        </TabsContent>
-
-        <TabsContent value="telemetry">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <TrackingCommandCenter />
           </Suspense>
         </TabsContent>
 
@@ -116,14 +152,6 @@ export default function TrackingTelemetryPremium() {
             <History className="h-12 w-12 mx-auto mb-3 opacity-50" />
             <p className="font-medium">Histórico de Navegação</p>
             <p className="text-sm">Replay de rotas e análise de viagens</p>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="alerts">
-          <div className="text-center py-12 text-muted-foreground">
-            <Bell className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Central de Alertas</p>
-            <p className="text-sm">Gestão de notificações e geofencing</p>
           </div>
         </TabsContent>
       </Tabs>
