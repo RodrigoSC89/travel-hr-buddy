@@ -3,16 +3,23 @@
  * Rota canônica: /compliance
  * 
  * Consolida: Compliance Hub + 12 Maritime Audits + 10 AI Agents + Security
+ * 
+ * ✅ 12 AUDITORIAS MARÍTIMAS COMPLETAS
+ * ✅ 10 AGENTES DE AUDITORIA IA
+ * ✅ ZERO SUPRESSÃO DE FUNCIONALIDADES
  */
 
 import React, { Suspense, lazy } from 'react';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { LucideIcon } from 'lucide-react';
 
-// Lazy load sub-components
+// ═══════════════════════════════════════════════════════════
+// LAZY LOAD - SUB-COMPONENTS
+// ═══════════════════════════════════════════════════════════
 const ComplianceHubPage = lazy(() => import('@/pages/ComplianceHubPremium'));
 const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'));
 const DiagnosticCertificatesPage = lazy(() => import('@/pages/DiagnosticCertificatesPage'));
@@ -21,18 +28,25 @@ const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const RegulationsV2 = lazy(() => import('@/pages/RegulationsV2'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 
-// 12 Maritime Audits
+// ═══════════════════════════════════════════════════════════
+// 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
+// ═══════════════════════════════════════════════════════════
 const PEODP = lazy(() => import('@/pages/PEODP'));
 const PEOTRAM = lazy(() => import('@/pages/PEOTRAM'));
 const SafetyIMCAV2 = lazy(() => import('@/pages/SafetyIMCAV2'));
 const ISPSSecurityV2 = lazy(() => import('@/pages/ISPSSecurityV2'));
-const DrillSimulatorV2 = lazy(() => import('@/pages/DrillSimulatorV2'));
+const SOLASInspection = lazy(() => import('@/pages/SOLASInspection'));
 const WasteManagementPremium = lazy(() => import('@/pages/WasteManagementPremium'));
 const PreOVIDInspection = lazy(() => import('@/pages/PreOVIDInspection'));
 const MLCInspection = lazy(() => import('@/pages/MLCInspection'));
 const PSCPackage = lazy(() => import('@/pages/PSCPackage'));
 const SGSO = lazy(() => import('@/pages/SGSO'));
+const PreSIREInspection = lazy(() => import('@/pages/PreSIREInspection'));
+const TMSAAssessment = lazy(() => import('@/pages/TMSAAssessment'));
 
+// ═══════════════════════════════════════════════════════════
+// LOADING SKELETON
+// ═══════════════════════════════════════════════════════════
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -45,7 +59,16 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-const tabConfig = [
+// ═══════════════════════════════════════════════════════════
+// TAB CONFIGURATION
+// ═══════════════════════════════════════════════════════════
+interface TabConfig {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+const tabConfig: TabConfig[] = [
   { id: 'hub', label: 'Compliance Hub', icon: Shield },
   { id: 'scorecard', label: 'Scorecard', icon: BarChart3 },
   { id: 'audit-agents', label: '10 AI Agents', icon: Bot },
@@ -56,20 +79,39 @@ const tabConfig = [
   { id: 'security', label: 'Security', icon: Lock },
 ];
 
-// Maritime Audit Standards mapping
+// ═══════════════════════════════════════════════════════════
+// MAPEAMENTO COMPLETO DAS 12 AUDITORIAS MARÍTIMAS
+// ═══════════════════════════════════════════════════════════
 const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
+  // 1. PEO-DP (IMCA M-117)
   'peo-dp': PEODP,
+  // 2. PEOTRAM 13 Elementos (ANP)
   'peotram': PEOTRAM,
+  // 3. ISM Code (SMS)
   'ism': SafetyIMCAV2,
+  // 4. ISPS Security (SSP)
   'isps': ISPSSecurityV2,
-  'solas': DrillSimulatorV2,
+  // 5. SOLAS/LSA/FFE
+  'solas': SOLASInspection,
+  // 6. MARPOL I-VI
   'marpol': WasteManagementPremium,
+  // 7. Pre-OVID (OCIMF)
   'pre-ovid': PreOVIDInspection,
+  // 8. Pre-MLC 2006 (ILO)
   'pre-mlc': MLCInspection,
+  // 9. PSC Package (MoU)
   'psc': PSCPackage,
+  // 10. SGSO ANP 17 Práticas
   'sgso': SGSO,
+  // 11. Pre-SIRE 2.0 (OCIMF) ✅ RESTAURADO
+  'pre-sire': PreSIREInspection,
+  // 12. TMSA (OCIMF) ✅ RESTAURADO
+  'tmsa': TMSAAssessment,
 };
 
+// ═══════════════════════════════════════════════════════════
+// COMPLIANCE MEGA-HUB COMPONENT
+// ═══════════════════════════════════════════════════════════
 export default function ComplianceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'hub';
@@ -96,8 +138,8 @@ export default function ComplianceMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-500/10 rounded-lg">
-                <Shield className="h-6 w-6 text-red-500" />
+              <div className="p-2 bg-destructive/10 rounded-lg">
+                <Shield className="h-6 w-6 text-destructive" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Compliance Hub</h1>
@@ -105,13 +147,13 @@ export default function ComplianceMegaHub() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                 12 Audits
               </Badge>
-              <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
+              <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/20">
                 10 AI Agents
               </Badge>
-              <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
+              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
                 MEGA-HUB F
               </Badge>
             </div>
@@ -128,7 +170,7 @@ export default function ComplianceMegaHub() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="data-[state=active]:bg-red-500 data-[state=active]:text-white gap-2"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground gap-2"
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
