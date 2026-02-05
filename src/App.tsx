@@ -116,7 +116,7 @@ const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
 
 // Módulos Completos - Enhanced
 const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary"));
-const EnhancedWasteManagement = lazy(() => import("@/modules/waste-management/EnhancedWasteManagement"));
+const EnhancedWasteManagement = lazy(() => import("@/pages/WasteManagementPremium"));
 
 // PATCH PREMIUM-2.0 - Módulos Aprimorados
 const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
