@@ -15,6 +15,7 @@ import {
 // Lazy load components
 const DocumentCommandCenter = lazy(() => import("@/modules/document-center/components/DocumentCommandCenter"));
 const DocumentWorkflowManager = lazy(() => import("@/modules/document-center/components/DocumentWorkflowManager"));
+const DocumentIntelligenceHub = lazy(() => import("@/components/premium/DocumentIntelligenceHub"));
 
 function LoadingSkeleton() {
   return (
@@ -50,11 +51,11 @@ export default function DocumentCenterPremium() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="command" className="space-y-6">
+      <Tabs defaultValue="intelligence" className="space-y-6">
         <TabsList className="grid w-full grid-cols-5 h-auto p-1">
-          <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="text-xs">Comando</span>
+          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+            <Brain className="h-4 w-4" />
+            <span className="text-xs">Intelligence</span>
           </TabsTrigger>
           <TabsTrigger value="workflow" className="flex flex-col items-center gap-1 py-2">
             <FileText className="h-4 w-4" />
@@ -74,15 +75,21 @@ export default function DocumentCenterPremium() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="command">
+        <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
-            <DocumentCommandCenter />
+            <DocumentIntelligenceHub />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="workflow">
           <Suspense fallback={<LoadingSkeleton />}>
             <DocumentWorkflowManager />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="library">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <DocumentCommandCenter />
           </Suspense>
         </TabsContent>
 

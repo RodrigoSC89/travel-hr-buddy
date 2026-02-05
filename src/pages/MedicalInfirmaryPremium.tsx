@@ -19,6 +19,7 @@ const MedicalConsultationsTab = lazy(() => import("@/modules/medical-infirmary/c
 const EmergencyProtocolsPanel = lazy(() => import("@/modules/medical-infirmary/components/EmergencyProtocolsPanel"));
 const PharmacyManagementPanel = lazy(() => import("@/modules/medical-infirmary/components/PharmacyManagementPanel"));
 const SuppliesTab = lazy(() => import("@/modules/medical-infirmary/components/SuppliesTab"));
+const MedicalIntelligenceHub = lazy(() => import("@/components/premium/MedicalIntelligenceHub"));
 
 function LoadingSkeleton() {
   return (
