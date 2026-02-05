@@ -20,7 +20,7 @@ const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/Cre
 const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
  const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
 const TrainingAcademyIntelligence = lazy(() => import("@/components/premium/TrainingAcademyIntelligence"));
-const DPMentorIntelligence = lazy(() => import("@/components/premium/DPMentorIntelligence"));
+const MentorDPUnified = lazy(() => import("@/components/mentor-dp/MentorDPUnified"));
 
 function LoadingSkeleton() {
   return (
@@ -140,7 +140,7 @@ export default function PeopleHubPremium() {
 
         <TabsContent value="mentor-dp">
           <Suspense fallback={<LoadingSkeleton />}>
-            <DPMentorIntelligence />
+            <MentorDPUnified />
           </Suspense>
         </TabsContent>
 
