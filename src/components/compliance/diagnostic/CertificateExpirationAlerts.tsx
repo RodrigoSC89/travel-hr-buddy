@@ -2,9 +2,10 @@
  * CertificateExpirationAlerts - Problema #1: Certificados Vencendo Sem Aviso
  * Sistema de alertas automáticos 60/30/7/3/1 dias antes do vencimento
  * ROI: R$ 2.000-5.000/mês em economia
+ * PATCH: Usando dados reais do Supabase via hook
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,227 +18,38 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Bell, AlertTriangle, CheckCircle2, Clock, Calendar, 
   User, Ship, FileText, Mail, MessageSquare, Settings,
   TrendingUp, Shield, RefreshCw, Download, Filter,
   ChevronRight, ArrowUpRight, Zap, Target
 } from 'lucide-react';
-
-interface Certificate {
-  id: string;
-  holder_name: string;
-  holder_id: string;
-  certificate_type: string;
-  certificate_number: string;
-  issue_date: string;
-  expiry_date: string;
-  issuing_authority: string;
-  vessel_name?: string;
-  status: 'valid' | 'expiring_soon' | 'expired' | 'renewed';
-  days_until_expiry: number;
-  alert_sent: boolean;
-  last_alert_date?: string;
-}
-
-interface AlertConfig {
-  id: string;
-  name: string;
-  days_before: number;
-  channels: ('email' | 'push' | 'sms' | 'system')[];
-  recipients: string[];
-  enabled: boolean;
-  escalation_enabled: boolean;
-  escalation_days: number;
-}
-
-interface AlertHistory {
-  id: string;
-  certificate_id: string;
-  certificate_type: string;
-  holder_name: string;
-  alert_type: string;
-  sent_at: string;
-  channel: string;
-  status: 'sent' | 'failed' | 'pending';
-}
-
-// Configurações padrão de alertas (60/30/7/3/1 dias)
-const DEFAULT_ALERT_CONFIGS: AlertConfig[] = [
-  {
-    id: 'alert-60',
-    name: 'Alerta Antecipado',
-    days_before: 60,
-    channels: ['email', 'system'],
-    recipients: ['rh@empresa.com'],
-    enabled: true,
-    escalation_enabled: false,
-    escalation_days: 0
-  },
-  {
-    id: 'alert-30',
-    name: 'Alerta Padrão',
-    days_before: 30,
-    channels: ['email', 'push', 'system'],
-    recipients: ['rh@empresa.com', 'gestor@empresa.com'],
-    enabled: true,
-    escalation_enabled: true,
-    escalation_days: 7
-  },
-  {
-    id: 'alert-7',
-    name: 'Alerta Urgente',
-    days_before: 7,
-    channels: ['email', 'push', 'sms', 'system'],
-    recipients: ['rh@empresa.com', 'gestor@empresa.com', 'diretor@empresa.com'],
-    enabled: true,
-    escalation_enabled: true,
-    escalation_days: 3
-  },
-  {
-    id: 'alert-3',
-    name: 'Alerta Crítico',
-    days_before: 3,
-    channels: ['email', 'push', 'sms', 'system'],
-    recipients: ['rh@empresa.com', 'gestor@empresa.com', 'diretor@empresa.com'],
-    enabled: true,
-    escalation_enabled: true,
-    escalation_days: 1
-  },
-  {
-    id: 'alert-1',
-    name: 'Alerta Final',
-    days_before: 1,
-    channels: ['email', 'push', 'sms', 'system'],
-    recipients: ['todos'],
-    enabled: true,
-    escalation_enabled: false,
-    escalation_days: 0
-  }
-];
-
-// Hook para buscar certificados reais do Supabase
-function useCertificates() {
-  return useQuery({
-    queryKey: ['certificates-expiration'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('certificates')
-        .select(`
-          id,
-          employee_id,
-          certificate_type,
-          certificate_number,
-          issuing_authority,
-          issue_date,
-          expiry_date,
-          status
-        `)
-        .order('expiry_date', { ascending: true });
-      
-      if (error) throw error;
-      
-      const now = new Date();
-      return (data || []).map(cert => {
-        const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : new Date();
-        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-        
-        let status: Certificate['status'] = 'valid';
-        if (daysUntilExpiry < 0) status = 'expired';
-        else if (daysUntilExpiry <= 30) status = 'expiring_soon';
-        
-        return {
-          id: cert.id,
-          holder_name: cert.employee_id || 'Não identificado',
-          holder_id: cert.employee_id || '',
-          certificate_type: cert.certificate_type || 'Certificado',
-          certificate_number: cert.certificate_number || '',
-          issue_date: cert.issue_date || '',
-          expiry_date: cert.expiry_date || '',
-          issuing_authority: cert.issuing_authority || '',
-          status,
-          days_until_expiry: daysUntilExpiry,
-          alert_sent: false
-        } as Certificate;
-      });
-    }
-  });
-}
-
-// Mock data para demonstração (fallback)
-const MOCK_CERTIFICATES: Certificate[] = [
-  {
-    id: '1',
-    holder_name: 'João Silva',
-    holder_id: 'crew-001',
-    certificate_type: 'STCW - Básico de Segurança',
-    certificate_number: 'STCW-2024-001',
-    issue_date: '2020-02-15',
-    expiry_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'DPC - Marinha do Brasil',
-    vessel_name: 'Navio Alpha',
-    status: 'expiring_soon',
-    days_until_expiry: 5,
-    alert_sent: true,
-    last_alert_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '2',
-    holder_name: 'Maria Santos',
-    holder_id: 'crew-002',
-    certificate_type: 'Certificado de Competência - Oficial de Máquinas',
-    certificate_number: 'COM-2023-045',
-    issue_date: '2019-08-20',
-    expiry_date: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'DPC - Marinha do Brasil',
-    vessel_name: 'Navio Beta',
-    status: 'expiring_soon',
-    days_until_expiry: 25,
-    alert_sent: true,
-    last_alert_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-  }
-];
-
-const MOCK_ALERT_HISTORY: AlertHistory[] = [
-  {
-    id: 'hist-1',
-    certificate_id: '1',
-    certificate_type: 'STCW - Básico de Segurança',
-    holder_name: 'João Silva',
-    alert_type: 'Alerta Urgente (7 dias)',
-    sent_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    channel: 'email',
-    status: 'sent'
-  }
-];
+import { 
+  useCertificateAlertsData, 
+  DEFAULT_ALERT_CONFIGS, 
+  type Certificate, 
+  type AlertConfig, 
+  type AlertHistory 
+} from '@/hooks/useCertificateAlertsData';
 
 export function CertificateExpirationAlerts() {
-  const { data: realCertificates, isLoading } = useCertificates();
-  const certificates = realCertificates?.length ? realCertificates : MOCK_CERTIFICATES;
+  const { 
+    certificates, 
+    alertHistory, 
+    metrics, 
+    isLoading, 
+    sendAlert, 
+    refetch 
+  } = useCertificateAlertsData();
   
   const [alertConfigs, setAlertConfigs] = useState<AlertConfig[]>(DEFAULT_ALERT_CONFIGS);
-  const [alertHistory, setAlertHistory] = useState<AlertHistory[]>(MOCK_ALERT_HISTORY);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedConfig, setSelectedConfig] = useState<AlertConfig | null>(null);
-  const queryClient = useQueryClient();
-
-  // Calcular métricas
-  const metrics = useMemo(() => {
-    const expired = certificates.filter(c => c.days_until_expiry < 0).length;
-    const critical = certificates.filter(c => c.days_until_expiry >= 0 && c.days_until_expiry <= 7).length;
-    const warning = certificates.filter(c => c.days_until_expiry > 7 && c.days_until_expiry <= 30).length;
-    const ok = certificates.filter(c => c.days_until_expiry > 30).length;
-    const total = certificates.length;
-    
-    return { expired, critical, warning, ok, total };
-  }, [certificates]);
 
   // Filtrar certificados
   const filteredCertificates = useMemo(() => {
-    return certificates.filter(cert => {
+    return certificates.filter((cert: Certificate) => {
       const matchesSearch = cert.holder_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            cert.certificate_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            cert.vessel_name?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -254,26 +66,8 @@ export function CertificateExpirationAlerts() {
   // Enviar alerta manual
   const sendManualAlert = async (certificate: Certificate) => {
     toast.loading('Enviando alerta...', { id: 'sending-alert' });
-    
-    // Simular envio
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Atualizar histórico
-    const newAlert: AlertHistory = {
-      id: `hist-${Date.now()}`,
-      certificate_id: certificate.id,
-      certificate_type: certificate.certificate_type,
-      holder_name: certificate.holder_name,
-      alert_type: 'Alerta Manual',
-      sent_at: new Date().toISOString(),
-      channel: 'email',
-      status: 'sent'
-    };
-    
-    setAlertHistory(prev => [newAlert, ...prev]);
-    // Note: certificates are now from query, manual update is for UI feedback only
-    toast.success('Alerta enviado com sucesso!', { id: 'sending-alert' });
-    
+    sendAlert(certificate);
     toast.success('Alerta enviado com sucesso!', { id: 'sending-alert' });
   };
 
@@ -445,7 +239,7 @@ export function CertificateExpirationAlerts() {
                     <Download className="h-4 w-4 mr-2" />
                     Exportar
                   </Button>
-                  <Button size="sm" onClick={() => queryClient.invalidateQueries()}>
+                  <Button size="sm" onClick={() => refetch()}>
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Atualizar
                   </Button>
