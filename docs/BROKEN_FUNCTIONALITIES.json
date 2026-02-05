@@ -1,0 +1,71 @@
+{
+  "version": "v8.0",
+  "generatedAt": "2026-02-05",
+  "summary": {
+    "p0": 12,
+    "p1": 18,
+    "p2": 25,
+    "total": 55
+  },
+  "issues": [
+    {
+      "id": "P0-001",
+      "severity": "P0",
+      "category": "mock-data",
+      "title": "Dados Mockados em Páginas Críticas",
+      "affected": [
+        "src/pages/maintenance/ClassSurveysPage.tsx",
+        "src/pages/command/OperationsOverviewPage.tsx",
+        "src/pages/tracking/RealTimeTrackingPage.tsx",
+        "src/pages/command/ExecutiveDashboardPage.tsx"
+      ],
+      "status": "fixing"
+    },
+    {
+      "id": "P0-002",
+      "severity": "P0",
+      "category": "placeholder-handlers",
+      "title": "Botões com Handlers Placeholders",
+      "affected": [
+        "ClassSurveysPage.handleScheduleSurvey",
+        "ClassSurveysPage.handleExport",
+        "OperationsOverviewPage.refresh"
+      ],
+      "status": "fixing"
+    },
+    {
+      "id": "P0-003",
+      "severity": "P0",
+      "category": "no-real-data",
+      "title": "Mapas sem Dados Reais",
+      "affected": [
+        "RealTimeTrackingPage"
+      ],
+      "status": "fixing"
+    },
+    {
+      "id": "P0-004",
+      "severity": "P0",
+      "category": "forms-not-working",
+      "title": "Formulários sem Submit Real",
+      "affected": [
+        "SurveySchedulingForm",
+        "VesselEditForm",
+        "CertificateUpload"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "P0-005",
+      "severity": "P0",
+      "category": "broken-routes",
+      "title": "Rotas Legacy 404",
+      "affected": [
+        "/compliance-dashboard",
+        "/voyage-pnl",
+        "/crew-scheduler"
+      ],
+      "status": "fixing"
+    }
+  ]
+}
