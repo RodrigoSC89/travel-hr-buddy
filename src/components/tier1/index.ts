@@ -24,3 +24,12 @@ export * from './maintenance';
 
 // People Hub - STCW Matrix, Sea Time
 export * from './people';
+
+// ESG & Emissions - CII, EU ETS, CSRD
+export * from './esg';
+
+// Tracking & Telemetry - AIS, Geofencing
+export * from './tracking';
+
+// System Hub - Integrations, API Gateway
+export * from './system';
