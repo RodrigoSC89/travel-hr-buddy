@@ -1,6 +1,7 @@
 /**
  * Tracking & Telemetry Premium - Centro de Rastreamento Completo
  * Integra todos os componentes de telemetria com abas
+ * MEGA-UPGRADE v4.0 - FASE 4
  */
 
 import React, { Suspense, lazy } from "react";
@@ -17,6 +18,10 @@ import {
 const TrackingCommandCenter = lazy(() => import("@/modules/tracking-telemetry/components/TrackingCommandCenter"));
 const VesselTrackingMap = lazy(() => import("@/modules/tracking-telemetry/components/VesselTrackingMap"));
 const TrackingIntelligence = lazy(() => import("@/components/premium/TrackingIntelligence"));
+
+// FASE 4 - Premium Components
+const AlertsNotificationHub = lazy(() => import("@/components/premium/tracking/AlertsNotificationHub"));
+const SATCOMDashboard = lazy(() => import("@/components/premium/tracking/SATCOMDashboard"));
 
 function LoadingSkeleton() {
   return (
@@ -49,7 +54,7 @@ export default function TrackingTelemetryPremium() {
             Tracking & Telemetry
           </h1>
           <p className="text-muted-foreground mt-1">
-            Centro de rastreamento AIS e telemetria em tempo real
+            Centro de rastreamento AIS, SATCOM e alertas em tempo real
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -61,12 +66,15 @@ export default function TrackingTelemetryPremium() {
             <Brain className="h-3 w-3 mr-1" />
             AIS Intelligence
           </Badge>
+          <Badge variant="outline" className="text-sm">
+            MEGA-UPGRADE v4.0
+          </Badge>
         </div>
       </div>
 
       {/* Tabs */}
       <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="overview" className="flex flex-col items-center gap-1 py-2">
             <Eye className="h-4 w-4" />
             <span className="text-xs">Visão Geral</span>
@@ -83,6 +91,10 @@ export default function TrackingTelemetryPremium() {
             <Bell className="h-4 w-4" />
             <span className="text-xs">Alertas</span>
           </TabsTrigger>
+          <TabsTrigger value="satcom" className="flex flex-col items-center gap-1 py-2">
+            <Satellite className="h-4 w-4" />
+            <span className="text-xs">SATCOM</span>
+          </TabsTrigger>
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">Intelligence</span>
@@ -98,6 +110,10 @@ export default function TrackingTelemetryPremium() {
           <TabsTrigger value="history" className="flex flex-col items-center gap-1 py-2">
             <History className="h-4 w-4" />
             <span className="text-xs">Histórico</span>
+          </TabsTrigger>
+          <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-2">
+            <LayoutDashboard className="h-4 w-4" />
+            <span className="text-xs">Dashboard</span>
           </TabsTrigger>
         </TabsList>
 
@@ -119,12 +135,17 @@ export default function TrackingTelemetryPremium() {
           </Suspense>
         </TabsContent>
 
+        {/* FASE 4 - Premium Components */}
         <TabsContent value="alerts">
-          <div className="text-center py-12 text-muted-foreground">
-            <Bell className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Central de Alertas</p>
-            <p className="text-sm">Gestão de notificações e geofencing</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <AlertsNotificationHub />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="satcom">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <SATCOMDashboard />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="intelligence">
@@ -153,6 +174,12 @@ export default function TrackingTelemetryPremium() {
             <p className="font-medium">Histórico de Navegação</p>
             <p className="text-sm">Replay de rotas e análise de viagens</p>
           </div>
+        </TabsContent>
+
+        <TabsContent value="dashboard">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <TrackingCommandCenter />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
