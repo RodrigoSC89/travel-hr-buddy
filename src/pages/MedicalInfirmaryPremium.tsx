@@ -25,6 +25,7 @@ const MedicalIntelligenceHub = lazy(() => import("@/components/premium/MedicalIn
 // Tier-1 Components
 const TelemedicinePortal = lazy(() => import("@/components/tier1/medical/TelemedicinePortal"));
 const MedicalRecordsEHR = lazy(() => import("@/components/tier1/medical/MedicalRecordsEHR"));
+const WellnessProgram = lazy(() => import("@/components/tier1/medical/WellnessProgram"));
 
 function LoadingSkeleton() {
   return (
@@ -164,12 +165,11 @@ export default function MedicalInfirmaryPremium() {
           </Suspense>
         </TabsContent>
 
+        {/* Tier-1 Wellness Program */}
         <TabsContent value="wellness">
-          <div className="text-center py-12 text-muted-foreground">
-            <Heart className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Programa de Bem-estar</p>
-            <p className="text-sm">Saúde mental e física da tripulação</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <WellnessProgram />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="mlc">

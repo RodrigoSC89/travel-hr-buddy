@@ -22,6 +22,7 @@ const ComplianceAuditIntelligence = lazy(() => import("@/components/premium/Comp
 
 // Tier-1 Components
 const ISMISPSAuditCenter = lazy(() => import("@/components/tier1/compliance/ISMISPSAuditCenter"));
+const MLCComplianceModule = lazy(() => import("@/components/tier1/compliance/MLCComplianceModule"));
 
 // Enterprise Components - Phase 5
 import { 
@@ -165,12 +166,11 @@ export default function ComplianceHubPremiumPage() {
           </Suspense>
         </TabsContent>
 
+        {/* Tier-1: MLC 2006 Compliance Module */}
         <TabsContent value="mlc">
-          <div className="text-center py-12 text-muted-foreground">
-            <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">MLC 2006 Compliance</p>
-            <p className="text-sm">Maritime Labour Convention - Condições de trabalho e vida a bordo</p>
-          </div>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MLCComplianceModule />
+          </Suspense>
         </TabsContent>
 
         {/* Tier-1: ISM/ISPS Audit Center */}
