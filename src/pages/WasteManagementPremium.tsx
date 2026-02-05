@@ -16,8 +16,9 @@ import {
   Globe, Flame, Package
 } from "lucide-react";
 
-// Tier-1 Component
+// Tier-1 Components
 const WasteManagementMARPOLPro = lazy(() => import("@/components/tier1/waste/WasteManagementMARPOLPro"));
+const ElectronicGarbageRecordBook = lazy(() => import("@/components/tier1/waste/ElectronicGarbageRecordBook"));
 
 // Legacy components - using named imports
 const WasteCommandCenter = lazy(() => import("@/modules/waste-management/components/WasteCommandCenter"));
