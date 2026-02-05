@@ -1,10 +1,10 @@
 /**
- * ⚡ SIDEBAR ROUTES - v6.0 FUSÃO FINAL
+ * ⚡ SIDEBAR ROUTES - v7.0 COMPLETE SYSTEM
  * =========================================================
- * 10 HUBs CANÔNICOS - Estrutura Definitiva
+ * 12 HUBs COMPLETOS - Estrutura Enterprise Definitiva
  * 
- * Redução: 134 → 52 itens (61%)
- * Todos os módulos acessíveis via tabs internas
+ * Total: 100+ módulos acessíveis via sidebar
+ * Todos os módulos de auditoria, compliance e enterprise visíveis
  * 
  * Documentação: docs/FUSION_REPORT_FINAL.md
  * Legacy Redirects: src/routes/legacy-redirects.tsx
@@ -147,18 +147,22 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Compliance Scorecard", path: "/compliance-unified?tab=scorecard", icon: BarChart3, emoji: "📊", badge: "ENT" },
       { label: "Gestão de Auditorias", path: "/compliance-unified?tab=audit-mgmt", icon: ClipboardList, emoji: "📋", badge: "ENT" },
       { label: "Rastreador Certificados", path: "/compliance-unified?tab=cert-tracker", icon: Award, emoji: "🏆", badge: "ENT" },
-      { label: "Matriz de Riscos", path: "/compliance-unified?tab=risk-matrix", icon: Target, emoji: "🎯", badge: "ENT" },
+      { label: "Matriz de Riscos", path: "/risk-matrix", icon: Target, emoji: "🎯", badge: "ENT" },
       { label: "Agentes Auditoria IA", path: "/audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
-      { label: "PEO-DP", path: "/peo-dp", icon: Shield, emoji: "📋", badge: "AUDIT" },
-      { label: "PEOTRAM", path: "/peotram", icon: Shield, emoji: "🚢", badge: "AUDIT" },
-      { label: "ISM/ISPS", path: "/compliance-unified?tab=ism", icon: Shield, emoji: "🛡️", badge: "AUDIT" },
-      { label: "Pre-OVID", path: "/pre-ovid", icon: Shield, emoji: "🔍", badge: "AUDIT" },
-      { label: "Pre-MLC", path: "/mlc-inspection", icon: Users, emoji: "👥", badge: "AUDIT" },
-      { label: "PSC Package", path: "/psc-package", icon: FileText, emoji: "📦", badge: "AUDIT" },
-      { label: "SGSO", path: "/sgso", icon: Shield, emoji: "⚙️", badge: "AUDIT" },
+      { label: "PEO-DP", path: "/peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
+      { label: "PEOTRAM", path: "/peotram", icon: Shield, emoji: "🚢", badge: "13E" },
+      { label: "ISM Code", path: "/safety-imca", icon: Shield, emoji: "🛡️", badge: "SMS" },
+      { label: "ISPS Security", path: "/isps-security", icon: Lock, emoji: "🔐", badge: "SSP" },
+      { label: "SOLAS/LSA/FFE", path: "/drill-simulator", icon: Ship, emoji: "🚢", badge: "SOLAS" },
+      { label: "MARPOL Anexos", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "I-VI" },
+      { label: "Pre-OVID", path: "/pre-ovid", icon: Shield, emoji: "🔍", badge: "OVID" },
+      { label: "Pre-MLC 2006", path: "/mlc-inspection", icon: Users, emoji: "👥", badge: "MLC" },
+      { label: "PSC Package", path: "/psc-package", icon: FileText, emoji: "📦", badge: "PSC" },
+      { label: "SGSO ANP", path: "/sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
       { label: "NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
-      { label: "Regulamentos", path: "/compliance-unified?tab=regulations", icon: BookOpen, emoji: "📜" },
-      { label: "Gestão de Resíduos", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "MARPOL" },
+      { label: "Regulamentos", path: "/regulations", icon: BookOpen, emoji: "📜" },
+      { label: "Due Diligence", path: "/due-diligence", icon: ClipboardList, emoji: "✅" },
+      { label: "Whistleblower", path: "/whistleblower", icon: AlertTriangle, emoji: "📢" },
       { label: "Security Center", path: "/security-center", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
     ],
   },
@@ -223,13 +227,56 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "System Hub", path: "/system-hub", icon: Server, emoji: "🖥️", badge: "HUB" },
       { label: "Integrações Enterprise", path: "/system-hub?tab=integrations-ent", icon: Link, emoji: "🔗", badge: "ENT" },
-      { label: "API Monitor", path: "/system-hub?tab=api-monitor", icon: Terminal, emoji: "📡", badge: "ENT" },
-      { label: "IoT Sensors", path: "/system-hub?tab=iot", icon: Thermometer, emoji: "🌡️", badge: "ENT" },
-      { label: "Configurações", path: "/system-hub?tab=settings", icon: Settings, emoji: "⚙️", badge: "ENT" },
-      { label: "Saúde Sistema", path: "/system-hub?tab=health", icon: Activity, emoji: "💓", badge: "LIVE" },
-      { label: "API Gateway", path: "/system-hub?tab=api-gateway", icon: Globe, emoji: "🌐" },
+      { label: "API Monitor", path: "/api-monitor", icon: Terminal, emoji: "📡", badge: "ENT" },
+      { label: "IoT Sensors", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️", badge: "ENT" },
+      { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
+      { label: "Saúde Sistema", path: "/health-monitor", icon: Activity, emoji: "💓", badge: "LIVE" },
+      { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
       { label: "Quality Dashboard", path: "/quality-dashboard", icon: BarChart3, emoji: "📊" },
       { label: "Roadmap", path: "/roadmap", icon: Map, emoji: "🗺️" },
+      { label: "Dev Routes", path: "/dev-routes", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
+    ],
+  },
+
+  // 11. 🚀 ENTERPRISE INTELLIGENCE (Módulos Avançados)
+  {
+    title: "🚀 Enterprise Intelligence",
+    defaultOpen: false,
+    requiredRoles: ['admin', 'manager'],
+    items: [
+      { label: "AI Modules Hub", path: "/ai-modules", icon: Brain, emoji: "🧠", badge: "11 AI" },
+      { label: "RAG Assistant", path: "/enterprise/rag-assistant", icon: Bot, emoji: "🤖", badge: "RAG" },
+      { label: "OCR Center", path: "/enterprise/ocr-center", icon: FileText, emoji: "📝", badge: "OCR" },
+      { label: "Forms Builder", path: "/enterprise/forms-builder", icon: ClipboardList, emoji: "📋" },
+      { label: "Checklists Builder", path: "/enterprise/checklists-builder", icon: ClipboardList, emoji: "✅" },
+      { label: "OCIMF Assessment", path: "/enterprise/ocimf-assessment", icon: Shield, emoji: "🛡️", badge: "SIRE" },
+      { label: "TMSA Analytics", path: "/enterprise/tmsa-analytics", icon: BarChart3, emoji: "📊", badge: "TMSA" },
+      { label: "Fatigue Risk", path: "/enterprise/fatigue-risk", icon: Clock, emoji: "😴", badge: "ML" },
+      { label: "MLC Work Hours", path: "/enterprise/mlc-hours", icon: Clock, emoji: "⏰", badge: "MLC" },
+      { label: "Crew Matching", path: "/enterprise/crew-matching", icon: Users, emoji: "🎯", badge: "AI" },
+      { label: "Contract Analysis", path: "/enterprise/contract-analysis", icon: FileText, emoji: "📜", badge: "AI" },
+      { label: "Compliance Predictor", path: "/enterprise/compliance-predictor", icon: TrendingUp, emoji: "📈", badge: "ML" },
+    ],
+  },
+
+  // 12. 🎮 ADVANCED MARITIME (Módulos Revolucionários)
+  {
+    title: "🎮 Advanced Maritime",
+    defaultOpen: false,
+    requiredRoles: ['admin', 'manager'],
+    items: [
+      { label: "Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Cpu, emoji: "🎮", badge: "3D" },
+      { label: "Weather Intelligence", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
+      { label: "Bunker Optimization", path: "/advanced/bunker-optimization", icon: Fuel, emoji: "⛽", badge: "AI" },
+      { label: "Cargo Planning", path: "/advanced/cargo-planning", icon: Package, emoji: "📦", badge: "3D" },
+      { label: "PSC Readiness", path: "/advanced/psc-readiness", icon: Shield, emoji: "🛡️", badge: "AI" },
+      { label: "MARPOL Tracker", path: "/advanced/marpol-tracker", icon: Trash2, emoji: "♻️", badge: "AI" },
+      { label: "Blockchain Certs", path: "/advanced/blockchain-certificates", icon: Link, emoji: "🔗", badge: "BC" },
+      { label: "Incident Investigation", path: "/advanced/incident-investigation", icon: AlertTriangle, emoji: "🔍", badge: "AI" },
+      { label: "VR Training", path: "/advanced/vr-training", icon: Gamepad2, emoji: "🎮", badge: "VR" },
+      { label: "Voice Commands", path: "/advanced/voice-commands", icon: Mic, emoji: "🎙️", badge: "NLU" },
+      { label: "Crew Wellness AI", path: "/advanced/crew-wellness-ai", icon: Heart, emoji: "❤️", badge: "AI" },
+      { label: "Executive Dashboard", path: "/advanced/executive-dashboard", icon: BarChart3, emoji: "📊", badge: "BI" },
     ],
   },
 ];
