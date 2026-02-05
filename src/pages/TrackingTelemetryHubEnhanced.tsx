@@ -39,6 +39,12 @@ const FleetTrackingDashboard = lazy(() => import("@/modules/tracking/components/
 const VesselAlertsCenter = lazy(() => import("@/modules/tracking/components/VesselAlertsCenter"));
 const TrackingCommandCenter = lazy(() => import("@/modules/tracking-telemetry/components/TrackingCommandCenter"));
 
+// Enterprise Components - Phase 4
+import { 
+  TrackingCommandCenter as TrackingCommandEnt,
+  AlertsNotificationCenter
+} from "@/components/enterprise";
+
 function TabLoadingSkeleton() {
   return (
     <div className="flex items-center justify-center py-20">
@@ -50,12 +56,14 @@ function TabLoadingSkeleton() {
 
 const TABS = [
   { id: "command", label: "Comando", icon: Activity, badge: "PREMIUM" },
+  { id: "tracking-ent", label: "Tracking", icon: Navigation, badge: "NEW" },
+  { id: "alerts-ent", label: "Alertas", icon: AlertTriangle, badge: "NEW" },
   { id: "dashboard", label: "Dashboard", icon: Activity },
-  { id: "fleet", label: "Frota", icon: Ship, badge: "NEW" },
+  { id: "fleet", label: "Frota", icon: Ship },
   { id: "map", label: "Mapa", icon: Globe },
   { id: "realtime", label: "Tempo Real", icon: Radio },
   { id: "predictive", label: "Preditiva", icon: Target, badge: "AI" },
-  { id: "alerts", label: "Alertas", icon: AlertTriangle },
+  { id: "alerts", label: "Alertas Hub", icon: AlertTriangle },
   { id: "geofence", label: "Geofence", icon: MapPin },
   { id: "history", label: "Histórico", icon: History },
 ];
@@ -313,6 +321,15 @@ export default function TrackingTelemetryHubEnhanced() {
             <Suspense fallback={<TabLoadingSkeleton />}>
               <TrackingCommandCenter />
             </Suspense>
+          </TabsContent>
+
+          {/* Enterprise Components - Phase 4 */}
+          <TabsContent value="tracking-ent" className="space-y-6 mt-6">
+            <TrackingCommandEnt />
+          </TabsContent>
+
+          <TabsContent value="alerts-ent" className="space-y-6 mt-6">
+            <AlertsNotificationCenter />
           </TabsContent>
 
           {/* Dashboard Tab */}

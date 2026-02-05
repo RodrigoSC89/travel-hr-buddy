@@ -1,6 +1,7 @@
 /**
  * Compliance Hub Premium - Centro de Conformidade Completo
  * Integra todos os componentes de compliance com abas
+ * ENTERPRISE UPGRADE - Phase 5
  */
 
 import React, { Suspense, lazy } from "react";
@@ -9,14 +10,22 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Shield, ClipboardCheck, Award, 
-  FileText, Users, AlertTriangle, Brain, Target
+  FileText, Users, AlertTriangle, Brain, Target, CheckCircle
 } from "lucide-react";
 
-// Lazy load components - use the existing ComplianceHubPremium as dashboard
+// Lazy load original components
 const ComplianceDashboard = lazy(() => import("@/modules/compliance-hub/ComplianceHubPremium"));
 const AuditWorkflow = lazy(() => import("@/modules/compliance-hub/components/AuditWorkflow"));
 const ComplianceIntelligence = lazy(() => import("@/components/premium/ComplianceIntelligence"));
 const ComplianceAuditIntelligence = lazy(() => import("@/components/premium/ComplianceAuditIntelligence"));
+
+// Enterprise Components - Phase 5
+import { 
+  ComplianceScorecard,
+  AuditManagement,
+  CertificateTracker,
+  RiskMatrix
+} from "@/components/enterprise";
 
 function LoadingSkeleton() {
   return (
@@ -58,18 +67,30 @@ export default function ComplianceHubPremiumPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="intelligence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">Intelligence</span>
+          </TabsTrigger>
+          <TabsTrigger value="scorecard" className="flex flex-col items-center gap-1 py-2">
+            <CheckCircle className="h-4 w-4" />
+            <span className="text-xs">Scorecard</span>
           </TabsTrigger>
           <TabsTrigger value="audits" className="flex flex-col items-center gap-1 py-2">
             <ClipboardCheck className="h-4 w-4" />
             <span className="text-xs">Auditorias</span>
           </TabsTrigger>
+          <TabsTrigger value="audit-mgmt" className="flex flex-col items-center gap-1 py-2">
+            <FileText className="h-4 w-4" />
+            <span className="text-xs">Gestão</span>
+          </TabsTrigger>
           <TabsTrigger value="certificates" className="flex flex-col items-center gap-1 py-2">
             <Award className="h-4 w-4" />
             <span className="text-xs">Certificados</span>
+          </TabsTrigger>
+          <TabsTrigger value="cert-tracker" className="flex flex-col items-center gap-1 py-2">
+            <Award className="h-4 w-4" />
+            <span className="text-xs">Tracker</span>
           </TabsTrigger>
           <TabsTrigger value="mlc" className="flex flex-col items-center gap-1 py-2">
             <Users className="h-4 w-4" />
@@ -81,7 +102,11 @@ export default function ComplianceHubPremiumPage() {
           </TabsTrigger>
           <TabsTrigger value="risk" className="flex flex-col items-center gap-1 py-2">
             <Target className="h-4 w-4" />
-            <span className="text-xs">Matriz Risco</span>
+            <span className="text-xs">Riscos</span>
+          </TabsTrigger>
+          <TabsTrigger value="risk-matrix" className="flex flex-col items-center gap-1 py-2">
+            <AlertTriangle className="h-4 w-4" />
+            <span className="text-xs">Matriz</span>
           </TabsTrigger>
         </TabsList>
 
@@ -91,16 +116,29 @@ export default function ComplianceHubPremiumPage() {
           </Suspense>
         </TabsContent>
 
+        {/* Enterprise Components */}
+        <TabsContent value="scorecard">
+          <ComplianceScorecard />
+        </TabsContent>
+
         <TabsContent value="audits">
           <Suspense fallback={<LoadingSkeleton />}>
             <AuditWorkflow />
           </Suspense>
         </TabsContent>
 
+        <TabsContent value="audit-mgmt">
+          <AuditManagement />
+        </TabsContent>
+
         <TabsContent value="certificates">
           <Suspense fallback={<LoadingSkeleton />}>
             <ComplianceDashboard />
           </Suspense>
+        </TabsContent>
+
+        <TabsContent value="cert-tracker">
+          <CertificateTracker />
         </TabsContent>
 
         <TabsContent value="mlc">
@@ -122,9 +160,13 @@ export default function ComplianceHubPremiumPage() {
         <TabsContent value="risk">
           <div className="text-center py-12 text-muted-foreground">
             <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Matriz de Riscos</p>
-            <p className="text-sm">Análise de riscos operacionais e mitigações</p>
+            <p className="font-medium">Análise de Riscos</p>
+            <p className="text-sm">Identificação e mitigação de riscos operacionais</p>
           </div>
+        </TabsContent>
+
+        <TabsContent value="risk-matrix">
+          <RiskMatrix />
         </TabsContent>
       </Tabs>
     </div>
