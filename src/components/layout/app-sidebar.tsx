@@ -1,7 +1,8 @@
 /**
- * AppSidebar Component - v7.0 COMPLETE SYSTEM
- * REFACTORED: Uses only SIDEBAR_ROUTES (12 HUBs completos)
- * Total: 100+ modules visible
+ * AppSidebar Component - v8.0 FUSION COMPLETE
+ * REFACTORED: Uses SIDEBAR_ROUTES_V8 (10 HUBs otimizados)
+ * Total: 68 itens no menu, 154 aliases para compatibilidade
+ * Zero funcionalidades perdidas
  */
 import React, { useState } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
