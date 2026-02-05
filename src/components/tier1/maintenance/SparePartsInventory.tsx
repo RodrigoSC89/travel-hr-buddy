@@ -15,140 +15,31 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Package, Search, Filter, Plus, AlertTriangle, CheckCircle2, 
   TrendingDown, TrendingUp, ShoppingCart, Truck, BarChart3,
-  RefreshCw, ArrowRight, DollarSign, Clock, Ship
+  RefreshCw, ArrowRight, DollarSign, Clock, Ship, Loader2
 } from "lucide-react";
+import { useSpareParts, useInventoryStats, SparePart, InventoryStats } from "@/hooks/useSparePartsData";
 
-interface SparePart {
-  id: string;
-  partNumber: string;
-  description: string;
-  category: string;
-  location: string;
-  robQty: number;
-  minQty: number;
-  maxQty: number;
-  unit: string;
-  unitCost: number;
-  totalValue: number;
-  status: "ok" | "low" | "critical" | "excess";
-  critical: boolean;
-  lastReceived?: Date;
-  leadTime: number;
-  supplier: string;
-  impaCode?: string;
-}
-
-const spareParts: SparePart[] = [
-  {
-    id: "SP001",
-    partNumber: "ME-CYL-001",
-    description: "Cylinder Liner - Main Engine",
-    category: "Main Engine",
-    location: "Engine Store A1",
-    robQty: 2,
-    minQty: 4,
-    maxQty: 8,
-    unit: "PCS",
-    unitCost: 45000,
-    totalValue: 90000,
-    status: "critical",
-    critical: true,
-    lastReceived: new Date("2024-08-15"),
-    leadTime: 45,
-    supplier: "MAN Energy Solutions",
-    impaCode: "271505"
-  },
-  {
-    id: "SP002",
-    partNumber: "FO-FILT-012",
-    description: "Fuel Oil Filter Element",
-    category: "Fuel System",
-    location: "Engine Store B2",
-    robQty: 24,
-    minQty: 20,
-    maxQty: 50,
-    unit: "PCS",
-    unitCost: 85,
-    totalValue: 2040,
-    status: "ok",
-    critical: false,
-    lastReceived: new Date("2024-12-10"),
-    leadTime: 14,
-    supplier: "Parker Hannifin",
-    impaCode: "370615"
-  },
-  {
-    id: "SP003",
-    partNumber: "LO-PUMP-003",
-    description: "Lube Oil Pump Mechanical Seal",
-    category: "Pumps",
-    location: "Engine Store A3",
-    robQty: 3,
-    minQty: 4,
-    maxQty: 10,
-    unit: "SET",
-    unitCost: 1200,
-    totalValue: 3600,
-    status: "low",
-    critical: true,
-    lastReceived: new Date("2024-09-22"),
-    leadTime: 21,
-    supplier: "Alfa Laval",
-    impaCode: "651225"
-  },
-  {
-    id: "SP004",
-    partNumber: "ORING-STD-001",
-    description: "O-Ring Kit - Standard Sizes",
-    category: "Seals & Gaskets",
-    location: "Deck Store C1",
-    robQty: 45,
-    minQty: 10,
-    maxQty: 30,
-    unit: "KIT",
-    unitCost: 25,
-    totalValue: 1125,
-    status: "excess",
-    critical: false,
-    lastReceived: new Date("2024-11-05"),
-    leadTime: 7,
-    supplier: "Parker Hannifin",
-    impaCode: "652012"
-  },
-  {
-    id: "SP005",
-    partNumber: "NAV-GYRO-BAT",
-    description: "Gyro Compass Battery Pack",
-    category: "Navigation",
-    location: "Bridge Store",
-    robQty: 1,
-    minQty: 2,
-    maxQty: 4,
-    unit: "PCS",
-    unitCost: 3500,
-    totalValue: 3500,
-    status: "low",
-    critical: true,
-    lastReceived: new Date("2024-06-18"),
-    leadTime: 30,
-    supplier: "Sperry Marine"
-  }
-];
-
-const inventoryStats = {
-  totalItems: 2456,
-  totalValue: 1850000,
-  criticalItems: 89,
-  lowStock: 34,
-  pendingOrders: 12,
-  ordersValue: 125000,
-  turnoverRate: 2.4,
-  serviceLevel: 97.5
+// Default stats for loading state
+const defaultStats: InventoryStats = {
+  totalItems: 0,
+  totalValue: 0,
+  criticalItems: 0,
+  lowStock: 0,
+  pendingOrders: 0,
+  ordersValue: 0,
+  turnoverRate: 0,
+  serviceLevel: 100
 };
 
 export function SparePartsInventory() {
   const [activeTab, setActiveTab] = useState("inventory");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Use real data hooks
+  const { data: spareParts = [], isLoading: partsLoading } = useSpareParts();
+  const { data: inventoryStats = defaultStats, isLoading: statsLoading } = useInventoryStats();
+  
+  const isLoading = partsLoading || statsLoading;
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; className: string }> = {
