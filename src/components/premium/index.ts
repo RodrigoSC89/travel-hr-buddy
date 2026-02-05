@@ -15,3 +15,6 @@ export { default as DocumentIntelligenceHub } from "./DocumentIntelligenceHub";
  export { default as FinanceIntelligenceHub } from "./FinanceIntelligenceHub";
  export { default as VoiceAssistantIntelligence } from "./VoiceAssistantIntelligence";
  export { default as APIGatewayIntelligence } from "./APIGatewayIntelligence";
+ export { default as OperationsIntelligenceHub } from "./OperationsIntelligenceHub";
+ export { default as PeopleIntelligenceHub } from "./PeopleIntelligenceHub";
+ export { default as ProcurementIntelligenceHub } from "./ProcurementIntelligenceHub";

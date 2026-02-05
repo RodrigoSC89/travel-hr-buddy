@@ -18,6 +18,7 @@ const CrewScheduler = lazy(() => import("@/modules/people-hub/components/CrewSch
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
 const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/CrewWellnessPanel"));
 const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
+ const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
 
 function LoadingSkeleton() {
   return (
@@ -60,11 +61,15 @@ export default function PeopleHubPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="intelligence" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7 h-auto p-1">
-          <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+         <TabsList className="grid w-full grid-cols-8 h-auto p-1">
+           <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
-            <span className="text-xs">Intelligence</span>
+             <span className="text-xs">Advanced</span>
           </TabsTrigger>
+           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
+             <Activity className="h-4 w-4" />
+             <span className="text-xs">STCW/MLC</span>
+           </TabsTrigger>
           <TabsTrigger value="scheduler" className="flex flex-col items-center gap-1 py-2">
             <Calendar className="h-4 w-4" />
             <span className="text-xs">Escalas</span>
@@ -91,6 +96,12 @@ export default function PeopleHubPremium() {
           </TabsTrigger>
         </TabsList>
 
+         <TabsContent value="advanced">
+           <Suspense fallback={<LoadingSkeleton />}>
+             <PeopleIntelligenceHub />
+           </Suspense>
+         </TabsContent>
+ 
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
             <CrewIntelligenceHub />

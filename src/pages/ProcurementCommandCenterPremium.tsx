@@ -24,6 +24,7 @@
  const SpendControlTower = lazy(() => import("@/modules/procurement-inventory/components/SpendControlTower"));
  const SupplierPerformanceDashboard = lazy(() => import("@/modules/procurement-inventory/components/SupplierPerformanceDashboard"));
  const PurchaseRequisitionWorkflow = lazy(() => import("@/modules/procurement-inventory/components/PurchaseRequisitionWorkflow"));
+ const ProcurementIntelligenceHub = lazy(() => import("@/components/premium/ProcurementIntelligenceHub"));
  
  function LoadingFallback() {
    return (
@@ -66,7 +67,8 @@
    });
  
    const tabs = [
-     { id: "command", label: "🎯 Comando (PREMIUM)", icon: Sparkles },
+     { id: "intelligence", label: "🧠 Intelligence (AI)", icon: Brain },
+     { id: "command", label: "🎯 Comando", icon: Sparkles },
      { id: "spend-analytics", label: "💰 Spend Analytics", icon: PieChart },
      { id: "supplier-performance", label: "⭐ Performance Fornecedores", icon: Award },
      { id: "requisition-workflow", label: "📋 Workflow Requisições", icon: ClipboardList },
@@ -199,6 +201,13 @@
                </TabsTrigger>
              ))}
            </TabsList>
+ 
+           {/* INTELLIGENCE TAB - NEW */}
+           <TabsContent value="intelligence" className="space-y-6">
+             <Suspense fallback={<LoadingFallback />}>
+               <ProcurementIntelligenceHub />
+             </Suspense>
+           </TabsContent>
  
            {/* COMMAND TAB */}
            <TabsContent value="command" className="space-y-6">
