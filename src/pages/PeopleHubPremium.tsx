@@ -5,6 +5,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -45,6 +46,13 @@ function LoadingSkeleton() {
 }
 
 export default function PeopleHubPremium() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "advanced";
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -67,11 +75,14 @@ export default function PeopleHubPremium() {
             <Brain className="h-3 w-3 mr-1" />
             STCW/MLC AI
           </Badge>
+          <Badge variant="outline" className="text-sm">
+            Enterprise
+          </Badge>
         </div>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="advanced" className="space-y-6">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 h-auto p-1">
           <TabsTrigger value="advanced" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
