@@ -1,7 +1,7 @@
 /**
  * Maintenance Hub Premium - Centro de Manutenção Completo
  * Integra todos os componentes de manutenção com IA preditiva
- * ENTERPRISE UPGRADE - Phase 2
+ * ENTERPRISE UPGRADE - Phase 2 + MEGA-UPGRADE
  */
 
 import React, { Suspense, lazy } from "react";
@@ -11,13 +11,18 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Wrench, Brain, Calendar, 
-  ClipboardList, BarChart3, Package, Activity, AlertTriangle, Fuel, Leaf, Anchor
+  ClipboardList, BarChart3, Package, Activity, AlertTriangle, Fuel, Leaf, Anchor, Gauge
 } from "lucide-react";
 
 // Lazy load original components
 const PredictiveMaintenanceAI = lazy(() => import("@/modules/maintenance-planner/components/PredictiveMaintenanceAI"));
 const MaintenanceIntelligence = lazy(() => import("@/components/premium/MaintenanceIntelligence"));
 const DrydockMaintenanceIntelligence = lazy(() => import("@/components/premium/DrydockMaintenanceIntelligence"));
+
+// FASE 2 - Premium Components
+const MaintenanceKPIDashboard = lazy(() => import("@/components/premium/maintenance/MaintenanceKPIDashboard"));
+const PMSHourMeterAlerts = lazy(() => import("@/components/premium/maintenance/PMSHourMeterAlerts"));
+const FuelROBAnalytics = lazy(() => import("@/components/premium/maintenance/FuelROBAnalytics"));
 
 // Enterprise Components - Phase 2
 import { 
@@ -43,7 +48,7 @@ function LoadingSkeleton() {
 
 export default function MaintenanceHubPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") || "intelligence";
+  const currentTab = searchParams.get("tab") || "kpis";
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
@@ -59,7 +64,7 @@ export default function MaintenanceHubPremium() {
             Maintenance Hub
           </h1>
           <p className="text-muted-foreground mt-1">
-            Centro de manutenção com IA preditiva e PMS integrado
+            Centro de manutenção com IA preditiva, PMS e MTBF/MTTR
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -72,14 +77,22 @@ export default function MaintenanceHubPremium() {
             IA Preditiva
           </Badge>
           <Badge variant="outline" className="text-sm">
-            Enterprise
+            MEGA-UPGRADE v4.0
           </Badge>
         </div>
       </div>
 
       {/* Tabs */}
       <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 h-auto p-1">
+          <TabsTrigger value="kpis" className="flex flex-col items-center gap-1 py-2">
+            <BarChart3 className="h-4 w-4" />
+            <span className="text-xs">KPIs</span>
+          </TabsTrigger>
+          <TabsTrigger value="pms" className="flex flex-col items-center gap-1 py-2">
+            <Gauge className="h-4 w-4" />
+            <span className="text-xs">PMS</span>
+          </TabsTrigger>
           <TabsTrigger value="intelligence" className="flex flex-col items-center gap-1 py-2">
             <Brain className="h-4 w-4" />
             <span className="text-xs">DNV Class</span>
@@ -100,6 +113,10 @@ export default function MaintenanceHubPremium() {
             <Fuel className="h-4 w-4" />
             <span className="text-xs">Combustível</span>
           </TabsTrigger>
+          <TabsTrigger value="fuel-rob" className="flex flex-col items-center gap-1 py-2">
+            <Fuel className="h-4 w-4" />
+            <span className="text-xs">ROB</span>
+          </TabsTrigger>
           <TabsTrigger value="waste" className="flex flex-col items-center gap-1 py-2">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-xs">MARPOL</span>
@@ -108,19 +125,34 @@ export default function MaintenanceHubPremium() {
             <Leaf className="h-4 w-4" />
             <span className="text-xs">ESG</span>
           </TabsTrigger>
-          <TabsTrigger value="orders" className="flex flex-col items-center gap-1 py-2">
-            <ClipboardList className="h-4 w-4" />
-            <span className="text-xs">Ordens</span>
-          </TabsTrigger>
           <TabsTrigger value="inventory" className="flex flex-col items-center gap-1 py-2">
             <Package className="h-4 w-4" />
             <span className="text-xs">Peças</span>
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex flex-col items-center gap-1 py-2">
-            <BarChart3 className="h-4 w-4" />
+            <LayoutDashboard className="h-4 w-4" />
             <span className="text-xs">Analytics</span>
           </TabsTrigger>
         </TabsList>
+
+        {/* FASE 2 - Premium Components */}
+        <TabsContent value="kpis">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <MaintenanceKPIDashboard />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="pms">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <PMSHourMeterAlerts />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="fuel-rob">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <FuelROBAnalytics />
+          </Suspense>
+        </TabsContent>
 
         <TabsContent value="intelligence">
           <Suspense fallback={<LoadingSkeleton />}>
@@ -153,14 +185,6 @@ export default function MaintenanceHubPremium() {
 
         <TabsContent value="esg">
           <ESGEmissionsDashboard />
-        </TabsContent>
-
-        <TabsContent value="orders">
-          <div className="text-center py-12 text-muted-foreground">
-            <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Ordens de Serviço</p>
-            <p className="text-sm">Gestão de work orders e requisições</p>
-          </div>
         </TabsContent>
 
         <TabsContent value="inventory">
