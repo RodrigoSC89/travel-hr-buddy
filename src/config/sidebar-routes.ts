@@ -1,10 +1,11 @@
 /**
- * ⚡ SIDEBAR ROUTES - v7.0 COMPLETE SYSTEM
+ * ⚡ SIDEBAR ROUTES - v7.1 COMPLETE SYSTEM
  * =========================================================
  * 12 HUBs COMPLETOS - Estrutura Enterprise Definitiva
  * 
- * Total: 100+ módulos acessíveis via sidebar
- * Todos os módulos de auditoria, compliance e enterprise visíveis
+ * Total: 120+ módulos acessíveis via sidebar
+ * ✅ 12 Auditorias Marítimas (PEO-DP, PEOTRAM, ISM, ISPS, SOLAS, MARPOL, Pre-OVID, Pre-MLC, PSC, SGSO, Pre-SIRE, TMSA)
+ * ✅ 10 Agentes de Auditoria IA (PEO-DP, PEO-TRAM, ISM, ISPS, MLC, SGSO, Quality, Environmental, Technical, Documentation)
  * 
  * Documentação: docs/FUSION_REPORT_FINAL.md
  * Legacy Redirects: src/routes/legacy-redirects.tsx
@@ -138,27 +139,46 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     ],
   },
 
-  // 6. 🛡️ COMPLIANCE & AUDITS (Hub Premium com Enterprise Components)
+  // 6. 🛡️ COMPLIANCE & AUDITS - 12 Auditorias Marítimas + 10 Agentes IA
   {
     title: "🛡️ Compliance & Audits",
     defaultOpen: false,
     items: [
+      // === HUB & ENTERPRISE ===
       { label: "Compliance Hub", path: "/compliance-unified", icon: Shield, emoji: "🛡️", badge: "HUB" },
       { label: "Compliance Scorecard", path: "/compliance-unified?tab=scorecard", icon: BarChart3, emoji: "📊", badge: "ENT" },
       { label: "Gestão de Auditorias", path: "/compliance-unified?tab=audit-mgmt", icon: ClipboardList, emoji: "📋", badge: "ENT" },
       { label: "Rastreador Certificados", path: "/compliance-unified?tab=cert-tracker", icon: Award, emoji: "🏆", badge: "ENT" },
       { label: "Matriz de Riscos", path: "/risk-matrix", icon: Target, emoji: "🎯", badge: "ENT" },
+      
+      // === 10 AGENTES DE AUDITORIA IA ===
       { label: "Agentes Auditoria IA", path: "/audit-agents", icon: Bot, emoji: "🤖", badge: "10 AI" },
-      { label: "PEO-DP", path: "/peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
-      { label: "PEOTRAM", path: "/peotram", icon: Shield, emoji: "🚢", badge: "13E" },
-      { label: "ISM Code", path: "/safety-imca", icon: Shield, emoji: "🛡️", badge: "SMS" },
-      { label: "ISPS Security", path: "/isps-security", icon: Lock, emoji: "🔐", badge: "SSP" },
+      { label: "Agent PEO-DP", path: "/audit-agents?agent=peo-dp", icon: Anchor, emoji: "🤖", badge: "DP" },
+      { label: "Agent PEO-TRAM", path: "/audit-agents?agent=peo-tram", icon: GraduationCap, emoji: "🤖", badge: "TRAM" },
+      { label: "Agent ISM", path: "/audit-agents?agent=ism", icon: Shield, emoji: "🤖", badge: "ISM" },
+      { label: "Agent ISPS", path: "/audit-agents?agent=isps", icon: Lock, emoji: "🤖", badge: "ISPS" },
+      { label: "Agent MLC", path: "/audit-agents?agent=mlc", icon: Users, emoji: "🤖", badge: "MLC" },
+      { label: "Agent SGSO", path: "/audit-agents?agent=sgso", icon: Shield, emoji: "🤖", badge: "SGSO" },
+      { label: "Agent Quality", path: "/audit-agents?agent=quality", icon: Award, emoji: "🤖", badge: "ISO" },
+      { label: "Agent Environmental", path: "/audit-agents?agent=environmental", icon: Leaf, emoji: "🤖", badge: "ENV" },
+      { label: "Agent Technical", path: "/audit-agents?agent=technical", icon: Wrench, emoji: "🤖", badge: "TECH" },
+      { label: "Agent Documentation", path: "/audit-agents?agent=documentation", icon: FileText, emoji: "🤖", badge: "DOC" },
+      
+      // === 12 AUDITORIAS MARÍTIMAS ===
+      { label: "PEO-DP (IMCA M-117)", path: "/peo-dp", icon: Anchor, emoji: "⚓", badge: "DP" },
+      { label: "PEOTRAM 13 Elementos", path: "/peotram", icon: Shield, emoji: "🚢", badge: "13E" },
+      { label: "ISM Code (SMS)", path: "/safety-imca", icon: Shield, emoji: "🛡️", badge: "SMS" },
+      { label: "ISPS Security (SSP)", path: "/isps-security", icon: Lock, emoji: "🔐", badge: "SSP" },
       { label: "SOLAS/LSA/FFE", path: "/drill-simulator", icon: Ship, emoji: "🚢", badge: "SOLAS" },
-      { label: "MARPOL Anexos", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "I-VI" },
-      { label: "Pre-OVID", path: "/pre-ovid", icon: Shield, emoji: "🔍", badge: "OVID" },
-      { label: "Pre-MLC 2006", path: "/mlc-inspection", icon: Users, emoji: "👥", badge: "MLC" },
-      { label: "PSC Package", path: "/psc-package", icon: FileText, emoji: "📦", badge: "PSC" },
-      { label: "SGSO ANP", path: "/sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
+      { label: "MARPOL I-VI", path: "/waste-management", icon: Trash2, emoji: "♻️", badge: "I-VI" },
+      { label: "Pre-OVID (OCIMF)", path: "/pre-ovid", icon: Eye, emoji: "🔍", badge: "OVID" },
+      { label: "Pre-MLC 2006 (ILO)", path: "/mlc-inspection", icon: Users, emoji: "👥", badge: "MLC" },
+      { label: "PSC Package (MoU)", path: "/psc-package", icon: FileText, emoji: "📦", badge: "PSC" },
+      { label: "SGSO ANP 17 Práticas", path: "/sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
+      { label: "Pre-SIRE 2.0 (OCIMF)", path: "/pre-sire", icon: ClipboardList, emoji: "📋", badge: "SIRE" },
+      { label: "TMSA (OCIMF)", path: "/tmsa-assessment", icon: BarChart3, emoji: "📊", badge: "TMSA" },
+      
+      // === GESTÃO DE CONFORMIDADE ===
       { label: "NCs & CAPAs", path: "/compliance-unified?tab=ncs", icon: AlertTriangle, emoji: "⚠️" },
       { label: "Regulamentos", path: "/regulations", icon: BookOpen, emoji: "📜" },
       { label: "Due Diligence", path: "/due-diligence", icon: ClipboardList, emoji: "✅" },
