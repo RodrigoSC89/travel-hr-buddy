@@ -1,6 +1,6 @@
 /**
  * Enterprise Components Index
- * MEGA-UPGRADE: Fases 1-4 Completas
+ * MEGA-UPGRADE: Fases 1-9 Completas
  */
 
 // Phase 1: Operations & Fleet
@@ -20,3 +20,12 @@ export * from "./ai";
 
 // Phase 4: Tracking & Telemetry
 export * from "./tracking";
+
+// Phase 5: Compliance & Audits
+export * from "./compliance";
+
+// Phase 6: Document Center
+export * from "./documents";
+
+// Phase 7: People Hub
+export * from "./people";
