@@ -29,3 +29,9 @@ export * from "./documents";
 
 // Phase 7: People Hub
 export * from "./people";
+
+// Phase 8: Finance & Contracts
+export * from "./finance";
+
+// Phase 9: System Hub
+export * from "./system";
