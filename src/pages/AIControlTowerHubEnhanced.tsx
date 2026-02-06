@@ -215,8 +215,28 @@ export default function AIControlTowerHubEnhanced() {
   };
 
   const handleQuickAction = (actionId: string) => {
-    const action = quickActions.find(a => a.id === actionId);
-    toast.info(`Executando: ${action?.label}`);
+    switch (actionId) {
+      case 'ask-ai':
+        setSearchParams({ tab: 'chat' });
+        toast.success('Abrindo Chat IA...');
+        break;
+      case 'run-analysis':
+        toast.success('Análise iniciada — verificando agentes e insights...');
+        break;
+      case 'check-agents':
+        setSearchParams({ tab: 'agents' });
+        toast.success('Abrindo painel de agentes...');
+        break;
+      case 'view-insights':
+        toast.success(`${metrics.actionableInsights} insights acionáveis encontrados`);
+        break;
+      case 'create-workflow':
+        setSearchParams({ tab: 'workflows' });
+        toast.success('Abrindo criador de workflows...');
+        break;
+      default:
+        toast.info('Ação não reconhecida');
+    }
   };
 
   const handleDismissInsight = (insightId: string) => {

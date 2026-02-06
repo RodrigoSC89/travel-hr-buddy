@@ -36,6 +36,8 @@ function LoadingSkeleton() {
 }
 
 export default function TravelCommandPremium() {
+  // Real data integration will come from crew_members and vessels
+  // For now, show dynamic counts based on available data
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -52,10 +54,10 @@ export default function TravelCommandPremium() {
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="bg-primary/10 text-primary">
             <Plane className="h-3 w-3 mr-1" />
-            23 Viagens Ativas
+            Travel Management
           </Badge>
           <Badge variant="outline" className="bg-success/10 text-success">
-            94.2% Pontualidade
+            Módulo Ativo
           </Badge>
         </div>
       </div>

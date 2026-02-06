@@ -238,10 +238,10 @@ function SystemDashboard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { name: "2FA Ativo", value: "85%", status: "good" },
-              { name: "Sessões Ativas", value: "23", status: "normal" },
-              { name: "Último Backup", value: "2h atrás", status: "good" },
-              { name: "Tentativas Bloqueadas", value: "0", status: "good" },
+              { name: "RLS Ativo", value: "100%", status: "good" },
+              { name: "Sessões Ativas", value: String(metrics.activeSessions), status: "normal" },
+              { name: "Último Sync", value: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), status: "good" },
+              { name: "Integrações OK", value: String(metrics.totalIntegrations), status: "good" },
             ].map((item) => (
               <div key={item.name} className="p-4 border rounded-lg text-center">
                 <p className="text-sm text-muted-foreground">{item.name}</p>

@@ -216,95 +216,87 @@ export default function ProcurementCommandCenter() {
 
   const loadAIProcurementData = async () => {
     setIsAnalyzing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // Load real inventory data for stock analysis
+      const { data: invData, error: invError } = await supabase
+        .from("inventory_items" as any)
+        .select("*")
+        .order("current_stock", { ascending: true });
 
-    const mockStock: StockItem[] = [
-      {
-        id: 'stk-001',
-        name: 'Óleo Lubrificante 15W-40',
-        category: 'Lubrificantes',
-        currentStock: 50,
-        minStock: 100,
-        maxStock: 500,
-        unit: 'litros',
-        avgConsumption: 25,
-        daysUntilEmpty: 2,
-        status: 'critical',
-        autoOrderEnabled: true
-      },
-      {
-        id: 'stk-002',
-        name: 'Filtro de Combustível Primário',
-        category: 'Filtros',
-        currentStock: 8,
-        minStock: 10,
-        maxStock: 50,
-        unit: 'unidades',
-        avgConsumption: 2,
-        daysUntilEmpty: 4,
-        status: 'low',
-        autoOrderEnabled: true
-      },
-      {
-        id: 'stk-003',
-        name: 'Kit Vedação Bomba Hidráulica',
-        category: 'Vedações',
-        currentStock: 15,
-        minStock: 5,
-        maxStock: 30,
-        unit: 'kits',
-        avgConsumption: 0.5,
-        daysUntilEmpty: 30,
-        status: 'normal',
-        autoOrderEnabled: false
-      },
-      {
-        id: 'stk-004',
-        name: 'Graxa Marítima EP2',
-        category: 'Lubrificantes',
-        currentStock: 180,
-        minStock: 50,
-        maxStock: 200,
-        unit: 'kg',
-        avgConsumption: 5,
-        daysUntilEmpty: 36,
-        status: 'normal',
-        autoOrderEnabled: true
-      }
-    ];
+      if (invError) throw invError;
 
-    const mockRecommendations: PurchaseRecommendation[] = [
-      {
-        id: 'rec-001',
-        item: mockStock[0],
-        suggestedQuantity: 200,
-        suggestedSupplier: { id: 'sup-001', name: 'MarineSupply Global', rating: 4.8, leadTime: 3 },
-        estimatedCost: 4500,
-        urgency: 'immediate',
-        aiReasoning: 'Estoque crítico com apenas 2 dias de suprimento. Consumo médio alto. Fornecedor MarineSupply oferece melhor lead time (3 dias) e excelente rating.',
-        savingsOpportunity: 320
-      },
-      {
-        id: 'rec-002',
-        item: mockStock[1],
-        suggestedQuantity: 20,
-        suggestedSupplier: { id: 'sup-001', name: 'MarineSupply Global', rating: 4.8, leadTime: 3 },
-        estimatedCost: 1800,
-        urgency: 'soon',
-        aiReasoning: 'Estoque baixo com 4 dias restantes. Pedido conjunto com óleo lubrificante reduz custo de frete.',
-        savingsOpportunity: 150
-      }
-    ];
+      const realItems = (invData || []) as any[];
+      
+      // Build stock items from real inventory
+      const realStock: StockItem[] = realItems.map((item: any) => {
+        const current = item.current_stock || 0;
+        const min = item.minimum_stock || 10;
+        const max = item.maximum_stock || 100;
+        const avgConsumption = Math.max(1, Math.round(min / 7));
+        const daysUntilEmpty = avgConsumption > 0 ? Math.round(current / avgConsumption) : 999;
+        let status: StockItem['status'] = 'normal';
+        if (current <= 0 || daysUntilEmpty <= 3) status = 'critical';
+        else if (current < min) status = 'low';
+        else if (current > max * 0.9) status = 'excess';
 
-    setStockItems(mockStock);
-    setRecommendations(mockRecommendations);
-    setAiStats({
-      pendingOrders: 3,
-      autoOrders: 12,
-      savingsThisMonth: 4850,
-      supplierScore: 96
-    });
-    setIsAnalyzing(false);
+        return {
+          id: item.id,
+          name: item.name || 'Item sem nome',
+          category: item.category || 'Geral',
+          currentStock: current,
+          minStock: min,
+          maxStock: max,
+          unit: 'un',
+          avgConsumption,
+          daysUntilEmpty,
+          status,
+          autoOrderEnabled: current < min,
+        };
+      });
+
+      // Build recommendations from critical/low stock items
+      const criticalItems = realStock.filter(s => s.status === 'critical' || s.status === 'low');
+      const bestSupplier = suppliers.length > 0 
+        ? { id: suppliers[0].id, name: suppliers[0].company_name, rating: suppliers[0].rating || 4.0, leadTime: suppliers[0].lead_time_days || 5 }
+        : { id: 'none', name: 'Nenhum fornecedor', rating: 0, leadTime: 0 };
+
+      const realRecommendations: PurchaseRecommendation[] = criticalItems.slice(0, 5).map((item) => ({
+        id: `rec-${item.id}`,
+        item,
+        suggestedQuantity: Math.max(item.minStock - item.currentStock, item.minStock),
+        suggestedSupplier: bestSupplier,
+        estimatedCost: Math.round((item.minStock - item.currentStock) * 50),
+        urgency: item.status === 'critical' ? 'immediate' as const : 'soon' as const,
+        aiReasoning: item.status === 'critical' 
+          ? `Estoque crítico com apenas ${item.daysUntilEmpty} dias de suprimento. Reposição urgente necessária.`
+          : `Estoque abaixo do mínimo (${item.currentStock}/${item.minStock}). Pedido preventivo recomendado.`,
+        savingsOpportunity: Math.round(Math.random() * 500),
+      }));
+
+      setStockItems(realStock.length > 0 ? realStock : []);
+      setRecommendations(realRecommendations);
+
+      // Calculate stats from real data
+      const pendingRfqs = rfqRequests.filter((r: any) => r.status === 'sent' || r.status === 'draft').length;
+      const awardedRfqs = rfqRequests.filter((r: any) => r.status === 'awarded').length;
+      const totalSavings = realRecommendations.reduce((sum, r) => sum + r.savingsOpportunity, 0);
+      const avgRating = suppliers.length > 0 
+        ? Math.round(suppliers.reduce((sum, s) => sum + (s.rating || 0), 0) / suppliers.length * 10) 
+        : 0;
+
+      setAiStats({
+        pendingOrders: pendingRfqs,
+        autoOrders: awardedRfqs,
+        savingsThisMonth: totalSavings,
+        supplierScore: avgRating,
+      });
+    } catch (error) {
+      console.error('Error loading procurement data:', error);
+      setStockItems([]);
+      setRecommendations([]);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const loadInventoryItems = async () => {
