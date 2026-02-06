@@ -1,0 +1,217 @@
+{
+  "version": "v8.0",
+  "generatedAt": "2026-02-06",
+  "totalRoutes": 35,
+  "totalActions": 156,
+  "modules": [
+    {
+      "route": "/command",
+      "module": "Command Center",
+      "megaHub": "A",
+      "actions": [
+        { "name": "View Dashboard", "selector": "[data-testid=dashboard]", "handler": "useExecutiveKPIs", "backend": "supabase:vessels,incidents", "required": true },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true },
+        { "name": "Export PDF", "selector": "[data-testid=export]", "handler": "exportDashboard()", "backend": "client:pdf-generation", "required": true },
+        { "name": "Acknowledge Alert", "selector": "[data-testid=acknowledge]", "handler": "acknowledgeAlert()", "backend": "supabase:alerts.update", "required": true }
+      ],
+      "dataSources": ["supabase:vessels", "supabase:incidents", "supabase:alerts"],
+      "featureFlags": [],
+      "rbac": ["viewer", "operator", "admin"]
+    },
+    {
+      "route": "/ops",
+      "module": "Operations Hub",
+      "megaHub": "B",
+      "actions": [
+        { "name": "Add Vessel", "selector": "[data-testid=add-vessel]", "handler": "createVessel()", "backend": "supabase:vessels.insert", "required": true },
+        { "name": "Edit Vessel", "selector": "[data-testid=edit]", "handler": "updateVessel()", "backend": "supabase:vessels.update", "required": true },
+        { "name": "Delete Vessel", "selector": "[data-testid=delete]", "handler": "deleteVessel()", "backend": "supabase:vessels.delete", "required": true },
+        { "name": "View Fleet", "selector": "[data-testid=fleet-list]", "handler": "useFleetOperations", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Export CSV", "selector": "[data-testid=export-csv]", "handler": "exportCSV()", "backend": "client:csv-generation", "required": true },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true }
+      ],
+      "dataSources": ["supabase:vessels", "supabase:voyages", "supabase:contracts"],
+      "featureFlags": [],
+      "rbac": ["operator", "admin"]
+    },
+    {
+      "route": "/maintenance",
+      "module": "Maintenance Hub",
+      "megaHub": "C",
+      "actions": [
+        { "name": "Schedule Survey", "selector": "[data-testid=schedule-survey]", "handler": "scheduleSurvey()", "backend": "supabase:vessels.update", "required": true },
+        { "name": "View Surveys", "selector": "[data-testid=surveys-list]", "handler": "useClassSurveys", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Export CSV", "selector": "[data-testid=export]", "handler": "exportCSV()", "backend": "client:csv-generation", "required": true },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true },
+        { "name": "Add Maintenance", "selector": "[data-testid=add-maintenance]", "handler": "createMaintenance()", "backend": "supabase:maintenance.insert", "required": true },
+        { "name": "View Digital Twin", "selector": "[data-testid=digital-twin]", "handler": "loadDigitalTwin()", "backend": "supabase:vessels.select", "required": false }
+      ],
+      "dataSources": ["supabase:vessels", "supabase:maintenance_records"],
+      "featureFlags": ["digital_twin_3d"],
+      "rbac": ["technician", "operator", "admin"]
+    },
+    {
+      "route": "/ai",
+      "module": "AI Hub",
+      "megaHub": "D",
+      "actions": [
+        { "name": "Chat", "selector": "[data-testid=ai-chat]", "handler": "sendMessage()", "backend": "edge:ai-chat", "required": true },
+        { "name": "Configure Agent", "selector": "[data-testid=config-agent]", "handler": "configureAgent()", "backend": "supabase:agent_registry.update", "required": true },
+        { "name": "Deploy Agent", "selector": "[data-testid=deploy]", "handler": "deployAgent()", "backend": "edge:deploy-agent", "required": true },
+        { "name": "View Analytics", "selector": "[data-testid=analytics]", "handler": "useAIAnalytics", "backend": "supabase:ai_logs.select", "required": true },
+        { "name": "Export Report", "selector": "[data-testid=export]", "handler": "exportReport()", "backend": "client:pdf-generation", "required": true }
+      ],
+      "dataSources": ["supabase:agent_registry", "supabase:ai_logs", "edge:ai-chat"],
+      "featureFlags": ["ai_voice", "ai_rag"],
+      "rbac": ["operator", "admin"]
+    },
+    {
+      "route": "/tracking",
+      "module": "Tracking Hub",
+      "megaHub": "E",
+      "actions": [
+        { "name": "View Map", "selector": "[data-testid=map]", "handler": "useFleetTracking", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Track Vessel", "selector": "[data-testid=track]", "handler": "trackVessel()", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Set Alert", "selector": "[data-testid=set-alert]", "handler": "createAlert()", "backend": "supabase:geofence_alerts.insert", "required": true },
+        { "name": "View Weather", "selector": "[data-testid=weather]", "handler": "useWeather()", "backend": "external:openmeteo", "required": false },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true },
+        { "name": "Export", "selector": "[data-testid=export]", "handler": "exportPositions()", "backend": "client:csv-generation", "required": true }
+      ],
+      "dataSources": ["supabase:vessels", "supabase:geofence_alerts", "external:openmeteo"],
+      "featureFlags": ["ais_live", "weather_ai"],
+      "rbac": ["viewer", "operator", "admin"]
+    },
+    {
+      "route": "/compliance",
+      "module": "Compliance Hub",
+      "megaHub": "F",
+      "actions": [
+        { "name": "Start Audit", "selector": "[data-testid=start-audit]", "handler": "startAudit()", "backend": "supabase:internal_audits.insert", "required": true },
+        { "name": "View Scorecard", "selector": "[data-testid=scorecard]", "handler": "useComplianceScore", "backend": "supabase:compliance_scores.select", "required": true },
+        { "name": "Track Certificate", "selector": "[data-testid=certificates]", "handler": "useCertificates", "backend": "supabase:certificates.select", "required": true },
+        { "name": "Create NC", "selector": "[data-testid=create-nc]", "handler": "createNC()", "backend": "supabase:non_conformities.insert", "required": true },
+        { "name": "Export Report", "selector": "[data-testid=export]", "handler": "exportAuditReport()", "backend": "client:pdf-generation", "required": true },
+        { "name": "AI Audit Agent", "selector": "[data-testid=ai-agent]", "handler": "runAIAudit()", "backend": "edge:audit-agent", "required": true }
+      ],
+      "dataSources": ["supabase:internal_audits", "supabase:non_conformities", "supabase:certificates", "supabase:compliance_scores"],
+      "featureFlags": [],
+      "rbac": ["auditor", "operator", "admin"]
+    },
+    {
+      "route": "/workbench/docs",
+      "module": "Documents",
+      "megaHub": "G",
+      "actions": [
+        { "name": "Upload Document", "selector": "[data-testid=upload]", "handler": "uploadDocument()", "backend": "supabase:storage.upload", "required": true },
+        { "name": "View Document", "selector": "[data-testid=view]", "handler": "viewDocument()", "backend": "supabase:documents.select", "required": true },
+        { "name": "Create Template", "selector": "[data-testid=create-template]", "handler": "createTemplate()", "backend": "supabase:templates.insert", "required": true },
+        { "name": "Export", "selector": "[data-testid=export]", "handler": "exportDocument()", "backend": "client:file-download", "required": true },
+        { "name": "Delete", "selector": "[data-testid=delete]", "handler": "deleteDocument()", "backend": "supabase:documents.delete", "required": true }
+      ],
+      "dataSources": ["supabase:documents", "supabase:templates", "supabase:storage"],
+      "featureFlags": [],
+      "rbac": ["viewer", "operator", "admin"]
+    },
+    {
+      "route": "/workbench/people",
+      "module": "People Hub",
+      "megaHub": "G",
+      "actions": [
+        { "name": "Add Crew", "selector": "[data-testid=add-crew]", "handler": "addCrew()", "backend": "supabase:crew_members.insert", "required": true },
+        { "name": "Edit Crew", "selector": "[data-testid=edit]", "handler": "updateCrew()", "backend": "supabase:crew_members.update", "required": true },
+        { "name": "View Schedule", "selector": "[data-testid=schedule]", "handler": "useCrewScheduler", "backend": "supabase:crew_rotations.select", "required": true },
+        { "name": "Assign Vessel", "selector": "[data-testid=assign]", "handler": "assignToVessel()", "backend": "supabase:crew_assignments.insert", "required": true },
+        { "name": "Export", "selector": "[data-testid=export]", "handler": "exportCrew()", "backend": "client:csv-generation", "required": true },
+        { "name": "View STCW/MLC", "selector": "[data-testid=stcw-mlc]", "handler": "useSTCWCompliance", "backend": "supabase:stcw_records.select", "required": true }
+      ],
+      "dataSources": ["supabase:crew_members", "supabase:crew_rotations", "supabase:stcw_records"],
+      "featureFlags": [],
+      "rbac": ["hr", "operator", "admin"]
+    },
+    {
+      "route": "/workbench/finance",
+      "module": "Finance Hub",
+      "megaHub": "G",
+      "actions": [
+        { "name": "View Voyage P&L", "selector": "[data-testid=voyage-pnl]", "handler": "useVoyagePnL", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Add Expense", "selector": "[data-testid=add-expense]", "handler": "addExpense()", "backend": "supabase:expenses.insert", "required": true },
+        { "name": "View Budget", "selector": "[data-testid=budget]", "handler": "useBudget", "backend": "supabase:budgets.select", "required": true },
+        { "name": "Manage Suppliers", "selector": "[data-testid=suppliers]", "handler": "useSuppliers", "backend": "supabase:suppliers.select", "required": true },
+        { "name": "Export Report", "selector": "[data-testid=export]", "handler": "exportFinanceReport()", "backend": "client:csv-generation", "required": true }
+      ],
+      "dataSources": ["supabase:vessels", "supabase:expenses", "supabase:budgets", "supabase:suppliers"],
+      "featureFlags": [],
+      "rbac": ["finance", "admin"]
+    },
+    {
+      "route": "/workbench/system",
+      "module": "System Hub",
+      "megaHub": "G",
+      "actions": [
+        { "name": "View Settings", "selector": "[data-testid=settings]", "handler": "useSettings", "backend": "supabase:settings.select", "required": true },
+        { "name": "Update Settings", "selector": "[data-testid=save]", "handler": "updateSettings()", "backend": "supabase:settings.update", "required": true },
+        { "name": "View API Monitor", "selector": "[data-testid=api-monitor]", "handler": "useAPIMonitor", "backend": "supabase:api_logs.select", "required": true },
+        { "name": "Check Health", "selector": "[data-testid=health]", "handler": "checkHealth()", "backend": "edge:health-check", "required": true },
+        { "name": "View IoT", "selector": "[data-testid=iot]", "handler": "useIoTSensors", "backend": "supabase:iot_readings.select", "required": false }
+      ],
+      "dataSources": ["supabase:settings", "supabase:api_logs", "supabase:iot_readings"],
+      "featureFlags": ["iot_dashboard"],
+      "rbac": ["admin"]
+    },
+    {
+      "route": "/voyage-pnl",
+      "module": "Voyage P&L Calculator",
+      "megaHub": "G",
+      "actions": [
+        { "name": "View P&L", "selector": "[data-testid=pnl-table]", "handler": "useVessels", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Calculate", "selector": "[data-testid=calculate]", "handler": "calculatePnL()", "backend": "client:calculation", "required": true },
+        { "name": "Export CSV", "selector": "[data-testid=export]", "handler": "exportCSV()", "backend": "client:csv-generation", "required": true },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true }
+      ],
+      "dataSources": ["supabase:vessels"],
+      "featureFlags": [],
+      "rbac": ["finance", "operator", "admin"]
+    },
+    {
+      "route": "/crew-scheduler",
+      "module": "Crew Scheduler",
+      "megaHub": "G",
+      "actions": [
+        { "name": "Add Crew", "selector": "[data-testid=add-crew]", "handler": "addCrewMember()", "backend": "supabase:insert", "required": true },
+        { "name": "View Crew", "selector": "[data-testid=crew-list]", "handler": "useCrew", "backend": "supabase:vessels.select", "required": true },
+        { "name": "Assign Vessel", "selector": "[data-testid=assign]", "handler": "assignVessel()", "backend": "supabase:update", "required": true },
+        { "name": "Export CSV", "selector": "[data-testid=export]", "handler": "exportCSV()", "backend": "client:csv-generation", "required": true },
+        { "name": "Refresh", "selector": "[data-testid=refresh]", "handler": "refetch()", "backend": "react-query:invalidate", "required": true }
+      ],
+      "dataSources": ["supabase:vessels"],
+      "featureFlags": [],
+      "rbac": ["hr", "operator", "admin"]
+    }
+  ],
+  "auditModules": [
+    { "route": "/peo-dp", "alias": "/compliance/standards/peo-dp", "standard": "IMCA M-117", "agent": "Agent PEO-DP" },
+    { "route": "/peotram", "alias": "/compliance/standards/peotram", "standard": "ANP 13E", "agent": "Agent PEO-TRAM" },
+    { "route": "/safety-imca", "alias": "/compliance/standards/ism", "standard": "IMO SMS", "agent": "Agent ISM" },
+    { "route": "/isps-security", "alias": "/compliance/standards/isps", "standard": "SOLAS XI-2", "agent": "Agent ISPS" },
+    { "route": "/drill-simulator", "alias": "/compliance/standards/solas", "standard": "IMO SOLAS III", "agent": null },
+    { "route": "/waste-management", "alias": "/compliance/standards/marpol", "standard": "IMO MARPOL", "agent": "Agent Environmental" },
+    { "route": "/pre-ovid", "alias": "/compliance/standards/pre-ovid", "standard": "OCIMF", "agent": null },
+    { "route": "/mlc-inspection", "alias": "/compliance/standards/pre-mlc", "standard": "ILO MLC 2006", "agent": "Agent MLC" },
+    { "route": "/psc-package", "alias": "/compliance/standards/psc", "standard": "Paris/Tokyo MoU", "agent": null },
+    { "route": "/sgso", "alias": "/compliance/standards/sgso", "standard": "ANP 17P", "agent": "Agent SGSO" },
+    { "route": "/pre-sire", "alias": "/compliance/standards/pre-sire", "standard": "OCIMF SIRE 2.0", "agent": null },
+    { "route": "/tmsa-assessment", "alias": "/compliance/standards/tmsa", "standard": "OCIMF TMSA", "agent": null }
+  ],
+  "aiAgents": [
+    { "name": "Agent PEO-DP", "specialty": "Dynamic Positioning", "status": "active" },
+    { "name": "Agent PEO-TRAM", "specialty": "Training & Manning", "status": "active" },
+    { "name": "Agent ISM", "specialty": "Safety Management", "status": "active" },
+    { "name": "Agent ISPS", "specialty": "Security", "status": "active" },
+    { "name": "Agent MLC", "specialty": "Maritime Labour", "status": "active" },
+    { "name": "Agent SGSO", "specialty": "Operations Management", "status": "active" },
+    { "name": "Agent Quality", "specialty": "ISO 9001", "status": "active" },
+    { "name": "Agent Environmental", "specialty": "MARPOL", "status": "active" },
+    { "name": "Agent Technical", "specialty": "Maintenance", "status": "active" },
+    { "name": "Agent Documentation", "specialty": "Document Control", "status": "active" }
+  ]
+}
