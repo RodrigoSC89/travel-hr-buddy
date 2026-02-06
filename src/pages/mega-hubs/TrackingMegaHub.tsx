@@ -3,14 +3,18 @@
  * Rota canônica: /tracking
  * 
  * Consolida: Tracking & Telemetry + AIS + SATCOM + Weather Intelligence
+ * 
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
 import React, { Suspense, lazy } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map } from 'lucide-react';
+import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { RealTimeTrackingMap } from '@/components/world-class';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TrackingTelemetryPremium'));
@@ -35,6 +39,7 @@ const LoadingSkeleton = () => (
 
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Satellite },
+  { id: 'live-map', label: 'Live Map', icon: Map },
   { id: 'realtime', label: 'Real-time', icon: Activity },
   { id: 'ais', label: 'AIS Fleet', icon: Ship },
   { id: 'satcom', label: 'SATCOM', icon: Radio },
@@ -49,6 +54,10 @@ export default function TrackingMegaHub() {
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
+  };
+
+  const handleActionBarAction = (action: string) => {
+    console.log(`Tracking action: ${action}`);
   };
 
   return (
@@ -66,9 +75,14 @@ export default function TrackingMegaHub() {
                 <p className="text-sm text-muted-foreground">Rastreamento & Telemetria</p>
               </div>
             </div>
-            <Badge variant="outline" className="bg-cyan-500/10 text-cyan-500 border-cyan-500/20">
-              MEGA-HUB E
-            </Badge>
+            <div className="flex gap-2">
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                AIS Active
+              </Badge>
+              <Badge variant="outline" className="bg-cyan-500/10 text-cyan-500 border-cyan-500/20">
+                MEGA-HUB E
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
@@ -95,8 +109,66 @@ export default function TrackingMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="overview" className="mt-0">
+            <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="Fleet Tracking Command"
+                subtitle="Real-time vessel tracking, AIS, and SATCOM monitoring"
+                actions={[
+                  {
+                    id: 'refresh',
+                    label: 'Refresh Positions',
+                    icon: <RefreshCw className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('refresh'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'live-map',
+                    label: 'Live Map',
+                    icon: <Map className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'live-map' }),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'export',
+                    label: 'Export Positions',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('export'),
+                    variant: 'outline'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search vessels, routes, locations..."
+              />
+
               <TrackingTelemetryHub />
+            </TabsContent>
+
+            <TabsContent value="live-map" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar for Live Map */}
+              <EnhancedActionBar
+                title="Live Fleet Map"
+                subtitle="Interactive real-time tracking with route replay and signal quality"
+                actions={[
+                  {
+                    id: 'refresh',
+                    label: 'Refresh',
+                    icon: <RefreshCw className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('refresh'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'filter',
+                    label: 'Filters',
+                    icon: <Filter className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('filter'),
+                    variant: 'outline'
+                  }
+                ]}
+              />
+
+              {/* World-Class Real-Time Tracking Map */}
+              <RealTimeTrackingMap />
             </TabsContent>
             
             <TabsContent value="realtime" className="mt-0">

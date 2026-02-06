@@ -3,6 +3,8 @@
  * Rota canônica: /command
  * 
  * Consolida: Central de Comando + NOC + SOC + Comms + Alerts
+ * 
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
 import React, { Suspense, lazy } from 'react';
@@ -12,6 +14,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
+import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 
 // Lazy load sub-components
 const CentralComando = lazy(() => import('@/pages/CentralComando'));
@@ -44,12 +49,55 @@ const tabConfig = [
   { id: 'alerts', label: 'Alerts', icon: Bell, path: '/command/alerts' },
 ];
 
+// Timeline events for command center
+const commandTimelineEvents = [
+  {
+    id: '1',
+    title: 'Port Entry Approved',
+    description: 'MV Atlantic Star cleared for Santos port entry',
+    timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
+    type: 'success' as const,
+    user: 'Captain Silva',
+    metadata: { vessel: 'Atlantic Star', port: 'Santos' }
+  },
+  {
+    id: '2',
+    title: 'Weather Alert',
+    description: 'Storm warning issued for Gulf region - vessel rerouting recommended',
+    timestamp: new Date(Date.now() - 45 * 60000).toISOString(),
+    type: 'warning' as const,
+    metadata: { region: 'Gulf of Mexico' }
+  },
+  {
+    id: '3',
+    title: 'Maintenance Completed',
+    description: 'Engine overhaul completed on MV Pacific Voyager',
+    timestamp: new Date(Date.now() - 90 * 60000).toISOString(),
+    type: 'info' as const,
+    user: 'Chief Engineer Costa',
+    metadata: { vessel: 'Pacific Voyager' }
+  },
+  {
+    id: '4',
+    title: 'Security Incident',
+    description: 'Unauthorized vessel approach detected - SOC monitoring',
+    timestamp: new Date(Date.now() - 120 * 60000).toISOString(),
+    type: 'error' as const,
+    user: 'SOC Operator',
+    metadata: { status: 'Active Monitoring' }
+  },
+];
+
 export default function CommandMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
+  };
+
+  const handleActionBarAction = (action: string) => {
+    console.log(`Command action: ${action}`);
   };
 
   return (
@@ -96,8 +144,65 @@ export default function CommandMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="overview" className="mt-0">
-              <CentralComando />
+            <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="Executive Command Panel"
+                subtitle="Real-time fleet operations overview"
+                actions={[
+                  {
+                    id: 'refresh',
+                    label: 'Refresh Data',
+                    icon: <Activity className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('refresh'),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'export',
+                    label: 'Export Report',
+                    icon: <BarChart3 className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('export'),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'alerts',
+                    label: 'View All Alerts',
+                    icon: <Bell className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'alerts' }),
+                    variant: 'default'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search vessels, voyages, alerts..."
+              />
+
+              {/* Workflow Status */}
+              <WorkflowStatusBar
+                title="Fleet Operations Status"
+                steps={[
+                  { id: 'planning', label: 'Planning', status: 'completed' },
+                  { id: 'dispatch', label: 'Dispatch', status: 'completed' },
+                  { id: 'transit', label: 'In Transit', status: 'current' },
+                  { id: 'arrival', label: 'Arrival', status: 'pending' },
+                  { id: 'completed', label: 'Completed', status: 'pending' }
+                ]}
+                variant="horizontal"
+              />
+
+              {/* Main Content with Timeline */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <CentralComando />
+                </div>
+                <div className="lg:col-span-1">
+                  <PremiumTimeline
+                    title="Activity Feed"
+                    events={commandTimelineEvents}
+                    maxItems={10}
+                    showFilters
+                  />
+                </div>
+              </div>
             </TabsContent>
             
             <TabsContent value="operations" className="mt-0">

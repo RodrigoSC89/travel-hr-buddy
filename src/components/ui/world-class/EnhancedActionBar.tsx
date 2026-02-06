@@ -14,6 +14,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Tooltip,
   TooltipContent,
@@ -43,6 +44,7 @@ import {
   Share2,
   FileText,
   Settings,
+  Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -61,11 +63,13 @@ interface ActionConfig {
   roles?: string[];
 }
 
-interface EnhancedActionBarProps {
+export interface EnhancedActionBarProps {
   title?: string;
   subtitle?: string;
   selectedCount?: number;
   onClearSelection?: () => void;
+  // Support both 'actions' and 'primaryActions' for flexibility
+  actions?: ActionConfig[];
   primaryActions?: ActionConfig[];
   secondaryActions?: ActionConfig[];
   bulkActions?: ActionConfig[];
@@ -76,6 +80,11 @@ interface EnhancedActionBarProps {
   isRefreshing?: boolean;
   onRefresh?: () => Promise<void>;
   lastUpdated?: Date;
+  // Search support
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+  onSearch?: (query: string) => void;
+  searchValue?: string;
 }
 
 export function EnhancedActionBar({
@@ -83,19 +92,28 @@ export function EnhancedActionBar({
   subtitle,
   selectedCount = 0,
   onClearSelection,
+  actions = [],
   primaryActions = [],
   secondaryActions = [],
   bulkActions = [],
-  showFilters = true,
+  showFilters = false,
   onFilterClick,
   filterCount = 0,
   className,
   isRefreshing = false,
   onRefresh,
   lastUpdated,
+  showSearch = false,
+  searchPlaceholder = 'Buscar...',
+  onSearch,
+  searchValue = '',
 }: EnhancedActionBarProps) {
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
   const [successActions, setSuccessActions] = useState<Set<string>>(new Set());
+  const [localSearchValue, setLocalSearchValue] = useState(searchValue);
+
+  // Merge actions and primaryActions for backwards compatibility
+  const allPrimaryActions = [...actions, ...primaryActions];
 
   const handleAction = async (action: ActionConfig) => {
     if (action.loading || loadingActions.has(action.id)) return;
@@ -123,6 +141,11 @@ export function EnhancedActionBar({
         return next;
       });
     }
+  };
+
+  const handleSearchChange = (value: string) => {
+    setLocalSearchValue(value);
+    onSearch?.(value);
   };
 
   const renderActionButton = (action: ActionConfig, size: 'default' | 'sm' = 'default') => {
@@ -196,7 +219,7 @@ export function EnhancedActionBar({
   }
 
   return (
-    <div className={cn('flex items-center justify-between gap-4 flex-wrap', className)}>
+    <div className={cn('flex items-center justify-between gap-4 flex-wrap p-4 bg-card border rounded-lg', className)}>
       {/* Left side - Title or Info */}
       {(title || subtitle) && (
         <div className="flex-1 min-w-0">
@@ -205,15 +228,30 @@ export function EnhancedActionBar({
         </div>
       )}
       
-      {/* Center - Last Updated */}
-      {lastUpdated && (
-        <div className="hidden lg:flex items-center gap-2 text-xs text-muted-foreground">
-          <span>Atualizado:</span>
-          <span className="font-medium">
-            {lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-          </span>
-        </div>
-      )}
+      {/* Center - Search or Last Updated */}
+      <div className="flex items-center gap-4 flex-1 justify-center">
+        {showSearch && (
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder={searchPlaceholder}
+              value={localSearchValue}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        )}
+        
+        {lastUpdated && !showSearch && (
+          <div className="hidden lg:flex items-center gap-2 text-xs text-muted-foreground">
+            <span>Atualizado:</span>
+            <span className="font-medium">
+              {lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Right side - Actions */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -259,7 +297,7 @@ export function EnhancedActionBar({
         )}
 
         {/* Primary Actions */}
-        {primaryActions.map(action => renderActionButton(action, 'sm'))}
+        {allPrimaryActions.map(action => renderActionButton(action, 'sm'))}
 
         {/* Secondary Actions Dropdown */}
         {secondaryActions.length > 0 && (

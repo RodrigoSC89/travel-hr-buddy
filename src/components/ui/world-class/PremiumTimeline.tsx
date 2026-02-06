@@ -42,13 +42,15 @@ import {
   Wrench,
   Shield,
   Calendar,
+  AlertTriangle,
+  Info,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-type EventType = 
+export type EventType = 
   | 'create' 
   | 'update' 
   | 'delete' 
@@ -63,17 +65,22 @@ type EventType =
   | 'maintenance'
   | 'voyage'
   | 'compliance'
-  | 'system';
+  | 'system'
+  // Additional simple types for backwards compatibility
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info';
 
 type EventStatus = 'completed' | 'pending' | 'in-progress' | 'cancelled' | 'warning';
 
-interface TimelineEvent {
+export interface TimelineEvent {
   id: string;
   type: EventType;
   title: string;
   description?: string;
-  timestamp: Date;
-  user?: {
+  timestamp: Date | string; // Accept both Date and string
+  user?: string | {
     name: string;
     avatar?: string;
     role?: string;
@@ -95,6 +102,7 @@ interface PremiumTimelineProps {
   events: TimelineEvent[];
   title?: string;
   showFilters?: boolean;
+  maxItems?: number;
   maxVisible?: number;
   className?: string;
   onAddEvent?: () => void;
@@ -118,6 +126,11 @@ const eventIcons: Record<EventType, React.ReactNode> = {
   voyage: <Ship className="h-4 w-4" />,
   compliance: <Shield className="h-4 w-4" />,
   system: <Settings className="h-4 w-4" />,
+  // Simple types
+  success: <CheckCircle2 className="h-4 w-4" />,
+  warning: <AlertTriangle className="h-4 w-4" />,
+  error: <AlertCircle className="h-4 w-4" />,
+  info: <Info className="h-4 w-4" />,
 };
 
 const eventColors: Record<EventType, string> = {
@@ -136,6 +149,11 @@ const eventColors: Record<EventType, string> = {
   voyage: 'bg-blue-500',
   compliance: 'bg-violet-500',
   system: 'bg-gray-500',
+  // Simple types
+  success: 'bg-green-500',
+  warning: 'bg-yellow-500',
+  error: 'bg-red-500',
+  info: 'bg-blue-500',
 };
 
 const statusColors: Record<EventStatus, string> = {
@@ -154,10 +172,26 @@ const statusLabels: Record<EventStatus, string> = {
   warning: 'Atenção',
 };
 
+// Helper to convert timestamp to Date
+const toDate = (timestamp: Date | string): Date => {
+  if (timestamp instanceof Date) return timestamp;
+  return new Date(timestamp);
+};
+
+// Helper to normalize user
+const normalizeUser = (user?: string | { name: string; avatar?: string; role?: string }) => {
+  if (!user) return undefined;
+  if (typeof user === 'string') {
+    return { name: user, avatar: undefined, role: undefined };
+  }
+  return user;
+};
+
 export function PremiumTimeline({
   events,
   title = 'Histórico de Atividades',
   showFilters = true,
+  maxItems,
   maxVisible = 5,
   className,
   onAddEvent,
@@ -168,12 +202,15 @@ export function PremiumTimeline({
   const [selectedTypes, setSelectedTypes] = useState<EventType[]>([]);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
 
+  // Use maxItems if provided, otherwise maxVisible
+  const effectiveMaxVisible = maxItems ?? maxVisible;
+
   const filteredEvents = selectedTypes.length > 0
     ? events.filter(e => selectedTypes.includes(e.type))
     : events;
 
-  const visibleEvents = expanded ? filteredEvents : filteredEvents.slice(0, maxVisible);
-  const hasMore = filteredEvents.length > maxVisible;
+  const visibleEvents = expanded ? filteredEvents : filteredEvents.slice(0, effectiveMaxVisible);
+  const hasMore = filteredEvents.length > effectiveMaxVisible;
 
   const toggleFilter = (type: EventType) => {
     setSelectedTypes(prev =>
@@ -255,15 +292,15 @@ export function PremiumTimeline({
               exit={{ height: 0, opacity: 0 }}
               className="flex flex-wrap gap-2 pt-3"
             >
-              {Object.entries(eventIcons).map(([type, icon]) => (
+              {(['success', 'warning', 'error', 'info', 'maintenance', 'voyage', 'compliance'] as EventType[]).map((type) => (
                 <Badge
                   key={type}
-                  variant={selectedTypes.includes(type as EventType) ? 'default' : 'outline'}
+                  variant={selectedTypes.includes(type) ? 'default' : 'outline'}
                   className="cursor-pointer"
-                  onClick={() => toggleFilter(type as EventType)}
+                  onClick={() => toggleFilter(type)}
                 >
-                  {icon}
-                  <span className="ml-1 text-xs">{type}</span>
+                  {eventIcons[type]}
+                  <span className="ml-1 text-xs capitalize">{type}</span>
                 </Badge>
               ))}
             </motion.div>
@@ -285,94 +322,99 @@ export function PremiumTimeline({
             {/* Events */}
             <div className="space-y-4">
               <AnimatePresence mode="popLayout">
-                {visibleEvents.map((event, idx) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className="relative flex gap-4 pl-2"
-                  >
-                    {/* Event icon */}
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className={cn(
-                            'w-8 h-8 rounded-full flex items-center justify-center text-white relative z-10',
-                            eventColors[event.type]
-                          )}>
-                            {eventIcons[event.type]}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="capitalize">{event.type.replace('-', ' ')}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                {visibleEvents.map((event, idx) => {
+                  const normalizedUser = normalizeUser(event.user);
+                  const eventDate = toDate(event.timestamp);
+                  
+                  return (
+                    <motion.div
+                      key={event.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="relative flex gap-4 pl-2"
+                    >
+                      {/* Event icon */}
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className={cn(
+                              'w-8 h-8 rounded-full flex items-center justify-center text-white relative z-10',
+                              eventColors[event.type] || 'bg-gray-500'
+                            )}>
+                              {eventIcons[event.type] || <Info className="h-4 w-4" />}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="capitalize">{event.type.replace('-', ' ')}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
 
-                    {/* Event content */}
-                    <div className="flex-1 min-w-0 pb-4">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm">{event.title}</p>
-                          {event.description && (
-                            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                              {event.description}
-                            </p>
+                      {/* Event content */}
+                      <div className="flex-1 min-w-0 pb-4">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm">{event.title}</p>
+                            {event.description && (
+                              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                                {event.description}
+                              </p>
+                            )}
+                          </div>
+                          
+                          {event.status && (
+                            <Badge className={cn('text-xs shrink-0', statusColors[event.status])}>
+                              {statusLabels[event.status]}
+                            </Badge>
                           )}
                         </div>
-                        
-                        {event.status && (
-                          <Badge className={cn('text-xs shrink-0', statusColors[event.status])}>
-                            {statusLabels[event.status]}
-                          </Badge>
-                        )}
-                      </div>
 
-                      {/* User and timestamp */}
-                      <div className="flex items-center gap-2 mt-2">
-                        {event.user && (
-                          <div className="flex items-center gap-1.5">
-                            <Avatar className="h-5 w-5">
-                              <AvatarImage src={event.user.avatar} />
-                              <AvatarFallback className="text-[10px]">
-                                {event.user.name.slice(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="text-xs text-muted-foreground">
-                              {event.user.name}
-                            </span>
+                        {/* User and timestamp */}
+                        <div className="flex items-center gap-2 mt-2">
+                          {normalizedUser && (
+                            <div className="flex items-center gap-1.5">
+                              <Avatar className="h-5 w-5">
+                                <AvatarImage src={normalizedUser.avatar} />
+                                <AvatarFallback className="text-[10px]">
+                                  {normalizedUser.name.slice(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="text-xs text-muted-foreground">
+                                {normalizedUser.name}
+                              </span>
+                            </div>
+                          )}
+                          <span className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(eventDate, { 
+                              addSuffix: true, 
+                              locale: ptBR 
+                            })}
+                          </span>
+                        </div>
+
+                        {/* Actions */}
+                        {event.actions && event.actions.length > 0 && (
+                          <div className="flex gap-2 mt-2">
+                            {event.actions.map((action, actionIdx) => (
+                              <Button
+                                key={actionIdx}
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs"
+                                onClick={action.onClick}
+                              >
+                                {action.icon}
+                                {action.label}
+                              </Button>
+                            ))}
                           </div>
                         )}
-                        <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(event.timestamp, { 
-                            addSuffix: true, 
-                            locale: ptBR 
-                          })}
-                        </span>
                       </div>
-
-                      {/* Actions */}
-                      {event.actions && event.actions.length > 0 && (
-                        <div className="flex gap-2 mt-2">
-                          {event.actions.map((action, actionIdx) => (
-                            <Button
-                              key={actionIdx}
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs"
-                              onClick={action.onClick}
-                            >
-                              {action.icon}
-                              {action.label}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </AnimatePresence>
             </div>
 
@@ -392,7 +434,7 @@ export function PremiumTimeline({
                 ) : (
                   <>
                     <ChevronDown className="h-4 w-4 mr-1" />
-                    Ver mais {filteredEvents.length - maxVisible} atividades
+                    Ver mais {filteredEvents.length - effectiveMaxVisible} atividades
                   </>
                 )}
               </Button>

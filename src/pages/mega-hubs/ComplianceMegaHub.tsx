@@ -7,15 +7,19 @@
  * ✅ 12 AUDITORIAS MARÍTIMAS COMPLETAS
  * ✅ 10 AGENTES DE AUDITORIA IA
  * ✅ ZERO SUPRESSÃO DE FUNCIONALIDADES
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
 import React, { Suspense, lazy } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock } from 'lucide-react';
+import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
+import { AuditWorkflowManager } from '@/components/world-class';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -70,6 +74,7 @@ interface TabConfig {
 
 const tabConfig: TabConfig[] = [
   { id: 'hub', label: 'Compliance Hub', icon: Shield },
+  { id: 'audit-workflow', label: 'Audit Workflow', icon: ClipboardCheck },
   { id: 'scorecard', label: 'Scorecard', icon: BarChart3 },
   { id: 'audit-agents', label: '10 AI Agents', icon: Bot },
   { id: 'certificates', label: 'Certificates', icon: Award },
@@ -83,29 +88,17 @@ const tabConfig: TabConfig[] = [
 // MAPEAMENTO COMPLETO DAS 12 AUDITORIAS MARÍTIMAS
 // ═══════════════════════════════════════════════════════════
 const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
-  // 1. PEO-DP (IMCA M-117)
   'peo-dp': PEODP,
-  // 2. PEOTRAM 13 Elementos (ANP)
   'peotram': PEOTRAM,
-  // 3. ISM Code (SMS)
   'ism': SafetyIMCAV2,
-  // 4. ISPS Security (SSP)
   'isps': ISPSSecurityV2,
-  // 5. SOLAS/LSA/FFE
   'solas': SOLASInspection,
-  // 6. MARPOL I-VI
   'marpol': WasteManagementPremium,
-  // 7. Pre-OVID (OCIMF)
   'pre-ovid': PreOVIDInspection,
-  // 8. Pre-MLC 2006 (ILO)
   'pre-mlc': MLCInspection,
-  // 9. PSC Package (MoU)
   'psc': PSCPackage,
-  // 10. SGSO ANP 17 Práticas
   'sgso': SGSO,
-  // 11. Pre-SIRE 2.0 (OCIMF) ✅ RESTAURADO
   'pre-sire': PreSIREInspection,
-  // 12. TMSA (OCIMF) ✅ RESTAURADO
   'tmsa': TMSAAssessment,
 };
 
@@ -119,6 +112,10 @@ export default function ComplianceMegaHub() {
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
+  };
+
+  const handleActionBarAction = (action: string) => {
+    console.log(`Compliance action: ${action}`);
   };
 
   // If accessing a specific standard, render that audit page
@@ -183,8 +180,72 @@ export default function ComplianceMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="hub" className="mt-0">
+            <TabsContent value="hub" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="Compliance Command Center"
+                subtitle="Manage audits, certifications, and regulatory compliance"
+                actions={[
+                  {
+                    id: 'new-audit',
+                    label: 'Start Audit',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-audit'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'workflow',
+                    label: 'Audit Workflow',
+                    icon: <ClipboardCheck className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'audit-workflow' }),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'export',
+                    label: 'Export Report',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('export'),
+                    variant: 'outline'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search audits, certificates, NCs..."
+              />
+
+              {/* Workflow Status */}
+              <WorkflowStatusBar
+                title="Compliance Cycle"
+                steps={[
+                  { id: 'planning', label: 'Planning', status: 'completed' },
+                  { id: 'execution', label: 'Audit Execution', status: 'completed' },
+                  { id: 'findings', label: 'Findings Review', status: 'current' },
+                  { id: 'capa', label: 'CAPA Actions', status: 'pending' },
+                  { id: 'closure', label: 'Closure', status: 'pending' }
+                ]}
+                variant="horizontal"
+              />
+
               <ComplianceHubPage />
+            </TabsContent>
+
+            <TabsContent value="audit-workflow" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar for Audit Workflow */}
+              <EnhancedActionBar
+                title="Audit Workflow Manager"
+                subtitle="Dynamic scorecards for ISM, ISPS, MLC, and all 12 maritime audits"
+                actions={[
+                  {
+                    id: 'new-audit',
+                    label: 'New Audit',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-audit'),
+                    variant: 'default'
+                  }
+                ]}
+              />
+
+              {/* World-Class Audit Workflow Manager */}
+              <AuditWorkflowManager />
             </TabsContent>
             
             <TabsContent value="scorecard" className="mt-0">
