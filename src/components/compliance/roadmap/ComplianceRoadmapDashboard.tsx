@@ -22,6 +22,36 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 
+// Helper functions & constants
+const getCriticidadeColor = (criticidade: string): string => {
+  switch (criticidade) {
+    case 'critico': return 'bg-red-500 text-white';
+    case 'alto': return 'bg-orange-500 text-white';
+    case 'medio': return 'bg-yellow-500 text-black';
+    case 'baixo': return 'bg-green-500 text-white';
+    default: return 'bg-muted text-muted-foreground';
+  }
+};
+
+const getStatusColor = (status: string): string => {
+  switch (status) {
+    case 'conforme': return 'bg-green-500 text-white';
+    case 'nao_conforme': return 'bg-red-500 text-white';
+    case 'pendente': return 'bg-yellow-500 text-black';
+    case 'em_analise': return 'bg-blue-500 text-white';
+    default: return 'bg-muted text-muted-foreground';
+  }
+};
+
+const CHART_COLORS: Record<string, string> = {
+  PEOTRAM: '#3b82f6',
+  'PEO-DP': '#10b981',
+  MLC: '#f59e0b',
+  SGSO: '#8b5cf6',
+  'Pre-OVID': '#ef4444',
+  meta: '#6b7280',
+};
+
 // Types
 interface ComplianceItem {
   id: string;
