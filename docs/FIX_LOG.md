@@ -85,10 +85,14 @@
 | RealTimeTracking | Mock | ✅ Hook Real |
 | VoyagePnL | 404 | ✅ Página Criada |
 | CrewScheduler | 404 | ✅ Página Criada |
+| PreSIREInspection | Mock | ✅ CRUD Real |
+| TMSAAssessment | Mock | ✅ CRUD Real |
+| AlertsCommandCenter | Mock | ✅ Hook Real |
+| OperationsHub | Placeholder | ✅ Handlers Reais |
 
 ## ✅ VALIDAÇÃO FINAL
 
-**Testes Executados:** 2026-02-06T00:30:00Z
+**Testes Executados:** 2026-02-06T01:00:00Z
 
 | Suite | Resultado |
 |-------|-----------|
@@ -98,26 +102,37 @@
 
 **Status:** 🟢 PRODUÇÃO READY - 0 P0, 0 P1
 
-## 🆕 PÁGINAS/HOOKS CRIADOS
+## 🆕 ARQUIVOS CRIADOS
 
+### Hooks CRUD
 | Arquivo | Tabelas | Funcionalidades |
 |---------|---------|-----------------|
 | `useClassSurveys` | vessels | CRUD, Export CSV |
 | `useFleetOperations` | vessels | KPIs, Export CSV, Status Update |
 | `useExecutiveKPIs` | vessels, incidents | Financial, Operational, Safety, ESG |
 | `useFleetTracking` | vessels | Realtime sub, Signal Quality |
-| `VoyagePnLPage` | vessels | P&L Calculator, KPIs, Export |
-| `CrewSchedulerPage` | vessels | Crew Management, Rotation Alerts |
+| `useAlertsRealData` | telemetry_alerts | CRUD, Real-time |
+| `useRealActionHandlers` | voyages, maintenance | Create, Update, Navigate |
+| `useSystemHealthData` | vessels, crew, maint | Aggregated KPIs |
+| `useProcurementCRUD` | suppliers, inventory | Full CRUD, Export |
+| `useComplianceCRUD` | audits, NCs, certs | Full CRUD, Export |
+| `useMaritimeAuditsCRUD` | 6 audit tables | 12 Audits CRUD, Export |
+
+### Componentes UX
+| Arquivo | Componentes |
+|---------|-------------|
+| `UXStates.tsx` | LoadingState, ErrorState, EmptyState, SuccessState, DataStateWrapper |
 
 ## 📋 PADRÕES APLICADOS
 
 - ✅ Loading State: Skeleton components
 - ✅ Error State: Mensagem + botão Retry
-- ✅ Empty State: Ícone + mensagem
+- ✅ Empty State: Ícone + mensagem + CTA
 - ✅ Success: Toast de confirmação
 - ✅ Refresh: `queryClient.invalidateQueries()`
-- ✅ Export: Gera arquivo real (CSV/JSON)
+- ✅ Export: CSV/Excel/PDF/JSON real via `useUniversalExport`
 
 ---
 
 *Log gerado automaticamente - NAUTI ONE v8.0*
+*Última atualização: 2026-02-06T01:00:00Z*

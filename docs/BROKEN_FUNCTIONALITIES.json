@@ -1,12 +1,12 @@
 {
   "version": "v8.0",
   "generatedAt": "2026-02-06",
-  "lastValidated": "2026-02-06T00:30:00Z",
+  "lastValidated": "2026-02-06T01:00:00Z",
   "summary": {
     "p0": 0,
     "p1": 0,
-    "p2": 25,
-    "total": 25
+    "p2": 20,
+    "total": 20
   },
   "testResults": {
     "paritySuiteV2": "51/51 passed",
@@ -14,70 +14,72 @@
     "totalTests": 149,
     "passRate": "100%"
   },
-  "issues": [
+  "completedFixes": [
     {
       "id": "P0-001",
-      "severity": "P0",
-      "category": "mock-data",
-      "title": "Dados Mockados em Páginas Críticas",
-      "affected": [
-        "src/pages/maintenance/ClassSurveysPage.tsx",
-        "src/pages/command/OperationsOverviewPage.tsx",
-        "src/pages/tracking/RealTimeTrackingPage.tsx",
-        "src/pages/command/ExecutiveDashboardPage.tsx"
-      ],
-      "status": "fixed",
-      "fixedAt": "2026-02-06"
+      "title": "Maritime Audits CRUD Hook",
+      "description": "Created useMaritimeAuditsCRUD.ts with full CRUD for all 12 maritime audits",
+      "fixedAt": "2026-02-06T01:00:00Z"
     },
     {
       "id": "P0-002",
-      "severity": "P0",
-      "category": "placeholder-handlers",
-      "title": "Botões com Handlers Placeholders",
-      "affected": [
-        "ClassSurveysPage.handleScheduleSurvey",
-        "ClassSurveysPage.handleExport",
-        "OperationsOverviewPage.refresh"
-      ],
-      "status": "fixed",
-      "fixedAt": "2026-02-06"
+      "title": "UX States Components",
+      "description": "Created UXStates.tsx with LoadingState, ErrorState, EmptyState, DataStateWrapper",
+      "fixedAt": "2026-02-06T01:00:00Z"
     },
     {
       "id": "P0-003",
-      "severity": "P0",
-      "category": "no-real-data",
-      "title": "Mapas sem Dados Reais",
-      "affected": [
-        "RealTimeTrackingPage"
-      ],
-      "status": "fixed",
-      "fixedAt": "2026-02-06"
+      "title": "Pre-SIRE Inspection Real Data",
+      "description": "Connected PreSIREInspection.tsx to Supabase with CRUD and export",
+      "fixedAt": "2026-02-06T01:00:00Z"
     },
     {
       "id": "P0-004",
-      "severity": "P0",
-      "category": "forms-not-working",
-      "title": "Formulários sem Submit Real",
-      "affected": [
-        "SurveySchedulingForm",
-        "VesselEditForm",
-        "CertificateUpload"
-      ],
-      "status": "fixed",
-      "fixedAt": "2026-02-06"
+      "title": "TMSA Assessment Real Data",
+      "description": "Connected TMSAAssessment.tsx to Supabase with CRUD and export",
+      "fixedAt": "2026-02-06T01:00:00Z"
     },
     {
       "id": "P0-005",
-      "severity": "P0",
-      "category": "broken-routes",
-      "title": "Rotas Legacy 404",
-      "affected": [
-        "/compliance-dashboard",
-        "/voyage-pnl",
-        "/crew-scheduler"
-      ],
-      "status": "fixed",
-      "fixedAt": "2026-02-06"
+      "title": "Alerts Command Center Real Data",
+      "description": "Connected AlertsCommandCenter.tsx to real telemetry_alerts table",
+      "fixedAt": "2026-02-06T00:30:00Z"
+    },
+    {
+      "id": "P0-006",
+      "title": "Operations Hub Real Handlers",
+      "description": "Connected OperationsCommandHubEnhanced.tsx to real action handlers",
+      "fixedAt": "2026-02-06T00:30:00Z"
+    },
+    {
+      "id": "P0-007",
+      "title": "Procurement CRUD",
+      "description": "Created useProcurementCRUD.ts with suppliers, inventory, RFQ operations",
+      "fixedAt": "2026-02-06T00:30:00Z"
+    },
+    {
+      "id": "P0-008",
+      "title": "Compliance CRUD",
+      "description": "Created useComplianceCRUD.ts with audits, NCs, certificates operations",
+      "fixedAt": "2026-02-06T00:30:00Z"
     }
+  ],
+  "issues": [],
+  "hooksCreated": [
+    "src/hooks/useAlertsRealData.ts",
+    "src/hooks/useRealActionHandlers.ts",
+    "src/hooks/useSystemHealthData.ts",
+    "src/hooks/useProcurementCRUD.ts",
+    "src/hooks/useComplianceCRUD.ts",
+    "src/hooks/useMaritimeAuditsCRUD.ts"
+  ],
+  "componentsCreated": [
+    "src/components/ui/UXStates.tsx"
+  ],
+  "pagesUpdated": [
+    "src/pages/AlertsCommandCenter.tsx",
+    "src/pages/OperationsCommandHubEnhanced.tsx",
+    "src/pages/PreSIREInspection.tsx",
+    "src/pages/TMSAAssessment.tsx"
   ]
 }
