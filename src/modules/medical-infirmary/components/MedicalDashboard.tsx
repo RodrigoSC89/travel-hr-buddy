@@ -1,6 +1,6 @@
 /**
- * Medical Dashboard - Premium Enfermaria Digital
- * Gestão completa de saúde da tripulação
+ * Medical Dashboard - Connected to real Supabase data
+ * Gestão de saúde da tripulação com dados reais
  */
 
 import React, { useState } from "react";
@@ -11,139 +11,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useMedicalDashboardData } from "@/hooks/useMedicalDashboardData";
 import {
-  Heart,
-  Activity,
-  Pill,
-  Stethoscope,
-  Calendar,
-  Clock,
-  AlertTriangle,
-  CheckCircle2,
-  User,
-  FileText,
-  Phone,
-  Video,
-  ThermometerSun,
-  Syringe,
-  Ambulance,
-  ClipboardList,
-  TrendingUp,
-  Shield,
-  Plus,
-  Search,
-  Download,
-  Bell
+  Heart, Activity, Pill, Stethoscope, Calendar, Clock, AlertTriangle,
+  CheckCircle2, User, FileText, Phone, Video, ThermometerSun, Syringe,
+  Ambulance, ClipboardList, TrendingUp, Shield, Plus, Search, Download,
+  Bell, RefreshCw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface CrewMember {
-  id: string;
-  name: string;
-  rank: string;
-  vessel: string;
-  medicalStatus: "fit" | "restricted" | "unfit" | "pending";
-  lastCheckup: string;
-  nextCheckup: string;
-  certifications: { name: string; expiry: string; status: "valid" | "expiring" | "expired" }[];
-}
-
-interface MedicalRecord {
-  id: string;
-  crewId: string;
-  crewName: string;
-  type: "consultation" | "emergency" | "routine" | "telemedicine";
-  date: string;
-  diagnosis: string;
-  treatment: string;
-  doctor: string;
-  status: "open" | "closed" | "follow-up";
-}
-
-interface Medication {
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  minStock: number;
-  expiry: string;
-  controlled: boolean;
-}
-
-// Mock data
-const mockCrew: CrewMember[] = [
-  {
-    id: "1",
-    name: "João Silva",
-    rank: "Capitão",
-    vessel: "MV Atlantic Star",
-    medicalStatus: "fit",
-    lastCheckup: "2024-01-10",
-    nextCheckup: "2024-07-10",
-    certifications: [
-      { name: "ENG1 Medical", expiry: "2025-01-10", status: "valid" },
-      { name: "Drug & Alcohol", expiry: "2024-03-15", status: "expiring" },
-    ]
-  },
-  {
-    id: "2",
-    name: "Carlos Santos",
-    rank: "Eng. Chefe",
-    vessel: "MV Pacific Dream",
-    medicalStatus: "restricted",
-    lastCheckup: "2024-01-05",
-    nextCheckup: "2024-02-05",
-    certifications: [
-      { name: "ENG1 Medical", expiry: "2024-02-01", status: "expiring" },
-      { name: "Visão", expiry: "2024-06-20", status: "valid" },
-    ]
-  },
-  {
-    id: "3",
-    name: "Pedro Costa",
-    rank: "Oficial de Convés",
-    vessel: "MV Atlantic Star",
-    medicalStatus: "fit",
-    lastCheckup: "2023-12-20",
-    nextCheckup: "2024-06-20",
-    certifications: [
-      { name: "ENG1 Medical", expiry: "2024-12-20", status: "valid" },
-    ]
-  },
-];
-
-const mockRecords: MedicalRecord[] = [
-  { id: "1", crewId: "2", crewName: "Carlos Santos", type: "consultation", date: "2024-01-15", diagnosis: "Hipertensão arterial leve", treatment: "Medicação diária, monitoramento", doctor: "Dr. Ana Oliveira", status: "follow-up" },
-  { id: "2", crewId: "1", crewName: "João Silva", type: "routine", date: "2024-01-10", diagnosis: "Exame periódico - Apto", treatment: "N/A", doctor: "Dr. Ana Oliveira", status: "closed" },
-  { id: "3", crewId: "3", crewName: "Pedro Costa", type: "emergency", date: "2024-01-08", diagnosis: "Entorse de tornozelo", treatment: "Imobilização, anti-inflamatório", doctor: "Dr. Carlos Mendes", status: "closed" },
-  { id: "4", crewId: "2", crewName: "Carlos Santos", type: "telemedicine", date: "2024-01-12", diagnosis: "Acompanhamento cardiológico", treatment: "Ajuste de medicação", doctor: "Dr. Paulo Cardoso", status: "closed" },
-];
-
-const mockMedications: Medication[] = [
-  { id: "1", name: "Paracetamol 500mg", category: "Analgésico", quantity: 200, minStock: 50, expiry: "2025-06-15", controlled: false },
-  { id: "2", name: "Morfina 10mg", category: "Opióide", quantity: 15, minStock: 10, expiry: "2024-12-01", controlled: true },
-  { id: "3", name: "Amoxicilina 500mg", category: "Antibiótico", quantity: 80, minStock: 30, expiry: "2024-08-20", controlled: false },
-  { id: "4", name: "Losartana 50mg", category: "Anti-hipertensivo", quantity: 120, minStock: 40, expiry: "2025-03-10", controlled: false },
-  { id: "5", name: "Diazepam 5mg", category: "Ansiolítico", quantity: 8, minStock: 10, expiry: "2024-11-15", controlled: true },
-];
-
-const getStatusColor = (status: CrewMember["medicalStatus"]) => {
-  const colors = {
-    "fit": "bg-emerald-500",
-    "restricted": "bg-amber-500",
-    "unfit": "bg-red-500",
-    "pending": "bg-blue-500"
+const getStatusColor = (status: string) => {
+  const colors: Record<string, string> = {
+    "fit": "bg-emerald-500", "restricted": "bg-amber-500",
+    "unfit": "bg-red-500", "pending": "bg-blue-500"
   };
-  return colors[status];
+  return colors[status] || "bg-muted";
 };
 
 export default function MedicalDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const { crew, records, medications, isLoading, error, refetch, stats } = useMedicalDashboardData();
 
-  const fitCount = mockCrew.filter(c => c.medicalStatus === "fit").length;
-  const restrictedCount = mockCrew.filter(c => c.medicalStatus === "restricted").length;
-  const expiringCerts = mockCrew.flatMap(c => c.certifications).filter(cert => cert.status === "expiring").length;
-  const lowStockMeds = mockMedications.filter(m => m.quantity <= m.minStock).length;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-96 gap-4">
+        <AlertTriangle className="h-12 w-12 text-destructive" />
+        <p className="text-muted-foreground">Erro ao carregar dados médicos</p>
+        <Button onClick={() => refetch()}>Tentar novamente</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -154,78 +59,60 @@ export default function MedicalDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulantes Aptos</p>
-                <p className="text-3xl font-bold text-emerald-600">{fitCount}/{mockCrew.length}</p>
+                <p className="text-3xl font-bold text-emerald-600">{stats.fitCount}/{stats.totalCrew}</p>
                 <p className="text-xs text-emerald-600 mt-1">
-                  {((fitCount / mockCrew.length) * 100).toFixed(0)}% da tripulação
+                  {stats.totalCrew > 0 ? ((stats.fitCount / stats.totalCrew) * 100).toFixed(0) : 0}% da tripulação
                 </p>
               </div>
-              <div className="p-3 bg-emerald-500/20 rounded-xl">
-                <Heart className="h-6 w-6 text-emerald-600" />
-              </div>
+              <div className="p-3 bg-emerald-500/20 rounded-xl"><Heart className="h-6 w-6 text-emerald-600" /></div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={cn(restrictedCount > 0 && "border-amber-500/50")}>
+        <Card className={cn(stats.restrictedCount > 0 && "border-amber-500/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Restrição Médica</p>
-                <p className={cn("text-3xl font-bold", restrictedCount > 0 ? "text-amber-600" : "text-muted-foreground")}>
-                  {restrictedCount}
-                </p>
-                <p className="text-xs text-amber-600 mt-1">
-                  Requer acompanhamento
-                </p>
+                <p className={cn("text-3xl font-bold", stats.restrictedCount > 0 ? "text-amber-600" : "text-muted-foreground")}>{stats.restrictedCount}</p>
+                <p className="text-xs text-amber-600 mt-1">Requer acompanhamento</p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <Activity className="h-6 w-6 text-amber-600" />
-              </div>
+              <div className="p-3 bg-amber-500/20 rounded-xl"><Activity className="h-6 w-6 text-amber-600" /></div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={cn(expiringCerts > 0 && "border-amber-500/50")}>
+        <Card className={cn(stats.expiringCerts > 0 && "border-amber-500/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Cert. Vencendo</p>
-                <p className={cn("text-3xl font-bold", expiringCerts > 0 ? "text-amber-600" : "text-muted-foreground")}>
-                  {expiringCerts}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Próximos 30 dias
-                </p>
+                <p className={cn("text-3xl font-bold", stats.expiringCerts > 0 ? "text-amber-600" : "text-muted-foreground")}>{stats.expiringCerts}</p>
+                <p className="text-xs text-muted-foreground mt-1">Próximos 90 dias</p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <FileText className="h-6 w-6 text-amber-600" />
-              </div>
+              <div className="p-3 bg-amber-500/20 rounded-xl"><FileText className="h-6 w-6 text-amber-600" /></div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={cn(lowStockMeds > 0 && "border-destructive/50")}>
+        <Card className={cn(stats.lowStockMeds > 0 && "border-destructive/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Estoque Baixo</p>
-                <p className={cn("text-3xl font-bold", lowStockMeds > 0 ? "text-destructive" : "text-muted-foreground")}>
-                  {lowStockMeds}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Medicamentos
-                </p>
+                <p className={cn("text-3xl font-bold", stats.lowStockMeds > 0 ? "text-destructive" : "text-muted-foreground")}>{stats.lowStockMeds}</p>
+                <p className="text-xs text-muted-foreground mt-1">Medicamentos</p>
               </div>
-              <div className={cn("p-3 rounded-xl", lowStockMeds > 0 ? "bg-destructive/20" : "bg-muted")}>
-                <Pill className={cn("h-6 w-6", lowStockMeds > 0 ? "text-destructive" : "text-muted-foreground")} />
+              <div className={cn("p-3 rounded-xl", stats.lowStockMeds > 0 ? "bg-destructive/20" : "bg-muted")}>
+                <Pill className={cn("h-6 w-6", stats.lowStockMeds > 0 ? "text-destructive" : "text-muted-foreground")} />
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Alertas */}
-      {(restrictedCount > 0 || expiringCerts > 0) && (
+      {/* Alert banner */}
+      {(stats.restrictedCount > 0 || stats.expiringCerts > 0) && (
         <Card className="border-amber-500/50 bg-amber-500/5">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -233,13 +120,20 @@ export default function MedicalDashboard() {
               <div className="flex-1">
                 <p className="font-medium text-amber-600">Atenção Requerida</p>
                 <p className="text-sm text-muted-foreground">
-                  {restrictedCount} tripulante(s) com restrição médica e {expiringCerts} certificação(ões) próximas do vencimento
+                  {stats.restrictedCount} tripulante(s) com restrição médica e {stats.expiringCerts} certificação(ões) próximas do vencimento
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="border-amber-500 text-amber-600 hover:bg-amber-500/10">
-                Ver Detalhes
-              </Button>
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {crew.length === 0 && (
+        <Card className="border-dashed">
+          <CardContent className="p-12 text-center">
+            <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Nenhum tripulante cadastrado</h3>
+            <p className="text-muted-foreground">Cadastre tripulantes para gerenciar o status médico.</p>
           </CardContent>
         </Card>
       )}
@@ -247,76 +141,39 @@ export default function MedicalDashboard() {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="flex items-center justify-between">
           <TabsList>
-            <TabsTrigger value="overview" className="gap-2">
-              <Activity className="h-4 w-4" />
-              Visão Geral
-            </TabsTrigger>
-            <TabsTrigger value="crew" className="gap-2">
-              <User className="h-4 w-4" />
-              Tripulação
-            </TabsTrigger>
-            <TabsTrigger value="records" className="gap-2">
-              <ClipboardList className="h-4 w-4" />
-              Prontuários
-            </TabsTrigger>
-            <TabsTrigger value="medications" className="gap-2">
-              <Pill className="h-4 w-4" />
-              Medicamentos
-            </TabsTrigger>
-            <TabsTrigger value="telemedicine" className="gap-2">
-              <Video className="h-4 w-4" />
-              Telemedicina
-            </TabsTrigger>
+            <TabsTrigger value="overview" className="gap-2"><Activity className="h-4 w-4" />Visão Geral</TabsTrigger>
+            <TabsTrigger value="crew" className="gap-2"><User className="h-4 w-4" />Tripulação</TabsTrigger>
+            <TabsTrigger value="records" className="gap-2"><ClipboardList className="h-4 w-4" />Prontuários</TabsTrigger>
+            <TabsTrigger value="medications" className="gap-2"><Pill className="h-4 w-4" />Medicamentos</TabsTrigger>
           </TabsList>
-
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Exportar
-            </Button>
-            <Button size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Consulta
-            </Button>
+            <Button variant="outline" size="sm" onClick={() => refetch()}><RefreshCw className="h-4 w-4 mr-2" />Atualizar</Button>
+            <Button size="sm"><Plus className="h-4 w-4 mr-2" />Nova Consulta</Button>
           </div>
         </div>
 
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Status da Tripulação */}
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle>Status Médico da Tripulação</CardTitle>
-                <CardDescription>Resumo de aptidão por embarcação</CardDescription>
+                <CardDescription>Resumo por embarcação</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {["MV Atlantic Star", "MV Pacific Dream", "MV Ocean Pride"].map((vessel) => {
-                    const vesselCrew = mockCrew.filter(c => c.vessel === vessel);
+                  {[...new Set(crew.map(c => c.vessel))].filter(v => v !== "N/A").map((vessel) => {
+                    const vesselCrew = crew.filter(c => c.vessel === vessel);
                     const fitPercent = vesselCrew.length ? (vesselCrew.filter(c => c.medicalStatus === "fit").length / vesselCrew.length) * 100 : 0;
-                    
                     return (
                       <div key={vessel} className="p-4 rounded-lg border">
                         <div className="flex items-center justify-between mb-3">
                           <span className="font-medium">{vessel}</span>
-                          <Badge variant={fitPercent === 100 ? "default" : "secondary"}>
-                            {fitPercent.toFixed(0)}% Aptos
-                          </Badge>
+                          <Badge variant={fitPercent === 100 ? "default" : "secondary"}>{fitPercent.toFixed(0)}% Aptos</Badge>
                         </div>
                         <Progress value={fitPercent} className="h-2" />
                         <div className="flex gap-4 mt-3 text-sm">
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                            Aptos: {vesselCrew.filter(c => c.medicalStatus === "fit").length}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full bg-amber-500" />
-                            Restrição: {vesselCrew.filter(c => c.medicalStatus === "restricted").length}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full bg-blue-500" />
-                            Pendente: {vesselCrew.filter(c => c.medicalStatus === "pending").length}
-                          </span>
+                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-emerald-500" />Aptos: {vesselCrew.filter(c => c.medicalStatus === "fit").length}</span>
+                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-amber-500" />Restrição: {vesselCrew.filter(c => c.medicalStatus === "restricted").length}</span>
                         </div>
                       </div>
                     );
@@ -325,7 +182,6 @@ export default function MedicalDashboard() {
               </CardContent>
             </Card>
 
-            {/* Próximos Vencimentos */}
             <Card>
               <CardHeader>
                 <CardTitle>Próximos Vencimentos</CardTitle>
@@ -333,24 +189,18 @@ export default function MedicalDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockCrew.flatMap(crew => 
-                    crew.certifications
-                      .filter(cert => cert.status !== "valid")
-                      .map(cert => ({ crew, cert }))
-                  ).map(({ crew, cert }, i) => (
+                  {crew.flatMap(c => c.certifications.filter(cert => cert.status !== "valid").map(cert => ({ crew: c, cert }))).map(({ crew: c, cert }, i) => (
                     <div key={i} className="flex items-center justify-between p-3 rounded-lg border bg-card">
-                      <div>
-                        <p className="font-medium text-sm">{crew.name}</p>
-                        <p className="text-xs text-muted-foreground">{cert.name}</p>
-                      </div>
+                      <div><p className="font-medium text-sm">{c.name}</p><p className="text-xs text-muted-foreground">{cert.name}</p></div>
                       <div className="text-right">
-                        <Badge variant={cert.status === "expired" ? "destructive" : "secondary"}>
-                          {cert.status === "expired" ? "Vencido" : "Vencendo"}
-                        </Badge>
+                        <Badge variant={cert.status === "expired" ? "destructive" : "secondary"}>{cert.status === "expired" ? "Vencido" : "Vencendo"}</Badge>
                         <p className="text-xs text-muted-foreground mt-1">{cert.expiry}</p>
                       </div>
                     </div>
                   ))}
+                  {crew.flatMap(c => c.certifications.filter(cert => cert.status !== "valid")).length === 0 && (
+                    <div className="text-center py-4"><CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-2" /><p className="text-sm text-muted-foreground">Todas certificações em dia</p></div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -359,48 +209,24 @@ export default function MedicalDashboard() {
 
         <TabsContent value="crew" className="mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Tripulação</CardTitle>
-              <CardDescription>Status médico individual</CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Tripulação</CardTitle><CardDescription>Status médico individual</CardDescription></CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockCrew.map((crew) => (
-                  <div key={crew.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
+                {crew.map((c) => (
+                  <div key={c.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
                     <div className="flex items-center gap-4">
-                      <Avatar>
-                        <AvatarFallback>{crew.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
-                      </Avatar>
+                      <Avatar><AvatarFallback>{c.name.split(" ").map(n => n[0]).join("").slice(0, 2)}</AvatarFallback></Avatar>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{crew.name}</span>
-                          <Badge variant="outline">{crew.rank}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{crew.vessel}</p>
+                        <div className="flex items-center gap-2"><span className="font-medium">{c.name}</span><Badge variant="outline">{c.rank}</Badge></div>
+                        <p className="text-sm text-muted-foreground">{c.vessel}</p>
                       </div>
                     </div>
-                    
                     <div className="flex items-center gap-6">
-                      <div className="text-sm">
-                        <span className="text-muted-foreground">Último Exame:</span>
-                        <p className="font-medium">{crew.lastCheckup}</p>
-                      </div>
-                      <div className="text-sm">
-                        <span className="text-muted-foreground">Próximo:</span>
-                        <p className="font-medium">{crew.nextCheckup}</p>
-                      </div>
-                      <Badge className={cn(
-                        crew.medicalStatus === "fit" ? "bg-emerald-500" :
-                        crew.medicalStatus === "restricted" ? "bg-amber-500" :
-                        crew.medicalStatus === "unfit" ? "bg-red-500" : "bg-blue-500"
-                      )}>
-                        {crew.medicalStatus === "fit" ? "Apto" :
-                         crew.medicalStatus === "restricted" ? "Restrição" :
-                         crew.medicalStatus === "unfit" ? "Inapto" : "Pendente"}
+                      <div className="text-sm"><span className="text-muted-foreground">Último Exame:</span><p className="font-medium">{c.lastCheckup}</p></div>
+                      <div className="text-sm"><span className="text-muted-foreground">Próximo:</span><p className="font-medium">{c.nextCheckup}</p></div>
+                      <Badge className={getStatusColor(c.medicalStatus)}>
+                        {c.medicalStatus === "fit" ? "Apto" : c.medicalStatus === "restricted" ? "Restrição" : c.medicalStatus === "unfit" ? "Inapto" : "Pendente"}
                       </Badge>
-                      <Button variant="outline" size="sm">
-                        Ver Prontuário
-                      </Button>
                     </div>
                   </div>
                 ))}
@@ -411,45 +237,27 @@ export default function MedicalDashboard() {
 
         <TabsContent value="records" className="mt-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Prontuários Médicos</CardTitle>
-              <CardDescription>Histórico de atendimentos</CardDescription>
-            </CardHeader>
+            <CardHeader><CardTitle>Prontuários Médicos</CardTitle><CardDescription>Histórico de atendimentos</CardDescription></CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {mockRecords.map((record) => (
+                  {records.map((record) => (
                     <div key={record.id} className="p-4 rounded-lg border bg-card">
                       <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "p-2 rounded-full",
-                            record.type === "emergency" ? "bg-red-500/20 text-red-600" :
-                            record.type === "telemedicine" ? "bg-purple-500/20 text-purple-600" :
-                            record.type === "consultation" ? "bg-blue-500/20 text-blue-600" :
-                            "bg-emerald-500/20 text-emerald-600"
-                          )}>
-                            {record.type === "emergency" ? <Ambulance className="h-4 w-4" /> :
-                             record.type === "telemedicine" ? <Video className="h-4 w-4" /> :
-                             record.type === "consultation" ? <Stethoscope className="h-4 w-4" /> :
-                             <ClipboardList className="h-4 w-4" />}
-                          </div>
-                          <div>
-                            <p className="font-medium">{record.crewName}</p>
-                            <p className="text-sm text-muted-foreground">{record.date} • {record.doctor}</p>
-                          </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{record.type === "consultation" ? "Consulta" : record.type === "emergency" ? "Emergência" : record.type === "telemedicine" ? "Telemedicina" : "Rotina"}</Badge>
+                          <span className="font-medium">{record.crewName}</span>
                         </div>
-                        <Badge variant={
-                          record.status === "closed" ? "default" :
-                          record.status === "follow-up" ? "secondary" : "outline"
-                        }>
-                          {record.status === "closed" ? "Encerrado" :
-                           record.status === "follow-up" ? "Acompanhamento" : "Aberto"}
+                        <Badge variant={record.status === "open" ? "default" : record.status === "follow-up" ? "secondary" : "outline"}>
+                          {record.status === "open" ? "Aberto" : record.status === "follow-up" ? "Acompanhamento" : "Fechado"}
                         </Badge>
                       </div>
-                      <div className="ml-11">
-                        <p className="text-sm"><strong>Diagnóstico:</strong> {record.diagnosis}</p>
-                        <p className="text-sm text-muted-foreground"><strong>Tratamento:</strong> {record.treatment}</p>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div><span className="text-muted-foreground">Diagnóstico:</span><p>{record.diagnosis}</p></div>
+                        <div><span className="text-muted-foreground">Tratamento:</span><p>{record.treatment}</p></div>
+                      </div>
+                      <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                        <span>{record.doctor}</span><span>{record.date}</span>
                       </div>
                     </div>
                   ))}
@@ -461,144 +269,43 @@ export default function MedicalDashboard() {
 
         <TabsContent value="medications" className="mt-6">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Estoque de Medicamentos</CardTitle>
-                <CardDescription>Controle de medicamentos da enfermaria</CardDescription>
-              </div>
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Medicamento
-              </Button>
-            </CardHeader>
+            <CardHeader><CardTitle>Farmácia de Bordo</CardTitle><CardDescription>Estoque de medicamentos (MLC 2006)</CardDescription></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {mockMedications.map((med) => {
-                  const stockPercent = (med.quantity / med.minStock) * 50;
-                  const isLowStock = med.quantity <= med.minStock;
-                  const isExpiring = new Date(med.expiry) < new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
-                  
-                  return (
-                    <div key={med.id} className={cn(
-                      "p-4 rounded-lg border",
-                      isLowStock && "border-destructive/50 bg-destructive/5"
-                    )}>
-                      <div className="flex items-center justify-between mb-2">
+                {medications.map((med) => (
+                  <div key={med.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className={cn("p-2 rounded-lg", med.controlled ? "bg-red-500/20" : "bg-blue-500/20")}>
+                        <Pill className={cn("h-4 w-4", med.controlled ? "text-red-600" : "text-blue-600")} />
+                      </div>
+                      <div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{med.name}</span>
-                          {med.controlled && (
-                            <Badge variant="outline" className="text-purple-600 border-purple-500">
-                              <Shield className="h-3 w-3 mr-1" />
-                              Controlado
-                            </Badge>
-                          )}
+                          {med.controlled && <Badge variant="destructive" className="text-xs">Controlado</Badge>}
                         </div>
-                        <div className="flex items-center gap-2">
-                          {isLowStock && (
-                            <Badge variant="destructive">Estoque Baixo</Badge>
-                          )}
-                          {isExpiring && (
-                            <Badge variant="secondary">Vencendo</Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Categoria</span>
-                          <p className="font-medium">{med.category}</p>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Quantidade</span>
-                          <p className={cn("font-medium", isLowStock && "text-destructive")}>
-                            {med.quantity} un.
-                          </p>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Estoque Mín.</span>
-                          <p className="font-medium">{med.minStock} un.</p>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Validade</span>
-                          <p className={cn("font-medium", isExpiring && "text-amber-600")}>{med.expiry}</p>
-                        </div>
+                        <p className="text-sm text-muted-foreground">{med.category}</p>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="flex items-center gap-6 text-sm">
+                      <div className="text-right">
+                        <span className="text-muted-foreground">Estoque</span>
+                        <p className={cn("font-bold", med.quantity <= med.minStock ? "text-destructive" : "text-emerald-600")}>{med.quantity}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-muted-foreground">Mín.</span>
+                        <p className="font-medium">{med.minStock}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-muted-foreground">Validade</span>
+                        <p className="font-medium">{med.expiry}</p>
+                      </div>
+                      {med.quantity <= med.minStock && <Badge variant="destructive">Reabastecer</Badge>}
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="telemedicine" className="mt-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Video className="h-5 w-5 text-purple-600" />
-                  Telemedicina
-                </CardTitle>
-                <CardDescription>Consultas remotas com especialistas</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button className="w-full" size="lg">
-                  <Video className="h-5 w-5 mr-2" />
-                  Iniciar Consulta de Emergência
-                </Button>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" className="h-auto py-4 flex-col">
-                    <Stethoscope className="h-6 w-6 mb-2" />
-                    <span>Clínico Geral</span>
-                  </Button>
-                  <Button variant="outline" className="h-auto py-4 flex-col">
-                    <Heart className="h-6 w-6 mb-2" />
-                    <span>Cardiologista</span>
-                  </Button>
-                  <Button variant="outline" className="h-auto py-4 flex-col">
-                    <Activity className="h-6 w-6 mb-2" />
-                    <span>Ortopedista</span>
-                  </Button>
-                  <Button variant="outline" className="h-auto py-4 flex-col">
-                    <ThermometerSun className="h-6 w-6 mb-2" />
-                    <span>Dermatologista</span>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Próximas Consultas</CardTitle>
-                <CardDescription>Agendamentos de telemedicina</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="p-4 rounded-lg border bg-purple-500/5 border-purple-500/20">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">Carlos Santos</span>
-                      <Badge className="bg-purple-500">Hoje 15:00</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Acompanhamento Cardiológico</p>
-                    <p className="text-sm text-muted-foreground">Dr. Paulo Cardoso</p>
-                    <Button className="w-full mt-3" size="sm">
-                      <Video className="h-4 w-4 mr-2" />
-                      Entrar na Sala
-                    </Button>
-                  </div>
-
-                  <div className="p-4 rounded-lg border">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">João Silva</span>
-                      <Badge variant="secondary">Amanhã 10:00</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Exame Periódico</p>
-                    <p className="text-sm text-muted-foreground">Dra. Ana Oliveira</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </TabsContent>
       </Tabs>
     </div>
