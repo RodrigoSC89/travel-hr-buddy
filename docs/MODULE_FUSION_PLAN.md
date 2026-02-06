@@ -1,407 +1,308 @@
-# 🔄 MODULE FUSION PLAN - NAUTI ONE
+# 🔀 MODULE FUSION PLAN - NAUTI ONE v8.0
 
-> **ETAPA 2 - PROMPT MASTER V4.1**
-> Data: Janeiro 2026
-
----
-
-## 🎯 OBJETIVO
-
-Reduzir o sidebar de **134+ módulos** para **~15 hubs** sem perder funcionalidades.
+> **Plano de Fusão com Regras Anti-Supressão**
+> Data: 2026-02-06 | Objetivo: Consolidar módulos sem perda de funcionalidades
 
 ---
 
-## 📋 GRUPOS DE FUSÃO
+## 📋 REGRAS DE FUSÃO (NÃO NEGOCIÁVEIS)
 
-### GRUPO A: Operations Command Hub
+### ❌ PROIBIDO
 
-**Fundir 5 módulos principais + 5 sub-áreas:**
+1. **Remover funcionalidades** - Nenhum botão, ação ou feature pode desaparecer
+2. **Quebrar rotas antigas** - Todas as URLs devem continuar funcionando via redirect
+3. **Apagar services/hooks** - Código existente deve ser migrado, não deletado
+4. **Criar placeholders** - Tudo que é fusionado deve continuar operacional
+5. **Esconder módulos** - Funcionalidades não podem ser "enterradas" em submenus inacessíveis
 
-#### Módulos Principais (viram TABS):
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Maritime Command | `/maritime-command` | `maritime` |
-| Fleet Command Center | `/fleet-command` | `fleet` |
-| Voyage Command | `/voyage-command` | `voyage` |
-| Mission Command | `/mission-command` | `mission` |
-| Logistics Command | `/logistics-command` | `logistics` |
+### ✅ OBRIGATÓRIO
 
-#### Sub-áreas (viram seções dentro das tabs):
-| Módulo Atual | Path Atual | Destino |
-|--------------|------------|---------|
-| Otimização de Rotas AI | `/route-optimizer` | Tab Voyage → Seção "Otimização" |
-| Bridge Link | `/bridge-link` | Tab Maritime → Seção "Bridge" |
-| Drydock Management | `/drydock-management` | Tab Fleet → Seção "Drydock" |
-| Histórico de Embarcação | `/vessel-history` | Tab Fleet → Seção "Histórico" |
-| Digital Twin | `/digital-twin` | Tab Fleet → Seção "Digital Twin" |
-
-#### Nova Estrutura:
-```typescript
-// Nova rota: /operations-command
-<Tabs defaultValue="maritime">
-  <TabsList>
-    <TabsTrigger value="maritime">⚓ Maritime</TabsTrigger>
-    <TabsTrigger value="fleet">🚢 Fleet</TabsTrigger>
-    <TabsTrigger value="voyage">🗺️ Voyage</TabsTrigger>
-    <TabsTrigger value="mission">🎯 Mission</TabsTrigger>
-    <TabsTrigger value="logistics">📦 Logistics</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-#### Redirects:
-```
-/maritime-command → /operations-command?tab=maritime
-/fleet-command → /operations-command?tab=fleet
-/voyage-command → /operations-command?tab=voyage
-/mission-command → /operations-command?tab=mission
-/logistics-command → /operations-command?tab=logistics
-/route-optimizer → /operations-command?tab=voyage&section=optimization
-/bridge-link → /operations-command?tab=maritime&section=bridge
-/drydock-management → /operations-command?tab=fleet&section=drydock
-/vessel-history → /operations-command?tab=fleet&section=history
-/digital-twin → /operations-command?tab=fleet&section=twin
-```
-
-**Resultado**: 15 módulos → 1 hub
+1. **Mapeamento 1:1** - Cada feature antiga → feature nova documentada
+2. **Legacy redirects** - Rotas antigas redirecionam para novas
+3. **Teste before/after** - Validar que tudo funciona após fusão
+4. **Preservar query params** - Deep links continuam funcionando
+5. **Manter CRUD** - Create/Read/Update/Delete preservados
 
 ---
 
-### GRUPO B: Cargo & Port Operations Hub
+## 🗂️ INVENTÁRIO FUNCIONAL PRÉ-FUSÃO
 
-**Fundir 2 módulos:**
+### MEGA-HUB A: COMMAND CENTER
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Cargo Management | `/cargo-management` | `cargo` |
-| Port Call | `/port-call` | `port` |
+**Módulos Consolidados:**
+| Módulo Original | Rota Antiga | Funcionalidades |
+|-----------------|-------------|-----------------|
+| Central de Comando | `/central-comando` | Dashboard, KPIs, Overview |
+| NOC 24/7 | `/noc` | Monitoramento real-time, Alertas |
+| SOC Security | `/soc` | Segurança, Incidentes |
+| Comunicações | `/communication-command` | Mensagens, Radio |
+| Alertas | `/alerts-command` | Gestão de alertas |
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /cargo-port-operations
-<Tabs defaultValue="cargo">
-  <TabsList>
-    <TabsTrigger value="cargo">📦 Cargo</TabsTrigger>
-    <TabsTrigger value="port">⚓ Port Call</TabsTrigger>
-    <TabsTrigger value="integrated">🔗 Visão Integrada</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
+**Hooks/Services:**
+- `useExecutiveKPIs.ts` ✅
+- `useAlerts.ts` 🟡
+- `useIncidents.ts` 🟡
 
-**Resultado**: 2 módulos → 1 hub
-
----
-
-### GRUPO C: Vessel Contracts Hub
-
-**Fundir 2 módulos:**
-
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Contratos de Embarcação | `/vessel-contracts` | `contracts` |
-| Charter Party | `/charter-party` | `charter` |
-
-#### Nova Estrutura:
-```typescript
-// Nova rota: /vessel-contracts-hub
-<Tabs defaultValue="contracts">
-  <TabsList>
-    <TabsTrigger value="contracts">📝 Contratos</TabsTrigger>
-    <TabsTrigger value="charter">📜 Charter Party</TabsTrigger>
-    <TabsTrigger value="compliance">✅ Compliance</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 2 módulos → 1 hub
+**Tabelas Supabase:**
+- `vessels` ✅
+- `incidents` ✅
+- `alerts` 🟡 (parcial)
+- `communications` ❌ (não existe)
 
 ---
 
-### GRUPO D: Crew Operations Hub
+### MEGA-HUB B: OPS (Operations)
 
-**Fundir 3 módulos:**
+**Módulos Consolidados:**
+| Módulo Original | Rota Antiga | Funcionalidades |
+|-----------------|-------------|-----------------|
+| Operations Command | `/operations-command-hub` | Hub central |
+| Maritime Command | `/maritime-command` | Operações marítimas |
+| Fleet Command | `/fleet-command` | Gestão de frota |
+| Voyage Command | `/voyage-command` | Gestão de viagens |
+| Mission Command | `/mission-command` | Missões/Projetos |
+| Logistics | `/logistics-command` | Logística |
+| Contracts | `/vessel-contracts` | Contratos, Charter |
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| CTS Tripulação | `/vessel-cts` | `cts` |
-| Gestão de Tripulação | `/crew-management` | `management` |
-| MLC Scheduling | `/mlc-scheduling` | `mlc` |
+**Hooks/Services:**
+- `useFleetOperations.ts` ✅
+- `useVoyages.ts` 🟡
+- `useContracts.ts` ✅
+- `useMissions.ts` ❌
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /crew-operations
-<Tabs defaultValue="management">
-  <TabsList>
-    <TabsTrigger value="management">👥 Gestão</TabsTrigger>
-    <TabsTrigger value="cts">📋 CTS</TabsTrigger>
-    <TabsTrigger value="mlc">⚖️ MLC</TabsTrigger>
-    <TabsTrigger value="certifications">🏆 Certificações</TabsTrigger>
-    <TabsTrigger value="hours">⏰ Horas</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 3 módulos → 1 hub
-
----
-
-### GRUPO E: AI Control Tower (MAIOR FUSÃO)
-
-**Fundir 11 módulos:**
-
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| AI Modules Hub | `/ai-modules-hub` | `hub` |
-| AI Hub Central | `/ai-hub` | `hub` |
-| AI Command Center | `/ai-command` | `command` |
-| Autonomous Command | `/autonomous-command` | `autonomous` |
-| Agent Orchestration | `/agent-orchestration` | `agents` |
-| AI Analytics | `/ai-analytics` | `analytics` |
-| Observabilidade IA | `/ai-observability` | `observability` |
-| Auditoria de IA | `/ai-audit` | `audit` |
-| Workflow Command | `/workflow-command` | `workflows` |
-| Journaling IA | `/ai-journaling` | `journaling` |
-| IA Autônoma (Logs) | `/ai-ops/logs` | `logs` |
-
-#### Nova Estrutura:
-```typescript
-// Nova rota: /ai-control-tower
-<Tabs defaultValue="hub">
-  <TabsList className="grid grid-cols-4">
-    <TabsTrigger value="hub">🏠 Hub</TabsTrigger>
-    <TabsTrigger value="chat">💬 Chat</TabsTrigger>
-    <TabsTrigger value="agents">🤖 Agentes</TabsTrigger>
-    <TabsTrigger value="workflows">🔄 Workflows</TabsTrigger>
-    <TabsTrigger value="analytics">📊 Analytics</TabsTrigger>
-    <TabsTrigger value="observability">👁️ Observabilidade</TabsTrigger>
-    <TabsTrigger value="audit">🔍 Auditoria</TabsTrigger>
-    <TabsTrigger value="journaling">📝 Journaling</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 11 módulos → 1 hub
+**Tabelas Supabase:**
+- `vessels` ✅
+- `voyages` 🟡
+- `vessel_contracts` ✅
+- `missions` ❌ (não existe)
 
 ---
 
-### GRUPO F: Voice & Assistant Hub
+### MEGA-HUB C: MAINTENANCE
 
-**Fundir 3 módulos:**
+**Módulos Consolidados:**
+| Módulo Original | Rota Antiga | Funcionalidades |
+|-----------------|-------------|-----------------|
+| Maintenance Hub | `/maintenance-hub` | Dashboard manutenção |
+| Class Surveys | `/maintenance?tab=surveys` | Vistorias DNV/LR/BV |
+| Predictive | `/predictive-maintenance` | ML predictions |
+| Drydock | `/drydock-management` | Docagem seca |
+| Fuel/ROB | `/fuel-management` | Combustível |
+| Digital Twin | `/digital-twin` | Visualização 2D/3D |
+| MARPOL/Waste | `/waste-management` | Resíduos MARPOL |
+| ESG | `/esg-emissions` | Emissões CII/EEXI |
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Voice Assistant IA | `/voice-assistant` | `assistant` |
-| Assistente de Voz | `/assistant/voice` | `assistant` |
-| IA de Voz | `/voice-transcriber` | `transcriber` |
+**Hooks/Services:**
+- `useClassSurveys.ts` ✅
+- `useDrydockSchedule.ts` 🟡
+- `useFuelData.ts` 🟡
+- `useWasteManagement.ts` ✅
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /voice-assistant-hub
-<Tabs defaultValue="assistant">
-  <TabsList>
-    <TabsTrigger value="assistant">🎙️ Assistente</TabsTrigger>
-    <TabsTrigger value="commands">🗣️ Comandos</TabsTrigger>
-    <TabsTrigger value="integration">🔗 Integração</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 3 módulos → 1 hub
-
----
-
-### GRUPO G: Tracking & Telemetry Hub
-
-**Fundir 5 módulos:**
-
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Telemetria 360° | `/telemetria` | `overview` |
-| Telemetria Preditiva | `/predictive-telemetry` | `predictive` |
-| DGNSS Tracking | `/tracking` | `tracking` |
-| GNSS Live | `/tracking/gnss-live` | `gnss` |
-| Tracking Alerts | `/tracking/alerts` | `alerts` |
-
-#### Nova Estrutura:
-```typescript
-// Nova rota: /tracking-telemetry
-<Tabs defaultValue="overview">
-  <TabsList>
-    <TabsTrigger value="overview">📊 Visão Geral</TabsTrigger>
-    <TabsTrigger value="realtime">⚡ Tempo Real</TabsTrigger>
-    <TabsTrigger value="predictive">🔮 Preditiva</TabsTrigger>
-    <TabsTrigger value="alerts">🚨 Alertas</TabsTrigger>
-    <TabsTrigger value="history">📜 Histórico</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 5 módulos → 1 hub
+**Tabelas Supabase:**
+- `vessels` ✅
+- `maintenance_records` ✅
+- `fuel_records` 🟡
+- `waste_logs` ✅
 
 ---
 
-### GRUPO H: Document Center Hub
+### MEGA-HUB D: AI
 
-**Fundir 7 módulos:**
+**Módulos Consolidados:**
+| Módulo Original | Rota Antiga | Funcionalidades |
+|-----------------|-------------|-----------------|
+| AI Control Tower | `/ai-control-tower` | Hub IA central |
+| AI Chat | `/ai-command` | Chat assistente |
+| AI Modules | `/ai-modules` | 11 módulos IA |
+| Voice Assistant | `/voice-assistant` | Comandos de voz |
+| RAG Assistant | `/enterprise/rag-assistant` | Busca semântica |
+| OCR Center | `/enterprise/ocr-center` | Leitura documentos |
+| Agent Orchestration | `/agent-orchestration` | Orquestração multi-agente |
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Reports Command | `/reports-command` | `reports` |
-| Documentos IA | `/documents` | `documents` |
-| Templates | `/templates` | `templates` |
-| Workflow Documentos | `/document-workflow` | `workflow` |
-| Centro de Exportação | `/export-center` | `export` |
-| Busca Avançada | `/advanced-search` | `search` |
-| Checklists Inteligentes | `/admin/checklists` | `checklists` |
+**Hooks/Services:**
+- `useAIChat.ts` 🟡
+- `useVoiceCommands.ts` 🟡
+- `useOCR.ts` ✅
+- `useRAG.ts` 🟡
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /document-center
-<Tabs defaultValue="documents">
-  <TabsList>
-    <TabsTrigger value="documents">📄 Documentos</TabsTrigger>
-    <TabsTrigger value="templates">📋 Templates</TabsTrigger>
-    <TabsTrigger value="checklists">✅ Checklists</TabsTrigger>
-    <TabsTrigger value="reports">📊 Relatórios</TabsTrigger>
-    <TabsTrigger value="workflow">🔄 Workflow</TabsTrigger>
-    <TabsTrigger value="export">📤 Exportar</TabsTrigger>
-    <TabsTrigger value="search">🔍 Busca</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 7 módulos → 1 hub
+**Edge Functions:**
+- `ai-chat` ✅
+- `document-ocr` ✅
+- `rag-query` 🟡
 
 ---
 
-### GRUPO I: Comms & Alerts Hub
+### MEGA-HUB E: TRACKING
 
-**Fundir 4 módulos:**
+**Módulos Consolidados:**
+| Módulo Original | Rota Antiga | Funcionalidades |
+|-----------------|-------------|-----------------|
+| Tracking Hub | `/tracking-telemetry` | Hub rastreamento |
+| Real-time | `/telemetria` | Tempo real |
+| AIS Fleet | `/ais-tracker-page` | Posições AIS |
+| SATCOM | `/satcom-dashboard` | Comunicação satélite |
+| Weather | `/weather-command` | Meteorologia |
+| Alerts | `/tracking/alerts` | Geofencing |
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Communication Command | `/communication-command` | `comms` |
-| Alerts Command | `/alerts-command` | `alerts` |
-| Workspace em Tempo Real | `/real-time-workspace` | `workspace` |
-| Conectividade Marítima | `/maritime-connectivity` | `connectivity` |
+**Hooks/Services:**
+- `useFleetTracking.ts` ✅
+- `useAISData.ts` 🟡 (simulado)
+- `useWeather.ts` 🟡
+- `useSATCOM.ts` ❌
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /comms-alerts
-<Tabs defaultValue="comms">
-  <TabsList>
-    <TabsTrigger value="comms">📡 Comunicação</TabsTrigger>
-    <TabsTrigger value="alerts">🚨 Alertas</TabsTrigger>
-    <TabsTrigger value="workspace">💼 Workspace</TabsTrigger>
-    <TabsTrigger value="connectivity">🌐 Conectividade</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
-
-**Resultado**: 4 módulos → 1 hub
+**Integrações Externas:**
+- OpenMeteo ✅
+- MarineTraffic ❌ (não integrado)
+- SATCOM Provider ❌
 
 ---
 
-### GRUPO J: People Hub
+### MEGA-HUB F: COMPLIANCE
 
-**Fundir 2 grupos (RH & Pessoas + RH & IA):**
+**Módulos Consolidados:**
 
-| Módulo Atual | Path Atual | Nova Tab |
-|--------------|------------|----------|
-| Nauti People Hub | `/nautilus-people` | `overview` |
-| HR Dashboard | `/hr-dashboard` | `dashboard` |
-| Recrutamento AI | `/recruitment` | `talent` |
-| Predição Turnover | `/hr-turnover` | `talent` |
-| Bem-estar AI | `/crew-wellness` | `wellness` |
-| Bem-estar Tripulação | `/crew-wellbeing` | `wellness` |
-| Folha de Pagamento | `/hr-payroll` | `payroll` |
-| Ponto Eletrônico | `/hr-time-tracking` | `time` |
-| Chatbot RH | `/hr-chatbot` | `chatbot` |
-| OCR Documentos | `/hr-ocr` | `documents` |
+#### 12 Auditorias Marítimas
+| # | Auditoria | Rota | Padrão |
+|---|-----------|------|--------|
+| 1 | PEO-DP | `/peo-dp` | IMCA M-117 |
+| 2 | PEOTRAM | `/peotram` | ANP 13E |
+| 3 | ISM Code | `/safety-imca` | IMO SMS |
+| 4 | ISPS Security | `/isps-security` | SOLAS XI-2 |
+| 5 | SOLAS/LSA/FFE | `/solas-inspection` | IMO SOLAS III |
+| 6 | MARPOL I-VI | `/waste-management` | IMO MARPOL |
+| 7 | Pre-OVID | `/pre-ovid` | OCIMF |
+| 8 | Pre-MLC 2006 | `/mlc-inspection` | ILO MLC |
+| 9 | PSC Package | `/psc-package` | Paris/Tokyo MoU |
+| 10 | SGSO ANP | `/sgso` | ANP 17P |
+| 11 | Pre-SIRE 2.0 | `/pre-sire` | OCIMF SIRE |
+| 12 | TMSA | `/tmsa-assessment` | OCIMF |
 
-#### Normalização de Duplicidades:
-- **Bem-estar AI + Bem-estar Tripulação** → 1 tab "Wellness"
-- **Recrutamento AI + Predição Turnover** → 1 tab "Talent Intelligence"
-- **OCR RH** → Integra com Document Center (filtro RH)
+#### 10 Agentes IA Auditoria
+Todos registrados em `/audit-agents`
 
-#### Nova Estrutura:
-```typescript
-// Nova rota: /people-hub
-<Tabs defaultValue="overview">
-  <TabsList>
-    <TabsTrigger value="overview">🏠 Visão Geral</TabsTrigger>
-    <TabsTrigger value="talent">🎯 Talent</TabsTrigger>
-    <TabsTrigger value="performance">📈 Performance</TabsTrigger>
-    <TabsTrigger value="wellness">❤️ Bem-estar</TabsTrigger>
-    <TabsTrigger value="training">🎓 Treinamento</TabsTrigger>
-    <TabsTrigger value="compliance">✅ Compliance</TabsTrigger>
-    <TabsTrigger value="analytics">📊 Analytics</TabsTrigger>
-  </TabsList>
-</Tabs>
-```
+**Hooks/Services:**
+- `useAuditData.ts` 🟡
+- `useCertificates.ts` 🟡
+- `useNonConformities.ts` 🟡
+- `useRiskMatrix.ts` 🟡
 
-**Resultado**: 10+ módulos → 1 hub
+**Tabelas Supabase:**
+- `internal_audits` 🟡
+- `certificates` 🟡
+- `non_conformities` 🟡
+- `compliance_scores` 🟡
 
 ---
 
-### GRUPO K: Operações Submarinas
+### MEGA-HUB G: WORKBENCH
 
-**Ação**: Ocultar do sidebar via feature flag (backend não existe)
+**Seções:**
+
+#### Docs
+- Document Center, Templates, Checklists, Forms, Reports
+
+#### People
+- HR Dashboard, Crew, Training, Medical, STCW/MLC
+
+#### Finance
+- Voyage P&L, Procurement, Suppliers, Travel
+
+#### System
+- Settings, Integrations, API Monitor, IoT
+
+**Hooks/Services:**
+- `useDocuments.ts` ✅
+- `usePeopleHubData.ts` ✅
+- `useVoyagePnL.ts` ✅
+- `useProcurement.ts` 🟡
+- `useSuppliers.ts` ✅
+
+---
+
+## 🔄 MAPEAMENTO DE MIGRAÇÃO
+
+### Legacy Redirects Configurados
+
+Arquivo: `src/routes/legacy-redirects-mega.tsx`
 
 ```typescript
-// src/config/feature-flags.ts
-export const FEATURE_FLAGS = {
-  enableUnderwaterOps: false, // Habilitar quando backend estiver pronto
-};
-
-// sidebar-routes.ts
-...(FEATURE_FLAGS.enableUnderwaterOps ? [{
-  title: "🌊 Operações Submarinas",
-  items: [...]
-}] : [])
+// Exemplo de redirecionamentos
+"/central-comando" → "/command"
+"/operations-command-hub" → "/ops"
+"/maintenance-hub" → "/maintenance"
+"/ai-control-tower" → "/ai"
+"/tracking-telemetry" → "/tracking"
+"/compliance-unified" → "/compliance"
+"/document-center" → "/workbench/docs"
+"/people-hub" → "/workbench/people"
+"/finance-hub" → "/workbench/finance"
+"/system-hub" → "/workbench/system"
 ```
 
----
-
-## 📊 RESUMO DA FUSÃO
-
-| Antes | Depois | Redução |
-|-------|--------|---------|
-| Central de Comando (9) | Central de Comando (9) | 0% |
-| Operações Marítimas (15) | Operations Command (1) | 93% |
-| Manutenção (7) | Manutenção (7) | 0% |
-| IA & Automação (14) | AI Control Tower (1) | 93% |
-| AI Enterprise (12) | AI Enterprise (12) | 0% |
-| Inteligência Avançada (7) | Inteligência Avançada (7) | 0% |
-| Enterprise Intelligence (16) | Enterprise Intelligence (16) | 0% |
-| Módulos Avançados (12) | Módulos Avançados (12) | 0% |
-| Telemetria (9) | Tracking & Telemetry (1) | 89% |
-| APIs & Integrações (11) | APIs & Integrações (11) | 0% |
-| Relatórios (8) | Document Center (1) | 88% |
-| Comunicação (4) | Comms & Alerts (1) | 75% |
-| Auditorias (29) | Auditorias (29) | 0% |
-| RH & Pessoas (11) | People Hub (1) | 91% |
-| RH & IA (5) | (Fundido em People Hub) | 100% |
-| Treinamentos (4) | Treinamentos (4) | 0% |
-| Finanças (9) | Finanças (9) | 0% |
-| ESG (3) | ESG (3) | 0% |
-| Viagens (2) | Viagens (2) | 0% |
-| Sistema (14) | Sistema (14) | 0% |
-
-**TOTAL**: 134+ módulos → ~90 itens no sidebar (33% redução)
+**Total Configurado:** 135+ redirects
 
 ---
 
-## 📄 SIDEBAR_NEW_TREE.md
+## ✅ VALIDAÇÃO DE FUSÃO
 
-Ver arquivo separado: `docs/SIDEBAR_NEW_TREE.md`
+### Checklist por MEGA-HUB
+
+#### MEGA-HUB A: Command ✅
+- [x] Rotas antigas redirecionam
+- [x] Tabs preservam funcionalidades
+- [ ] Timeline conectada a dados reais
+- [ ] Alertas com backend real
+
+#### MEGA-HUB B: Ops ✅
+- [x] Rotas antigas redirecionam
+- [x] Contratos com CRUD real
+- [ ] Voyages com CRUD completo
+- [ ] Missions implementado
+
+#### MEGA-HUB C: Maintenance ✅
+- [x] Class Surveys funcional
+- [x] Waste Management real
+- [ ] Spare parts implementado
+- [ ] Predictive com dados reais
+
+#### MEGA-HUB D: AI ✅
+- [x] Chat funcional
+- [x] OCR funcional
+- [ ] RAG melhorado
+- [ ] Voice offline
+
+#### MEGA-HUB E: Tracking 🟡
+- [x] Estrutura OK
+- [ ] AIS real (não simulado)
+- [ ] SATCOM integrado
+- [ ] Weather multi-provider
+
+#### MEGA-HUB F: Compliance ✅
+- [x] 12 auditorias acessíveis
+- [x] 10 agentes registrados
+- [ ] CRUD completo em auditorias
+- [ ] Certificados automatizados
+
+#### MEGA-HUB G: Workbench ✅
+- [x] Docs funcional
+- [x] People funcional
+- [x] Finance P&L real
+- [ ] Forms Builder real
+- [ ] Checklists Builder real
 
 ---
 
-## 📄 REDIRECTS_COMPAT.md
+## 📊 STATUS DE MIGRAÇÃO
 
-Ver arquivo separado: `docs/REDIRECTS_COMPAT.md`
+| Categoria | Total | Migrado | Funcional | Pendente |
+|-----------|-------|---------|-----------|----------|
+| Rotas | 180+ | 180+ | 180+ | 0 |
+| Redirects | 135 | 135 | 135 | 0 |
+| CRUD Operations | 45 | 45 | 25 | 20 |
+| Backend Hooks | 50+ | 50+ | 35 | 15+ |
+| Mock Removal | 45 | 0 | 0 | 45 |
 
 ---
 
-*Documento gerado em Janeiro 2026 - ETAPA 2 Completa*
+*Plano de Fusão - NAUTI ONE v8.0*
+*Última atualização: 2026-02-06*
