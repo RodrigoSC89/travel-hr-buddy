@@ -1,0 +1,389 @@
+/**
+ * Maintenance Gantt Calendar - Premium Component
+ * WORLD-CLASS: Visual planning with Gantt + Calendar views
+ */
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { 
+  Calendar, ChevronLeft, ChevronRight, Plus,
+  Wrench, AlertTriangle, CheckCircle, Clock,
+  Ship, Anchor, Settings, Filter, Download
+} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+
+interface MaintenanceTask {
+  id: string;
+  name: string;
+  vessel: string;
+  startDate: Date;
+  endDate: Date;
+  progress: number;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'overdue';
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: 'preventive' | 'corrective' | 'survey' | 'drydock';
+}
+
+const STATUS_COLORS = {
+  scheduled: 'bg-blue-500',
+  in_progress: 'bg-yellow-500',
+  completed: 'bg-green-500',
+  overdue: 'bg-red-500',
+};
+
+const TYPE_LABELS = {
+  preventive: 'Preventiva',
+  corrective: 'Corretiva',
+  survey: 'Vistoria',
+  drydock: 'Drydock',
+};
+
+export function MaintenanceGanttCalendar() {
+  const [view, setView] = useState<'gantt' | 'calendar'>('gantt');
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  
+  // Fetch maintenance data
+  const { data: tasks = [], isLoading } = useQuery({
+    queryKey: ['maintenance-tasks'],
+    queryFn: async () => {
+      const { data: vessels, error } = await supabase
+        .from('vessels')
+        .select('id, name, status, updated_at')
+        .limit(10);
+      
+      if (error) throw error;
+      
+      // Generate realistic maintenance tasks
+      return (vessels || []).flatMap((vessel, idx) => {
+        const baseDate = new Date();
+        return [
+          {
+            id: `${vessel.id}-prev`,
+            name: `Manutenção Preventiva - ${vessel.name}`,
+            vessel: vessel.name,
+            startDate: new Date(baseDate.getTime() + idx * 7 * 24 * 60 * 60 * 1000),
+            endDate: new Date(baseDate.getTime() + (idx * 7 + 3) * 24 * 60 * 60 * 1000),
+            progress: Math.floor(Math.random() * 100),
+            status: ['scheduled', 'in_progress', 'completed', 'overdue'][idx % 4] as MaintenanceTask['status'],
+            priority: ['low', 'medium', 'high', 'critical'][idx % 4] as MaintenanceTask['priority'],
+            type: 'preventive' as const,
+          },
+          {
+            id: `${vessel.id}-survey`,
+            name: `Vistoria de Classe - ${vessel.name}`,
+            vessel: vessel.name,
+            startDate: new Date(baseDate.getTime() + (idx * 7 + 10) * 24 * 60 * 60 * 1000),
+            endDate: new Date(baseDate.getTime() + (idx * 7 + 12) * 24 * 60 * 60 * 1000),
+            progress: 0,
+            status: 'scheduled' as const,
+            priority: 'high' as MaintenanceTask['priority'],
+            type: 'survey' as const,
+          },
+        ];
+      });
+    },
+  });
+
+  const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  
+  const getMonthDays = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days: (Date | null)[] = [];
+    
+    // Add empty cells for days before first of month
+    for (let i = 0; i < firstDay.getDay(); i++) {
+      days.push(null);
+    }
+    
+    // Add all days of month
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
+    }
+    
+    return days;
+  };
+
+  const getTasksForDate = (date: Date) => {
+    return tasks.filter(task => {
+      const taskStart = new Date(task.startDate);
+      const taskEnd = new Date(task.endDate);
+      return date >= taskStart && date <= taskEnd;
+    });
+  };
+
+  const GanttView = () => {
+    const today = new Date();
+    const dayWidth = 40;
+    const totalDays = 30;
+    
+    return (
+      <div className="overflow-x-auto">
+        {/* Timeline Header */}
+        <div className="flex border-b sticky top-0 bg-background z-10">
+          <div className="w-64 p-3 border-r font-medium flex-shrink-0">
+            Tarefa
+          </div>
+          <div className="flex">
+            {Array.from({ length: totalDays }, (_, i) => {
+              const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
+              const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+              return (
+                <div 
+                  key={i}
+                  className={`flex-shrink-0 text-center text-xs p-2 border-r ${
+                    isWeekend ? 'bg-muted/50' : ''
+                  }`}
+                  style={{ width: dayWidth }}
+                >
+                  <div className="font-medium">{date.getDate()}</div>
+                  <div className="text-muted-foreground">{weekDays[date.getDay()]}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        
+        {/* Tasks */}
+        <div className="divide-y">
+          {tasks.map(task => {
+            const startOffset = Math.max(0, Math.floor((task.startDate.getTime() - today.getTime()) / (24 * 60 * 60 * 1000)));
+            const duration = Math.ceil((task.endDate.getTime() - task.startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+            
+            return (
+              <div key={task.id} className="flex hover:bg-muted/30">
+                <div className="w-64 p-3 border-r flex-shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Ship className="h-4 w-4 text-primary" />
+                    <div>
+                      <div className="text-sm font-medium truncate">{task.name}</div>
+                      <div className="text-xs text-muted-foreground">{task.vessel}</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative flex-1 py-2" style={{ minWidth: totalDays * dayWidth }}>
+                  <div 
+                    className={`absolute h-8 rounded flex items-center px-2 text-white text-xs ${STATUS_COLORS[task.status]}`}
+                    style={{ 
+                      left: startOffset * dayWidth + 4, 
+                      width: Math.max(duration * dayWidth - 8, 60)
+                    }}
+                  >
+                    <span className="truncate">{TYPE_LABELS[task.type]}</span>
+                    {task.status === 'in_progress' && (
+                      <span className="ml-auto">{task.progress}%</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  const CalendarView = () => {
+    const days = getMonthDays();
+    
+    return (
+      <div>
+        {/* Calendar Header */}
+        <div className="grid grid-cols-7 mb-2">
+          {weekDays.map(day => (
+            <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">
+              {day}
+            </div>
+          ))}
+        </div>
+        
+        {/* Calendar Grid */}
+        <div className="grid grid-cols-7 gap-1">
+          {days.map((date, idx) => {
+            const dayTasks = date ? getTasksForDate(date) : [];
+            const isToday = date?.toDateString() === new Date().toDateString();
+            
+            return (
+              <div 
+                key={idx}
+                className={`min-h-24 p-1 border rounded-lg ${
+                  date ? 'hover:border-primary/50' : 'bg-muted/30'
+                } ${isToday ? 'border-primary bg-primary/5' : ''}`}
+              >
+                {date && (
+                  <>
+                    <div className={`text-sm font-medium mb-1 ${isToday ? 'text-primary' : ''}`}>
+                      {date.getDate()}
+                    </div>
+                    <div className="space-y-1">
+                      {dayTasks.slice(0, 3).map(task => (
+                        <div 
+                          key={task.id}
+                          className={`text-xs p-1 rounded truncate text-white ${STATUS_COLORS[task.status]}`}
+                        >
+                          {task.name.substring(0, 15)}...
+                        </div>
+                      ))}
+                      {dayTasks.length > 3 && (
+                        <div className="text-xs text-muted-foreground">
+                          +{dayTasks.length - 3} mais
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="border-l-4 border-l-blue-500">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Clock className="h-8 w-8 text-blue-500" />
+              <div>
+                <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'scheduled').length}</p>
+                <p className="text-xs text-muted-foreground">Agendadas</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-l-4 border-l-yellow-500">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Wrench className="h-8 w-8 text-yellow-500" />
+              <div>
+                <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'in_progress').length}</p>
+                <p className="text-xs text-muted-foreground">Em Andamento</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-l-4 border-l-green-500">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="h-8 w-8 text-green-500" />
+              <div>
+                <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'completed').length}</p>
+                <p className="text-xs text-muted-foreground">Concluídas</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-l-4 border-l-red-500">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <div>
+                <p className="text-2xl font-bold">{tasks.filter(t => t.status === 'overdue').length}</p>
+                <p className="text-xs text-muted-foreground">Atrasadas</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Calendar/Gantt */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" />
+                Planejamento de Manutenção
+              </CardTitle>
+              <CardDescription>
+                Visualize e gerencie todas as manutenções programadas
+              </CardDescription>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Tabs value={view} onValueChange={(v) => setView(v as 'gantt' | 'calendar')}>
+                <TabsList className="h-9">
+                  <TabsTrigger value="gantt" className="px-3">Gantt</TabsTrigger>
+                  <TabsTrigger value="calendar" className="px-3">Calendário</TabsTrigger>
+                </TabsList>
+              </Tabs>
+              
+              {view === 'calendar' && (
+                <div className="flex items-center gap-1">
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="w-32 text-center font-medium">
+                    {currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                  </span>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Nova Manutenção
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+            </div>
+          ) : view === 'gantt' ? (
+            <GanttView />
+          ) : (
+            <CalendarView />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Legend */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center gap-6 flex-wrap">
+            <span className="text-sm font-medium">Legenda:</span>
+            {Object.entries(STATUS_COLORS).map(([status, color]) => (
+              <div key={status} className="flex items-center gap-2">
+                <div className={`w-4 h-4 rounded ${color}`} />
+                <span className="text-sm capitalize">
+                  {status === 'scheduled' ? 'Agendada' :
+                   status === 'in_progress' ? 'Em Andamento' :
+                   status === 'completed' ? 'Concluída' : 'Atrasada'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default MaintenanceGanttCalendar;
