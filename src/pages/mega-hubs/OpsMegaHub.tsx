@@ -58,7 +58,18 @@ export default function OpsMegaHub() {
   };
 
   const handleActionBarAction = (action: string) => {
-    console.log(`Ops action: ${action}`);
+    switch (action) {
+      case 'new-voyage':
+        setSearchParams({ tab: 'overview' });
+        // Trigger voyage creation in the overview tab
+        window.dispatchEvent(new CustomEvent('ops:new-voyage'));
+        break;
+      case 'bulk-approve':
+        window.dispatchEvent(new CustomEvent('ops:bulk-approve'));
+        break;
+      default:
+        setSearchParams({ tab: action });
+    }
   };
 
   return (
