@@ -1,6 +1,6 @@
 /**
  * People Hub Premium - Centro de Gestão de Pessoas Completo
- * Integra todos os componentes de RH com abas
+ * Tier-1 UX: Real data badges, functional actions
  * ENTERPRISE UPGRADE - Phase 7
  */
 
@@ -8,11 +8,16 @@ import React, { Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Users, Calendar, GraduationCap, 
-  Heart, Award, UserPlus, Brain, Activity, Star, ClipboardList
+  Heart, Award, UserPlus, Brain, Activity, Star, ClipboardList,
+  RefreshCw, Download
 } from "lucide-react";
+import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 // Lazy load original components
 const PeopleCommandCenter = lazy(() => import("@/modules/people-hub/components/PeopleCommandCenter"));
@@ -52,10 +57,26 @@ function LoadingSkeleton() {
 export default function PeopleHubPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "advanced";
+  const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
+
+  // Real crew count for badge
+  const { data: crewStats } = useQuery({
+    queryKey: ["people-crew-stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crew_members")
+        .select("id, status");
+      if (error) throw error;
+      const total = data?.length || 0;
+      const active = data?.filter((c: any) => c.status === 'active' || c.status === 'onboard').length || 0;
+      return { total, active };
+    },
+    staleTime: 30000,
+  });
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -71,17 +92,40 @@ export default function PeopleHubPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-success/10 text-success">
-            <Activity className="h-3 w-3 mr-1 animate-pulse" />
-            247 ativos
-          </Badge>
           <Badge variant="outline" className="bg-primary/10 text-primary">
+            <Activity className="h-3 w-3 mr-1 animate-pulse" />
+            {crewStats ? `${crewStats.active} ativos` : '...'}
+          </Badge>
+          <Badge variant="outline" className="text-primary">
             <Brain className="h-3 w-3 mr-1" />
             STCW/MLC AI
           </Badge>
-          <Badge variant="outline" className="text-sm">
-            Enterprise
-          </Badge>
+          <Button variant="outline" size="sm" onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["people"] });
+            toast.success("Dados atualizados");
+          }}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
+          <Button variant="outline" size="sm" onClick={async () => {
+            const { data } = await supabase.from("crew_members").select("full_name, rank, status, nationality");
+            if (data && data.length > 0) {
+              const csv = ["Nome,Cargo,Status,Nacionalidade", ...data.map(c => 
+                `${c.full_name},${c.rank || 'N/A'},${c.status || 'N/A'},${c.nationality || 'N/A'}`
+              )].join('\n');
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url; a.download = 'crew-list.csv'; a.click();
+              URL.revokeObjectURL(url);
+              toast.success("Lista de tripulantes exportada");
+            } else {
+              toast.info("Sem dados para exportar");
+            }
+          }}>
+            <Download className="h-4 w-4 mr-2" />
+            Exportar
+          </Button>
         </div>
       </div>
 
@@ -154,7 +198,6 @@ export default function PeopleHubPremium() {
           </Suspense>
         </TabsContent>
 
-        {/* STCW/MLC Compliance Tab */}
         <TabsContent value="stcw-mlc">
           <div className="space-y-6">
             <Suspense fallback={<LoadingSkeleton />}>
@@ -166,7 +209,6 @@ export default function PeopleHubPremium() {
           </div>
         </TabsContent>
 
-        {/* Enterprise Components - Phase 7 */}
         <TabsContent value="talent">
           <TalentPipeline />
         </TabsContent>
