@@ -115,66 +115,7 @@ const quickActions = [
 
 // KPIs will be calculated from real data inside component
 
-// Mock alerts
-const operationalAlerts = [
-  {
-    id: "1",
-    title: "Certificado expirando em 5 dias",
-    description: "SOLAS da embarcação Nautilus Star expira em 12/02/2026",
-    severity: "high" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 30),
-    module: "Compliance",
-    actions: [
-      { label: "Renovar", onClick: () => toast.success("Solicitação de renovação enviada") },
-      { label: "Ver Detalhes", onClick: () => toast.info("Abrindo detalhes...") }
-    ]
-  },
-  {
-    id: "2",
-    title: "Manutenção preventiva pendente",
-    description: "Motor principal do Nautilus Explorer - 50h para limite",
-    severity: "medium" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    module: "Manutenção",
-    actions: [
-      { label: "Agendar", onClick: () => toast.success("Abrindo agenda...") },
-      { label: "Adiar", onClick: () => toast.info("Adiamento registrado") }
-    ]
-  },
-  {
-    id: "3",
-    title: "Tripulante com documento vencido",
-    description: "João Silva - Certificado STCW vencido há 2 dias",
-    severity: "high" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5),
-    module: "RH",
-    actions: [
-      { label: "Notificar", onClick: () => toast.success("Notificação enviada") },
-      { label: "Substituir", onClick: () => toast.info("Abrindo escala...") }
-    ]
-  },
-  {
-    id: "4",
-    title: "Condições meteorológicas adversas",
-    description: "Alerta de tempestade na rota Santos-Paranaguá",
-    severity: "info" as const,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 1),
-    module: "Navegação",
-    actions: [
-      { label: "Ver Previsão", onClick: () => toast.info("Abrindo mapa...") }
-    ]
-  }
-];
-
-// Weather widget data
-const weatherData = {
-  location: "Porto de Santos",
-  temperature: 28,
-  condition: "Parcialmente Nublado",
-  wind: "15 nós NE",
-  waves: "1.2m",
-  visibility: "10 km"
-};
+// Alerts are now derived from real data inside the component (no mocks)
 
 export default function OperationsCommandHubEnhanced() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -297,7 +238,61 @@ export default function OperationsCommandHubEnhanced() {
     toast.success("Alerta arquivado");
   };
 
-  const activeAlerts = operationalAlerts.filter(a => !dismissedAlerts.includes(a.id));
+  // Build alerts from real vessel/voyage data
+  const operationalAlerts = useMemo(() => {
+    const alerts: Array<{id: string; title: string; description: string; severity: "high" | "medium" | "info"; timestamp: Date; module: string; actions: Array<{label: string; onClick: () => void}>}> = [];
+    
+    // Generate alerts from real vessel data
+    vessels.forEach((v: any, idx: number) => {
+      if (v.status === 'maintenance') {
+        alerts.push({
+          id: `vessel-maint-${v.id || idx}`,
+          title: `${v.name || 'Embarcação'} em manutenção`,
+          description: `Embarcação ${v.name} está em manutenção programada`,
+          severity: "medium",
+          timestamp: new Date(v.updated_at || Date.now()),
+          module: "Manutenção",
+          actions: [
+            { label: "Ver Detalhes", onClick: () => handleTabChange("fleet") },
+          ]
+        });
+      }
+    });
+
+    // Alert for pending voyages
+    if (metrics.plannedVoyages > 0) {
+      alerts.push({
+        id: "planned-voyages",
+        title: `${metrics.plannedVoyages} viagens planejadas`,
+        description: "Viagens aguardando aprovação ou início",
+        severity: "info",
+        timestamp: new Date(),
+        module: "Operações",
+        actions: [
+          { label: "Ver Viagens", onClick: () => handleTabChange("voyage") },
+        ]
+      });
+    }
+
+    // Alert if no operational vessels
+    if (metrics.totalVessels > 0 && metrics.operationalVessels === 0) {
+      alerts.push({
+        id: "no-operational",
+        title: "Nenhuma embarcação operacional",
+        description: "Todas as embarcações estão fora de operação",
+        severity: "high",
+        timestamp: new Date(),
+        module: "Frota",
+        actions: [
+          { label: "Ver Frota", onClick: () => handleTabChange("fleet") },
+        ]
+      });
+    }
+
+    return alerts;
+  }, [vessels, metrics, handleTabChange]);
+
+  const activeAlerts = operationalAlerts.filter((a: any) => !dismissedAlerts.includes(a.id));
 
   return (
     <div className="min-h-screen bg-background">
@@ -443,35 +438,37 @@ export default function OperationsCommandHubEnhanced() {
 
               {/* Weather & Status Column */}
               <div className="space-y-4">
-                {/* Weather Card */}
+                {/* Operations Summary Card */}
                 <Card className="overflow-hidden">
-                  <CardHeader className="pb-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+                  <CardHeader className="pb-2 bg-gradient-to-r from-primary/10 to-accent/10">
                     <CardTitle className="text-sm flex items-center gap-2">
-                      <Waves className="h-4 w-4 text-blue-500" />
-                      Condições Marítimas
+                      <Waves className="h-4 w-4 text-primary" />
+                      Resumo Operacional
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground text-sm">{weatherData.location}</span>
-                      <Badge variant="secondary">{weatherData.condition}</Badge>
+                      <span className="text-muted-foreground text-sm">Status Geral</span>
+                      <Badge variant="secondary">
+                        {metrics.operationalVessels > 0 ? "Operacional" : "Sem Operação"}
+                      </Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="flex items-center gap-2 text-sm">
-                        <Thermometer className="h-4 w-4 text-orange-500" />
-                        <span>{weatherData.temperature}°C</span>
+                        <Ship className="h-4 w-4 text-primary" />
+                        <span>{metrics.operationalVessels} embarcações</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Wind className="h-4 w-4 text-blue-500" />
-                        <span>{weatherData.wind}</span>
+                        <Navigation className="h-4 w-4 text-primary" />
+                        <span>{metrics.activeVoyages} viagens</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Waves className="h-4 w-4 text-cyan-500" />
-                        <span>Ondas: {weatherData.waves}</span>
+                        <Target className="h-4 w-4 text-primary" />
+                        <span>{metrics.activeMissions} missões</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="h-4 w-4 text-green-500" />
-                        <span>Vis: {weatherData.visibility}</span>
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span>{metrics.totalPorts} portos</span>
                       </div>
                     </div>
                   </CardContent>
@@ -489,23 +486,22 @@ export default function OperationsCommandHubEnhanced() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Em Operação</span>
-                        <span className="font-medium text-green-600">10</span>
+                        <span className="font-medium text-primary">{metrics.operationalVessels}</span>
                       </div>
-                      <Progress value={66} className="h-2" />
+                      <Progress value={metrics.totalVessels > 0 ? (metrics.operationalVessels / metrics.totalVessels) * 100 : 0} className="h-2" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Manutenção</span>
-                        <span className="font-medium text-yellow-600">2</span>
+                        <span className="font-medium text-muted-foreground">{vessels.filter((v: any) => v.status === 'maintenance').length}</span>
                       </div>
-                      <Progress value={13} className="h-2 [&>div]:bg-yellow-500" />
+                      <Progress value={metrics.totalVessels > 0 ? (vessels.filter((v: any) => v.status === 'maintenance').length / metrics.totalVessels) * 100 : 0} className="h-2 [&>div]:bg-warning" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Docadas</span>
-                        <span className="font-medium text-blue-600">3</span>
+                        <span className="text-muted-foreground">Total Frota</span>
+                        <span className="font-medium text-muted-foreground">{metrics.totalVessels}</span>
                       </div>
-                      <Progress value={20} className="h-2 [&>div]:bg-blue-500" />
                     </div>
                     <Button variant="outline" size="sm" className="w-full mt-2" onClick={() => handleTabChange("fleet")}>
                       Ver Detalhes da Frota
