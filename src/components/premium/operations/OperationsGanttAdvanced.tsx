@@ -1,10 +1,10 @@
 /**
  * OPERATIONS GANTT ADVANCED
- * Gantt interativo com otimização de rotas e weather overlay
- * Benchmark: Veson IMOS, Danaos, Q88
+ * Gantt interativo com dados reais do Supabase
  */
 
 import React, { useState, useMemo } from "react";
+import { useVoyageEvents, useWeatherOverlay, type VoyageEvent, type WeatherOverlay } from "@/hooks/useOperationsGanttData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,130 +21,6 @@ import {
 import { cn } from "@/lib/utils";
 import { format, addDays, differenceInDays, isWithinInterval, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-// Interfaces
-interface VoyageEvent {
-  id: string;
-  type: "voyage" | "port_call" | "maintenance" | "drydock";
-  vesselId: string;
-  vesselName: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  status: "scheduled" | "in_progress" | "completed" | "delayed";
-  origin?: string;
-  destination?: string;
-  cargo?: string;
-  fuelConsumption?: number;
-  weatherRisk?: "low" | "medium" | "high";
-  revenue?: number;
-}
-
-interface WeatherOverlay {
-  date: Date;
-  region: string;
-  condition: "clear" | "cloudy" | "rain" | "storm";
-  windSpeed: number;
-  waveHeight: number;
-  visibility: string;
-  risk: "low" | "medium" | "high";
-}
-
-// Mock data generator
-const generateMockVoyages = (): VoyageEvent[] => {
-  const today = startOfDay(new Date());
-  return [
-    {
-      id: "v1",
-      type: "voyage",
-      vesselId: "1",
-      vesselName: "MV Nautilus Star",
-      title: "Santos → Rotterdam",
-      startDate: addDays(today, -5),
-      endDate: addDays(today, 10),
-      status: "in_progress",
-      origin: "Santos, BR",
-      destination: "Rotterdam, NL",
-      cargo: "Container",
-      fuelConsumption: 45,
-      weatherRisk: "medium",
-      revenue: 850000,
-    },
-    {
-      id: "v2",
-      type: "port_call",
-      vesselId: "1",
-      vesselName: "MV Nautilus Star",
-      title: "Rotterdam - Descarga",
-      startDate: addDays(today, 10),
-      endDate: addDays(today, 13),
-      status: "scheduled",
-      origin: "Rotterdam, NL",
-      cargo: "Container",
-    },
-    {
-      id: "v3",
-      type: "voyage",
-      vesselId: "2",
-      vesselName: "MV Atlantic Explorer",
-      title: "Houston → Singapore",
-      startDate: addDays(today, 2),
-      endDate: addDays(today, 25),
-      status: "scheduled",
-      origin: "Houston, US",
-      destination: "Singapore, SG",
-      cargo: "Oil & Gas",
-      fuelConsumption: 62,
-      weatherRisk: "low",
-      revenue: 1200000,
-    },
-    {
-      id: "v4",
-      type: "maintenance",
-      vesselId: "3",
-      vesselName: "MV Pacific Trader",
-      title: "Manutenção Programada",
-      startDate: addDays(today, -2),
-      endDate: addDays(today, 1),
-      status: "in_progress",
-    },
-    {
-      id: "v5",
-      type: "drydock",
-      vesselId: "4",
-      vesselName: "MV Ocean Pioneer",
-      title: "Drydock - Class Survey",
-      startDate: addDays(today, 5),
-      endDate: addDays(today, 20),
-      status: "scheduled",
-    },
-    {
-      id: "v6",
-      type: "voyage",
-      vesselId: "2",
-      vesselName: "MV Atlantic Explorer",
-      title: "Singapore → Dubai",
-      startDate: addDays(today, 27),
-      endDate: addDays(today, 35),
-      status: "scheduled",
-      origin: "Singapore, SG",
-      destination: "Dubai, AE",
-      cargo: "General",
-      weatherRisk: "low",
-      revenue: 650000,
-    },
-  ];
-};
-
-const generateWeatherOverlay = (): WeatherOverlay[] => {
-  const today = startOfDay(new Date());
-  return [
-    { date: addDays(today, 3), region: "North Atlantic", condition: "storm", windSpeed: 45, waveHeight: 4.5, visibility: "2km", risk: "high" },
-    { date: addDays(today, 4), region: "North Atlantic", condition: "storm", windSpeed: 40, waveHeight: 4.0, visibility: "3km", risk: "high" },
-    { date: addDays(today, 8), region: "Mediterranean", condition: "rain", windSpeed: 25, waveHeight: 2.0, visibility: "5km", risk: "medium" },
-    { date: addDays(today, 15), region: "Indian Ocean", condition: "cloudy", windSpeed: 15, waveHeight: 1.5, visibility: "8km", risk: "low" },
-  ];
-};
 
 // Type colors
 const typeColors = {
@@ -168,8 +44,10 @@ const weatherRiskColors = {
 };
 
 export function OperationsGanttAdvanced() {
-  const [voyages] = useState<VoyageEvent[]>(generateMockVoyages());
-  const [weather] = useState<WeatherOverlay[]>(generateWeatherOverlay());
+  const { data: voyagesData = [] } = useVoyageEvents();
+  const { data: weatherData = [] } = useWeatherOverlay();
+  const voyages = voyagesData;
+  const weather = weatherData;
   const [viewMode, setViewMode] = useState<"week" | "month" | "quarter">("month");
   const [showWeather, setShowWeather] = useState(true);
   const [selectedVessel, setSelectedVessel] = useState<string>("all");
