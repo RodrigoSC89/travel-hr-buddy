@@ -1,6 +1,6 @@
 /**
  * AIS Fleet Tracker - Real-time Vessel Tracking
- * Global AIS Integration with Geofencing
+ * Connected to Supabase via useFleetPositions hook
  */
 
 import { useState, useEffect } from "react";
@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useFleetPositions, type VesselPosition } from "@/hooks/useFleetPositions";
 import { 
   Ship, 
   MapPin, 
@@ -25,187 +27,19 @@ import {
   Map
 } from "lucide-react";
 
-interface VesselPosition {
-  vesselId: string;
-  vesselName: string;
-  imoNumber: string;
-  mmsi: string;
-  flag: string;
-  vesselType: string;
-  position: {
-    latitude: number;
-    longitude: number;
-    timestamp: Date;
-  };
-  navigation: {
-    speed: number; // knots
-    course: number; // degrees
-    heading: number; // degrees
-    draught: number; // meters
-    destination: string;
-    eta: Date | null;
-    navStatus: string;
-  };
-  voyage: {
-    currentVoyage: string | null;
-    departurePort: string;
-    arrivalPort: string;
-    distanceRemaining: number; // nm
-    distanceTraveled: number; // nm
-  };
-  alerts: {
-    type: 'geofence' | 'speed' | 'deviation' | 'anchor' | 'weather';
-    message: string;
-    severity: 'info' | 'warning' | 'critical';
-    timestamp: Date;
-  }[];
-  status: 'underway' | 'anchored' | 'moored' | 'not_under_command' | 'restricted_maneuverability';
-}
-
+// Geofence type (static zones — could be moved to DB later)
 interface Geofence {
   id: string;
   name: string;
   type: 'port' | 'exclusion_zone' | 'eca' | 'custom';
-  polygon: { lat: number; lng: number }[];
   alerts: boolean;
   vessels: string[];
 }
 
-const mockVessels: VesselPosition[] = [
-  {
-    vesselId: "v1",
-    vesselName: "MV Atlantic Pioneer",
-    imoNumber: "9876543",
-    mmsi: "123456789",
-    flag: "Panama",
-    vesselType: "Bulk Carrier",
-    position: {
-      latitude: 51.9225,
-      longitude: 4.4791,
-      timestamp: new Date()
-    },
-    navigation: {
-      speed: 12.5,
-      course: 245,
-      heading: 243,
-      draught: 11.2,
-      destination: "DEHAM",
-      eta: new Date(Date.now() + 86400000 * 2),
-      navStatus: "Under way using engine"
-    },
-    voyage: {
-      currentVoyage: "V2025-042",
-      departurePort: "Rotterdam",
-      arrivalPort: "Hamburg",
-      distanceRemaining: 280,
-      distanceTraveled: 45
-    },
-    alerts: [],
-    status: 'underway'
-  },
-  {
-    vesselId: "v2",
-    vesselName: "MV Pacific Star",
-    imoNumber: "9876544",
-    mmsi: "987654321",
-    flag: "Liberia",
-    vesselType: "Container Ship",
-    position: {
-      latitude: 1.2655,
-      longitude: 103.8200,
-      timestamp: new Date()
-    },
-    navigation: {
-      speed: 0,
-      course: 0,
-      heading: 180,
-      draught: 12.5,
-      destination: "NLRTM",
-      eta: new Date(Date.now() + 86400000 * 14),
-      navStatus: "At anchor"
-    },
-    voyage: {
-      currentVoyage: "V2025-043",
-      departurePort: "Singapore",
-      arrivalPort: "Rotterdam",
-      distanceRemaining: 8420,
-      distanceTraveled: 0
-    },
-    alerts: [
-      {
-        type: 'anchor',
-        message: 'Vessel at anchor for 8 hours - awaiting berth',
-        severity: 'info',
-        timestamp: new Date()
-      }
-    ],
-    status: 'anchored'
-  },
-  {
-    vesselId: "v3",
-    vesselName: "MV Nordic Wind",
-    imoNumber: "9876545",
-    mmsi: "111222333",
-    flag: "Norway",
-    vesselType: "Tanker",
-    position: {
-      latitude: 59.9139,
-      longitude: 10.7522,
-      timestamp: new Date()
-    },
-    navigation: {
-      speed: 0,
-      course: 0,
-      heading: 90,
-      draught: 10.8,
-      destination: "In Port",
-      eta: null,
-      navStatus: "Moored"
-    },
-    voyage: {
-      currentVoyage: null,
-      departurePort: "Oslo",
-      arrivalPort: "-",
-      distanceRemaining: 0,
-      distanceTraveled: 0
-    },
-    alerts: [
-      {
-        type: 'weather',
-        message: 'Storm warning in area - Wind 45 kn expected',
-        severity: 'warning',
-        timestamp: new Date()
-      }
-    ],
-    status: 'moored'
-  }
-];
-
-const mockGeofences: Geofence[] = [
-  {
-    id: "g1",
-    name: "Rotterdam Port Area",
-    type: "port",
-    polygon: [],
-    alerts: true,
-    vessels: ["v1"]
-  },
-  {
-    id: "g2",
-    name: "North Sea ECA",
-    type: "eca",
-    polygon: [],
-    alerts: true,
-    vessels: ["v1"]
-  },
-  {
-    id: "g3",
-    name: "Singapore Strait",
-    type: "exclusion_zone",
-    polygon: [],
-    alerts: true,
-    vessels: ["v2"]
-  }
+const staticGeofences: Geofence[] = [
+  { id: "g1", name: "Rotterdam Port Area", type: "port", alerts: true, vessels: [] },
+  { id: "g2", name: "North Sea ECA", type: "eca", alerts: true, vessels: [] },
+  { id: "g3", name: "Singapore Strait", type: "exclusion_zone", alerts: true, vessels: [] },
 ];
 
 const getStatusColor = (status: string) => {
@@ -229,22 +63,25 @@ const getStatusBadge = (status: string) => {
 };
 
 export function AISFleetTracker() {
-  const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(mockVessels[0]);
+  const { data, isLoading, error, refetch } = useFleetPositions();
+  const vessels = data?.vessels || [];
+  const fleetStats = data?.stats || { total: 0, underway: 0, anchored: 0, moored: 0, alerts: 0 };
+
+  const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  const filteredVessels = mockVessels.filter(v => 
+  // Auto-select first vessel when data loads
+  useEffect(() => {
+    if (vessels.length > 0 && !selectedVessel) {
+      setSelectedVessel(vessels[0]);
+    }
+  }, [vessels, selectedVessel]);
+
+  const filteredVessels = vessels.filter(v => 
     v.vesselName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     v.imoNumber.includes(searchQuery)
   );
-
-  const fleetStats = {
-    total: mockVessels.length,
-    underway: mockVessels.filter(v => v.status === 'underway').length,
-    anchored: mockVessels.filter(v => v.status === 'anchored').length,
-    moored: mockVessels.filter(v => v.status === 'moored').length,
-    alerts: mockVessels.reduce((acc, v) => acc + v.alerts.length, 0)
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -525,7 +362,7 @@ export function AISFleetTracker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockGeofences.map((geofence) => (
+                {staticGeofences.map((geofence: Geofence) => (
                   <div key={geofence.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -570,14 +407,14 @@ export function AISFleetTracker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockVessels.flatMap(v => v.alerts.map(a => ({ ...a, vessel: v.vesselName }))).length === 0 ? (
+                {vessels.flatMap(v => v.alerts.map((a, i) => ({ ...a, vessel: v.vesselName, key: `${v.vesselId}-${i}` }))).length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>No active alerts</p>
                   </div>
                 ) : (
-                  mockVessels.flatMap(v => 
-                    v.alerts.map((a, idx) => (
+                  vessels.flatMap(v => 
+                    v.alerts.map((a: VesselPosition["alerts"][0], idx: number) => (
                       <div key={`${v.vesselId}-${idx}`} className={`p-4 border rounded-lg ${
                         a.severity === 'critical' ? 'border-red-500 bg-red-500/5' :
                         a.severity === 'warning' ? 'border-orange-500 bg-orange-500/5' :

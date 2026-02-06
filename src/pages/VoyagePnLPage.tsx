@@ -1,10 +1,8 @@
 /**
- * VoyagePnLPage - Voyage Profit & Loss Calculator
- * P0-005 FIX: Route was 404, now functional with real data
+ * VoyagePnLPage - Voyage Profit & Loss with REAL Supabase Data
+ * Uses voyage_accounting + voyage_plans tables (no Math.random())
  */
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,70 +10,19 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { RefreshCw, Download, DollarSign, TrendingUp, TrendingDown, Ship, Anchor } from 'lucide-react';
-
-interface VoyageFinancial {
-  id: string;
-  vesselName: string;
-  voyageNumber: string;
-  revenue: number;
-  costs: number;
-  profit: number;
-  margin: number;
-  status: 'completed' | 'ongoing' | 'planned';
-  startDate: string;
-  endDate: string | null;
-}
+import { useVoyagePnL } from '@/hooks/useVoyagePnL';
 
 export default function VoyagePnLPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const { data, isLoading, error, refetch } = useVoyagePnL();
 
-  const { data: voyages, isLoading, error, refetch } = useQuery({
-    queryKey: ['voyage-pnl'],
-    queryFn: async (): Promise<VoyageFinancial[]> => {
-      const { data, error } = await supabase
-        .from('vessels')
-        .select('id, name, imo_number, status, created_at')
-        .order('created_at', { ascending: false });
+  const voyages = data?.voyages || [];
+  const stats = data?.stats;
 
-      if (error) throw error;
-
-      // Transform vessel data into voyage P&L format
-      return (data || []).map((vessel, index) => {
-        const revenue = Math.floor(Math.random() * 500000) + 100000;
-        const costs = Math.floor(Math.random() * 300000) + 50000;
-        const profit = revenue - costs;
-        const margin = (profit / revenue) * 100;
-        const status: VoyageFinancial['status'] = 
-          vessel.status === 'active' ? 'ongoing' : 
-          vessel.status === 'inactive' ? 'completed' : 'planned';
-        
-        return {
-          id: vessel.id,
-          vesselName: vessel.name || 'Unknown Vessel',
-          voyageNumber: `VOY-${(index + 1).toString().padStart(4, '0')}`,
-          revenue,
-          costs,
-          profit,
-          margin,
-          status,
-          startDate: vessel.created_at || new Date().toISOString(),
-          endDate: vessel.status === 'inactive' ? new Date().toISOString() : null,
-        };
-      });
-    },
-  });
-
-  const filteredVoyages = voyages?.filter(v =>
+  const filteredVoyages = voyages.filter(v =>
     v.vesselName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.voyageNumber.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
-
-  const totalRevenue = filteredVoyages.reduce((sum, v) => sum + v.revenue, 0);
-  const totalCosts = filteredVoyages.reduce((sum, v) => sum + v.costs, 0);
-  const totalProfit = totalRevenue - totalCosts;
-  const avgMargin = filteredVoyages.length > 0 
-    ? filteredVoyages.reduce((sum, v) => sum + v.margin, 0) / filteredVoyages.length 
-    : 0;
+  );
 
   const handleExport = () => {
     if (!filteredVoyages.length) {
@@ -84,7 +31,7 @@ export default function VoyagePnLPage() {
     }
 
     const csv = [
-      ['Voyage', 'Vessel', 'Revenue', 'Costs', 'Profit', 'Margin %', 'Status', 'Start Date'].join(','),
+      ['Voyage', 'Vessel', 'Revenue', 'Costs', 'Profit', 'Margin %', 'TCE $/day', 'Status', 'Departure', 'Arrival'].join(','),
       ...filteredVoyages.map(v => [
         v.voyageNumber,
         v.vesselName,
@@ -92,8 +39,10 @@ export default function VoyagePnLPage() {
         v.costs,
         v.profit,
         v.margin.toFixed(2),
+        v.tceDaily?.toFixed(0) || '—',
         v.status,
-        v.startDate.split('T')[0],
+        v.departurePort,
+        v.arrivalPort,
       ].join(','))
     ].join('\n');
 
@@ -105,11 +54,6 @@ export default function VoyagePnLPage() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success('Relatório P&L exportado');
-  };
-
-  const handleRefresh = () => {
-    refetch();
-    toast.success('Dados atualizados');
   };
 
   if (error) {
@@ -136,11 +80,12 @@ export default function VoyagePnLPage() {
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <DollarSign className="h-6 w-6 text-primary" />
             Voyage P&L
+            <Badge variant="outline" className="ml-2 text-xs">LIVE DATA</Badge>
           </h1>
-          <p className="text-muted-foreground">Análise de Lucro e Perda por Viagem</p>
+          <p className="text-muted-foreground">Análise de Lucro e Perda por Viagem — Dados Reais</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleRefresh}>
+          <Button variant="outline" onClick={() => { refetch(); toast.success('Dados atualizados'); }}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
@@ -152,9 +97,9 @@ export default function VoyagePnLPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {isLoading ? (
-          Array.from({ length: 4 }).map((_, i) => (
+          Array.from({ length: 5 }).map((_, i) => (
             <Card key={i}>
               <CardContent className="p-4">
                 <Skeleton className="h-4 w-24 mb-2" />
@@ -170,7 +115,7 @@ export default function VoyagePnLPage() {
                   <TrendingUp className="h-4 w-4" /> Receita Total
                 </p>
                 <p className="text-2xl font-bold text-green-600">
-                  ${totalRevenue.toLocaleString()}
+                  ${(stats?.totalRevenue || 0).toLocaleString()}
                 </p>
               </CardContent>
             </Card>
@@ -180,7 +125,7 @@ export default function VoyagePnLPage() {
                   <TrendingDown className="h-4 w-4" /> Custos Total
                 </p>
                 <p className="text-2xl font-bold text-red-600">
-                  ${totalCosts.toLocaleString()}
+                  ${(stats?.totalCosts || 0).toLocaleString()}
                 </p>
               </CardContent>
             </Card>
@@ -189,8 +134,8 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <DollarSign className="h-4 w-4" /> Lucro Total
                 </p>
-                <p className={`text-2xl font-bold ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  ${totalProfit.toLocaleString()}
+                <p className={`text-2xl font-bold ${(stats?.totalProfit || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  ${(stats?.totalProfit || 0).toLocaleString()}
                 </p>
               </CardContent>
             </Card>
@@ -199,8 +144,18 @@ export default function VoyagePnLPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Ship className="h-4 w-4" /> Margem Média
                 </p>
-                <p className={`text-2xl font-bold ${avgMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {avgMargin.toFixed(1)}%
+                <p className={`text-2xl font-bold ${(stats?.avgMargin || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {(stats?.avgMargin || 0).toFixed(1)}%
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <p className="text-sm text-muted-foreground flex items-center gap-1">
+                  <Anchor className="h-4 w-4" /> TCE Médio
+                </p>
+                <p className="text-2xl font-bold text-primary">
+                  ${(stats?.avgTCE || 0).toLocaleString()}/dia
                 </p>
               </CardContent>
             </Card>
@@ -237,6 +192,7 @@ export default function VoyagePnLPage() {
             <div className="text-center py-8 text-muted-foreground">
               <Ship className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma viagem encontrada</p>
+              <p className="text-sm mt-1">Adicione viagens em Voyage Accounting para visualizar o P&L</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -245,10 +201,12 @@ export default function VoyagePnLPage() {
                   <tr className="border-b">
                     <th className="text-left p-2">Viagem</th>
                     <th className="text-left p-2">Navio</th>
+                    <th className="text-left p-2">Rota</th>
                     <th className="text-right p-2">Receita</th>
                     <th className="text-right p-2">Custos</th>
                     <th className="text-right p-2">Lucro</th>
                     <th className="text-right p-2">Margem</th>
+                    <th className="text-right p-2">TCE</th>
                     <th className="text-center p-2">Status</th>
                   </tr>
                 </thead>
@@ -257,6 +215,9 @@ export default function VoyagePnLPage() {
                     <tr key={voyage.id} className="border-b hover:bg-muted/50">
                       <td className="p-2 font-mono">{voyage.voyageNumber}</td>
                       <td className="p-2">{voyage.vesselName}</td>
+                      <td className="p-2 text-sm text-muted-foreground">
+                        {voyage.departurePort} → {voyage.arrivalPort}
+                      </td>
                       <td className="p-2 text-right text-green-600">
                         ${voyage.revenue.toLocaleString()}
                       </td>
@@ -268,6 +229,9 @@ export default function VoyagePnLPage() {
                       </td>
                       <td className={`p-2 text-right ${voyage.margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {voyage.margin.toFixed(1)}%
+                      </td>
+                      <td className="p-2 text-right text-muted-foreground">
+                        {voyage.tceDaily ? `$${voyage.tceDaily.toLocaleString()}` : '—'}
                       </td>
                       <td className="p-2 text-center">
                         <Badge variant={
