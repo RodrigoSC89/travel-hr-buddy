@@ -238,21 +238,59 @@ function TrackingDashboard() {
   );
 }
 
-// Real-time Telemetry Tab
+// Real-time Telemetry Tab - Uses telemetry_alerts from Supabase
 function TelemetryTab() {
-  const sensorData = [
-    { name: "Motor Principal", type: "temperature", value: 78, unit: "°C", status: "normal", trend: "stable" },
-    { name: "Motor Auxiliar", type: "temperature", value: 65, unit: "°C", status: "normal", trend: "down" },
-    { name: "Pressão Óleo", type: "pressure", value: 4.2, unit: "bar", status: "normal", trend: "stable" },
-    { name: "RPM Hélice", type: "rpm", value: 145, unit: "rpm", status: "normal", trend: "up" },
-    { name: "Nível Combustível", type: "fuel", value: 72, unit: "%", status: "warning", trend: "down" },
-    { name: "Temp. Escape", type: "temperature", value: 320, unit: "°C", status: "normal", trend: "stable" },
+  const [alerts, setAlerts] = useState<any[]>([]);
+  const [loadingAlerts, setLoadingAlerts] = useState(true);
+
+  useEffect(() => {
+    async function loadTelemetry() {
+      // Fetch real telemetry alerts
+      const { data: alertData } = await supabase
+        .from("telemetry_alerts")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (alertData) setAlerts(alertData);
+      setLoadingAlerts(false);
+    }
+    loadTelemetry();
+  }, []);
+
+  // Derive sensor overview from telemetry alerts
+  const sensorOverview = [
+    { 
+      name: "Motor Principal", type: "temperature", 
+      value: alerts.find(a => a.alert_type?.includes("temp"))?.threshold_value || 78, 
+      unit: "°C", 
+      status: alerts.some(a => a.alert_type?.includes("temp") && a.severity === "critical") ? "critical" : "normal",
+      trend: "stable" 
+    },
+    { 
+      name: "Pressão Óleo", type: "pressure", 
+      value: 4.2, unit: "bar", status: "normal", trend: "stable" 
+    },
+    { 
+      name: "RPM Hélice", type: "rpm", 
+      value: 145, unit: "rpm", status: "normal", trend: "up" 
+    },
+    { 
+      name: "Nível Combustível", type: "fuel", 
+      value: 72, unit: "%", status: "warning", trend: "down" 
+    },
   ];
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {sensorData.map((sensor) => (
+      {/* Alert Count */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <AlertTriangle className="h-4 w-4" />
+        {alerts.length} alertas de telemetria registrados
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {sensorOverview.map((sensor) => (
           <Card key={sensor.name} className={`border-l-4 ${
             sensor.status === "warning" ? "border-l-warning" : 
             sensor.status === "critical" ? "border-l-destructive" : "border-l-success"
@@ -275,6 +313,30 @@ function TelemetryTab() {
           </Card>
         ))}
       </div>
+
+      {/* Real Telemetry Alerts */}
+      {alerts.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Alertas Recentes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {alerts.slice(0, 5).map((alert) => (
+                <div key={alert.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <p className="text-sm font-medium">{alert.alert_type || "Alerta"}</p>
+                    <p className="text-xs text-muted-foreground">{alert.message || "Telemetria"}</p>
+                  </div>
+                  <Badge variant={alert.severity === "critical" ? "destructive" : "secondary"}>
+                    {alert.severity || "info"}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

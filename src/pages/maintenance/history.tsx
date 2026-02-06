@@ -3,44 +3,42 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Badge } from "@/components/ui/badge";
-import { History, CheckCircle, Clock, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useMaintenanceHistoryRealData } from "@/hooks/useMaintenanceHistoryRealData";
+import { toast } from "sonner";
+import { History, CheckCircle, Clock, Calendar, Download, RefreshCw, Ship, AlertTriangle } from "lucide-react";
 
 export default function MaintenanceHistory() {
-  const historyItems = [
-    {
-      id: 1,
-      equipment: "Gerador Diesel A",
-      type: "Preventiva",
-      date: "2025-10-15",
-      technician: "João Silva",
-      duration: "2h 30m",
-      cost: "R$ 1,250.00",
-      status: "completed",
-      notes: "Substituição de filtros realizada conforme programado"
-    },
-    {
-      id: 2,
-      equipment: "Bomba Hidráulica 2",
-      type: "Corretiva",
-      date: "2025-10-20",
-      technician: "Maria Santos",
-      duration: "4h 15m",
-      cost: "R$ 3,800.00",
-      status: "completed",
-      notes: "Reparo de vazamento e substituição de vedação"
-    },
-    {
-      id: 3,
-      equipment: "Compressor de Ar",
-      type: "Preditiva",
-      date: "2025-10-25",
-      technician: "Pedro Costa",
-      duration: "1h 45m",
-      cost: "R$ 850.00",
-      status: "completed",
-      notes: "Manutenção baseada em análise de vibração"
+  const { history, isLoading, refetch, stats } = useMaintenanceHistoryRealData();
+
+  const handleExport = () => {
+    if (!history.length) {
+      toast.warning("Nenhum registro para exportar");
+      return;
     }
-  ];
+    const csv = [
+      ['Equipamento', 'Embarcação', 'Tipo', 'Técnico', 'Horas', 'Custo', 'Data'].join(','),
+      ...history.map(r => [
+        `"${r.title}"`, `"${r.vesselName}"`, r.type, `"${r.technician}"`,
+        r.hours, r.cost, r.completedAt.toLocaleDateString('pt-BR')
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `historico_manutencao_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Histórico exportado com sucesso");
+  };
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Dados atualizados");
+  };
 
   return (
     <ModulePageWrapper gradient="purple">
@@ -56,27 +54,73 @@ export default function MaintenanceHistory() {
         ]}
       />
 
+      {/* Actions */}
+      <div className="flex justify-end gap-2 mb-4">
+        <Button variant="outline" size="sm" onClick={handleRefresh}>
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Atualizar
+        </Button>
+        <Button variant="outline" size="sm" onClick={handleExport}>
+          <Download className="h-4 w-4 mr-2" />
+          Exportar CSV
+        </Button>
+      </div>
+
       <div className="grid gap-4">
         <Card>
           <CardHeader>
             <CardTitle>Resumo do Histórico</CardTitle>
             <CardDescription>
-              Últimas 90 dias de atividades de manutenção
+              Estatísticas calculadas a partir dos registros reais do banco de dados
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-3xl font-bold text-blue-600">124</div>
+                {isLoading ? <Skeleton className="h-10 w-16 mx-auto" /> : (
+                  <div className="text-3xl font-bold text-primary">{stats.totalRecords}</div>
+                )}
                 <div className="text-sm text-muted-foreground">Manutenções Realizadas</div>
               </div>
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-3xl font-bold text-green-600">95%</div>
-                <div className="text-sm text-muted-foreground">Taxa de Sucesso</div>
+                {isLoading ? <Skeleton className="h-10 w-16 mx-auto" /> : (
+                  <div className="text-3xl font-bold text-success">
+                    {stats.totalRecords > 0 ? Math.round((stats.completedCount / stats.totalRecords) * 100) : 0}%
+                  </div>
+                )}
+                <div className="text-sm text-muted-foreground">Taxa de Conclusão</div>
               </div>
               <div className="text-center p-4 border rounded-lg">
-                <div className="text-3xl font-bold text-purple-600">2.5h</div>
+                {isLoading ? <Skeleton className="h-10 w-16 mx-auto" /> : (
+                  <div className="text-3xl font-bold text-primary">
+                    {stats.totalRecords > 0 ? (stats.totalHours / stats.totalRecords).toFixed(1) : 0}h
+                  </div>
+                )}
                 <div className="text-sm text-muted-foreground">Tempo Médio</div>
+              </div>
+              <div className="text-center p-4 border rounded-lg">
+                {isLoading ? <Skeleton className="h-10 w-16 mx-auto" /> : (
+                  <div className="text-3xl font-bold text-warning">
+                    R$ {(stats.totalCost / 1000).toFixed(1)}k
+                  </div>
+                )}
+                <div className="text-sm text-muted-foreground">Custo Total</div>
+              </div>
+            </div>
+
+            {/* By Type */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center p-3 border rounded-lg">
+                <div className="text-xl font-bold">{stats.byType.preventiva}</div>
+                <div className="text-xs text-muted-foreground">Preventiva</div>
+              </div>
+              <div className="text-center p-3 border rounded-lg">
+                <div className="text-xl font-bold">{stats.byType.corretiva}</div>
+                <div className="text-xs text-muted-foreground">Corretiva</div>
+              </div>
+              <div className="text-center p-3 border rounded-lg">
+                <div className="text-xl font-bold">{stats.byType.preditiva}</div>
+                <div className="text-xs text-muted-foreground">Preditiva</div>
               </div>
             </div>
           </CardContent>
@@ -86,34 +130,53 @@ export default function MaintenanceHistory() {
           <CardHeader>
             <CardTitle>Registro de Atividades</CardTitle>
             <CardDescription>
-              Manutenções completadas ordenadas por data
+              Manutenções completadas — dados reais do Supabase
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {historyItems.map((item) => (
-                <div key={item.id} className="border-l-4 border-green-500 pl-4 py-2">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold">{item.equipment}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline">{item.type}</Badge>
-                        <Badge variant="secondary">{item.status}</Badge>
+            {isLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="border-l-4 border-muted pl-4 py-2">
+                    <Skeleton className="h-5 w-48 mb-2" />
+                    <Skeleton className="h-4 w-96 mb-2" />
+                    <Skeleton className="h-3 w-64" />
+                  </div>
+                ))}
+              </div>
+            ) : history.length === 0 ? (
+              <div className="text-center py-8">
+                <Ship className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+                <p className="text-muted-foreground">Nenhuma manutenção concluída registrada</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {history.map((item) => (
+                  <div key={item.id} className="border-l-4 border-success pl-4 py-2">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3 className="font-semibold">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground">
+                          <Ship className="inline h-3 w-3 mr-1" />{item.vesselName}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="outline">{item.type}</Badge>
+                          <Badge variant="secondary">{item.status}</Badge>
+                        </div>
+                      </div>
+                      <div className="text-right text-sm">
+                        <div className="font-medium">{item.completedAt.toLocaleDateString('pt-BR')}</div>
+                        <div className="text-muted-foreground">{item.hours}h</div>
                       </div>
                     </div>
-                    <div className="text-right text-sm">
-                      <div className="font-medium">{item.date}</div>
-                      <div className="text-muted-foreground">{item.duration}</div>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span>Técnico: {item.technician}</span>
+                      {item.cost > 0 && <span>Custo: R$ {item.cost.toLocaleString('pt-BR')}</span>}
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">{item.notes}</p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>Técnico: {item.technician}</span>
-                    <span>Custo: {item.cost}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
