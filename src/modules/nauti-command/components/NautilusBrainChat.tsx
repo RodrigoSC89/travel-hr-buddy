@@ -104,13 +104,11 @@ Sistema Nautilus One - Contexto Atual:
 ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       `;
 
-      const { data, error } = await supabase.functions.invoke('nauti-llm', {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
-          prompt: input,
-          contextId: 'command-center',
-          moduleId: 'nauti-brain',
-          sessionId: `brain-${Date.now()}`,
-          mode: 'safe'
+          message: input,
+          context,
+          agentId: 'nauti-brain',
         }
       });
 
@@ -119,9 +117,9 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || "Desculpe, não consegui processar sua solicitação. Tente novamente.",
+        content: data?.reply || "Desculpe, não consegui processar sua solicitação. Tente novamente.",
         timestamp: new Date(),
-        context: data.model,
+        context: data?.model,
         suggestions: generateSuggestions(input)
       };
 
