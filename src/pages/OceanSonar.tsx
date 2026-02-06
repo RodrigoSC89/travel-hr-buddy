@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { Plus, Search, Edit2, Trash2, Play, Waves, MapPin, Radio, Target } from "lucide-react";
+import { IntegrationGuard } from "@/components/ui/IntegrationGuard";
 
 interface Scan { id: string; name: string; status: 'queued' | 'scanning' | 'completed'; frequency: number; range: number; location: string; progress: number; detections: number; }
 
@@ -53,35 +54,41 @@ export default function OceanSonar() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3"><Waves className="h-8 w-8 text-primary" /><h1 className="text-3xl font-bold">Ocean Sonar AI</h1></div>
-        <Button onClick={() => { setEditing(null); setForm({ name: '', frequency: 200, range: 500, location: '' }); setIsOpen(true); }}><Plus className="h-4 w-4 mr-2" />Nova Varredura</Button>
-      </div>
-      <Card><CardContent className="p-4"><div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" /></div></CardContent></Card>
-      <Card><CardHeader><CardTitle>Varreduras ({filtered.length})</CardTitle></CardHeader><CardContent><div className="space-y-3">
-        {filtered.map(s => (
-          <div key={s.id} className="p-4 border rounded-lg">
-            <div className="flex justify-between items-start mb-3">
-              <div><div className="flex items-center gap-2 mb-1"><h3 className="font-semibold">{s.name}</h3><Badge className={statusColors[s.status]}>{s.status}</Badge></div>
-              <div className="flex gap-4 text-sm text-muted-foreground"><span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{s.location}</span><span className="flex items-center gap-1"><Radio className="h-3 w-3" />{s.frequency}kHz</span><span className="flex items-center gap-1"><Target className="h-3 w-3" />{s.detections} detecções</span></div></div>
-              <div className="flex gap-2">
-                {s.status === 'queued' && <Button size="sm" onClick={() => handleStart(s.id)}><Play className="h-4 w-4" /></Button>}
-                <Button size="sm" variant="ghost" onClick={() => { setEditing(s); setForm({ name: s.name, frequency: s.frequency, range: s.range, location: s.location }); setIsOpen(true); }}><Edit2 className="h-4 w-4" /></Button>
-                <Button size="sm" variant="ghost" onClick={() => handleDelete(s.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+      <IntegrationGuard
+        moduleName="Ocean Sonar AI"
+        integrationRequired="Hardware sonar submarino (side-scan sonar, multi-beam) + API de processamento acústico"
+        description="Os dados exibidos são simulados para demonstração do fluxo operacional."
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3"><Waves className="h-8 w-8 text-primary" /><h1 className="text-3xl font-bold">Ocean Sonar AI</h1></div>
+          <Button onClick={() => { setEditing(null); setForm({ name: '', frequency: 200, range: 500, location: '' }); setIsOpen(true); }}><Plus className="h-4 w-4 mr-2" />Nova Varredura</Button>
+        </div>
+        <Card><CardContent className="p-4"><div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" /></div></CardContent></Card>
+        <Card><CardHeader><CardTitle>Varreduras ({filtered.length})</CardTitle></CardHeader><CardContent><div className="space-y-3">
+          {filtered.map(s => (
+            <div key={s.id} className="p-4 border rounded-lg">
+              <div className="flex justify-between items-start mb-3">
+                <div><div className="flex items-center gap-2 mb-1"><h3 className="font-semibold">{s.name}</h3><Badge className={statusColors[s.status]}>{s.status}</Badge></div>
+                <div className="flex gap-4 text-sm text-muted-foreground"><span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{s.location}</span><span className="flex items-center gap-1"><Radio className="h-3 w-3" />{s.frequency}kHz</span><span className="flex items-center gap-1"><Target className="h-3 w-3" />{s.detections} detecções</span></div></div>
+                <div className="flex gap-2">
+                  {s.status === 'queued' && <Button size="sm" onClick={() => handleStart(s.id)}><Play className="h-4 w-4" /></Button>}
+                  <Button size="sm" variant="ghost" onClick={() => { setEditing(s); setForm({ name: s.name, frequency: s.frequency, range: s.range, location: s.location }); setIsOpen(true); }}><Edit2 className="h-4 w-4" /></Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleDelete(s.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                </div>
               </div>
+              {s.status === 'scanning' && <div className="flex items-center gap-3"><Progress value={s.progress} className="flex-1" /><span className="text-sm font-medium">{s.progress}%</span></div>}
             </div>
-            {s.status === 'scanning' && <div className="flex items-center gap-3"><Progress value={s.progress} className="flex-1" /><span className="text-sm font-medium">{s.progress}%</span></div>}
-          </div>
-        ))}
-      </div></CardContent></Card>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}><DialogContent><DialogHeader><DialogTitle>{editing ? 'Editar' : 'Nova'} Varredura</DialogTitle></DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input placeholder="Nome" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
-          <div className="grid grid-cols-2 gap-4"><Input type="number" placeholder="Frequência (kHz)" value={form.frequency} onChange={e => setForm({ ...form, frequency: Number(e.target.value) })} /><Input type="number" placeholder="Range (m)" value={form.range} onChange={e => setForm({ ...form, range: Number(e.target.value) })} /></div>
-          <Input placeholder="Localização" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} required />
-          <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button><Button type="submit">{editing ? 'Salvar' : 'Criar'}</Button></div>
-        </form>
-      </DialogContent></Dialog>
+          ))}
+        </div></CardContent></Card>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}><DialogContent><DialogHeader><DialogTitle>{editing ? 'Editar' : 'Nova'} Varredura</DialogTitle></DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input placeholder="Nome" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
+            <div className="grid grid-cols-2 gap-4"><Input type="number" placeholder="Frequência (kHz)" value={form.frequency} onChange={e => setForm({ ...form, frequency: Number(e.target.value) })} /><Input type="number" placeholder="Range (m)" value={form.range} onChange={e => setForm({ ...form, range: Number(e.target.value) })} /></div>
+            <Input placeholder="Localização" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} required />
+            <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button><Button type="submit">{editing ? 'Salvar' : 'Criar'}</Button></div>
+          </form>
+        </DialogContent></Dialog>
+      </IntegrationGuard>
     </div>
   );
 }
