@@ -188,27 +188,10 @@ export default function FleetTelemetryModule() {
     return "normal";
   };
 
-  const generateMockSensorData = async () => {
-    // Generate realistic sensor data for demo
-    const mockSensor = {
-      vessel_id: "vessel-001",
-      sensor_type: "engine_temperature",
-      value: 75 + Math.random() * 10,
-      unit: "°C",
-      threshold_min: 60,
-      threshold_max: 90,
-      timestamp: new Date().toISOString()
-    };
-
-    try {
-      const { error } = await supabase
-        .from("fleet_sensors")
-        .insert(mockSensor);
-
-      if (error) throw error;
-    } catch (error) {
-      logger.error("Error generating sensor data:", error);
-    }
+  const generateSensorData = async () => {
+    // No-op in production - real sensor data comes from IoT integrations
+    // This function is intentionally empty to prevent mock data insertion
+    logger.debug("Sensor data generation skipped - awaiting IoT integration");
   };
 
   const criticalAlerts = alerts.filter(a => a.severity === "critical");

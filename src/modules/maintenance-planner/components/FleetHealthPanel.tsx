@@ -4,49 +4,25 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   Activity, AlertTriangle, CheckCircle, Clock, 
-  TrendingUp, Wrench, Ship, Gauge 
+  TrendingUp, Wrench, Ship, Gauge, RefreshCw 
 } from "lucide-react";
-
-interface Equipment {
-  id: string;
-  codigo: string;
-  nome: string;
-  status: "operacional" | "atencao" | "critico";
-  saude: number;
-  proximaManutencao: string;
-  horasOperacao: number;
-  falhasRecentes: number;
-}
+import { useFleetHealthData } from "@/hooks/useFleetHealthData";
+import type { Equipment, FleetHealthKPIs } from "@/hooks/useFleetHealthData";
 
 interface FleetHealthPanelProps {
   equipamentos?: Equipment[];
-  kpis?: {
-    mtbf: string;
-    jobsCriticos: number;
-    taxaConformidade: number;
-    jobsPendentes: number;
-  };
+  kpis?: FleetHealthKPIs;
 }
 
-const mockEquipamentos: Equipment[] = [
-  { id: "1", codigo: "601.0001.01", nome: "Motor Principal BB", status: "operacional", saude: 95, proximaManutencao: "15 dias", horasOperacao: 12450, falhasRecentes: 0 },
-  { id: "2", codigo: "601.0001.02", nome: "Motor Principal STBD", status: "atencao", saude: 78, proximaManutencao: "3 dias", horasOperacao: 12380, falhasRecentes: 1 },
-  { id: "3", codigo: "603.0004.02", nome: "Bomba Hidráulica Popa", status: "critico", saude: 45, proximaManutencao: "Vencido", horasOperacao: 8920, falhasRecentes: 3 },
-  { id: "4", codigo: "604.0002.01", nome: "Gerador Diesel 1", status: "operacional", saude: 88, proximaManutencao: "22 dias", horasOperacao: 15200, falhasRecentes: 0 },
-  { id: "5", codigo: "605.0001.03", nome: "Sistema Sprinkler", status: "operacional", saude: 92, proximaManutencao: "45 dias", horasOperacao: 2100, falhasRecentes: 0 },
-];
-
-const mockKPIs = {
-  mtbf: "847h",
-  jobsCriticos: 3,
-  taxaConformidade: 94,
-  jobsPendentes: 12,
-};
-
 export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
-  equipamentos = mockEquipamentos,
-  kpis = mockKPIs,
+  equipamentos: propEquipamentos,
+  kpis: propKpis,
 }) => {
+  const { data, isLoading } = useFleetHealthData();
+
+  const equipamentos = propEquipamentos || data?.equipamentos || [];
+  const kpis = propKpis || data?.kpis || { mtbf: "N/A", jobsCriticos: 0, taxaConformidade: 100, jobsPendentes: 0 };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "operacional": return "bg-green-500";
@@ -71,6 +47,14 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
     return "bg-red-500";
   };
 
+  if (isLoading && !propEquipamentos) {
+    return (
+      <div className="flex items-center justify-center h-48">
+        <RefreshCw className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   const operacionais = equipamentos.filter(e => e.status === "operacional").length;
   const atencao = equipamentos.filter(e => e.status === "atencao").length;
   const criticos = equipamentos.filter(e => e.status === "critico").length;
@@ -91,7 +75,6 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
             <p className="text-xs text-muted-foreground mt-1">Tempo médio entre falhas</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -104,7 +87,6 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
             <p className="text-xs text-muted-foreground mt-1">Requerem atenção imediata</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -117,7 +99,6 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
             <Progress value={kpis.taxaConformidade} className="mt-2 h-1" />
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -156,63 +137,64 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
             </div>
           </div>
 
-          {/* Equipment List */}
-          <div className="space-y-3">
-            {equipamentos.map((equip) => (
-              <div
-                key={equip.id}
-                className={`p-3 rounded-lg border ${
-                  equip.status === "critico" ? "border-red-500/50 bg-red-500/5" :
-                  equip.status === "atencao" ? "border-yellow-500/50 bg-yellow-500/5" :
-                  "border-border"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {getStatusIcon(equip.status)}
-                    <div>
-                      <p className="font-medium text-sm">{equip.nome}</p>
-                      <p className="text-xs text-muted-foreground">{equip.codigo}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">Saúde</p>
-                      <div className="flex items-center gap-2">
-                        <Progress 
-                          value={equip.saude} 
-                          className={`w-16 h-2 ${getHealthColor(equip.saude)}`}
-                        />
-                        <span className="text-sm font-medium">{equip.saude}%</span>
+          {equipamentos.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Ship className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>Nenhum equipamento registrado</p>
+              <p className="text-sm">Adicione embarcações e registros de manutenção para visualizar a saúde da frota.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {equipamentos.map((equip) => (
+                <div
+                  key={equip.id}
+                  className={`p-3 rounded-lg border ${
+                    equip.status === "critico" ? "border-red-500/50 bg-red-500/5" :
+                    equip.status === "atencao" ? "border-yellow-500/50 bg-yellow-500/5" :
+                    "border-border"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {getStatusIcon(equip.status)}
+                      <div>
+                        <p className="font-medium text-sm">{equip.nome}</p>
+                        <p className="text-xs text-muted-foreground">{equip.codigo}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">Próx. Manutenção</p>
-                      <Badge 
-                        variant={equip.proximaManutencao === "Vencido" ? "destructive" : "secondary"}
-                        className="text-xs"
-                      >
-                        {equip.proximaManutencao}
-                      </Badge>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">Horas</p>
-                      <div className="flex items-center gap-1">
-                        <Gauge className="h-3 w-3" />
-                        <span className="text-sm">{equip.horasOperacao.toLocaleString()}h</span>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Saúde</p>
+                        <div className="flex items-center gap-2">
+                          <Progress value={equip.saude} className={`w-16 h-2 ${getHealthColor(equip.saude)}`} />
+                          <span className="text-sm font-medium">{equip.saude}%</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Próx. Manutenção</p>
+                        <Badge variant={equip.proximaManutencao === "Vencido" ? "destructive" : "secondary"} className="text-xs">
+                          {equip.proximaManutencao}
+                        </Badge>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Horas</p>
+                        <div className="flex items-center gap-1">
+                          <Gauge className="h-3 w-3" />
+                          <span className="text-sm">{equip.horasOperacao.toLocaleString()}h</span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  {equip.falhasRecentes > 0 && (
+                    <div className="mt-2 flex items-center gap-2 text-xs text-yellow-600">
+                      <AlertTriangle className="h-3 w-3" />
+                      {equip.falhasRecentes} falha(s) nos últimos 90 dias
+                    </div>
+                  )}
                 </div>
-                {equip.falhasRecentes > 0 && (
-                  <div className="mt-2 flex items-center gap-2 text-xs text-yellow-600">
-                    <AlertTriangle className="h-3 w-3" />
-                    {equip.falhasRecentes} falha(s) nos últimos 90 dias
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
