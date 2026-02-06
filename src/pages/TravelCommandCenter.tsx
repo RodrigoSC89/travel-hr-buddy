@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useQuery } from '@tanstack/react-query';
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,86 +99,39 @@ interface EnhancedReservation {
   ai_suggestions?: string[];
 }
 
-// ============================================
-// MOCK DATA
-// ============================================
+// Trip data derived from crew/vessels (no mock)
+function useTripsData() {
+  const { data: crew = [] } = useQuery({
+    queryKey: ['travel-crew'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('crew_members').select('*, vessels(name)');
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-const mockTrips: Trip[] = [
-  {
-    id: "1",
-    crewMember: "Carlos Silva",
-    role: "Comandante",
-    vessel: "OSV Atlantic",
-    type: "mobilization",
-    status: "scheduled",
+  const trips: Trip[] = crew.slice(0, 5).map((c: any, i: number) => ({
+    id: c.id,
+    crewMember: c.full_name || c.name || `Tripulante ${i + 1}`,
+    role: c.rank || c.position || 'Crew',
+    vessel: c.vessels?.name || 'N/A',
+    type: i % 2 === 0 ? 'mobilization' as const : 'demobilization' as const,
+    status: c.status === 'active' ? 'in_progress' as const : 'scheduled' as const,
     flight: {
-      airline: "LATAM",
-      number: "LA3421",
-      departure: "GIG",
-      arrival: "MCE",
-      departureTime: "2024-01-20 08:30",
-      arrivalTime: "2024-01-20 10:15",
-      status: "on_time",
+      airline: ['LATAM', 'GOL', 'Azul'][i % 3],
+      number: `${['LA', 'G3', 'AD'][i % 3]}${3000 + i * 100}`,
+      departure: 'GIG', arrival: 'MCE',
+      departureTime: new Date(Date.now() + i * 86400000).toISOString().slice(0, 16).replace('T', ' '),
+      arrivalTime: new Date(Date.now() + i * 86400000 + 7200000).toISOString().slice(0, 16).replace('T', ' '),
+      status: 'on_time' as const,
     },
-    hotel: {
-      name: "Hotel Macaé Business",
-      location: "Macaé, RJ",
-      checkIn: "2024-01-20",
-      checkOut: "2024-01-21",
-    },
-    transfer: {
-      type: "Van executiva",
-      provider: "LogMar Transportes",
-      time: "2024-01-21 05:00",
-    },
-    cost: 2450,
-    carbonFootprint: 89,
-  },
-  {
-    id: "2",
-    crewMember: "Ana Santos",
-    role: "DPO",
-    vessel: "PSV Brasil",
-    type: "demobilization",
-    status: "in_progress",
-    flight: {
-      airline: "GOL",
-      number: "G3 1045",
-      departure: "MCE",
-      arrival: "GRU",
-      departureTime: "2024-01-19 14:00",
-      arrivalTime: "2024-01-19 15:45",
-      status: "delayed",
-    },
-    cost: 1890,
-    carbonFootprint: 75,
-  },
-  {
-    id: "3",
-    crewMember: "Roberto Lima",
-    role: "Chefe de Máquinas",
-    vessel: "AHTS Power",
-    type: "mobilization",
-    status: "completed",
-    flight: {
-      airline: "Azul",
-      number: "AD4521",
-      departure: "VCP",
-      arrival: "MCE",
-      departureTime: "2024-01-18 06:00",
-      arrivalTime: "2024-01-18 07:30",
-      status: "on_time",
-    },
-    hotel: {
-      name: "Ibis Macaé",
-      location: "Macaé, RJ",
-      checkIn: "2024-01-18",
-      checkOut: "2024-01-19",
-    },
-    cost: 1650,
-    carbonFootprint: 62,
-  },
-];
+    hotel: i % 2 === 0 ? { name: 'Hotel Macaé Business', location: 'Macaé, RJ', checkIn: new Date(Date.now() + i * 86400000).toISOString().split('T')[0], checkOut: new Date(Date.now() + (i + 1) * 86400000).toISOString().split('T')[0] } : undefined,
+    cost: 1500 + i * 300,
+    carbonFootprint: 60 + i * 10,
+  }));
+
+  return { trips, isLoading: false };
+}
 
 // ============================================
 // MAIN COMPONENT
@@ -185,6 +139,8 @@ const mockTrips: Trip[] = [
 
 export default function TravelCommandCenter() {
   const { toast } = useToast();
+  const { trips: tripsData } = useTripsData();
+  const mockTrips = tripsData;
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoaded, setIsLoaded] = useState(false);

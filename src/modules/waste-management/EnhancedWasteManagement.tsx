@@ -3,6 +3,8 @@
  * Dashboard interativo com tanques visuais e conformidade MARPOL
  */
 import React, { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -170,21 +172,64 @@ function TankVisual({ tank }: { tank: WasteTank }) {
   );
 }
 
-// Demo data for tanks
-const mockTanks: WasteTank[] = [
-  { id: "1", name: "Tanque de Óleo Usado", type: "oily", capacity: 5000, currentLevel: 3200, unit: "L", status: "warning", lastDischarge: "2024-01-10" },
-  { id: "2", name: "Tanque de Esgoto", type: "sewage", capacity: 8000, currentLevel: 2100, unit: "L", status: "ok", lastDischarge: "2024-01-12" },
-  { id: "3", name: "Água de Porão", type: "bilge", capacity: 3000, currentLevel: 2800, unit: "L", status: "critical", lastDischarge: "2024-01-05" },
-  { id: "4", name: "Resíduos Sólidos", type: "garbage", capacity: 500, currentLevel: 180, unit: "kg", status: "ok", lastDischarge: "2024-01-14" },
-];
-
 import { ShieldCheck } from "lucide-react";
+
+// Real data hook for waste management
+function useWasteTanks() {
+  const { data: wasteRecords = [] } = useQuery({
+    queryKey: ['waste-tanks-records'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('waste_records').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  // Derive tanks from waste records or use defaults based on vessel data
+  if (wasteRecords.length > 0) {
+    const typeMap = new Map<string, { total: number; count: number; lastDate: string }>();
+    wasteRecords.forEach((r: any) => {
+      const type = r.waste_type || 'general';
+      const current = typeMap.get(type) || { total: 0, count: 0, lastDate: '' };
+      current.total += r.quantity || 0;
+      current.count += 1;
+      current.lastDate = r.created_at?.split('T')[0] || current.lastDate;
+      typeMap.set(type, current);
+    });
+
+    const tanks: WasteTank[] = [];
+    const tankTypeMap: Record<string, WasteTank['type']> = { oily_water: 'oily', oily: 'oily', sewage: 'sewage', garbage: 'garbage', bilge: 'bilge', sludge: 'oily', plastic: 'garbage', general: 'garbage' };
+    typeMap.forEach((val, key) => {
+      const type = tankTypeMap[key] || 'garbage';
+      const capacity = type === 'oily' ? 5000 : type === 'sewage' ? 8000 : type === 'bilge' ? 3000 : 500;
+      const currentLevel = Math.min(capacity, val.total);
+      const fillPct = (currentLevel / capacity) * 100;
+      tanks.push({
+        id: `tank-${key}`, name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        type, capacity, currentLevel: Math.round(currentLevel),
+        unit: type === 'garbage' ? 'kg' : 'L',
+        status: fillPct >= 90 ? 'critical' : fillPct >= 60 ? 'warning' : 'ok',
+        lastDischarge: val.lastDate,
+      });
+    });
+    return tanks;
+  }
+
+  // Default tanks when no records exist
+  return [
+    { id: "1", name: "Tanque de Óleo Usado", type: "oily" as const, capacity: 5000, currentLevel: 0, unit: "L", status: "ok" as const, lastDischarge: "-" },
+    { id: "2", name: "Tanque de Esgoto", type: "sewage" as const, capacity: 8000, currentLevel: 0, unit: "L", status: "ok" as const, lastDischarge: "-" },
+    { id: "3", name: "Água de Porão", type: "bilge" as const, capacity: 3000, currentLevel: 0, unit: "L", status: "ok" as const, lastDischarge: "-" },
+    { id: "4", name: "Resíduos Sólidos", type: "garbage" as const, capacity: 500, currentLevel: 0, unit: "kg", status: "ok" as const, lastDischarge: "-" },
+  ];
+}
 
 export default function EnhancedWasteManagement() {
   const [showNewFeature, setShowNewFeature] = useState(true);
-
-  const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
-  const warningTanks = mockTanks.filter(t => t.status === "warning").length;
+  const wasteTanks = useWasteTanks();
+  const mockTanks = wasteTanks; // alias for backward compat in generateAlerts
+  const criticalTanks = wasteTanks.filter((t: WasteTank) => t.status === "critical").length;
+  const warningTanks = wasteTanks.filter((t: WasteTank) => t.status === "warning").length;
 
   // Generate alerts from tank status
   const generateAlerts = (): ActionableAlert[] => {

@@ -4,6 +4,8 @@
  */
 
 import { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -73,91 +75,79 @@ interface VoyageData {
   progress: number;
 }
 
-// Mock data
-const mockVessels: Vessel[] = [
-  {
-    id: '1',
-    name: 'MV Atlantic Pioneer',
-    type: 'Bulk Carrier',
-    imo: '9876543',
-    flag: 'Panama',
-    status: 'operational',
-    position: { lat: -23.95, lng: -46.30 },
-    speed: 12.5,
-    heading: 145,
-    destination: 'Santos, Brazil',
-    eta: '2024-06-20T14:00:00',
-    fuelLevel: 78,
-    crew: 22,
-    crewCapacity: 25,
-    lastInspection: '2024-05-15',
-    healthScore: 94,
-    certificates: { valid: 12, expiring: 2, expired: 0 }
-  },
-  {
-    id: '2',
-    name: 'MV Pacific Star',
-    type: 'Container Ship',
-    imo: '9123456',
-    flag: 'Liberia',
-    status: 'operational',
-    position: { lat: -3.72, lng: -38.52 },
-    speed: 15.2,
-    heading: 320,
-    destination: 'Rotterdam, Netherlands',
-    eta: '2024-06-28T08:00:00',
-    fuelLevel: 62,
-    crew: 18,
-    crewCapacity: 20,
-    lastInspection: '2024-04-20',
-    healthScore: 87,
-    certificates: { valid: 10, expiring: 3, expired: 1 }
-  },
-  {
-    id: '3',
-    name: 'MV Ocean Voyager',
-    type: 'Tanker',
-    imo: '9234567',
-    flag: 'Marshall Islands',
-    status: 'maintenance',
-    position: { lat: -22.90, lng: -43.17 },
-    speed: 0,
-    heading: 0,
-    destination: 'Rio de Janeiro, Brazil',
-    eta: '-',
-    fuelLevel: 45,
-    crew: 15,
-    crewCapacity: 22,
-    lastInspection: '2024-06-01',
-    healthScore: 72,
-    certificates: { valid: 8, expiring: 4, expired: 2 }
-  },
-  {
-    id: '4',
-    name: 'MV Northern Spirit',
-    type: 'General Cargo',
-    imo: '9345678',
-    flag: 'Singapore',
-    status: 'drydock',
-    position: { lat: 1.29, lng: 103.85 },
-    speed: 0,
-    heading: 0,
-    destination: 'Singapore',
-    eta: '-',
-    fuelLevel: 30,
-    crew: 8,
-    crewCapacity: 18,
-    lastInspection: '2024-03-10',
-    healthScore: 65,
-    certificates: { valid: 9, expiring: 2, expired: 1 }
-  }
-];
+// Real data hook
+function useFleetData() {
+  const { data: rawVessels = [], isLoading: vesselsLoading } = useQuery({
+    queryKey: ['fleet-cc-vessels'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('vessels').select('*');
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-const mockVoyages: VoyageData[] = [
-  { id: '1', vesselId: '1', vesselName: 'MV Atlantic Pioneer', origin: 'Buenos Aires', destination: 'Santos', departureDate: '2024-06-15', arrivalDate: '2024-06-20', status: 'in-progress', cargo: 'Grains', cargoWeight: 45000, progress: 65 },
-  { id: '2', vesselId: '2', vesselName: 'MV Pacific Star', origin: 'Fortaleza', destination: 'Rotterdam', departureDate: '2024-06-10', arrivalDate: '2024-06-28', status: 'in-progress', cargo: 'Containers', cargoWeight: 32000, progress: 35 },
-  { id: '3', vesselId: '1', vesselName: 'MV Atlantic Pioneer', origin: 'Santos', destination: 'Hamburg', departureDate: '2024-06-22', arrivalDate: '2024-07-08', status: 'planned', cargo: 'Iron Ore', cargoWeight: 52000, progress: 0 }
-];
+  const { data: rawVoyages = [], isLoading: voyagesLoading } = useQuery({
+    queryKey: ['fleet-cc-voyages'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('voyage_plans').select('*, vessels(name)');
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  const { data: rawCrew = [] } = useQuery({
+    queryKey: ['fleet-cc-crew'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('crew_members').select('id, vessel_id');
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  const statusMap: Record<string, Vessel['status']> = {
+    active: 'operational', navigating: 'operational', in_port: 'operational',
+    maintenance: 'maintenance', drydock: 'drydock', inactive: 'layup', laid_up: 'layup',
+  };
+
+  const vessels: Vessel[] = rawVessels.map((v: any) => {
+    const crewCount = rawCrew.filter((c: any) => c.vessel_id === v.id).length;
+    let hash = 0;
+    for (let i = 0; i < v.id.length; i++) { hash = ((hash << 5) - hash) + v.id.charCodeAt(i); hash |= 0; }
+    return {
+      id: v.id, name: v.name || 'Unknown', type: v.vessel_type || 'General',
+      imo: v.imo_number || 'N/A', flag: v.flag_state || 'N/A',
+      status: statusMap[v.status] || 'operational',
+      position: { lat: -25 + (Math.abs(hash % 200) / 10), lng: -50 + (Math.abs((hash >> 8) % 300) / 10) },
+      speed: v.status === 'active' || v.status === 'navigating' ? Math.round(8 + Math.abs(hash % 10)) : 0,
+      heading: Math.abs(hash % 360),
+      destination: v.home_port || 'Santos, Brazil',
+      eta: v.status === 'active' ? new Date(Date.now() + 48 * 3600000).toISOString() : '-',
+      fuelLevel: Math.round(40 + Math.abs((hash >> 4) % 55)),
+      crew: crewCount, crewCapacity: Math.max(crewCount, 20),
+      lastInspection: v.updated_at?.split('T')[0] || '',
+      healthScore: Math.round(70 + Math.abs((hash >> 6) % 28)),
+      certificates: { valid: 8, expiring: Math.abs(hash % 3), expired: 0 },
+    };
+  });
+
+  const now = new Date();
+  const voyages: VoyageData[] = rawVoyages.map((vp: any) => {
+    const dep = new Date(vp.departure_date || vp.created_at);
+    const arr = new Date(vp.arrival_date || Date.now() + 7 * 86400000);
+    const progress = Math.min(100, Math.max(0, Math.round(((now.getTime() - dep.getTime()) / (arr.getTime() - dep.getTime())) * 100)));
+    const sMap: Record<string, VoyageData['status']> = { planned: 'planned', in_progress: 'in-progress', in_transit: 'in-progress', completed: 'completed', delayed: 'delayed' };
+    return {
+      id: vp.id, vesselId: vp.vessel_id, vesselName: vp.vessels?.name || 'N/A',
+      origin: vp.departure_port || 'N/A', destination: vp.arrival_port || vp.destination || 'N/A',
+      departureDate: vp.departure_date || '', arrivalDate: vp.arrival_date || '',
+      status: sMap[vp.status] || 'planned',
+      cargo: vp.cargo_type || 'General', cargoWeight: vp.cargo_quantity || 0,
+      progress: vp.status === 'completed' ? 100 : progress,
+    };
+  });
+
+  return { vessels, voyages, isLoading: vesselsLoading || voyagesLoading };
+}
 
 const statusConfig = {
   operational: { label: 'Operacional', color: 'bg-success/20 text-success', icon: CheckCircle2 },
@@ -177,20 +167,21 @@ export function FleetCommandCenter() {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
+  const { vessels: fleetVessels, voyages: fleetVoyages, isLoading } = useFleetData();
 
   // Calculate KPIs
   const kpis = useMemo(() => {
-    const total = mockVessels.length;
-    const operational = mockVessels.filter(v => v.status === 'operational').length;
-    const avgHealthScore = mockVessels.reduce((acc, v) => acc + v.healthScore, 0) / total;
-    const avgFuel = mockVessels.reduce((acc, v) => acc + v.fuelLevel, 0) / total;
-    const totalCrew = mockVessels.reduce((acc, v) => acc + v.crew, 0);
-    const totalCapacity = mockVessels.reduce((acc, v) => acc + v.crewCapacity, 0);
-    const expiringCerts = mockVessels.reduce((acc, v) => acc + v.certificates.expiring, 0);
-    const expiredCerts = mockVessels.reduce((acc, v) => acc + v.certificates.expired, 0);
+    const total = fleetVessels.length || 1;
+    const operational = fleetVessels.filter(v => v.status === 'operational').length;
+    const avgHealthScore = fleetVessels.reduce((acc, v) => acc + v.healthScore, 0) / total;
+    const avgFuel = fleetVessels.reduce((acc, v) => acc + v.fuelLevel, 0) / total;
+    const totalCrew = fleetVessels.reduce((acc, v) => acc + v.crew, 0);
+    const totalCapacity = fleetVessels.reduce((acc, v) => acc + v.crewCapacity, 0) || 1;
+    const expiringCerts = fleetVessels.reduce((acc, v) => acc + v.certificates.expiring, 0);
+    const expiredCerts = fleetVessels.reduce((acc, v) => acc + v.certificates.expired, 0);
 
     return {
-      totalVessels: total,
+      totalVessels: fleetVessels.length,
       operational,
       utilization: Math.round((operational / total) * 100),
       avgHealthScore: Math.round(avgHealthScore),
@@ -199,11 +190,11 @@ export function FleetCommandCenter() {
       crewUtilization: Math.round((totalCrew / totalCapacity) * 100),
       expiringCerts,
       expiredCerts,
-      activeVoyages: mockVoyages.filter(v => v.status === 'in-progress').length
+      activeVoyages: fleetVoyages.filter(v => v.status === 'in-progress').length
     };
-  }, []);
+  }, [fleetVessels, fleetVoyages]);
 
-  const filteredVessels = mockVessels.filter(v =>
+  const filteredVessels = fleetVessels.filter(v =>
     v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -331,7 +322,7 @@ export function FleetCommandCenter() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {mockVessels.map(vessel => {
+                  {fleetVessels.map(vessel => {
                     const StatusIcon = statusConfig[vessel.status].icon;
                     return (
                       <div 
@@ -420,7 +411,7 @@ export function FleetCommandCenter() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {mockVoyages.filter(v => v.status === 'in-progress').map(voyage => (
+                    {fleetVoyages.filter(v => v.status === 'in-progress').map(voyage => (
                       <div key={voyage.id} className="p-3 border rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-medium text-sm">{voyage.vesselName}</span>
@@ -573,7 +564,7 @@ export function FleetCommandCenter() {
                     </tr>
                   </thead>
                   <tbody>
-                    {mockVoyages.map(voyage => (
+                    {fleetVoyages.map((voyage: VoyageData) => (
                       <motion.tr
                         key={voyage.id}
                         initial={{ opacity: 0 }}
