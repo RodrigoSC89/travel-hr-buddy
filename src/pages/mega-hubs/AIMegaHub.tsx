@@ -3,14 +3,18 @@
  * Rota canônica: /ai
  * 
  * Consolida: AI Control Tower + Enterprise Intelligence + AI Modules + Voice
+ * 
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
 import React, { Suspense, lazy } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu } from 'lucide-react';
+import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { AIAgentHealthDashboard } from '@/components/world-class';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIControlTowerHubEnhanced'));
@@ -38,6 +42,7 @@ const LoadingSkeleton = () => (
 
 const tabConfig = [
   { id: 'hub', label: 'AI Hub', icon: Brain },
+  { id: 'health', label: 'Agent Health', icon: Activity },
   { id: 'chat', label: 'Chat', icon: MessageSquare },
   { id: 'agents', label: 'Agents', icon: Bot },
   { id: 'workflows', label: 'Workflows', icon: Zap },
@@ -57,6 +62,10 @@ export default function AIMegaHub() {
     setSearchParams({ tab: value });
   };
 
+  const handleActionBarAction = (action: string) => {
+    console.log(`AI action: ${action}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -72,9 +81,14 @@ export default function AIMegaHub() {
                 <p className="text-sm text-muted-foreground">Inteligência Artificial Unificada</p>
               </div>
             </div>
-            <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
-              MEGA-HUB D
-            </Badge>
+            <div className="flex gap-2">
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                10 Agents Active
+              </Badge>
+              <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
+                MEGA-HUB D
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
@@ -101,8 +115,59 @@ export default function AIMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="hub" className="mt-0">
+            <TabsContent value="hub" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="AI Control Tower"
+                subtitle="Monitor and manage all AI agents and workflows"
+                actions={[
+                  {
+                    id: 'new-agent',
+                    label: 'Deploy Agent',
+                    icon: <Bot className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-agent'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'configure',
+                    label: 'Configure',
+                    icon: <Settings className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('configure'),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'health',
+                    label: 'Agent Health',
+                    icon: <Activity className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'health' }),
+                    variant: 'outline'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search agents, workflows, logs..."
+              />
+
               <AIControlTowerHub />
+            </TabsContent>
+
+            <TabsContent value="health" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar for Health */}
+              <EnhancedActionBar
+                title="AI Agent Health Monitor"
+                subtitle="Real-time health, accuracy, and decision logs for all 10 audit agents"
+                actions={[
+                  {
+                    id: 'refresh',
+                    label: 'Refresh Status',
+                    icon: <Activity className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('refresh'),
+                    variant: 'default'
+                  }
+                ]}
+              />
+
+              {/* World-Class AI Agent Health Dashboard */}
+              <AIAgentHealthDashboard />
             </TabsContent>
             
             <TabsContent value="chat" className="mt-0">

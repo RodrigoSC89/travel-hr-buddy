@@ -3,14 +3,19 @@
  * Rota canônica: /ops
  * 
  * Consolida: Operations Command + Maritime + Fleet + Voyage + Missions + Logistics + Contracts
+ * 
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Anchor, Ship, Map, Target, Package, FileText } from 'lucide-react';
+import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
+import { OperationsActionPanel } from '@/components/world-class';
 
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandHubEnhanced'));
@@ -46,9 +51,14 @@ const tabConfig = [
 export default function OpsMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
+  const [showActionPanel, setShowActionPanel] = useState(true);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
+  };
+
+  const handleActionBarAction = (action: string) => {
+    console.log(`Ops action: ${action}`);
   };
 
   return (
@@ -95,7 +105,55 @@ export default function OpsMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="overview" className="mt-0">
+            <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="Operations Command Center"
+                subtitle="Manage fleet operations, voyages, and contracts"
+                actions={[
+                  {
+                    id: 'new-voyage',
+                    label: 'New Voyage',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-voyage'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'new-contract',
+                    label: 'New Contract',
+                    icon: <FileText className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'contracts' }),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'bulk-approve',
+                    label: 'Bulk Approve',
+                    icon: <CheckCircle className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('bulk-approve'),
+                    variant: 'outline'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search voyages, vessels, contracts..."
+              />
+
+              {/* Workflow Status */}
+              <WorkflowStatusBar
+                title="Operations Workflow"
+                steps={[
+                  { id: 'request', label: 'Request', status: 'completed' },
+                  { id: 'planning', label: 'Planning', status: 'completed' },
+                  { id: 'approval', label: 'Approval', status: 'current' },
+                  { id: 'execution', label: 'Execution', status: 'pending' },
+                  { id: 'completion', label: 'Completion', status: 'pending' }
+                ]}
+                variant="horizontal"
+              />
+
+              {/* Operations Action Panel with Real Data */}
+              {showActionPanel && <OperationsActionPanel />}
+
+              {/* Original Operations Hub */}
               <OperationsCommandHub />
             </TabsContent>
             

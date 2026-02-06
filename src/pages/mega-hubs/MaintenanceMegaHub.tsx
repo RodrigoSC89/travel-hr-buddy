@@ -3,14 +3,19 @@
  * Rota canônica: /maintenance
  * 
  * Consolida: Maintenance Hub + Drydock + Fuel + Digital Twin + MARPOL + ESG
+ * 
+ * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar } from 'lucide-react';
+import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
+import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
+import { MaintenanceGanttCalendar } from '@/components/world-class';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceHubPremium'));
@@ -36,6 +41,7 @@ const LoadingSkeleton = () => (
 
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Wrench },
+  { id: 'planning', label: 'Planning', icon: Calendar },
   { id: 'surveys', label: 'Class Surveys', icon: Shield },
   { id: 'predictive', label: 'Predictive', icon: Brain },
   { id: 'drydock', label: 'Drydock', icon: Anchor },
@@ -48,7 +54,7 @@ const tabConfig = [
 export default function MaintenanceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
-  const mode = searchParams.get('mode'); // For 3D mode in Digital Twin
+  const mode = searchParams.get('mode');
 
   const handleTabChange = (value: string) => {
     const params: Record<string, string> = { tab: value };
@@ -56,6 +62,10 @@ export default function MaintenanceMegaHub() {
       params.mode = mode;
     }
     setSearchParams(params);
+  };
+
+  const handleActionBarAction = (action: string) => {
+    console.log(`Maintenance action: ${action}`);
   };
 
   return (
@@ -102,8 +112,80 @@ export default function MaintenanceMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TabsContent value="overview" className="mt-0">
+            <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar */}
+              <EnhancedActionBar
+                title="Maintenance Command Center"
+                subtitle="Plan, track, and optimize vessel maintenance"
+                actions={[
+                  {
+                    id: 'new-work-order',
+                    label: 'New Work Order',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-work-order'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'schedule-survey',
+                    label: 'Schedule Survey',
+                    icon: <Calendar className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'surveys' }),
+                    variant: 'outline'
+                  },
+                  {
+                    id: 'export',
+                    label: 'Export Report',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('export'),
+                    variant: 'outline'
+                  }
+                ]}
+                showSearch
+                searchPlaceholder="Search work orders, vessels, surveys..."
+              />
+
+              {/* Workflow Status */}
+              <WorkflowStatusBar
+                title="Maintenance Workflow"
+                steps={[
+                  { id: 'request', label: 'Request', status: 'completed' },
+                  { id: 'planning', label: 'Planning', status: 'completed' },
+                  { id: 'approval', label: 'Approval', status: 'current' },
+                  { id: 'execution', label: 'Execution', status: 'pending' },
+                  { id: 'verification', label: 'Verification', status: 'pending' }
+                ]}
+                variant="horizontal"
+              />
+
+              {/* Original Maintenance Hub */}
               <MaintenanceHub />
+            </TabsContent>
+
+            <TabsContent value="planning" className="mt-0 space-y-6">
+              {/* Enhanced Action Bar for Planning */}
+              <EnhancedActionBar
+                title="Maintenance Planning"
+                subtitle="Visual Gantt and calendar view of all maintenance activities"
+                actions={[
+                  {
+                    id: 'new-task',
+                    label: 'New Task',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('new-task'),
+                    variant: 'default'
+                  },
+                  {
+                    id: 'export',
+                    label: 'Export Schedule',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: () => handleActionBarAction('export-schedule'),
+                    variant: 'outline'
+                  }
+                ]}
+              />
+
+              {/* World-Class Gantt Calendar */}
+              <MaintenanceGanttCalendar />
             </TabsContent>
             
             <TabsContent value="surveys" className="mt-0">
