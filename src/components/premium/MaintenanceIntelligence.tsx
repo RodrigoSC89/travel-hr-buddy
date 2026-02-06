@@ -148,74 +148,74 @@
                      
                      return (
                        <div 
-                         key={equipment.id} 
-                         className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-                           selectedEquipment?.id === equipment.id ? "ring-2 ring-primary" : ""
-                         } ${equipment.status === "critical" ? "border-destructive/50 bg-destructive/5" : ""}`}
-                         onClick={() => setSelectedEquipment(equipment)}
-                       >
-                         <div className="flex items-start justify-between mb-3">
-                           <div className="flex items-center gap-3">
-                             <div className={`p-2 rounded-lg bg-muted`}>
-                               <Wrench className={`h-5 w-5 ${statusConfig.color}`} />
-                             </div>
-                             <div>
-                               <p className="font-semibold">{equipment.name}</p>
-                               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                 <Ship className="h-3 w-3" />
-                                 {equipment.vessel}
-                                 <span>•</span>
-                                 <Badge variant="outline" className="text-xs">{equipment.category}</Badge>
-                               </div>
-                             </div>
-                           </div>
-                           <Badge className={`${statusConfig.color} bg-transparent border`}>
-                             <StatusIcon className="h-3 w-3 mr-1" />
-                             {statusConfig.label}
-                           </Badge>
-                         </div>
+                          key={eq.id} 
+                          className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
+                            selectedEquipment?.id === eq.id ? "ring-2 ring-primary" : ""
+                          } ${eq.status === "critical" ? "border-destructive/50 bg-destructive/5" : ""}`}
+                          onClick={() => setSelectedEquipment(eq)}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <div className={`p-2 rounded-lg bg-muted`}>
+                                <Wrench className={`h-5 w-5 ${statusCfg.color}`} />
+                              </div>
+                              <div>
+                                <p className="font-semibold">{eq.name}</p>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Ship className="h-3 w-3" />
+                                  {eq.vessel}
+                                  <span>•</span>
+                                  <Badge variant="outline" className="text-xs">{eq.category}</Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <Badge className={`${statusCfg.color} bg-transparent border`}>
+                              <StatusIcon className="h-3 w-3 mr-1" />
+                              {statusCfg.label}
+                            </Badge>
+                          </div>
  
-                         {/* Health & Prediction */}
-                         <div className="grid grid-cols-4 gap-4 mt-3">
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${getHealthColor(equipment.healthScore)}`}>
-                               {equipment.healthScore}%
-                             </p>
-                             <p className="text-xs text-muted-foreground">Saúde</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className="text-lg font-bold">{equipment.runningHours}h</p>
-                             <p className="text-xs text-muted-foreground">Horas</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${equipment.nextService <= 50 ? "text-warning" : ""}`}>
-                               {equipment.nextService}h
-                             </p>
-                             <p className="text-xs text-muted-foreground">Próx. Serviço</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${equipment.prediction.failureProbability > 50 ? "text-destructive" : ""}`}>
-                               {equipment.prediction.daysToFailure}d
-                             </p>
-                             <p className="text-xs text-muted-foreground">Pred. Falha</p>
+                          {/* Health & Prediction */}
+                          <div className="grid grid-cols-4 gap-4 mt-3">
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className={`text-lg font-bold ${getHealthColor(eq.healthScore)}`}>
+                                {eq.healthScore}%
+                              </p>
+                              <p className="text-xs text-muted-foreground">Saúde</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className="text-lg font-bold">{eq.runningHours}h</p>
+                              <p className="text-xs text-muted-foreground">Horas</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className={`text-lg font-bold ${eq.nextService <= 50 ? "text-warning" : ""}`}>
+                                {eq.nextService}h
+                              </p>
+                              <p className="text-xs text-muted-foreground">Próx. Serviço</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className={`text-lg font-bold ${eq.prediction.failureProbability > 50 ? "text-destructive" : ""}`}>
+                                {eq.prediction.daysToFailure}d
+                              </p>
+                              <p className="text-xs text-muted-foreground">Pred. Falha</p>
                            </div>
                          </div>
  
                          {/* IoT Sensors */}
-                         <div className="flex gap-4 mt-3 text-sm">
-                           <div className="flex items-center gap-1">
-                             <Thermometer className={`h-4 w-4 ${equipment.sensors.temperature > 90 ? "text-destructive" : "text-muted-foreground"}`} />
-                             <span>{equipment.sensors.temperature}°C</span>
-                           </div>
-                           <div className="flex items-center gap-1">
-                             <Activity className={`h-4 w-4 ${equipment.sensors.vibration > 5 ? "text-warning" : "text-muted-foreground"}`} />
-                             <span>{equipment.sensors.vibration} mm/s</span>
-                           </div>
-                           <div className="flex items-center gap-1">
-                             <Gauge className={`h-4 w-4 ${equipment.sensors.pressure < 5 ? "text-warning" : "text-muted-foreground"}`} />
-                             <span>{equipment.sensors.pressure} bar</span>
-                           </div>
-                         </div>
+                          <div className="flex gap-4 mt-3 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Thermometer className={`h-4 w-4 ${eq.sensors.temperature > 90 ? "text-destructive" : "text-muted-foreground"}`} />
+                              <span>{eq.sensors.temperature}°C</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Activity className={`h-4 w-4 ${eq.sensors.vibration > 5 ? "text-warning" : "text-muted-foreground"}`} />
+                              <span>{eq.sensors.vibration} mm/s</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Gauge className={`h-4 w-4 ${eq.sensors.pressure < 5 ? "text-warning" : "text-muted-foreground"}`} />
+                              <span>{eq.sensors.pressure} bar</span>
+                            </div>
+                          </div>
                        </div>
                      );
                    })}
