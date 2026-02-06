@@ -1,492 +1,206 @@
-# 📐 UX/UI STANDARDS - NAUTI ONE
+# 📐 UX/UI Standards — NAUTI ONE v8.0
 
-> **Design System Tier-1 para Excelência Mundial**
-> Versão: 8.0 | Data: Fevereiro 2026
-
----
-
-## 🎯 PRINCÍPIOS FUNDAMENTAIS
-
-### Regra de Ouro (Não Negociável)
-
-| ❌ PROIBIDO | ✅ OBRIGATÓRIO |
-|-------------|----------------|
-| Botão decorativo sem ação | Todo botão executa uma ação |
-| Tela sem estados (empty/loading/error) | 3 estados em toda tela |
-| Ação sem feedback | Toast em toda operação |
-| UX inconsistente entre módulos | Design System único |
-| Dados mockados em produção | Dados reais ou feature flag |
+> **Padrão Tier-1 de Enterprise UX para Sistemas Marítimos**
+> Última atualização: 2026-02-06
 
 ---
 
-## 🏗️ ARQUITETURA DE COMPONENTES
+## 🎯 Princípios Fundamentais
 
-### 1. PageShell (Container de Página)
+1. **Zero Dead Buttons** — Todo botão executa uma ação real com feedback
+2. **Zero Empty Screens** — Toda tela vazia mostra CTA + orientação
+3. **Feedback Imediato** — Toda ação gera toast/visual change em < 200ms
+4. **Consistência Total** — Mesmo padrão UX em todos os 7 Mega-Hubs
+5. **Zero Training** — Navegação intuitiva sem manual
+
+---
+
+## 📋 Componentes Padrão
+
+### PageShell (`src/components/ui/PageShell.tsx`)
+
+Wrapper obrigatório para TODAS as páginas. Garante:
 
 ```tsx
-import { PageShell } from '@/components/design-system';
-
 <PageShell
-  title="Gestão de Navios"
-  subtitle="Gerencie sua frota de embarcações"
-  breadcrumbs={[
-    { label: 'Operations', href: '/ops' },
-    { label: 'Navios' }
+  title="Gestão de Frota"
+  subtitle="Gerencie embarcações, status e documentação"
+  breadcrumbs={[{ label: "Ops" }, { label: "Fleet" }]}
+  actions={[
+    pageActions.add(handleAdd),
+    pageActions.export(handleExport),
+    pageActions.refresh(handleRefresh, isRefetching),
   ]}
-  
-  // Ações padrão
-  onAdd={() => setShowModal(true)}
-  addLabel="Novo Navio"
-  onRefresh={refetch}
-  isRefreshing={isRefetching}
-  onExport={exportToCSV}
-  
-  // Estados
+  searchable
+  onSearchChange={setSearch}
   isLoading={isLoading}
   error={error}
   onRetry={refetch}
-  isEmpty={data?.length === 0}
-  emptyState={{
-    icon: Ship,
-    title: "Nenhum navio cadastrado",
-    description: "Comece adicionando seu primeiro navio.",
-    actionLabel: "Adicionar Navio",
-    onAction: () => setShowModal(true)
-  }}
-  
-  // Status do sistema
-  isOnline={isOnline}
+  isEmpty={data.length === 0}
+  emptyTitle="Nenhuma embarcação cadastrada"
+  emptyAction={{ label: "Cadastrar Embarcação", onClick: handleAdd }}
   lastSync={lastSync}
-  activeFilters={filters.length}
 >
   {/* Conteúdo da página */}
 </PageShell>
 ```
 
-### 2. DataGrid (Tabela Avançada)
+### ConfirmDialog (`src/components/ui/ConfirmDialog.tsx`)
+
+Obrigatório para ações destrutivas:
 
 ```tsx
-import { DataGrid, createDefaultBulkActions } from '@/components/design-system';
+<ConfirmDialog
+  open={deleteDialogOpen}
+  onOpenChange={setDeleteDialogOpen}
+  title="Excluir embarcação?"
+  description="Esta ação não pode ser desfeita. Todos os dados relacionados serão removidos."
+  confirmLabel="Sim, excluir"
+  variant="destructive"
+  onConfirm={handleDelete}
+/>
+```
 
-<DataGrid
+### DataTable (`src/components/ui/DataTable.tsx`)
+
+Tabela padrão com sort, pagination, selection:
+
+```tsx
+<DataTable
   data={vessels}
-  columns={[
-    { key: 'name', header: 'Nome', sortable: true },
-    { key: 'imo', header: 'IMO', width: '120px' },
-    { key: 'status', header: 'Status', render: (row) => (
-      <StatusBadge status={row.status === 'active' ? 'active' : 'inactive'} />
-    )},
-    { key: 'updated_at', header: 'Atualizado', render: (row) => formatDate(row.updated_at) },
-  ]}
-  
-  // Features
-  searchable
-  searchPlaceholder="Buscar por nome ou IMO..."
+  columns={columns}
   selectable
-  bulkActions={createDefaultBulkActions(handleDelete, handleExport)}
-  
-  // Paginação
-  paginated
-  pageSize={20}
-  
-  // Ações por linha
-  rowActions={(row) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <MoreHorizontal className="w-4 h-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => handleEdit(row)}>
-          <Edit className="w-4 h-4 mr-2" /> Editar
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleDelete(row)} className="text-destructive">
-          <Trash className="w-4 h-4 mr-2" /> Excluir
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )}
-  
-  // Estados
-  isLoading={isLoading}
-  emptyTitle="Nenhum navio encontrado"
-  emptyDescription="Ajuste os filtros ou adicione novos navios."
-  emptyAction={{ label: "Adicionar", onClick: handleAdd }}
+  selectedIds={selectedIds}
+  onSelectionChange={setSelectedIds}
+  onRowClick={handleRowClick}
+  pageSize={25}
 />
 ```
 
-### 3. FormField (Campo de Formulário)
+### StatusPipeline (`src/components/ui/StatusPipeline.tsx`)
+
+Pipeline visual para workflows:
 
 ```tsx
-import { FormField } from '@/components/design-system';
-
-<FormField
-  label="Nome do Navio"
-  name="name"
-  required
-  placeholder="Ex: MV Atlantic Star"
-  helperText="Nome oficial conforme registro"
-  error={errors.name?.message}
-  tooltip="Nome completo da embarcação"
-/>
-
-<FormField
-  label="Capacidade (DWT)"
-  name="capacity"
-  type="number"
-  suffix="tons"
-  success={isValid ? "Valor válido" : undefined}
-/>
-
-<FormField
-  label="Descrição"
-  inputType="textarea"
-  rows={4}
-  helperText="Opcional: informações adicionais"
+<StatusPipeline
+  stages={[
+    { id: "draft", label: "Rascunho", count: 5 },
+    { id: "review", label: "Em Revisão", count: 3 },
+    { id: "approved", label: "Aprovado", count: 12 },
+    { id: "completed", label: "Concluído", count: 45 },
+  ]}
+  activeStage={filter}
+  onStageClick={setFilter}
 />
 ```
 
-### 4. ConfirmModal (Confirmação de Ações)
+### BulkActionsBar (`src/components/ui/BulkActionsBar.tsx`)
+
+Barra flutuante para ações em lote:
 
 ```tsx
-import { ConfirmModal, useConfirmModal } from '@/components/design-system';
-
-const { confirm, ConfirmModalComponent } = useConfirmModal();
-
-const handleDelete = async () => {
-  const confirmed = await confirm({
-    title: "Excluir navio?",
-    description: "Esta ação é irreversível. Todos os dados serão perdidos.",
-    variant: "danger",
-    confirmLabel: "Sim, excluir",
-  });
-  
-  if (confirmed) {
-    await deleteVessel(vessel.id);
-    toast.success("Navio excluído com sucesso");
-  }
-};
-
-// Renderize o modal
-<ConfirmModalComponent />
-```
-
-### 5. StatusBadge (Badges de Status)
-
-```tsx
-import { StatusBadge } from '@/components/design-system';
-
-// Status predefinidos
-<StatusBadge status="active" />        // Verde: Ativo
-<StatusBadge status="inactive" />      // Cinza: Inativo
-<StatusBadge status="pending" />       // Cinza: Pendente
-<StatusBadge status="approved" />      // Verde: Aprovado
-<StatusBadge status="rejected" />      // Vermelho: Rejeitado
-<StatusBadge status="review" />        // Amarelo: Em Revisão
-<StatusBadge status="draft" />         // Cinza: Rascunho
-<StatusBadge status="loading" />       // Azul: Carregando (com spinner)
-
-// Com label customizado
-<StatusBadge status="success" label="Concluído" />
-
-// Tamanhos
-<StatusBadge status="active" size="sm" />
-<StatusBadge status="active" size="md" />
-<StatusBadge status="active" size="lg" />
-```
-
-### 6. SkeletonLoaders (Estados de Carregamento)
-
-```tsx
-import { 
-  TableSkeleton, 
-  CardSkeleton, 
-  KPIGridSkeleton,
-  ChartSkeleton,
-  FormSkeleton 
-} from '@/components/design-system';
-
-// Tabela
-<TableSkeleton rows={5} columns={4} />
-
-// Grid de Cards
-<CardsGridSkeleton cards={6} columns={3} />
-
-// KPIs
-<KPIGridSkeleton count={4} />
-
-// Gráfico
-<ChartSkeleton type="bar" height={300} />
-
-// Formulário
-<FormSkeleton fields={6} />
-```
-
-### 7. ToastNotification (Feedback)
-
-```tsx
-import { toast, toastMessages } from '@/components/design-system';
-
-// Toasts básicos
-toast.success("Operação concluída!");
-toast.error("Erro ao processar");
-toast.warning("Atenção necessária");
-toast.info("Nova atualização disponível");
-
-// Com detalhes
-toast.success({
-  title: "Navio cadastrado",
-  description: "O registro foi salvo no sistema.",
-  duration: 5000,
-});
-
-// Com ação
-toast.error({
-  title: "Falha na conexão",
-  description: "Não foi possível salvar.",
-  action: {
-    label: "Tentar novamente",
-    onClick: () => retry(),
-  },
-});
-
-// Mensagens padrão para CRUD
-toastMessages.created("Navio");      // "Navio criado com sucesso"
-toastMessages.updated("Contrato");   // "Contrato atualizado"
-toastMessages.deleted("Documento");  // "Documento removido"
-toastMessages.loadError();           // "Erro ao carregar dados"
-
-// Promise (loading → success/error)
-toast.promise(saveVessel(data), {
-  loading: "Salvando...",
-  success: "Navio salvo!",
-  error: "Erro ao salvar",
-});
+<BulkActionsBar
+  selectedCount={selectedIds.length}
+  totalCount={data.length}
+  onSelectAll={selectAll}
+  onDeselectAll={deselectAll}
+  actions={[
+    { id: "export", label: "Exportar", icon: <Download />, onClick: handleBulkExport },
+    { id: "delete", label: "Excluir", icon: <Trash2 />, onClick: handleBulkDelete, variant: "destructive" },
+  ]}
+/>
 ```
 
 ---
 
-## 📋 CHECKLIST POR TELA (OBRIGATÓRIO)
+## 📊 Checklist por Página (OBRIGATÓRIO)
 
-### Header da Página
+### Cabeçalho
+- [ ] Título claro (H1) + subtítulo
+- [ ] Breadcrumbs (se profundidade > 1)
+- [ ] Ações: Adicionar, Exportar, Atualizar
+- [ ] Status de conexão (online/offline)
+- [ ] Última sync visível
 
-- [ ] Título claro e conciso (h1)
-- [ ] Subtítulo descritivo (quando necessário)
-- [ ] Breadcrumbs para navegação
-- [ ] Ações principais visíveis: [Adicionar] [Importar] [Exportar] [Atualizar]
-- [ ] Indicador de status (online/offline)
-- [ ] Indicador de filtros ativos
-
-### Listagens
-
-- [ ] Campo de busca funcional
-- [ ] Filtros avançados acessíveis
-- [ ] Ordenação por colunas (sort)
-- [ ] Paginação (client ou server-side)
-- [ ] Seleção múltipla (checkbox)
-- [ ] Bulk actions visíveis quando há seleção
+### Listagem
+- [ ] Busca local
+- [ ] Filtros avançados
+- [ ] Ordenação por colunas
+- [ ] Paginação (10/25/50/100)
+- [ ] Seleção múltipla + bulk actions
 - [ ] Empty state com CTA
-- [ ] Loading state (skeleton)
-- [ ] Ações por linha (edit/delete/view)
 
 ### CRUD
-
-- [ ] Modal ou drawer para criar/editar
-- [ ] Validação inline em tempo real
-- [ ] Campos obrigatórios marcados (*)
-- [ ] Helper text em campos complexos
-- [ ] Botões de ação claros (Salvar/Cancelar)
-- [ ] Loading no botão durante submit
-- [ ] Confirm modal para exclusões
-- [ ] Toast de feedback após operação
+- [ ] Create com validação
+- [ ] Edit em modal/drawer
+- [ ] Delete com ConfirmDialog
+- [ ] Feedback toast em todas ações
+- [ ] Loading states durante mutations
 
 ### Estados
-
-- [ ] Loading: Skeleton adequado ao conteúdo
-- [ ] Empty: Ícone + mensagem + CTA
-- [ ] Error: Mensagem clara + botão Retry
-- [ ] Offline: Banner informativo
-
-### Acessibilidade
-
-- [ ] Navegação por teclado (Tab/Enter/Esc)
-- [ ] Focus visível em elementos interativos
-- [ ] Labels em todos os inputs
-- [ ] aria-labels em botões sem texto
-- [ ] Contraste adequado (WCAG AA+)
+- [ ] Loading: Skeleton (não spinner)
+- [ ] Error: Mensagem + Retry
+- [ ] Empty: Ícone + Mensagem + CTA
+- [ ] Success: Toast + visual change
 
 ---
 
-## 🎨 TOKENS DE DESIGN
+## 🎨 Design Tokens
 
-### Cores (Usar tokens semânticos)
+### Cores (usar APENAS tokens semânticos)
 
-```css
-/* ✅ CORRETO - Usar tokens */
-bg-primary
-bg-secondary
-bg-muted
-bg-destructive
-bg-success
-bg-warning
+```
+✅ bg-primary, text-primary-foreground
+✅ bg-destructive, text-destructive
+✅ bg-muted, text-muted-foreground
+✅ bg-success, text-success-foreground
+✅ bg-warning, text-warning-foreground
 
-text-foreground
-text-muted-foreground
-text-primary-foreground
-
-border-border
-border-primary
-
-/* ❌ ERRADO - Não usar cores diretas */
-bg-blue-500
-bg-red-600
-text-gray-700
+❌ bg-red-500, text-blue-600, bg-green-400
+❌ bg-[#ff0000], text-[rgb(0,0,255)]
 ```
 
-### Espaçamento
+### Botões
 
-```css
-/* Padrão de espaçamento */
-p-4   /* Padding interno de cards */
-p-6   /* Padding de seções principais */
-gap-2 /* Gap entre botões */
-gap-4 /* Gap entre elementos */
-gap-6 /* Gap entre seções */
+| Uso | Variante | Exemplo |
+|-----|----------|---------|
+| Ação principal | `default` | Adicionar, Salvar |
+| Ação secundária | `outline` | Exportar, Filtrar |
+| Ação terciária | `ghost` | Atualizar, Fechar |
+| Ação destrutiva | `destructive` | Excluir, Cancelar |
+| Link | `link` | Ver mais, Detalhes |
 
-/* Margins */
-mb-2  /* Entre label e input */
-mb-4  /* Entre campos de form */
-mb-6  /* Entre seções */
-```
+### Toasts
 
-### Tipografia
-
-```css
-/* Títulos */
-text-3xl font-bold     /* h1 - Título da página */
-text-2xl font-semibold /* h2 - Seções */
-text-xl font-semibold  /* h3 - Subseções */
-text-lg font-medium    /* h4 - Cards */
-
-/* Corpo */
-text-base              /* Texto padrão */
-text-sm                /* Texto secundário */
-text-xs                /* Labels, badges */
-
-/* Cores de texto */
-text-foreground        /* Texto principal */
-text-muted-foreground  /* Texto secundário */
-```
-
-### Bordas e Sombras
-
-```css
-/* Bordas */
-rounded-lg    /* Cards, modais */
-rounded-md    /* Inputs, botões */
-rounded-full  /* Avatares, badges */
-
-/* Sombras */
-shadow-soft   /* Cards leves */
-shadow-elegant/* Cards destacados */
-shadow-azure  /* Elementos primários */
-```
+| Tipo | Função | Exemplo |
+|------|--------|---------|
+| Sucesso | `toast.success()` | "Embarcação cadastrada" |
+| Erro | `toast.error()` | "Erro ao salvar. Tente novamente." |
+| Aviso | `toast.warning()` | "Certificado expira em 5 dias" |
+| Info | `toast.info()` | "Dados atualizados" |
 
 ---
 
-## 🚫 ANTI-PATTERNS (EVITAR)
+## 🧭 Sidebar — Regras
 
-### ❌ Botão Decorativo
-
-```tsx
-// ERRADO
-<Button>Ver Detalhes</Button> // onClick não definido
-
-// CORRETO
-<Button onClick={() => navigate(`/vessel/${id}`)}>Ver Detalhes</Button>
-```
-
-### ❌ Toast Genérico
-
-```tsx
-// ERRADO
-toast("Sucesso"); // Não informa o que aconteceu
-
-// CORRETO
-toast.success("Navio adicionado com sucesso");
-```
-
-### ❌ Loading Infinito
-
-```tsx
-// ERRADO - Sem tratamento de erro
-if (isLoading) return <Spinner />;
-
-// CORRETO - Com estados completos
-<PageShell
-  isLoading={isLoading}
-  error={error}
-  onRetry={refetch}
->
-  {content}
-</PageShell>
-```
-
-### ❌ Empty State Vazio
-
-```tsx
-// ERRADO
-{data.length === 0 && <p>Nenhum dado</p>}
-
-// CORRETO
-{data.length === 0 && (
-  <EmptyState
-    icon={Ship}
-    title="Nenhum navio cadastrado"
-    description="Comece adicionando seu primeiro navio."
-    actionLabel="Adicionar Navio"
-    onAction={handleAdd}
-  />
-)}
-```
-
-### ❌ Cores Hardcoded
-
-```tsx
-// ERRADO
-<div className="bg-blue-500 text-white">...</div>
-
-// CORRETO
-<div className="bg-primary text-primary-foreground">...</div>
-```
+1. Máximo 7 grupos principais (Mega-Hubs)
+2. Profundidade máxima: 2 níveis
+3. Nomes curtos e consistentes
+4. Badges úteis (contagem, status)
+5. Busca integrada no menu
+6. Itens fixados pelo usuário
+7. Módulos recentes
 
 ---
 
-## 📊 MÉTRICAS DE QUALIDADE UX
+## ⌨️ Acessibilidade
 
-| Critério | Meta | Medição |
-|----------|------|---------|
-| Time to Interactive | < 3s | Lighthouse |
-| Feedback Time | < 200ms | UX Audit |
-| Error Recovery | 100% | Manual test |
-| Empty States | 100% | Code review |
-| Loading States | 100% | Code review |
-| Keyboard Navigation | 100% | a11y test |
-| Touch Targets | ≥ 44px | Visual check |
+- Todos os botões com `aria-label`
+- Foco visível (`focus-visible:ring-2`)
+- Navegação por teclado completa
+- Contraste WCAG AAA (7:1)
+- Touch targets ≥ 44px
 
 ---
 
-## ✅ VALIDAÇÃO
-
-Antes de aprovar qualquer tela:
-
-1. **Funcional**: Todo botão executa ação
-2. **Feedback**: Toda ação tem resposta visual
-3. **Estados**: Loading/Empty/Error implementados
-4. **Consistência**: Usa componentes do Design System
-5. **Acessível**: Navegável por teclado
-
----
-
-*Documento gerado automaticamente - NAUTI ONE v8.0*
+*Documento vivo — atualizar a cada sprint*
