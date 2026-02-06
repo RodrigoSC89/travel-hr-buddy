@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { useFleetMonitorData } from "@/hooks/useFleetMonitorData";
-import type { VesselMetrics } from "@/hooks/useFleetMonitorData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
