@@ -1,589 +1,196 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+/**
+ * AdvancedDocumentCenter - Connected to Supabase 'documents' table
+ * PATCH Sprint 8: Replaced generateMockData() with useDocumentsCRUD hook
+ * Real CRUD: Create, Upload, Update status, Delete, Download, Search
+ */
+
+import React, { useState, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { 
-  FileText, 
-  Upload, 
-  Download, 
-  Share2, 
-  Search, 
-  Filter, 
-  Eye, 
-  Edit, 
-  Trash2,
-  FolderPlus,
-  Calendar,
-  User,
-  Tag,
-  Archive,
-  Star,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Lock,
-  Globe,
-  Users,
-  FileCheck,
-  Workflow,
-  BarChart3,
-  TrendingUp,
-  RefreshCw,
-  Plus,
-  X,
-  File
+import {
+  FileText, Upload, Download, Search, Eye, Edit, Trash2,
+  Calendar, Clock, CheckCircle, AlertTriangle, Archive,
+  Workflow, RefreshCw, Plus, X, File, Loader2
 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useDocumentsCRUD, type DocumentRecord, type CreateDocumentInput } from "@/hooks/useDocumentsCRUD";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-interface Document {
-  id: string;
-  title: string;
-  description: string;
-  type: "pdf" | "docx" | "xlsx" | "pptx" | "image" | "other";
-  category: string;
-  size: number;
-  status: "draft" | "review" | "approved" | "archived";
-  version: string;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: string;
-  tags: string[];
-  isPublic: boolean;
-  downloadCount: number;
-  viewCount: number;
-  collaborators: string[];
-  content?: string;
-  approvals: Array<{
-    user: string;
-    status: "pending" | "approved" | "rejected";
-    date: Date;
-    comments?: string;
-  }>;
+const documentTypes = [
+  { value: "certificate", label: "Certificado" },
+  { value: "manual", label: "Manual" },
+  { value: "report", label: "Relatório" },
+  { value: "policy", label: "Política" },
+  { value: "checklist", label: "Checklist" },
+  { value: "contract", label: "Contrato" },
+  { value: "other", label: "Outro" },
+];
+
+const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  active: { label: "Ativo", color: "bg-green-500/10 text-green-600 border-green-500/20", icon: <CheckCircle className="h-3.5 w-3.5" /> },
+  draft: { label: "Rascunho", color: "bg-blue-500/10 text-blue-600 border-blue-500/20", icon: <Edit className="h-3.5 w-3.5" /> },
+  expired: { label: "Expirado", color: "bg-destructive/10 text-destructive border-destructive/20", icon: <AlertTriangle className="h-3.5 w-3.5" /> },
+  archived: { label: "Arquivado", color: "bg-muted text-muted-foreground border-muted", icon: <Archive className="h-3.5 w-3.5" /> },
+  review: { label: "Em Revisão", color: "bg-amber-500/10 text-amber-600 border-amber-500/20", icon: <Clock className="h-3.5 w-3.5" /> },
+};
+
+function formatFileSize(bytes: number | null) {
+  if (!bytes) return "—";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1048576).toFixed(1)} MB`;
 }
 
-interface DocumentTemplate {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  fields: Array<{
-    name: string;
-    type: "text" | "number" | "date" | "select" | "textarea";
-    required: boolean;
-    options?: string[];
-  }>;
-  usageCount: number;
+function getFileIcon(type: string) {
+  const icons: Record<string, string> = {
+    certificate: "🏅",
+    manual: "📘",
+    report: "📊",
+    policy: "📋",
+    checklist: "✅",
+    contract: "📜",
+    photo: "🖼️",
+    presentation: "📊",
+  };
+  return icons[type] || "📄";
 }
 
 export const AdvancedDocumentCenter: React.FC = () => {
-  const { user } = useAuth();
-  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [templates, setTemplates] = useState<DocumentTemplate[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  
-  // Dialog states
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isNewDocDialogOpen, setIsNewDocDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<DocumentRecord | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [docToDelete, setDocToDelete] = useState<DocumentRecord | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [newDocForm, setNewDocForm] = useState({
+  const [newDocForm, setNewDocForm] = useState<CreateDocumentInput>({
     title: "",
-    description: "",
-    category: "manuais",
-    tags: "",
-    isPublic: false
-  });
-  const [isUploading, setIsUploading] = useState(false);
-  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
-  const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
-
-  // Dados simulados para demonstração
-  const generateMockData = () => {
-    const mockDocuments: Document[] = [
-      {
-        id: "1",
-        title: "Manual de Operações Marítimas",
-        description: "Guia completo de procedimentos operacionais para embarcações",
-        type: "pdf",
-        category: "manuais",
-        size: 2048576, // 2MB
-        status: "approved",
-        version: "2.1",
-        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-        createdBy: "João Silva",
-        tags: ["marítimo", "operações", "manual", "segurança"],
-        isPublic: false,
-        downloadCount: 47,
-        viewCount: 156,
-        collaborators: ["João Silva", "Maria Santos", "Pedro Costa"],
-        approvals: [
-          { user: "Supervisor Marítimo", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-          { user: "Diretor Operacional", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-        ]
-      },
-      {
-        id: "2",
-        title: "Relatório Financeiro Q1 2024",
-        description: "Análise financeira do primeiro trimestre",
-        type: "xlsx",
-        category: "relatórios",
-        size: 1536000, // 1.5MB
-        status: "review",
-        version: "1.3",
-        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-        createdBy: "Ana Oliveira",
-        tags: ["financeiro", "relatório", "Q1", "2024"],
-        isPublic: false,
-        downloadCount: 23,
-        viewCount: 89,
-        collaborators: ["Ana Oliveira", "Carlos Ferreira"],
-        approvals: [
-          { user: "Gerente Financeiro", status: "pending", date: new Date() },
-          { user: "CFO", status: "pending", date: new Date() }
-        ]
-      },
-      {
-        id: "3",
-        title: "Política de Recursos Humanos",
-        description: "Documento oficial das políticas de RH da empresa",
-        type: "docx",
-        category: "políticas",
-        size: 512000, // 512KB
-        status: "draft",
-        version: "3.0",
-        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        createdBy: "Roberto Lima",
-        tags: ["rh", "política", "recursos humanos", "oficial"],
-        isPublic: true,
-        downloadCount: 12,
-        viewCount: 67,
-        collaborators: ["Roberto Lima", "Fernanda Alves"],
-        approvals: [
-          { user: "Diretor de RH", status: "pending", date: new Date() }
-        ]
-      },
-      {
-        id: "4",
-        title: "Certificados de Qualidade ISO",
-        description: "Coleção de certificados ISO da empresa",
-        type: "pdf",
-        category: "certificados",
-        size: 3072000, // 3MB
-        status: "approved",
-        version: "1.0",
-        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        updatedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        createdBy: "Qualidade ISO",
-        tags: ["iso", "qualidade", "certificado", "auditoria"],
-        isPublic: true,
-        downloadCount: 89,
-        viewCount: 234,
-        collaborators: ["Qualidade ISO"],
-        approvals: [
-          { user: "Auditor Interno", status: "approved", date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000) }
-        ]
-      }
-    ];
-
-    const mockTemplates: DocumentTemplate[] = [
-      {
-        id: "t1",
-        name: "Relatório de Incidente",
-        description: "Template para reportar incidentes operacionais",
-        category: "relatórios",
-        usageCount: 34,
-        fields: [
-          { name: "Data do Incidente", type: "date", required: true },
-          { name: "Local", type: "text", required: true },
-          { name: "Descrição", type: "textarea", required: true },
-          { name: "Gravidade", type: "select", required: true, options: ["Baixa", "Média", "Alta", "Crítica"] },
-          { name: "Responsável", type: "text", required: true }
-        ]
-      },
-      {
-        id: "t2",
-        name: "Solicitação de Férias",
-        description: "Template para solicitação de períodos de férias",
-        category: "rh",
-        usageCount: 87,
-        fields: [
-          { name: "Nome do Funcionário", type: "text", required: true },
-          { name: "Data de Início", type: "date", required: true },
-          { name: "Data de Fim", type: "date", required: true },
-          { name: "Motivo", type: "textarea", required: false },
-          { name: "Substituto", type: "text", required: true }
-        ]
-      },
-      {
-        id: "t3",
-        name: "Avaliação de Fornecedor",
-        description: "Template para avaliar fornecedores",
-        category: "compras",
-        usageCount: 23,
-        fields: [
-          { name: "Nome do Fornecedor", type: "text", required: true },
-          { name: "Categoria", type: "select", required: true, options: ["Serviços", "Produtos", "Equipamentos"] },
-          { name: "Qualidade", type: "number", required: true },
-          { name: "Pontualidade", type: "number", required: true },
-          { name: "Observações", type: "textarea", required: false }
-        ]
-      }
-    ];
-
-    setDocuments(mockDocuments);
-    setTemplates(mockTemplates);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    generateMockData();
-  }, []);
-
-  const getFileTypeIcon = (type: string) => {
-    switch (type) {
-    case "pdf": return "📄";
-    case "docx": return "📝";
-    case "xlsx": return "📊";
-    case "pptx": return "📊";
-    case "image": return "🖼️";
-    default: return "📁";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-    case "approved": return "text-green-600 bg-green-100";
-    case "review": return "text-yellow-600 bg-yellow-100";
-    case "draft": return "text-blue-600 bg-blue-100";
-    case "archived": return "text-muted-foreground bg-gray-100";
-    default: return "text-muted-foreground bg-gray-100";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-    case "approved": return <CheckCircle className="h-4 w-4" />;
-    case "review": return <Clock className="h-4 w-4" />;
-    case "draft": return <Edit className="h-4 w-4" />;
-    case "archived": return <Archive className="h-4 w-4" />;
-    default: return <FileText className="h-4 w-4" />;
-    }
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
-
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = categoryFilter === "all" || doc.category === categoryFilter;
-    const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
-    
-    return matchesSearch && matchesCategory && matchesStatus;
+    document_type: "manual",
+    content: "",
+    status: "active",
   });
 
-  const handleUpload = () => {
-    setIsUploadDialogOpen(true);
-  };
+  const {
+    documents,
+    isLoading,
+    stats,
+    createDocument,
+    uploadDocument,
+    updateDocument,
+    deleteDocument,
+    refetch,
+  } = useDocumentsCRUD({
+    category: categoryFilter,
+    status: statusFilter,
+    search: searchTerm || undefined,
+  });
+
+  // Filter locally for instant search feedback
+  const filteredDocs = documents.filter((doc) => {
+    if (searchTerm) {
+      return doc.title.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return true;
+  });
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      setUploadedFiles(Array.from(files));
+    if (event.target.files) {
+      setUploadedFiles(Array.from(event.target.files));
     }
   };
 
   const handleUploadSubmit = async () => {
-    if (uploadedFiles.length === 0) {
-      toast({
-        title: "Nenhum arquivo selecionado",
-        description: "Por favor, selecione pelo menos um arquivo para upload.",
-        variant: "destructive"
-      });
-      return;
+    if (uploadedFiles.length === 0) return;
+    for (const file of uploadedFiles) {
+      await uploadDocument.mutateAsync({ file });
     }
-
-    setIsUploading(true);
-    
-    // Simulate upload delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const newDocuments: Document[] = uploadedFiles.map((file, index) => {
-      const fileType = file.name.split('.').pop()?.toLowerCase() || 'other';
-      return {
-        id: `new-${Date.now()}-${index}`,
-        title: file.name.replace(/\.[^/.]+$/, ""),
-        description: `Documento enviado via upload`,
-        type: (["pdf", "docx", "xlsx", "pptx"].includes(fileType) ? fileType : "other") as Document["type"],
-        category: "manuais",
-        size: file.size,
-        status: "draft" as const,
-        version: "1.0",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: user?.email || "Usuário",
-        tags: [],
-        isPublic: false,
-        downloadCount: 0,
-        viewCount: 0,
-        collaborators: [user?.email || "Usuário"],
-        approvals: []
-      };
-    });
-
-    setDocuments(prev => [...newDocuments, ...prev]);
     setUploadedFiles([]);
     setIsUploadDialogOpen(false);
-    setIsUploading(false);
-    
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    
-    toast({
-      title: "Upload concluído",
-      description: `${uploadedFiles.length} arquivo(s) enviado(s) com sucesso.`,
-    });
-  };
-
-  const handleNewDocument = () => {
-    setIsNewDocDialogOpen(true);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleNewDocSubmit = async () => {
-    if (!newDocForm.title.trim()) {
-      toast({
-        title: "Título obrigatório",
-        description: "Por favor, informe o título do documento.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newDoc: Document = {
-      id: `new-${Date.now()}`,
-      title: newDocForm.title,
-      description: newDocForm.description,
-      type: "docx",
-      category: newDocForm.category,
-      size: 0,
-      status: "draft",
-      version: "1.0",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: user?.email || "Usuário",
-      tags: newDocForm.tags.split(",").map(t => t.trim()).filter(Boolean),
-      isPublic: newDocForm.isPublic,
-      downloadCount: 0,
-      viewCount: 0,
-      collaborators: [user?.email || "Usuário"],
-      content: "",
-      approvals: []
-    };
-
-    setDocuments(prev => [newDoc, ...prev]);
-    setNewDocForm({
-      title: "",
-      description: "",
-      category: "manuais",
-      tags: "",
-      isPublic: false
-    });
+    if (!newDocForm.title.trim()) return;
+    await createDocument.mutateAsync(newDocForm);
+    setNewDocForm({ title: "", document_type: "manual", content: "", status: "active" });
     setIsNewDocDialogOpen(false);
-    
-    toast({
-      title: "Documento criado",
-      description: "O novo documento foi criado com sucesso.",
-    });
   };
 
-  const handleDownload = (doc: Document) => {
-    setDocuments(prev => prev.map(d => 
-      d.id === doc.id 
-        ? { ...d, downloadCount: d.downloadCount + 1 }
-        : d
-    ));
-    
-    // Create a simulated download
-    const content = `
-Documento: ${doc.title}
-Descrição: ${doc.description}
-Versão: ${doc.version}
-Categoria: ${doc.category}
-Criado por: ${doc.createdBy}
-Data de criação: ${doc.createdAt.toLocaleDateString()}
-Última atualização: ${doc.updatedAt.toLocaleDateString()}
-Tags: ${doc.tags.join(", ")}
-Status: ${doc.status}
-
----
-Este é um documento de demonstração do Centro de Documentos.
-    `.trim();
-
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${doc.title}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    toast({
-      title: "Download iniciado",
-      description: `Baixando "${doc.title}"...`,
-    });
+  const handleStatusChange = (doc: DocumentRecord, newStatus: string) => {
+    updateDocument.mutate({ id: doc.id, status: newStatus });
   };
 
-  const handleView = (document: Document) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === document.id 
-        ? { ...doc, viewCount: doc.viewCount + 1 }
-        : doc
-    ));
-    
-    setSelectedDocument(document);
-    setIsViewDialogOpen(true);
-  };
-
-  const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === documentId 
-        ? { ...doc, status: newStatus, updatedAt: new Date() }
-        : doc
-    ));
-    
-    toast({
-      title: "Status atualizado",
-      description: `Documento marcado como ${newStatus}.`,
-    });
-  };
-
-  const handleUseTemplate = (template: DocumentTemplate) => {
-    setSelectedTemplate(template);
-    const initialData: Record<string, string> = {};
-    template.fields.forEach(field => {
-      initialData[field.name] = "";
-    });
-    setTemplateFormData(initialData);
-    setIsTemplateDialogOpen(true);
-  };
-
-  const handleTemplateSubmit = () => {
-    if (!selectedTemplate) return;
-
-    // Validate required fields
-    const missingFields = selectedTemplate.fields
-      .filter(field => field.required && !templateFormData[field.name]?.trim())
-      .map(field => field.name);
-
-    if (missingFields.length > 0) {
-      toast({
-        title: "Campos obrigatórios",
-        description: `Por favor, preencha: ${missingFields.join(", ")}`,
-        variant: "destructive"
-      });
-      return;
+  const confirmDelete = () => {
+    if (docToDelete) {
+      deleteDocument.mutate(docToDelete.id);
+      setDocToDelete(null);
+      setIsDeleteDialogOpen(false);
     }
+  };
 
-    // Create document content from template fields
-    const content = selectedTemplate.fields
-      .map(field => `${field.name}: ${templateFormData[field.name] || "N/A"}`)
-      .join("\n");
-
-    const newDoc: Document = {
-      id: `template-${Date.now()}`,
-      title: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
-      description: `Documento gerado a partir do template: ${selectedTemplate.name}`,
-      type: "docx",
-      category: selectedTemplate.category,
-      size: content.length * 2,
-      status: "draft",
-      version: "1.0",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: user?.email || "Usuário",
-      tags: [selectedTemplate.category, "template"],
-      isPublic: false,
-      downloadCount: 0,
-      viewCount: 0,
-      collaborators: [user?.email || "Usuário"],
-      content: content,
-      approvals: []
-    };
-
-    setDocuments(prev => [newDoc, ...prev]);
-    
-    // Update template usage count
-    setTemplates(prev => prev.map(t => 
-      t.id === selectedTemplate.id 
-        ? { ...t, usageCount: t.usageCount + 1 }
-        : t
-    ));
-
-    setTemplateFormData({});
-    setSelectedTemplate(null);
-    setIsTemplateDialogOpen(false);
-
-    toast({
-      title: "Documento criado",
-      description: `Documento criado a partir do template "${selectedTemplate.name}".`,
-    });
+  const handleDownload = (doc: DocumentRecord) => {
+    if (doc.file_url) {
+      window.open(doc.file_url, "_blank");
+    } else {
+      const content = `Documento: ${doc.title}\nTipo: ${doc.document_type}\nStatus: ${doc.status}\nCriado: ${format(new Date(doc.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}`;
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${doc.title}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <RefreshCw className="h-8 w-8 animate-spin" />
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+        </div>
+        <Skeleton className="h-12 w-full" />
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
+      {/* Header Actions */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Centro de Documentos</h2>
           <p className="text-muted-foreground">
-            Gerencie documentos, templates e fluxos de aprovação
+            {stats.total} documentos • {stats.active} ativos • {stats.certificates} certificados
           </p>
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={handleUpload}>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RefreshCw className="h-4 w-4 mr-1" />
+            Atualizar
+          </Button>
+          <Button variant="outline" onClick={() => setIsUploadDialogOpen(true)}>
             <Upload className="h-4 w-4 mr-2" />
             Upload
           </Button>
-          <Button onClick={handleNewDocument}>
+          <Button onClick={() => setIsNewDocDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Documento
           </Button>
@@ -600,7 +207,7 @@ Este é um documento de demonstração do Centro de Documentos.
         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png"
       />
 
-      {/* Overview Cards */}
+      {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -608,70 +215,56 @@ Este é um documento de demonstração do Centro de Documentos.
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{documents.length}</div>
-            <p className="text-xs text-muted-foreground">
-              {documents.filter(d => d.status === "approved").length} aprovados
-            </p>
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <p className="text-xs text-muted-foreground">{stats.active} ativos</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Downloads Hoje</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Certificados</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {documents.reduce((acc, doc) => acc + doc.downloadCount, 0)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              +12% vs ontem
-            </p>
+            <div className="text-2xl font-bold">{stats.certificates}</div>
+            <p className="text-xs text-muted-foreground">documentos certificados</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Em Revisão</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Expirados</CardTitle>
+            <AlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {documents.filter(d => d.status === "review").length}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              aguardando aprovação
-            </p>
+            <div className="text-2xl font-bold text-destructive">{stats.expired}</div>
+            <p className="text-xs text-muted-foreground">necessitam renovação</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Templates</CardTitle>
+            <CardTitle className="text-sm font-medium">Tipos</CardTitle>
             <Workflow className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{templates.length}</div>
-            <p className="text-xs text-muted-foreground">
-              disponíveis
-            </p>
+            <div className="text-2xl font-bold">
+              {new Set(documents.map(d => d.document_type)).size}
+            </div>
+            <p className="text-xs text-muted-foreground">categorias distintas</p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Filters + Document List */}
       <Tabs defaultValue="documents" className="space-y-4">
         <TabsList>
           <TabsTrigger value="documents">Documentos</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
-          <TabsTrigger value="approval">Aprovações</TabsTrigger>
           <TabsTrigger value="analytics">Análise</TabsTrigger>
         </TabsList>
 
         <TabsContent value="documents" className="space-y-4">
-          {/* Filtros */}
-          <div className="flex items-center space-x-4">
+          {/* Filters */}
+          <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
@@ -679,384 +272,202 @@ Este é um documento de demonstração do Centro de Documentos.
                 className="pl-8"
               />
             </div>
-            
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Categoria" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas</SelectItem>
-                <SelectItem value="manuais">Manuais</SelectItem>
-                <SelectItem value="relatórios">Relatórios</SelectItem>
-                <SelectItem value="políticas">Políticas</SelectItem>
-                <SelectItem value="certificados">Certificados</SelectItem>
+                {documentTypes.map(t => (
+                  <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="active">Ativo</SelectItem>
                 <SelectItem value="draft">Rascunho</SelectItem>
-                <SelectItem value="review">Revisão</SelectItem>
-                <SelectItem value="approved">Aprovado</SelectItem>
+                <SelectItem value="expired">Expirado</SelectItem>
                 <SelectItem value="archived">Arquivado</SelectItem>
               </SelectContent>
             </Select>
-
-            <div className="flex items-center space-x-2">
-              <Button 
-                variant={viewMode === "grid" ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setViewMode("grid")}
-              >
-                Grid
-              </Button>
-              <Button 
-                variant={viewMode === "list" ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setViewMode("list")}
-              >
-                Lista
-              </Button>
-            </div>
           </div>
 
-          {/* Lista/Grid de Documentos */}
-          {viewMode === "grid" ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredDocuments.map((doc) => (
-                <Card key={doc.id} className="cursor-pointer hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-2xl">{getFileTypeIcon(doc.type)}</span>
-                        <div className="flex-1 min-w-0">
-                          <CardTitle className="text-base truncate">{doc.title}</CardTitle>
-                          <CardDescription className="text-sm line-clamp-2">
-                            {doc.description}
-                          </CardDescription>
-                        </div>
-                      </div>
-                      
-                      <Badge className={getStatusColor(doc.status)}>
-                        {getStatusIcon(doc.status)}
-                        <span className="ml-1 capitalize">{doc.status}</span>
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>v{doc.version}</span>
-                        <span>{formatFileSize(doc.size)}</span>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-1">
-                        {doc.tags.slice(0, 3).map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                        {doc.tags.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{doc.tags.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span className="flex items-center">
-                          <Eye className="h-3 w-3 mr-1" />
-                          {doc.viewCount}
-                        </span>
-                        <span className="flex items-center">
-                          <Download className="h-3 w-3 mr-1" />
-                          {doc.downloadCount}
-                        </span>
-                        <span className="flex items-center">
-                          <Users className="h-3 w-3 mr-1" />
-                          {doc.collaborators.length}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center space-x-1">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="flex-1"
-                          onClick={() => handleView(doc)}
-                        >
-                          <Eye className="h-3 w-3 mr-1" />
-                          Ver
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          className="flex-1"
-                          onClick={() => handleDownload(doc)}
-                        >
-                          <Download className="h-3 w-3 mr-1" />
-                          Baixar
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          {/* Document List */}
+          {filteredDocs.length === 0 ? (
+            <Card className="p-12 text-center">
+              <FileText className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground text-lg">Nenhum documento encontrado</p>
+              <p className="text-sm text-muted-foreground mt-1">Crie um novo documento ou faça upload de um arquivo</p>
+              <Button className="mt-4" onClick={() => setIsNewDocDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Novo Documento
+              </Button>
+            </Card>
           ) : (
             <div className="space-y-2">
-              {filteredDocuments.map((doc) => (
-                <Card key={doc.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 flex-1 min-w-0">
-                        <span className="text-xl">{getFileTypeIcon(doc.type)}</span>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium truncate">{doc.title}</h4>
-                          <p className="text-sm text-muted-foreground truncate">{doc.description}</p>
+              {filteredDocs.map((doc) => {
+                const status = statusConfig[doc.status] || statusConfig.active;
+                return (
+                  <Card key={doc.id} className="hover:bg-muted/30 transition-colors">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-2xl">{getFileIcon(doc.document_type)}</span>
+                          <div className="min-w-0">
+                            <p className="font-medium truncate">{doc.title}</p>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                              <span className="capitalize">{doc.document_type}</span>
+                              <span>•</span>
+                              <span>{formatFileSize(doc.file_size)}</span>
+                              <span>•</span>
+                              <Calendar className="h-3 w-3" />
+                              <span>{format(new Date(doc.created_at), "dd/MM/yyyy", { locale: ptBR })}</span>
+                              {doc.expiry_date && (
+                                <>
+                                  <span>•</span>
+                                  <span className={new Date(doc.expiry_date) < new Date() ? "text-destructive" : ""}>
+                                    Expira: {format(new Date(doc.expiry_date), "dd/MM/yyyy")}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                          <span>{formatFileSize(doc.size)}</span>
-                          <span>{doc.updatedAt.toLocaleDateString()}</span>
-                          <span>{doc.createdBy}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Badge className={getStatusColor(doc.status)}>
-                          {doc.status}
-                        </Badge>
-                        <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                        <Button size="sm" onClick={() => handleDownload(doc)}>
-                          <Download className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
 
-        <TabsContent value="templates" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Templates de Documentos</CardTitle>
-              <CardDescription>
-                Modelos pré-configurados para criação rápida de documentos
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {templates.map((template) => (
-                  <Card key={template.id} className="cursor-pointer hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <CardTitle className="text-base">{template.name}</CardTitle>
-                      <CardDescription>{template.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between text-sm">
-                          <Badge variant="outline">{template.category}</Badge>
-                          <span className="text-muted-foreground">
-                            {template.fields.length} campos
-                          </span>
+                        <div className="flex items-center gap-2 ml-4">
+                          <Badge variant="outline" className={status.color}>
+                            {status.icon}
+                            <span className="ml-1">{status.label}</span>
+                          </Badge>
+                          <Button variant="ghost" size="icon" onClick={() => { setSelectedDocument(doc); setIsViewDialogOpen(true); }}>
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleDownload(doc)}>
+                            <Download className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => { setDocToDelete(doc); setIsDeleteDialogOpen(true); }}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
-                        
-                        <div className="text-sm text-muted-foreground">
-                          Usado {template.usageCount} vezes
-                        </div>
-                        
-                        <Button className="w-full" size="sm" onClick={() => handleUseTemplate(template)}>
-                          Usar Template
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="approval" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Fluxo de Aprovações</CardTitle>
-              <CardDescription>
-                Documentos aguardando sua aprovação
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {documents.filter(doc => doc.status === "review").map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
-                    <div className="flex-1">
-                      <h4 className="font-medium">{doc.title}</h4>
-                      <p className="text-sm text-muted-foreground">{doc.description}</p>
-                      <div className="flex items-center space-x-4 mt-2 text-xs text-muted-foreground">
-                        <span>Criado por: {doc.createdBy}</span>
-                        <span>Versão: {doc.version}</span>
-                        <span>Atualizado: {doc.updatedAt.toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
-                        <Eye className="h-3 w-3 mr-1" />
-                        Revisar
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive"
-                        onClick={() => handleStatusChange(doc.id, "draft")}
-                      >
-                        Rejeitar
-                      </Button>
-                      <Button 
-                        size="sm"
-                        onClick={() => handleStatusChange(doc.id, "approved")}
-                      >
-                        Aprovar
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                );
+              })}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Documentos por Categoria</CardTitle>
-                <CardDescription>Distribuição de documentos</CardDescription>
+                <CardTitle className="text-base">Documentos por Tipo</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {["manuais", "relatórios", "políticas", "certificados"].map((category) => {
-                    const count = documents.filter(d => d.category === category).length;
-                    const percentage = (count / documents.length) * 100;
-                    
-                    return (
-                      <div key={category} className="flex items-center justify-between">
-                        <span className="capitalize">{category}</span>
-                        <div className="flex items-center space-x-2">
-                          <Progress value={percentage} className="w-20 h-2" />
-                          <span className="text-sm font-medium">{count}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+              <CardContent className="space-y-3">
+                {Object.entries(
+                  documents.reduce((acc, doc) => {
+                    acc[doc.document_type] = (acc[doc.document_type] || 0) + 1;
+                    return acc;
+                  }, {} as Record<string, number>)
+                ).map(([type, count]) => (
+                  <div key={type} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span>{getFileIcon(type)}</span>
+                      <span className="capitalize text-sm">{type}</span>
+                    </div>
+                    <Badge variant="secondary">{count}</Badge>
+                  </div>
+                ))}
+                {documents.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">Sem dados</p>
+                )}
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
-                <CardTitle>Atividade Recente</CardTitle>
-                <CardDescription>Downloads e visualizações</CardDescription>
+                <CardTitle className="text-base">Documentos por Status</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span>Downloads hoje</span>
-                    <span className="font-bold">89</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Visualizações hoje</span>
-                    <span className="font-bold">234</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Novos documentos</span>
-                    <span className="font-bold">7</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Aprovações pendentes</span>
-                    <span className="font-bold text-yellow-600">
-                      {documents.filter(d => d.status === "review").length}
-                    </span>
-                  </div>
-                </div>
+              <CardContent className="space-y-3">
+                {Object.entries(
+                  documents.reduce((acc, doc) => {
+                    acc[doc.status] = (acc[doc.status] || 0) + 1;
+                    return acc;
+                  }, {} as Record<string, number>)
+                ).map(([st, count]) => {
+                  const cfg = statusConfig[st] || statusConfig.active;
+                  return (
+                    <div key={st} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {cfg.icon}
+                        <span className="text-sm">{cfg.label}</span>
+                      </div>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  );
+                })}
+                {documents.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">Sem dados</p>
+                )}
               </CardContent>
             </Card>
           </div>
         </TabsContent>
       </Tabs>
 
+      {/* ===== DIALOGS ===== */}
+
       {/* Upload Dialog */}
       <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>Upload de Documentos</DialogTitle>
-            <DialogDescription>
-              Selecione os arquivos que deseja enviar para o Centro de Documentos.
-            </DialogDescription>
+            <DialogTitle>Upload de Documento</DialogTitle>
+            <DialogDescription>Selecione um ou mais arquivos para enviar ao repositório.</DialogDescription>
           </DialogHeader>
-          
           <div className="space-y-4">
-            <div 
-              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+            <div
+              className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-              <p className="text-sm font-medium">Clique para selecionar arquivos</p>
+              <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">
+                Clique para selecionar arquivos ou arraste aqui
+              </p>
               <p className="text-xs text-muted-foreground mt-1">
-                PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG
+                PDF, DOC, XLS, PPT, imagens (máx 50MB)
               </p>
             </div>
-            
             {uploadedFiles.length > 0 && (
               <div className="space-y-2">
-                <Label>Arquivos selecionados ({uploadedFiles.length})</Label>
-                <ScrollArea className="h-32 border border-border rounded-md p-2">
-                  {uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between py-1">
-                      <div className="flex items-center gap-2">
-                        <File className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm truncate max-w-[200px]">{file.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          ({(file.size / 1024).toFixed(1)} KB)
-                        </span>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+                {uploadedFiles.map((file, i) => (
+                  <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                    <div className="flex items-center gap-2">
+                      <File className="h-4 w-4" />
+                      <span className="text-sm truncate max-w-[200px]">{file.name}</span>
+                      <span className="text-xs text-muted-foreground">{formatFileSize(file.size)}</span>
                     </div>
-                  ))}
-                </ScrollArea>
+                    <Button variant="ghost" size="icon" onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== i))}>
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-          
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+            <Button variant="outline" onClick={() => { setUploadedFiles([]); setIsUploadDialogOpen(false); }}>
               Cancelar
             </Button>
-            <Button onClick={handleUploadSubmit} disabled={isUploading || uploadedFiles.length === 0}>
-              {isUploading ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Enviando...
-                </>
+            <Button onClick={handleUploadSubmit} disabled={uploadedFiles.length === 0 || uploadDocument.isPending}>
+              {uploadDocument.isPending ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Enviando...</>
               ) : (
-                <>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Enviar {uploadedFiles.length > 0 && `(${uploadedFiles.length})`}
-                </>
+                <><Upload className="h-4 w-4 mr-2" />Enviar {uploadedFiles.length} arquivo(s)</>
               )}
             </Button>
           </DialogFooter>
@@ -1065,71 +476,51 @@ Este é um documento de demonstração do Centro de Documentos.
 
       {/* New Document Dialog */}
       <Dialog open={isNewDocDialogOpen} onOpenChange={setIsNewDocDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Novo Documento</DialogTitle>
-            <DialogDescription>
-              Crie um novo documento no Centro de Documentos.
-            </DialogDescription>
+            <DialogDescription>Crie um novo registro de documento no sistema.</DialogDescription>
           </DialogHeader>
-          
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="doc-title">Título *</Label>
+            <div>
+              <Label>Título *</Label>
               <Input
-                id="doc-title"
-                placeholder="Título do documento"
                 value={newDocForm.title}
                 onChange={(e) => setNewDocForm(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Nome do documento"
               />
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="doc-description">Descrição</Label>
-              <Textarea
-                id="doc-description"
-                placeholder="Descrição do documento"
-                value={newDocForm.description}
-                onChange={(e) => setNewDocForm(prev => ({ ...prev, description: e.target.value }))}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="doc-category">Categoria</Label>
-              <Select 
-                value={newDocForm.category} 
-                onValueChange={(value) => setNewDocForm(prev => ({ ...prev, category: value }))}
-              >
+            <div>
+              <Label>Tipo</Label>
+              <Select value={newDocForm.document_type} onValueChange={(v) => setNewDocForm(prev => ({ ...prev, document_type: v }))}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="manuais">Manuais</SelectItem>
-                  <SelectItem value="relatórios">Relatórios</SelectItem>
-                  <SelectItem value="políticas">Políticas</SelectItem>
-                  <SelectItem value="certificados">Certificados</SelectItem>
+                  {documentTypes.map(t => (
+                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="doc-tags">Tags (separadas por vírgula)</Label>
-              <Input
-                id="doc-tags"
-                placeholder="tag1, tag2, tag3"
-                value={newDocForm.tags}
-                onChange={(e) => setNewDocForm(prev => ({ ...prev, tags: e.target.value }))}
+            <div>
+              <Label>Descrição</Label>
+              <Textarea
+                value={newDocForm.content || ""}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, content: e.target.value }))}
+                placeholder="Descrição ou conteúdo do documento"
+                rows={3}
               />
             </div>
           </div>
-          
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsNewDocDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleNewDocSubmit}>
-              <Plus className="h-4 w-4 mr-2" />
-              Criar Documento
+            <Button variant="outline" onClick={() => setIsNewDocDialogOpen(false)}>Cancelar</Button>
+            <Button onClick={handleNewDocSubmit} disabled={!newDocForm.title.trim() || createDocument.isPending}>
+              {createDocument.isPending ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Criando...</>
+              ) : (
+                <><Plus className="h-4 w-4 mr-2" />Criar Documento</>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1137,217 +528,103 @@ Este é um documento de demonstração do Centro de Documentos.
 
       {/* View Document Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="sm:max-w-2xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <span className="text-2xl">{selectedDocument && getFileTypeIcon(selectedDocument.type)}</span>
+              <span className="text-2xl">{selectedDocument ? getFileIcon(selectedDocument.document_type) : "📄"}</span>
               {selectedDocument?.title}
             </DialogTitle>
-            <DialogDescription>
-              {selectedDocument?.description}
-            </DialogDescription>
           </DialogHeader>
-          
           {selectedDocument && (
-            <ScrollArea className="max-h-[60vh]">
-              <div className="space-y-6">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Badge className={getStatusColor(selectedDocument.status)}>
-                    {getStatusIcon(selectedDocument.status)}
-                    <span className="ml-1 capitalize">{selectedDocument.status}</span>
-                  </Badge>
-                  <Badge variant="outline">v{selectedDocument.version}</Badge>
-                  <Badge variant="secondary">{selectedDocument.category}</Badge>
-                  {selectedDocument.isPublic ? (
-                    <Badge variant="outline" className="text-green-600">
-                      <Globe className="h-3 w-3 mr-1" />
-                      Público
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="text-yellow-600">
-                      <Lock className="h-3 w-3 mr-1" />
-                      Privado
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Criado por:</span>
-                    <p className="font-medium">{selectedDocument.createdBy}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Tamanho:</span>
-                    <p className="font-medium">{formatFileSize(selectedDocument.size)}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Criado em:</span>
-                    <p className="font-medium">{selectedDocument.createdAt.toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Atualizado em:</span>
-                    <p className="font-medium">{selectedDocument.updatedAt.toLocaleDateString()}</p>
-                  </div>
-                </div>
-                
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <span className="text-muted-foreground text-sm">Tags:</span>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {selectedDocument.tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {selectedDocument.tags.length === 0 && (
-                      <span className="text-xs text-muted-foreground">Nenhuma tag</span>
-                    )}
-                  </div>
+                  <span className="text-muted-foreground">Tipo:</span>
+                  <p className="font-medium capitalize">{selectedDocument.document_type}</p>
                 </div>
-                
                 <div>
-                  <span className="text-muted-foreground text-sm">Colaboradores:</span>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {selectedDocument.collaborators.map((collaborator, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        <User className="h-3 w-3 mr-1" />
-                        {collaborator}
-                      </Badge>
-                    ))}
+                  <span className="text-muted-foreground">Status:</span>
+                  <p><Badge variant="outline" className={statusConfig[selectedDocument.status]?.color || ""}>{statusConfig[selectedDocument.status]?.label || selectedDocument.status}</Badge></p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Tamanho:</span>
+                  <p className="font-medium">{formatFileSize(selectedDocument.file_size)}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Criado em:</span>
+                  <p className="font-medium">{format(new Date(selectedDocument.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
+                </div>
+                {selectedDocument.expiry_date && (
+                  <div>
+                    <span className="text-muted-foreground">Expira em:</span>
+                    <p className={`font-medium ${new Date(selectedDocument.expiry_date) < new Date() ? "text-destructive" : ""}`}>
+                      {format(new Date(selectedDocument.expiry_date), "dd/MM/yyyy")}
+                    </p>
                   </div>
-                </div>
-                
-                <div className="flex items-center gap-4 text-sm text-muted-foreground border-t border-border pt-4">
-                  <span className="flex items-center">
-                    <Eye className="h-4 w-4 mr-1" />
-                    {selectedDocument.viewCount} visualizações
-                  </span>
-                  <span className="flex items-center">
-                    <Download className="h-4 w-4 mr-1" />
-                    {selectedDocument.downloadCount} downloads
-                  </span>
-                </div>
+                )}
+                {selectedDocument.mime_type && (
+                  <div>
+                    <span className="text-muted-foreground">Formato:</span>
+                    <p className="font-medium">{selectedDocument.mime_type}</p>
+                  </div>
+                )}
               </div>
-            </ScrollArea>
+              {selectedDocument.content && (
+                <div>
+                  <span className="text-sm text-muted-foreground">Conteúdo:</span>
+                  <p className="mt-1 text-sm bg-muted/50 p-3 rounded">{selectedDocument.content}</p>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Select
+                  value={selectedDocument.status}
+                  onValueChange={(v) => {
+                    handleStatusChange(selectedDocument, v);
+                    setSelectedDocument({ ...selectedDocument, status: v });
+                  }}
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Alterar status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Ativo</SelectItem>
+                    <SelectItem value="draft">Rascunho</SelectItem>
+                    <SelectItem value="review">Em Revisão</SelectItem>
+                    <SelectItem value="archived">Arquivado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           )}
-          
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
-              Fechar
-            </Button>
+            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>Fechar</Button>
             {selectedDocument && (
-              <Button onClick={() => {
-                handleDownload(selectedDocument);
-                setIsViewDialogOpen(false);
-              }}>
+              <Button onClick={() => handleDownload(selectedDocument)}>
                 <Download className="h-4 w-4 mr-2" />
-                Baixar
+                Download
               </Button>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Use Template Dialog */}
-      <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>{selectedTemplate?.name}</DialogTitle>
+            <DialogTitle>Confirmar Exclusão</DialogTitle>
             <DialogDescription>
-              {selectedTemplate?.description}
+              Tem certeza que deseja excluir "{docToDelete?.title}"? Esta ação não pode ser desfeita.
             </DialogDescription>
           </DialogHeader>
-          
-          {selectedTemplate && (
-            <ScrollArea className="max-h-[60vh]">
-              <div className="space-y-4 pr-4">
-                {selectedTemplate.fields.map((field, index) => (
-                  <div key={index} className="space-y-2">
-                    <Label htmlFor={`field-${index}`}>
-                      {field.name} {field.required && <span className="text-destructive">*</span>}
-                    </Label>
-                    
-                    {field.type === "text" && (
-                      <Input
-                        id={`field-${index}`}
-                        placeholder={`Digite ${field.name.toLowerCase()}`}
-                        value={templateFormData[field.name] || ""}
-                        onChange={(e) => setTemplateFormData(prev => ({
-                          ...prev,
-                          [field.name]: e.target.value
-                        }))}
-                      />
-                    )}
-                    
-                    {field.type === "number" && (
-                      <Input
-                        id={`field-${index}`}
-                        type="number"
-                        placeholder={`Digite ${field.name.toLowerCase()}`}
-                        value={templateFormData[field.name] || ""}
-                        onChange={(e) => setTemplateFormData(prev => ({
-                          ...prev,
-                          [field.name]: e.target.value
-                        }))}
-                      />
-                    )}
-                    
-                    {field.type === "date" && (
-                      <Input
-                        id={`field-${index}`}
-                        type="date"
-                        value={templateFormData[field.name] || ""}
-                        onChange={(e) => setTemplateFormData(prev => ({
-                          ...prev,
-                          [field.name]: e.target.value
-                        }))}
-                      />
-                    )}
-                    
-                    {field.type === "textarea" && (
-                      <Textarea
-                        id={`field-${index}`}
-                        placeholder={`Digite ${field.name.toLowerCase()}`}
-                        value={templateFormData[field.name] || ""}
-                        onChange={(e) => setTemplateFormData(prev => ({
-                          ...prev,
-                          [field.name]: e.target.value
-                        }))}
-                      />
-                    )}
-                    
-                    {field.type === "select" && field.options && (
-                      <Select 
-                        value={templateFormData[field.name] || ""} 
-                        onValueChange={(value) => setTemplateFormData(prev => ({
-                          ...prev,
-                          [field.name]: value
-                        }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={`Selecione ${field.name.toLowerCase()}`} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {field.options.map((option, optIndex) => (
-                            <SelectItem key={optIndex} value={option}>
-                              {option}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          )}
-          
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsTemplateDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleTemplateSubmit}>
-              <FileText className="h-4 w-4 mr-2" />
-              Criar Documento
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancelar</Button>
+            <Button variant="destructive" onClick={confirmDelete} disabled={deleteDocument.isPending}>
+              {deleteDocument.isPending ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Excluindo...</>
+              ) : (
+                <><Trash2 className="h-4 w-4 mr-2" />Excluir</>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
