@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/module-enhancements";
 import { useOperationsCommandData } from "@/hooks/useOperationsCommandData";
 import { useRealActionHandlers } from "@/hooks/useRealActionHandlers";
+import { NewVoyageDialog, CrewScheduleDialog, MaintenanceOrderDialog, FuelReportDialog, ChecklistDialog } from "@/components/operations/QuickActionDialogs";
 
 // Lazy load original components
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
@@ -121,6 +122,7 @@ export default function OperationsCommandHubEnhanced() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
+  const [dialogOpen, setDialogOpen] = useState({ voyage: false, crew: false, maintenance: false, fuel: false, checklist: false });
 
   // Get active tab directly from URL - use useMemo to avoid stale closures
   const activeTab = useMemo(() => {
@@ -214,19 +216,19 @@ export default function OperationsCommandHubEnhanced() {
   const handleQuickAction = (actionId: string) => {
     switch (actionId) {
       case "new-voyage":
-        realQuickActions.newVoyage();
+        setDialogOpen(p => ({ ...p, voyage: true }));
         break;
       case "crew-schedule":
-        realQuickActions.crewSchedule();
+        setDialogOpen(p => ({ ...p, crew: true }));
         break;
       case "maintenance":
-        realQuickActions.maintenanceOrder();
+        setDialogOpen(p => ({ ...p, maintenance: true }));
         break;
       case "fuel-report":
-        realQuickActions.fuelReport();
+        setDialogOpen(p => ({ ...p, fuel: true }));
         break;
       case "checklist":
-        realQuickActions.openChecklist();
+        setDialogOpen(p => ({ ...p, checklist: true }));
         break;
       default:
         toast.info(`Executando: ${actionId}`);
@@ -609,6 +611,13 @@ export default function OperationsCommandHubEnhanced() {
             </Suspense>
           </TabsContent>
         </Tabs>
+
+        {/* Quick Action Dialogs */}
+        <NewVoyageDialog open={dialogOpen.voyage} onOpenChange={(v) => setDialogOpen(p => ({ ...p, voyage: v }))} />
+        <CrewScheduleDialog open={dialogOpen.crew} onOpenChange={(v) => setDialogOpen(p => ({ ...p, crew: v }))} />
+        <MaintenanceOrderDialog open={dialogOpen.maintenance} onOpenChange={(v) => setDialogOpen(p => ({ ...p, maintenance: v }))} />
+        <FuelReportDialog open={dialogOpen.fuel} onOpenChange={(v) => setDialogOpen(p => ({ ...p, fuel: v }))} />
+        <ChecklistDialog open={dialogOpen.checklist} onOpenChange={(v) => setDialogOpen(p => ({ ...p, checklist: v }))} />
       </div>
     </div>
   );
