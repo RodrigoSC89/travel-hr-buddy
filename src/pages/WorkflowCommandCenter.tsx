@@ -102,8 +102,9 @@ export default function WorkflowCommandCenter() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
-  // Visual workflow state
-  const [selectedVisualWorkflow, setSelectedVisualWorkflow] = useState<typeof mockVisualWorkflows[0] | null>(null);
+  // Visual workflow state - derived from real workflows
+  const visualWorkflows = getVisualWorkflows(workflows);
+  const [selectedVisualWorkflow, setSelectedVisualWorkflow] = useState<ReturnType<typeof getVisualWorkflows>[0] | null>(null);
 
   // Filtered workflows
   const filteredWorkflows = workflows.filter(w => {
@@ -180,11 +181,11 @@ export default function WorkflowCommandCenter() {
 
   // Stats calculation
   const stats = {
-    totalWorkflows: workflows.length + mockVisualWorkflows.length,
-    activeWorkflows: workflows.filter(w => w.status === "active").length + mockVisualWorkflows.filter(w => w.status === "running").length,
-    completedToday: workflows.filter(w => w.status === "completed").length,
-    automationRulesActive: automationRules.filter(r => r.is_active).length,
-    totalExecutions: mockVisualWorkflows.reduce((acc, w) => acc + w.executions, 0),
+    totalWorkflows: workflows.length,
+    activeWorkflows: workflows.filter((w: any) => w.status === "active").length,
+    completedToday: workflows.filter((w: any) => w.status === "completed").length,
+    automationRulesActive: automationRules.filter((r: any) => r.is_active).length,
+    totalExecutions: visualWorkflows.reduce((acc: number, w: any) => acc + w.executions, 0),
     efficiencyScore: 87
   };
 
@@ -347,7 +348,7 @@ export default function WorkflowCommandCenter() {
                   <CardDescription>Fluxos em execução com visualização de etapas</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {mockVisualWorkflows.filter(w => w.status === "running").map((workflow) => (
+                  {visualWorkflows.filter((w: any) => w.status === "running").map((workflow: any) => (
                     <div 
                       key={workflow.id} 
                       className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
@@ -358,7 +359,7 @@ export default function WorkflowCommandCenter() {
                         <Badge className="bg-blue-500/10 text-blue-500">Em execução</Badge>
                       </div>
                       <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                        {workflow.nodes.map((node, i) => (
+                        {workflow.nodes.map((node: any, i: number) => (
                           <React.Fragment key={node.id}>
                             <div className={`flex items-center justify-center w-8 h-8 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
                               {getNodeIcon(node.type)}
@@ -457,7 +458,7 @@ export default function WorkflowCommandCenter() {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {mockVisualWorkflows.map((workflow) => (
+                  {visualWorkflows.map((workflow: any) => (
                     <Card 
                       key={workflow.id} 
                       className="hover:shadow-md transition-shadow cursor-pointer"
@@ -473,7 +474,7 @@ export default function WorkflowCommandCenter() {
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center gap-1 mb-3 overflow-x-auto pb-2">
-                          {workflow.nodes.slice(0, 5).map((node, i) => (
+                          {workflow.nodes.slice(0, 5).map((node: any, i: number) => (
                             <React.Fragment key={node.id}>
                               <div className={`flex items-center justify-center w-6 h-6 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
                                 {getNodeIcon(node.type)}
@@ -820,7 +821,7 @@ export default function WorkflowCommandCenter() {
 
                 <div className="border rounded-lg p-6 bg-muted/30">
                   <div className="flex flex-wrap items-center gap-4 justify-center">
-                    {selectedVisualWorkflow.nodes.map((node, i) => (
+                    {selectedVisualWorkflow.nodes.map((node: any, i: number) => (
                       <React.Fragment key={node.id}>
                         <div className="flex flex-col items-center gap-2">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full ${getNodeStatusColor(node.status)} text-white`}>
@@ -847,13 +848,13 @@ export default function WorkflowCommandCenter() {
                   </div>
                   <div className="p-3 bg-muted/50 rounded-lg">
                     <p className="text-2xl font-bold">
-                      {selectedVisualWorkflow.nodes.filter(n => n.status === "completed").length}
+                      {selectedVisualWorkflow.nodes.filter((n: any) => n.status === "completed").length}
                     </p>
                     <p className="text-xs text-muted-foreground">Concluídas</p>
                   </div>
                   <div className="p-3 bg-muted/50 rounded-lg">
                     <p className="text-2xl font-bold">
-                      {Math.round((selectedVisualWorkflow.nodes.filter(n => n.status === "completed").length / selectedVisualWorkflow.nodes.length) * 100)}%
+                      {Math.round((selectedVisualWorkflow.nodes.filter((n: any) => n.status === "completed").length / selectedVisualWorkflow.nodes.length) * 100)}%
                     </p>
                     <p className="text-xs text-muted-foreground">Progresso</p>
                   </div>

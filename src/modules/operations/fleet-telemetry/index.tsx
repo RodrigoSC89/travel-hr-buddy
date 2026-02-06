@@ -67,7 +67,7 @@ export default function FleetTelemetryModule() {
     
     // Simulate real-time sensor updates
     const interval = setInterval(() => {
-      generateMockSensorData();
+      generateSensorData();
     }, 5000);
 
     return () => clearInterval(interval);
