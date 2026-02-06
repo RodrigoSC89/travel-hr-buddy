@@ -1,18 +1,25 @@
 /**
  * Maintenance Hub Premium - Centro de Manutenção Completo
- * Integra todos os componentes de manutenção com IA preditiva
+ * Tier-1 UX: Real badges, functional inventory, zero placeholders
  * ENTERPRISE UPGRADE - Phase 2 + MEGA-UPGRADE
  */
 
 import React, { Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, Wrench, Brain, Calendar, 
-  ClipboardList, BarChart3, Package, Activity, AlertTriangle, Fuel, Leaf, Anchor, Gauge
+  ClipboardList, BarChart3, Package, Activity, AlertTriangle, Fuel, Leaf, Anchor, Gauge,
+  RefreshCw, Download
 } from "lucide-react";
+import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/UXStates";
 
 // Lazy load original components
 const PredictiveMaintenanceAI = lazy(() => import("@/modules/maintenance-planner/components/PredictiveMaintenanceAI"));
@@ -46,13 +53,147 @@ function LoadingSkeleton() {
   );
 }
 
+// Spare Parts Inventory Tab with real data
+function SparePartsInventoryTab() {
+  const { data: inventory = [], isLoading } = useQuery({
+    queryKey: ["maintenance-inventory"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("inventory_items")
+        .select("id, name, category, quantity, unit, min_quantity, location, status")
+        .order("name");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <LoadingSkeleton />;
+
+  if (inventory.length === 0) {
+    return (
+      <EmptyState
+        icon={Package}
+        title="Inventário vazio"
+        message="Cadastre peças e materiais para controle de estoque. O sistema alertará sobre itens abaixo do mínimo."
+        actionLabel="Ir para Procurement"
+        onAction={() => toast.info("Navegue ao módulo Ops → Procurement para cadastrar itens")}
+      />
+    );
+  }
+
+  const lowStock = inventory.filter((i: any) => i.quantity <= (i.min_quantity || 0));
+  const totalItems = inventory.length;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <Package className="h-5 w-5" />
+          Inventário de Peças
+        </h3>
+        <div className="flex gap-2">
+          {lowStock.length > 0 && (
+            <Badge variant="destructive">{lowStock.length} abaixo do mínimo</Badge>
+          )}
+          <Button variant="outline" size="sm" onClick={() => {
+            const csv = ["Nome,Categoria,Quantidade,Unidade,Mínimo,Local,Status", ...inventory.map((i: any) =>
+              `"${i.name}",${i.category || 'N/A'},${i.quantity},${i.unit || 'un'},${i.min_quantity || 0},${i.location || 'N/A'},${i.status || 'active'}`
+            )].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'inventory-report.csv'; a.click();
+            URL.revokeObjectURL(url);
+            toast.success("Inventário exportado");
+          }}>
+            <Download className="h-4 w-4 mr-2" />
+            Exportar
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <Card className="border-l-4 border-l-primary">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Total Itens</p>
+            <p className="text-2xl font-bold">{totalItems}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-l-4 border-l-destructive">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Estoque Baixo</p>
+            <p className="text-2xl font-bold text-destructive">{lowStock.length}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-l-4 border-l-secondary">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Categorias</p>
+            <p className="text-2xl font-bold">
+              {new Set(inventory.map((i: any) => i.category)).size}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Itens do Inventário</CardTitle>
+          <CardDescription>{totalItems} itens cadastrados</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {inventory.slice(0, 15).map((item: any) => {
+              const isLow = item.quantity <= (item.min_quantity || 0);
+              return (
+                <div key={item.id} className={`flex items-center justify-between p-2 border rounded hover:bg-muted/50 transition-colors ${isLow ? 'border-destructive/30 bg-destructive/5' : ''}`}>
+                  <div className="flex items-center gap-3">
+                    <Package className={`h-4 w-4 ${isLow ? 'text-destructive' : 'text-muted-foreground'}`} />
+                    <div>
+                      <p className="text-sm font-medium">{item.name}</p>
+                      <p className="text-xs text-muted-foreground">{item.category || 'Sem categoria'} • {item.location || 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-medium ${isLow ? 'text-destructive' : ''}`}>
+                      {item.quantity} {item.unit || 'un'}
+                    </span>
+                    {isLow && <Badge variant="destructive" className="text-xs">Baixo</Badge>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function MaintenanceHubPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "kpis";
+  const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
+
+  // Real maintenance metrics for badge
+  const { data: maintStats } = useQuery({
+    queryKey: ["maintenance-stats-badge"],
+    queryFn: async () => {
+      const { data: records, error } = await supabase
+        .from("maintenance_records")
+        .select("id, status");
+      if (error) throw error;
+      const total = records?.length || 0;
+      const completed = records?.filter((r: any) => r.status === 'completed').length || 0;
+      const healthScore = total > 0 ? Math.round((completed / total) * 100) : 100;
+      return { total, completed, healthScore };
+    },
+    staleTime: 30000,
+  });
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -60,7 +201,7 @@ export default function MaintenanceHubPremium() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Wrench className="h-8 w-8 text-orange-500" />
+            <Wrench className="h-8 w-8 text-primary" />
             Maintenance Hub
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -68,17 +209,21 @@ export default function MaintenanceHubPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-success/10 text-success">
-            <Activity className="h-3 w-3 mr-1 animate-pulse" />
-            94% Health Score
-          </Badge>
           <Badge variant="outline" className="bg-primary/10 text-primary">
+            <Activity className="h-3 w-3 mr-1 animate-pulse" />
+            {maintStats ? `${maintStats.healthScore}%` : '...'} Health
+          </Badge>
+          <Badge variant="outline" className="text-primary">
             <Brain className="h-3 w-3 mr-1" />
             IA Preditiva
           </Badge>
-          <Badge variant="outline" className="text-sm">
-            MEGA-UPGRADE v4.0
-          </Badge>
+          <Button variant="outline" size="sm" onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["maintenance"] });
+            toast.success("Dados de manutenção atualizados");
+          }}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
         </div>
       </div>
 
@@ -135,7 +280,6 @@ export default function MaintenanceHubPremium() {
           </TabsTrigger>
         </TabsList>
 
-        {/* FASE 2 - Premium Components */}
         <TabsContent value="kpis">
           <Suspense fallback={<LoadingSkeleton />}>
             <MaintenanceKPIDashboard />
@@ -166,7 +310,6 @@ export default function MaintenanceHubPremium() {
           </Suspense>
         </TabsContent>
 
-        {/* Enterprise Components - Phase 2 */}
         <TabsContent value="calendar">
           <MaintenanceCalendarView />
         </TabsContent>
@@ -188,11 +331,7 @@ export default function MaintenanceHubPremium() {
         </TabsContent>
 
         <TabsContent value="inventory">
-          <div className="text-center py-12 text-muted-foreground">
-            <Package className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Inventário de Peças</p>
-            <p className="text-sm">Estoque e requisições de materiais</p>
-          </div>
+          <SparePartsInventoryTab />
         </TabsContent>
 
         <TabsContent value="analytics">

@@ -1,18 +1,24 @@
 /**
  * Tracking & Telemetry Premium - Centro de Rastreamento Completo
- * Integra todos os componentes de telemetria com abas
- * MEGA-UPGRADE v4.0 - FASE 4
+ * Tier-1 UX: Zero placeholders, real data badges, functional empty states
  */
 
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   LayoutDashboard, MapPin, Satellite, Activity, 
-  History, Bell, Radio, Brain, Fuel, TrendingUp, Eye
+  History, Bell, Radio, Brain, Fuel, TrendingUp, Eye,
+  RefreshCw, Download, Ship
 } from "lucide-react";
+import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/UXStates";
 
 // Lazy load components
 const TrackingCommandCenter = lazy(() => import("@/modules/tracking-telemetry/components/TrackingCommandCenter"));
@@ -36,13 +42,217 @@ function LoadingSkeleton() {
   );
 }
 
+// Fuel Consumption Tab - Real data
+function FuelConsumptionTab() {
+  const { data: vessels = [], isLoading } = useQuery({
+    queryKey: ["tracking-fuel-vessels"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vessels")
+        .select("id, name, status, type, fuel_capacity")
+        .order("name");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  const { data: fuelRecords = [] } = useQuery({
+    queryKey: ["tracking-fuel-records"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("fuel_records")
+        .select("*")
+        .order("record_date", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <LoadingSkeleton />;
+
+  if (fuelRecords.length === 0 && vessels.length === 0) {
+    return (
+      <EmptyState
+        icon={Fuel}
+        title="Sem registros de combustível"
+        message="Registros de consumo, bunkering e ROB aparecerão aqui quando disponíveis. Cadastre embarcações primeiro."
+        actionLabel="Ver Frota"
+        onAction={() => toast.info("Navegue ao módulo Ops → Fleet para cadastrar embarcações")}
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <Fuel className="h-5 w-5" />
+          Gestão de Combustível
+        </h3>
+        <Badge variant="outline">{fuelRecords.length} registros</Badge>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="border-l-4 border-l-primary">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Embarcações</p>
+            <p className="text-2xl font-bold">{vessels.length}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-l-4 border-l-secondary">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Registros Fuel</p>
+            <p className="text-2xl font-bold">{fuelRecords.length}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-l-4 border-l-accent">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Capacidade Total</p>
+            <p className="text-2xl font-bold">
+              {vessels.reduce((sum: number, v: any) => sum + (v.fuel_capacity || 0), 0).toLocaleString()} t
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-l-4 border-l-muted">
+          <CardContent className="p-4">
+            <p className="text-xs text-muted-foreground">Último Registro</p>
+            <p className="text-sm font-bold">
+              {fuelRecords[0] ? new Date(fuelRecords[0].record_date).toLocaleDateString('pt-BR') : 'N/A'}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Registros Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {fuelRecords.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">Nenhum registro de combustível encontrado</p>
+          ) : (
+            <div className="space-y-2">
+              {fuelRecords.slice(0, 10).map((r: any) => (
+                <div key={r.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50">
+                  <span className="text-sm font-medium">{r.fuel_type || 'Fuel'}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm">{r.quantity_mt?.toFixed(1) || '0'} MT</span>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(r.recorded_at).toLocaleDateString('pt-BR')}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Navigation History Tab
+function NavigationHistoryTab() {
+  const { data: navHistory = [], isLoading } = useQuery({
+    queryKey: ["tracking-nav-history"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("navigation_history")
+        .select("*")
+        .order("recorded_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <LoadingSkeleton />;
+
+  if (navHistory.length === 0) {
+    return (
+      <EmptyState
+        icon={History}
+        title="Sem histórico de navegação"
+        message="O histórico de rotas, posições e análise de viagens será exibido aqui à medida que os dados de AIS/GNSS forem registrados."
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <History className="h-5 w-5" />
+          Histórico de Navegação
+        </h3>
+        <Button variant="outline" size="sm" onClick={() => {
+          const csv = ["Data,Latitude,Longitude,Velocidade,Curso", ...navHistory.map((n: any) => 
+            `${n.recorded_at},${n.latitude},${n.longitude},${n.speed_knots || 0},${n.course || 0}`
+          )].join('\n');
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = 'navigation-history.csv'; a.click();
+          URL.revokeObjectURL(url);
+          toast.success("Histórico exportado");
+        }}>
+          <Download className="h-4 w-4 mr-2" />
+          Exportar
+        </Button>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <div className="divide-y">
+            {navHistory.slice(0, 20).map((entry: any) => (
+              <div key={entry.id} className="flex items-center justify-between p-3 hover:bg-muted/50">
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium">
+                      {entry.latitude?.toFixed(4)}°, {entry.longitude?.toFixed(4)}°
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {entry.speed_knots?.toFixed(1) || 0} kn | Curso: {entry.course || 0}°
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {new Date(entry.recorded_at).toLocaleString('pt-BR')}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function TrackingTelemetryPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "overview";
+  const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
+
+  // Real vessel count for badge
+  const { data: vesselStats } = useQuery({
+    queryKey: ["tracking-vessel-stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vessels")
+        .select("id, status");
+      if (error) throw error;
+      const total = data?.length || 0;
+      const online = data?.filter((v: any) => v.status === 'active' || v.status === 'operational').length || 0;
+      return { total, online };
+    },
+    staleTime: 30000,
+  });
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -50,7 +260,7 @@ export default function TrackingTelemetryPremium() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Satellite className="h-8 w-8 text-cyan-500" />
+            <Satellite className="h-8 w-8 text-primary" />
             Tracking & Telemetry
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -58,17 +268,17 @@ export default function TrackingTelemetryPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-success/10 text-success">
+          <Badge variant="outline" className="bg-primary/10 text-primary">
             <Radio className="h-3 w-3 mr-1 animate-pulse" />
-            14/15 Online
+            {vesselStats ? `${vesselStats.online}/${vesselStats.total}` : '...'} Online
           </Badge>
-          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
-            <Brain className="h-3 w-3 mr-1" />
-            AIS Intelligence
-          </Badge>
-          <Badge variant="outline" className="text-sm">
-            MEGA-UPGRADE v4.0
-          </Badge>
+          <Button variant="outline" size="sm" onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["tracking"] });
+            toast.success("Dados de tracking atualizados");
+          }}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
         </div>
       </div>
 
@@ -135,7 +345,6 @@ export default function TrackingTelemetryPremium() {
           </Suspense>
         </TabsContent>
 
-        {/* FASE 4 - Premium Components */}
         <TabsContent value="alerts">
           <Suspense fallback={<LoadingSkeleton />}>
             <AlertsNotificationHub />
@@ -161,19 +370,11 @@ export default function TrackingTelemetryPremium() {
         </TabsContent>
 
         <TabsContent value="fuel">
-          <div className="text-center py-12 text-muted-foreground">
-            <Fuel className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Gestão de Combustível</p>
-            <p className="text-sm">Consumo, bunkering e eficiência energética</p>
-          </div>
+          <FuelConsumptionTab />
         </TabsContent>
 
         <TabsContent value="history">
-          <div className="text-center py-12 text-muted-foreground">
-            <History className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Histórico de Navegação</p>
-            <p className="text-sm">Replay de rotas e análise de viagens</p>
-          </div>
+          <NavigationHistoryTab />
         </TabsContent>
 
         <TabsContent value="dashboard">
