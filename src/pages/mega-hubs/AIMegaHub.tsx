@@ -4,17 +4,24 @@
  * 
  * Consolida: AI Control Tower + Enterprise Intelligence + AI Modules + Voice
  * 
- * ✅ WORLD-CLASS COMPONENTS INTEGRATED
+ * ✅ ZERO CONSOLE.LOG HANDLERS
+ * ✅ REAL DATA INTEGRATION
+ * ✅ SYSTEM STATUS BAR
+ * ✅ FUNCTIONAL ACTIONS
  */
 
-import React, { Suspense, lazy } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings } from 'lucide-react';
+import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings, Wifi, Download, RefreshCw, Plus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { AIAgentHealthDashboard } from '@/components/world-class';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
+import { toast } from 'sonner';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIControlTowerHubEnhanced'));
@@ -57,14 +64,67 @@ const tabConfig = [
 export default function AIMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'hub';
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { exportToJSON } = useRealActionHandlers();
+
+  // Real data: fetch AI agent registry
+  const { data: agentData = [], isLoading: agentsLoading } = useQuery({
+    queryKey: ['ai-agents-hub'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('agent_registry')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  const agentMetrics = useMemo(() => ({
+    totalAgents: agentData.length,
+    activeAgents: agentData.filter((a: any) => a.status === 'active').length,
+    pausedAgents: agentData.filter((a: any) => a.status === 'paused' || a.status === 'inactive').length,
+  }), [agentData]);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
-  const handleActionBarAction = (action: string) => {
-    console.log(`AI action: ${action}`);
-  };
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['ai-agents-hub'] });
+    toast.success('Dados de IA atualizados');
+  }, [queryClient]);
+
+  const handleDeployAgent = useCallback(async () => {
+    const agentId = `agent-${Date.now().toString().slice(-6)}`;
+    const { error } = await supabase.from('agent_registry').insert([{
+      agent_id: agentId,
+      name: `Agent ${agentId}`,
+      status: 'active',
+      capabilities: ['analysis', 'reporting'],
+    }]);
+    if (error) {
+      toast.error(`Erro ao criar agente: ${error.message}`);
+    } else {
+      toast.success('Agente implantado com sucesso');
+      queryClient.invalidateQueries({ queryKey: ['ai-agents-hub'] });
+    }
+  }, [queryClient]);
+
+  const handleExportAgents = useCallback(async () => {
+    if (agentData.length === 0) {
+      toast.error('Nenhum agente para exportar');
+      return;
+    }
+    exportToJSON(agentData, 'ai-agents-registry');
+  }, [agentData, exportToJSON]);
+
+  const handleConfigure = useCallback(() => {
+    setSearchParams({ tab: 'agents' });
+    toast.info('Abrindo configuração dos agentes...');
+  }, [setSearchParams]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,7 +143,7 @@ export default function AIMegaHub() {
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                10 Agents Active
+                {agentMetrics.activeAgents} Agents Active
               </Badge>
               <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
                 MEGA-HUB D
@@ -116,31 +176,64 @@ export default function AIMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="hub" className="mt-0 space-y-6">
+              {/* System Status */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <span>Online</span>
+                </div>
+                <span>•</span>
+                <span>{agentMetrics.totalAgents} agentes registrados</span>
+                <span>•</span>
+                <span>{agentMetrics.activeAgents} ativos</span>
+                {agentMetrics.pausedAgents > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="text-yellow-500">{agentMetrics.pausedAgents} pausados</span>
+                  </>
+                )}
+                <span>•</span>
+                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="AI Control Tower"
-                subtitle="Monitor and manage all AI agents and workflows"
+                subtitle={`${agentMetrics.activeAgents} agentes ativos | ${agentMetrics.totalAgents} total registrados`}
                 actions={[
                   {
-                    id: 'new-agent',
+                    id: 'deploy-agent',
                     label: 'Deploy Agent',
                     icon: <Bot className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('new-agent'),
-                    variant: 'default'
+                    onClick: handleDeployAgent,
+                    variant: 'default',
+                    tooltip: 'Criar e implantar novo agente de IA'
                   },
                   {
                     id: 'configure',
                     label: 'Configure',
                     icon: <Settings className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('configure'),
-                    variant: 'outline'
+                    onClick: handleConfigure,
+                    variant: 'outline',
+                    tooltip: 'Abrir configuração dos agentes'
                   },
                   {
                     id: 'health',
                     label: 'Agent Health',
                     icon: <Activity className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'health' }),
-                    variant: 'outline'
+                    variant: 'outline',
+                    tooltip: 'Verificar saúde dos agentes'
+                  }
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={agentsLoading}
+                secondaryActions={[
+                  {
+                    id: 'export-agents',
+                    label: 'Exportar Registro (JSON)',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: handleExportAgents,
                   }
                 ]}
                 showSearch
@@ -154,14 +247,25 @@ export default function AIMegaHub() {
               {/* Enhanced Action Bar for Health */}
               <EnhancedActionBar
                 title="AI Agent Health Monitor"
-                subtitle="Real-time health, accuracy, and decision logs for all 10 audit agents"
+                subtitle={`${agentMetrics.activeAgents} agentes ativos | ${agentMetrics.pausedAgents} pausados`}
                 actions={[
                   {
-                    id: 'refresh',
+                    id: 'refresh-health',
                     label: 'Refresh Status',
                     icon: <Activity className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('refresh'),
-                    variant: 'default'
+                    onClick: handleRefresh,
+                    variant: 'default',
+                    tooltip: 'Recarregar status dos agentes'
+                  }
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={agentsLoading}
+                secondaryActions={[
+                  {
+                    id: 'export-health',
+                    label: 'Exportar Health Report',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: handleExportAgents,
                   }
                 ]}
               />

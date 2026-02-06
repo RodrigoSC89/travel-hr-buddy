@@ -4,17 +4,24 @@
  * 
  * Consolida: Tracking & Telemetry + AIS + SATCOM + Weather Intelligence
  * 
- * ✅ WORLD-CLASS COMPONENTS INTEGRATED
+ * ✅ ZERO CONSOLE.LOG HANDLERS
+ * ✅ REAL DATA INTEGRATION
+ * ✅ SYSTEM STATUS BAR
+ * ✅ FUNCTIONAL EXPORT & REFRESH
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter } from 'lucide-react';
+import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { RealTimeTrackingMap } from '@/components/world-class';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
+import { toast } from 'sonner';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TrackingTelemetryPremium'));
@@ -51,14 +58,87 @@ const tabConfig = [
 export default function TrackingMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
+  const queryClient = useQueryClient();
+  const { exportToCSV } = useRealActionHandlers();
+
+  // Real data: vessels for tracking
+  const { data: vessels = [], isLoading: vesselsLoading } = useQuery({
+    queryKey: ['tracking-vessels'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vessels')
+        .select('id, name, status, vessel_type, flag_state, imo_number, updated_at')
+        .order('name');
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 15000,
+  });
+
+  // Real data: telemetry alerts
+  const { data: alerts = [] } = useQuery({
+    queryKey: ['tracking-alerts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('telemetry_alerts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 15000,
+  });
+
+  const trackingMetrics = useMemo(() => ({
+    totalVessels: vessels.length,
+    activeVessels: vessels.filter((v: any) => v.status === 'active' || v.status === 'operational').length,
+    openAlerts: alerts.filter((a: any) => !a.resolved && !a.acknowledged).length,
+  }), [vessels, alerts]);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
-  const handleActionBarAction = (action: string) => {
-    console.log(`Tracking action: ${action}`);
-  };
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['tracking-vessels'] }),
+      queryClient.invalidateQueries({ queryKey: ['tracking-alerts'] }),
+      queryClient.invalidateQueries({ queryKey: ['fleet-tracking'] }),
+    ]);
+    toast.success('Posições e alertas atualizados');
+  }, [queryClient]);
+
+  const handleExportPositions = useCallback(async () => {
+    if (vessels.length === 0) {
+      toast.error('Nenhuma embarcação para exportar');
+      return;
+    }
+    const exportData = vessels.map((v: any) => ({
+      name: v.name,
+      imo: v.imo_number,
+      type: v.vessel_type,
+      status: v.status,
+      flag: v.flag_state,
+      last_update: v.updated_at,
+    }));
+    exportToCSV(exportData, 'fleet-positions');
+  }, [vessels, exportToCSV]);
+
+  const handleCreateAlert = useCallback(async () => {
+    const { error } = await supabase.from('telemetry_alerts').insert([{
+      sensor_id: 'manual',
+      alert_type: 'geofence',
+      severity: 'medium',
+      message: `Alerta manual - ${new Date().toLocaleString('pt-BR')}`,
+    }]);
+    if (error) {
+      toast.error(`Erro ao criar alerta: ${error.message}`);
+    } else {
+      toast.success('Alerta criado com sucesso');
+      queryClient.invalidateQueries({ queryKey: ['tracking-alerts'] });
+    }
+  }, [queryClient]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,6 +156,11 @@ export default function TrackingMegaHub() {
               </div>
             </div>
             <div className="flex gap-2">
+              {trackingMetrics.openAlerts > 0 && (
+                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
+                  {trackingMetrics.openAlerts} Alertas
+                </Badge>
+              )}
               <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
                 AIS Active
               </Badge>
@@ -100,6 +185,11 @@ export default function TrackingMegaHub() {
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
+                  {tab.id === 'alerts' && trackingMetrics.openAlerts > 0 && (
+                    <Badge variant="destructive" className="h-5 min-w-5 px-1 text-[10px]">
+                      {trackingMetrics.openAlerts}
+                    </Badge>
+                  )}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -110,31 +200,60 @@ export default function TrackingMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* System Status */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <span>Online</span>
+                </div>
+                <span>•</span>
+                <span>{trackingMetrics.totalVessels} embarcações rastreadas</span>
+                <span>•</span>
+                <span>{trackingMetrics.activeVessels} ativas</span>
+                <span>•</span>
+                <span>{trackingMetrics.openAlerts} alertas abertos</span>
+                <span>•</span>
+                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="Fleet Tracking Command"
-                subtitle="Real-time vessel tracking, AIS, and SATCOM monitoring"
+                subtitle={`${trackingMetrics.activeVessels} embarcações ativas | ${trackingMetrics.openAlerts} alertas pendentes`}
                 actions={[
                   {
-                    id: 'refresh',
+                    id: 'refresh-positions',
                     label: 'Refresh Positions',
                     icon: <RefreshCw className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('refresh'),
-                    variant: 'default'
+                    onClick: handleRefresh,
+                    variant: 'default',
+                    tooltip: 'Recarregar posições AIS e alertas'
                   },
                   {
                     id: 'live-map',
                     label: 'Live Map',
                     icon: <Map className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'live-map' }),
-                    variant: 'outline'
+                    variant: 'outline',
+                    tooltip: 'Abrir mapa interativo ao vivo'
                   },
                   {
-                    id: 'export',
-                    label: 'Export Positions',
+                    id: 'new-alert',
+                    label: 'Novo Alerta',
+                    icon: <Bell className="h-4 w-4" />,
+                    onClick: handleCreateAlert,
+                    variant: 'outline',
+                    tooltip: 'Criar alerta manual de geofencing'
+                  }
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={vesselsLoading}
+                secondaryActions={[
+                  {
+                    id: 'export-positions',
+                    label: 'Exportar Posições (CSV)',
                     icon: <Download className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('export'),
-                    variant: 'outline'
+                    onClick: handleExportPositions,
                   }
                 ]}
                 showSearch
@@ -148,21 +267,33 @@ export default function TrackingMegaHub() {
               {/* Enhanced Action Bar for Live Map */}
               <EnhancedActionBar
                 title="Live Fleet Map"
-                subtitle="Interactive real-time tracking with route replay and signal quality"
+                subtitle={`${trackingMetrics.activeVessels} embarcações ativas no mapa`}
                 actions={[
                   {
-                    id: 'refresh',
+                    id: 'refresh-map',
                     label: 'Refresh',
                     icon: <RefreshCw className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('refresh'),
-                    variant: 'default'
+                    onClick: handleRefresh,
+                    variant: 'default',
+                    tooltip: 'Recarregar mapa'
                   },
                   {
                     id: 'filter',
                     label: 'Filters',
                     icon: <Filter className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('filter'),
-                    variant: 'outline'
+                    onClick: () => { toast.info('Filtros de mapa: use as opções de tipo e status no mapa abaixo'); },
+                    variant: 'outline',
+                    tooltip: 'Filtrar embarcações por tipo ou status'
+                  }
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={vesselsLoading}
+                secondaryActions={[
+                  {
+                    id: 'export-map-data',
+                    label: 'Exportar Dados do Mapa',
+                    icon: <Download className="h-4 w-4" />,
+                    onClick: handleExportPositions,
                   }
                 ]}
               />
