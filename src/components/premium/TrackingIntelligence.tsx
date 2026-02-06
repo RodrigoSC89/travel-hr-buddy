@@ -97,7 +97,7 @@
          <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
            <CardContent className="p-4 text-center">
              <Ship className="h-5 w-5 text-primary mx-auto mb-2" />
-             <p className="text-2xl font-bold">{mockVessels.length}</p>
+             <p className="text-2xl font-bold">{vessels.length}</p>
              <p className="text-xs text-muted-foreground">Total Frota</p>
            </CardContent>
          </Card>
@@ -132,7 +132,7 @@
          <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
            <CardContent className="p-4 text-center">
              <Satellite className="h-5 w-5 text-accent-foreground mx-auto mb-2" />
-             <p className="text-2xl font-bold">{mockVessels.filter(v => v.connectivity !== "offline").length}</p>
+             <p className="text-2xl font-bold">{vessels.filter(v => v.connectivity !== "offline").length}</p>
              <p className="text-xs text-muted-foreground">Conectados</p>
            </CardContent>
          </Card>
@@ -177,7 +177,7 @@
              <CardContent>
                <ScrollArea className="h-[450px]">
                  <div className="space-y-4">
-                   {mockVessels.map((vessel) => {
+                   {vessels.map((vessel) => {
                      const statusConfig = getStatusConfig(vessel.status);
                      const StatusIcon = statusConfig.icon;
                      const connConfig = getConnectivityConfig(vessel.connectivity);

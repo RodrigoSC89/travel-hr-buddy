@@ -2,6 +2,7 @@
   * Maintenance Intelligence Component
   * Based on best practices from AMOS, DNV ShipManager, ABS Nautical
   * Features: Predictive maintenance, digital twin, IoT integration
+  * PATCH Sprint 12: Replaced mockEquipment with useMaintenanceIntelligenceData hook
   */
  
  import { useState } from "react";
@@ -10,64 +11,33 @@
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
  import { ScrollArea } from "@/components/ui/scroll-area";
+ import { Skeleton } from "@/components/ui/skeleton";
  import { 
    Wrench, AlertTriangle, CheckCircle2, Clock, TrendingUp,
    Cpu, Thermometer, Gauge, Activity, Calendar, Ship,
    Brain, Zap, Settings, BarChart3, Target, Timer
  } from "lucide-react";
- 
- interface Equipment {
-   id: string;
-   name: string;
-   category: string;
-   vessel: string;
-   healthScore: number;
-   runningHours: number;
-   nextService: number;
-   status: "operational" | "warning" | "critical" | "maintenance";
-   prediction: {
-     failureProbability: number;
-     daysToFailure: number;
-     confidence: number;
-   };
-   sensors: {
-     temperature: number;
-     vibration: number;
-     pressure: number;
-   };
- }
- 
- const mockEquipment: Equipment[] = [
-   {
-     id: "1", name: "Main Engine #1 (MAN B&W 6S50ME-C)", category: "Propulsão",
-     vessel: "MV Atlantic Explorer", healthScore: 87, runningHours: 12450,
-     nextService: 150, status: "operational",
-     prediction: { failureProbability: 12, daysToFailure: 45, confidence: 89 },
-     sensors: { temperature: 78, vibration: 2.4, pressure: 6.2 }
-   },
-   {
-     id: "2", name: "Auxiliary Generator #2 (Caterpillar 3512B)", category: "Geração",
-     vessel: "MV Atlantic Explorer", healthScore: 64, runningHours: 8920,
-     nextService: 80, status: "warning",
-     prediction: { failureProbability: 45, daysToFailure: 12, confidence: 94 },
-     sensors: { temperature: 92, vibration: 4.8, pressure: 5.8 }
-   },
-   {
-     id: "3", name: "Bow Thruster Hydraulic System", category: "Manobra",
-     vessel: "MV Pacific Voyager", healthScore: 42, runningHours: 5670,
-     nextService: 0, status: "critical",
-     prediction: { failureProbability: 78, daysToFailure: 5, confidence: 91 },
-     sensors: { temperature: 105, vibration: 7.2, pressure: 4.1 }
-   },
- ];
+ import { useMaintenanceIntelligenceData, type Equipment } from "@/hooks/useMaintenanceIntelligenceData";
  
  export default function MaintenanceIntelligence() {
+   const { data: equipment = [], isLoading } = useMaintenanceIntelligenceData();
    const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+
+   if (isLoading) {
+     return (
+       <div className="space-y-6">
+         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+           {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+         </div>
+         <Skeleton className="h-96" />
+       </div>
+     );
+   }
  
-   const criticalCount = mockEquipment.filter(e => e.status === "critical").length;
-   const warningCount = mockEquipment.filter(e => e.status === "warning").length;
-   const avgHealth = mockEquipment.reduce((sum, e) => sum + e.healthScore, 0) / mockEquipment.length;
-   const upcomingMaintenance = mockEquipment.filter(e => e.nextService <= 100).length;
+   const criticalCount = equipment.filter(e => e.status === "critical").length;
+   const warningCount = equipment.filter(e => e.status === "warning").length;
+   const avgHealth = equipment.length > 0 ? equipment.reduce((sum, e) => sum + e.healthScore, 0) / equipment.length : 0;
+   const upcomingMaintenance = equipment.filter(e => e.nextService <= 100).length;
  
    const getStatusConfig = (status: string) => {
      const config: Record<string, { color: string; icon: typeof CheckCircle2; label: string }> = {
@@ -120,7 +90,7 @@
          <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
            <CardContent className="p-4 text-center">
              <Cpu className="h-5 w-5 text-primary mx-auto mb-2" />
-             <p className="text-2xl font-bold">{mockEquipment.length}</p>
+             <p className="text-2xl font-bold">{equipment.length}</p>
              <p className="text-xs text-muted-foreground">Equipamentos</p>
            </CardContent>
          </Card>
@@ -172,9 +142,9 @@
              <CardContent>
                <ScrollArea className="h-[450px]">
                  <div className="space-y-4">
-                   {mockEquipment.map((equipment) => {
-                     const statusConfig = getStatusConfig(equipment.status);
-                     const StatusIcon = statusConfig.icon;
+                    {equipment.map((eq) => {
+                      const statusCfg = getStatusConfig(eq.status);
+                      const StatusIcon = statusCfg.icon;
                      
                      return (
                        <div 
