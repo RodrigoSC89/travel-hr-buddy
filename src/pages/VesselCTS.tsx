@@ -102,40 +102,41 @@ const VesselCTS = () => {
   const runConformityCheck = async () => {
     setIsChecking(true);
     try {
-      // Use local mock data instead of edge function for now
-      // This prevents fetch errors when the function doesn't exist
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Simulate conformity check results
-      const mockNonConformities: NonConformity[] = [
-        {
-          type: 'expired_cert',
-          severity: 'critical',
-          description: 'Certificado STCW expira em 15 dias',
-          crewMember: 'João Silva',
-          position: 'Chefe de Máquinas',
-          recommendation: 'Agendar renovação imediata do certificado STCW'
-        },
-        {
-          type: 'category_mismatch',
-          severity: 'high',
-          description: 'Categoria B insuficiente para posição de Capitão',
-          crewMember: 'Pedro Santos',
-          position: 'Capitão',
-          recommendation: 'Tripulante precisa de certificação Categoria A para esta função'
-        },
-        {
-          type: 'training_gap',
-          severity: 'medium',
-          description: 'Treinamento de DP não concluído',
-          crewMember: 'Maria Costa',
-          position: 'Oficial de Navegação',
-          recommendation: 'Concluir curso DP antes do próximo embarque'
+      // Derive non-conformities from real certification data
+      const realNonConformities: NonConformity[] = [];
+      
+      const now = new Date();
+      certifications.forEach(cert => {
+        if (!cert.expiry_date) return;
+        const daysUntil = Math.ceil((new Date(cert.expiry_date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntil < 0) {
+          realNonConformities.push({
+            type: 'expired_cert', severity: 'critical',
+            description: `Certificado ${cert.certification_type} expirado há ${Math.abs(daysUntil)} dias`,
+            crewMember: cert.crew_member_id || 'N/A',
+            recommendation: 'Renovação imediata necessária'
+          });
+        } else if (daysUntil <= 30) {
+          realNonConformities.push({
+            type: 'expired_cert', severity: 'high',
+            description: `Certificado ${cert.certification_type} expira em ${daysUntil} dias`,
+            crewMember: cert.crew_member_id || 'N/A',
+            recommendation: 'Agendar renovação do certificado'
+          });
         }
-      ];
+      });
 
-      setNonConformities(mockNonConformities);
-      toast.success('Verificação de conformidade concluída');
+      if (realNonConformities.length === 0) {
+        realNonConformities.push({
+          type: 'training_gap', severity: 'low',
+          description: 'Nenhuma não-conformidade crítica detectada',
+          recommendation: 'Continuar monitoramento regular'
+        });
+      }
+
+      setNonConformities(realNonConformities);
+      toast.success(`Verificação concluída: ${realNonConformities.length} item(s) encontrado(s)`);
     } catch (error) {
       logger.error('Error checking conformity:', error);
       toast.error('Erro na verificação de conformidade');

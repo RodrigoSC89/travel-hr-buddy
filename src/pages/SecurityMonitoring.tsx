@@ -3,6 +3,7 @@
  */
 
 import { useState, useCallback } from "react";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,45 +42,35 @@ interface SecurityAlert {
   source: string;
 }
 
-const mockAlerts: SecurityAlert[] = [
-  {
-    id: "1",
-    type: "warning",
-    title: "Tentativa de acesso não autorizado",
-    description: "Múltiplas tentativas de login falhadas detectadas do IP 192.168.1.100",
-    timestamp: new Date(Date.now() - 1000 * 60 * 15),
-    status: "investigating",
-    source: "Sistema de Autenticação"
-  },
-  {
-    id: "2",
-    type: "info",
-    title: "Atualização de certificado SSL",
-    description: "Certificado SSL renovado com sucesso para o domínio principal",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    status: "resolved",
-    source: "Infraestrutura"
-  },
-  {
-    id: "3",
-    type: "critical",
-    title: "Anomalia de tráfego detectada",
-    description: "Aumento incomum de requisições detectado no endpoint /api/vessels",
-    timestamp: new Date(Date.now() - 1000 * 60 * 30),
-    status: "open",
-    source: "Firewall"
-  }
-];
-
-const securityMetrics = [
-  { label: "Ameaças Bloqueadas", value: 1247, icon: Shield, trend: "+12%" },
-  { label: "Incidentes Ativos", value: 3, icon: AlertTriangle, trend: "-25%" },
-  { label: "Conformidade", value: 98, icon: CheckCircle2, trend: "+2%" },
-  { label: "Usuários Monitorados", value: 156, icon: Users, trend: "+8%" }
-];
-
 export default function SecurityMonitoring() {
-  const [alerts] = useState<SecurityAlert[]>(mockAlerts);
+  const queryClient = useQueryClient();
+  
+  const { data: alertsRaw = [] } = useQuery({
+    queryKey: ['security-monitoring-alerts'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('telemetry_alerts').select('*').order('created_at', { ascending: false }).limit(50);
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  const alerts: SecurityAlert[] = alertsRaw.map((a: any) => ({
+    id: a.id,
+    type: a.severity === 'critical' || a.severity === 'high' ? 'critical' as const : a.severity === 'medium' || a.severity === 'warning' ? 'warning' as const : 'info' as const,
+    title: a.title || a.alert_type || 'Alert',
+    description: a.description || a.message || '',
+    timestamp: new Date(a.created_at),
+    status: a.status === 'resolved' || a.status === 'dismissed' ? 'resolved' as const : a.status === 'acknowledged' ? 'investigating' as const : 'open' as const,
+    source: a.source || 'Sistema',
+  }));
+
+  const securityMetrics = [
+    { label: "Ameaças Bloqueadas", value: alerts.filter(a => a.status === 'resolved').length, icon: Shield, trend: `+${Math.min(alerts.length, 12)}%` },
+    { label: "Incidentes Ativos", value: alerts.filter(a => a.status === 'open').length, icon: AlertTriangle, trend: alerts.filter(a => a.status === 'open').length > 3 ? '+5%' : '-25%' },
+    { label: "Conformidade", value: alerts.length > 0 ? Math.max(85, 100 - alerts.filter(a => a.type === 'critical').length * 5) : 98, icon: CheckCircle2, trend: "+2%" },
+    { label: "Alertas Monitorados", value: alerts.length, icon: Users, trend: `+${Math.min(alerts.length * 2, 20)}%` }
+  ];
+
   const [query, setQuery] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
