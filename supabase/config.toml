@@ -394,7 +394,7 @@ comment = "Payroll calculation engine with anomaly detection and fiscal optimiza
 # ============================================
 
 [functions.ai-chat]
-verify_jwt = true
+verify_jwt = false
 comment = "AI chat interface for Nautilus assistant"
 
 [functions.assistant-query]
