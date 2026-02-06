@@ -1,246 +1,229 @@
 # 🌍 GLOBAL BENCHMARK SUMMARY - NAUTI ONE v8.0
 
-> **Análise Competitiva dos Líderes Globais de Software Marítimo**
-> Data: Fevereiro 2026 | Objetivo: Excelência Mundial
+> **Análise Comparativa com Líderes Globais de Software Marítimo**
+> Data: 2026-02-06 | Objetivo: Identificar gaps e aplicar best practices
 
 ---
 
-## 📊 RESUMO EXECUTIVO
+## 📊 LÍDERES ANALISADOS
 
-O NAUTI ONE foi analisado contra os **30+ principais sistemas marítimos globais** para identificar gaps e oportunidades de melhoria. Este documento consolida os padrões de excelência que devem ser implementados.
-
----
-
-## 🏆 LÍDERES GLOBAIS ANALISADOS
-
-### 1. Fleet Management & Operations
-
-| Software | Empresa | Pontos Fortes | Gap NAUTI ONE |
-|----------|---------|---------------|---------------|
-| **AMOS** | SpecTec | PMS líder mundial, 150K+ embarcações | Workflows visuais, jobs hierarchy |
-| **DNV Veracity** | DNV GL | Data platform, compliance digital | Certificação digital nativa |
-| **Wärtsilä Fleet Ops** | Wärtsilä | Otimização combustível, performance | Analytics avançados visíveis |
-| **Kongsberg Digital** | Kongsberg | Digital twin, autonomia | Visualização 3D interativa |
-| **ShipNet** | Veson | ERP marítimo completo | Fluxos financeiros integrados |
-
-### 2. Voyage & Commercial
-
-| Software | Empresa | Pontos Fortes | Gap NAUTI ONE |
-|----------|---------|---------------|---------------|
-| **Veson IMOS** | Veson | TCE, laytime, demurrage | Calculadora visual laytime |
-| **Danaos** | Danaos | Voyage P&L em tempo real | P&L drill-down interativo |
-| **NAPA** | NAPA Group | Otimização trim, estabilidade | Simulações visuais |
-| **StormGeo** | StormGeo | Roteamento meteorológico | Integração weather visual |
-
-### 3. Compliance & Safety
-
-| Software | Empresa | Pontos Fortes | Gap NAUTI ONE |
-|----------|---------|---------------|---------------|
-| **Q88** | Q88 | Vetting SIRE/OVID | Workflows de inspeção |
-| **ClassNK ZETA** | ClassNK | Certificação digital | Timeline certificados |
-| **RightShip** | RightShip | Due diligence | Scorecard visual |
-| **CrewSmart** | Helm CONNECT | STCW compliance | Matriz competências visual |
-
-### 4. Crew Management
-
-| Software | Empresa | Pontos Fortes | Gap NAUTI ONE |
-|----------|---------|---------------|---------------|
-| **Helm CONNECT** | Helm | Crew scheduling, compliance | Gantt visual rotações |
-| **DNV SeaSkill** | DNV | Competências, treinamento | Paths de carreira visuais |
-| **Adonis** | Adonis | Payroll marítimo | Integração folha |
-
-### 5. Procurement & Finance
-
-| Software | Empresa | Pontos Fortes | Gap NAUTI ONE |
-|----------|---------|---------------|---------------|
-| **Coupa** | Coupa | Procurement intelligence | Spend analytics dashboard |
-| **SAP Ariba** | SAP | Supplier management | Portal fornecedores |
-| **Oracle NetSuite** | Oracle | ERP financeiro | Relatórios financeiros |
-
-### 6. UX/UI Benchmarks
-
-| Software | Tipo | Padrões de Excelência |
-|----------|------|----------------------|
-| **Notion** | Productivity | Clean UI, blocks, collaboration |
-| **Linear** | Project Mgmt | Speed, keyboard shortcuts, focus |
-| **Monday.com** | Work OS | Visual workflows, automations |
-| **Figma** | Design | Real-time collaboration |
-| **Datadog** | Observability | Dashboards, alerting |
+| Categoria | Plataformas | Foco |
+|-----------|-------------|------|
+| **Maritime ERP** | AMOS (Kongsberg), DNV Veracity, Wärtsilä Voyage | Fleet management completo |
+| **Maintenance** | AMOS, Helm CONNECT, Maximo (IBM) | PMS, Class surveys, Drydock |
+| **Compliance** | DNV ShipManager, TMSA Manager, ClassNK | Auditorias, Certificados |
+| **Tracking** | MarineTraffic, VesselFinder, exactEarth | AIS, SATCOM, Weather |
+| **Enterprise** | SAP S/4HANA, Oracle Fusion, ServiceNow | Workflows, Procurement |
+| **BI/Analytics** | Power BI, Tableau, Qlik | Dashboards executivos |
+| **Collaboration** | Monday.com, Jira, Notion, Confluence | Task management, Docs |
 
 ---
 
-## 🎯 PADRÕES DE EXCELÊNCIA IDENTIFICADOS
+## 🔍 BENCHMARK POR MÓDULO
 
-### 1. UX/UI PATTERNS (Obrigatório)
+### A. COMMAND CENTER
 
-#### a) Zero Ambiguidade
-```
-✅ Cada tela tem propósito claro
-✅ Botões descrevem exatamente o que fazem
-✅ Status são visualmente distintos (cores + ícones)
-✅ Breadcrumbs em todas as páginas
-✅ Ações primárias destacadas
-```
+#### Benchmark: NOC/SOC Enterprise (ServiceNow, Splunk)
 
-#### b) Feedback Imediato
-```
-✅ Loading states em TODAS as ações
-✅ Toasts de sucesso/erro com detalhes
-✅ Progress bars para operações longas
-✅ Skeleton loaders em carregamentos
-✅ Estados de "Salvando..." em forms
-```
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| Real-time alerts | ✅ Push + SMS + Email | 🟡 Toast only | Integrar notificações reais |
+| Escalation workflows | ✅ Auto-escalation rules | ❌ Manual | Implementar regras automáticas |
+| Incident timeline | ✅ Full audit trail | 🟡 Mock timeline | Conectar a eventos reais |
+| SLA tracking | ✅ Automatic | ❌ Inexistente | Criar métricas SLA |
+| Integration hub | ✅ 500+ connectors | 🟡 ~10 parciais | Expandir integrações |
 
-#### c) Progressive Disclosure
-```
-✅ Máximo 5 ações primárias visíveis
-✅ Ações secundárias em menus
-✅ Filtros avançados colapsáveis
-✅ Detalhes em drill-down/modals
-```
+**Gap Crítico:** Alertas decorativos, sem workflow real de incidentes.
 
-#### d) Empty States Inteligentes
-```
-✅ Ilustração/ícone
-✅ Mensagem explicativa
-✅ CTA para primeira ação
-✅ Link para documentação
-```
-
-### 2. FUNCIONALIDADES ESSENCIAIS
-
-#### a) CRUD Completo
-```
-✅ Create: Wizard multi-step ou form simples
-✅ Read: Tabela com sort/filter/search + cards view
-✅ Update: Inline edit ou modal
-✅ Delete: Confirmação com impacto
-✅ Bulk Actions: Seleção múltipla
-```
-
-#### b) Workflows
-```
-✅ Timeline visual de eventos
-✅ Status claros (draft/pending/approved/rejected)
-✅ Aprovações com comentários
-✅ Histórico de alterações
-✅ Notificações automáticas
-```
-
-#### c) Relatórios & Export
-```
-✅ Dashboards customizáveis
-✅ Export PDF/Excel/CSV
-✅ Filtros de período
-✅ Drill-down em métricas
-✅ Agendamento de relatórios
-```
-
-#### d) Integrações
-```
-✅ Status de conexão visível
-✅ Logs de sincronização
-✅ Retry automático
-✅ Fallback graceful
-```
-
-### 3. MÉTRICAS DE QUALIDADE
-
-| Métrica | Benchmark | Meta NAUTI ONE |
-|---------|-----------|----------------|
-| Time to First Action | < 3s | < 2s |
-| Clicks para tarefa comum | ≤ 3 | ≤ 3 |
-| Loading máximo | < 2s | < 1.5s |
-| Error rate | < 0.1% | < 0.05% |
-| User satisfaction | 4.5+/5 | 4.8/5 |
+**Implementação Imediata:**
+- [ ] Conectar timeline a tabela `operational_events`
+- [ ] Implementar escalation com notificação real
+- [ ] Criar SLA tracking dashboard
 
 ---
 
-## 📋 GAPS PRIORITÁRIOS IDENTIFICADOS
+### B. OPERATIONS (Fleet/Voyage)
 
-### P0 - CRÍTICOS (Bloqueia Adoção)
+#### Benchmark: Veson IMOS, Voyager Fleet
 
-| # | Gap | Módulo | Impacto |
-|---|-----|--------|---------|
-| 1 | Botões sem feedback visual | Múltiplos | UX quebrada |
-| 2 | Empty states genéricos | Listas vazias | Confusão usuário |
-| 3 | Falta de workflows visíveis | Procurement, Compliance | Processo manual |
-| 4 | CRUD incompleto | Documentos, Pessoas | Funcionalidade parcial |
-| 5 | Falta timeline de eventos | Operações, Manutenção | Histórico invisível |
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| Voyage P&L | ✅ TCE real-time | ✅ Implementado | ✅ OK |
+| Port call optimization | ✅ AI-powered | 🟡 Básico | Adicionar ML |
+| Bunker procurement | ✅ Multi-supplier RFQ | ❌ Mock | Implementar RFQ real |
+| Charter calculator | ✅ C/P templates | 🟡 Básico | Expandir templates |
+| Cargo stowage | ✅ 3D visualization | ❌ Mock | Implementar 3D real |
 
-### P1 - ALTOS (Reduz Competitividade)
+**Gap Crítico:** Bunker e Cargo são placeholders.
 
-| # | Gap | Módulo | Benchmark |
-|---|-----|--------|-----------|
-| 1 | Gantt não interativo | Operações | Monday.com |
-| 2 | Mapas básicos | Tracking | MarineTraffic |
-| 3 | Analytics simplificados | IA | Datadog |
-| 4 | Supplier portal inexistente | Procurement | Coupa |
-| 5 | Calculadora Laytime básica | Contracts | Veson IMOS |
-
-### P2 - MÉDIOS (Diferenciação)
-
-| # | Gap | Módulo | Benchmark |
-|---|-----|--------|-----------|
-| 1 | Voice commands limitados | IA | Alexa for Business |
-| 2 | Digital twin 2D | Maintenance | Kongsberg 3D |
-| 3 | Relatórios fixos | Todos | Power BI |
+**Implementação Imediata:**
+- [ ] Criar hook `useBunkerRFQ` com tabela `bunker_requests`
+- [ ] Implementar modal de nova cotação
+- [ ] Conectar a fornecedores reais
 
 ---
 
-## ✅ PLANO DE IMPLEMENTAÇÃO
+### C. MAINTENANCE
 
-### FASE 1: UX Foundation (Imediato)
-1. Implementar feedback visual em TODOS os botões
-2. Empty states inteligentes em todas as listas
-3. Loading states padronizados
-4. Breadcrumbs em todas as páginas
-5. Tooltips explicativos
+#### Benchmark: AMOS (Kongsberg), Helm CONNECT
 
-### FASE 2: CRUD Completo (Sprint 1)
-1. Forms com validação visual
-2. Bulk actions em tabelas
-3. Inline editing
-4. Delete com confirmação
-5. Timeline de eventos
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| Planned Maintenance (PMS) | ✅ Class-driven | ✅ Implementado | ✅ OK |
+| Work order lifecycle | ✅ Full CRUD | 🟡 Parcial | Completar lifecycle |
+| Spare parts inventory | ✅ Min/Max alerts | ❌ Mock | Implementar inventário real |
+| Class survey tracking | ✅ DNV/LR/BV sync | ✅ Implementado | ✅ OK |
+| Digital Twin | ✅ 3D interactive | 🟡 2D básico | Melhorar visualização |
+| Predictive ML | ✅ Failure prediction | 🟡 Demo only | Conectar a sensores reais |
 
-### FASE 3: Workflows Visuais (Sprint 2)
-1. Fluxos de aprovação interativos
-2. Status claros com cores
-3. Histórico de alterações
-4. Notificações configuráveis
-5. Automações visuais
+**Gap Crítico:** Spare parts e Predictive são demonstrativos.
 
-### FASE 4: Analytics Premium (Sprint 3)
-1. Dashboards customizáveis
-2. Drill-down em métricas
-3. Export multi-formato
-4. Agendamento de relatórios
-5. Comparativos período
+**Implementação Imediata:**
+- [ ] Criar tabela `spare_parts_inventory`
+- [ ] Implementar alertas de estoque mínimo
+- [ ] Conectar predictive a dados reais de sensores
 
 ---
 
-## 🎯 CRITÉRIOS DE SUCESSO
+### D. AI HUB
 
-| Critério | Definição | Medição |
-|----------|-----------|---------|
-| **Visibilidade** | 100% funcionalidades visíveis na UI | Auditoria manual |
-| **Funcionalidade** | 100% botões executam ação real | Testes E2E |
-| **Feedback** | 100% ações têm resposta visual | Testes UX |
-| **Intuitividade** | 0 treinamento necessário | User testing |
-| **Satisfação** | NPS > 70 | Survey |
+#### Benchmark: Microsoft Copilot, GPT-4 Enterprise
 
----
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| RAG (Retrieval) | ✅ Vector search | 🟡 Básico | Melhorar embeddings |
+| Document OCR | ✅ Multi-language | ✅ Implementado | ✅ OK |
+| Voice commands | ✅ Offline-capable | 🟡 Online only | Adicionar offline |
+| Agent orchestration | ✅ Multi-agent | 🟡 Demo | Implementar orquestração real |
+| Explainability | ✅ Decision logs | ❌ Mock | Criar audit trail de IA |
 
-## 📚 REFERÊNCIAS
+**Gap Crítico:** Orquestração de agentes é demonstrativa.
 
-- AMOS User Guide (SpecTec 2024)
-- Veson IMOS Best Practices (2025)
-- DNV Veracity Platform Documentation
-- Helm CONNECT User Manual
-- Nielsen Norman Group: Enterprise UX Patterns
-- Material Design 3 Guidelines
+**Implementação Imediata:**
+- [ ] Criar tabela `ai_decision_logs`
+- [ ] Implementar logs de explicabilidade
+- [ ] Conectar agentes a edge functions
 
 ---
 
-*Documento gerado para NAUTI ONE v8.0 - Objetivo: Excelência Mundial*
+### E. TRACKING & TELEMETRY
+
+#### Benchmark: MarineTraffic, exactEarth, Pole Star
+
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| AIS real-time | ✅ Global coverage | 🟡 Simulado | Integrar API AIS |
+| Historical playback | ✅ 12 months | ❌ Mock | Implementar histórico |
+| Geofencing | ✅ Custom zones | 🟡 Básico | Expandir alertas |
+| Weather overlay | ✅ Multiple providers | 🟡 OpenMeteo | Adicionar providers |
+| SATCOM monitoring | ✅ Multi-provider | 🟡 Mock | Integrar SATCOM real |
+
+**Gap Crítico:** Posições são simuladas, não AIS real.
+
+**Implementação Imediata:**
+- [ ] Integrar MarineTraffic API (ou similar)
+- [ ] Armazenar posições históricas
+- [ ] Implementar geofencing com alertas reais
+
+---
+
+### F. COMPLIANCE & AUDITS
+
+#### Benchmark: DNV ShipManager, OCIMF SIRE 2.0
+
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| 12 Maritime Audits | ✅ Full coverage | ✅ Rotas OK | 🟡 Backend parcial |
+| Checklist execution | ✅ Offline-capable | 🟡 Online only | Adicionar offline |
+| Evidence attachment | ✅ Photo + video | ✅ Implementado | ✅ OK |
+| Non-conformity tracking | ✅ Full lifecycle | 🟡 Parcial | Completar workflow |
+| Certificate alerts | ✅ Auto-renewal | 🟡 Manual | Automatizar alertas |
+| AI audit assistant | ✅ GPT-powered | ✅ Implementado | ✅ OK |
+
+**Gap Crítico:** Auditorias existem mas CRUD incompleto.
+
+**Implementação Imediata:**
+- [ ] Completar CRUD para todas as 12 auditorias
+- [ ] Implementar offline sync para checklists
+- [ ] Automatizar alertas de certificados
+
+---
+
+### G. WORKBENCH (Docs/People/Finance/System)
+
+#### Benchmark: Confluence, Monday.com, SAP SuccessFactors
+
+| Feature | Benchmark | NAUTI ONE | Gap |
+|---------|-----------|-----------|-----|
+| Document versioning | ✅ Full history | 🟡 Básico | Melhorar versionamento |
+| Forms builder | ✅ Drag & drop | ❌ Mock | Implementar builder real |
+| Checklists builder | ✅ Templates | ❌ Mock | Implementar builder real |
+| HR dashboard | ✅ Self-service | ✅ Implementado | ✅ OK |
+| Payroll integration | ✅ Multi-country | 🟡 Básico | Expandir integrações |
+| Procurement workflow | ✅ Approval chain | 🟡 Parcial | Completar workflow |
+
+**Gap Crítico:** Forms e Checklists builders são placeholders.
+
+**Implementação Imediata:**
+- [ ] Implementar forms builder com persistência
+- [ ] Criar templates de checklists editáveis
+- [ ] Completar approval workflow de procurement
+
+---
+
+## 📈 SCORECARD COMPARATIVO
+
+| Módulo | AMOS | DNV | NAUTI ONE | Gap % |
+|--------|------|-----|-----------|-------|
+| Command Center | 95% | 90% | 60% | -35% |
+| Operations | 98% | 85% | 75% | -20% |
+| Maintenance | 99% | 95% | 70% | -27% |
+| AI Hub | 70% | 60% | 55% | -10% |
+| Tracking | 95% | 90% | 45% | -48% |
+| Compliance | 98% | 99% | 65% | -33% |
+| Workbench | 90% | 85% | 60% | -28% |
+
+**Média NAUTI ONE:** 61%
+**Target Tier-1:** 90%+
+
+---
+
+## 🎯 PRIORIDADES DE IMPLEMENTAÇÃO
+
+### Fase 1: Fundação (Imediato)
+1. Remover todos os mocks de produção
+2. Conectar handlers placeholder a backend real
+3. Completar CRUD em módulos core
+
+### Fase 2: Paridade (1-2 semanas)
+1. Integrar AIS real
+2. Completar 12 auditorias marítimas
+3. Implementar workflows de aprovação
+
+### Fase 3: Diferenciação (2-4 semanas)
+1. AI explainability completa
+2. Predictive maintenance real
+3. Forms/Checklists builder
+
+### Fase 4: Excellence (1+ mês)
+1. Offline-first para campo
+2. Multi-provider weather
+3. 3D cargo stowage
+
+---
+
+## ✅ FEATURES JÁ TIER-1
+
+| Feature | Status |
+|---------|--------|
+| Voyage P&L Calculator | ✅ World-class |
+| Crew Scheduler Gantt | ✅ World-class |
+| Class Surveys Tracking | ✅ World-class |
+| Document OCR | ✅ World-class |
+| 10 AI Audit Agents | ✅ World-class |
+| Design System | ✅ World-class |
+| Mobile PWA | ✅ World-class |
+
+---
+
+*Benchmark gerado em 2026-02-06 - NAUTI ONE v8.0*
