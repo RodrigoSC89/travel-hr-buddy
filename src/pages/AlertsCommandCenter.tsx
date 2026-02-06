@@ -10,7 +10,7 @@
  * - Configuration and settings
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,9 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAlertsRealData } from "@/hooks/useAlertsRealData";
+import type { SmartAlert as AlertType, SystemHealth as HealthType } from "@/hooks/useAlertsRealData";
 
 // Price Alerts Components
 import { PriceAlertsDashboard } from "@/components/price-alerts/price-alerts-dashboard-integrated";
@@ -55,23 +57,9 @@ import {
   Gauge
 } from "lucide-react";
 
-// Types for Intelligent Alerts
-interface SmartAlert {
-  id: string;
-  type: "critical" | "warning" | "info" | "success";
-  category: "maintenance" | "safety" | "efficiency" | "compliance" | "crew" | "weather" | "price";
-  title: string;
-  description: string;
-  vessel_id?: string;
-  vessel_name?: string;
-  priority: "high" | "medium" | "low";
-  status: "new" | "acknowledged" | "in_progress" | "resolved";
-  created_at: string;
-  resolved_at?: string;
-  ai_confidence: number;
-  recommended_actions: string[];
-  impact_assessment: string;
-}
+// Re-export types from hook for local use (avoid conflicts)
+type LocalSmartAlert = AlertType;
+type LocalSystemHealth = HealthType;
 
 interface AIInsight {
   id: string;
@@ -90,234 +78,76 @@ interface AIInsight {
   };
 }
 
-interface SystemHealth {
-  overall_score: number;
-  fleet_efficiency: number;
-  safety_compliance: number;
-  crew_performance: number;
-  fuel_optimization: number;
-  maintenance_status: number;
-  weather_preparedness: number;
-  price_monitoring: number;
-  last_updated: string;
-}
-
 const AlertsCommandCenter = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [smartAlerts, setSmartAlerts] = useState<SmartAlert[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
-  const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
   const [filterType, setFilterType] = useState("all");
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
-  useEffect(() => {
-    loadData();
+  // Use real data hook instead of mock
+  const {
+    alerts: smartAlerts,
+    systemHealth,
+    isLoading: loading,
+    error,
+    refetch,
+    acknowledgeAlert,
+    resolveAlert,
+    exportAlerts,
+    stats
+  } = useAlertsRealData();
+
+  // AI Insights (can be extended to fetch from real source later)
+  React.useEffect(() => {
+    setAiInsights([
+      {
+        id: "1",
+        insight_type: "predictive",
+        title: "Previsão de Demanda de Combustível",
+        description: "Baseado em padrões históricos, prevê-se aumento de 18% no consumo nos próximos 15 dias.",
+        confidence_score: 89,
+        business_impact: "high",
+        data_sources: ["Consumo histórico", "Previsão meteorológica", "Rotas planejadas"],
+        recommendations: [
+          "Negociar contratos de combustível com fornecedores",
+          "Otimizar rotas para reduzir consumo"
+        ],
+        timeline: "15 dias",
+        cost_benefit: { potential_savings: 45000, implementation_cost: 8000, roi_percentage: 462 }
+      },
+      {
+        id: "2",
+        insight_type: "prescriptive",
+        title: "Tendência de Preços - VLSFO Global",
+        description: "Análise preditiva indica queda de 8% nos preços nas próximas 2 semanas.",
+        confidence_score: 85,
+        business_impact: "high",
+        data_sources: ["Mercado global", "Tendências OPEC", "Dados históricos"],
+        recommendations: [
+          "Aguardar compra para período de baixa",
+          "Manter estoque mínimo operacional"
+        ],
+        timeline: "14 dias",
+        cost_benefit: { potential_savings: 32000, implementation_cost: 0, roi_percentage: 100 }
+      },
+      {
+        id: "3",
+        insight_type: "diagnostic",
+        title: "Análise de Padrões de Manutenção",
+        description: "Manutenção preditiva pode reduzir custos de reparo em 35%.",
+        confidence_score: 87,
+        business_impact: "high",
+        data_sources: ["Histórico de manutenção", "Sensores IoT", "Relatórios de inspeção"],
+        recommendations: [
+          "Instalar sensores IoT adicionais",
+          "Implementar algoritmo de manutenção preditiva"
+        ],
+        timeline: "60 dias",
+        cost_benefit: { potential_savings: 75000, implementation_cost: 25000, roi_percentage: 200 }
+      }
+    ]);
   }, []);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      
-      // Mock intelligent alerts including price alerts
-      const mockAlerts: SmartAlert[] = [
-        {
-          id: "1",
-          type: "critical",
-          category: "maintenance",
-          title: "Falha Iminente do Motor - MV Atlantic Explorer",
-          description: "IA detectou padrões anômalos na temperatura e vibração do motor principal. Falha prevista em 72h.",
-          vessel_id: "1",
-          vessel_name: "MV Atlantic Explorer",
-          priority: "high",
-          status: "new",
-          created_at: new Date().toISOString(),
-          ai_confidence: 94,
-          recommended_actions: [
-            "Inspecionar sistema de refrigeração imediatamente",
-            "Verificar níveis de óleo e filtros",
-            "Agendar parada para manutenção preventiva"
-          ],
-          impact_assessment: "Potencial parada operacional de 48-72h, custo estimado R$ 85.000"
-        },
-        {
-          id: "2",
-          type: "warning",
-          category: "price",
-          title: "Alerta de Preço - Combustível MGO",
-          description: "Preço do MGO ultrapassou threshold de $850/ton em Roterdã",
-          priority: "high",
-          status: "new",
-          created_at: new Date().toISOString(),
-          ai_confidence: 98,
-          recommended_actions: [
-            "Considerar abastecimento em porto alternativo",
-            "Negociar contrato spot com fornecedor",
-            "Avaliar rota alternativa para economia"
-          ],
-          impact_assessment: "Impacto estimado de +12% no custo operacional"
-        },
-        {
-          id: "3",
-          type: "warning",
-          category: "weather",
-          title: "Condições Meteorológicas Adversas - Rota Santos",
-          description: "Tempestade tropical se aproximando da rota. Ventos de até 45 nós previstos.",
-          vessel_id: "2",
-          vessel_name: "MS Ocean Pioneer",
-          priority: "high",
-          status: "acknowledged",
-          created_at: new Date().toISOString(),
-          ai_confidence: 87,
-          recommended_actions: [
-            "Considerar rota alternativa via Canal de São Sebastião",
-            "Reduzir velocidade para 8 nós",
-            "Alertar tripulação sobre condições adversas"
-          ],
-          impact_assessment: "Atraso estimado de 6-8h, consumo adicional de combustível"
-        },
-        {
-          id: "4",
-          type: "info",
-          category: "efficiency",
-          title: "Oportunidade de Otimização - Consumo de Combustível",
-          description: "IA identificou rota 12% mais eficiente para próxima viagem.",
-          vessel_id: "3",
-          vessel_name: "MV Pacific Star",
-          priority: "medium",
-          status: "new",
-          created_at: new Date().toISOString(),
-          ai_confidence: 91,
-          recommended_actions: [
-            "Implementar rota otimizada no sistema de navegação",
-            "Ajustar velocidade para 14 nós durante o trajeto"
-          ],
-          impact_assessment: "Economia estimada de R$ 15.000 em combustível"
-        },
-        {
-          id: "5",
-          type: "success",
-          category: "price",
-          title: "Preço Favorável - VLSFO Singapore",
-          description: "Preço do VLSFO atingiu mínima de 30 dias em Singapore: $620/ton",
-          priority: "medium",
-          status: "new",
-          created_at: new Date().toISOString(),
-          ai_confidence: 100,
-          recommended_actions: [
-            "Considerar compra antecipada",
-            "Avaliar capacidade de armazenamento"
-          ],
-          impact_assessment: "Oportunidade de economia de ~$8.500"
-        },
-        {
-          id: "6",
-          type: "warning",
-          category: "crew",
-          title: "Fadiga da Tripulação Detectada - MS Baltic Wind",
-          description: "Padrões de trabalho indicam níveis elevados de fadiga em 60% da tripulação.",
-          vessel_id: "4",
-          vessel_name: "MS Baltic Wind",
-          priority: "medium",
-          status: "in_progress",
-          created_at: new Date().toISOString(),
-          ai_confidence: 83,
-          recommended_actions: [
-            "Reorganizar escalas de trabalho",
-            "Implementar pausas obrigatórias de 2h"
-          ],
-          impact_assessment: "Risco de acidentes aumentado em 35%"
-        }
-      ];
-
-      const mockInsights: AIInsight[] = [
-        {
-          id: "1",
-          insight_type: "predictive",
-          title: "Previsão de Demanda de Combustível",
-          description: "Baseado em padrões históricos, prevê-se aumento de 18% no consumo nos próximos 15 dias.",
-          confidence_score: 89,
-          business_impact: "high",
-          data_sources: ["Consumo histórico", "Previsão meteorológica", "Rotas planejadas"],
-          recommendations: [
-            "Negociar contratos de combustível com fornecedores",
-            "Otimizar rotas para reduzir consumo"
-          ],
-          timeline: "15 dias",
-          cost_benefit: {
-            potential_savings: 45000,
-            implementation_cost: 8000,
-            roi_percentage: 462
-          }
-        },
-        {
-          id: "2",
-          insight_type: "prescriptive",
-          title: "Tendência de Preços - VLSFO Global",
-          description: "Análise preditiva indica queda de 8% nos preços nas próximas 2 semanas.",
-          confidence_score: 85,
-          business_impact: "high",
-          data_sources: ["Mercado global", "Tendências OPEC", "Dados históricos"],
-          recommendations: [
-            "Aguardar compra para período de baixa",
-            "Manter estoque mínimo operacional"
-          ],
-          timeline: "14 dias",
-          cost_benefit: {
-            potential_savings: 32000,
-            implementation_cost: 0,
-            roi_percentage: 100
-          }
-        },
-        {
-          id: "3",
-          insight_type: "diagnostic",
-          title: "Análise de Padrões de Manutenção",
-          description: "Manutenção preditiva pode reduzir custos de reparo em 35%.",
-          confidence_score: 87,
-          business_impact: "high",
-          data_sources: ["Histórico de manutenção", "Sensores IoT", "Relatórios de inspeção"],
-          recommendations: [
-            "Instalar sensores IoT adicionais",
-            "Implementar algoritmo de manutenção preditiva"
-          ],
-          timeline: "60 dias",
-          cost_benefit: {
-            potential_savings: 75000,
-            implementation_cost: 25000,
-            roi_percentage: 200
-          }
-        }
-      ];
-
-      const mockSystemHealth: SystemHealth = {
-        overall_score: 87,
-        fleet_efficiency: 89,
-        safety_compliance: 96,
-        crew_performance: 84,
-        fuel_optimization: 91,
-        maintenance_status: 78,
-        weather_preparedness: 93,
-        price_monitoring: 95,
-        last_updated: new Date().toISOString()
-      };
-
-      setSmartAlerts(mockAlerts);
-      setAiInsights(mockInsights);
-      setSystemHealth(mockSystemHealth);
-      
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar dados",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getAlertIcon = (type: SmartAlert["type"]) => {
+  const getAlertIcon = (type: LocalSmartAlert["type"]) => {
     switch (type) {
       case "critical": return AlertTriangle;
       case "warning": return Bell;
@@ -327,7 +157,7 @@ const AlertsCommandCenter = () => {
     }
   };
 
-  const getAlertColor = (type: SmartAlert["type"]) => {
+  const getAlertColor = (type: LocalSmartAlert["type"]) => {
     switch (type) {
       case "critical": return "border-destructive bg-destructive/10";
       case "warning": return "border-yellow-500 bg-yellow-500/10";
@@ -337,7 +167,7 @@ const AlertsCommandCenter = () => {
     }
   };
 
-  const getCategoryIcon = (category: SmartAlert["category"]) => {
+  const getCategoryIcon = (category: LocalSmartAlert["category"]) => {
     switch (category) {
       case "maintenance": return Ship;
       case "safety": return Shield;
@@ -356,40 +186,28 @@ const AlertsCommandCenter = () => {
     return "text-red-600";
   };
 
-  const [selectedAlert, setSelectedAlert] = useState<SmartAlert | null>(null);
+  const [selectedAlert, setSelectedAlert] = useState<LocalSmartAlert | null>(null);
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
 
   const filteredAlerts = smartAlerts.filter(alert => 
     filterType === "all" || alert.category === filterType
   );
 
-  const handleViewDetails = (alert: SmartAlert) => {
+  const handleViewDetails = (alert: LocalSmartAlert) => {
     setSelectedAlert(alert);
     setShowDetailsDialog(true);
   };
 
-  const handleResolveAlert = (alert: SmartAlert) => {
-    setSmartAlerts(prev => prev.map(a => 
-      a.id === alert.id ? { ...a, status: "resolved" as const, resolved_at: new Date().toISOString() } : a
-    ));
-    toast({
-      title: "✅ Alerta Resolvido",
-      description: `O alerta "${alert.title}" foi marcado como resolvido.`
-    });
+  const handleResolveAlert = (alert: LocalSmartAlert) => {
+    resolveAlert(alert.id);
   };
 
-  const handleAcknowledgeAlert = (alert: SmartAlert) => {
-    setSmartAlerts(prev => prev.map(a => 
-      a.id === alert.id ? { ...a, status: "acknowledged" as const } : a
-    ));
-    toast({
-      title: "👁️ Alerta Reconhecido",
-      description: `Você reconheceu o alerta "${alert.title}".`
-    });
+  const handleAcknowledgeAlert = (alert: LocalSmartAlert) => {
+    acknowledgeAlert(alert.id);
   };
 
-  const criticalAlerts = smartAlerts.filter(alert => alert.type === "critical").length;
-  const warningAlerts = smartAlerts.filter(alert => alert.type === "warning").length;
+  const criticalAlerts = stats.critical;
+  const warningAlerts = stats.warning;
   const priceAlerts = smartAlerts.filter(alert => alert.category === "price").length;
 
   if (loading) {
