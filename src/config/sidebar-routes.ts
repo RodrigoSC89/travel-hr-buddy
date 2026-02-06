@@ -32,7 +32,7 @@ import {
   DollarSign, Leaf, ClipboardList, Cloud,
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
-  Briefcase
+  Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -103,6 +103,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Missions", path: "/ops?tab=missions", icon: Target, emoji: "🎯" },
       { label: "Logistics", path: "/ops?tab=logistics", icon: Package, emoji: "📦" },
       { label: "Contracts", path: "/ops?tab=contracts", icon: FileText, emoji: "📝" },
+      { label: "Submarine Ops", path: "/ocean-sonar", icon: Waves, emoji: "🌊", badge: "DEMO", status: "beta" as const },
+      { label: "Operational Calendar", path: "/operational-calendar", icon: Calendar, emoji: "📅" },
+      { label: "Task Management", path: "/task-management", icon: ClipboardList, emoji: "✅" },
     ],
   },
 
@@ -139,6 +142,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "11 AI Modules", path: "/ai?tab=modules", icon: Brain, emoji: "🌟", badge: "11" },
       { label: "RAG & OCR", path: "/ai?tab=rag", icon: FileText, emoji: "📄" },
       { label: "Analytics", path: "/ai?tab=analytics", icon: BarChart3, emoji: "📊" },
+      { label: "DP Intelligence", path: "/dp-intelligence", icon: Cpu, emoji: "🎛️" },
     ],
   },
 
@@ -155,6 +159,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "SATCOM", path: "/tracking?tab=satcom", icon: Radio, emoji: "📻" },
       { label: "Weather AI", path: "/tracking?tab=weather", icon: Cloud, emoji: "🌤️", badge: "AI" },
       { label: "Alerts", path: "/tracking?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
+      { label: "Weather Maritime", path: "/weather-maritime", icon: Cloud, emoji: "🌊" },
+      { label: "IoT Dashboard", path: "/iot-dashboard", icon: Cpu, emoji: "📟" },
     ],
   },
 
@@ -199,6 +205,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "💰 Finance", path: "/workbench?section=finance", icon: DollarSign, emoji: "💰" },
       { label: "✈️ Travel", path: "/workbench?section=travel", icon: Plane, emoji: "✈️" },
       { label: "⚙️ System", path: "/workbench?section=system", icon: Settings, emoji: "⚙️" },
+      { label: "🎓 Academy", path: "/nautilus-academy", icon: GraduationCap, emoji: "🎓" },
+      { label: "📚 Knowledge Hub", path: "/knowledge-hub", icon: BookOpen, emoji: "📚" },
+      { label: "🏆 Gamification", path: "/gamification", icon: Trophy, emoji: "🏆" },
+      { label: "🤝 Collaboration", path: "/collaboration", icon: Handshake, emoji: "🤝" },
+      { label: "🌱 Sustainability", path: "/sustainability-score", icon: Leaf, emoji: "🌱" },
+      { label: "🛡️ Blockchain", path: "/blockchain-compliance", icon: Shield, emoji: "🔗" },
       { label: "🛠️ Dev Tools", path: "/workbench?section=system&view=dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
     ],
   },
