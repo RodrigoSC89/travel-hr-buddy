@@ -66,10 +66,11 @@
  export default function TrackingIntelligence() {
    const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
  
-   const underwayCount = mockVessels.filter(v => v.status === "underway").length;
-   const avgSpeed = mockVessels.filter(v => v.status === "underway").reduce((sum, v) => sum + v.speed, 0) / (underwayCount || 1);
-   const avgEfficiency = mockVessels.reduce((sum, v) => sum + v.fuel.efficiency, 0) / mockVessels.length;
-   const weatherAlerts = mockVessels.filter(v => v.weather.wind > 20 || v.weather.waves > 2).length;
+    const vessels = mockVessels;
+    const underwayCount = vessels.filter(v => v.status === "underway").length;
+    const avgSpeed = vessels.filter(v => v.status === "underway").reduce((sum, v) => sum + v.speed, 0) / (underwayCount || 1);
+    const avgEfficiency = vessels.reduce((sum, v) => sum + v.fuel.efficiency, 0) / vessels.length;
+    const weatherAlerts = vessels.filter(v => v.weather.wind > 20 || v.weather.waves > 2).length;
  
    const getStatusConfig = (status: string) => {
      const config: Record<string, { color: string; label: string; icon: typeof Ship }> = {

@@ -172,17 +172,17 @@
                                 <AvatarFallback>{member.name.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
                              </Avatar>
                              <div>
-                               <p className="font-semibold">{crew.name}</p>
+                              <p className="font-semibold">{member.name}</p>
                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                 <span>{crew.rank}</span>
+                                 <span>{member.rank}</span>
                                  <span>•</span>
                                  <Ship className="h-3 w-3" />
-                                 {crew.vessel}
+                                 {member.vessel}
                                </div>
                              </div>
                            </div>
                            <div className="flex items-center gap-2">
-                             {getStatusBadge(crew.status)}
+                             {getStatusBadge(member.status)}
                              <div className={`p-1 rounded-full ${fatigueConfig.color}`}>
                                <FatigueIcon className="h-4 w-4" />
                              </div>
@@ -192,39 +192,39 @@
                          {/* Compliance & Wellness */}
                          <div className="grid grid-cols-4 gap-4 mt-3">
                            <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${getComplianceColor(crew.stcwCompliance)}`}>
-                               {crew.stcwCompliance}%
-                             </p>
-                             <p className="text-xs text-muted-foreground">STCW</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${getComplianceColor(crew.mlcCompliance)}`}>
-                               {crew.mlcCompliance}%
-                             </p>
-                             <p className="text-xs text-muted-foreground">MLC</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className="text-lg font-bold">{crew.wellnessScore}%</p>
-                             <p className="text-xs text-muted-foreground">Bem-estar</p>
-                           </div>
-                           <div className="text-center p-2 bg-muted/50 rounded">
-                             <p className={`text-lg font-bold ${crew.hoursWorked > 84 ? "text-destructive" : ""}`}>
-                               {crew.hoursWorked}h
+                              <p className={`text-lg font-bold ${getComplianceColor(member.stcwCompliance)}`}>
+                                {member.stcwCompliance}%
+                              </p>
+                              <p className="text-xs text-muted-foreground">STCW</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className={`text-lg font-bold ${getComplianceColor(member.mlcCompliance)}`}>
+                                {member.mlcCompliance}%
+                              </p>
+                              <p className="text-xs text-muted-foreground">MLC</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className="text-lg font-bold">{member.wellnessScore}%</p>
+                              <p className="text-xs text-muted-foreground">Bem-estar</p>
+                            </div>
+                            <div className="text-center p-2 bg-muted/50 rounded">
+                              <p className={`text-lg font-bold ${member.hoursWorked > 84 ? "text-destructive" : ""}`}>
+                                {member.hoursWorked}h
                              </p>
                              <p className="text-xs text-muted-foreground">Trabalhadas</p>
                            </div>
                          </div>
  
                          {/* Alerts */}
-                         {(crew.expiringCerts > 0 || crew.fatigueRisk === "high") && (
-                           <div className="flex gap-2 mt-3">
-                             {crew.expiringCerts > 0 && (
-                               <Badge variant="outline" className="text-warning border-warning/30">
-                                 <AlertTriangle className="h-3 w-3 mr-1" />
-                                 {crew.expiringCerts} cert(s) expirando
-                               </Badge>
-                             )}
-                             {crew.fatigueRisk === "high" && (
+                          {(member.expiringCerts > 0 || member.fatigueRisk === "high") && (
+                            <div className="flex gap-2 mt-3">
+                              {member.expiringCerts > 0 && (
+                                <Badge variant="outline" className="text-warning border-warning/30">
+                                  <AlertTriangle className="h-3 w-3 mr-1" />
+                                  {member.expiringCerts} cert(s) expirando
+                                </Badge>
+                              )}
+                              {member.fatigueRisk === "high" && (
                                <Badge variant="outline" className="text-destructive border-destructive/30">
                                  <Heart className="h-3 w-3 mr-1" />
                                  Risco de Fadiga
