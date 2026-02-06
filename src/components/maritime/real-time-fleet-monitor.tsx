@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
+import { useFleetMonitorData } from "@/hooks/useFleetMonitorData";
+import type { VesselMetrics } from "@/hooks/useFleetMonitorData";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,71 +37,18 @@ interface VesselMetrics {
 }
 
 export const RealTimeFleetMonitor = () => {
+  const { data: fleetData = [], isLoading: loading } = useFleetMonitorData();
   const [vessels, setVessels] = useState<VesselMetrics[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState<{
     current: { temperature: number; windSpeed: number; visibility: number };
     alerts: Array<{ message: string }>;
   } | null>(null);
 
+  // Sync from hook data
   useEffect(() => {
-    loadFleetData();
-    
-    // Set up real-time subscription
-    const channel = supabase
-      .channel("fleet-updates")
-      .on("postgres_changes", {
-        event: "*",
-        schema: "public",
-        table: "vessels"
-      }, handleFleetUpdate)
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  const loadFleetData = async () => {
-    try {
-      setLoading(true);
-      
-      const { data: vesselsData, error } = await supabase
-        .from("vessels")
-        .select("*")
-        .limit(10);
-
-      if (error) throw error;
-
-      // Transform data to match our interface with mock performance data
-      const transformedVessels: VesselMetrics[] = vesselsData?.map(vessel => ({
-        id: vessel.id,
-        name: vessel.name,
-        status: vessel.status || "operational",
-        location: vessel.current_location && 
-                 typeof vessel.current_location === "object"
-          ? { 
-            lat: (vessel.current_location as any).lat || -23.5505, 
-            lon: (vessel.current_location as any).lon || -46.6333 
-          }
-          : { lat: -23.5505, lon: -46.6333 },
-        speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
-        heading: Math.random() * 360, // Mock heading 0-360 degrees
-        fuelLevel: Math.random() * 100, // Mock fuel level 0-100%
-        engineHours: Math.floor(Math.random() * 5000 + 1000), // Mock engine hours
-        lastMaintenance: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-        nextMaintenance: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000),
-        crew: Math.floor(Math.random() * 20 + 5) // Mock crew size 5-25
-      })) || [];
-
-      setVessels(transformedVessels);
-      
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (fleetData.length > 0) setVessels(fleetData);
+  }, [fleetData]);
 
   const handleFleetUpdate = (payload: any) => {
     // Update specific vessel data
