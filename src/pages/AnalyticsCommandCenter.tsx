@@ -20,7 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useAnalyticsRealData } from "@/hooks/useAnalyticsRealData";
 
 import { 
   BarChart3, TrendingUp, TrendingDown, Activity, Download, Brain, Database, 
