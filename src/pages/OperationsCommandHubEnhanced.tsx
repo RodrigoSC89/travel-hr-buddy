@@ -33,6 +33,7 @@ import {
   ActionableAlertList 
 } from "@/components/ui/module-enhancements";
 import { useOperationsCommandData } from "@/hooks/useOperationsCommandData";
+import { useRealActionHandlers } from "@/hooks/useRealActionHandlers";
 
 // Lazy load original components
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
@@ -266,9 +267,29 @@ export default function OperationsCommandHubEnhanced() {
     toast.success("Bem-vindo ao Operations Command! 🚢");
   };
 
+  // Real action handlers from hook
+  const { quickActions: realQuickActions } = useRealActionHandlers();
+
   const handleQuickAction = (actionId: string) => {
-    const action = quickActions.find(a => a.id === actionId);
-    toast.info(`Executando: ${action?.label}`);
+    switch (actionId) {
+      case "new-voyage":
+        realQuickActions.newVoyage();
+        break;
+      case "crew-schedule":
+        realQuickActions.crewSchedule();
+        break;
+      case "maintenance":
+        realQuickActions.maintenanceOrder();
+        break;
+      case "fuel-report":
+        realQuickActions.fuelReport();
+        break;
+      case "checklist":
+        realQuickActions.openChecklist();
+        break;
+      default:
+        toast.info(`Executando: ${actionId}`);
+    }
   };
 
   const handleDismissAlert = (alertId: string) => {
