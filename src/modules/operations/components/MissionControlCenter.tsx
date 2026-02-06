@@ -1,6 +1,7 @@
 /**
  * Mission Control Center - Premium Operations Component
  * Centro de controle de missões e viagens com timeline interativa
+ * CONNECTED TO REAL DATA via useVoyageOperationsData
  */
 
 import React, { useState } from "react";
@@ -35,119 +36,10 @@ import {
   Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useVoyageOperationsData, type MissionVoyage } from "@/hooks/useVoyageOperationsData";
+import { Loader2 } from "lucide-react";
 
-interface Voyage {
-  id: string;
-  voyageNumber: string;
-  vesselName: string;
-  vesselIMO: string;
-  departurePort: string;
-  arrivalPort: string;
-  departureTime: string;
-  estimatedArrival: string;
-  status: "planning" | "loading" | "underway" | "anchored" | "discharging" | "completed";
-  progress: number;
-  cargoType: string;
-  cargoTonnage: number;
-  fuelRemaining: number;
-  crewOnboard: number;
-  currentSpeed: number;
-  currentPosition: { lat: number; lng: number };
-  weatherConditions: {
-    windSpeed: number;
-    waveHeight: number;
-    temperature: number;
-    visibility: string;
-  };
-  milestones: VoyageMilestone[];
-  alerts: VoyageAlert[];
-}
-
-interface VoyageMilestone {
-  id: string;
-  name: string;
-  type: "departure" | "waypoint" | "arrival" | "inspection" | "bunkering";
-  plannedTime: string;
-  actualTime?: string;
-  status: "pending" | "in-progress" | "completed" | "delayed";
-  notes?: string;
-}
-
-interface VoyageAlert {
-  id: string;
-  type: "weather" | "mechanical" | "regulatory" | "safety" | "schedule";
-  severity: "info" | "warning" | "critical";
-  message: string;
-  timestamp: string;
-  acknowledged: boolean;
-}
-
-const mockVoyages: Voyage[] = [
-  {
-    id: "1",
-    voyageNumber: "VOY-2024-0156",
-    vesselName: "MV Atlantic Pioneer",
-    vesselIMO: "9876543",
-    departurePort: "Santos, Brazil",
-    arrivalPort: "Rotterdam, Netherlands",
-    departureTime: "2024-01-15T08:00:00Z",
-    estimatedArrival: "2024-01-28T14:00:00Z",
-    status: "underway",
-    progress: 45,
-    cargoType: "Container",
-    cargoTonnage: 45000,
-    fuelRemaining: 78,
-    crewOnboard: 24,
-    currentSpeed: 14.5,
-    currentPosition: { lat: 5.4321, lng: -25.1234 },
-    weatherConditions: {
-      windSpeed: 18,
-      waveHeight: 2.5,
-      temperature: 28,
-      visibility: "Good"
-    },
-    milestones: [
-      { id: "m1", name: "Departure Santos", type: "departure", plannedTime: "2024-01-15T08:00:00Z", actualTime: "2024-01-15T08:15:00Z", status: "completed" },
-      { id: "m2", name: "Equator Crossing", type: "waypoint", plannedTime: "2024-01-18T12:00:00Z", actualTime: "2024-01-18T11:30:00Z", status: "completed" },
-      { id: "m3", name: "Mid-Atlantic Waypoint", type: "waypoint", plannedTime: "2024-01-21T00:00:00Z", status: "in-progress" },
-      { id: "m4", name: "Bunkering - Las Palmas", type: "bunkering", plannedTime: "2024-01-24T06:00:00Z", status: "pending" },
-      { id: "m5", name: "Arrival Rotterdam", type: "arrival", plannedTime: "2024-01-28T14:00:00Z", status: "pending" }
-    ],
-    alerts: [
-      { id: "a1", type: "weather", severity: "warning", message: "Rough sea conditions expected in 48h - Bay of Biscay", timestamp: "2024-01-20T10:00:00Z", acknowledged: false },
-      { id: "a2", type: "schedule", severity: "info", message: "Ahead of schedule by 6 hours", timestamp: "2024-01-20T08:00:00Z", acknowledged: true }
-    ]
-  },
-  {
-    id: "2",
-    voyageNumber: "VOY-2024-0157",
-    vesselName: "MV Pacific Voyager",
-    vesselIMO: "9876544",
-    departurePort: "Singapore",
-    arrivalPort: "Los Angeles, USA",
-    departureTime: "2024-01-20T06:00:00Z",
-    estimatedArrival: "2024-02-08T18:00:00Z",
-    status: "loading",
-    progress: 0,
-    cargoType: "Bulk Carrier",
-    cargoTonnage: 82000,
-    fuelRemaining: 95,
-    crewOnboard: 22,
-    currentSpeed: 0,
-    currentPosition: { lat: 1.2644, lng: 103.8198 },
-    weatherConditions: {
-      windSpeed: 8,
-      waveHeight: 0.5,
-      temperature: 31,
-      visibility: "Excellent"
-    },
-    milestones: [
-      { id: "m1", name: "Cargo Loading", type: "inspection", plannedTime: "2024-01-20T06:00:00Z", status: "in-progress" },
-      { id: "m2", name: "Departure Singapore", type: "departure", plannedTime: "2024-01-21T18:00:00Z", status: "pending" }
-    ],
-    alerts: []
-  }
-];
+type Voyage = MissionVoyage;
 
 const statusConfig = {
   planning: { label: "Planejamento", color: "bg-slate-500", icon: FileText },
@@ -167,10 +59,17 @@ const milestoneConfig = {
 };
 
 export default function MissionControlCenter() {
-  const [selectedVoyage, setSelectedVoyage] = useState<Voyage | null>(mockVoyages[0]);
+  const [selectedVoyage, setSelectedVoyage] = useState<Voyage | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const { data, isLoading } = useVoyageOperationsData();
 
-  const filteredVoyages = mockVoyages.filter(v => 
+  const voyages = data?.voyages || [];
+  const kpis = data?.kpis || { activeVoyages: 0, inTransit: 0, activeAlerts: 0, onTimeRate: 0 };
+
+  // Auto-select first voyage when data loads
+  const effectiveSelected = selectedVoyage || voyages[0] || null;
+
+  const filteredVoyages = voyages.filter((v: Voyage) => 
     v.voyageNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
     v.vesselName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -184,60 +83,69 @@ export default function MissionControlCenter() {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando missões...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* KPIs Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Ship className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Ship className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold">12</p>
+                <p className="text-2xl font-bold">{kpis.activeVoyages}</p>
                 <p className="text-xs text-muted-foreground">Viagens Ativas</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/20 rounded-lg">
-                <Navigation className="h-5 w-5 text-green-500" />
+              <div className="p-2 bg-success/20 rounded-lg">
+                <Navigation className="h-5 w-5 text-success" />
               </div>
               <div>
-                <p className="text-2xl font-bold">8</p>
+                <p className="text-2xl font-bold">{kpis.inTransit}</p>
                 <p className="text-xs text-muted-foreground">Em Trânsito</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-500/20 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+              <div className="p-2 bg-warning/20 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
-                <p className="text-2xl font-bold">3</p>
+                <p className="text-2xl font-bold">{kpis.activeAlerts}</p>
                 <p className="text-xs text-muted-foreground">Alertas Ativos</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Clock className="h-5 w-5 text-purple-500" />
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Clock className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
-                <p className="text-2xl font-bold">98.5%</p>
+                <p className="text-2xl font-bold">{kpis.onTimeRate}%</p>
                 <p className="text-xs text-muted-foreground">On-Time Rate</p>
               </div>
             </div>
@@ -271,7 +179,7 @@ export default function MissionControlCenter() {
                       onClick={() => setSelectedVoyage(voyage)}
                       className={cn(
                         "p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md",
-                        selectedVoyage?.id === voyage.id 
+                        (selectedVoyage?.id || effectiveSelected?.id) === voyage.id 
                           ? "border-primary bg-primary/5" 
                           : "border-border hover:border-primary/50"
                       )}
@@ -318,14 +226,14 @@ export default function MissionControlCenter() {
 
         {/* Voyage Details */}
         <Card className="lg:col-span-2">
-          {selectedVoyage ? (
+          {effectiveSelected ? (
             <>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle className="text-xl">{selectedVoyage.voyageNumber}</CardTitle>
+                    <CardTitle className="text-xl">{effectiveSelected.voyageNumber}</CardTitle>
                     <CardDescription>
-                      {selectedVoyage.vesselName} (IMO: {selectedVoyage.vesselIMO})
+                      {effectiveSelected.vesselName} (IMO: {effectiveSelected.vesselIMO})
                     </CardDescription>
                   </div>
                   <div className="flex gap-2">
@@ -357,9 +265,9 @@ export default function MissionControlCenter() {
                           <Ship className="h-4 w-4 text-primary" />
                           <span className="font-medium">Origem</span>
                         </div>
-                        <p className="text-lg font-semibold">{selectedVoyage.departurePort}</p>
+                        <p className="text-lg font-semibold">{effectiveSelected.departurePort}</p>
                         <p className="text-sm text-muted-foreground">
-                          {formatDateTime(selectedVoyage.departureTime)}
+                          {formatDateTime(effectiveSelected.departureTime)}
                         </p>
                       </div>
                       <div className="p-4 rounded-lg bg-muted/50">
@@ -367,9 +275,9 @@ export default function MissionControlCenter() {
                           <Anchor className="h-4 w-4 text-primary" />
                           <span className="font-medium">Destino</span>
                         </div>
-                        <p className="text-lg font-semibold">{selectedVoyage.arrivalPort}</p>
+                        <p className="text-lg font-semibold">{effectiveSelected.arrivalPort}</p>
                         <p className="text-sm text-muted-foreground">
-                          ETA: {formatDateTime(selectedVoyage.estimatedArrival)}
+                          ETA: {formatDateTime(effectiveSelected.estimatedArrival)}
                         </p>
                       </div>
                     </div>
@@ -378,37 +286,37 @@ export default function MissionControlCenter() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       <div className="p-3 rounded-lg border text-center">
                         <Compass className="h-5 w-5 mx-auto mb-1 text-blue-500" />
-                        <p className="text-lg font-bold">{selectedVoyage.currentSpeed} kn</p>
+                        <p className="text-lg font-bold">{effectiveSelected.currentSpeed} kn</p>
                         <p className="text-xs text-muted-foreground">Velocidade</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
                         <Fuel className="h-5 w-5 mx-auto mb-1 text-yellow-500" />
-                        <p className="text-lg font-bold">{selectedVoyage.fuelRemaining}%</p>
+                        <p className="text-lg font-bold">{effectiveSelected.fuelRemaining}%</p>
                         <p className="text-xs text-muted-foreground">Combustível</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
                         <Users className="h-5 w-5 mx-auto mb-1 text-green-500" />
-                        <p className="text-lg font-bold">{selectedVoyage.crewOnboard}</p>
+                        <p className="text-lg font-bold">{effectiveSelected.crewOnboard}</p>
                         <p className="text-xs text-muted-foreground">Tripulação</p>
                       </div>
                       <div className="p-3 rounded-lg border text-center">
                         <Ship className="h-5 w-5 mx-auto mb-1 text-purple-500" />
-                        <p className="text-lg font-bold">{selectedVoyage.cargoTonnage.toLocaleString()}</p>
+                        <p className="text-lg font-bold">{effectiveSelected.cargoTonnage.toLocaleString()}</p>
                         <p className="text-xs text-muted-foreground">Toneladas</p>
                       </div>
                     </div>
 
                     {/* Progress */}
-                    {selectedVoyage.status === "underway" && (
+                    {effectiveSelected.status === "underway" && (
                       <div className="p-4 rounded-lg border">
                         <div className="flex justify-between mb-2">
                           <span className="font-medium">Progresso da Viagem</span>
-                          <span className="text-primary font-bold">{selectedVoyage.progress}%</span>
+                          <span className="text-primary font-bold">{effectiveSelected.progress}%</span>
                         </div>
-                        <Progress value={selectedVoyage.progress} className="h-3" />
+                        <Progress value={effectiveSelected.progress} className="h-3" />
                         <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                          <span>{selectedVoyage.departurePort}</span>
-                          <span>{selectedVoyage.arrivalPort}</span>
+                          <span>{effectiveSelected.departurePort}</span>
+                          <span>{effectiveSelected.arrivalPort}</span>
                         </div>
                       </div>
                     )}
@@ -416,7 +324,7 @@ export default function MissionControlCenter() {
 
                   <TabsContent value="timeline">
                     <div className="relative">
-                      {selectedVoyage.milestones.map((milestone, index) => {
+                      {effectiveSelected.milestones.map((milestone, index) => {
                         const config = milestoneConfig[milestone.type];
                         const MilestoneIcon = config.icon;
                         return (
@@ -431,7 +339,7 @@ export default function MissionControlCenter() {
                               )}>
                                 <MilestoneIcon className={cn("h-5 w-5", config.color)} />
                               </div>
-                              {index < selectedVoyage.milestones.length - 1 && (
+                              {index < effectiveSelected.milestones.length - 1 && (
                                 <div className="absolute top-10 left-1/2 w-0.5 h-full -translate-x-1/2 bg-border" />
                               )}
                             </div>
@@ -467,13 +375,13 @@ export default function MissionControlCenter() {
 
                   <TabsContent value="alerts">
                     <div className="space-y-3">
-                      {selectedVoyage.alerts.length === 0 ? (
+                      {effectiveSelected.alerts.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                           <Shield className="h-12 w-12 mx-auto mb-2 opacity-50" />
                           <p>Nenhum alerta ativo</p>
                         </div>
                       ) : (
-                        selectedVoyage.alerts.map((alert) => (
+                        effectiveSelected.alerts.map((alert) => (
                           <div 
                             key={alert.id}
                             className={cn(
@@ -520,22 +428,22 @@ export default function MissionControlCenter() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="p-4 rounded-lg border text-center">
                         <Wind className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                        <p className="text-2xl font-bold">{selectedVoyage.weatherConditions.windSpeed}</p>
+                        <p className="text-2xl font-bold">{effectiveSelected.weatherConditions.windSpeed}</p>
                         <p className="text-sm text-muted-foreground">Vento (kn)</p>
                       </div>
                       <div className="p-4 rounded-lg border text-center">
-                        <Waves className="h-8 w-8 mx-auto mb-2 text-cyan-500" />
-                        <p className="text-2xl font-bold">{selectedVoyage.weatherConditions.waveHeight}</p>
+                        <Waves className="h-8 w-8 mx-auto mb-2 text-primary" />
+                        <p className="text-2xl font-bold">{effectiveSelected.weatherConditions.waveHeight}</p>
                         <p className="text-sm text-muted-foreground">Ondas (m)</p>
                       </div>
                       <div className="p-4 rounded-lg border text-center">
-                        <Thermometer className="h-8 w-8 mx-auto mb-2 text-orange-500" />
-                        <p className="text-2xl font-bold">{selectedVoyage.weatherConditions.temperature}°</p>
+                        <Thermometer className="h-8 w-8 mx-auto mb-2 text-warning" />
+                        <p className="text-2xl font-bold">{effectiveSelected.weatherConditions.temperature}°</p>
                         <p className="text-sm text-muted-foreground">Temperatura</p>
                       </div>
                       <div className="p-4 rounded-lg border text-center">
-                        <Eye className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                        <p className="text-lg font-bold">{selectedVoyage.weatherConditions.visibility}</p>
+                        <Eye className="h-8 w-8 mx-auto mb-2 text-success" />
+                        <p className="text-lg font-bold">{effectiveSelected.weatherConditions.visibility}</p>
                         <p className="text-sm text-muted-foreground">Visibilidade</p>
                       </div>
                     </div>

@@ -1,24 +1,24 @@
 import { useState } from "react";
-import { useStormGlass, getCurrentWeather } from "@/hooks/useStormGlass";
+import { useMarineWeather } from "@/hooks/useMarineWeather";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Wind, Waves, Thermometer, Droplets, Eye, Compass, RefreshCw, MapPin } from "lucide-react";
+import { Loader2, Wind, Waves, Thermometer, Droplets, Eye, Compass, RefreshCw, MapPin, AlertTriangle, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function WeatherMaritime() {
-  const [coordinates, setCoordinates] = useState({ lat: -23.55, lng: -46.63 }); // São Paulo default
+  const [coordinates, setCoordinates] = useState({ lat: -23.55, lng: -46.63 });
   const [inputLat, setInputLat] = useState("-23.55");
   const [inputLng, setInputLng] = useState("-46.63");
 
-  const { data, isLoading, isError, error, refetch, isFetching } = useStormGlass(
+  const { data, isLoading, isError, error, refetch, isFetching } = useMarineWeather(
     coordinates.lat,
     coordinates.lng
   );
 
-  const weather = getCurrentWeather(data);
+  const weather = data?.current;
 
   const handleSearch = () => {
     const lat = parseFloat(inputLat);
@@ -53,18 +53,25 @@ export default function WeatherMaritime() {
             🌊 Clima Marítimo
           </h1>
           <p className="text-muted-foreground">
-            Previsão meteorológica marítima em tempo real via StormGlass API
+            Previsão meteorológica marítima em tempo real via Open-Meteo Marine API
           </p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={() => refetch()} 
-          disabled={isFetching}
-          className="gap-2"
-        >
-          <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
-          Atualizar
-        </Button>
+        <div className="flex items-center gap-2">
+          {data?.source && (
+            <Badge variant="outline" className="text-xs">
+              Fonte: {data.source}
+            </Badge>
+          )}
+          <Button 
+            variant="outline" 
+            onClick={() => refetch()} 
+            disabled={isFetching}
+            className="gap-2"
+          >
+            <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
+            Atualizar
+          </Button>
+        </div>
       </div>
 
       {/* Coordinates Input */}
@@ -134,7 +141,7 @@ export default function WeatherMaritime() {
       {weather && !isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Wave Height */}
-          <Card className="bg-gradient-to-br from-primary/10 to-info/10 border-primary/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -152,7 +159,7 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Wind Speed */}
-          <Card className="bg-gradient-to-br from-success/10 to-info/10 border-success/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -160,6 +167,9 @@ export default function WeatherMaritime() {
                   <p className="text-3xl font-bold text-success">
                     {weather.windSpeed?.toFixed(1) ?? "—"} m/s
                   </p>
+                  {weather.windSpeedKnots && (
+                    <p className="text-xs text-muted-foreground mt-1">{weather.windSpeedKnots.toFixed(1)} knots</p>
+                  )}
                   <Badge variant="outline" className="mt-2">
                     {getWindDescription(weather.windSpeed)}
                   </Badge>
@@ -169,17 +179,20 @@ export default function WeatherMaritime() {
             </CardContent>
           </Card>
 
-          {/* Water Temperature */}
-          <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
+          {/* Swell Height */}
+          <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Temp. Água</p>
-                  <p className="text-3xl font-bold text-info">
-                    {weather.waterTemperature?.toFixed(1) ?? "—"} °C
+                  <p className="text-sm text-muted-foreground">Swell</p>
+                  <p className="text-3xl font-bold text-primary">
+                    {weather.swellHeight?.toFixed(1) ?? "—"} m
                   </p>
+                  {weather.swellPeriod && (
+                    <p className="text-xs text-muted-foreground mt-1">Período: {weather.swellPeriod.toFixed(1)}s</p>
+                  )}
                 </div>
-                <Thermometer className="h-12 w-12 text-info/50" />
+                <Waves className="h-12 w-12 text-primary/50" />
               </div>
             </CardContent>
           </Card>
@@ -193,6 +206,9 @@ export default function WeatherMaritime() {
                   <p className="text-3xl font-bold text-warning">
                     {weather.airTemperature?.toFixed(1) ?? "—"} °C
                   </p>
+                  {weather.feelsLike && (
+                    <p className="text-xs text-muted-foreground mt-1">Sensação: {weather.feelsLike.toFixed(1)}°C</p>
+                  )}
                 </div>
                 <Thermometer className="h-12 w-12 text-warning/50" />
               </div>
@@ -200,16 +216,16 @@ export default function WeatherMaritime() {
           </Card>
 
           {/* Humidity */}
-          <Card className="bg-gradient-to-br from-info/10 to-primary/10 border-info/20">
+          <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Umidade</p>
-                  <p className="text-3xl font-bold text-info">
+                  <p className="text-3xl font-bold text-primary">
                     {weather.humidity?.toFixed(0) ?? "—"} %
                   </p>
                 </div>
-                <Droplets className="h-12 w-12 text-info/50" />
+                <Droplets className="h-12 w-12 text-primary/50" />
               </div>
             </CardContent>
           </Card>
@@ -220,7 +236,7 @@ export default function WeatherMaritime() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Visibilidade</p>
-                  <p className="text-3xl font-bold text-secondary">
+                  <p className="text-3xl font-bold text-secondary-foreground">
                     {weather.visibility?.toFixed(1) ?? "—"} km
                   </p>
                 </div>
@@ -235,7 +251,7 @@ export default function WeatherMaritime() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Corrente</p>
-                  <p className="text-3xl font-bold text-secondary">
+                  <p className="text-3xl font-bold text-secondary-foreground">
                     {weather.currentSpeed?.toFixed(2) ?? "—"} m/s
                   </p>
                 </div>
@@ -278,6 +294,61 @@ export default function WeatherMaritime() {
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {/* Alerts */}
+      {data?.alerts && data.alerts.length > 0 && (
+        <Card className="border-warning/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-warning">
+              <AlertTriangle className="h-5 w-5" />
+              Alertas Meteorológicos
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {data.alerts.map((alert, i) => (
+              <div key={i} className={cn(
+                "p-3 rounded-lg border",
+                alert.severity === "high" ? "border-destructive/50 bg-destructive/5" : "border-warning/50 bg-warning/5"
+              )}>
+                <p className="font-medium text-sm">{alert.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">{alert.description}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Forecast */}
+      {data?.forecast && data.forecast.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Previsão (Próximas Horas)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {data.forecast.slice(0, 12).map((hour, i) => (
+                <div key={i} className="p-3 rounded-lg border bg-card text-center">
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(hour.time).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                  <p className="text-lg font-bold mt-1">
+                    {hour.waveHeight?.toFixed(1) ?? "—"}m
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {hour.windSpeed?.toFixed(0) ?? "—"} m/s
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {hour.temperature?.toFixed(0) ?? "—"}°C
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Last Update */}
