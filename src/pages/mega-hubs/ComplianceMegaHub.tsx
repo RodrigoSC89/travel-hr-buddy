@@ -10,16 +10,20 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck } from 'lucide-react';
+import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { AuditWorkflowManager } from '@/components/world-class';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
+import { toast } from 'sonner';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -109,14 +113,85 @@ export default function ComplianceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'hub';
   const standard = searchParams.get('standard');
+  const queryClient = useQueryClient();
+  const { exportToCSV } = useRealActionHandlers();
+
+  // Real compliance data
+  const { data: audits = [], isLoading: auditsLoading } = useQuery({
+    queryKey: ['compliance-audits-hub'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('internal_audits')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  const { data: nonConformities = [] } = useQuery({
+    queryKey: ['compliance-ncs-hub'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('non_conformities')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  // Compliance metrics
+  const complianceMetrics = useMemo(() => ({
+    totalAudits: audits.length,
+    openAudits: audits.filter((a: any) => a.status === 'open' || a.status === 'in_progress').length,
+    completedAudits: audits.filter((a: any) => a.status === 'completed' || a.status === 'closed').length,
+    totalNCs: nonConformities.length,
+    openNCs: nonConformities.filter((nc: any) => nc.status === 'open').length,
+  }), [audits, nonConformities]);
+
+  // Dynamic workflow
+  const workflowSteps = useMemo(() => [
+    { id: 'planning', label: 'Planejamento', status: complianceMetrics.totalAudits > 0 ? 'completed' as const : 'current' as const },
+    { id: 'execution', label: 'Execução', status: complianceMetrics.openAudits > 0 ? 'current' as const : complianceMetrics.totalAudits > 0 ? 'completed' as const : 'pending' as const },
+    { id: 'findings', label: 'Achados', status: complianceMetrics.totalNCs > 0 ? 'current' as const : 'pending' as const },
+    { id: 'capa', label: 'CAPA', status: complianceMetrics.openNCs > 0 ? 'current' as const : complianceMetrics.totalNCs > 0 ? 'completed' as const : 'pending' as const },
+    { id: 'closure', label: 'Encerramento', status: complianceMetrics.completedAudits > 2 ? 'completed' as const : 'pending' as const }
+  ], [complianceMetrics]);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
-  const handleActionBarAction = (action: string) => {
-    console.log(`Compliance action: ${action}`);
-  };
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
+    await queryClient.invalidateQueries({ queryKey: ['compliance-ncs-hub'] });
+    toast.success('Dados de compliance atualizados');
+  }, [queryClient]);
+
+  const handleNewAudit = useCallback(async () => {
+    const { error } = await supabase.from('internal_audits').insert([{
+      audit_number: `AUD-${Date.now().toString().slice(-6)}`,
+      audit_type: 'internal',
+      status: 'planned',
+      findings_count: 0,
+    }]);
+    if (error) {
+      toast.error(`Erro ao criar auditoria: ${error.message}`);
+    } else {
+      toast.success('Auditoria criada com sucesso');
+      queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
+    }
+  }, [queryClient]);
+
+  const handleExportCompliance = useCallback(async () => {
+    const allData = [...audits.map((a: any) => ({ tipo: 'Auditoria', ...a })), ...nonConformities.map((nc: any) => ({ tipo: 'NC', ...nc }))];
+    exportToCSV(allData, 'compliance-report');
+  }, [audits, nonConformities, exportToCSV]);
 
   // If accessing a specific standard, render that audit page
   if (standard && auditStandards[standard]) {
@@ -145,10 +220,10 @@ export default function ComplianceMegaHub() {
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                12 Audits
+                {complianceMetrics.totalAudits} Auditorias
               </Badge>
               <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/20">
-                10 AI Agents
+                {complianceMetrics.openNCs} NCs Abertas
               </Badge>
               <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
                 MEGA-HUB F
@@ -181,47 +256,59 @@ export default function ComplianceMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="hub" className="mt-0 space-y-6">
+              {/* System Status */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <span>Conectado</span>
+                </div>
+                <span>•</span>
+                <span>{complianceMetrics.totalAudits} auditorias</span>
+                <span>•</span>
+                <span>{complianceMetrics.openNCs} NCs abertas</span>
+                <span>•</span>
+                <span>12 padrões marítimos</span>
+              </div>
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
-                title="Compliance Command Center"
-                subtitle="Manage audits, certifications, and regulatory compliance"
+                title="Centro de Compliance"
+                subtitle={`${complianceMetrics.openAudits} auditorias em andamento | ${complianceMetrics.openNCs} não-conformidades abertas`}
                 actions={[
                   {
                     id: 'new-audit',
-                    label: 'Start Audit',
+                    label: 'Nova Auditoria',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('new-audit'),
-                    variant: 'default'
+                    onClick: handleNewAudit,
+                    variant: 'default',
+                    tooltip: 'Iniciar nova auditoria interna'
                   },
                   {
                     id: 'workflow',
-                    label: 'Audit Workflow',
+                    label: 'Workflow',
                     icon: <ClipboardCheck className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'audit-workflow' }),
                     variant: 'outline'
                   },
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={auditsLoading}
+                secondaryActions={[
                   {
                     id: 'export',
-                    label: 'Export Report',
+                    label: 'Exportar Relatório',
                     icon: <Download className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('export'),
-                    variant: 'outline'
+                    onClick: handleExportCompliance,
                   }
                 ]}
                 showSearch
-                searchPlaceholder="Search audits, certificates, NCs..."
+                searchPlaceholder="Buscar auditorias, certificados, NCs..."
               />
 
-              {/* Workflow Status */}
+              {/* Workflow Status - Dynamic */}
               <WorkflowStatusBar
-                title="Compliance Cycle"
-                steps={[
-                  { id: 'planning', label: 'Planning', status: 'completed' },
-                  { id: 'execution', label: 'Audit Execution', status: 'completed' },
-                  { id: 'findings', label: 'Findings Review', status: 'current' },
-                  { id: 'capa', label: 'CAPA Actions', status: 'pending' },
-                  { id: 'closure', label: 'Closure', status: 'pending' }
-                ]}
+                title="Ciclo de Compliance"
+                steps={workflowSteps}
                 variant="horizontal"
               />
 
@@ -231,19 +318,19 @@ export default function ComplianceMegaHub() {
             <TabsContent value="audit-workflow" className="mt-0 space-y-6">
               {/* Enhanced Action Bar for Audit Workflow */}
               <EnhancedActionBar
-                title="Audit Workflow Manager"
-                subtitle="Dynamic scorecards for ISM, ISPS, MLC, and all 12 maritime audits"
+                title="Gerenciador de Auditorias"
+                subtitle="Scorecards dinâmicos para ISM, ISPS, MLC e todas 12 auditorias marítimas"
                 actions={[
                   {
                     id: 'new-audit',
-                    label: 'New Audit',
+                    label: 'Nova Auditoria',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('new-audit'),
+                    onClick: handleNewAudit,
                     variant: 'default'
                   }
                 ]}
+                onRefresh={handleRefresh}
               />
-
               {/* World-Class Audit Workflow Manager */}
               <AuditWorkflowManager />
             </TabsContent>

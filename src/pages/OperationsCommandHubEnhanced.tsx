@@ -518,19 +518,28 @@ export default function OperationsCommandHubEnhanced() {
                       Próximos Eventos
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    {[
-                      { time: "14:00", event: "Chegada - Nautilus Star", type: "arrival" },
-                      { time: "16:30", event: "Partida - Nautilus Explorer", type: "departure" },
-                      { time: "18:00", event: "Troca de Turno", type: "crew" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 text-sm">
-                        <Badge variant="outline" className="min-w-[50px] justify-center">
-                          {item.time}
-                        </Badge>
-                        <span className="flex-1 truncate">{item.event}</span>
-                      </div>
-                    ))}
+                   <CardContent className="space-y-3">
+                     {voyages.length > 0 ? (
+                       voyages.slice(0, 3).map((voy: any, idx: number) => (
+                         <div key={voy.id || idx} className="flex items-center gap-3 text-sm">
+                           <Badge variant="outline" className="min-w-[60px] justify-center text-xs">
+                             {voy.status === 'in_progress' ? '🟢' : voy.status === 'planned' ? '🟡' : '✅'} {voy.status || 'N/A'}
+                           </Badge>
+                           <span className="flex-1 truncate">
+                             {voy.voyage_number || `Voyage ${idx + 1}`} — {voy.origin_port || '?'} → {voy.destination_port || '?'}
+                           </span>
+                         </div>
+                       ))
+                     ) : (
+                       <div className="text-sm text-muted-foreground text-center py-4">
+                         <Calendar className="h-5 w-5 mx-auto mb-2 opacity-50" />
+                         Nenhuma viagem registrada.
+                         <br />
+                         <Button variant="link" size="sm" onClick={() => handleTabChange("voyage")} className="mt-1">
+                           Criar primeira viagem →
+                         </Button>
+                       </div>
+                     )}
                   </CardContent>
                 </Card>
               </div>

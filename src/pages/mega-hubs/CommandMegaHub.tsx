@@ -7,16 +7,20 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio } from 'lucide-react';
+import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
+import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
+import { toast } from 'sonner';
 
 // Lazy load sub-components
 const CentralComando = lazy(() => import('@/pages/CentralComando'));
@@ -49,56 +53,80 @@ const tabConfig = [
   { id: 'alerts', label: 'Alerts', icon: Bell, path: '/command/alerts' },
 ];
 
-// Timeline events for command center
-const commandTimelineEvents = [
-  {
-    id: '1',
-    title: 'Port Entry Approved',
-    description: 'MV Atlantic Star cleared for Santos port entry',
-    timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-    type: 'success' as const,
-    user: 'Captain Silva',
-    metadata: { vessel: 'Atlantic Star', port: 'Santos' }
-  },
-  {
-    id: '2',
-    title: 'Weather Alert',
-    description: 'Storm warning issued for Gulf region - vessel rerouting recommended',
-    timestamp: new Date(Date.now() - 45 * 60000).toISOString(),
-    type: 'warning' as const,
-    metadata: { region: 'Gulf of Mexico' }
-  },
-  {
-    id: '3',
-    title: 'Maintenance Completed',
-    description: 'Engine overhaul completed on MV Pacific Voyager',
-    timestamp: new Date(Date.now() - 90 * 60000).toISOString(),
-    type: 'info' as const,
-    user: 'Chief Engineer Costa',
-    metadata: { vessel: 'Pacific Voyager' }
-  },
-  {
-    id: '4',
-    title: 'Security Incident',
-    description: 'Unauthorized vessel approach detected - SOC monitoring',
-    timestamp: new Date(Date.now() - 120 * 60000).toISOString(),
-    type: 'error' as const,
-    user: 'SOC Operator',
-    metadata: { status: 'Active Monitoring' }
-  },
-];
-
 export default function CommandMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
+  const queryClient = useQueryClient();
+  const { quickActions, exportToCSV } = useRealActionHandlers();
+  const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
-  const handleActionBarAction = (action: string) => {
-    console.log(`Command action: ${action}`);
-  };
+  // Build real timeline events from vessel/voyage data
+  const commandTimelineEvents = useMemo(() => {
+    const events: any[] = [];
+    
+    vessels.slice(0, 3).forEach((v: any) => {
+      events.push({
+        id: `vessel-${v.id}`,
+        title: `${v.name || 'Vessel'} — ${v.status || 'Unknown'}`,
+        description: `Type: ${v.vessel_type || 'N/A'} | Flag: ${v.flag_state || 'N/A'}`,
+        timestamp: v.updated_at || new Date().toISOString(),
+        type: v.status === 'active' ? 'success' as const : v.status === 'maintenance' ? 'warning' as const : 'info' as const,
+        metadata: { vessel: v.name, status: v.status }
+      });
+    });
+
+    voyages.slice(0, 3).forEach((voy: any) => {
+      events.push({
+        id: `voyage-${voy.id}`,
+        title: `Voyage ${voy.voyage_number || ''}`,
+        description: `${voy.origin_port || '?'} → ${voy.destination_port || '?'} | Status: ${voy.status || 'N/A'}`,
+        timestamp: voy.created_at || new Date().toISOString(),
+        type: voy.status === 'completed' ? 'success' as const : voy.status === 'in_progress' ? 'info' as const : 'warning' as const,
+        metadata: { voyage: voy.voyage_number }
+      });
+    });
+
+    if (events.length === 0) {
+      events.push({
+        id: 'no-events',
+        title: 'Nenhum evento recente',
+        description: 'Cadastre embarcações e viagens para ver atividades aqui.',
+        timestamp: new Date().toISOString(),
+        type: 'info' as const,
+      });
+    }
+
+    return events;
+  }, [vessels, voyages]);
+
+  // Build dynamic workflow steps from real metrics
+  const workflowSteps = useMemo(() => {
+    const hasVessels = metrics.totalVessels > 0;
+    const hasVoyages = metrics.activeVoyages > 0 || metrics.plannedVoyages > 0;
+    const hasOperational = metrics.operationalVessels > 0;
+    
+    return [
+      { id: 'planning', label: 'Fleet Setup', status: hasVessels ? 'completed' as const : 'current' as const },
+      { id: 'dispatch', label: 'Voyage Planning', status: hasVoyages ? 'completed' as const : hasVessels ? 'current' as const : 'pending' as const },
+      { id: 'transit', label: 'In Transit', status: metrics.activeVoyages > 0 ? 'current' as const : hasVoyages ? 'pending' as const : 'pending' as const },
+      { id: 'arrival', label: 'Arrival', status: metrics.completedVoyages > 0 ? 'completed' as const : 'pending' as const },
+      { id: 'completed', label: 'Completed', status: metrics.completedVoyages > 2 ? 'completed' as const : 'pending' as const }
+    ];
+  }, [metrics]);
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['operations-voyages'] });
+    await queryClient.invalidateQueries({ queryKey: ['operations-vessels'] });
+    toast.success('Dados atualizados com sucesso');
+  }, [queryClient]);
+
+  const handleExport = useCallback(async () => {
+    await quickActions.exportDashboard();
+  }, [quickActions]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -145,47 +173,57 @@ export default function CommandMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* System Status Bar */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <span>Online</span>
+                </div>
+                <span>•</span>
+                <span>{metrics.totalVessels} embarcações</span>
+                <span>•</span>
+                <span>{metrics.activeVoyages} viagens ativas</span>
+                <span>•</span>
+                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="Executive Command Panel"
-                subtitle="Real-time fleet operations overview"
+                subtitle={`${metrics.operationalVessels} embarcações operacionais | ${metrics.activeVoyages} viagens ativas`}
                 actions={[
                   {
-                    id: 'refresh',
-                    label: 'Refresh Data',
-                    icon: <Activity className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('refresh'),
-                    variant: 'outline'
-                  },
-                  {
-                    id: 'export',
-                    label: 'Export Report',
-                    icon: <BarChart3 className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('export'),
-                    variant: 'outline'
-                  },
-                  {
                     id: 'alerts',
-                    label: 'View All Alerts',
+                    label: `Alertas${metrics.totalVessels > 0 && metrics.operationalVessels === 0 ? ' ⚠️' : ''}`,
                     icon: <Bell className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'alerts' }),
                     variant: 'default'
                   }
                 ]}
+                onRefresh={handleRefresh}
+                isRefreshing={isLoading}
                 showSearch
-                searchPlaceholder="Search vessels, voyages, alerts..."
+                searchPlaceholder="Buscar embarcações, viagens, alertas..."
+                secondaryActions={[
+                  {
+                    id: 'export-json',
+                    label: 'Exportar Dashboard (JSON)',
+                    icon: <BarChart3 className="h-4 w-4" />,
+                    onClick: handleExport,
+                  },
+                  {
+                    id: 'export-csv',
+                    label: 'Exportar Frota (CSV)',
+                    icon: <Activity className="h-4 w-4" />,
+                    onClick: async () => exportToCSV(vessels, 'fleet-command'),
+                  }
+                ]}
               />
 
-              {/* Workflow Status */}
+              {/* Workflow Status - Dynamic */}
               <WorkflowStatusBar
-                title="Fleet Operations Status"
-                steps={[
-                  { id: 'planning', label: 'Planning', status: 'completed' },
-                  { id: 'dispatch', label: 'Dispatch', status: 'completed' },
-                  { id: 'transit', label: 'In Transit', status: 'current' },
-                  { id: 'arrival', label: 'Arrival', status: 'pending' },
-                  { id: 'completed', label: 'Completed', status: 'pending' }
-                ]}
+                title="Status Operacional da Frota"
+                steps={workflowSteps}
                 variant="horizontal"
               />
 

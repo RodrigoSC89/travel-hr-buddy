@@ -7,15 +7,19 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download } from 'lucide-react';
+import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { MaintenanceGanttCalendar } from '@/components/world-class';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
+import { toast } from 'sonner';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceHubPremium'));
@@ -55,6 +59,51 @@ export default function MaintenanceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const mode = searchParams.get('mode');
+  const queryClient = useQueryClient();
+  const { createMaintenanceOrder, exportToCSV } = useRealActionHandlers();
+
+  // Real maintenance data
+  const { data: maintenanceRecords = [], isLoading: maintLoading } = useQuery({
+    queryKey: ['maintenance-records-hub'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('maintenance_records')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  const { data: vessels = [] } = useQuery({
+    queryKey: ['maintenance-vessels'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('vessels').select('id, name, status').order('name');
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60000,
+  });
+
+  // Dynamic metrics
+  const maintMetrics = useMemo(() => ({
+    total: maintenanceRecords.length,
+    pending: maintenanceRecords.filter((r: any) => r.status === 'pending').length,
+    inProgress: maintenanceRecords.filter((r: any) => r.status === 'in_progress').length,
+    completed: maintenanceRecords.filter((r: any) => r.status === 'completed').length,
+    vesselsInMaint: vessels.filter((v: any) => v.status === 'maintenance').length,
+  }), [maintenanceRecords, vessels]);
+
+  // Dynamic workflow
+  const workflowSteps = useMemo(() => [
+    { id: 'request', label: 'Solicitação', status: maintMetrics.total > 0 ? 'completed' as const : 'current' as const },
+    { id: 'planning', label: 'Planejamento', status: maintMetrics.pending > 0 ? 'current' as const : maintMetrics.total > 0 ? 'completed' as const : 'pending' as const },
+    { id: 'approval', label: 'Aprovação', status: maintMetrics.inProgress > 0 ? 'completed' as const : maintMetrics.pending > 0 ? 'current' as const : 'pending' as const },
+    { id: 'execution', label: 'Execução', status: maintMetrics.inProgress > 0 ? 'current' as const : 'pending' as const },
+    { id: 'verification', label: 'Verificação', status: maintMetrics.completed > 0 ? 'completed' as const : 'pending' as const }
+  ], [maintMetrics]);
 
   const handleTabChange = (value: string) => {
     const params: Record<string, string> = { tab: value };
@@ -64,9 +113,23 @@ export default function MaintenanceMegaHub() {
     setSearchParams(params);
   };
 
-  const handleActionBarAction = (action: string) => {
-    console.log(`Maintenance action: ${action}`);
-  };
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['maintenance-records-hub'] });
+    await queryClient.invalidateQueries({ queryKey: ['maintenance-vessels'] });
+    toast.success('Dados de manutenção atualizados');
+  }, [queryClient]);
+
+  const handleNewWorkOrder = useCallback(() => {
+    createMaintenanceOrder.mutate({
+      title: `OS-${Date.now().toString().slice(-6)}`,
+      description: 'Nova ordem de serviço',
+      priority: 'medium',
+    });
+  }, [createMaintenanceOrder]);
+
+  const handleExport = useCallback(async () => {
+    exportToCSV(maintenanceRecords, 'maintenance-records');
+  }, [maintenanceRecords, exportToCSV]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,47 +176,65 @@ export default function MaintenanceMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* System Status */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <span>Conectado</span>
+                </div>
+                <span>•</span>
+                <span>{maintMetrics.total} ordens registradas</span>
+                <span>•</span>
+                <span>{maintMetrics.pending} pendentes</span>
+                <span>•</span>
+                <span>{maintMetrics.vesselsInMaint} embarcações em manutenção</span>
+              </div>
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
-                title="Maintenance Command Center"
-                subtitle="Plan, track, and optimize vessel maintenance"
+                title="Centro de Manutenção"
+                subtitle={`${maintMetrics.inProgress} em execução | ${maintMetrics.pending} pendentes | ${maintMetrics.completed} concluídas`}
                 actions={[
                   {
                     id: 'new-work-order',
-                    label: 'New Work Order',
+                    label: 'Nova OS',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('new-work-order'),
-                    variant: 'default'
+                    onClick: handleNewWorkOrder,
+                    variant: 'default',
+                    tooltip: 'Criar nova ordem de serviço'
                   },
                   {
                     id: 'schedule-survey',
-                    label: 'Schedule Survey',
+                    label: 'Vistorias',
                     icon: <Calendar className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'surveys' }),
                     variant: 'outline'
                   },
+                ]}
+                onRefresh={handleRefresh}
+                isRefreshing={maintLoading}
+                secondaryActions={[
                   {
-                    id: 'export',
-                    label: 'Export Report',
+                    id: 'export-csv',
+                    label: 'Exportar CSV',
                     icon: <Download className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('export'),
-                    variant: 'outline'
+                    onClick: handleExport,
+                  },
+                  {
+                    id: 'planning',
+                    label: 'Planejamento Gantt',
+                    icon: <Calendar className="h-4 w-4" />,
+                    onClick: () => setSearchParams({ tab: 'planning' }),
                   }
                 ]}
                 showSearch
-                searchPlaceholder="Search work orders, vessels, surveys..."
+                searchPlaceholder="Buscar ordens, embarcações, equipamentos..."
               />
 
-              {/* Workflow Status */}
+              {/* Workflow Status - Dynamic */}
               <WorkflowStatusBar
-                title="Maintenance Workflow"
-                steps={[
-                  { id: 'request', label: 'Request', status: 'completed' },
-                  { id: 'planning', label: 'Planning', status: 'completed' },
-                  { id: 'approval', label: 'Approval', status: 'current' },
-                  { id: 'execution', label: 'Execution', status: 'pending' },
-                  { id: 'verification', label: 'Verification', status: 'pending' }
-                ]}
+                title="Fluxo de Manutenção"
+                steps={workflowSteps}
                 variant="horizontal"
               />
 
@@ -164,22 +245,24 @@ export default function MaintenanceMegaHub() {
             <TabsContent value="planning" className="mt-0 space-y-6">
               {/* Enhanced Action Bar for Planning */}
               <EnhancedActionBar
-                title="Maintenance Planning"
-                subtitle="Visual Gantt and calendar view of all maintenance activities"
+                title="Planejamento de Manutenção"
+                subtitle="Visualização Gantt e calendário de atividades"
                 actions={[
                   {
                     id: 'new-task',
-                    label: 'New Task',
+                    label: 'Nova Tarefa',
                     icon: <Plus className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('new-task'),
+                    onClick: handleNewWorkOrder,
                     variant: 'default'
                   },
+                ]}
+                onRefresh={handleRefresh}
+                secondaryActions={[
                   {
                     id: 'export',
-                    label: 'Export Schedule',
+                    label: 'Exportar Cronograma',
                     icon: <Download className="h-4 w-4" />,
-                    onClick: () => handleActionBarAction('export-schedule'),
-                    variant: 'outline'
+                    onClick: handleExport,
                   }
                 ]}
               />
