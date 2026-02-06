@@ -3,7 +3,7 @@
  * Gestão de escalas, rotações e embarques
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Calendar, Users, Ship, Clock, AlertTriangle, CheckCircle2,
   ArrowRightLeft, Plane, Hotel, FileText, Search, Filter,
@@ -20,6 +21,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { useCrewRealData, type CrewMemberData } from "@/hooks/useCrewRealData";
+import { EmptyState } from "@/components/ui/UXStates";
 
 interface CrewMember {
   id: string;
@@ -49,21 +52,6 @@ interface Rotation {
   flight?: string;
   hotel?: string;
 }
-
-const crewMembers: CrewMember[] = [
-  { id: "1", name: "Carlos Silva", rank: "Comandante", department: "Deck", vessel: "MV Atlântico Sul", status: "onboard", embarkedDate: "2025-11-15", plannedDisembark: "2026-02-15", daysOnboard: 82, maxDays: 120, certifications: 12, expiringCerts: 1 },
-  { id: "2", name: "João Santos", rank: "Chefe de Máquinas", department: "Engine", vessel: "MV Atlântico Sul", status: "onboard", embarkedDate: "2025-12-01", plannedDisembark: "2026-03-01", daysOnboard: 65, maxDays: 90, certifications: 15, expiringCerts: 0 },
-  { id: "3", name: "Maria Costa", rank: "1º Oficial", department: "Deck", vessel: "MV Horizonte", status: "onboard", embarkedDate: "2025-10-20", plannedDisembark: "2026-02-20", daysOnboard: 107, maxDays: 120, certifications: 10, expiringCerts: 2 },
-  { id: "4", name: "Pedro Oliveira", rank: "2º Oficial", department: "Deck", vessel: "MV Oceano", status: "standby", embarkedDate: "", plannedDisembark: "", daysOnboard: 0, maxDays: 120, nextRotation: "2026-02-10", certifications: 8, expiringCerts: 0 },
-  { id: "5", name: "Ana Ferreira", rank: "Cozinheira", department: "Catering", vessel: "MV Atlântico Sul", status: "on-leave", embarkedDate: "", plannedDisembark: "", daysOnboard: 0, maxDays: 90, nextRotation: "2026-02-25", certifications: 5, expiringCerts: 1 },
-];
-
-const upcomingRotations: Rotation[] = [
-  { id: "1", type: "disembark", crewMember: "Roberto Dias", rank: "Imediato", vessel: "MV Atlântico Sul", port: "Santos", date: "2026-02-10", status: "confirmed", flight: "LA3456", hotel: "Ibis Santos" },
-  { id: "2", type: "embark", crewMember: "Pedro Oliveira", rank: "2º Oficial", vessel: "MV Oceano", port: "Santos", date: "2026-02-10", status: "scheduled", flight: "LA3458" },
-  { id: "3", type: "transfer", crewMember: "Lucas Mendes", rank: "Marinheiro", vessel: "MV Horizonte → MV Pacífico", port: "Rotterdam", date: "2026-02-12", status: "scheduled" },
-  { id: "4", type: "disembark", crewMember: "Carlos Silva", rank: "Comandante", vessel: "MV Atlântico Sul", port: "Santos", date: "2026-02-15", status: "scheduled", flight: "LA3460", hotel: "Hilton Santos" },
-];
 
 function StatusBadge({ status }: { status: CrewMember["status"] }) {
   const config = {
@@ -232,14 +220,72 @@ function RotationCard({ rotation }: { rotation: Rotation }) {
 export default function CrewScheduler() {
   const [activeTab, setActiveTab] = useState("crew");
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: realData, isLoading } = useCrewRealData();
+
+  // Map real data to component format
+  const crewMembers: CrewMember[] = useMemo(() => {
+    return (realData?.crew || []).map(c => ({
+      id: c.id,
+      name: c.name,
+      rank: c.rank,
+      department: c.department,
+      vessel: c.vessel,
+      status: c.status,
+      embarkedDate: c.embarkedDate,
+      plannedDisembark: c.plannedDisembark,
+      daysOnboard: c.daysOnboard,
+      maxDays: c.maxDays,
+      certifications: c.certCount,
+      expiringCerts: c.expiringCerts,
+    }));
+  }, [realData]);
+
+  // Derive upcoming rotations from crew approaching limits
+  const upcomingRotations: Rotation[] = useMemo(() => {
+    return crewMembers
+      .filter(c => c.status === "onboard" && c.daysOnboard > c.maxDays * 0.75)
+      .map(c => ({
+        id: c.id,
+        type: "disembark" as const,
+        crewMember: c.name,
+        rank: c.rank,
+        vessel: c.vessel,
+        port: "A definir",
+        date: c.plannedDisembark || "A definir",
+        status: c.daysOnboard > c.maxDays * 0.9 ? "scheduled" as const : "confirmed" as const,
+      }));
+  }, [crewMembers]);
 
   const stats = {
     onboard: crewMembers.filter(c => c.status === "onboard").length,
     standby: crewMembers.filter(c => c.status === "standby").length,
     onLeave: crewMembers.filter(c => c.status === "on-leave").length,
-    upcomingRotations: upcomingRotations.filter(r => r.status === "scheduled").length,
+    upcomingRotations: upcomingRotations.length,
     overdueCrews: crewMembers.filter(c => c.daysOnboard > c.maxDays * 0.9).length,
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-5 gap-4">
+          {[1,2,3,4,5].map(i => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  if (crewMembers.length === 0) {
+    return (
+      <EmptyState
+        icon={Users}
+        title="Nenhum tripulante cadastrado"
+        message="Cadastre tripulantes para gerenciar escalas, rotações e conformidade MLC."
+        actionLabel="Cadastrar Tripulante"
+        onAction={() => toast.info("Navegue para People Hub para cadastrar")}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">

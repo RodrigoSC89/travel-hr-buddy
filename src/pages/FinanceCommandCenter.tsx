@@ -109,55 +109,7 @@ const CATEGORY_ICONS: Record<string, any> = {
   other: DollarSign,
 };
 
-// Sample route costs data
-const sampleRouteCosts: RouteCost[] = [
-  {
-    id: "1",
-    route: "Santos → Rotterdam",
-    vessel: "MV Atlântico Sul",
-    period: "2024-02",
-    totalCost: 485000,
-    breakdown: { fuel: 285000, crew: 95000, maintenance: 45000, port: 42000, other: 18000 },
-    efficiency: 92,
-    variance: -5.2,
-    aiInsights: [
-      "Economia de 8% em combustível vs média histórica",
-      "Custo de tripulação dentro do esperado",
-      "Manutenção preventiva reduziu custos não planejados em 23%"
-    ]
-  },
-  {
-    id: "2",
-    route: "Rio → Macaé (Offshore)",
-    vessel: "PSV Oceano Azul",
-    period: "2024-02",
-    totalCost: 156000,
-    breakdown: { fuel: 68000, crew: 52000, maintenance: 18000, port: 12000, other: 6000 },
-    efficiency: 88,
-    variance: 3.8,
-    aiInsights: [
-      "Consumo de combustível 4% acima do benchmark",
-      "Recomendado ajuste de velocidade econômica",
-      "Custo portuário otimizado com janelas preferenciais"
-    ]
-  },
-  {
-    id: "3",
-    route: "Bacia de Santos (Operação DP)",
-    vessel: "AHTS Maré Alta",
-    period: "2024-02",
-    totalCost: 892000,
-    breakdown: { fuel: 425000, crew: 185000, maintenance: 125000, port: 85000, other: 72000 },
-    efficiency: 78,
-    variance: 12.5,
-    aiInsights: [
-      "⚠️ Custo operacional 12.5% acima do orçado",
-      "Alto consumo de combustível em modo DP",
-      "Manutenção não planejada impactou orçamento",
-      "Sugerido revisão de contrato de fornecimento"
-    ]
-  }
-];
+// Route costs are now fetched from useFinanceCommandData hook - no mock fallback
 
 const FinanceCommandCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -184,31 +136,20 @@ const FinanceCommandCenter: React.FC = () => {
     refresh,
   } = useFinanceCommandData();
 
-  // Route Cost Analysis State - use real data with fallback
-  const [routeCosts, setRouteCosts] = useState<RouteCost[]>(sampleRouteCosts);
+  // Route Cost Analysis State - use real data only (zero mock policy)
+  const [routeCosts, setRouteCosts] = useState<RouteCost[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState("2024-02");
   const [selectedVessel, setSelectedVessel] = useState("all");
 
   // Sync real data when available
   useEffect(() => {
-    if (realRouteCosts.length > 0) {
-      setRouteCosts(realRouteCosts);
-    }
+    setRouteCosts(realRouteCosts);
   }, [realRouteCosts]);
 
-  // Financial Data State - use real data
-  const financialSummary = realSummary.revenue > 0 ? realSummary : {
-    revenue: 2450000,
-    expenses: 1890000,
-    profit: 560000,
-    budget: 2000000,
-    budgetUsed: 1890000,
-    margin: 22.8,
-    revenueGrowth: 12.5,
-    expenseGrowth: 8.2,
-  };
+  // Financial Data State - real data only
+  const financialSummary = realSummary;
 
-  const transactions = realTransactions.length > 0 ? realTransactions.map((t: any) => ({
+  const transactions = realTransactions.map((t: any) => ({
     id: t.id,
     description: t.description,
     amount: t.type === "expense" ? -Math.abs(t.amount) : t.amount,
@@ -217,33 +158,19 @@ const FinanceCommandCenter: React.FC = () => {
     status: t.status,
     type: t.type,
     requester: t.requester,
-  })) : [
-    { id: "1", description: "Combustível - Embarcação Alpha", amount: -45000, date: "2024-01-15", category: "fuel", status: "approved", type: "expense" },
-    { id: "2", description: "Manutenção Preventiva", amount: -12500, date: "2024-01-14", category: "maintenance", status: "pending", type: "expense", requester: "Carlos Silva" },
-    { id: "3", description: "Contrato de Frete #2024-001", amount: 180000, date: "2024-01-13", category: "revenue", status: "approved", type: "income" },
-  ];
+  }));
 
-  const pendingApprovals = realPendingApprovals.length > 0 ? realPendingApprovals : [
-    { id: "p1", description: "Reparo Motor Principal", amount: 45000, date: "2024-01-15", category: "maintenance", status: "pending", type: "expense", requester: "Carlos Silva" },
-  ];
+  const pendingApprovals = realPendingApprovals;
 
-  const budgetCategories = realBudgets.length > 0 ? realBudgets.map((b: any) => ({
+  const budgetCategories = realBudgets.map((b: any) => ({
     name: b.name,
     allocated: b.allocated,
     spent: b.spent,
     color: b.color,
     icon: CATEGORY_ICONS[b.name.toLowerCase()] || DollarSign,
-  })) : [
-    { name: "Combustível", allocated: 500000, spent: 420000, color: "hsl(var(--chart-1))", icon: Fuel },
-    { name: "Manutenção", allocated: 300000, spent: 280000, color: "hsl(var(--chart-2))", icon: Wrench },
-    { name: "Tripulação", allocated: 400000, spent: 390000, color: "hsl(var(--chart-3))", icon: Users },
-  ];
+  }));
 
-  const monthlyData = realMonthlyData.length > 0 ? realMonthlyData : [
-    { month: "Jan", receita: 420000, despesas: 320000 },
-    { month: "Fev", receita: 380000, despesas: 290000 },
-    { month: "Mar", receita: 450000, despesas: 340000 },
-  ];
+  const monthlyData = realMonthlyData;
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
