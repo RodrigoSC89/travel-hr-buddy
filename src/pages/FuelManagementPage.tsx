@@ -1,6 +1,6 @@
 /**
- * Fuel Management Page - Gestão de Combustível Premium
- * PATCH: Módulo completo de bunker e consumo
+ * Fuel Management Page - Connected to Supabase fuel_records
+ * PATCH Sprint 8: Replaced mock data with useFuelRecords hook
  */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,45 +8,52 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Fuel, TrendingUp, TrendingDown, AlertTriangle, Ship, 
   DollarSign, BarChart3, Calendar, FileText, Droplets,
-  Gauge, Thermometer, Clock, MapPin, Plus, HelpCircle
+  Gauge, Thermometer, Clock, MapPin, Plus, HelpCircle, RefreshCw
 } from "lucide-react";
-
-// Mock data for fuel tanks
-const fuelTanks = [
-  { id: 1, name: "HFO Tank P1", type: "HFO", capacity: 500, current: 420, unit: "MT", temp: 42 },
-  { id: 2, name: "HFO Tank P2", type: "HFO", capacity: 500, current: 380, unit: "MT", temp: 41 },
-  { id: 3, name: "MGO Tank S1", type: "MGO", capacity: 200, current: 165, unit: "MT", temp: 28 },
-  { id: 4, name: "MGO Tank S2", type: "MGO", capacity: 200, current: 180, unit: "MT", temp: 27 },
-  { id: 5, name: "LSFO Tank C1", type: "LSFO", capacity: 300, current: 245, unit: "MT", temp: 35 },
-];
-
-const bunkerHistory = [
-  { id: 1, date: "2026-02-01", port: "Rotterdam", type: "HFO", quantity: 450, price: 485, supplier: "Shell Marine" },
-  { id: 2, date: "2026-01-28", port: "Singapore", type: "MGO", quantity: 180, price: 720, supplier: "BP Marine" },
-  { id: 3, date: "2026-01-15", port: "Fujairah", type: "LSFO", quantity: 320, price: 590, supplier: "ADNOC" },
-];
+import { useFuelRecords } from "@/hooks/useFuelRecords";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function FuelManagementPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showHelp, setShowHelp] = useState(false);
+  const { records, bunkerRecords, tankLevels, stats, isLoading, refetch } = useFuelRecords();
 
-  const totalCapacity = fuelTanks.reduce((acc, t) => acc + t.capacity, 0);
-  const totalCurrent = fuelTanks.reduce((acc, t) => acc + t.current, 0);
-  const fillPercentage = Math.round((totalCurrent / totalCapacity) * 100);
+  if (isLoading) {
+    return (
+      <div className="space-y-6 py-4">
+        <Skeleton className="h-10 w-64" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  const totalCurrent = tankLevels.reduce((s, t) => s + t.current, 0);
+  const totalCapacity = tankLevels.reduce((s, t) => s + t.capacity, 0);
+  const fillPercentage = totalCapacity > 0 ? Math.round((totalCurrent / totalCapacity) * 100) : 0;
+
+  // Calculate daily avg from consumption records
+  const consumptionDays = records.length > 1
+    ? Math.max(1, Math.ceil((new Date(records[0].record_date).getTime() - new Date(records[records.length - 1].record_date).getTime()) / (1000 * 60 * 60 * 24)))
+    : 30;
+  const dailyAvg = stats.totalConsumed > 0 ? (stats.totalConsumed / consumptionDays).toFixed(1) : "0";
+  const autonomyDays = Number(dailyAvg) > 0 ? Math.round(totalCurrent / Number(dailyAvg)) : 0;
+
+  // Fuel type distribution for analytics
+  const fuelTypeDistribution = records.reduce((acc, r) => {
+    acc[r.fuel_type] = (acc[r.fuel_type] || 0) + Number(r.quantity_mt);
+    return acc;
+  }, {} as Record<string, number>);
+  const totalQuantity = Object.values(fuelTypeDistribution).reduce((s, v) => s + v, 0) || 1;
 
   return (
     <div className="space-y-6 py-4">
-      {/* Help Button */}
-      <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={() => setShowHelp(!showHelp)}>
-          <HelpCircle className="h-4 w-4 mr-2" />
-          Ajuda
-        </Button>
-      </div>
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -55,10 +62,14 @@ export default function FuelManagementPage() {
             Gestão de Combustível
           </h1>
           <p className="text-muted-foreground">
-            Bunker Operations, Consumo & Otimização
+            {records.length} registros • {bunkerRecords.length} bunkerings • {stats.fuelTypes} tipos
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
           <Button variant="outline" size="sm">
             <FileText className="h-4 w-4 mr-2" />
             Bunker Report
@@ -70,13 +81,13 @@ export default function FuelManagementPage() {
         </div>
       </div>
 
-      {/* KPIs */}
+      {/* KPIs - Real Data */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total em Tanques</p>
+                <p className="text-sm text-muted-foreground">ROB Estimado</p>
                 <p className="text-2xl font-bold">{totalCurrent.toLocaleString()} MT</p>
                 <p className="text-xs text-muted-foreground">{fillPercentage}% capacidade</p>
               </div>
@@ -92,14 +103,11 @@ export default function FuelManagementPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Consumo Médio/Dia</p>
-                <p className="text-2xl font-bold">28.5 MT</p>
-                <div className="flex items-center text-xs text-success">
-                  <TrendingDown className="h-3 w-3 mr-1" />
-                  -3.2% vs mês anterior
-                </div>
+                <p className="text-2xl font-bold">{dailyAvg} MT</p>
+                <p className="text-xs text-muted-foreground">últimos {consumptionDays} dias</p>
               </div>
-              <div className="p-3 rounded-full bg-success/10">
-                <Gauge className="h-6 w-6 text-success" />
+              <div className="p-3 rounded-full bg-green-500/10">
+                <Gauge className="h-6 w-6 text-green-500" />
               </div>
             </div>
           </CardContent>
@@ -109,15 +117,12 @@ export default function FuelManagementPage() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Custo Bunker YTD</p>
-                <p className="text-2xl font-bold">$1.2M</p>
-                <div className="flex items-center text-xs text-destructive">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  +8.5% vs ano anterior
-                </div>
+                <p className="text-sm text-muted-foreground">Custo Total</p>
+                <p className="text-2xl font-bold">${(stats.totalCost / 1000).toFixed(0)}K</p>
+                <p className="text-xs text-muted-foreground">Preço médio: ${stats.avgPrice.toFixed(0)}/MT</p>
               </div>
-              <div className="p-3 rounded-full bg-warning/10">
-                <DollarSign className="h-6 w-6 text-warning" />
+              <div className="p-3 rounded-full bg-amber-500/10">
+                <DollarSign className="h-6 w-6 text-amber-500" />
               </div>
             </div>
           </CardContent>
@@ -128,11 +133,11 @@ export default function FuelManagementPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Autonomia Estimada</p>
-                <p className="text-2xl font-bold">48 dias</p>
-                <p className="text-xs text-muted-foreground">@ velocidade atual</p>
+                <p className="text-2xl font-bold">{autonomyDays} dias</p>
+                <p className="text-xs text-muted-foreground">@ consumo atual</p>
               </div>
-              <div className="p-3 rounded-full bg-info/10">
-                <Clock className="h-6 w-6 text-info" />
+              <div className="p-3 rounded-full bg-blue-500/10">
+                <Clock className="h-6 w-6 text-blue-500" />
               </div>
             </div>
           </CardContent>
@@ -150,44 +155,47 @@ export default function FuelManagementPage() {
 
         <TabsContent value="dashboard" className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
-            {/* Tank Overview */}
+            {/* Tank Overview - Real Data */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Droplets className="h-5 w-5" />
-                  Visão Geral dos Tanques
+                  Níveis dos Tanques (Estimado)
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {fuelTanks.map(tank => {
-                  const fill = Math.round((tank.current / tank.capacity) * 100);
-                  const isLow = fill < 30;
-                  return (
-                    <div key={tank.id} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{tank.name}</span>
-                          <Badge variant="outline" className="text-xs">{tank.type}</Badge>
+                {tankLevels.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Droplets className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                    <p className="text-muted-foreground">Sem dados de tanques</p>
+                  </div>
+                ) : (
+                  tankLevels.map((tank, i) => {
+                    const fill = tank.capacity > 0 ? Math.round((tank.current / tank.capacity) * 100) : 0;
+                    const isLow = fill < 30;
+                    return (
+                      <div key={i} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{tank.name}</span>
+                            <Badge variant="outline" className="text-xs">{tank.type}</Badge>
+                          </div>
+                          {isLow && <AlertTriangle className="h-4 w-4 text-amber-500" />}
                         </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <Thermometer className="h-3 w-3 text-muted-foreground" />
-                          <span>{tank.temp}°C</span>
-                          {isLow && <AlertTriangle className="h-4 w-4 text-warning" />}
+                        <div className="flex items-center gap-3">
+                          <Progress value={fill} className="flex-1" />
+                          <span className="text-sm font-medium w-24 text-right">
+                            {Math.round(tank.current)}/{Math.round(tank.capacity)} MT
+                          </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <Progress value={fill} className="flex-1" />
-                        <span className="text-sm font-medium w-20 text-right">
-                          {tank.current}/{tank.capacity} MT
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </CardContent>
             </Card>
 
-            {/* Recent Bunker Operations */}
+            {/* Recent Bunker Operations - Real Data */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -197,22 +205,33 @@ export default function FuelManagementPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {bunkerHistory.map(op => (
-                    <div key={op.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{op.port}</span>
-                          <Badge variant="secondary" className="text-xs">{op.type}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{op.supplier}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">{op.quantity} MT</p>
-                        <p className="text-sm text-muted-foreground">${op.price}/MT</p>
-                      </div>
+                  {bunkerRecords.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Ship className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                      <p className="text-muted-foreground">Nenhum bunkering registrado</p>
                     </div>
-                  ))}
+                  ) : (
+                    bunkerRecords.slice(0, 5).map(op => (
+                      <div key={op.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">{op.bunkering_port || "Sem porto"}</span>
+                            <Badge variant="secondary" className="text-xs">{op.fuel_type}</Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {op.supplier || "—"} • {format(new Date(op.record_date), "dd/MM/yyyy")}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">{Number(op.quantity_mt).toLocaleString()} MT</p>
+                          <p className="text-sm text-muted-foreground">
+                            ${Number(op.price_per_mt || 0).toFixed(0)}/MT
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -223,14 +242,14 @@ export default function FuelManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle>Configuração de Tanques</CardTitle>
-              <CardDescription>Gerenciamento detalhado de todos os tanques de combustível</CardDescription>
+              <CardDescription>Níveis estimados baseados em registros de bunker e consumo</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 gap-4">
-                {fuelTanks.map(tank => {
-                  const fill = Math.round((tank.current / tank.capacity) * 100);
+                {tankLevels.map((tank, i) => {
+                  const fill = tank.capacity > 0 ? Math.round((tank.current / tank.capacity) * 100) : 0;
                   return (
-                    <Card key={tank.id} className="bg-muted/30">
+                    <Card key={i} className="bg-muted/30">
                       <CardContent className="pt-4">
                         <div className="flex justify-between items-start mb-4">
                           <div>
@@ -243,14 +262,8 @@ export default function FuelManagementPage() {
                         </div>
                         <Progress value={fill} className="mb-2" />
                         <div className="flex justify-between text-sm text-muted-foreground">
-                          <span>{tank.current} MT</span>
-                          <span>Cap: {tank.capacity} MT</span>
-                        </div>
-                        <div className="mt-3 pt-3 border-t flex justify-between text-sm">
-                          <span className="flex items-center gap-1">
-                            <Thermometer className="h-3 w-3" /> {tank.temp}°C
-                          </span>
-                          <Button variant="ghost" size="sm">Detalhes</Button>
+                          <span>{Math.round(tank.current)} MT</span>
+                          <span>Cap: {Math.round(tank.capacity)} MT</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -265,39 +278,48 @@ export default function FuelManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle>Histórico de Bunker</CardTitle>
-              <CardDescription>Todas as operações de abastecimento registradas</CardDescription>
+              <CardDescription>{bunkerRecords.length} operações registradas</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="rounded-lg border">
-                <table className="w-full">
-                  <thead className="bg-muted/50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-sm font-medium">Data</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium">Porto</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium">Tipo</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium">Fornecedor</th>
-                      <th className="px-4 py-3 text-right text-sm font-medium">Quantidade</th>
-                      <th className="px-4 py-3 text-right text-sm font-medium">Preço/MT</th>
-                      <th className="px-4 py-3 text-right text-sm font-medium">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {bunkerHistory.map(op => (
-                      <tr key={op.id} className="border-t">
-                        <td className="px-4 py-3 text-sm">{op.date}</td>
-                        <td className="px-4 py-3 text-sm">{op.port}</td>
-                        <td className="px-4 py-3"><Badge variant="outline">{op.type}</Badge></td>
-                        <td className="px-4 py-3 text-sm">{op.supplier}</td>
-                        <td className="px-4 py-3 text-sm text-right">{op.quantity} MT</td>
-                        <td className="px-4 py-3 text-sm text-right">${op.price}</td>
-                        <td className="px-4 py-3 text-sm text-right font-medium">
-                          ${(op.quantity * op.price).toLocaleString()}
-                        </td>
+              {bunkerRecords.length === 0 ? (
+                <div className="text-center py-12">
+                  <Ship className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                  <p className="text-muted-foreground">Nenhuma operação de bunker registrada</p>
+                </div>
+              ) : (
+                <div className="rounded-lg border">
+                  <table className="w-full">
+                    <thead className="bg-muted/50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-sm font-medium">Data</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium">Porto</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium">Tipo</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium">Fornecedor</th>
+                        <th className="px-4 py-3 text-right text-sm font-medium">Quantidade</th>
+                        <th className="px-4 py-3 text-right text-sm font-medium">Preço/MT</th>
+                        <th className="px-4 py-3 text-right text-sm font-medium">Total</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {bunkerRecords.map(op => (
+                        <tr key={op.id} className="border-t">
+                          <td className="px-4 py-3 text-sm">
+                            {format(new Date(op.record_date), "dd/MM/yyyy")}
+                          </td>
+                          <td className="px-4 py-3 text-sm">{op.bunkering_port || "—"}</td>
+                          <td className="px-4 py-3"><Badge variant="outline">{op.fuel_type}</Badge></td>
+                          <td className="px-4 py-3 text-sm">{op.supplier || "—"}</td>
+                          <td className="px-4 py-3 text-sm text-right">{Number(op.quantity_mt).toLocaleString()} MT</td>
+                          <td className="px-4 py-3 text-sm text-right">${Number(op.price_per_mt || 0).toFixed(0)}</td>
+                          <td className="px-4 py-3 text-sm text-right font-medium">
+                            ${Number(op.total_cost || 0).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -309,48 +331,50 @@ export default function FuelManagementPage() {
                 <BarChart3 className="h-5 w-5" />
                 Analytics de Consumo
               </CardTitle>
-              <CardDescription>Análise de consumo e custos de combustível</CardDescription>
+              <CardDescription>Análise baseada em {records.length} registros reais</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Consumo por Tipo</h3>
+                  <h3 className="font-semibold">Distribuição por Tipo</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span>HFO (Heavy Fuel Oil)</span>
-                      <span className="font-medium">65%</span>
-                    </div>
-                    <Progress value={65} />
-                    <div className="flex items-center justify-between">
-                      <span>MGO (Marine Gas Oil)</span>
-                      <span className="font-medium">25%</span>
-                    </div>
-                    <Progress value={25} />
-                    <div className="flex items-center justify-between">
-                      <span>LSFO (Low Sulfur)</span>
-                      <span className="font-medium">10%</span>
-                    </div>
-                    <Progress value={10} />
+                    {Object.entries(fuelTypeDistribution)
+                      .sort(([, a], [, b]) => b - a)
+                      .map(([type, qty]) => {
+                        const pct = Math.round((qty / totalQuantity) * 100);
+                        return (
+                          <div key={type}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm">{type}</span>
+                              <span className="font-medium text-sm">{pct}% ({Math.round(qty)} MT)</span>
+                            </div>
+                            <Progress value={pct} />
+                          </div>
+                        );
+                      })}
+                    {Object.keys(fuelTypeDistribution).length === 0 && (
+                      <p className="text-sm text-muted-foreground text-center py-4">Sem dados</p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Métricas de Eficiência</h3>
+                  <h3 className="font-semibold">Métricas Reais</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 bg-muted/50 rounded-lg text-center">
-                      <p className="text-2xl font-bold text-success">94.2%</p>
-                      <p className="text-sm text-muted-foreground">Eficiência do Motor</p>
+                      <p className="text-2xl font-bold text-primary">{stats.totalBunkered.toLocaleString()}</p>
+                      <p className="text-sm text-muted-foreground">MT Bunkered</p>
                     </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-center">
-                      <p className="text-2xl font-bold text-primary">12.4</p>
-                      <p className="text-sm text-muted-foreground">MT/1000nm</p>
+                      <p className="text-2xl font-bold text-amber-500">{stats.totalConsumed.toLocaleString()}</p>
+                      <p className="text-sm text-muted-foreground">MT Consumido</p>
                     </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-center">
-                      <p className="text-2xl font-bold text-warning">$542</p>
+                      <p className="text-2xl font-bold text-green-500">${stats.avgPrice.toFixed(0)}</p>
                       <p className="text-sm text-muted-foreground">Preço Médio/MT</p>
                     </div>
                     <div className="p-4 bg-muted/50 rounded-lg text-center">
-                      <p className="text-2xl font-bold text-info">-5.3%</p>
-                      <p className="text-sm text-muted-foreground">vs Budget</p>
+                      <p className="text-2xl font-bold text-blue-500">{stats.suppliers}</p>
+                      <p className="text-sm text-muted-foreground">Fornecedores</p>
                     </div>
                   </div>
                 </div>
