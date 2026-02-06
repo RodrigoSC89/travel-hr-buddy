@@ -1316,3 +1316,7 @@ comment = "Report generation, custom builder, executive dashboard, scheduled rep
 [functions.mobile-offline-ai]
 verify_jwt = false
 comment = "Offline sync, voice commands, camera OCR, geolocation tracking, offline packages"
+
+[functions.marine-weather]
+verify_jwt = false
+comment = "Marine weather via Open-Meteo free API - waves, wind, temperature, alerts"

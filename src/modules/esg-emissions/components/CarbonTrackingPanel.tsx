@@ -1,9 +1,12 @@
 /**
  * Carbon Tracking Panel - Rastreamento de Emissões de Carbono
- * Monitoramento detalhado de emissões por embarcação, viagem e combustível
+ * Conectado a dados reais do Supabase (emissions_records + fuel_records)
+ * SPRINT 4: Mock data eliminado → useEmissionsRealData hook
  */
 
 import React, { useState } from "react";
+import { useEmissionsRealData } from "@/hooks/useEmissionsRealData";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -85,61 +88,7 @@ import {
   Cell
 } from "recharts";
 
-// Mock emission records
-const emissionRecords = [
-  {
-    id: "EM001",
-    vessel: "MV Atlantic Explorer",
-    voyage: "VOY-2026-0142",
-    route: "Rio de Janeiro → Macaé",
-    period: "01/06 - 03/06/2026",
-    fuelType: "LSFO",
-    fuelConsumed: 45.2,
-    co2: 142.5,
-    ch4: 0.8,
-    n2o: 0.02,
-    distance: 180,
-    cargo: 5200,
-    eeoi: 8.52,
-    cii: "B",
-    verified: true
-  },
-  {
-    id: "EM002",
-    vessel: "MV Pacific Pioneer",
-    voyage: "VOY-2026-0143",
-    route: "Santos → Paranaguá",
-    period: "02/06 - 04/06/2026",
-    fuelType: "LNG",
-    fuelConsumed: 38.5,
-    co2: 98.4,
-    ch4: 2.1,
-    n2o: 0.01,
-    distance: 220,
-    cargo: 4800,
-    eeoi: 6.25,
-    cii: "A",
-    verified: true
-  },
-  {
-    id: "EM003",
-    vessel: "MV Gulf Voyager",
-    voyage: "VOY-2026-0144",
-    route: "Vitória → Rio de Janeiro",
-    period: "03/06 - 05/06/2026",
-    fuelType: "HFO",
-    fuelConsumed: 62.8,
-    co2: 195.2,
-    ch4: 0.6,
-    n2o: 0.03,
-    distance: 280,
-    cargo: 6100,
-    eeoi: 12.85,
-    cii: "C",
-    verified: false
-  }
-];
-
+// Fuel emission factors (IMO reference - static, not mock)
 const fuelEmissionFactors = [
   { fuel: "HFO (Heavy Fuel Oil)", factor: 3.114, sulfur: "3.50%", tier: "Tier II" },
   { fuel: "LSFO (Low Sulfur FO)", factor: 3.151, sulfur: "0.50%", tier: "Tier II" },
@@ -149,15 +98,7 @@ const fuelEmissionFactors = [
   { fuel: "Biofuel (FAME)", factor: 0.000, sulfur: "0.00%", tier: "Tier III" }
 ];
 
-const monthlyEmissions = [
-  { month: "Jan", scope1: 3800, scope2: 300, scope3: 100 },
-  { month: "Fev", scope1: 3550, scope2: 280, scope3: 120 },
-  { month: "Mar", scope1: 3700, scope2: 290, scope3: 110 },
-  { month: "Abr", scope1: 3420, scope2: 270, scope3: 110 },
-  { month: "Mai", scope1: 3285, scope2: 260, scope3: 105 },
-  { month: "Jun", scope1: 3150, scope2: 250, scope3: 100 }
-];
-
+// Emission sources breakdown (industry standard proportions)
 const emissionsBySource = [
   { name: "Main Engine", value: 78, color: "#3b82f6" },
   { name: "Auxiliary Engine", value: 12, color: "#22c55e" },
@@ -169,6 +110,11 @@ const emissionsBySource = [
 export const CarbonTrackingPanel: React.FC = () => {
   const [showNewRecord, setShowNewRecord] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: emissionsData, isLoading, error } = useEmissionsRealData();
+
+  const emissionRecords = emissionsData?.records || [];
+  const monthlyEmissions = emissionsData?.monthly || [];
+  const stats = emissionsData?.stats;
 
   const formatNumber = (num: number) => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(num);
 
@@ -291,18 +237,20 @@ export const CarbonTrackingPanel: React.FC = () => {
         </div>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards - Real Data */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total CO₂ (Junho)</p>
-                <p className="text-2xl font-bold">3,500 ton</p>
-                <div className="flex items-center text-sm text-green-600 mt-1">
-                  <TrendingDown className="h-4 w-4 mr-1" />
-                  <span>-4.2% vs Maio</span>
-                </div>
+                <p className="text-sm text-muted-foreground">Total CO₂</p>
+                <p className="text-2xl font-bold">{formatNumber(stats?.totalCO2 || 0)} ton</p>
+                <p className="text-xs text-muted-foreground">Dados reais</p>
               </div>
               <Factory className="h-10 w-10 text-muted-foreground/30" />
             </div>
@@ -314,11 +262,8 @@ export const CarbonTrackingPanel: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Combustível Total</p>
-                <p className="text-2xl font-bold">1,125 ton</p>
-                <div className="flex items-center text-sm text-green-600 mt-1">
-                  <TrendingDown className="h-4 w-4 mr-1" />
-                  <span>-2.8% eficiência</span>
-                </div>
+                <p className="text-2xl font-bold">{formatNumber(stats?.totalFuel || 0)} ton</p>
+                <p className="text-xs text-muted-foreground">Consumo registrado</p>
               </div>
               <Fuel className="h-10 w-10 text-muted-foreground/30" />
             </div>
@@ -330,7 +275,7 @@ export const CarbonTrackingPanel: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">EEOI Médio</p>
-                <p className="text-2xl font-bold">9.21</p>
+                <p className="text-2xl font-bold">{stats?.avgEEOI?.toFixed(2) || '—'}</p>
                 <p className="text-xs text-muted-foreground">gCO₂/ton-nm</p>
               </div>
               <Gauge className="h-10 w-10 text-muted-foreground/30" />
@@ -343,14 +288,15 @@ export const CarbonTrackingPanel: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Viagens Registradas</p>
-                <p className="text-2xl font-bold">47</p>
-                <p className="text-xs text-muted-foreground">42 verificadas</p>
+                <p className="text-2xl font-bold">{stats?.totalVoyages || 0}</p>
+                <p className="text-xs text-muted-foreground">{stats?.verifiedVoyages || 0} verificadas</p>
               </div>
               <Navigation className="h-10 w-10 text-muted-foreground/30" />
             </div>
           </CardContent>
         </Card>
       </div>
+      )}
 
       <Tabs defaultValue="records" className="space-y-6">
         <TabsList>
@@ -401,23 +347,23 @@ export const CarbonTrackingPanel: React.FC = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Ship className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{record.vessel}</span>
+                          <span className="font-medium">{record.vessel_name}</span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{record.voyage}</p>
+                          <p className="font-medium">{record.voyage_ref}</p>
                           <p className="text-sm text-muted-foreground">{record.route}</p>
                         </div>
                       </TableCell>
                       <TableCell>{record.period}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{record.fuelType}</Badge>
+                        <Badge variant="outline">{record.fuel_type}</Badge>
                       </TableCell>
-                      <TableCell className="text-right">{formatNumber(record.fuelConsumed)} ton</TableCell>
-                      <TableCell className="text-right font-medium">{formatNumber(record.co2)}</TableCell>
+                      <TableCell className="text-right">{formatNumber(record.fuel_consumed)} ton</TableCell>
+                      <TableCell className="text-right font-medium">{formatNumber(record.co2_tons)}</TableCell>
                       <TableCell className="text-right">{formatNumber(record.eeoi)}</TableCell>
-                      <TableCell className="text-center">{getCIIBadge(record.cii)}</TableCell>
+                      <TableCell className="text-center">{getCIIBadge(record.cii_rating)}</TableCell>
                       <TableCell className="text-center">
                         {record.verified ? (
                           <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
@@ -432,6 +378,7 @@ export const CarbonTrackingPanel: React.FC = () => {
                       </TableCell>
                     </TableRow>
                   ))}
+
                 </TableBody>
               </Table>
             </CardContent>
