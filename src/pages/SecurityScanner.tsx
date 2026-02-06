@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Shield, AlertTriangle, CheckCircle, XCircle, Play, RefreshCw, FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useSecurityScanData } from "@/hooks/useSecurityScanData";
 
 interface SecurityFinding {
   id: string;
@@ -18,15 +19,6 @@ interface SecurityFinding {
   description: string;
   status: "open" | "fixed" | "ignored";
 }
-
-const mockFindings: SecurityFinding[] = [
-  { id: "SEC-001", title: "RLS Policy Missing", severity: "critical", category: "Database", description: "Tabela 'documents' sem política RLS habilitada", status: "open" },
-  { id: "SEC-002", title: "Weak Password Policy", severity: "high", category: "Authentication", description: "Política de senha não requer caracteres especiais", status: "open" },
-  { id: "SEC-003", title: "Exposed API Key", severity: "high", category: "Secrets", description: "Chave de API encontrada em código frontend", status: "fixed" },
-  { id: "SEC-004", title: "Missing Rate Limiting", severity: "medium", category: "API", description: "Edge function sem rate limiting configurado", status: "open" },
-  { id: "SEC-005", title: "Outdated Dependency", severity: "low", category: "Dependencies", description: "Pacote 'lodash' desatualizado", status: "ignored" },
-  { id: "SEC-006", title: "CORS Misconfiguration", severity: "medium", category: "API", description: "CORS permite todas as origens (*)", status: "open" },
-];
 
 const severityColors = {
   critical: "bg-red-600",
@@ -43,10 +35,11 @@ const statusIcons = {
 };
 
 export default function SecurityScanner() {
+  const { findings: realFindings, isLoading, markFixed, refetch } = useSecurityScanData();
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
-  const [findings, setFindings] = useState<SecurityFinding[]>(mockFindings);
-  const [lastScan, setLastScan] = useState<string | null>("2024-01-15 14:30:00");
+  const findings = realFindings;
+  const [lastScan, setLastScan] = useState<string | null>(new Date().toLocaleString());
 
   const handleScan = () => {
     setIsScanning(true);
@@ -67,10 +60,7 @@ export default function SecurityScanner() {
   };
 
   const handleFixFinding = (id: string) => {
-    setFindings(prev => prev.map(f => 
-      f.id === id ? { ...f, status: "fixed" as const } : f
-    ));
-    toast.success(`Finding ${id} marcado como corrigido`);
+    markFixed.mutate(id);
   };
 
   const openCount = findings.filter(f => f.status === "open").length;
