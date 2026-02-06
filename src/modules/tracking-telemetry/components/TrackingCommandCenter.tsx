@@ -1,9 +1,10 @@
 /**
  * Tracking Command Center - Premium Telemetry Dashboard
  * Centro de Comando de Rastreamento e Telemetria
+ * CONNECTED TO REAL DATA via useTrackingVesselsData
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,53 +16,16 @@ import {
   MapPin, Navigation, Anchor, Ship, Wifi, Signal, Compass,
   Clock, Eye, Target, Zap, Globe, ArrowRight, Sparkles,
   Battery, Thermometer, Gauge, Wind, Waves, Sun, Moon,
-  RefreshCw, Settings, Bell, Search, Filter, MoreVertical
+  RefreshCw, Settings, Bell, Search, Filter, MoreVertical,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTrackingVesselsData, type TrackingVessel, type TrackingTelemetryStats } from "@/hooks/useTrackingVesselsData";
 
-// Types
-interface Vessel {
-  id: string;
-  name: string;
-  imo: string;
-  position: { lat: number; lng: number };
-  heading: number;
-  speed: number;
-  status: "sailing" | "anchored" | "moored" | "maintenance";
-  lastUpdate: string;
-  signalStrength: number;
-  fuelLevel: number;
-  engineTemp: number;
-  alerts: number;
-}
-
-interface TelemetryData {
-  vesselsOnline: number;
-  totalVessels: number;
-  avgSignal: number;
-  activeAlerts: number;
-  dataPoints: number;
-  lastSync: string;
-}
-
-// Mock data - should connect to real Supabase
-const mockVessels: Vessel[] = [
-  { id: "1", name: "MV Atlântico Sul", imo: "IMO 9876543", position: { lat: -22.9068, lng: -43.1729 }, heading: 125, speed: 12.5, status: "sailing", lastUpdate: "10s", signalStrength: 95, fuelLevel: 78, engineTemp: 72, alerts: 0 },
-  { id: "2", name: "MV Horizonte", imo: "IMO 9876544", position: { lat: -23.0068, lng: -42.8729 }, heading: 230, speed: 0, status: "anchored", lastUpdate: "15s", signalStrength: 88, fuelLevel: 65, engineTemp: 45, alerts: 1 },
-  { id: "3", name: "MV Oceano", imo: "IMO 9876545", position: { lat: -22.7068, lng: -43.4729 }, heading: 45, speed: 8.2, status: "sailing", lastUpdate: "5s", signalStrength: 92, fuelLevel: 82, engineTemp: 68, alerts: 0 },
-  { id: "4", name: "MV Pacífico", imo: "IMO 9876546", position: { lat: -22.5068, lng: -43.7729 }, heading: 180, speed: 0, status: "moored", lastUpdate: "8s", signalStrength: 98, fuelLevel: 95, engineTemp: 35, alerts: 0 },
-  { id: "5", name: "MV Caribe", imo: "IMO 9876547", position: { lat: -23.2068, lng: -44.1729 }, heading: 90, speed: 15.8, status: "sailing", lastUpdate: "12s", signalStrength: 75, fuelLevel: 45, engineTemp: 78, alerts: 2 },
-];
-
-const telemetryStats: TelemetryData = {
-  vesselsOnline: 14,
-  totalVessels: 15,
-  avgSignal: 89,
-  activeAlerts: 3,
-  dataPoints: 1247852,
-  lastSync: "2s ago"
-};
+// Types - use imported types
+type Vessel = TrackingVessel;
+type TelemetryData = TrackingTelemetryStats;
 
 // Vessel Status Badge
 function VesselStatusBadge({ status }: { status: Vessel["status"] }) {
@@ -366,9 +330,15 @@ function AIPredictionsPanel() {
 export default function TrackingCommandCenter() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
-  const [vessels] = useState(mockVessels);
+  const { data, isLoading } = useTrackingVesselsData();
 
-  const filteredVessels = vessels.filter(v => 
+  const vessels = data?.vessels || [];
+  const stats = data?.stats || {
+    vesselsOnline: 0, totalVessels: 0, avgSignal: 0,
+    activeAlerts: 0, dataPoints: 0, lastSync: "—"
+  };
+
+  const filteredVessels = vessels.filter((v: Vessel) => 
     v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     v.imo.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -378,10 +348,19 @@ export default function TrackingCommandCenter() {
     toast.info(`Focando em ${vessel.name}`);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando telemetria...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Real-time Stats */}
-      <RealtimeStatsPanel stats={telemetryStats} />
+      <RealtimeStatsPanel stats={stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Fleet List */}
