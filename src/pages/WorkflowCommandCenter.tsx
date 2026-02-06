@@ -59,51 +59,23 @@ interface WorkflowNode {
   config?: Record<string, any>;
 }
 
-// Mock visual workflow data
-const mockVisualWorkflows = [
-  {
-    id: "vw-1",
-    name: "Onboarding Crew Automation",
-    nodes: [
-      { id: "n1", type: "trigger" as const, label: "Novo tripulante cadastrado", status: "completed" as const },
-      { id: "n2", type: "action" as const, label: "Criar credenciais", status: "completed" as const },
-      { id: "n3", type: "condition" as const, label: "Certificações válidas?", status: "running" as const },
-      { id: "n4", type: "action" as const, label: "Agendar treinamento", status: "pending" as const },
-      { id: "n5", type: "end" as const, label: "Onboarding completo", status: "pending" as const },
-    ],
-    status: "running",
-    executions: 47,
-    lastRun: "2024-01-15T10:30:00Z",
-  },
-  {
-    id: "vw-2",
-    name: "Manutenção Preventiva Flow",
-    nodes: [
-      { id: "n1", type: "trigger" as const, label: "Timer: 30 dias", status: "completed" as const },
-      { id: "n2", type: "action" as const, label: "Gerar checklist", status: "completed" as const },
-      { id: "n3", type: "action" as const, label: "Notificar técnico", status: "completed" as const },
-      { id: "n4", type: "delay" as const, label: "Aguardar 24h", status: "running" as const },
-      { id: "n5", type: "condition" as const, label: "Tarefa concluída?", status: "pending" as const },
-      { id: "n6", type: "end" as const, label: "Finalizar", status: "pending" as const },
-    ],
-    status: "running",
-    executions: 156,
-    lastRun: "2024-01-15T08:00:00Z",
-  },
-  {
-    id: "vw-3",
-    name: "Alerta de Certificação",
-    nodes: [
-      { id: "n1", type: "trigger" as const, label: "Certificado expira em 30 dias", status: "completed" as const },
-      { id: "n2", type: "action" as const, label: "Enviar email", status: "completed" as const },
-      { id: "n3", type: "action" as const, label: "Criar tarefa", status: "completed" as const },
-      { id: "n4", type: "end" as const, label: "Alerta enviado", status: "completed" as const },
-    ],
-    status: "completed",
-    executions: 89,
-    lastRun: "2024-01-14T14:20:00Z",
-  },
-];
+// Visual workflows derived from real workflow data
+const getVisualWorkflows = (workflows: any[]) => {
+  if (workflows.length === 0) return [];
+  return workflows.slice(0, 3).map((w, i) => ({
+    id: `vw-${w.id || i}`,
+    name: w.name || `Workflow ${i + 1}`,
+    nodes: (w.steps || []).map((step: any, si: number) => ({
+      id: `n${si + 1}`,
+      type: si === 0 ? "trigger" as const : si === (w.steps?.length || 1) - 1 ? "end" as const : "action" as const,
+      label: step.name || step.title || `Etapa ${si + 1}`,
+      status: w.status === "completed" ? "completed" as const : si === 0 ? "completed" as const : "pending" as const,
+    })),
+    status: w.status === "active" ? "running" : w.status || "draft",
+    executions: w.execution_count || 0,
+    lastRun: w.updated_at || new Date().toISOString(),
+  }));
+};
 
 export default function WorkflowCommandCenter() {
   const { toast } = useToast();
