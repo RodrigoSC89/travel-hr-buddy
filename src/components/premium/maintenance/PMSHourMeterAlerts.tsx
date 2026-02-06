@@ -1,6 +1,6 @@
 /**
- * FASE 2 - Manutenção Preventiva
- * PMS baseado em horímetro com alertas automáticos (benchmark: SERTICA)
+ * PMS Hour Meter Alerts - Real data from maintenance_records
+ * Preventive maintenance tracking
  */
 
 import React, { useState } from "react";
@@ -8,110 +8,119 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Clock, AlertTriangle, CheckCircle, Calendar, 
-  Wrench, Timer, Bell, Settings, Play, Pause,
-  RotateCcw, TrendingUp, Gauge
+  Clock, AlertTriangle, CheckCircle, Wrench, Gauge, Bell, RotateCcw
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface MaintenanceTask {
-  id: string;
-  equipment: string;
-  task: string;
-  interval: number; // hours
-  currentHours: number;
-  lastMaintenance: string;
-  status: "ok" | "warning" | "overdue";
-  priority: "low" | "medium" | "high" | "critical";
-}
-
-const maintenanceTasks: MaintenanceTask[] = [
-  {
-    id: "1",
-    equipment: "Motor Principal ME-01",
-    task: "Troca de óleo lubrificante",
-    interval: 500,
-    currentHours: 485,
-    lastMaintenance: "2024-01-15",
-    status: "warning",
-    priority: "high"
-  },
-  {
-    id: "2",
-    equipment: "Gerador Auxiliar GE-01",
-    task: "Inspeção de filtros de ar",
-    interval: 250,
-    currentHours: 280,
-    lastMaintenance: "2024-01-20",
-    status: "overdue",
-    priority: "critical"
-  },
-  {
-    id: "3",
-    equipment: "Compressor de Ar CA-01",
-    task: "Verificação de válvulas",
-    interval: 1000,
-    currentHours: 720,
-    lastMaintenance: "2024-01-10",
-    status: "ok",
-    priority: "medium"
-  },
-  {
-    id: "4",
-    equipment: "Sistema Hidráulico SH-01",
-    task: "Análise de óleo hidráulico",
-    interval: 750,
-    currentHours: 650,
-    lastMaintenance: "2024-01-05",
-    status: "ok",
-    priority: "medium"
-  },
-  {
-    id: "5",
-    equipment: "Bomba de Lastro BL-01",
-    task: "Inspeção de selo mecânico",
-    interval: 2000,
-    currentHours: 1950,
-    lastMaintenance: "2023-12-01",
-    status: "warning",
-    priority: "high"
-  },
-];
-
-const hourMeters = [
-  { equipment: "Motor Principal", hours: 12450, running: true },
-  { equipment: "Gerador #1", hours: 8920, running: true },
-  { equipment: "Gerador #2", hours: 7840, running: false },
-  { equipment: "Compressor", hours: 5620, running: true },
-];
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/UXStates";
 
 export default function PMSHourMeterAlerts() {
   const [selectedTab, setSelectedTab] = useState("tasks");
+  const queryClient = useQueryClient();
 
-  const getProgressPercentage = (current: number, interval: number) => {
-    return Math.min((current / interval) * 100, 100);
+  const { data: records = [], isLoading } = useQuery({
+    queryKey: ["pms-maintenance-records"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("maintenance_records")
+        .select("id, title, description, maintenance_type, priority, status, scheduled_date, completed_date, estimated_duration, actual_duration, vessel_id, assigned_technician")
+        .order("priority", { ascending: true })
+        .order("scheduled_date", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30000,
+  });
+
+  const { data: vessels = [] } = useQuery({
+    queryKey: ["pms-vessels"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("vessels").select("id, name").order("name");
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("maintenance_records")
+        .update({ status: "completed", completed_date: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pms-maintenance-records"] });
+      queryClient.invalidateQueries({ queryKey: ["maintenance"] });
+      toast.success("Manutenção marcada como concluída");
+    },
+    onError: (err: any) => toast.error(err.message),
+  });
+
+  const createOSMutation = useMutation({
+    mutationFn: async (record: any) => {
+      const { error } = await supabase
+        .from("maintenance_records")
+        .update({ status: "in_progress" })
+        .eq("id", record.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pms-maintenance-records"] });
+      toast.success("Ordem de serviço iniciada");
+    },
+    onError: (err: any) => toast.error(err.message),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="grid grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
+  if (records.length === 0) {
+    return (
+      <EmptyState
+        icon={Gauge}
+        title="Nenhuma tarefa PMS"
+        message="Cadastre tarefas de manutenção preventiva para acompanhar intervalos e horímetros."
+      />
+    );
+  }
+
+  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+
+  const getStatus = (r: any) => {
+    if (r.status === "completed") return "ok";
+    const scheduled = new Date(r.scheduled_date);
+    const now = new Date();
+    if (scheduled < now) return "overdue";
+    const daysLeft = (scheduled.getTime() - now.getTime()) / (1000 * 86400);
+    if (daysLeft < 7) return "warning";
+    return "ok";
   };
 
-  const getRemainingHours = (current: number, interval: number) => {
-    return Math.max(interval - current, 0);
-  };
+  const enrichedRecords = records.map((r: any) => ({
+    ...r,
+    vesselName: vesselMap.get(r.vessel_id) || "N/A",
+    computedStatus: getStatus(r),
+  }));
 
-  const handleCreateWorkOrder = (taskId: string) => {
-    toast.success("Ordem de serviço criada automaticamente");
-  };
-
-  const handleResetCounter = (taskId: string) => {
-    toast.success("Contador resetado após manutenção");
-  };
-
-  const overdueCount = maintenanceTasks.filter(t => t.status === "overdue").length;
-  const warningCount = maintenanceTasks.filter(t => t.status === "warning").length;
+  const overdueCount = enrichedRecords.filter((r: any) => r.computedStatus === "overdue").length;
+  const warningCount = enrichedRecords.filter((r: any) => r.computedStatus === "warning").length;
+  const completedCount = enrichedRecords.filter((r: any) => r.status === "completed").length;
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
@@ -124,7 +133,6 @@ export default function PMSHourMeterAlerts() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -136,27 +144,23 @@ export default function PMSHourMeterAlerts() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Em Dia</p>
-                <p className="text-2xl font-bold text-success">
-                  {maintenanceTasks.length - overdueCount - warningCount}
-                </p>
+                <p className="text-xs text-muted-foreground">Concluídas</p>
+                <p className="text-2xl font-bold text-success">{completedCount}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-l-4 border-l-primary">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Total Tarefas</p>
-                <p className="text-2xl font-bold">{maintenanceTasks.length}</p>
+                <p className="text-2xl font-bold">{records.length}</p>
               </div>
               <Wrench className="h-8 w-8 text-primary opacity-60" />
             </div>
@@ -167,155 +171,85 @@ export default function PMSHourMeterAlerts() {
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
         <TabsList>
           <TabsTrigger value="tasks" className="gap-2">
-            <Wrench className="h-4 w-4" />
-            Tarefas PMS
+            <Wrench className="h-4 w-4" /> Tarefas PMS
           </TabsTrigger>
-          <TabsTrigger value="hourmeters" className="gap-2">
-            <Gauge className="h-4 w-4" />
-            Horímetros
-          </TabsTrigger>
-          <TabsTrigger value="alerts" className="gap-2">
-            <Bell className="h-4 w-4" />
-            Configurar Alertas
+          <TabsTrigger value="overdue" className="gap-2">
+            <AlertTriangle className="h-4 w-4" /> Vencidas ({overdueCount})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="tasks" className="space-y-4 mt-4">
-          {maintenanceTasks
-            .sort((a, b) => {
-              const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-              return priorityOrder[a.priority] - priorityOrder[b.priority];
+          {enrichedRecords
+            .filter((r: any) => r.status !== "completed")
+            .sort((a: any, b: any) => {
+              const order: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+              return (order[a.priority] ?? 9) - (order[b.priority] ?? 9);
             })
-            .map((task) => (
+            .map((task: any) => (
             <Card key={task.id} className={`border-l-4 ${
-              task.status === "overdue" ? "border-l-destructive" :
-              task.status === "warning" ? "border-l-warning" : "border-l-success"
+              task.computedStatus === "overdue" ? "border-l-destructive" :
+              task.computedStatus === "warning" ? "border-l-warning" : "border-l-success"
             }`}>
               <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-2">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold">{task.equipment}</h4>
+                      <h4 className="font-semibold">{task.title}</h4>
                       <Badge variant={
                         task.priority === "critical" ? "destructive" :
                         task.priority === "high" ? "secondary" : "outline"
                       }>
                         {task.priority}
                       </Badge>
+                      <Badge variant="outline">{task.maintenance_type}</Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">{task.task}</p>
+                    <p className="text-sm text-muted-foreground">{task.vesselName} • {task.description || "Sem descrição"}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleCreateWorkOrder(task.id)}
-                    >
-                      <Wrench className="h-4 w-4 mr-1" />
-                      Criar OS
+                    <Button variant="outline" size="sm" onClick={() => createOSMutation.mutate(task)} disabled={createOSMutation.isPending}>
+                      <Wrench className="h-4 w-4 mr-1" /> Iniciar
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => handleResetCounter(task.id)}
-                    >
-                      <RotateCcw className="h-4 w-4" />
+                    <Button variant="ghost" size="sm" onClick={() => completeMutation.mutate(task.id)} disabled={completeMutation.isPending}>
+                      <CheckCircle className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Progresso: {task.currentHours}h / {task.interval}h</span>
-                    <span className={
-                      task.status === "overdue" ? "text-destructive font-medium" :
-                      task.status === "warning" ? "text-warning font-medium" : ""
-                    }>
-                      {task.status === "overdue" 
-                        ? `${task.currentHours - task.interval}h vencida`
-                        : `${getRemainingHours(task.currentHours, task.interval)}h restantes`
-                      }
-                    </span>
-                  </div>
-                  <Progress 
-                    value={getProgressPercentage(task.currentHours, task.interval)}
-                    className={`h-2 ${
-                      task.status === "overdue" ? "[&>div]:bg-destructive" :
-                      task.status === "warning" ? "[&>div]:bg-warning" : ""
-                    }`}
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Última manutenção: {task.lastMaintenance}</span>
-                    <span>Intervalo: {task.interval}h</span>
-                  </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Agendada: {new Date(task.scheduled_date).toLocaleDateString("pt-BR")}</span>
+                  <span>Duração est.: {task.estimated_duration || "?"}h</span>
+                  {task.assigned_technician && <span>Responsável: {task.assigned_technician}</span>}
                 </div>
               </CardContent>
             </Card>
           ))}
         </TabsContent>
 
-        <TabsContent value="hourmeters" className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {hourMeters.map((meter) => (
-              <Card key={meter.equipment}>
+        <TabsContent value="overdue" className="space-y-4 mt-4">
+          {enrichedRecords.filter((r: any) => r.computedStatus === "overdue").length === 0 ? (
+            <Card><CardContent className="p-8 text-center text-muted-foreground">
+              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
+              Nenhuma manutenção vencida!
+            </CardContent></Card>
+          ) : (
+            enrichedRecords.filter((r: any) => r.computedStatus === "overdue").map((task: any) => (
+              <Card key={task.id} className="border-l-4 border-l-destructive">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-3 w-3 rounded-full ${
-                        meter.running ? "bg-success animate-pulse" : "bg-muted"
-                      }`} />
-                      <h4 className="font-semibold">{meter.equipment}</h4>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold">{task.title}</h4>
+                      <p className="text-sm text-muted-foreground">{task.vesselName}</p>
+                      <p className="text-xs text-destructive mt-1">
+                        Vencida desde {new Date(task.scheduled_date).toLocaleDateString("pt-BR")}
+                      </p>
                     </div>
-                    <Badge variant={meter.running ? "default" : "secondary"}>
-                      {meter.running ? (
-                        <><Play className="h-3 w-3 mr-1" /> Em operação</>
-                      ) : (
-                        <><Pause className="h-3 w-3 mr-1" /> Parado</>
-                      )}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-center py-6">
-                    <div className="text-center">
-                      <Gauge className="h-12 w-12 mx-auto text-primary mb-2" />
-                      <p className="text-3xl font-bold">{meter.hours.toLocaleString()}h</p>
-                      <p className="text-sm text-muted-foreground">Horas de operação</p>
-                    </div>
+                    <Button size="sm" onClick={() => createOSMutation.mutate(task)}>
+                      <Wrench className="h-4 w-4 mr-1" /> Criar OS
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="alerts" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Settings className="h-5 w-5" />
-                Configurações de Alertas Automáticos
-              </CardTitle>
-              <CardDescription>
-                Configure quando receber notificações de manutenção preventiva
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {[
-                { label: "Alerta crítico (10% restantes)", enabled: true },
-                { label: "Alerta de aviso (20% restantes)", enabled: true },
-                { label: "Lembrete (30% restantes)", enabled: false },
-                { label: "Notificação por email", enabled: true },
-                { label: "Notificação push mobile", enabled: true },
-                { label: "Criar OS automaticamente quando vencer", enabled: false },
-              ].map((setting, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
-                  <span>{setting.label}</span>
-                  <Button variant={setting.enabled ? "default" : "outline"} size="sm">
-                    {setting.enabled ? "Ativo" : "Inativo"}
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+            ))
+          )}
         </TabsContent>
       </Tabs>
     </div>
