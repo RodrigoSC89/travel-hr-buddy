@@ -50,6 +50,29 @@
 - Posições geradas de forma consistente por vessel ID
 - Estados UX: Loading, Error, Empty
 
+### FIX-005: VoyagePnLPage - Rota 404 → Página Funcional
+**Arquivo:** `src/pages/VoyagePnLPage.tsx`
+**Causa:** Rota `/voyage-pnl` retornava 404
+**Correção:**
+- Criada página completa `VoyagePnLPage.tsx`
+- Hook conectado à tabela `vessels` do Supabase
+- Cálculos de P&L (Revenue, Costs, Profit, Margin)
+- KPIs dinâmicos com totais e médias
+- Export CSV funcional
+- Estados UX padronizados
+
+### FIX-006: CrewSchedulerPage - Rota 404 → Página Funcional
+**Arquivo:** `src/pages/CrewSchedulerPage.tsx`
+**Causa:** Rota `/crew-scheduler` retornava 404
+**Correção:**
+- Criada página completa `CrewSchedulerPage.tsx`
+- Hook conectado à tabela `vessels` para associação
+- Gestão de tripulação com status (onboard, available, onleave, training)
+- Modal para adicionar tripulantes
+- Alertas de rotação expirando
+- Export CSV funcional
+- Estados UX padronizados
+
 ---
 
 ## 📊 STATUS FINAL
@@ -60,15 +83,19 @@
 | OperationsOverview | Mock | ✅ Hook Real |
 | ExecutiveDashboard | Mock | ✅ Hook Real |
 | RealTimeTracking | Mock | ✅ Hook Real |
+| VoyagePnL | 404 | ✅ Página Criada |
+| CrewScheduler | 404 | ✅ Página Criada |
 
-## 🆕 HOOKS CRIADOS
+## 🆕 PÁGINAS/HOOKS CRIADOS
 
-| Hook | Tabelas | Funcionalidades |
-|------|---------|-----------------|
+| Arquivo | Tabelas | Funcionalidades |
+|---------|---------|-----------------|
 | `useClassSurveys` | vessels | CRUD, Export CSV |
 | `useFleetOperations` | vessels | KPIs, Export CSV, Status Update |
 | `useExecutiveKPIs` | vessels, incidents | Financial, Operational, Safety, ESG |
 | `useFleetTracking` | vessels | Realtime sub, Signal Quality |
+| `VoyagePnLPage` | vessels | P&L Calculator, KPIs, Export |
+| `CrewSchedulerPage` | vessels | Crew Management, Rotation Alerts |
 
 ## 📋 PADRÕES APLICADOS
 

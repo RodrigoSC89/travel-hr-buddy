@@ -280,6 +280,8 @@ const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
 // ============================================
 const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenter"));
 const VoyageAccountingPage = lazy(() => import("@/pages/VoyageAccountingPage"));
+const VoyagePnLPage = lazy(() => import("@/pages/VoyagePnLPage"));
+const CrewSchedulerPage = lazy(() => import("@/pages/CrewSchedulerPage"));
 const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter"));
 const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
  const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenterPremium"));
@@ -865,6 +867,8 @@ const AppRoutes = () => (
       <Route path="/finance-ai" element={<FinanceProcurementAIPage />} />
       <Route path="/finance-procurement-ai" element={<FinanceProcurementAIPage />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
+      <Route path="/voyage-pnl" element={<VoyagePnLPage />} />
+      <Route path="/crew-scheduler" element={<CrewSchedulerPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
       <Route path="/operations-command" element={<OperationsCommandCenter />} />
       <Route path="/procurement-command" element={<ProcurementCommandCenter />} />
