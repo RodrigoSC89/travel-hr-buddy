@@ -41,67 +41,57 @@ export default function CrewSchedulerPage() {
   const { data: crewMembers, isLoading, error, refetch } = useQuery({
     queryKey: ['crew-scheduler'],
     queryFn: async (): Promise<CrewMember[]> => {
-      // Fetch vessels for assignment
-      const { data: vessels, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('id, name')
-        .eq('status', 'active');
+      // Fetch real crew_members with vessel data
+      const { data: crew, error: crewError } = await supabase
+        .from('crew_members')
+        .select('id, full_name, position, rank, status, contract_start, contract_end, vessel_id, vessels:vessel_id(id, name)')
+        .order('full_name');
 
-      if (vesselsError) throw vesselsError;
+      if (crewError) throw crewError;
 
-      // Generate crew data based on vessels
-      const ranks = ['Master', 'Chief Officer', 'Second Officer', 'Chief Engineer', 'Second Engineer', 'AB', 'OS', 'Cook'];
-      const statuses: CrewMember['status'][] = ['onboard', 'onleave', 'available', 'training'];
-      
-      const crewData: CrewMember[] = [];
-      
-      (vessels || []).forEach((vessel, vIndex) => {
-        // Generate 5-10 crew per vessel
-        const crewCount = 5 + Math.floor(Math.random() * 6);
-        for (let i = 0; i < crewCount; i++) {
-          const rotationStart = new Date();
-          rotationStart.setDate(rotationStart.getDate() - Math.floor(Math.random() * 60));
-          const rotationEnd = new Date(rotationStart);
-          rotationEnd.setDate(rotationEnd.getDate() + 90);
-          const daysRemaining = Math.ceil((rotationEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+      return (crew || []).map((member) => {
+        const vessel = member.vessels as { id: string; name: string } | null;
+        const contractStart = member.contract_start ? new Date(member.contract_start) : null;
+        const contractEnd = member.contract_end ? new Date(member.contract_end) : null;
+        const daysRemaining = contractEnd
+          ? Math.max(0, Math.ceil((contractEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+          : 0;
 
-          crewData.push({
-            id: `crew-${vIndex}-${i}`,
-            name: `Crew Member ${vIndex * 10 + i + 1}`,
-            rank: ranks[Math.floor(Math.random() * ranks.length)],
-            vesselId: vessel.id,
-            vesselName: vessel.name,
-            status: statuses[Math.floor(Math.random() * statuses.length)],
-            rotationStart: rotationStart.toISOString(),
-            rotationEnd: rotationEnd.toISOString(),
-            daysRemaining: Math.max(0, daysRemaining),
-          });
-        }
+        const statusMap: Record<string, CrewMember['status']> = {
+          active: 'onboard',
+          on_leave: 'onleave',
+          available: 'available',
+          training: 'training',
+          onboard: 'onboard',
+          off_duty: 'onleave',
+        };
+
+        return {
+          id: member.id,
+          name: member.full_name || 'Sem Nome',
+          rank: member.position || member.rank || 'Tripulante',
+          vesselId: member.vessel_id || null,
+          vesselName: vessel?.name || null,
+          status: statusMap[member.status?.toLowerCase() || ''] || 'available',
+          rotationStart: contractStart?.toISOString() || '',
+          rotationEnd: contractEnd?.toISOString() || '',
+          daysRemaining,
+        };
       });
-
-      // Add some available crew not assigned to vessels
-      for (let i = 0; i < 5; i++) {
-        crewData.push({
-          id: `crew-available-${i}`,
-          name: `Available Crew ${i + 1}`,
-          rank: ranks[Math.floor(Math.random() * ranks.length)],
-          vesselId: null,
-          vesselName: null,
-          status: 'available',
-          rotationStart: '',
-          rotationEnd: '',
-          daysRemaining: 0,
-        });
-      }
-
-      return crewData;
     },
   });
 
   const addCrewMutation = useMutation({
     mutationFn: async (crew: typeof newCrewMember) => {
-      // In a real app, this would insert into a crew table
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase.from('crew_members').insert([{
+        full_name: crew.name,
+        employee_id: `EMP-${Date.now().toString(36).toUpperCase()}`,
+        position: crew.rank,
+        rank: crew.rank,
+        nationality: 'BR',
+        status: crew.status === 'available' ? 'available' : crew.status === 'training' ? 'training' : 'active',
+      }]);
+      if (error) throw error;
       return crew;
     },
     onSuccess: () => {

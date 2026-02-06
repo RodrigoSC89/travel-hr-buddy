@@ -27,9 +27,7 @@ export function useCrewWellnessData() {
   return useQuery({
     queryKey: ["crew-wellness-dashboard"],
     queryFn: async (): Promise<CrewWellnessMember[]> => {
-      // Buscar crew_members com health_checkins
-      // crew_members: id, full_name, position, rank, vessel_id
-      // crew_health_checkins: crew_member_id, wellness_score, stress_level, fatigue_index, etc.
+      // Fetch crew_members with vessel info
       const { data: crew, error } = await supabase
         .from("crew_members")
         .select(`
@@ -38,25 +36,53 @@ export function useCrewWellnessData() {
           position,
           rank,
           join_date,
+          contract_start,
           vessels:vessel_id (name)
         `)
         .eq("status", "active")
-        .limit(20);
+        .limit(50);
 
       if (error || !crew || crew.length === 0) {
-        // No data - return empty array, UI should show EmptyState
         return [];
       }
 
-      return crew.map((member, idx) => {
-        const daysOnBoard = member.join_date 
-          ? Math.floor((Date.now() - new Date(member.join_date).getTime()) / (24 * 60 * 60 * 1000))
-          : 30;
+      // Fetch latest health checkins for each crew member
+      const { data: checkins } = await supabase
+        .from("crew_health_checkins")
+        .select("user_id, mood, stress_level, sleep_quality, energy_level, physical_health, created_at")
+        .order("created_at", { ascending: false })
+        .limit(100);
 
-        // Simular dados de wellness baseados em índice
-        const wellnessScore = 75 + Math.floor(Math.random() * 20);
-        const fatigueIndex = Math.floor(Math.random() * 60);
-        const stressLevel = ["low", "moderate", "high"][Math.floor(Math.random() * 3)];
+      // Map checkins by user_id for quick lookup
+      const checkinMap = new Map<string, typeof checkins extends (infer T)[] | null ? T : never>();
+      for (const c of checkins || []) {
+        if (c.user_id && !checkinMap.has(c.user_id)) {
+          checkinMap.set(c.user_id, c);
+        }
+      }
+
+      return crew.map((member, idx) => {
+        const daysOnBoard = member.contract_start
+          ? Math.max(0, Math.floor((Date.now() - new Date(member.contract_start).getTime()) / (24 * 60 * 60 * 1000)))
+          : member.join_date
+            ? Math.max(0, Math.floor((Date.now() - new Date(member.join_date).getTime()) / (24 * 60 * 60 * 1000)))
+            : 0;
+
+        const checkin = checkinMap.get(member.id);
+
+        // Derive wellness scores from real checkin data or use defaults based on days onboard
+        const moodScore = checkin?.mood ? Number(checkin.mood) : Math.max(50, 90 - daysOnBoard * 0.3);
+        const sleepScore = checkin?.sleep_quality ? Number(checkin.sleep_quality) : Math.max(40, 85 - daysOnBoard * 0.2);
+        const energyScore = checkin?.energy_level ? Number(checkin.energy_level) : Math.max(40, 80 - daysOnBoard * 0.25);
+        const physicalScore = checkin?.physical_health ? Number(checkin.physical_health) : Math.max(50, 88 - daysOnBoard * 0.15);
+
+        const wellnessScore = Math.round((moodScore + sleepScore + energyScore + physicalScore) / 4);
+        const fatigueIndex = Math.round(100 - ((sleepScore + energyScore) / 2));
+        const stressRaw: string = checkin?.stress_level ? String(checkin.stress_level) : (daysOnBoard > 120 ? "high" : daysOnBoard > 60 ? "moderate" : "low");
+
+        // Estimate work/rest hours from MLC rules (max 14h/day work, min 10h rest)
+        const hoursWorked = daysOnBoard > 0 ? Math.min(72, Math.round(daysOnBoard > 90 ? 65 : 48 + daysOnBoard * 0.15)) : 0;
+        const restHours = Math.max(0, 168 - hoursWorked); // 168h/week
 
         return {
           id: member.id,
@@ -65,14 +91,14 @@ export function useCrewWellnessData() {
           vessel: (member.vessels as { name: string } | null)?.name || "Sem Embarcação",
           wellnessScore,
           fatigueLevel: mapFatigueLevel(fatigueIndex),
-          stressLevel: mapStressLevel(stressLevel),
-          physicalHealth: mapHealthLevel(wellnessScore),
-          mentalHealth: mapHealthLevel(wellnessScore - 5),
-          hoursWorked: 40 + Math.floor(Math.random() * 20),
-          restHours: 50 + Math.floor(Math.random() * 20),
+          stressLevel: mapStressLevel(stressRaw),
+          physicalHealth: mapHealthLevel(physicalScore),
+          mentalHealth: mapHealthLevel(moodScore),
+          hoursWorked,
+          restHours,
           daysOnBoard,
-          lastCheckIn: new Date(Date.now() - idx * 2 * 60 * 60 * 1000),
-          alerts: fatigueIndex > 50 ? ["Fadiga detectada"] : [],
+          lastCheckIn: checkin?.created_at ? new Date(checkin.created_at) : new Date(Date.now() - idx * 8 * 60 * 60 * 1000),
+          alerts: generateAlerts({ fatigue_index: fatigueIndex, stress_level: String(stressRaw) }),
         };
       });
     },
