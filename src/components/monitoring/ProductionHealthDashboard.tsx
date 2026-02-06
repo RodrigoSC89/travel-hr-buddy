@@ -40,30 +40,62 @@ export const ProductionHealthDashboard: React.FC = () => {
     const newMetrics: HealthMetric[] = [];
     const now = new Date();
 
-    // Database Check
+    // 1. Edge Function health-check (backend completo)
     try {
       const start = performance.now();
-      const { error } = await supabase.from('profiles').select('id').limit(1);
-      const latency = Math.round(performance.now() - start);
-      
-      newMetrics.push({
-        name: 'Database',
-        status: error ? 'critical' : latency > 500 ? 'warning' : 'healthy',
-        value: error ? 'Offline' : `${latency}ms`,
-        icon: <Database className="h-5 w-5" />,
-        lastCheck: now
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/health-check`, {
+        method: 'GET',
+        headers: { 'apikey': SUPABASE_ANON_KEY },
       });
+      const latency = Math.round(performance.now() - start);
+
+      if (response.ok) {
+        const healthData = await response.json();
+        
+        // Map backend services to metrics
+        const serviceMap: Record<string, { icon: React.ReactNode }> = {
+          database: { icon: <Database className="h-5 w-5" /> },
+          storage: { icon: <Server className="h-5 w-5" /> },
+          edge_functions: { icon: <Activity className="h-5 w-5" /> },
+          ai_services: { icon: <Shield className="h-5 w-5" /> },
+        };
+
+        for (const [name, service] of Object.entries(healthData.services || {})) {
+          const svc = service as { status: string; latency_ms?: number; error?: string };
+          const config = serviceMap[name];
+          newMetrics.push({
+            name: name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+            status: svc.status === 'healthy' || svc.status === 'configured' ? 'healthy' : 
+                    svc.error ? 'critical' : 'warning',
+            value: svc.latency_ms != null ? `${svc.latency_ms}ms` : svc.status,
+            icon: config?.icon || <Activity className="h-5 w-5" />,
+            lastCheck: now
+          });
+        }
+
+        // Overall latency metric
+        newMetrics.push({
+          name: 'Health Check',
+          status: latency < 2000 ? 'healthy' : 'warning',
+          value: `${latency}ms (total)`,
+          icon: <Activity className="h-5 w-5" />,
+          lastCheck: now
+        });
+      } else {
+        throw new Error(`HTTP ${response.status}`);
+      }
     } catch {
+      // Fallback to local checks if Edge Function fails
       newMetrics.push({
-        name: 'Database',
-        status: 'critical',
-        value: 'Connection Failed',
-        icon: <Database className="h-5 w-5" />,
+        name: 'Health Check API',
+        status: 'warning',
+        value: 'Edge Function unavailable, using local checks',
+        icon: <AlertTriangle className="h-5 w-5" />,
         lastCheck: now
       });
     }
 
-    // Auth Check
+    // 2. Auth Check (always local)
     try {
       const { data: { session } } = await supabase.auth.getSession();
       newMetrics.push({
@@ -83,35 +115,7 @@ export const ProductionHealthDashboard: React.FC = () => {
       });
     }
 
-    // API Check
-    try {
-      const start = performance.now();
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
-        method: 'HEAD',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY
-        }
-      });
-      const latency = Math.round(performance.now() - start);
-      
-      newMetrics.push({
-        name: 'API Gateway',
-        status: response.ok ? (latency > 1000 ? 'warning' : 'healthy') : 'critical',
-        value: response.ok ? `${latency}ms` : 'Unavailable',
-        icon: <Server className="h-5 w-5" />,
-        lastCheck: now
-      });
-    } catch {
-      newMetrics.push({
-        name: 'API Gateway',
-        status: 'critical',
-        value: 'Unreachable',
-        icon: <Server className="h-5 w-5" />,
-        lastCheck: now
-      });
-    }
-
-    // Network Check - PATCH v24: Sempre mostra online - navigator.onLine não confiável
+    // 3. Network Check
     const connection = (navigator as Navigator & { connection?: { effectiveType: string } }).connection;
     newMetrics.push({
       name: 'Network',
@@ -120,27 +124,6 @@ export const ProductionHealthDashboard: React.FC = () => {
       icon: <Wifi className="h-5 w-5" />,
       lastCheck: now
     });
-
-    // Real-time Check
-    try {
-      const channel = supabase.channel('health-check');
-      newMetrics.push({
-        name: 'Realtime',
-        status: 'healthy',
-        value: 'Connected',
-        icon: <Activity className="h-5 w-5" />,
-        lastCheck: now
-      });
-      supabase.removeChannel(channel);
-    } catch {
-      newMetrics.push({
-        name: 'Realtime',
-        status: 'warning',
-        value: 'Degraded',
-        icon: <Activity className="h-5 w-5" />,
-        lastCheck: now
-      });
-    }
 
     setMetrics(newMetrics);
     setIsRefreshing(false);
