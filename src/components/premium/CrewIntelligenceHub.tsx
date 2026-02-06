@@ -2,6 +2,7 @@
   * Crew Intelligence Hub Component
   * Based on best practices from ShipNet Crewing, AMOS Crewing
   * Features: STCW/MLC compliance, wellness monitoring, self-service portal
+  * PATCH Sprint 12: Replaced mockCrew with useCrewIntelligenceData hook
   */
  
  import { useState } from "react";
@@ -11,59 +12,33 @@
  import { Progress } from "@/components/ui/progress";
  import { ScrollArea } from "@/components/ui/scroll-area";
  import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+ import { Skeleton } from "@/components/ui/skeleton";
  import { 
    Users, Award, FileCheck, AlertTriangle, Heart, Clock,
    Calendar, GraduationCap, Briefcase, Smile, Frown, Meh,
    TrendingUp, Brain, Shield, Ship, CheckCircle2, Timer
  } from "lucide-react";
- 
- interface CrewMember {
-   id: string;
-   name: string;
-   rank: string;
-   vessel: string;
-   status: "onboard" | "onleave" | "training" | "available";
-   stcwCompliance: number;
-   mlcCompliance: number;
-   wellnessScore: number;
-   fatigueRisk: "low" | "medium" | "high";
-   hoursWorked: number;
-   restHours: number;
-   expiringCerts: number;
-   nextLeave: string;
-   avatar?: string;
- }
- 
- const mockCrew: CrewMember[] = [
-   {
-     id: "1", name: "Carlos Silva", rank: "Master", vessel: "MV Atlantic Explorer",
-     status: "onboard", stcwCompliance: 100, mlcCompliance: 98, wellnessScore: 85,
-     fatigueRisk: "low", hoursWorked: 72, restHours: 96, expiringCerts: 0, nextLeave: "2024-03-15"
-   },
-   {
-     id: "2", name: "João Pereira", rank: "Chief Officer", vessel: "MV Atlantic Explorer",
-     status: "onboard", stcwCompliance: 95, mlcCompliance: 92, wellnessScore: 68,
-     fatigueRisk: "medium", hoursWorked: 84, restHours: 84, expiringCerts: 2, nextLeave: "2024-02-28"
-   },
-   {
-     id: "3", name: "Ana Costa", rank: "Chief Engineer", vessel: "MV Pacific Voyager",
-     status: "onboard", stcwCompliance: 88, mlcCompliance: 85, wellnessScore: 52,
-     fatigueRisk: "high", hoursWorked: 91, restHours: 77, expiringCerts: 3, nextLeave: "2024-02-20"
-   },
-   {
-     id: "4", name: "Pedro Lima", rank: "2nd Officer", vessel: "MV Nordic Queen",
-     status: "training", stcwCompliance: 100, mlcCompliance: 100, wellnessScore: 90,
-     fatigueRisk: "low", hoursWorked: 40, restHours: 128, expiringCerts: 0, nextLeave: "2024-04-01"
-   },
- ];
+ import { useCrewIntelligenceData, type CrewMember } from "@/hooks/useCrewIntelligenceData";
  
  export default function CrewIntelligenceHub() {
+   const { data: crew = [], isLoading } = useCrewIntelligenceData();
    const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+
+   if (isLoading) {
+     return (
+       <div className="space-y-6">
+         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+           {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+         </div>
+         <Skeleton className="h-96" />
+       </div>
+     );
+   }
  
-   const onboardCount = mockCrew.filter(c => c.status === "onboard").length;
-   const avgCompliance = mockCrew.reduce((sum, c) => sum + c.stcwCompliance, 0) / mockCrew.length;
-   const fatigueAlerts = mockCrew.filter(c => c.fatigueRisk === "high").length;
-   const expiringCerts = mockCrew.reduce((sum, c) => sum + c.expiringCerts, 0);
+   const onboardCount = crew.filter(c => c.status === "onboard").length;
+   const avgCompliance = crew.length > 0 ? crew.reduce((sum, c) => sum + c.stcwCompliance, 0) / crew.length : 0;
+   const fatigueAlerts = crew.filter(c => c.fatigueRisk === "high").length;
+   const expiringCerts = crew.reduce((sum, c) => sum + c.expiringCerts, 0);
  
    const getStatusBadge = (status: string) => {
      const config: Record<string, { color: string; label: string }> = {
@@ -98,7 +73,7 @@
          <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
            <CardContent className="p-4 text-center">
              <Users className="h-5 w-5 text-primary mx-auto mb-2" />
-             <p className="text-2xl font-bold">{mockCrew.length}</p>
+             <p className="text-2xl font-bold">{crew.length}</p>
              <p className="text-xs text-muted-foreground">Total Tripulação</p>
            </CardContent>
          </Card>
@@ -178,23 +153,23 @@
              <CardContent>
                <ScrollArea className="h-[450px]">
                  <div className="space-y-4">
-                   {mockCrew.map((crew) => {
-                     const fatigueConfig = getFatigueConfig(crew.fatigueRisk);
-                     const FatigueIcon = fatigueConfig.icon;
-                     
-                     return (
-                       <div 
-                         key={crew.id} 
-                         className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-                           selectedCrew?.id === crew.id ? "ring-2 ring-primary" : ""
-                         } ${crew.fatigueRisk === "high" ? "border-destructive/50 bg-destructive/5" : ""}`}
-                         onClick={() => setSelectedCrew(crew)}
-                       >
-                         <div className="flex items-start justify-between mb-3">
-                           <div className="flex items-center gap-3">
-                             <Avatar className="h-10 w-10">
-                               <AvatarImage src={crew.avatar} />
-                               <AvatarFallback>{crew.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                    {crew.map((member) => {
+                      const fatigueConfig = getFatigueConfig(member.fatigueRisk);
+                      const FatigueIcon = fatigueConfig.icon;
+                      
+                      return (
+                        <div 
+                          key={member.id} 
+                          className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
+                            selectedCrew?.id === member.id ? "ring-2 ring-primary" : ""
+                          } ${member.fatigueRisk === "high" ? "border-destructive/50 bg-destructive/5" : ""}`}
+                          onClick={() => setSelectedCrew(member)}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage src={member.avatar} />
+                                <AvatarFallback>{member.name.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
                              </Avatar>
                              <div>
                                <p className="font-semibold">{crew.name}</p>
