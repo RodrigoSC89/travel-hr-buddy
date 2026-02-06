@@ -1,44 +1,112 @@
 /**
- * FASE 2 - Maintenance Hub
- * Dashboard com KPIs MTBF/MTTR (benchmark: DNV ShipManager)
+ * Maintenance KPI Dashboard - Real data from maintenance_records
  */
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Wrench, Clock, TrendingUp, TrendingDown, AlertTriangle, 
   CheckCircle, BarChart3, Target, Activity, Zap 
 } from "lucide-react";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-
-// Mock data - replace with real Supabase data
-const mtbfData = [
-  { month: "Jan", mtbf: 2100, mttr: 4.2, availability: 98.5 },
-  { month: "Fev", mtbf: 2250, mttr: 3.8, availability: 98.8 },
-  { month: "Mar", mtbf: 2180, mttr: 4.0, availability: 98.6 },
-  { month: "Abr", mtbf: 2400, mttr: 3.5, availability: 99.1 },
-  { month: "Mai", mtbf: 2350, mttr: 3.6, availability: 99.0 },
-  { month: "Jun", mtbf: 2500, mttr: 3.2, availability: 99.3 },
-];
-
-const workOrdersByPriority = [
-  { priority: "Crítica", count: 3, color: "hsl(var(--destructive))" },
-  { priority: "Alta", count: 12, color: "hsl(var(--warning))" },
-  { priority: "Média", count: 28, color: "hsl(var(--primary))" },
-  { priority: "Baixa", count: 45, color: "hsl(var(--muted-foreground))" },
-];
-
-const equipmentHealth = [
-  { name: "Motor Principal", health: 94, status: "good", nextMaintenance: "15 dias" },
-  { name: "Sistema Hidráulico", health: 87, status: "warning", nextMaintenance: "5 dias" },
-  { name: "Gerador Auxiliar", health: 92, status: "good", nextMaintenance: "22 dias" },
-  { name: "Sistema de Navegação", health: 98, status: "good", nextMaintenance: "45 dias" },
-  { name: "Bomba de Lastro", health: 78, status: "critical", nextMaintenance: "Vencida" },
-];
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/UXStates";
 
 export default function MaintenanceKPIDashboard() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["maintenance-kpis"],
+    queryFn: async () => {
+      const { data: records, error } = await supabase
+        .from("maintenance_records")
+        .select("id, status, priority, maintenance_type, estimated_duration, actual_duration, cost_estimate, actual_cost, scheduled_date, completed_date, title, vessel_id")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+
+      const { data: vessels, error: ve } = await supabase
+        .from("vessels")
+        .select("id, name")
+        .order("name");
+      if (ve) throw ve;
+
+      return { records: records || [], vessels: vessels || [] };
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
+        </div>
+        <Skeleton className="h-64" />
+      </div>
+    );
+  }
+
+  const records = data?.records || [];
+  const vessels = data?.vessels || [];
+
+  if (records.length === 0) {
+    return (
+      <EmptyState
+        icon={Wrench}
+        title="Sem registros de manutenção"
+        message="Crie ordens de serviço para visualizar KPIs de MTBF, MTTR e desempenho de manutenção."
+        actionLabel="Ir para PMS"
+      />
+    );
+  }
+
+  const completed = records.filter((r: any) => r.status === "completed");
+  const pending = records.filter((r: any) => r.status === "pending");
+  const inProgress = records.filter((r: any) => r.status === "in_progress");
+  const critical = records.filter((r: any) => r.priority === "critical");
+
+  // Calculate MTBF (estimated from avg interval between completions)
+  const avgDurationHours = completed.length > 0
+    ? Math.round(completed.reduce((acc: number, r: any) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length)
+    : 0;
+
+  // MTTR = average actual duration of completed work
+  const mttr = completed.length > 0
+    ? (completed.reduce((acc: number, r: any) => acc + (r.actual_duration || r.estimated_duration || 4), 0) / completed.length).toFixed(1)
+    : "N/A";
+
+  // Availability = completed / total * 100
+  const availability = records.length > 0
+    ? ((completed.length / records.length) * 100).toFixed(1)
+    : "0";
+
+  const totalPending = pending.length + inProgress.length;
+
+  // Work orders by priority
+  const workOrdersByPriority = [
+    { priority: "Crítica", count: records.filter((r: any) => r.priority === "critical").length },
+    { priority: "Alta", count: records.filter((r: any) => r.priority === "high").length },
+    { priority: "Média", count: records.filter((r: any) => r.priority === "medium").length },
+    { priority: "Baixa", count: records.filter((r: any) => r.priority === "low").length },
+  ].filter(w => w.count > 0);
+
+  // Equipment health from vessels
+  const vesselHealth = vessels.slice(0, 5).map((v: any) => {
+    const vRecords = records.filter((r: any) => r.vessel_id === v.id);
+    const vCompleted = vRecords.filter((r: any) => r.status === "completed").length;
+    const vTotal = vRecords.length;
+    const health = vTotal > 0 ? Math.round((vCompleted / vTotal) * 100) : 100;
+    const pendingCount = vRecords.filter((r: any) => r.status !== "completed").length;
+    return {
+      name: v.name,
+      health,
+      status: health >= 80 ? "good" : health >= 60 ? "warning" : "critical",
+      pending: pendingCount,
+    };
+  });
+
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -47,11 +115,11 @@ export default function MaintenanceKPIDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">MTBF (Mean Time Between Failures)</p>
-                <p className="text-2xl font-bold">2,500h</p>
+                <p className="text-xs text-muted-foreground">Total Completadas</p>
+                <p className="text-2xl font-bold">{completed.length}</p>
                 <div className="flex items-center gap-1 text-xs text-success">
-                  <TrendingUp className="h-3 w-3" />
-                  +12% vs último mês
+                  <CheckCircle className="h-3 w-3" />
+                  de {records.length} registros
                 </div>
               </div>
               <Clock className="h-8 w-8 text-success opacity-60" />
@@ -63,11 +131,10 @@ export default function MaintenanceKPIDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">MTTR (Mean Time To Repair)</p>
-                <p className="text-2xl font-bold">3.2h</p>
-                <div className="flex items-center gap-1 text-xs text-success">
-                  <TrendingDown className="h-3 w-3" />
-                  -8% vs último mês
+                <p className="text-xs text-muted-foreground">MTTR (Duração Média)</p>
+                <p className="text-2xl font-bold">{mttr}h</p>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  Tempo médio de reparo
                 </div>
               </div>
               <Wrench className="h-8 w-8 text-primary opacity-60" />
@@ -79,11 +146,11 @@ export default function MaintenanceKPIDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Disponibilidade</p>
-                <p className="text-2xl font-bold">99.3%</p>
+                <p className="text-xs text-muted-foreground">Taxa de Conclusão</p>
+                <p className="text-2xl font-bold">{availability}%</p>
                 <div className="flex items-center gap-1 text-xs text-success">
                   <CheckCircle className="h-3 w-3" />
-                  Acima da meta (98%)
+                  {completed.length} completadas
                 </div>
               </div>
               <Activity className="h-8 w-8 text-cyan-500 opacity-60" />
@@ -96,10 +163,10 @@ export default function MaintenanceKPIDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Ordens Pendentes</p>
-                <p className="text-2xl font-bold">88</p>
+                <p className="text-2xl font-bold">{totalPending}</p>
                 <div className="flex items-center gap-1 text-xs text-warning">
                   <AlertTriangle className="h-3 w-3" />
-                  3 críticas
+                  {critical.length} críticas
                 </div>
               </div>
               <Target className="h-8 w-8 text-warning opacity-60" />
@@ -108,41 +175,15 @@ export default function MaintenanceKPIDashboard() {
         </Card>
       </div>
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* MTBF/MTTR Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Tendência MTBF/MTTR
-            </CardTitle>
-            <CardDescription>Últimos 6 meses</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={mtbfData}>
-                <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                <XAxis dataKey="month" fontSize={12} />
-                <YAxis yAxisId="left" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Line yAxisId="left" type="monotone" dataKey="mtbf" stroke="hsl(var(--primary))" strokeWidth={2} name="MTBF (h)" />
-                <Line yAxisId="right" type="monotone" dataKey="mttr" stroke="hsl(var(--warning))" strokeWidth={2} name="MTTR (h)" />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Work Orders by Priority */}
+      {/* Work Orders by Priority */}
+      {workOrdersByPriority.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wrench className="h-5 w-5" />
               Ordens por Prioridade
             </CardTitle>
-            <CardDescription>Distribuição atual</CardDescription>
+            <CardDescription>Distribuição atual ({records.length} registros)</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
@@ -156,53 +197,54 @@ export default function MaintenanceKPIDashboard() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </div>
+      )}
 
-      {/* Equipment Health */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
-            Saúde dos Equipamentos
-          </CardTitle>
-          <CardDescription>Monitoramento em tempo real baseado em sensores IoT</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {equipmentHealth.map((equipment) => (
-              <div key={equipment.name} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`h-3 w-3 rounded-full ${
-                      equipment.status === "good" ? "bg-success" : 
-                      equipment.status === "warning" ? "bg-warning" : "bg-destructive"
-                    }`} />
-                    <span className="font-medium">{equipment.name}</span>
+      {/* Equipment Health per Vessel */}
+      {vesselHealth.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5" />
+              Saúde por Embarcação
+            </CardTitle>
+            <CardDescription>Baseado em registros de manutenção reais</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {vesselHealth.map((v: any) => (
+                <div key={v.name} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-3 w-3 rounded-full ${
+                        v.status === "good" ? "bg-success" :
+                        v.status === "warning" ? "bg-warning" : "bg-destructive"
+                      }`} />
+                      <span className="font-medium">{v.name}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Badge variant={v.status === "good" ? "default" : v.status === "warning" ? "secondary" : "destructive"}>
+                        {v.health}% Health
+                      </Badge>
+                      {v.pending > 0 && (
+                        <span className="text-sm text-muted-foreground">
+                          {v.pending} pendente(s)
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <Badge variant={
-                      equipment.status === "good" ? "default" : 
-                      equipment.status === "warning" ? "secondary" : "destructive"
-                    }>
-                      {equipment.health}% Health
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      Próxima: {equipment.nextMaintenance}
-                    </span>
-                  </div>
+                  <Progress
+                    value={v.health}
+                    className={`h-2 ${
+                      v.status === "good" ? "[&>div]:bg-success" :
+                      v.status === "warning" ? "[&>div]:bg-warning" : "[&>div]:bg-destructive"
+                    }`}
+                  />
                 </div>
-                <Progress 
-                  value={equipment.health} 
-                  className={`h-2 ${
-                    equipment.status === "good" ? "[&>div]:bg-success" : 
-                    equipment.status === "warning" ? "[&>div]:bg-warning" : "[&>div]:bg-destructive"
-                  }`}
-                />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

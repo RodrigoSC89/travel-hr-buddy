@@ -1,100 +1,22 @@
 /**
- * ESGEmissionsDashboard - Dashboard de Emissões e ESG
- * Enterprise-grade CII/EEXI monitoring with carbon footprint tracking
+ * ESGEmissionsDashboard - Real data from emissions_records, cii_ratings, vessels
  */
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Leaf, TrendingDown, TrendingUp, Ship, AlertTriangle, 
-  Target, BarChart3, Globe, Droplets, Wind, FileText
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { 
-  LineChart, Line, AreaChart, Area, BarChart, Bar,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
-} from "recharts";
+import { Leaf, TrendingDown, Ship, AlertTriangle, Target, BarChart3, Globe, FileText, Download } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { EmptyState } from "@/components/ui/UXStates";
+import { toast } from "sonner";
 
-interface VesselEmissions {
-  vesselId: string;
-  vesselName: string;
-  imo: string;
-  ciiRating: "A" | "B" | "C" | "D" | "E";
-  ciiAttained: number;
-  ciiRequired: number;
-  eexi: number;
-  eexiRequired: number;
-  co2Emissions: number; // tonnes
-  sox: number;
-  nox: number;
-  yearlyTarget: number;
-  yearlyActual: number;
-}
-
-const mockVessels: VesselEmissions[] = [
-  {
-    vesselId: "v1",
-    vesselName: "MV Atlantic Star",
-    imo: "9123456",
-    ciiRating: "B",
-    ciiAttained: 8.2,
-    ciiRequired: 9.5,
-    eexi: 12.5,
-    eexiRequired: 15.0,
-    co2Emissions: 12500,
-    sox: 45,
-    nox: 320,
-    yearlyTarget: 50000,
-    yearlyActual: 42000,
-  },
-  {
-    vesselId: "v2",
-    vesselName: "MV Pacific Dawn",
-    imo: "9234567",
-    ciiRating: "C",
-    ciiAttained: 10.1,
-    ciiRequired: 9.8,
-    eexi: 14.2,
-    eexiRequired: 15.0,
-    co2Emissions: 15800,
-    sox: 52,
-    nox: 380,
-    yearlyTarget: 55000,
-    yearlyActual: 51000,
-  },
-  {
-    vesselId: "v3",
-    vesselName: "MV Caribbean Blue",
-    imo: "9345678",
-    ciiRating: "A",
-    ciiAttained: 6.8,
-    ciiRequired: 9.2,
-    eexi: 11.0,
-    eexiRequired: 15.0,
-    co2Emissions: 9800,
-    sox: 35,
-    nox: 250,
-    yearlyTarget: 45000,
-    yearlyActual: 32000,
-  },
-];
-
-const emissionsTrend = [
-  { month: "Jan", co2: 4200, sox: 15, nox: 95 },
-  { month: "Fev", co2: 4500, sox: 16, nox: 102 },
-  { month: "Mar", co2: 3800, sox: 14, nox: 88 },
-  { month: "Abr", co2: 4100, sox: 15, nox: 94 },
-  { month: "Mai", co2: 3600, sox: 13, nox: 82 },
-  { month: "Jun", co2: 3900, sox: 14, nox: 89 },
-];
-
-const ciiRatingColors = {
+const ciiColors: Record<string, { bg: string; text: string; label: string }> = {
   A: { bg: "bg-green-500", text: "text-white", label: "Superior" },
   B: { bg: "bg-lime-500", text: "text-white", label: "Menor" },
   C: { bg: "bg-yellow-500", text: "text-black", label: "Moderado" },
@@ -102,259 +24,158 @@ const ciiRatingColors = {
   E: { bg: "bg-red-500", text: "text-white", label: "Muito Inferior" },
 };
 
-const esgScoreData = [
-  { subject: "Emissões CO2", A: 85, fullMark: 100 },
-  { subject: "SOx/NOx", A: 78, fullMark: 100 },
-  { subject: "Resíduos", A: 92, fullMark: 100 },
-  { subject: "Eficiência", A: 88, fullMark: 100 },
-  { subject: "Compliance", A: 95, fullMark: 100 },
-  { subject: "Inovação", A: 72, fullMark: 100 },
-];
-
 export function ESGEmissionsDashboard() {
-  const [selectedVessel, setSelectedVessel] = useState<string>("all");
-  const [timeRange, setTimeRange] = useState<string>("ytd");
+  const [selectedVessel, setSelectedVessel] = useState("all");
 
-  const totalCO2 = mockVessels.reduce((sum, v) => sum + v.co2Emissions, 0);
-  const avgCII = mockVessels.reduce((sum, v) => sum + v.ciiAttained, 0) / mockVessels.length;
-  const compliantVessels = mockVessels.filter(v => v.ciiRating !== "D" && v.ciiRating !== "E").length;
-  const totalReduction = mockVessels.reduce((sum, v) => sum + (v.yearlyTarget - v.yearlyActual), 0);
+  const { data, isLoading } = useQuery({
+    queryKey: ["esg-dashboard"],
+    queryFn: async () => {
+      const [emResult, ciiResult, vesResult] = await Promise.all([
+        supabase.from("emissions_records")
+          .select("id, vessel_id, recorded_date, co2_tonnes, nox_kg, sox_kg, fuel_consumed_mt, distance_nm, carbon_intensity")
+          .order("recorded_date", { ascending: false }),
+        supabase.from("cii_ratings")
+          .select("id, vessel_id, year, attained_cii, required_cii, rating, annual_co2_tonnes, annual_distance_nm")
+          .order("year", { ascending: false }),
+        supabase.from("vessels").select("id, name, imo_number").order("name"),
+      ]);
+      if (emResult.error) throw emResult.error;
+      if (ciiResult.error) throw ciiResult.error;
+      if (vesResult.error) throw vesResult.error;
+      return { emissions: emResult.data || [], ciiRatings: ciiResult.data || [], vessels: vesResult.data || [] };
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <div className="space-y-4"><div className="grid grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}</div><Skeleton className="h-64" /></div>;
+
+  const { emissions = [], ciiRatings = [], vessels = [] } = data || {};
+  const vesselMap = new Map(vessels.map((v: any) => [v.id, v.name]));
+
+  if (emissions.length === 0 && ciiRatings.length === 0) {
+    return <EmptyState icon={Leaf} title="Sem dados de emissões" message="Registre emissões e ratings CII para monitorar o desempenho ESG da frota." />;
+  }
+
+  const totalCO2 = emissions.reduce((sum: number, r: any) => sum + (Number(r.co2_tonnes) || 0), 0);
+  const totalSOx = emissions.reduce((sum: number, r: any) => sum + (Number(r.sox_kg) || 0), 0);
+  const totalNOx = emissions.reduce((sum: number, r: any) => sum + (Number(r.nox_kg) || 0), 0);
+  const compliantVessels = ciiRatings.filter((c: any) => ["A", "B", "C"].includes(c.rating)).length;
+
+  // Group emissions by month for chart
+  const byMonth: Record<string, { co2: number; sox: number; nox: number }> = {};
+  emissions.forEach((r: any) => {
+    const month = r.recorded_date ? r.recorded_date.substring(0, 7) : "?";
+    if (!byMonth[month]) byMonth[month] = { co2: 0, sox: 0, nox: 0 };
+    byMonth[month].co2 += Number(r.co2_tonnes) || 0;
+    byMonth[month].sox += Number(r.sox_kg) || 0;
+    byMonth[month].nox += Number(r.nox_kg) || 0;
+  });
+  const trendData = Object.entries(byMonth).sort().slice(-12).map(([m, v]) => ({ month: m, co2: Math.round(v.co2), sox: Math.round(v.sox), nox: Math.round(v.nox) }));
+
+  const exportCSV = () => {
+    const headers = ["Data", "Embarcação", "CO2 (t)", "SOx (kg)", "NOx (kg)", "Combustível (MT)", "Distância (nm)"];
+    const rows = emissions.map((r: any) => [r.recorded_date, vesselMap.get(r.vessel_id) || "N/A", r.co2_tonnes, r.sox_kg, r.nox_kg, r.fuel_consumed_mt, r.distance_nm]);
+    const csv = [headers.join(","), ...rows.map((r: any[]) => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "esg-emissions.csv"; a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Relatório ESG exportado");
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-green-600" />
-            ESG & Emissões
-          </h2>
-          <p className="text-muted-foreground">Monitoramento CII/EEXI e Carbon Footprint</p>
+          <h2 className="text-2xl font-bold flex items-center gap-2"><Leaf className="h-6 w-6 text-green-600" />ESG & Emissões</h2>
+          <p className="text-muted-foreground">{emissions.length} registros • {ciiRatings.length} ratings CII</p>
         </div>
         <div className="flex items-center gap-2">
           <Select value={selectedVessel} onValueChange={setSelectedVessel}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Embarcação" />
-            </SelectTrigger>
+            <SelectTrigger className="w-48"><SelectValue placeholder="Embarcação" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Toda a Frota</SelectItem>
-              {mockVessels.map(v => (
-                <SelectItem key={v.vesselId} value={v.vesselId}>{v.vesselName}</SelectItem>
-              ))}
+              {vessels.map((v: any) => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
             </SelectContent>
           </Select>
-          <Button variant="outline">
-            <FileText className="h-4 w-4 mr-2" />
-            Relatório ESG
-          </Button>
+          <Button variant="outline" onClick={exportCSV}><Download className="h-4 w-4 mr-2" />Exportar</Button>
         </div>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="border-l-4 border-l-green-500">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total CO2 Emitido</p>
-                  <p className="text-2xl font-bold">{(totalCO2 / 1000).toFixed(1)}K t</p>
-                  <div className="flex items-center gap-1 text-xs text-green-600">
-                    <TrendingDown className="h-3 w-3" />
-                    <span>-8.5% vs ano anterior</span>
-                  </div>
-                </div>
-                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                  <Globe className="h-6 w-6 text-green-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="border-l-4 border-l-blue-500">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">CII Médio</p>
-                  <p className="text-2xl font-bold">{avgCII.toFixed(1)}</p>
-                  <p className="text-xs text-muted-foreground">gCO2/t·nm</p>
-                </div>
-                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                  <BarChart3 className="h-6 w-6 text-blue-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="border-l-4 border-l-emerald-500">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Navios Compliant</p>
-                  <p className="text-2xl font-bold">{compliantVessels}/{mockVessels.length}</p>
-                  <p className="text-xs text-green-600">Rating A-C</p>
-                </div>
-                <div className="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Ship className="h-6 w-6 text-emerald-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="border-l-4 border-l-purple-500">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Redução Atingida</p>
-                  <p className="text-2xl font-bold">{(totalReduction / 1000).toFixed(0)}K t</p>
-                  <p className="text-xs text-purple-600">vs meta anual</p>
-                </div>
-                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                  <Target className="h-6 w-6 text-purple-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        <Card className="border-l-4 border-l-green-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CO2 Total</p><p className="text-2xl font-bold">{totalCO2.toFixed(1)} t</p></div><Globe className="h-6 w-6 text-green-600" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-amber-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">SOx Total</p><p className="text-2xl font-bold">{totalSOx.toFixed(0)} kg</p></div><BarChart3 className="h-6 w-6 text-amber-600" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-red-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">NOx Total</p><p className="text-2xl font-bold">{totalNOx.toFixed(0)} kg</p></div><AlertTriangle className="h-6 w-6 text-red-600" /></div></CardContent></Card>
+        <Card className="border-l-4 border-l-emerald-500"><CardContent className="pt-4"><div className="flex items-center justify-between"><div><p className="text-sm text-muted-foreground">CII Compliant</p><p className="text-2xl font-bold">{compliantVessels}/{ciiRatings.length}</p></div><Ship className="h-6 w-6 text-emerald-600" /></div></CardContent></Card>
       </div>
 
-      {/* CII Rating Cards */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Ship className="h-5 w-5" />
-            Rating CII por Embarcação
-          </CardTitle>
-          <CardDescription>Carbon Intensity Indicator - Regulamento IMO 2023</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {mockVessels.map((vessel) => (
-              <motion.div key={vessel.vesselId} whileHover={{ scale: 1.02 }}>
-                <Card className="border-2">
-                  <CardContent className="pt-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <h4 className="font-semibold">{vessel.vesselName}</h4>
-                        <p className="text-xs text-muted-foreground">IMO {vessel.imo}</p>
-                      </div>
-                      <div className={`h-12 w-12 rounded-full ${ciiRatingColors[vessel.ciiRating].bg} flex items-center justify-center`}>
-                        <span className={`text-xl font-bold ${ciiRatingColors[vessel.ciiRating].text}`}>
-                          {vessel.ciiRating}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* CII Progress */}
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-muted-foreground">CII Attained</span>
-                          <span className="font-medium">{vessel.ciiAttained} gCO2/t·nm</span>
-                        </div>
-                        <Progress 
-                          value={(vessel.ciiAttained / vessel.ciiRequired) * 100} 
-                          className={vessel.ciiAttained <= vessel.ciiRequired ? "bg-green-100" : "bg-red-100"}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Required: ≤{vessel.ciiRequired} gCO2/t·nm
-                        </p>
-                      </div>
-
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-muted-foreground">EEXI</span>
-                          <span className="font-medium">{vessel.eexi}</span>
-                        </div>
-                        <Progress 
-                          value={(vessel.eexi / vessel.eexiRequired) * 100}
-                          className="bg-green-100"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Required: ≤{vessel.eexiRequired}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Yearly Target */}
-                    <div className="mt-4 p-3 rounded-lg bg-muted/50">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Meta Anual CO2</span>
-                        <Badge className={vessel.yearlyActual <= vessel.yearlyTarget ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}>
-                          {((vessel.yearlyActual / vessel.yearlyTarget) * 100).toFixed(0)}%
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {vessel.yearlyActual.toLocaleString()} / {vessel.yearlyTarget.toLocaleString()} t
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Emissions Trend */}
+      {/* CII Ratings */}
+      {ciiRatings.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Tendência de Emissões (toneladas)</CardTitle>
-            <CardDescription>CO2, SOx e NOx por mês</CardDescription>
-          </CardHeader>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Ship className="h-5 w-5" />Rating CII por Embarcação</CardTitle><CardDescription>Carbon Intensity Indicator - Regulamento IMO</CardDescription></CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {ciiRatings.map((cii: any) => {
+                const colors = ciiColors[cii.rating] || ciiColors.C;
+                return (
+                  <Card key={cii.id} className="border-2">
+                    <CardContent className="pt-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h4 className="font-semibold">{vesselMap.get(cii.vessel_id) || "N/A"}</h4>
+                          <p className="text-xs text-muted-foreground">Ano {cii.year}</p>
+                        </div>
+                        <div className={`h-12 w-12 rounded-full ${colors.bg} flex items-center justify-center`}>
+                          <span className={`text-xl font-bold ${colors.text}`}>{cii.rating}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-muted-foreground">CII Attained</span>
+                            <span className="font-medium">{Number(cii.attained_cii).toFixed(1)}</span>
+                          </div>
+                          <Progress value={cii.required_cii ? (Number(cii.attained_cii) / Number(cii.required_cii)) * 100 : 50} />
+                          <p className="text-xs text-muted-foreground mt-1">Required: ≤{Number(cii.required_cii).toFixed(1)}</p>
+                        </div>
+                        {cii.annual_co2_tonnes && (
+                          <p className="text-xs text-muted-foreground">CO2 Anual: {Number(cii.annual_co2_tonnes).toLocaleString()} t</p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Emissions Trend */}
+      {trendData.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle className="text-sm">Tendência de Emissões</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={emissionsTrend}>
+              <AreaChart data={trendData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
+                <YAxis />
                 <Tooltip />
                 <Legend />
-                <Area yAxisId="left" type="monotone" dataKey="co2" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="CO2 (t)" />
-                <Line yAxisId="right" type="monotone" dataKey="sox" stroke="#f59e0b" name="SOx (t)" />
-                <Line yAxisId="right" type="monotone" dataKey="nox" stroke="#ef4444" name="NOx (t)" />
+                <Area type="monotone" dataKey="co2" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="CO2 (t)" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
+      )}
 
-        {/* ESG Score Radar */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Score ESG Consolidado</CardTitle>
-            <CardDescription>Performance ambiental da frota</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={280}>
-              <RadarChart data={esgScoreData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11 }} />
-                <PolarRadiusAxis angle={30} domain={[0, 100]} />
-                <Radar name="Score" dataKey="A" stroke="#22c55e" fill="#22c55e" fillOpacity={0.5} />
-                <Tooltip />
-              </RadarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* CII Rating Scale */}
+      {/* CII Scale */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Escala CII Rating - IMO</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle className="text-sm">Escala CII Rating - IMO</CardTitle></CardHeader>
         <CardContent>
           <div className="flex items-center justify-center gap-2">
-            {Object.entries(ciiRatingColors).map(([rating, config]) => (
+            {Object.entries(ciiColors).map(([rating, config]) => (
               <div key={rating} className="flex flex-col items-center">
                 <div className={`h-12 w-12 rounded-lg ${config.bg} flex items-center justify-center mb-2`}>
                   <span className={`text-xl font-bold ${config.text}`}>{rating}</span>
@@ -362,15 +183,6 @@ export function ESGEmissionsDashboard() {
                 <span className="text-xs text-muted-foreground">{config.label}</span>
               </div>
             ))}
-          </div>
-          <div className="mt-4 p-4 rounded-lg bg-amber-50 border border-amber-200">
-            <div className="flex items-center gap-2 text-amber-700">
-              <AlertTriangle className="h-5 w-5" />
-              <span className="font-medium">Atenção: Navios com rating D ou E</span>
-            </div>
-            <p className="text-sm text-amber-600 mt-1">
-              Devem apresentar plano de correção à autoridade de bandeira dentro de 3 anos
-            </p>
           </div>
         </CardContent>
       </Card>
