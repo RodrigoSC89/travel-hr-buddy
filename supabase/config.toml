@@ -1368,3 +1368,11 @@ comment = "M028 - Weather Routing AI with 7-day forecast, route optimization, al
 [functions.maintenance-optimizer-ai]
 verify_jwt = false
 comment = "M048/M049 - Spare Parts Intelligence + Cost Optimization via AI"
+
+# ============================================
+# CROSS-MODULE INTELLIGENCE (M139-M150)
+# ============================================
+
+[functions.cross-module-intelligence]
+verify_jwt = false
+comment = "M139-M150 - Cross-module correlation, predictive alerts, fleet optimization, unified analytics"
