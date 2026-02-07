@@ -4,8 +4,9 @@
   * Features: PSC readiness, automated audits, risk matrix
   */
  
- import { useState } from "react";
- import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+  import { useState } from "react";
+  import { useComplianceIntelligenceData, type InspectionReadiness, type ComplianceItem } from "@/hooks/useComplianceIntelligenceData";
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -16,46 +17,14 @@
    XCircle, AlertOctagon, TrendingUp, Zap
  } from "lucide-react";
  
- interface InspectionReadiness {
-   type: string;
-   score: number;
-   lastInspection: string;
-   nextDue: string;
-   openFindings: number;
-   criticalItems: number;
-   status: "ready" | "attention" | "critical";
- }
+  // Types are now imported from the hook
  
- interface ComplianceItem {
-   id: string;
-   category: string;
-   requirement: string;
-   vessel: string;
-   status: "compliant" | "non_compliant" | "pending" | "expired";
-   dueDate: string;
-   priority: "high" | "medium" | "low";
-   aiRecommendation?: string;
- }
- 
- const mockReadiness: InspectionReadiness[] = [
-   { type: "PSC", score: 92, lastInspection: "2024-01-10", nextDue: "2024-07-10", openFindings: 2, criticalItems: 0, status: "ready" },
-   { type: "OVID", score: 78, lastInspection: "2023-11-15", nextDue: "2024-05-15", openFindings: 5, criticalItems: 1, status: "attention" },
-   { type: "CDI", score: 65, lastInspection: "2023-09-20", nextDue: "2024-03-20", openFindings: 8, criticalItems: 2, status: "critical" },
-   { type: "ISM", score: 95, lastInspection: "2024-01-05", nextDue: "2025-01-05", openFindings: 1, criticalItems: 0, status: "ready" },
- ];
- 
- const mockItems: ComplianceItem[] = [
-   { id: "1", category: "Certificados", requirement: "Certificado de Segurança", vessel: "MV Atlantic Explorer", status: "compliant", dueDate: "2024-12-15", priority: "high" },
-   { id: "2", category: "MARPOL", requirement: "Diário de Óleo - Anexo I", vessel: "MV Pacific Voyager", status: "pending", dueDate: "2024-02-01", priority: "high", aiRecommendation: "Registro pendente há 3 dias. Completar antes da próxima inspeção PSC." },
-   { id: "3", category: "ISM", requirement: "Drill de Abandono", vessel: "MV Atlantic Explorer", status: "expired", dueDate: "2024-01-15", priority: "high", aiRecommendation: "Drill vencido há 5 dias. Agendar imediatamente para manter conformidade." },
-   { id: "4", category: "STCW", requirement: "Treinamento GMDSS", vessel: "MV Nordic Queen", status: "non_compliant", dueDate: "2024-01-20", priority: "medium" },
- ];
- 
- export default function ComplianceIntelligence() {
-   const avgReadiness = mockReadiness.reduce((sum, r) => sum + r.score, 0) / mockReadiness.length;
-   const criticalCount = mockReadiness.filter(r => r.status === "critical").length;
-   const totalFindings = mockReadiness.reduce((sum, r) => sum + r.openFindings, 0);
-   const expiredItems = mockItems.filter(i => i.status === "expired" || i.status === "non_compliant").length;
+export default function ComplianceIntelligence() {
+    const { readiness: mockReadiness, items: mockItems, isLoading } = useComplianceIntelligenceData();
+    const avgReadiness = mockReadiness.reduce((sum: number, r: InspectionReadiness) => sum + r.score, 0) / Math.max(mockReadiness.length, 1);
+    const criticalCount = mockReadiness.filter((r: InspectionReadiness) => r.status === "critical").length;
+    const totalFindings = mockReadiness.reduce((sum: number, r: InspectionReadiness) => sum + r.openFindings, 0);
+    const expiredItems = mockItems.filter((i: ComplianceItem) => i.status === "expired" || i.status === "non_compliant").length;
  
    const getStatusConfig = (status: string) => {
      const config: Record<string, { color: string; bgColor: string; label: string }> = {

@@ -3,8 +3,9 @@
   * Based on HDHE (Human Digital Healthcare Engineering) framework
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+  import React, { useState } from "react";
+  import { useMedicalIntelligenceData } from "@/hooks/useMedicalIntelligenceData";
+  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -15,75 +16,19 @@
    TrendingUp, Clock, Shield, Stethoscope, Syringe
  } from "lucide-react";
  
- interface CrewMember {
-   id: string;
-   name: string;
-   role: string;
-   vessel: string;
-   vitals: {
-     heartRate: number;
-     oxygenLevel: number;
-     temperature: number;
-     bloodPressure: string;
-   };
-   riskLevel: "low" | "medium" | "high";
-   lastCheckup: string;
-   alerts: string[];
- }
+  // Types and mock data replaced by useMedicalIntelligenceData hook
  
- interface MedicalSupply {
-   id: string;
-   name: string;
-   category: string;
-   quantity: number;
-   minStock: number;
-   expiryDate: string;
-   batchNumber: string;
-   status: "ok" | "low" | "critical" | "expired";
- }
- 
- const mockCrewHealth: CrewMember[] = [
-   {
-     id: "1",
-     name: "João Silva",
-     role: "Capitão",
-     vessel: "Nautilus Star",
-     vitals: { heartRate: 72, oxygenLevel: 98, temperature: 36.5, bloodPressure: "120/80" },
-     riskLevel: "low",
-     lastCheckup: "2026-02-01",
-     alerts: []
-   },
-   {
-     id: "2",
-     name: "Maria Santos",
-     role: "Oficial de Máquinas",
-     vessel: "Nautilus Explorer",
-     vitals: { heartRate: 88, oxygenLevel: 95, temperature: 37.2, bloodPressure: "135/90" },
-     riskLevel: "medium",
-     lastCheckup: "2026-01-28",
-     alerts: ["Pressão arterial elevada", "Fadiga relatada"]
-   },
-   {
-     id: "3",
-     name: "Pedro Costa",
-     role: "Marinheiro",
-     vessel: "Nautilus Star",
-     vitals: { heartRate: 95, oxygenLevel: 92, temperature: 38.1, bloodPressure: "140/95" },
-     riskLevel: "high",
-     lastCheckup: "2026-02-04",
-     alerts: ["Febre detectada", "Baixa saturação O2", "Consulta urgente recomendada"]
-   }
- ];
- 
- const mockSupplies: MedicalSupply[] = [
-   { id: "1", name: "Paracetamol 500mg", category: "Analgésicos", quantity: 120, minStock: 50, expiryDate: "2027-06-15", batchNumber: "LOT-2024-A1", status: "ok" },
-   { id: "2", name: "Bandagem Elástica", category: "Curativos", quantity: 25, minStock: 30, expiryDate: "2028-01-01", batchNumber: "LOT-2024-B2", status: "low" },
-   { id: "3", name: "Epinefrina 1mg/mL", category: "Emergência", quantity: 5, minStock: 10, expiryDate: "2026-03-01", batchNumber: "LOT-2023-E1", status: "critical" },
-   { id: "4", name: "Antibiótico Amoxicilina", category: "Antibióticos", quantity: 0, minStock: 20, expiryDate: "2025-12-01", batchNumber: "LOT-2022-X1", status: "expired" }
- ];
- 
- export default function MedicalIntelligenceHub() {
-   const [activeTab, setActiveTab] = useState("monitoring");
+export default function MedicalIntelligenceHub() {
+    const { crewHealth: mockCrewHealth, isLoading } = useMedicalIntelligenceData();
+    const [activeTab, setActiveTab] = useState("monitoring");
+
+    // Static mock supplies (medical inventory not yet in DB)
+    const mockSupplies = [
+      { id: "1", name: "Paracetamol 500mg", category: "Analgésicos", quantity: 120, minStock: 50, expiryDate: "2027-06-15", batchNumber: "LOT-2024-A1", status: "ok" },
+      { id: "2", name: "Bandagem Elástica", category: "Curativos", quantity: 25, minStock: 30, expiryDate: "2028-01-01", batchNumber: "LOT-2024-B2", status: "low" },
+      { id: "3", name: "Epinefrina 1mg/mL", category: "Emergência", quantity: 5, minStock: 10, expiryDate: "2026-03-01", batchNumber: "LOT-2023-E1", status: "critical" },
+      { id: "4", name: "Antibiótico Amoxicilina", category: "Antibióticos", quantity: 0, minStock: 20, expiryDate: "2025-12-01", batchNumber: "LOT-2022-X1", status: "expired" }
+    ];
  
    const getRiskColor = (level: string) => {
      switch (level) {

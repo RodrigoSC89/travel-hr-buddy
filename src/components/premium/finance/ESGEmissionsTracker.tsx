@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { useESGEmissionsData, type VesselCII } from "@/hooks/useESGEmissionsData";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,31 +17,7 @@ import {
 } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from "recharts";
 
-interface VesselCII {
-  vessel: string;
-  rating: "A" | "B" | "C" | "D" | "E";
-  ciiValue: number;
-  target: number;
-  trend: "improving" | "stable" | "declining";
-  co2Emissions: number;
-  voyagesCount: number;
-}
-
-const vesselCIIData: VesselCII[] = [
-  { vessel: "MV Atlântico Sul", rating: "B", ciiValue: 8.2, target: 9.0, trend: "improving", co2Emissions: 12500, voyagesCount: 24 },
-  { vessel: "PSV Oceano Azul", rating: "C", ciiValue: 11.5, target: 10.5, trend: "stable", co2Emissions: 8200, voyagesCount: 48 },
-  { vessel: "AHTS Maré Alta", rating: "D", ciiValue: 15.2, target: 12.0, trend: "declining", co2Emissions: 18900, voyagesCount: 32 },
-  { vessel: "Supply Boat SB-07", rating: "A", ciiValue: 6.8, target: 8.0, trend: "improving", co2Emissions: 4500, voyagesCount: 56 },
-];
-
-const emissionsTrend = [
-  { month: "Set", emissions: 42500, target: 45000 },
-  { month: "Out", emissions: 44200, target: 44500 },
-  { month: "Nov", emissions: 41800, target: 44000 },
-  { month: "Dez", emissions: 43500, target: 43500 },
-  { month: "Jan", emissions: 40200, target: 43000 },
-  { month: "Fev", emissions: 38900, target: 42500 },
-];
+// Types imported from hook; local mock data removed
 
 const getRatingColor = (rating: string) => {
   switch (rating) {
@@ -65,12 +42,13 @@ const getRatingBarColor = (rating: string) => {
 };
 
 export default function ESGEmissionsTracker() {
+  const { vesselCII: vesselCIIData, emissionsTrend, isLoading } = useESGEmissionsData();
   const [selectedYear, setSelectedYear] = useState("2024");
 
-  const fleetAverageRating = "B";
-  const totalEmissions = vesselCIIData.reduce((sum, v) => sum + v.co2Emissions, 0);
-  const compliantCount = vesselCIIData.filter(v => ["A", "B", "C"].includes(v.rating)).length;
-  const atRiskCount = vesselCIIData.filter(v => ["D", "E"].includes(v.rating)).length;
+  const totalEmissions = vesselCIIData.reduce((sum: number, v: VesselCII) => sum + v.co2Emissions, 0);
+  const compliantCount = vesselCIIData.filter((v: VesselCII) => ["A", "B", "C"].includes(v.rating)).length;
+  const atRiskCount = vesselCIIData.filter((v: VesselCII) => ["D", "E"].includes(v.rating)).length;
+  const fleetAverageRating = vesselCIIData.length > 0 ? vesselCIIData[0].rating : "B";
 
   return (
     <div className="space-y-6">
