@@ -52,8 +52,7 @@ export function useTaskManagementData(vesselId?: string) {
           assigned_to_name,
           created_at,
           updated_at,
-          vessel_id,
-          vessels:vessel_id (name)
+          vessel_id
         `)
         .order("created_at", { ascending: false })
         .limit(100);
@@ -77,11 +76,12 @@ export function useTaskManagementData(vesselId?: string) {
         created_at: item.created_at || new Date().toISOString(),
         updated_at: item.updated_at || undefined,
         vessel_id: item.vessel_id || undefined,
-        vessel_name: (item.vessels as any)?.name,
+        vessel_name: undefined,
         progress: calculateProgress(item.status),
       }));
     },
     staleTime: 60000,
+    retry: 1,
     refetchOnWindowFocus: false,
   });
 
