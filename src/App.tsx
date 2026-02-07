@@ -500,6 +500,11 @@ const AuthenticatedLayout = () => {
   // Command Palette for global search
   const CommandPalette = lazy(() => import("@/components/shared/CommandPalette"));
 
+  // Global AI Assistant
+  const GlobalAIAssistant = lazy(() => 
+    import("@/components/ai/GlobalAIAssistant").then(mod => ({ default: mod.GlobalAIAssistant }))
+  );
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
@@ -531,6 +536,11 @@ const AuthenticatedLayout = () => {
         {/* Command Palette - Global Module Search (Ctrl+K) */}
         <Suspense fallback={null}>
           <CommandPalette />
+        </Suspense>
+        
+        {/* Global AI Assistant (Nauti Brain) */}
+        <Suspense fallback={null}>
+          <GlobalAIAssistant />
         </Suspense>
         
         {/* Toast Notifications */}
