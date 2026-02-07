@@ -1360,3 +1360,11 @@ comment = "M026 - Voyage AI Copilot with route optimization, bunker planning, P&
 [functions.weather-routing-ai]
 verify_jwt = false
 comment = "M028 - Weather Routing AI with 7-day forecast, route optimization, alert monitoring"
+
+# ============================================
+# MAINTENANCE INTELLIGENCE - World-Class (M046-M051)
+# ============================================
+
+[functions.maintenance-optimizer-ai]
+verify_jwt = false
+comment = "M048/M049 - Spare Parts Intelligence + Cost Optimization via AI"
