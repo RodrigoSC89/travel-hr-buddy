@@ -1348,3 +1348,15 @@ comment = "M006 - Multi-modal AI vision for equipment inspection, document OCR, 
 [functions.rag-maritime-query]
 verify_jwt = false
 comment = "M007 - RAG Engine for maritime regulations (SOLAS, MARPOL, MLC, STCW, ISM, ISPS)"
+
+# ============================================
+# OPERATIONS & FLEET - World-Class (M026-M034)
+# ============================================
+
+[functions.voyage-copilot-ai]
+verify_jwt = false
+comment = "M026 - Voyage AI Copilot with route optimization, bunker planning, P&L forecast, risk analysis"
+
+[functions.weather-routing-ai]
+verify_jwt = false
+comment = "M028 - Weather Routing AI with 7-day forecast, route optimization, alert monitoring"

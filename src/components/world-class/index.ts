@@ -5,6 +5,11 @@
 
 // Operations
 export { OperationsActionPanel } from './operations/OperationsActionPanel';
+export { VoyageAICopilotPanel } from './operations/VoyageAICopilotPanel';
+export { WeatherRoutingPanel } from './operations/WeatherRoutingPanel';
+export { TCECalculatorPanel } from './operations/TCECalculatorPanel';
+export { BunkerOptimizerPanel } from './operations/BunkerOptimizerPanel';
+export { FleetIntelligencePanel } from './operations/FleetIntelligencePanel';
 
 // Maintenance
 export { MaintenanceGanttCalendar } from './maintenance/MaintenanceGanttCalendar';
