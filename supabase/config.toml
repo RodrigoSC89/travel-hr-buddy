@@ -1320,3 +1320,11 @@ comment = "Offline sync, voice commands, camera OCR, geolocation tracking, offli
 [functions.marine-weather]
 verify_jwt = false
 comment = "Marine weather via Open-Meteo free API - waves, wind, temperature, alerts"
+
+[functions.psc-ai-briefing]
+verify_jwt = false
+comment = "PSC AI Briefing - Pre-inspection preparation with AI risk analysis"
+
+[functions.voyage-simulator-ai]
+verify_jwt = false
+comment = "Voyage Simulator AI - What-if scenario analysis for voyage planning"
