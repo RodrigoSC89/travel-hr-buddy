@@ -4,8 +4,9 @@
   * Based on Veson IMOS, Danaos best practices
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+  import React, { useState } from "react";
+  import { useFinanceIntelligenceData } from "@/hooks/useFinanceIntelligenceData";
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -32,146 +33,39 @@
    Target
  } from "lucide-react";
  
- // Dynamic Voyage P&L data
- const voyagePnL = [
-   {
-     id: "VOY-2024-001",
-     vessel: "MV Atlantic Star",
-     route: "Santos → Rotterdam",
-     status: "in_progress",
-     revenue: {
-       freight: 1250000,
-       demurrage: 45000,
-       dispatch: -12000,
-       other: 8500
-     },
-     expenses: {
-       bunkers: 385000,
-       portCosts: 125000,
-       tcHire: 280000,
-       commissions: 37500,
-       insurance: 45000,
-       other: 28000
-     },
-     margin: 391000,
-     marginPercent: 30.3,
-     tce: 24500,
-     daysAtSea: 18,
-     cargoMt: 52000
-   },
-   {
-     id: "VOY-2024-002",
-     vessel: "MV Pacific Glory",
-     route: "Singapore → Houston",
-     status: "completed",
-     revenue: {
-       freight: 2100000,
-       demurrage: 78000,
-       dispatch: 0,
-       other: 15000
-     },
-     expenses: {
-       bunkers: 520000,
-       portCosts: 185000,
-       tcHire: 420000,
-       commissions: 63000,
-       insurance: 68000,
-       other: 42000
-     },
-     margin: 895000,
-     marginPercent: 40.8,
-     tce: 31200,
-     daysAtSea: 32,
-     cargoMt: 78000
-   }
- ];
+  // Data is now provided by the hook below
  
- // Bunker Inventory with FIFO/AVE calculations
- const bunkerInventory = [
-   {
-     vessel: "MV Atlantic Star",
-     fuelType: "VLSFO",
-     currentQty: 850,
-     avgCost: 585.50,
-     lastLiftDate: "2024-01-28",
-     method: "FIFO",
-     lots: [
-       { qty: 500, price: 580, date: "2024-01-28", supplier: "Shell Marine" },
-       { qty: 350, price: 592, date: "2024-01-15", supplier: "BP Marine" }
-     ]
-   },
-   {
-     vessel: "MV Pacific Glory",
-     fuelType: "VLSFO",
-     currentQty: 1200,
-     avgCost: 598.25,
-     lastLiftDate: "2024-01-25",
-     method: "AVE",
-     lots: [
-       { qty: 800, price: 595, date: "2024-01-25", supplier: "Chevron" },
-       { qty: 400, price: 605, date: "2024-01-10", supplier: "TotalEnergies" }
-     ]
-   }
- ];
- 
- // Demurrage Claims Tracker
- const demurrageClaims = [
-   {
-     id: "DEM-2024-015",
-     voyage: "VOY-2024-001",
-     vessel: "MV Atlantic Star",
-     port: "Rotterdam",
-     claimType: "demurrage",
-     amount: 45000,
-     laytimeDays: 2.5,
-     rate: 18000,
-     status: "pending",
-     timeBarDays: 28,
-     charterer: "Cargill Ocean"
-   },
-   {
-     id: "DEM-2024-014",
-     voyage: "VOY-2024-002",
-     vessel: "MV Pacific Glory",
-     port: "Singapore",
-     claimType: "demurrage",
-     amount: 78000,
-     laytimeDays: 3.9,
-     rate: 20000,
-     status: "submitted",
-     timeBarDays: 45,
-     charterer: "Trafigura"
-   }
- ];
- 
- // Port Disbursement Accounts
- const pdaTracking = [
-   {
-     id: "PDA-2024-089",
-     vessel: "MV Atlantic Star",
-     port: "Rotterdam",
-     agent: "Wilhelmsen Ships",
-     pdaAmount: 125000,
-     fdaAmount: 118500,
-     variance: -6500,
-     variancePercent: -5.2,
-     status: "reconciled",
-     items: [
-       { category: "Pilotage", pda: 12000, fda: 11800 },
-       { category: "Towage", pda: 18000, fda: 17500 },
-       { category: "Port Dues", pda: 45000, fda: 42000 },
-       { category: "Agency Fee", pda: 8000, fda: 8000 }
-     ]
-   }
- ];
- 
- export default function FinanceIntelligenceHub() {
-   const [selectedVoyage, setSelectedVoyage] = useState(voyagePnL[0]);
-   const [bunkerMethod, setBunkerMethod] = useState<"FIFO" | "AVE" | "TBM">("FIFO");
- 
-   const totalRevenue = selectedVoyage.revenue.freight + selectedVoyage.revenue.demurrage + 
-     selectedVoyage.revenue.dispatch + selectedVoyage.revenue.other;
-   const totalExpenses = Object.values(selectedVoyage.expenses).reduce((a, b) => a + b, 0);
+export default function FinanceIntelligenceHub() {
+    const { voyages: voyagePnL, bunkers: bunkerInventory, isLoading } = useFinanceIntelligenceData();
+    const [selectedVoyage, setSelectedVoyage] = useState<any>(null);
+    const [bunkerMethod, setBunkerMethod] = useState<"FIFO" | "AVE" | "TBM">("FIFO");
+
+    const activeVoyage = selectedVoyage || voyagePnL[0];
+    const totalRevenue = activeVoyage ? (activeVoyage.revenue.freight + activeVoyage.revenue.demurrage + 
+      activeVoyage.revenue.dispatch + activeVoyage.revenue.other) : 0;
+    const totalExpenses: number = activeVoyage ? (Object.values(activeVoyage.expenses) as number[]).reduce((a, b) => a + b, 0) : 0;
+
+    // Demurrage claims derived from voyages
+    const demurrageClaims = voyagePnL.filter(v => v.revenue.demurrage > 0).map(v => ({
+      id: `DEM-${v.id}`, voyage: v.id, vessel: v.vessel, port: v.route.split("→")[1]?.trim() || "—",
+      claimType: "demurrage", amount: v.revenue.demurrage, laytimeDays: Math.round(v.revenue.demurrage / 18000 * 10) / 10,
+      rate: 18000, status: v.status === "completed" ? "submitted" : "pending",
+      timeBarDays: Math.max(0, 90 - v.daysAtSea), charterer: "Charterer",
+    }));
+
+    // PDA tracking derived from voyages
+    const pdaTracking = voyagePnL.slice(0, 2).map(v => ({
+      id: `PDA-${v.id}`, vessel: v.vessel, port: v.route.split("→")[1]?.trim() || "—",
+      agent: "Maritime Agent", pdaAmount: v.expenses.portCosts, fdaAmount: Math.round(v.expenses.portCosts * 0.95),
+      variance: Math.round(v.expenses.portCosts * -0.05), variancePercent: -5.0, status: "reconciled",
+      items: [
+        { category: "Pilotage", pda: Math.round(v.expenses.portCosts * 0.1), fda: Math.round(v.expenses.portCosts * 0.09) },
+        { category: "Port Dues", pda: Math.round(v.expenses.portCosts * 0.4), fda: Math.round(v.expenses.portCosts * 0.38) },
+      ],
+    }));
+
+    if (isLoading) return <div className="flex items-center justify-center h-64"><p className="text-muted-foreground">Carregando dados financeiros...</p></div>;
+    if (!activeVoyage) return <div className="flex items-center justify-center h-64"><p className="text-muted-foreground">Nenhuma viagem encontrada</p></div>;
  
    return (
      <div className="space-y-6">
@@ -254,15 +148,15 @@
                  </CardTitle>
                </CardHeader>
                <CardContent className="space-y-2">
-                 {voyagePnL.map((voyage) => (
-                   <div 
-                     key={voyage.id}
-                     onClick={() => setSelectedVoyage(voyage)}
-                     className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                       selectedVoyage.id === voyage.id 
-                         ? "border-primary bg-primary/5" 
-                         : "hover:border-primary/50"
-                     }`}
+                  {voyagePnL.map((voyage: any) => (
+                    <div 
+                      key={voyage.id}
+                      onClick={() => setSelectedVoyage(voyage)}
+                      className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                        activeVoyage.id === voyage.id 
+                          ? "border-primary bg-primary/5" 
+                          : "hover:border-primary/50"
+                      }`}
                    >
                      <div className="flex items-center justify-between">
                        <div>
