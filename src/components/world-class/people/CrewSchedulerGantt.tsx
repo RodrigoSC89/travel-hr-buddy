@@ -1,6 +1,6 @@
 /**
  * Crew Scheduler Gantt - Premium Component
- * WORLD-CLASS: Visual crew rotations, STCW alerts, MLC compliance
+ * WORLD-CLASS: Visual crew rotations, STCW alerts, MLC compliance, AI optimization
  */
 
 import React, { useState } from 'react';
@@ -12,10 +12,12 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
   Users, Calendar, AlertTriangle, CheckCircle, Clock,
   Ship, ChevronLeft, ChevronRight, Plus, Filter,
-  Download, UserPlus, Award, Heart
+  Download, UserPlus, Award, Heart, Brain, Sparkles, Loader2
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 interface CrewMember {
   id: string;
@@ -54,6 +56,8 @@ const RANKS = [
 export function CrewSchedulerGantt() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
+  const [aiOptimization, setAiOptimization] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Fetch crew data
   const { data: crew = [], isLoading } = useQuery({
@@ -117,6 +121,40 @@ export function CrewSchedulerGantt() {
   const days = getDaysInMonth();
   const today = new Date();
   const dayWidth = 28;
+
+  const runAIOptimization = async () => {
+    setAiLoading(true);
+    try {
+      const crewSummary = crew.map(c => ({
+        name: c.name,
+        rank: c.rank,
+        vessel: c.vessel,
+        daysOnboard: c.rotationDays,
+        maxRotation: c.maxRotation,
+        status: c.status,
+        stcwExpiry: c.stcwExpiry.toISOString().split('T')[0],
+        mlcCompliant: c.mlcCompliant,
+      }));
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [{
+            role: 'user',
+            content: `Otimize a escala de tripulação considerando MLC 2006 e STCW:\n\nTripulação: ${JSON.stringify(crewSummary)}\n\nAlertas: ${rotationAlerts.length} rotações expirando, ${stcwAlerts.length} STCW vencendo, ${mlcViolations.length} violações MLC\n\nForneça:\n1. Proposta de rotação otimizada\n2. Prioridades de substituição\n3. Riscos de compliance\n4. Economia estimada com otimização\n5. Plano de ação para próximos 30 dias`,
+          }],
+          agentId: 'crew',
+        },
+      });
+
+      if (error) throw error;
+      setAiOptimization(data?.response || data?.choices?.[0]?.message?.content || 'Otimização indisponível');
+      toast.success('Otimização AI de escalas concluída');
+    } catch {
+      toast.error('Erro ao gerar otimização AI');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -229,6 +267,10 @@ export function CrewSchedulerGantt() {
               
               <div className="h-6 w-px bg-border mx-2" />
               
+              <Button variant="secondary" className="gap-2" onClick={runAIOptimization} disabled={aiLoading}>
+                {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Otimizar com IA
+              </Button>
               <Button className="gap-2">
                 <UserPlus className="h-4 w-4" />
                 Adicionar
@@ -240,6 +282,20 @@ export function CrewSchedulerGantt() {
             </div>
           </div>
         </CardHeader>
+
+        {/* AI Optimization Result */}
+        {aiOptimization && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="px-6 pb-4">
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <h4 className="font-medium text-sm text-primary mb-2 flex items-center gap-2">
+                  <Brain className="h-4 w-4" /> Otimização AI de Escalas
+                </h4>
+                <p className="text-sm whitespace-pre-wrap">{aiOptimization}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
         <CardContent className="p-0 overflow-x-auto">
           {/* Timeline Header */}
           <div className="flex border-b sticky top-0 bg-background z-10">

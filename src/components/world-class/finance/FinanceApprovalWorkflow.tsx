@@ -1,6 +1,6 @@
 /**
  * Finance Approval Workflow - Premium Component
- * WORLD-CLASS: Complete financial flows, approvals, real reports
+ * WORLD-CLASS: Complete financial flows, approvals, real reports, AI anomaly detection
  */
 
 import React, { useState } from 'react';
@@ -12,10 +12,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   DollarSign, CheckCircle, XCircle, Clock, AlertTriangle,
   FileText, User, Calendar, ArrowRight, TrendingUp,
-  TrendingDown, PiggyBank, CreditCard, Receipt
+  TrendingDown, PiggyBank, CreditCard, Receipt,
+  Brain, Sparkles, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { motion } from 'framer-motion';
 
 interface FinanceRequest {
   id: string;
@@ -118,7 +121,44 @@ const URGENCY_CONFIG = {
 export function FinanceApprovalWorkflow() {
   const [selectedRequest, setSelectedRequest] = useState<FinanceRequest | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
+
+  const runFinanceAI = async () => {
+    setAiLoading(true);
+    try {
+      const requestsSummary = FINANCE_REQUESTS.map(r => ({
+        type: r.type,
+        title: r.title,
+        amount: r.amount,
+        currency: r.currency,
+        status: r.status,
+        urgency: r.urgency,
+        vessel: r.vessel,
+        category: r.category,
+        daysAgo: Math.floor((Date.now() - r.requestedAt.getTime()) / (1000 * 60 * 60 * 24)),
+      }));
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [{
+            role: 'user',
+            content: `Analise as solicitações financeiras marítimas e forneça insights:\n\nTotal pendente: $${totalPending.toLocaleString()}\nSolicitações: ${JSON.stringify(requestsSummary)}\n\nForneça:\n1. Análise de padrão de gastos\n2. Detecção de anomalias (valores fora do normal)\n3. Prioridade de aprovação recomendada\n4. Oportunidades de economia\n5. Forecast financeiro para próximos 30 dias\n6. Benchmarking vs mercado marítimo`,
+          }],
+          agentId: 'nauti-brain',
+        },
+      });
+
+      if (error) throw error;
+      setAiAnalysis(data?.response || data?.choices?.[0]?.message?.content || 'Análise indisponível');
+      toast.success('Análise financeira AI concluída');
+    } catch {
+      toast.error('Erro ao gerar análise financeira AI');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const approveRequestMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -156,6 +196,32 @@ export function FinanceApprovalWorkflow() {
 
   return (
     <div className="space-y-6">
+      {/* Summary Cards */}
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-2">
+        <div />
+        <Button variant="secondary" className="gap-2" onClick={runFinanceAI} disabled={aiLoading}>
+          {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          Análise Financeira AI
+        </Button>
+      </div>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2 text-primary">
+                <Brain className="h-4 w-4" />
+                Inteligência Financeira AI
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm whitespace-pre-wrap">{aiAnalysis}</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-l-4 border-l-yellow-500">
