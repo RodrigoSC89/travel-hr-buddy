@@ -15,6 +15,10 @@ export { PSCReadinessDashboard } from './compliance/PSCReadinessDashboard';
 
 // AI
 export { AIAgentHealthDashboard } from './ai/AIAgentHealthDashboard';
+export { VisionAIPanel } from './ai/VisionAIPanel';
+export { RAGQueryPanel } from './ai/RAGQueryPanel';
+export { SwarmFormationPanel } from './ai/SwarmFormationPanel';
+export { VoiceAgentInterface } from './ai/VoiceAgentInterface';
 
 // Tracking
 export { RealTimeTrackingMap } from './tracking/RealTimeTrackingMap';

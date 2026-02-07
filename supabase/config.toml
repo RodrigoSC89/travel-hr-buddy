@@ -1340,3 +1340,11 @@ comment = "Predictive maintenance AI - equipment failure prediction and maintena
 [functions.proactive-agent-monitor]
 verify_jwt = false
 comment = "M005 - Proactive agent monitoring for certificates, compliance, maintenance, agent health"
+
+[functions.vision-ai-analyzer]
+verify_jwt = false
+comment = "M006 - Multi-modal AI vision for equipment inspection, document OCR, damage assessment, safety check"
+
+[functions.rag-maritime-query]
+verify_jwt = false
+comment = "M007 - RAG Engine for maritime regulations (SOLAS, MARPOL, MLC, STCW, ISM, ISPS)"
