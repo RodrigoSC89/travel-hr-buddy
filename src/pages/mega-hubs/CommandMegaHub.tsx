@@ -18,6 +18,8 @@ import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
+import { SystemHealthKPIs } from '@/components/dashboard/SystemHealthKPIs';
+import { SystemModulesOverview } from '@/components/dashboard/SystemModulesOverview';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
@@ -195,6 +197,9 @@ export default function CommandMegaHub() {
                 <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
 
+              {/* System Health KPIs - Always visible */}
+              <SystemHealthKPIs />
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="Executive Command Panel"
@@ -249,6 +254,9 @@ export default function CommandMegaHub() {
                   />
                 </div>
               </div>
+
+              {/* Modules Overview - Always visible */}
+              <SystemModulesOverview />
 
               {/* Empty State when no data */}
               {!isLoading && metrics.totalVessels === 0 && metrics.activeVoyages === 0 && (
