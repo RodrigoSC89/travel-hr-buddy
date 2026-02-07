@@ -11356,6 +11356,65 @@ export type Database = {
           },
         ]
       }
+      crew_wellbeing_scores: {
+        Row: {
+          burnout_prediction_days: number | null
+          calculated_at: string
+          created_at: string
+          crew_member_id: string | null
+          factors: Json | null
+          fatigue_risk_level: string | null
+          id: string
+          medical_score: number | null
+          overall_score: number
+          performance_score: number | null
+          recommendations: string[] | null
+          rest_hours_score: number | null
+          time_onboard_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          burnout_prediction_days?: number | null
+          calculated_at?: string
+          created_at?: string
+          crew_member_id?: string | null
+          factors?: Json | null
+          fatigue_risk_level?: string | null
+          id?: string
+          medical_score?: number | null
+          overall_score?: number
+          performance_score?: number | null
+          recommendations?: string[] | null
+          rest_hours_score?: number | null
+          time_onboard_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          burnout_prediction_days?: number | null
+          calculated_at?: string
+          created_at?: string
+          crew_member_id?: string | null
+          factors?: Json | null
+          fatigue_risk_level?: string | null
+          id?: string
+          medical_score?: number | null
+          overall_score?: number
+          performance_score?: number | null
+          recommendations?: string[] | null
+          rest_hours_score?: number | null
+          time_onboard_score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_wellbeing_scores_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_wellness_metrics: {
         Row: {
           active_minutes: number | null
@@ -16332,6 +16391,71 @@ export type Database = {
           },
           {
             foreignKeyName: "fleet_anomalies_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fleet_health_scores: {
+        Row: {
+          alerts: Json | null
+          calculated_at: string
+          compliance_score: number | null
+          created_at: string
+          crew_score: number | null
+          current_activity: string | null
+          id: string
+          maintenance_score: number | null
+          next_event_date: string | null
+          next_event_description: string | null
+          next_event_type: string | null
+          overall_score: number
+          risk_level: string | null
+          safety_score: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          alerts?: Json | null
+          calculated_at?: string
+          compliance_score?: number | null
+          created_at?: string
+          crew_score?: number | null
+          current_activity?: string | null
+          id?: string
+          maintenance_score?: number | null
+          next_event_date?: string | null
+          next_event_description?: string | null
+          next_event_type?: string | null
+          overall_score?: number
+          risk_level?: string | null
+          safety_score?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          alerts?: Json | null
+          calculated_at?: string
+          compliance_score?: number | null
+          created_at?: string
+          crew_score?: number | null
+          current_activity?: string | null
+          id?: string
+          maintenance_score?: number | null
+          next_event_date?: string | null
+          next_event_description?: string | null
+          next_event_type?: string | null
+          overall_score?: number
+          risk_level?: string | null
+          safety_score?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_health_scores_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -44425,6 +44549,77 @@ export type Database = {
           vessel_id?: string | null
         }
         Relationships: []
+      }
+      voyage_simulations: {
+        Row: {
+          ai_analysis: string | null
+          base_scenario: Json | null
+          created_at: string
+          created_by: string | null
+          destination_port: string
+          estimated_duration_hours: number | null
+          estimated_fuel_cost: number | null
+          estimated_profit: number | null
+          id: string
+          origin_port: string
+          recommended_scenario: number | null
+          risk_factors: Json | null
+          scenarios: Json | null
+          simulation_name: string
+          status: string | null
+          updated_at: string
+          vessel_id: string | null
+          weather_impact: Json | null
+        }
+        Insert: {
+          ai_analysis?: string | null
+          base_scenario?: Json | null
+          created_at?: string
+          created_by?: string | null
+          destination_port: string
+          estimated_duration_hours?: number | null
+          estimated_fuel_cost?: number | null
+          estimated_profit?: number | null
+          id?: string
+          origin_port: string
+          recommended_scenario?: number | null
+          risk_factors?: Json | null
+          scenarios?: Json | null
+          simulation_name: string
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          weather_impact?: Json | null
+        }
+        Update: {
+          ai_analysis?: string | null
+          base_scenario?: Json | null
+          created_at?: string
+          created_by?: string | null
+          destination_port?: string
+          estimated_duration_hours?: number | null
+          estimated_fuel_cost?: number | null
+          estimated_profit?: number | null
+          id?: string
+          origin_port?: string
+          recommended_scenario?: number | null
+          risk_factors?: Json | null
+          scenarios?: Json | null
+          simulation_name?: string
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          weather_impact?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voyage_simulations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       voyages: {
         Row: {

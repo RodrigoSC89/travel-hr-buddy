@@ -399,6 +399,14 @@ const CrewWellnessAIAdvancedPage = lazy(() => import("@/pages/advanced/CrewWelln
 const ExecutiveDashboardAdvancedPage = lazy(() => import("@/pages/advanced/ExecutiveDashboardPage"));
 
 // ============================================
+// WORLD-CLASS DIFFERENTIALS
+// ============================================
+const FleetPulsePage = lazy(() => import("@/pages/FleetPulsePage"));
+const VoyageSimulatorPage = lazy(() => import("@/pages/VoyageSimulatorPage"));
+const CrewWellbeingPage = lazy(() => import("@/pages/CrewWellbeingPage"));
+const PSCReadinessPageNew = lazy(() => import("@/pages/PSCReadinessPage"));
+
+// ============================================
 // SYSTEM & QA
 // ============================================
 const InteractivityScoreboard = lazy(() => import("@/pages/System/InteractivityScoreboard"));
@@ -631,6 +639,12 @@ const AppRoutes = () => (
       <Route path="/vessel-history" element={<VesselHistoryV2 />} />
       <Route path="/digital-twin" element={<DigitalTwinPage />} />
       <Route path="/logistics-command" element={<LogisticsCommandPage />} />
+      
+      {/* WORLD-CLASS DIFFERENTIALS */}
+      <Route path="/fleet-pulse" element={<FleetPulsePage />} />
+      <Route path="/voyage-simulator" element={<VoyageSimulatorPage />} />
+      <Route path="/crew-wellbeing" element={<CrewWellbeingPage />} />
+      <Route path="/psc-readiness" element={<PSCReadinessPageNew />} />
       <Route path="/recruitment" element={<RecruitmentPage />} />
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
       <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
