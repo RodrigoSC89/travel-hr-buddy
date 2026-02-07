@@ -3,139 +3,94 @@
  * 
  * Provides color-coded visual indicators, auto-refresh, and dark theme design
  * for monitoring AI-powered predictive maintenance status.
+ * Now connected to the predictive-maintenance-ai edge function.
  * 
  * @module MaintenanceDashboard
- * @version 1.0.0 (Patch 21)
+ * @version 2.0.0
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wrench, AlertTriangle, CheckCircle } from "lucide-react";
-import { runMaintenanceOrchestrator, type MaintenanceResult, type TelemetryData } from "@/lib/ai/maintenance-orchestrator";
-import { logger } from '@/lib/logger';
-
-const REFRESH_INTERVAL = 60000; // 60 seconds
+import { Button } from "@/components/ui/button";
+import { Wrench, AlertTriangle, CheckCircle, Brain, Loader2, RefreshCw } from "lucide-react";
+import { usePredictiveMaintenance } from "@/hooks/usePredictiveMaintenance";
 
 export default function MaintenanceDashboard() {
-  const [status, setStatus] = useState<MaintenanceResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { result, isAnalyzing, analyze } = usePredictiveMaintenance();
 
-  useEffect(() => {
-    // Initial fetch
-    fetchMaintenanceStatus();
-
-    // Auto-refresh every 60 seconds
-    const interval = setInterval(fetchMaintenanceStatus, REFRESH_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  /**
-   * Fetch telemetry data and run maintenance analysis
-   */
-  async function fetchMaintenanceStatus() {
-    try {
-      setLoading(true);
-
-      // Fetch telemetry from real sources
-      const telemetry = await fetchTelemetryData();
-
-      // If no real telemetry, show empty state (zero mocks policy)
-      if (!telemetry) {
-        setStatus(null);
-        return;
-      }
-
-      // Run AI analysis
-      const result = await runMaintenanceOrchestrator(telemetry);
-      setStatus(result);
-    } catch (error) {
-      logger.error("Failed to fetch maintenance status:", error);
-      setStatus(null);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  /**
-   * Fetch telemetry data from Supabase or IoT endpoints
-   * Returns null if no real data is available (triggers EmptyState)
-   */
-  async function fetchTelemetryData(): Promise<TelemetryData | null> {
-    try {
-      // Attempt to fetch from real telemetry source
-      // This would connect to IoT sensors via MQTT or REST API
-      // For now, return null to show EmptyState (zero mocks policy)
-      const hasRealTelemetry = false; // Set to true when IoT integration is configured
-      
-      if (!hasRealTelemetry) {
-        return null;
-      }
-
-      // Real integration would fetch from:
-      // - IoT sensors via edge function
-      // - MQTT broker
-      // - Equipment monitoring APIs
-      return null;
-    } catch {
-      return null;
-    }
-  }
-
-  /**
-   * Get visual indicator based on risk level
-   */
   function getStatusIndicator(level: string) {
     switch (level) {
-    case "Normal":
+    case "low":
       return {
         icon: CheckCircle,
-        color: "text-green-500",
-        bgColor: "bg-green-500/10",
+        color: "text-emerald-500",
+        bgColor: "bg-emerald-500/10",
         badgeVariant: "default" as const,
+        label: "Normal",
       };
-    case "Atenção":
+    case "medium":
       return {
         icon: AlertTriangle,
-        color: "text-yellow-500",
-        bgColor: "bg-yellow-500/10",
+        color: "text-amber-500",
+        bgColor: "bg-amber-500/10",
         badgeVariant: "secondary" as const,
+        label: "Atenção",
       };
-    case "Crítico":
+    case "high":
+    case "critical":
       return {
         icon: Wrench,
-        color: "text-red-500",
-        bgColor: "bg-red-500/10",
+        color: "text-destructive",
+        bgColor: "bg-destructive/10",
         badgeVariant: "destructive" as const,
+        label: level === "critical" ? "Crítico" : "Alto",
       };
     default:
       return {
         icon: CheckCircle,
-        color: "text-gray-500",
-        bgColor: "bg-gray-500/10",
+        color: "text-muted-foreground",
+        bgColor: "bg-muted",
         badgeVariant: "default" as const,
+        label: "Desconhecido",
       };
     }
   }
 
-  const indicator = status ? getStatusIndicator(status.risk_level) : null;
+  const indicator = result ? getStatusIndicator(result.overall_risk) : null;
   const Icon = indicator?.icon || CheckCircle;
 
   return (
-    <Card className="bg-card border-cyan-900/20">
+    <Card className="bg-card border-primary/20">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-cyan-400">
-          <Wrench className="h-5 w-5" />
-          AI Maintenance Orchestrator
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-primary">
+            <Brain className="h-5 w-5" />
+            AI Maintenance Orchestrator
+          </CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => analyze({ analysisType: 'health_assessment' })}
+            disabled={isAnalyzing}
+          >
+            {isAnalyzing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {loading && !status ? (
+        {isAnalyzing && !result ? (
           <div className="flex items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-info" />
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="text-sm text-muted-foreground">Analisando com IA...</span>
+            </div>
           </div>
-        ) : status ? (
+        ) : result ? (
           <>
             {/* Status Indicator */}
             <div className={`flex items-center gap-3 p-4 rounded-lg ${indicator?.bgColor}`}>
@@ -143,29 +98,52 @@ export default function MaintenanceDashboard() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Badge variant={indicator?.badgeVariant}>
-                    {status.risk_level}
+                    {indicator?.label}
                   </Badge>
                   <span className="text-sm text-muted-foreground">
-                    Risco: {(status.risk_score * 100).toFixed(1)}%
+                    {result.predictions?.length || 0} equipamentos analisados
                   </span>
                 </div>
-                <p className="text-sm">{status.message}</p>
+                <p className="text-sm">{result.summary}</p>
               </div>
             </div>
 
+            {/* Top predictions */}
+            {result.predictions && result.predictions.length > 0 && (
+              <div className="space-y-2">
+                {result.predictions.slice(0, 3).map((pred, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-2 rounded border text-sm">
+                    <span className="font-medium truncate flex-1">{pred.equipment_name}</span>
+                    <Badge variant="outline" className="ml-2 text-xs">
+                      {(pred.failure_probability * 100).toFixed(0)}%
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Timestamp */}
             <div className="text-xs text-muted-foreground text-right">
-              Última atualização: {new Date(status.timestamp).toLocaleString("pt-BR")}
+              Última análise: {new Date().toLocaleString("pt-BR")}
             </div>
 
             {/* Compliance Info */}
-            <div className="text-xs text-muted-foreground border-t border-cyan-900/20 pt-3">
+            <div className="text-xs text-muted-foreground border-t border-primary/20 pt-3">
               ✅ IMCA M109, M140, M254 | ISM Code | NORMAM 101
             </div>
           </>
         ) : (
-          <div className="text-center text-muted-foreground py-8">
-            Nenhum dado disponível
+          <div className="text-center text-muted-foreground py-6">
+            <Brain className="h-10 w-10 mx-auto mb-2 opacity-40" />
+            <p className="text-sm mb-2">Nenhuma análise disponível</p>
+            <Button 
+              size="sm" 
+              variant="outline"
+              onClick={() => analyze({ analysisType: 'health_assessment' })}
+            >
+              <Wrench className="h-4 w-4 mr-2" />
+              Executar Análise
+            </Button>
           </div>
         )}
       </CardContent>

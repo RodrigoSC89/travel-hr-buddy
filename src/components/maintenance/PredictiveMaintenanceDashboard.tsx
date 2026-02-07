@@ -1,7 +1,7 @@
 /**
- * Predictive Maintenance Dashboard - PATCH 1000
- * Visual interface for ML-powered maintenance predictions
- * MIGRATED: Uses Supabase maintenance_tasks table
+ * Predictive Maintenance Dashboard - PATCH 1001
+ * Visual interface for ML-powered maintenance predictions + AI deep analysis
+ * MIGRATED: Uses Supabase maintenance_tasks table + predictive-maintenance-ai edge function
  */
 
 import React, { useState, useEffect } from 'react';
@@ -16,14 +16,14 @@ import {
   CheckCircle, 
   Clock, 
   Wrench, 
-  Thermometer,
   Activity,
-  TrendingUp,
   Calendar,
   DollarSign,
   RefreshCw,
   Settings,
-  Loader2
+  Loader2,
+  Brain,
+  Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,6 +34,7 @@ import {
   type PredictionResult, 
   type EquipmentMetrics 
 } from '@/lib/ai/predictive-maintenance';
+import { usePredictiveMaintenance } from '@/hooks/usePredictiveMaintenance';
 
 // Fetch equipment from maintenance tasks
 function useEquipmentMetrics() {
@@ -83,6 +84,7 @@ export function PredictiveMaintenanceDashboard() {
   const [predictions, setPredictions] = useState<PredictionResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedEquipment, setSelectedEquipment] = useState<PredictionResult | null>(null);
+  const { result: aiResult, isAnalyzing, analyze: runAIAnalysis } = usePredictiveMaintenance();
 
   useEffect(() => {
     if (equipment.length > 0) {
@@ -413,6 +415,93 @@ export function PredictiveMaintenanceDashboard() {
               </TabsContent>
             ))}
           </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* AI Deep Analysis Panel */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              Análise Profunda com IA
+            </CardTitle>
+            <Button 
+              onClick={() => runAIAnalysis({ analysisType: 'comprehensive' })}
+              disabled={isAnalyzing}
+              size="sm"
+            >
+              {isAnalyzing ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Analisando...</>
+              ) : (
+                <><Sparkles className="h-4 w-4 mr-2" /> Executar Análise IA</>
+              )}
+            </Button>
+          </div>
+          <CardDescription>
+            Análise preditiva avançada via Gemini AI com contexto de histórico de manutenção
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {aiResult ? (
+            <div className="space-y-4">
+              {/* Overall Risk */}
+              <div className="flex items-center gap-3">
+                <Badge variant={
+                  aiResult.overall_risk === 'critical' ? 'destructive' :
+                  aiResult.overall_risk === 'high' ? 'secondary' : 'default'
+                }>
+                  Risco: {aiResult.overall_risk?.toUpperCase()}
+                </Badge>
+                <span className="text-sm text-muted-foreground">{aiResult.summary}</span>
+              </div>
+
+              {/* AI Predictions */}
+              {aiResult.predictions && aiResult.predictions.length > 0 && (
+                <div className="space-y-2">
+                  {aiResult.predictions.map((pred, idx) => (
+                    <div key={idx} className="p-3 border rounded-lg bg-background">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium text-sm">{pred.equipment_name}</span>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs">
+                            {pred.recommended_action}
+                          </Badge>
+                          <span className="text-xs font-mono text-destructive">
+                            {(pred.failure_probability * 100).toFixed(0)}% risco
+                          </span>
+                        </div>
+                      </div>
+                      {pred.estimated_days_to_failure && (
+                        <p className="text-xs text-muted-foreground">
+                          ⏱ Falha estimada em {pred.estimated_days_to_failure} dias
+                        </p>
+                      )}
+                      {pred.risk_factors && pred.risk_factors.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {pred.risk_factors.map((f, i) => (
+                            <Badge key={i} variant="outline" className="text-[10px]">{f}</Badge>
+                          ))}
+                        </div>
+                      )}
+                      {(pred.preventive_cost_usd || pred.corrective_cost_usd) && (
+                        <div className="flex gap-4 mt-1 text-xs text-muted-foreground">
+                          {pred.preventive_cost_usd && <span>Preventiva: ${pred.preventive_cost_usd.toLocaleString()}</span>}
+                          {pred.corrective_cost_usd && <span>Corretiva: ${pred.corrective_cost_usd.toLocaleString()}</span>}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">
+              <Brain className="h-10 w-10 mx-auto mb-2 opacity-40" />
+              <p className="text-sm">Clique em "Executar Análise IA" para uma análise profunda</p>
+              <p className="text-xs">Utiliza Gemini AI para análise avançada de padrões</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
