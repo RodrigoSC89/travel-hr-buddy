@@ -46502,6 +46502,7 @@ export type Database = {
       }
       get_current_organization_id: { Args: never; Returns: string }
       get_current_tenant_id: { Args: never; Returns: string }
+      get_demo_data: { Args: never; Returns: Json }
       get_drill_statistics: {
         Args: { p_organization_id: string }
         Returns: Json
