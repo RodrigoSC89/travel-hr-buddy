@@ -3,7 +3,7 @@
  * Login, Signup, Password Recovery + OAuth + System Overview
  */
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ import {
   RefreshCw,
   AlertCircle,
   Ship, Users, Shield, FileText, Brain, Wrench,
-  Compass, Satellite, Briefcase, Activity
+  Compass, Satellite, Briefcase, Activity, BarChart3
 } from "lucide-react";
 import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
@@ -58,6 +58,7 @@ type SignUpFormData = z.infer<typeof signUpSchema>;
 type ResetFormData = z.infer<typeof resetSchema>;
 
 const Auth: React.FC = () => {
+  const navigate = useNavigate();
   const { user, isLoading: authLoading, clearSession } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
@@ -751,6 +752,18 @@ const Auth: React.FC = () => {
               </Tabs>
             </CardContent>
           </Card>
+
+          {/* Demo Access Button */}
+          <div className="text-center mt-4">
+            <Button
+              variant="outline"
+              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/5"
+              onClick={() => navigate('/demo')}
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Ver Demo do Sistema (sem login)
+            </Button>
+          </div>
 
           {/* Footer */}
           <p className="text-center text-xs text-muted-foreground mt-4">

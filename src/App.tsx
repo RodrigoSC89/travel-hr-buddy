@@ -341,6 +341,7 @@ const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
+const DemoPage = lazy(() => import("@/pages/DemoPage"));
 const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 
 // ============================================
@@ -569,6 +570,7 @@ const AppRoutes = () => (
     <Route path="/landing" element={<LandingPage />} />
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
+    <Route path="/demo" element={<DemoPage />} />
     
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
