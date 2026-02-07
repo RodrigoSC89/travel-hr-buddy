@@ -1,6 +1,6 @@
 /**
  * Audit Workflow Manager - Premium Component
- * WORLD-CLASS: Auditable workflows, evidence attachments, dynamic scorecards
+ * WORLD-CLASS: Auditable workflows, evidence attachments, dynamic scorecards, AI analysis
  */
 
 import React, { useState } from 'react';
@@ -13,11 +13,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { 
   Shield, CheckCircle, XCircle, Clock, AlertTriangle,
   FileText, Upload, MessageSquare, User, Calendar,
-  ChevronRight, Plus, Download, Eye, Paperclip
+  ChevronRight, Plus, Download, Eye, Paperclip,
+  Brain, Sparkles, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { motion } from 'framer-motion';
 
 interface AuditItem {
   id: string;
@@ -96,7 +98,43 @@ const AUDIT_CATEGORIES: AuditCategory[] = [
 export function AuditWorkflowManager() {
   const [selectedCategory, setSelectedCategory] = useState(AUDIT_CATEGORIES[0]);
   const [selectedItem, setSelectedItem] = useState<AuditItem | null>(null);
+  const [aiAuditReport, setAiAuditReport] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
+
+  const runAIAudit = async () => {
+    setAiLoading(true);
+    try {
+      const auditSummary = AUDIT_CATEGORIES.map(cat => ({
+        standard: cat.standard,
+        name: cat.name,
+        score: cat.score,
+        maxScore: cat.maxScore,
+        percent: Math.round((cat.score / cat.maxScore) * 100),
+        nonCompliant: cat.items.filter(i => i.status === 'non_compliant').length,
+        pending: cat.items.filter(i => i.status === 'pending').length,
+        observations: cat.items.filter(i => i.status === 'observation').length,
+      }));
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [{
+            role: 'user',
+            content: `Analise os resultados da auditoria marítima e forneça recomendações:\n\nScore geral: ${overallPercentage}%\n\nCategorias: ${JSON.stringify(auditSummary)}\n\nNão-conformidades ativas:\n${AUDIT_CATEGORIES.flatMap(c => c.items.filter(i => i.status === 'non_compliant').map(i => `- ${i.code}: ${i.requirement}`)).join('\n')}\n\nForneça:\n1. Avaliação geral de compliance\n2. Riscos prioritários (PSC, Flag State)\n3. Plano de ação para não-conformidades\n4. Prazo recomendado para correção\n5. Impacto em inspeções PSC\n6. Comparação com benchmark da indústria`,
+          }],
+          agentId: 'compliance',
+        },
+      });
+
+      if (error) throw error;
+      setAiAuditReport(data?.response || data?.choices?.[0]?.message?.content || 'Relatório indisponível');
+      toast.success('Relatório AI de auditoria gerado');
+    } catch {
+      toast.error('Erro ao gerar relatório AI');
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Calculate overall score
   const totalScore = AUDIT_CATEGORIES.reduce((acc, cat) => acc + cat.score, 0);
@@ -138,6 +176,16 @@ export function AuditWorkflowManager() {
                 <p className="text-sm text-muted-foreground mt-1">
                   {totalScore} / {totalMaxScore} pontos
                 </p>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="mt-3 gap-2"
+                  onClick={runAIAudit}
+                  disabled={aiLoading}
+                >
+                  {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                  Relatório AI de Compliance
+                </Button>
               </div>
               <div className="relative w-24 h-24">
                 <svg className="w-full h-full transform -rotate-90">
@@ -188,6 +236,23 @@ export function AuditWorkflowManager() {
           </Card>
         ))}
       </div>
+
+      {/* AI Audit Report */}
+      {aiAuditReport && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2 text-primary">
+                <Brain className="h-4 w-4" />
+                Relatório AI de Compliance
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm whitespace-pre-wrap">{aiAuditReport}</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
