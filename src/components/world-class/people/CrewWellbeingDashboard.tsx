@@ -1,6 +1,7 @@
 /**
- * Crew Wellbeing Dashboard - Burnout prediction & wellness tracking
+ * Crew Wellbeing Dashboard - Burnout prediction & wellness tracking with AI
  */
+import { useState } from "react";
 import { useCrewWellbeing, WellbeingScore } from "@/hooks/useCrewWellbeing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Heart, AlertTriangle, RefreshCw, Save, Brain, Clock, Shield, Activity, TrendingDown } from "lucide-react";
+import { Heart, AlertTriangle, RefreshCw, Save, Brain, Clock, Shield, Activity, TrendingDown, Sparkles, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const fatigueColors: Record<string, string> = {
   low: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
@@ -39,6 +42,43 @@ function MiniScore({ value, label, icon: Icon }: { value: number; label: string;
 
 export function CrewWellbeingDashboard() {
   const { scores, isLoading, atRiskCrew, saveScores, refetch, stats } = useCrewWellbeing();
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  const runAIAnalysis = async () => {
+    if (scores.length === 0) return;
+    setAiLoading(true);
+    try {
+      const crewSummary = scores.slice(0, 20).map(s => ({
+        name: s.crew_name,
+        rank: s.crew_rank,
+        vessel: s.vessel_name,
+        score: s.overall_score,
+        fatigue: s.fatigue_risk_level,
+        rest: s.rest_hours_score,
+        burnoutDays: s.burnout_prediction_days,
+      }));
+
+      const { data, error } = await supabase.functions.invoke("ai-chat", {
+        body: {
+          messages: [{
+            role: "user",
+            content: `Analise o bem-estar da tripulação e forneça recomendações de ação:\n\nResumo: ${stats.total} tripulantes, Score médio: ${stats.avgScore}%, Críticos: ${stats.critical}, Altos: ${stats.high}\n\nDados: ${JSON.stringify(crewSummary)}\n\nForneça:\n1. Avaliação geral de saúde da tripulação\n2. Padrões de risco identificados\n3. Ações prioritárias imediatas\n4. Recomendações MLC 2006 de compliance\n5. Plano preventivo para próximos 30 dias`
+          }],
+          agentId: "crew",
+        },
+      });
+
+      if (error) throw error;
+      setAiAnalysis(data?.response || data?.choices?.[0]?.message?.content || "Análise indisponível");
+      toast.success("Análise AI de bem-estar concluída");
+    } catch (err) {
+      console.error("AI analysis error:", err);
+      toast.error("Erro ao gerar análise AI");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -103,14 +143,35 @@ export function CrewWellbeingDashboard() {
       )}
 
       {/* Actions */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="h-4 w-4 mr-1" /> Recalcular
         </Button>
         <Button size="sm" onClick={() => saveScores.mutate()} disabled={saveScores.isPending}>
           <Save className="h-4 w-4 mr-1" /> Salvar Scores
         </Button>
+        <Button size="sm" variant="secondary" onClick={runAIAnalysis} disabled={aiLoading || scores.length === 0}>
+          {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1" />}
+          Análise AI de Bem-Estar
+        </Button>
       </div>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2 text-primary">
+                <Brain className="h-4 w-4" />
+                Análise AI — Saúde da Tripulação
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm whitespace-pre-wrap">{aiAnalysis}</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Crew Table */}
       <Card>
