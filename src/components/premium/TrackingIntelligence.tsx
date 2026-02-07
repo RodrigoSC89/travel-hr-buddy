@@ -4,8 +4,9 @@
   * Features: Real-time AIS, weather overlay, predictive analytics
   */
  
- import { useState } from "react";
- import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { useTrackingIntelligenceData, type VesselPosition } from "@/hooks/useTrackingIntelligenceData";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -16,57 +17,11 @@
    TrendingUp, Brain, Eye, BarChart3, Anchor, Compass
  } from "lucide-react";
  
- interface VesselPosition {
-   id: string;
-   name: string;
-   imo: string;
-   type: string;
-   position: { lat: number; lon: number };
-   course: number;
-   speed: number;
-   status: "underway" | "anchored" | "moored" | "not_available";
-   destination: string;
-   eta: string;
-   lastUpdate: string;
-   weather: { wind: number; waves: number; temp: number };
-   fuel: { consumption: number; remaining: number; efficiency: number };
-   connectivity: "vsat" | "lte" | "offline";
- }
- 
- const mockVessels: VesselPosition[] = [
-   {
-     id: "1", name: "MV Atlantic Explorer", imo: "9876543", type: "OSV",
-     position: { lat: -23.9618, lon: -46.3322 }, course: 145, speed: 12.5,
-     status: "underway", destination: "Santos, BR", eta: "2024-02-15T14:30:00",
-     lastUpdate: "2024-02-14T10:25:00",
-     weather: { wind: 18, waves: 1.8, temp: 28 },
-     fuel: { consumption: 4.2, remaining: 78, efficiency: 94 },
-     connectivity: "vsat"
-   },
-   {
-     id: "2", name: "MV Pacific Voyager", imo: "9876544", type: "PSV",
-     position: { lat: -22.8967, lon: -43.1729 }, course: 0, speed: 0,
-     status: "anchored", destination: "Rio de Janeiro, BR", eta: "2024-02-14T18:00:00",
-     lastUpdate: "2024-02-14T10:20:00",
-     weather: { wind: 12, waves: 0.8, temp: 30 },
-     fuel: { consumption: 0.5, remaining: 92, efficiency: 98 },
-     connectivity: "lte"
-   },
-   {
-     id: "3", name: "MV Nordic Queen", imo: "9876545", type: "AHTS",
-     position: { lat: -25.4289, lon: -49.2671 }, course: 270, speed: 8.2,
-     status: "underway", destination: "Paranaguá, BR", eta: "2024-02-16T08:00:00",
-     lastUpdate: "2024-02-14T10:15:00",
-     weather: { wind: 25, waves: 2.5, temp: 24 },
-     fuel: { consumption: 5.8, remaining: 65, efficiency: 87 },
-     connectivity: "vsat"
-   },
- ];
- 
- export default function TrackingIntelligence() {
-   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
- 
-    const vessels = mockVessels;
+// Types and data provided by useTrackingIntelligenceData hook
+
+export default function TrackingIntelligence() {
+    const { data: vessels = [], isLoading } = useTrackingIntelligenceData();
+    const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
     const underwayCount = vessels.filter(v => v.status === "underway").length;
     const avgSpeed = vessels.filter(v => v.status === "underway").reduce((sum, v) => sum + v.speed, 0) / (underwayCount || 1);
     const avgEfficiency = vessels.reduce((sum, v) => sum + v.fuel.efficiency, 0) / vessels.length;

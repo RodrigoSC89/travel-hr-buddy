@@ -4,8 +4,10 @@
   * Based on ShipNet, Mespas, and DNV patterns
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useState } from "react";
+import { usePeopleIntelligenceData } from "@/hooks/usePeopleIntelligenceData";
+// Types imported from hook
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -20,111 +22,21 @@
  } from "lucide-react";
  import { toast } from "sonner";
  
- // STCW Competency Matrix
- interface Competency {
-   code: string;
-   name: string;
-   level: "operational" | "management";
-   function: string;
-   status: "valid" | "expiring" | "expired" | "missing";
-   expiryDate?: string;
- }
- 
- // Crew Member with full profile
- interface CrewMember {
-   id: string;
-   name: string;
-   rank: string;
-   vessel: string;
-   nationality: string;
-   photo?: string;
-   status: "onboard" | "leave" | "training" | "available";
-   contractEnd: string;
-   stcwCompliance: number;
-   mlcCompliance: number;
-   fatigueScore: number;
-   wellnessScore: number;
-   hoursWorked24h: number;
-   hoursWorked7d: number;
-   restHours24h: number;
-   restHours7d: number;
-   competencies: Competency[];
-   certificates: { name: string; expiry: string; status: string }[];
-   nextLeave: string;
- }
- 
- // Work/Rest Record (MLC 2006)
- interface WorkRestRecord {
-   date: string;
-   workHours: number[];
-   restHours: number[];
-   compliant: boolean;
-   violations: string[];
- }
- 
- // Mock Data
- const crewMembers: CrewMember[] = [
-   {
-     id: "1", name: "Cap. João Silva", rank: "Master", vessel: "Nautilus Star",
-     nationality: "BR", status: "onboard", contractEnd: "2026-06-30",
-     stcwCompliance: 100, mlcCompliance: 100, fatigueScore: 15, wellnessScore: 92,
-     hoursWorked24h: 8, hoursWorked7d: 56, restHours24h: 16, restHours7d: 112,
-     competencies: [
-       { code: "II/2", name: "Master Unlimited", level: "management", function: "Navigation", status: "valid", expiryDate: "2028-05-15" },
-       { code: "A-VI/1", name: "Basic Safety Training", level: "operational", function: "Safety", status: "valid", expiryDate: "2027-03-20" },
-       { code: "A-VI/5", name: "Security Awareness", level: "operational", function: "Security", status: "expiring", expiryDate: "2026-03-01" }
-     ],
-     certificates: [
-       { name: "COC Master Unlimited", expiry: "2028-05-15", status: "valid" },
-       { name: "GMDSS", expiry: "2027-08-20", status: "valid" },
-       { name: "Medical Certificate", expiry: "2026-02-28", status: "expiring" }
-     ],
-     nextLeave: "2026-04-15"
-   },
-   {
-     id: "2", name: "1/O Pedro Santos", rank: "Chief Officer", vessel: "Nautilus Star",
-     nationality: "BR", status: "onboard", contractEnd: "2026-05-15",
-     stcwCompliance: 95, mlcCompliance: 100, fatigueScore: 28, wellnessScore: 85,
-     hoursWorked24h: 10, hoursWorked7d: 68, restHours24h: 14, restHours7d: 100,
-     competencies: [
-       { code: "II/2", name: "Chief Mate Unlimited", level: "management", function: "Navigation", status: "valid", expiryDate: "2027-09-10" },
-       { code: "A-VI/1", name: "Basic Safety Training", level: "operational", function: "Safety", status: "valid", expiryDate: "2026-08-15" }
-     ],
-     certificates: [
-       { name: "COC Chief Mate", expiry: "2027-09-10", status: "valid" },
-       { name: "ARPA Certificate", expiry: "2026-05-20", status: "expiring" }
-     ],
-     nextLeave: "2026-03-20"
-   },
-   {
-     id: "3", name: "C/E Maria Costa", rank: "Chief Engineer", vessel: "Nautilus Explorer",
-     nationality: "BR", status: "training", contractEnd: "2026-08-01",
-     stcwCompliance: 88, mlcCompliance: 100, fatigueScore: 22, wellnessScore: 88,
-     hoursWorked24h: 0, hoursWorked7d: 40, restHours24h: 24, restHours7d: 128,
-     competencies: [
-       { code: "III/2", name: "Chief Engineer Unlimited", level: "management", function: "Engineering", status: "valid", expiryDate: "2027-11-05" },
-       { code: "A-VI/3", name: "Advanced Fire Fighting", level: "operational", function: "Safety", status: "expired", expiryDate: "2025-12-01" }
-     ],
-     certificates: [
-       { name: "COC Chief Engineer", expiry: "2027-11-05", status: "valid" },
-       { name: "High Voltage", expiry: "2026-07-15", status: "valid" }
-     ],
-     nextLeave: "2026-05-01"
-   }
- ];
- 
- const stcwFunctions = [
-   { code: "I", name: "Navigation", icon: "🧭" },
-   { code: "II", name: "Cargo Handling & Stowage", icon: "📦" },
-   { code: "III", name: "Ship Operations", icon: "⚙️" },
-   { code: "IV", name: "Marine Engineering", icon: "🔧" },
-   { code: "V", name: "Electrical & Electronics", icon: "⚡" },
-   { code: "VI", name: "Safety & Security", icon: "🛡️" },
-   { code: "VII", name: "Radiocommunications", icon: "📡" }
- ];
- 
- export default function PeopleIntelligenceHub() {
-   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(crewMembers[0]);
+// Types and data provided by usePeopleIntelligenceData hook
+
+const stcwFunctions = [
+  { code: "I", name: "Navigation", icon: "🧭" },
+  { code: "II", name: "Cargo Handling & Stowage", icon: "📦" },
+  { code: "III", name: "Ship Operations", icon: "⚙️" },
+  { code: "IV", name: "Marine Engineering", icon: "🔧" },
+  { code: "V", name: "Electrical & Electronics", icon: "⚡" },
+  { code: "VI", name: "Safety & Security", icon: "🛡️" },
+  { code: "VII", name: "Radiocommunications", icon: "📡" }
+];
+
+export default function PeopleIntelligenceHub() {
+    const { data: crewMembers = [], isLoading } = usePeopleIntelligenceData();
+    const [selectedCrew, setSelectedCrew] = useState<any>(null);
  
    const getStatusColor = (status: string) => {
      switch (status) {
@@ -476,7 +388,7 @@
                      {/* Header */}
                      <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
                        <Avatar className="h-16 w-16">
-                         <AvatarFallback className="text-xl">{selectedCrew.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                         <AvatarFallback className="text-xl">{selectedCrew.name.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
                        </Avatar>
                        <div className="flex-1">
                          <h3 className="text-xl font-bold">{selectedCrew.name}</h3>
@@ -522,7 +434,7 @@
                      <div>
                        <h4 className="font-semibold mb-3">Certificados</h4>
                        <div className="space-y-2">
-                         {selectedCrew.certificates.map((cert, idx) => (
+                         {selectedCrew.certificates.map((cert: any, idx: number) => (
                            <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
                              <div className="flex items-center gap-2">
                                <FileText className="h-4 w-4" />
