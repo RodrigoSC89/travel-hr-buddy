@@ -1336,3 +1336,7 @@ comment = "Unified audit agent chat - 10 specialized AI agents via Lovable AI Ga
 [functions.predictive-maintenance-ai]
 verify_jwt = false
 comment = "Predictive maintenance AI - equipment failure prediction and maintenance planning"
+
+[functions.proactive-agent-monitor]
+verify_jwt = false
+comment = "M005 - Proactive agent monitoring for certificates, compliance, maintenance, agent health"
