@@ -12,15 +12,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Fuel, TrendingUp, TrendingDown, AlertTriangle, Ship, 
   DollarSign, BarChart3, Calendar, FileText, Droplets,
-  Gauge, Thermometer, Clock, MapPin, Plus, HelpCircle, RefreshCw
+  Gauge, Thermometer, Clock, MapPin, Plus, HelpCircle, RefreshCw,
+  Zap, Brain, Sparkles, Target, Lightbulb
 } from "lucide-react";
 import { useFuelRecords } from "@/hooks/useFuelRecords";
+import { useFuelAI } from "@/hooks/useFuelAI";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export default function FuelManagementPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { records, bunkerRecords, tankLevels, stats, isLoading, refetch } = useFuelRecords();
+  const { prediction, loading: aiLoading, predictConsumption } = useFuelAI();
 
   if (isLoading) {
     return (
@@ -146,11 +149,15 @@ export default function FuelManagementPage() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="tanks">Tanques</TabsTrigger>
           <TabsTrigger value="bunker">Bunker Ops</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="ai" className="flex items-center gap-1">
+            <Sparkles className="h-3 w-3" />
+            AI
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-4">
@@ -379,6 +386,146 @@ export default function FuelManagementPage() {
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* AI Prediction Tab */}
+        <TabsContent value="ai" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5 text-primary" />
+                Previsão de Consumo com IA
+              </CardTitle>
+              <CardDescription>
+                Análise preditiva usando Gemini AI para prever consumo, recomendar reabastecimento e otimizar custos
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button
+                onClick={() => predictConsumption({
+                  history: records.slice(0, 20).map(r => ({
+                    date: r.record_date,
+                    quantity: r.quantity_mt,
+                    type: r.fuel_type,
+                    port: r.bunkering_port,
+                  })),
+                  current_stock_tons: totalCurrent,
+                  min_rob_tons: 50,
+                  fuel_type: Object.keys(fuelTypeDistribution)[0] || 'VLSFO',
+                })}
+                disabled={aiLoading}
+                className="w-full md:w-auto"
+              >
+                {aiLoading ? (
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4 mr-2" />
+                )}
+                Gerar Previsão AI
+              </Button>
+
+              {prediction && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  {/* Prediction Results */}
+                  <Card className="bg-primary/5 border-primary/20">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Target className="h-4 w-4" />
+                        Previsão de Consumo
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        {prediction.predicted_consumption_tons && (
+                          <div className="p-3 bg-background rounded-lg text-center">
+                            <p className="text-2xl font-bold text-primary">{prediction.predicted_consumption_tons}</p>
+                            <p className="text-xs text-muted-foreground">Consumo Previsto (ton)</p>
+                          </div>
+                        )}
+                        {prediction.confidence_score && (
+                          <div className="p-3 bg-background rounded-lg text-center">
+                            <p className="text-2xl font-bold text-emerald-500">{Math.round(prediction.confidence_score * 100)}%</p>
+                            <p className="text-xs text-muted-foreground">Confiança</p>
+                          </div>
+                        )}
+                        {prediction.estimated_cost_usd && (
+                          <div className="p-3 bg-background rounded-lg text-center">
+                            <p className="text-2xl font-bold text-amber-500">${prediction.estimated_cost_usd.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">Custo Estimado</p>
+                          </div>
+                        )}
+                        {prediction.potential_savings_usd && (
+                          <div className="p-3 bg-background rounded-lg text-center">
+                            <p className="text-2xl font-bold text-green-500">${prediction.potential_savings_usd.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">Economia Potencial</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {prediction.optimal_refuel_port && (
+                        <div className="p-3 bg-background rounded-lg flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">Melhor Porto</span>
+                          </div>
+                          <Badge>{prediction.optimal_refuel_port}</Badge>
+                        </div>
+                      )}
+                      {prediction.recommended_refuel_date && (
+                        <div className="p-3 bg-background rounded-lg flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">Data Recomendada</span>
+                          </div>
+                          <Badge variant="outline">{prediction.recommended_refuel_date}</Badge>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* AI Tips */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Lightbulb className="h-4 w-4 text-amber-500" />
+                        Dicas de Otimização
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {prediction.optimization_tips && prediction.optimization_tips.length > 0 ? (
+                        <ul className="space-y-2">
+                          {prediction.optimization_tips.map((tip, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm">
+                              <Zap className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                              <span>{tip}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Sem dicas disponíveis</p>
+                      )}
+
+                      {prediction.factors && prediction.factors.length > 0 && (
+                        <div className="pt-3 border-t">
+                          <h4 className="text-sm font-semibold mb-2">Fatores de Impacto</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {prediction.factors.map((f, i) => (
+                              <Badge 
+                                key={i} 
+                                variant={f.impact === 'high' ? 'destructive' : f.impact === 'medium' ? 'default' : 'secondary'}
+                              >
+                                {f.factor}: {f.impact}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

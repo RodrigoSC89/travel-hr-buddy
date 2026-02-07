@@ -18,6 +18,8 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
+    console.log(`Bunker AI - Action: ${action}`);
+
     let systemPrompt = "";
     let userPrompt = "";
 
@@ -141,8 +143,7 @@ Carga transportada: ${data.cargo_transported_tons || 0} tons`;
         throw new Error(`Unknown action: ${action}`);
     }
 
-    console.log(`Bunker AI - Action: ${action}`);
-
+    // Remove old console.log, already logged above
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -150,7 +151,7 @@ Carga transportada: ${data.cargo_transported_tons || 0} tons`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
