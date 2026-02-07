@@ -183,9 +183,9 @@ export default function FinanceIntelligenceHub() {
                    <div>
                      <CardTitle className="flex items-center gap-2">
                        <BarChart3 className="h-5 w-5" />
-                       {selectedVoyage.id} - P&L Dinâmico
-                     </CardTitle>
-                     <CardDescription>{selectedVoyage.vessel} | {selectedVoyage.route}</CardDescription>
+                    {activeVoyage.id} - P&L Dinâmico
+                    </CardTitle>
+                    <CardDescription>{activeVoyage.vessel} | {activeVoyage.route}</CardDescription>
                    </div>
                    <Button variant="outline" size="sm">
                      <RefreshCw className="h-4 w-4 mr-2" />
@@ -204,21 +204,21 @@ export default function FinanceIntelligenceHub() {
                      <div className="space-y-2">
                        <div className="flex justify-between text-sm">
                          <span>Freight</span>
-                         <span className="font-medium">${selectedVoyage.revenue.freight.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Demurrage</span>
-                         <span className="font-medium">${selectedVoyage.revenue.demurrage.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Despatch</span>
-                         <span className={`font-medium ${selectedVoyage.revenue.dispatch < 0 ? "text-destructive" : ""}`}>
-                           ${selectedVoyage.revenue.dispatch.toLocaleString()}
-                         </span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Outros</span>
-                         <span className="font-medium">${selectedVoyage.revenue.other.toLocaleString()}</span>
+                          <span className="font-medium">${activeVoyage.revenue.freight.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Demurrage</span>
+                          <span className="font-medium">${activeVoyage.revenue.demurrage.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Despatch</span>
+                          <span className={`font-medium ${activeVoyage.revenue.dispatch < 0 ? "text-destructive" : ""}`}>
+                            ${activeVoyage.revenue.dispatch.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Outros</span>
+                          <span className="font-medium">${activeVoyage.revenue.other.toLocaleString()}</span>
                        </div>
                        <div className="border-t pt-2 flex justify-between font-semibold">
                          <span>Total Receitas</span>
@@ -236,23 +236,23 @@ export default function FinanceIntelligenceHub() {
                      <div className="space-y-2">
                        <div className="flex justify-between text-sm">
                          <span>Bunkers</span>
-                         <span className="font-medium">${selectedVoyage.expenses.bunkers.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Port Costs</span>
-                         <span className="font-medium">${selectedVoyage.expenses.portCosts.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>TC Hire</span>
-                         <span className="font-medium">${selectedVoyage.expenses.tcHire.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Commissions</span>
-                         <span className="font-medium">${selectedVoyage.expenses.commissions.toLocaleString()}</span>
-                       </div>
-                       <div className="flex justify-between text-sm">
-                         <span>Insurance</span>
-                         <span className="font-medium">${selectedVoyage.expenses.insurance.toLocaleString()}</span>
+                          <span className="font-medium">${activeVoyage.expenses.bunkers.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Port Costs</span>
+                          <span className="font-medium">${activeVoyage.expenses.portCosts.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>TC Hire</span>
+                          <span className="font-medium">${activeVoyage.expenses.tcHire.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Commissions</span>
+                          <span className="font-medium">${activeVoyage.expenses.commissions.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Insurance</span>
+                          <span className="font-medium">${activeVoyage.expenses.insurance.toLocaleString()}</span>
                        </div>
                        <div className="border-t pt-2 flex justify-between font-semibold">
                          <span>Total Despesas</span>
@@ -267,15 +267,15 @@ export default function FinanceIntelligenceHub() {
                    <div className="grid grid-cols-3 gap-4 text-center">
                      <div>
                        <p className="text-xs text-muted-foreground">Margem Bruta</p>
-                       <p className="text-xl font-bold text-emerald-600">${selectedVoyage.margin.toLocaleString()}</p>
-                     </div>
-                     <div>
-                       <p className="text-xs text-muted-foreground">% Margem</p>
-                       <p className="text-xl font-bold">{selectedVoyage.marginPercent}%</p>
-                     </div>
-                     <div>
-                       <p className="text-xs text-muted-foreground">TCE</p>
-                       <p className="text-xl font-bold text-primary">${selectedVoyage.tce.toLocaleString()}/dia</p>
+                        <p className="text-xl font-bold text-emerald-600">${activeVoyage.margin.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">% Margem</p>
+                        <p className="text-xl font-bold">{activeVoyage.marginPercent}%</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">TCE</p>
+                        <p className="text-xl font-bold text-primary">${activeVoyage.tce.toLocaleString()}/dia</p>
                      </div>
                    </div>
                  </div>
