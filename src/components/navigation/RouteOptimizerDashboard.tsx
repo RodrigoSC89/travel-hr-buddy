@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouteWeatherFuel } from '@/hooks/useRouteWeatherFuel';
+import { useRouteAI } from '@/hooks/useRouteAI';
 import { useToast } from '@/hooks/use-toast';
 import { RouteMap } from './RouteMap';
 import { WeatherRoutingPanel } from '@/components/weather/WeatherRoutingPanel';
@@ -73,6 +74,7 @@ export function RouteOptimizerDashboard() {
   const [optimizing, setOptimizing] = useState(false);
   
   const { weather, fuelPrices, bestBunkerPort, hazards, loading, error, source, fetchRouteData } = useRouteWeatherFuel();
+  const { result: aiOptimization, loading: aiLoading, optimizeRoute: runAIOptimize } = useRouteAI();
   const { toast } = useToast();
 
   // Load initial data on mount
@@ -177,10 +179,14 @@ export function RouteOptimizerDashboard() {
 
   return (
     <Tabs defaultValue="quick" className="space-y-6">
-      <TabsList className="grid w-full grid-cols-2 max-w-md">
+      <TabsList className="grid w-full grid-cols-3 max-w-lg">
         <TabsTrigger value="quick" className="flex items-center gap-2">
           <Zap className="h-4 w-4" />
           Cálculo Rápido
+        </TabsTrigger>
+        <TabsTrigger value="ai" className="flex items-center gap-2">
+          <Ship className="h-4 w-4" />
+          AI Optimizer
         </TabsTrigger>
         <TabsTrigger value="weather" className="flex items-center gap-2">
           <CloudRain className="h-4 w-4" />
@@ -523,6 +529,149 @@ export function RouteOptimizerDashboard() {
           </CardContent>
         </Card>
       </div>
+      </TabsContent>
+
+      {/* AI Optimizer Tab */}
+      <TabsContent value="ai" className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              Otimização de Rota com IA
+            </CardTitle>
+            <CardDescription>
+              Análise avançada usando Gemini AI para otimizar velocidade, consumo e custo da viagem
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>Origem</Label>
+                <Input value={departurePort} onChange={(e) => setDeparturePort(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label>Destino</Label>
+                <Input value={arrivalPort} onChange={(e) => setArrivalPort(e.target.value)} />
+              </div>
+              <div className="flex items-end">
+                <Button 
+                  className="w-full"
+                  onClick={() => runAIOptimize({
+                    origin: departurePort,
+                    destination: arrivalPort,
+                    distance_nm: 2850,
+                    vessel_type: 'PSV',
+                    base_consumption: 10,
+                    eco_speed: 10,
+                    max_speed: 14,
+                    weather: weather.length > 0 
+                      ? weather.map(w => `${w.location}: ${w.maritimeCondition}`).join(', ')
+                      : 'Normal',
+                  })}
+                  disabled={aiLoading}
+                >
+                  {aiLoading ? (
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Zap className="h-4 w-4 mr-2" />
+                  )}
+                  Otimizar com IA
+                </Button>
+              </div>
+            </div>
+
+            {aiOptimization && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                {/* AI Results */}
+                <Card className="bg-primary/5 border-primary/20">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Navigation className="h-4 w-4" />
+                      Resultado da Otimização AI
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      {aiOptimization.optimal_speed_knots && (
+                        <div className="p-3 bg-background rounded-lg text-center">
+                          <p className="text-2xl font-bold text-primary">{aiOptimization.optimal_speed_knots}</p>
+                          <p className="text-xs text-muted-foreground">Velocidade Ótima (nós)</p>
+                        </div>
+                      )}
+                      {aiOptimization.estimated_fuel_consumption_tons && (
+                        <div className="p-3 bg-background rounded-lg text-center">
+                          <p className="text-2xl font-bold text-amber-500">{aiOptimization.estimated_fuel_consumption_tons}</p>
+                          <p className="text-xs text-muted-foreground">Consumo Est. (ton)</p>
+                        </div>
+                      )}
+                      {aiOptimization.fuel_savings_percent && (
+                        <div className="p-3 bg-background rounded-lg text-center">
+                          <p className="text-2xl font-bold text-emerald-500">{aiOptimization.fuel_savings_percent}%</p>
+                          <p className="text-xs text-muted-foreground">Economia Combustível</p>
+                        </div>
+                      )}
+                      {aiOptimization.co2_reduction_tons && (
+                        <div className="p-3 bg-background rounded-lg text-center">
+                          <p className="text-2xl font-bold text-green-500">{aiOptimization.co2_reduction_tons}</p>
+                          <p className="text-xs text-muted-foreground">Redução CO₂ (ton)</p>
+                        </div>
+                      )}
+                    </div>
+                    {aiOptimization.voyage_cost_usd && (
+                      <div className="p-3 bg-background rounded-lg flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Custo Total Estimado</span>
+                        <span className="text-lg font-bold text-emerald-600">
+                          ${aiOptimization.voyage_cost_usd.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Recommendations & Stops */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-500" />
+                      Recomendações AI
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {aiOptimization.recommendations && aiOptimization.recommendations.length > 0 ? (
+                      <ul className="space-y-2">
+                        {aiOptimization.recommendations.map((rec: string, i: number) => (
+                          <li key={i} className="flex items-start gap-2 text-sm">
+                            <Leaf className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                            <span>{rec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">Sem recomendações disponíveis</p>
+                    )}
+
+                    {aiOptimization.recommended_stops && aiOptimization.recommended_stops.length > 0 && (
+                      <div className="pt-3 border-t">
+                        <h4 className="text-sm font-semibold mb-2 flex items-center gap-1">
+                          <Anchor className="h-3 w-3" /> Paradas Recomendadas
+                        </h4>
+                        {aiOptimization.recommended_stops.map((stop: { port: string; purpose: string; eta: string }, i: number) => (
+                          <div key={i} className="flex items-center justify-between p-2 bg-muted rounded-lg mb-1">
+                            <div>
+                              <span className="font-medium text-sm">{stop.port}</span>
+                              <p className="text-xs text-muted-foreground">{stop.purpose}</p>
+                            </div>
+                            <Badge variant="outline" className="text-xs">{stop.eta}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </TabsContent>
 
       {/* Weather Routing Tab */}

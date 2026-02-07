@@ -1,34 +1,33 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
+/**
+ * Weather AI Chat - Lovable AI Gateway
+ * Contextual weather assistant for maritime operations
+ */
 import { edgeLogger } from "../_shared/edge-logger.ts";
 
 const TAG = "WEATHER-AI-CHAT";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-const SYSTEM_PROMPT = `Você é um assistente meteorológico inteligente especializado em previsão do tempo e condições marítimas para o Brasil.
+const SYSTEM_PROMPT = `Você é um assistente meteorológico inteligente especializado em previsão do tempo e condições marítimas.
 
 Suas responsabilidades:
 1. Responder perguntas sobre clima e condições meteorológicas
-2. Fornecer recomendações práticas (roupas, atividades, viagens)
-3. Alertar sobre condições perigosas para navegação marítima
-4. Analisar tendências climáticas e padrões
-5. Dar dicas de saúde relacionadas ao clima
+2. Fornecer recomendações práticas para operações marítimas
+3. Alertar sobre condições perigosas para navegação
+4. Analisar tendências climáticas e padrões de vento/ondas
+5. Recomendar janelas operacionais seguras
 
 Diretrizes:
 - Responda sempre em português brasileiro
 - Seja conciso mas informativo (2-4 frases)
 - Use emojis relevantes para tornar as respostas mais visuais
 - Priorize informações de segurança quando houver alertas
-- Considere o contexto marítimo (ondas, ventos, maré) quando relevante
-- Se não tiver dados suficientes, indique claramente
-
-Formato de resposta preferido:
-- Resposta direta à pergunta
-- Recomendação prática (se aplicável)
-- Alerta de segurança (se necessário)`;
+- Considere o contexto marítimo (ondas, ventos, maré, correntes) quando relevante
+- Forneça recomendações operacionais para embarcações quando possível
+- Se não tiver dados suficientes, indique claramente`;
 
 interface ChatRequest {
   message: string;
@@ -43,9 +42,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
   }
 
   try {
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY not configured');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('LOVABLE_API_KEY not configured');
     }
 
     const { message, context, location, history = [] }: ChatRequest = await req.json();
@@ -56,12 +55,10 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     edgeLogger.info(TAG, "Processing request", { location, contextLength: context?.length || 0 });
 
-    // Build messages array
-    const messages = [
+    const messages: Array<{ role: string; content: string }> = [
       { role: 'system', content: SYSTEM_PROMPT },
     ];
 
-    // Add context if provided
     if (context) {
       messages.push({
         role: 'system',
@@ -69,40 +66,42 @@ Deno.serve(async (req: Request): Promise<Response> => {
       });
     }
 
-    // Add conversation history (last 6 messages)
     const recentHistory = history.slice(-6);
     recentHistory.forEach(msg => {
-      messages.push({
-        role: msg.role as 'user' | 'assistant',
-        content: msg.content
-      });
+      messages.push({ role: msg.role, content: msg.content });
     });
 
-    // Add current message
-    messages.push({
-      role: 'user',
-      content: message
-    });
+    messages.push({ role: 'user', content: message });
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'google/gemini-3-flash-preview',
         messages,
         max_tokens: 500,
         temperature: 0.7,
       }),
     });
 
+    if (response.status === 429) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded", response: "⏳ Limite de requisições atingido. Tente novamente em alguns instantes." }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    if (response.status === 402) {
+      return new Response(JSON.stringify({ error: "Credits exhausted", response: "💳 Créditos de IA esgotados. Contate o administrador." }), {
+        status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     if (!response.ok) {
       const errorData = await response.text();
-      edgeLogger.error(TAG, "OpenAI API error", new Error(errorData), { status: response.status });
-      throw new Error(`OpenAI API error: ${response.status}`);
+      edgeLogger.error(TAG, "AI gateway error", new Error(errorData), { status: response.status });
+      throw new Error(`AI gateway error: ${response.status}`);
     }
 
     const data = await response.json();
@@ -117,7 +116,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return new Response(
       JSON.stringify({ 
         response: aiResponse,
-        model: 'gpt-4o-mini',
+        model: 'google/gemini-3-flash-preview',
         location,
         timestamp: new Date().toISOString()
       }),
