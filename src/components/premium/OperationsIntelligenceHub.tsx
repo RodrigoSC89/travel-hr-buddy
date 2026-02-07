@@ -4,8 +4,10 @@
   * Based on Veson IMOS, Danaos, and NAPA patterns
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useState } from "react";
+import { useOperationsIntelligenceData } from "@/hooks/useOperationsIntelligenceData";
+// Types imported from hook
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -20,132 +22,14 @@
  } from "lucide-react";
  import { toast } from "sonner";
  
- // Voyage Estimate Interface (IMOS Pattern)
- interface VoyageEstimate {
-   id: string;
-   voyageNo: string;
-   vessel: string;
-   route: string;
-   loadPort: string;
-   dischargePort: string;
-   cargoType: string;
-   quantity: number;
-   freightRate: number;
-   currency: string;
-   laycanStart: string;
-   laycanEnd: string;
-   estimatedDays: number;
-   tceResult: number;
-   bunkerCost: number;
-   portCost: number;
-   status: "draft" | "pending" | "approved" | "executed";
- }
+// Types and data provided by useOperationsIntelligenceData hook
  
- // Fleet Position Interface
- interface FleetPosition {
-   id: string;
-   vessel: string;
-   imo: string;
-   position: { lat: number; lng: number };
-   destination: string;
-   eta: string;
-   speed: number;
-   course: number;
-   status: "sailing" | "port" | "anchor" | "drifting";
-   lastPort: string;
-   nextPort: string;
-   fuelROB: { hfo: number; mgo: number };
-   weather: { wind: number; waves: number; temp: number };
- }
- 
- // Charter Party Terms
- interface CharterTerms {
-   id: string;
-   vessel: string;
-   charterer: string;
-   type: "voyage" | "time" | "bareboat";
-   cpDate: string;
-   laycan: string;
-   loadPort: string;
-   dischargePort: string;
-   cargoDescription: string;
-   freightRate: number;
-   demurrageRate: number;
-   despatchRate: number;
-   laytimeHours: number;
-   laytimeUsed: number;
-   status: "active" | "completed" | "dispute";
- }
- 
- // Mock data
- const voyageEstimates: VoyageEstimate[] = [
-   {
-     id: "1", voyageNo: "V-2026-001", vessel: "Nautilus Star", route: "Santos - Rotterdam",
-     loadPort: "Santos", dischargePort: "Rotterdam", cargoType: "Soybean", quantity: 52000,
-     freightRate: 42.50, currency: "USD", laycanStart: "2026-02-15", laycanEnd: "2026-02-20",
-     estimatedDays: 28, tceResult: 18500, bunkerCost: 185000, portCost: 45000, status: "approved"
-   },
-   {
-     id: "2", voyageNo: "V-2026-002", vessel: "Nautilus Explorer", route: "Paranaguá - Shanghai",
-     loadPort: "Paranaguá", dischargePort: "Shanghai", cargoType: "Corn", quantity: 48000,
-     freightRate: 55.00, currency: "USD", laycanStart: "2026-02-25", laycanEnd: "2026-03-02",
-     estimatedDays: 45, tceResult: 22300, bunkerCost: 295000, portCost: 52000, status: "pending"
-   },
-   {
-     id: "3", voyageNo: "V-2026-003", vessel: "Nautilus Pioneer", route: "Rio Grande - Antwerp",
-     loadPort: "Rio Grande", dischargePort: "Antwerp", cargoType: "Soybean Meal", quantity: 35000,
-     freightRate: 48.00, currency: "USD", laycanStart: "2026-03-01", laycanEnd: "2026-03-05",
-     estimatedDays: 24, tceResult: 15800, bunkerCost: 142000, portCost: 38000, status: "draft"
-   }
- ];
- 
- const fleetPositions: FleetPosition[] = [
-   {
-     id: "1", vessel: "Nautilus Star", imo: "9876543", 
-     position: { lat: -23.9618, lng: -46.3322 }, destination: "Rotterdam", 
-     eta: "2026-02-18T14:00:00Z", speed: 12.5, course: 45,
-     status: "port", lastPort: "Santos", nextPort: "Rotterdam",
-     fuelROB: { hfo: 850, mgo: 120 },
-     weather: { wind: 15, waves: 1.2, temp: 28 }
-   },
-   {
-     id: "2", vessel: "Nautilus Explorer", imo: "9876544",
-     position: { lat: -8.0476, lng: -34.8770 }, destination: "Shanghai",
-     eta: "2026-03-15T08:00:00Z", speed: 14.2, course: 78,
-     status: "sailing", lastPort: "Paranaguá", nextPort: "Cape Town",
-     fuelROB: { hfo: 1200, mgo: 180 },
-     weather: { wind: 22, waves: 2.5, temp: 26 }
-   },
-   {
-     id: "3", vessel: "Nautilus Pioneer", imo: "9876545",
-     position: { lat: -32.0350, lng: -52.0986 }, destination: "Antwerp",
-     eta: "2026-02-28T10:00:00Z", speed: 0, course: 0,
-     status: "anchor", lastPort: "Buenos Aires", nextPort: "Rio Grande",
-     fuelROB: { hfo: 650, mgo: 95 },
-     weather: { wind: 8, waves: 0.5, temp: 24 }
-   }
- ];
- 
- const charterTerms: CharterTerms[] = [
-   {
-     id: "1", vessel: "Nautilus Star", charterer: "Cargill SA", type: "voyage",
-     cpDate: "2026-01-20", laycan: "15-20 Feb 2026", loadPort: "Santos",
-     dischargePort: "Rotterdam", cargoDescription: "52,000 MT Soybean in bulk",
-     freightRate: 42.50, demurrageRate: 45000, despatchRate: 22500,
-     laytimeHours: 96, laytimeUsed: 72, status: "active"
-   },
-   {
-     id: "2", vessel: "Nautilus Explorer", charterer: "Bunge Global", type: "voyage",
-     cpDate: "2026-01-28", laycan: "25 Feb - 02 Mar 2026", loadPort: "Paranaguá",
-     dischargePort: "Shanghai", cargoDescription: "48,000 MT Corn in bulk",
-     freightRate: 55.00, demurrageRate: 48000, despatchRate: 24000,
-     laytimeHours: 120, laytimeUsed: 0, status: "active"
-   }
- ];
- 
- export default function OperationsIntelligenceHub() {
-   const [selectedVoyage, setSelectedVoyage] = useState<VoyageEstimate | null>(voyageEstimates[0]);
-   const [selectedVessel, setSelectedVessel] = useState<FleetPosition | null>(fleetPositions[0]);
+export default function OperationsIntelligenceHub() {
+    const { voyageEstimates, fleetPositions, charterTerms, isLoading } = useOperationsIntelligenceData();
+    const [selectedVoyage, setSelectedVoyage] = useState<any>(null);
+    const [selectedVessel, setSelectedVessel] = useState<any>(null);
+    const activeVoyage = selectedVoyage || voyageEstimates[0];
+    const activeVessel = selectedVessel || fleetPositions[0];
  
    const getStatusColor = (status: string) => {
      switch (status) {

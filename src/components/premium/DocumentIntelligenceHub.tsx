@@ -3,8 +3,9 @@
   * OCR, AI Tagging, and Compliance Automation
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useState } from "react";
+import { useDocumentIntelligenceData, type DocumentItem } from "@/hooks/useDocumentIntelligenceData";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
  import { Button } from "@/components/ui/button";
  import { Progress } from "@/components/ui/progress";
@@ -16,29 +17,10 @@
    FileCheck, FileClock, FileX, Filter, Sparkles
  } from "lucide-react";
  
- interface Document {
-   id: string;
-   name: string;
-   type: string;
-   category: string;
-   vessel: string;
-   status: "valid" | "expiring" | "expired" | "pending";
-   expiryDate: string;
-   lastModified: string;
-   aiTags: string[];
-   confidence: number;
- }
- 
- const documents: Document[] = [
-   { id: "1", name: "Certificado SOLAS", type: "Certificado", category: "Compliance", vessel: "Nautilus Star", status: "valid", expiryDate: "2027-06-15", lastModified: "2026-01-20", aiTags: ["SOLAS", "Safety", "IMO"], confidence: 98 },
-   { id: "2", name: "Certificado STCW - João Silva", type: "Certificado Pessoal", category: "Tripulação", vessel: "Nautilus Star", status: "expiring", expiryDate: "2026-03-01", lastModified: "2021-03-01", aiTags: ["STCW", "Competência", "Capitão"], confidence: 95 },
-   { id: "3", name: "Contrato de Afretamento TCP-2024-045", type: "Contrato", category: "Comercial", vessel: "Nautilus Explorer", status: "valid", expiryDate: "2026-12-31", lastModified: "2024-07-15", aiTags: ["Charter", "TCP", "Afretamento"], confidence: 92 },
-   { id: "4", name: "Certificado de Classe DNV", type: "Certificado", category: "Classe", vessel: "Nautilus Star", status: "expired", expiryDate: "2026-01-30", lastModified: "2021-01-30", aiTags: ["DNV", "Classe", "Vistoria"], confidence: 99 },
-   { id: "5", name: "Apólice P&I Insurance", type: "Seguro", category: "Financeiro", vessel: "Nautilus Star", status: "valid", expiryDate: "2027-02-20", lastModified: "2026-02-01", aiTags: ["Seguro", "P&I", "Marine Insurance"], confidence: 97 },
-   { id: "6", name: "Checklist Pre-Arrival Santos", type: "Checklist", category: "Operacional", vessel: "Nautilus Explorer", status: "pending", expiryDate: "-", lastModified: "2026-02-04", aiTags: ["Checklist", "Port Call", "Santos"], confidence: 88 }
- ];
- 
- export default function DocumentIntelligenceHub() {
+// Types provided by useDocumentIntelligenceData hook
+
+export default function DocumentIntelligenceHub() {
+    const { data: documents = [], isLoading } = useDocumentIntelligenceData();
    const [activeTab, setActiveTab] = useState("overview");
    const [searchQuery, setSearchQuery] = useState("");
  
