@@ -20,6 +20,8 @@ import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { AuditWorkflowManager } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -316,7 +318,15 @@ export default function ComplianceMegaHub() {
                 variant="horizontal"
               />
 
-              <ComplianceHubPage />
+              {/* Empty state when no audits */}
+              {!auditsLoading && complianceMetrics.totalAudits === 0 && (
+                <HubEmptyState 
+                  hub="compliance" 
+                  onPrimaryAction={handleNewAudit} 
+                />
+              )}
+
+              {(auditsLoading || complianceMetrics.totalAudits > 0) && <ComplianceHubPage />}
             </TabsContent>
 
             <TabsContent value="audit-workflow" className="mt-0 space-y-6">

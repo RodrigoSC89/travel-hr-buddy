@@ -16,6 +16,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { OperationsActionPanel } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -107,8 +109,8 @@ export default function OpsMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Compass className="h-6 w-6 text-blue-500" />
+              <div className="p-2 bg-hub-ops/10 rounded-lg">
+                <Compass className="h-6 w-6 text-hub-ops" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Hub de Operações</h1>
@@ -118,10 +120,10 @@ export default function OpsMegaHub() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+              <Badge variant="outline" className="bg-hub-ops/10 text-hub-ops border-hub-ops/20">
                 {metrics.activeVoyages} viagens ativas
               </Badge>
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 Operacional
               </Badge>
             </div>
@@ -138,7 +140,7 @@ export default function OpsMegaHub() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="data-[state=active]:bg-blue-500 data-[state=active]:text-white gap-2"
+                  className="data-[state=active]:bg-hub-ops data-[state=active]:text-white gap-2"
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -220,8 +222,16 @@ export default function OpsMegaHub() {
               {/* Operations Action Panel with Real Data */}
               {showActionPanel && <OperationsActionPanel />}
 
+              {/* Empty state when no data */}
+              {!isLoading && metrics.totalVessels === 0 && (
+                <HubEmptyState 
+                  hub="ops" 
+                  onPrimaryAction={() => window.dispatchEvent(new CustomEvent('ops:new-voyage'))} 
+                />
+              )}
+
               {/* Original Operations Hub */}
-              <OperationsCommandHub />
+              {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
             </TabsContent>
             
             <TabsContent value="maritime" className="mt-0">

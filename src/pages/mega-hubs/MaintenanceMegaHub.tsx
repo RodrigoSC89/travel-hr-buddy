@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
 import { MaintenanceGanttCalendar } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -138,8 +139,8 @@ export default function MaintenanceMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-500/10 rounded-lg">
-                <Wrench className="h-6 w-6 text-orange-500" />
+              <div className="p-2 bg-hub-maintenance/10 rounded-lg">
+                <Wrench className="h-6 w-6 text-hub-maintenance" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Hub de Manutenção</h1>
@@ -149,10 +150,10 @@ export default function MaintenanceMegaHub() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
+              <Badge variant="outline" className="bg-hub-maintenance/10 text-hub-maintenance border-hub-maintenance/20">
                 {maintMetrics.pending} pendentes
               </Badge>
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 {maintMetrics.completed} concluídas
               </Badge>
             </div>
@@ -169,7 +170,7 @@ export default function MaintenanceMegaHub() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="data-[state=active]:bg-orange-500 data-[state=active]:text-white gap-2"
+                  className="data-[state=active]:bg-hub-maintenance data-[state=active]:text-white gap-2"
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -245,8 +246,16 @@ export default function MaintenanceMegaHub() {
                 variant="horizontal"
               />
 
+              {/* Empty state when no data */}
+              {!maintLoading && maintMetrics.total === 0 && (
+                <HubEmptyState 
+                  hub="maintenance" 
+                  onPrimaryAction={handleNewWorkOrder} 
+                />
+              )}
+
               {/* Original Maintenance Hub */}
-              <MaintenanceHub />
+              {(maintLoading || maintMetrics.total > 0) && <MaintenanceHub />}
             </TabsContent>
 
             <TabsContent value="planning" className="mt-0 space-y-6">

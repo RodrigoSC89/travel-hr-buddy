@@ -154,6 +154,15 @@
     --font-weight-medium: 600;               /* Aumentado de 500 para 600 */
     --font-weight-semibold: 600;             /* Mantém 600 */
     --font-weight-bold: 700;                 /* Mantém 700 */
+
+    /* === HUB IDENTITY COLORS === */
+    --hub-command: 214 84% 46%;              /* Azul primário — Command Center */
+    --hub-ops: 214 91% 40%;                  /* Azul forte — Operations */
+    --hub-maintenance: 25 95% 53%;           /* Laranja — Maintenance */
+    --hub-ai: 270 70% 55%;                   /* Roxo — AI Hub */
+    --hub-tracking: 187 85% 43%;             /* Ciano — Tracking */
+    --hub-compliance: var(--destructive);     /* Vermelho — Compliance */
+    --hub-workbench: 240 60% 55%;            /* Índigo — Workbench */
     
     /* Gradients Azuis */
     --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));

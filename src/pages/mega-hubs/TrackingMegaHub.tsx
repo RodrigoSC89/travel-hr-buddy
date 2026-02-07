@@ -18,6 +18,7 @@ import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw,
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { RealTimeTrackingMap } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -147,8 +148,8 @@ export default function TrackingMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-cyan-500/10 rounded-lg">
-                <Satellite className="h-6 w-6 text-cyan-500" />
+              <div className="p-2 bg-hub-tracking/10 rounded-lg">
+                <Satellite className="h-6 w-6 text-hub-tracking" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Hub de Rastreamento</h1>
@@ -163,10 +164,10 @@ export default function TrackingMegaHub() {
                   {trackingMetrics.openAlerts} alertas ativos
                 </Badge>
               )}
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 {trackingMetrics.totalVessels} rastreadas
               </Badge>
-              <Badge variant="outline" className="bg-cyan-500/10 text-cyan-500 border-cyan-500/20">
+              <Badge variant="outline" className="bg-hub-tracking/10 text-hub-tracking border-hub-tracking/20">
                 AIS Ativo
               </Badge>
             </div>
@@ -183,7 +184,7 @@ export default function TrackingMegaHub() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="data-[state=active]:bg-cyan-500 data-[state=active]:text-white gap-2"
+                  className="data-[state=active]:bg-hub-tracking data-[state=active]:text-white gap-2"
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -262,7 +263,15 @@ export default function TrackingMegaHub() {
                 searchPlaceholder="Search vessels, routes, locations..."
               />
 
-              <TrackingTelemetryHub />
+              {/* Empty state when no vessels */}
+              {!vesselsLoading && trackingMetrics.totalVessels === 0 && (
+                <HubEmptyState 
+                  hub="tracking" 
+                  onPrimaryAction={() => window.location.href = '/ops'} 
+                />
+              )}
+
+              {(vesselsLoading || trackingMetrics.totalVessels > 0) && <TrackingTelemetryHub />}
             </TabsContent>
 
             <TabsContent value="live-map" className="mt-0 space-y-6">

@@ -138,6 +138,16 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Hub identity colors
+        hub: {
+          command: "hsl(var(--hub-command))",
+          ops: "hsl(var(--hub-ops))",
+          maintenance: "hsl(var(--hub-maintenance))",
+          ai: "hsl(var(--hub-ai))",
+          tracking: "hsl(var(--hub-tracking))",
+          compliance: "hsl(var(--hub-compliance))",
+          workbench: "hsl(var(--hub-workbench))",
+        },
         // Maritime theme colors
         "ocean-blue": "hsl(var(--ocean-blue))",
         "ocean-deep": "hsl(var(--ocean-deep))",
