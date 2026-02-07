@@ -9,10 +9,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Plus, Edit, Trash2, CheckCircle, XCircle, Clock,
   Ship, Anchor, MapPin, Package, Filter, Download,
-  RefreshCw, MoreHorizontal, AlertTriangle, TrendingUp
+  RefreshCw, MoreHorizontal, AlertTriangle, TrendingUp,
+  Brain, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -49,6 +51,8 @@ const PRIORITY_CONFIG = {
 export function OperationsActionPanel() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>('all');
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const queryClient = useQueryClient();
 
   // Fetch real operations from Supabase
@@ -119,6 +123,30 @@ export function OperationsActionPanel() {
     filter === 'all' || op.status === filter
   );
 
+  const runAIAnalysis = async () => {
+    setIsAnalyzing(true);
+    setAiAnalysis(null);
+    try {
+      const summary = operations.map(op => `${op.name} | ${op.vessel} | Status: ${op.status} | Prioridade: ${op.priority}`).join('\n');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          agentId: 'nauti-brain',
+          messages: [{
+            role: 'user',
+            content: `Analise estas operações marítimas e forneça: 1) Priorização inteligente, 2) Gargalos operacionais, 3) Recomendações de aprovação em lote, 4) Alertas de risco. Responda em PT-BR.\n\nOperações:\n${summary}`
+          }]
+        }
+      });
+      if (error) throw error;
+      setAiAnalysis(data?.choices?.[0]?.message?.content || data?.message || 'Análise concluída sem resultados.');
+      toast.success('Análise AI de operações concluída');
+    } catch (err) {
+      toast.error('Erro na análise AI');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Action Bar */}
@@ -180,10 +208,39 @@ export function OperationsActionPanel() {
                 <Download className="h-4 w-4" />
                 Export
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-1 border-primary/50 text-primary"
+                onClick={runAIAnalysis}
+                disabled={isAnalyzing || operations.length === 0}
+              >
+                {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
+                Análise AI
+              </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              Análise AI de Operações
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-[300px]">
+              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                {aiAnalysis}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Operations List */}
       <Card>
