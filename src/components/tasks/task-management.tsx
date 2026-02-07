@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 export const TaskManagement: React.FC = () => {
-  const { tasks, stats, isLoading, createTask, updateTask } = useTaskManagementData();
+  const { tasks, stats, isLoading, error, createTask, updateTask, refetch } = useTaskManagementData();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -163,6 +163,21 @@ export const TaskManagement: React.FC = () => {
       <div className="flex items-center justify-center h-96">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2 text-muted-foreground">Carregando tarefas...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-96 gap-4">
+        <AlertTriangle className="h-12 w-12 text-destructive" />
+        <div className="text-center">
+          <h3 className="font-semibold text-lg">Erro ao carregar tarefas</h3>
+          <p className="text-muted-foreground text-sm mt-1">Não foi possível carregar os dados. Tente novamente.</p>
+        </div>
+        <Button onClick={() => refetch()} variant="outline">
+          Tentar novamente
+        </Button>
       </div>
     );
   }
