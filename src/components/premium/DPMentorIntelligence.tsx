@@ -4,21 +4,22 @@
   * Features: CPD tracking, competency matrix, simulator management, NI certification
   */
  
- import React, { useState } from "react";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
- import { Badge } from "@/components/ui/badge";
- import { Button } from "@/components/ui/button";
- import { Progress } from "@/components/ui/progress";
- import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
- import { ScrollArea } from "@/components/ui/scroll-area";
- import {
-   Anchor, Brain, GraduationCap, Award, Target, Shield, Clock,
-   CheckCircle, AlertTriangle, TrendingUp, Users, Calendar,
-   BookOpen, PlayCircle, FileText, Star, Zap, BarChart3,
-   RefreshCw, Download, Eye, Sparkles, Timer, Radio,
-   Compass, Navigation, Waves, Activity
- } from "lucide-react";
- import { toast } from "sonner";
+  import React, { useState } from "react";
+  import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+  import { Badge } from "@/components/ui/badge";
+  import { Button } from "@/components/ui/button";
+  import { Progress } from "@/components/ui/progress";
+  import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  import { ScrollArea } from "@/components/ui/scroll-area";
+  import {
+    Anchor, Brain, GraduationCap, Award, Target, Shield, Clock,
+    CheckCircle, AlertTriangle, TrendingUp, Users, Calendar,
+    BookOpen, PlayCircle, FileText, Star, Zap, BarChart3,
+    RefreshCw, Download, Eye, Sparkles, Timer, Radio,
+    Compass, Navigation, Waves, Activity, Loader2
+  } from "lucide-react";
+  import { toast } from "sonner";
+  import { useDPMentorData } from "@/hooks/useDPMentorData";
  
  // NI CPD Requirement by Year (2024-2028)
  const CPD_REQUIREMENTS = [
@@ -116,22 +117,27 @@
    { type: "Integrated Scenario", description: "Bridge + Engine Room linked", frequency: "Quarterly", lastPerformed: "2023-12-15" },
  ];
  
- export default function DPMentorIntelligence() {
-   const [activeTab, setActiveTab] = useState("cpd");
-   const [selectedPersonnel, setSelectedPersonnel] = useState<string | null>(null);
- 
-   const getStatusColor = (status: string) => {
-     switch (status) {
-       case "active": return "bg-green-500/10 text-green-500 border-green-500/20";
-       case "renewal_due": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-       case "in_training": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-       default: return "bg-muted text-muted-foreground";
-     }
-   };
- 
-   const renewalsDue = TRAINING_PERSONNEL.filter(p => p.status === "renewal_due").length;
-   const avgCPDProgress = Math.round(TRAINING_PERSONNEL.reduce((acc, p) => acc + (p.cpdModules / p.cpdRequired) * 100, 0) / TRAINING_PERSONNEL.length);
-   const totalSimulatorHours = TRAINING_PERSONNEL.reduce((acc, p) => acc + p.simulatorHours, 0);
+  export default function DPMentorIntelligence() {
+    const [activeTab, setActiveTab] = useState("cpd");
+    const [selectedPersonnel, setSelectedPersonnel] = useState<string | null>(null);
+    const dpData = useDPMentorData();
+
+    // Use real data from hook, fallback to static mock for reference data only
+    const ACTIVE_PERSONNEL = dpData.personnel.length > 0 ? dpData.personnel : TRAINING_PERSONNEL;
+
+    const getStatusColor = (status: string) => {
+      switch (status) {
+        case "active": return "bg-green-500/10 text-green-500 border-green-500/20";
+        case "renewal_due": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+        case "in_training": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+        default: return "bg-muted text-muted-foreground";
+      }
+    };
+  
+    const renewalsDue = dpData.personnel.length > 0 ? dpData.renewalsDue : TRAINING_PERSONNEL.filter(p => p.status === "renewal_due").length;
+    const avgCPDProgress = dpData.personnel.length > 0 ? dpData.avgCPDProgress : Math.round(TRAINING_PERSONNEL.reduce((acc, p) => acc + (p.cpdModules / p.cpdRequired) * 100, 0) / TRAINING_PERSONNEL.length);
+    const totalSimulatorHours = dpData.personnel.length > 0 ? dpData.totalSimulatorHours : TRAINING_PERSONNEL.reduce((acc, p) => acc + p.simulatorHours, 0);
+    const ACTIVE_SIMULATOR = dpData.trainingRecords.length > 0 ? dpData.trainingRecords : SIMULATOR_SESSIONS;
  
    return (
      <div className="space-y-6">
@@ -142,7 +148,7 @@
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-xs text-muted-foreground">DPOs Certificados</p>
-                 <p className="text-2xl font-bold">{TRAINING_PERSONNEL.length}</p>
+                 <p className="text-2xl font-bold">{ACTIVE_PERSONNEL.length}</p>
                  <p className="text-xs text-green-500 flex items-center gap-1">
                    <CheckCircle className="h-3 w-3" /> NI Standards
                  </p>
@@ -267,7 +273,7 @@
              <CardContent>
                <ScrollArea className="h-[300px]">
                  <div className="space-y-4">
-                   {TRAINING_PERSONNEL.map(person => (
+                   {ACTIVE_PERSONNEL.map(person => (
                      <div key={person.id} className="p-4 border rounded-lg space-y-3">
                        <div className="flex items-center justify-between">
                          <div className="flex items-center gap-3">
@@ -419,7 +425,7 @@
                <CardContent>
                  <ScrollArea className="h-[350px]">
                    <div className="space-y-3">
-                     {SIMULATOR_SESSIONS.map(session => (
+                     {ACTIVE_SIMULATOR.map(session => (
                        <div key={session.id} className="p-3 border rounded-lg space-y-2">
                          <div className="flex items-center justify-between">
                            <Badge variant="outline">{session.type}</Badge>
