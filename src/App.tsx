@@ -215,6 +215,7 @@ const AlertsCommandCenter = lazy(() => import("@/pages/AlertsCommandCenter"));
 const PEODP = lazy(() => import("@/pages/PEODP"));
 const PEOTRAM = lazy(() => import("@/pages/PEOTRAM"));
 const SGSO = lazy(() => import("@/pages/SGSO"));
+const SGSOReportPage = lazy(() => import("@/pages/SGSOReportPage"));
 const SafetyIMCAV2 = lazy(() => import("@/pages/SafetyIMCAV2"));
 const PreOVIDInspection = lazy(() => import("@/pages/PreOVIDInspection"));
 const MLCInspection = lazy(() => import("@/pages/MLCInspection"));
@@ -758,6 +759,7 @@ const AppRoutes = () => (
       <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />
+      <Route path="/sgso/report" element={<SGSOReportPage />} />
       <Route path="/imca-audit" element={<SafetyIMCAV2 />} />
       <Route path="/pre-ovid" element={<PreOVIDInspection />} />
       <Route path="/pre-ovid-inspection" element={<PreOVIDInspection />} />
