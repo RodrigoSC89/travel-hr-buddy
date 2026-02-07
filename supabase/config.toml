@@ -1328,3 +1328,11 @@ comment = "PSC AI Briefing - Pre-inspection preparation with AI risk analysis"
 [functions.voyage-simulator-ai]
 verify_jwt = false
 comment = "Voyage Simulator AI - What-if scenario analysis for voyage planning"
+
+[functions.audit-agent-chat]
+verify_jwt = false
+comment = "Unified audit agent chat - 10 specialized AI agents via Lovable AI Gateway (streaming)"
+
+[functions.predictive-maintenance-ai]
+verify_jwt = false
+comment = "Predictive maintenance AI - equipment failure prediction and maintenance planning"

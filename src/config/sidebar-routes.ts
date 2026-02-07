@@ -215,6 +215,26 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🛠️ Dev Tools", path: "/workbench?section=system&view=dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
     ],
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // H. 🏆 WORLD-CLASS - Diferenciais Competitivos
+  // ═══════════════════════════════════════════════════════════
+  {
+    title: "🏆 World-Class",
+    defaultOpen: false,
+    items: [
+      { label: "Fleet Pulse", path: "/fleet-pulse", icon: Activity, emoji: "💓", badge: "NEW" },
+      { label: "Voyage Simulator", path: "/voyage-simulator", icon: Map, emoji: "🎮", badge: "AI" },
+      { label: "Crew Wellbeing", path: "/crew-wellbeing", icon: Heart, emoji: "❤️", badge: "AI" },
+      { label: "PSC Readiness", path: "/psc-readiness", icon: Shield, emoji: "🛡️", badge: "AI" },
+      { label: "STCW/MLC Center", path: "/stcw-mlc", icon: Award, emoji: "📜" },
+      { label: "Predictive Maint.", path: "/predictive-maintenance", icon: Brain, emoji: "🔮", badge: "ML" },
+      { label: "Route Optimizer", path: "/route-optimizer", icon: Compass, emoji: "🧭" },
+      { label: "Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Cpu, emoji: "🎮", badge: "3D" },
+      { label: "Bunker Optimizer", path: "/advanced/bunker-optimization", icon: Fuel, emoji: "⛽", badge: "AI" },
+      { label: "Weather Intel", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
+    ],
+  },
 ];
 
 /**
