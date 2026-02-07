@@ -139,13 +139,20 @@ export default function CommandMegaHub() {
                 <Compass className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Command Center</h1>
-                <p className="text-sm text-muted-foreground">Central Operacional Unificada</p>
+                <h1 className="text-2xl font-bold">Central de Comando</h1>
+                <p className="text-sm text-muted-foreground">
+                  Visão geral de toda a operação marítima — embarcações, viagens, alertas e KPIs em tempo real
+                </p>
               </div>
             </div>
-            <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-              MEGA-HUB A
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                {metrics.totalVessels} embarcações
+              </Badge>
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                Operacional
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

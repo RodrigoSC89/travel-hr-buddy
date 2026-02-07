@@ -214,19 +214,23 @@ export default function ComplianceMegaHub() {
                 <Shield className="h-6 w-6 text-destructive" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Compliance Hub</h1>
-                <p className="text-sm text-muted-foreground">12 Auditorias Marítimas + 10 Agentes IA</p>
+                <h1 className="text-2xl font-bold">Hub de Compliance</h1>
+                <p className="text-sm text-muted-foreground">
+                  12 auditorias marítimas (IMO, OCIMF, ILO, ANP) + 10 agentes IA de auditoria
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                {complianceMetrics.totalAudits} Auditorias
+                {complianceMetrics.totalAudits} auditorias
               </Badge>
-              <Badge variant="outline" className="bg-accent/10 text-accent-foreground border-accent/20">
-                {complianceMetrics.openNCs} NCs Abertas
-              </Badge>
-              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                MEGA-HUB F
+              {complianceMetrics.openNCs > 0 && (
+                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
+                  {complianceMetrics.openNCs} NCs abertas
+                </Badge>
+              )}
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                12/12 standards
               </Badge>
             </div>
           </div>

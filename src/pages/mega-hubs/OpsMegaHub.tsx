@@ -111,13 +111,20 @@ export default function OpsMegaHub() {
                 <Compass className="h-6 w-6 text-blue-500" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Operations Hub</h1>
-                <p className="text-sm text-muted-foreground">Operações & Contratos Marítimos</p>
+                <h1 className="text-2xl font-bold">Hub de Operações</h1>
+                <p className="text-sm text-muted-foreground">
+                  Gerencie viagens, frota, contratos e logística — tudo integrado em tempo real
+                </p>
               </div>
             </div>
-            <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
-              MEGA-HUB B
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+                {metrics.activeVoyages} viagens ativas
+              </Badge>
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                Operacional
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

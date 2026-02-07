@@ -137,16 +137,18 @@ export default function AIMegaHub() {
                 <Brain className="h-6 w-6 text-purple-500" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">AI Hub</h1>
-                <p className="text-sm text-muted-foreground">Inteligência Artificial Unificada</p>
+                <h1 className="text-2xl font-bold">Hub de Inteligência Artificial</h1>
+                <p className="text-sm text-muted-foreground">
+                  Chat IA, agentes autônomos, workflows, voz, OCR e analytics — {agentMetrics.totalAgents} agentes disponíveis
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                {agentMetrics.activeAgents} Agents Active
+                {agentMetrics.activeAgents} agentes ativos
               </Badge>
               <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
-                MEGA-HUB D
+                IA Operacional
               </Badge>
             </div>
           </div>
