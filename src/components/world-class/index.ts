@@ -48,3 +48,8 @@ export { FleetPulseDashboard } from './fleet/FleetPulseDashboard';
 
 // Voyage
 export { VoyageSimulatorPanel } from './operations/VoyageSimulatorPanel';
+
+// Cross-Module Intelligence
+export { CrossModuleIntelligenceDashboard } from './cross-module/CrossModuleIntelligenceDashboard';
+export { PredictiveAlertsHub } from './cross-module/PredictiveAlertsHub';
+export { OperationsCorrelationMatrix } from './cross-module/OperationsCorrelationMatrix';
