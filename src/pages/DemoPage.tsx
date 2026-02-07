@@ -33,6 +33,7 @@ interface DemoData {
   certificates_count: number;
   voyages: any[];
   voyages_count: number;
+  maintenance: any[];
   documents_count: number;
   maintenance_count: number;
   ncs_count: number;
@@ -42,6 +43,7 @@ interface DemoData {
   courses_count: number;
   insights_count: number;
   contracts_count: number;
+  checklists_count: number;
 }
 
 function useDemoData() {
