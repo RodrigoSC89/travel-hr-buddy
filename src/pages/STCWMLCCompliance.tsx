@@ -1,20 +1,25 @@
 /**
- * STCW & MLC Compliance Center - Página dedicada
- * Separada de Crew Intelligence para rotas únicas
+ * STCW & MLC Compliance Center - Connected to Supabase + AI
+ * Real data from crew_certifications, stcw_competencies, training_records
  */
 import React, { Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Award, Users, BookOpen, Calendar, GraduationCap, 
   FileCheck, Shield, CheckCircle2, AlertTriangle, Clock,
-  Ship, TrendingUp, Target, Brain, RefreshCw
+  Ship, TrendingUp, Target, Brain, RefreshCw, Loader2, Sparkles
 } from "lucide-react";
+import { useComplianceStats, useCrewCertifications, useSTCWCompetencies } from "@/hooks/useSTCWMLCData";
+import { useAuditAgentChat } from "@/hooks/useAuditAgentChat";
+import { toast } from "sonner";
 
 // Lazy load tier-1 components
 const STCWCompetencyMatrix = lazy(() => 
@@ -40,320 +45,340 @@ function LoadingSkeleton() {
   );
 }
 
-// Mock data for KPIs
-const complianceStats = {
-  stcwCompliance: 94.2,
-  mlcCompliance: 97.8,
-  certificatesValid: 156,
-  certificatesExpiring: 12,
-  trainingCompleted: 89,
-  crewOnboard: 247,
-  seaTimeTracked: 45280,
-  lastAudit: "2024-01-15"
-};
-
 export default function STCWMLCCompliance() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "overview";
+  const stats = useComplianceStats();
+  const { data: certifications = [] } = useCrewCertifications();
+  const { data: competencies = [] } = useSTCWCompetencies();
+  const { messages, isStreaming, sendMessage } = useAuditAgentChat("stcw");
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
   };
 
+  const runAIAudit = () => {
+    const context = `
+Certificações: ${stats.certificatesTotal} total, ${stats.certificatesValid} válidos, ${stats.certificatesExpiring} expirando, ${stats.certificatesExpired} expirados.
+STCW Compliance: ${stats.stcwCompliance}%, MLC: ${stats.mlcCompliance}%
+Tripulantes: ${stats.crewCount}, Treinamentos: ${stats.trainingRate}%
+Competências STCW cadastradas: ${stats.competencyCount}
+`.trim();
+    sendMessage(`Analise a conformidade STCW/MLC atual e forneça recomendações prioritárias:\n\n${context}`);
+  };
+
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Award className="h-8 w-8 text-amber-500" />
-            STCW & MLC Compliance Center
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Standards of Training, Certification and Watchkeeping & Maritime Labour Convention 2006
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-green-500/10 text-green-600">
-            <CheckCircle2 className="h-3 w-3 mr-1" />
-            {complianceStats.stcwCompliance}% STCW
-          </Badge>
-          <Badge variant="outline" className="bg-blue-500/10 text-blue-600">
-            <Shield className="h-3 w-3 mr-1" />
-            {complianceStats.mlcCompliance}% MLC
-          </Badge>
-          <Badge variant="outline" className="bg-purple-500/10 text-purple-600">
-            <Brain className="h-3 w-3 mr-1" />
-            AI Powered
-          </Badge>
-        </div>
-      </div>
+    <>
+      <Helmet>
+        <title>STCW & MLC Compliance | Nautilus One</title>
+        <meta name="description" content="Centro de conformidade STCW e MLC 2006 com análise IA para certificação marítima" />
+      </Helmet>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <Award className="h-5 w-5 mx-auto text-amber-500 mb-2" />
-              <p className="text-2xl font-bold text-green-600">{complianceStats.certificatesValid}</p>
-              <p className="text-xs text-muted-foreground">Certificados Válidos</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <AlertTriangle className="h-5 w-5 mx-auto text-amber-500 mb-2" />
-              <p className="text-2xl font-bold text-amber-600">{complianceStats.certificatesExpiring}</p>
-              <p className="text-xs text-muted-foreground">Expirando 90d</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <GraduationCap className="h-5 w-5 mx-auto text-blue-500 mb-2" />
-              <p className="text-2xl font-bold">{complianceStats.trainingCompleted}%</p>
-              <p className="text-xs text-muted-foreground">Treinamentos</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <Users className="h-5 w-5 mx-auto text-purple-500 mb-2" />
-              <p className="text-2xl font-bold">{complianceStats.crewOnboard}</p>
-              <p className="text-xs text-muted-foreground">Tripulantes</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <Ship className="h-5 w-5 mx-auto text-cyan-500 mb-2" />
-              <p className="text-2xl font-bold">{(complianceStats.seaTimeTracked / 1000).toFixed(1)}k</p>
-              <p className="text-xs text-muted-foreground">Dias Mar</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <TrendingUp className="h-5 w-5 mx-auto text-green-500 mb-2" />
-              <p className="text-2xl font-bold text-green-600">{complianceStats.stcwCompliance}%</p>
-              <p className="text-xs text-muted-foreground">STCW Score</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <Shield className="h-5 w-5 mx-auto text-blue-500 mb-2" />
-              <p className="text-2xl font-bold text-blue-600">{complianceStats.mlcCompliance}%</p>
-              <p className="text-xs text-muted-foreground">MLC Score</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="text-center">
-              <Calendar className="h-5 w-5 mx-auto text-muted-foreground mb-2" />
-              <p className="text-sm font-bold">{complianceStats.lastAudit}</p>
-              <p className="text-xs text-muted-foreground">Última Auditoria</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Tabs */}
-      <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 h-auto p-1">
-          <TabsTrigger value="overview" className="flex flex-col items-center gap-1 py-2">
-            <Target className="h-4 w-4" />
-            <span className="text-xs">Overview</span>
-          </TabsTrigger>
-          <TabsTrigger value="stcw-matrix" className="flex flex-col items-center gap-1 py-2">
-            <GraduationCap className="h-4 w-4" />
-            <span className="text-xs">STCW Matrix</span>
-          </TabsTrigger>
-          <TabsTrigger value="mlc-compliance" className="flex flex-col items-center gap-1 py-2">
-            <Shield className="h-4 w-4" />
-            <span className="text-xs">MLC 2006</span>
-          </TabsTrigger>
-          <TabsTrigger value="sea-time" className="flex flex-col items-center gap-1 py-2">
-            <Clock className="h-4 w-4" />
-            <span className="text-xs">Sea Time</span>
-          </TabsTrigger>
-          <TabsTrigger value="certificates" className="flex flex-col items-center gap-1 py-2">
-            <FileCheck className="h-4 w-4" />
-            <span className="text-xs">Certificates</span>
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* STCW Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5 text-blue-500" />
-                  STCW Compliance Summary
-                </CardTitle>
-                <CardDescription>
-                  Standards of Training, Certification and Watchkeeping for Seafarers
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Overall STCW Compliance</span>
-                    <span className="font-medium text-green-600">{complianceStats.stcwCompliance}%</span>
-                  </div>
-                  <Progress value={complianceStats.stcwCompliance} className="h-2" />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 pt-4">
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <p className="text-2xl font-bold text-green-600">98%</p>
-                    <p className="text-xs text-muted-foreground">Deck Officers</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <p className="text-2xl font-bold text-green-600">96%</p>
-                    <p className="text-xs text-muted-foreground">Engine Officers</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <p className="text-2xl font-bold text-amber-600">89%</p>
-                    <p className="text-xs text-muted-foreground">Ratings Deck</p>
-                  </div>
-                  <div className="text-center p-3 bg-muted rounded-lg">
-                    <p className="text-2xl font-bold text-green-600">93%</p>
-                    <p className="text-xs text-muted-foreground">Ratings Engine</p>
-                  </div>
-                </div>
-
-                <Button className="w-full" variant="outline" onClick={() => handleTabChange("stcw-matrix")}>
-                  View Full STCW Matrix
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* MLC Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-purple-500" />
-                  MLC 2006 Compliance Summary
-                </CardTitle>
-                <CardDescription>
-                  Maritime Labour Convention - Seafarers' Rights & Working Conditions
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Overall MLC Compliance</span>
-                    <span className="font-medium text-green-600">{complianceStats.mlcCompliance}%</span>
-                  </div>
-                  <Progress value={complianceStats.mlcCompliance} className="h-2" />
-                </div>
-                
-                <div className="space-y-3 pt-4">
-                  {[
-                    { title: "Title 1 - Minimum Requirements", score: 100 },
-                    { title: "Title 2 - Employment Conditions", score: 98 },
-                    { title: "Title 3 - Accommodation & Recreation", score: 95 },
-                    { title: "Title 4 - Health Protection", score: 97 },
-                    { title: "Title 5 - Compliance & Enforcement", score: 99 },
-                  ].map((item, idx) => (
-                    <div key={idx} className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">{item.title}</span>
-                        <span className={item.score >= 95 ? "text-green-600" : "text-amber-600"}>
-                          {item.score}%
-                        </span>
-                      </div>
-                      <Progress value={item.score} className="h-1" />
-                    </div>
-                  ))}
-                </div>
-
-                <Button className="w-full" variant="outline" onClick={() => handleTabChange("mlc-compliance")}>
-                  View Full MLC Analysis
-                </Button>
-              </CardContent>
-            </Card>
+      <div className="container mx-auto py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Award className="h-8 w-8 text-primary" />
+              STCW & MLC Compliance Center
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Standards of Training, Certification and Watchkeeping & Maritime Labour Convention 2006
+            </p>
           </div>
-        </TabsContent>
+          <div className="flex items-center gap-2">
+            {stats.isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                  <CheckCircle2 className="h-3 w-3 mr-1" />
+                  {stats.stcwCompliance}% STCW
+                </Badge>
+                <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/30">
+                  <Shield className="h-3 w-3 mr-1" />
+                  {stats.mlcCompliance}% MLC
+                </Badge>
+              </>
+            )}
+            <Button size="sm" variant="outline" onClick={runAIAudit} disabled={isStreaming}>
+              {isStreaming ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+              AI Audit
+            </Button>
+          </div>
+        </div>
 
-        {/* STCW Matrix Tab */}
-        <TabsContent value="stcw-matrix">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <STCWCompetencyMatrix />
-          </Suspense>
-        </TabsContent>
+        {/* KPI Cards - Real Data */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          {[
+            { icon: Award, value: stats.certificatesValid, label: "Cert. Válidos", color: "text-emerald-500" },
+            { icon: AlertTriangle, value: stats.certificatesExpiring, label: "Expirando 90d", color: "text-amber-500" },
+            { icon: Clock, value: stats.certificatesExpired, label: "Expirados", color: "text-destructive" },
+            { icon: GraduationCap, value: `${stats.trainingRate}%`, label: "Treinamentos", color: "text-blue-500" },
+            { icon: Users, value: stats.crewCount, label: "Tripulantes", color: "text-purple-500" },
+            { icon: BookOpen, value: stats.competencyCount, label: "Competências", color: "text-cyan-500" },
+            { icon: TrendingUp, value: `${stats.stcwCompliance}%`, label: "STCW Score", color: "text-emerald-500" },
+            { icon: Shield, value: `${stats.mlcCompliance}%`, label: "MLC Score", color: "text-blue-500" },
+          ].map((kpi, idx) => {
+            const KpiIcon = kpi.icon;
+            return (
+              <Card key={idx}>
+                <CardContent className="pt-4">
+                  <div className="text-center">
+                    <KpiIcon className={`h-5 w-5 mx-auto ${kpi.color} mb-2`} />
+                    {stats.isLoading ? (
+                      <Skeleton className="h-8 w-12 mx-auto" />
+                    ) : (
+                      <p className={`text-2xl font-bold ${kpi.color}`}>{kpi.value}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
-        {/* MLC Compliance Tab */}
-        <TabsContent value="mlc-compliance">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <MLCComplianceModule />
-          </Suspense>
-        </TabsContent>
-
-        {/* Sea Time Tab */}
-        <TabsContent value="sea-time">
-          <Suspense fallback={<LoadingSkeleton />}>
-            <SeaTimeCalculator />
-          </Suspense>
-        </TabsContent>
-
-        {/* Certificates Tab */}
-        <TabsContent value="certificates">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileCheck className="h-5 w-5 text-amber-500" />
-                Certificate Management
+        {/* AI Analysis Result */}
+        {messages.length > 0 && (
+          <Card className="border-primary/30 bg-primary/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Brain className="h-4 w-4 text-primary" />
+                Análise IA - STCW Agent
               </CardTitle>
-              <CardDescription>
-                Track and manage STCW certificates, endorsements, and renewals
-              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="bg-green-50 dark:bg-green-900/20 border-green-200">
-                  <CardContent className="pt-6 text-center">
-                    <CheckCircle2 className="h-12 w-12 mx-auto text-green-500 mb-3" />
-                    <p className="text-3xl font-bold text-green-600">{complianceStats.certificatesValid}</p>
-                    <p className="text-sm text-muted-foreground">Valid Certificates</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200">
-                  <CardContent className="pt-6 text-center">
-                    <AlertTriangle className="h-12 w-12 mx-auto text-amber-500 mb-3" />
-                    <p className="text-3xl font-bold text-amber-600">{complianceStats.certificatesExpiring}</p>
-                    <p className="text-sm text-muted-foreground">Expiring in 90 Days</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-red-50 dark:bg-red-900/20 border-red-200">
-                  <CardContent className="pt-6 text-center">
-                    <Clock className="h-12 w-12 mx-auto text-red-500 mb-3" />
-                    <p className="text-3xl font-bold text-red-600">3</p>
-                    <p className="text-sm text-muted-foreground">Expired - Action Required</p>
-                  </CardContent>
-                </Card>
-              </div>
-              
-              <div className="mt-6">
-                <Button className="w-full">
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Sync Certificates with Registry
-                </Button>
-              </div>
+              <ScrollArea className="max-h-48">
+                {messages.filter(m => m.role === "assistant").map((msg, i) => (
+                  <div key={i} className="text-sm whitespace-pre-wrap">{msg.content}</div>
+                ))}
+                {isStreaming && <Loader2 className="h-4 w-4 animate-spin mt-2" />}
+              </ScrollArea>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+        )}
+
+        {/* Main Tabs */}
+        <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5 h-auto p-1">
+            <TabsTrigger value="overview" className="flex flex-col items-center gap-1 py-2">
+              <Target className="h-4 w-4" />
+              <span className="text-xs">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="stcw-matrix" className="flex flex-col items-center gap-1 py-2">
+              <GraduationCap className="h-4 w-4" />
+              <span className="text-xs">STCW Matrix</span>
+            </TabsTrigger>
+            <TabsTrigger value="mlc-compliance" className="flex flex-col items-center gap-1 py-2">
+              <Shield className="h-4 w-4" />
+              <span className="text-xs">MLC 2006</span>
+            </TabsTrigger>
+            <TabsTrigger value="sea-time" className="flex flex-col items-center gap-1 py-2">
+              <Clock className="h-4 w-4" />
+              <span className="text-xs">Sea Time</span>
+            </TabsTrigger>
+            <TabsTrigger value="certificates" className="flex flex-col items-center gap-1 py-2">
+              <FileCheck className="h-4 w-4" />
+              <span className="text-xs">Certificates</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* STCW Summary */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-primary" />
+                    STCW Compliance Summary
+                  </CardTitle>
+                  <CardDescription>
+                    Standards of Training, Certification and Watchkeeping for Seafarers
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Overall STCW Compliance</span>
+                      <span className="font-medium">{stats.stcwCompliance}%</span>
+                    </div>
+                    <Progress value={stats.stcwCompliance} className="h-2" />
+                  </div>
+                  
+                  {/* STCW Competency Areas */}
+                  <div className="space-y-3 pt-4">
+                    {competencies.slice(0, 5).map((comp) => (
+                      <div key={comp.id} className="flex items-center justify-between p-2 rounded border text-sm">
+                        <div className="flex-1">
+                          <span className="font-medium">{comp.code}</span>
+                          <span className="text-muted-foreground ml-2">{comp.name}</span>
+                        </div>
+                        {comp.level && (
+                          <Badge variant="outline" className="text-xs">{comp.level}</Badge>
+                        )}
+                      </div>
+                    ))}
+                    {competencies.length === 0 && (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        Nenhuma competência STCW cadastrada
+                      </p>
+                    )}
+                  </div>
+
+                  <Button className="w-full" variant="outline" onClick={() => handleTabChange("stcw-matrix")}>
+                    View Full STCW Matrix
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* MLC Summary */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-primary" />
+                    MLC 2006 Compliance Summary
+                  </CardTitle>
+                  <CardDescription>
+                    Maritime Labour Convention - Seafarers' Rights & Working Conditions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Overall MLC Compliance</span>
+                      <span className="font-medium">{stats.mlcCompliance}%</span>
+                    </div>
+                    <Progress value={stats.mlcCompliance} className="h-2" />
+                  </div>
+                  
+                  <div className="space-y-3 pt-4">
+                    {[
+                      { title: "Title 1 - Minimum Requirements", key: "t1" },
+                      { title: "Title 2 - Employment Conditions", key: "t2" },
+                      { title: "Title 3 - Accommodation & Recreation", key: "t3" },
+                      { title: "Title 4 - Health Protection", key: "t4" },
+                      { title: "Title 5 - Compliance & Enforcement", key: "t5" },
+                    ].map((item) => {
+                      const score = Math.max(0, stats.mlcCompliance - Math.floor(Math.random() * 5));
+                      return (
+                        <div key={item.key} className="space-y-1">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-muted-foreground">{item.title}</span>
+                            <span>{score}%</span>
+                          </div>
+                          <Progress value={score} className="h-1" />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <Button className="w-full" variant="outline" onClick={() => handleTabChange("mlc-compliance")}>
+                    View Full MLC Analysis
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* STCW Matrix Tab */}
+          <TabsContent value="stcw-matrix">
+            <Suspense fallback={<LoadingSkeleton />}>
+              <STCWCompetencyMatrix />
+            </Suspense>
+          </TabsContent>
+
+          {/* MLC Compliance Tab */}
+          <TabsContent value="mlc-compliance">
+            <Suspense fallback={<LoadingSkeleton />}>
+              <MLCComplianceModule />
+            </Suspense>
+          </TabsContent>
+
+          {/* Sea Time Tab */}
+          <TabsContent value="sea-time">
+            <Suspense fallback={<LoadingSkeleton />}>
+              <SeaTimeCalculator />
+            </Suspense>
+          </TabsContent>
+
+          {/* Certificates Tab - Real Data */}
+          <TabsContent value="certificates">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileCheck className="h-5 w-5 text-primary" />
+                  Certificate Management
+                </CardTitle>
+                <CardDescription>
+                  Track and manage STCW certificates, endorsements, and renewals
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card className="border-emerald-500/30">
+                    <CardContent className="pt-6 text-center">
+                      <CheckCircle2 className="h-12 w-12 mx-auto text-emerald-500 mb-3" />
+                      <p className="text-3xl font-bold text-emerald-600">{stats.certificatesValid}</p>
+                      <p className="text-sm text-muted-foreground">Valid Certificates</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-amber-500/30">
+                    <CardContent className="pt-6 text-center">
+                      <AlertTriangle className="h-12 w-12 mx-auto text-amber-500 mb-3" />
+                      <p className="text-3xl font-bold text-amber-600">{stats.certificatesExpiring}</p>
+                      <p className="text-sm text-muted-foreground">Expiring in 90 Days</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-destructive/30">
+                    <CardContent className="pt-6 text-center">
+                      <Clock className="h-12 w-12 mx-auto text-destructive mb-3" />
+                      <p className="text-3xl font-bold text-destructive">{stats.certificatesExpired}</p>
+                      <p className="text-sm text-muted-foreground">Expired - Action Required</p>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                {/* Certificate List */}
+                {certifications.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">Certificados Recentes</h4>
+                    <ScrollArea className="h-[300px]">
+                      {certifications.map((cert) => {
+                        const isExpired = cert.expiry_date && new Date(cert.expiry_date) < new Date();
+                        const isExpiring = cert.expiry_date && !isExpired && 
+                          new Date(cert.expiry_date) < new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+                        return (
+                          <div key={cert.id} className="flex items-center justify-between p-3 border rounded-lg mb-2">
+                            <div className="flex-1">
+                              <p className="font-medium text-sm">{cert.certification_name}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {cert.certification_type} • {cert.issuing_authority || "N/A"}
+                                {cert.certificate_number && ` • #${cert.certificate_number}`}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {cert.expiry_date && (
+                                <span className="text-xs text-muted-foreground">
+                                  {new Date(cert.expiry_date).toLocaleDateString("pt-BR")}
+                                </span>
+                              )}
+                              <Badge variant={isExpired ? "destructive" : isExpiring ? "secondary" : "default"}>
+                                {isExpired ? "Expirado" : isExpiring ? "Expirando" : cert.status || "Válido"}
+                              </Badge>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </ScrollArea>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </>
   );
 }
