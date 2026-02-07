@@ -46562,6 +46562,7 @@ export type Database = {
               total_reservations: number
             }[]
           }
+      get_system_stats: { Args: never; Returns: Json }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
       get_user_org: { Args: never; Returns: string }
       get_user_org_ids: { Args: { user_uuid: string }; Returns: string[] }

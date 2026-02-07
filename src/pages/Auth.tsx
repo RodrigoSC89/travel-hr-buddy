@@ -1,6 +1,6 @@
 /**
- * Auth Page - PATCH v27 Production Login Fix
- * Login, Signup, Password Recovery + OAuth
+ * Auth Page - PATCH v28 Production Login + Live System Metrics
+ * Login, Signup, Password Recovery + OAuth + System Overview
  */
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
@@ -10,11 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Eye, 
   EyeOff, 
@@ -24,7 +26,9 @@ import {
   CheckCircle,
   Loader2,
   RefreshCw,
-  AlertCircle
+  AlertCircle,
+  Ship, Users, Shield, FileText, Brain, Wrench,
+  Compass, Satellite, Briefcase, Activity
 } from "lucide-react";
 import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
@@ -75,6 +79,20 @@ const Auth: React.FC = () => {
   const resetForm = useForm<ResetFormData>({
     resolver: zodResolver(resetSchema),
     defaultValues: { email: "" }
+  });
+
+  // Live system metrics - visible without authentication
+  const { data: systemStats } = useQuery({
+    queryKey: ['auth-system-stats'],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc('get_system_stats');
+      if (error || !data) {
+        return { vessels: 0, crew: 0, audits: 0, documents: 0, maintenance: 0, certificates: 0 };
+      }
+      return data as { vessels: number; crew: number; audits: number; documents: number; maintenance: number; certificates: number };
+    },
+    staleTime: 300000,
+    retry: 1,
   });
 
   // Cleanup corrupted tokens on mount
@@ -387,42 +405,103 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl grid lg:grid-cols-2 gap-8 items-center">
-        {/* Left Side - Branding */}
-        <div className="hidden lg:block space-y-8">
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center shadow-lg p-2">
-                <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                  NAUTI ONE
-                </h1>
-                <p className="text-sm text-muted-foreground font-medium">
-                  Sistema Corporativo Marítimo
-                </p>
-              </div>
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center">
+        {/* Left Side - System Showcase */}
+        <div className="hidden lg:flex flex-col space-y-6">
+          {/* Logo & Title */}
+          <div className="flex items-center space-x-3">
+            <div className="w-14 h-14 rounded-xl bg-card flex items-center justify-center shadow-lg p-2 border border-border">
+              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                NAUTI ONE
+              </h1>
+              <p className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
+                Maritime Operations Platform
+              </p>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">
-              Gestão Marítima Completa
-            </h2>
-            <div className="space-y-4">
+          {/* Live System Stats */}
+          {systemStats && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" />
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Sistema Ativo — Dados em Tempo Real
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { label: 'Embarcações', value: systemStats.vessels, icon: Ship, color: 'text-blue-500' },
+                  { label: 'Tripulantes', value: systemStats.crew, icon: Users, color: 'text-emerald-500' },
+                  { label: 'Auditorias', value: systemStats.audits, icon: Shield, color: 'text-red-500' },
+                  { label: 'Documentos', value: systemStats.documents, icon: FileText, color: 'text-amber-500' },
+                  { label: 'Manutenções', value: systemStats.maintenance, icon: Wrench, color: 'text-orange-500' },
+                  { label: 'Certificados', value: systemStats.certificates, icon: CheckCircle, color: 'text-teal-500' },
+                ].map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="bg-card/80 border border-border/50 rounded-lg p-3 flex items-center gap-2.5"
+                  >
+                    <stat.icon className={`h-4 w-4 ${stat.color} shrink-0`} />
+                    <div className="min-w-0">
+                      <p className="text-lg font-bold leading-tight">{stat.value}</p>
+                      <p className="text-[10px] text-muted-foreground truncate">{stat.label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 7 Mega-Hubs */}
+          <div className="space-y-3">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              7 Mega-Hubs • 75+ Módulos
+            </span>
+            <div className="grid grid-cols-2 gap-2">
               {[
-                "Controle de frota em tempo real",
-                "Gestão de tripulação e certificações",
-                "Analytics avançados e relatórios",
-                "Automação de processos marítimos"
-              ].map((feature, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-primary" />
-                  <span className="text-foreground font-medium">{feature}</span>
+                { name: 'Comando', desc: 'NOC, SOC, Alertas', icon: Compass, badge: '7' },
+                { name: 'Operações', desc: 'Frota, Viagens', icon: Ship, badge: '7' },
+                { name: 'Manutenção', desc: 'Preditiva, ESG', icon: Wrench, badge: '8' },
+                { name: 'Inteligência IA', desc: '10 Agentes, Chat', icon: Brain, badge: '11' },
+                { name: 'Rastreamento', desc: 'AIS, SATCOM, IoT', icon: Satellite, badge: '8' },
+                { name: 'Compliance', desc: '12 Auditorias', icon: Shield, badge: '22' },
+              ].map((hub) => (
+                <div
+                  key={hub.name}
+                  className="bg-card/60 border border-border/30 rounded-lg p-2.5 flex items-center gap-2.5"
+                >
+                  <hub.icon className="h-4 w-4 text-primary shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold truncate">{hub.name}</span>
+                      <Badge variant="secondary" className="text-[9px] px-1 py-0 h-3.5 shrink-0">
+                        {hub.badge}
+                      </Badge>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground truncate">{hub.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Features */}
+          <div className="space-y-2">
+            {[
+              "Controle de frota em tempo real",
+              "12 Auditorias marítimas (ISM, MLC, SIRE, PSC...)",
+              "10 Agentes IA especializados",
+              "Compliance STCW, MLC 2006 & MARPOL"
+            ].map((feature, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
+                <span className="text-xs text-foreground/80">{feature}</span>
+              </div>
+            ))}
           </div>
         </div>
 
