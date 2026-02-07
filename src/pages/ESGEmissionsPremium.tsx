@@ -7,10 +7,12 @@ import React, { Suspense, lazy } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, Leaf, Factory, Droplets, Fuel,
-  Globe, BarChart3, FileText, Settings, Shield
+  Globe, BarChart3, FileText, Settings, Shield, RefreshCw
 } from "lucide-react";
+import { useCIICalculator } from "@/hooks/useCIICalculator";
 
 // Lazy load components
 const ESGCommandCenter = lazy(() => import("@/modules/esg-emissions/components/ESGCommandCenter"));
@@ -37,6 +39,8 @@ function LoadingSkeleton() {
 }
 
 export default function ESGEmissionsPremium() {
+  const cii = useCIICalculator();
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
@@ -51,11 +55,15 @@ export default function ESGEmissionsPremium() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={cii.recalculate} disabled={cii.isLoading}>
+            <RefreshCw className={`h-4 w-4 mr-1 ${cii.isLoading ? 'animate-spin' : ''}`} />
+            Recalcular CII
+          </Button>
           <Badge variant="outline" className="bg-success/10 text-success">
-            CII Rating: B
+            CII Fleet: {cii.fleetRating} ({cii.fleetAvgCII || '—'})
           </Badge>
           <Badge variant="outline" className="bg-primary/10 text-primary">
-            87/100 ESG Score
+            CO₂: {cii.totalCO2.toLocaleString()} t
           </Badge>
         </div>
       </div>
