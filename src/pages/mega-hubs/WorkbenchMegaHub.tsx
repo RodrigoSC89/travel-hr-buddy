@@ -216,16 +216,18 @@ export default function WorkbenchMegaHub() {
                 <Briefcase className="h-6 w-6 text-indigo-500" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Workbench</h1>
-                <p className="text-sm text-muted-foreground">Docs • People • Finance • System</p>
+                <h1 className="text-2xl font-bold">Área de Trabalho</h1>
+                <p className="text-sm text-muted-foreground">
+                  Documentos, tripulação, finanças, viagens e configurações do sistema
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                {workbenchMetrics.activeCrew} Crew Active
+                {workbenchMetrics.activeCrew} tripulantes ativos
               </Badge>
               <Badge variant="outline" className="bg-indigo-500/10 text-indigo-500 border-indigo-500/20">
-                MEGA-HUB G
+                {workbenchMetrics.totalVessels} embarcações
               </Badge>
             </div>
           </div>

@@ -142,13 +142,20 @@ export default function MaintenanceMegaHub() {
                 <Wrench className="h-6 w-6 text-orange-500" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Maintenance Hub</h1>
-                <p className="text-sm text-muted-foreground">Manutenção, ESG & Digital Twin</p>
+                <h1 className="text-2xl font-bold">Hub de Manutenção</h1>
+                <p className="text-sm text-muted-foreground">
+                  Ordens de serviço, vistorias de classe, manutenção preditiva, ESG e gêmeo digital
+                </p>
               </div>
             </div>
-            <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
-              MEGA-HUB C
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
+                {maintMetrics.pending} pendentes
+              </Badge>
+              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                {maintMetrics.completed} concluídas
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

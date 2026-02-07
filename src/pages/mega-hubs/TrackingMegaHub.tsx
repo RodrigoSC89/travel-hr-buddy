@@ -151,21 +151,23 @@ export default function TrackingMegaHub() {
                 <Satellite className="h-6 w-6 text-cyan-500" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Tracking Hub</h1>
-                <p className="text-sm text-muted-foreground">Rastreamento & Telemetria</p>
+                <h1 className="text-2xl font-bold">Hub de Rastreamento</h1>
+                <p className="text-sm text-muted-foreground">
+                  Posições AIS, telemetria, SATCOM, previsão meteorológica e alertas de geofencing
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
               {trackingMetrics.openAlerts > 0 && (
                 <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                  {trackingMetrics.openAlerts} Alertas
+                  {trackingMetrics.openAlerts} alertas ativos
                 </Badge>
               )}
               <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                AIS Active
+                {trackingMetrics.totalVessels} rastreadas
               </Badge>
               <Badge variant="outline" className="bg-cyan-500/10 text-cyan-500 border-cyan-500/20">
-                MEGA-HUB E
+                AIS Ativo
               </Badge>
             </div>
           </div>
