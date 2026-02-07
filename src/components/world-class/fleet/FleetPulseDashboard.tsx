@@ -1,17 +1,19 @@
 /**
  * Fleet Pulse Dashboard - World-class unified fleet overview
- * Real-time vessel status, health scores, and next events
+ * Real-time vessel status, health scores, AI fleet analysis, and next events
  */
 import { useState } from "react";
 import { useFleetPulse, FleetPulseVessel } from "@/hooks/useFleetPulse";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Ship, AlertTriangle, CheckCircle, Activity, RefreshCw, Search, Users, Wrench, Shield, Heart } from "lucide-react";
+import { Ship, AlertTriangle, CheckCircle, Activity, RefreshCw, Search, Users, Wrench, Shield, Heart, Brain, Sparkles, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const riskColors: Record<string, string> = {
   low: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
@@ -112,6 +114,61 @@ export function FleetPulseDashboard() {
   const { vessels, isLoading, stats, refetch } = useFleetPulse();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const { toast } = useToast();
+
+  const runFleetAI = async () => {
+    setAiLoading(true);
+    try {
+      const fleetSummary = vessels.map(v => ({
+        name: v.name,
+        type: v.vessel_type,
+        health: v.healthScore,
+        maintenance: v.maintenanceScore,
+        compliance: v.complianceScore,
+        crew: v.crewScore,
+        safety: v.safetyScore,
+        risk: v.riskLevel,
+        activity: v.currentActivity,
+        alerts: v.alerts.length,
+        pendingTasks: v.pendingTasks,
+      }));
+
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          messages: [
+            {
+              role: 'user',
+              content: `Analise o Fleet Pulse da frota e forneça recomendações operacionais priorizadas:
+              
+Fleet Summary (${vessels.length} embarcações):
+${JSON.stringify(fleetSummary, null, 2)}
+
+Stats: ${stats.total} total, ${stats.active} ativos, ${stats.atRisk} em risco, ${stats.avgHealth}% health médio
+
+Forneça:
+1. Diagnóstico geral da frota (1 parágrafo)
+2. Top 3 ações prioritárias
+3. Embarcações que requerem atenção imediata
+4. Previsão de riscos para os próximos 30 dias`
+            }
+          ],
+          agentType: 'nauti-brain'
+        }
+      });
+
+      if (error) throw error;
+      const content = data?.choices?.[0]?.message?.content || data?.response || "Análise não disponível";
+      setAiAnalysis(content);
+      toast({ title: '🧠 Análise Fleet Pulse concluída' });
+    } catch (err) {
+      console.error('Fleet AI error:', err);
+      toast({ title: 'Erro na análise AI', variant: 'destructive' });
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const filtered = vessels.filter(v => {
     const matchSearch = !search || v.name.toLowerCase().includes(search.toLowerCase());
@@ -166,7 +223,28 @@ export function FleetPulseDashboard() {
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="h-4 w-4 mr-1" /> Atualizar
         </Button>
+        <Button size="sm" onClick={runFleetAI} disabled={aiLoading || vessels.length === 0}>
+          {aiLoading ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Brain className="h-4 w-4 mr-1" />}
+          Análise AI
+        </Button>
       </div>
+
+      {/* AI Fleet Analysis */}
+      {aiAnalysis && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              Análise Fleet Pulse — Gemini AI
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="prose prose-sm max-w-none text-sm whitespace-pre-wrap">
+              {aiAnalysis}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Fleet Grid */}
       {isLoading ? (
