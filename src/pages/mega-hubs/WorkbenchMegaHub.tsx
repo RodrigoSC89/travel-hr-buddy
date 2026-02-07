@@ -22,6 +22,7 @@ import {
   FinanceApprovalWorkflow, 
   DocumentVersionControl 
 } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -212,8 +213,8 @@ export default function WorkbenchMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-500/10 rounded-lg">
-                <Briefcase className="h-6 w-6 text-indigo-500" />
+              <div className="p-2 bg-hub-workbench/10 rounded-lg">
+                <Briefcase className="h-6 w-6 text-hub-workbench" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Área de Trabalho</h1>
@@ -223,10 +224,10 @@ export default function WorkbenchMegaHub() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 {workbenchMetrics.activeCrew} tripulantes ativos
               </Badge>
-              <Badge variant="outline" className="bg-indigo-500/10 text-indigo-500 border-indigo-500/20">
+              <Badge variant="outline" className="bg-hub-workbench/10 text-hub-workbench border-hub-workbench/20">
                 {workbenchMetrics.totalVessels} embarcações
               </Badge>
             </div>

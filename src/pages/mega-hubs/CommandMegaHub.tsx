@@ -17,6 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
@@ -135,8 +136,8 @@ export default function CommandMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Compass className="h-6 w-6 text-primary" />
+              <div className="p-2 bg-hub-command/10 rounded-lg">
+                <Compass className="h-6 w-6 text-hub-command" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Central de Comando</h1>
@@ -239,7 +240,7 @@ export default function CommandMegaHub() {
                 <div className="lg:col-span-2">
                   <CentralComando />
                 </div>
-                <div className="lg:col-span-1">
+              <div className="lg:col-span-1">
                   <PremiumTimeline
                     title="Activity Feed"
                     events={commandTimelineEvents}
@@ -248,6 +249,14 @@ export default function CommandMegaHub() {
                   />
                 </div>
               </div>
+
+              {/* Empty State when no data */}
+              {!isLoading && metrics.totalVessels === 0 && metrics.activeVoyages === 0 && (
+                <HubEmptyState 
+                  hub="command" 
+                  onPrimaryAction={() => setSearchParams({ tab: 'operations' })} 
+                />
+              )}
             </TabsContent>
             
             <TabsContent value="operations" className="mt-0">

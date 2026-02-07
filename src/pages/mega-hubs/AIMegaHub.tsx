@@ -18,6 +18,7 @@ import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Act
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { AIAgentHealthDashboard } from '@/components/world-class';
+import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
@@ -133,8 +134,8 @@ export default function AIMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/10 rounded-lg">
-                <Brain className="h-6 w-6 text-purple-500" />
+              <div className="p-2 bg-hub-ai/10 rounded-lg">
+                <Brain className="h-6 w-6 text-hub-ai" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold">Hub de Inteligência Artificial</h1>
@@ -144,10 +145,10 @@ export default function AIMegaHub() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
                 {agentMetrics.activeAgents} agentes ativos
               </Badge>
-              <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
+              <Badge variant="outline" className="bg-hub-ai/10 text-hub-ai border-hub-ai/20">
                 IA Operacional
               </Badge>
             </div>
@@ -164,7 +165,7 @@ export default function AIMegaHub() {
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="data-[state=active]:bg-purple-500 data-[state=active]:text-white gap-2"
+                  className="data-[state=active]:bg-hub-ai data-[state=active]:text-white gap-2"
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -242,7 +243,15 @@ export default function AIMegaHub() {
                 searchPlaceholder="Search agents, workflows, logs..."
               />
 
-              <AIControlTowerHub />
+              {/* Empty state when no agents */}
+              {!agentsLoading && agentMetrics.totalAgents === 0 && (
+                <HubEmptyState 
+                  hub="ai" 
+                  onPrimaryAction={() => setSearchParams({ tab: 'chat' })} 
+                />
+              )}
+
+              {(agentsLoading || agentMetrics.totalAgents > 0) && <AIControlTowerHub />}
             </TabsContent>
 
             <TabsContent value="health" className="mt-0 space-y-6">
