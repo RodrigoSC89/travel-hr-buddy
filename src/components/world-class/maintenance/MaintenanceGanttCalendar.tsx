@@ -9,11 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Calendar, ChevronLeft, ChevronRight, Plus,
   Wrench, AlertTriangle, CheckCircle, Clock,
-  Ship, Anchor, Settings, Filter, Download
+  Ship, Anchor, Settings, Filter, Download,
+  Brain, Loader2
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -46,6 +49,8 @@ const TYPE_LABELS = {
 export function MaintenanceGanttCalendar() {
   const [view, setView] = useState<'gantt' | 'calendar'>('gantt');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   // Fetch maintenance data
   const { data: tasks = [], isLoading } = useQuery({
@@ -117,6 +122,30 @@ export function MaintenanceGanttCalendar() {
       const taskEnd = new Date(task.endDate);
       return date >= taskStart && date <= taskEnd;
     });
+  };
+
+  const runAIAnalysis = async () => {
+    setIsAnalyzing(true);
+    setAiAnalysis(null);
+    try {
+      const summary = tasks.map(t => `${t.name} | Tipo: ${t.type} | Status: ${t.status} | Prioridade: ${t.priority} | Progresso: ${t.progress}%`).join('\n');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          agentId: 'nauti-brain',
+          messages: [{
+            role: 'user',
+            content: `Analise o planejamento de manutenção marítima abaixo. Forneça: 1) Priorização preditiva de tarefas, 2) Riscos de atraso, 3) Otimização de cronograma, 4) Recomendações de manutenção preventiva vs corretiva. Responda em PT-BR.\n\nTarefas:\n${summary}`
+          }]
+        }
+      });
+      if (error) throw error;
+      setAiAnalysis(data?.choices?.[0]?.message?.content || data?.message || 'Análise concluída.');
+      toast.success('Análise AI de manutenção concluída');
+    } catch {
+      toast.error('Erro na análise AI de manutenção');
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const GanttView = () => {
@@ -348,6 +377,15 @@ export function MaintenanceGanttCalendar() {
                 <Plus className="h-4 w-4" />
                 Nova Manutenção
               </Button>
+              <Button 
+                variant="outline" 
+                className="gap-2 border-primary/50 text-primary"
+                onClick={runAIAnalysis}
+                disabled={isAnalyzing || tasks.length === 0}
+              >
+                {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
+                IA Preditiva
+              </Button>
             </div>
           </div>
         </CardHeader>
@@ -363,6 +401,25 @@ export function MaintenanceGanttCalendar() {
           )}
         </CardContent>
       </Card>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              Análise Preditiva de Manutenção
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-[300px]">
+              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                {aiAnalysis}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Legend */}
       <Card>

@@ -8,12 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   MapPin, Navigation, Clock, Anchor, Play, Pause,
   FastForward, Rewind, RefreshCw, Filter, Layers,
-  Signal, AlertTriangle, Ship, Fuel, Wind, Route
+  Signal, AlertTriangle, Ship, Fuel, Wind, Route,
+  Brain, Loader2
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -58,6 +61,8 @@ export function RealTimeTrackingMap() {
   const [isReplaying, setIsReplaying] = useState(false);
   const [replayProgress, setReplayProgress] = useState(0);
   const [mapLayer, setMapLayer] = useState('satellite');
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Fetch vessels
   const { data: vessels = [], isLoading, refetch } = useQuery({
@@ -104,6 +109,30 @@ export function RealTimeTrackingMap() {
       return () => clearInterval(interval);
     }
   }, [isReplaying]);
+
+  const runAIAnalysis = async () => {
+    setIsAnalyzing(true);
+    setAiAnalysis(null);
+    try {
+      const vesselSummary = vessels.map(v => `${v.name} | IMO: ${v.imo} | Status: ${v.status} | Velocidade: ${v.speed.toFixed(1)}kn | Rumo: ${v.course.toFixed(0)}° | Destino: ${v.destination || 'N/A'} | Sinal: ${v.signalQuality}`).join('\n');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          agentId: 'nauti-brain',
+          messages: [{
+            role: 'user',
+            content: `Analise o rastreamento da frota marítima. Forneça: 1) Embarcações com anomalias de posição/velocidade, 2) Alertas de perda de sinal, 3) Otimização de rotas, 4) Previsão de ETA e riscos de atraso. Responda em PT-BR.\n\nFrota:\n${vesselSummary}`
+          }]
+        }
+      });
+      if (error) throw error;
+      setAiAnalysis(data?.choices?.[0]?.message?.content || data?.message || 'Análise concluída.');
+      toast.success('Análise AI de rastreamento concluída');
+    } catch {
+      toast.error('Erro na análise AI');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const SignalIndicator = ({ quality }: { quality: VesselPosition['signalQuality'] }) => {
     const config = SIGNAL_CONFIG[quality];
@@ -203,6 +232,16 @@ export function RealTimeTrackingMap() {
                 
                 <Button variant="outline" size="sm" onClick={() => refetch()}>
                   <RefreshCw className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="gap-1 border-primary/50 text-primary"
+                  onClick={runAIAnalysis}
+                  disabled={isAnalyzing || vessels.length === 0}
+                >
+                  {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
+                  Análise AI
                 </Button>
               </div>
             </div>
@@ -358,6 +397,25 @@ export function RealTimeTrackingMap() {
           </CardContent>
         </Card>
       </div>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              Análise AI de Rastreamento
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-[300px]">
+              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                {aiAnalysis}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

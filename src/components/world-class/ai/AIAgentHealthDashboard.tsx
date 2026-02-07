@@ -14,9 +14,11 @@ import {
   Bot, Brain, Activity, Zap, AlertTriangle,
   CheckCircle, XCircle, Clock, TrendingUp,
   MessageSquare, FileText, RefreshCw, Settings,
-  Lightbulb, History, BarChart3
+  Lightbulb, History, BarChart3, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AIAgent {
   id: string;
@@ -72,6 +74,17 @@ const STATUS_CONFIG = {
 
 export function AIAgentHealthDashboard() {
   const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
+  const [aiDiagnostic, setAiDiagnostic] = useState<string | null>(null);
+  const [isDiagnosing, setIsDiagnosing] = useState(false);
+
+  // Fetch real agent metrics from Supabase
+  const { data: agentMetrics } = useQuery({
+    queryKey: ['agent-swarm-metrics'],
+    queryFn: async () => {
+      const { data } = await supabase.from('agent_swarm_metrics').select('*').limit(20);
+      return data || [];
+    },
+  });
 
   // Calculate aggregate stats
   const onlineAgents = AI_AGENTS.filter(a => a.status === 'online').length;
@@ -86,8 +99,65 @@ export function AIAgentHealthDashboard() {
     }, 2000);
   };
 
+  const runAIDiagnostic = async () => {
+    setIsDiagnosing(true);
+    setAiDiagnostic(null);
+    try {
+      const agentSummary = AI_AGENTS.map(a => `${a.name} | Status: ${a.status} | Saúde: ${a.health}% | Precisão: ${a.accuracy}% | Requests: ${a.requestsToday} | Tempo médio: ${a.avgResponseTime}s`).join('\n');
+      const metricsInfo = agentMetrics?.length ? `\nMétricas reais do Supabase: ${agentMetrics.length} registros disponíveis.` : '';
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          agentId: 'nauti-brain',
+          messages: [{
+            role: 'user',
+            content: `Faça um diagnóstico completo da saúde do ecossistema de agentes de IA marítimos. Analise: 1) Agentes com problemas críticos, 2) Gargalos de performance, 3) Recomendações de otimização, 4) Score geral do swarm. Responda em PT-BR.\n\nAgentes:\n${agentSummary}${metricsInfo}`
+          }]
+        }
+      });
+      if (error) throw error;
+      setAiDiagnostic(data?.choices?.[0]?.message?.content || data?.message || 'Diagnóstico concluído.');
+      toast.success('Diagnóstico AI do swarm concluído');
+    } catch {
+      toast.error('Erro no diagnóstico AI');
+    } finally {
+      setIsDiagnosing(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* AI Diagnostic Button */}
+      <div className="flex justify-end">
+        <Button 
+          variant="outline" 
+          className="gap-2 border-primary/50 text-primary"
+          onClick={runAIDiagnostic}
+          disabled={isDiagnosing}
+        >
+          {isDiagnosing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Brain className="h-4 w-4" />}
+          Diagnóstico AI do Swarm
+        </Button>
+      </div>
+
+      {/* AI Diagnostic Result */}
+      {aiDiagnostic && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              Diagnóstico do Ecossistema AI
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-[300px]">
+              <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm">
+                {aiDiagnostic}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Health Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-l-4 border-l-green-500">
