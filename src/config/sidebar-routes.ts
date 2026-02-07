@@ -209,6 +209,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "📚 Knowledge Hub", path: "/knowledge-hub", icon: BookOpen, emoji: "📚" },
       { label: "🏆 Gamification", path: "/gamification", icon: Trophy, emoji: "🏆" },
       { label: "🤝 Collaboration", path: "/collaboration", icon: Handshake, emoji: "🤝" },
+      { label: "🏥 Medical", path: "/medical-infirmary", icon: Stethoscope, emoji: "🏥" },
       { label: "🌱 Sustainability", path: "/sustainability-score", icon: Leaf, emoji: "🌱" },
       { label: "🛡️ Blockchain", path: "/blockchain-compliance", icon: Shield, emoji: "🔗" },
       { label: "🛠️ Dev Tools", path: "/workbench?section=system&view=dev", icon: Terminal, emoji: "🛠️", requiredRoles: ['admin'] },
