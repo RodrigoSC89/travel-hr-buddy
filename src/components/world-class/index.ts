@@ -13,6 +13,11 @@ export { FleetIntelligencePanel } from './operations/FleetIntelligencePanel';
 
 // Maintenance
 export { MaintenanceGanttCalendar } from './maintenance/MaintenanceGanttCalendar';
+export { EquipmentDigitalTwin } from './maintenance/EquipmentDigitalTwin';
+export { SparePartsIntelligence } from './maintenance/SparePartsIntelligence';
+export { ConditionBasedMonitoring } from './maintenance/ConditionBasedMonitoring';
+export { DryDockPlanner } from './maintenance/DryDockPlanner';
+export { MaintenanceCostOptimizer } from './maintenance/MaintenanceCostOptimizer';
 
 // Compliance
 export { AuditWorkflowManager } from './compliance/AuditWorkflowManager';
