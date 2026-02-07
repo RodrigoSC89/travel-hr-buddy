@@ -1,9 +1,11 @@
 /**
  * Agent Detail Page - Página de Detalhes do Agente de Auditoria
  * Chat interativo, histórico, configurações e execução
+ * PATCH: Unified AI chat via ai-chat edge function + Markdown rendering
  */
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -248,20 +250,39 @@ Faça sua pergunta sobre compliance, auditoria ou regulamentações!`,
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke(agent.edgeFunction, {
+      // Use unified ai-chat edge function with agentId for specialized prompts
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           message: currentInput,
-          context: agent.id,
-          agentType: agent.shortName
+          agentId: agent.id,
+          context: `Agente especializado: ${agent.shortName}. Normas: ${agent.compliance.join(', ')}. Capacidades: ${agent.capabilities.join(', ')}.`,
         }
       });
 
       let responseContent: string;
       
       if (error) {
-        responseContent = generateFallbackResponse(agent, currentInput);
+        // Try the agent-specific edge function as fallback
+        try {
+          const { data: fallbackData, error: fallbackError } = await supabase.functions.invoke(agent.edgeFunction, {
+            body: {
+              message: currentInput,
+              context: agent.id,
+              agentType: agent.shortName
+            }
+          });
+          if (!fallbackError && fallbackData) {
+            responseContent = fallbackData?.reply || fallbackData?.response || fallbackData?.message || 
+              generateFallbackResponse(agent, currentInput);
+          } else {
+            responseContent = generateFallbackResponse(agent, currentInput);
+          }
+        } catch {
+          responseContent = generateFallbackResponse(agent, currentInput);
+        }
       } else {
-        responseContent = data?.response || data?.message || data?.answer || 
+        // ai-chat returns { reply, ... }
+        responseContent = data?.reply || data?.response || data?.message || data?.answer || 
           generateFallbackResponse(agent, currentInput);
       }
 
@@ -437,7 +458,9 @@ Precisa de mais detalhes sobre algum aspecto específico?`;
                             ? "bg-primary text-primary-foreground" 
                             : "bg-muted"
                         }`}>
-                          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                          <div className="prose prose-sm dark:prose-invert max-w-none text-sm">
+                            <ReactMarkdown>{message.content}</ReactMarkdown>
+                          </div>
                         </div>
                         {message.role === "assistant" && (
                           <div className="flex items-center gap-1 mt-1">
