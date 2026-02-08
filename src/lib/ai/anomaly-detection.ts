@@ -117,7 +117,7 @@ class AnomalyDetectionEngine {
       
       if (Math.abs(zScore) > 3) {
         return {
-          id: `anomaly_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `anomaly_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
           type: this.categorizeMetric(metric.name),
           severity: Math.abs(zScore) > 4 ? 'critical' : 'warning',
           metric: metric.name,
@@ -148,7 +148,7 @@ class AnomalyDetectionEngine {
     const threshold = severity === 'critical' ? config.critical : config.warning;
     
     return {
-      id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `alert_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       type: this.categorizeMetric(metric.name),
       severity,
       metric: metric.name,

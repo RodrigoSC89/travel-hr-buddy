@@ -356,8 +356,8 @@ class ComplianceEngine {
           .select('id, full_name, status')
           .limit(1);
         
-        // Simulate compliance check
-        if (data && data.length > 0 && Math.random() > 0.9) {
+        // Check compliance based on actual data presence
+        if (data && data.length > 0 && data[0].status !== 'active') {
           return {
             entity_id: data[0].id,
             entity_name: data[0].full_name,

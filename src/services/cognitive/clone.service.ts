@@ -147,7 +147,7 @@ export class CognitiveCloneService {
   // Private helper methods
 
   private static generateId(): string {
-    return `clone-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `clone-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private static getInstanceId(): string {

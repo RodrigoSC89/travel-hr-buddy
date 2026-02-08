@@ -171,12 +171,12 @@ export class AIIncidentReplayerV2 {
     // In production, query actual sensor logs
     return {
       timestamp,
-      temperature: 22 + Math.random() * 5,
-      pressure: 1013 + Math.random() * 10,
-      humidity: 45 + Math.random() * 20,
+      temperature: 22 + Math.sin(timestamp / 60000) * 2.5,
+      pressure: 1013 + Math.sin(timestamp / 120000) * 5,
+      humidity: 55 + Math.sin(timestamp / 90000) * 10,
       position: {
-        lat: 40.7128 + Math.random() * 0.1,
-        lon: -74.0060 + Math.random() * 0.1,
+        lat: 40.7128 + Math.sin(timestamp / 300000) * 0.05,
+        lon: -74.0060 + Math.cos(timestamp / 300000) * 0.05,
       },
     };
   }

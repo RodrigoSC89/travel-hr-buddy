@@ -151,7 +151,7 @@ class ApiProxyRouterService {
   }
 
   private generateId(): string {
-    return `route_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    return `route_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 }
 

@@ -43,7 +43,7 @@ class ErrorTracker {
     context?: Record<string, unknown>
   ): ErrorLog {
     const errorLog: ErrorLog = {
-      id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `error_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: Date.now(),
       message: typeof error === 'string' ? error : error.message,
       stack: typeof error === 'object' ? error.stack : undefined,

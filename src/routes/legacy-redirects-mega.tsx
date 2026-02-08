@@ -14,6 +14,7 @@
  */
 
 import { Navigate, useSearchParams, useLocation } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 /**
  * Complete map of legacy routes to new canonical routes
@@ -277,7 +278,7 @@ export function LegacyRedirectMega({ from }: { from: string }) {
   
   if (!to) {
     // Fallback to command center if route not found
-    console.warn(`[MEGA-FUSION] Legacy route not found: ${from}, redirecting to /command`);
+    logger.warn(`[MEGA-FUSION] Legacy route not found: ${from}, redirecting to /command`);
     return <Navigate to="/command" replace />;
   }
   

@@ -226,7 +226,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
           `Com base na sua solicitação, recomendo:\n\n• Revisar o checklist de operações\n• Confirmar com o comandante\n• Atualizar o log de atividades`,
           `Análise do contexto marítimo:\n\n✓ Condições meteorológicas: Favoráveis\n✓ Status da embarcação: Operacional\n✓ Próxima parada: Conforme programação\n\nSugestão: Mantenha a equipe informada sobre atualizações.`,
         ];
-        aiContent = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+        aiContent = aiResponses[message.length % aiResponses.length];
       } else {
         aiContent = data.response;
       }

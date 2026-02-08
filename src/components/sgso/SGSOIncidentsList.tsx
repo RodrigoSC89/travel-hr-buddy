@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -83,7 +84,7 @@ export const SGSOIncidentsList: React.FC = () => {
           .limit(50);
 
         if (error) {
-          console.error("Error fetching SGSO incidents:", error.message);
+          logger.error("Error fetching SGSO incidents: " + error.message);
           return [];
         }
         return (data || []) as SGSOIncident[];

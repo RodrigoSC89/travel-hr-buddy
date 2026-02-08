@@ -210,7 +210,7 @@ export class AutoReconfigurationEngine {
   ): Promise<ReconfigurationTriggerEvent> {
     const trigger: ReconfigurationTriggerEvent = {
       ...data,
-      triggerId: `trigger-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      triggerId: `trigger-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date().toISOString(),
     };
 
@@ -234,7 +234,7 @@ export class AutoReconfigurationEngine {
     const afterState = this.determineNewConfiguration(trigger, beforeState);
 
     const action: ReconfigurationAction = {
-      actionId: `action-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      actionId: `action-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       triggerId: trigger.triggerId,
       configurationType: this.determineConfigurationType(trigger),
       beforeState,
@@ -436,7 +436,7 @@ export class AutoReconfigurationEngine {
     }
 
     const validation: PerformanceValidation = {
-      validationId: `validation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      validationId: `validation-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       actionId,
       beforeMetrics,
       afterMetrics,

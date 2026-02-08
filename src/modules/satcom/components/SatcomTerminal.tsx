@@ -57,7 +57,8 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
 
     // Simulate incoming messages
     const interval = setInterval(() => {
-      if (Math.random() > 0.7) {
+      // Periodically receive messages based on time
+      if (Date.now() % 3 === 0) {
         receiveMessage();
       }
     }, 15000);
@@ -96,18 +97,18 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
 
   const simulateTransmission = () => {
     // Simulate signal loss, latency, degradation
-    const random = Math.random();
+    const signalFactor = signalStrength / 100;
     let status: "success" | "failed" | "degraded" | "timeout" = "success";
-    let actualLatency = 600 + Math.random() * 400;
+    let actualLatency = 600 + (1 - signalFactor) * 400;
 
     if (signalStrength < 30) {
-      status = random > 0.3 ? "failed" : "degraded";
+      status = signalStrength < 15 ? "failed" : "degraded";
     } else if (signalStrength < 60) {
-      status = random > 0.7 ? "degraded" : "success";
+      status = signalStrength < 45 ? "degraded" : "success";
       actualLatency *= 1.5;
     }
 
-    if (random > 0.95) {
+    if (signalStrength < 5) {
       status = "timeout";
       actualLatency = 3000;
     }
@@ -194,7 +195,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       "Fuel consumption: Within normal range"
     ];
 
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    const randomMessage = messages[Date.now() % messages.length];
     const { status, latency } = simulateTransmission();
 
     const newMessage: TerminalMessage = {

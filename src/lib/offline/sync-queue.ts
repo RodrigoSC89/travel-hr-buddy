@@ -52,7 +52,7 @@ export async function queueAction(
   maxRetries: number = 3
 ): Promise<string> {
   const database = await getDB();
-  const id = `${type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const id = `${type}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   
   const action: QueuedAction = {
     id,

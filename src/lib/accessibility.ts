@@ -102,7 +102,7 @@ export function meetsContrastRequirement(
 
 // Generate aria-describedby id
 export function generateAriaId(prefix: string = 'aria'): string {
-  return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}-${crypto.randomUUID().slice(0, 9)}`;
 }
 
 // Keyboard navigation helper

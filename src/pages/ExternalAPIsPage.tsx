@@ -134,8 +134,8 @@ export default function ExternalAPIsPage() {
           if (["stormglass", "copernicus"].includes(api.id)) {
             return {
               ...api,
-              status: Math.random() > 0.2 ? "online" : "degraded",
-              responseTime: Math.floor(100 + Math.random() * 400),
+              status: "online" as const,
+              responseTime: 100 + (api.id.charCodeAt(0) * 3) % 400,
               lastCheck: new Date().toLocaleTimeString(),
             };
           }

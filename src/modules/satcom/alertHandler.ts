@@ -72,7 +72,7 @@ class AlertHandler {
     options: Partial<SatcomAlert> = {}
   ): SatcomAlert {
     const alert: SatcomAlert = {
-      id: `alert_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      id: `alert_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date(),
       severity,
       title,

@@ -91,7 +91,7 @@ export class EvolutionTracker {
   async createVersion(data: Omit<AIVersion, "versionId" | "timestamp">): Promise<AIVersion> {
     const version: AIVersion = {
       ...data,
-      versionId: `v-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      versionId: `v-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date().toISOString(),
     };
 

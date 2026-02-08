@@ -105,7 +105,7 @@ class RequestBatcher {
 
     return new Promise((resolve, reject) => {
       const request: BatchedRequest = {
-        id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        id: `req-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         url,
         options: processedOptions,
         resolve,

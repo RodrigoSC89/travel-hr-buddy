@@ -544,7 +544,7 @@ class InstanceController {
    * Helper methods
    */
   private generateId(): string {
-    return `instance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `instance-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private getMainInstanceId(): string {

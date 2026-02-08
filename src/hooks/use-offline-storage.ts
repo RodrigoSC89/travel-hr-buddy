@@ -102,7 +102,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       const store = transaction.objectStore(OFFLINE_STORE);
       
       const offlineData: OfflineData = {
-        id: `${action}_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+        id: `${action}_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
         action,
         data,
         timestamp: Date.now(),

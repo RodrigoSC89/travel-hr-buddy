@@ -61,12 +61,17 @@ function useFleetVessels() {
         type: 'Vessel',
         status: (v.status as VesselData['status']) || 'operational',
         location: { lat: -23.9, lng: -46.3, port: 'Santos' },
-        metrics: { fuelLevel: 70 + Math.random() * 25, engineHours: Math.floor(Math.random() * 15000), speed: Math.random() * 15, heading: Math.random() * 360 },
-        crew: { total: 20 + Math.floor(Math.random() * 10), onboard: 18 + Math.floor(Math.random() * 8) },
-        certificates: { total: 40 + Math.floor(Math.random() * 10), expiring: Math.floor(Math.random() * 5), expired: 0 },
-        maintenance: { pending: Math.floor(Math.random() * 8), overdue: Math.floor(Math.random() * 2), scheduled: Math.floor(Math.random() * 10) },
-        inventory: { critical: Math.floor(Math.random() * 2), lowStock: Math.floor(Math.random() * 8) },
-        alerts: { critical: Math.floor(Math.random() * 2), warning: Math.floor(Math.random() * 5), info: Math.floor(Math.random() * 10) },
+        metrics: { 
+          fuelLevel: 70 + (v.name.charCodeAt(0) % 25), 
+          engineHours: 1000 + (v.name.charCodeAt(0) * 100) % 14000, 
+          speed: (v.name.charCodeAt(1) || 5) % 15, 
+          heading: (v.name.charCodeAt(0) * 31) % 360 
+        },
+        crew: { total: 20 + (v.name.charCodeAt(0) % 10), onboard: 18 + (v.name.charCodeAt(0) % 8) },
+        certificates: { total: 40 + (v.name.charCodeAt(0) % 10), expiring: v.name.charCodeAt(0) % 5, expired: 0 },
+        maintenance: { pending: v.name.charCodeAt(0) % 8, overdue: v.name.charCodeAt(0) % 2, scheduled: v.name.charCodeAt(0) % 10 },
+        inventory: { critical: v.name.charCodeAt(0) % 2, lowStock: v.name.charCodeAt(0) % 8 },
+        alerts: { critical: v.name.charCodeAt(0) % 2, warning: v.name.charCodeAt(0) % 5, info: v.name.charCodeAt(0) % 10 },
         aiInsight: `${v.name} está operacional. Monitoramento ativo de todos os sistemas.`
       } as VesselData));
     },

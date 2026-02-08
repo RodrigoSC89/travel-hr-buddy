@@ -143,7 +143,7 @@ export class HubCache {
    * Generate unique ID
    */
   private generateId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 }
 

@@ -63,7 +63,7 @@ class OfflineManagerService {
   }
 
   async queueAction(type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>): Promise<string> {
-    const id = `action-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const id = `action-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     
     this.pendingActions.push({
       id,

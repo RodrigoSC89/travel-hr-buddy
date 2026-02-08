@@ -122,7 +122,7 @@ class OfflineSyncManager {
     if (!this.db) throw new Error('DB not initialized');
 
     const operation: PendingOperation = {
-      id: `${table}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${table}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       table,
       type,
       data,

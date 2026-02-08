@@ -157,7 +157,7 @@ class FeedbackResponder {
     );
 
     const feedback: UserFeedback = {
-      id: `feedback-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       input,
       modality,
       detectedEmotions,

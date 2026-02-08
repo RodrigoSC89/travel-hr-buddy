@@ -97,7 +97,7 @@ class AdaptiveJointDecision {
                                    aiConfidence === "very_low";
 
     const proposal: DecisionProposal = {
-      id: `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `decision-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       type,
       context,
       options: optionsWithIds,

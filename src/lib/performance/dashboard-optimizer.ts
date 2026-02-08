@@ -191,7 +191,7 @@ class DashboardOptimizer {
     }
     
     return new Promise((resolve, reject) => {
-      const id = Math.random().toString(36);
+      const id = crypto.randomUUID();
       
       const handler = (e: MessageEvent) => {
         if (e.data.id === id) {

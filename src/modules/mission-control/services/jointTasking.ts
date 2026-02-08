@@ -113,7 +113,7 @@ export async function createMission(
   logger.info(`[JointTasking] Creating mission: ${mission.name}`);
 
   try {
-    const missionId = `mission-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const missionId = `mission-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
 
     const newMission: JointMission = {
       ...mission,

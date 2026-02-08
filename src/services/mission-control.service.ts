@@ -150,7 +150,7 @@ export class MissionControlService {
   }
 
   static async createMission(mission: Partial<Mission>): Promise<Mission> {
-    const missionId = `mission_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const missionId = `mission_${Date.now()}_${crypto.randomUUID().slice(0, 7)}`;
     
     const { data, error } = await supabase
       .from("missions")

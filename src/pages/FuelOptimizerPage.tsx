@@ -254,8 +254,8 @@ const FuelOptimizerPage = () => {
 
       if (aiAnalysis) {
         savingsPercentage = aiAnalysis.confidence_score > 60 
-          ? 10 + Math.random() * 12 
-          : 5 + Math.random() * 8;
+          ? 10 + (aiAnalysis.confidence_score % 12)
+          : 5 + (aiAnalysis.confidence_score % 8);
         optimizedConsumption = estimatedConsumption * (1 - savingsPercentage / 100);
       }
 

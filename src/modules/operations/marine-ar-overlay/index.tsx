@@ -92,10 +92,11 @@ const MarineAROverlay = () => {
   useEffect(() => {
     // Simulate real-time sensor updates
     const interval = setInterval(() => {
-      setMarkers(prev => prev.map(marker => ({
+      const t = Date.now() / 3000;
+      setMarkers(prev => prev.map((marker, idx) => ({
         ...marker,
-        temperature: (marker.temperature || 0) + (Math.random() - 0.5) * 2,
-        consumption: (marker.consumption || 0) + (Math.random() - 0.5) * 5,
+        temperature: (marker.temperature || 0) + Math.sin(t + idx) * 1,
+        consumption: (marker.consumption || 0) + Math.sin(t + idx * 2) * 2.5,
       })));
     }, 3000);
 

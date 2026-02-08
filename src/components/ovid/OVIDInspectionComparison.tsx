@@ -97,8 +97,8 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
       return {
         chapter: `Cap ${ch.id}`,
         name: ch.name,
-        inspection1: Math.max(50, base1 - (i * 3) + Math.floor(Math.random() * 10)),
-        inspection2: Math.max(50, base2 - (i * 3) + Math.floor(Math.random() * 10)),
+        inspection1: Math.max(50, base1 - (i * 3) + (((i * 7 + 3) % 10))),
+        inspection2: Math.max(50, base2 - (i * 3) + (((i * 11 + 5) % 10))),
       };
     });
   }, [inspection1, inspection2]);

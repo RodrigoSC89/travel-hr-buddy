@@ -266,7 +266,7 @@ class AutonomousAI {
     const confidenceLevel = this.getConfidenceLevel(confidence);
 
     const decision: AIDecision = {
-      id: `decision_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `decision_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       type: params.type,
       title: params.title,
       description: params.description,

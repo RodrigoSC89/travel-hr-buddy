@@ -33,10 +33,10 @@ function TimeSeriesChart({ metrics, period }: { metrics: any[]; period: string }
     
     return labels.slice(0, points).map((label, i) => ({
       name: label,
-      fleetUtilization: 70 + Math.random() * 20,
-      revenue: 100000 + Math.random() * 50000,
-      turnaround: 3 + Math.random() * 2,
-      satisfaction: 4 + Math.random() * 0.8,
+      fleetUtilization: 70 + ((i * 7 + 3) % 20),
+      revenue: 100000 + ((i * 13 + 7) % 50) * 1000,
+      turnaround: 3 + ((i * 11 + 2) % 20) / 10,
+      satisfaction: 4 + ((i * 9 + 1) % 8) / 10,
     }));
   };
 

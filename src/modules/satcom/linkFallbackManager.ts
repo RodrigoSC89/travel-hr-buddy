@@ -350,7 +350,7 @@ class LinkFallbackManager {
   private addEvent(event: Omit<FallbackEvent, "id" | "timestamp">): void {
     const newEvent: FallbackEvent = {
       ...event,
-      id: `fallback_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      id: `fallback_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date()
     };
 
