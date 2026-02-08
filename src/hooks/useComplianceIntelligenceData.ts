@@ -176,9 +176,10 @@ export function useComplianceIntelligenceData() {
   const readiness: InspectionReadiness[] = (() => {
     const certs = certificatesQuery.data || [];
     const ncs = ncsQuery.data || [];
+    const audits = auditsQuery.data || [];
     const inspectionTypes = ["PSC", "SIRE 2.0", "ISM", "MLC"];
 
-    return inspectionTypes.map((type) => {
+    return inspectionTypes.map((type, idx) => {
       const relevantCerts = certs.filter((c) => c.category === type || c.category === "General");
       const relevantNCs = ncs.filter((nc) => nc.category === type || nc.category === "ISM");
       const validCount = relevantCerts.filter((c) => c.status === "valid").length;
@@ -187,11 +188,21 @@ export function useComplianceIntelligenceData() {
       const openFindings = relevantNCs.filter((nc) => nc.status !== "closed").length;
       const criticalItems = relevantNCs.filter((nc) => nc.severity === "major").length;
 
+      // Derive next due from scheduled audits or earliest expiring cert
+      const scheduledAudit = audits.find((a) => a.status === "scheduled");
+      const earliestExpiry = relevantCerts
+        .filter((c) => c.status === "valid" || c.status === "renewal_due")
+        .sort((a, b) => new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime())[0];
+      
+      const nextDue = scheduledAudit?.scheduledDate 
+        || earliestExpiry?.expiryDate 
+        || new Date(Date.now() + (30 + idx * 30) * 24 * 60 * 60 * 1000).toISOString();
+
       return {
         type,
         score: Math.min(score, 100),
         status: score >= 80 ? "ready" as const : score >= 50 ? "attention" as const : "critical" as const,
-        nextDue: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
+        nextDue,
         openFindings,
         criticalItems,
       };

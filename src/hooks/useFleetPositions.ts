@@ -130,9 +130,17 @@ export function useFleetPositions() {
         // Assign alerts round-robin
         const vesselAlerts = allAlerts.filter((_, i) => i % (vessels?.length || 1) === idx);
 
-        // Use real position data if available, otherwise derive from port info
-        const lat = vesselStatus === "underway" ? 51.9 + Math.random() * 10 : 51.9;
-        const lng = vesselStatus === "underway" ? 4.5 + Math.random() * 10 : 4.5;
+        // Use deterministic position based on vessel index
+        const portPositions = [
+          { lat: -23.96, lng: -46.33 }, // Santos
+          { lat: 51.92, lng: 4.48 },    // Rotterdam
+          { lat: 1.26, lng: 103.82 },   // Singapore
+          { lat: 31.23, lng: 121.47 },   // Shanghai
+          { lat: -25.52, lng: -48.51 },   // Paranagua
+        ];
+        const basePos = portPositions[idx % portPositions.length];
+        const lat = vesselStatus === "underway" ? basePos.lat + idx * 2 : basePos.lat;
+        const lng = vesselStatus === "underway" ? basePos.lng + idx * 2 : basePos.lng;
 
         return {
           vesselId: v.id,
@@ -147,9 +155,9 @@ export function useFleetPositions() {
             timestamp: new Date(),
           },
           navigation: {
-            speed: vesselStatus === "underway" ? 10 + Math.random() * 5 : 0,
-            course: vesselStatus === "underway" ? Math.floor(Math.random() * 360) : 0,
-            heading: vesselStatus === "underway" ? Math.floor(Math.random() * 360) : 0,
+            speed: vesselStatus === "underway" ? 10 + idx * 0.8 : 0,
+            course: vesselStatus === "underway" ? (45 + idx * 30) % 360 : 0,
+            heading: vesselStatus === "underway" ? (45 + idx * 30) % 360 : 0,
             draught: Number(v.capacity) ? Number(v.capacity) * 0.001 : 10,
             destination: activeVoyage?.destination_port || (vesselStatus === "moored" ? "In Port" : "—"),
             eta: activeVoyage ? new Date(Date.now() + 86400000 * 3) : null,

@@ -59,25 +59,34 @@ export function useVesselTrackingData() {
 
       if (error) throw error;
 
-      return (data || []).map((vessel): VesselPosition => {
+      const portPositions = [
+        { lat: -23.96, lng: -46.33 },
+        { lat: -22.90, lng: -43.17 },
+        { lat: -12.97, lng: -38.51 },
+        { lat: -8.05, lng: -34.88 },
+        { lat: -25.52, lng: -48.51 },
+      ];
+
+      return (data || []).map((vessel, idx): VesselPosition => {
         const metadata = (vessel.metadata as Record<string, unknown>) || {};
         const position = (metadata.position as Record<string, unknown>) || {};
+        const basePos = portPositions[idx % portPositions.length];
         return {
           id: vessel.id,
           name: vessel.name,
           imo: vessel.imo_number || "",
           type: vessel.vessel_type || "Cargo",
           flag: getFlagEmoji((metadata.flag_state as string) || "BR"),
-          lat: (position.lat as number) || -23.9618 + Math.random() * 5,
-          lng: (position.lng as number) || -46.3322 + Math.random() * 5,
-          course: (position.course as number) || Math.floor(Math.random() * 360),
-          speed: (position.speed as number) || Math.random() * 15,
-          heading: (position.heading as number) || Math.floor(Math.random() * 360),
+          lat: (position.lat as number) || basePos.lat,
+          lng: (position.lng as number) || basePos.lng,
+          course: (position.course as number) || 0,
+          speed: (position.speed as number) || 0,
+          heading: (position.heading as number) || 0,
           status: mapVesselStatus(vessel.status || ""),
           destination: (metadata.destination as string) || "Porto não definido",
-          eta: new Date(Date.now() + Math.random() * 7 * 24 * 60 * 60 * 1000),
+          eta: vessel.eta ? new Date(vessel.eta) : new Date(Date.now() + (idx + 1) * 2 * 24 * 60 * 60 * 1000),
           lastUpdate: new Date(vessel.updated_at || vessel.created_at || Date.now()),
-          signalQuality: 85 + Math.floor(Math.random() * 15),
+          signalQuality: 90,
         };
       });
     },
@@ -113,14 +122,14 @@ export function useVesselTrackingData() {
     staleTime: 10000,
   });
 
-  // Weather data (simulated - would integrate with real weather API)
+  // Weather data - defaults until real weather API is integrated
   const weather: WeatherData = {
     location: "Atlântico Sul",
-    windSpeed: 12 + Math.random() * 10,
-    windDirection: Math.floor(Math.random() * 360),
-    waveHeight: 1 + Math.random() * 2,
-    temperature: 20 + Math.random() * 8,
-    visibility: 10 + Math.random() * 10,
+    windSpeed: 15,
+    windDirection: 180,
+    waveHeight: 1.5,
+    temperature: 24,
+    visibility: 15,
   };
 
   // Auto refresh

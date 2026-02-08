@@ -115,17 +115,42 @@ export function useFleetOperations() {
       const anchored = vessels.filter(v => v.status?.toLowerCase() === 'anchored').length;
       const maintenance = vessels.filter(v => ['drydock', 'maintenance'].includes(v.status?.toLowerCase() || '')).length;
 
+      // Fetch real alert counts from soc_alerts
+      const { count: totalAlerts } = await supabase
+        .from('soc_alerts')
+        .select('*', { count: 'exact', head: true })
+        .is('acknowledged_at', null);
+
+      const { count: criticalAlerts } = await supabase
+        .from('soc_alerts')
+        .select('*', { count: 'exact', head: true })
+        .is('acknowledged_at', null)
+        .eq('severity', 'critical');
+
+      // Fetch completed vs total missions for on-time performance
+      const { count: totalMissions } = await supabase
+        .from('missions')
+        .select('*', { count: 'exact', head: true });
+      const { count: completedMissions } = await supabase
+        .from('missions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'completed');
+
+      const onTime = totalMissions && totalMissions > 0
+        ? Math.round((completedMissions || 0) / totalMissions * 100)
+        : 0;
+
       return {
         activeVessels: vessels.length,
         navigating,
         inPort,
         anchored,
         maintenance,
-        totalAlerts: Math.floor(Math.random() * 20),
-        criticalAlerts: Math.floor(Math.random() * 5),
-        avgSpeed: 13.8,
-        fleetUtilization: vessels.length > 0 ? Math.floor(((navigating + inPort) / vessels.length) * 100) : 89,
-        onTimePerformance: Math.floor(85 + Math.random() * 12),
+        totalAlerts: totalAlerts || 0,
+        criticalAlerts: criticalAlerts || 0,
+        avgSpeed: 0,
+        fleetUtilization: vessels.length > 0 ? Math.floor(((navigating + inPort) / vessels.length) * 100) : 0,
+        onTimePerformance: onTime,
       } as OperationalKPIs;
     },
     staleTime: 60000,

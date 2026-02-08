@@ -67,12 +67,12 @@ export function useTrackingVesselsData() {
           imo: v.imo_number || `IMO ${9800000 + i}`,
           position: { lat: baseLat, lng: baseLng },
           heading: Math.round((i * 45 + 90) % 360),
-          speed: status === "sailing" ? +(8 + Math.random() * 8).toFixed(1) : 0,
+          speed: status === "sailing" ? +(8 + i * 0.8).toFixed(1) : 0,
           status,
-          lastUpdate: `${Math.floor(Math.random() * 30 + 2)}s`,
-          signalStrength: Math.floor(75 + Math.random() * 25),
-          fuelLevel: Math.floor(40 + Math.random() * 55),
-          engineTemp: status === "sailing" ? Math.floor(60 + Math.random() * 20) : Math.floor(30 + Math.random() * 15),
+          lastUpdate: `${2 + i * 5}s`,
+          signalStrength: 85 + (i % 3) * 5,
+          fuelLevel: 50 + (i % 5) * 10,
+          engineTemp: status === "sailing" ? 65 + i * 3 : 35 + i * 2,
           alerts: i < alertCount ? 1 : 0,
         };
       });

@@ -74,7 +74,7 @@ function mapMaintenanceToWorkOrder(record: any, vessels: any[]): WorkOrder {
   };
 }
 
-function deriveEquipmentFromVessels(vessels: any[]): Equipment[] {
+function deriveEquipmentFromVessels(vessels: any[], maintenanceRecords: any[]): Equipment[] {
   const equipmentTypes = [
     { name: "Motor Principal", type: "Propulsão", healthBase: 88 },
     { name: "Gerador", type: "Geração", healthBase: 82 },
@@ -85,9 +85,24 @@ function deriveEquipmentFromVessels(vessels: any[]): Equipment[] {
 
   return vessels.slice(0, 5).map((vessel, i) => {
     const eq = equipmentTypes[i % equipmentTypes.length];
-    const healthVariation = Math.floor(Math.random() * 15) - 5;
-    const healthScore = Math.max(30, Math.min(100, eq.healthBase + healthVariation));
-    
+    // Derive health variation from maintenance record count for this vessel
+    const vesselRecords = maintenanceRecords.filter((r: any) => r.vessel_id === vessel.id);
+    const openIssues = vesselRecords.filter((r: any) => r.status !== "completed" && r.status !== "cancelled").length;
+    const healthPenalty = Math.min(openIssues * 5, 30);
+    const healthScore = Math.max(30, Math.min(100, eq.healthBase - healthPenalty));
+
+    // Find last completed maintenance date
+    const completedRecords = vesselRecords.filter((r: any) => r.status === "completed").sort((a: any, b: any) =>
+      new Date(b.completed_date || b.created_at).getTime() - new Date(a.completed_date || a.created_at).getTime()
+    );
+    const lastMaintDate = completedRecords[0]?.completed_date || completedRecords[0]?.created_at;
+
+    // Find next scheduled maintenance
+    const scheduledRecords = vesselRecords.filter((r: any) => r.status === "scheduled" && r.scheduled_date).sort((a: any, b: any) =>
+      new Date(a.scheduled_date).getTime() - new Date(b.scheduled_date).getTime()
+    );
+    const nextMaintDate = scheduledRecords[0]?.scheduled_date;
+
     return {
       id: `EQ-${String(i + 1).padStart(3, "0")}`,
       name: `${eq.name} - ${vessel.name}`,
@@ -95,8 +110,8 @@ function deriveEquipmentFromVessels(vessels: any[]): Equipment[] {
       vessel: vessel.name,
       status: healthScore >= 80 ? "operational" : healthScore >= 60 ? "degraded" : "critical",
       healthScore,
-      lastMaintenance: new Date(Date.now() - (30 + i * 10) * 86400000).toISOString().slice(0, 10),
-      nextMaintenance: new Date(Date.now() + (30 + i * 15) * 86400000).toISOString().slice(0, 10),
+      lastMaintenance: lastMaintDate ? new Date(lastMaintDate).toISOString().slice(0, 10) : "N/A",
+      nextMaintenance: nextMaintDate ? new Date(nextMaintDate).toISOString().slice(0, 10) : "N/A",
       runningHours: 3000 + i * 2000,
       predictedFailure: healthScore < 60 
         ? new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10) 
@@ -135,7 +150,7 @@ export function useMaintenanceDashboardData() {
   });
 
   const workOrders: WorkOrder[] = maintenanceRecords.map(r => mapMaintenanceToWorkOrder(r, vessels));
-  const equipment: Equipment[] = deriveEquipmentFromVessels(vessels);
+  const equipment: Equipment[] = deriveEquipmentFromVessels(vessels, maintenanceRecords);
 
   const createWorkOrder = useMutation({
     mutationFn: async (input: Partial<WorkOrder>) => {

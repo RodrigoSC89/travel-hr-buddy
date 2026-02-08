@@ -60,17 +60,24 @@ export function useRouteMapData() {
         .is("deleted_at", null)
         .limit(20);
 
-      // Create sample routes based on vessels
+      // Map vessel status to voyage status deterministically
+      const statusToVoyage = (s: string | null): VoyageRoute["status"] => {
+        const lower = s?.toLowerCase() || "";
+        if (["active", "underway"].includes(lower)) return "active";
+        if (["in_port", "moored", "anchored"].includes(lower)) return "completed";
+        return "planned";
+      };
+
       return (vessels || []).map((vessel, idx) => ({
         id: vessel.id,
         vesselId: vessel.id,
         vesselName: vessel.name,
         waypoints: generateWaypointsForVessel(idx),
-        status: idx % 3 === 0 ? "active" : idx % 3 === 1 ? "planned" : "completed",
+        status: statusToVoyage(vessel.status),
         distance: 2500 + idx * 500,
         estimatedDuration: 120 + idx * 24,
         fuelConsumption: 150 + idx * 20,
-        riskScore: 15 + Math.random() * 30,
+        riskScore: 20 + idx * 5, // deterministic score based on vessel index
       })) as VoyageRoute[];
     },
     staleTime: 120000,

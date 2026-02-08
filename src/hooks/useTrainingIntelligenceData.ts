@@ -71,7 +71,7 @@ export function useTrainingIntelligenceData() {
           format: m.content?.format || "E-Learning",
           enrolled: relatedRecords.length || Math.max(10, Math.round(crew.length * 0.3)),
           completed: completedCount || Math.max(5, Math.round(crew.length * 0.2)),
-          rating: 4.0 + Math.random() * 0.9,
+          rating: relatedRecords.length > 0 ? Math.min(5, 3.5 + (completedCount / Math.max(relatedRecords.length, 1)) * 1.5) : 4.0,
           status: m.status || "active",
           expiry: m.expiration_months ? `${m.expiration_months} meses` : "3 years",
         };

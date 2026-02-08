@@ -87,8 +87,8 @@ export function useFleetVessels() {
           type: vessel.vessel_type || 'cargo',
           latitude: loc.lat,
           longitude: loc.lng,
-          course: meta.course || meta.heading || Math.random() * 360,
-          speed: meta.speed || Math.random() * 15,
+          course: meta.course || meta.heading || 0,
+          speed: meta.speed || 0,
           status: mapVesselStatus(vessel.status),
           last_update: vessel.updated_at || vessel.created_at || new Date().toISOString(),
           captain: meta.captain || meta.master,
@@ -261,10 +261,10 @@ function parseVesselLocation(
     }
   }
 
-  // Return random position in Brazil region as fallback
+  // Return default position in Santos port as fallback
   return {
-    lat: -23 + Math.random() * 10,
-    lng: -46 + Math.random() * 10,
+    lat: -23.9618,
+    lng: -46.3322,
   };
 }
 

@@ -106,8 +106,8 @@ export const useTrainingAcademy = () => {
           ...c,
           category: meta?.category || "Geral",
           level: meta?.level || "intermediate",
-          enrolledCount: meta?.enrolledCount || Math.floor(Math.random() * 50) + 10,
-          rating: meta?.rating || 4 + Math.random(),
+          enrolledCount: meta?.enrolledCount || 0,
+          rating: meta?.rating || 4.0,
           tags: meta?.tags || ["marítimo", "segurança"],
         };
       });
@@ -149,14 +149,14 @@ export const useTrainingAcademy = () => {
 
       if (error) throw error;
 
-      const mappedCrew: CrewMember[] = (data || []).map((c: any) => ({
+      const mappedCrew: CrewMember[] = (data || []).map((c: any, idx: number) => ({
         id: c.id,
         name: c.name || c.full_name || "Tripulante",
         position: c.position || c.rank || "Marinheiro",
         department: c.department || "Operações",
-        trainingProgress: Math.floor(Math.random() * 100),
-        certifications: Math.floor(Math.random() * 10),
-        lastTraining: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        trainingProgress: 0,
+        certifications: 0,
+        lastTraining: c.updated_at || c.created_at || new Date().toISOString(),
       }));
 
       if (mappedCrew.length === 0) {

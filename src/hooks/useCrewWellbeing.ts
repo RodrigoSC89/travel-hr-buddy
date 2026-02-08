@@ -73,13 +73,17 @@ export function useCrewWellbeing() {
           } as WellbeingScore;
         }
 
-        // Generate baseline scores
-        const restScore = 75 + Math.random() * 20;
-        const medicalScore = 80 + Math.random() * 15;
-        const perfScore = 70 + Math.random() * 25;
+        // Derive deterministic baseline scores from crew data
+        // Rest score: based on days onboard (less days = better rest)
+        const restScore = daysOnboard > 150 ? 60 : daysOnboard > 90 ? 75 : 85;
+        // Medical score: default healthy baseline
+        const medicalScore = 80;
+        // Performance score: based on rank seniority
+        const rankScore: Record<string, number> = { "Master": 92, "Chief Officer": 88, "Chief Engineer": 88, "2nd Officer": 82, "2nd Engineer": 82 };
+        const perfScore = rankScore[c.rank || ""] || 78;
         const overall = Math.round((restScore + timeOnboardScore + medicalScore + perfScore) / 4);
-        const fatigue = overall >= 80 ? "low" : overall >= 65 ? "moderate" : overall >= 50 ? "high" : "critical";
-        const burnoutDays = fatigue === "critical" ? Math.floor(Math.random() * 15) + 5 : fatigue === "high" ? Math.floor(Math.random() * 30) + 20 : undefined;
+        const fatigue: WellbeingScore["fatigue_risk_level"] = overall >= 80 ? "low" : overall >= 65 ? "moderate" : overall >= 50 ? "high" : "critical";
+        const burnoutDays = fatigue === "critical" ? Math.max(5, 180 - daysOnboard) : fatigue === "high" ? Math.max(20, 270 - daysOnboard) : undefined;
 
         const recommendations: string[] = [];
         if (timeOnboardScore < 60) recommendations.push("Agendar rotação de tripulação - tempo a bordo prolongado");
@@ -93,10 +97,10 @@ export function useCrewWellbeing() {
           crew_rank: c.rank,
           vessel_name: vessel?.name,
           overall_score: overall,
-          rest_hours_score: Math.round(restScore),
+          rest_hours_score: restScore,
           time_onboard_score: timeOnboardScore,
-          medical_score: Math.round(medicalScore),
-          performance_score: Math.round(perfScore),
+          medical_score: medicalScore,
+          performance_score: perfScore,
           fatigue_risk_level: fatigue,
           burnout_prediction_days: burnoutDays,
           recommendations,

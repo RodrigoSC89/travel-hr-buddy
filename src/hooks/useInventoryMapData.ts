@@ -75,11 +75,11 @@ export function useInventoryMapData() {
             lng: -46.3 + (index * 0.2),
             city: v.port_of_registry || "Santos",
           },
-          itemCount: vesselItems.length + Math.floor(Math.random() * 100) + 50,
+          itemCount: vesselItems.length,
           criticalItems,
           lowStockItems,
-          expiringItems: Math.floor(Math.random() * 5),
-          totalValue: Math.floor(Math.random() * 500000) + 50000,
+          expiringItems: 0,
+          totalValue: vesselItems.reduce((sum: number, m: any) => sum + (m.cost_estimate || 0), 0),
         };
       });
 
@@ -111,7 +111,9 @@ export function useInventoryMapData() {
       // Map maintenance records to inventory items
       const items: InventoryItem[] = (maintenanceRecords || []).slice(0, 20).map((m: any, index: number) => {
         const vessel = (vessels || []).find((v: any) => v.id === m.vessel_id);
-        const quantity = Math.floor(Math.random() * 30);
+        // Derive quantity from maintenance priority (critical = low stock)
+        const priorityStock: Record<string, number> = { critical: 2, high: 8, medium: 15, low: 25 };
+        const quantity = priorityStock[m.priority] || 10;
         const minStock = 5;
         const maxStock = 50;
         
@@ -130,12 +132,12 @@ export function useInventoryMapData() {
           maxStock,
           location: vessel?.name || "Base Santos",
           locationType: vessel ? "vessel" : "warehouse",
-          leadTime: Math.floor(Math.random() * 21) + 3,
-          unitCost: m.cost_estimate || Math.floor(Math.random() * 1000) + 100,
+          leadTime: m.priority === "critical" ? 3 : m.priority === "high" ? 7 : 14,
+          unitCost: m.cost_estimate || 500,
           status,
           lastMovement: new Date(m.updated_at || m.created_at),
           predictedRunout: status === "critical" || status === "low" 
-            ? new Date(Date.now() + Math.floor(Math.random() * 14) * 24 * 60 * 60 * 1000)
+            ? new Date(Date.now() + quantity * 24 * 60 * 60 * 1000)
             : undefined,
         };
       });

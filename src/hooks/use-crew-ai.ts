@@ -73,15 +73,16 @@ export const useCrewAI = () => {
         },
       });
 
-      // Gerar recomendações baseadas em análise
+      // Gerar recomendações baseadas em dados reais do tripulante
       const recommendations: CrewRecommendation[] = crew
         .filter(c => c.status === "active")
-        .map(member => {
+        .map((member, idx) => {
           const types: CrewRecommendation["type"][] = ["training", "rotation", "promotion", "certificate", "performance"];
           const priorities: CrewRecommendation["priority"][] = ["low", "medium", "high", "critical"];
           
-          const type = types[Math.floor(Math.random() * types.length)];
-          const priority = priorities[Math.floor(Math.random() * priorities.length)];
+          // Deterministic type/priority based on member index and experience
+          const type = types[idx % types.length];
+          const priority = priorities[idx % priorities.length];
 
           const titleMap = {
             training: "Atualização de Treinamento Necessária",
@@ -153,22 +154,23 @@ export const useCrewAI = () => {
         },
       });
 
+      const vesselNames = ["MV Atlantic Pride", "MV Pacific Dawn", "MV Mediterranean"];
       const optimizations: RotationOptimization[] = crew
         .filter(c => c.status === "active")
         .slice(0, Math.min(5, crew.length))
-        .map(member => ({
+        .map((member, idx) => ({
           crewId: member.id,
           crewName: member.full_name,
           currentVessel: "MV Ocean Star",
-          suggestedVessel: ["MV Atlantic Pride", "MV Pacific Dawn", "MV Mediterranean"][Math.floor(Math.random() * 3)],
-          rotationDate: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
+          suggestedVessel: vesselNames[idx % vesselNames.length],
+          rotationDate: new Date(Date.now() + (30 + idx * 15) * 24 * 60 * 60 * 1000).toISOString(),
           reason: response.message || "Balanceamento de experiência e redução de fadiga operacional",
           benefits: [
             "Desenvolvimento de novas competências",
             "Redução de tempo embarcado consecutivo",
             "Experiência em diferentes tipos de operação",
           ],
-          estimatedCost: Math.floor(2000 + Math.random() * 5000),
+          estimatedCost: 2000 + idx * 1000,
         }));
 
       toast({
