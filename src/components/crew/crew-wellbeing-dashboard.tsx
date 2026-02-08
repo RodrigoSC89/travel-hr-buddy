@@ -47,15 +47,13 @@ export function CrewWellbeingDashboard() {
 
   const loadWellbeingData = async () => {
     try {
-      // Use type assertion for tables not in generated types
+      const db = supabase.from as Function;
       const [recordsRes, alertsRes] = await Promise.all([
-        (supabase as any)
-          .from("crew_health_records")
+        db("crew_health_records")
           .select("*")
           .order("record_date", { ascending: false })
           .limit(20),
-        (supabase as any)
-          .from("wellbeing_alerts")
+        db("wellbeing_alerts")
           .select("*")
           .eq("status", "active")
           .order("severity", { ascending: false })

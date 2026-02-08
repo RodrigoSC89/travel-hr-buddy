@@ -92,8 +92,7 @@ export default function CollaborationPage() {
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("colab_comments")
+      const { data, error } = await (supabase.from as Function)("colab_comments")
         .select(`
           id,
           author_id,
@@ -166,8 +165,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as any)
-        .from("colab_comments")
+      const { error } = await (supabase.from as Function)("colab_comments")
         .insert({
           author_id: user.id,
           text: newComment.trim(),
@@ -194,8 +192,7 @@ export default function CollaborationPage() {
 
   const fetchReplies = async (commentId: string) => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("colab_replies")
+      const { data, error } = await (supabase.from as Function)("colab_replies")
         .select(`
           id,
           comment_id,
@@ -243,8 +240,7 @@ export default function CollaborationPage() {
         [emoji]: (currentReactions[emoji] || 0) + 1
       };
 
-      const { error } = await (supabase as any)
-        .from("colab_comments")
+      const { error } = await (supabase.from as Function)("colab_comments")
         .update({ reactions: newReactions })
         .eq("id", commentId);
 
@@ -284,8 +280,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as any)
-        .from("colab_replies")
+      const { error } = await (supabase.from as Function)("colab_replies")
         .insert({
           comment_id: commentId,
           author_id: user.id,

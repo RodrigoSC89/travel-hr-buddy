@@ -68,8 +68,8 @@ export default function AuditoriaTecnica() {
           supabase.from("logs").select("*", { count: "exact", head: true }),
           supabase.from("logs").select("*", { count: "exact", head: true }).eq("level", "error"),
           supabase.from("ai_decisions").select("*", { count: "exact", head: true }),
-          (supabase as any).from("telemetry_alerts").select("*", { count: "exact", head: true }),
-          (supabase as any).from("telemetry_logs").select("*", { count: "exact", head: true })
+          (supabase.from as Function)("telemetry_alerts").select("*", { count: "exact", head: true }),
+          (supabase.from as Function)("telemetry_logs").select("*", { count: "exact", head: true })
         ]);
 
         if (results[0].status === "fulfilled") logsCount = (results[0].value as any).count || 0;

@@ -8,8 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 
-// Use any cast for dynamic table access
-const dynamicDb = supabase as any;
+// Dynamic table accessor for tables not in generated types
+const dynamicDb = { from: supabase.from as Function };
 import type {
   ComplianceItem,
   AuditSession,

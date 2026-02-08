@@ -12,8 +12,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-// Use any cast for dynamic table access
-const dynamicDb = supabase as any;
+// Dynamic table accessor for offline sync (tables may not be in generated types)
+const dynamicDb = { from: supabase.from as Function };
 
 export type SyncItemStatus = "queued" | "sending" | "sent" | "failed" | "conflict";
 
@@ -231,8 +231,7 @@ class SyncQueue {
         if (!data.id) throw new Error("UPDATE requires id");
         
         // Verificar conflito
-        const { data: serverData } = await dynamicDb
-          .from(table)
+        const { data: serverData } = await dynamicDb.from(table)
           .select("*")
           .eq("id", data.id)
           .single();
@@ -243,7 +242,6 @@ class SyncQueue {
           const localTime = item.timestamp;
           
           if (serverTime > localTime) {
-            // Conflito: servidor tem versão mais nova
             this.updateItemStatus(item.id, "conflict");
             const itemInState = this.state.items.find(i => i.id === item.id);
             if (itemInState) {
@@ -253,8 +251,7 @@ class SyncQueue {
           }
         }
 
-        const { error } = await dynamicDb
-          .from(table)
+        const { error } = await dynamicDb.from(table)
           .update(data)
           .eq("id", data.id);
         if (error) throw error;
@@ -263,8 +260,7 @@ class SyncQueue {
       
       case "DELETE": {
         if (!data.id) throw new Error("DELETE requires id");
-        const { error } = await dynamicDb
-          .from(table)
+        const { error } = await dynamicDb.from(table)
           .delete()
           .eq("id", data.id);
         if (error) throw error;

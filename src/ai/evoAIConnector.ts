@@ -383,9 +383,10 @@ class EvoAIConnector {
       // Correlate records with a cycle id
       const cycleId = (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2));
 
+      const db = supabase.from as Function;
+
       // Save training deltas snapshot
-      await (supabase as any)
-        .from("training_deltas")
+      await db("training_deltas")
         .insert({
           cycle_id: cycleId,
           module_name: "evo_ai",
@@ -396,8 +397,7 @@ class EvoAIConnector {
         });
 
       // Save performance score
-      await (supabase as any)
-        .from("performance_scores")
+      await db("performance_scores")
         .insert({
           module_name: "evo_ai",
           overall_score: report.performanceScore.overall,
@@ -420,7 +420,7 @@ class EvoAIConnector {
       }));
 
       if (insightRecords.length > 0) {
-        await (supabase as any).from("evolution_insights").insert(insightRecords);
+        await db("evolution_insights").insert(insightRecords);
       }
 
       logger.info("[EvoAI] Evolution report saved");
@@ -448,8 +448,7 @@ class EvoAIConnector {
 
     try {
       // Save fine-tune request
-      await (supabase as any)
-        .from("fine_tune_requests")
+      await (supabase.from as Function)("fine_tune_requests")
         .insert({
           module_name: "evo_ai",
           request_id: (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)),

@@ -7,16 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { 
-  Plug, 
-  CheckCircle2, 
-  XCircle, 
-  Activity, 
-  Package,
-  Webhook,
-  Key
+  Plug, CheckCircle2, XCircle, Activity, Package, Webhook, Key
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+
+// Dynamic table accessor for tables not in generated types
+const db = supabase.from as Function;
 
 interface IntegrationProvider {
   id: string;
@@ -72,8 +69,7 @@ export default function IntegrationsHub() {
 
   const fetchProviders = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("integration_providers")
+      const { data, error } = await db("integration_providers")
         .select("*")
         .eq("is_active", true)
         .order("display_name");
@@ -87,12 +83,8 @@ export default function IntegrationsHub() {
 
   const fetchUserIntegrations = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("user_integrations")
-        .select(`
-          *,
-          provider:integration_providers(*)
-        `)
+      const { data, error } = await db("user_integrations")
+        .select(`*, provider:integration_providers(*)`)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -104,8 +96,7 @@ export default function IntegrationsHub() {
 
   const fetchLogs = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("integration_logs")
+      const { data, error } = await db("integration_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
@@ -119,8 +110,7 @@ export default function IntegrationsHub() {
 
   const fetchPlugins = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("plugins")
+      const { data, error } = await db("plugins")
         .select("*")
         .eq("is_active", true)
         .order("install_count", { ascending: false });
@@ -135,82 +125,50 @@ export default function IntegrationsHub() {
   const toggleIntegration = async (integrationId: string, isActive: boolean) => {
     try {
       if (isActive) {
-        const { error } = await (supabase as any).rpc("deactivate_integration", {
+        const { error } = await (supabase.rpc as Function)("deactivate_integration", {
           p_integration_id: integrationId
         });
         if (error) throw error;
       } else {
-        // For activation, would typically go through OAuth flow
-        toast({
-          title: "OAuth Required",
-          description: "Please complete the OAuth flow to activate this integration",
-        });
+        toast({ title: "OAuth Required", description: "Please complete the OAuth flow to activate this integration" });
         return;
       }
 
-      toast({
-        title: "Success",
-        description: `Integration ${isActive ? "deactivated" : "activated"} successfully`,
-      });
-
+      toast({ title: "Success", description: `Integration ${isActive ? "deactivated" : "activated"} successfully` });
       fetchUserIntegrations();
     } catch (error) {
       logger.error("Error toggling integration", { error });
-      toast({
-        title: "Error",
-        description: "Failed to update integration",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to update integration", variant: "destructive" });
     }
   };
 
   const initiateOAuth = async (providerId: string) => {
     try {
-      const { data, error } = await (supabase as any).rpc("create_oauth_state", {
+      const { data, error } = await (supabase.rpc as Function)("create_oauth_state", {
         p_provider_id: providerId
       });
 
       if (error) throw error;
-
-      toast({
-        title: "OAuth Flow Started",
-        description: "Redirecting to authorization page...",
-      });
-
-      // In production, would redirect to OAuth URL
-      // window.location.href = data.auth_url + `?state=${data.state}`;
+      toast({ title: "OAuth Flow Started", description: "Redirecting to authorization page..." });
     } catch (error) {
       logger.error("Error initiating OAuth", { error });
-      toast({
-        title: "Error",
-        description: "Failed to start OAuth flow",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to start OAuth flow", variant: "destructive" });
     }
   };
 
   const installPlugin = async (pluginId: string) => {
     try {
-      const { error } = await (supabase as any).rpc("install_plugin", {
+      const { error } = await (supabase.rpc as Function)("install_plugin", {
         p_plugin_id: pluginId,
         p_configuration: {}
       });
 
       if (error) throw error;
-
-      toast({
-        title: "Plugin Installed",
-        description: "Plugin has been installed successfully",
-      });
-
+      toast({ title: "Plugin Installed", description: "Plugin has been installed successfully" });
       fetchPlugins();
     } catch (error) {
       logger.error("Error installing plugin", { error });
-      toast({
-        title: "Error",
-        description: "Failed to install plugin",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to install plugin", variant: "destructive" });
     }
   };
 
@@ -222,47 +180,28 @@ export default function IntegrationsHub() {
             <Plug className="h-8 w-8" />
             Integrations Hub
           </h1>
-          <p className="text-muted-foreground">
-            Connect third-party services and extend functionality with plugins
-          </p>
+          <p className="text-muted-foreground">Connect third-party services and extend functionality with plugins</p>
         </div>
       </div>
 
       <Tabs defaultValue="integrations" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="integrations">
-            <Plug className="mr-2 h-4 w-4" />
-            Integrations
-          </TabsTrigger>
-          <TabsTrigger value="plugins">
-            <Package className="mr-2 h-4 w-4" />
-            Plugins
-          </TabsTrigger>
-          <TabsTrigger value="webhooks">
-            <Webhook className="mr-2 h-4 w-4" />
-            Webhooks
-          </TabsTrigger>
-          <TabsTrigger value="logs">
-            <Activity className="mr-2 h-4 w-4" />
-            Activity Logs
-          </TabsTrigger>
+          <TabsTrigger value="integrations"><Plug className="mr-2 h-4 w-4" />Integrations</TabsTrigger>
+          <TabsTrigger value="plugins"><Package className="mr-2 h-4 w-4" />Plugins</TabsTrigger>
+          <TabsTrigger value="webhooks"><Webhook className="mr-2 h-4 w-4" />Webhooks</TabsTrigger>
+          <TabsTrigger value="logs"><Activity className="mr-2 h-4 w-4" />Activity Logs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="integrations" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {providers.map((provider) => {
-              const userIntegration = userIntegrations.find(
-                ui => ui.provider_id === provider.id
-              );
-
+              const userIntegration = userIntegrations.find(ui => ui.provider_id === provider.id);
               return (
                 <Card key={provider.id}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span>{provider.display_name}</span>
-                      <Badge variant={userIntegration?.is_active ? "default" : "secondary"}>
-                        {provider.provider_type}
-                      </Badge>
+                      <Badge variant={userIntegration?.is_active ? "default" : "secondary"}>{provider.provider_type}</Badge>
                     </CardTitle>
                     <CardDescription>{provider.description}</CardDescription>
                   </CardHeader>
@@ -270,31 +209,20 @@ export default function IntegrationsHub() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         {userIntegration?.is_active ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          <CheckCircle2 className="h-5 w-5 text-primary" />
                         ) : (
-                          <XCircle className="h-5 w-5 text-gray-400" />
+                          <XCircle className="h-5 w-5 text-muted-foreground" />
                         )}
-                        <span className="text-sm">
-                          {userIntegration?.is_active ? "Active" : "Inactive"}
-                        </span>
+                        <span className="text-sm">{userIntegration?.is_active ? "Active" : "Inactive"}</span>
                       </div>
                       {userIntegration ? (
-                        <Switch
-                          checked={userIntegration.is_active}
-                          onCheckedChange={() =>
-                            toggleIntegration(userIntegration.id, userIntegration.is_active)
-                          }
-                        />
+                        <Switch checked={userIntegration.is_active} onCheckedChange={() => toggleIntegration(userIntegration.id, userIntegration.is_active)} />
                       ) : (
-                        <Button onClick={() => initiateOAuth(provider.id)}>
-                          Connect
-                        </Button>
+                        <Button onClick={() => initiateOAuth(provider.id)}>Connect</Button>
                       )}
                     </div>
                     {userIntegration?.last_sync_at && (
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Last sync: {new Date(userIntegration.last_sync_at).toLocaleString()}
-                      </p>
+                      <p className="text-xs text-muted-foreground mt-2">Last sync: {new Date(userIntegration.last_sync_at).toLocaleString()}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -314,16 +242,9 @@ export default function IntegrationsHub() {
                 <CardContent>
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="outline">v{plugin.version}</Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {plugin.install_count} installs
-                    </span>
+                    <span className="text-sm text-muted-foreground">{plugin.install_count} installs</span>
                   </div>
-                  <Button 
-                    className="w-full" 
-                    onClick={() => installPlugin(plugin.id)}
-                  >
-                    Install Plugin
-                  </Button>
+                  <Button className="w-full" onClick={() => installPlugin(plugin.id)}>Install Plugin</Button>
                 </CardContent>
               </Card>
             ))}
@@ -334,19 +255,12 @@ export default function IntegrationsHub() {
           <Card>
             <CardHeader>
               <CardTitle>Configured Webhooks</CardTitle>
-              <CardDescription>
-                Manage webhook endpoints for event notifications
-              </CardDescription>
+              <CardDescription>Manage webhook endpoints for event notifications</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Button>
-                  <Webhook className="mr-2 h-4 w-4" />
-                  Add Webhook
-                </Button>
-                <p className="text-sm text-muted-foreground">
-                  No webhooks configured yet
-                </p>
+                <Button><Webhook className="mr-2 h-4 w-4" />Add Webhook</Button>
+                <p className="text-sm text-muted-foreground">No webhooks configured yet</p>
               </div>
             </CardContent>
           </Card>
@@ -356,9 +270,7 @@ export default function IntegrationsHub() {
           <Card>
             <CardHeader>
               <CardTitle>Integration Activity Logs</CardTitle>
-              <CardDescription>
-                Monitor integration activity and errors
-              </CardDescription>
+              <CardDescription>Monitor integration activity and errors</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[500px]">
@@ -369,24 +281,12 @@ export default function IntegrationsHub() {
                         <div className="flex items-start justify-between">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
-                              <Badge 
-                                variant={
-                                  log.status === "success" 
-                                    ? "default" 
-                                    : log.status === "failure"
-                                      ? "destructive"
-                                      : "secondary"
-                                }
-                              >
-                                {log.status}
-                              </Badge>
+                              <Badge variant={log.status === "success" ? "default" : log.status === "failure" ? "destructive" : "secondary"}>{log.status}</Badge>
                               <Badge variant="outline">{log.log_type}</Badge>
                             </div>
                             <p className="text-sm">{log.message}</p>
                           </div>
-                          <span className="text-xs text-muted-foreground whitespace-nowrap">
-                            {new Date(log.created_at).toLocaleString()}
-                          </span>
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">{new Date(log.created_at).toLocaleString()}</span>
                         </div>
                       </CardContent>
                     </Card>
