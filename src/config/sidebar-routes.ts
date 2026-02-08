@@ -136,7 +136,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "AI Hub", path: "/ai", icon: Brain, emoji: "🧠", badge: "HUB" },
       { label: "Chat & Assistants", path: "/ai?tab=chat", icon: MessageSquare, emoji: "💬" },
-      { label: "AI Agents", path: "/ai?tab=agents", icon: Bot, emoji: "🤖", badge: "25+" },
+      { label: "AI Agents", path: "/ai?tab=agents", icon: Bot, emoji: "🤖", badge: "10" },
+      { label: "Agent Chat", path: "/ai/agents/captain-ai", icon: MessageSquare, emoji: "💬", badge: "NEW", status: "new" as const },
       { label: "Workflows", path: "/ai?tab=workflows", icon: Zap, emoji: "🔄" },
       { label: "Voice", path: "/ai?tab=voice", icon: Mic, emoji: "🎙️" },
       { label: "11 AI Modules", path: "/ai?tab=modules", icon: Brain, emoji: "🌟", badge: "11" },
