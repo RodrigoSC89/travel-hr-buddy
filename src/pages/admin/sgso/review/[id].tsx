@@ -1,4 +1,4 @@
-// @ts-nocheck - SGSO schema: vessels/users foreign key joins, compliance_status union type
+// PATCH: Removed @ts-nocheck - proper typing for SGSO audit review
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -65,38 +65,63 @@ export default function SGSOAuditReviewPage() {
 
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        // Fetch audit data
+        const { data: auditData, error: auditError } = await supabase
           .from("sgso_audits")
-          .select(`
-            id,
-            audit_date,
-            vessel_id,
-            auditor_id,
-            vessels ( name ),
-            users:auditor_id ( full_name ),
-            sgso_audit_items (
-              id,
-              requirement_number,
-              requirement_title,
-              compliance_status,
-              evidence,
-              comment
-            )
-          `)
+          .select("id, audit_date, vessel_id, auditor_id")
           .eq("id", id)
           .single();
 
-        if (error) {
-          // Audit fetch error handled by toast
+        if (auditError || !auditData) {
           toast({
             title: "Erro",
             description: "Não foi possível carregar a auditoria",
             variant: "destructive"
           });
-        } else if (data) {
-          setAudit(data as Audit);
-          setItems((data.sgso_audit_items || []).sort((a, b) => a.requirement_number - b.requirement_number));
+          return;
         }
+
+        // Fetch vessel name
+        let vesselName = "---";
+        if (auditData.vessel_id) {
+          const { data: vessel } = await supabase
+            .from("vessels")
+            .select("name")
+            .eq("id", auditData.vessel_id)
+            .maybeSingle();
+          vesselName = vessel?.name || "---";
+        }
+
+        // Fetch auditor name
+        let auditorName = "---";
+        if (auditData.auditor_id) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("id", auditData.auditor_id)
+            .maybeSingle();
+          auditorName = profile?.full_name || "---";
+        }
+
+        // Fetch audit items
+        const { data: itemsData } = await supabase
+          .from("sgso_audit_items")
+          .select("id, requirement_number, requirement_title, compliance_status, evidence, comment")
+          .eq("audit_id", id)
+          .order("requirement_number", { ascending: true });
+
+        const audit: Audit = {
+          id: auditData.id,
+          audit_date: auditData.audit_date,
+          vessel_id: auditData.vessel_id || "",
+          auditor_id: auditData.auditor_id || "",
+          vessels: { name: vesselName },
+          users: { full_name: auditorName },
+          sgso_audit_items: (itemsData || []) as unknown as AuditItem[],
+        };
+
+        setAudit(audit);
+        setItems(audit.sgso_audit_items);
       } catch (err) {
         // Error handled by toast
         toast({
@@ -163,7 +188,13 @@ export default function SGSOAuditReviewPage() {
     setExporting(true);
     try {
       const element = contentRef.current;
-      const opt = {
+      const opt: {
+        margin: number;
+        filename: string;
+        image: { type: "jpeg" | "png" | "webp"; quality: number };
+        html2canvas: { scale: number };
+        jsPDF: { unit: "mm"; format: "a4"; orientation: "portrait" };
+      } = {
         margin: 10,
         filename: `auditoria-sgso-${audit?.vessels?.name || "sem-nome"}-${new Date().toISOString().split("T")[0]}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
