@@ -366,7 +366,7 @@ async function fetchOperationsData(): Promise<OperationsData[]> {
   
   return hours.map(time => {
     const data = hourlyData[time === "Agora" ? new Date().getHours().toString().padStart(2, "0") + ":00" : time];
-    const ops = data?.ops || Math.floor(Math.random() * 50 + 30);
+    const ops = data?.ops || (30 + (hours.indexOf(time) * 7) % 50);
     const success = data?.success || ops;
     const efficiency = ops > 0 ? Math.round((success / ops) * 100) : 95;
 

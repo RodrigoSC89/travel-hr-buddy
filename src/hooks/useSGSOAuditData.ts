@@ -132,7 +132,7 @@ export function useSGSOAuditData(auditId?: string) {
       const baseScore = audit.compliance_score || 80;
       const practices: PracticeResult[] = SGSO_PRACTICES.map((pg, idx) => {
         const finding = parsedFindings.find(f => f.practice === pg.number);
-        const variance = Math.floor(Math.random() * 20) - 10; // ±10 variance
+        const variance = ((idx * 7) % 20) - 10; // ±10 deterministic variance
         const score = Math.min(100, Math.max(0, baseScore + variance));
         
         return {

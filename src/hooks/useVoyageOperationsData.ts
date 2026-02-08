@@ -87,8 +87,8 @@ export function useVoyageOperationsData() {
         const status = statusMap[rawStatus] || "planning";
 
         const progress = status === "completed" ? 100
-          : status === "underway" ? Math.floor(20 + Math.random() * 60)
-          : status === "loading" ? Math.floor(Math.random() * 20)
+          : status === "underway" ? 20 + (i * 17) % 60
+          : status === "loading" ? (i * 7) % 20
           : 0;
 
         const departureDate = v.departure_date || v.created_at || new Date().toISOString();
@@ -138,15 +138,15 @@ export function useVoyageOperationsData() {
           progress,
           cargoType: v.cargo_type || "General",
           cargoTonnage: v.cargo_quantity || 0,
-          fuelRemaining: Math.floor(40 + Math.random() * 55),
-          crewOnboard: Math.floor(18 + Math.random() * 8),
-          currentSpeed: status === "underway" ? +(10 + Math.random() * 6).toFixed(1) : 0,
-          currentPosition: { lat: -10 + Math.random() * 40, lng: -40 + Math.random() * 60 },
+          fuelRemaining: 40 + (i * 13) % 55,
+          crewOnboard: 18 + (i * 3) % 8,
+          currentSpeed: status === "underway" ? +(10 + (i * 2.1) % 6).toFixed(1) : 0,
+          currentPosition: { lat: -10 + (i * 11) % 40, lng: -40 + (i * 17) % 60 },
           weatherConditions: {
-            windSpeed: Math.floor(5 + Math.random() * 20),
-            waveHeight: +(0.5 + Math.random() * 3).toFixed(1),
-            temperature: Math.floor(20 + Math.random() * 12),
-            visibility: Math.random() > 0.3 ? "Good" : "Moderate",
+            windSpeed: 5 + (i * 7) % 20,
+            waveHeight: +(0.5 + (i * 0.7) % 3).toFixed(1),
+            temperature: 20 + (i * 4) % 12,
+            visibility: i % 3 !== 0 ? "Good" : "Moderate",
           },
           milestones,
           alerts: voyageAlerts,
@@ -161,7 +161,7 @@ export function useVoyageOperationsData() {
         activeVoyages: mappedVoyages.filter(v => v.status !== "completed").length,
         inTransit: underwayCount,
         activeAlerts: totalAlerts,
-        onTimeRate: completedCount > 0 ? +(85 + Math.random() * 13).toFixed(1) : 95.0,
+        onTimeRate: completedCount > 0 ? +(85 + (completedCount * 3.7) % 13).toFixed(1) : 95.0,
       };
 
       return { voyages: mappedVoyages, kpis };

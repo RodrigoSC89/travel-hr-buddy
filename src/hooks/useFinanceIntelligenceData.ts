@@ -108,7 +108,8 @@ export function useFinanceIntelligenceData() {
 
       return Array.from(byVessel.entries()).map(([vessel, recs]): BunkerInventory => {
         const totalQty = recs.reduce((s, r) => s + (Number(r.rob_mt) || 0), 0) / recs.length;
-        const avgCost = 585 + Math.round(Math.random() * 30); // Approximate since no price column
+        const vesselHash = vessel.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+        const avgCost = 585 + (vesselHash % 30);
         return {
           vessel,
           fuelType: recs[0]?.fuel_type || "VLSFO",
@@ -116,9 +117,9 @@ export function useFinanceIntelligenceData() {
           avgCost,
           lastLiftDate: recs[0]?.record_date || "",
           method: "FIFO",
-          lots: recs.slice(0, 3).map(r => ({
+          lots: recs.slice(0, 3).map((r, idx) => ({
             qty: Number(r.rob_mt) || 0,
-            price: avgCost + Math.round((Math.random() - 0.5) * 20),
+            price: avgCost + ((idx * 7) % 20) - 10,
             date: r.record_date || "",
             supplier: "Marine Supplier",
           })),

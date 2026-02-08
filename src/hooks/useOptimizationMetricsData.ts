@@ -196,12 +196,12 @@ export function useOptimizationMetricsData() {
         .limit(7);
 
       if (!data?.length) {
-        // Generate based on current time
+        // Deterministic fallback based on time slot
         return Array.from({ length: 7 }, (_, i) => ({
           time: `${(i * 4).toString().padStart(2, "0")}:00`,
-          score: 75 + Math.random() * 15,
-          cpu: 40 + Math.random() * 30,
-          memory: 55 + Math.random() * 20,
+          score: 75 + Math.sin(i * 1.2) * 7 + 7,
+          cpu: 40 + Math.sin(i * 0.8 + 1) * 15 + 15,
+          memory: 55 + Math.sin(i * 1.5 + 2) * 10 + 10,
         }));
       }
 

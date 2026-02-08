@@ -112,15 +112,16 @@ export function useComplianceScore(vesselId?: string) {
       const total = requirements.length;
       const score = total > 0 ? Math.round((compliant / total) * 100) : 0;
 
+      // Derive sub-scores deterministically from overall score
       return {
         overall: score,
-        solas: Math.min(100, score + Math.random() * 5),
-        marpol: Math.min(100, score + Math.random() * 3),
-        mlc: Math.max(0, score - Math.random() * 5),
-        ism: Math.min(100, score + Math.random() * 2),
-        isps: Math.min(100, score + Math.random() * 6),
+        solas: Math.min(100, score + 3),
+        marpol: Math.min(100, score + 2),
+        mlc: Math.max(0, score - 3),
+        ism: Math.min(100, score + 1),
+        isps: Math.min(100, score + 4),
         flagState: score,
-        portState: Math.max(0, score - Math.random() * 3),
+        portState: Math.max(0, score - 2),
       };
     },
   });

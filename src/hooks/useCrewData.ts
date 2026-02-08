@@ -101,7 +101,7 @@ export function useCrewMembers() {
         throw error;
       }
 
-      return (data || []).map(row => transformCrewMember(row));
+      return (data || []).map((row, index) => transformCrewMember(row, index));
     },
     staleTime: 5 * 60 * 1000
   });
@@ -126,16 +126,19 @@ export function useCrewIntelligence() {
         throw error;
       }
 
-      return (data || []).map((row, index) => ({
-        ...transformCrewMember(row),
-        fatigueLevel: generateFatigueLevel(index),
-        performanceScore: 80 + Math.floor(Math.random() * 20),
-        hoursWorked: 6 + Math.floor(Math.random() * 6),
-        restHours: 8 + Math.floor(Math.random() * 4),
-        competencyLevel: 85 + Math.floor(Math.random() * 15),
-        achievements: generateAchievements(row.id),
-        trainingProgress: generateTrainingProgress(row.id)
-      }));
+      return (data || []).map((row, index) => {
+        const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+        return {
+          ...transformCrewMember(row, index),
+          fatigueLevel: generateFatigueLevel(index),
+          performanceScore: 80 + (nameHash % 20),
+          hoursWorked: 6 + (index % 6),
+          restHours: 8 + (index % 4),
+          competencyLevel: 85 + (nameHash % 15),
+          achievements: generateAchievements(row.id, index),
+          trainingProgress: generateTrainingProgress(row.id, index)
+        };
+      });
     },
     staleTime: 5 * 60 * 1000
   });
@@ -209,18 +212,21 @@ export function useDPCompetence() {
         throw error;
       }
 
-      return (data || []).map((row, index) => ({
-        id: row.id,
-        name: row.full_name || 'Tripulante',
-        role: ['SDPO', 'JDPO', 'DPO', 'Trainee'][index % 4],
-        vessel: 'MV Atlantic Explorer',
-        dpHours: 1000 + Math.floor(Math.random() * 4000),
-        targetDpHours: 5000,
-        cpdScore: 70 + Math.floor(Math.random() * 30),
-        mentoringStatus: index === 0 ? 'mentor' : index === 1 ? 'mentee' : null,
-        certifications: generateDPCertifications(index),
-        trainings: generateDPTrainings(row.id)
-      }));
+      return (data || []).map((row, index) => {
+        const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+        return {
+          id: row.id,
+          name: row.full_name || 'Tripulante',
+          role: ['SDPO', 'JDPO', 'DPO', 'Trainee'][index % 4],
+          vessel: 'MV Atlantic Explorer',
+          dpHours: 1000 + (nameHash * 13) % 4000,
+          targetDpHours: 5000,
+          cpdScore: 70 + (nameHash % 30),
+          mentoringStatus: index === 0 ? 'mentor' : index === 1 ? 'mentee' : null,
+          certifications: generateDPCertifications(index),
+          trainings: generateDPTrainings(row.id, index)
+        };
+      });
     },
     staleTime: 5 * 60 * 1000
   });
@@ -245,31 +251,35 @@ export function useCrewTrainingCompliance() {
         throw error;
       }
 
-      return (data || []).map(row => ({
-        id: row.id,
-        name: row.full_name || 'Tripulante',
-        role: row.rank || 'Marinheiro',
-        trainings: 8 + Math.floor(Math.random() * 5),
-        completed: 6 + Math.floor(Math.random() * 5),
-        compliance: 80 + Math.floor(Math.random() * 20)
-      }));
+      return (data || []).map((row, idx) => {
+        const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+        return {
+          id: row.id,
+          name: row.full_name || 'Tripulante',
+          role: row.rank || 'Marinheiro',
+          trainings: 8 + (nameHash % 5),
+          completed: 6 + (nameHash % 5),
+          compliance: 80 + (nameHash % 20)
+        };
+      });
     },
     staleTime: 5 * 60 * 1000
   });
 }
 
 // Transform functions
-function transformCrewMember(row: any): CrewMemberData {
+function transformCrewMember(row: any, index: number = 0): CrewMemberData {
   const alertLevel = row.status === 'active' ? 'green' : 
                      row.status === 'on_leave' ? 'yellow' : 'red';
+  const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
   
   return {
     id: row.id,
     name: row.full_name || 'Tripulante',
     position: row.rank || 'Marinheiro',
     rank: row.rank,
-    fatigueLevel: 20 + Math.floor(Math.random() * 40),
-    performanceScore: 80 + Math.floor(Math.random() * 20),
+    fatigueLevel: 20 + (nameHash % 40),
+    performanceScore: 80 + (nameHash % 20),
     hoursWorked: 8,
     restHours: 12,
     competencyLevel: 85,
@@ -282,43 +292,44 @@ function transformCrewMember(row: any): CrewMemberData {
 }
 
 function generateFatigueLevel(index: number): number {
-  // Simulate some crew members with higher fatigue
-  if (index % 5 === 2) return 60 + Math.floor(Math.random() * 20);
-  return 20 + Math.floor(Math.random() * 30);
+  // Deterministic: some crew with higher fatigue
+  if (index % 5 === 2) return 60 + (index * 7) % 20;
+  return 20 + (index * 11) % 30;
 }
 
-function generateAchievements(crewId: string): Achievement[] {
+function generateAchievements(crewId: string, index: number = 0): Achievement[] {
   const achievements: Achievement[] = [
     { id: `${crewId}-a1`, title: 'Navegador Expert', description: '1000 horas sem incidentes', points: 500, icon: '🏆', date: new Date() },
     { id: `${crewId}-a2`, title: 'Mentor do Mês', description: 'Treinamento de oficiais', points: 300, icon: '👨‍🏫', date: new Date() }
   ];
-  return achievements.slice(0, 1 + Math.floor(Math.random() * 2));
+  return achievements.slice(0, 1 + (index % 2));
 }
 
-function generateTrainingProgress(crewId: string): TrainingModule[] {
+function generateTrainingProgress(crewId: string, index: number = 0): TrainingModule[] {
   return [
-    { id: `${crewId}-t1`, name: 'STCW Avançado', category: 'Safety', progress: 60 + Math.floor(Math.random() * 40), dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), priority: 'high' },
-    { id: `${crewId}-t2`, name: 'Bridge Resource Management', category: 'Operations', progress: 40 + Math.floor(Math.random() * 30), dueDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), priority: 'medium' }
+    { id: `${crewId}-t1`, name: 'STCW Avançado', category: 'Safety', progress: 60 + (index * 13) % 40, dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), priority: 'high' },
+    { id: `${crewId}-t2`, name: 'Bridge Resource Management', category: 'Operations', progress: 40 + (index * 11) % 30, dueDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), priority: 'medium' }
   ];
 }
 
 function generateWellnessData(row: any, index: number): CrewWellnessData {
   const isAtRisk = index % 4 === 2;
+  const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
   
   return {
     id: row.id,
     name: row.full_name || 'Tripulante',
     role: row.rank || 'Marinheiro',
-    heartRate: isAtRisk ? 92 : 68 + Math.floor(Math.random() * 15),
+    heartRate: isAtRisk ? 92 : 68 + (nameHash % 15),
     heartRateStatus: isAtRisk ? 'elevated' : 'normal',
-    hrv: isAtRisk ? 32 : 45 + Math.floor(Math.random() * 15),
+    hrv: isAtRisk ? 32 : 45 + (nameHash % 15),
     hrvTrend: isAtRisk ? 'down' : 'stable',
-    sleepQuality: isAtRisk ? 45 : 75 + Math.floor(Math.random() * 20),
-    sleepHours: isAtRisk ? 4.5 : 7 + Math.random() * 2,
-    stressLevel: isAtRisk ? 75 : 20 + Math.floor(Math.random() * 30),
-    spO2: 96 + Math.floor(Math.random() * 3),
-    temperature: 36.2 + Math.random() * 0.8,
-    fatigueScore: isAtRisk ? 72 : 15 + Math.floor(Math.random() * 30),
+    sleepQuality: isAtRisk ? 45 : 75 + (nameHash % 20),
+    sleepHours: isAtRisk ? 4.5 : 7 + (nameHash % 20) * 0.1,
+    stressLevel: isAtRisk ? 75 : 20 + (nameHash % 30),
+    spO2: 96 + (index % 3),
+    temperature: 36.2 + (nameHash % 8) * 0.1,
+    fatigueScore: isAtRisk ? 72 : 15 + (nameHash % 30),
     mentalState: isAtRisk ? 'concern' : 'good',
     alerts: isAtRisk ? [
       { id: `alert-${row.id}`, type: 'fatigue', severity: 'high', message: 'Fadiga elevada detectada', recommendation: 'Reduzir carga de trabalho', timestamp: new Date().toISOString() }
@@ -337,11 +348,11 @@ function generateEmotionalState(row: any, index: number): CrewEmotionalState {
     name: row.full_name || 'Tripulante',
     role: row.rank || 'Marinheiro',
     primaryEmotion: emotions[index % emotions.length],
-    emotionIntensity: 60 + Math.floor(Math.random() * 30),
+    emotionIntensity: 60 + (index * 13) % 30,
     trend: trends[index % trends.length],
     riskLevel: risks[index % risks.length],
-    lastInteraction: `${Math.floor(Math.random() * 4)}h atrás`,
-    teamCompatibility: 70 + Math.floor(Math.random() * 25),
+    lastInteraction: `${index % 4}h atrás`,
+    teamCompatibility: 70 + (index * 7) % 25,
     stressFactors: index % 4 === 3 ? ['Carga de trabalho', 'Sono insuficiente'] : []
   };
 }
@@ -354,9 +365,9 @@ function generateDPCertifications(index: number) {
   ];
 }
 
-function generateDPTrainings(crewId: string) {
+function generateDPTrainings(crewId: string, index: number = 0) {
   return [
-    { id: `trn-${crewId}-1`, name: 'Fault Response Avançado', type: 'simulator', status: 'completed', completedDate: '2024-11-15', score: 85 + Math.floor(Math.random() * 10), passScore: 80 },
+    { id: `trn-${crewId}-1`, name: 'Fault Response Avançado', type: 'simulator', status: 'completed', completedDate: '2024-11-15', score: 85 + (index * 3) % 10, passScore: 80 },
     { id: `trn-${crewId}-2`, name: 'TAM/CAM Procedures', type: 'online', status: 'pending', dueDate: '2025-01-31', passScore: 75 }
   ];
 }

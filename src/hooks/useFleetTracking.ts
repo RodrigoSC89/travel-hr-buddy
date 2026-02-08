@@ -100,8 +100,8 @@ export function useFleetTracking() {
           mmsi: 'N/A', // MMSI não existe na tabela vessels atual
           imo: vessel.imo_number || 'N/A',
           position,
-          course: Math.floor(Math.random() * 360),
-          speed: Math.random() * 18,
+          course: (vessel.id.charCodeAt(0) * 17) % 360,
+          speed: 5 + (vessel.id.charCodeAt(1) || 5) % 13,
           status: mapVesselStatus(vessel.status),
           destination: vessel.next_port || undefined,
           eta: vessel.eta ? new Date(vessel.eta) : undefined,
@@ -110,7 +110,7 @@ export function useFleetTracking() {
           vesselType: vessel.vessel_type || undefined,
           fuelROB: vessel.current_fuel_level && vessel.fuel_capacity
             ? Math.round((vessel.current_fuel_level / vessel.fuel_capacity) * 100)
-            : Math.floor(40 + Math.random() * 60),
+            : 40 + (vessel.id.charCodeAt(0) % 60),
         };
       });
     },

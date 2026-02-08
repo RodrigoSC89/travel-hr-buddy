@@ -137,7 +137,7 @@ export function useAnalyticsRealData() {
 
       const chartData: ChartDataPoint[] = last7Days.map((date, index) => ({
         name: date.toLocaleDateString("pt-BR", { weekday: "short" }),
-        value: operationalEfficiency - 5 + Math.floor(Math.random() * 10),
+        value: operationalEfficiency - 5 + (index * 3) % 10,
         target: 90,
         date: date.toISOString().split("T")[0],
       }));

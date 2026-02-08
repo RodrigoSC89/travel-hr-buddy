@@ -286,8 +286,9 @@ export function useComplianceForecasts() {
 
         return elements.map((element, idx) => {
           const relevantAudits = audits.slice(0, 3);
-          const currentScore = relevantAudits[0]?.compliance_score || 85 + Math.random() * 10;
-          const previousScore = relevantAudits[1]?.compliance_score || currentScore - 2 + Math.random() * 4;
+          const fallbackScore = 85 + (idx * 3) % 10;
+          const currentScore = relevantAudits[0]?.compliance_score || fallbackScore;
+          const previousScore = relevantAudits[1]?.compliance_score || currentScore - 1 + idx % 3;
           const trend = currentScore > previousScore ? "improving" : currentScore < previousScore ? "declining" : "stable";
 
           return {
@@ -295,7 +296,7 @@ export function useComplianceForecasts() {
             currentScore: Math.round(currentScore),
             predictedScore: Math.round(currentScore + (trend === "improving" ? 2 : trend === "declining" ? -4 : 0)),
             trend: trend as "improving" | "declining" | "stable",
-            confidence: 75 + Math.floor(Math.random() * 15),
+            confidence: 75 + ((idx * 7) % 15),
           };
         });
       }

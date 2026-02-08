@@ -74,16 +74,19 @@ export const useFleetAI = () => {
       });
 
       // Parse AI response - in production, use structured output
-      const predictions: MaintenancePrediction[] = vessels.map(vessel => ({
-        vesselId: vessel.id,
-        vesselName: vessel.name,
-        predictedDate: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
-        confidence: 0.7 + Math.random() * 0.25,
-        criticalComponents: ["Engine", "Hull", "Navigation System"].slice(0, Math.floor(Math.random() * 3) + 1),
-        estimatedCost: Math.floor(10000 + Math.random() * 40000),
-        priority: ["low", "medium", "high", "critical"][Math.floor(Math.random() * 4)] as any,
-        reasoning: response.message || "Análise baseada em horas operacionais e histórico de manutenção",
-      }));
+      const predictions: MaintenancePrediction[] = vessels.map((vessel, idx) => {
+        const nameHash = (vessel.name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+        return {
+          vesselId: vessel.id,
+          vesselName: vessel.name,
+          predictedDate: new Date(Date.now() + (30 + (nameHash % 60)) * 24 * 60 * 60 * 1000).toISOString(),
+          confidence: 0.7 + (nameHash % 25) * 0.01,
+          criticalComponents: ["Engine", "Hull", "Navigation System"].slice(0, 1 + (idx % 3)),
+          estimatedCost: 10000 + (nameHash * 13) % 40000,
+          priority: (["low", "medium", "high", "critical"] as const)[idx % 4],
+          reasoning: response.message || "Análise baseada em horas operacionais e histórico de manutenção",
+        };
+      });
 
       toast({
         title: "Análise Concluída",
@@ -124,14 +127,14 @@ export const useFleetAI = () => {
 
       const optimizations: RouteOptimization[] = vessels
         .filter(v => v.status === "active")
-        .map(vessel => ({
+        .map((vessel, i) => ({
           vesselId: vessel.id,
           vesselName: vessel.name,
           currentRoute: vessel.current_location || "Unknown",
           optimizedRoute: `${vessel.current_location} → Optimized Path`,
-          fuelSavings: Math.floor(5 + Math.random() * 15),
-          timeSavings: Math.floor(2 + Math.random() * 8),
-          costSavings: Math.floor(2000 + Math.random() * 8000),
+          fuelSavings: 5 + (i * 5) % 15,
+          timeSavings: 2 + (i * 3) % 8,
+          costSavings: 2000 + (i * 2500) % 8000,
           reasoning: response.message || "Rota otimizada baseada em condições climáticas e tráfego",
         }));
 
@@ -173,10 +176,10 @@ export const useFleetAI = () => {
         },
       });
 
-      const predictions: FuelPrediction[] = vessels.map(vessel => {
+      const predictions: FuelPrediction[] = vessels.map((vessel, i) => {
         const currentLevel = vessel.current_fuel_level || 0;
         const capacity = vessel.fuel_capacity || 1000;
-        const consumption = Math.floor(10 + Math.random() * 30);
+        const consumption = 10 + (i * 7) % 30;
         
         return {
           vesselId: vessel.id,

@@ -70,8 +70,8 @@ function mapVesselToPosition(vessel: any, index: number): VesselPosition {
   };
 
   const position = generatePosition(vessel.id, index);
-  const speed = statusMap[vessel.status] === "underway" ? 8 + Math.random() * 8 : 0;
-  const course = statusMap[vessel.status] === "underway" ? Math.floor(Math.random() * 360) : 0;
+  const speed = statusMap[vessel.status] === "underway" ? 8 + (index * 2.5) % 8 : 0;
+  const course = statusMap[vessel.status] === "underway" ? (index * 73) % 360 : 0;
 
   return {
     id: vessel.id,
@@ -88,7 +88,7 @@ function mapVesselToPosition(vessel: any, index: number): VesselPosition {
       ? new Date(Date.now() + (24 + index * 6) * 3600000).toISOString().slice(0, 16).replace("T", " ")
       : "-",
     lastUpdate: new Date(Date.now() - index * 300000).toISOString().slice(0, 16).replace("T", " "),
-    fuelLevel: 40 + Math.floor(Math.random() * 55),
+    fuelLevel: 40 + (index * 13) % 55,
     engineStatus: engineMap[vessel.status] || "idle",
   };
 }

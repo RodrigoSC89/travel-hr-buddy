@@ -71,8 +71,10 @@ export function useCrewWellness(vesselId?: string) {
         const daysPenalty = Math.max(0, (daysOnboard - 60) * 0.5);
         const wellnessScore = Math.max(20, Math.min(100, baseScore - daysPenalty));
         
-        // Burnout risk increases with days onboard
-        const burnoutRisk = Math.min(95, Math.max(5, (daysOnboard / 90) * 60 + Math.random() * 15));
+        // Burnout risk increases with days onboard (deterministic based on crew name hash)
+        const nameHash = (crew.full_name || "").split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+        const personalVariance = (nameHash % 15);
+        const burnoutRisk = Math.min(95, Math.max(5, (daysOnboard / 90) * 60 + personalVariance));
         
         // Determine stress level
         let stressLevel: 'low' | 'medium' | 'high' | 'critical' = 'low';
@@ -80,8 +82,8 @@ export function useCrewWellness(vesselId?: string) {
         else if (burnoutRisk > 50) stressLevel = 'high';
         else if (burnoutRisk > 30) stressLevel = 'medium';
         
-        // Sleep quality inversely related to stress
-        const sleepQuality = Math.max(30, 100 - burnoutRisk + (Math.random() * 20 - 10));
+        // Sleep quality inversely related to stress (deterministic)
+        const sleepQuality = Math.max(30, 100 - burnoutRisk + (nameHash % 20) - 10);
         
         // Trend based on days onboard
         let trend: 'improving' | 'stable' | 'declining' = 'stable';
@@ -130,7 +132,7 @@ export function useCrewWellness(vesselId?: string) {
           stress_level: stressLevel,
           sleep_quality: Math.round(sleepQuality),
           trend,
-          last_check_in: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString(),
+          last_check_in: new Date(Date.now() - (nameHash % 24) * 60 * 60 * 1000).toISOString(),
           alerts,
           recommended_actions: recommendedActions
         };

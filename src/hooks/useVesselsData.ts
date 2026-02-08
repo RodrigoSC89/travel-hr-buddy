@@ -181,8 +181,8 @@ export function useVesselTracking() {
         flag: row.flag_state || 'Brasil',
         status: mapVesselStatus(row.status),
         location: generateVesselLocation(index),
-        speed: 12 + Math.random() * 8,
-        heading: Math.floor(Math.random() * 360),
+        speed: 12 + (index * 2.5) % 8,
+        heading: (index * 73) % 360,
         eta: row.eta || undefined,
         lastUpdate: row.updated_at || new Date().toISOString()
       }));
@@ -209,17 +209,20 @@ export function useVesselConnectivity() {
         throw error;
       }
 
-      return (data || []).map(vessel => ({
-        id: vessel.id,
-        name: vessel.name || 'Embarcação',
-        status: determineConnectivityStatus(vessel.updated_at),
-        signalStrength: Math.floor(Math.random() * 40) + 60,
-        lastSync: new Date(vessel.updated_at || Date.now()),
-        pendingSync: Math.floor(Math.random() * 10),
-        bandwidth: { up: 2 + Math.random() * 3, down: 5 + Math.random() * 8 },
-        provider: ['Inmarsat Fleet Xpress', 'VSAT Ku-Band', 'Starlink Maritime'][Math.floor(Math.random() * 3)],
-        latency: Math.floor(Math.random() * 800) + 100
-      }));
+      return (data || []).map((vessel, i) => {
+        const nameHash = (vessel.name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+        return {
+          id: vessel.id,
+          name: vessel.name || 'Embarcação',
+          status: determineConnectivityStatus(vessel.updated_at),
+          signalStrength: 60 + (nameHash % 40),
+          lastSync: new Date(vessel.updated_at || Date.now()),
+          pendingSync: i % 5,
+          bandwidth: { up: 2 + (i * 1.2) % 3, down: 5 + (i * 2.3) % 8 },
+          provider: ['Inmarsat Fleet Xpress', 'VSAT Ku-Band', 'Starlink Maritime'][i % 3],
+          latency: 100 + (nameHash * 3) % 800
+        };
+      });
     },
     staleTime: 60 * 1000
   });
@@ -259,7 +262,7 @@ function generateSensorsForVessel(vesselId: string): SensorReading[] {
   ];
 
   return sensorTypes.map((sensor, idx) => {
-    const variance = (Math.random() - 0.5) * 0.2 * sensor.base;
+    const variance = Math.sin(idx * 2.7 + vesselId.charCodeAt(0)) * 0.1 * sensor.base;
     const value = sensor.base + variance;
     
     return {

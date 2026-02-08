@@ -393,7 +393,7 @@ export default function ChannelManagerProfessional() {
   useEffect(() => {
     if (dbChannels && dbChannels.length > 0) {
       const mergedChannels: Channel[] = [
-        ...dbChannels.map(ch => ({
+        ...dbChannels.map((ch, i) => ({
           id: ch.id,
           name: (ch as any).channel_name || (ch as any).name || '',
           description: ch.description || undefined,
@@ -402,10 +402,10 @@ export default function ChannelManagerProfessional() {
           is_private: !(ch as any).is_public,
           created_at: ch.created_at,
           created_by: ch.created_by,
-          member_count: Math.floor(Math.random() * 20) + 5,
-          unread_count: Math.floor(Math.random() * 10),
-          is_favorite: Math.random() > 0.5,
-          is_muted: Math.random() > 0.8,
+          member_count: 5 + (i * 3) % 20,
+          unread_count: i % 5,
+          is_favorite: i % 3 === 0,
+          is_muted: i % 7 === 0,
           last_message: 'Última mensagem...',
           last_message_time: new Date().toISOString(),
         })),

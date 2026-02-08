@@ -84,7 +84,7 @@ export function useEquipmentHealth(vesselId?: string) {
 
       const equipmentMap = new Map<string, EquipmentHealth>();
 
-      (data || []).forEach((task) => {
+      (data || []).forEach((task, tIdx) => {
         const name = task.component_name || task.title || "Equipamento";
         if (!equipmentMap.has(name)) {
           equipmentMap.set(name, {
@@ -95,7 +95,7 @@ export function useEquipmentHealth(vesselId?: string) {
             trend: task.priority === "critical" ? "down" : "stable",
             lastMaintenance: new Date(task.completed_date || Date.now() - 30 * 24 * 60 * 60 * 1000),
             nextMaintenance: new Date(task.due_date || addDays(new Date(), 30)),
-            runningHours: Math.floor(Math.random() * 10000) + 5000,
+            runningHours: 5000 + (tIdx * 1337) % 10000,
             predictions: [],
           });
         }

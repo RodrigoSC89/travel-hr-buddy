@@ -119,17 +119,26 @@ export function useCandidatos() {
         .limit(30);
 
       if (!error && candidates && candidates.length > 0) {
-        return candidates.map((c) => ({
-          id: c.id,
-          nome: c.full_name || "Candidato",
-          email: c.email || (c.emergency_contact as Record<string, unknown>)?.email as string || "email@exemplo.com",
-          telefone: c.phone || (c.emergency_contact as Record<string, unknown>)?.phone as string || undefined,
-          etapa: mapEtapa(c.status),
-          matchScore: Math.floor(60 + Math.random() * 40),
-          skills: [c.position || c.rank || "Marítimo"],
-          experiencia: `${Math.floor(1 + Math.random() * 15)} anos`,
-          dataAplicacao: c.created_at || new Date().toISOString(),
-        }));
+        return candidates.map((c, idx) => {
+          // Deterministic matchScore based on candidate name hash
+          const nameHash = (c.full_name || "").split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+          const matchScore = 60 + (nameHash % 40);
+          // Derive experience from join/create date
+          const createdDate = c.created_at ? new Date(c.created_at) : new Date();
+          const yearsAgo = Math.max(1, Math.floor((Date.now() - createdDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)) + 1);
+
+          return {
+            id: c.id,
+            nome: c.full_name || "Candidato",
+            email: c.email || (c.emergency_contact as Record<string, unknown>)?.email as string || "email@exemplo.com",
+            telefone: c.phone || (c.emergency_contact as Record<string, unknown>)?.phone as string || undefined,
+            etapa: mapEtapa(c.status),
+            matchScore,
+            skills: [c.position || c.rank || "Marítimo"],
+            experiencia: `${yearsAgo} anos`,
+            dataAplicacao: c.created_at || new Date().toISOString(),
+          };
+        });
       }
 
       // Demo fallback
