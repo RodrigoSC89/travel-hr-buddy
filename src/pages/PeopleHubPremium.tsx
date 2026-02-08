@@ -56,11 +56,13 @@ function LoadingSkeleton() {
 
 export default function PeopleHubPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") || "advanced";
+  const currentTab = searchParams.get("ptab") || "advanced";
   const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("ptab", value);
+    setSearchParams(newParams);
   };
 
   // Real crew count for badge
