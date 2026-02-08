@@ -1376,3 +1376,11 @@ comment = "M048/M049 - Spare Parts Intelligence + Cost Optimization via AI"
 [functions.cross-module-intelligence]
 verify_jwt = false
 comment = "M139-M150 - Cross-module correlation, predictive alerts, fleet optimization, unified analytics"
+
+# ============================================
+# AI CONTROL TOWER - World-Class (Phase 3)
+# ============================================
+
+[functions.ai-governance]
+verify_jwt = false
+comment = "AI Governance - Model monitoring, decision audit, usage analytics, governance reports"

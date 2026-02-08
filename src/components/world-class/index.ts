@@ -29,6 +29,9 @@ export { VisionAIPanel } from './ai/VisionAIPanel';
 export { RAGQueryPanel } from './ai/RAGQueryPanel';
 export { SwarmFormationPanel } from './ai/SwarmFormationPanel';
 export { VoiceAgentInterface } from './ai/VoiceAgentInterface';
+export { AIModelPerformanceMonitor } from './ai/AIModelPerformanceMonitor';
+export { AIDecisionAuditTrail } from './ai/AIDecisionAuditTrail';
+export { AIUsageAnalyticsPanel } from './ai/AIUsageAnalyticsPanel';
 
 // Tracking
 export { RealTimeTrackingMap } from './tracking/RealTimeTrackingMap';
