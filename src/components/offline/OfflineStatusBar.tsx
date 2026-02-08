@@ -87,7 +87,7 @@ export function OfflineStatusBar({
 
   const formatLastSync = () => {
     if (!lastSyncTime) return 'Nunca sincronizado';
-    const diff = Date.now() - lastSyncTime;
+    const diff = Date.now() - (lastSyncTime instanceof Date ? lastSyncTime.getTime() : Number(lastSyncTime));
     if (diff < 60000) return 'Há menos de 1 minuto';
     if (diff < 3600000) return `Há ${Math.floor(diff / 60000)} minutos`;
     if (diff < 86400000) return `Há ${Math.floor(diff / 3600000)} horas`;

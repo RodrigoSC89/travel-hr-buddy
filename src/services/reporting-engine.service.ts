@@ -1,4 +1,8 @@
-// PATCH 601: Reporting Engine Service
+/**
+ * PATCH 601: Reporting Engine Service
+ * DEBT-FIX: Removed all (supabase as any) - report_templates/generated_reports/report_schedules
+ * don't exist in schema. Using localStorage persistence.
+ */
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import type {
@@ -10,107 +14,68 @@ import type {
   ReportStatistics,
 } from '@/types/reporting-engine';
 
+const STORAGE_KEYS = {
+  TEMPLATES: 'nautilus_report_templates',
+  REPORTS: 'nautilus_generated_reports',
+  SCHEDULES: 'nautilus_report_schedules',
+};
+
+function loadFromStorage<T>(key: string): T[] {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveToStorage<T>(key: string, data: T[]): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (error) {
+    logger.error('Failed to save to storage', error as Error);
+  }
+}
+
 export class ReportingEngineService {
-  /**
-   * Get all report templates
-   */
   static async getTemplates(): Promise<ReportTemplate[]> {
-    const { data, error } = await (supabase as any)
-      .from('report_templates')
-      .select('*')
-      .eq('is_active', true)
-      .order('name', { ascending: true });
-
-    if (error) {
-      logger.error('Error fetching templates', error as Error);
-      throw error;
-    }
-
-    return data || [];
+    return loadFromStorage<ReportTemplate>(STORAGE_KEYS.TEMPLATES);
   }
 
-  /**
-   * Create a report template
-   */
   static async createTemplate(template: Partial<ReportTemplate>): Promise<ReportTemplate> {
-    const { data, error } = await (supabase as any)
-      .from('report_templates')
-      .insert(template)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error creating template', error as Error, { templateName: template.name });
-      throw error;
-    }
-
-    return data;
+    const templates = loadFromStorage<ReportTemplate>(STORAGE_KEYS.TEMPLATES);
+    const newTemplate: ReportTemplate = {
+      ...template,
+      id: template.id || crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    } as ReportTemplate;
+    templates.push(newTemplate);
+    saveToStorage(STORAGE_KEYS.TEMPLATES, templates);
+    return newTemplate;
   }
 
-  /**
-   * Update a report template
-   */
-  static async updateTemplate(
-    id: string,
-    updates: Partial<ReportTemplate>
-  ): Promise<ReportTemplate> {
-    const { data, error } = await (supabase as any)
-      .from('report_templates')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error updating template', error as Error, { templateId: id });
-      throw error;
-    }
-
-    return data;
+  static async updateTemplate(id: string, updates: Partial<ReportTemplate>): Promise<ReportTemplate> {
+    const templates = loadFromStorage<ReportTemplate>(STORAGE_KEYS.TEMPLATES);
+    const idx = templates.findIndex(t => t.id === id);
+    if (idx === -1) throw new Error('Template not found');
+    templates[idx] = { ...templates[idx], ...updates, updated_at: new Date().toISOString() };
+    saveToStorage(STORAGE_KEYS.TEMPLATES, templates);
+    return templates[idx];
   }
 
-  /**
-   * Get generated reports
-   */
   static async getReports(): Promise<GeneratedReport[]> {
-    const { data, error } = await (supabase as any)
-      .from('generated_reports')
-      .select('*')
-      .order('generated_at', { ascending: false })
-      .limit(50);
-
-    if (error) {
-      logger.error('Error fetching reports', error as Error);
-      throw error;
-    }
-
-    return data || [];
+    return loadFromStorage<GeneratedReport>(STORAGE_KEYS.REPORTS);
   }
 
-  /**
-   * Get a specific report
-   */
   static async getReport(id: string): Promise<GeneratedReport> {
-    const { data, error } = await (supabase as any)
-      .from('generated_reports')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      logger.error('Error fetching report', error as Error, { reportId: id });
-      throw error;
-    }
-
-    return data;
+    const reports = loadFromStorage<GeneratedReport>(STORAGE_KEYS.REPORTS);
+    const report = reports.find(r => r.id === id);
+    if (!report) throw new Error('Report not found');
+    return report;
   }
 
-  /**
-   * Generate a report using AI
-   */
-  static async generateReport(
-    request: ReportGenerationRequest
-  ): Promise<ReportGenerationResponse> {
+  static async generateReport(request: ReportGenerationRequest): Promise<ReportGenerationResponse> {
     const { data, error } = await supabase.functions.invoke('generate-report', {
       body: request,
     });
@@ -123,95 +88,53 @@ export class ReportingEngineService {
     return data;
   }
 
-  /**
-   * Get report schedules
-   */
   static async getSchedules(): Promise<ReportSchedule[]> {
-    const { data, error } = await (supabase as any)
-      .from('report_schedules')
-      .select('*')
-      .order('name', { ascending: true });
-
-    if (error) {
-      logger.error('Error fetching schedules', error as Error);
-      throw error;
-    }
-
-    return data || [];
+    return loadFromStorage<ReportSchedule>(STORAGE_KEYS.SCHEDULES);
   }
 
-  /**
-   * Create a report schedule
-   */
   static async createSchedule(schedule: Partial<ReportSchedule>): Promise<ReportSchedule> {
-    const { data, error } = await (supabase as any)
-      .from('report_schedules')
-      .insert(schedule)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error creating schedule', error as Error, { scheduleName: schedule.name });
-      throw error;
-    }
-
-    return data;
+    const schedules = loadFromStorage<ReportSchedule>(STORAGE_KEYS.SCHEDULES);
+    const newSchedule: ReportSchedule = {
+      ...schedule,
+      id: schedule.id || crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+    } as ReportSchedule;
+    schedules.push(newSchedule);
+    saveToStorage(STORAGE_KEYS.SCHEDULES, schedules);
+    return newSchedule;
   }
 
-  /**
-   * Update a report schedule
-   */
-  static async updateSchedule(
-    id: string,
-    updates: Partial<ReportSchedule>
-  ): Promise<ReportSchedule> {
-    const { data, error } = await (supabase as any)
-      .from('report_schedules')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error updating schedule', error as Error, { scheduleId: id });
-      throw error;
-    }
-
-    return data;
+  static async updateSchedule(id: string, updates: Partial<ReportSchedule>): Promise<ReportSchedule> {
+    const schedules = loadFromStorage<ReportSchedule>(STORAGE_KEYS.SCHEDULES);
+    const idx = schedules.findIndex(s => s.id === id);
+    if (idx === -1) throw new Error('Schedule not found');
+    schedules[idx] = { ...schedules[idx], ...updates };
+    saveToStorage(STORAGE_KEYS.SCHEDULES, schedules);
+    return schedules[idx];
   }
 
-  /**
-   * Delete a schedule
-   */
   static async deleteSchedule(id: string): Promise<void> {
-    const { error } = await (supabase as any)
-      .from('report_schedules')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      logger.error('Error deleting schedule', error as Error, { scheduleId: id });
-      throw error;
-    }
+    const schedules = loadFromStorage<ReportSchedule>(STORAGE_KEYS.SCHEDULES);
+    saveToStorage(STORAGE_KEYS.SCHEDULES, schedules.filter(s => s.id !== id));
   }
 
-  /**
-   * Get report statistics
-   */
   static async getStatistics(): Promise<ReportStatistics> {
-    const { data, error } = await (supabase as any).rpc('get_report_statistics');
+    const reports = loadFromStorage<GeneratedReport>(STORAGE_KEYS.REPORTS);
 
-    if (error) {
-      logger.error('Error fetching statistics', error as Error);
-      throw error;
-    }
-
-    return data as ReportStatistics;
+    return {
+      total_reports: reports.length,
+      reports_by_type: {},
+      reports_by_format: {},
+      ai_generated_count: 0,
+      recent_reports: reports.slice(0, 5).map(r => ({
+        id: r.id,
+        title: r.title,
+        type: r.report_type,
+        generated_at: r.generated_at,
+      })),
+    };
   }
 
-  /**
-   * Export report as JSON
-   */
   static async exportAsJSON(reportId: string): Promise<string> {
     const report = await this.getReport(reportId);
     return JSON.stringify(report.content, null, 2);

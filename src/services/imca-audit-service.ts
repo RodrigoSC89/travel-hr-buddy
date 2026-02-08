@@ -1,21 +1,28 @@
+/**
+ * IMCA Audit Service
+ * DEBT-FIX: auditorias_imca doesn't exist in schema.
+ * Using localStorage persistence for audit reports.
+ */
 import { supabase } from "@/integrations/supabase/client";
 import type { IMCAAuditReport, IMCAAuditInput } from "@/types/imca-audit";
 import { logger } from "@/lib/logger";
 
-/**
- * Generate a new IMCA audit report using AI
- */
-export async function generateIMCAAudit(
-  input: IMCAAuditInput
-): Promise<IMCAAuditReport> {
-  try {
-    const { data, error } = await supabase.functions.invoke(
-      "imca-audit-generator",
-      {
-        body: input,
-      }
-    );
+const STORAGE_KEY = "nautilus_imca_audits";
 
+function loadAudits(): Array<{ id: string; user_id: string; report_data: IMCAAuditReport; created_at: string; updated_at: string }> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveAuditsToStorage(audits: any[]): void {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch {}
+}
+
+export async function generateIMCAAudit(input: IMCAAuditInput): Promise<IMCAAuditReport> {
+  try {
+    const { data, error } = await supabase.functions.invoke("imca-audit-generator", { body: input });
     if (error) throw error;
     return data;
   } catch (error) {
@@ -24,173 +31,74 @@ export async function generateIMCAAudit(
   }
 }
 
-/**
- * Save audit report to database
- */
 export async function saveAudit(report: IMCAAuditReport): Promise<string> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
 
-    if (!user) throw new Error("User not authenticated");
-
-    const { data, error } = await (supabase as any)
-      .from("auditorias_imca")
-      .insert({
-        user_id: user.id,
-        vessel_name: report.vesselName,
-        dp_class: report.dpClass,
-        location: report.location,
-        audit_objective: report.auditObjective,
-        audit_date: report.auditDate.toISOString(),
-        overall_score: report.overallScore,
-        report_data: report,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data.id;
-  } catch (error) {
-    logger.error("Error saving audit", error as Error, { vesselName: report.vesselName });
-    throw error;
-  }
+  const id = crypto.randomUUID();
+  const audits = loadAudits();
+  audits.push({
+    id,
+    user_id: user.id,
+    report_data: report,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  });
+  saveAuditsToStorage(audits);
+  return id;
 }
 
-/**
- * Get all audits for current user
- */
 export async function getAudits(): Promise<IMCAAuditReport[]> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
 
-    if (!user) throw new Error("User not authenticated");
-
-    const { data, error } = await (supabase as any)
-      .from("auditorias_imca")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-
-    return (data || []).map((row: any) => ({
-      ...(row.report_data as IMCAAuditReport),
-      id: row.id,
-    }));
-  } catch (error) {
-    logger.error("Error fetching audits", error as Error);
-    throw error;
-  }
+  return loadAudits()
+    .filter(a => a.user_id === user.id)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .map(row => ({ ...row.report_data, id: row.id }));
 }
 
-/**
- * Get a single audit by ID
- */
 export async function getAudit(id: string): Promise<IMCAAuditReport | null> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
 
-    if (!user) throw new Error("User not authenticated");
-
-    const { data, error } = await (supabase as any)
-      .from("auditorias_imca")
-      .select("*")
-      .eq("id", id)
-      .eq("user_id", user.id)
-      .single();
-
-    if (error) throw error;
-
-    return {
-      ...(data.report_data as IMCAAuditReport),
-      id: data.id,
-    };
-  } catch (error) {
-    logger.error("Error fetching audit", error as Error, { auditId: id });
-    return null;
-  }
+  const audit = loadAudits().find(a => a.id === id && a.user_id === user.id);
+  if (!audit) return null;
+  return { ...audit.report_data, id: audit.id };
 }
 
-/**
- * Update an existing audit
- */
-export async function updateAudit(
-  id: string,
-  report: Partial<IMCAAuditReport>
-): Promise<boolean> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+export async function updateAudit(id: string, report: Partial<IMCAAuditReport>): Promise<boolean> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
 
-    if (!user) throw new Error("User not authenticated");
+  const audits = loadAudits();
+  const idx = audits.findIndex(a => a.id === id && a.user_id === user.id);
+  if (idx === -1) return false;
 
-    const { error } = await (supabase as any)
-      .from("auditorias_imca")
-      .update({
-        report_data: report,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .eq("user_id", user.id);
-
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    logger.error("Error updating audit", error as Error, { auditId: id });
-    return false;
-  }
+  audits[idx].report_data = { ...audits[idx].report_data, ...report };
+  audits[idx].updated_at = new Date().toISOString();
+  saveAuditsToStorage(audits);
+  return true;
 }
 
-/**
- * Delete an audit
- */
 export async function deleteAudit(id: string): Promise<boolean> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
 
-    if (!user) throw new Error("User not authenticated");
-
-    const { error } = await (supabase as any)
-      .from("auditorias_imca")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", user.id);
-
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    logger.error("Error deleting audit", error as Error, { auditId: id });
-    return false;
-  }
+  const audits = loadAudits();
+  const filtered = audits.filter(a => !(a.id === id && a.user_id === user.id));
+  if (filtered.length === audits.length) return false;
+  saveAuditsToStorage(filtered);
+  return true;
 }
 
-/**
- * Export audit as Markdown
- */
-export async function exportAuditMarkdown(
-  report: IMCAAuditReport
-): Promise<Blob> {
+export async function exportAuditMarkdown(report: IMCAAuditReport): Promise<Blob> {
   const { formatAuditAsMarkdown } = await import("@/types/imca-audit");
   const markdown = formatAuditAsMarkdown(report);
   return new Blob([markdown], { type: "text/markdown" });
 }
 
-/**
- * Download audit as Markdown file
- */
-export function downloadAuditMarkdown(
-  report: IMCAAuditReport,
-  filename?: string
-): void {
+export function downloadAuditMarkdown(report: IMCAAuditReport, filename?: string): void {
   import("@/types/imca-audit").then(({ formatAuditAsMarkdown }) => {
     const markdown = formatAuditAsMarkdown(report);
     const blob = new Blob([markdown], { type: "text/markdown" });

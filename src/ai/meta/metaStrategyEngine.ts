@@ -202,17 +202,11 @@ export class MetaStrategyEngine {
     evaluations: StrategyEvaluation[]
   ): Promise<void> {
     try {
-      await (supabase as any).from("meta_strategy_log").insert({
+      logger.info("[MetaStrategyEngine] Strategy decision logged", {
         strategy_id: strategy.id,
         strategy_name: strategy.name,
-        decision_data: {
-          strategy: strategy,
-          decision: decision,
-          evaluations: evaluations,
-        },
         confidence: decision.confidence,
         justification: decision.justification,
-        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       logger.error("[MetaStrategyEngine] Failed to log meta strategy decision:", error);

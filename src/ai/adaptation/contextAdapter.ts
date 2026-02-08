@@ -341,18 +341,12 @@ class ContextualResponseAdapter {
    * Log adaptation to database
    */
   private async logAdaptation(response: AdaptedResponse, adaptations: string[]): Promise<void> {
-    try {
-      await (supabase as any).from("response_adaptation_log").insert({
-        original_content: response.original.content,
-        adapted_content: response.adapted,
-        mode: response.mode,
-        adaptations,
-        reasoning: response.reasoning,
-        timestamp: response.timestamp
-      });
-    } catch (error) {
-      logger.error("[ContextAdapter] Failed to log adaptation:", error);
-    }
+    // Log adaptation in-memory only (response_adaptation_log doesn't exist in schema)
+    logger.info("[ContextAdapter] Adaptation logged", {
+      mode: response.mode,
+      adaptations,
+      reasoning: response.reasoning,
+    });
   }
 
   /**

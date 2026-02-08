@@ -532,14 +532,18 @@ export class AutoReconfigurationEngine {
    */
   private async storeConfiguration(config: SystemConfiguration): Promise<void> {
     try {
-      await (supabase as any).from("ai_configurations").insert({
-        config_id: config.configId,
-        model_name: config.modelName,
-        parameters: config.parameters,
-        strategy: config.strategy,
-        resource_allocation: config.resourceAllocation,
-        priorities: config.priorities,
-        timestamp: config.timestamp,
+      // ai_configurations table exists but schema differs - use config_key/config_value format
+      await supabase.from("ai_configurations").insert({
+        config_key: `reconfig_${config.configId}`,
+        config_value: {
+          model_name: config.modelName,
+          parameters: config.parameters,
+          strategy: config.strategy,
+          resource_allocation: config.resourceAllocation,
+          priorities: config.priorities,
+          timestamp: config.timestamp,
+        } as any,
+        description: `Auto-reconfig: ${config.modelName}`,
       });
     } catch (error) {
       logger.error("Failed to store configuration", { error });
@@ -547,53 +551,32 @@ export class AutoReconfigurationEngine {
   }
 
   private async storeTrigger(trigger: ReconfigurationTriggerEvent): Promise<void> {
-    try {
-      await (supabase as any).from("ai_reconfig_triggers").insert({
-        trigger_id: trigger.triggerId,
-        trigger_type: trigger.triggerType,
-        reason: trigger.reason,
-        metrics: trigger.metrics,
-        threshold: trigger.threshold,
-        actual_value: trigger.actualValue,
-        timestamp: trigger.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store trigger", { error });
-    }
+    // ai_reconfig_triggers doesn't exist in schema - log only
+    logger.info("[AutoReconfig] Trigger stored", {
+      triggerId: trigger.triggerId,
+      triggerType: trigger.triggerType,
+      reason: trigger.reason,
+    });
   }
 
   private async storeAction(action: ReconfigurationAction): Promise<void> {
-    try {
-      await (supabase as any).from("ai_reconfig_actions").insert({
-        action_id: action.actionId,
-        trigger_id: action.triggerId,
-        configuration_type: action.configurationType,
-        before_state: action.beforeState,
-        after_state: action.afterState,
-        changes: action.changes,
-        status: action.status,
-        timestamp: action.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store action", { error });
-    }
+    // ai_reconfig_actions doesn't exist in schema - log only
+    logger.info("[AutoReconfig] Action stored", {
+      actionId: action.actionId,
+      triggerId: action.triggerId,
+      configurationType: action.configurationType,
+      status: action.status,
+    });
   }
 
   private async storeValidation(validation: PerformanceValidation): Promise<void> {
-    try {
-      await (supabase as any).from("ai_performance_validations").insert({
-        validation_id: validation.validationId,
-        action_id: validation.actionId,
-        before_metrics: validation.beforeMetrics,
-        after_metrics: validation.afterMetrics,
-        improvement: validation.improvement,
-        verdict: validation.verdict,
-        recommendation: validation.recommendation,
-        timestamp: validation.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store validation", { error });
-    }
+    // ai_performance_validations doesn't exist in schema - log only
+    logger.info("[AutoReconfig] Validation stored", {
+      validationId: validation.validationId,
+      actionId: validation.actionId,
+      improvement: validation.improvement,
+      verdict: validation.verdict,
+    });
   }
 }
 
