@@ -1,5 +1,14 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+# ============================================
+# PHASE 3 - AI AGENT CHAT (10 Maritime Personas)
+# Specialized agent routing via Lovable AI Gateway
+# ============================================
+
+[functions.ai-agent-chat]
+verify_jwt = false
+comment = "AI Agent Chat - 10 specialized maritime personas via Lovable AI Gateway with streaming SSE"
+
 [functions.contract-predict-downtime]
 verify_jwt = false
 
