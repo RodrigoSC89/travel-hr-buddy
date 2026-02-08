@@ -429,6 +429,29 @@ const WorkbenchMegaHub = lazy(() => import("@/pages/mega-hubs/WorkbenchMegaHub")
 const Admin = lazy(() => import("@/pages/Admin"));
 // Dashboard, ExecutiveDashboard, Analytics → CentralComando/AnalyticsCommandCenter
 
+// ============================================
+// ADMIN SUB-PAGES (documents, templates, sgso, reports, etc.)
+// ============================================
+const AdminDocumentList = lazy(() => import("@/pages/admin/documents/DocumentList"));
+const AdminDocumentsAI = lazy(() => import("@/pages/admin/documents-ai"));
+const AdminDocumentView = lazy(() => import("@/pages/admin/documents/DocumentView"));
+const AdminDocumentHistory = lazy(() => import("@/pages/admin/documents/DocumentHistory"));
+const AdminDocumentEditorDemo = lazy(() => import("@/pages/admin/documents/DocumentEditorDemo"));
+const AdminAIEditor = lazy(() => import("@/pages/admin/documents/ai-editor"));
+const AdminAITemplates = lazy(() => import("@/pages/admin/documents/ai-templates"));
+const AdminCollaborativeEditor = lazy(() => import("@/pages/admin/documents/CollaborativeEditor"));
+const AdminTemplates = lazy(() => import("@/pages/admin/templates"));
+const AdminTemplateEdit = lazy(() => import("@/pages/admin/templates/edit/[id]"));
+const AdminSGSO = lazy(() => import("@/pages/admin/sgso"));
+const AdminSGSOHistory = lazy(() => import("@/pages/admin/sgso/history/[vesselId]"));
+const AdminAssistant = lazy(() => import("@/pages/admin/assistant"));
+const AdminAssistantLogs = lazy(() => import("@/pages/admin/assistant-logs"));
+const AdminReportsAssistant = lazy(() => import("@/pages/admin/reports/assistant"));
+const AdminReportsLogs = lazy(() => import("@/pages/admin/reports/logs"));
+const AdminReportsRestoreAnalytics = lazy(() => import("@/pages/admin/reports/restore-analytics"));
+const AdminCollaboration = lazy(() => import("@/pages/admin/collaboration"));
+const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+
 // Query client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -765,7 +788,7 @@ const AppRoutes = () => (
       <Route path="/reports" element={<ReportsCommandCenter />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/templates" element={<Templates />} />
-      <Route path="/admin/checklists" element={<MaritimeCommandCenter />} />
+      {/* admin/checklists route moved to ADMIN section below */}
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
@@ -844,9 +867,7 @@ const AppRoutes = () => (
       <Route path="/crew-management" element={<MaritimeCommandCenter />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
-      <Route path="/recruitment" element={<RecruitmentPage />} />
-      <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
-      <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
+      {/* /recruitment, /agent-orchestration, /blockchain-compliance already defined in WORLD-CLASS section */}
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
       <Route path="/medical-infirmary" element={<MedicalInfirmaryPremium />} />
       <Route path="/enfermaria-digital" element={<MedicalInfirmaryPremium />} />
@@ -994,21 +1015,55 @@ const AppRoutes = () => (
       {/* ADMIN & DASHBOARDS */}
       {/* ============================================ */}
       <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      
+      {/* ADMIN DOCUMENTS - Full CRUD flow */}
+      <Route path="/admin/documents" element={<AdminDocumentList />} />
+      <Route path="/admin/documents/ai" element={<AdminAIEditor />} />
+      <Route path="/admin/documents/ai/templates" element={<AdminAITemplates />} />
+      <Route path="/admin/documents/view/:id" element={<AdminDocumentView />} />
+      <Route path="/admin/documents/history/:id" element={<AdminDocumentHistory />} />
+      <Route path="/admin/documents/editor/:id" element={<AdminDocumentEditorDemo />} />
+      <Route path="/admin/documents/collaborate/:id" element={<AdminCollaborativeEditor />} />
+      
+      {/* ADMIN TEMPLATES */}
+      <Route path="/admin/templates" element={<AdminTemplates />} />
+      <Route path="/admin/templates/edit/:id" element={<AdminTemplateEdit />} />
+      
+      {/* ADMIN SGSO */}
+      <Route path="/admin/sgso" element={<AdminSGSO />} />
+      <Route path="/admin/sgso/history/:vesselId" element={<AdminSGSOHistory />} />
+      
+      {/* ADMIN ASSISTANT & REPORTS */}
+      <Route path="/admin/assistant" element={<AdminAssistant />} />
+      <Route path="/admin/assistant/logs" element={<AdminAssistantLogs />} />
+      <Route path="/admin/reports/assistant" element={<AdminReportsAssistant />} />
+      <Route path="/admin/reports/logs" element={<AdminReportsLogs />} />
+      <Route path="/admin/reports/restore-analytics" element={<AdminReportsRestoreAnalytics />} />
+      
+      {/* ADMIN COLLABORATION */}
+      <Route path="/admin/collaboration" element={<AdminCollaboration />} />
+      
+      {/* ADMIN CHECKLISTS - alias */}
+      <Route path="/admin/checklists" element={<MaritimeCommandCenter />} />
+      
       <Route path="/dashboard" element={<CentralComando />} />
       <Route path="/executive-dashboard" element={<CentralComando />} />
       <Route path="/system-overview" element={<CentralComando />} />
       <Route path="/analytics" element={<AnalyticsCommandCenter />} />
       <Route path="/backup-audit" element={<SecurityAuditCenter />} />
       <Route path="/testing" element={<CentralComando />} />
-      <Route path="/feedback" element={<CentralComando />} />
       <Route path="/saas-manager" element={<Admin />} />
+      
+      {/* MISSING ROUTE ALIASES */}
+      <Route path="/docs" element={<Documents />} />
       
       {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
-    {/* Catch-all: Redirecionar para central de comando */}
-    <Route path="*" element={<Navigate to="/central-comando" replace />} />
+    {/* Catch-all: Redirecionar para command hub */}
+    <Route path="*" element={<Navigate to="/command" replace />} />
   </Routes>
 );
 
