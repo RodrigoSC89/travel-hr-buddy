@@ -274,7 +274,7 @@ export function useAnalyticsDashboardData() {
           .gte("timestamp", startOfDay.toISOString())
           .lte("timestamp", endOfDay.toISOString());
 
-        data.push(count || Math.floor(Math.random() * 50) + 20);
+        data.push(count || 20 + (i * 7) % 50);
       }
 
       return {

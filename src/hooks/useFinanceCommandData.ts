@@ -222,8 +222,8 @@ export function useFinanceCommandData() {
             port: 15000,
             other: 10000,
           },
-          efficiency: 85 + Math.random() * 10,
-          variance: (Math.random() - 0.5) * 20,
+          efficiency: 85 + (index * 3.5) % 10,
+          variance: ((index * 7) % 20) - 10,
           aiInsights: [
             "Rota otimizada com base em condições climáticas",
             "Consumo de combustível dentro do esperado",

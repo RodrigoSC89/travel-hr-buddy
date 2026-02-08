@@ -56,26 +56,27 @@ function generateHistoricalData(port: string): HistoricalPrice[] {
   const history: HistoricalPrice[] = [];
   const today = new Date();
 
-  // Create trend patterns for realism
-  const trendPattern = Math.random() > 0.5 ? 1 : -1; // General trend direction
-  const volatility = 0.015 + Math.random() * 0.01; // 1.5-2.5% daily volatility
+// Deterministic seed based on port name
+  const seed = port.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const trendPattern = seed % 2 === 0 ? 1 : -1;
+  const volatility = 0.015 + (seed % 10) * 0.001;
 
   for (let i = 29; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
 
-    // Calculate price with trend and noise
-    const dayFactor = (29 - i) / 29; // 0 to 1 over the month
-    const trendAdjust = trendPattern * dayFactor * 0.05; // Up to 5% trend over month
-    const dailyNoise = (Math.random() - 0.5) * volatility * 2;
+    // Deterministic noise using sine function
+    const dayFactor = (29 - i) / 29;
+    const trendAdjust = trendPattern * dayFactor * 0.05;
+    const dailyNoise = Math.sin(seed + i * 1.7) * volatility;
 
     const factor = 1 + trendAdjust + dailyNoise;
 
     history.push({
       date: date.toISOString().split("T")[0],
       vlsfo: Math.round(base.vlsfo * factor),
-      mgo: Math.round(base.mgo * factor * (1 + (Math.random() - 0.5) * 0.01)),
-      hfo: Math.round(base.hfo * factor * (1 + (Math.random() - 0.5) * 0.01)),
+      mgo: Math.round(base.mgo * factor * (1 + Math.sin(seed + i * 2.3) * 0.005)),
+      hfo: Math.round(base.hfo * factor * (1 + Math.sin(seed + i * 3.1) * 0.005)),
     });
   }
 

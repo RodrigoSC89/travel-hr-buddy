@@ -115,8 +115,8 @@ export function useCreatePurchaseOrder() {
       notes?: string;
     }) => {
       const year = new Date().getFullYear();
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const po_number = `PO-${year}-${randomNum}`;
+      const seqNum = Date.now() % 9000 + 1000;
+      const po_number = `PO-${year}-${seqNum}`;
 
       const insertData = {
         po_number,

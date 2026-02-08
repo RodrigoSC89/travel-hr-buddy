@@ -49,7 +49,7 @@ export function useTelemedicineSpecialists() {
         name: `Dr. ${specialty.split(" ")[0]} ${["Silva", "Santos", "Costa", "Oliveira", "Lima"][idx]}`,
         specialty,
         availability: ["available", "busy", "offline"][idx % 3] as TelemedicineSpecialist["availability"],
-        rating: 4 + Math.random(),
+        rating: 4 + (idx * 0.2), // Deterministic: 4.0, 4.2, 4.4, 4.6, 4.8
         languages: ["Português", "Inglês"],
       }));
     },

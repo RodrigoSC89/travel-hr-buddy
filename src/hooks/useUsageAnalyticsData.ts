@@ -38,9 +38,9 @@ export function useUsageAnalyticsData() {
         date.setDate(date.getDate() - (6 - i));
         return {
           date: date.toISOString().split("T")[0],
-          users: Math.max(1, Math.round((crewCount || 1) * (0.5 + Math.random() * 0.5))),
+          users: Math.max(1, Math.round((crewCount || 1) * (0.5 + i * 0.07))),
           storage: Number((totalRecords * 0.01 * (0.8 + i * 0.05)).toFixed(1)),
-          api_calls: Math.round(totalRecords * 10 * (0.7 + Math.random() * 0.6)),
+          api_calls: Math.round(totalRecords * 10 * (0.7 + i * 0.08)),
         };
       });
 

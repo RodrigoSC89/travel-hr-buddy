@@ -44,7 +44,7 @@ export function useIoTIntelligenceData() {
       const maintenanceRecords = maintenanceRes.data || [];
 
       // Map sensors
-      const sensors: SensorData[] = rawSensors.map((s: any) => {
+      const sensors: SensorData[] = rawSensors.map((s: any, sIdx: number) => {
         const latestData = rawData.find((d: any) => d.sensor_id === s.sensor_id);
         const value = latestData ? Number(latestData.value) : Number(s.current_value) || 0;
         const thresholds = s.thresholds || {};
@@ -68,8 +68,8 @@ export function useIoTIntelligenceData() {
           status,
           trend: "stable" as const,
           lastUpdate: s.last_reading_at ? getTimeDiff(s.last_reading_at) : "N/A",
-          battery: s.metadata?.battery || Math.round(70 + Math.random() * 30),
-          signalStrength: s.metadata?.signal || Math.round(80 + Math.random() * 20),
+          battery: s.metadata?.battery || 70 + (sIdx * 11) % 30,
+          signalStrength: s.metadata?.signal || 80 + (sIdx * 7) % 20,
         };
       });
 
@@ -90,10 +90,10 @@ export function useIoTIntelligenceData() {
           name,
           location: records[0].location || "Engine Room",
           healthScore: Math.min(100, healthScore),
-          operatingHours: Math.round(5000 + Math.random() * 10000),
-          nextMaintenance: `${Math.round(50 + Math.random() * 450)}h`,
+          operatingHours: 5000 + (healthScore * 53) % 10000,
+          nextMaintenance: `${50 + (healthScore * 3) % 450}h`,
           anomalies: criticalCount,
-          efficiency: Math.min(100, healthScore + Math.round(Math.random() * 5)),
+          efficiency: Math.min(100, healthScore + 3),
         };
       });
 

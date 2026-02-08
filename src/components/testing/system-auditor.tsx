@@ -286,15 +286,16 @@ const SystemAuditor: React.FC = () => {
       updatedSuites[suiteIndex].tests[testIndex].status = "running";
       setTestSuites(updatedSuites);
 
-      // Simular execução do teste
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+      // Simular execução do teste com tempo determinístico
+      await new Promise(resolve => setTimeout(resolve, 1500 + (testIndex * 300) % 1500));
       
-      const success = Math.random() > 0.2; // 80% de chance de sucesso
+      // Deterministic result based on test index
+      const success = testIndex % 5 !== 4; // 80% pass rate (every 5th fails)
       
       const finalSuites = [...testSuites];
       finalSuites[suiteIndex].tests[testIndex].status = success ? "passed" : "failed";
       finalSuites[suiteIndex].tests[testIndex].result = success ? "Teste aprovado" : "Falha detectada";
-      finalSuites[suiteIndex].tests[testIndex].executionTime = Math.floor(1000 + Math.random() * 2000);
+      finalSuites[suiteIndex].tests[testIndex].executionTime = 1200 + (testIndex * 317) % 1800;
       finalSuites[suiteIndex].progress = ((testIndex + 1) / suite.tests.length) * 100;
       setTestSuites(finalSuites);
     }

@@ -153,9 +153,9 @@ export const OptimizationReportsManager = () => {
           ? {
             ...report,
             status: "ready" as const,
-            insights: Math.floor(Math.random() * 20) + 10,
-            improvements: Math.floor(Math.random() * 15) + 5,
-            performanceGain: Math.floor(Math.random() * 30) + 10
+            insights: 15 + reports.length * 3,
+            improvements: 8 + reports.length * 2,
+            performanceGain: 15 + reports.length * 5
           }
           : report
       ));

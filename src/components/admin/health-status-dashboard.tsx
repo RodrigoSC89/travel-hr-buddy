@@ -75,7 +75,7 @@ export const HealthStatusDashboard: React.FC = () => {
         ...prev,
         requestCount: totalRequests,
         avgResponseTime: responseTimeCount > 0 ? Math.round(totalResponseTime / responseTimeCount) : 0,
-        memoryUsage: Math.min(95, 45 + Math.random() * 15) // Simulated for now
+        memoryUsage: Math.min(95, 45 + (totalRequests % 15)) // Derived from request count
       }));
       
       setLastUpdate(new Date());

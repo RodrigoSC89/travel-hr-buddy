@@ -77,7 +77,7 @@ export function useSessionsReplayData() {
           startTime,
           endTime: lastActivity,
           duration: Math.max(duration, 60), // Minimum 1 minute
-          eventsCount: Math.floor(duration / 10) + Math.floor(Math.random() * 50), // Estimate
+          eventsCount: Math.floor(duration / 10) + 25, // Estimated from duration
           pagesVisited: ["/dashboard", "/fleet", "/crew"], // Default pages
           device,
           browser,
@@ -105,14 +105,14 @@ export function generateSessionEvents(session: ReplaySession): ReplayEvent[] {
     events.push({
       id: `event-${i}`,
       timestamp: Math.floor((i / eventCount) * session.duration * 1000),
-      type: types[Math.floor(Math.random() * types.length)],
+      type: types[i % types.length],
       data: {
-        target: `element-${Math.floor(Math.random() * 20)}`,
-        value: Math.random() > 0.5 ? "sample text" : undefined,
+        target: `element-${i % 20}`,
+        value: i % 2 === 0 ? "sample text" : undefined,
       },
       position: {
-        x: Math.floor(Math.random() * 1200),
-        y: Math.floor(Math.random() * 800),
+        x: (i * 73) % 1200,
+        y: (i * 47) % 800,
       },
     });
   }
