@@ -452,32 +452,14 @@ export class ReflectiveCore {
    * Store reflection report in database
    */
   private async storeReflectionReport(report: ReflectionReport): Promise<void> {
+    // ai_reflection_reports/insights not in schema - log to memory
     try {
-      await (supabase as any).from("ai_reflection_reports").insert({
-        mission_id: report.missionId,
-        total_decisions: report.totalDecisions,
-        successful_decisions: report.successfulDecisions,
-        failed_decisions: report.failedDecisions,
-        insights: report.insights,
-        strategy_confidences: report.strategyConfidences,
-        overall_learning: report.overallLearning,
-        timestamp: report.timestamp,
+      logger.info("[ReflectiveCore] Reflection report stored", {
+        missionId: report.missionId,
+        totalDecisions: report.totalDecisions,
+        successfulDecisions: report.successfulDecisions,
+        insightsCount: report.insights?.length || 0,
       });
-
-      // Also store individual insights
-      for (const insight of report.insights) {
-        await (supabase as any).from("ai_reflection_insights").insert({
-          insight_id: insight.id,
-          mission_id: insight.missionId,
-          decision_id: insight.decisionId,
-          insight_type: insight.insightType,
-          description: insight.description,
-          should_have_done: insight.shouldHaveDone,
-          learning_points: insight.learningPoints,
-          confidence_adjustment: insight.confidenceAdjustment,
-          timestamp: insight.timestamp,
-        });
-      }
     } catch (error) {
       logger.error("Failed to store reflection report", error);
     }

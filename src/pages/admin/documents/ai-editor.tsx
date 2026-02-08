@@ -102,13 +102,16 @@ export default function DocumentAIEditorPage() {
         return;
       }
 
-      const { data, error } = await (supabase as any)
+      // ai_generated_documents exists in schema
+      const { data, error } = await supabase
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),
           content: content,
-          prompt: "Documento criado manualmente no editor",
-          generated_by: user.id,
+          document_type: "manual",
+          prompt_used: "Documento criado manualmente no editor",
+          created_by: user.id,
+          status: "draft",
         })
         .select()
         .single();

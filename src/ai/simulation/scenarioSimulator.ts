@@ -443,13 +443,12 @@ class ScenarioSimulator {
    */
   private async logEvent(event: SimulationEvent): Promise<void> {
     try {
-      await (supabase as any).from("simulation_event_log").insert({
+      // simulation_event_log schema: event_id (required), event_type (required), data (Json)
+      await supabase.from("simulation_event_log").insert({
         event_id: event.id,
         event_type: event.type,
-        description: event.description,
-        ai_response: event.aiResponse,
-        impact: event.impact,
-        timestamp: event.timestamp
+        data: { description: event.description, ai_response: event.aiResponse, impact: event.impact } as unknown as import("@/integrations/supabase/types").Json,
+        timestamp: event.timestamp,
       });
     } catch (error) {
       logger.error("Failed to log event", { error });
@@ -461,13 +460,8 @@ class ScenarioSimulator {
    */
   async logDecision(decision: DecisionLog): Promise<void> {
     this.decisions.push(decision);
-    
-    try {
-      await (supabase as any).from("simulation_decision_log").insert(decision);
-      logger.info("Decision logged");
-    } catch (error) {
-      logger.error("Failed to log decision", { error });
-    }
+    // Log to memory - simulation_decision_log not in schema
+    logger.info("[Simulator] Decision logged", { eventId: decision.eventId });
   }
 
   /**
