@@ -57,7 +57,7 @@ export function useMedicalInfirmaryData() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crew_members")
-        .select("id, full_name, status, medical_status, medical_expiry")
+        .select("id, full_name, status")
         .order("full_name", { ascending: true });
       
       if (error) throw error;
@@ -186,13 +186,13 @@ export function useMedicalInfirmaryData() {
   // Calculate health metrics
   const healthMetrics = {
     totalCrew: crewHealth.length,
-    fitForService: crewHealth.filter((c: any) => c.medical_status === "fit" || c.status === "active").length,
+    fitForService: crewHealth.filter((c: any) => c.status === "active").length,
     consultationsThisMonth: consultations.length,
     pendingExams: exams.filter((e) => e.status === "scheduled").length,
     criticalMedications: medications.filter((m) => m.status === "critical").length,
     lowStockMedications: medications.filter((m) => m.status === "low").length,
     fitnessRate: crewHealth.length > 0 
-      ? Math.round((crewHealth.filter((c: any) => c.medical_status === "fit" || c.status === "active").length / crewHealth.length) * 100)
+      ? Math.round((crewHealth.filter((c: any) => c.status === "active").length / crewHealth.length) * 100)
       : 96.8,
     totalMedications: medications.length,
     expiringCertificates: medicalCertificates.filter((c: any) => {

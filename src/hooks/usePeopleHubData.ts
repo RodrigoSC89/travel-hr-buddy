@@ -174,9 +174,8 @@ export function usePeopleHubData(vesselId?: string) {
         // Try medical_records or similar table
         const { data, error } = await supabase
           .from("crew_members")
-          .select("id, full_name, medical_exam_date, medical_status, next_medical_exam")
-          .not("medical_exam_date", "is", null)
-          .order("medical_exam_date", { ascending: false })
+          .select("id, full_name, status, contract_start, contract_end")
+          .order("full_name", { ascending: false })
           .limit(50);
 
         if (error) throw error;
@@ -185,10 +184,10 @@ export function usePeopleHubData(vesselId?: string) {
           id: `wellness-${m.id}`,
           crew_id: m.id,
           crew_name: m.full_name,
-          date: m.medical_exam_date,
+          date: m.contract_start || new Date().toISOString(),
           type: "checkup" as const,
-          status: m.medical_status === "fit" ? "fit" as const : "pending" as const,
-          next_checkup: m.next_medical_exam,
+          status: m.status === "active" ? "fit" as const : "pending" as const,
+          next_checkup: m.contract_end,
         }));
       } catch (error) {
         logger.error("Failed to fetch wellness records", error);
