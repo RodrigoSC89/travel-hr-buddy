@@ -58,13 +58,12 @@ export function useEmployeePayments(period?: string) {
         };
       }
 
-      // Tentar buscar de payroll_records usando RPC ou query genérica
-      // A tabela pode não existir nos tipos, então usamos any
+      // Buscar pagamentos reais da tabela crew_payroll
       try {
-        const { data: payrollData } = await (supabase as any)
-          .from("payroll_records")
+        const { data: payrollData } = await supabase
+          .from("crew_payroll")
           .select("*")
-          .eq("employee_id", crewMember.id)
+          .eq("crew_member_id", crewMember.id)
           .order("payment_date", { ascending: false })
           .limit(10);
 
@@ -81,14 +80,14 @@ export function useEmployeePayments(period?: string) {
           };
         }
 
-        const payments: Payment[] = payrollData.map((record: Record<string, unknown>) => ({
-          id: String(record.id),
-          type: (record.type as Payment["type"]) || "salary",
-          description: String(record.description || "Pagamento"),
-          amount: Number(record.amount) || 0,
-          date: String(record.payment_date || new Date().toISOString().split("T")[0]),
-          status: (record.status as Payment["status"]) || "paid",
-          reference: record.reference ? String(record.reference) : undefined,
+        const payments: Payment[] = payrollData.map((record) => ({
+          id: record.id,
+          type: "salary" as const,
+          description: record.notes || "Pagamento",
+          amount: record.net_pay || record.base_salary || 0,
+          date: record.payment_date || record.payroll_period_end,
+          status: (record.payment_status === "paid" ? "paid" : record.payment_status === "pending" ? "pending" : "processing") as Payment["status"],
+          reference: record.bank_reference || undefined,
         }));
 
         const allowances = payments.filter(p => p.type === "allowance").reduce((acc, p) => acc + p.amount, 0);

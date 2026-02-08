@@ -1,6 +1,7 @@
 /**
  * Voyage & Logistics Real-Time Data Hooks
  * Route optimization, port calls, cargo tracking
+ * Typed against voyages table schema
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,20 +9,25 @@ import { toast } from 'sonner';
 
 interface Voyage {
   id: string;
-  vessel_id: string;
+  vessel_id: string | null;
   voyage_number: string;
-  origin_port: string;
-  destination_port: string;
-  status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
-  created_at: string;
+  route_id: string | null;
+  status: string | null;
+  planned_departure: string | null;
+  planned_arrival: string | null;
+  actual_departure: string | null;
+  actual_arrival: string | null;
+  cargo_manifest: Record<string, unknown> | null;
+  fuel_consumption: number | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export function useVoyages(vesselId?: string) {
   return useQuery({
     queryKey: ['voyages', vesselId],
     queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query = (supabase as any)
+      let query = supabase
         .from('voyages')
         .select('*')
         .order('created_at', { ascending: false });
@@ -36,11 +42,14 @@ export function useVoyages(vesselId?: string) {
 export function useCreateVoyage() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (voyage: Partial<Voyage>) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase as any)
+    mutationFn: async (voyage: { voyage_number: string; vessel_id?: string; status?: string }) => {
+      const { data, error } = await supabase
         .from('voyages')
-        .insert(voyage)
+        .insert({
+          voyage_number: voyage.voyage_number,
+          vessel_id: voyage.vessel_id,
+          status: voyage.status || 'planned',
+        })
         .select()
         .single();
       if (error) throw error;
@@ -57,14 +66,13 @@ export function useVoyageDashboardStats() {
   return useQuery({
     queryKey: ['voyage-dashboard-stats'],
     queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: voyages } = await (supabase as any)
+      const { data: voyages } = await supabase
         .from('voyages')
         .select('id, status');
       return {
-        activeVoyages: (voyages || []).filter((v: { status: string }) => v.status === 'in_progress').length,
-        plannedVoyages: (voyages || []).filter((v: { status: string }) => v.status === 'planned').length,
-        completedVoyages: (voyages || []).filter((v: { status: string }) => v.status === 'completed').length,
+        activeVoyages: (voyages || []).filter((v) => v.status === 'in_progress').length,
+        plannedVoyages: (voyages || []).filter((v) => v.status === 'planned').length,
+        completedVoyages: (voyages || []).filter((v) => v.status === 'completed').length,
         totalVoyages: voyages?.length || 0,
       };
     },

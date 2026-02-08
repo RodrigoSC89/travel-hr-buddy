@@ -279,13 +279,13 @@ export const TemplateLibrary: React.FC = () => {
       // Save PDF
       doc.save(`${selectedTemplate.name.replace(/\s+/g, "_")}_${Date.now()}.pdf`);
 
-      // Log export (use any cast for untyped table)
-      (supabase as any)
-        .from("itinerary_exports")
-        .insert([{
-          export_format: "pdf",
-          file_size_kb: Math.round(doc.output("blob").size / 1024)
-        }]);
+      // Log export - fire and forget
+      supabase.from("access_logs").insert([{
+        action: "template_pdf_export",
+        module_accessed: "document-hub",
+        result: "success",
+        details: { export_format: "pdf", file_size_kb: Math.round(doc.output("blob").size / 1024) } as import("@/integrations/supabase/types").Json,
+      }]);
 
       toast({
         title: "Success",

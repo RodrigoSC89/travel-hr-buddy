@@ -98,36 +98,36 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     if (!incident) return;
 
     try {
-      // Load signatures
-      const { data: sigData } = await (supabase as any)
+      // Load signatures - typed query
+      const { data: sigData } = await supabase
         .from("incident_signatures")
         .select("*")
         .eq("incident_id", incident.id);
       
       if (sigData) {
-        const mappedSignatures: SignatureDataLocal[] = sigData.map((sig: Record<string, unknown>) => ({
-          id: String(sig.id || ''),
-          signature_image: String(sig.signature_data || sig.signature_image || ''),
-          signatory_name: String(sig.signer_name || sig.signatory_name || ''),
-          signatory_role: String(sig.signer_role || sig.signatory_role || ''),
-          signed_at: String(sig.signed_at || sig.created_at || new Date().toISOString()),
+        const mappedSignatures: SignatureDataLocal[] = sigData.map((sig) => ({
+          id: sig.id,
+          signature_image: sig.signature_data || '',
+          signatory_name: sig.signer_name,
+          signatory_role: sig.signer_role || '',
+          signed_at: sig.signed_at || sig.created_at || new Date().toISOString(),
         }));
         setSignatures(mappedSignatures);
       }
 
-      // Load corrective actions
-      const { data: actionData } = await (supabase as any)
+      // Load corrective actions - typed query
+      const { data: actionData } = await supabase
         .from("incident_actions")
         .select("*")
         .eq("incident_id", incident.id);
       
       if (actionData) {
-        const mappedActions: CorrectiveAction[] = actionData.map((action: Record<string, unknown>) => ({
-          id: String(action.id || ''),
-          action_description: String(action.description || action.action_description || ''),
-          assigned_to: String(action.assigned_to || action.assigned_to_name || ''),
-          due_date: String(action.due_date || ''),
-          status: String(action.status || 'pending'),
+        const mappedActions: CorrectiveAction[] = actionData.map((action) => ({
+          id: action.id,
+          action_description: action.description || '',
+          assigned_to: action.assigned_to || action.assigned_to_name || '',
+          due_date: action.due_date || '',
+          status: action.status || 'pending',
         }));
         setCorrectiveActions(mappedActions);
       }
@@ -140,7 +140,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     if (!incident) return;
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("incident_signatures")
         .insert({
           incident_id: incident.id,
@@ -179,12 +179,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     }
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("incident_actions")
         .insert({
           incident_id: incident.id,
+          title: newAction.action_description,
+          action_type: "corrective",
           description: newAction.action_description,
-          assigned_to: newAction.assigned_to,
+          assigned_to_name: newAction.assigned_to,
           due_date: newAction.due_date,
           status: newAction.status
         });
