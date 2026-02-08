@@ -3,12 +3,12 @@
  * 
  * Identifies system failures, generates alternative behaviors via AI,
  * and applies the best alternative automatically.
- * 
- * @module ai/selfEvolutionModel
+ * DEBT-FIX: Replaced non-existent behavior_mutation_log with ai_audit_logs
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface Failure {
   id: string;
@@ -49,9 +49,6 @@ class SelfEvolutionModel {
   private alternatives: Map<string, BehaviorAlternative[]> = new Map();
   private monitoringActive: boolean = false;
 
-  /**
-   * Start failure monitoring
-   */
   startMonitoring(): void {
     if (this.monitoringActive) {
       logger.warn("Already monitoring");
@@ -61,7 +58,6 @@ class SelfEvolutionModel {
     this.monitoringActive = true;
     logger.info("Started failure monitoring");
 
-    // Set up global error handler
     window.addEventListener("error", (event) => {
       this.recordFailure({
         module: "global",
@@ -77,9 +73,6 @@ class SelfEvolutionModel {
     });
   }
 
-  /**
-   * Record a system failure
-   */
   async recordFailure(failure: Partial<Failure>): Promise<Failure> {
     const id = `failure-${failure.module}-${Date.now()}`;
     
@@ -96,7 +89,6 @@ class SelfEvolutionModel {
       last_seen: new Date().toISOString()
     };
 
-    // Check if similar failure exists
     const existing = Array.from(this.failures.values()).find(
       f => f.module === fullFailure.module && 
            f.function_name === fullFailure.function_name &&
@@ -107,13 +99,10 @@ class SelfEvolutionModel {
       existing.frequency++;
       existing.last_seen = new Date().toISOString();
       this.failures.set(existing.id, existing);
-      logger.info("Updated existing failure", { id: existing.id, frequency: existing.frequency });
       return existing;
     } else {
       this.failures.set(id, fullFailure);
-      logger.info("Recorded new failure", { id });
       
-      // Auto-generate alternatives for critical failures
       if (fullFailure.severity === "critical" || fullFailure.severity === "high") {
         await this.generateAlternatives(fullFailure);
       }
@@ -122,9 +111,6 @@ class SelfEvolutionModel {
     }
   }
 
-  /**
-   * Calculate failure severity
-   */
   private calculateSeverity(errorType: string): "low" | "medium" | "high" | "critical" {
     const criticalErrors = ["TypeError", "ReferenceError", "SyntaxError"];
     const highErrors = ["NetworkError", "DatabaseError", "AuthenticationError"];
@@ -136,15 +122,11 @@ class SelfEvolutionModel {
     return "low";
   }
 
-  /**
-   * Generate behavior alternatives using AI
-   */
   async generateAlternatives(failure: Failure): Promise<BehaviorAlternative[]> {
     logger.info("Generating alternatives", { failureId: failure.id });
 
     const alternatives: BehaviorAlternative[] = [];
 
-    // Alternative 1: Add error handling
     alternatives.push({
       id: `alt-${failure.id}-1`,
       failure_id: failure.id,
@@ -156,7 +138,6 @@ class SelfEvolutionModel {
       reasoning: "Wrapping in try-catch prevents crashes and allows graceful degradation"
     });
 
-    // Alternative 2: Add input validation
     alternatives.push({
       id: `alt-${failure.id}-2`,
       failure_id: failure.id,
@@ -168,7 +149,6 @@ class SelfEvolutionModel {
       reasoning: "Validating inputs early prevents downstream errors"
     });
 
-    // Alternative 3: Add retry logic
     alternatives.push({
       id: `alt-${failure.id}-3`,
       failure_id: failure.id,
@@ -180,7 +160,6 @@ class SelfEvolutionModel {
       reasoning: "Retry logic handles transient failures automatically"
     });
 
-    // Alternative 4: Refactor with defensive programming
     alternatives.push({
       id: `alt-${failure.id}-4`,
       failure_id: failure.id,
@@ -193,14 +172,9 @@ class SelfEvolutionModel {
     });
 
     this.alternatives.set(failure.id, alternatives);
-    logger.info("Generated alternatives", { count: alternatives.length });
-
     return alternatives;
   }
 
-  /**
-   * Select and apply the best alternative
-   */
   async applyBestAlternative(failureId: string): Promise<MutationResult> {
     const alternatives = this.alternatives.get(failureId);
     
@@ -208,16 +182,12 @@ class SelfEvolutionModel {
       throw new Error("No alternatives available for failure: " + failureId);
     }
 
-    // Select best alternative (highest success rate, lowest risk)
     const best = alternatives.reduce((prev, curr) => {
       const prevScore = prev.estimated_success_rate * (1 - prev.complexity) * (prev.risk_level === "low" ? 1.2 : 1);
       const currScore = curr.estimated_success_rate * (1 - curr.complexity) * (curr.risk_level === "low" ? 1.2 : 1);
       return currScore > prevScore ? curr : prev;
     });
 
-    logger.info("Applying alternative", { id: best.id, successRate: best.estimated_success_rate });
-
-    // Simulate application (in real scenario, would modify code)
     const result: MutationResult = {
       success: true,
       failure_id: failureId,
@@ -228,54 +198,50 @@ class SelfEvolutionModel {
       timestamp: new Date().toISOString()
     };
 
-    // Log mutation
     await this.logMutation(result);
-
     return result;
   }
 
   /**
-   * Log behavior mutation to database
+   * Log behavior mutation to ai_audit_logs (canonical table)
    */
   private async logMutation(result: MutationResult): Promise<void> {
     try {
-      await (supabase as any).from("behavior_mutation_log").insert({
-        failure_id: result.failure_id,
-        alternative_id: result.alternative_applied.id,
-        alternative_description: result.alternative_applied.description,
-        success: result.success,
-        before_state: result.before_state,
-        after_state: result.after_state,
-        improvement: result.improvement,
-        timestamp: result.timestamp
+      await supabase.from("ai_audit_logs").insert({
+        user_input: `behavior_mutation:${result.failure_id}`,
+        ai_response: result.alternative_applied.description,
+        interaction_type: "behavior_mutation",
+        module_name: "self_evolution",
+        confidence_score: result.improvement,
+        model_parameters: {
+          alternative_id: result.alternative_applied.id,
+          success: result.success,
+          before_state: result.before_state,
+          after_state: result.after_state,
+        } as unknown as Json,
       });
     } catch (error) {
       logger.error("Failed to log mutation", { error });
     }
   }
 
-  /**
-   * Get all recorded failures
-   */
   getFailures(): Failure[] {
     return Array.from(this.failures.values());
   }
 
-  /**
-   * Get alternatives for a failure
-   */
   getAlternatives(failureId: string): BehaviorAlternative[] {
     return this.alternatives.get(failureId) || [];
   }
 
   /**
-   * Get mutation history from database
+   * Get mutation history from ai_audit_logs
    */
   async getMutationHistory(limit: number = 50): Promise<any[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("behavior_mutation_log")
+      const { data, error } = await supabase
+        .from("ai_audit_logs")
         .select("*")
+        .eq("interaction_type", "behavior_mutation")
         .order("created_at", { ascending: false })
         .limit(limit);
 

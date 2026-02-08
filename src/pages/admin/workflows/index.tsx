@@ -1,4 +1,7 @@
-// PATCH 860: Type safety restored - using type assertions for dynamic tables
+/**
+ * Smart Workflows Page
+ * DEBT-FIX: Typed queries using smart_workflows schema (name instead of title)
+ */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,21 +16,19 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { WorkflowAIScoreCard } from "@/components/workflows";
-
-interface SmartWorkflow {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  created_by: string | null;
-  category: string | null;
-  tags: string[] | null;
-}
+import { Badge } from "@/components/ui/badge";
 
 export default function SmartWorkflowPage() {
-  const [workflows, setWorkflows] = useState<SmartWorkflow[]>([]);
+  const [workflows, setWorkflows] = useState<Array<{
+    id: string;
+    name: string;
+    description: string | null;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    created_by: string | null;
+    workflow_type: string;
+  }>>([]);
   const [newTitle, setNewTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
@@ -36,14 +37,13 @@ export default function SmartWorkflowPage() {
   async function fetchWorkflows() {
     try {
       setIsLoading(true);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("smart_workflows")
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      setWorkflows((data as SmartWorkflow[]) || []);
+      setWorkflows(data || []);
     } catch {
       toast({
         title: "Erro",
@@ -69,11 +69,10 @@ export default function SmartWorkflowPage() {
       setIsCreating(true);
       const { data: userData } = await supabase.auth.getUser();
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("smart_workflows")
         .insert({ 
-          title: newTitle,
+          name: newTitle,
           created_by: userData.user?.id 
         });
       
@@ -163,14 +162,10 @@ export default function SmartWorkflowPage() {
                 <Card key={wf.id} className="p-4 hover:shadow-lg transition">
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
-                      <h3 className="text-lg font-semibold">{wf.title}</h3>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        wf.status === "active" 
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}>
+                      <h3 className="text-lg font-semibold">{wf.name}</h3>
+                      <Badge variant={wf.status === "active" ? "default" : "secondary"}>
                         {wf.status === "active" ? "Ativo" : "Rascunho"}
-                      </span>
+                      </Badge>
                     </div>
                     
                     {wf.description && (
