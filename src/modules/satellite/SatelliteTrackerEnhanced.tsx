@@ -224,13 +224,14 @@ export const SatelliteTrackerEnhanced = () => {
   const simulateTLEUpdate = async () => {
     // Simulate satellite position updates
     try {
-      const updates = satellites.map((sat) => ({
+      const t = Date.now() / 10000;
+      const updates = satellites.map((sat, idx) => ({
         ...sat,
-        latitude: sat.latitude + (Math.random() - 0.5) * 2,
-        longitude: sat.longitude + (Math.random() - 0.5) * 2,
-        altitude_km: sat.altitude_km + (Math.random() - 0.5) * 5,
-        azimuth: (sat.azimuth + Math.random() * 10) % 360,
-        elevation: Math.max(0, Math.min(90, sat.elevation + (Math.random() - 0.5) * 5)),
+        latitude: sat.latitude + Math.sin(t + idx) * 0.8,
+        longitude: sat.longitude + Math.cos(t + idx * 1.3) * 0.8,
+        altitude_km: sat.altitude_km + Math.sin(t * 0.5 + idx) * 2,
+        azimuth: (sat.azimuth + Math.abs(Math.sin(t + idx)) * 5) % 360,
+        elevation: Math.max(0, Math.min(90, sat.elevation + Math.sin(t * 0.7 + idx) * 2)),
         timestamp: new Date().toISOString(),
       }));
 
@@ -261,9 +262,10 @@ export const SatelliteTrackerEnhanced = () => {
 
   const checkCoverageEvents = async (satellites: SatelliteData[]) => {
     for (const sat of satellites) {
-      // Simulate coverage entry/exit events
-      if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
-        const eventType = Math.random() > 0.5 ? "entry" : "exit";
+      // Deterministic coverage events based on satellite index
+      const satIdx = satellites.indexOf(sat);
+      if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && (satIdx % 3 === 0)) {
+        const eventType = satIdx % 2 === 0 ? "entry" : "exit";
 
         // Coverage events stored in satellite_coverage_maps
         await supabase.from("satellite_coverage_maps").insert({

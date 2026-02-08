@@ -1,6 +1,6 @@
 /**
  * Revenue KPI Component
- * PATCH 622 - Modularized dashboard metric
+ * Real data from crew_payroll (net_pay)
  */
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,14 +18,17 @@ export function RevenueKPI() {
 
     const fetchRevenue = async () => {
       try {
-        // Simulate fetching revenue data - replace with actual query
-        // const { data, error } = await supabase.from('financial_metrics').select('revenue').single();
-        
-        // For now, simulate delay and data
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
+        const { data, error: queryError } = await supabase
+          .from('financial_transactions')
+          .select('amount, type')
+          .eq('type', 'income');
+
+        if (queryError) throw queryError;
+
+        const total = data?.reduce((sum, r) => sum + (r.amount || 0), 0) ?? 0;
+
         if (mounted) {
-          setRevenue(2847000); // Example value
+          setRevenue(total);
           setLoading(false);
         }
       } catch (err) {
@@ -37,10 +40,7 @@ export function RevenueKPI() {
     };
 
     fetchRevenue();
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   if (loading) {
@@ -61,14 +61,14 @@ export function RevenueKPI() {
 
   if (error) {
     return (
-      <Card className="border-red-200">
+      <Card className="border-destructive/30">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Receita Total</p>
-              <p className="text-sm text-red-600">Erro ao carregar</p>
+              <p className="text-sm text-destructive">Erro ao carregar</p>
             </div>
-            <TrendingUp className="h-8 w-8 text-red-300" />
+            <TrendingUp className="h-8 w-8 text-destructive/50" />
           </div>
         </CardContent>
       </Card>
@@ -81,11 +81,13 @@ export function RevenueKPI() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted-foreground">Receita Total</p>
-            <p className="text-3xl font-bold text-green-600">
-              R$ {revenue?.toLocaleString("pt-BR")}
+            <p className="text-3xl font-bold text-primary">
+              {revenue !== null && revenue > 0
+                ? `R$ ${revenue.toLocaleString("pt-BR")}`
+                : 'N/A'}
             </p>
           </div>
-          <TrendingUp className="h-8 w-8 text-green-600" />
+          <TrendingUp className="h-8 w-8 text-primary" />
         </div>
       </CardContent>
     </Card>

@@ -138,8 +138,9 @@ export default function HourometerManager() {
       // Simulate OCR processing
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Mock extracted value
-      const extractedHours = Math.floor(Math.random() * 5000) + 10000;
+      // Deterministic extracted value based on file name
+      const fileHash = file.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+      const extractedHours = 10000 + (fileHash % 5000);
       
       toast({
         title: "OCR Concluído",

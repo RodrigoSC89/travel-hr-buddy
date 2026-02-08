@@ -175,15 +175,17 @@ class MultiAgentScanner {
     const current = this.metrics.get(agentId);
     if (!current) return;
 
-    // Simulate metric updates (in production, these would be real measurements)
+    // Deterministic metric updates based on agent ID and time
+    const t = Date.now() / 10000;
+    const idHash = agentId.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
     const updated: AgentMetrics = {
       agent_id: agentId,
-      response_time_ms: Math.random() * 2000 + 500,
-      success_rate: Math.random() * 20 + 80, // 80-100%
-      error_count: current.error_count + (Math.random() > 0.95 ? 1 : 0),
-      total_requests: current.total_requests + Math.floor(Math.random() * 10),
-      avg_confidence: Math.random() * 0.3 + 0.7, // 70-100%
-      uptime_percent: Math.random() * 10 + 90, // 90-100%
+      response_time_ms: 500 + Math.abs(Math.sin(t + idHash)) * 1500,
+      success_rate: 80 + Math.abs(Math.sin(t * 0.5 + idHash)) * 18,
+      error_count: current.error_count + (Math.floor(t) % 20 === 0 ? 1 : 0),
+      total_requests: current.total_requests + 1 + (idHash % 5),
+      avg_confidence: 0.7 + Math.abs(Math.sin(t * 0.3 + idHash)) * 0.28,
+      uptime_percent: 90 + Math.abs(Math.sin(t * 0.2 + idHash)) * 9.5,
       last_updated: new Date().toISOString()
     };
 

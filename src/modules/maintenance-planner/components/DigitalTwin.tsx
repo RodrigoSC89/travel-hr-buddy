@@ -72,115 +72,85 @@ interface TelemetryData {
   };
 }
 
-// Simulated real-time telemetry
-const generateTelemetry = (): TelemetryData => ({
-  timestamp: new Date(),
-  systems: [
-    {
-      id: "me1",
-      name: "Main Engine Port",
-      type: "propulsion",
-      status: "operational",
-      health: 94,
-      temperature: 78 + Math.random() * 5,
-      rpm: 720 + Math.random() * 30,
-      fuelRate: 245 + Math.random() * 20,
-      lastUpdate: new Date()
+// Deterministic telemetry using sine waves for smooth, stable values
+const generateTelemetry = (): TelemetryData => {
+  const t = Date.now() / 10000;
+  const sin = (phase: number, amp: number, base: number) => base + Math.sin(t + phase) * amp;
+  
+  return {
+    timestamp: new Date(),
+    systems: [
+      {
+        id: "me1", name: "Main Engine Port", type: "propulsion",
+        status: "operational", health: 94,
+        temperature: sin(0, 2.5, 80), rpm: sin(0.5, 15, 735),
+        fuelRate: sin(1, 10, 255), lastUpdate: new Date()
+      },
+      {
+        id: "me2", name: "Main Engine Starboard", type: "propulsion",
+        status: "operational", health: 91,
+        temperature: sin(1, 2.5, 78), rpm: sin(1.5, 15, 730),
+        fuelRate: sin(2, 10, 248), lastUpdate: new Date()
+      },
+      {
+        id: "gen1", name: "Generator #1", type: "electrical",
+        status: "operational", health: 97,
+        voltage: sin(2, 2.5, 442), current: sin(2.5, 25, 875),
+        temperature: sin(3, 1.5, 66.5), lastUpdate: new Date()
+      },
+      {
+        id: "gen2", name: "Generator #2", type: "electrical",
+        status: "warning", health: 78,
+        voltage: sin(3, 2.5, 440), current: sin(3.5, 25, 845),
+        temperature: sin(4, 2.5, 74.5), lastUpdate: new Date()
+      },
+      {
+        id: "thruster1", name: "Bow Thruster", type: "propulsion",
+        status: "operational", health: 89,
+        rpm: sin(4, 10, 190), pressure: sin(4.5, 5, 285),
+        lastUpdate: new Date()
+      },
+      {
+        id: "thruster2", name: "Stern Thruster", type: "propulsion",
+        status: "operational", health: 92,
+        rpm: sin(5, 10, 185), pressure: sin(5.5, 5, 280),
+        lastUpdate: new Date()
+      },
+      {
+        id: "hpu1", name: "HPU Main", type: "hydraulic",
+        status: "operational", health: 95,
+        pressure: sin(6, 2.5, 212.5), temperature: sin(6.5, 1.5, 56.5),
+        lastUpdate: new Date()
+      },
+      {
+        id: "nav1", name: "Navigation System", type: "navigation",
+        status: "operational", health: 100,
+        lastUpdate: new Date()
+      }
+    ],
+    vessel: {
+      heading: sin(0, 1, 126),
+      speed: sin(0.5, 0.25, 8.75),
+      position: { lat: -22.9068 + Math.sin(t * 0.01) * 0.0005, lng: -43.1729 + Math.cos(t * 0.01) * 0.0005 },
+      draft: 6.2,
+      trim: sin(1, 0.05, 0.35),
+      heel: sin(1.5, 0.25, 1.45)
     },
-    {
-      id: "me2",
-      name: "Main Engine Starboard",
-      type: "propulsion",
-      status: "operational",
-      health: 91,
-      temperature: 76 + Math.random() * 5,
-      rpm: 715 + Math.random() * 30,
-      fuelRate: 238 + Math.random() * 20,
-      lastUpdate: new Date()
+    environment: {
+      windSpeed: sin(2, 2.5, 20.5),
+      windDirection: sin(2.5, 5, 50),
+      waveHeight: sin(3, 0.15, 1.95),
+      seaState: 4,
+      visibility: sin(3.5, 1, 9)
     },
-    {
-      id: "gen1",
-      name: "Generator #1",
-      type: "electrical",
-      status: "operational",
-      health: 97,
-      voltage: 440 + Math.random() * 5,
-      current: 850 + Math.random() * 50,
-      temperature: 65 + Math.random() * 3,
-      lastUpdate: new Date()
-    },
-    {
-      id: "gen2",
-      name: "Generator #2",
-      type: "electrical",
-      status: "warning",
-      health: 78,
-      voltage: 438 + Math.random() * 5,
-      current: 820 + Math.random() * 50,
-      temperature: 72 + Math.random() * 5,
-      lastUpdate: new Date()
-    },
-    {
-      id: "thruster1",
-      name: "Bow Thruster",
-      type: "propulsion",
-      status: "operational",
-      health: 89,
-      rpm: 180 + Math.random() * 20,
-      pressure: 280 + Math.random() * 10,
-      lastUpdate: new Date()
-    },
-    {
-      id: "thruster2",
-      name: "Stern Thruster",
-      type: "propulsion",
-      status: "operational",
-      health: 92,
-      rpm: 175 + Math.random() * 20,
-      pressure: 275 + Math.random() * 10,
-      lastUpdate: new Date()
-    },
-    {
-      id: "hpu1",
-      name: "HPU Main",
-      type: "hydraulic",
-      status: "operational",
-      health: 95,
-      pressure: 210 + Math.random() * 5,
-      temperature: 55 + Math.random() * 3,
-      lastUpdate: new Date()
-    },
-    {
-      id: "nav1",
-      name: "Navigation System",
-      type: "navigation",
-      status: "operational",
-      health: 100,
-      lastUpdate: new Date()
+    dp: {
+      mode: "AUTO",
+      status: "active",
+      alertLevel: 1,
+      thrusterUtilization: [65, 72, 58, 45]
     }
-  ],
-  vessel: {
-    heading: 125 + Math.random() * 2,
-    speed: 8.5 + Math.random() * 0.5,
-    position: { lat: -22.9068 + Math.random() * 0.001, lng: -43.1729 + Math.random() * 0.001 },
-    draft: 6.2,
-    trim: 0.3 + Math.random() * 0.1,
-    heel: 1.2 + Math.random() * 0.5
-  },
-  environment: {
-    windSpeed: 18 + Math.random() * 5,
-    windDirection: 45 + Math.random() * 10,
-    waveHeight: 1.8 + Math.random() * 0.3,
-    seaState: 4,
-    visibility: 8 + Math.random() * 2
-  },
-  dp: {
-    mode: "AUTO",
-    status: "active",
-    alertLevel: 1,
-    thrusterUtilization: [65, 72, 58, 45]
-  }
-});
+  };
+};
 
 const SystemCard = ({ system }: { system: SystemStatus }) => {
   const getStatusColor = (status: string) => {

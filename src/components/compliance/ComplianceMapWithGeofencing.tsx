@@ -165,9 +165,14 @@ export function ComplianceMapWithGeofencing({
         
         for (const vessel of data) {
           const loc = parseLocation(vessel.current_location, vessel.metadata);
-          // Generate default positions for vessels without coordinates
-          const defaultLat = -23.0 + Math.random() * 50; // Random lat for demo
-          const defaultLng = -43.0 + Math.random() * 100; // Random lng for demo
+          // Generate deterministic positions for vessels without coordinates
+          const nameHash = (vessel.name || '').split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+          const defaultLat = -23.0 + (nameHash % 50);
+          const defaultLng = -43.0 + ((nameHash * 7) % 100);
+          
+          // Deterministic due date based on vessel id
+          const idHash = (vessel.id || '').split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+          const daysUntilDue = 5 + (idHash % 25);
           
           mapped.push({
             id: vessel.id,
@@ -178,7 +183,7 @@ export function ComplianceMapWithGeofencing({
             lng: loc?.lng ?? defaultLng,
             status: mapVesselStatus(vessel.status),
             inspectionType: 'mlc',
-            dueDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
+            dueDate: new Date(Date.now() + daysUntilDue * 24 * 60 * 60 * 1000).toISOString()
           });
         }
         

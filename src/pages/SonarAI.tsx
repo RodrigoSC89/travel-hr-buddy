@@ -41,7 +41,7 @@ export default function SonarAI() {
     setItems(p => p.map(i => i.id === id ? { ...i, status: 'training' } : i)); 
     toast.info('Treinamento iniciado...'); 
     setTimeout(() => { 
-      setItems(p => p.map(i => i.id === id ? { ...i, status: 'active', accuracy: Math.min(i.accuracy + Math.random() * 5, 99) } : i)); 
+      setItems(p => p.map(i => i.id === id ? { ...i, status: 'active', accuracy: Math.min(i.accuracy + 2.5, 99) } : i)); 
       toast.success('Treinamento concluído'); 
     }, 3000); 
   };

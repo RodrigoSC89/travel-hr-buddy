@@ -90,31 +90,32 @@ export default function Patch519DeepRiskAI() {
       return;
     }
 
-    // Simular análise de IA
+    // Deterministic risk factors based on input hash
+    const inputHash = context.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
     const factors: RiskFactor[] = [
       {
         name: "Contexto Operacional",
-        value: Math.floor(Math.random() * 40) + 40,
+        value: 40 + (inputHash % 40),
         weight: 0.3,
-        impact: Math.random() > 0.5 ? "high" : "medium",
+        impact: (inputHash % 2) === 0 ? "high" : "medium",
       },
       {
         name: "Fatores Ambientais",
-        value: Math.floor(Math.random() * 40) + 30,
+        value: 30 + ((inputHash * 7) % 40),
         weight: 0.25,
-        impact: Math.random() > 0.7 ? "critical" : "high",
+        impact: (inputHash % 3) === 0 ? "critical" : "high",
       },
       {
         name: "Recursos Disponíveis",
-        value: Math.floor(Math.random() * 30) + 50,
+        value: 50 + ((inputHash * 3) % 30),
         weight: 0.2,
         impact: "medium",
       },
       {
         name: "Preparação da Equipe",
-        value: Math.floor(Math.random() * 30) + 40,
+        value: 40 + ((inputHash * 5) % 30),
         weight: 0.25,
-        impact: Math.random() > 0.6 ? "high" : "low",
+        impact: (inputHash % 5) > 2 ? "high" : "low",
       },
     ];
 

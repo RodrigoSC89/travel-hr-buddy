@@ -76,9 +76,11 @@ const VesselCard: React.FC<{
   index
 }) => {
   const status = statusConfig[vessel.status] || statusConfig.inactive;
-  const fuelLevel = vessel.fuel_level || Math.floor(Math.random() * 40 + 60);
-  const efficiency = vessel.efficiency || Math.floor(Math.random() * 15 + 85);
-  const crewCount = vessel.crew_count || Math.floor(Math.random() * 10 + 18);
+  // Deterministic fallback based on vessel name hash
+  const nameHash = (vessel.name || '').split('').reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0);
+  const fuelLevel = vessel.fuel_level || (60 + (nameHash % 35));
+  const efficiency = vessel.efficiency || (85 + (nameHash % 14));
+  const crewCount = vessel.crew_count || (18 + ((nameHash * 3) % 10));
 
   return (
     <motion.div

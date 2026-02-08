@@ -257,7 +257,7 @@ const VRTrainingPage = () => {
 
   const completeSession = useCallback(() => {
     if (activeSession && selectedScenario) {
-      const finalScore = Math.floor(Math.random() * 30) + 70;
+      const finalScore = Math.floor(70 + (selectedScenario.id.charCodeAt(0) % 25));
       setScenarios(prev => prev.map(s => 
         s.id === selectedScenario.id 
           ? { 

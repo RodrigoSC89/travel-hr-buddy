@@ -268,13 +268,18 @@ const NautilusAIHub: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map((day, i) => (
+                  {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map((day, i) => {
+                    // Deterministic values based on day index
+                    const progressVal = 50 + Math.sin(i * 1.2) * 30 + (i % 3) * 8;
+                    const countVal = Math.floor(25 + Math.sin(i * 0.9 + 1) * 12 + (i % 2) * 5);
+                    return (
                     <div key={day} className="flex items-center gap-3">
                       <span className="text-sm text-muted-foreground w-10">{day}</span>
-                      <Progress value={40 + Math.random() * 50} className="flex-1" />
-                      <span className="text-sm text-foreground w-12">{Math.floor(20 + Math.random() * 30)}</span>
+                      <Progress value={Math.max(10, Math.min(95, progressVal))} className="flex-1" />
+                      <span className="text-sm text-foreground w-12">{countVal}</span>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

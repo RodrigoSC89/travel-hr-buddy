@@ -65,17 +65,20 @@ const VesselPerformanceMonitor = () => {
     }
   };
 
-  // Generate mock history for chart (since we don't have real-time history)
+  // Generate deterministic history for chart using sine waves
   const generateChartData = (vesselData: VesselPerformanceData) => {
     const now = new Date();
+    const nameHash = vesselData.vesselName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     return Array.from({ length: 24 }, (_, i) => {
       const time = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
-      const variance = (Math.random() - 0.5) * 10;
+      const phase = nameHash * 0.1;
+      const sineVal = Math.sin((i / 24) * Math.PI * 2 + phase) * 5;
+      const cosVal = Math.cos((i / 24) * Math.PI * 3 + phase * 0.7) * 2;
       return {
         time: time.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-        speed: Math.max(0, vesselData.averageSpeed + variance),
-        fuel: Math.max(0, vesselData.fuelConsumption + variance * 0.5),
-        efficiency: Math.max(0, Math.min(100, vesselData.efficiency + variance * 0.8))
+        speed: Math.max(0, vesselData.averageSpeed + sineVal),
+        fuel: Math.max(0, vesselData.fuelConsumption + cosVal),
+        efficiency: Math.max(0, Math.min(100, vesselData.efficiency + sineVal * 0.8))
       };
     });
   };
