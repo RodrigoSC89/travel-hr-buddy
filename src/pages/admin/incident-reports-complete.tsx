@@ -16,7 +16,6 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
 
-// Lazy load jsPDF
 const loadJsPDF = async () => {
   const [{ default: jsPDF }, autoTableModule] = await Promise.all([
     import("jspdf"),
@@ -27,24 +26,23 @@ const loadJsPDF = async () => {
 
 interface IncidentReport {
   id: string;
-  incident_number: string;
+  incident_number: string | null;
   title: string;
   description: string;
-  severity: "low" | "medium" | "high" | "critical";
-  category: string;
-  status: "pending" | "under_analysis" | "resolved" | "closed";
-  reported_by: string;
-  assigned_to: string;
-  incident_date: string;
-  incident_location: string;
-  impact_level: string;
-  root_cause: string;
-  immediate_actions: string;
-  created_at: string;
-  updated_at: string;
-  resolved_at?: string;
+  severity: string;
+  status: string;
+  reported_by: string | null;
+  assigned_to: string | null;
+  incident_date: string | null;
+  location: string;
+  code: string;
+  type: string;
+  created_at: string | null;
+  updated_at: string | null;
+  metadata: Record<string, any> | null;
 }
 
+// In-memory followup storage (incident_followups table doesn't exist)
 interface IncidentFollowup {
   id: string;
   incident_id: string;
@@ -55,6 +53,8 @@ interface IncidentFollowup {
   new_status: string;
   created_at: string;
 }
+
+const followupStore: IncidentFollowup[] = [];
 
 export default function IncidentReportsComplete() {
   const { toast } = useToast();
@@ -86,7 +86,6 @@ export default function IncidentReportsComplete() {
   useEffect(() => {
     loadIncidents();
     
-    // Real-time subscription
     const channel = supabase
       .channel("incident-changes")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "incident_reports" }, (payload) => {
@@ -104,13 +103,14 @@ export default function IncidentReportsComplete() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      // incident_reports table exists in schema
+      const { data, error } = await supabase
         .from("incident_reports")
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      setIncidents(data || []);
+      setIncidents((data || []) as IncidentReport[]);
     } catch (error) {
       logger.error("Error loading incidents", { error });
       toast({
@@ -124,18 +124,9 @@ export default function IncidentReportsComplete() {
   };
 
   const loadFollowups = async (incidentId: string) => {
-    try {
-      const { data, error } = await (supabase as any)
-        .from("incident_followups")
-        .select("*")
-        .eq("incident_id", incidentId)
-        .order("created_at", { ascending: false });
-      
-      if (error) throw error;
-      setFollowups(data || []);
-    } catch (error) {
-      logger.error("Error loading followups", { error });
-    }
+    // incident_followups table doesn't exist - use in-memory store
+    const filtered = followupStore.filter(f => f.incident_id === incidentId);
+    setFollowups(filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
   };
 
   const createIncident = async () => {
@@ -145,12 +136,20 @@ export default function IncidentReportsComplete() {
 
       const incidentNumber = `INC-${Date.now()}`;
       
-      const { data, error } = await (supabase as any)
+      // incident_reports requires: code, description, location, severity, title, type
+      const { data, error } = await supabase
         .from("incident_reports")
         .insert({
+          code: incidentNumber,
           incident_number: incidentNumber,
+          title: newIncident.title,
+          description: newIncident.description,
+          severity: newIncident.severity,
+          type: newIncident.category,
+          location: newIncident.incident_location || "N/A",
           reported_by: user.id,
-          ...newIncident
+          incident_date: newIncident.incident_date,
+          metadata: { impact_level: newIncident.impact_level },
         })
         .select()
         .single();
@@ -173,9 +172,6 @@ export default function IncidentReportsComplete() {
         incident_date: new Date().toISOString(),
       });
       
-      // Auto-route to responsible team
-      await autoRouteIncident(data);
-      
     } catch (error) {
       logger.error("Error creating incident", { error });
       toast({
@@ -186,34 +182,6 @@ export default function IncidentReportsComplete() {
     }
   };
 
-  const autoRouteIncident = async (incident: IncidentReport) => {
-    // Auto-assign based on category
-    const teamMapping: Record<string, string> = {
-      safety: "safety",
-      operational: "operations",
-      environmental: "operations",
-      equipment: "maintenance",
-      personnel: "hr"
-    };
-    
-    const assignedTeam = teamMapping[incident.category] || "operations";
-    
-    // Create workflow state
-    try {
-      await (supabase as any)
-        .from("incident_workflow_states")
-        .insert({
-          incident_id: incident.id,
-          workflow_stage: "reported",
-          assigned_team: assignedTeam,
-          escalation_level: incident.severity === "critical" ? 1 : 0,
-          sla_deadline: new Date(Date.now() + (incident.severity === "critical" ? 4 : 24) * 60 * 60 * 1000).toISOString()
-        });
-    } catch (error) {
-      logger.error("Error routing incident", { error });
-    }
-  };
-
   const addFollowup = async () => {
     if (!selectedIncident || !newFollowup.description) return;
     
@@ -221,26 +189,27 @@ export default function IncidentReportsComplete() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await (supabase as any)
-        .from("incident_followups")
-        .insert({
-          incident_id: selectedIncident.id,
-          created_by: user.id,
-          created_by_name: user.email?.split("@")[0] || "Unknown",
-          previous_status: selectedIncident.status,
-          ...newFollowup
-        });
-      
-      if (error) throw error;
+      // Store followup in-memory (table doesn't exist)
+      const followup: IncidentFollowup = {
+        id: `followup-${Date.now()}`,
+        incident_id: selectedIncident.id,
+        followup_type: newFollowup.followup_type,
+        description: newFollowup.description,
+        created_by_name: user.email?.split("@")[0] || "Unknown",
+        previous_status: selectedIncident.status,
+        new_status: newFollowup.new_status || selectedIncident.status,
+        created_at: new Date().toISOString(),
+      };
+
+      followupStore.push(followup);
       
       // Update incident status if changed
       if (newFollowup.new_status && newFollowup.new_status !== selectedIncident.status) {
-        await (supabase as any)
+        await supabase
           .from("incident_reports")
           .update({ 
             status: newFollowup.new_status,
             updated_at: new Date().toISOString(),
-            ...((newFollowup.new_status === "resolved" || newFollowup.new_status === "closed") && { resolved_at: new Date().toISOString() })
           })
           .eq("id", selectedIncident.id);
       }
@@ -271,26 +240,22 @@ export default function IncidentReportsComplete() {
     const { jsPDF } = await loadJsPDF();
     const doc = new jsPDF();
     
-    // Title
     doc.setFontSize(20);
     doc.text("Relatório de Incidente", 20, 20);
     
-    // Incident details
     doc.setFontSize(12);
-    doc.text(`Número: ${incident.incident_number}`, 20, 35);
+    doc.text(`Número: ${incident.incident_number || incident.code}`, 20, 35);
     doc.text(`Título: ${incident.title}`, 20, 45);
     doc.text(`Severidade: ${incident.severity.toUpperCase()}`, 20, 55);
-    doc.text(`Categoria: ${incident.category}`, 20, 65);
+    doc.text(`Tipo: ${incident.type}`, 20, 65);
     doc.text(`Status: ${incident.status}`, 20, 75);
-    doc.text(`Local: ${incident.incident_location || "N/A"}`, 20, 85);
-    doc.text(`Data: ${new Date(incident.incident_date).toLocaleString("pt-BR")}`, 20, 95);
+    doc.text(`Local: ${incident.location || "N/A"}`, 20, 85);
+    doc.text(`Data: ${incident.incident_date ? new Date(incident.incident_date).toLocaleString("pt-BR") : "N/A"}`, 20, 95);
     
-    // Description
     doc.text("Descrição:", 20, 110);
     const splitDescription = doc.splitTextToSize(incident.description, 170);
     doc.text(splitDescription, 20, 120);
     
-    // Add followups if available
     if (followups.length > 0) {
       let yPos = 140 + (splitDescription.length * 7);
       doc.text("Histórico de Acompanhamento:", 20, yPos);
@@ -311,7 +276,7 @@ export default function IncidentReportsComplete() {
       });
     }
     
-    doc.save(`incident-${incident.incident_number}.pdf`);
+    doc.save(`incident-${incident.incident_number || incident.code}.pdf`);
     
     toast({
       title: "Sucesso",
@@ -359,7 +324,6 @@ export default function IncidentReportsComplete() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -470,7 +434,6 @@ export default function IncidentReportsComplete() {
         </Dialog>
       </div>
 
-      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-3">
@@ -506,255 +469,184 @@ export default function IncidentReportsComplete() {
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtros</CardTitle>
-        </CardHeader>
-        <CardContent className="flex gap-4">
-          <div className="flex-1">
-            <Label>Status</Label>
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="pending">Pendente</SelectItem>
-                <SelectItem value="under_analysis">Em Análise</SelectItem>
-                <SelectItem value="resolved">Resolvido</SelectItem>
-                <SelectItem value="closed">Fechado</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label>Severidade</Label>
-            <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                <SelectItem value="low">Baixa</SelectItem>
-                <SelectItem value="medium">Média</SelectItem>
-                <SelectItem value="high">Alta</SelectItem>
-                <SelectItem value="critical">Crítica</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex gap-4 items-center">
+        <Select value={filterStatus} onValueChange={setFilterStatus}>
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Filtrar por Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os Status</SelectItem>
+            <SelectItem value="pending">Pendente</SelectItem>
+            <SelectItem value="under_analysis">Em Análise</SelectItem>
+            <SelectItem value="resolved">Resolvido</SelectItem>
+            <SelectItem value="closed">Fechado</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={filterSeverity} onValueChange={setFilterSeverity}>
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Filtrar por Severidade" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas Severidades</SelectItem>
+            <SelectItem value="low">Baixa</SelectItem>
+            <SelectItem value="medium">Média</SelectItem>
+            <SelectItem value="high">Alta</SelectItem>
+            <SelectItem value="critical">Crítica</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-      {/* Incidents List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Lista de Incidentes</CardTitle>
-          <CardDescription>
-            {getFilteredIncidents().length} incidentes encontrados
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[600px]">
-            <div className="space-y-4">
-              {getFilteredIncidents().map((incident) => (
-                <Card key={incident.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openIncidentDetail(incident)}>
-                  <CardContent className="pt-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 space-y-2">
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(incident.status)}
-                          <span className="font-semibold">{incident.incident_number}</span>
-                          <Badge variant={getSeverityColor(incident.severity)}>
-                            {incident.severity.toUpperCase()}
-                          </Badge>
-                          <Badge variant="outline">{incident.category}</Badge>
-                        </div>
-                        <h3 className="font-medium">{incident.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {incident.description}
-                        </p>
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>📍 {incident.incident_location || "Não especificado"}</span>
-                          <span>🕐 {formatDistanceToNow(new Date(incident.created_at), { addSuffix: true, locale: ptBR })}</span>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <Badge>{incident.status}</Badge>
-                        <Button size="sm" variant="ghost" onClick={(e) => {
-                          e.stopPropagation();
-                          openIncidentDetail(incident);
-                        }}>
-                          Ver Detalhes
-                        </Button>
-                      </div>
+      <ScrollArea className="h-[600px]">
+        <div className="space-y-4">
+          {getFilteredIncidents().map((incident) => (
+            <Card key={incident.id} className="cursor-pointer hover:bg-muted/50 transition" onClick={() => openIncidentDetail(incident)}>
+              <CardContent className="pt-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(incident.status)}
+                      <h3 className="font-semibold">{incident.title}</h3>
+                      <Badge variant={getSeverityColor(incident.severity) as any}>
+                        {incident.severity}
+                      </Badge>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {incident.description}
+                    </p>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span>#{incident.incident_number || incident.code}</span>
+                      <span>{incident.location}</span>
+                      {incident.created_at && (
+                        <span>{formatDistanceToNow(new Date(incident.created_at), { addSuffix: true, locale: ptBR })}</span>
+                      )}
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={(e) => { e.stopPropagation(); exportToPDF(incident); }}>
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </ScrollArea>
 
       {/* Detail Dialog */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           {selectedIncident && (
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  {selectedIncident.incident_number} - {selectedIncident.title}
-                  <Badge variant={getSeverityColor(selectedIncident.severity)}>
-                    {selectedIncident.severity}
-                  </Badge>
+                  {getStatusIcon(selectedIncident.status)}
+                  {selectedIncident.title}
                 </DialogTitle>
                 <DialogDescription>
-                  Criado em {new Date(selectedIncident.created_at).toLocaleString("pt-BR")}
+                  {selectedIncident.incident_number || selectedIncident.code} • {selectedIncident.location}
                 </DialogDescription>
               </DialogHeader>
               
               <Tabs defaultValue="details">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="details">Detalhes</TabsTrigger>
                   <TabsTrigger value="followups">Acompanhamento ({followups.length})</TabsTrigger>
-                  <TabsTrigger value="actions">Ações</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="details" className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-semibold">Status</Label>
-                      <p className="flex items-center gap-2 mt-1">
-                        {getStatusIcon(selectedIncident.status)}
-                        {selectedIncident.status}
-                      </p>
+                      <Label className="text-muted-foreground">Severidade</Label>
+                      <div><Badge variant={getSeverityColor(selectedIncident.severity) as any}>{selectedIncident.severity}</Badge></div>
                     </div>
                     <div>
-                      <Label className="font-semibold">Categoria</Label>
-                      <p className="mt-1">{selectedIncident.category}</p>
+                      <Label className="text-muted-foreground">Status</Label>
+                      <div><Badge variant="outline">{selectedIncident.status}</Badge></div>
                     </div>
                     <div>
-                      <Label className="font-semibold">Local</Label>
-                      <p className="mt-1">{selectedIncident.incident_location || "N/A"}</p>
+                      <Label className="text-muted-foreground">Tipo</Label>
+                      <p>{selectedIncident.type}</p>
                     </div>
                     <div>
-                      <Label className="font-semibold">Impacto</Label>
-                      <p className="mt-1">{selectedIncident.impact_level || "N/A"}</p>
+                      <Label className="text-muted-foreground">Local</Label>
+                      <p>{selectedIncident.location}</p>
                     </div>
                   </div>
                   <div>
-                    <Label className="font-semibold">Descrição</Label>
-                    <p className="mt-1 text-sm">{selectedIncident.description}</p>
+                    <Label className="text-muted-foreground">Descrição</Label>
+                    <p className="whitespace-pre-wrap">{selectedIncident.description}</p>
                   </div>
-                  {selectedIncident.root_cause && (
-                    <div>
-                      <Label className="font-semibold">Causa Raiz</Label>
-                      <p className="mt-1 text-sm">{selectedIncident.root_cause}</p>
-                    </div>
-                  )}
-                  {selectedIncident.immediate_actions && (
-                    <div>
-                      <Label className="font-semibold">Ações Imediatas</Label>
-                      <p className="mt-1 text-sm">{selectedIncident.immediate_actions}</p>
-                    </div>
-                  )}
                 </TabsContent>
                 
                 <TabsContent value="followups" className="space-y-4">
-                  <div className="space-y-4 mb-4">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Tipo de Atualização</Label>
+                      <Select value={newFollowup.followup_type} onValueChange={(v) => setNewFollowup({...newFollowup, followup_type: v})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="update">Atualização</SelectItem>
+                          <SelectItem value="investigation">Investigação</SelectItem>
+                          <SelectItem value="resolution">Resolução</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Descrição</Label>
+                      <Textarea
+                        value={newFollowup.description}
+                        onChange={(e) => setNewFollowup({...newFollowup, description: e.target.value})}
+                        placeholder="Descreva a atualização..."
+                        rows={3}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Novo Status (opcional)</Label>
+                      <Select value={newFollowup.new_status} onValueChange={(v) => setNewFollowup({...newFollowup, new_status: v})}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Manter status atual" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pendente</SelectItem>
+                          <SelectItem value="under_analysis">Em Análise</SelectItem>
+                          <SelectItem value="resolved">Resolvido</SelectItem>
+                          <SelectItem value="closed">Fechado</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={addFollowup} disabled={!newFollowup.description}>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Adicionar Atualização
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-3">
                     {followups.map((followup) => (
                       <Card key={followup.id}>
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
                                 <User className="h-4 w-4" />
                                 <span className="font-medium">{followup.created_by_name}</span>
                                 <Badge variant="outline">{followup.followup_type}</Badge>
-                                {followup.new_status && (
-                                  <Badge>Status: {followup.new_status}</Badge>
-                                )}
                               </div>
                               <p className="text-sm">{followup.description}</p>
-                              <p className="text-xs text-muted-foreground mt-2">
-                                {formatDistanceToNow(new Date(followup.created_at), { addSuffix: true, locale: ptBR })}
-                              </p>
+                              {followup.new_status !== followup.previous_status && (
+                                <p className="text-xs text-muted-foreground">
+                                  Status: {followup.previous_status} → {followup.new_status}
+                                </p>
+                              )}
                             </div>
+                            <span className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(followup.created_at), { addSuffix: true, locale: ptBR })}
+                            </span>
                           </div>
                         </CardContent>
                       </Card>
                     ))}
                   </div>
-                  
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Adicionar Atualização</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label>Tipo</Label>
-                        <Select value={newFollowup.followup_type} onValueChange={(value) => setNewFollowup({...newFollowup, followup_type: value})}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="update">Atualização</SelectItem>
-                            <SelectItem value="investigation">Investigação</SelectItem>
-                            <SelectItem value="resolution">Resolução</SelectItem>
-                            <SelectItem value="comment">Comentário</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Descrição</Label>
-                        <Textarea
-                          value={newFollowup.description}
-                          onChange={(e) => setNewFollowup({...newFollowup, description: e.target.value})}
-                          placeholder="Descreva a atualização"
-                          rows={3}
-                        />
-                      </div>
-                      <div>
-                        <Label>Alterar Status (opcional)</Label>
-                        <Select value={newFollowup.new_status || "none"} onValueChange={(value) => setNewFollowup({...newFollowup, new_status: value === "none" ? "" : value})}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Manter status atual" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">Sem alteração</SelectItem>
-                            <SelectItem value="under_analysis">Em Análise</SelectItem>
-                            <SelectItem value="resolved">Resolvido</SelectItem>
-                            <SelectItem value="closed">Fechado</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <Button onClick={addFollowup} className="w-full">
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Adicionar Atualização
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                
-                <TabsContent value="actions" className="space-y-4">
-                  <Button onClick={() => exportToPDF(selectedIncident)} className="w-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Exportar para PDF
-                  </Button>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Informações Adicionais</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2 text-sm">
-                        <p><strong>Criado:</strong> {new Date(selectedIncident.created_at).toLocaleString("pt-BR")}</p>
-                        <p><strong>Atualizado:</strong> {new Date(selectedIncident.updated_at).toLocaleString("pt-BR")}</p>
-                        {selectedIncident.resolved_at && (
-                          <p><strong>Resolvido:</strong> {new Date(selectedIncident.resolved_at).toLocaleString("pt-BR")}</p>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
                 </TabsContent>
               </Tabs>
             </>

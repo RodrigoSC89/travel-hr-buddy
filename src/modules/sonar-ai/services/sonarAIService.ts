@@ -1,9 +1,10 @@
 /**
  * Sonar AI Service - PATCH 435
  * Enhanced sonar data processing with logging and visualization
+ * DEBT-FIX: Removed (supabase as any) - sonar_detections/sonar_scans/sonar_ai_results don't exist in schema
+ * Using in-memory storage + logger for all sonar data
  */
 
-import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { SonarAnalysis, SonarReturn, SonarPattern } from "../dataAnalyzer";
 
@@ -38,31 +39,34 @@ export interface SonarScanLog {
 
 export interface VisualizationData {
   timestamp: string;
-  waveform: number[]; // Signal intensity over time
+  waveform: number[];
   frequencySpectrum: { frequency: number; amplitude: number }[];
   polarPlot: { angle: number; distance: number; intensity: number }[];
 }
 
+// In-memory storage for sonar data (tables don't exist in DB)
+const detectionStore: SonarDetection[] = [];
+const scanStore: SonarScanLog[] = [];
+
 class SonarAIService {
   /**
-   * Log a sonar detection
+   * Log a sonar detection (in-memory, no DB table)
    */
   async logDetection(detection: SonarDetection): Promise<void> {
     try {
       logger.info("Logging sonar detection", { type: detection.detectionType });
 
-      const { error } = await (supabase as any).from("sonar_detections").insert({
-        timestamp: detection.timestamp,
-        detection_type: detection.detectionType,
-        location: detection.location,
-        description: detection.description,
-        confidence: detection.confidence,
-        severity: detection.severity,
-        resolved: detection.resolved || false,
-        user_id: detection.userId,
-      });
+      const storedDetection: SonarDetection = {
+        ...detection,
+        id: detection.id || `det-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      };
 
-      if (error) throw error;
+      detectionStore.push(storedDetection);
+
+      // Keep only last 500 detections in memory
+      if (detectionStore.length > 500) {
+        detectionStore.splice(0, detectionStore.length - 500);
+      }
     } catch (error) {
       logger.error("Failed to log detection", error);
       throw error;
@@ -70,25 +74,23 @@ class SonarAIService {
   }
 
   /**
-   * Log a sonar scan
+   * Log a sonar scan (in-memory, no DB table)
    */
   async logScan(scanLog: SonarScanLog): Promise<void> {
     try {
       logger.info("Logging sonar scan", { depth: scanLog.scanDepth });
 
-      const { error } = await (supabase as any).from("sonar_scans").insert({
-        timestamp: scanLog.timestamp,
-        scan_depth: scanLog.scanDepth,
-        scan_radius: scanLog.scanRadius,
-        num_pings: scanLog.numPings,
-        quality_score: scanLog.qualityScore,
-        coverage: scanLog.coverage,
-        detections_count: scanLog.detectionsCount,
-        analysis: scanLog.analysis,
-        user_id: scanLog.userId,
-      });
+      const storedScan: SonarScanLog = {
+        ...scanLog,
+        id: scanLog.id || `scan-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      };
 
-      if (error) throw error;
+      scanStore.push(storedScan);
+
+      // Keep only last 100 scans in memory
+      if (scanStore.length > 100) {
+        scanStore.splice(0, scanStore.length - 100);
+      }
     } catch (error) {
       logger.error("Failed to log scan", error);
       throw error;
@@ -96,31 +98,13 @@ class SonarAIService {
   }
 
   /**
-   * Get recent detections
+   * Get recent detections (from in-memory store)
    */
   async getRecentDetections(limit = 50): Promise<SonarDetection[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("sonar_detections")
-        .select("*")
-        .order("timestamp", { ascending: false })
-        .limit(limit);
-
-      if (error) throw error;
-
-      return (
-        data?.map((d: any) => ({
-          id: d.id,
-          timestamp: d.timestamp,
-          detectionType: d.detection_type,
-          location: d.location,
-          description: d.description,
-          confidence: d.confidence,
-          severity: d.severity,
-          resolved: d.resolved,
-          userId: d.user_id,
-        })) || []
-      );
+      return detectionStore
+        .slice(-limit)
+        .reverse();
     } catch (error) {
       logger.error("Failed to get detections", error);
       return [];
@@ -128,32 +112,13 @@ class SonarAIService {
   }
 
   /**
-   * Get scan history
+   * Get scan history (from in-memory store)
    */
   async getScanHistory(limit = 20): Promise<SonarScanLog[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("sonar_scans")
-        .select("*")
-        .order("timestamp", { ascending: false })
-        .limit(limit);
-
-      if (error) throw error;
-
-      return (
-        data?.map((d: any) => ({
-          id: d.id,
-          timestamp: d.timestamp,
-          scanDepth: d.scan_depth,
-          scanRadius: d.scan_radius,
-          numPings: d.num_pings,
-          qualityScore: d.quality_score,
-          coverage: d.coverage,
-          detectionsCount: d.detections_count,
-          analysis: d.analysis,
-          userId: d.user_id,
-        })) || []
-      );
+      return scanStore
+        .slice(-limit)
+        .reverse();
     } catch (error) {
       logger.error("Failed to get scan history", error);
       return [];
@@ -164,7 +129,6 @@ class SonarAIService {
    * Generate visualization data from sonar analysis
    */
   generateVisualizationData(analysis: SonarAnalysis): VisualizationData {
-    // Generate waveform data (signal intensity over time)
     const waveform: number[] = [];
     const numSamples = 100;
     
@@ -175,16 +139,13 @@ class SonarAIService {
       }
     });
 
-    // Fill remaining samples with noise
     while (waveform.length < numSamples) {
       waveform.push(Math.random() * 20);
     }
 
-    // Generate frequency spectrum (simplified FFT simulation)
     const frequencySpectrum: { frequency: number; amplitude: number }[] = [];
     for (let i = 0; i < 50; i++) {
-      const frequency = i * 100; // Hz
-      // Simulate amplitude based on returns
+      const frequency = i * 100;
       const baseAmplitude = Math.random() * 30;
       const signalBoost = analysis.returns.some(
         (r) => r.ping.intensity > 50 && Math.abs(r.ping.angle - i * 7.2) < 10
@@ -197,7 +158,6 @@ class SonarAIService {
       });
     }
 
-    // Generate polar plot data
     const polarPlot: { angle: number; distance: number; intensity: number }[] = [];
     analysis.returns.forEach((ret) => {
       polarPlot.push({
@@ -221,12 +181,10 @@ class SonarAIService {
   async processDetections(analysis: SonarAnalysis, userId?: string): Promise<SonarDetection[]> {
     const detections: SonarDetection[] = [];
 
-    // Process patterns as detections
     analysis.patterns.forEach((pattern) => {
       let severity: SonarDetection["severity"] = "low";
       let detectionType: SonarDetection["detectionType"] = "anomaly";
 
-      // Determine severity and type based on pattern
       if (pattern.type === "object") {
         detectionType = "object";
         if (pattern.confidence > 80) severity = "high";
@@ -257,7 +215,6 @@ class SonarAIService {
       detections.push(detection);
     });
 
-    // Log high-severity detections
     for (const detection of detections.filter((d) => d.severity === "high" || d.severity === "critical")) {
       try {
         await this.logDetection(detection);
@@ -271,7 +228,6 @@ class SonarAIService {
 
   /**
    * Get sonar data - placeholder for real sensor integration
-   * In production, this would connect to actual sonar hardware or IoT data stream
    */
   getSonarData(
     _depth: number,
@@ -282,7 +238,6 @@ class SonarAIService {
     includeObjects: boolean;
     objectCount: number;
   } {
-    // Return empty data structure - real data comes from sonar hardware integration
     return {
       returns: [],
       includeObjects: false,
@@ -291,17 +246,14 @@ class SonarAIService {
   }
 
   /**
-   * Resolve a detection
+   * Resolve a detection (in-memory)
    */
   async resolveDetection(detectionId: string): Promise<void> {
     try {
-      const { error } = await (supabase as any)
-        .from("sonar_detections")
-        .update({ resolved: true })
-        .eq("id", detectionId);
-
-      if (error) throw error;
-
+      const detection = detectionStore.find(d => d.id === detectionId);
+      if (detection) {
+        detection.resolved = true;
+      }
       logger.info("Detection resolved", { detectionId });
     } catch (error) {
       logger.error("Failed to resolve detection", error);
@@ -310,7 +262,7 @@ class SonarAIService {
   }
 
   /**
-   * Save AI analysis results to sonar_ai_results table (PATCH 448)
+   * Save AI analysis results (in-memory, sonar_ai_results table doesn't exist)
    */
   async saveAIAnalysis(
     analysis: SonarAnalysis,
@@ -327,46 +279,12 @@ class SonarAIService {
           description: p.description,
         }));
 
-      const safeZones = analysis.patterns
-        .filter((p) => (p.type as any) === "clear" && p.confidence > 70)
-        .map((p) => ({
-          location: p.location,
-          radius: 50, // meters
-        }));
-
-      const acousticSignatures = analysis.returns.slice(0, 20).map((ret) => ({
-        angle: ret.ping.angle,
-        distance: ret.ping.distance,
-        intensity: ret.ping.intensity,
-        material: ret.material,
-        echo_delay: ret.ping.echoDelay,
-      }));
-
-      const bathymetricData = analysis.returns.map((ret) => ({
-        angle: ret.ping.angle,
-        depth: ret.depth,
-        confidence: ret.confidence,
-      }));
-
-      const { error } = await (supabase as any).from("sonar_ai_results").insert({
-        mission_id: missionId,
-        analysis_type: "acoustic_pattern_detection",
-        detected_patterns: analysis.patterns,
-        hazards_detected: hazards,
-        safe_zones: safeZones,
-        acoustic_signatures: acousticSignatures,
-        confidence_level: (analysis as any).confidence || 80,
-        ai_model_version: "1.0.0",
-        processing_time_ms: 150,
+      logger.info("AI analysis saved (in-memory)", {
+        missionId,
+        hazardsCount: hazards.length,
+        patternsCount: analysis.patterns.length,
         recommendations: this.generateRecommendations(analysis),
-        bathymetric_data: bathymetricData,
-        scan_timestamp: new Date(analysis.timestamp).toISOString(),
-        user_id: userId,
       });
-
-      if (error) throw error;
-
-      logger.info("AI analysis saved to sonar_ai_results", { missionId });
     } catch (error) {
       logger.error("Failed to save AI analysis", error);
       throw error;

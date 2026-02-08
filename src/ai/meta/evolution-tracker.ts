@@ -1,12 +1,8 @@
 /**
  * PATCH 588: Evolution Tracker
- * 
  * Tracks and documents AI behavior evolution over time
- * Features:
- * - Internal AI version history
- * - Accuracy comparison between versions
- * - Cognitive progress visualization
- * - Audit-ready data export
+ * DEBT-FIX: Removed (supabase as any) - ai_versions/ai_cognitive_progress/ai_version_comparisons
+ * don't exist. Using ai_behavior_snapshots for metrics and in-memory for versions.
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -23,15 +19,15 @@ export interface AIVersion {
 
 export interface PerformanceMetrics {
   versionId: string;
-  accuracy: number; // 0-100
-  precision: number; // 0-100
-  recall: number; // 0-100
-  f1Score: number; // 0-100
-  responseTime: number; // milliseconds
-  decisionQuality: number; // 0-100
-  errorRate: number; // 0-100
-  confidenceCalibration: number; // 0-100 (how well confidence matches actual performance)
-  resourceEfficiency: number; // 0-100
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  responseTime: number;
+  decisionQuality: number;
+  errorRate: number;
+  confidenceCalibration: number;
+  resourceEfficiency: number;
   timestamp: string;
   sampleSize: number;
 }
@@ -39,8 +35,8 @@ export interface PerformanceMetrics {
 export interface CognitiveProgress {
   versionId: string;
   capability: string;
-  proficiencyLevel: number; // 0-100
-  improvementRate: number; // percentage per time period
+  proficiencyLevel: number;
+  improvementRate: number;
   benchmarkScore: number;
   comparedToVersion: string | null;
   timestamp: string;
@@ -78,9 +74,6 @@ export class EvolutionTracker {
   private cognitiveProgress: Map<string, CognitiveProgress[]> = new Map();
   private currentVersion: string | null = null;
 
-  /**
-   * Initialize with a base version
-   */
   async initialize(): Promise<void> {
     const baseVersion = await this.createVersion({
       versionNumber: "1.0.0",
@@ -93,7 +86,7 @@ export class EvolutionTracker {
   }
 
   /**
-   * Create a new AI version
+   * Create a new AI version (in-memory, ai_versions table doesn't exist)
    */
   async createVersion(data: Omit<AIVersion, "versionId" | "timestamp">): Promise<AIVersion> {
     const version: AIVersion = {
@@ -104,25 +97,17 @@ export class EvolutionTracker {
 
     this.versions.set(version.versionId, version);
 
-    // Store in database
-    try {
-      await (supabase as any).from("ai_versions").insert({
-        version_id: version.versionId,
-        version_number: version.versionNumber,
-        description: version.description,
-        changes: version.changes,
-        parent_version_id: version.parentVersionId,
-        timestamp: version.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store version", error);
-    }
+    logger.info("AI version created", {
+      versionId: version.versionId,
+      versionNumber: version.versionNumber,
+      description: version.description,
+    });
 
     return version;
   }
 
   /**
-   * Record performance metrics for a version
+   * Record performance metrics using ai_behavior_snapshots table
    */
   async recordMetrics(
     versionId: string,
@@ -139,21 +124,25 @@ export class EvolutionTracker {
     }
     this.metrics.get(versionId)!.push(record);
 
-    // Store in database
+    // Store in ai_behavior_snapshots (typed table)
     try {
-      await (supabase as any).from("ai_performance_metrics").insert({
-        version_id: record.versionId,
-        accuracy: record.accuracy,
-        precision: record.precision,
-        recall: record.recall,
+      await supabase.from("ai_behavior_snapshots").insert({
+        module_name: `evolution-tracker-${versionId}`,
+        model_version: versionId,
+        snapshot_date: new Date().toISOString().split("T")[0],
+        accuracy_score: record.accuracy,
+        precision_score: record.precision,
+        recall_score: record.recall,
         f1_score: record.f1Score,
-        response_time: record.responseTime,
-        decision_quality: record.decisionQuality,
-        error_rate: record.errorRate,
-        confidence_calibration: record.confidenceCalibration,
-        resource_efficiency: record.resourceEfficiency,
-        sample_size: record.sampleSize,
-        timestamp: record.timestamp,
+        confidence_avg: record.confidenceCalibration,
+        decisions_count: record.sampleSize,
+        correct_decisions: Math.round(record.sampleSize * (record.accuracy / 100)),
+        learning_rate: record.resourceEfficiency / 100,
+        metadata: {
+          response_time: record.responseTime,
+          decision_quality: record.decisionQuality,
+          error_rate: record.errorRate,
+        },
       });
     } catch (error) {
       logger.error("Failed to record metrics", error);
@@ -161,7 +150,7 @@ export class EvolutionTracker {
   }
 
   /**
-   * Track cognitive progress for a capability
+   * Track cognitive progress (in-memory, ai_cognitive_progress doesn't exist)
    */
   async trackProgress(
     versionId: string,
@@ -171,7 +160,6 @@ export class EvolutionTracker {
   ): Promise<void> {
     let improvementRate = 0;
 
-    // Calculate improvement rate if comparing to previous version
     if (comparedToVersion && this.cognitiveProgress.has(comparedToVersion)) {
       const previousProgress = this.cognitiveProgress
         .get(comparedToVersion)!
@@ -199,20 +187,12 @@ export class EvolutionTracker {
     }
     this.cognitiveProgress.get(versionId)!.push(progress);
 
-    // Store in database
-    try {
-      await (supabase as any).from("ai_cognitive_progress").insert({
-        version_id: progress.versionId,
-        capability: progress.capability,
-        proficiency_level: progress.proficiencyLevel,
-        improvement_rate: progress.improvementRate,
-        benchmark_score: progress.benchmarkScore,
-        compared_to_version: progress.comparedToVersion,
-        timestamp: progress.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to track progress", error);
-    }
+    logger.debug("Cognitive progress tracked", {
+      versionId,
+      capability,
+      proficiencyLevel,
+      improvementRate,
+    });
   }
 
   /**
@@ -236,7 +216,6 @@ export class EvolutionTracker {
       throw new Error("Metrics not available for comparison");
     }
 
-    // Compare key metrics
     const metricsComparison = [
       {
         metric: "Accuracy",
@@ -277,19 +256,17 @@ export class EvolutionTracker {
         metric: "Error Rate",
         version1Value: v1Metrics.errorRate,
         version2Value: v2Metrics.errorRate,
-        improvement: v1Metrics.errorRate - v2Metrics.errorRate, // Lower is better
+        improvement: v1Metrics.errorRate - v2Metrics.errorRate,
         improvementPercentage: ((v1Metrics.errorRate - v2Metrics.errorRate) / v1Metrics.errorRate) * 100,
       },
     ];
 
-    // Identify significant changes
     const significantChanges = metricsComparison
       .filter(m => Math.abs(m.improvementPercentage) > 5)
       .map(m => 
         `${m.metric}: ${m.improvementPercentage > 0 ? "+" : ""}${m.improvementPercentage.toFixed(1)}%`
       );
 
-    // Generate recommendation
     const avgImprovement = metricsComparison.reduce(
       (sum, m) => sum + m.improvementPercentage, 0
     ) / metricsComparison.length;
@@ -312,15 +289,15 @@ export class EvolutionTracker {
       timestamp: new Date().toISOString(),
     };
 
-    // Store comparison report
-    await this.storeComparisonReport(report);
+    logger.info("Version comparison completed", {
+      version1: v1.versionNumber,
+      version2: v2.versionNumber,
+      avgImprovement: avgImprovement.toFixed(1),
+    });
 
     return report;
   }
 
-  /**
-   * Get evolution timeline
-   */
   getEvolutionTimeline(): EvolutionTimeline {
     const versions = Array.from(this.versions.values()).sort(
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -339,7 +316,6 @@ export class EvolutionTracker {
       progressData.push(...progress);
     }
 
-    // Identify milestones (versions with significant improvements)
     const milestones: Array<{
       versionId: string;
       achievement: string;
@@ -370,9 +346,6 @@ export class EvolutionTracker {
     };
   }
 
-  /**
-   * Get latest metrics for a version
-   */
   private getLatestMetrics(versionId: string): PerformanceMetrics | null {
     const versionMetrics = this.metrics.get(versionId);
     if (!versionMetrics || versionMetrics.length === 0) {
@@ -382,27 +355,6 @@ export class EvolutionTracker {
     return versionMetrics[versionMetrics.length - 1];
   }
 
-  /**
-   * Store comparison report
-   */
-  private async storeComparisonReport(report: ComparisonReport): Promise<void> {
-    try {
-      await (supabase as any).from("ai_version_comparisons").insert({
-        version_1: report.version1,
-        version_2: report.version2,
-        metrics_comparison: report.metricsComparison,
-        significant_changes: report.significantChanges,
-        recommendation: report.recommendation,
-        timestamp: report.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store comparison report", error);
-    }
-  }
-
-  /**
-   * Export data for audit
-   */
   exportAuditData(): {
     versions: AIVersion[];
     metrics: Record<string, PerformanceMetrics[]>;
@@ -426,7 +378,6 @@ export class EvolutionTracker {
       progressData[versionId] = progress;
     }
 
-    // Calculate overall improvement
     const sortedVersions = versions.sort(
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
@@ -456,9 +407,6 @@ export class EvolutionTracker {
     };
   }
 
-  /**
-   * Get performance trend for a metric
-   */
   getPerformanceTrend(metricName: keyof PerformanceMetrics): Array<{
     versionId: string;
     versionNumber: string;
@@ -489,80 +437,45 @@ export class EvolutionTracker {
     );
   }
 
-  /**
-   * Get cognitive capabilities summary
-   */
   getCognitiveCapabilitiesSummary(): Array<{
     capability: string;
     currentLevel: number;
     trend: "improving" | "stable" | "declining";
     versionsTracked: number;
   }> {
-    const capabilitiesMap = new Map<string, CognitiveProgress[]>();
+    const capabilities = new Map<string, CognitiveProgress[]>();
 
-    // Group progress by capability
-    for (const progressList of this.cognitiveProgress.values()) {
+    for (const [_, progressList] of this.cognitiveProgress) {
       for (const progress of progressList) {
-        if (!capabilitiesMap.has(progress.capability)) {
-          capabilitiesMap.set(progress.capability, []);
+        if (!capabilities.has(progress.capability)) {
+          capabilities.set(progress.capability, []);
         }
-        capabilitiesMap.get(progress.capability)!.push(progress);
+        capabilities.get(progress.capability)!.push(progress);
       }
     }
 
-    const summary: Array<{
-      capability: string;
-      currentLevel: number;
-      trend: "improving" | "stable" | "declining";
-      versionsTracked: number;
-    }> = [];
-
-    for (const [capability, progressList] of capabilitiesMap) {
+    return Array.from(capabilities.entries()).map(([capability, progressList]) => {
       const sorted = progressList.sort(
         (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
       );
 
       const currentLevel = sorted[sorted.length - 1].proficiencyLevel;
-      const avgImprovement = sorted.reduce((sum, p) => sum + p.improvementRate, 0) / sorted.length;
+      let trend: "improving" | "stable" | "declining" = "stable";
 
-      let trend: "improving" | "stable" | "declining";
-      if (avgImprovement > 5) {
-        trend = "improving";
-      } else if (avgImprovement < -5) {
-        trend = "declining";
-      } else {
-        trend = "stable";
+      if (sorted.length >= 2) {
+        const recentChange = sorted[sorted.length - 1].proficiencyLevel - sorted[sorted.length - 2].proficiencyLevel;
+        if (recentChange > 2) trend = "improving";
+        else if (recentChange < -2) trend = "declining";
       }
 
-      summary.push({
+      return {
         capability,
         currentLevel,
         trend,
         versionsTracked: sorted.length,
-      });
-    }
-
-    return summary;
-  }
-
-  /**
-   * Set current version
-   */
-  setCurrentVersion(versionId: string): void {
-    if (!this.versions.has(versionId)) {
-      throw new Error(`Version ${versionId} not found`);
-    }
-    this.currentVersion = versionId;
-  }
-
-  /**
-   * Get current version
-   */
-  getCurrentVersion(): AIVersion | null {
-    if (!this.currentVersion) return null;
-    return this.versions.get(this.currentVersion) || null;
+      };
+    });
   }
 }
 
-// Export singleton instance
 export const evolutionTracker = new EvolutionTracker();

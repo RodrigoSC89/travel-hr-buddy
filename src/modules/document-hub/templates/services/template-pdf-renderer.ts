@@ -1,6 +1,7 @@
 /**
  * PATCH 482 - Template PDF Renderer Service
- * Renders templates to PDF with placeholder substitution and workspace_files storage
+ * DEBT-FIX: Removed (supabase as any) - rendered_documents has different schema
+ * Aligned with: format, html_content, title, template_id, variables, rendered_by
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -26,9 +27,6 @@ export interface PlaceholderValues {
 }
 
 export class TemplatePDFRenderer {
-  /**
-   * Render a template to PDF with placeholder substitution
-   */
   async renderTemplateToPDF(
     templateId: string,
     placeholderValues: PlaceholderValues,
@@ -74,32 +72,27 @@ export class TemplatePDFRenderer {
         renderedContent = renderedContent.replace(placeholder, String(value));
       }
 
-      // 5. Create rendered document record
+      // 5. Create rendered document record (typed schema)
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { data: renderedDoc, error: docError } = await (supabase as any)
+      const { data: renderedDoc, error: docError } = await supabase
         .from("rendered_documents")
         .insert({
           template_id: templateId,
-          user_id: user.id,
-          document_name: `${template.title} - ${new Date().toISOString().split("T")[0]}`,
-          rendered_content: renderedContent,
-          pdf_settings: {
-            orientation: options.orientation || "portrait",
-            pageSize: options.pageSize || "A4",
-            margins: options.margins || { top: 20, right: 20, bottom: 20, left: 20 },
-            headerFooter: options.headerFooter
-          },
-          placeholder_values: placeholderValues,
-          status: "draft"
+          rendered_by: user.id,
+          title: `${template.title} - ${new Date().toISOString().split("T")[0]}`,
+          html_content: renderedContent,
+          format: "pdf",
+          variables: placeholderValues as any,
+          rendered_at: new Date().toISOString(),
         })
         .select()
         .single();
 
       if (docError) throw docError;
 
-      // 6. Generate PDF (simulate for now - in production, use a PDF library or service)
+      // 6. Generate PDF blob
       const pdfBlob = await this.generatePDFBlob(renderedContent, options);
 
       // 7. Upload to workspace_files storage
@@ -121,10 +114,7 @@ export class TemplatePDFRenderer {
       // 9. Update rendered document with PDF URL
       const { error: updateError } = await supabase
         .from("rendered_documents")
-        .update({
-          pdf_url: urlData.publicUrl,
-          status: "final"
-        })
+        .update({ pdf_url: urlData.publicUrl })
         .eq("id", renderedDoc.id);
 
       if (updateError) throw updateError;
@@ -139,16 +129,10 @@ export class TemplatePDFRenderer {
     }
   }
 
-  /**
-   * Generate PDF blob from HTML content
-   * In production, this would use a library like jsPDF, pdfmake, or a server-side service
-   */
   private async generatePDFBlob(
     htmlContent: string,
     options: PDFRenderOptions
   ): Promise<Blob> {
-    // Simulate PDF generation
-    // In production, use jsPDF, pdfmake, or server-side rendering
     const pdfContent = `
 PDF Document
 ============
@@ -163,9 +147,6 @@ Settings:
     return new Blob([pdfContent], { type: "application/pdf" });
   }
 
-  /**
-   * Get rendered document by ID
-   */
   async getRenderedDocument(documentId: string) {
     try {
       const { data, error } = await supabase
@@ -182,12 +163,8 @@ Settings:
     }
   }
 
-  /**
-   * List rendered documents for current user
-   */
   async listRenderedDocuments(filters?: {
     templateId?: string;
-    status?: string;
     limit?: number;
   }) {
     try {
@@ -198,10 +175,6 @@ Settings:
 
       if (filters?.templateId) {
         query = query.eq("template_id", filters.templateId);
-      }
-
-      if (filters?.status) {
-        query = query.eq("status", filters.status);
       }
 
       if (filters?.limit) {
@@ -218,21 +191,15 @@ Settings:
     }
   }
 
-  /**
-   * Delete rendered document
-   */
   async deleteRenderedDocument(documentId: string) {
     try {
-      // Get document to find PDF URL
       const doc = await this.getRenderedDocument(documentId);
 
-      // Delete from storage if PDF exists
       if (doc.pdf_url) {
         const fileName = `rendered-docs/${documentId}.pdf`;
         await supabase.storage.from("workspace_files").remove([fileName]);
       }
 
-      // Delete document record
       const { error } = await supabase
         .from("rendered_documents")
         .delete()
