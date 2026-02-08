@@ -53,3 +53,9 @@ export { VoyageSimulatorPanel } from './operations/VoyageSimulatorPanel';
 export { CrossModuleIntelligenceDashboard } from './cross-module/CrossModuleIntelligenceDashboard';
 export { PredictiveAlertsHub } from './cross-module/PredictiveAlertsHub';
 export { OperationsCorrelationMatrix } from './cross-module/OperationsCorrelationMatrix';
+
+// ESG & Waste Intelligence
+export { ESGDashboardPanel } from './esg/ESGDashboardPanel';
+export { WasteIntelligencePanel } from './esg/WasteIntelligencePanel';
+export { CarbonFootprintTracker } from './esg/CarbonFootprintTracker';
+export { EnvironmentalComplianceMonitor } from './esg/EnvironmentalComplianceMonitor';
