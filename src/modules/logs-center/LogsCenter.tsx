@@ -40,14 +40,29 @@ export default function LogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
-        .from("logs")
+      // Use access_logs table which exists in the schema
+      const { data, error } = await supabase
+        .from("access_logs")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(100);
 
       if (error) throw error;
-      setLogs(data || []);
+      
+      // Map access_logs to LogEntry format
+      const mappedLogs: LogEntry[] = (data || []).map((log) => ({
+        id: log.id,
+        timestamp: log.timestamp,
+        level: (log.severity === "critical" || log.severity === "high" ? "error" : 
+               log.severity === "medium" ? "warn" : "info") as LogLevel,
+        origin: log.module_accessed || "system",
+        message: `${log.action} - ${log.result}`,
+        details: log.details as Record<string, unknown> | undefined,
+        user_id: log.user_id || undefined,
+        created_at: log.created_at,
+      }));
+      
+      setLogs(mappedLogs);
     } catch (error) {
       logger.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");

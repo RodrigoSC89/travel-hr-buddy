@@ -156,15 +156,16 @@ export default function DocumentHub() {
       setAiInsight(aiResponse.message);
       logger.info("AI analysis completed", { confidence: aiResponse.confidence });
 
-      // Store document metadata
-      const { error: dbError } = await (supabase as any)
-        .from("documents")
+      // Store document metadata in ai_documents table
+      const { error: dbError } = await supabase
+        .from("ai_documents")
         .insert({
-          name: selectedFile.name,
-          type: selectedFile.type,
-          size: selectedFile.size,
+          file_name: selectedFile.name,
+          file_type: selectedFile.type,
+          file_size: selectedFile.size,
           storage_path: uploadData.path,
-          ai_analysis: aiResponse.message,
+          ocr_status: "completed",
+          ocr_text: aiResponse.message,
         });
 
       if (dbError) {
