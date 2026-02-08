@@ -79,14 +79,11 @@ export function useComplianceHubData(vesselId?: string) {
       try {
         let query = supabase
           .from("certificates")
-          .select(`
-            *,
-            vessels(name)
-          `)
+          .select("*")
           .order("expiry_date", { ascending: true });
 
         if (vesselId) {
-          query = query.eq("vessel_id", vesselId);
+          query = query.eq("employee_id", vesselId);
         }
 
         const { data, error } = await query;
@@ -106,11 +103,11 @@ export function useComplianceHubData(vesselId?: string) {
 
           return {
             id: c.id,
-            name: c.certificate_name || c.name,
-            type: c.certificate_type || c.type || "general",
-            vessel_id: c.vessel_id,
-            vessel_name: c.vessels?.name,
-            issued_by: c.issuing_authority || c.issued_by,
+            name: c.certificate_type || "Certificado",
+            type: c.certificate_type || "general",
+            vessel_id: undefined,
+            vessel_name: undefined,
+            issued_by: c.issuing_authority,
             issue_date: c.issue_date,
             expiry_date: c.expiry_date,
             status,

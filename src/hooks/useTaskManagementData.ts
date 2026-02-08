@@ -5,7 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 export interface Task {
   id: string;
@@ -34,6 +34,7 @@ export interface TaskStats {
 
 export function useTaskManagementData(vesselId?: string) {
   const queryClient = useQueryClient();
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   // Fetch tasks from action_items table
   const tasksQuery = useQuery({
@@ -85,27 +86,23 @@ export function useTaskManagementData(vesselId?: string) {
     refetchOnWindowFocus: false,
   });
 
-  // Stats calculation
-  const statsQuery = useQuery({
-    queryKey: ["task-stats", vesselId, tasksQuery.data],
-    queryFn: async (): Promise<TaskStats> => {
-      const tasks = tasksQuery.data || [];
-      const now = new Date();
-
-      return {
-        total: tasks.length,
-        pending: tasks.filter(t => t.status === "pending").length,
-        inProgress: tasks.filter(t => t.status === "in_progress").length,
-        completed: tasks.filter(t => t.status === "completed").length,
-        overdue: tasks.filter(t => 
-          t.due_date && 
-          new Date(t.due_date) < now && 
-          t.status !== "completed"
-        ).length,
-      };
-    },
-    enabled: !!tasksQuery.data,
-  });
+  // Stats derived from tasks via useMemo (not a separate query)
+  const stats = useMemo((): TaskStats => {
+    const tasks = tasksQuery.data || [];
+    const now = new Date();
+    return {
+      total: tasks.length,
+      pending: tasks.filter(t => t.status === "pending").length,
+      inProgress: tasks.filter(t => t.status === "in_progress").length,
+      completed: tasks.filter(t => t.status === "completed").length,
+      overdue: tasks.filter(t =>
+        t.due_date &&
+        new Date(t.due_date) < now &&
+        t.status !== "completed" &&
+        t.status !== "cancelled"
+      ).length,
+    };
+  }, [tasksQuery.data]);
 
   // Create task mutation
   const createTask = useMutation({
@@ -171,27 +168,41 @@ export function useTaskManagementData(vesselId?: string) {
     },
   });
 
-  // Real-time subscription
+  // Debounced real-time subscription
   useEffect(() => {
+    // Clean up any existing channel
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+    }
+
+    let debounceTimer: ReturnType<typeof setTimeout>;
+
     const channel = supabase
       .channel("task-management-changes")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "action_items" },
         () => {
-          queryClient.invalidateQueries({ queryKey: ["task-management"] });
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            queryClient.invalidateQueries({ queryKey: ["task-management"] });
+          }, 1000);
         }
       )
       .subscribe();
 
+    channelRef.current = channel;
+
     return () => {
+      clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
+      channelRef.current = null;
     };
   }, [queryClient]);
 
   return {
     tasks: tasksQuery.data || [],
-    stats: statsQuery.data,
+    stats,
     isLoading: tasksQuery.isLoading,
     error: tasksQuery.error,
     createTask,

@@ -135,15 +135,15 @@ export function UnifiedLogisticsDashboard() {
       
       return data.map((s: Record<string, unknown>) => ({
         id: String(s.id),
-        name: String(s.name || ""),
-        category: String(s.payment_terms || "General"),
+        name: String(s.company_name || s.trading_name || ""),
+        category: String(s.category || s.payment_terms || "General"),
         rating: Number(s.rating) || 0,
-        total_orders: Number(s.delivery_time_days) || 0,
-        on_time_delivery_rate: Number(s.rating) * 20 || 0,
-        contact_email: String(s.email || ""),
-        contact_phone: String(s.phone || ""),
-        location: String(s.country || s.address || ""),
-        status: mapSupplierStatus(String(s.status)),
+        total_orders: Number(s.total_orders) || 0,
+        on_time_delivery_rate: Number(s.rating) ? Number(s.rating) * 20 : 0,
+        contact_email: String(s.contact_email || ""),
+        contact_phone: String(s.contact_phone || ""),
+        location: String(s.country || s.city || s.address || ""),
+        status: s.is_active ? "active" as const : "inactive" as const,
       }));
     },
   });
