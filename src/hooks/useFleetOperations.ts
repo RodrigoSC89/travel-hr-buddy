@@ -91,9 +91,9 @@ export function useFleetOperations() {
         eta: vessel.eta ? new Date(vessel.eta) : undefined,
         fuelROB: vessel.current_fuel_level && vessel.fuel_capacity 
           ? Math.round((vessel.current_fuel_level / vessel.fuel_capacity) * 100)
-          : Math.floor(Math.random() * 100),
-        speed: Math.random() * 15,
-        crewOnboard: Math.floor(Math.random() * 30) + 10,
+          : 0,
+        speed: 0,
+        crewOnboard: 0,
       }));
     },
     staleTime: 30000,

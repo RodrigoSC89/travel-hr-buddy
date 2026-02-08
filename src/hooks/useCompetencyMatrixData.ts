@@ -158,7 +158,7 @@ function generateCompetenciesForRank(rank: string): Competency[] {
     category: comp.category,
     level: (isOfficer ? Math.min(comp.required + 1, 5) : comp.required) as 1 | 2 | 3 | 4 | 5,
     required: comp.required,
-    lastAssessed: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000),
-    trend: ["up", "stable", "down"][Math.floor(Math.random() * 3)] as "up" | "down" | "stable",
+    lastAssessed: new Date(Date.now() - (idx + 1) * 30 * 24 * 60 * 60 * 1000),
+    trend: "stable" as "up" | "down" | "stable",
   }));
 }

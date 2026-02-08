@@ -72,8 +72,8 @@ export function useMaintenancePredictionsData() {
         type: mapMaintenanceType(m.maintenance_type),
         priority: mapPriorityString(m.priority),
         predictedDate: new Date(m.scheduled_date || m.created_at),
-        confidence: 85 + Math.floor(Math.random() * 15),
-        estimatedCost: m.cost_estimate || 5000,
+        confidence: m.priority === "critical" ? 95 : m.priority === "high" ? 88 : m.priority === "medium" ? 80 : 70,
+        estimatedCost: m.cost_estimate || 0,
         partsNeeded: extractPartsFromDescription(m.description),
         reason: m.description || "Manutenção programada",
         healthScore: m.priority === "critical" ? 35 : m.priority === "high" ? 55 : m.priority === "medium" ? 75 : 90,
@@ -178,12 +178,12 @@ function extractPartsFromDescription(description: string): PredictedMaintenance[
   
   const commonParts = ["filtro", "óleo", "junta", "rolamento", "selo", "sensor"];
   
-  commonParts.forEach((part) => {
+  commonParts.forEach((part, idx) => {
     if (description?.toLowerCase().includes(part)) {
       parts.push({
         name: part.charAt(0).toUpperCase() + part.slice(1),
-        quantity: Math.floor(Math.random() * 3) + 1,
-        inStock: Math.random() > 0.3,
+        quantity: idx < 2 ? 2 : 1,
+        inStock: idx < 4, // first 4 parts assumed in stock
       });
     }
   });

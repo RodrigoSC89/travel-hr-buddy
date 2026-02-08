@@ -48,9 +48,26 @@ export function useInventoryLocations() {
         .limit(20);
 
       if (!error && vessels && vessels.length > 0) {
-        // Para cada embarcação, agregar dados de suprimentos
+        // Para cada embarcação, agregar dados reais de maintenance_records como suprimentos
+        const vesselIds = vessels.map(v => v.id);
+        const { data: maintenanceData } = await supabase
+          .from("maintenance_records")
+          .select("vessel_id, priority, status, cost_estimate")
+          .in("vessel_id", vesselIds);
+
+        const maintByVessel = new Map<string, typeof maintenanceData>();
+        (maintenanceData || []).forEach(m => {
+          const list = maintByVessel.get(m.vessel_id) || [];
+          list.push(m);
+          maintByVessel.set(m.vessel_id, list);
+        });
+
         const locations: InventoryLocation[] = vessels.map((vessel, idx) => {
-          const meta = (vessel.metadata as Record<string, unknown>) || {};
+          const vesselMaint = maintByVessel.get(vessel.id) || [];
+          const criticalItems = vesselMaint.filter(m => m.priority === "critical").length;
+          const lowStockItems = vesselMaint.filter(m => m.status === "pending").length;
+          const totalValue = vesselMaint.reduce((sum, m) => sum + (m.cost_estimate || 0), 0);
+
           return {
             id: vessel.id,
             name: vessel.name,
@@ -60,25 +77,12 @@ export function useInventoryLocations() {
               lng: -46.3 + idx * 0.2,
               city: vessel.current_location || "Santos",
             },
-            itemCount: (meta.item_count as number) || Math.floor(100 + Math.random() * 200),
-            criticalItems: Math.floor(Math.random() * 3),
-            lowStockItems: Math.floor(Math.random() * 15),
-            expiringItems: Math.floor(Math.random() * 8),
-            totalValue: Math.floor(50000 + Math.random() * 150000),
+            itemCount: vesselMaint.length,
+            criticalItems,
+            lowStockItems,
+            expiringItems: vesselMaint.filter(m => m.status === "scheduled").length,
+            totalValue,
           };
-        });
-
-        // Adicionar base/warehouse
-        locations.push({
-          id: "warehouse-base",
-          name: "Base Santos",
-          type: "warehouse",
-          location: { lat: -23.96, lng: -46.33, city: "Santos" },
-          itemCount: 1520,
-          criticalItems: 5,
-          lowStockItems: 45,
-          expiringItems: 12,
-          totalValue: 850000,
         });
 
         return locations;
@@ -113,14 +117,20 @@ export function useInventoryItems(locationId?: string) {
         .limit(30);
 
       if (!error && records && records.length > 0) {
-        return records.map((rec, idx) => {
-          const quantity = Math.floor(Math.random() * 25);
+        return records.map((rec) => {
+          // Derive inventory status from maintenance priority/status
+          const priorityWeight = rec.priority === "critical" ? 1 : rec.priority === "high" ? 3 : rec.priority === "medium" ? 8 : 15;
+          const isCompleted = rec.status === "completed";
+          const quantity = isCompleted ? priorityWeight + 10 : priorityWeight;
           const minStock = 5;
           const maxStock = 30;
           let status: "critical" | "low" | "ok" | "excess" = "ok";
           if (quantity <= 2) status = "critical";
           else if (quantity < minStock) status = "low";
           else if (quantity > maxStock) status = "excess";
+
+          // Derive lead time from maintenance type
+          const leadTime = rec.maintenance_type === "emergency" ? 3 : rec.maintenance_type === "corrective" ? 7 : 14;
 
           return {
             id: rec.id,
@@ -132,10 +142,10 @@ export function useInventoryItems(locationId?: string) {
             maxStock,
             location: (rec.vessels as { name: string } | null)?.name || "Base",
             locationType: "vessel" as const,
-            leadTime: 7 + Math.floor(Math.random() * 14),
-            unitCost: rec.cost_estimate || 100 + Math.floor(Math.random() * 1500),
+            leadTime,
+            unitCost: rec.cost_estimate || 0,
             status,
-            lastMovement: rec.completed_date ? new Date(rec.completed_date) : new Date(Date.now() - idx * 24 * 60 * 60 * 1000),
+            lastMovement: rec.completed_date ? new Date(rec.completed_date) : rec.scheduled_date ? new Date(rec.scheduled_date) : new Date(),
             predictedRunout: status === "critical" ? new Date(Date.now() + 5 * 24 * 60 * 60 * 1000) : undefined,
           };
         });

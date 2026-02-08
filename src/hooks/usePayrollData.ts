@@ -34,19 +34,30 @@ export function usePayrollData(selectedPeriod: string = "all") {
       // Get current crew member
       const { data: crewMember } = await supabase
         .from("crew_members")
-        .select("id, salary")
+        .select("id")
         .or(`auth_user_id.eq.${user.id},user_id.eq.${user.id}`)
         .single();
 
       if (!crewMember) return { payments: [], summary: getEmptySummary() };
-      
-      const baseSalary = (crewMember as any)?.salary || 0;
+
+      // Buscar salário base do contrato ativo
+      const { data: contract } = await supabase
+        .from("crew_contracts")
+        .select("base_salary")
+        .eq("crew_member_id", crewMember.id)
+        .eq("status", "active")
+        .order("start_date", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const baseSalary = contract?.base_salary || 0;
 
       // Fetch from expenses (using expenses as payment records)
+      // expenses table columns: date, amount, category, description, status
       const { data: expenses, error } = await supabase
         .from("expenses")
         .select("*")
-        .order("expense_date", { ascending: false })
+        .order("date", { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -56,9 +67,9 @@ export function usePayrollData(selectedPeriod: string = "all") {
         type: mapCategoryToType(e.category),
         description: e.description || e.category || "Pagamento",
         amount: e.amount || 0,
-        date: e.expense_date || e.created_at,
+        date: e.date || e.created_at,
         status: e.status === "approved" ? "paid" : e.status === "pending" ? "pending" : "processing",
-        reference: e.reference_number || undefined,
+        reference: undefined,
       }));
 
       // Calculate summary

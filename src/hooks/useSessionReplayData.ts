@@ -70,33 +70,16 @@ export function useSessionReplays() {
             deviceType: detectDeviceType(session.user_agent),
             browser: detectBrowser(session.user_agent),
             os: detectOS(session.user_agent),
-            pagesVisited: (deviceInfo.pages as string[]) || ["/dashboard", "/crew-management"],
-            eventCount: (deviceInfo.event_count as number) || 50 + Math.floor(Math.random() * 100),
-            hasErrors: Math.random() > 0.8,
-            errorCount: Math.random() > 0.8 ? Math.floor(Math.random() * 5) : 0,
+            pagesVisited: (deviceInfo.pages as string[]) || [],
+            eventCount: (deviceInfo.event_count as number) || 0,
+            hasErrors: (deviceInfo.has_errors as boolean) || false,
+            errorCount: (deviceInfo.error_count as number) || 0,
           };
         });
       }
 
-      // Demo fallback
-      return [
-        {
-          id: "demo-session-1",
-          userId: "demo-user",
-          userName: "João Silva",
-          userEmail: "joao@example.com",
-          startTime: new Date(Date.now() - 3600000),
-          endTime: new Date(),
-          duration: 3600,
-          deviceType: "desktop" as const,
-          browser: "Chrome",
-          os: "Windows",
-          pagesVisited: ["/dashboard", "/crew-management", "/documents"],
-          eventCount: 156,
-          hasErrors: false,
-          errorCount: 0,
-        },
-      ];
+      // No sessions found - return empty array for EmptyState UI
+      return [];
     },
     staleTime: 1000 * 60 * 5,
   });
