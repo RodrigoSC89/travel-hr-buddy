@@ -28,6 +28,7 @@ import { toast } from 'sonner';
 const AIControlTowerHub = lazy(() => import('@/pages/AIControlTowerHubEnhanced'));
 const AICommandCenter = lazy(() => import('@/pages/AICommandCenter'));
 const AutonomousCommandCenter = lazy(() => import('@/pages/AutonomousCommandCenter'));
+const AIAgentDirectory = lazy(() => import('@/pages/AIAgents/AIAgentDirectory'));
 const WorkflowCommandCenter = lazy(() => import('@/pages/WorkflowCommandCenter'));
 const VoiceAssistant = lazy(() => import('@/pages/VoiceAssistant'));
 const AIModulesHubPage = lazy(() => import('@/pages/ai/AIModulesHubPage'));
@@ -289,7 +290,8 @@ export default function AIMegaHub() {
               <AICommandCenter />
             </TabsContent>
             
-            <TabsContent value="agents" className="mt-0">
+            <TabsContent value="agents" className="mt-0 space-y-6">
+              <AIAgentDirectory />
               <AutonomousCommandCenter />
             </TabsContent>
             
