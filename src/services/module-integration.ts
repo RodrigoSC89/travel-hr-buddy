@@ -1,12 +1,15 @@
 /**
  * Module Integration Service
  * Central service for cross-module communication and integration
- * PATCH 855 - Added logger integration
+ * DEBT-FIX: Removed (supabase as any) - using typed dynamic table helper
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type TableName = keyof Database["public"]["Tables"];
 
 export interface ModuleAction {
   module: string;
@@ -23,6 +26,16 @@ export interface IntegrationEvent {
   timestamp: Date;
 }
 
+const MODULE_TABLE_MAP: Record<string, TableName> = {
+  "fleet": "vessels",
+  "crew": "crew_members",
+  "maintenance": "maintenance_tasks",
+  "documents": "ai_documents",
+  "training": "academy_courses",
+  "compliance": "compliance_items",
+  "communication": "channel_messages"
+};
+
 class ModuleIntegrationService {
   private listeners: Map<string, Set<(event: IntegrationEvent) => void>> = new Map();
   private actionHandlers: Map<string, (payload: any) => Promise<any>> = new Map();
@@ -32,36 +45,21 @@ class ModuleIntegrationService {
   }
 
   private registerDefaultHandlers() {
-    // Navigation actions
     this.registerAction("navigate", async (payload) => {
-      if (payload.path) {
-        window.location.href = payload.path;
-      }
+      if (payload.path) window.location.href = payload.path;
       return { success: true };
     });
 
-    // Toast notifications
     this.registerAction("notify", async (payload) => {
       const { title, message, type = "info" } = payload;
-      if (type === "error") {
-        toast.error(title || message);
-      } else if (type === "success") {
-        toast.success(title || message);
-      } else {
-        toast(title || message);
-      }
+      if (type === "error") toast.error(title || message);
+      else if (type === "success") toast.success(title || message);
+      else toast(title || message);
       return { success: true };
     });
 
-    // Data refresh
     this.registerAction("refresh", async (payload) => {
-      this.emit({
-        type: "refresh",
-        source: "integration-service",
-        target: payload.module,
-        data: payload,
-        timestamp: new Date()
-      });
+      this.emit({ type: "refresh", source: "integration-service", target: payload.module, data: payload, timestamp: new Date() });
       return { success: true };
     });
   }
@@ -79,9 +77,7 @@ class ModuleIntegrationService {
 
     try {
       const result = await handler({ ...action.payload, module: action.module });
-      if (action.callback) {
-        action.callback(result);
-      }
+      if (action.callback) action.callback(result);
       return result;
     } catch (error) {
       logger.error(`Error executing action ${action.action}`, { error });
@@ -90,50 +86,25 @@ class ModuleIntegrationService {
   }
 
   subscribe(eventType: string, callback: (event: IntegrationEvent) => void) {
-    if (!this.listeners.has(eventType)) {
-      this.listeners.set(eventType, new Set());
-    }
+    if (!this.listeners.has(eventType)) this.listeners.set(eventType, new Set());
     this.listeners.get(eventType)!.add(callback);
-
-    return () => {
-      this.listeners.get(eventType)?.delete(callback);
-    };
+    return () => { this.listeners.get(eventType)?.delete(callback); };
   }
 
   emit(event: IntegrationEvent) {
     const listeners = this.listeners.get(event.type);
-    if (listeners) {
-      listeners.forEach(callback => callback(event));
-    }
-
-    // Also emit to "all" listeners
+    if (listeners) listeners.forEach(callback => callback(event));
     const allListeners = this.listeners.get("*");
-    if (allListeners) {
-      allListeners.forEach(callback => callback(event));
-    }
+    if (allListeners) allListeners.forEach(callback => callback(event));
   }
 
-  // Cross-module data sharing
   async getModuleData(module: string, query?: Record<string, any>): Promise<any> {
-    const tableMap: Record<string, string> = {
-      "fleet": "vessels",
-      "crew": "crew_members",
-      "maintenance": "mmi_maintenance_jobs",
-      "documents": "ai_documents",
-      "training": "academy_courses",
-      "compliance": "peotram_audits",
-      "communication": "channel_messages"
-    };
-
-    const table = tableMap[module];
-    if (!table) {
-      return { data: [], error: "Module not mapped" };
-    }
+    const table = MODULE_TABLE_MAP[module];
+    if (!table) return { data: [], error: "Module not mapped" };
 
     try {
-      // Use type assertion to avoid deep type instantiation
-      const { data, error } = await (supabase as any)
-        .from(table)
+      // Dynamic table access requires targeted type assertion on table name
+      const { data, error } = await (supabase.from as any)(table)
         .select("*")
         .limit(query?.limit || 100);
 
@@ -143,20 +114,15 @@ class ModuleIntegrationService {
     }
   }
 
-  // Module status check
   async checkModuleStatus(module: string): Promise<{ online: boolean; lastSync?: string }> {
     try {
       const result = await this.getModuleData(module, { limit: 1 });
-      return {
-        online: !result.error,
-        lastSync: new Date().toISOString()
-      };
+      return { online: !result.error, lastSync: new Date().toISOString() };
     } catch {
       return { online: false };
     }
   }
 
-  // Batch operations
   async batchExecute(actions: ModuleAction[]): Promise<any[]> {
     return Promise.all(actions.map(action => this.executeAction(action)));
   }

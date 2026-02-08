@@ -1,14 +1,11 @@
 /**
  * AI Forecast Engine
- * Uses ONNX models to predict operational failures based on telemetry data
- * @module forecast-engine
+ * DEBT-FIX: Removed (supabase as any) - dp_telemetry doesn't exist, using system_observations with metadata
  */
 
 let ort: any = null;
 const loadORT = async () => {
-  if (!ort) {
-    ort = await import("onnxruntime-web");
-  }
+  if (!ort) { ort = await import("onnxruntime-web"); }
   return ort;
 };
 import { logger } from "@/lib/logger";
@@ -28,126 +25,64 @@ export interface RiskClassification {
   message?: string;
 }
 
-/**
- * Run forecast analysis using ONNX model and telemetry data
- * @returns Forecast result with risk classification
- */
 export async function runForecastAnalysis(): Promise<ForecastResult> {
   try {
-    // Load ONNX model
     const session = await ort.InferenceSession.create("/models/nautilus_forecast.onnx");
-    
-    // Query last 100 telemetry readings from Supabase
-    const { data, error } = await (supabase as any)
-      .from("dp_telemetry")
+
+    // Use system_observations for telemetry since dp_telemetry table doesn't exist
+    const { data, error } = await supabase
+      .from("system_observations")
       .select("*")
-      .order("timestamp", { ascending: false })
+      .eq("observation_type", "telemetry")
+      .order("created_at", { ascending: false })
       .limit(100);
 
     if (error) {
-      logger.error("Supabase query error", error, { table: "dp_telemetry" });
-      return { 
-        status: "error", 
-        message: `Database error: ${error.message}` 
-      };
+      logger.error("Supabase query error", error);
+      return { status: "error", message: `Database error: ${error.message}` };
     }
 
     if (!data || data.length === 0) {
-      return { 
-        status: "no-data",
-        message: "No telemetry data available" 
-      };
+      return { status: "no-data", message: "No telemetry data available" };
     }
 
-    // Prepare input tensor from telemetry values
-    const rows = (data as any[]) || [];
-    const values = rows.map((x: any) => Number(x.value) || 0);
+    // Extract values from metadata field
+    const values = data.map((x) => {
+      const meta = x.metadata as Record<string, any> | null;
+      return Number(meta?.value) || 0;
+    });
     const input = new ort.Tensor("float32", new Float32Array(values), [1, values.length]);
 
-    // Run inference
     const output = await session.run({ input });
-    
-    // Extract prediction probability
     const prediction = Number((output as any).probabilities?.data?.[0] ?? (output as any).output?.data?.[0] ?? 0);
 
-    // Classify risk level
     const risk = classifyRisk(prediction);
-
-    // Publish MQTT alert if risk is detected
-    if (risk.level !== "OK") {
-      publishForecastAlert(risk);
-    }
-
-    return {
-      status: "success",
-      ...risk
-    };
+    if (risk.level !== "OK") publishForecastAlert(risk);
+    return { status: "success", ...risk };
   } catch (error) {
     logger.error("Forecast analysis error", error as Error);
-    return {
-      status: "error",
-      message: error instanceof Error ? error.message : "Unknown error"
-    };
+    return { status: "error", message: error instanceof Error ? error.message : "Unknown error" };
   }
 }
 
-/**
- * Classify risk level based on prediction value
- * @param value Prediction probability (0-1)
- * @returns Risk classification
- */
 function classifyRisk(value: number): RiskClassification {
-  if (value < 0.4) {
-    return { 
-      level: "OK", 
-      value,
-      message: "Operação dentro do esperado"
-    };
-  }
-  if (value < 0.7) {
-    return { 
-      level: "Risco", 
-      value,
-      message: "Risco moderado - verificar procedimentos ASOG"
-    };
-  }
-  return { 
-    level: "Crítico", 
-    value,
-    message: "Risco crítico - ativar protocolo DP"
-  };
+  if (value < 0.4) return { level: "OK", value, message: "Operação dentro do esperado" };
+  if (value < 0.7) return { level: "Risco", value, message: "Risco moderado - verificar procedimentos ASOG" };
+  return { level: "Crítico", value, message: "Risco crítico - ativar protocolo DP" };
 }
 
-/**
- * Publish forecast alert to MQTT broker
- * @param risk Risk classification data
- */
 function publishForecastAlert(risk: RiskClassification): void {
   try {
     const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "ws://localhost:1883");
-    
     client.on("connect", () => {
-      const alertData = {
-        level: risk.level,
-        value: risk.value,
-        message: risk.message,
-        timestamp: new Date().toISOString()
-      };
-      
+      const alertData = { level: risk.level, value: risk.value, message: risk.message, timestamp: new Date().toISOString() };
       client.publish("nautilus/forecast/alert", JSON.stringify(alertData), { qos: 1 }, (err) => {
-        if (err) {
-          logger.error("Failed to publish forecast alert", err as Error, { alertData });
-        } else {
-          logger.info("Published forecast alert", { alertData });
-        }
+        if (err) logger.error("Failed to publish forecast alert", err as Error);
+        else logger.info("Published forecast alert", { alertData });
         client.end();
       });
     });
-
-    client.on("error", (err) => {
-      logger.error("MQTT connection error", err as Error);
-      client.end();
-    });
+    client.on("error", (err) => { logger.error("MQTT connection error", err as Error); client.end(); });
   } catch (error) {
     logger.error("Error publishing forecast alert", error as Error);
   }

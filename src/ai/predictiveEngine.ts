@@ -1,7 +1,7 @@
 /**
  * PATCH 206.0 - Predictive Engine
  * AI engine capable of forecasting failures, overloads or demands
- * based on historical logs and real-time data
+ * DEBT-FIX: Removed (supabase as any) - using typed tables with fallbacks for non-existent tables
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -12,10 +12,10 @@ export type RiskLevel = "low" | "medium" | "high" | "critical";
 
 export interface ModuleRiskScore {
   moduleName: string;
-  riskScore: number; // 0-100
+  riskScore: number;
   riskLevel: RiskLevel;
   forecastEvent: ForecastEvent;
-  confidence: number; // 0-1
+  confidence: number;
   factors: string[];
   predictedAt: Date;
 }
@@ -38,11 +38,8 @@ class PredictiveEngine {
   private isTraining = false;
   private modelVersion = "1.0.0";
   private predictionCache = new Map<string, ModuleRiskScore>();
-  private cacheTimeout = 5 * 60 * 1000; // 5 minutes
+  private cacheTimeout = 5 * 60 * 1000;
 
-  /**
-   * Train model using historical data
-   */
   async trainModel(data?: TrainingData): Promise<void> {
     if (this.isTraining) {
       logger.warn("[PredictiveEngine] Training already in progress");
@@ -53,15 +50,9 @@ class PredictiveEngine {
     logger.info("[PredictiveEngine] Starting model training...");
 
     try {
-      // Fetch training data if not provided
       const trainingData = data || await this.fetchTrainingData();
-
-      // Analyze patterns
       const patterns = this.analyzePatterns(trainingData);
-      
-      // Update model parameters
       await this.updateModelParameters(patterns);
-
       logger.info("[PredictiveEngine] Model training completed successfully");
     } catch (error) {
       logger.error("[PredictiveEngine] Training failed:", error);
@@ -71,33 +62,27 @@ class PredictiveEngine {
     }
   }
 
-  /**
-   * Fetch training data from various sources
-   */
   private async fetchTrainingData(): Promise<TrainingData> {
     try {
-      // Fetch watchdog logs (last 30 days)
-      const { data: watchdogLogs } = await (supabase as any)
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+
+      const { data: watchdogLogs } = await supabase
         .from("watchdog_logs")
         .select("*")
-        .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .from("watchdog_logs")
-        .select("*")
-        .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .gte("created_at", thirtyDaysAgo)
         .order("created_at", { ascending: false });
 
-      // Fetch usage statistics
-      const { data: usageStats } = await (supabase as any)
+      const { data: usageStats } = await supabase
         .from("system_metrics")
         .select("*")
-        .gte("recorded_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .gte("recorded_at", thirtyDaysAgo)
         .order("recorded_at", { ascending: false });
 
-      // Fetch past incidents
-      const { data: incidentPatterns } = await (supabase as any)
+      const { data: incidentPatterns } = await supabase
         .from("incidents")
         .select("*")
-        .gte("created_at", new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString())
+        .gte("created_at", ninetyDaysAgo)
         .order("created_at", { ascending: false });
 
       return {
@@ -107,17 +92,10 @@ class PredictiveEngine {
       };
     } catch (error) {
       logger.error("[PredictiveEngine] Failed to fetch training data:", error);
-      return {
-        watchdogLogs: [],
-        usageStats: [],
-        incidentPatterns: [],
-      };
+      return { watchdogLogs: [], usageStats: [], incidentPatterns: [] };
     }
   }
 
-  /**
-   * Analyze patterns in training data
-   */
   private analyzePatterns(data: TrainingData): Record<string, any> {
     const patterns: Record<string, any> = {
       errorFrequency: {},
@@ -125,7 +103,6 @@ class PredictiveEngine {
       timePatterns: {},
     };
 
-    // Analyze error frequency by module
     data.watchdogLogs.forEach((log: any) => {
       const moduleName = log.module_name || "unknown";
       if (!patterns.errorFrequency[moduleName]) {
@@ -134,7 +111,6 @@ class PredictiveEngine {
       patterns.errorFrequency[moduleName]++;
     });
 
-    // Analyze incident patterns
     data.incidentPatterns.forEach((incident: any) => {
       const moduleName = incident.module || "unknown";
       if (!patterns.moduleHealth[moduleName]) {
@@ -151,29 +127,27 @@ class PredictiveEngine {
     return patterns;
   }
 
-  /**
-   * Update model parameters based on patterns
-   */
   private async updateModelParameters(patterns: Record<string, any>): Promise<void> {
     try {
-      await (supabase as any)
-        .from("ai_model_config")
+      // Store model config using ai_configurations table
+      await supabase
+        .from("ai_configurations")
         .upsert({
-          model_name: "predictive_engine",
-          version: this.modelVersion,
-          parameters: patterns,
+          config_key: "predictive_engine_params",
+          config_value: {
+            model_name: "predictive_engine",
+            version: this.modelVersion,
+            parameters: patterns,
+          } as any,
+          description: "Predictive engine model parameters",
           updated_at: new Date().toISOString(),
         });
     } catch (error) {
-      logger.warn("[PredictiveEngine] Failed to save model parameters:", error as any);
+      logger.warn("[PredictiveEngine] Failed to save model parameters:", error);
     }
   }
 
-  /**
-   * Calculate risk score for a specific module
-   */
   async predictModuleRisk(moduleName: string): Promise<ModuleRiskScore> {
-    // Check cache first
     const cached = this.predictionCache.get(moduleName);
     if (cached && Date.now() - cached.predictedAt.getTime() < this.cacheTimeout) {
       return cached;
@@ -182,10 +156,7 @@ class PredictiveEngine {
     logger.info(`[PredictiveEngine] Calculating risk for module: ${moduleName}`);
 
     try {
-      // Fetch recent metrics for the module
       const metrics = await this.fetchModuleMetrics(moduleName);
-
-      // Calculate risk score
       const riskScore = this.calculateRiskScore(metrics);
       const riskLevel = this.getRiskLevel(riskScore);
       const forecastEvent = this.predictEvent(metrics, riskScore);
@@ -202,10 +173,7 @@ class PredictiveEngine {
         predictedAt: new Date(),
       };
 
-      // Cache the prediction
       this.predictionCache.set(moduleName, prediction);
-
-      // Save to Supabase
       await this.savePrediction(prediction);
 
       return prediction;
@@ -215,47 +183,43 @@ class PredictiveEngine {
     }
   }
 
-  /**
-   * Fetch metrics for a specific module
-   */
   private async fetchModuleMetrics(moduleName: string): Promise<PredictiveMetrics> {
     try {
-      // Fetch recent errors
-      const { data: errors, count: errorCount } = await (supabase as any)
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+      const { data: errors, count: errorCount } = await supabase
         .from("watchdog_logs")
         .select("*", { count: "exact" })
         .eq("module_name", moduleName)
-        .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .gte("created_at", oneDayAgo);
 
-      // Fetch recent incidents
-      const { data: incidents } = await (supabase as any)
+      const { data: incidents } = await supabase
         .from("incidents")
         .select("*")
         .eq("module", moduleName)
-        .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .gte("created_at", oneWeekAgo)
         .order("created_at", { ascending: false })
         .limit(1);
 
-      // Fetch usage stats
-      const { data: usageStats } = await (supabase as any)
+      const { data: usageStats } = await supabase
         .from("system_metrics")
         .select("*")
         .eq("metric_name", moduleName)
-        .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        .gte("recorded_at", oneDayAgo)
         .order("recorded_at", { ascending: false });
 
-      // Calculate metrics
       const totalIncidents = incidents?.length || 0;
-      const avgResponseTime = (usageStats as any[])?.reduce((sum, stat: any) => sum + (stat.response_time || 0), 0) / ((usageStats as any[])?.length || 1);
-      const errorRate = (errorCount || 0) / Math.max(usageStats?.length || 1, 1);
-      
-      // Determine usage pattern
+      const statsArr = usageStats || [];
+      const avgResponseTime = statsArr.reduce((sum: number, stat: any) => sum + (stat.response_time || 0), 0) / Math.max(statsArr.length, 1);
+      const errorRate = (errorCount || 0) / Math.max(statsArr.length, 1);
+
       let usagePattern: "stable" | "increasing" | "decreasing" | "volatile" = "stable";
-      if (usageStats && (usageStats as any[]).length > 5) {
-        const recentAvg = (usageStats as any[]).slice(0, 5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / 5;
-        const olderAvg = (usageStats as any[]).slice(5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / Math.max((usageStats as any[]).length - 5, 1);
+      if (statsArr.length > 5) {
+        const recentAvg = statsArr.slice(0, 5).reduce((sum: number, s: any) => sum + (s.request_count || 0), 0) / 5;
+        const olderAvg = statsArr.slice(5).reduce((sum: number, s: any) => sum + (s.request_count || 0), 0) / Math.max(statsArr.length - 5, 1);
         const change = (recentAvg - olderAvg) / Math.max(olderAvg, 1);
-        
+
         if (Math.abs(change) > 0.5) usagePattern = "volatile";
         else if (change > 0.2) usagePattern = "increasing";
         else if (change < -0.2) usagePattern = "decreasing";
@@ -270,54 +234,25 @@ class PredictiveEngine {
       };
     } catch (error) {
       logger.error(`[PredictiveEngine] Failed to fetch metrics for ${moduleName}:`, error);
-      return {
-        totalIncidents: 0,
-        avgResponseTime: 0,
-        errorRate: 0,
-        usagePattern: "stable",
-      };
+      return { totalIncidents: 0, avgResponseTime: 0, errorRate: 0, usagePattern: "stable" };
     }
   }
 
-  /**
-   * Calculate risk score (0-100)
-   */
   private calculateRiskScore(metrics: PredictiveMetrics): number {
     let score = 0;
-
-    // Factor 1: Error rate (40% weight)
     score += Math.min(metrics.errorRate * 100, 40);
-
-    // Factor 2: Recent incidents (30% weight)
     if (metrics.lastIncidentTime) {
       const hoursSinceIncident = (Date.now() - metrics.lastIncidentTime.getTime()) / (1000 * 60 * 60);
-      if (hoursSinceIncident < 24) {
-        score += 30;
-      } else if (hoursSinceIncident < 168) {
-        score += 15;
-      }
+      if (hoursSinceIncident < 24) score += 30;
+      else if (hoursSinceIncident < 168) score += 15;
     }
-
-    // Factor 3: Response time (20% weight)
-    if (metrics.avgResponseTime > 2000) {
-      score += 20;
-    } else if (metrics.avgResponseTime > 1000) {
-      score += 10;
-    }
-
-    // Factor 4: Usage pattern (10% weight)
-    if (metrics.usagePattern === "volatile") {
-      score += 10;
-    } else if (metrics.usagePattern === "increasing") {
-      score += 5;
-    }
-
+    if (metrics.avgResponseTime > 2000) score += 20;
+    else if (metrics.avgResponseTime > 1000) score += 10;
+    if (metrics.usagePattern === "volatile") score += 10;
+    else if (metrics.usagePattern === "increasing") score += 5;
     return Math.min(Math.round(score), 100);
   }
 
-  /**
-   * Determine risk level from score
-   */
   private getRiskLevel(score: number): RiskLevel {
     if (score >= 75) return "critical";
     if (score >= 50) return "high";
@@ -325,79 +260,55 @@ class PredictiveEngine {
     return "low";
   }
 
-  /**
-   * Predict event type based on metrics
-   */
   private predictEvent(metrics: PredictiveMetrics, riskScore: number): ForecastEvent {
-    if (riskScore >= 75) {
-      return metrics.usagePattern === "increasing" ? "overload" : "incident";
-    }
-    if (riskScore >= 50) {
-      return metrics.avgResponseTime > 2000 ? "downtime" : "incident";
-    }
+    if (riskScore >= 75) return metrics.usagePattern === "increasing" ? "overload" : "incident";
+    if (riskScore >= 50) return metrics.avgResponseTime > 2000 ? "downtime" : "incident";
     return "normal";
   }
 
-  /**
-   * Calculate prediction confidence (0-1)
-   */
   private calculateConfidence(metrics: PredictiveMetrics): number {
-    let confidence = 0.5; // Base confidence
-
-    // More data = higher confidence
+    let confidence = 0.5;
     if (metrics.totalIncidents > 0) confidence += 0.2;
     if (metrics.avgResponseTime > 0) confidence += 0.15;
     if (metrics.errorRate > 0) confidence += 0.15;
-
     return Math.min(confidence, 1);
   }
 
-  /**
-   * Identify risk factors
-   */
   private identifyRiskFactors(metrics: PredictiveMetrics): string[] {
     const factors: string[] = [];
-
-    if (metrics.errorRate > 0.1) {
-      factors.push("High error rate detected");
-    }
-    if (metrics.avgResponseTime > 1000) {
-      factors.push("Elevated response times");
-    }
-    if (metrics.usagePattern === "volatile") {
-      factors.push("Volatile usage patterns");
-    }
-    if (metrics.usagePattern === "increasing") {
-      factors.push("Increasing demand");
-    }
+    if (metrics.errorRate > 0.1) factors.push("High error rate detected");
+    if (metrics.avgResponseTime > 1000) factors.push("Elevated response times");
+    if (metrics.usagePattern === "volatile") factors.push("Volatile usage patterns");
+    if (metrics.usagePattern === "increasing") factors.push("Increasing demand");
     if (metrics.lastIncidentTime) {
       const hoursSince = (Date.now() - metrics.lastIncidentTime.getTime()) / (1000 * 60 * 60);
-      if (hoursSince < 24) {
-        factors.push("Recent incident detected");
-      }
+      if (hoursSince < 24) factors.push("Recent incident detected");
     }
-    if (factors.length === 0) {
-      factors.push("System operating normally");
-    }
-
+    if (factors.length === 0) factors.push("System operating normally");
     return factors;
   }
 
-  /**
-   * Save prediction to Supabase
-   */
   private async savePrediction(prediction: ModuleRiskScore): Promise<void> {
     try {
-      const { error } = await (supabase as any)
-        .from("predictive_events")
+      // Save as ai_insights instead of non-existent predictive_events table
+      const { error } = await supabase
+        .from("ai_insights")
         .insert({
-          module_name: prediction.moduleName,
-          risk_score: prediction.riskScore,
-          risk_level: prediction.riskLevel,
-          forecast_event: prediction.forecastEvent,
+          title: `Risk Prediction: ${prediction.moduleName}`,
+          description: `Risk score: ${prediction.riskScore}, Level: ${prediction.riskLevel}, Event: ${prediction.forecastEvent}`,
+          category: "predictive_risk",
+          priority: prediction.riskLevel === "critical" ? "critical" : prediction.riskLevel === "high" ? "high" : "medium",
           confidence: prediction.confidence,
-          factors: prediction.factors,
-          predicted_at: prediction.predictedAt.toISOString(),
+          related_module: prediction.moduleName,
+          actionable: prediction.riskLevel !== "low",
+          user_id: (await supabase.auth.getUser()).data.user?.id || "system",
+          metadata: {
+            risk_score: prediction.riskScore,
+            risk_level: prediction.riskLevel,
+            forecast_event: prediction.forecastEvent,
+            factors: prediction.factors,
+            predicted_at: prediction.predictedAt.toISOString(),
+          },
         });
 
       if (error) {
@@ -408,24 +319,19 @@ class PredictiveEngine {
     }
   }
 
-  /**
-   * Predict risks for all active modules
-   */
   async predictAllModules(): Promise<ModuleRiskScore[]> {
     logger.info("[PredictiveEngine] Predicting risks for all modules...");
 
     try {
-      // Fetch list of active modules
-      const { data: modules } = await (supabase as any)
+      const { data: modules } = await supabase
         .from("system_metrics")
         .select("metric_name")
         .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      const uniqueModules = [...new Set((modules || []).map((m: any) => m.metric_name).filter((name: any) => typeof name === "string"))] as string[];
+      const uniqueModules = [...new Set((modules || []).map((m) => m.metric_name).filter((name): name is string => typeof name === "string"))];
 
-      // Predict for each module
       const predictions = await Promise.all(
-        uniqueModules.map((moduleName: string) => this.predictModuleRisk(moduleName))
+        uniqueModules.map((moduleName) => this.predictModuleRisk(moduleName))
       );
 
       return predictions;
@@ -435,15 +341,13 @@ class PredictiveEngine {
     }
   }
 
-  /**
-   * Get recent predictions
-   */
   async getRecentPredictions(limit = 50): Promise<any[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("predictive_events")
+      const { data, error } = await supabase
+        .from("ai_insights")
         .select("*")
-        .order("predicted_at", { ascending: false })
+        .eq("category", "predictive_risk")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -454,14 +358,10 @@ class PredictiveEngine {
     }
   }
 
-  /**
-   * Clear prediction cache
-   */
   clearCache(): void {
     this.predictionCache.clear();
     logger.info("[PredictiveEngine] Cache cleared");
   }
 }
 
-// Export singleton instance
 export const predictiveEngine = new PredictiveEngine();

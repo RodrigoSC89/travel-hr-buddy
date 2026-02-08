@@ -1,10 +1,18 @@
 /**
  * PATCH 587 - Enhanced Offline Sync Manager
- * Provides robust offline sync with queue management and retry logic
+ * DEBT-FIX: Dynamic table access requires type assertion on table name only (not entire client)
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type TableName = keyof Database["public"]["Tables"];
+
+/** Helper for dynamic table operations where table name is determined at runtime */
+function dynamicFrom(table: string) {
+  return supabase.from(table as TableName);
+}
 
 export interface SyncQueueItem {
   id: string;
@@ -26,7 +34,6 @@ export interface SyncStats {
 
 class OfflineSyncManager {
   private queue: SyncQueueItem[] = [];
-  // PATCH v26: Sempre assumir online - navigator.onLine não é confiável no iOS PWA
   private isOnline: boolean = true;
   private isSyncing: boolean = false;
   private readonly STORAGE_KEY = "nautilus_offline_sync_queue";
@@ -39,42 +46,27 @@ class OfflineSyncManager {
     this.startAutoSync();
   }
 
-  /**
-   * Setup network status listeners
-   * PATCH v26: Listeners mantidos para compatibilidade, mas sempre tentamos sync
-   */
   private setupNetworkListeners(): void {
     window.addEventListener("online", () => {
       logger.info("[OfflineSync] Network event: online - starting sync");
       this.isOnline = true;
       this.syncAll();
     });
-
     window.addEventListener("offline", () => {
       logger.warn("[OfflineSync] Network offline - queuing operations");
       this.isOnline = false;
     });
   }
 
-  /**
-   * Start automatic sync every 30 seconds when online
-   */
   private startAutoSync(): void {
     this.syncInterval = window.setInterval(() => {
       if (this.isOnline && !this.isSyncing && this.queue.length > 0) {
         this.syncAll();
       }
-    }, 30000); // 30 seconds
+    }, 30000);
   }
 
-  /**
-   * Add operation to sync queue
-   */
-  public queueOperation(
-    operation: "insert" | "update" | "delete",
-    table: string,
-    data: any
-  ): string {
+  public queueOperation(operation: "insert" | "update" | "delete", table: string, data: any): string {
     const item: SyncQueueItem = {
       id: `sync-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       operation,
@@ -88,38 +80,23 @@ class OfflineSyncManager {
 
     this.queue.push(item);
     this.saveQueueToStorage();
-
     logger.info(`[OfflineSync] Queued ${operation} on ${table}`, { id: item.id });
 
-    // Try to sync immediately if online
-    if (this.isOnline) {
-      this.syncAll();
-    }
-
+    if (this.isOnline) this.syncAll();
     return item.id;
   }
 
-  /**
-   * Sync all pending operations
-   */
   public async syncAll(): Promise<SyncStats> {
-    if (this.isSyncing || !this.isOnline) {
-      return this.getStats();
-    }
+    if (this.isSyncing || !this.isOnline) return this.getStats();
 
     this.isSyncing = true;
     logger.info(`[OfflineSync] Starting sync of ${this.queue.length} operations`);
 
-    const pendingItems = this.queue.filter(
-      item => item.status === "pending" || item.status === "failed"
-    );
+    const pendingItems = this.queue.filter(item => item.status === "pending" || item.status === "failed");
 
     for (const item of pendingItems) {
-      try {
-        await this.syncItem(item);
-      } catch (error) {
-        logger.error(`[OfflineSync] Failed to sync item ${item.id}`, { error });
-      }
+      try { await this.syncItem(item); }
+      catch (error) { logger.error(`[OfflineSync] Failed to sync item ${item.id}`, { error }); }
     }
 
     this.isSyncing = false;
@@ -127,13 +104,9 @@ class OfflineSyncManager {
 
     const stats = this.getStats();
     logger.info("[OfflineSync] Sync completed", stats);
-
     return stats;
   }
 
-  /**
-   * Sync individual item
-   */
   private async syncItem(item: SyncQueueItem): Promise<void> {
     item.status = "syncing";
 
@@ -142,31 +115,22 @@ class OfflineSyncManager {
 
       switch (item.operation) {
       case "insert":
-        result = await (supabase as any).from(item.table).insert(item.data);
+        result = await dynamicFrom(item.table).insert(item.data as any);
         break;
       case "update":
-        result = await (supabase as any)
-          .from(item.table)
-          .update(item.data)
-          .eq("id", item.data.id);
+        result = await dynamicFrom(item.table).update(item.data as any).eq("id", item.data.id);
         break;
       case "delete":
-        result = await (supabase as any)
-          .from(item.table)
-          .delete()
-          .eq("id", item.data.id);
+        result = await dynamicFrom(item.table).delete().eq("id", item.data.id);
         break;
       }
 
-      if (result.error) {
-        throw result.error;
-      }
+      if (result.error) throw result.error;
 
       item.status = "completed";
       logger.info(`[OfflineSync] Successfully synced ${item.operation} on ${item.table}`);
     } catch (error) {
       item.retryCount++;
-
       if (item.retryCount >= item.maxRetries) {
         item.status = "failed";
         logger.error(`[OfflineSync] Max retries reached for item ${item.id}`, { error });
@@ -174,14 +138,10 @@ class OfflineSyncManager {
         item.status = "pending";
         logger.warn(`[OfflineSync] Retry ${item.retryCount}/${item.maxRetries} for item ${item.id}`);
       }
-
       throw error;
     }
   }
 
-  /**
-   * Get sync statistics
-   */
   public getStats(): SyncStats {
     return {
       totalQueued: this.queue.length,
@@ -191,95 +151,44 @@ class OfflineSyncManager {
     };
   }
 
-  /**
-   * Clear completed operations from queue
-   */
   public clearCompleted(): void {
     const beforeCount = this.queue.length;
     this.queue = this.queue.filter(item => item.status !== "completed");
     this.saveQueueToStorage();
-
     const cleared = beforeCount - this.queue.length;
-    if (cleared > 0) {
-      logger.info(`[OfflineSync] Cleared ${cleared} completed operations`);
-    }
+    if (cleared > 0) logger.info(`[OfflineSync] Cleared ${cleared} completed operations`);
   }
 
-  /**
-   * Retry failed operations
-   */
   public async retryFailed(): Promise<void> {
     const failedItems = this.queue.filter(item => item.status === "failed");
-
-    for (const item of failedItems) {
-      item.status = "pending";
-      item.retryCount = 0;
-    }
-
+    for (const item of failedItems) { item.status = "pending"; item.retryCount = 0; }
     this.saveQueueToStorage();
-
-    if (this.isOnline) {
-      await this.syncAll();
-    }
+    if (this.isOnline) await this.syncAll();
   }
 
-  /**
-   * Get network status
-   */
   public getNetworkStatus(): { isOnline: boolean; isSyncing: boolean } {
-    return {
-      isOnline: this.isOnline,
-      isSyncing: this.isSyncing
-    };
+    return { isOnline: this.isOnline, isSyncing: this.isSyncing };
   }
 
-  /**
-   * Save queue to localStorage
-   */
   private saveQueueToStorage(): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.queue));
-    } catch (error) {
-      logger.error("[OfflineSync] Failed to save queue to storage", { error });
-    }
+    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.queue)); }
+    catch (error) { logger.error("[OfflineSync] Failed to save queue to storage", { error }); }
   }
 
-  /**
-   * Load queue from localStorage
-   */
   private loadQueueFromStorage(): void {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
-      if (stored) {
-        this.queue = JSON.parse(stored);
-        logger.info(`[OfflineSync] Loaded ${this.queue.length} items from storage`);
-      }
-    } catch (error) {
-      logger.error("[OfflineSync] Failed to load queue from storage", { error });
-      this.queue = [];
-    }
+      if (stored) { this.queue = JSON.parse(stored); logger.info(`[OfflineSync] Loaded ${this.queue.length} items from storage`); }
+    } catch (error) { logger.error("[OfflineSync] Failed to load queue from storage", { error }); this.queue = []; }
   }
 
-  /**
-   * Cleanup on destroy
-   */
   public destroy(): void {
-    if (this.syncInterval) {
-      clearInterval(this.syncInterval);
-      this.syncInterval = null;
-    }
+    if (this.syncInterval) { clearInterval(this.syncInterval); this.syncInterval = null; }
   }
 }
 
-// Export singleton instance
 export const offlineSyncManager = new OfflineSyncManager();
 
-/**
- * Initialize the sync manager (for main.tsx)
- */
 export function initializeSyncManager(): () => void {
-  // The singleton is already initialized, just return cleanup
-  return () => {
-    offlineSyncManager.destroy();
-  };
+  return () => { offlineSyncManager.destroy(); };
 }

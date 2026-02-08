@@ -10,11 +10,6 @@ export interface Document {
   created_at?: string;
 }
 
-/**
- * Create a new document in the database
- * @param doc Document data to create
- * @returns Created document or null on error
- */
 export async function createDocument(doc: Document): Promise<Document | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -24,7 +19,7 @@ export async function createDocument(doc: Document): Promise<Document | null> {
       return null;
     }
 
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("documents")
       .insert({
         content: doc.content,
@@ -45,14 +40,9 @@ export async function createDocument(doc: Document): Promise<Document | null> {
   }
 }
 
-/**
- * Get a document by ID
- * @param id Document ID
- * @returns Document or null if not found
- */
 export async function getDocument(id: string): Promise<Document | null> {
   try {
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("documents")
       .select("*")
       .eq("id", id)
@@ -70,12 +60,6 @@ export async function getDocument(id: string): Promise<Document | null> {
   }
 }
 
-/**
- * Update a document
- * @param id Document ID
- * @param content New content
- * @returns Updated document or null on error
- */
 export async function updateDocument(id: string, content: string): Promise<Document | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -85,7 +69,7 @@ export async function updateDocument(id: string, content: string): Promise<Docum
       return null;
     }
 
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("documents")
       .update({
         content,
@@ -107,14 +91,9 @@ export async function updateDocument(id: string, content: string): Promise<Docum
   }
 }
 
-/**
- * Delete a document
- * @param id Document ID
- * @returns True if deleted successfully, false otherwise
- */
 export async function deleteDocument(id: string): Promise<boolean> {
   try {
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from("documents")
       .delete()
       .eq("id", id);
@@ -131,13 +110,9 @@ export async function deleteDocument(id: string): Promise<boolean> {
   }
 }
 
-/**
- * List all documents
- * @returns Array of documents
- */
 export async function listDocuments(): Promise<Document[]> {
   try {
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("documents")
       .select("*")
       .order("created_at", { ascending: false });

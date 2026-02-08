@@ -1,6 +1,6 @@
 /**
  * PATCH 472 - Incident Replay Service
- * Service for retrieving and analyzing incident data with AI
+ * DEBT-FIX: Removed (supabase as any) - incident_comments exists in schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -56,9 +56,6 @@ function mapSeverity(severity: string | null): SeverityType {
 }
 
 class IncidentReplayService {
-  /**
-   * Get incident by ID
-   */
   async getIncident(incidentId: string): Promise<IncidentData | null> {
     try {
       const { data, error } = await supabase
@@ -68,10 +65,8 @@ class IncidentReplayService {
         .single();
 
       if (error) throw error;
-
       if (!data) return null;
 
-      // Access metadata safely
       const metadata = data.metadata as Record<string, unknown> | null;
       const vesselId = metadata?.vessel_id ? String(metadata.vessel_id) : undefined;
 
@@ -95,9 +90,6 @@ class IncidentReplayService {
     }
   }
 
-  /**
-   * Get all incidents for list
-   */
   async getIncidents(limit: number = 50): Promise<IncidentData[]> {
     try {
       const { data, error } = await supabase
@@ -133,51 +125,42 @@ class IncidentReplayService {
     }
   }
 
-  /**
-   * Build timeline for incident replay
-   */
   async getIncidentTimeline(incidentId: string): Promise<TimelineEvent[]> {
     const timeline: TimelineEvent[] = [];
 
     try {
-      // Get incident data
       const incident = await this.getIncident(incidentId);
       if (!incident) return timeline;
 
-      // Add creation event
       timeline.push({
         id: `${incidentId}-creation`,
         timestamp: incident.createdAt,
         type: "creation",
         actor: incident.reportedBy || "Sistema",
         description: "Incidente criado",
-        data: {
-          title: incident.title,
-          severity: incident.severity,
-        },
+        data: { title: incident.title, severity: incident.severity },
       });
 
-      // Get comments/notes using any cast for untyped table
-      const { data: comments } = await (supabase as any)
+      // incident_comments table exists in schema
+      const { data: comments } = await supabase
         .from("incident_comments")
         .select("*")
         .eq("incident_id", incidentId)
         .order("created_at", { ascending: true });
 
       if (comments) {
-        (comments as Record<string, unknown>[]).forEach((comment) => {
+        comments.forEach((comment) => {
           timeline.push({
-            id: String(comment.id || ''),
-            timestamp: String(comment.created_at || new Date().toISOString()),
+            id: comment.id,
+            timestamp: comment.created_at || new Date().toISOString(),
             type: "comment",
-            actor: String(comment.created_by || comment.user_id || "Usuário"),
-            description: String(comment.comment_text || comment.comment || comment.text || "Comentário adicionado"),
-            data: comment,
+            actor: comment.created_by || "Usuário",
+            description: comment.comment_text || "Comentário adicionado",
+            data: { comment_type: comment.comment_type },
           });
         });
       }
 
-      // Add update event if updated
       if (incident.updatedAt !== incident.createdAt) {
         timeline.push({
           id: `${incidentId}-update`,
@@ -185,14 +168,11 @@ class IncidentReplayService {
           type: "update",
           actor: "Sistema",
           description: "Incidente atualizado",
-          data: {
-            status: incident.status,
-          },
+          data: { status: incident.status },
         });
       }
 
-      // Sort by timestamp
-      timeline.sort((a, b) => 
+      timeline.sort((a, b) =>
         new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
       );
 
@@ -203,11 +183,7 @@ class IncidentReplayService {
     }
   }
 
-  /**
-   * Analyze incident with AI to identify probable causes
-   */
   async analyzeIncident(incident: IncidentData): Promise<AIAnalysis> {
-    // Simulate AI analysis (in production, this would call an AI service)
     const analysis: AIAnalysis = {
       id: `analysis-${incident.id}`,
       incidentId: incident.id,
@@ -218,15 +194,21 @@ class IncidentReplayService {
       timestamp: new Date().toISOString(),
     };
 
-    // Save analysis to database (optional)
+    // Save analysis to system_observations as incident_analysis table doesn't exist
     try {
-      await (supabase as any).from("incident_analysis").insert({
-        incident_id: incident.id,
-        probable_causes: analysis.probableCauses,
-        recommendations: analysis.recommendations,
-        risk_score: analysis.riskScore,
-        severity: analysis.severity,
-      });
+      const insertData = {
+        observation_type: "incident_analysis",
+        module_name: "incident_reports",
+        message: `AI analysis for incident ${incident.id}`,
+        severity: incident.severity,
+        metadata: {
+          incident_id: incident.id,
+          probable_causes: analysis.probableCauses,
+          recommendations: analysis.recommendations,
+          risk_score: analysis.riskScore,
+        },
+      };
+      await supabase.from("system_observations").insert(insertData as any);
     } catch (error) {
       logger.error("Failed to save analysis:", error);
     }
@@ -234,26 +216,18 @@ class IncidentReplayService {
     return analysis;
   }
 
-  /**
-   * Identify probable causes using AI patterns
-   */
   private identifyProbableCauses(incident: IncidentData) {
     const causes = [];
     const description = (incident.description || "").toLowerCase();
     const title = (incident.title || "").toLowerCase();
     const combined = `${title} ${description}`;
 
-    // Pattern matching for common incident causes
     if (combined.includes("clima") || combined.includes("tempo") || combined.includes("weather")) {
       causes.push({
         cause: "Condições Climáticas Adversas",
         confidence: 85,
-        explanation:
-          "Análise textual indica referências a condições meteorológicas. Dados históricos mostram correlação com eventos climáticos.",
-        supportingData: [
-          "Palavras-chave climáticas identificadas",
-          "Período coincide com alerta meteorológico",
-        ],
+        explanation: "Análise textual indica referências a condições meteorológicas.",
+        supportingData: ["Palavras-chave climáticas identificadas", "Período coincide com alerta meteorológico"],
       });
     }
 
@@ -261,12 +235,8 @@ class IncidentReplayService {
       causes.push({
         cause: "Falha de Equipamento",
         confidence: 78,
-        explanation:
-          "Descrição sugere problemas mecânicos ou de equipamento. Padrão similar a incidentes anteriores relacionados a manutenção.",
-        supportingData: [
-          "Menção a equipamentos no relatório",
-          "Histórico de manutenção indica possível desgaste",
-        ],
+        explanation: "Descrição sugere problemas mecânicos ou de equipamento.",
+        supportingData: ["Menção a equipamentos no relatório", "Histórico de manutenção indica possível desgaste"],
       });
     }
 
@@ -274,12 +244,8 @@ class IncidentReplayService {
       causes.push({
         cause: "Erro Humano",
         confidence: 65,
-        explanation:
-          "Análise sugere possível fator humano envolvido. Recomenda-se revisão de procedimentos e treinamento.",
-        supportingData: [
-          "Indicadores de possível fator humano",
-          "Horário do incidente coincide com troca de turno",
-        ],
+        explanation: "Análise sugere possível fator humano envolvido.",
+        supportingData: ["Indicadores de possível fator humano", "Horário do incidente coincide com troca de turno"],
       });
     }
 
@@ -287,38 +253,25 @@ class IncidentReplayService {
       causes.push({
         cause: "Falha de Comunicação",
         confidence: 70,
-        explanation:
-          "Evidências sugerem problemas na comunicação entre equipes ou sistemas.",
-        supportingData: [
-          "Referências a problemas de comunicação",
-          "Múltiplas equipes envolvidas",
-        ],
+        explanation: "Evidências sugerem problemas na comunicação entre equipes ou sistemas.",
+        supportingData: ["Referências a problemas de comunicação", "Múltiplas equipes envolvidas"],
       });
     }
 
-    // If no specific patterns found, provide general causes
     if (causes.length === 0) {
       causes.push({
         cause: "Causa Múltipla ou Complexa",
         confidence: 50,
-        explanation:
-          "O incidente pode ter múltiplas causas interrelacionadas. Recomenda-se investigação mais aprofundada.",
-        supportingData: [
-          "Padrão não corresponde a causas comuns",
-          "Contexto sugere cenário complexo",
-        ],
+        explanation: "O incidente pode ter múltiplas causas interrelacionadas.",
+        supportingData: ["Padrão não corresponde a causas comuns", "Contexto sugere cenário complexo"],
       });
     }
 
     return causes;
   }
 
-  /**
-   * Generate AI recommendations
-   */
   private generateRecommendations(incident: IncidentData): string[] {
     const recommendations = [];
-
     switch (incident.severity) {
     case "critical":
       recommendations.push("Ação imediata necessária - escalar para gestão superior");
@@ -338,51 +291,23 @@ class IncidentReplayService {
       recommendations.push("Documentar lições aprendidas");
       recommendations.push("Considerar medidas preventivas");
     }
-
-    // Add general recommendations
     recommendations.push("Atualizar documentação de resposta a incidentes");
     recommendations.push("Agendar revisão pós-incidente com equipe");
     recommendations.push("Verificar se medidas corretivas foram implementadas");
-
     return recommendations;
   }
 
-  /**
-   * Calculate risk score
-   */
   private calculateRiskScore(incident: IncidentData): number {
     let score = 0;
-
-    // Severity contributes 40%
-    const severityScores: Record<SeverityType, number> = {
-      critical: 40,
-      high: 30,
-      medium: 20,
-      low: 10,
-    };
+    const severityScores: Record<SeverityType, number> = { critical: 40, high: 30, medium: 20, low: 10 };
     score += severityScores[incident.severity] || 10;
-
-    // Status contributes 30%
-    if (incident.status === "open" || incident.status === "in_progress") {
-      score += 30;
-    } else if (incident.status === "investigating") {
-      score += 20;
-    } else {
-      score += 10;
-    }
-
-    // Age contributes 30%
-    const ageInDays = Math.floor(
-      (Date.now() - new Date(incident.incidentDate).getTime()) / (1000 * 60 * 60 * 24)
-    );
-    if (ageInDays < 1) {
-      score += 30;
-    } else if (ageInDays < 7) {
-      score += 20;
-    } else {
-      score += 10;
-    }
-
+    if (incident.status === "open" || incident.status === "in_progress") score += 30;
+    else if (incident.status === "investigating") score += 20;
+    else score += 10;
+    const ageInDays = Math.floor((Date.now() - new Date(incident.incidentDate).getTime()) / (1000 * 60 * 60 * 24));
+    if (ageInDays < 1) score += 30;
+    else if (ageInDays < 7) score += 20;
+    else score += 10;
     return Math.min(score, 100);
   }
 }
