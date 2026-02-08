@@ -293,9 +293,7 @@ export function DataGrid<T extends { id: string | number }>({
                 {selectable && (
                   <th className="w-12 px-4 py-3">
                     <Checkbox
-                      checked={allSelected}
-                      // @ts-ignore
-                      indeterminate={someSelected && !allSelected}
+                      checked={allSelected ? true : (someSelected && !allSelected) ? "indeterminate" : false}
                       onCheckedChange={toggleSelectAll}
                       aria-label="Selecionar todos"
                     />

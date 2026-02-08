@@ -1,4 +1,4 @@
-// @ts-nocheck — Mapbox GL UMD global types + dynamic import incompatibility
+// PATCH 900 - Removed @ts-nocheck, using explicit 'any' for Mapbox GL dynamic imports
 /**
  * Enhanced Compliance Inspection Map with Geofencing
  * Features: Real-time vessel tracking, geofence alerts, Supabase integration
@@ -85,9 +85,9 @@ export function ComplianceMapWithGeofencing({
   showControls = true
 }: ComplianceMapWithGeofencingProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const mapboxglRef = useRef<typeof mapboxgl | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const mapRef = useRef<any>(null);
+  const mapboxglRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
   const geofenceSourcesRef = useRef<Set<string>>(new Set());
   const mapLoadedRef = useRef(false);
   
@@ -390,7 +390,7 @@ export function ComplianceMapWithGeofencing({
           }
         });
       } catch (e) {
-        logger.warn('Error adding geofence:', geofence.id, e);
+        logger.warn(`Error adding geofence ${geofence.id}:`, e as Error);
       }
     });
   }
@@ -499,11 +499,11 @@ export function ComplianceMapWithGeofencing({
       const lineLayerId = `geofence-line-${geofence.id}`;
       
       try {
-        if (mapRef.current.getLayer(fillLayerId)) {
-          mapRef.current.setLayoutProperty(fillLayerId, 'visibility', showGeofences ? 'visible' : 'none');
+        if (mapRef.current?.getLayer(fillLayerId)) {
+          mapRef.current?.setLayoutProperty(fillLayerId, 'visibility', showGeofences ? 'visible' : 'none');
         }
-        if (mapRef.current.getLayer(lineLayerId)) {
-          mapRef.current.setLayoutProperty(lineLayerId, 'visibility', showGeofences ? 'visible' : 'none');
+        if (mapRef.current?.getLayer(lineLayerId)) {
+          mapRef.current?.setLayoutProperty(lineLayerId, 'visibility', showGeofences ? 'visible' : 'none');
         }
       } catch (e) {
         // Ignore

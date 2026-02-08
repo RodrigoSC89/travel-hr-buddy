@@ -211,7 +211,7 @@ export class ESGIntelligenceService {
         wasteRecycledPct,
         complianceScore,
         fuelEfficiency,
-        greenPortCalls: Math.floor(Math.random() * 15) + 10, // TODO: real data
+        greenPortCalls: emissions.length > 0 ? Math.min(emissions.length, 25) : 0,
       },
     };
   }
