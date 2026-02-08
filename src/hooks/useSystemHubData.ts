@@ -137,8 +137,7 @@ export function useSystemHubData() {
   // Update system setting - simplified since table may not exist
   const updateSetting = useMutation({
     mutationFn: async ({ key, value }: { key: string; value: any }) => {
-      console.log("Updating setting:", key, value);
-      // Return success
+      // Settings table may not exist - return local success
       return { key, value };
     },
     onSuccess: () => {

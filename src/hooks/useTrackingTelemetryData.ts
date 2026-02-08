@@ -171,8 +171,7 @@ export function useTrackingTelemetryData() {
   // Create alert - simplified since telemetry_alerts may not exist
   const createAlert = useMutation({
     mutationFn: async (alertData: Partial<TelemetryAlert>) => {
-      // Log the alert since table may not exist
-      console.log("Creating alert:", alertData);
+      // Table may not exist - return local fallback
       return {
         id: crypto.randomUUID(),
         vessel_id: alertData.vessel_id || null,

@@ -107,10 +107,10 @@ export const ComputerVisionInspector: React.FC = () => {
       id: `INS-${Date.now()}`,
       imageName: files[0].name,
       timestamp: new Date().toISOString(),
-      status: Math.random() > 0.5 ? "passed" : "warning",
+      status: "passed",
       equipment: "Equipamento Analisado",
       location: "Localização",
-      confidence: Math.floor(Math.random() * 15) + 85,
+      confidence: 92,
       findings: []
     };
 

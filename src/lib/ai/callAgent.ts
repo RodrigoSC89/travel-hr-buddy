@@ -4,6 +4,7 @@
  * Supports both streaming (SSE) and non-streaming modes.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { AGENT_CONTEXTS } from "./agentContexts";
 
 export interface Message {
@@ -39,7 +40,7 @@ export async function callAgent(
 
   const { context, conversationHistory = [] } = options;
 
-  console.log(`[callAgent] Calling ${agentContext.name} (${agentId})`);
+  logger.info(`[callAgent] Calling ${agentContext.name} (${agentId})`);
 
   const { data, error } = await supabase.functions.invoke("ai-agent-chat", {
     body: {
@@ -62,7 +63,7 @@ export async function callAgent(
     throw new Error(`Empty response from ${agentContext.name}`);
   }
 
-  console.log(`[callAgent] ${agentContext.name} responded (${data.responseTimeMs}ms)`);
+  logger.info(`[callAgent] ${agentContext.name} responded (${data.responseTimeMs}ms)`);
   return data.reply;
 }
 
@@ -86,7 +87,7 @@ export async function streamAgent(
 
   const { context, conversationHistory = [], onDelta, onDone, onError } = options;
 
-  console.log(`[streamAgent] Streaming ${agentContext.name} (${agentId})`);
+  logger.info(`[streamAgent] Streaming ${agentContext.name} (${agentId})`);
 
   try {
     const resp = await fetch(AGENT_CHAT_URL, {
