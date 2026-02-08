@@ -31,7 +31,7 @@ export function useCrewWellbeing() {
     queryFn: async (): Promise<WellbeingScore[]> => {
       const { data: crew, error: crewError } = await supabase
         .from("crew_members")
-        .select("id, full_name, rank, vessel_id, status, embark_date")
+        .select("id, full_name, rank, vessel_id, status, contract_start")
         .eq("status", "active");
       if (crewError) throw crewError;
 
@@ -47,9 +47,9 @@ export function useCrewWellbeing() {
         const existing = (existingScores || []).find((s: any) => s.crew_member_id === c.id);
         const vessel = (vessels || []).find((v: any) => v.id === c.vessel_id);
 
-        // Calculate time onboard
-        const daysOnboard = c.embark_date
-          ? Math.floor((Date.now() - new Date(c.embark_date).getTime()) / (1000 * 60 * 60 * 24))
+        // Calculate time onboard using contract_start
+        const daysOnboard = c.contract_start
+          ? Math.floor((Date.now() - new Date(c.contract_start).getTime()) / (1000 * 60 * 60 * 24))
           : 0;
 
         const timeOnboardScore = daysOnboard > 180 ? 30 : daysOnboard > 120 ? 50 : daysOnboard > 90 ? 70 : 90;
