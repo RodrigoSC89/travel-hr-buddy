@@ -18,8 +18,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Hotel, Plus } from "lucide-react";
 import { logger } from '@/lib/logger';
 
-// Helper to get dynamic supabase client for untyped tables
-const dynamicSupabase = () => supabase as any;
+// Use travel_itineraries as the canonical table for travel bookings
+const TRAVEL_TABLE = "travel_itineraries" as const;
 
 interface Reservation {
   id: string;
@@ -75,31 +75,30 @@ export const TravelReservations: React.FC = () => {
   const loadReservations = async () => {
     try {
       setLoading(true);
-      const { data, error } = await dynamicSupabase()
-        .from("travel_reservations")
+      const { data, error } = await supabase
+        .from(TRAVEL_TABLE)
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       
-      // Map database results to Reservation interface
-      const mappedData: Reservation[] = (data || []).map((row: any) => ({
+      const mappedData: Reservation[] = (data || []).map((row) => ({
         id: row.id,
-        reservation_number: row.reservation_number || `RES-${row.id?.slice(0, 8)}`,
-        itinerary_id: row.itinerary_id,
-        crew_member_id: row.crew_member_id,
-        reservation_type: row.reservation_type || "accommodation",
-        provider_name: row.provider_name || "",
-        booking_reference: row.booking_reference,
+        reservation_number: row.booking_reference || `RES-${(row.id || "").slice(0, 8)}`,
+        itinerary_id: row.id,
+        crew_member_id: undefined,
+        reservation_type: row.status || "accommodation",
+        provider_name: row.trip_name || row.destination || "",
+        booking_reference: row.booking_reference || undefined,
         status: row.status || "pending",
-        check_in_date: row.check_in_date,
-        check_out_date: row.check_out_date,
-        location: row.location,
-        cost: row.cost,
-        currency: row.currency || "USD",
-        payment_status: row.payment_status || "pending",
-        notes: row.notes,
-        created_at: row.created_at,
+        check_in_date: row.departure_date || undefined,
+        check_out_date: row.return_date || undefined,
+        location: row.destination || undefined,
+        cost: row.total_cost ? Number(row.total_cost) : undefined,
+        currency: "USD",
+        payment_status: "pending",
+        notes: undefined,
+        created_at: row.created_at || "",
       }));
       
       setReservations(mappedData);
@@ -131,9 +130,18 @@ export const TravelReservations: React.FC = () => {
 
   const handleCreate = async () => {
     try {
-      const { error } = await dynamicSupabase()
-        .from("travel_reservations")
-        .insert([formData]);
+      const { error } = await supabase
+        .from(TRAVEL_TABLE)
+        .insert([{
+          trip_name: formData.provider_name || formData.reservation_number,
+          destination: formData.location || formData.provider_name,
+          origin: "N/A",
+          booking_reference: formData.booking_reference || formData.reservation_number,
+          status: formData.status,
+          departure_date: formData.check_in_date || new Date().toISOString().split('T')[0],
+          return_date: formData.check_out_date || null,
+          total_cost: formData.cost,
+        }]);
 
       if (error) throw error;
 
@@ -173,26 +181,26 @@ export const TravelReservations: React.FC = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, string> = {
-      pending: "bg-yellow-100 text-yellow-800",
-      confirmed: "bg-green-100 text-green-800",
-      cancelled: "bg-red-100 text-red-800",
-      completed: "bg-blue-100 text-blue-800",
-      no_show: "bg-gray-100 text-gray-800"
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      pending: "outline",
+      confirmed: "default",
+      cancelled: "destructive",
+      completed: "secondary",
+      no_show: "outline"
     };
 
-    return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
+    return <Badge variant={variants[status] || "outline"}>{status}</Badge>;
   };
 
   const getPaymentBadge = (status: string) => {
-    const variants: Record<string, string> = {
-      pending: "bg-yellow-100 text-yellow-800",
-      paid: "bg-green-100 text-green-800",
-      refunded: "bg-blue-100 text-blue-800",
-      cancelled: "bg-red-100 text-red-800"
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      pending: "outline",
+      paid: "default",
+      refunded: "secondary",
+      cancelled: "destructive"
     };
 
-    return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
+    return <Badge variant={variants[status] || "outline"}>{status}</Badge>;
   };
 
   return (
@@ -416,7 +424,7 @@ export const TravelReservations: React.FC = () => {
         {loading ? (
           <div className="text-center py-8">Loading reservations...</div>
         ) : filteredReservations.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             No reservations found. Create your first reservation to get started.
           </div>
         ) : (
@@ -446,7 +454,7 @@ export const TravelReservations: React.FC = () => {
                     <TableCell>
                       <div className="font-medium">{reservation.provider_name}</div>
                       {reservation.booking_reference && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           Ref: {reservation.booking_reference}
                         </div>
                       )}

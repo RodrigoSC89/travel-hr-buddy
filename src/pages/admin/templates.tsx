@@ -47,11 +47,11 @@ interface Template {
   id: string;
   title: string;
   content: string;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
-  is_favorite: boolean;
-  is_private: boolean;
+  created_by: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  is_favorite: boolean | null;
+  is_private: boolean | null;
 }
 
 export default function TemplatesPage() {
@@ -90,7 +90,7 @@ export default function TemplatesPage() {
         return;
       }
 
-      const query = (supabase as any)
+      const query = supabase
         .from("templates")
         .select("*")
         .order("created_at", { ascending: false });
@@ -99,7 +99,13 @@ export default function TemplatesPage() {
 
       if (error) throw error;
 
-      setTemplates(data || []);
+      // Map DB content (Json) to string for UI
+      setTemplates((data || []).map((d) => ({
+        ...d,
+        content: typeof d.content === 'string' ? d.content : JSON.stringify(d.content),
+        is_favorite: d.is_favorite ?? false,
+        is_private: d.is_private ?? false,
+      })));
     } catch (err) {
       logger.error("Error loading templates:", err);
       toast({
@@ -252,7 +258,7 @@ export default function TemplatesPage() {
 
       if (isEditing && currentTemplateId) {
         // Update existing template
-        const { error } = await (supabase as any)
+        const { error } = await supabase
           .from("templates")
           .update({
             title: title.trim(),
@@ -268,7 +274,7 @@ export default function TemplatesPage() {
         });
       } else {
         // Create new template
-        const { error } = await (supabase as any)
+        const { error } = await supabase
           .from("templates")
           .insert({
             title: title.trim(),
@@ -302,7 +308,7 @@ export default function TemplatesPage() {
   // Toggle favorite
   const toggleFavorite = async (template: Template) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("templates")
         .update({ is_favorite: !template.is_favorite })
         .eq("id", template.id);
@@ -328,7 +334,7 @@ export default function TemplatesPage() {
   // Toggle private
   const togglePrivate = async (template: Template) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("templates")
         .update({ is_private: !template.is_private })
         .eq("id", template.id);
@@ -354,7 +360,7 @@ export default function TemplatesPage() {
   // Delete template
   const deleteTemplate = async (id: string) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("templates")
         .delete()
         .eq("id", id);
@@ -541,7 +547,7 @@ export default function TemplatesPage() {
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 mr-2 text-yellow-400" /> Gerar com IA
+                      <Sparkles className="w-4 h-4 mr-2 text-accent-foreground" /> Gerar com IA
                     </>
                   )}
                 </Button>
@@ -683,7 +689,7 @@ export default function TemplatesPage() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="text-xs text-muted-foreground">
-                      Criado em {new Date(template.created_at).toLocaleDateString("pt-BR")}
+                      Criado em {template.created_at ? new Date(template.created_at).toLocaleDateString("pt-BR") : '-'}
                     </div>
                     
                     <div className="flex flex-wrap gap-2">
@@ -760,7 +766,7 @@ export default function TemplatesPage() {
                           setDeleteDialogOpen(true);
                         }}
                       >
-                        <Trash2 className="w-3 h-3 mr-1 text-red-500" />
+                        <Trash2 className="w-3 h-3 mr-1 text-destructive" />
                         Excluir
                       </Button>
                     </div>

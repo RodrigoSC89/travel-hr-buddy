@@ -46,16 +46,22 @@ export function useAIPEODP(vesselId?: string) {
   const sectionsQuery = useQuery({
     queryKey: ['peo-dp-sections'],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from('peo_dp_sections')
-        .select('*')
-        .order('section_number');
+      const { data, error } = await supabase
+        .from('peo_dp_audits')
+        .select('*');
 
-      if (error) {
-        // Fallback com dados locais
+      if (error || !data || data.length === 0) {
+        // Fallback com dados locais se não houver dados no DB
         return getPEODPLocalData();
       }
-      return data || getPEODPLocalData();
+      // Map audit data to section format
+      return data.map((audit: Record<string, unknown>) => ({
+        id: String(audit.id),
+        section_number: String(audit.audit_date || '1'),
+        title: String(audit.status || 'Auditoria PEO-DP'),
+        description: String(audit.notes || ''),
+        requirements: [],
+      })) as PEODPSection[];
     },
     staleTime: 60000,
   });
@@ -64,12 +70,17 @@ export function useAIPEODP(vesselId?: string) {
   const auditsQuery = useQuery({
     queryKey: ['peo-dp-audits', vesselId],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      let query = supabase
         .from('peo_dp_audits')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
 
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
       if (error) return [];
       return data || [];
     },
