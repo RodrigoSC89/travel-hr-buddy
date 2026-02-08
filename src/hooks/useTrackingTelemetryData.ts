@@ -95,13 +95,47 @@ export function useTrackingTelemetryData() {
     refetchInterval: 30000,
   });
 
-  // Satellite connections (simulated since table may not exist)
-  const satellitesLoading = false;
-  const satellites: any[] = [
-    { id: "1", name: "Starlink", status: "connected", latency_ms: 45, last_sync: new Date().toISOString() },
-    { id: "2", name: "Iridium", status: "connected", latency_ms: 180, last_sync: new Date().toISOString() },
-    { id: "3", name: "VSAT", status: "connected", latency_ms: 320, last_sync: new Date().toISOString() },
-  ];
+  // Satellite connections from satcom_connection_status
+  const { data: satellites = [], isLoading: satellitesLoading } = useQuery({
+    queryKey: ["tracking-satellites"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("satcom_connection_status")
+        .select("id, link_id, is_connected, signal_quality, latency_ms, last_check_at")
+        .order("last_check_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+
+      if (!data?.length) return [];
+
+      // Fetch link names
+      const linkIds = [...new Set(data.map(d => d.link_id).filter((id): id is string => id != null))];
+      let linkMap: Record<string, string> = {};
+
+      if (linkIds.length > 0) {
+        const { data: links } = await supabase
+          .from("satcom_links")
+          .select("id, provider, link_name")
+          .in("id", linkIds);
+
+        (links || []).forEach((l: any) => {
+          linkMap[l.id] = l.link_name || l.provider || "SATCOM";
+        });
+      }
+
+      return data.map((s: any) => ({
+        id: s.id,
+        name: linkMap[s.link_id] || "SATCOM Link",
+        status: s.is_connected ? "connected" : "disconnected",
+        signal_quality: s.signal_quality,
+        latency_ms: s.latency_ms || 0,
+        last_sync: s.last_check_at || new Date().toISOString(),
+      }));
+    },
+    staleTime: 15000,
+    refetchInterval: 30000,
+  });
 
   // Fetch vessels for tracking
   const { data: vessels = [], isLoading: vesselsLoading } = useQuery({

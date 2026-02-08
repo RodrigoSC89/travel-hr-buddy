@@ -1,6 +1,6 @@
 /**
  * Class Surveys Hook - Gestão de Vistorias de Classe
- * Conecta ao Supabase para dados reais de surveys DNV/Lloyd's/ABS
+ * PATCH v3.0 - Integrado com tabela class_surveys real
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -38,47 +38,97 @@ export interface CreateSurveyInput {
 }
 
 /**
- * Fetch all class surveys with vessel info
+ * Fetch all class surveys with vessel info from real table
  */
 export function useClassSurveys() {
   return useQuery({
     queryKey: ['class-surveys'],
     queryFn: async (): Promise<ClassSurvey[]> => {
-      // Try to fetch from class_surveys table if exists
       const { data: surveys, error } = await supabase
-        .from('vessels')
-        .select('id, name, imo_number, status, updated_at')
-        .order('name')
-        .limit(50);
+        .from('class_surveys')
+        .select('*')
+        .order('due_date', { ascending: true })
+        .limit(100);
 
       if (error) {
-        logger.error('Failed to fetch class surveys', { error });
-        // Return demo data if table doesn't exist
-        return generateDemoSurveys();
+        logger.error('Failed to fetch class_surveys', { error });
+        throw error;
       }
 
-      // Generate survey data based on real vessels
-      return (surveys || []).map((vessel, idx) => ({
-        id: `SRV-${String(idx + 1).padStart(3, '0')}`,
-        vessel_id: vessel.id,
-        vessel_name: vessel.name || 'Embarcação',
-        vessel_imo: vessel.imo_number || '0000000',
-        survey_type: (['Annual', 'Intermediate', 'Special', 'Renewal', 'Drydock'] as const)[idx % 5],
-        classification_society: (['DNV', "Lloyd's", 'ABS', 'BV', 'ClassNK'] as const)[idx % 5],
-        status: determineSurveyStatus(idx),
-        scheduled_date: new Date(Date.now() + (idx - 2) * 15 * 24 * 60 * 60 * 1000).toISOString(),
-        completed_date: idx === 3 ? new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString() : undefined,
-        findings_count: Math.floor(Math.random() * 10),
-        critical_findings: Math.floor(Math.random() * 3),
-        inspector: idx % 3 === 0 ? 'James Morrison' : undefined,
-        location: ['Singapore', 'Rotterdam', 'Santos', 'Houston', 'Shanghai'][idx % 5],
-        certificates: ['Safety Construction', 'Safety Equipment', 'Load Line', 'Class Maintenance'].slice(0, (idx % 3) + 2),
-        next_due_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        created_at: new Date().toISOString(),
-        updated_at: vessel.updated_at || new Date().toISOString()
-      }));
+      if (!surveys?.length) return [];
+
+      // Fetch vessel info
+      const vesselIds = [...new Set(surveys.map(s => s.vessel_id).filter((id): id is string => id != null))];
+      let vesselMap: Record<string, { name: string; imo: string }> = {};
+
+      if (vesselIds.length > 0) {
+        const { data: vessels } = await supabase
+          .from('vessels')
+          .select('id, name, imo_number')
+          .in('id', vesselIds);
+
+        (vessels || []).forEach((v: any) => {
+          vesselMap[v.id] = { name: v.name, imo: v.imo_number || '' };
+        });
+      }
+
+      // Fetch classification society names
+      const csIds = [...new Set(surveys.map(s => s.classification_society_id).filter((id): id is string => id != null))];
+      let csMap: Record<string, string> = {};
+
+      if (csIds.length > 0) {
+        const { data: societies } = await supabase
+          .from('classification_societies')
+          .select('id, name')
+          .in('id', csIds);
+
+        (societies || []).forEach((cs: any) => {
+          csMap[cs.id] = cs.name;
+        });
+      }
+
+      const now = new Date();
+
+      return surveys.map((s: any) => {
+        const vessel = vesselMap[s.vessel_id] || { name: 'Embarcação', imo: '' };
+        const csName = csMap[s.classification_society_id] || 'DNV';
+        const findings = Array.isArray(s.findings) ? s.findings : [];
+        const criticalFindings = findings.filter((f: any) => f?.severity === 'critical' || f?.priority === 'critical').length;
+
+        // Determine status
+        let status: ClassSurvey['status'] = 'Scheduled';
+        if (s.status === 'completed' || s.completed_date) {
+          status = 'Completed';
+        } else if (s.status === 'in_progress') {
+          status = 'In Progress';
+        } else if (s.status === 'pending') {
+          status = 'Pending';
+        } else if (s.due_date && new Date(s.due_date) < now && !s.completed_date) {
+          status = 'Overdue';
+        }
+
+        return {
+          id: s.id,
+          vessel_id: s.vessel_id,
+          vessel_name: vessel.name,
+          vessel_imo: vessel.imo,
+          survey_type: (s.survey_type as ClassSurvey['survey_type']) || 'Annual',
+          classification_society: mapCSName(csName),
+          status,
+          scheduled_date: s.due_date || s.window_start || s.created_at,
+          completed_date: s.completed_date || undefined,
+          findings_count: findings.length,
+          critical_findings: criticalFindings,
+          inspector: s.surveyor_name || undefined,
+          location: s.survey_location || undefined,
+          certificates: s.certificates_issued || [],
+          next_due_date: s.window_end || undefined,
+          created_at: s.created_at,
+          updated_at: s.updated_at,
+        };
+      });
     },
-    staleTime: 5 * 60 * 1000
+    staleTime: 5 * 60 * 1000,
   });
 }
 
@@ -95,12 +145,12 @@ export function useClassSurveyStats() {
     completed: surveys?.filter(s => s.status === 'Completed').length || 0,
     overdue: surveys?.filter(s => s.status === 'Overdue').length || 0,
     complianceRate: surveys?.length ? 
-      Math.round((surveys.filter(s => s.status !== 'Overdue').length / surveys.length) * 100) : 100
+      Math.round((surveys.filter(s => s.status !== 'Overdue').length / surveys.length) * 100) : 100,
   };
 }
 
 /**
- * Create new class survey
+ * Create new class survey (real insert)
  */
 export function useCreateClassSurvey() {
   const queryClient = useQueryClient();
@@ -108,43 +158,42 @@ export function useCreateClassSurvey() {
 
   return useMutation({
     mutationFn: async (input: CreateSurveyInput) => {
-      // In real implementation, insert into class_surveys table
-      // For now, simulate success
-      logger.info('Creating class survey', { input });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      return {
-        id: `SRV-${Date.now()}`,
-        ...input,
-        status: 'Scheduled' as const,
-        findings_count: 0,
-        critical_findings: 0,
-        certificates: input.certificates || [],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
+      const { data, error } = await supabase
+        .from('class_surveys')
+        .insert({
+          vessel_id: input.vessel_id,
+          survey_type: input.survey_type,
+          due_date: input.scheduled_date,
+          survey_location: input.location,
+          certificates_issued: input.certificates || [],
+          status: 'scheduled',
+          survey_name: `${input.survey_type} Survey`,
+        } as any)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['class-surveys'] });
       toast({
         title: "Vistoria Agendada",
-        description: "Nova vistoria de classe criada com sucesso."
+        description: "Nova vistoria de classe criada com sucesso.",
       });
     },
     onError: (error) => {
       toast({
         title: "Erro ao Criar Vistoria",
         description: error.message || "Não foi possível criar a vistoria.",
-        variant: "destructive"
+        variant: "destructive",
       });
-    }
+    },
   });
 }
 
 /**
- * Update survey status
+ * Update survey status (real update)
  */
 export function useUpdateSurveyStatus() {
   const queryClient = useQueryClient();
@@ -152,75 +201,46 @@ export function useUpdateSurveyStatus() {
 
   return useMutation({
     mutationFn: async ({ surveyId, status }: { surveyId: string; status: ClassSurvey['status'] }) => {
-      logger.info('Updating survey status', { surveyId, status });
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const dbStatus = status.toLowerCase().replace(' ', '_');
+      const updates: Record<string, unknown> = { status: dbStatus };
+      
+      if (status === 'Completed') {
+        updates.completed_date = new Date().toISOString().split('T')[0];
+      }
+
+      const { error } = await supabase
+        .from('class_surveys')
+        .update(updates as any)
+        .eq('id', surveyId);
+
+      if (error) throw error;
       return { surveyId, status };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['class-surveys'] });
       toast({
         title: "Status Atualizado",
-        description: "O status da vistoria foi atualizado."
+        description: "O status da vistoria foi atualizado.",
       });
-    }
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao Atualizar",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 }
 
-// Helper functions
-function determineSurveyStatus(index: number): ClassSurvey['status'] {
-  const statuses: ClassSurvey['status'][] = ['Scheduled', 'In Progress', 'Overdue', 'Completed', 'Pending'];
-  return statuses[index % 5];
-}
-
-function generateDemoSurveys(): ClassSurvey[] {
-  return [
-    {
-      id: 'SRV-001',
-      vessel_id: 'v1',
-      vessel_name: 'Atlantic Pioneer',
-      vessel_imo: '9876543',
-      survey_type: 'Annual',
-      classification_society: 'DNV',
-      status: 'Scheduled',
-      scheduled_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-      findings_count: 0,
-      critical_findings: 0,
-      certificates: ['Safety Construction', 'Safety Equipment'],
-      next_due_date: new Date(Date.now() + 380 * 24 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'SRV-002',
-      vessel_id: 'v2',
-      vessel_name: 'Pacific Voyager',
-      vessel_imo: '8765432',
-      survey_type: 'Intermediate',
-      classification_society: "Lloyd's",
-      status: 'In Progress',
-      scheduled_date: new Date().toISOString(),
-      findings_count: 3,
-      critical_findings: 0,
-      inspector: 'James Morrison',
-      location: 'Singapore',
-      certificates: ['Class Maintenance', 'Statutory'],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'SRV-003',
-      vessel_id: 'v3',
-      vessel_name: 'Northern Star',
-      vessel_imo: '7654321',
-      survey_type: 'Special',
-      classification_society: 'ABS',
-      status: 'Overdue',
-      scheduled_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      findings_count: 5,
-      critical_findings: 2,
-      certificates: ['Hull', 'Machinery'],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  ];
+// Helper: map classification society name
+function mapCSName(name: string): ClassSurvey['classification_society'] {
+  const normalized = name.toLowerCase();
+  if (normalized.includes('dnv')) return 'DNV';
+  if (normalized.includes('lloyd')) return "Lloyd's";
+  if (normalized.includes('abs')) return 'ABS';
+  if (normalized.includes('bureau') || normalized.includes('bv')) return 'BV';
+  if (normalized.includes('nk') || normalized.includes('nippon')) return 'ClassNK';
+  if (normalized.includes('rina')) return 'RINA';
+  return 'DNV';
 }

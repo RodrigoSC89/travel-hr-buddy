@@ -1,6 +1,6 @@
 /**
  * Hook para dados de gamificação baseados em dados reais
- * Substitui mockLeaderboard, mockBadges, mockChallenges
+ * PATCH v3.0 - Corrigido mapeamento de campos (employee_id → id)
  */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,26 +9,29 @@ export function useGamificationData() {
   return useQuery({
     queryKey: ["gamification-data"],
     queryFn: async () => {
-      // Build leaderboard from crew_members + certificates
-      const [{ data: crew }, { data: certs }] = await Promise.all([
-        supabase.from("crew_members").select("*").limit(20),
-        supabase.from("certificates").select("*").limit(50),
+      // Build leaderboard from crew_members + certifications
+      const [{ data: crew }, { data: certs }, { data: vessels }] = await Promise.all([
+        supabase.from("crew_members").select("id, full_name, rank, vessel_id, status, employee_id").eq("status", "active").limit(20),
+        supabase.from("crew_certifications").select("id, crew_member_id, certification_name, status").limit(100),
+        supabase.from("vessels").select("id, name").limit(50),
       ]);
 
       const crewList = crew || [];
       const certList = certs || [];
+      const vesselMap = new Map((vessels || []).map((v: any) => [v.id, v.name]));
 
-      // Generate leaderboard from crew data
+      // Generate leaderboard from crew data - use crew_member_id (which maps to crew_members.id)
       const leaderboard = crewList
-        .map((c, i) => {
+        .map((c: any, i: number) => {
           const crewCerts = certList.filter(
-            (cert) => cert.employee_id === c.employee_id
+            (cert: any) => cert.crew_member_id === c.id
           );
-          const points = 1000 + crewCerts.length * 500 + (crewList.length - i) * 200;
+          const validCerts = crewCerts.filter((cert: any) => cert.status === "valid" || cert.status === "active");
+          const points = 1000 + validCerts.length * 500 + crewCerts.length * 200 + (crewList.length - i) * 100;
           return {
             rank: 0,
             name: c.full_name || `Tripulante ${i + 1}`,
-            vessel: c.vessel_id || "Não atribuído",
+            vessel: c.vessel_id ? vesselMap.get(c.vessel_id) || "Não atribuído" : "Não atribuído",
             points,
             avatar: "",
             streak: Math.max(1, Math.floor(points / 1000)),
@@ -40,9 +43,10 @@ export function useGamificationData() {
 
       // Generate badges based on cert data
       const totalCerts = certList.length;
+      const validCerts = certList.filter((c: any) => c.status === "valid" || c.status === "active").length;
       const badges = [
-        { id: "1", name: "Safety Champion", description: "100 dias sem incidentes", earned: totalCerts >= 1, rarity: "legendary" as const },
-        { id: "2", name: "Compliance Master", description: "Todas auditorias aprovadas", earned: totalCerts >= 2, rarity: "epic" as const },
+        { id: "1", name: "Safety Champion", description: "100 dias sem incidentes", earned: validCerts >= 5, rarity: "legendary" as const },
+        { id: "2", name: "Compliance Master", description: "Todas auditorias aprovadas", earned: validCerts >= 3, rarity: "epic" as const },
         { id: "3", name: "Training Expert", description: "Treinamentos concluídos", earned: crewList.length >= 2, rarity: "rare" as const },
         { id: "4", name: "Early Bird", description: "Check-in antes das 6h por 30 dias", earned: false, rarity: "rare" as const },
         { id: "5", name: "Team Player", description: "Ajudou colegas", earned: crewList.length >= 3, rarity: "common" as const },
@@ -52,11 +56,12 @@ export function useGamificationData() {
       // Challenges based on real data counts
       const challenges = [
         { id: "1", title: "Zero Incidentes", description: "Mantenha zero incidentes no mês", progress: Math.min(100, crewList.length * 20), reward: 500, deadline: "31 dias", participants: crewList.length * 3 },
-        { id: "2", title: "Certificações em Dia", description: "Todos certificados válidos", progress: Math.min(100, totalCerts * 30), reward: 200, deadline: "15 dias", participants: crewList.length * 5 },
+        { id: "2", title: "Certificações em Dia", description: "Todos certificados válidos", progress: totalCerts > 0 ? Math.min(100, Math.round((validCerts / totalCerts) * 100)) : 0, reward: 200, deadline: "15 dias", participants: crewList.length * 5 },
         { id: "3", title: "Eco Champion", description: "Reduza emissões em 10%", progress: 40, reward: 350, deadline: "60 dias", participants: Math.max(10, crewList.length * 2) },
       ];
 
       return { leaderboard, badges, challenges, totalCrew: crewList.length, totalCerts };
     },
+    staleTime: 30000,
   });
 }

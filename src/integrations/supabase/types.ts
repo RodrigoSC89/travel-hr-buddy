@@ -18928,6 +18928,110 @@ export type Database = {
           },
         ]
       }
+      hr_key_results: {
+        Row: {
+          created_at: string
+          current_value: number
+          id: string
+          okr_id: string
+          status: string
+          target_value: number
+          title: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number
+          id?: string
+          okr_id: string
+          status?: string
+          target_value?: number
+          title: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_value?: number
+          id?: string
+          okr_id?: string
+          status?: string
+          target_value?: number
+          title?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_key_results_okr_id_fkey"
+            columns: ["okr_id"]
+            isOneToOne: false
+            referencedRelation: "hr_okrs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_okrs: {
+        Row: {
+          created_at: string
+          id: string
+          level: string
+          objective: string
+          organization_id: string | null
+          owner: string
+          owner_id: string | null
+          parent_okr_id: string | null
+          progress: number | null
+          quarter: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level?: string
+          objective: string
+          organization_id?: string | null
+          owner: string
+          owner_id?: string | null
+          parent_okr_id?: string | null
+          progress?: number | null
+          quarter: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level?: string
+          objective?: string
+          organization_id?: string | null
+          owner?: string
+          owner_id?: string | null
+          parent_okr_id?: string | null
+          progress?: number | null
+          quarter?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_okrs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_okrs_parent_okr_id_fkey"
+            columns: ["parent_okr_id"]
+            isOneToOne: false
+            referencedRelation: "hr_okrs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_onboarding_tasks: {
         Row: {
           admission_id: string | null

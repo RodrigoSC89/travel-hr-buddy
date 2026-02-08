@@ -69,42 +69,8 @@ export function useNautiPeopleData() {
         .eq("source_module", "recruitment")
         .order("created_at", { ascending: false });
 
-      if (error || !actionItems?.length) {
-        // Demo data
-        return [
-          {
-            id: "demo-1",
-            titulo: "Capitão de Longo Curso",
-            departamento: "Operações",
-            unidade: "Frota Principal",
-            tipo: "CLT",
-            status: "aberta",
-            prioridade: "critica",
-            salarioMin: 25000,
-            salarioMax: 35000,
-            descricao: "Capitão experiente para comandar embarcação offshore",
-            requisitos: ["Habilitação CLC", "Mínimo 10 anos experiência", "Inglês fluente"],
-            dataCriacao: new Date().toISOString(),
-            dataLimite: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            candidatosCount: 5
-          },
-          {
-            id: "demo-2",
-            titulo: "Engenheiro Naval",
-            departamento: "Engenharia",
-            unidade: "Escritório Central",
-            tipo: "CLT",
-            status: "em_andamento",
-            prioridade: "alta",
-            salarioMin: 15000,
-            salarioMax: 22000,
-            descricao: "Engenheiro para projetos de manutenção e modernização",
-            requisitos: ["Formação em Engenharia Naval", "5+ anos experiência", "AutoCAD"],
-            dataCriacao: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-            candidatosCount: 12
-          }
-        ];
-      }
+      if (error) throw error;
+      if (!actionItems?.length) return [];
 
       return actionItems.map(item => {
         const comments = item.comments as any || {};
@@ -141,38 +107,8 @@ export function useNautiPeopleData() {
         .or("status.eq.pending,status.eq.candidate,status.eq.applicant")
         .order("created_at", { ascending: false });
 
-      if (error || !crewCandidates?.length) {
-        // Demo data
-        return [
-          {
-            id: "cand-1",
-            nome: "André Lima",
-            email: "andre.lima@email.com",
-            telefone: "+55 21 99999-1234",
-            vagaId: "demo-1",
-            vagaTitulo: "Capitão de Longo Curso",
-            etapa: "entrevista_tecnica",
-            score: 85,
-            skills: ["Navegação", "Liderança", "Inglês Fluente"],
-            experiencia: 12,
-            dataCandidatura: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-            ultimaAtualizacao: new Date().toISOString()
-          },
-          {
-            id: "cand-2",
-            nome: "Paula Ferreira",
-            email: "paula.f@email.com",
-            vagaId: "demo-2",
-            vagaTitulo: "Engenheiro Naval",
-            etapa: "triagem",
-            score: 72,
-            skills: ["AutoCAD", "Projeto Naval", "MS Project"],
-            experiencia: 6,
-            dataCandidatura: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-            ultimaAtualizacao: new Date().toISOString()
-          }
-        ];
-      }
+      if (error) throw error;
+      if (!crewCandidates?.length) return [];
 
       return crewCandidates.map(c => {
         const emergencyData = c.emergency_contact as any || {};

@@ -65,7 +65,7 @@ export function useInventoryItems(searchQuery = "", filterCategory = "all", filt
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        return generateDemoInventory();
+        return [];
       }
 
       return data.map((item) => {
@@ -109,7 +109,7 @@ export function useStockMovements() {
         .limit(50);
 
       if (error || !logs || logs.length === 0) {
-        return generateDemoMovements();
+        return [];
       }
 
       return logs.map((log) => {

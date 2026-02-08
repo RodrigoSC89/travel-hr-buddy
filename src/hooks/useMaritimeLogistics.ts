@@ -79,11 +79,52 @@ export function useLogisticsOperations(vesselId?: string) {
   return useQuery({
     queryKey: ['logistics-operations', vesselId],
     queryFn: async (): Promise<LogisticsOperation[]> => {
-      // Operations would come from a dedicated operations table
-      // For now, return empty array
-      return [];
+      let query = supabase
+        .from('logistics_operations')
+        .select('id, vessel_id, operation_type, origin_port, destination_port, estimated_departure, status')
+        .order('estimated_departure', { ascending: false })
+        .limit(50);
+
+      if (vesselId) {
+        query = query.eq('vessel_id', vesselId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return (data || []).map((op: any) => ({
+        id: op.id,
+        vesselId: op.vessel_id || '',
+        type: mapOperationType(op.operation_type),
+        port: op.origin_port || op.destination_port || 'Unknown',
+        scheduled: op.estimated_departure || new Date().toISOString(),
+        status: mapOpStatus(op.status),
+      }));
     }
   });
+}
+
+function mapOperationType(type: string | null): LogisticsOperation['type'] {
+  const map: Record<string, LogisticsOperation['type']> = {
+    'loading': 'loading',
+    'unloading': 'unloading',
+    'bunkering': 'bunkering',
+    'crew_change': 'crew_change',
+    'maintenance': 'maintenance',
+  };
+  return map[type || ''] || 'loading';
+}
+
+function mapOpStatus(status: string | null): LogisticsOperation['status'] {
+  const map: Record<string, LogisticsOperation['status']> = {
+    'scheduled': 'scheduled',
+    'in_progress': 'in_progress',
+    'completed': 'completed',
+    'delayed': 'delayed',
+    'pending': 'scheduled',
+    'cancelled': 'completed',
+  };
+  return map[status || ''] || 'scheduled';
 }
 
 export function useVesselStats() {
