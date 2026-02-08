@@ -39,15 +39,23 @@ export function FindingsManager() {
   const loadFindings = async () => {
     try {
       setLoading(true);
-      // Use type assertion for table not in generated types
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("non_conformities")
-        .select("id, nc_number, nc_type, source, description, status, created_at")
+        .select("id, nc_number, source, description, status, severity, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      setFindings((data as Finding[]) || []);
+      const mapped: Finding[] = (data || []).map(nc => ({
+        id: nc.id,
+        nc_number: nc.nc_number || `NC-${nc.id.slice(0, 6)}`,
+        nc_type: nc.severity || 'observation',
+        source: nc.source || 'internal',
+        description: nc.description,
+        status: nc.status || 'open',
+        created_at: nc.created_at,
+      }));
+      setFindings(mapped);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
       toast({

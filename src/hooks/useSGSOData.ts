@@ -1,6 +1,6 @@
 /**
  * PATCH OPS-V7: Hooks para dados SGSO reais
- * Substitui SAMPLE_TRAININGS, SAMPLE_NCS, SAMPLE_INCIDENTS, etc.
+ * DEBT-FIX: Aligned with real schema - training_records, sgso_audits, non_conformities
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -29,31 +29,20 @@ export function useTrainingComplianceData() {
     queryKey: ["sgso-training-compliance"],
     queryFn: async (): Promise<TrainingRecord[]> => {
       try {
-        // Buscar de crew_training_records using any cast
-        const { data: records, error } = await (supabase as any)
-          .from("crew_training_records")
-          .select(`
-            id,
-            training_name,
-            training_type,
-            completion_date,
-            expiry_date,
-            status,
-            score,
-            crew_member_id
-          `)
-          .order("expiry_date", { ascending: true })
+        const { data: records, error } = await supabase
+          .from("training_records")
+          .select("id, training_name, training_type, start_date, certificate_expiry_date, status, score, crew_member_id")
+          .order("certificate_expiry_date", { ascending: true })
           .limit(50);
 
         if (error || !records || records.length === 0) {
           return [];
         }
 
-        // Agrupar por training_name e calcular estatísticas
-        const groupedByTraining = new Map<string, Record<string, unknown>[]>();
+        const groupedByTraining = new Map<string, typeof records>();
         
-        (records as Record<string, unknown>[]).forEach((rec) => {
-          const key = String(rec.training_name || "Treinamento");
+        records.forEach((rec) => {
+          const key = rec.training_name || "Treinamento";
           if (!groupedByTraining.has(key)) {
             groupedByTraining.set(key, []);
           }
@@ -65,33 +54,32 @@ export function useTrainingComplianceData() {
           const certified = recs.filter(r => r.status === "completed" || r.status === "valid").length;
           const completionRate = total > 0 ? Math.round((certified / total) * 100) : 0;
           
-          // Determinar status baseado nas datas de expiração
           const now = new Date();
           const thirtyDays = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
           
           let status: TrainingRecord["status"] = "valid";
-          const expiringSoon = recs.some(r => r.expiry_date && new Date(String(r.expiry_date)) <= thirtyDays && new Date(String(r.expiry_date)) > now);
-          const expired = recs.some(r => r.expiry_date && new Date(String(r.expiry_date)) < now);
+          const expiringSoon = recs.some(r => r.certificate_expiry_date && new Date(r.certificate_expiry_date) <= thirtyDays && new Date(r.certificate_expiry_date) > now);
+          const expired = recs.some(r => r.certificate_expiry_date && new Date(r.certificate_expiry_date) < now);
           
           if (expired) status = "expired";
           else if (expiringSoon) status = "expiring_soon";
           else if (completionRate < 50) status = "pending";
 
-          const latestRecord = recs.sort((a, b) => 
-            new Date(String(b.completion_date || 0)).getTime() - new Date(String(a.completion_date || 0)).getTime()
+          const latestRecord = [...recs].sort((a, b) => 
+            new Date(b.start_date || 0).getTime() - new Date(a.start_date || 0).getTime()
           )[0];
 
           return {
             id: `training-${idx}`,
             name,
-            category: mapTrainingCategory(String(recs[0]?.training_type || "")),
+            category: mapTrainingCategory(recs[0]?.training_type || ""),
             status,
             completionRate,
             certified,
             total,
             validityMonths: 12,
-            lastConducted: latestRecord?.completion_date ? String(latestRecord.completion_date) : undefined,
-            nextDue: latestRecord?.expiry_date ? String(latestRecord.expiry_date) : undefined,
+            lastConducted: latestRecord?.start_date || undefined,
+            nextDue: latestRecord?.certificate_expiry_date || undefined,
           };
         });
       } catch {
@@ -128,23 +116,9 @@ export function useNonConformityData() {
     queryKey: ["sgso-non-conformities"],
     queryFn: async (): Promise<NonConformity[]> => {
       try {
-        const { data: ncs, error } = await (supabase as any)
+        const { data: ncs, error } = await supabase
           .from("non_conformities")
-          .select(`
-            id,
-            title,
-            description,
-            severity,
-            status,
-            category,
-            root_cause,
-            corrective_action,
-            preventive_action,
-            created_at,
-            due_date,
-            reported_by,
-            assigned_to
-          `)
+          .select("id, title, description, severity, status, category, root_cause, corrective_action, preventive_action, created_at, due_date, reported_by, assigned_to")
           .order("created_at", { ascending: false })
           .limit(30);
 
@@ -152,20 +126,20 @@ export function useNonConformityData() {
           return [];
         }
 
-        return (ncs as Record<string, unknown>[]).map((nc, idx) => ({
-          id: String(nc.id || ''),
-          number: `NC-${new Date(String(nc.created_at || new Date())).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
-          title: String(nc.title || "Não Conformidade"),
-          type: mapNCType(String(nc.severity || '')),
+        return ncs.map((nc, idx) => ({
+          id: nc.id,
+          number: `NC-${new Date(nc.created_at || new Date().toISOString()).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
+          title: nc.title || nc.description || "Não Conformidade",
+          type: mapNCType(nc.severity || ''),
           practiceId: 1,
-          practiceName: String(nc.category || "Geral"),
-          status: mapNCStatus(String(nc.status || '')),
-          severity: mapSeverity(String(nc.severity || '')),
-          identifiedDate: String(nc.created_at || new Date().toISOString()),
-          dueDate: String(nc.due_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()),
-          responsible: String(nc.assigned_to || nc.reported_by || "A definir"),
-          correctiveAction: nc.corrective_action ? String(nc.corrective_action) : undefined,
-          preventiveAction: nc.preventive_action ? String(nc.preventive_action) : undefined,
+          practiceName: nc.category || "Geral",
+          status: mapNCStatus(nc.status || ''),
+          severity: mapSeverity(nc.severity || ''),
+          identifiedDate: nc.created_at || new Date().toISOString(),
+          dueDate: nc.due_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          responsible: nc.assigned_to || nc.reported_by || "A definir",
+          correctiveAction: nc.corrective_action || undefined,
+          preventiveAction: nc.preventive_action || undefined,
           completionPercentage: 0,
         }));
       } catch {
@@ -181,13 +155,13 @@ export function useCreateNonConformity() {
 
   return useMutation({
     mutationFn: async (nc: Partial<NonConformity>) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("non_conformities")
         .insert({
-          description: nc.title,
-          severity: nc.severity,
+          title: nc.title || '',
+          severity: nc.severity || 'medium',
           status: "open",
-          category: nc.practiceName,
+          category: nc.practiceName || 'general',
           corrective_action: nc.correctiveAction,
           due_date: nc.dueDate,
           reported_by: nc.responsible,
@@ -234,18 +208,7 @@ export function useSGSOIncidentsData() {
       try {
         const { data: alerts, error } = await supabase
           .from("soc_alerts")
-          .select(`
-            id,
-            title,
-            message,
-            severity,
-            alert_type,
-            created_at,
-            source_module,
-            metadata,
-            acknowledged_at,
-            vessels:vessel_id (name)
-          `)
+          .select("id, title, message, severity, alert_type, created_at, source_module, metadata, acknowledged_at")
           .or("source_module.ilike.%sgso%,source_module.ilike.%incident%,alert_type.ilike.%incident%")
           .order("created_at", { ascending: false })
           .limit(20);
@@ -263,7 +226,7 @@ export function useSGSOIncidentsData() {
             type: mapIncidentType(alert.alert_type),
             severity: mapSeverity(alert.severity),
             status: alert.acknowledged_at ? "closed" as const : "reported" as const,
-            location: (alert.vessels as { name: string } | null)?.name || "Local não especificado",
+            location: "Local não especificado",
             description: alert.message || alert.title,
             injuredCount: (meta.injured_count as number) || 0,
             rootCause: (meta.root_cause as string) || undefined,
@@ -304,20 +267,9 @@ export function useCAPAData() {
     queryKey: ["sgso-capa"],
     queryFn: async (): Promise<CAPARecord[]> => {
       try {
-        // Buscar ações corretivas/preventivas das non_conformities
-        const { data: ncs, error } = await (supabase as any)
+        const { data: ncs, error } = await supabase
           .from("non_conformities")
-          .select(`
-            id,
-            description,
-            corrective_action,
-            preventive_action,
-            status,
-            severity,
-            assigned_to,
-            due_date,
-            created_at
-          `)
+          .select("id, description, corrective_action, preventive_action, status, severity, assigned_to, due_date, created_at")
           .not("corrective_action", "is", null)
           .order("created_at", { ascending: false })
           .limit(30);
@@ -328,19 +280,19 @@ export function useCAPAData() {
 
         const capas: CAPARecord[] = [];
 
-        (ncs as Record<string, unknown>[]).forEach((nc, idx) => {
+        ncs.forEach((nc, idx) => {
           if (nc.corrective_action) {
             capas.push({
               id: `capa-c-${nc.id}`,
-              number: `CAPA-C-${new Date(String(nc.created_at || new Date())).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
+              number: `CAPA-C-${new Date(nc.created_at || new Date().toISOString()).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
               type: "corrective",
               originType: "nc",
-              originId: String(nc.id || ''),
-              title: String(nc.corrective_action || ''),
-              status: mapCAPAStatus(String(nc.status || ''), 0),
-              priority: mapSeverity(String(nc.severity || '')),
-              responsible: String(nc.assigned_to || "A definir"),
-              plannedDate: String(nc.due_date || new Date().toISOString()),
+              originId: nc.id,
+              title: nc.corrective_action,
+              status: mapCAPAStatus(nc.status || '', 0),
+              priority: mapSeverity(nc.severity || ''),
+              responsible: nc.assigned_to || "A definir",
+              plannedDate: nc.due_date || new Date().toISOString(),
               progress: 0,
             });
           }
@@ -348,15 +300,15 @@ export function useCAPAData() {
           if (nc.preventive_action) {
             capas.push({
               id: `capa-p-${nc.id}`,
-              number: `CAPA-P-${new Date(String(nc.created_at || new Date())).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
+              number: `CAPA-P-${new Date(nc.created_at || new Date().toISOString()).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
               type: "preventive",
               originType: "nc",
-              originId: String(nc.id || ''),
-              title: String(nc.preventive_action || ''),
-              status: mapCAPAStatus(String(nc.status || ''), 0),
-              priority: mapSeverity(String(nc.severity || '')),
-              responsible: String(nc.assigned_to || "A definir"),
-              plannedDate: String(nc.due_date || new Date().toISOString()),
+              originId: nc.id,
+              title: nc.preventive_action,
+              status: mapCAPAStatus(nc.status || '', 0),
+              priority: mapSeverity(nc.severity || ''),
+              responsible: nc.assigned_to || "A definir",
+              plannedDate: nc.due_date || new Date().toISOString(),
               progress: 0,
             });
           }
@@ -372,7 +324,7 @@ export function useCAPAData() {
 }
 
 // =====================================================
-// AUDIT PLANNER
+// AUDIT PLANNER - uses sgso_audits table
 // =====================================================
 
 export interface AuditPlan {
@@ -397,44 +349,31 @@ export function useAuditPlannerData() {
     queryKey: ["sgso-audit-planner"],
     queryFn: async (): Promise<AuditPlan[]> => {
       try {
-        const { data: audits, error } = await (supabase as any)
-          .from("audits")
-          .select(`
-            id,
-            title,
-            audit_type,
-            scheduled_date,
-            status,
-            lead_auditor,
-            scope,
-            findings_count,
-            nc_major,
-            nc_minor,
-            observations,
-            created_at
-          `)
-          .order("scheduled_date", { ascending: false })
+        const { data: audits, error } = await supabase
+          .from("sgso_audits")
+          .select("id, audit_date, audit_type, status, compliance_score, non_conformities_count, findings, recommendations, created_at")
+          .order("audit_date", { ascending: false })
           .limit(20);
 
         if (error || !audits || audits.length === 0) {
           return [];
         }
 
-        return (audits as Record<string, unknown>[]).map((audit, idx) => ({
-          id: String(audit.id || ''),
-          number: `AUD-${new Date(String(audit.scheduled_date || audit.created_at || new Date())).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
-          type: mapAuditType(String(audit.audit_type || '')),
-          scope: String(audit.scope || audit.title || "Auditoria SGSO"),
-          auditDate: String(audit.scheduled_date || audit.created_at || new Date().toISOString()),
+        return audits.map((audit, idx) => ({
+          id: audit.id,
+          number: `AUD-${new Date(audit.audit_date || audit.created_at || new Date().toISOString()).getFullYear()}-${String(idx + 1).padStart(3, "0")}`,
+          type: mapAuditType(audit.audit_type || ''),
+          scope: audit.findings || "Auditoria SGSO",
+          auditDate: audit.audit_date || audit.created_at || new Date().toISOString(),
           duration: 2,
-          status: mapAuditStatus(String(audit.status || '')),
-          leadAuditor: String(audit.lead_auditor || "A definir"),
+          status: mapAuditStatus(audit.status || ''),
+          leadAuditor: "Auditor",
           team: [],
           practices: [1, 2, 3, 4, 5],
-          findingsCount: Number(audit.findings_count) || 0,
-          ncMajor: Number(audit.nc_major) || 0,
-          ncMinor: Number(audit.nc_minor) || 0,
-          observations: Number(audit.observations) || 0,
+          findingsCount: 0,
+          ncMajor: audit.non_conformities_count || 0,
+          ncMinor: 0,
+          observations: 0,
         }));
       } catch {
         return [];
@@ -499,16 +438,16 @@ function mapCAPAStatus(status: string, completion: number): CAPARecord["status"]
   return "planned";
 }
 
-function mapAuditType(type: string | null): AuditPlan["type"] {
-  const lower = (type || "").toLowerCase();
+function mapAuditType(type: string): AuditPlan["type"] {
+  const lower = type.toLowerCase();
   if (lower.includes("extern")) return "external";
   if (lower.includes("certif")) return "certification";
   if (lower.includes("surv")) return "surveillance";
   return "internal";
 }
 
-function mapAuditStatus(status: string | null): AuditPlan["status"] {
-  const lower = (status || "").toLowerCase();
+function mapAuditStatus(status: string): AuditPlan["status"] {
+  const lower = status.toLowerCase();
   if (lower.includes("complet") || lower.includes("done")) return "completed";
   if (lower.includes("progress")) return "in_progress";
   if (lower.includes("cancel")) return "cancelled";
