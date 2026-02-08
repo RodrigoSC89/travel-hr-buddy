@@ -23,11 +23,16 @@ import { supabase } from "@/integrations/supabase/client";
 const PeopleCommandCenter = lazy(() => import("@/modules/people-hub/components/PeopleCommandCenter"));
 const CrewSchedulerOriginal = lazy(() => import("@/modules/people-hub/components/CrewScheduler"));
 const CompetencyMatrix = lazy(() => import("@/modules/people-hub/components/CompetencyMatrix"));
-const CrewWellnessPanel = lazy(() => import("@/modules/people-hub/components/CrewWellnessPanel"));
 const CrewIntelligenceHub = lazy(() => import("@/components/premium/CrewIntelligenceHub"));
 const PeopleIntelligenceHub = lazy(() => import("@/components/premium/PeopleIntelligenceHub"));
 const TrainingAcademyIntelligence = lazy(() => import("@/components/premium/TrainingAcademyIntelligence"));
 const MentorDPUnified = lazy(() => import("@/components/mentor-dp/MentorDPUnified"));
+const AITraining = lazy(() => import("@/pages/AITraining"));
+
+// Real data wellness component
+const CrewWellbeingDashboard = lazy(() => 
+  import("@/components/world-class/people/CrewWellbeingDashboard").then(m => ({ default: m.CrewWellbeingDashboard }))
+);
 
 // Tier-1 Components - STCW/MLC
 const STCWCompetencyMatrix = lazy(() => import("@/components/tier1/people/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix })));
@@ -247,7 +252,12 @@ export default function PeopleHubPremium() {
 
         <TabsContent value="training">
           <Suspense fallback={<LoadingSkeleton />}>
-            <TrainingAcademyIntelligence />
+            <div className="space-y-6">
+              <TrainingAcademyIntelligence />
+              <div className="border-t pt-6">
+                <AITraining />
+              </div>
+            </div>
           </Suspense>
         </TabsContent>
 
@@ -259,7 +269,7 @@ export default function PeopleHubPremium() {
 
         <TabsContent value="wellness">
           <Suspense fallback={<LoadingSkeleton />}>
-            <CrewWellnessPanel />
+            <CrewWellbeingDashboard />
           </Suspense>
         </TabsContent>
       </Tabs>
