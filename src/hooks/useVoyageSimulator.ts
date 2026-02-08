@@ -112,10 +112,26 @@ export function useVoyageSimulator() {
     onError: () => toast({ title: "Erro ao criar simulação", variant: "destructive" }),
   });
 
+  const deleteSimulation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("voyage_simulations")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["voyage-simulations"] });
+      toast({ title: "Simulação excluída" });
+    },
+    onError: () => toast({ title: "Erro ao excluir simulação", variant: "destructive" }),
+  });
+
   return {
     simulations: simulations.data || [],
     isLoading: simulations.isLoading,
     createSimulation,
+    deleteSimulation,
     refetch: simulations.refetch,
   };
 }
