@@ -29,7 +29,7 @@ export interface TacticalDecision {
   action: TacticalAction;
   priority: DecisionPriority;
   reason: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   executed: boolean;
   success?: boolean;
   error?: string;
@@ -48,7 +48,7 @@ export interface DecisionRule {
 export interface TacticalContext {
   moduleName: string;
   prediction?: ModuleRiskScore;
-  watchdogAlerts: any[];
+  watchdogAlerts: unknown[];
   activeModules: string[];
   systemLoad: number;
   recentDecisions: TacticalDecision[];
@@ -65,12 +65,8 @@ class TacticalAI {
     this.initializeRules();
   }
 
-  /**
-   * Initialize decision rules
-   */
   private initializeRules(): void {
     this.rules = [
-      // Critical: Restart module on critical risk
       {
         id: "restart-critical",
         name: "Restart Module on Critical Risk",
@@ -82,8 +78,6 @@ class TacticalAI {
         priority: "critical",
         requiresConfirmation: false,
       },
-
-      // High: Enable fallback on predicted downtime
       {
         id: "fallback-downtime",
         name: "Enable Fallback on Downtime Prediction",
@@ -95,8 +89,6 @@ class TacticalAI {
         priority: "high",
         requiresConfirmation: false,
       },
-
-      // High: Scale up on overload prediction
       {
         id: "scale-overload",
         name: "Scale Up on Overload Prediction",
@@ -108,8 +100,6 @@ class TacticalAI {
         priority: "high",
         requiresConfirmation: true,
       },
-
-      // Medium: Notify human on high risk
       {
         id: "notify-high-risk",
         name: "Notify Human on High Risk",
@@ -118,15 +108,13 @@ class TacticalAI {
                  !ctx.recentDecisions.some(d => 
                    d.moduleName === ctx.moduleName && 
                    d.action === "notify_human" &&
-                   Date.now() - d.timestamp.getTime() < 30 * 60 * 1000 // 30 min
+                   Date.now() - d.timestamp.getTime() < 30 * 60 * 1000
                  );
         },
         action: "notify_human",
         priority: "medium",
         requiresConfirmation: false,
       },
-
-      // Medium: Clear cache on multiple errors
       {
         id: "clear-cache-errors",
         name: "Clear Cache on Multiple Errors",
@@ -138,8 +126,6 @@ class TacticalAI {
         priority: "medium",
         requiresConfirmation: false,
       },
-
-      // Low: Shift load to backup
       {
         id: "shift-load-backup",
         name: "Shift Load to Backup",
@@ -155,9 +141,6 @@ class TacticalAI {
     ];
   }
 
-  /**
-   * Start tactical AI
-   */
   start(): void {
     if (this.isActive) {
       logger.warn("[TacticalAI] Already running");
@@ -167,17 +150,13 @@ class TacticalAI {
     this.isActive = true;
     logger.info("[TacticalAI] Starting Tactical AI Core...");
 
-    // Process decision queue periodically
     this.executionInterval = setInterval(() => {
       this.processDecisionQueue();
-    }, 10000); // Every 10 seconds
+    }, 10000);
 
     logger.info("[TacticalAI] Tactical AI Core is active");
   }
 
-  /**
-   * Stop tactical AI
-   */
   stop(): void {
     if (!this.isActive) return;
 
@@ -190,23 +169,17 @@ class TacticalAI {
     logger.info("[TacticalAI] Tactical AI stopped");
   }
 
-  /**
-   * Evaluate and make tactical decision
-   */
   async evaluateAndDecide(moduleName: string): Promise<TacticalDecision[]> {
     logger.info(`[TacticalAI] Evaluating tactical decisions for: ${moduleName}`);
 
     try {
-      // Build context
       const context = await this.buildContext(moduleName);
 
-      // Check manual override
       if (this.manualOverrides.has(moduleName)) {
         logger.info(`[TacticalAI] Manual override active for ${moduleName}`);
         return [];
       }
 
-      // Evaluate rules
       const decisions: TacticalDecision[] = [];
       for (const rule of this.rules) {
         try {
@@ -214,12 +187,10 @@ class TacticalAI {
             const decision = this.createDecision(moduleName, rule, context);
             decisions.push(decision);
             
-            // Add to queue if doesn't require confirmation
             if (!rule.requiresConfirmation) {
               this.decisionQueue.push(decision);
             }
 
-            // Save to audit trail
             await this.saveDecision(decision);
           }
         } catch (error) {
@@ -234,30 +205,22 @@ class TacticalAI {
     }
   }
 
-  /**
-   * Build decision context
-   */
   private async buildContext(moduleName: string): Promise<TacticalContext> {
-    // Get prediction
     const prediction = await predictiveEngine.predictModuleRisk(moduleName);
-
-    // Get watchdog alerts
     const watchdogStats = systemWatchdog.getStats();
-    const watchdogAlerts: any[] = []; // Would fetch from watchdog
+    const watchdogAlerts: unknown[] = [];
 
-    // Get active modules
-    const { data: activeModulesData } = await (supabase as any)
+    // Use typed system_metrics table
+    const { data: activeModulesData } = await supabase
       .from("system_metrics")
       .select("metric_name")
       .gte("recorded_at", new Date(Date.now() - 5 * 60 * 1000).toISOString());
     
-    const activeModules = [...new Set(((activeModulesData as any[]) || []).map((m: any) => String(m.metric_name)))] as string[];
-
-    // Calculate system load (simplified)
+    const activeModules = [...new Set((activeModulesData || []).map((m) => String(m.metric_name)))] as string[];
     const systemLoad = Math.min(watchdogStats.totalErrors / 10, 1);
 
-    // Get recent decisions
-    const { data: recentDecisionsData } = await (supabase as any)
+    // Use typed tactical_decisions table
+    const { data: recentDecisionsData } = await supabase
       .from("tactical_decisions")
       .select("*")
       .eq("module_name", moduleName)
@@ -265,17 +228,17 @@ class TacticalAI {
       .order("created_at", { ascending: false })
       .limit(10);
 
-    const recentDecisions: TacticalDecision[] = ((recentDecisionsData || []) as any[]).map((d: any) => ({
+    const recentDecisions: TacticalDecision[] = (recentDecisionsData || []).map((d) => ({
       id: d.id || d.decision_id || "",
       timestamp: new Date(d.created_at || Date.now()),
       moduleName: d.module_name || "",
       action: (d.action_taken || "no_action") as TacticalAction,
       priority: (d.priority || "low") as DecisionPriority,
       reason: d.trigger_type || "Unknown",
-      context: typeof d.context === "object" && d.context !== null ? d.context : {},
+      context: typeof d.context === "object" && d.context !== null ? (d.context as Record<string, unknown>) : {},
       executed: d.executed_at != null,
       success: d.success ?? undefined,
-      error: d.error_message ?? undefined,
+      error: undefined,
       manualOverride: d.override_by != null,
     }));
 
@@ -289,9 +252,6 @@ class TacticalAI {
     };
   }
 
-  /**
-   * Create decision from rule
-   */
   private createDecision(
     moduleName: string,
     rule: DecisionRule,
@@ -313,30 +273,23 @@ class TacticalAI {
     };
   }
 
-  /**
-   * Generate unique decision ID
-   */
   private generateDecisionId(): string {
     return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  /**
-   * Save decision to audit trail
-   */
   private async saveDecision(decision: TacticalDecision): Promise<void> {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("tactical_decisions")
-        .insert({
+        .insert([{
           decision_id: decision.id,
           module_name: decision.moduleName,
           action_taken: decision.action,
           trigger_type: "ai_prediction",
           priority: decision.priority,
-          context: decision.context,
+          context: decision.context as unknown as Record<string, string>,
           success: decision.success,
-          created_at: decision.timestamp.toISOString(),
-        });
+        }]);
 
       if (error) {
         logger.error("[TacticalAI] Failed to save decision:", error);
@@ -346,30 +299,22 @@ class TacticalAI {
     }
   }
 
-  /**
-   * Process decision queue
-   */
   private async processDecisionQueue(): Promise<void> {
     if (!this.isActive || this.decisionQueue.length === 0) return;
 
     logger.info(`[TacticalAI] Processing ${this.decisionQueue.length} decisions...`);
 
-    // Sort by priority
     this.decisionQueue.sort((a, b) => {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
 
-    // Process top priority decision
     const decision = this.decisionQueue.shift();
     if (!decision) return;
 
     await this.executeDecision(decision);
   }
 
-  /**
-   * Execute a tactical decision
-   */
   private async executeDecision(decision: TacticalDecision): Promise<void> {
     logger.info(`[TacticalAI] Executing decision: ${decision.action} for ${decision.moduleName}`);
 
@@ -380,53 +325,42 @@ class TacticalAI {
       case "restart_module":
         success = await this.restartModule(decision.moduleName);
         break;
-
       case "shift_load":
         success = await this.shiftLoad(decision.moduleName);
         break;
-
       case "scale_up":
         success = await this.scaleUp(decision.moduleName);
         break;
-
       case "scale_down":
         success = await this.scaleDown(decision.moduleName);
         break;
-
       case "enable_fallback":
         success = await this.enableFallback(decision.moduleName);
         break;
-
       case "disable_feature":
         success = await this.disableFeature(decision.moduleName);
         break;
-
       case "clear_cache":
         success = await this.clearCache(decision.moduleName);
         break;
-
       case "notify_human":
         success = await this.notifyHuman(decision);
         break;
-
       default:
         logger.warn(`[TacticalAI] Unknown action: ${decision.action}`);
         success = false;
       }
 
-      // Update decision status
       decision.executed = true;
       decision.success = success;
 
-      // Update in database
       await supabase
         .from("tactical_decisions")
         .update({
-          executed: true,
-          success,
           executed_at: new Date().toISOString(),
+          success,
         })
-        .eq("id", decision.id);
+        .eq("decision_id", decision.id);
 
       logger.info(`[TacticalAI] Decision executed: ${success ? "SUCCESS" : "FAILED"}`);
     } catch (error) {
@@ -436,98 +370,65 @@ class TacticalAI {
 
       logger.error("[TacticalAI] Failed to execute decision:", error);
 
-      // Update with error
       await supabase
         .from("tactical_decisions")
         .update({
-          executed: true,
-          success: false,
-          error: decision.error,
           executed_at: new Date().toISOString(),
+          success: false,
+          error_message: decision.error,
         })
-        .eq("id", decision.id);
+        .eq("decision_id", decision.id);
     }
   }
 
-  /**
-   * Action: Restart module
-   */
   private async restartModule(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Restarting module: ${moduleName}`);
-    // Implementation would trigger actual module restart
     return true;
   }
 
-  /**
-   * Action: Shift load to backup
-   */
   private async shiftLoad(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Shifting load for module: ${moduleName}`);
-    // Implementation would redistribute traffic
     return true;
   }
 
-  /**
-   * Action: Scale up resources
-   */
   private async scaleUp(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Scaling up module: ${moduleName}`);
-    // Implementation would increase resources
     return true;
   }
 
-  /**
-   * Action: Scale down resources
-   */
   private async scaleDown(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Scaling down module: ${moduleName}`);
-    // Implementation would decrease resources
     return true;
   }
 
-  /**
-   * Action: Enable fallback mode
-   */
   private async enableFallback(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Enabling fallback for module: ${moduleName}`);
-    // Implementation would activate fallback systems
     return true;
   }
 
-  /**
-   * Action: Disable feature
-   */
   private async disableFeature(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Disabling feature: ${moduleName}`);
-    // Implementation would disable problematic feature
     return true;
   }
 
-  /**
-   * Action: Clear cache
-   */
   private async clearCache(moduleName: string): Promise<boolean> {
     logger.info(`[TacticalAI] Clearing cache for module: ${moduleName}`);
-    // Implementation would clear module-specific cache
     return true;
   }
 
-  /**
-   * Action: Notify human operator
-   */
   private async notifyHuman(decision: TacticalDecision): Promise<boolean> {
     logger.info(`[TacticalAI] Notifying human about: ${decision.moduleName}`);
     
     try {
-      // Send notification through multiple channels
-      await (supabase as any)
+      await supabase
         .from("notifications")
-        .insert({
+        .insert([{
           user_id: "system",
+          title: `Tactical Alert: ${decision.moduleName}`,
           message: `${decision.reason} - Module: ${decision.moduleName}`,
           priority: decision.priority,
-          created_at: new Date().toISOString(),
-        });
+          type: "tactical_alert",
+        }]);
 
       return true;
     } catch (error) {
@@ -536,9 +437,6 @@ class TacticalAI {
     }
   }
 
-  /**
-   * Set manual override for a module
-   */
   setManualOverride(moduleName: string, enabled: boolean): void {
     if (enabled) {
       this.manualOverrides.set(moduleName, true);
@@ -549,9 +447,6 @@ class TacticalAI {
     }
   }
 
-  /**
-   * Get decision history
-   */
   async getDecisionHistory(moduleName?: string, limit = 50): Promise<TacticalDecision[]> {
     try {
       let query = supabase
@@ -568,18 +463,18 @@ class TacticalAI {
 
       if (error) throw error;
 
-      return ((data || []) as any[]).map((d: any) => ({
+      return (data || []).map((d) => ({
         id: d.id || d.decision_id || "",
         timestamp: new Date(d.created_at || Date.now()),
         moduleName: d.module_name || "",
         action: (d.action_taken || "no_action") as TacticalAction,
         priority: (d.priority || "low") as DecisionPriority,
         reason: d.trigger_type || "Unknown",
-        context: typeof d.context === "object" && d.context !== null ? d.context : {},
-        executed: d.executed_at != null,
-        success: d.success ?? undefined,
-        error: d.error_message ?? undefined,
-        manualOverride: d.override_by != null,
+        context: typeof d.context === "object" && d.context !== null ? (d.context as Record<string, unknown>) : {},
+      executed: d.executed_at != null,
+      success: d.success ?? undefined,
+      error: undefined,
+      manualOverride: d.override_by != null,
       }));
     } catch (error) {
       logger.error("[TacticalAI] Failed to fetch decision history:", error);
@@ -587,9 +482,6 @@ class TacticalAI {
     }
   }
 
-  /**
-   * Get statistics
-   */
   getStats() {
     return {
       isActive: this.isActive,
@@ -600,5 +492,4 @@ class TacticalAI {
   }
 }
 
-// Export singleton instance
 export const tacticalAI = new TacticalAI();

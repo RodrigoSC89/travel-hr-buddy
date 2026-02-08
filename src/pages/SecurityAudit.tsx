@@ -56,9 +56,9 @@ interface TableSecurityStatus {
 interface AccessLog {
   id: string;
   action: string;
-  user_id: string;
+  user_id: string | null;
   timestamp: string;
-  ip_address: string;
+  ip_address: unknown;
   result: string;
 }
 
@@ -149,7 +149,7 @@ export default function SecurityAudit() {
       });
 
       // Fetch recent access logs
-      const { data: logs } = await (supabase as any)
+      const { data: logs } = await supabase
         .from("access_logs")
         .select("id, action, user_id, timestamp, ip_address, result")
         .order("timestamp", { ascending: false })
@@ -503,7 +503,7 @@ export default function SecurityAudit() {
                                   {log.result}
                                 </Badge>
                               </td>
-                              <td className="p-3 font-mono text-xs">{log.ip_address || "N/A"}</td>
+                              <td className="p-3 font-mono text-xs">{String(log.ip_address || "N/A")}</td>
                               <td className="p-3 text-muted-foreground">
                                 {log.timestamp ? format(new Date(log.timestamp), "dd/MM/yyyy HH:mm", { locale: ptBR }) : "N/A"}
                               </td>
