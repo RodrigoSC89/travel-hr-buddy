@@ -314,13 +314,15 @@ class TemplateSystemService {
    */
   private async saveGeneratedDocument(document: GeneratedDocument): Promise<void> {
     try {
-      const { error } = await (supabase as any).from("generated_documents").insert({
+      // Use ai_generated_documents table (canonical schema)
+      const { error } = await supabase.from("ai_generated_documents").insert({
         template_id: document.templateId,
-        template_name: document.templateName,
-        field_values: document.fieldValues,
-        generated_html: document.generatedHtml,
-        created_at: document.createdAt,
-        user_id: document.userId,
+        title: document.templateName,
+        document_type: "template_generated",
+        content: document.generatedHtml,
+        status: "draft",
+        metadata: { field_values: document.fieldValues } as import("@/integrations/supabase/types").Json,
+        created_by: document.userId,
       });
 
       if (error) throw error;
@@ -335,23 +337,23 @@ class TemplateSystemService {
    */
   async getGeneratedDocuments(userId: string): Promise<GeneratedDocument[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("generated_documents")
+      const { data, error } = await supabase
+        .from("ai_generated_documents")
         .select("*")
-        .eq("user_id", userId)
+        .eq("created_by", userId)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       return (
-        data?.map((d: any) => ({
+        data?.map((d) => ({
           id: d.id,
-          templateId: d.template_id,
-          templateName: d.template_name,
-          fieldValues: d.field_values,
-          generatedHtml: d.generated_html,
+          templateId: d.template_id || "",
+          templateName: d.title,
+          fieldValues: ((d.metadata as Record<string, unknown>)?.field_values as Record<string, unknown>) || {},
+          generatedHtml: d.content || "",
           createdAt: d.created_at,
-          userId: d.user_id,
+          userId: d.created_by || undefined,
         })) || []
       );
     } catch (error) {

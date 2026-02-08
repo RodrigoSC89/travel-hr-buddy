@@ -2,12 +2,16 @@
  * Realtime Sync Hook with Offline Fallback
  * PATCH 624 - Supabase offline/error fallback
  * PATCH 852 - Removed console.log, using logger
+ * Dynamic table access requires type assertion for flexibility
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { localStorageCache as offlineCache } from "@/services/unified/offline-cache.service";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type TableName = keyof Database["public"]["Tables"];
 
 interface UseRealtimeSyncOptions<T> {
   table: string;
@@ -55,22 +59,25 @@ export function useRealtimeSync<T>({
     try {
       setLoading(true);
       
-      // Build query with type assertions to bypass strict typing
-      const query: ReturnType<typeof supabase.from> = (supabase as any).from(table).select(select);
+      // Dynamic table access requires type assertion since table name is a string param
+      const query = supabase.from(table as TableName).select(select);
       
       // Apply filters if provided
       if (filter) {
+        let filteredQuery = query;
         Object.entries(filter).forEach(([key, value]) => {
-          (query as any).eq(key, value);
+          filteredQuery = filteredQuery.eq(key, value as string) as typeof filteredQuery;
         });
+        
+        const { data: fetchedData, error: fetchError } = await filteredQuery.maybeSingle();
+        if (fetchError) throw fetchError;
+        setData(fetchedData as T);
+      } else {
+        const { data: fetchedData, error: fetchError } = await query.maybeSingle();
+        if (fetchError) throw fetchError;
+        setData(fetchedData as T);
       }
 
-      const { data: fetchedData, error: fetchError } = await (query as any).maybeSingle();
-
-      if (fetchError) throw fetchError;
-
-      // Successfully fetched data
-      setData(fetchedData as T);
       setError(null);
       setSyncState({
         isOnline: true,
@@ -80,7 +87,7 @@ export function useRealtimeSync<T>({
       });
 
       // Update cache
-      offlineCache.set(cacheKey, fetchedData, cacheTTL);
+      offlineCache.set(cacheKey, data, cacheTTL);
       setLoading(false);
 
     } catch (err) {

@@ -1,6 +1,6 @@
 /**
  * Hook para Integrações API
- * CRUD completo para api_integrations
+ * CRUD completo para api_integrations - typed queries
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,13 +28,32 @@ export interface CreateIntegrationInput {
   api_key?: string;
 }
 
+function mapRowToIntegration(item: {
+  id: string;
+  api_name: string;
+  api_category: string | null;
+  status: string | null;
+  config: unknown;
+  created_at: string | null;
+  updated_at: string | null;
+}): Integration {
+  return {
+    id: item.id,
+    name: item.api_name,
+    type: item.api_category || 'custom',
+    status: (item.status || 'inactive') as Integration['status'],
+    config: item.config as Record<string, unknown> | undefined,
+    created_at: item.created_at || new Date().toISOString(),
+    updated_at: item.updated_at || new Date().toISOString(),
+  };
+}
+
 export function useIntegrations() {
   return useQuery({
     queryKey: ['integrations'],
     queryFn: async (): Promise<Integration[]> => {
       try {
-        // Use any cast to bypass type checking for dynamic table
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from('api_integrations')
           .select('*')
           .order('created_at', { ascending: false });
@@ -44,16 +63,7 @@ export function useIntegrations() {
           return [];
         }
 
-        return (data || []).map((item: Record<string, unknown>) => ({
-          id: String(item.id || ''),
-          name: String(item.api_name || item.name || 'Unnamed Integration'),
-          type: String(item.api_category || item.type || 'custom'),
-          status: (String(item.status || 'inactive') as Integration['status']),
-          description: item.description ? String(item.description) : undefined,
-          config: item.config as Record<string, unknown> | undefined,
-          created_at: String(item.created_at || new Date().toISOString()),
-          updated_at: String(item.updated_at || new Date().toISOString()),
-        }));
+        return (data || []).map(mapRowToIntegration);
       } catch (err) {
         logger.error('Error in useIntegrations:', err);
         return [];
@@ -68,7 +78,7 @@ export function useIntegration(id: string) {
     queryKey: ['integration', id],
     queryFn: async (): Promise<Integration | null> => {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from('api_integrations')
           .select('*')
           .eq('id', id)
@@ -80,18 +90,7 @@ export function useIntegration(id: string) {
         }
 
         if (!data) return null;
-
-        const item = data as Record<string, unknown>;
-        return {
-          id: String(item.id || ''),
-          name: String(item.api_name || item.name || 'Unnamed Integration'),
-          type: String(item.api_category || item.type || 'custom'),
-          status: (String(item.status || 'inactive') as Integration['status']),
-          description: item.description ? String(item.description) : undefined,
-          config: item.config as Record<string, unknown> | undefined,
-          created_at: String(item.created_at || new Date().toISOString()),
-          updated_at: String(item.updated_at || new Date().toISOString()),
-        };
+        return mapRowToIntegration(data);
       } catch (err) {
         logger.error('Error in useIntegration:', err);
         return null;
@@ -106,14 +105,14 @@ export function useCreateIntegration() {
 
   return useMutation({
     mutationFn: async (input: CreateIntegrationInput) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('api_integrations')
-        .insert({
+        .insert([{
           api_name: input.name,
           api_category: input.type,
-          config: input.config,
-          status: 'inactive',
-        })
+          config: input.config as import("@/integrations/supabase/types").Json ?? null,
+          status: 'inactive' as string,
+        }])
         .select()
         .single();
 
@@ -145,7 +144,7 @@ export function useUpdateIntegration() {
       if (input.type !== undefined) updateData.api_category = input.type;
       if (input.config !== undefined) updateData.config = input.config;
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('api_integrations')
         .update(updateData)
         .eq('id', id)
@@ -175,7 +174,7 @@ export function useDeleteIntegration() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('api_integrations')
         .delete()
         .eq('id', id);
@@ -202,7 +201,7 @@ export function useTestIntegrationConnection() {
     mutationFn: async (id: string) => {
       const startTime = Date.now();
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('api_integrations')
         .select('status')
         .eq('id', id)

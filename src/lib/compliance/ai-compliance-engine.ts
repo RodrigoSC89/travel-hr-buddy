@@ -1,6 +1,7 @@
 /**
  * AI Compliance Engine
  * ONNX-based compliance scoring for maritime regulations (IMCA, ISM, ISPS, NORMAM)
+ * Typed queries against compliance_audit_logs
  */
 import * as ort from "onnxruntime-web";
 import { logger } from "@/lib/logger";
@@ -41,7 +42,7 @@ export async function initComplianceEngine() {
  * Analyze incident data for compliance violations
  * Supports: DP Loss, Sensor Misalignment, ISM/ISPS Non-Compliance, ASOG/FMEA Deviations
  */
-export async function runComplianceAudit(data: any) {
+export async function runComplianceAudit(data: IncidentData | number[]) {
   if (!session) await initComplianceEngine();
   
   // Handle both array and object inputs
@@ -49,20 +50,22 @@ export async function runComplianceAudit(data: any) {
   
   const input = new ort.Tensor("float32", Float32Array.from(inputArray), [1, inputArray.length]);
   const results = await session!.run({ input });
-  const score = (Object.values(results)[0] as any)[0] as number;
+  const score = (Object.values(results)[0] as ort.Tensor).data[0] as number;
 
   const weightedScore = RULES.reduce((acc, rule) => acc + (score * rule.weight), 0);
   const complianceLevel = weightedScore > 0.85 ? "Conforme" : weightedScore > 0.65 ? "Risco" : "Não Conforme";
 
-  await (supabase as any).from("compliance_audit_logs").insert({
-    timestamp: new Date().toISOString(),
+  // Insert typed compliance_audit_logs entry
+  await supabase.from("compliance_audit_logs").insert({
     score: weightedScore,
     level: complianceLevel,
+    audit_type: "ai_onnx",
+    rules_evaluated: RULES.map(r => r.id),
   });
 
   // Optional MQTT publishing
   try {
-    const mqttUrl = import.meta.env.VITE_MQTT_URL;
+    const mqttUrl = typeof window !== 'undefined' ? (window as unknown as Record<string, unknown>).__MQTT_URL__ as string : undefined;
     if (mqttUrl) {
       const client = mqtt.connect(mqttUrl);
       client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));

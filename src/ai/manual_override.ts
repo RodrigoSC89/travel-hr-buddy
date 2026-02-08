@@ -1,6 +1,7 @@
 /**
  * PATCH 207.0 - Manual Override System
  * Allows human operators to override tactical AI decisions
+ * Uses ai_decisions table as manual_overrides doesn't exist in schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -59,16 +60,16 @@ class ManualOverrideSystem {
     // Remove override from tactical AI
     tacticalAI.setManualOverride(moduleName, false);
 
-    // Update database
-    await (supabase as any)
-      .from("manual_overrides")
+    // Update database - use ai_decisions as fallback
+    await supabase
+      .from("ai_decisions")
       .update({
-        enabled: false,
-        disabled_at: new Date().toISOString(),
-        disabled_by: userId,
+        status: "rejected",
+        rejected_reason: `Override disabled by ${userId}`,
       })
-      .eq("module_name", moduleName)
-      .eq("enabled", true);
+      .eq("type", "manual_override")
+      .eq("title", `Override: ${moduleName}`)
+      .eq("status", "approved");
   }
 
   /**
@@ -76,17 +77,19 @@ class ManualOverrideSystem {
    */
   async isOverrideActive(moduleName: string): Promise<boolean> {
     try {
-      const { data } = await (supabase as any)
-        .from("manual_overrides")
+      const { data } = await supabase
+        .from("ai_decisions")
         .select("*")
-        .eq("module_name", moduleName)
-        .eq("enabled", true)
-        .single();
+        .eq("type", "manual_override")
+        .eq("title", `Override: ${moduleName}`)
+        .eq("status", "approved")
+        .maybeSingle();
 
       if (!data) return false;
 
-      // Check if expired
-      if (data.expires_at && new Date(data.expires_at) < new Date()) {
+      // Check if expired via metadata in justification
+      const metadata = data.justification_evidence as Record<string, string> | null;
+      if (metadata?.expires_at && new Date(metadata.expires_at) < new Date()) {
         await this.disableOverride(moduleName, "system");
         return false;
       }
@@ -102,23 +105,27 @@ class ManualOverrideSystem {
    */
   async getActiveOverrides(): Promise<ManualOverride[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("manual_overrides")
+      const { data, error } = await supabase
+        .from("ai_decisions")
         .select("*")
-        .eq("enabled", true)
+        .eq("type", "manual_override")
+        .eq("status", "approved")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      return (data || []).map((d: any) => ({
-        id: d.id,
-        moduleName: d.module_name,
-        enabled: d.enabled,
-        reason: d.reason,
-        createdBy: d.created_by,
-        createdAt: new Date(d.created_at),
-        expiresAt: d.expires_at ? new Date(d.expires_at) : undefined,
-      }));
+      return (data || []).map((d) => {
+        const evidence = (d.justification_evidence || {}) as Record<string, string>;
+        return {
+          id: d.id,
+          moduleName: d.title.replace("Override: ", ""),
+          enabled: true,
+          reason: d.description,
+          createdBy: d.created_by || "system",
+          createdAt: new Date(d.created_at),
+          expiresAt: evidence.expires_at ? new Date(evidence.expires_at) : undefined,
+        };
+      });
     } catch (error) {
       logger.error("[ManualOverride] Failed to fetch active overrides:", error);
       return [];
@@ -130,29 +137,33 @@ class ManualOverrideSystem {
    */
   async getOverrideHistory(moduleName?: string, limit = 50): Promise<ManualOverride[]> {
     try {
-      let query = (supabase as any)
-        .from("manual_overrides")
+      let query = supabase
+        .from("ai_decisions")
         .select("*")
+        .eq("type", "manual_override")
         .order("created_at", { ascending: false })
         .limit(limit);
 
       if (moduleName) {
-        query = query.eq("module_name", moduleName);
+        query = query.eq("title", `Override: ${moduleName}`);
       }
 
       const { data, error } = await query;
 
       if (error) throw error;
 
-      return (data || []).map((d: any) => ({
-        id: d.id,
-        moduleName: d.module_name,
-        enabled: d.enabled,
-        reason: d.reason,
-        createdBy: d.created_by,
-        createdAt: new Date(d.created_at),
-        expiresAt: d.expires_at ? new Date(d.expires_at) : undefined,
-      }));
+      return (data || []).map((d) => {
+        const evidence = (d.justification_evidence || {}) as Record<string, string>;
+        return {
+          id: d.id,
+          moduleName: d.title.replace("Override: ", ""),
+          enabled: d.status === "approved",
+          reason: d.description,
+          createdBy: d.created_by || "system",
+          createdAt: new Date(d.created_at),
+          expiresAt: evidence.expires_at ? new Date(evidence.expires_at) : undefined,
+        };
+      });
     } catch (error) {
       logger.error("[ManualOverride] Failed to fetch override history:", error);
       return [];
@@ -164,16 +175,21 @@ class ManualOverrideSystem {
    */
   private async saveOverride(override: ManualOverride): Promise<void> {
     try {
-      const { error } = await (supabase as any)
-        .from("manual_overrides")
+      const { error } = await supabase
+        .from("ai_decisions")
         .insert({
-          id: override.id,
-          module_name: override.moduleName,
-          enabled: override.enabled,
-          reason: override.reason,
+          title: `Override: ${override.moduleName}`,
+          description: override.reason,
+          type: "manual_override",
+          status: "approved",
+          confidence: 1.0,
+          confidence_level: "high",
+          impact: "medium",
+          justification_reasoning: `Manual override by ${override.createdBy}: ${override.reason}`,
+          justification_evidence: override.expiresAt 
+            ? { expires_at: override.expiresAt.toISOString(), created_by: override.createdBy }
+            : { created_by: override.createdBy },
           created_by: override.createdBy,
-          created_at: override.createdAt.toISOString(),
-          expires_at: override.expiresAt?.toISOString(),
         });
 
       if (error) {
@@ -196,17 +212,25 @@ class ManualOverrideSystem {
    */
   async cleanupExpiredOverrides(): Promise<void> {
     try {
-      const { data: expired } = await (supabase as any)
-        .from("manual_overrides")
-        .select("module_name")
-        .eq("enabled", true)
-        .lt("expires_at", new Date().toISOString());
+      const { data: active } = await supabase
+        .from("ai_decisions")
+        .select("id, title, justification_evidence")
+        .eq("type", "manual_override")
+        .eq("status", "approved");
 
-      if (expired) {
-        for (const override of expired) {
-          await this.disableOverride(override.module_name, "system");
+      if (active) {
+        let cleaned = 0;
+        for (const decision of active) {
+          const evidence = (decision.justification_evidence || {}) as Record<string, string>;
+          if (evidence.expires_at && new Date(evidence.expires_at) < new Date()) {
+            const moduleName = decision.title.replace("Override: ", "");
+            await this.disableOverride(moduleName, "system");
+            cleaned++;
+          }
         }
-        logger.info(`[ManualOverride] Cleaned up ${expired.length} expired overrides`);
+        if (cleaned > 0) {
+          logger.info(`[ManualOverride] Cleaned up ${cleaned} expired overrides`);
+        }
       }
     } catch (error) {
       logger.error("[ManualOverride] Failed to cleanup expired overrides:", error);
