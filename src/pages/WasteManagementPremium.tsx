@@ -48,10 +48,14 @@ function LoadingSkeleton() {
 
 export default function WasteManagementPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") || "command";
+  const currentTab = searchParams.get("wtab") || "command";
 
   const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set("wtab", value);
+      return newParams;
+    });
   };
 
   return (
