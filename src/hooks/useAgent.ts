@@ -2,10 +2,13 @@
  * 🤖 useAgent - React hook for interacting with maritime AI agents
  * Supports both streaming and non-streaming modes.
  * Uses the ai-agent-chat Edge Function via Lovable AI Gateway.
+ * 
+ * Checkpoint 3.2: Now persists conversations to Supabase.
  */
 import { useState, useCallback, useRef } from "react";
 import { callAgent, streamAgent, type Message } from "@/lib/ai/callAgent";
 import { AGENT_CONTEXTS, type AgentContext } from "@/lib/ai/agentContexts";
+import { useSaveConversation } from "@/hooks/useAgentMemory";
 import { toast } from "sonner";
 
 interface UseAgentOptions {
@@ -40,6 +43,8 @@ export function useAgent(agentId: string, options: UseAgentOptions = {}): UseAge
   const [error, setError] = useState<string | null>(null);
   const [streamingContent, setStreamingContent] = useState("");
   const abortRef = useRef(false);
+  const conversationIdRef = useRef<string | undefined>(undefined);
+  const { saveConversation } = useSaveConversation();
 
   const agent = AGENT_CONTEXTS[agentId];
 
@@ -77,8 +82,16 @@ export function useAgent(agentId: string, options: UseAgentOptions = {}): UseAge
             { role: "user", content: message },
             { role: "assistant", content: fullResponse },
           ]);
-
           setStreamingContent("");
+
+          // Persist to Supabase (fire-and-forget)
+          saveConversation(agentId, [
+            { role: "user", content: message },
+            { role: "assistant", content: fullResponse },
+          ], conversationIdRef.current).then((id) => {
+            if (id) conversationIdRef.current = id;
+          }).catch(() => {/* silent */});
+
           return fullResponse;
         } else {
           // Non-streaming mode
@@ -92,6 +105,14 @@ export function useAgent(agentId: string, options: UseAgentOptions = {}): UseAge
             { role: "user", content: message },
             { role: "assistant", content: response },
           ]);
+
+          // Persist to Supabase
+          saveConversation(agentId, [
+            { role: "user", content: message },
+            { role: "assistant", content: response },
+          ], conversationIdRef.current).then((id) => {
+            if (id) conversationIdRef.current = id;
+          }).catch(() => {/* silent */});
 
           return response;
         }
@@ -113,11 +134,12 @@ export function useAgent(agentId: string, options: UseAgentOptions = {}): UseAge
         setIsLoading(false);
       }
     },
-    [agentId, streaming, context, conversationHistory]
+    [agentId, streaming, context, conversationHistory, saveConversation]
   );
 
   const resetConversation = useCallback(() => {
     abortRef.current = true;
+    conversationIdRef.current = undefined;
     setConversationHistory([]);
     setStreamingContent("");
     setError(null);
