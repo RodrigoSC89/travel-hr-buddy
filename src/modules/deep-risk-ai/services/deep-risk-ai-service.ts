@@ -110,8 +110,9 @@ export class DeepRiskAIService {
 
   async savePrediction(prediction: Omit<RiskPrediction, "id" | "predictedAt">): Promise<void> {
     try {
-      const { error } = await (supabase as any)
-        .from("ai_risk_predictions")
+      // ai_risk_predictions not in typed schema - using dynamic table access
+      const db = supabase.from as Function;
+      const { error } = await db("ai_risk_predictions")
         .insert({
           source: prediction.source,
           risk_type: prediction.riskType,

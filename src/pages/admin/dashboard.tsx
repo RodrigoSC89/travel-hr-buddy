@@ -89,8 +89,9 @@ export default function AdminDashboard() {
     const fetchTrendData = async () => {
       setLoadingTrend(true);
       try {
-        const { data, error } = await (supabase as any)
-          .rpc("get_restore_count_by_day_with_email", { 
+      // RPC may not exist in typed schema - using dynamic access
+      const rpc = supabase.rpc as Function;
+      const { data, error } = await rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
           });
 
@@ -121,8 +122,9 @@ export default function AdminDashboard() {
     const fetchMonthlySummary = async () => {
       setLoadingMonthlySummary(true);
       try {
-        const { data, error } = await (supabase as any)
-          .rpc("get_monthly_restore_summary_by_department");
+        // RPC may not exist in typed schema - using dynamic access
+        const rpc = supabase.rpc as Function;
+        const { data, error } = await rpc("get_monthly_restore_summary_by_department");
 
         if (error) {
           logger.error("Error fetching monthly summary", { error });

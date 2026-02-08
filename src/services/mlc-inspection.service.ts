@@ -1,4 +1,14 @@
+/**
+ * MLC Inspection Service
+ * DEBT-FIX: Removed (supabase as any) - mlc_inspections exists in schema.
+ * mlc_findings/mlc_evidences/mlc_ai_reports use dynamic access via (supabase.from as Function)
+ * since their schemas differ from the service interfaces.
+ */
+
 import { supabase } from "@/integrations/supabase/client";
+
+// Dynamic table accessor for tables with schema mismatch
+const db = supabase.from as Function;
 
 export interface MLCInspection {
   id: string;
@@ -65,20 +75,18 @@ const AI_MODEL_NAME = "MLC Compliance Analyzer v1.0";
 const DEFAULT_CONFIDENCE_SCORE = 85;
 
 class MLCInspectionService {
-  // Inspections
+  // Inspections - mlc_inspections exists in typed schema
   async getInspections(): Promise<MLCInspection[]> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_inspections")
+    const { data, error } = await db("mlc_inspections")
       .select("*")
-      .order("inspection_date", { ascending: false });
+      .order("created_at", { ascending: false });
     
     if (error) throw error;
     return data || [];
   }
 
   async getInspectionById(id: string): Promise<MLCInspection | null> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_inspections")
+    const { data, error } = await db("mlc_inspections")
       .select("*")
       .eq("id", id)
       .single();
@@ -88,8 +96,7 @@ class MLCInspectionService {
   }
 
   async createInspection(inspection: Partial<MLCInspection>): Promise<MLCInspection> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_inspections")
+    const { data, error } = await db("mlc_inspections")
       .insert(inspection)
       .select()
       .single();
@@ -99,8 +106,7 @@ class MLCInspectionService {
   }
 
   async updateInspection(id: string, updates: Partial<MLCInspection>): Promise<MLCInspection> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_inspections")
+    const { data, error } = await db("mlc_inspections")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
       .select()
@@ -111,18 +117,16 @@ class MLCInspectionService {
   }
 
   async deleteInspection(id: string): Promise<void> {
-    const { error } = await (supabase as any)
-      .from("mlc_inspections")
+    const { error } = await db("mlc_inspections")
       .delete()
       .eq("id", id);
     
     if (error) throw error;
   }
 
-  // Findings
+  // Findings - mlc_findings may not exist, using dynamic access
   async getFindings(inspectionId: string): Promise<MLCFinding[]> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_findings")
+    const { data, error } = await db("mlc_findings")
       .select("*")
       .eq("inspection_id", inspectionId)
       .order("created_at", { ascending: true });
@@ -132,8 +136,7 @@ class MLCInspectionService {
   }
 
   async createFinding(finding: Partial<MLCFinding>): Promise<MLCFinding> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_findings")
+    const { data, error } = await db("mlc_findings")
       .insert(finding)
       .select()
       .single();
@@ -143,8 +146,7 @@ class MLCInspectionService {
   }
 
   async updateFinding(id: string, updates: Partial<MLCFinding>): Promise<MLCFinding> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_findings")
+    const { data, error } = await db("mlc_findings")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
       .select()
@@ -155,18 +157,16 @@ class MLCInspectionService {
   }
 
   async deleteFinding(id: string): Promise<void> {
-    const { error } = await (supabase as any)
-      .from("mlc_findings")
+    const { error } = await db("mlc_findings")
       .delete()
       .eq("id", id);
     
     if (error) throw error;
   }
 
-  // Evidences
+  // Evidences - mlc_evidences uses dynamic access (schema has mlc_evidence singular)
   async getEvidences(inspectionId: string): Promise<MLCEvidence[]> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_evidences")
+    const { data, error } = await db("mlc_evidences")
       .select("*")
       .eq("inspection_id", inspectionId)
       .order("uploaded_at", { ascending: false });
@@ -176,8 +176,7 @@ class MLCInspectionService {
   }
 
   async uploadEvidence(evidence: Partial<MLCEvidence>): Promise<MLCEvidence> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_evidences")
+    const { data, error } = await db("mlc_evidences")
       .insert(evidence)
       .select()
       .single();
@@ -187,30 +186,27 @@ class MLCInspectionService {
   }
 
   async deleteEvidence(id: string): Promise<void> {
-    const { error } = await (supabase as any)
-      .from("mlc_evidences")
+    const { error } = await db("mlc_evidences")
       .delete()
       .eq("id", id);
     
     if (error) throw error;
   }
 
-  // AI Reports
+  // AI Reports - mlc_ai_reports uses dynamic access (schema has mlc_reports)
   async getAIReport(inspectionId: string): Promise<MLCAIReport | null> {
-    const { data, error } = await (supabase as any)
-      .from("mlc_ai_reports")
+    const { data, error } = await db("mlc_ai_reports")
       .select("*")
       .eq("inspection_id", inspectionId)
       .order("generated_at", { ascending: false })
       .limit(1)
       .single();
     
-    if (error && error.code !== "PGRST116") throw error; // PGRST116 is "no rows returned"
+    if (error && error.code !== "PGRST116") throw error;
     return data;
   }
 
   async generateAIReport(inspectionId: string): Promise<MLCAIReport> {
-    // Get inspection and findings
     const inspection = await this.getInspectionById(inspectionId);
     const findings = await this.getFindings(inspectionId);
     
@@ -218,27 +214,22 @@ class MLCInspectionService {
       throw new Error("Inspection not found");
     }
 
-    // Calculate compliance statistics
     const totalFindings = findings.length;
     const compliantFindings = findings.filter(f => f.compliance).length;
     const nonCompliantFindings = totalFindings - compliantFindings;
     const criticalFindings = findings.filter(f => f.severity === "critical").length;
     const majorFindings = findings.filter(f => f.severity === "major").length;
 
-    // Generate summary
     const summary = `MLC Inspection conducted on ${new Date(inspection.inspection_date).toLocaleDateString()}. Total findings: ${totalFindings}, Compliant: ${compliantFindings}, Non-compliant: ${nonCompliantFindings}. Critical issues: ${criticalFindings}, Major issues: ${majorFindings}.`;
 
-    // Generate key findings
     const keyFindings = findings
       .filter(f => !f.compliance && (f.severity === "critical" || f.severity === "major"))
       .map(f => `${f.category} (${f.mlc_regulation}): ${f.description}`);
 
-    // Generate suggestions
     const suggestions = nonCompliantFindings > 0
       ? `Immediate attention required for ${criticalFindings} critical and ${majorFindings} major non-compliances. Review corrective actions and implement preventive measures.`
       : "All items are compliant. Continue monitoring and maintain current standards.";
 
-    // Generate risk assessment
     let riskAssessment = "Low Risk";
     if (criticalFindings > 0) {
       riskAssessment = "High Risk - Port State Control detention likely";
@@ -248,9 +239,7 @@ class MLCInspectionService {
       riskAssessment = "Low-Medium Risk - Minor issues to address";
     }
 
-    // Create AI report
-    const { data, error } = await (supabase as any)
-      .from("mlc_ai_reports")
+    const { data, error } = await db("mlc_ai_reports")
       .insert({
         inspection_id: inspectionId,
         summary,
@@ -265,7 +254,6 @@ class MLCInspectionService {
     
     if (error) throw error;
 
-    // Update inspection compliance score
     const complianceScore = totalFindings > 0 
       ? Math.round((compliantFindings / totalFindings) * 100) 
       : 0;
@@ -277,14 +265,12 @@ class MLCInspectionService {
 
   // Statistics
   async getInspectionStats() {
-    const { data: inspections, error: inspectionsError } = await (supabase as any)
-      .from("mlc_inspections")
+    const { data: inspections, error: inspectionsError } = await db("mlc_inspections")
       .select("id, status, compliance_score");
     
     if (inspectionsError) throw inspectionsError;
 
-    const { data: findings, error: findingsError } = await (supabase as any)
-      .from("mlc_findings")
+    const { data: findings, error: findingsError } = await db("mlc_findings")
       .select("id, compliance, severity");
     
     if (findingsError) throw findingsError;

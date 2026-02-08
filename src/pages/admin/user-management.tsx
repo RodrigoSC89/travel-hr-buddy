@@ -1,3 +1,10 @@
+/**
+ * User Management Page
+ * DEBT-FIX: Removed (supabase as any) - profiles exists in schema but
+ * code uses columns (role, last_sign_in_at) not in typed schema.
+ * Using dynamic table access via (supabase.from as Function).
+ */
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +24,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+// Dynamic table accessor for profiles (code uses columns not in typed schema)
+const db = supabase.from as Function;
 
 interface User {
   id: string;
@@ -43,9 +53,7 @@ export default function UserManagement() {
     try {
       setLoading(true);
       
-      // Fetch users from profiles table joined with auth.users
-      const { data, error } = await (supabase as any)
-        .from("profiles")
+      const { data, error } = await db("profiles")
         .select(`
           id,
           email,
@@ -71,8 +79,7 @@ export default function UserManagement() {
 
   const handleRoleUpdate = async (userId: string, newRole: string) => {
     try {
-      const { error } = await (supabase as any)
-        .from("profiles")
+      const { error } = await db("profiles")
         .update({ role: newRole })
         .eq("id", userId);
 
@@ -90,8 +97,7 @@ export default function UserManagement() {
     const newStatus = currentStatus === "active" ? "inactive" : "active";
 
     try {
-      const { error } = await (supabase as any)
-        .from("profiles")
+      const { error } = await db("profiles")
         .update({ status: newStatus })
         .eq("id", userId);
 

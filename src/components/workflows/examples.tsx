@@ -3,26 +3,20 @@
  * 
  * This file demonstrates how to integrate the KanbanAISuggestions component
  * into a workflow detail page with real AI-generated suggestions.
+ * DEBT-FIX: Removed (supabase as any) - smart_workflow_steps exists in schema
  */
 
 import { useState, useEffect } from "react";
 import { KanbanAISuggestions, type Suggestion } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
-
-// Missing table in database schema - using any for now
-// type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
 export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
   const [aiSuggestions, setAiSuggestions] = useState<Suggestion[]>([]);
 
   useEffect(() => {
-    // Example: Fetch AI suggestions from an AI service or generate them
     const generateAISuggestions = async () => {
-      // In a real implementation, this would call an AI service
-      // For now, we'll use example data
       const suggestions: Suggestion[] = [
         {
           etapa: "Planejamento",
@@ -62,7 +56,6 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
 
   return (
     <div className="space-y-6 p-6">
-      {/* Existing workflow content */}
       <Card>
         <CardHeader>
           <CardTitle>Workflow: Desenvolvimento de Nova Feature</CardTitle>
@@ -74,7 +67,6 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
         </CardContent>
       </Card>
 
-      {/* AI Suggestions Section */}
       {aiSuggestions.length > 0 && (
         <KanbanAISuggestions suggestions={aiSuggestions} />
       )}
@@ -82,10 +74,9 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
   );
 }
 
-// Example: Generate suggestions dynamically based on workflow analysis
+// Generate suggestions dynamically based on workflow analysis
 export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<Suggestion[]> {
-  // Fetch workflow steps
-  const { data: steps } = await (supabase as any)
+  const { data: steps } = await supabase
     .from("smart_workflow_steps")
     .select("*")
     .eq("workflow_id", workflowId);
@@ -94,15 +85,13 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
     return [];
   }
 
-  // Analyze workflow and generate suggestions
-  const typedSteps = steps as any[];
   const suggestions: Suggestion[] = [];
 
-  // Example: Detect missing documentation
-  const stepsWithoutDescription = typedSteps.filter(s => !s.description);
+  // Detect missing documentation
+  const stepsWithoutDescription = steps.filter(s => !s.description);
   if (stepsWithoutDescription.length > 0) {
     suggestions.push({
-      etapa: stepsWithoutDescription[0].title,
+      etapa: stepsWithoutDescription[0].title || "Sem título",
       tipo_sugestao: "Documentação",
       conteudo: `${stepsWithoutDescription.length} etapas sem descrição detalhada. Adicionar descrições melhora a clareza do processo.`,
       criticidade: "Baixa",
@@ -111,12 +100,12 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
   }
 
   // Detect high priority tasks without assignment
-  const unassignedHighPriority = typedSteps.filter(
+  const unassignedHighPriority = steps.filter(
     s => s.priority === "high" && !s.assigned_to
   );
   if (unassignedHighPriority.length > 0) {
     suggestions.push({
-      etapa: unassignedHighPriority[0].title,
+      etapa: unassignedHighPriority[0].title || "Sem título",
       tipo_sugestao: "Atribuição",
       conteudo: `${unassignedHighPriority.length} tarefas de alta prioridade sem responsável. Atribuir para evitar atrasos.`,
       criticidade: "Alta",
@@ -124,8 +113,8 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
     });
   }
 
-  // Detect bottlenecks (many tasks in same status)
-  const inProgressTasks = typedSteps.filter(s => s.status === "em_progresso");
+  // Detect bottlenecks
+  const inProgressTasks = steps.filter(s => s.status === "em_progresso");
   if (inProgressTasks.length > 5) {
     suggestions.push({
       etapa: "Em Progresso",
@@ -137,7 +126,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
   }
 
   // Suggest automation for repetitive tasks
-  const pendingTasks = typedSteps.filter(s => s.status === "pendente");
+  const pendingTasks = steps.filter(s => s.status === "pendente");
   if (pendingTasks.length > 10) {
     suggestions.push({
       etapa: "Planejamento",
@@ -157,7 +146,6 @@ export default function ExampleWorkflowPage() {
 
   useEffect(() => {
     const loadSuggestions = async () => {
-      // Method 1: Use pre-generated suggestions
       const staticSuggestions: Suggestion[] = [
         {
           etapa: "Code Review",
@@ -168,10 +156,7 @@ export default function ExampleWorkflowPage() {
         }
       ];
 
-      // Method 2: Generate dynamic suggestions
       const dynamicSuggestions = await generateAISuggestionsForWorkflow("workflow-123");
-
-      // Combine and set suggestions
       setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
     };
 
@@ -181,31 +166,7 @@ export default function ExampleWorkflowPage() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Workflow com IA</h1>
-      
       <KanbanAISuggestions suggestions={suggestions} />
     </div>
   );
 }
-
-// Example: Integration with existing workflow detail page
-// Add this section to /src/pages/admin/workflows/detail.tsx
-
-/*
-import { KanbanAISuggestions } from '@/components/workflows';
-import { generateAISuggestionsForWorkflow } from '@/components/workflows/examples';
-
-// Inside the component, add state:
-const [aiSuggestions, setAiSuggestions] = useState([]);
-
-// In useEffect, fetch suggestions:
-useEffect(() => {
-  if (id) {
-    generateAISuggestionsForWorkflow(id).then(setSuggestions);
-  }
-}, [id]);
-
-// Add component to the render:
-{aiSuggestions.length > 0 && (
-  <KanbanAISuggestions suggestions={aiSuggestions} />
-)}
-*/

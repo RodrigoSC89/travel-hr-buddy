@@ -1,6 +1,8 @@
 /**
  * Status Page - Real-time System Status
  * Shows component status, incidents, and uptime history
+ * DEBT-FIX: Removed (supabase as any) - status_components, status_incidents,
+ * status_incident_updates all exist in schema
  */
 
 import { useState, useEffect } from "react";
@@ -87,25 +89,25 @@ export default function StatusPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      // Fetch components - using type assertion for dynamic table
-      const { data: componentsData } = await (supabase as any)
+      // Fetch components - typed access
+      const { data: componentsData } = await supabase
         .from("status_components")
         .select("*")
         .order("display_order");
 
       // Fetch recent incidents (last 30 days)
       const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
-      const { data: incidentsData } = await (supabase as any)
+      const { data: incidentsData } = await supabase
         .from("status_incidents")
         .select("*")
         .gte("started_at", thirtyDaysAgo)
         .order("started_at", { ascending: false });
 
       // Fetch all updates for these incidents
-      const incidents = (incidentsData as unknown as Incident[]) || [];
-      if (incidents.length > 0) {
-        const incidentIds = incidents.map((i) => i.id);
-        const { data: updatesData } = await (supabase as any)
+      const fetchedIncidents = (incidentsData || []) as unknown as Incident[];
+      if (fetchedIncidents.length > 0) {
+        const incidentIds = fetchedIncidents.map((i) => i.id);
+        const { data: updatesData } = await supabase
           .from("status_incident_updates")
           .select("*")
           .in("incident_id", incidentIds)
@@ -113,7 +115,7 @@ export default function StatusPage() {
 
         // Group updates by incident_id
         const groupedUpdates: Record<string, IncidentUpdate[]> = {};
-        ((updatesData as unknown as IncidentUpdate[]) || []).forEach((update) => {
+        ((updatesData || []) as unknown as IncidentUpdate[]).forEach((update) => {
           if (!groupedUpdates[update.incident_id]) {
             groupedUpdates[update.incident_id] = [];
           }
@@ -125,8 +127,8 @@ export default function StatusPage() {
         setIncidentUpdates(groupedUpdates);
       }
 
-      setComponents((componentsData as unknown as StatusComponent[]) || []);
-      setIncidents(incidents);
+      setComponents((componentsData || []) as unknown as StatusComponent[]);
+      setIncidents(fetchedIncidents);
       setLastUpdated(new Date());
     } catch (error) {
       logger.error("Error fetching status data:", error);
@@ -210,7 +212,6 @@ export default function StatusPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Refresh Button */}
         <div className="flex justify-end">
           <Button variant="outline" size="sm" onClick={fetchData} disabled={isLoading}>
             <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
@@ -218,7 +219,6 @@ export default function StatusPage() {
           </Button>
         </div>
 
-        {/* Active Incidents */}
         {activeIncidents.length > 0 && (
           <Card className="border-orange-200 bg-orange-50/50">
             <CardHeader>
@@ -264,7 +264,6 @@ export default function StatusPage() {
                     )}
                   </div>
 
-                  {/* Timeline */}
                   {expandedIncident === incident.id && incidentUpdates[incident.id] && (
                     <div className="mt-4 border-t pt-4">
                       <h4 className="font-medium mb-3">Timeline</h4>
@@ -290,7 +289,6 @@ export default function StatusPage() {
           </Card>
         )}
 
-        {/* Components Status */}
         <Card>
           <CardHeader>
             <CardTitle>Status dos Componentes</CardTitle>
@@ -323,7 +321,6 @@ export default function StatusPage() {
           </CardContent>
         </Card>
 
-        {/* Uptime Summary */}
         <Card>
           <CardHeader>
             <CardTitle>Uptime (Últimos 30 dias)</CardTitle>
@@ -357,7 +354,6 @@ export default function StatusPage() {
           </CardContent>
         </Card>
 
-        {/* Past Incidents */}
         {resolvedIncidents.length > 0 && (
           <Card>
             <CardHeader>
@@ -409,7 +405,6 @@ export default function StatusPage() {
           </Card>
         )}
 
-        {/* Footer */}
         <div className="text-center text-sm text-muted-foreground py-8">
           <p>Todas as datas estão em horário local (Brasília)</p>
           <p className="mt-2">
