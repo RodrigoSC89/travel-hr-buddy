@@ -49,7 +49,7 @@ export default function FeatureToggles() {
     );
   }
 
-  const enabledCount = flags?.filter((f: { enabled: boolean }) => f.enabled).length || 0;
+  const enabledCount = flags?.filter((f) => f.enabled === true).length || 0;
   const totalCount = flags?.length || 0;
 
   return (
@@ -79,7 +79,7 @@ export default function FeatureToggles() {
             <CardTitle>Enabled</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600">{enabledCount}</p>
+            <p className="text-3xl font-bold text-primary">{enabledCount}</p>
           </CardContent>
         </Card>
 
@@ -88,7 +88,7 @@ export default function FeatureToggles() {
             <CardTitle>Disabled</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-400">{totalCount - enabledCount}</p>
+            <p className="text-3xl font-bold text-muted-foreground">{totalCount - enabledCount}</p>
           </CardContent>
         </Card>
       </div>
@@ -106,14 +106,14 @@ export default function FeatureToggles() {
 
         <TabsContent value="enabled" className="space-y-4">
           <FeatureFlagsList 
-            flags={flags?.filter((f: { enabled: boolean }) => f.enabled) || []} 
+            flags={flags?.filter((f) => f.enabled === true) || []} 
             onToggle={handleToggle} 
           />
         </TabsContent>
 
         <TabsContent value="disabled" className="space-y-4">
           <FeatureFlagsList 
-            flags={flags?.filter((f: { enabled: boolean }) => !f.enabled) || []} 
+            flags={flags?.filter((f) => f.enabled !== true) || []} 
             onToggle={handleToggle} 
           />
         </TabsContent>
@@ -125,11 +125,12 @@ export default function FeatureToggles() {
 interface FeatureFlagsListProps {
   flags: Array<{
     id: string;
-    key: string;
-    enabled: boolean;
+    flag_name: string;
+    enabled: boolean | null;
     description: string | null;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
+    org_id?: string | null;
   }>;
   onToggle: (key: string, currentEnabled: boolean) => void;
 }
@@ -153,7 +154,7 @@ function FeatureFlagsList({ flags, onToggle }: FeatureFlagsListProps) {
             <div className="flex items-start justify-between">
               <div className="space-y-1 flex-1">
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-lg">{flag.key}</CardTitle>
+                  <CardTitle className="text-lg">{flag.flag_name}</CardTitle>
                   <Badge variant={flag.enabled ? "default" : "secondary"}>
                     {flag.enabled ? "Enabled" : "Disabled"}
                   </Badge>
@@ -163,18 +164,18 @@ function FeatureFlagsList({ flags, onToggle }: FeatureFlagsListProps) {
                 )}
               </div>
               <Switch
-                checked={flag.enabled}
-                onCheckedChange={() => onToggle(flag.key, flag.enabled)}
+                checked={flag.enabled === true}
+                onCheckedChange={() => onToggle(flag.flag_name, flag.enabled === true)}
               />
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4 text-xs text-muted-foreground">
               <div>
-                Created: {new Date(flag.created_at).toLocaleDateString()}
+                Created: {flag.created_at ? new Date(flag.created_at).toLocaleDateString() : '-'}
               </div>
               <div>
-                Updated: {new Date(flag.updated_at).toLocaleDateString()}
+                Updated: {flag.updated_at ? new Date(flag.updated_at).toLocaleDateString() : '-'}
               </div>
             </div>
           </CardContent>
