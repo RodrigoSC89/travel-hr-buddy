@@ -280,10 +280,36 @@ export function DocumentVersionControl() {
                           </div>
 
                           <div className="flex items-center gap-1">
-                            <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); toast.info('Preview em desenvolvimento'); }}>
+                            <Button variant="ghost" size="sm" onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                const { data } = await supabase.storage.from('documents').createSignedUrl(doc.storage_path, 3600);
+                                if (data?.signedUrl) {
+                                  window.open(data.signedUrl, '_blank');
+                                } else {
+                                  toast.error('Não foi possível gerar preview');
+                                }
+                              } catch { toast.error('Erro ao abrir preview'); }
+                            }}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); toast.info('Download em desenvolvimento'); }}>
+                            <Button variant="ghost" size="sm" onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                const { data } = await supabase.storage.from('documents').download(doc.storage_path);
+                                if (data) {
+                                  const url = URL.createObjectURL(data);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = doc.file_name;
+                                  a.click();
+                                  URL.revokeObjectURL(url);
+                                  toast.success('Download iniciado');
+                                } else {
+                                  toast.error('Arquivo não encontrado no storage');
+                                }
+                              } catch { toast.error('Erro no download'); }
+                            }}>
                               <Download className="h-4 w-4" />
                             </Button>
                           </div>

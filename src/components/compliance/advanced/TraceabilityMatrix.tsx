@@ -405,7 +405,16 @@ export function TraceabilityMatrix() {
   };
 
   const handleExport = () => {
-    toast.success('Exportando matriz...', { description: 'Download iniciará em breve' });
+    const rows = ["Código,Título,Módulo,Status,Criticidade,Score,Responsável,Última Auditoria"];
+    requirements.forEach(req => {
+      req.elements.forEach(elem => {
+        rows.push(`"${req.code}","${req.title}","${req.module}","${req.status}","${req.criticality}","${elem.score}%","${req.responsible}","${req.lastAudit}"`);
+      });
+    });
+    const blob = new Blob(["\uFEFF" + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = `matriz-rastreabilidade-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+    toast.success('Matriz exportada em CSV');
   };
 
   return (

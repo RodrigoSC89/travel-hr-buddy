@@ -130,8 +130,8 @@ const generateSensorData = (hours: number = 24): SensorReading[] => {
 
   for (let i = hours; i >= 0; i--) {
     sensorTypes.forEach((sensor, idx) => {
-      const value = sensor.base + (Math.random() - 0.5) * sensor.variance * 2;
-      const status = Math.random() > 0.95 ? "critical" : Math.random() > 0.85 ? "warning" : "normal";
+      const value = sensor.base + Math.sin((i * 0.3) + idx) * sensor.variance;
+      const status = value > sensor.base + sensor.variance * 0.9 ? "critical" : value > sensor.base + sensor.variance * 0.7 ? "warning" : "normal";
       
       data.push({
         id: `reading_${i}_${idx}`,

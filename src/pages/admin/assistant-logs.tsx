@@ -1,4 +1,5 @@
 "use client";
+import { toast as sonnerToast } from "sonner";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -123,7 +124,7 @@ export default function AssistantLogsPage() {
 
   function exportToCSV() {
     if (filteredLogs.length === 0) {
-      alert("Não há dados para exportar");
+      sonnerToast.warning("Não há dados para exportar");
       return;
     }
 
@@ -161,7 +162,7 @@ export default function AssistantLogsPage() {
 
   async function exportToPDF() {
     if (filteredLogs.length === 0) {
-      alert("Não há dados para exportar");
+      sonnerToast.warning("Não há dados para exportar");
       return;
     }
 
@@ -212,7 +213,7 @@ export default function AssistantLogsPage() {
 
   async function sendReportByEmail() {
     if (filteredLogs.length === 0) {
-      alert("Não há dados para enviar");
+      sonnerToast.warning("Não há dados para enviar");
       return;
     }
 
@@ -221,13 +222,12 @@ export default function AssistantLogsPage() {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        alert("❌ Você precisa estar autenticado para enviar relatórios");
+        sonnerToast.error("Você precisa estar autenticado para enviar relatórios");
         return;
       }
 
       // Show loading state
-      const confirmed = confirm(`Deseja enviar relatório com ${filteredLogs.length} interações por e-mail?`);
-      if (!confirmed) return;
+      if (!window.confirm(`Deseja enviar relatório com ${filteredLogs.length} interações por e-mail?`)) return;
 
       const response = await fetch(
         getEdgeFunctionUrl("send-assistant-report"),
@@ -249,13 +249,13 @@ export default function AssistantLogsPage() {
       const result = await response.json();
 
       if (response.ok) {
-        alert("✅ " + (result.message || "Relatório enviado por e-mail com sucesso!"));
+        sonnerToast.success(result.message || "Relatório enviado por e-mail com sucesso!");
       } else {
-        alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
+        sonnerToast.error("Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
       }
     } catch (error) {
       logger.error("Error sending report:", error);
-      alert("❌ Erro ao enviar relatório por e-mail");
+      sonnerToast.error("Erro ao enviar relatório por e-mail");
     }
   }
 

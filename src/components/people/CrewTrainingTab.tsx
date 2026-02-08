@@ -234,7 +234,7 @@ export default function CrewTrainingTab() {
       primaryAction={{
         label: "Novo Curso",
         icon: Plus,
-        onClick: () => toast.info("Criar curso em desenvolvimento")
+        onClick: () => toast.info("Utilize o módulo Academy (/admin/academy) para criar novos cursos")
       }}
       isEmpty={courses.length === 0}
       emptyTitle="Nenhum curso disponível"

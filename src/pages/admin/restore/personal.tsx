@@ -1,4 +1,5 @@
 "use client";
+import { toast as sonnerToast } from "sonner";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,7 +84,7 @@ export default function PersonalRestoreDashboard() {
 
   async function exportAndSendEmail() {
     if (!summary || trend.length === 0) {
-      alert("Não há dados para exportar");
+      sonnerToast.warning("Não há dados para exportar");
       return;
     }
 
@@ -92,12 +93,11 @@ export default function PersonalRestoreDashboard() {
       const email = session.data.session?.user?.email;
       
       if (!session.data.session) {
-        alert("❌ Você precisa estar autenticado");
+        sonnerToast.error("Você precisa estar autenticado");
         return;
       }
 
-      const confirmed = confirm("Deseja gerar PDF e enviar por e-mail?");
-      if (!confirmed) return;
+      if (!window.confirm("Deseja gerar PDF e enviar por e-mail?")) return;
 
       // Call the Supabase Edge Function
       const response = await fetch(
@@ -114,19 +114,19 @@ export default function PersonalRestoreDashboard() {
       const result = await response.json();
 
       if (response.ok) {
-        alert("✅ " + (result.message || "Relatório enviado por e-mail com sucesso!"));
+        sonnerToast.success(result.message || "Relatório enviado por e-mail com sucesso!");
       } else {
-        alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
+        sonnerToast.error("Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
       }
     } catch (error) {
       logger.error("Error sending report:", error);
-      alert("❌ Erro ao enviar relatório");
+      sonnerToast.error("Erro ao enviar relatório");
     }
   }
 
   function exportToPDF() {
     if (!summary || trend.length === 0) {
-      alert("Não há dados para exportar");
+      sonnerToast.warning("Não há dados para exportar");
       return;
     }
 

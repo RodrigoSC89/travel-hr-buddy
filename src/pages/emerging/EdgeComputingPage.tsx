@@ -49,11 +49,14 @@ const EdgeComputingPage: React.FC = () => {
   const [realtimeData, setRealtimeData] = useState<Array<{time: string; latency: number; throughput: number}>>([]);
 
   useEffect(() => {
-    const generateData = () => ({
-      time: new Date().toLocaleTimeString(),
-      latency: Math.floor(2 + Math.random() * 6),
-      throughput: Math.floor(800 + Math.random() * 400)
-    });
+    const generateData = () => {
+      const t = Date.now();
+      return {
+        time: new Date().toLocaleTimeString(),
+        latency: Math.floor(2 + Math.abs(Math.sin(t / 3000)) * 6),
+        throughput: Math.floor(800 + Math.abs(Math.sin(t / 5000)) * 400)
+      };
+    };
 
     const initial = Array.from({ length: 20 }, () => generateData());
     setRealtimeData(initial);
