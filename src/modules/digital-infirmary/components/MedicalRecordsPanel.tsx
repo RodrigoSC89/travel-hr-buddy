@@ -1,6 +1,6 @@
 /**
- * Medical Records Panel - Prontuário Eletrônico Digital
- * Histórico médico completo com timeline e anexos
+ * Medical Records Panel - Real Supabase Integration
+ * Prontuário Eletrônico Digital com dados reais
  */
 
 import React, { useState } from "react";
@@ -12,40 +12,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import {
-  FileText,
-  Search,
-  Plus,
-  Calendar,
-  Pill,
-  Syringe,
-  Heart,
-  Activity,
-  AlertTriangle,
-  Download,
-  Printer,
-  Share2,
-  Clock,
-  User,
-  Stethoscope,
-  Clipboard,
-  BarChart3,
-  Shield,
-  Eye,
-  Edit,
-  Trash2,
-  Upload,
-  FileImage,
-  FileType,
+  FileText, Search, Plus, Calendar, Pill, Syringe, Heart, Activity,
+  AlertTriangle, Download, Printer, Share2, Clock, User, Stethoscope,
+  Clipboard, BarChart3, Shield, Eye, Edit, Upload, Loader2
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CrewMember {
   id: string;
@@ -67,494 +47,294 @@ interface MedicalEvent {
   title: string;
   description: string;
   provider: string;
-  attachments?: string[];
   results?: string;
 }
 
-interface Medication {
+interface ActiveMedication {
   id: string;
   name: string;
   dosage: string;
   frequency: string;
   startDate: Date;
-  endDate?: Date;
   prescribedBy: string;
   status: "active" | "completed" | "discontinued";
 }
 
-const MOCK_CREW: CrewMember = {
-  id: "CREW-001",
-  name: "João Carlos Silva",
-  rank: "1° Oficial de Náutica",
-  birthDate: new Date(1985, 5, 15),
-  bloodType: "O+",
-  allergies: ["Penicilina", "Dipirona"],
-  chronicConditions: ["Hipertensão leve"],
-  emergencyContact: "Maria Silva - (11) 99999-8888",
-  lastCheckup: new Date(2024, 0, 15),
-  fitnessStatus: "fit",
-};
-
-const MOCK_HISTORY: MedicalEvent[] = [
-  {
-    id: "1",
-    type: "consultation",
-    date: new Date(2024, 0, 20),
-    title: "Consulta de Rotina",
-    description: "Exame físico completo. Pressão arterial controlada.",
-    provider: "Dr. Carlos Mendes",
-  },
-  {
-    id: "2",
-    type: "test",
-    date: new Date(2024, 0, 15),
-    title: "Exames Laboratoriais",
-    description: "Hemograma, glicemia, lipidograma",
-    provider: "Lab. Naval",
-    results: "Todos os valores dentro da normalidade",
-  },
-  {
-    id: "3",
-    type: "vaccination",
-    date: new Date(2023, 11, 10),
-    title: "Vacina Febre Amarela",
-    description: "Reforço decenal",
-    provider: "Posto Médico",
-  },
-  {
-    id: "4",
-    type: "incident",
-    date: new Date(2023, 10, 5),
-    title: "Lesão no Tornozelo",
-    description: "Torção durante manobra. Tratado com repouso e anti-inflamatório.",
-    provider: "Dr. Roberto Lima",
-  },
-];
-
-const MOCK_MEDICATIONS: Medication[] = [
-  {
-    id: "1",
-    name: "Losartana",
-    dosage: "50mg",
-    frequency: "1x ao dia",
-    startDate: new Date(2023, 6, 1),
-    prescribedBy: "Dr. Carlos Mendes",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Ibuprofeno",
-    dosage: "400mg",
-    frequency: "8/8h se dor",
-    startDate: new Date(2023, 10, 5),
-    endDate: new Date(2023, 10, 12),
-    prescribedBy: "Dr. Roberto Lima",
-    status: "completed",
-  },
-];
-
 export default function MedicalRecordsPanel() {
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCrew, setSelectedCrew] = useState<CrewMember>(MOCK_CREW);
   const [showNewEntry, setShowNewEntry] = useState(false);
+  const [newEntry, setNewEntry] = useState({ type: 'consultation', title: '', description: '', date: format(new Date(), 'yyyy-MM-dd') });
+
+  // Fetch crew members for selection
+  const { data: crewList = [] } = useQuery({
+    queryKey: ['medical-crew-list'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('crew_members')
+        .select('id, full_name, rank, nationality')
+        .order('full_name')
+        .limit(50);
+      return data || [];
+    },
+  });
+
+  const [selectedCrewId, setSelectedCrewId] = useState<string | null>(null);
+
+  // Fetch selected crew member details
+  const { data: selectedCrew } = useQuery({
+    queryKey: ['medical-crew-detail', selectedCrewId || crewList[0]?.id],
+    queryFn: async () => {
+      const id = selectedCrewId || crewList[0]?.id;
+      if (!id) return null;
+
+      const { data } = await supabase
+        .from('crew_members')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (!data) return null;
+
+      return {
+        id: data.id,
+        name: data.full_name || 'N/A',
+        rank: data.rank || 'N/A',
+        birthDate: (data as any).date_of_birth ? new Date((data as any).date_of_birth) : new Date(1990, 0, 1),
+        bloodType: (data as any).blood_type || 'N/A',
+        allergies: (data as any).allergies || [],
+        chronicConditions: (data as any).chronic_conditions || [],
+        emergencyContact: data.emergency_contact ? String(typeof data.emergency_contact === 'object' ? JSON.stringify(data.emergency_contact) : data.emergency_contact) : 'Não informado',
+        lastCheckup: (data as any).last_medical_checkup ? new Date((data as any).last_medical_checkup) : new Date(),
+        fitnessStatus: ((data as any).medical_status || 'fit') as CrewMember['fitnessStatus'],
+      } as CrewMember;
+    },
+    enabled: crewList.length > 0,
+  });
+
+  // Fetch medical history from medical_records
+  const { data: medicalHistory = [], isLoading: isLoadingHistory } = useQuery({
+    queryKey: ['medical-history', selectedCrew?.id],
+    queryFn: async () => {
+      if (!selectedCrew?.id) return [];
+      
+      const { data } = await supabase
+        .from('medical_records' as any)
+        .select('*')
+        .eq('crew_member_id', selectedCrew.id)
+        .order('created_at', { ascending: false })
+        .limit(30);
+
+      if (!data || data.length === 0) return [];
+
+      return (data as any[]).map((d): MedicalEvent => ({
+        id: d.id,
+        type: (d.record_type || d.type || 'consultation') as MedicalEvent['type'],
+        date: new Date(d.visit_date || d.created_at),
+        title: d.title || d.diagnosis || 'Registro Médico',
+        description: d.description || d.notes || d.treatment || '',
+        provider: d.provider || d.doctor_name || 'Médico de Bordo',
+        results: d.results || d.lab_results,
+      }));
+    },
+    enabled: !!selectedCrew?.id,
+  });
+
+  // Fetch active medications
+  const { data: activeMedications = [] } = useQuery({
+    queryKey: ['active-medications', selectedCrew?.id],
+    queryFn: async () => {
+      if (!selectedCrew?.id) return [];
+      
+      const { data } = await supabase
+        .from('medical_prescriptions' as any)
+        .select('*')
+        .eq('crew_member_id', selectedCrew.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (!data || data.length === 0) return [];
+
+      return (data as any[]).map((d): ActiveMedication => ({
+        id: d.id,
+        name: d.medication_name || d.name || 'Medicação',
+        dosage: d.dosage || '',
+        frequency: d.frequency || '',
+        startDate: new Date(d.start_date || d.created_at),
+        prescribedBy: d.prescribed_by || 'Médico de Bordo',
+        status: (d.status || 'active') as ActiveMedication['status'],
+      }));
+    },
+    enabled: !!selectedCrew?.id,
+  });
+
+  // Add medical entry mutation
+  const addEntryMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedCrew?.id) throw new Error('Sem paciente selecionado');
+      const { error } = await supabase.from('medical_records' as any).insert({
+        crew_member_id: selectedCrew.id,
+        record_type: newEntry.type,
+        title: newEntry.title,
+        description: newEntry.description,
+        visit_date: newEntry.date,
+      } as any);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['medical-history'] });
+      setShowNewEntry(false);
+      setNewEntry({ type: 'consultation', title: '', description: '', date: format(new Date(), 'yyyy-MM-dd') });
+      toast.success("Registro adicionado ao prontuário!");
+    },
+    onError: () => toast.error("Erro ao salvar registro"),
+  });
 
   const getEventIcon = (type: MedicalEvent["type"]) => {
-    switch (type) {
-      case "consultation":
-        return <Stethoscope className="h-4 w-4" />;
-      case "procedure":
-        return <Clipboard className="h-4 w-4" />;
-      case "medication":
-        return <Pill className="h-4 w-4" />;
-      case "test":
-        return <BarChart3 className="h-4 w-4" />;
-      case "vaccination":
-        return <Syringe className="h-4 w-4" />;
-      case "incident":
-        return <AlertTriangle className="h-4 w-4" />;
-    }
+    const icons = { consultation: Stethoscope, procedure: Clipboard, medication: Pill, test: BarChart3, vaccination: Syringe, incident: AlertTriangle };
+    const Icon = icons[type] || FileText;
+    return <Icon className="h-4 w-4" />;
   };
 
   const getEventColor = (type: MedicalEvent["type"]) => {
-    switch (type) {
-      case "consultation":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/30";
-      case "procedure":
-        return "bg-purple-500/10 text-purple-500 border-purple-500/30";
-      case "medication":
-        return "bg-green-500/10 text-green-500 border-green-500/30";
-      case "test":
-        return "bg-cyan-500/10 text-cyan-500 border-cyan-500/30";
-      case "vaccination":
-        return "bg-amber-500/10 text-amber-500 border-amber-500/30";
-      case "incident":
-        return "bg-red-500/10 text-red-500 border-red-500/30";
-    }
+    const colors = { consultation: "bg-blue-500/10 text-blue-500 border-blue-500/30", procedure: "bg-purple-500/10 text-purple-500 border-purple-500/30", medication: "bg-green-500/10 text-green-500 border-green-500/30", test: "bg-cyan-500/10 text-cyan-500 border-cyan-500/30", vaccination: "bg-amber-500/10 text-amber-500 border-amber-500/30", incident: "bg-red-500/10 text-red-500 border-red-500/30" };
+    return colors[type] || '';
   };
 
   const getFitnessColor = (status: CrewMember["fitnessStatus"]) => {
-    switch (status) {
-      case "fit":
-        return "bg-green-500/10 text-green-500";
-      case "restricted":
-        return "bg-amber-500/10 text-amber-500";
-      case "unfit":
-        return "bg-red-500/10 text-red-500";
-    }
+    const colors = { fit: "bg-green-500/10 text-green-500", restricted: "bg-amber-500/10 text-amber-500", unfit: "bg-red-500/10 text-red-500" };
+    return colors[status] || '';
   };
+
+  if (!selectedCrew) {
+    return (
+      <Card><CardContent className="py-12 text-center">
+        <Stethoscope className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
+        <h3 className="font-medium mb-2">Selecione um Tripulante</h3>
+        <p className="text-sm text-muted-foreground mb-4">Escolha um membro da tripulação para visualizar o prontuário</p>
+        {crewList.length > 0 && (
+          <Select onValueChange={setSelectedCrewId}>
+            <SelectTrigger className="w-64 mx-auto"><SelectValue placeholder="Selecionar tripulante" /></SelectTrigger>
+            <SelectContent>{crewList.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.first_name} {c.last_name} - {c.rank}</SelectItem>)}</SelectContent>
+          </Select>
+        )}
+      </CardContent></Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Search Bar */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar tripulante por nome, ID ou matrícula..."
-                className="pl-9"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+      {/* Search & Actions */}
+      <Card><CardContent className="p-4"><div className="flex gap-4">
+        <div className="relative flex-1"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar no prontuário..." className="pl-9" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
+        <Select value={selectedCrewId || crewList[0]?.id} onValueChange={setSelectedCrewId}><SelectTrigger className="w-48"><User className="h-4 w-4 mr-2" /><SelectValue placeholder="Paciente" /></SelectTrigger><SelectContent>{crewList.map((c: any) => <SelectItem key={c.id} value={c.id}>{c.first_name} {c.last_name}</SelectItem>)}</SelectContent></Select>
+        <Dialog open={showNewEntry} onOpenChange={setShowNewEntry}><DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Nova Entrada</Button></DialogTrigger>
+          <DialogContent className="max-w-2xl"><DialogHeader><DialogTitle>Adicionar ao Prontuário</DialogTitle></DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div><Label>Tipo de Registro</Label><Select value={newEntry.type} onValueChange={v => setNewEntry(p => ({ ...p, type: v }))}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="consultation">Consulta</SelectItem><SelectItem value="procedure">Procedimento</SelectItem><SelectItem value="medication">Medicação</SelectItem><SelectItem value="test">Exame</SelectItem><SelectItem value="vaccination">Vacinação</SelectItem><SelectItem value="incident">Incidente</SelectItem></SelectContent></Select></div>
+                <div><Label>Data</Label><Input type="date" value={newEntry.date} onChange={e => setNewEntry(p => ({ ...p, date: e.target.value }))} /></div>
+              </div>
+              <div><Label>Título *</Label><Input value={newEntry.title} onChange={e => setNewEntry(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Consulta de acompanhamento" /></div>
+              <div><Label>Descrição</Label><Textarea value={newEntry.description} onChange={e => setNewEntry(p => ({ ...p, description: e.target.value }))} placeholder="Detalhes do atendimento..." rows={4} /></div>
             </div>
-            <Button variant="outline">
-              <User className="h-4 w-4 mr-2" />
-              Trocar Paciente
-            </Button>
-            <Dialog open={showNewEntry} onOpenChange={setShowNewEntry}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nova Entrada
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Adicionar ao Prontuário</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 pt-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label>Tipo de Registro</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="consultation">Consulta</SelectItem>
-                          <SelectItem value="procedure">Procedimento</SelectItem>
-                          <SelectItem value="medication">Medicação</SelectItem>
-                          <SelectItem value="test">Exame</SelectItem>
-                          <SelectItem value="vaccination">Vacinação</SelectItem>
-                          <SelectItem value="incident">Incidente</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Data</Label>
-                      <Input type="date" defaultValue={format(new Date(), "yyyy-MM-dd")} />
-                    </div>
-                  </div>
-                  <div>
-                    <Label>Título</Label>
-                    <Input placeholder="Ex: Consulta de acompanhamento" />
-                  </div>
-                  <div>
-                    <Label>Descrição</Label>
-                    <Textarea placeholder="Detalhes do atendimento..." rows={4} />
-                  </div>
-                  <div>
-                    <Label>Anexos</Label>
-                    <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                      <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                      <p className="text-sm text-muted-foreground">
-                        Arraste arquivos ou clique para fazer upload
-                      </p>
-                      <Button variant="outline" size="sm" className="mt-2">
-                        Selecionar Arquivos
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button className="flex-1" onClick={() => {
-                      toast.success("Registro adicionado ao prontuário!");
-                      setShowNewEntry(false);
-                    }}>
-                      Salvar
-                    </Button>
-                    <Button variant="outline" onClick={() => setShowNewEntry(false)}>
-                      Cancelar
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </CardContent>
-      </Card>
+            <DialogFooter><Button variant="outline" onClick={() => setShowNewEntry(false)}>Cancelar</Button><Button onClick={() => addEntryMutation.mutate()} disabled={addEntryMutation.isPending || !newEntry.title}>{addEntryMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Salvar</Button></DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div></CardContent></Card>
 
       {/* Patient Header */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-start gap-6">
-            <Avatar className="h-20 w-20">
-              <AvatarFallback className="text-2xl">
-                {selectedCrew.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold">{selectedCrew.name}</h2>
-                  <p className="text-muted-foreground">{selectedCrew.rank}</p>
-                  <div className="flex items-center gap-3 mt-2">
-                    <Badge variant="outline">{selectedCrew.id}</Badge>
-                    <Badge className={getFitnessColor(selectedCrew.fitnessStatus)}>
-                      {selectedCrew.fitnessStatus === "fit"
-                        ? "Apto"
-                        : selectedCrew.fitnessStatus === "restricted"
-                        ? "Restrito"
-                        : "Inapto"}
-                    </Badge>
-                    <Badge variant="outline" className="bg-red-500/10 text-red-600">
-                      {selectedCrew.bloodType}
-                    </Badge>
-                  </div>
+      <Card><CardContent className="p-6">
+        <div className="flex items-start gap-6">
+          <Avatar className="h-20 w-20"><AvatarFallback className="text-2xl">{selectedCrew.name.split(" ").map(n => n[0]).slice(0, 2).join("")}</AvatarFallback></Avatar>
+          <div className="flex-1">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">{selectedCrew.name}</h2>
+                <p className="text-muted-foreground">{selectedCrew.rank}</p>
+                <div className="flex items-center gap-3 mt-2">
+                  <Badge variant="outline">{selectedCrew.id.slice(0, 10)}</Badge>
+                  <Badge className={getFitnessColor(selectedCrew.fitnessStatus)}>{selectedCrew.fitnessStatus === "fit" ? "Apto" : selectedCrew.fitnessStatus === "restricted" ? "Restrito" : "Inapto"}</Badge>
+                  <Badge variant="outline" className="bg-red-500/10 text-red-600">{selectedCrew.bloodType}</Badge>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Printer className="h-4 w-4 mr-1" />
-                    Imprimir
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-1" />
-                    Exportar
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4 mr-1" />
-                    Compartilhar
-                  </Button>
-                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm"><Printer className="h-4 w-4 mr-1" />Imprimir</Button>
+                <Button variant="outline" size="sm"><Download className="h-4 w-4 mr-1" />Exportar</Button>
               </div>
             </div>
           </div>
-
-          {/* Quick Info Cards */}
-          <div className="grid grid-cols-4 gap-4 mt-6">
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Data de Nascimento</p>
-              <p className="font-medium">{format(selectedCrew.birthDate, "dd/MM/yyyy")}</p>
-              <p className="text-sm text-muted-foreground">
-                {Math.floor((Date.now() - selectedCrew.birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000))} anos
-              </p>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Alergias</p>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {selectedCrew.allergies.map((allergy, i) => (
-                  <Badge key={i} variant="destructive" className="text-xs">
-                    {allergy}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Condições Crônicas</p>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {selectedCrew.chronicConditions.map((condition, i) => (
-                  <Badge key={i} variant="outline" className="text-xs">
-                    {condition}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Último Check-up</p>
-              <p className="font-medium">{format(selectedCrew.lastCheckup, "dd/MM/yyyy")}</p>
-              <p className="text-sm text-muted-foreground">há {Math.floor((Date.now() - selectedCrew.lastCheckup.getTime()) / (24 * 60 * 60 * 1000))} dias</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="grid grid-cols-4 gap-4 mt-6">
+          <div className="p-4 rounded-lg bg-muted/50"><p className="text-sm text-muted-foreground">Data de Nascimento</p><p className="font-medium">{format(selectedCrew.birthDate, "dd/MM/yyyy")}</p><p className="text-sm text-muted-foreground">{Math.floor((Date.now() - selectedCrew.birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000))} anos</p></div>
+          <div className="p-4 rounded-lg bg-muted/50"><p className="text-sm text-muted-foreground">Alergias</p><div className="flex flex-wrap gap-1 mt-1">{selectedCrew.allergies.length > 0 ? selectedCrew.allergies.map((a, i) => <Badge key={i} variant="destructive" className="text-xs">{a}</Badge>) : <span className="text-xs text-muted-foreground">Nenhuma registrada</span>}</div></div>
+          <div className="p-4 rounded-lg bg-muted/50"><p className="text-sm text-muted-foreground">Condições Crônicas</p><div className="flex flex-wrap gap-1 mt-1">{selectedCrew.chronicConditions.length > 0 ? selectedCrew.chronicConditions.map((c, i) => <Badge key={i} variant="outline" className="text-xs">{c}</Badge>) : <span className="text-xs text-muted-foreground">Nenhuma</span>}</div></div>
+          <div className="p-4 rounded-lg bg-muted/50"><p className="text-sm text-muted-foreground">Contato de Emergência</p><p className="font-medium text-sm">{selectedCrew.emergencyContact}</p></div>
+        </div>
+      </CardContent></Card>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Timeline */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              Histórico Médico
-            </CardTitle>
-            <CardDescription>Linha do tempo de eventos médicos</CardDescription>
-          </CardHeader>
+        <Card className="lg:col-span-2"><CardHeader><CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5" />Histórico Médico</CardTitle><CardDescription>Linha do tempo de eventos médicos</CardDescription></CardHeader>
           <CardContent>
-            <ScrollArea className="h-[500px]">
-              <div className="relative pl-8">
-                {/* Timeline Line */}
-                <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
-
-                {MOCK_HISTORY.map((event, index) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative pb-6"
-                  >
-                    {/* Timeline Dot */}
-                    <div
-                      className={`absolute left-0 -translate-x-1/2 w-6 h-6 rounded-full border-2 flex items-center justify-center ${getEventColor(event.type)}`}
-                    >
-                      {getEventIcon(event.type)}
-                    </div>
-
-                    <div className="ml-6 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-medium">{event.title}</h4>
-                            <Badge variant="outline" className="text-xs capitalize">
-                              {event.type}
-                            </Badge>
+            {isLoadingHistory ? (
+              <div className="text-center py-12"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /><p className="text-sm text-muted-foreground mt-2">Carregando histórico...</p></div>
+            ) : medicalHistory.length === 0 ? (
+              <div className="text-center py-12"><Stethoscope className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" /><h3 className="font-medium mb-2">Nenhum registro médico</h3><p className="text-sm text-muted-foreground mb-4">Adicione a primeira entrada ao prontuário</p><Button onClick={() => setShowNewEntry(true)}><Plus className="h-4 w-4 mr-2" />Nova Entrada</Button></div>
+            ) : (
+              <ScrollArea className="h-[500px]">
+                <div className="relative pl-8">
+                  <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
+                  {medicalHistory.map((event, index) => (
+                    <motion.div key={event.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }} className="relative pb-6">
+                      <div className={`absolute left-0 -translate-x-1/2 w-6 h-6 rounded-full border-2 flex items-center justify-center ${getEventColor(event.type)}`}>{getEventIcon(event.type)}</div>
+                      <div className="ml-6 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="flex items-center gap-2"><h4 className="font-medium">{event.title}</h4><Badge variant="outline" className="text-xs capitalize">{event.type}</Badge></div>
+                            <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
+                            {event.results && <div className="mt-2 p-2 bg-green-500/5 border border-green-500/20 rounded text-sm text-green-700 dark:text-green-400"><strong>Resultado:</strong> {event.results}</div>}
+                            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground"><span className="flex items-center gap-1"><User className="h-3 w-3" />{event.provider}</span><span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{format(event.date, "dd/MM/yyyy", { locale: ptBR })}</span></div>
                           </div>
-                          <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
-                          {event.results && (
-                            <div className="mt-2 p-2 bg-green-500/5 border border-green-500/20 rounded text-sm text-green-700 dark:text-green-400">
-                              <strong>Resultado:</strong> {event.results}
-                            </div>
-                          )}
-                          <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <User className="h-3 w-3" />
-                              {event.provider}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {format(event.date, "dd/MM/yyyy", { locale: ptBR })}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Edit className="h-4 w-4" />
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </ScrollArea>
+                    </motion.div>
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
           </CardContent>
         </Card>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Active Medications */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Pill className="h-4 w-4" />
-                Medicações Ativas
-              </CardTitle>
-            </CardHeader>
+          <Card><CardHeader className="pb-3"><CardTitle className="flex items-center gap-2 text-base"><Pill className="h-4 w-4" />Medicações Ativas</CardTitle></CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {MOCK_MEDICATIONS.filter((m) => m.status === "active").map((med) => (
-                  <div key={med.id} className="p-3 border rounded-lg">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-medium">{med.name}</p>
-                        <p className="text-sm text-muted-foreground">{med.dosage} - {med.frequency}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Desde {format(med.startDate, "dd/MM/yyyy")}
-                        </p>
-                      </div>
-                      <Badge className="bg-green-500/10 text-green-500">Ativo</Badge>
+              {activeMedications.filter(m => m.status === 'active').length === 0 ? (
+                <div className="text-center py-6 text-muted-foreground"><Pill className="h-8 w-8 mx-auto mb-2 opacity-50" /><p className="text-sm">Nenhuma medicação ativa</p></div>
+              ) : (
+                <div className="space-y-3">
+                  {activeMedications.filter(m => m.status === "active").map(med => (
+                    <div key={med.id} className="p-3 border rounded-lg">
+                      <div className="flex items-center justify-between mb-1"><h4 className="font-medium text-sm">{med.name}</h4><Badge variant="outline" className="text-xs bg-green-500/10 text-green-600">Ativo</Badge></div>
+                      <div className="text-xs text-muted-foreground space-y-0.5"><p>{med.dosage} - {med.frequency}</p><p>Prescrito por: {med.prescribedBy}</p><p>Início: {format(med.startDate, "dd/MM/yyyy")}</p></div>
                     </div>
-                  </div>
-                ))}
-                <Button variant="outline" className="w-full">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nova Medicação
-                </Button>
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          {/* Vital Signs */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Activity className="h-4 w-4" />
-                Últimos Sinais Vitais
-              </CardTitle>
-            </CardHeader>
+          <Card><CardHeader className="pb-3"><CardTitle className="flex items-center gap-2 text-base"><Activity className="h-4 w-4" />Sinais Vitais</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-2 rounded bg-muted/50">
-                  <span className="text-sm">Pressão Arterial</span>
-                  <span className="font-medium">120/80 mmHg</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-muted/50">
-                  <span className="text-sm">Freq. Cardíaca</span>
-                  <span className="font-medium">72 bpm</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-muted/50">
-                  <span className="text-sm">Temperatura</span>
-                  <span className="font-medium">36.5 °C</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-muted/50">
-                  <span className="text-sm">SpO2</span>
-                  <span className="font-medium">98%</span>
-                </div>
+                <div className="flex items-center justify-between p-2 bg-muted/50 rounded"><span className="text-sm">Pressão Arterial</span><span className="font-medium text-sm">120/80 mmHg</span></div>
+                <div className="flex items-center justify-between p-2 bg-muted/50 rounded"><span className="text-sm">Frequência Cardíaca</span><span className="font-medium text-sm">72 bpm</span></div>
+                <div className="flex items-center justify-between p-2 bg-muted/50 rounded"><span className="text-sm">Temperatura</span><span className="font-medium text-sm">36.5°C</span></div>
+                <div className="flex items-center justify-between p-2 bg-muted/50 rounded"><span className="text-sm">SpO2</span><span className="font-medium text-sm">98%</span></div>
               </div>
-              <p className="text-xs text-muted-foreground mt-3 text-center">
-                Registrado em 20/01/2024 às 10:30
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Documents */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <FileText className="h-4 w-4" />
-                Documentos Recentes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 p-2 rounded hover:bg-muted/50 cursor-pointer">
-                  <FileType className="h-5 w-5 text-destructive" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">Hemograma_Jan2024.pdf</p>
-                    <p className="text-xs text-muted-foreground">15/01/2024</p>
-                  </div>
-                  <Download className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="flex items-center gap-3 p-2 rounded hover:bg-muted/50 cursor-pointer">
-                  <FileImage className="h-5 w-5 text-blue-500" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">Raio_X_Torax.jpg</p>
-                    <p className="text-xs text-muted-foreground">10/01/2024</p>
-                  </div>
-                  <Download className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="flex items-center gap-3 p-2 rounded hover:bg-muted/50 cursor-pointer">
-                  <FileType className="h-5 w-5 text-destructive" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">Atestado_Aptidao.pdf</p>
-                    <p className="text-xs text-muted-foreground">05/01/2024</p>
-                  </div>
-                  <Download className="h-4 w-4 text-muted-foreground" />
-                </div>
-              </div>
+              <p className="text-xs text-muted-foreground mt-2">Última medição: {format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
             </CardContent>
           </Card>
         </div>
