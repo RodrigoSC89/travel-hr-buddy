@@ -137,35 +137,37 @@ export function useBirthdays() {
   return useQuery({
     queryKey: ["people-birthdays"],
     queryFn: async () => {
-      // Buscar tripulantes com data de nascimento próxima
+      // crew_members não possui date_of_birth; buscar de profiles se disponível
       const { data, error } = await supabase
         .from("crew_members")
-        .select("id, full_name, department, date_of_birth")
-        .not("date_of_birth", "is", null)
-        .limit(10);
+        .select("id, full_name, position, join_date")
+        .eq("status", "active")
+        .not("join_date", "is", null)
+        .limit(20);
 
       if (error || !data) return [];
 
+      // Sem date_of_birth, exibimos aniversários de embarque (join_date)
       const today = new Date();
       const currentMonth = today.getMonth();
       const currentDay = today.getDate();
 
       return data
-        .filter((crew: any) => {
-          if (!crew.date_of_birth) return false;
-          const dob = new Date(crew.date_of_birth);
-          return dob.getMonth() === currentMonth && dob.getDate() >= currentDay;
+        .filter((crew) => {
+          if (!crew.join_date) return false;
+          const joinDate = new Date(crew.join_date);
+          return joinDate.getMonth() === currentMonth && joinDate.getDate() >= currentDay;
         })
         .slice(0, 5)
-        .map((crew: any) => {
-          const dob = new Date(crew.date_of_birth);
-          const isToday = dob.getDate() === currentDay;
-          const isTomorrow = dob.getDate() === currentDay + 1;
+        .map((crew) => {
+          const joinDate = new Date(crew.join_date!);
+          const isToday = joinDate.getDate() === currentDay;
+          const isTomorrow = joinDate.getDate() === currentDay + 1;
 
           return {
             nome: crew.full_name,
-            data: isToday ? 'Hoje' : isTomorrow ? 'Amanhã' : `${dob.getDate()}/${dob.getMonth() + 1}`,
-            departamento: crew.department || 'Operações'
+            data: isToday ? 'Hoje' : isTomorrow ? 'Amanhã' : `${joinDate.getDate()}/${joinDate.getMonth() + 1}`,
+            departamento: crew.position || 'Operações'
           };
         });
     },

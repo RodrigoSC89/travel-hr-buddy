@@ -80,15 +80,18 @@ export function useCrewTrainingData() {
       let certificates: Certificate[] = [];
 
       if (crewMember) {
+        // maritime_certificates: use certificate_number and issuing_authority as name
         const { data: certs } = await supabase
           .from("maritime_certificates")
-          .select("*")
+          .select("id, certificate_number, issue_date, expiry_date, status, issuing_authority, created_at")
           .eq("crew_member_id", crewMember.id);
 
-        certificates = (certs || []).map((cert: any) => ({
+        certificates = (certs || []).map((cert) => ({
           id: cert.id,
-          name: cert.certificate_type || "Certificado",
-          issueDate: cert.issue_date || cert.created_at,
+          name: cert.certificate_number
+            ? `${cert.certificate_number}${cert.issuing_authority ? ` - ${cert.issuing_authority}` : ''}`
+            : "Certificado Marítimo",
+          issueDate: cert.issue_date || cert.created_at || new Date().toISOString(),
           expiryDate: cert.expiry_date || undefined,
           status: getExpiryStatus(cert.expiry_date),
         }));

@@ -112,25 +112,55 @@ export function useCommunicationAnalytics(period: string = '7d') {
         });
         const avgTime = dayMessages.length > 0 
           ? dayMessages.reduce((sum, m) => sum + (m.response_time_seconds || 0), 0) / dayMessages.length / 60
-          : 2 + Math.random() * 2;
+          : 0;
         return { period: day, avgResponseTime: parseFloat(avgTime.toFixed(1)), targetTime: 4 };
       });
 
-      // User engagement (mock - would need profiles table join)
-      const userEngagement = [
-        { department: 'RH', activeUsers: 12, totalUsers: 15, engagementRate: 80 },
-        { department: 'Operações', activeUsers: 28, totalUsers: 34, engagementRate: 82 },
-        { department: 'Engenharia', activeUsers: 18, totalUsers: 25, engagementRate: 72 },
-        { department: 'Deck', activeUsers: 22, totalUsers: 30, engagementRate: 73 },
-        { department: 'Administração', activeUsers: 8, totalUsers: 12, engagementRate: 67 }
-      ];
+      // User engagement - derive from crew_members positions
+      const { data: crewByPosition } = await supabase
+        .from("crew_members")
+        .select("position, status")
+        .limit(200);
 
-      // Communication trends (monthly)
-      const communicationTrends = ['Set', 'Out', 'Nov', 'Dez', 'Jan'].map(month => ({
+      const positionGroups: Record<string, { active: number; total: number }> = {};
+      (crewByPosition || []).forEach(c => {
+        const pos = c.position || "Outros";
+        if (!positionGroups[pos]) positionGroups[pos] = { active: 0, total: 0 };
+        positionGroups[pos].total++;
+        if (c.status === "active") positionGroups[pos].active++;
+      });
+
+      const userEngagement = Object.entries(positionGroups).slice(0, 5).map(([dept, counts]) => ({
+        department: dept,
+        activeUsers: counts.active,
+        totalUsers: counts.total,
+        engagementRate: counts.total > 0 ? Math.round((counts.active / counts.total) * 100) : 0,
+      }));
+
+      // Communication trends - aggregate from real messages by month
+      const sixMonthsAgo = new Date();
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+      const { data: trendMessages } = await supabase
+        .from("communication_messages")
+        .select("message_type, priority, created_at")
+        .gte("created_at", sixMonthsAgo.toISOString())
+        .order("created_at", { ascending: true });
+
+      const monthLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const trendMap: Record<string, { internal: number; external: number; emergency: number }> = {};
+
+      (trendMessages || []).forEach(m => {
+        const date = new Date(m.created_at || '');
+        const key = monthLabels[date.getMonth()];
+        if (!trendMap[key]) trendMap[key] = { internal: 0, external: 0, emergency: 0 };
+        if (m.priority === 'critical') trendMap[key].emergency++;
+        else if (m.message_type === 'broadcast') trendMap[key].external++;
+        else trendMap[key].internal++;
+      });
+
+      const communicationTrends = Object.entries(trendMap).map(([month, data]) => ({
         month,
-        internal: Math.floor(200 + Math.random() * 150),
-        external: Math.floor(40 + Math.random() * 30),
-        emergency: Math.floor(Math.random() * 10)
+        ...data,
       }));
 
       return {
