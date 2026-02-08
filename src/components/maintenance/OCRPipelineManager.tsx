@@ -111,8 +111,8 @@ export function OCRPipelineManager() {
   });
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newDocs: OCRDocument[] = acceptedFiles.map(file => ({
-      id: `doc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    const newDocs: OCRDocument[] = acceptedFiles.map((file, idx) => ({
+      id: `doc-${Date.now()}-${idx}-${file.name.replace(/\W/g, '').slice(0, 8)}`,
       fileName: file.name,
       fileSize: file.size,
       uploadedAt: new Date().toISOString(),
@@ -163,7 +163,7 @@ export function OCRPipelineManager() {
         await new Promise(resolve => setTimeout(resolve, 1500));
         
         const extractedText = `DOCUMENTO EXTRAÍDO VIA OCR\nData: ${new Date().toLocaleDateString('pt-BR')}\nArquivo: ${doc.fileName}\n\n[Texto extraído automaticamente]`;
-        const confidence = 85 + Math.floor(Math.random() * 15);
+        const confidence = 92;
 
         await supabase
           .from("ai_documents")

@@ -1,4 +1,4 @@
-// @ts-nocheck - Mapbox GL type compatibility (complex external library types)
+// @ts-nocheck — Mapbox GL UMD global types + dynamic import incompatibility
 /**
  * Enhanced Compliance Inspection Map with Geofencing
  * Features: Real-time vessel tracking, geofence alerts, Supabase integration

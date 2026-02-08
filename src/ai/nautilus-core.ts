@@ -93,18 +93,20 @@ class NautilusAICore {
    * @returns Categoria identificada com confiança
    */
   async classify(input: string): Promise<ClassificationResult> {
-    // Stub: Implementação real usará modelo de classificação
+    // Stub: deterministic classification based on input hash
     const categories = ["safety", "compliance", "operational", "technical"];
-    const primaryCategory = categories[Math.floor(Math.random() * categories.length)];
+    // Use input char codes for deterministic category selection
+    const inputHash = input.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const primaryCategory = categories[inputHash % categories.length];
 
     const result: ClassificationResult = {
       category: primaryCategory,
       confidence: 0.78,
       alternatives: categories
         .filter((c) => c !== primaryCategory)
-        .map((c) => ({
+        .map((c, i) => ({
           category: c,
-          confidence: Math.random() * 0.5,
+          confidence: 0.45 - i * 0.12,
         }))
         .sort((a, b) => b.confidence - a.confidence),
       timestamp: Date.now(),

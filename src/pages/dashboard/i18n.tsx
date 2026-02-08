@@ -1,4 +1,4 @@
-// @ts-nocheck - Awaiting types.ts regeneration for language_usage_stats/translation_logs
+// Dynamic Table Access: language_usage_stats/translation_logs via dynamicDb pattern
 /**
  * Dashboard de Internacionalização
  * Painel para monitorar uso multilíngue do sistema
@@ -76,10 +76,8 @@ const LANGUAGE_NAMES: Record<string, string> = {
   de: "Deutsch",
 };
 
-// Dynamic DB access for tables not in schema
-const dynamicDb = supabase as unknown as {
-  from: (table: string) => ReturnType<typeof supabase.from>;
-};
+// Dynamic DB access for tables not in generated schema
+const dynamicFrom = supabase.from as Function;
 
 export default function I18nDashboard() {
   const { t } = useTranslation();
@@ -113,35 +111,32 @@ export default function I18nDashboard() {
     setLoading(true);
     try {
       // Carregar estatísticas de uso
-      const { data: statsData, error: statsError } = await dynamicDb
-        .from("language_usage_stats")
+      const { data: statsData, error: statsError } = await dynamicFrom("language_usage_stats")
         .select("*")
         .gte("date", getStartDate(timeRange))
         .order("translation_count", { ascending: false });
 
       if (statsError) throw statsError;
-      setStats((statsData as LanguageStats[]) || []);
+      setStats((statsData as unknown as LanguageStats[]) || []);
 
       // Carregar logs de tradução
-      const { data: logsData, error: logsError } = await dynamicDb
-        .from("translation_logs")
+      const { data: logsData, error: logsError } = await dynamicFrom("translation_logs")
         .select("*")
         .gte("created_at", getStartDate(timeRange))
         .order("created_at", { ascending: false })
         .limit(100);
 
       if (logsError) throw logsError;
-      setLogs((logsData as TranslationLog[]) || []);
+      setLogs((logsData as unknown as TranslationLog[]) || []);
 
       // Carregar feedback
-      const { data: feedbackData, error: feedbackError } = await dynamicDb
-        .from("translation_feedback")
+      const { data: feedbackData, error: feedbackError } = await dynamicFrom("translation_feedback")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
 
       if (feedbackError) throw feedbackError;
-      setFeedback((feedbackData as TranslationFeedback[]) || []);
+      setFeedback((feedbackData as unknown as TranslationFeedback[]) || []);
 
       logger.info("[I18nDashboard] Data loaded successfully");
     } catch (error) {

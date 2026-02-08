@@ -67,9 +67,7 @@ export async function optimizeImage(
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              console.log(
-                `📷 Image optimized: ${file.size} → ${blob.size} bytes (${Math.round((1 - blob.size / file.size) * 100)}% reduction)`
-              );
+              // Image optimized silently
               resolve(blob);
             } else {
               reject(new Error('Failed to create blob'));
@@ -130,7 +128,7 @@ class RequestBatcher {
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       const request: BatchRequest = {
-        id: `req_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+        id: `req_${Date.now()}_${crypto.randomUUID?.() ?? Date.now().toString(36)}`,
         method,
         path,
         body,
@@ -165,7 +163,7 @@ class RequestBatcher {
     const batch = [...this.queue];
     this.queue = [];
 
-    console.log(`📦 Executing batch of ${batch.length} requests`);
+    // Batch executing silently
 
     try {
       // In a real implementation, this would send all requests as a single payload
@@ -534,7 +532,7 @@ export async function cleanupStorageIfNeeded(threshold: number = 80): Promise<vo
 
     for (const cacheName of oldCaches) {
       await caches.delete(cacheName);
-      console.log(`🗑️ Deleted old cache: ${cacheName}`);
+      // Old cache deleted silently
     }
   }
 }

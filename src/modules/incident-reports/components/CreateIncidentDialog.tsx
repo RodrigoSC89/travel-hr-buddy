@@ -56,8 +56,8 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
   // Generate unique incident number: INC-{timestamp}-{random}
   const generateIncidentNumber = () => {
     const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
-    return `INC-${timestamp}-${random}`;
+    const uuid = crypto.randomUUID?.() ?? timestamp.toString(36);
+    return `INC-${timestamp}-${uuid.slice(0, 4).toUpperCase()}`;
   };
 
   // GPS capture via browser Geolocation API

@@ -78,10 +78,11 @@ export class GDSIntegrationService {
   private getMockFlights(params: FlightSearchParams): FlightOffer[] {
     const airlines = ["LATAM", "Gol", "Azul", "American", "United"];
     const offers: FlightOffer[] = [];
+    const basePrices = [850, 1020, 1180, 1340, 1500];
 
     for (let i = 0; i < 5; i++) {
       const airline = airlines[i % airlines.length];
-      const basePrice = 800 + Math.random() * 1200;
+      const basePrice = basePrices[i];
       
       offers.push({
         id: `FL-${Date.now()}-${i}`,
@@ -94,11 +95,11 @@ export class GDSIntegrationService {
         duration: "2h 30m",
         stops: i % 3 === 0 ? 0 : 1,
         price: {
-          amount: Math.round(basePrice),
+          amount: basePrice,
           currency: "BRL"
         },
         cabinClass: params.cabinClass || "economy",
-        seatsAvailable: 5 + Math.floor(Math.random() * 20),
+        seatsAvailable: 5 + (i * 4),
         refundable: i % 2 === 0,
         changeable: true,
         baggage: {
@@ -171,20 +172,21 @@ export class HotelProviderService {
       { name: "Harbor View", chain: null, stars: 3 },
       { name: "Airport Inn", chain: "Marriott", stars: 4 }
     ];
+    const perNightPrices = [220, 380, 260, 180, 310];
 
     return hotels.map((hotel, i) => ({
       id: `HTL-${Date.now()}-${i}`,
       name: `${params.location} ${hotel.name}`,
       chain: hotel.chain || undefined,
       address: `Av. Principal, ${100 + i * 50} - ${params.location}`,
-      coordinates: { lat: -22.9 + Math.random() * 0.1, lng: -43.2 + Math.random() * 0.1 },
+      coordinates: { lat: -22.9 + i * 0.01, lng: -43.2 + i * 0.01 },
       starRating: hotel.stars,
-      guestRating: 8 + Math.random() * 1.5,
-      reviewCount: 100 + Math.floor(Math.random() * 500),
+      guestRating: 8.2 + i * 0.3,
+      reviewCount: 150 + i * 100,
       price: {
-        amount: (180 + Math.random() * 200) * (params.rooms || 1),
+        amount: perNightPrices[i] * (params.rooms || 1),
         currency: "BRL",
-        perNight: 180 + Math.random() * 200
+        perNight: perNightPrices[i]
       },
       roomType: i % 2 === 0 ? "Quarto Standard" : "Quarto Superior",
       amenities: ["WiFi", "AC", "TV", "Frigobar", i % 2 === 0 ? "Café da Manhã" : "Academia"],
@@ -233,13 +235,14 @@ export class CorporateCardService {
       { name: "Restaurante Executivo", category: "Restaurants" },
       { name: "Posto Shell", category: "Fuel" }
     ];
+    const amounts = [850, 420, 65, 180, 250];
 
     return merchants.map((merchant, i) => ({
       id: `TXN-${Date.now()}-${i}`,
       cardLast4: "4242",
       merchantName: merchant.name,
       merchantCategory: merchant.category,
-      amount: 100 + Math.random() * 900,
+      amount: amounts[i],
       currency: "BRL",
       date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
       status: "posted" as const,
