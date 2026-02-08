@@ -115,16 +115,18 @@ export default function AIControlTowerHubEnhanced() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [dismissedInsights, setDismissedInsights] = useState<string[]>([]);
 
-  // Get active tab directly from URL
+  // Use prefixed param 'aitab' to avoid conflict with parent AIMegaHub's 'tab' param
   const activeTab = useMemo(() => {
-    const tabFromUrl = searchParams.get("tab");
+    const tabFromUrl = searchParams.get("aitab");
     const validTab = TABS.find(t => t.id === tabFromUrl);
     return validTab ? tabFromUrl : "dashboard";
   }, [searchParams]);
 
-  // Handle tab change by updating URL
+  // Handle tab change by preserving existing params (especially parent's 'tab')
   const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("aitab", value);
+    setSearchParams(newParams);
   };
 
   // Real data from Supabase
@@ -215,23 +217,27 @@ export default function AIControlTowerHubEnhanced() {
   };
 
   const handleQuickAction = (actionId: string) => {
+    const newParams = new URLSearchParams(searchParams);
     switch (actionId) {
       case 'ask-ai':
-        setSearchParams({ tab: 'chat' });
+        newParams.set("aitab", "chat");
+        setSearchParams(newParams);
         toast.success('Abrindo Chat IA...');
         break;
       case 'run-analysis':
         toast.success('Análise iniciada — verificando agentes e insights...');
         break;
       case 'check-agents':
-        setSearchParams({ tab: 'agents' });
+        newParams.set("aitab", "agents");
+        setSearchParams(newParams);
         toast.success('Abrindo painel de agentes...');
         break;
       case 'view-insights':
         toast.success(`${metrics.actionableInsights} insights acionáveis encontrados`);
         break;
       case 'create-workflow':
-        setSearchParams({ tab: 'workflows' });
+        newParams.set("aitab", "workflows");
+        setSearchParams(newParams);
         toast.success('Abrindo criador de workflows...');
         break;
       default:
