@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 export const TaskManagement: React.FC = () => {
-  const { tasks, stats, isLoading, error, createTask, updateTask, refetch } = useTaskManagementData();
+  const { tasks, stats, isLoading, error, createTask, updateTask, deleteTask, refetch } = useTaskManagementData();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -529,8 +529,10 @@ export const TaskManagement: React.FC = () => {
 
         <TabsContent value="calendar">
           <TaskCalendarView 
-            tasks={tasks}
+            tasks={filteredTasks}
             onSelectTask={setSelectedTask}
+            onUpdateStatus={handleUpdateTaskStatus}
+            onDeleteTask={(id) => deleteTask.mutateAsync(id).then(() => toast({ title: "Tarefa excluída" })).catch(() => toast({ title: "Erro ao excluir", variant: "destructive" }))}
           />
         </TabsContent>
       </Tabs>
