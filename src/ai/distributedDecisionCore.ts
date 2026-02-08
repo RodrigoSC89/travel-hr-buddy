@@ -1,6 +1,7 @@
 /**
  * PATCH 217 - Distributed Decision Core
  * Enables local autonomous decision-making with escalation to collective when conflicts arise
+ * DEBT-FIX: Removed (supabase as any) - decision_history has different schema, using distributed_decisions
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -63,9 +64,6 @@ class DistributedDecisionCore {
   private decisionCallbacks: Map<string, (decision: Decision) => void> = new Map();
   private isInitialized = false;
 
-  /**
-   * Initialize the distributed decision core
-   */
   async initialize(): Promise<void> {
     if (this.isInitialized) {
       logger.warn("[DistributedDecisionCore] Already initialized");
@@ -74,10 +72,8 @@ class DistributedDecisionCore {
 
     logger.info("[DistributedDecisionCore] Initializing distributed decision core...");
 
-    // Initialize context mesh if not already done
     await contextMesh.initialize();
 
-    // Subscribe to decision-related contexts
     contextMesh.subscribe({
       moduleName: "DistributedDecisionCore",
       contextTypes: ["ai", "mission", "risk"],
@@ -90,29 +86,19 @@ class DistributedDecisionCore {
     logger.info("[DistributedDecisionCore] Distributed decision core initialized successfully");
   }
 
-  /**
-   * Register a decision rule
-   */
   registerRule(rule: DecisionRule): void {
     this.rules.set(rule.id, rule);
     logger.debug(`[DistributedDecisionCore] Registered rule: ${rule.name} for ${rule.moduleName}`);
   }
 
-  /**
-   * Unregister a decision rule
-   */
   unregisterRule(ruleId: string): void {
     this.rules.delete(ruleId);
     logger.debug(`[DistributedDecisionCore] Unregistered rule: ${ruleId}`);
   }
 
-  /**
-   * Make a local decision
-   */
   async makeDecision(context: DecisionContext): Promise<Decision> {
     const decisionId = `dec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    // Find applicable rules
     const applicableRules = await this.findApplicableRules(context);
     
     if (applicableRules.length === 0) {
@@ -120,22 +106,16 @@ class DistributedDecisionCore {
       return this.createDefaultDecision(decisionId, context);
     }
 
-    // Sort by priority
     const sortedRules = this.sortRulesByPriority(applicableRules);
     const topRule = sortedRules[0];
 
-    // Check if escalation is required
     if (topRule.requiresEscalation || applicableRules.length > 1) {
       return await this.escalateDecision(decisionId, context, applicableRules);
     }
 
-    // Make local decision
     return await this.executeLocalDecision(decisionId, context, topRule);
   }
 
-  /**
-   * Execute a decision with timeout
-   */
   async executeDecisionWithTimeout(decision: Decision): Promise<Decision> {
     return new Promise((resolve) => {
       const timeoutId = setTimeout(() => {
@@ -147,7 +127,6 @@ class DistributedDecisionCore {
         }
       }, decision.timeoutMs);
 
-      // Execute decision
       this.executeDecision(decision)
         .then((result) => {
           clearTimeout(timeoutId);
@@ -162,14 +141,10 @@ class DistributedDecisionCore {
     });
   }
 
-  /**
-   * Run parallel simulations
-   */
   async runSimulations(context: DecisionContext): Promise<SimulationResult[]> {
     const simulations: SimulationResult[] = [];
 
     try {
-      // Simulate different scenarios
       const scenarios = this.generateScenarios(context);
 
       const simulationPromises = scenarios.map(async (scenario) => {
@@ -194,34 +169,27 @@ class DistributedDecisionCore {
   }
 
   /**
-   * Log decision to database
+   * Log decision to database using distributed_decisions table
    */
   async logDecision(decision: Decision): Promise<void> {
     try {
-      const { error } = await (supabase as any).from("decision_history").insert({
-        decision_id: decision.id,
-        module_name: decision.moduleName,
+      const { error } = await supabase.from("distributed_decisions").insert({
         decision_level: decision.decisionLevel,
         decision_type: decision.decisionType,
-        context: decision.context,
-        action: decision.action,
+        context: decision.context as any,
         priority: decision.priority,
-        status: decision.status,
-        timeout_ms: decision.timeoutMs,
-        executed: decision.executed,
-        success: decision.success,
-        error_message: decision.errorMessage,
-        simulation_results: decision.simulationResults,
+        decision_status: decision.status,
+        confidence: decision.success ? 1.0 : 0.0,
+        outcome: decision.action,
         escalation_reason: decision.escalationReason,
-        timestamp: decision.timestamp.toISOString(),
-        executed_at: decision.executedAt?.toISOString()
+        simulation_result: decision.simulationResults as any,
+        executed_at: decision.executedAt?.toISOString(),
       });
 
       if (error) {
         logger.error("[DistributedDecisionCore] Failed to log decision", error);
       }
 
-      // Also publish to context mesh
       await contextMesh.publish({
         moduleName: decision.moduleName,
         contextType: "ai" as ContextType,
@@ -242,7 +210,7 @@ class DistributedDecisionCore {
   }
 
   /**
-   * Get decision history
+   * Get decision history from distributed_decisions table
    */
   async getDecisionHistory(
     moduleName?: string,
@@ -250,13 +218,13 @@ class DistributedDecisionCore {
   ): Promise<Decision[]> {
     try {
       let query = supabase
-        .from("decision_history")
+        .from("distributed_decisions")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (moduleName) {
-        query = query.eq("module_name", moduleName);
+        query = query.eq("decision_type", moduleName);
       }
 
       const { data, error } = await query;
@@ -322,10 +290,8 @@ class DistributedDecisionCore {
 
     this.pendingDecisions.set(decisionId, decision);
 
-    // Execute with timeout
     const result = await this.executeDecisionWithTimeout(decision);
     
-    // Log decision
     await this.logDecision(result);
 
     this.pendingDecisions.delete(decisionId);
@@ -340,7 +306,6 @@ class DistributedDecisionCore {
   ): Promise<Decision> {
     logger.info(`[DistributedDecisionCore] Escalating decision for ${context.moduleName}`);
 
-    // Run simulations for different approaches
     const simulations = await this.runSimulations(context);
 
     const decision: Decision = {
@@ -352,14 +317,13 @@ class DistributedDecisionCore {
       action: "escalated_to_collective",
       priority: "high",
       status: "pending",
-      timeoutMs: 30000, // Longer timeout for collaborative decisions
+      timeoutMs: 30000,
       executed: false,
       simulationResults: simulations,
       escalationReason: `${conflictingRules.length} conflicting rules found`,
       timestamp: new Date()
     };
 
-    // Publish escalation to context mesh
     await contextMesh.publish({
       moduleName: context.moduleName,
       contextType: "ai" as ContextType,
@@ -402,8 +366,6 @@ class DistributedDecisionCore {
     decision.executedAt = new Date();
 
     try {
-      // Simulate decision execution
-      // In real implementation, this would call the actual action handlers
       await new Promise(resolve => setTimeout(resolve, 100));
 
       decision.status = "completed";
@@ -420,7 +382,6 @@ class DistributedDecisionCore {
   }
 
   private generateScenarios(context: DecisionContext): string[] {
-    // Generate different scenario variations
     return [
       "optimistic",
       "pessimistic",
@@ -434,8 +395,6 @@ class DistributedDecisionCore {
     scenario: string,
     context: DecisionContext
   ): Promise<SimulationResult> {
-    // Simulate scenario outcome
-    // In real implementation, this would use AI/ML models
     const confidence = 0.5 + Math.random() * 0.5;
 
     return {
@@ -449,30 +408,28 @@ class DistributedDecisionCore {
 
   private handleContextUpdate(contextData: Record<string, any>): void {
     logger.debug("[DistributedDecisionCore] Received context update", contextData);
-    // Handle context updates that might trigger decisions
   }
 
   private mapRowToDecision(row: any): Decision {
     return {
-      id: row.decision_id,
-      moduleName: row.module_name,
+      id: row.id,
+      moduleName: row.decision_type,
       decisionLevel: row.decision_level,
       decisionType: row.decision_type,
-      context: row.context,
-      action: row.action,
+      context: row.context || {},
+      action: row.outcome || "no_action",
       priority: row.priority,
-      status: row.status,
-      timeoutMs: row.timeout_ms,
-      executed: row.executed,
-      success: row.success,
-      errorMessage: row.error_message,
-      simulationResults: row.simulation_results,
+      status: row.decision_status || "completed",
+      timeoutMs: 5000,
+      executed: true,
+      success: row.decision_status === "completed",
+      errorMessage: undefined,
+      simulationResults: row.simulation_result,
       escalationReason: row.escalation_reason,
-      timestamp: new Date(row.timestamp),
+      timestamp: new Date(row.created_at),
       executedAt: row.executed_at ? new Date(row.executed_at) : undefined
     };
   }
 }
 
-// Export singleton instance
 export const distributedDecisionCore = new DistributedDecisionCore();

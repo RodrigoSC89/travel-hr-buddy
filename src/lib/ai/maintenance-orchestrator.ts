@@ -4,6 +4,7 @@
  * Implements autonomous predictive maintenance and repair orchestration
  * for Nautilus One, achieving compliance with IMCA M109, M140, M254,
  * ISM Code, and NORMAM 101 maritime safety standards.
+ * DEBT-FIX: Removed (supabase as any) - maintenance_logs doesn't exist, using ai_audit_logs
  * 
  * @module MaintenanceOrchestrator
  * @version 1.0.0 (Patch 21)
@@ -17,24 +18,24 @@ const loadORT = async () => {
   return ort;
 };
 import { publishEvent } from "@/lib/mqtt/publisher";
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 // Risk thresholds aligned with maritime standards
 const RISK_THRESHOLDS = {
-  NORMAL: 0.3,      // Equipment operating within parameters
-  ATENCAO: 0.7,     // Wear trend identified, inspection recommended
-  CRITICO: 1.0,     // Imminent failure detected, IMCA M254 preventive repair required
+  NORMAL: 0.3,
+  ATENCAO: 0.7,
+  CRITICO: 1.0,
 } as const;
 
 export type RiskLevel = "Normal" | "Atenção" | "Crítico";
 
 export interface TelemetryData {
-  generator_load: number;      // 0-100%
-  position_error: number;      // meters
-  vibration: number;           // mm/s
-  temperature: number;         // °C
-  power_fluctuation: number;   // %
+  generator_load: number;
+  position_error: number;
+  vibration: number;
+  temperature: number;
+  power_fluctuation: number;
 }
 
 export interface MaintenanceResult {
@@ -44,18 +45,12 @@ export interface MaintenanceResult {
   timestamp: string;
 }
 
-/**
- * Classify risk level based on ONNX model output
- */
 function classifyRisk(riskScore: number): RiskLevel {
   if (riskScore < RISK_THRESHOLDS.NORMAL) return "Normal";
   if (riskScore < RISK_THRESHOLDS.ATENCAO) return "Atenção";
   return "Crítico";
 }
 
-/**
- * Generate maintenance message based on risk level
- */
 function generateMessage(level: RiskLevel, score: number): string {
   switch (level) {
   case "Normal":
@@ -67,20 +62,12 @@ function generateMessage(level: RiskLevel, score: number): string {
   }
 }
 
-/**
- * Run AI-powered predictive maintenance analysis
- * 
- * @param telemetry - Five telemetry parameters for analysis
- * @returns Maintenance result with risk assessment
- */
 export async function runMaintenanceOrchestrator(
   telemetry: TelemetryData
 ): Promise<MaintenanceResult> {
   try {
-    // Load ONNX model
     const session = await ort.InferenceSession.create("/models/nautilus_maintenance_predictor.onnx");
 
-    // Prepare input tensor (5 features)
     const inputData = new Float32Array([
       telemetry.generator_load,
       telemetry.position_error,
@@ -92,12 +79,10 @@ export async function runMaintenanceOrchestrator(
     const tensor = new ort.Tensor("float32", inputData, [1, 5]);
     const feeds = { input: tensor };
 
-    // Run inference
     const results = await session.run(feeds);
     const output = results.output.data as Float32Array;
     const riskScore = output[0];
 
-    // Classify risk
     const riskLevel = classifyRisk(riskScore);
     const message = generateMessage(riskLevel, riskScore);
     const timestamp = new Date().toISOString();
@@ -109,10 +94,8 @@ export async function runMaintenanceOrchestrator(
       timestamp,
     };
 
-    // Log to Supabase
     await logToSupabase(result);
 
-    // Publish MQTT alert for critical/warning conditions
     if (riskLevel !== "Normal") {
       publishEvent("nautilus/maintenance/alert", {
         level: riskLevel,
@@ -126,7 +109,6 @@ export async function runMaintenanceOrchestrator(
   } catch (error) {
     logger.error("Maintenance orchestrator error", error as Error);
     
-    // Fallback result
     return {
       risk_score: 0,
       risk_level: "Normal",
@@ -137,18 +119,22 @@ export async function runMaintenanceOrchestrator(
 }
 
 /**
- * Log maintenance result to Supabase
+ * Log maintenance result to Supabase via ai_audit_logs (maintenance_logs table doesn't exist)
  */
 async function logToSupabase(result: MaintenanceResult): Promise<void> {
   try {
-    const supabase = createClient();
-    
-    const { error } = await (supabase as any)
-      .from("maintenance_logs")
+    const { error } = await supabase
+      .from("ai_audit_logs")
       .insert({
-        timestamp: result.timestamp,
-        level: result.risk_level,
-        message: result.message,
+        user_input: `maintenance_prediction:${result.risk_level}`,
+        ai_response: result.message,
+        module_name: "maintenance-orchestrator",
+        interaction_type: "maintenance_prediction",
+        confidence_score: 1 - result.risk_score,
+        model_provider: "onnx",
+        model_version: "nautilus_maintenance_predictor",
+        response_time_ms: 0,
+        ip_address: "0.0.0.0"
       });
 
     if (error) {

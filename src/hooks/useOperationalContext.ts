@@ -1,17 +1,11 @@
 /**
  * Hook: useOperationalContext
  * PATCH 1000 - Captura contexto operacional para IA
- * 
- * Fornece informações sobre:
- * - Rota atual
- * - Dados da tela
- * - Alertas ativos
- * - Histórico de navegação
- * - Performance do sistema
+ * DEBT-FIX: Removed (supabase as any) - intelligent_alerts doesn't exist, using satellite_alerts + maintenance_orders
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 interface OperationalContext {
@@ -33,7 +27,6 @@ interface UseOperationalContextReturn {
   addScreenData: (key: string, value: unknown) => void;
 }
 
-// Route labels mapping
 const ROUTE_LABELS: Record<string, string> = {
   "/": "Página Inicial",
   "/dashboard": "Dashboard Principal",
@@ -60,20 +53,17 @@ export function useOperationalContext(): UseOperationalContextReturn {
   const [recentRoutes, setRecentRoutes] = useState<string[]>([]);
   const [screenData, setScreenData] = useState<Record<string, unknown>>({});
 
-  // Track route history
   useEffect(() => {
     setRecentRoutes(prev => {
       const newRoutes = [location.pathname, ...prev.filter(r => r !== location.pathname)];
-      return newRoutes.slice(0, 10); // Keep last 10 routes
+      return newRoutes.slice(0, 10);
     });
   }, [location.pathname]);
 
-  // Get route label
   const routeLabel = useMemo(() => {
     const path = location.pathname;
     if (ROUTE_LABELS[path]) return ROUTE_LABELS[path];
     
-    // Try to match partial paths
     for (const [route, label] of Object.entries(ROUTE_LABELS)) {
       if (path.startsWith(route) && route !== "/") return label;
     }
@@ -81,27 +71,25 @@ export function useOperationalContext(): UseOperationalContextReturn {
     return path.split("/").filter(Boolean).pop()?.replace(/-/g, " ") || "Desconhecido";
   }, [location.pathname]);
 
-  // Fetch operational data
   const refreshContext = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Fetch active alerts - use any to avoid type issues
-      const alertResult = await (supabase as any)
-        .from("intelligent_alerts")
+      // Fetch active alerts from satellite_alerts (typed table)
+      const alertResult = await supabase
+        .from("satellite_alerts")
         .select("*", { count: "exact", head: true })
-        .eq("status", "active");
+        .eq("is_resolved", false);
       
       setActiveAlerts(alertResult.count || 0);
 
-      // Fetch pending maintenance orders
-      const maintenanceResult = await (supabase as any)
+      // Fetch pending maintenance orders (typed table)
+      const maintenanceResult = await supabase
         .from("maintenance_orders")
         .select("*", { count: "exact", head: true })
         .eq("status", "pending");
       
       setPendingTasks(maintenanceResult.count || 0);
 
-      // Determine system health based on alerts
       const alertCount = alertResult.count || 0;
       if (alertCount > 10) {
         setSystemHealth("critical");
@@ -118,20 +106,17 @@ export function useOperationalContext(): UseOperationalContextReturn {
     }
   }, []);
 
-  // Initial fetch and periodic refresh
   useEffect(() => {
     refreshContext();
     
-    const interval = setInterval(refreshContext, 60000); // Refresh every minute
+    const interval = setInterval(refreshContext, 60000);
     return () => clearInterval(interval);
   }, [refreshContext]);
 
-  // Add screen-specific data
   const addScreenData = useCallback((key: string, value: unknown) => {
     setScreenData(prev => ({ ...prev, [key]: value }));
   }, []);
 
-  // Build context object
   const context = useMemo<OperationalContext>(() => ({
     currentRoute: location.pathname,
     routeLabel,

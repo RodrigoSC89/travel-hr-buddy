@@ -1,10 +1,14 @@
 /**
  * PATCH 837: Offline-First Sync System
  * Revolutionary offline capabilities for maritime environments
+ * DEBT-FIX: Removed (supabase as any) - uses typed dynamic table access
  */
 
 import { useState, useEffect } from 'react';
 import { openDB, IDBPDatabase } from 'idb';
+import type { Database } from '@/integrations/supabase/types';
+
+type TableName = keyof Database["public"]["Tables"];
 
 interface SyncQueueItem {
   id: string;
@@ -35,7 +39,6 @@ class OfflineSyncManager {
   async init(): Promise<void> {
     this.db = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
-        // Sync queue store
         if (!db.objectStoreNames.contains('syncQueue')) {
           const syncStore = db.createObjectStore('syncQueue', { keyPath: 'id' });
           syncStore.createIndex('timestamp', 'timestamp');
@@ -43,29 +46,23 @@ class OfflineSyncManager {
           syncStore.createIndex('table', 'table');
         }
 
-        // Cached data store
         if (!db.objectStoreNames.contains('cache')) {
           const cacheStore = db.createObjectStore('cache', { keyPath: 'key' });
           cacheStore.createIndex('timestamp', 'timestamp');
           cacheStore.createIndex('ttl', 'ttl');
         }
 
-        // User actions store (for analytics)
         if (!db.objectStoreNames.contains('pendingActions')) {
           db.createObjectStore('pendingActions', { keyPath: 'id', autoIncrement: true });
         }
       },
     });
 
-    // PATCH v21: Apenas 'online' para trigger de sync - NÃO escutar 'offline'
     window.addEventListener('online', () => this.onOnline());
-    // REMOVIDO: listener 'offline' que bloqueava funcionalidades no iOS
 
-    // Start periodic sync check
     this.startPeriodicSync();
   }
 
-  // Add item to sync queue
   async queueSync(item: Omit<SyncQueueItem, 'id' | 'timestamp' | 'retries'>): Promise<string> {
     if (!this.db) await this.init();
 
@@ -79,7 +76,6 @@ class OfflineSyncManager {
     await this.db!.put('syncQueue', syncItem);
     this.notifyListeners({ type: 'queued', item: syncItem });
 
-    // Try immediate sync if online
     if (navigator.onLine) {
       this.processQueue();
     }
@@ -87,7 +83,6 @@ class OfflineSyncManager {
     return syncItem.id;
   }
 
-  // Cache data locally
   async cacheData(key: string, data: any, ttlMinutes = 60): Promise<void> {
     if (!this.db) await this.init();
 
@@ -102,7 +97,6 @@ class OfflineSyncManager {
     await this.db!.put('cache', cached);
   }
 
-  // Get cached data
   async getCachedData<T>(key: string): Promise<T | null> {
     if (!this.db) await this.init();
 
@@ -110,7 +104,6 @@ class OfflineSyncManager {
 
     if (!cached) return null;
 
-    // Check if expired
     if (Date.now() - cached.timestamp > cached.ttl) {
       await this.db!.delete('cache', key);
       return null;
@@ -119,8 +112,6 @@ class OfflineSyncManager {
     return cached.data as T;
   }
 
-  // Process sync queue
-  // PATCH v17 iOS PWA: REMOVIDO check navigator.onLine - sempre tentar sync
   async processQueue(): Promise<void> {
     if (this.syncInProgress) return;
 
@@ -132,7 +123,6 @@ class OfflineSyncManager {
 
       const items = await this.db!.getAllFromIndex('syncQueue', 'priority') as SyncQueueItem[];
       
-      // Sort by priority and timestamp
       const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
       const sortedItems = items.sort((a, b) => {
         const aPriority = priorityOrder[a.priority] ?? 5;
@@ -165,13 +155,11 @@ class OfflineSyncManager {
     }
   }
 
-  // Sync individual item
   private async syncItem(item: SyncQueueItem): Promise<void> {
-    // This would be replaced with actual Supabase calls
     const { supabase } = await import('@/integrations/supabase/client');
     
-    // Cast to any to allow dynamic table names
-    const table = (supabase as any).from(item.table);
+    // Use typed dynamic table access
+    const table = supabase.from(item.table as TableName);
 
     switch (item.action) {
       case 'create':
@@ -186,7 +174,6 @@ class OfflineSyncManager {
     }
   }
 
-  // Get queue status
   async getQueueStatus(): Promise<{ pending: number; failed: number }> {
     if (!this.db) await this.init();
 
@@ -197,7 +184,6 @@ class OfflineSyncManager {
     };
   }
 
-  // Clear expired cache
   async clearExpiredCache(): Promise<number> {
     if (!this.db) await this.init();
 
@@ -214,7 +200,6 @@ class OfflineSyncManager {
     return cleared;
   }
 
-  // Subscribe to sync events
   subscribe(callback: (status: SyncStatus) => void): () => void {
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
@@ -238,7 +223,7 @@ class OfflineSyncManager {
       if (navigator.onLine && !this.syncInProgress) {
         this.processQueue();
       }
-    }, 30000); // Check every 30 seconds
+    }, 30000);
   }
 }
 
@@ -253,7 +238,6 @@ type SyncStatus =
 
 export const offlineSync = new OfflineSyncManager();
 
-// React hook for offline sync
 export function useOfflineSync() {
   const [status, setStatus] = useState<SyncStatus | null>(null);
   const [queueStatus, setQueueStatus] = useState({ pending: 0, failed: 0 });
