@@ -222,7 +222,7 @@ export const ChartSkeleton: FC<ChartSkeletonProps> = ({
         <Skeleton 
           key={i} 
           className="flex-1 max-w-12" 
-          style={{ height: `${30 + Math.random() * 70}%` }}
+          style={{ height: `${30 + ((i * 37 + 13) % 70)}%` }}
         />
       ))}
       {type === 'pie' && (

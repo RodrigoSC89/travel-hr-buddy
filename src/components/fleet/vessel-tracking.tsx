@@ -57,27 +57,40 @@ export const VesselTracking = () => {
 
       if (error) throw error;
 
-      // Transform to tracking format with mock real-time data
-      const trackingData: VesselPosition[] = data?.map(vessel => ({
-        id: vessel.id,
-        name: vessel.name,
-        latitude: -23.5505 + (Math.random() - 0.5) * 0.1,
-        longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
-        speed: Math.random() * 20,
-        heading: Math.random() * 360,
-        status: (["sailing", "anchored", "docked"] as const)[Math.floor(Math.random() * 3)],
-        fuel_level: 50 + Math.random() * 50,
-        last_update: new Date().toISOString(),
-        weather: {
-          temperature: 20 + Math.random() * 15,
-          wind_speed: Math.random() * 25,
-          wind_direction: Math.random() * 360,
-          visibility: 5 + Math.random() * 5
-        },
-        crew_count: Math.floor(10 + Math.random() * 20),
-        destination: "Porto de Santos",
-        eta: new Date(Date.now() + Math.random() * 86400000 * 7).toISOString()
-      })) || [];
+      // Transform to tracking format with deterministic data
+      const hashStr = (s: string) => s.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const portPositions = [
+        { lat: -23.95, lng: -46.30 }, // Santos
+        { lat: 51.90, lng: 4.50 },    // Rotterdam
+        { lat: 1.26, lng: 103.84 },   // Singapore
+        { lat: 29.37, lng: 47.97 },   // Kuwait
+        { lat: 31.23, lng: 121.47 },  // Shanghai
+      ];
+      const statuses = ["sailing", "anchored", "docked"] as const;
+      const trackingData: VesselPosition[] = data?.map((vessel, idx) => {
+        const seed = hashStr(vessel.id);
+        const port = portPositions[idx % portPositions.length];
+        return {
+          id: vessel.id,
+          name: vessel.name,
+          latitude: port.lat + ((seed % 100) - 50) / 1000,
+          longitude: port.lng + ((seed % 80) - 40) / 1000,
+          speed: ((seed * 7 + idx * 13) % 200) / 10,
+          heading: (seed * 11 + idx * 37) % 360,
+          status: statuses[(seed + idx) % 3],
+          fuel_level: 50 + ((seed * 3 + idx * 17) % 50),
+          last_update: new Date().toISOString(),
+          weather: {
+            temperature: 20 + ((seed * 5) % 15),
+            wind_speed: (seed * 9 + idx * 3) % 25,
+            wind_direction: (seed * 13 + idx * 7) % 360,
+            visibility: 5 + ((seed * 4) % 5)
+          },
+          crew_count: 10 + ((seed * 7) % 20),
+          destination: "Porto de Santos",
+          eta: new Date(Date.now() + ((seed * 11 + idx * 23) % 7) * 86400000).toISOString()
+        };
+      }) || [];
 
       setVessels(trackingData);
       if (!selectedVessel && trackingData.length > 0) {

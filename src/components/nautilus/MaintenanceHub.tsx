@@ -90,28 +90,32 @@ export function MaintenanceHub() {
         .limit(10);
 
       if (vesselsData && vesselsData.length > 0) {
-        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any) => [
-          {
-            id: `${v.id}-engine`,
-            name: "Motor Principal",
-            vessel: v.name,
-            health: 70 + Math.random() * 25,
-            temperature: 60 + Math.random() * 30,
-            vibration: 5 + Math.random() * 15,
-            predictedLifespan: 2000 + Math.random() * 3000,
-            lastMaintenance: new Date(Date.now() - Math.random() * 90 * 86400000).toISOString().split("T")[0],
-          },
-          {
-            id: `${v.id}-generator`,
-            name: "Gerador",
-            vessel: v.name,
-            health: 75 + Math.random() * 20,
-            temperature: 50 + Math.random() * 20,
-            vibration: 3 + Math.random() * 10,
-            predictedLifespan: 3000 + Math.random() * 4000,
-            lastMaintenance: new Date(Date.now() - Math.random() * 60 * 86400000).toISOString().split("T")[0],
-          },
-        ]);
+        const hashStr = (s: string) => s.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any, idx: number) => {
+          const seed = hashStr(v.id || v.name || `v${idx}`);
+          return [
+            {
+              id: `${v.id}-engine`,
+              name: "Motor Principal",
+              vessel: v.name,
+              health: 70 + ((seed * 7 + idx * 13) % 25),
+              temperature: 60 + ((seed * 3 + idx * 11) % 30),
+              vibration: 5 + ((seed * 5 + idx * 9) % 15),
+              predictedLifespan: 2000 + ((seed * 11 + idx * 7) % 3000),
+              lastMaintenance: new Date(Date.now() - ((seed * 3 + idx * 17) % 90) * 86400000).toISOString().split("T")[0],
+            },
+            {
+              id: `${v.id}-generator`,
+              name: "Gerador",
+              vessel: v.name,
+              health: 75 + ((seed * 9 + idx * 5) % 20),
+              temperature: 50 + ((seed * 4 + idx * 8) % 20),
+              vibration: 3 + ((seed * 6 + idx * 3) % 10),
+              predictedLifespan: 3000 + ((seed * 13 + idx * 11) % 4000),
+              lastMaintenance: new Date(Date.now() - ((seed * 7 + idx * 5) % 60) * 86400000).toISOString().split("T")[0],
+            },
+          ];
+        });
         setComponents(healthData);
       } else {
         setComponents(getDemoComponents());

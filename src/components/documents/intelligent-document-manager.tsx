@@ -258,7 +258,7 @@ const IntelligentDocumentManager = () => {
           ...doc, 
           status: "completed",
           aiSummary: "Análise IA concluída. Documento contém informações importantes sobre...",
-          confidence: Math.floor(Math.random() * 20) + 80
+          confidence: 92
         } : doc
       ));
       

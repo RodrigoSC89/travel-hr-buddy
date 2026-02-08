@@ -164,9 +164,9 @@ const generateAlertLogs = (): AlertLog[] => {
 
   return Array.from({ length: 25 }, (_, i) => {
     const tipo = tipos[i % tipos.length];
-    const prioridade = prioridades[Math.floor(Math.random() * prioridades.length)];
-    const currentStatus = status[Math.floor(Math.random() * status.length)];
-    const hoursAgo = Math.floor(Math.random() * 168);
+    const prioridade = prioridades[(i * 7 + 3) % prioridades.length];
+    const currentStatus = status[(i * 11 + 2) % status.length];
+    const hoursAgo = ((i * 37 + 5) % 168);
 
     return {
       id: `log-${i + 1}`,

@@ -219,23 +219,32 @@ export class VesselDigitalTwin {
     const fuelConsumed = state.avgConsumption * deltaHours;
     const newFuel = Math.max(0, state.fuelOnBoard - fuelConsumed);
 
-    // Update equipment health (gradual degradation)
-    const updatedEquipment = state.equipment.map(eq => ({
-      ...eq,
-      health: Math.max(0, eq.health - Math.random() * 0.01),
-      runningHours: eq.runningHours + deltaHours,
-      temperature: eq.temperature ? eq.temperature + (Math.random() - 0.5) * 0.5 : undefined,
-      vibration: eq.vibration ? eq.vibration + (Math.random() - 0.5) * 0.1 : undefined,
-      status: this.getEquipmentStatus(eq.health)
-    }));
+    // Update equipment health (gradual deterministic degradation)
+    const elapsed = Date.now() / 1000;
+    const updatedEquipment = state.equipment.map((eq, idx) => {
+      const degradation = 0.005 + (idx * 0.001); // Slight variation per equipment
+      const tempWave = Math.sin(elapsed / 60 + idx * 1.5) * 0.25;
+      const vibWave = Math.sin(elapsed / 45 + idx * 2.3) * 0.05;
+      return {
+        ...eq,
+        health: Math.max(0, eq.health - degradation * deltaHours),
+        runningHours: eq.runningHours + deltaHours,
+        temperature: eq.temperature ? eq.temperature + tempWave : undefined,
+        vibration: eq.vibration ? eq.vibration + vibWave : undefined,
+        status: this.getEquipmentStatus(eq.health)
+      };
+    });
 
-    // Update crew fatigue (increases while on duty)
-    const updatedCrew = state.crew.map(c => ({
-      ...c,
-      fatigue: Math.min(100, c.fatigue + (c.status === 'on-duty' ? 0.05 : -0.1)),
-      stress: Math.min(100, c.stress + (Math.random() - 0.5) * 0.1),
-      hoursWorked: c.status === 'on-duty' ? c.hoursWorked + deltaHours : c.hoursWorked
-    }));
+    // Update crew fatigue (increases while on duty, deterministic)
+    const updatedCrew = state.crew.map((c, idx) => {
+      const stressWave = Math.sin(elapsed / 120 + idx * 3.7) * 0.05;
+      return {
+        ...c,
+        fatigue: Math.min(100, c.fatigue + (c.status === 'on-duty' ? 0.05 : -0.1)),
+        stress: Math.min(100, c.stress + stressWave),
+        hoursWorked: c.status === 'on-duty' ? c.hoursWorked + deltaHours : c.hoursWorked
+      };
+    });
 
     return {
       ...state,

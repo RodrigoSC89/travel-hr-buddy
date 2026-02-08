@@ -119,7 +119,7 @@ export function SessionReplayViewer() {
                 log.action?.includes('input') ? 'input' as const :
                 log.action?.includes('nav') ? 'navigation' as const : 'custom' as const,
           data: { action: log.action, module: log.module_accessed, result: log.result },
-          position: { x: 100 + Math.random() * 900, y: 50 + Math.random() * 300 },
+          position: { x: 100 + ((i * 137 + 43) % 900), y: 50 + ((i * 89 + 17) % 300) },
         }));
         setEvents(mapped);
       }

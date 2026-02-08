@@ -49,17 +49,21 @@ function useEquipmentMetrics() {
 
       if (error) throw error;
 
-      return (data || []).map((task, idx) => ({
-        equipmentId: task.id,
-        name: task.title || task.component_name || `Equipment #${idx + 1}`,
-        operatingHours: 5000 + Math.floor(Math.random() * 10000),
-        cycleCount: 3000 + Math.floor(Math.random() * 20000),
-        lastMaintenance: task.completed_date ? new Date(task.completed_date) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        avgTimeBetweenFailures: 3000 + Math.floor(Math.random() * 3000),
-        vibrationLevel: 2 + Math.random() * 5,
-        temperature: 60 + Math.random() * 35,
-        oilPressure: 25 + Math.random() * 25,
-      } as EquipmentMetrics));
+      const hashId = (id: string) => id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      return (data || []).map((task, idx) => {
+        const seed = hashId(task.id);
+        return {
+          equipmentId: task.id,
+          name: task.title || task.component_name || `Equipment #${idx + 1}`,
+          operatingHours: 5000 + ((seed * 7 + idx * 1337) % 10000),
+          cycleCount: 3000 + ((seed * 11 + idx * 997) % 20000),
+          lastMaintenance: task.completed_date ? new Date(task.completed_date) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          avgTimeBetweenFailures: 3000 + ((seed * 13 + idx * 503) % 3000),
+          vibrationLevel: 2 + ((seed * 3 + idx * 7) % 50) / 10,
+          temperature: 60 + ((seed * 5 + idx * 11) % 35),
+          oilPressure: 25 + ((seed * 9 + idx * 13) % 25),
+        } as EquipmentMetrics;
+      });
     },
     staleTime: 5 * 60 * 1000
   });

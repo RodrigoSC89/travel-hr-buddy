@@ -115,15 +115,20 @@ const IoTRealtimeSensors: React.FC = () => {
   useOptimizedPolling({
     id: "iot-realtime-sensors-updates",
     callback: () => {
+      const elapsed = Date.now() / 1000;
       setSensors(prevSensors => 
-        prevSensors.map(sensor => ({
-          ...sensor,
-          value: sensor.value + (Math.random() - 0.5) * 2,
-          trend: Math.random() > 0.5 ? "up" : "down",
-          lastUpdate: Math.random() > 0.7 ? "Agora" : `Há ${Math.floor(Math.random() * 10)}s`,
-          status: sensor.value > sensor.maxRange * 0.9 ? "warning" : 
-            sensor.value > sensor.maxRange ? "critical" : "normal"
-        }))
+        prevSensors.map((sensor, idx) => {
+          const wave = Math.sin(elapsed / 8 + idx * 2.1) * 1.0;
+          const newValue = sensor.value + wave;
+          return {
+            ...sensor,
+            value: newValue,
+            trend: wave > 0 ? "up" as const : "down" as const,
+            lastUpdate: "Agora",
+            status: newValue > sensor.maxRange * 0.9 ? "warning" : 
+              newValue > sensor.maxRange ? "critical" : "normal"
+          };
+        })
       );
     },
     interval: 3000,

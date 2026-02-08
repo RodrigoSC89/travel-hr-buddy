@@ -51,14 +51,16 @@ export const SystemHealthMonitor: React.FC = () => {
       // Simulate real system metrics
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      const elapsed = Date.now() / 1000;
+      const wave = (offset: number) => Math.sin(elapsed / 30 + offset);
       const newMetrics: SystemMetrics = {
-        cpu: Math.floor(Math.random() * 100),
-        memory: Math.floor(Math.random() * 100),
-        disk: Math.floor(Math.random() * 100),
-        network: Math.floor(Math.random() * 100),
-        database: Math.floor(Math.random() * 100),
-        activeUsers: Math.floor(Math.random() * 150) + 50,
-        responseTime: Math.floor(Math.random() * 500) + 100,
+        cpu: Math.floor(35 + wave(1) * 15 + wave(3.7) * 10),
+        memory: Math.floor(55 + wave(2.3) * 10 + wave(5.1) * 5),
+        disk: Math.floor(42 + wave(0.7) * 5),
+        network: Math.floor(25 + wave(4.1) * 20 + wave(7.3) * 10),
+        database: Math.floor(30 + wave(1.9) * 12 + wave(6.2) * 8),
+        activeUsers: Math.floor(80 + wave(3.3) * 30),
+        responseTime: Math.floor(200 + wave(2.7) * 80),
         uptime: "15d 8h 42m",
         lastUpdate: new Date()
       };
