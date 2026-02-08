@@ -15,7 +15,7 @@
  * - Análise de custos
  */
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +38,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import { usePorts } from "@/hooks/usePortsData";
+import { useMarineWeather } from "@/hooks/useMarineWeather";
 
 // Types
 interface Port {
@@ -96,8 +97,47 @@ export default function VoyageCommandCenter() {
   }));
   
   const [voyages, setVoyages] = useState<VoyageRoute[]>([]);
-  const [weather] = useState<WeatherCondition[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
+
+  // ✅ Dados meteorológicos reais via Open-Meteo (portos marítimos brasileiros)
+  const WEATHER_LOCATIONS = [
+    { lat: -23.5505, lng: -46.6333, name: "Santos" },
+    { lat: -22.9068, lng: -43.1729, name: "Rio de Janeiro" },
+    { lat: -3.7319, lng: -38.5267, name: "Fortaleza" },
+    { lat: -12.9714, lng: -38.5014, name: "Salvador" },
+    { lat: -25.4284, lng: -49.2733, name: "Paranaguá" },
+  ];
+
+  const santosWeather = useMarineWeather(WEATHER_LOCATIONS[0].lat, WEATHER_LOCATIONS[0].lng);
+  const rioWeather = useMarineWeather(WEATHER_LOCATIONS[1].lat, WEATHER_LOCATIONS[1].lng);
+  const fortalezaWeather = useMarineWeather(WEATHER_LOCATIONS[2].lat, WEATHER_LOCATIONS[2].lng);
+  const salvadorWeather = useMarineWeather(WEATHER_LOCATIONS[3].lat, WEATHER_LOCATIONS[3].lng);
+  const paranaguaWeather = useMarineWeather(WEATHER_LOCATIONS[4].lat, WEATHER_LOCATIONS[4].lng);
+
+  const weatherQueries = [santosWeather, rioWeather, fortalezaWeather, salvadorWeather, paranaguaWeather];
+
+  const weather: WeatherCondition[] = useMemo(() => {
+    return WEATHER_LOCATIONS.map((loc, idx) => {
+      const q = weatherQueries[idx];
+      if (!q.data?.current) return null;
+      const c = q.data.current;
+      const windKnots = c.windSpeedKnots ?? (c.windSpeed ? c.windSpeed * 1.94384 : 0);
+      const waveH = c.waveHeight ?? 0;
+      const risk: "low" | "medium" | "high" =
+        waveH > 4 || windKnots > 35 ? "high" :
+        waveH > 2.5 || windKnots > 25 ? "medium" : "low";
+      const vis = c.visibility != null ? `${(c.visibility / 1000).toFixed(0)} km` : "N/A";
+      const condition = waveH > 3 ? "Mar agitado" : waveH > 1.5 ? "Mar moderado" : "Mar calmo";
+      return {
+        location: `Porto de ${loc.name}`,
+        condition,
+        windSpeed: Math.round(windKnots),
+        waveHeight: Math.round(waveH * 10) / 10,
+        visibility: vis,
+        risk,
+      } as WeatherCondition;
+    }).filter((w): w is WeatherCondition => w !== null);
+  }, [santosWeather.data, rioWeather.data, fortalezaWeather.data, salvadorWeather.data, paranaguaWeather.data]);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
@@ -459,10 +499,15 @@ export default function VoyageCommandCenter() {
                       <span className="text-sm">{w.waveHeight}m</span>
                     </div>
                   </div>
-                )) : (
+                )) : weatherQueries.some(q => q.isLoading) ? (
+                  <div className="col-span-full text-center py-8 text-muted-foreground">
+                    <RefreshCw className="h-12 w-12 mx-auto mb-2 animate-spin text-primary" />
+                    <p>Carregando dados meteorológicos...</p>
+                  </div>
+                ) : (
                   <div className="col-span-full text-center py-8 text-muted-foreground">
                     <Cloud className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                    <p>Configure integração meteorológica para visualizar dados</p>
+                    <p>Dados meteorológicos indisponíveis no momento</p>
                   </div>
                 )}
               </div>
@@ -713,8 +758,28 @@ export default function VoyageCommandCenter() {
 
         {/* Weather Tab */}
         <TabsContent value="weather" className="space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Cloud className="h-5 w-5" />
+              Condições Meteorológicas — Portos Brasileiros
+            </h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => weatherQueries.forEach(q => q.refetch())}
+              disabled={weatherQueries.some(q => q.isFetching)}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${weatherQueries.some(q => q.isFetching) ? "animate-spin" : ""}`} />
+              Atualizar
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
+            {weatherQueries.some(q => q.isLoading) ? (
+              <div className="col-span-full text-center py-12">
+                <RefreshCw className="h-12 w-12 mx-auto mb-4 text-primary animate-spin" />
+                <p className="text-muted-foreground">Carregando dados meteorológicos em tempo real...</p>
+              </div>
+            ) : weather.length > 0 ? weather.map((w: WeatherCondition, idx: number) => (
               <Card key={idx} className={getWeatherBgColor(w.risk)}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -758,8 +823,8 @@ export default function VoyageCommandCenter() {
               </Card>
             )) : (
               <div className="col-span-full text-center py-12">
-                <Cloud className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <p className="text-muted-foreground">Configure integração meteorológica para visualizar dados</p>
+                <AlertTriangle className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+                <p className="text-muted-foreground">Nenhum dado disponível. Clique em Atualizar para tentar novamente.</p>
               </div>
             )}
           </div>
