@@ -159,7 +159,7 @@ const VoiceCommandsPage = () => {
                         key={i}
                         className="w-1 bg-primary rounded-full animate-pulse"
                         style={{ 
-                          height: `${Math.random() * 24 + 8}px`,
+                          height: `${8 + (i * 7) % 24}px`,
                           animationDelay: `${i * 0.1}s`
                         }}
                       />

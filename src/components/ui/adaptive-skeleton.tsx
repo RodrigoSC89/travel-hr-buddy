@@ -75,7 +75,7 @@ export const ChartSkeleton = memo(function ChartSkeleton() {
           <AdaptiveSkeleton 
             key={i} 
             className="flex-1" 
-            style={{ height: `${20 + Math.random() * 80}%` } as React.CSSProperties} 
+            style={{ height: `${20 + ((i * 17 + 5) % 80)}%` } as React.CSSProperties} 
           />
         ))}
       </div>

@@ -124,7 +124,7 @@ class SocioCognitiveLayer {
     adaptations: string[]
   ): void {
     const context: SocialContext = {
-      commandId: `cmd-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      commandId: `cmd-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       interpretation,
       response,
       adaptations,

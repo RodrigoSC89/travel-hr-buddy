@@ -98,8 +98,8 @@ export default function FacialAccess() {
 
     // Simulate facial recognition process
     setTimeout(() => {
-      const success = Math.random() > 0.2; // 80% success rate
-      const confidence = success ? 85 + Math.random() * 15 : 30 + Math.random() * 30;
+      const success = true; // Default to success in simulation mode
+      const confidence = 92.5; // Fixed high confidence for demo
       
       setScanResult({
         success,

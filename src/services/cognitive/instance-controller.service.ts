@@ -157,7 +157,7 @@ export class InstanceControllerService {
   // Private helper methods
 
   private static generateId(): string {
-    return `inst_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `inst_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private static getMainInstanceId(): string {

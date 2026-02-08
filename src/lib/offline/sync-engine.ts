@@ -113,7 +113,7 @@ export async function queueOperation(
   const database = await initOfflineDB();
   
   const operation: PendingOperation = {
-    id: `op_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+    id: `op_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
     type,
     table,
     data,

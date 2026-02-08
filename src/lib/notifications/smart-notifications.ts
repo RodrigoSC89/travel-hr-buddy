@@ -102,7 +102,7 @@ class SmartNotificationManager {
 
   // Add a notification
   add(notification: Omit<SmartNotification, 'id' | 'timestamp' | 'read'>): string {
-    const id = `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `notif_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     const newNotification: SmartNotification = {
       ...notification,

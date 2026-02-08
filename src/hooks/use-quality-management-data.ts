@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 // Types
 interface NonConformity {
@@ -91,7 +92,7 @@ export function useNonConformities(vesselId?: string, status?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('NCR query error:', error.message);
+        logger.warn('NCR query error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as NonConformity[];
@@ -194,7 +195,7 @@ export function useCorrectiveActions(ncrId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('CAPA query error:', error.message);
+        logger.warn('CAPA query error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as CorrectiveAction[];
@@ -248,7 +249,7 @@ export function useInternalAudits(vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Internal audits query error:', error.message);
+        logger.warn('Internal audits query error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as InternalAudit[];
@@ -306,7 +307,7 @@ export function useImprovementSuggestions(status?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Suggestions query error:', error.message);
+        logger.warn('Suggestions query error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as ImprovementSuggestion[];

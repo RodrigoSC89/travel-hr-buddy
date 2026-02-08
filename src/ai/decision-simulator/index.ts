@@ -136,7 +136,7 @@ class DecisionSimulatorCore {
       await this.initialize();
     }
 
-    const simulationId = `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const simulationId = `sim_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     logger.info("[DecisionSimulator] Starting simulation", {
       simulationId,

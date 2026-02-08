@@ -40,7 +40,7 @@ export class ContextMeshService {
     const timestamp = message.timestamp || new Date();
     const fullMessage: ContextMessage = {
       ...message,
-      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `msg_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp,
       syncStatus: "synced"
     };
@@ -57,7 +57,7 @@ export class ContextMeshService {
    * Subscribe to context updates
    */
   static subscribe(subscription: Omit<ContextSubscription, "id">): string {
-    const id = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `sub_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const fullSubscription: ContextSubscription = { ...subscription, id };
     
     this.subscribers.set(id, fullSubscription);

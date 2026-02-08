@@ -90,7 +90,7 @@ class RequestQueue {
       }
 
       const request: QueuedRequest = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         url,
         options,
         priority,

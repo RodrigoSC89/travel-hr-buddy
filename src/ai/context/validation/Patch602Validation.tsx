@@ -54,8 +54,8 @@ export function Patch602Validation() {
           ...l,
           status: "active" as const,
           metrics: {
-            awareness: 0.85 + Math.random() * 0.15,
-            adaptation: 0.80 + Math.random() * 0.20
+            awareness: 0.85 + (level.charCodeAt(0) % 15) / 100,
+            adaptation: 0.80 + (level.charCodeAt(0) % 20) / 100
           },
           actions
         } : l
@@ -65,8 +65,8 @@ export function Patch602Validation() {
         level, 
         actions,
         metrics: {
-          awareness: 0.85 + Math.random() * 0.15,
-          adaptation: 0.80 + Math.random() * 0.20
+          awareness: 0.85 + (level.charCodeAt(0) % 15) / 100,
+          adaptation: 0.80 + (level.charCodeAt(0) % 20) / 100
         }
       });
       

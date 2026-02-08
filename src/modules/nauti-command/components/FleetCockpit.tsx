@@ -58,9 +58,9 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
         vessel_type: v.vessel_type,
         status: v.status || 'active',
         current_location: v.current_location,
-        fuel_level: Math.floor(Math.random() * 40) + 60,
-        speed: Math.floor(Math.random() * 15) + 5,
-        heading: Math.floor(Math.random() * 360),
+        fuel_level: 60 + (v.name.charCodeAt(0) % 40),
+        speed: 5 + (v.name.charCodeAt(0) % 15),
+        heading: (v.name.charCodeAt(0) * 31) % 360,
         last_update: new Date()
       }));
       

@@ -380,7 +380,7 @@ class CognitiveClone {
    * Helper methods
    */
   private generateId(): string {
-    return `clone-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `clone-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private getInstanceId(): string {

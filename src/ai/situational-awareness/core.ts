@@ -471,7 +471,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     context: Record<string, any> = {}
   ): void {
     const entry: SituationalLogEntry = {
-      id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `log-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       timestamp: Date.now(),
       level,
       category,

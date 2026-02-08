@@ -67,7 +67,7 @@ class AIInsightsService {
   }
 
   private generateId(): string {
-    return `insight_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    return `insight_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 }
 

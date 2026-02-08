@@ -104,7 +104,7 @@ class SyncQueue {
    * Adiciona item à fila
    */
   enqueue(table: string, action: SyncItem["action"], data: Record<string, unknown>): string {
-    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     
     // Verificar duplicata (mesmo table + action + id nos últimos 5s)
     const isDuplicate = this.state.items.some(item => 

@@ -65,7 +65,7 @@ class AuditProtocol {
   private currentSessionId: string;
 
   constructor() {
-    this.currentSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.currentSessionId = `session_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     this.loadFromStorage();
     this.cleanupOldEntries();
   }
@@ -190,7 +190,7 @@ class AuditProtocol {
   async log(entry: Omit<AuditEntry, 'id' | 'timestamp' | 'synced' | 'hash' | 'sessionId'>): Promise<AuditEntry> {
     const fullEntry: AuditEntry = {
       ...entry,
-      id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `audit_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date(),
       sessionId: this.currentSessionId,
       synced: false

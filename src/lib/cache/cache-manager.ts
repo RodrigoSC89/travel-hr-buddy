@@ -200,7 +200,7 @@ class CacheManager {
     try {
       await this.init();
       
-      const id = `${action}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const id = `${action}_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
       
       await this.db!.put('offline-queue', {
         action,

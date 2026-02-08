@@ -377,7 +377,7 @@ class WatchdogService {
   private addEvent(event: Omit<WatchdogEvent, "id" | "timestamp">) {
     const newEvent: WatchdogEvent = {
       ...event,
-      id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
+      id: `evt_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date()
     };
 

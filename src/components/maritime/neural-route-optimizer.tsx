@@ -127,11 +127,11 @@ export const NeuralRouteOptimizer: React.FC = () => {
       
       forecast.push({
         date,
-        windSpeed: 10 + Math.random() * 20,
-        waveHeight: 1 + Math.random() * 3,
-        temperature: 18 + Math.random() * 10,
-        precipitation: Math.random() * 100,
-        visibility: 5 + Math.random() * 10,
+        windSpeed: 10 + ((i * 7 + 3) % 20),
+        waveHeight: 1 + ((i * 11 + 2) % 30) / 10,
+        temperature: 18 + ((i * 13 + 1) % 10),
+        precipitation: ((i * 17 + 5) % 100),
+        visibility: 5 + ((i * 9 + 4) % 10),
         conditions: i % 3 === 0 ? "Ensolarado" : i % 3 === 1 ? "Parcialmente nublado" : "Nublado",
         severity: i % 4 === 0 ? "calm" : i % 4 === 1 ? "moderate" : i % 4 === 2 ? "rough" : "moderate"
       });

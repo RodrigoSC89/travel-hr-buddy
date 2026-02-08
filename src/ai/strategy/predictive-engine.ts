@@ -171,7 +171,7 @@ class PredictiveStrategyEngine {
     });
 
     const proposal: StrategyProposal = {
-      id: `proposal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `proposal_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       strategies: strategies.slice(0, 5), // Return top 5 strategies
       topStrategy: strategies[0],
       analysisContext: this.buildAnalysisContext(),
@@ -300,7 +300,7 @@ class PredictiveStrategyEngine {
   }
 
   private createPreventiveStrategy(signals: Signal[]): Strategy {
-    const strategyId = `strategy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const strategyId = `strategy_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const successRate = this.learningModel.get("preventive") || 0.7;
 
     const strategy: Strategy = {
@@ -337,7 +337,7 @@ class PredictiveStrategyEngine {
   }
 
   private createOptimizationStrategy(signals: Signal[]): Strategy {
-    const strategyId = `strategy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const strategyId = `strategy_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const successRate = this.learningModel.get("optimization") || 0.7;
 
     const strategy: Strategy = {
@@ -391,7 +391,7 @@ class PredictiveStrategyEngine {
   }
 
   private createRiskMitigationStrategy(signals: Signal[]): Strategy {
-    const strategyId = `strategy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const strategyId = `strategy_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const successRate = this.learningModel.get("risk_mitigation") || 0.7;
 
     const strategy: Strategy = {
@@ -459,7 +459,7 @@ class PredictiveStrategyEngine {
 
     // Generate reactive strategy if not present
     if (!existingTypes.has("reactive")) {
-      const strategyId = `strategy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const strategyId = `strategy_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
       const successRate = this.learningModel.get("reactive") || 0.7;
       
       alternatives.push({

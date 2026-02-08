@@ -179,7 +179,7 @@ function generateMockAuditHistory(vesselId: string): AuditRecord[] {
     vessel_id: vesselId,
     audit_type: types[i % types.length],
     audit_date: new Date(Date.now() - i * 30 * 24 * 60 * 60 * 1000).toISOString(),
-    score: 75 + Math.floor(Math.random() * 20),
+    score: 75 + ((i * 7 + 3) % 20),
     status: 'completed',
   }));
 }

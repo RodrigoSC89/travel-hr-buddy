@@ -316,7 +316,7 @@ const normalizeSupabaseSession = (rawSession: ActiveSessionRow): SessionToken =>
     session.session_id ||
     session.id ||
     session.token ||
-    `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    `session-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
 
   return {
     id: fallbackId,

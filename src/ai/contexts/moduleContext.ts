@@ -128,7 +128,7 @@ export const getAllContexts = (): Map<string, ModuleContext> => {
  * Generate unique session ID
  */
 const generateSessionId = (): string => {
-  return `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  return `session_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
 };
 
 /**

@@ -162,7 +162,7 @@ class SwarmFormationService {
    */
   formSwarm(missionType: MissionType, customAgents?: string[]): SwarmResult {
     const template = MISSION_TEMPLATES[missionType];
-    const id = `swarm-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+    const id = `swarm-${Date.now()}-${crypto.randomUUID().slice(0, 6)}`;
 
     const formation: SwarmFormation = {
       ...template,

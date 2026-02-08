@@ -289,7 +289,7 @@ class DeltaSyncService {
    * Generate a unique version string
    */
   private generateVersion(): string {
-    return `v${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `v${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   /**

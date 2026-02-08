@@ -122,7 +122,7 @@ export function useEnhancedToast() {
     title: string,
     description?: string
   ) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = crypto.randomUUID().slice(0, 9);
     setToasts(prev => [...prev, { id, type, title, description }]);
     return id;
   }, []);

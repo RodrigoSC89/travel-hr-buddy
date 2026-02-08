@@ -288,7 +288,7 @@ export const IntegrationSecurity: React.FC = () => {
                     <div>
                       <p className="font-medium text-foreground">{service}</p>
                       <p className="text-xs text-muted-foreground">
-                        {showApiKeys ? `naut_${Math.random().toString(36).substring(2, 15)}` : "••••••••••••••••"}
+                        {showApiKeys ? `naut_${crypto.randomUUID().slice(0, 13)}` : "••••••••••••••••"}
                       </p>
                     </div>
                   </div>

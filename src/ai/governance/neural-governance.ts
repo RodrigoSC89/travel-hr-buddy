@@ -133,7 +133,7 @@ class NeuralGovernance {
       type: strategy.type
     });
 
-    const evaluationId = `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const evaluationId = `eval_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
 
     // Check for violations
     const violations = await this.checkViolations(strategy, simulation);
@@ -469,7 +469,7 @@ class NeuralGovernance {
         const violated = await this.evaluateRule(rule, strategy, simulation);
         if (violated) {
           violations.push({
-            id: `violation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            id: `violation_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
             type: this.categorizeViolation(policy.category),
             policyId: policy.id,
             policyName: policy.name,
@@ -670,7 +670,7 @@ class NeuralGovernance {
     strategyId: string,
     evaluation: GovernanceEvaluation
   ): Promise<void> {
-    const vetoId = `veto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const vetoId = `veto_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     const veto: VetoRecord = {
       id: vetoId,

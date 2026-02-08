@@ -418,7 +418,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   const add = useCallback((notification: Omit<Notification, "id" | "timestamp" | "createdAt" | "read">) => {
     const newNotification: Notification = {
       ...notification,
-      id: `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `local-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date(),
       createdAt: new Date().toISOString(),
       read: false,

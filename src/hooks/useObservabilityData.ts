@@ -6,6 +6,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { subHours, format } from "date-fns";
+import { logger } from "@/lib/logger";
 
 export interface SystemMetric {
   id: string;
@@ -56,7 +57,7 @@ export function useObservabilityData() {
         .limit(50);
 
       if (error) {
-        console.error("Error fetching system metrics:", error);
+        logger.error("Error fetching system metrics", error as Error);
         return [];
       }
 
@@ -93,7 +94,7 @@ export function useObservabilityData() {
         .limit(20);
 
       if (error) {
-        console.error("Error fetching AI decisions:", error);
+        logger.error("Error fetching AI decisions", error as Error);
         return [];
       }
 

@@ -81,7 +81,7 @@ export default function SGSOAuditEditor() {
       
       for (const nc of nonCompliances) {
         await supabase.from("sgso_action_plans").insert({
-          code: `SGSO-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+          code: `SGSO-${Date.now()}-${crypto.randomUUID().slice(0, 5).toUpperCase()}`,
           title: `NC: ${nc.criterion}`,
           description: `Resolver não conformidade: ${nc.criterion}`,
           deadline: deadline.toISOString(),

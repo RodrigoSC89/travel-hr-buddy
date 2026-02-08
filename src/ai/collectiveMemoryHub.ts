@@ -42,7 +42,7 @@ class CollectiveMemoryHub {
   private syncInterval: number | null = null;
 
   constructor() {
-    this.instanceId = `instance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    this.instanceId = `instance-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   /**
@@ -68,7 +68,7 @@ class CollectiveMemoryHub {
     const version = existing ? existing.version + 1 : 1;
 
     const entry: KnowledgeEntry = {
-      id: `knowledge-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `knowledge-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       key,
       value,
       version,
@@ -300,7 +300,7 @@ class CollectiveMemoryHub {
         // Create new entry with incremented version (rollback is a new version)
         const currentVersion = this.knowledge.get(key)?.version || 0;
         const newEntry: KnowledgeEntry = {
-          id: `knowledge-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: `knowledge-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
           key: data.key,
           value: data.value,
           version: currentVersion + 1,
