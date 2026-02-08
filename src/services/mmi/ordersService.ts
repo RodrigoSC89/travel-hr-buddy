@@ -1,33 +1,21 @@
 /**
  * MMI Orders (OS) Service
  * Service for fetching and managing work orders
+ * Uses maintenance_tasks as canonical table (mmi_os not in typed schema)
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import type { MMIOS } from "@/types/mmi";
 import { logger } from "@/lib/logger";
 
-// Dynamic supabase for tables not in schema
-const dynamicDb = supabase as any;
-
 /**
- * Fetch all work orders with job details
+ * Fetch all work orders from maintenance_tasks
  */
 export async function fetchOrders(): Promise<MMIOS[]> {
   try {
-    const { data, error } = await dynamicDb
-      .from("mmi_os")
-      .select(`
-        *,
-        job:mmi_jobs(
-          id,
-          title,
-          description,
-          priority,
-          component_name,
-          vessel_name
-        )
-      `)
+    const { data, error } = await supabase
+      .from("maintenance_tasks")
+      .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -35,7 +23,20 @@ export async function fetchOrders(): Promise<MMIOS[]> {
       throw error;
     }
 
-    return (data || []) as MMIOS[];
+    // Map maintenance_tasks to MMIOS interface
+    return (data || []).map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status || "open",
+      priority: task.priority || "medium",
+      component_name: task.component_name,
+      vessel_id: task.vessel_id,
+      assigned_to: task.assigned_to,
+      created_at: task.created_at,
+      updated_at: task.updated_at,
+      notes: task.notes,
+    })) as MMIOS[];
   } catch (error) {
     logger.error("Failed to fetch orders", error as Error);
     return [];
@@ -47,28 +48,32 @@ export async function fetchOrders(): Promise<MMIOS[]> {
  */
 export async function fetchOrderById(orderId: string): Promise<MMIOS | null> {
   try {
-    const { data, error } = await dynamicDb
-      .from("mmi_os")
-      .select(`
-        *,
-        job:mmi_jobs(
-          id,
-          title,
-          description,
-          priority,
-          component_name,
-          vessel_name
-        )
-      `)
+    const { data, error } = await supabase
+      .from("maintenance_tasks")
+      .select("*")
       .eq("id", orderId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       logger.error("Error fetching order", error as Error, { orderId });
       throw error;
     }
 
-    return data as MMIOS | null;
+    if (!data) return null;
+
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      status: data.status || "open",
+      priority: data.priority || "medium",
+      component_name: data.component_name,
+      vessel_id: data.vessel_id,
+      assigned_to: data.assigned_to,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      notes: data.notes,
+    } as MMIOS;
   } catch (error) {
     logger.error("Failed to fetch order", error as Error, { orderId });
     return null;
@@ -83,8 +88,8 @@ export async function updateOrderStatus(
   status: "open" | "in_progress" | "completed" | "cancelled"
 ): Promise<boolean> {
   try {
-    const { error } = await dynamicDb
-      .from("mmi_os")
+    const { error } = await supabase
+      .from("maintenance_tasks")
       .update({ 
         status,
         updated_at: new Date().toISOString()
@@ -107,8 +112,8 @@ export async function addTechnicianComment(
   comment: string
 ): Promise<boolean> {
   try {
-    const { error } = await dynamicDb
-      .from("mmi_os")
+    const { error } = await supabase
+      .from("maintenance_tasks")
       .update({ 
         notes: comment,
         updated_at: new Date().toISOString()
@@ -125,11 +130,6 @@ export async function addTechnicianComment(
 
 /**
  * Create work order (OS) from forecast
- * 
- * @param forecastId - UUID of the forecast
- * @param jobId - Optional UUID of the related job
- * @param descricao - Description of the work order
- * @returns Promise<boolean> - True if successful, false otherwise
  */
 export async function createOSFromForecast(
   forecastId: string,
@@ -137,7 +137,6 @@ export async function createOSFromForecast(
   descricao: string
 ): Promise<boolean> {
   try {
-    // Get authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     
     if (authError) {
@@ -145,14 +144,13 @@ export async function createOSFromForecast(
       throw new Error("Unauthorized");
     }
 
-    // Insert work order into mmi_os table
-    const { error } = await dynamicDb.from("mmi_os").insert({
-      forecast_id: forecastId,
-      job_id: jobId,
-      descricao,
-      status: "pendente",
+    const { error } = await supabase.from("maintenance_tasks").insert({
+      title: `OS - ${descricao.substring(0, 50)}`,
+      description: descricao,
+      status: "pending",
+      priority: "medium",
+      assigned_to: user?.id || null,
       created_by: user?.id || null,
-      opened_by: user?.id || null
     });
 
     if (error) {

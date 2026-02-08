@@ -9,12 +9,16 @@ import { logger } from "@/lib/logger";
 
 interface Incident {
   id: string;
-  module: string;
-  severity: "info" | "warning" | "critical";
-  message: string;
-  metadata?: Record<string, unknown>;
-  timestamp: string;
+  incident_type: string;
+  severity: string;
+  description: string | null;
+  location: string | null;
+  metadata: unknown;
+  occurred_at: string;
   created_at: string;
+  resolution_notes: string | null;
+  resolved_at: string | null;
+  vessel_id: string | null;
 }
 
 export default function IncidentsPage() {
@@ -48,14 +52,14 @@ export default function IncidentsPage() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("incidents")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      setIncidents(data || []);
+      setIncidents((data || []) as Incident[]);
     } catch (error) {
       logger.error("Error loading incidents", { error });
     } finally {
@@ -107,29 +111,34 @@ export default function IncidentsPage() {
             <ScrollArea className="h-[600px] pr-4">
               <div className="space-y-4">
                 {incidents.map((incident) => {
-                  const borderColor = incident.severity === "critical" ? "#dc2626" : 
-                    incident.severity === "warning" ? "#ca8a04" : "#2563eb";
+                  const severityColor = incident.severity === "critical" ? "#dc2626" : 
+                    incident.severity === "high" ? "#ca8a04" : "#2563eb";
+                  const badgeVariant = incident.severity === "critical" ? "destructive" as const : 
+                    incident.severity === "high" ? "secondary" as const : "default" as const;
                   return (
-                    <Card key={incident.id} className="border-l-4" style={{ borderLeftColor: borderColor }}>
+                    <Card key={incident.id} className="border-l-4" style={{ borderLeftColor: severityColor }}>
                       <CardContent className="pt-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 space-y-2">
                             <div className="flex items-center gap-2">
-                              <Badge variant={getSeverityVariant(incident.severity)}>
+                              <Badge variant={badgeVariant}>
                                 {incident.severity.toUpperCase()}
                               </Badge>
                               <span className="font-semibold text-sm">
-                                {incident.module}
+                                {incident.incident_type}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                {formatDistanceToNow(new Date(incident.timestamp), {
+                                {formatDistanceToNow(new Date(incident.occurred_at), {
                                   addSuffix: true,
                                   locale: ptBR,
                                 })}
                               </span>
                             </div>
-                            <p className="text-sm">{incident.message}</p>
-                            {incident.metadata && Object.keys(incident.metadata).length > 0 && (
+                            <p className="text-sm">{incident.description || "Sem descrição"}</p>
+                            {incident.location && (
+                              <p className="text-xs text-muted-foreground">📍 {incident.location}</p>
+                            )}
+                            {incident.metadata != null && typeof incident.metadata === "object" ? (
                               <details className="text-xs">
                                 <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
                                   Metadados
@@ -138,7 +147,7 @@ export default function IncidentsPage() {
                                   {JSON.stringify(incident.metadata, null, 2)}
                                 </pre>
                               </details>
-                            )}
+                            ) : null}
                           </div>
                         </div>
                       </CardContent>

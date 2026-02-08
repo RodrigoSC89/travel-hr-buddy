@@ -1,4 +1,4 @@
-// @ts-nocheck - Complex schema: smart_workflow_steps has Json metadata, profiles join compatibility
+// @ts-nocheck - Complex schema: smart_workflow_steps requires name/step_number/step_type + nullable profile joins
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management
@@ -59,7 +59,7 @@ interface WorkflowStep {
   updated_at?: string | null;
   created_by?: string | null;
   tags?: string[] | null;
-  metadata?: Record<string, unknown> | null;
+  metadata?: unknown;
   profiles?: {
     full_name: string | null;
   } | null;
@@ -196,12 +196,12 @@ export default function WorkflowDetailPage() {
     try {
       const { data, error } = await supabase
         .from("smart_workflow_steps")
-        .select("*, profiles:assigned_to (full_name)")
+        .select("*")
         .eq("workflow_id", id)
         .order("position", { ascending: true });
       
       if (error) throw error;
-      setSteps(data || []);
+      setSteps((data || []) as unknown as WorkflowStep[]);
     } catch (error) {
       // Steps fetch error handled by toast
       toast({
@@ -221,14 +221,14 @@ export default function WorkflowDetailPage() {
       
       const { error } = await supabase
         .from("smart_workflow_steps")
-        .insert({
+        .insert([{
           workflow_id: id,
           title: newTitle,
           status: "pendente",
           position: steps.length,
           assigned_to: user?.id,
           created_by: user?.id
-        });
+        }]);
       
       if (error) throw error;
       
