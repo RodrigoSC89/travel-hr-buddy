@@ -83,7 +83,9 @@ export function PremiumModuleShell({
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     if (syncWithUrl) {
-      setSearchParams({ tab: value });
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("tab", value);
+      setSearchParams(newParams);
     }
   };
 
