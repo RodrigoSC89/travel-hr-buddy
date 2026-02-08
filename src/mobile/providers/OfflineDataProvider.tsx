@@ -79,8 +79,8 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     // If online, fetch from server and cache
     if (isOnline) {
       try {
-        const { data, error } = await (supabase as any)
-          .from(table)
+        // Dynamic table access - type safety handled by caller
+        const { data, error } = await (supabase.from as Function)(table)
           .select("*")
           .eq("id", id)
           .single();
@@ -107,8 +107,8 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     // If online and cache is empty, fetch from server
     if (cached.length === 0 && isOnline) {
       try {
-        const { data, error } = await (supabase as any)
-          .from(table)
+        // Dynamic table access - type safety handled by caller
+        const { data, error } = await (supabase.from as Function)(table)
           .select("*")
           .limit(500);
 

@@ -351,7 +351,8 @@ Respond in JSON format with:
 
   private async logPerformance(data: any) {
     try {
-      await (supabase as any).from("ia_performance_log").insert(data);
+      // ia_performance_log exists in schema
+      await supabase.from("ia_performance_log").insert(data);
     } catch (error) {
       logger.error("Failed to log performance", { error });
     }
