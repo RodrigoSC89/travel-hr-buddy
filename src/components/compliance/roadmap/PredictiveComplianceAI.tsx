@@ -187,14 +187,14 @@ export function PredictiveComplianceAI() {
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Shuffle and update some values to simulate new analysis
-    const updatedPredictions = [...predictions].map(p => ({
+    const updatedPredictions = [...predictions].map((p, idx) => ({
       ...p,
-      probability: Math.min(100, Math.max(0, p.probability + (Math.random() * 10 - 5))),
-      confidence: Math.min(100, Math.max(70, p.confidence + (Math.random() * 5 - 2.5)))
+      probability: Math.min(100, Math.max(0, p.probability + Math.sin(idx * 1.5) * 3)),
+      confidence: Math.min(100, Math.max(70, p.confidence + Math.sin(idx * 2.1) * 1.5))
     })).sort((a, b) => b.probability - a.probability);
     
     setPredictions(updatedPredictions);
-    setOverallRisk(Math.floor(Math.random() * 20 + 55));
+    setOverallRisk(65);
     setIsAnalyzing(false);
     toast.success('Análise concluída!', { description: `${updatedPredictions.length} previsões geradas` });
   };

@@ -114,10 +114,10 @@ export function VesselTrackingCard({ contractId }: VesselTrackingCardProps) {
     setLoading(true);
     // Simulate AIS data fetch
     setTimeout(() => {
-      setVessels(prev => prev.map(v => ({
+      setVessels(prev => prev.map((v, idx) => ({
         ...v,
         last_update: new Date().toISOString(),
-        speed: v.status === 'underway' ? v.speed + (Math.random() - 0.5) * 2 : 0
+        speed: v.status === 'underway' ? v.speed + Math.sin(Date.now() / 1000 + idx) * 0.5 : 0
       })));
       setLoading(false);
       toast.success('Posições atualizadas!');

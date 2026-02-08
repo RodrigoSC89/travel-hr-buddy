@@ -171,7 +171,9 @@ export const ComplianceHubInteractive: React.FC = () => {
   };
 
   const handleCompleteAudit = (audit: Audit) => {
-    const score = Math.floor(Math.random() * 20) + 80;
+    // Deterministic score based on audit id hash
+    const seed = audit.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const score = 80 + (seed % 20);
     setAudits(audits.map(a => 
       a.id === audit.id ? { 
         ...a, 

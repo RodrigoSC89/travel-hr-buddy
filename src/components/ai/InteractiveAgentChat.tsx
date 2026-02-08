@@ -325,9 +325,9 @@ export function InteractiveAgentChat() {
       timestamp: new Date().toISOString(),
       actions,
       metadata: {
-        tokens: Math.floor(Math.random() * 200) + 100,
-        latency_ms: Math.floor(Math.random() * 500) + 800,
-        confidence: Math.floor(Math.random() * 15) + 85,
+        tokens: 150 + (content.length % 100),
+        latency_ms: 900 + (content.length % 300),
+        confidence: 88 + (content.length % 10),
       },
     };
   };
@@ -362,7 +362,7 @@ export function InteractiveAgentChat() {
       status: "success",
       message: `Ação "${pendingAction.title}" executada com sucesso`,
       timestamp: new Date().toISOString(),
-      duration_ms: Math.floor(Math.random() * 1000) + 500,
+      duration_ms: 750,
     };
     setLogs((prev) => [newLog, ...prev]);
 

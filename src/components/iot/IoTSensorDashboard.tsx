@@ -143,10 +143,11 @@ export const IoTSensorDashboard: React.FC = () => {
     if (!isLive) return;
 
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
+      const elapsed = Date.now() / 1000;
+      setSensors(prev => prev.map((sensor, idx) => ({
         ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * 2,
-        lastUpdate: `${Math.floor(Math.random() * 5) + 1} sec ago`
+        value: sensor.value + Math.sin(elapsed / (5 + idx * 2)) * 0.5,
+        lastUpdate: `${(idx % 5) + 1} sec ago`
       })));
     }, 2000);
 

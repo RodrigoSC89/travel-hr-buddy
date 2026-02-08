@@ -70,15 +70,16 @@ const ProductionDeployCenter: React.FC = () => {
   const [deployProgress, setDeployProgress] = useState(0);
   const [isLive, setIsLive] = useState(false);
 
-  // Simular métricas em tempo real
+  // Métricas em tempo real com variação determinística
   useEffect(() => {
     const interval = setInterval(() => {
+      const elapsed = Date.now() / 1000;
       setMetrics(prev => ({
         ...prev,
-        responseTime: 200 + Math.random() * 100,
-        activeUsers: 8 + Math.floor(Math.random() * 20),
-        memoryUsage: 40 + Math.random() * 20,
-        cpuUsage: 15 + Math.random() * 25
+        responseTime: 250 + Math.sin(elapsed / 10) * 50,
+        activeUsers: 18 + Math.round(Math.sin(elapsed / 15) * 5),
+        memoryUsage: 50 + Math.sin(elapsed / 12) * 8,
+        cpuUsage: 27 + Math.sin(elapsed / 8) * 10
       }));
     }, 3000);
 

@@ -69,16 +69,19 @@ function useCandidates() {
 
       if (error) return [];
       
-      return (data || []).map(c => ({
-        id: c.id,
-        name: c.full_name,
-        email: c.email || '',
-        rank_applied: c.rank || 'Deck Cadet',
-        experience_years: Math.floor(Math.random() * 15) + 1,
-        certifications: ['STCW', 'Basic Safety'],
-        match_score: 70 + Math.floor(Math.random() * 25),
-        status: 'new' as const
-      } as Candidate));
+      return (data || []).map((c, idx) => {
+        const seed = c.id.split("").reduce((a: number, ch: string) => a + ch.charCodeAt(0), 0);
+        return {
+          id: c.id,
+          name: c.full_name,
+          email: c.email || '',
+          rank_applied: c.rank || 'Deck Cadet',
+          experience_years: 1 + (seed % 15),
+          certifications: ['STCW', 'Basic Safety'],
+          match_score: 70 + (seed % 25),
+          status: 'new' as const
+        } as Candidate;
+      });
     },
     staleTime: 60 * 1000
   });

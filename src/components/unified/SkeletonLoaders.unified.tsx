@@ -332,13 +332,16 @@ export const SkeletonChart = memo(function SkeletonChart({
         </div>
       ) : (
         <div className="flex items-end gap-2" style={{ height: heightStyle }}>
-          {Array.from({ length: 7 }).map((_, i) => (
-            <Skeleton 
-              key={i} 
-              className="flex-1" 
-              style={{ height: `${Math.random() * 80 + 20}%` }}
-            />
-          ))}
+          {Array.from({ length: 7 }).map((_, i) => {
+            const h = [65, 40, 85, 30, 70, 50, 90][i];
+            return (
+              <Skeleton 
+                key={i} 
+                className="flex-1" 
+                style={{ height: `${h}%` }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

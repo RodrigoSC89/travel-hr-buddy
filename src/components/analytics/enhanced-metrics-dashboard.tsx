@@ -123,13 +123,14 @@ const EnhancedMetricsDashboard = () => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Simular atualização dos dados
+    const elapsed = Date.now() / 1000;
     setMetricsData(prev => ({
       ...prev,
       kpis: {
         ...prev.kpis,
         efficiency: { 
           ...prev.kpis.efficiency, 
-          value: prev.kpis.efficiency.value + (Math.random() * 2 - 1) 
+          value: prev.kpis.efficiency.value + Math.sin(elapsed / 10) * 0.5 
         }
       }
     }));

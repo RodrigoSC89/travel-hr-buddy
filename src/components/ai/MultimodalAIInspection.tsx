@@ -188,7 +188,7 @@ export const MultimodalAIInspection: React.FC = () => {
     const findings: Finding[] = [
       {
         id: '1',
-        severity: Math.random() > 0.7 ? 'critical' : 'warning',
+        severity: 'warning',
         category: 'Corrosão',
         description: 'Sinais de corrosão detectados na área de casco',
         location: { x: 120, y: 80, width: 50, height: 30 },
@@ -217,7 +217,7 @@ export const MultimodalAIInspection: React.FC = () => {
     ];
 
     return {
-      overallScore: Math.floor(70 + Math.random() * 25),
+      overallScore: type === 'video' ? 82 : 78,
       findings,
       recommendations: [
         'Agendar manutenção preventiva de pintura',

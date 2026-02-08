@@ -255,8 +255,10 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
       };
 
       // Simulate progress
+      let progressStep = 0;
       const progressInterval = setInterval(() => {
-        setOptimizationProgress(prev => Math.min(prev + Math.random() * 15, 95));
+        progressStep += 5;
+        setOptimizationProgress(prev => Math.min(prev + progressStep, 95));
       }, 200);
 
       const availablePorts = PORTS.filter(p => 

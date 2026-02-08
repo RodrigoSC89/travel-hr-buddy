@@ -217,13 +217,14 @@ const SmartWorkflowAutomation = () => {
       // Update running executions
       setExecutions(prev => prev.map(exec => {
         if (exec.status === "running") {
-          const shouldComplete = Math.random() > 0.7;
-          if (shouldComplete) {
+          // Deterministic completion: complete after 30+ seconds of running
+          const runningTime = (Date.now() - exec.startedAt.getTime()) / 1000;
+          if (runningTime > 30) {
             return {
               ...exec,
               status: "completed",
               completedAt: new Date(),
-              duration: Math.floor((Date.now() - exec.startedAt.getTime()) / 1000)
+              duration: Math.floor(runningTime)
             };
           }
         }

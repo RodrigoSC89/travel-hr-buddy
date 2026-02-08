@@ -105,15 +105,18 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     supplierPerformance: 89.1
   };
 
-  const auditProgress: AuditProgress[] = PEOTRAM_ELEMENTS.map((element, index) => ({
-    elementId: element.id,
-    elementName: element.name,
-    progress: Math.floor(Math.random() * 100),
-    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as any,
-    dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
-    assignedTo: `Auditor ${index + 1}`,
-    lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`
-  }));
+  const auditProgress: AuditProgress[] = PEOTRAM_ELEMENTS.map((element, index) => {
+    const seed = element.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+    return {
+      elementId: element.id,
+      elementName: element.name,
+      progress: [25, 50, 75, 100, 60, 40, 80, 90, 35, 55, 70, 95, 45, 85, 65][index % 15],
+      status: ["completed", "in-progress", "pending", "overdue"][index % 4] as any,
+      dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
+      assignedTo: `Auditor ${index + 1}`,
+      lastUpdate: `2024-12-${String((seed % 28) + 1).padStart(2, "0")}`
+    };
+  });
 
   const complianceTrend: ComplianceTrend[] = [
     { period: "Jan 2024", score: 85.2, nonConformities: 15, target: 90 },
@@ -611,7 +614,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {PEOTRAM_ELEMENTS.slice(0, 5).map((element, index) => {
-                      const score = 85 + Math.random() * 15;
+                      const score = 85 + [7, 12, 3, 9, 5][index % 5];
                       const compliance = getComplianceLevel(score);
                       return (
                         <div key={element.id} className="flex items-center justify-between">

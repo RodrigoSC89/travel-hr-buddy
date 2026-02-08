@@ -99,11 +99,11 @@ export const APIStatus: React.FC = () => {
     // Simulate refresh
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setServices(prev => prev.map(service => ({
+    setServices(prev => prev.map((service, idx) => ({
       ...service,
       lastTest: new Date(),
-      status: (Math.random() > 0.2 ? "connected" : "disconnected") as "connected" | "disconnected",
-      responseTime: Math.floor(Math.random() * 1500) + 100
+      status: "connected" as "connected" | "disconnected",
+      responseTime: 200 + (idx * 150)
     })));
     
     setIsRefreshing(false);

@@ -131,7 +131,7 @@ const VesselManagement: React.FC = () => {
         // Local addition fallback
         // Fallback to local state
         const vessel: Vessel = {
-          id: Math.random().toString(),
+          id: `local-${Date.now()}`,
           name: newVessel.name,
           imo_number: newVessel.imo_number || null,
           vessel_type: newVessel.vessel_type,

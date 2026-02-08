@@ -102,7 +102,7 @@ export const APIIntegrationsHub: React.FC = () => {
     {
       id: "1",
       name: "Production API",
-      key: "naut_prod_" + Math.random().toString(36).substring(7),
+      key: "naut_prod_xk7m9p2",
       permissions: ["read", "write", "admin"],
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 30 * 60000),
@@ -111,7 +111,7 @@ export const APIIntegrationsHub: React.FC = () => {
     {
       id: "2",
       name: "Development API",
-      key: "naut_dev_" + Math.random().toString(36).substring(7),
+      key: "naut_dev_3r5t8w1",
       permissions: ["read", "write"],
       createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
       lastUsed: new Date(Date.now() - 2 * 60 * 60 * 1000),
@@ -206,7 +206,7 @@ export const APIIntegrationsHub: React.FC = () => {
     const newKey: APIKey = {
       id: Date.now().toString(),
       name: newKeyName,
-      key: "naut_" + Math.random().toString(36).substring(2, 15),
+      key: "naut_" + Date.now().toString(36),
       permissions: ["read"],
       createdAt: new Date(),
       active: true

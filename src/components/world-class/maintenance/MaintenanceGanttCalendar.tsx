@@ -73,7 +73,7 @@ export function MaintenanceGanttCalendar() {
             vessel: vessel.name,
             startDate: new Date(baseDate.getTime() + idx * 7 * 24 * 60 * 60 * 1000),
             endDate: new Date(baseDate.getTime() + (idx * 7 + 3) * 24 * 60 * 60 * 1000),
-            progress: Math.floor(Math.random() * 100),
+            progress: [0, 25, 75, 100, 50, 10, 90][idx % 7],
             status: ['scheduled', 'in_progress', 'completed', 'overdue'][idx % 4] as MaintenanceTask['status'],
             priority: ['low', 'medium', 'high', 'critical'][idx % 4] as MaintenanceTask['priority'],
             type: 'preventive' as const,

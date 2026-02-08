@@ -110,11 +110,12 @@ export const RealTimeSystemMonitor: React.FC = () => {
   // Simular atualizações em tempo real
   useEffect(() => {
     const interval = setInterval(() => {
+      const elapsed = Date.now() / 1000;
       setMetrics(prevMetrics => 
-        prevMetrics.map(metric => ({
+        prevMetrics.map((metric, idx) => ({
           ...metric,
-          value: metric.value + (Math.random() - 0.5) * 5,
-          trend: (Math.random() - 0.5) * 20
+          value: metric.value + Math.sin(elapsed / (10 + idx * 4)) * 1.5,
+          trend: Math.sin(elapsed / (8 + idx * 3)) * 5
         }))
       );
     }, 3000);

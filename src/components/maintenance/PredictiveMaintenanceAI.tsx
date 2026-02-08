@@ -97,7 +97,7 @@ export function PredictiveMaintenanceAI() {
             id: `pred-${idx}`,
             equipmentName: eq.name,
             componentId: eq.id,
-            probability: Math.max(20, 100 - eq.healthScore + Math.random() * 15),
+            probability: Math.max(20, 100 - eq.healthScore + (eq.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) % 15)),
             estimatedDate: new Date(Date.now() + (eq.healthScore / 100) * 90 * 24 * 60 * 60 * 1000),
             severity: eq.healthScore < 60 ? "critical" : eq.healthScore < 70 ? "high" : "medium",
             recommendation: result.response.substring(0, 200),

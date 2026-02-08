@@ -78,8 +78,10 @@ export default function VoiceAssistantNLU() {
   // Simulate audio level when listening
   useEffect(() => {
     if (isListening) {
+      let phase = 0;
       audioIntervalRef.current = setInterval(() => {
-        setAudioLevel(Math.random() * 100);
+        phase += 0.3;
+        setAudioLevel(50 + Math.sin(phase) * 40);
       }, 100);
     } else {
       if (audioIntervalRef.current) {

@@ -121,16 +121,17 @@ const UnifiedDashboard = () => {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Simular atualização dos dados
+    // Atualizar dados com variação determinística
+    const elapsed = Date.now() / 1000;
     setDashboardData(prev => ({
       ...prev,
       kpis: {
         ...prev.kpis,
-        efficiency: { ...prev.kpis.efficiency, value: prev.kpis.efficiency.value + Math.random() * 2 - 1 }
+        efficiency: { ...prev.kpis.efficiency, value: prev.kpis.efficiency.value + Math.sin(elapsed / 10) * 0.5 }
       },
       systemHealth: {
         ...prev.systemHealth,
-        performance: Math.max(90, Math.min(100, prev.systemHealth.performance + Math.random() * 4 - 2))
+        performance: Math.max(90, Math.min(100, prev.systemHealth.performance + Math.sin(elapsed / 15) * 1))
       }
     }));
     

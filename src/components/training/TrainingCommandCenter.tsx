@@ -223,7 +223,9 @@ export const TrainingCommandCenter: React.FC = () => {
   };
 
   const handleCompleteTraining = (enrollment: Enrollment) => {
-    const score = Math.floor(Math.random() * 30) + 70;
+    // Deterministic score based on enrollment id hash
+    const seed = enrollment.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const score = 70 + (seed % 30);
     setEnrollments(enrollments.map(e => 
       e.id === enrollment.id ? { ...e, status: "completed" as const, progress: 100, score } : e
     ));

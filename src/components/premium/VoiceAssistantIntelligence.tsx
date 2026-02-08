@@ -123,8 +123,10 @@ export default function VoiceAssistantIntelligence() {
   // Listening simulation
   useEffect(() => {
     if (isListening) {
+      let step = 0;
       const interval = setInterval(() => {
-        setConfidence(prev => Math.min(100, prev + Math.random() * 20));
+        step++;
+        setConfidence(prev => Math.min(100, prev + step * 5));
       }, 200);
       return () => clearInterval(interval);
     } else {
@@ -162,16 +164,19 @@ export default function VoiceAssistantIntelligence() {
               <div className="absolute inset-0 flex items-center justify-center opacity-20">
                 {isListening && (
                   <div className="flex items-center gap-1">
-                    {[...Array(20)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="w-1 bg-primary rounded-full animate-pulse"
-                        style={{
-                          height: `${Math.random() * 60 + 20}px`,
-                          animationDelay: `${i * 0.05}s`
-                        }}
-                      />
-                    ))}
+                    {[...Array(20)].map((_, i) => {
+                      const barHeight = 20 + Math.sin(i * 0.8) * 30 + 20;
+                      return (
+                        <div
+                          key={i}
+                          className="w-1 bg-primary rounded-full animate-pulse"
+                          style={{
+                            height: `${barHeight}px`,
+                            animationDelay: `${i * 0.05}s`
+                          }}
+                        />
+                      );
+                    })}
                   </div>
                 )}
               </div>

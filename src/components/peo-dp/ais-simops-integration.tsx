@@ -152,10 +152,11 @@ export const AISSimopsIntegration: React.FC = () => {
     if (!isAISEnabled) return;
     
     const interval = setInterval(() => {
-      setVessels(prev => prev.map(v => ({
+      const elapsed = Date.now() / 1000;
+      setVessels(prev => prev.map((v, idx) => ({
         ...v,
-        distance: v.distance + (Math.random() - 0.5) * 50,
-        speed: Math.max(0, v.speed + (Math.random() - 0.5) * 0.5)
+        distance: v.distance + Math.sin(elapsed / (8 + idx * 3)) * 10,
+        speed: Math.max(0, v.speed + Math.sin(elapsed / (6 + idx * 2)) * 0.1)
       })));
       setLastUpdate(new Date());
     }, 5000);

@@ -174,7 +174,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
     setIsAnalyzing(true);
     
     setTimeout(() => {
-      setSystemAccuracy(97 + Math.random() * 2);
+      setSystemAccuracy(98.2);
       setIsAnalyzing(false);
       toast({
         title: "✅ Análise IA Completa",

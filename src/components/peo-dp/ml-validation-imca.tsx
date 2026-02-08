@@ -203,7 +203,7 @@ export const MLValidationIMCA: React.FC = () => {
 
     // Simulate ML validation
     setTimeout(() => {
-      setOverallScore(prev => Math.min(100, prev + Math.floor(Math.random() * 5)));
+      setOverallScore(prev => Math.min(100, prev + 3));
       setIsAnalyzing(false);
       toast.success("Validação concluída!", {
         description: "12 recomendações IMCA geradas"
