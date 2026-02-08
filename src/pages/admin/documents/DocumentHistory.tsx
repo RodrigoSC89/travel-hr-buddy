@@ -41,32 +41,26 @@ export default function DocumentHistoryPage() {
   const loadVersions = async () => {
     try {
       setLoading(true);
-      // Use explicit foreign key relationship for author email
-      const { data, error } = await (supabase as any)
+      // Query document_versions with proper schema fields
+      const docId = id as string;
+      const { data, error } = await supabase
         .from("document_versions")
-        .select(`
-          id,
-          document_id,
-          content,
-          created_at,
-          updated_by,
-          profiles!document_versions_updated_by_fkey(email)
-        `)
-        .eq("document_id", id)
-        .order("created_at", { ascending: false });
+        .select("id, document_id, document_snapshot, changed_at, changed_by, change_summary, file_path")
+        .eq("document_id", docId)
+        .order("changed_at", { ascending: false });
 
       if (error) throw error;
 
-      // Transform data with author email
-      const transformedData = (data || []).map((version: any) => {
-        const profiles = version.profiles as unknown as { email: string } | null;
+      // Transform data mapping schema fields to interface
+      const transformedData: DocumentVersion[] = (data || []).map((version) => {
+        const snapshot = version.document_snapshot as Record<string, unknown> | null;
         return {
           id: version.id,
-          document_id: version.document_id,
-          content: version.content,
-          created_at: version.created_at,
-          updated_by: version.updated_by,
-          author_email: profiles?.email || "Desconhecido",
+          document_id: version.document_id || "",
+          content: snapshot ? (typeof snapshot === 'string' ? snapshot : JSON.stringify(snapshot)) : version.change_summary || "",
+          created_at: version.changed_at || "",
+          updated_by: version.changed_by,
+          author_email: version.changed_by || "Desconhecido",
         };
       });
 
@@ -107,7 +101,7 @@ export default function DocumentHistoryPage() {
     setRestoring(versionId);
     try {
       // Update the document with the version content
-      const { error: updateError } = await (supabase as any)
+      const { error: updateError } = await supabase
         .from("ai_generated_documents")
         .update({ content: versionContent })
         .eq("id", id);

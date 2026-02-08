@@ -128,7 +128,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       setIsLoading(true);
       if (!user?.id) return;
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("price_alerts")
         .select("*")
         .eq("user_id", user.id)
@@ -137,20 +137,20 @@ export const CompletePriceAlertsUI: React.FC = () => {
       if (error) throw error;
 
       // Map data to expected interface
-      setAlerts((data || []).map((a: Record<string, unknown>) => ({
-        id: String(a.id || ""),
-        route: String(a.route || a.product_name || ""),
-        origin: String(a.origin || ""),
-        destination: String(a.destination || ""),
-        target_price: Number(a.target_price || 0),
-        current_price: a.current_price != null ? Number(a.current_price) : undefined,
-        threshold_type: String(a.threshold_type || "below"),
-        is_active: Boolean(a.is_active),
-        email_notifications: Boolean(a.email_notifications),
-        visual_notifications: Boolean(a.visual_notifications),
-        created_at: String(a.created_at || new Date().toISOString()),
-        last_checked: a.last_checked ? String(a.last_checked) : undefined,
-        triggered_at: a.triggered_at ? String(a.triggered_at) : undefined,
+      setAlerts((data || []).map((a) => ({
+        id: a.id,
+        route: a.route || a.product_name || "",
+        origin: a.origin || "",
+        destination: a.destination || "",
+        target_price: a.target_price,
+        current_price: a.current_price ?? null,
+        threshold_type: (a.threshold_type === "above" ? "above" : "below") as "below" | "above",
+        is_active: a.is_active,
+        email_notifications: a.email_notifications ?? false,
+        visual_notifications: a.visual_notifications ?? false,
+        created_at: a.created_at,
+        last_checked_at: a.last_checked_at || undefined,
+        user_id: a.user_id,
       })));
     } catch (error) {
       logger.error("Error loading alerts:", error);
@@ -185,14 +185,15 @@ export const CompletePriceAlertsUI: React.FC = () => {
     try {
       const route = `${newAlert.origin} → ${newAlert.destination}`;
       
-      const { error } = await (supabase as any).from("price_alerts").insert({
+      const { error } = await supabase.from("price_alerts").insert({
         product_name: route,
+        product_url: "#", // placeholder URL for travel routes
         target_price: parseFloat(newAlert.target_price),
         threshold_type: newAlert.threshold_type,
         email_notifications: newAlert.email_notifications,
         visual_notifications: newAlert.visual_notifications,
         is_active: true,
-        user_id: user?.id,
+        user_id: user?.id || "",
       });
 
       if (error) throw error;
@@ -385,7 +386,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
             <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{activeAlerts}</div>
+            <div className="text-2xl font-bold text-primary">{activeAlerts}</div>
           </CardContent>
         </Card>
 
@@ -465,7 +466,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
                             deleteAlert(alert.id);
                           }}
                         >
-                          <Trash2 className="h-3 w-3 text-red-500" />
+                          <Trash2 className="h-3 w-3 text-destructive" />
                         </Button>
                         <Button
                           size="sm"

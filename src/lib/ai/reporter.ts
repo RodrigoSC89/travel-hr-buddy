@@ -15,9 +15,9 @@ export const reportInsight = async (category: string, payload: unknown): Promise
     // Armazena localmente e envia depois
     localStorage.setItem(`insight-${entry.timestamp}`, JSON.stringify(entry));
 
-    // Envia em background sem bloquear a UI usando ai_logs table instead
+    // Envia em background sem bloquear a UI usando ai_logs table
     queueMicrotask(async () => {
-      await (supabase as any).from("ai_logs").insert({
+      await supabase.from("ai_logs").insert({
         service: "insight_reporter",
         prompt_hash: category,
         prompt_length: JSON.stringify(payload).length,
