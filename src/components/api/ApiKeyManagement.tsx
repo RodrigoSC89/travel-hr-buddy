@@ -94,10 +94,13 @@ export const ApiKeyManagement: React.FC = () => {
   };
 
   const generateApiKey = (): string => {
+    // Use crypto.getRandomValues for secure key generation
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let key = "naut_";
     for (let i = 0; i < 32; i++) {
-      key += chars.charAt(Math.floor(Math.random() * chars.length));
+      key += chars.charAt(array[i] % chars.length);
     }
     return key;
   };

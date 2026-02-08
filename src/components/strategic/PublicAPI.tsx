@@ -201,7 +201,7 @@ export const PublicAPI = () => {
   };
 
   const generateNewKey = () => {
-    const newKey = `naut_live_sk_${Math.random().toString(36).substring(2, 15)}`;
+    const newKey = `naut_live_sk_${crypto.randomUUID().replace(/-/g, '').substring(0, 13)}`;
     setApiKey(newKey);
     toast({
       title: "Nova chave gerada",

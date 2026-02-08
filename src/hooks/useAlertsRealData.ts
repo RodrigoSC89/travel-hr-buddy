@@ -214,7 +214,7 @@ export function useAlertsRealData() {
         .eq('id', alertId);
 
       if (error) {
-        console.log('Alert acknowledged locally:', alertId);
+        // Acknowledged locally if table update fails
       }
 
       return alertId;
@@ -236,7 +236,7 @@ export function useAlertsRealData() {
         .eq('id', alertId);
 
       if (error) {
-        console.log('Alert resolved locally:', alertId);
+        // Resolved locally if table update fails
       }
 
       return alertId;

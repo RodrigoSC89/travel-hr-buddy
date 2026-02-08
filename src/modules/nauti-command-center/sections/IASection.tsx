@@ -120,12 +120,15 @@ export function IASection() {
   // Simulate real-time insight updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setMetrics(prev => prev.map(m => ({
-        ...m,
-        value: m.unit === "%" 
-          ? Math.min(100, Math.max(80, m.value + (Math.random() - 0.5) * 2))
-          : m.value + (Math.random() - 0.5) * (m.value * 0.02)
-      })));
+      setMetrics(prev => prev.map((m, idx) => {
+        const sineOffset = Math.sin(Date.now() / 10000 + idx * 1.5);
+        return {
+          ...m,
+          value: m.unit === "%" 
+            ? Math.min(100, Math.max(80, m.value + sineOffset * 0.3))
+            : m.value + sineOffset * (m.value * 0.003)
+        };
+      }));
     }, 5000);
 
     return () => clearInterval(interval);

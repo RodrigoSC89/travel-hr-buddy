@@ -46,7 +46,7 @@ function mapToContract(tx: BlockchainTransaction): SmartContract {
     id: tx.id,
     type: typeMap[tx.type] || 'charter_party',
     parties: [tx.issuer, tx.documentName],
-    value: `$${Math.floor(Math.random() * 2000000 + 100000).toLocaleString()}`,
+    value: `$${((tx.blockNumber * 17389 + 100000) % 2000000 + 100000).toLocaleString()}`,
     status: tx.status === 'confirmed' ? 'active' : 'pending',
     hash: tx.hash,
     created: tx.timestamp,

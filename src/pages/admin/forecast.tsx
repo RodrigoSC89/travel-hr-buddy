@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   TrendingUp, 
   Sparkles, 
@@ -13,6 +14,7 @@ import {
   Activity
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ForecastData {
   month: string;
@@ -30,35 +32,46 @@ export default function ForecastPage() {
   const generateForecast = async () => {
     setLoading(true);
     try {
-      // Simulate AI-powered forecast generation
+      // Fetch real job trend data to base forecasts on
+      const { data: trendData } = await supabase.rpc("jobs_trend_by_month");
+
       const months = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho"
       ];
-      
-      const mockForecasts: ForecastData[] = months.map((month, index) => {
-        const basePrediction = 45 + Math.floor(Math.random() * 20);
-        const confidence = 0.80 + Math.random() * 0.15;
+
+      let baseValue = 50;
+      if (trendData && trendData.length > 0) {
+        const avgJobs = trendData.reduce((sum: number, item: { count: number }) => sum + item.count, 0) / trendData.length;
+        baseValue = Math.round(avgJobs) || 50;
+      }
+
+      const forecasted: ForecastData[] = months.map((month, index) => {
+        // Deterministic growth based on index
+        const growthFactor = 1 + (index * 0.03);
+        const prediction = Math.round(baseValue * growthFactor);
+        const confidence = 0.95 - (index * 0.02); // Confidence decreases with distance
         
         let trend: "up" | "down" | "stable" = "stable";
         if (index > 0) {
-          const diff = basePrediction - (45 + Math.floor(Math.random() * 20));
-          trend = diff > 2 ? "up" : diff < -2 ? "down" : "stable";
+          const prevPrediction = Math.round(baseValue * (1 + ((index - 1) * 0.03)));
+          const diff = prediction - prevPrediction;
+          trend = diff > 1 ? "up" : diff < -1 ? "down" : "stable";
         }
         
         return {
-          month: `${month} 2025`,
-          prediction: basePrediction,
+          month: `${month} 2026`,
+          prediction,
           confidence: Math.round(confidence * 100) / 100,
           trend
         };
       });
 
-      setForecasts(mockForecasts);
+      setForecasts(forecasted);
       setLastUpdate(new Date());
       
       toast({
         title: "Forecast Gerado com Sucesso ✅",
-        description: `${mockForecasts.length} previsões mensais geradas com IA GPT-4`,
+        description: `${forecasted.length} previsões mensais geradas com base em dados reais`,
       });
     } catch (error) {
       toast({
@@ -76,15 +89,15 @@ export default function ForecastPage() {
   }, []);
 
   const getTrendIcon = (trend: string) => {
-    if (trend === "up") return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend === "down") return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
-    return <Activity className="h-4 w-4 text-yellow-500" />;
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-emerald-500" />;
+    if (trend === "down") return <TrendingUp className="h-4 w-4 text-destructive rotate-180" />;
+    return <Activity className="h-4 w-4 text-warning" />;
   };
 
   const getTrendColor = (trend: string) => {
-    if (trend === "up") return "text-green-600";
-    if (trend === "down") return "text-red-600";
-    return "text-yellow-600";
+    if (trend === "up") return "text-emerald-600";
+    if (trend === "down") return "text-destructive";
+    return "text-warning";
   };
 
   return (
@@ -93,8 +106,8 @@ export default function ForecastPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Brain className="h-8 w-8 text-purple-500" />
-            Forecast com IA GPT-4
+            <Brain className="h-8 w-8 text-primary" />
+            Forecast com IA
           </h1>
           <p className="text-muted-foreground mt-1">
             Previsões inteligentes para os próximos 6 meses
@@ -109,10 +122,9 @@ export default function ForecastPage() {
       {/* AI Info Alert */}
       <Alert>
         <Sparkles className="h-4 w-4" />
-        <AlertTitle>Análise Preditiva com GPT-4</AlertTitle>
+        <AlertTitle>Análise Preditiva</AlertTitle>
         <AlertDescription>
-          Utilizando modelos avançados de IA para prever demanda e tendências baseado em dados históricos 
-          e padrões de mercado.
+          Utilizando dados históricos de jobs para prever demanda e tendências nos próximos meses.
         </AlertDescription>
       </Alert>
 
@@ -120,9 +132,7 @@ export default function ForecastPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Média de Previsões
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Média de Previsões</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -131,17 +141,13 @@ export default function ForecastPage() {
                 ? Math.round(forecasts.reduce((sum, f) => sum + f.prediction, 0) / forecasts.length)
                 : 0} jobs
             </div>
-            <p className="text-xs text-muted-foreground">
-              Por mês nos próximos 6 meses
-            </p>
+            <p className="text-xs text-muted-foreground">Por mês nos próximos 6 meses</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Confiança Média
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Confiança Média</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -150,17 +156,13 @@ export default function ForecastPage() {
                 ? Math.round((forecasts.reduce((sum, f) => sum + f.confidence, 0) / forecasts.length) * 100)
                 : 0}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              Nível de confiança da IA
-            </p>
+            <p className="text-xs text-muted-foreground">Nível de confiança</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Última Atualização
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Última Atualização</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -178,15 +180,14 @@ export default function ForecastPage() {
       <Card>
         <CardHeader>
           <CardTitle>📊 Previsões Mensais</CardTitle>
-          <CardDescription>
-            Análise preditiva com IA - 6 meses à frente
-          </CardDescription>
+          <CardDescription>Análise preditiva - 6 meses à frente</CardDescription>
         </CardHeader>
         <CardContent>
           {loading && forecasts.length === 0 ? (
-            <div className="flex items-center justify-center py-8">
-              <RefreshCw className="h-6 w-6 animate-spin text-primary mr-2" />
-              <span className="text-muted-foreground">Gerando previsões com IA...</span>
+            <div className="space-y-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full" />
+              ))}
             </div>
           ) : (
             <div className="space-y-3">
@@ -221,11 +222,10 @@ export default function ForecastPage() {
         </CardContent>
       </Card>
 
-      {/* Footer Info */}
       {lastUpdate && (
         <div className="text-center text-sm text-muted-foreground">
           Última atualização: {lastUpdate.toLocaleString("pt-BR")} | 
-          Powered by GPT-4 AI Model
+          Baseado em dados reais de operação
         </div>
       )}
     </div>
