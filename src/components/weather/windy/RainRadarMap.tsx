@@ -123,7 +123,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
               Math.pow(point.lat - location.lat, 2) + 
               Math.pow(point.lon - location.lon, 2)
             );
-            const variation = Math.random() * 0.5 + 0.5;
+            const variation = 0.5 + Math.sin(distance * 3.7 + i * 0.5) * 0.25;
             const localPrecip = precipitation * variation * Math.max(0, 1 - distance / 3);
             
             return {

@@ -165,7 +165,7 @@ export const OfflineSyncManager: React.FC = () => {
       }
     ];
 
-    const randomAction = sampleActions[Math.floor(Math.random() * sampleActions.length)];
+    const randomAction = sampleActions[Date.now() % sampleActions.length];
     await addPendingChange(randomAction.action, randomAction.data);
     
     toast({

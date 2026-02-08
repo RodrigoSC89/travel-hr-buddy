@@ -129,11 +129,12 @@ export function TrackingCommandCenter() {
     if (!isLive) return;
     
     const interval = setInterval(() => {
-      setPositions(prev => prev.map(pos => ({
+      const elapsed = Date.now() / 1000;
+      setPositions(prev => prev.map((pos, idx) => ({
         ...pos,
         lastUpdate: new Date(),
-        speed: pos.status === "underway" ? pos.speed + (Math.random() - 0.5) * 0.5 : 0,
-        course: pos.status === "underway" ? pos.course + (Math.random() - 0.5) * 2 : pos.course,
+        speed: pos.status === "underway" ? pos.speed + Math.sin(elapsed / 10 + idx * 2.3) * 0.25 : 0,
+        course: pos.status === "underway" ? pos.course + Math.sin(elapsed / 15 + idx * 1.7) * 1 : pos.course,
       })));
     }, 5000);
 

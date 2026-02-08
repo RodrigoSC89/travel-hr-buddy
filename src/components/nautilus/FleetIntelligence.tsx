@@ -54,21 +54,33 @@ export function FleetIntelligence() {
       }
 
       if (data && data.length > 0) {
-        const mappedVessels: VesselStatus[] = data.map((v) => ({
-          id: v.id,
-          name: v.name || "Embarcação",
-          status: mapVesselStatus(v.status),
-          fuelLevel: v.current_fuel_level ? Math.min(100, (v.current_fuel_level / 15)) : 50 + Math.random() * 40,
-          speed: v.status === "active" ? 8 + Math.random() * 12 : 0,
-          position: {
-            lat: -23.5505 + Math.random() * 5, 
-            lng: -46.6333 + Math.random() * 5 
-          },
-          nextPort: v.current_location || "Santos, BR",
-          eta: new Date(Date.now() + Math.random() * 86400000 * 3).toISOString(),
-          alerts: Math.floor(Math.random() * 3),
-          efficiency: 75 + Math.random() * 20,
-        }));
+        const hashStr = (s: string) => s.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+        const portCoords = [
+          { lat: -23.95, lng: -46.30 },
+          { lat: 51.90, lng: 4.50 },
+          { lat: 1.26, lng: 103.84 },
+          { lat: 29.37, lng: 47.97 },
+          { lat: 31.23, lng: 121.47 },
+        ];
+        const mappedVessels: VesselStatus[] = data.map((v, idx) => {
+          const seed = hashStr(v.id || v.name || `v${idx}`);
+          const port = portCoords[idx % portCoords.length];
+          return {
+            id: v.id,
+            name: v.name || "Embarcação",
+            status: mapVesselStatus(v.status),
+            fuelLevel: v.current_fuel_level ? Math.min(100, (v.current_fuel_level / 15)) : 50 + ((seed * 3) % 40),
+            speed: v.status === "active" ? 8 + ((seed * 7 + idx * 11) % 12) : 0,
+            position: {
+              lat: port.lat + ((seed % 50) - 25) / 100,
+              lng: port.lng + ((seed % 50) - 25) / 100
+            },
+            nextPort: v.current_location || "Santos, BR",
+            eta: new Date(Date.now() + ((seed * 11 + idx * 23) % 3 + 1) * 86400000).toISOString(),
+            alerts: (seed * 5 + idx * 3) % 3,
+            efficiency: 75 + ((seed * 9 + idx * 7) % 20),
+          };
+        });
         setVessels(mappedVessels);
       } else {
         setVessels(getDemoVessels());

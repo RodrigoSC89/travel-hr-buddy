@@ -111,8 +111,8 @@ const generateAuditItems = (): AuditItem[] => {
   ];
 
   return Array.from({ length: 40 }, (_, i) => {
-    const criticidade = criticidades[Math.floor(Math.random() * criticidades.length)];
-    const conforme = Math.random() > 0.2 ? true : (Math.random() > 0.3 ? false : null);
+    const criticidade = criticidades[(i * 7 + 3) % criticidades.length];
+    const conforme = (i % 5 !== 0) ? true : ((i % 3 !== 0) ? false : null);
     
     return {
       id: `item-${i + 1}`,

@@ -85,15 +85,32 @@ export function GlobalOperationsMap() {
         .limit(20);
 
       if (data) {
-        // Generate mock positions for demo (vessels around Brazil/Atlantic)
+        // Deterministic positions based on major global ports
+        const portPositions = [
+          { lat: -23.95, lng: -46.30 },  // Santos, BR
+          { lat: 51.90, lng: 4.50 },     // Rotterdam, NL
+          { lat: 1.26, lng: 103.84 },    // Singapore
+          { lat: 29.37, lng: 47.97 },    // Kuwait
+          { lat: 31.23, lng: 121.47 },   // Shanghai
+          { lat: -33.86, lng: 18.42 },   // Cape Town
+          { lat: 35.44, lng: 139.64 },   // Yokohama
+          { lat: 22.28, lng: 114.17 },   // Hong Kong
+          { lat: 40.42, lng: -74.00 },   // New York
+          { lat: 59.33, lng: 18.07 },    // Stockholm
+        ];
+        const hashStr = (s: string) => s.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
         setVessels(
-          data.map((v, idx) => ({
-            id: v.id,
-            name: v.name,
-            latitude: -23 + (idx * 3) + (Math.random() * 5),
-            longitude: -46 + (idx * 4) + (Math.random() * 10),
-            status: (v.status as VesselLocation["status"]) || "active",
-          }))
+          data.map((v, idx) => {
+            const port = portPositions[idx % portPositions.length];
+            const seed = hashStr(v.id || `v${idx}`);
+            return {
+              id: v.id,
+              name: v.name,
+              latitude: port.lat + ((seed % 100) - 50) / 100,
+              longitude: port.lng + ((seed % 80) - 40) / 100,
+              status: (v.status as VesselLocation["status"]) || "active",
+            };
+          })
         );
       }
     } catch (err) {

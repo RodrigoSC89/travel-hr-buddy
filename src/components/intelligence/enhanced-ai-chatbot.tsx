@@ -239,7 +239,7 @@ const EnhancedAIChatbot: React.FC = () => {
 
       setMessages(prev => [...prev, aiMessage]);
       setIsProcessing(false);
-    }, Math.random() * 1000 + 1500); // Variação realística no tempo de resposta
+    }, 2000); // Tempo de resposta fixo para estabilidade
     timeoutsRef.current.push(timeout);
   };
 
@@ -251,27 +251,27 @@ const EnhancedAIChatbot: React.FC = () => {
         sources: ["Sistema Nautilus One", "Base de Conhecimento", "Logs Operacionais"]
       },
       analysis: {
-        content: `📊 **Análise Detalhada Concluída**\n\nProcessei ${Math.floor(Math.random() * 5000 + 1000)} pontos de dados relacionados à sua consulta:\n\n📈 **Tendências Identificadas**:\n• Crescimento de 18% nas métricas principais\n• Eficiência operacional em 94.7%\n• 3 oportunidades de otimização detectadas\n\n🎯 **Insights Principais**:\n• Performance superior à média do setor\n• Padrão sazonal identificado nos dados\n• Recomendo revisão dos processos do Módulo B\n\n🔍 **Próximos Passos**: Implementar as otimizações sugeridas pode resultar em 12% de melhoria adicional.`,
+        content: `📊 **Análise Detalhada Concluída**\n\nProcessei 3.247 pontos de dados relacionados à sua consulta:\n\n📈 **Tendências Identificadas**:\n• Crescimento de 18% nas métricas principais\n• Eficiência operacional em 94.7%\n• 3 oportunidades de otimização detectadas\n\n🎯 **Insights Principais**:\n• Performance superior à média do setor\n• Padrão sazonal identificado nos dados\n• Recomendo revisão dos processos do Módulo B\n\n🔍 **Próximos Passos**: Implementar as otimizações sugeridas pode resultar em 12% de melhoria adicional.`,
         confidence: 96,
         sources: ["Analytics Engine", "Historical Data", "Benchmarking DB"]
       },
       prediction: {
-        content: `🔮 **Previsão Avançada - Modelo ML v3.2**\n\nAnálise preditiva baseada em ${Math.floor(Math.random() * 50 + 20)} variáveis:\n\n📊 **Previsões para próximos 30 dias**:\n• Probabilidade de 87% de atingir metas estabelecidas\n• Aumento previsto de 23% na demanda\n• Otimização de recursos pode economizar R$ 45.000\n\n⚠️ **Alertas Preditivos**:\n• Possível pico de demanda na semana 3\n• Manutenção preventiva recomendada para 2 equipamentos\n• Ajuste de equipe sugerido para período de alta\n\n🎯 **Confiança do Modelo**: ${90 + Math.floor(Math.random() * 8)}% (baseado em histórico de 24 meses)`,
+        content: `🔮 **Previsão Avançada - Modelo ML v3.2**\n\nAnálise preditiva baseada em 34 variáveis:\n\n📊 **Previsões para próximos 30 dias**:\n• Probabilidade de 87% de atingir metas estabelecidas\n• Aumento previsto de 23% na demanda\n• Otimização de recursos pode economizar R$ 45.000\n\n⚠️ **Alertas Preditivos**:\n• Possível pico de demanda na semana 3\n• Manutenção preventiva recomendada para 2 equipamentos\n• Ajuste de equipe sugerido para período de alta\n\n🎯 **Confiança do Modelo**: 94% (baseado em histórico de 24 meses)`,
         confidence: 94,
         sources: ["ML Model v3.2", "Predictive Analytics", "Historical Patterns"]
       },
       recommendation: {
-        content: `💡 **Recomendações Inteligentes**\n\nCom base na análise da sua solicitação, identifiquei ${Math.floor(Math.random() * 8 + 3)} oportunidades:\n\n🚀 **Implementação Imediata** (ROI: 2-4 semanas):\n• Automatizar aprovações no módulo de checklists\n• Otimizar roteamento de notificações\n• Implementar cache inteligente de dados\n\n⭐ **Melhorias Estratégicas** (ROI: 2-3 meses):\n• Integração com APIs externas para dados meteorológicos\n• Dashboard preditivo personalizado\n• Sistema de alertas proativos\n\n🎯 **Impacto Estimado**:\n• ⬆️ 28% de eficiência operacional\n• ⬇️ 15% de redução de custos\n• ⬆️ 35% de satisfação da equipe\n\n📋 **Plano de Ação**: Quer que eu detalhe a implementação de alguma recomendação específica?`,
+        content: `💡 **Recomendações Inteligentes**\n\nCom base na análise da sua solicitação, identifiquei 7 oportunidades:\n\n🚀 **Implementação Imediata** (ROI: 2-4 semanas):\n• Automatizar aprovações no módulo de checklists\n• Otimizar roteamento de notificações\n• Implementar cache inteligente de dados\n\n⭐ **Melhorias Estratégicas** (ROI: 2-3 meses):\n• Integração com APIs externas para dados meteorológicos\n• Dashboard preditivo personalizado\n• Sistema de alertas proativos\n\n🎯 **Impacto Estimado**:\n• ⬆️ 28% de eficiência operacional\n• ⬇️ 15% de redução de custos\n• ⬆️ 35% de satisfação da equipe\n\n📋 **Plano de Ação**: Quer que eu detalhe a implementação de alguma recomendação específica?`,
         confidence: 91,
         sources: ["Best Practices DB", "Industry Benchmarks", "Optimization Engine"]
       },
       voice: {
-        content: `🎙️ **Comando de Voz Processado**\n\nReconheci sua solicitação por voz com precisão de ${95 + Math.floor(Math.random() * 5)}%:\n\n✅ **Comando Interpretado**: "${input}"\n🔄 **Ação Executada**: Processamento em andamento\n📊 **Contexto Detectado**: ${selectedCapability}\n\n🗣️ **Dica**: Para melhor reconhecimento, fale claramente e evite ruídos de fundo.\n\n💬 **Resposta**: Processando sua solicitação via comando de voz...`,
+        content: `🎙️ **Comando de Voz Processado**\n\nReconheci sua solicitação por voz com precisão de 97%:\n\n✅ **Comando Interpretado**: "${input}"\n🔄 **Ação Executada**: Processamento em andamento\n📊 **Contexto Detectado**: ${selectedCapability}\n\n🗣️ **Dica**: Para melhor reconhecimento, fale claramente e evite ruídos de fundo.\n\n💬 **Resposta**: Processando sua solicitação via comando de voz...`,
         confidence: 88,
         sources: ["Speech Recognition API", "Voice Processing Engine", "Context Analyzer"]
       },
       image: {
-        content: `📸 **Análise Visual Completa**\n\nProcessei a imagem/documento enviado:\n\n🔍 **Elementos Detectados**:\n• Formato: ${["PDF", "JPG", "PNG", "DOC"][Math.floor(Math.random() * 4)]}\n• Qualidade: ${85 + Math.floor(Math.random() * 15)}%\n• Texto extraído: ${Math.floor(Math.random() * 500 + 100)} caracteres\n• Objetos identificados: ${Math.floor(Math.random() * 10 + 3)}\n\n📋 **Informações Extraídas**:\n• Tipo de documento: Operacional\n• Data identificada: ${new Date().toLocaleDateString("pt-BR")}\n• Status de conformidade: ✅ Aprovado\n\n🔄 **Processamento OCR**: Texto convertido e indexado para busca.\n\n💡 **Sugestão**: Documento processado com sucesso. Posso ajudar com análise específica do conteúdo?`,
+        content: `📸 **Análise Visual Completa**\n\nProcessei a imagem/documento enviado:\n\n🔍 **Elementos Detectados**:\n• Formato: PDF\n• Qualidade: 92%\n• Texto extraído: 350 caracteres\n• Objetos identificados: 6\n\n📋 **Informações Extraídas**:\n• Tipo de documento: Operacional\n• Data identificada: ${new Date().toLocaleDateString("pt-BR")}\n• Status de conformidade: ✅ Aprovado\n\n🔄 **Processamento OCR**: Texto convertido e indexado para busca.\n\n💡 **Sugestão**: Documento processado com sucesso. Posso ajudar com análise específica do conteúdo?`,
         confidence: 89,
         sources: ["OCR Engine", "Image Recognition API", "Document Parser"]
       }
@@ -303,7 +303,7 @@ const EnhancedAIChatbot: React.FC = () => {
           "Verificar conformidade PEOTRAM",
           "Mostrar alertas pendentes"
         ];
-        const randomCommand = voiceCommands[Math.floor(Math.random() * voiceCommands.length)];
+        const randomCommand = voiceCommands[Date.now() % voiceCommands.length];
         setInputMessage(randomCommand);
         setSelectedCapability("voice");
         setIsVoiceActive(false);

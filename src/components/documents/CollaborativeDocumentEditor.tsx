@@ -54,9 +54,9 @@ export function CollaborativeDocumentEditor({
   const providerRef = useRef<WebrtcProvider | null>(null);
   const editorRef = useRef<Editor | null>(null);
 
-  // Generate a random color for user cursor
+  // Generate a stable color based on component mount time
   const randomColor = useRef(
-    `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
+    `hsl(${Date.now() % 360}, 70%, 50%)`
   );
 
   // Save content to database
