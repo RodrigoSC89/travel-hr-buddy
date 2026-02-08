@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -169,7 +170,7 @@ export function TanksManagement() {
           vessel_id: tank.vessel_id,
           notes: notes,
         });
-      if (recordError) console.warn("Could not create waste_record:", recordError);
+      if (recordError) logger.warn("Could not create waste_record: " + recordError.message);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["waste-tanks-management"] });

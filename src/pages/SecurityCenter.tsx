@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
+import { logger } from "@/lib/logger";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -117,7 +118,7 @@ function useSecurityData() {
         // PII fields - dados estáticos de referência (são definidos no schema)
         setPiiFields([]);
       } catch (error) {
-        console.error("Error fetching security data:", error);
+        logger.error("Error fetching security data", error as Error);
       } finally {
         setLoading(false);
       }

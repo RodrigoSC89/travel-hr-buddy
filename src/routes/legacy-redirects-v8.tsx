@@ -12,6 +12,7 @@
  */
 
 import { Navigate, useSearchParams, useLocation } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 /**
  * Complete map of legacy routes to new canonical routes
@@ -240,7 +241,7 @@ export function LegacyRedirectV8({ from }: { from: string }) {
   
   if (!to) {
     // Fallback to command center if route not found
-    console.warn(`Legacy route not found: ${from}, redirecting to /command`);
+    logger.warn(`Legacy route not found: ${from}, redirecting to /command`);
     return <Navigate to="/command" replace />;
   }
   

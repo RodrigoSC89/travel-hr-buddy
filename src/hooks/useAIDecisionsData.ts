@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface AIDecision {
   id: string;
@@ -39,7 +40,7 @@ export function useAIDecisions(limit = 20) {
         .limit(limit);
 
       if (error) {
-        console.error('[useAIDecisions] Error:', error);
+        logger.error('[useAIDecisions] Error', error as Error);
         throw error;
       }
 
@@ -134,7 +135,7 @@ export function useAILearningMetrics() {
         .limit(30);
 
       if (error) {
-        console.error('[useAILearningMetrics] Error:', error);
+        logger.error('[useAILearningMetrics] Error', error as Error);
         return [];
       }
 

@@ -55,7 +55,7 @@ export async function callAgent(
   });
 
   if (error) {
-    console.error(`[callAgent] Error from ${agentContext.name}:`, error);
+    logger.error(`[callAgent] Error from ${agentContext.name}`, error as Error);
     throw new Error(`Failed to get response from ${agentContext.name}: ${error.message}`);
   }
 
@@ -178,7 +178,7 @@ export async function streamAgent(
     onDone();
   } catch (err) {
     const error = err instanceof Error ? err : new Error(String(err));
-    console.error(`[streamAgent] Error from ${agentContext.name}:`, error);
+    logger.error(`[streamAgent] Error from ${agentContext.name}`, error);
     onError?.(error);
   }
 }

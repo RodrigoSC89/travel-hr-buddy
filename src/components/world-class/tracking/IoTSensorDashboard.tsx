@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { trackingIntelligence, type IoTSensor, type IoTAlert } from '@/services/tracking/tracking-intelligence.service';
+import { logger } from '@/lib/logger';
 
 const SENSOR_ICONS: Record<string, React.ComponentType<any>> = {
   temperature: Thermometer,
@@ -54,7 +55,7 @@ export function IoTSensorDashboard() {
         criticalAlerts: data.stats.criticalAlerts,
       });
     } catch (err) {
-      console.error('IoT dashboard error:', err);
+      logger.error('IoT dashboard error', err as Error);
       toast.error('Erro ao carregar dados IoT');
     } finally {
       setLoading(false);

@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { esgIntelligence, type EmissionsData, type CarbonFootprint } from '@/services/esg';
 import { useESGWasteAI } from '@/hooks/useESGWasteAI';
+import { logger } from '@/lib/logger';
 
 export function CarbonFootprintTracker() {
   const [emissions, setEmissions] = useState<EmissionsData[]>([]);
@@ -29,7 +30,7 @@ export function CarbonFootprintTracker() {
       setEmissions(data.emissions);
       setCarbonFP(data.carbonFootprint);
     } catch (err) {
-      console.error('Carbon tracker error:', err);
+      logger.error('Carbon tracker error', err as Error);
       toast.error('Erro ao carregar dados de carbono');
     } finally {
       setLoading(false);

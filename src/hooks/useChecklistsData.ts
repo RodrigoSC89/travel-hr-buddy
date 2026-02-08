@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import type { Json } from '@/integrations/supabase/types';
 
 export interface ChecklistItem {
@@ -58,7 +59,7 @@ export function useChecklists() {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('[useChecklists] Error:', error);
+        logger.error('[useChecklists] Error', error as Error);
         throw error;
       }
 

@@ -11,6 +11,7 @@ import { Mic, MicOff, Volume2, VolumeX, Bot, Brain, Loader2, Send, Waves } from 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 interface VoiceMessage {
   id: string;
@@ -110,7 +111,7 @@ export const VoiceAgentInterface: React.FC = () => {
         speak(responseText.substring(0, 500));
       }
     } catch (err) {
-      console.error("Voice agent error:", err);
+      logger.error("Voice agent error", err as Error);
       toast.error("Erro ao processar comando de voz");
       const errorMsg: VoiceMessage = {
         id: crypto.randomUUID(),
@@ -145,7 +146,7 @@ export const VoiceAgentInterface: React.FC = () => {
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
+      logger.error("Speech recognition error: " + event.error);
       setIsListening(false);
       if (event.error !== "aborted") {
         toast.error("Erro no reconhecimento de voz");

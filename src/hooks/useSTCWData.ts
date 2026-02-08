@@ -5,6 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface Competency {
   id: string;
@@ -51,7 +52,7 @@ export function useSTCWCompetencies() {
         .order('code');
 
       if (error) {
-        console.warn('STCW competencies query error:', error.message);
+        logger.warn('STCW competencies query error: ' + error.message);
         return getDefaultCompetencies();
       }
 
@@ -126,7 +127,7 @@ export function useCrewCompetencies() {
         .order('full_name');
 
       if (error) {
-        console.warn('Crew competencies query error:', error.message);
+        logger.warn('Crew competencies query error: ' + error.message);
         return [];
       }
 

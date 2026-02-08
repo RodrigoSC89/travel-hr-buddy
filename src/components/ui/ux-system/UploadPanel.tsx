@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback, useState } from "react";
+import { logger } from "@/lib/logger";
 import { useDropzone, Accept } from "react-dropzone";
 import {
   Upload,
@@ -182,7 +183,7 @@ export const UploadPanel: React.FC<UploadPanelProps> = ({
       try {
         await onDelete(fileId);
       } catch (error) {
-        console.error("Failed to delete file:", error);
+        logger.error("Failed to delete file", error as Error);
       }
     }
     onFilesChange(files.filter((f) => f.id !== fileId));

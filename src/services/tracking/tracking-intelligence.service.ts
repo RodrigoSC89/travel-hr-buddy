@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // ── Types ──────────────────────────────────────────────────────
 export interface VesselTrackingPosition {
@@ -250,7 +251,7 @@ export class TrackingIntelligenceService {
       if (error) throw error;
       return data?.data?.analysis || null;
     } catch (err) {
-      console.error('Tracking AI analysis error:', err);
+      logger.error('Tracking AI analysis error', err as Error);
       return null;
     }
   }

@@ -3,6 +3,7 @@
  * Permite resolver problemas diretamente do alerta sem navegar
  */
 import React, { useState } from "react";
+import { logger } from "@/lib/logger";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -123,7 +124,7 @@ export function ActionableAlerts({
       setResolvedIds((prev) => new Set(prev).add(alertId));
       onResolve?.(alertId);
     } catch (error) {
-      console.error("Action failed:", error);
+      logger.error("Action failed", error as Error);
     } finally {
       setProcessingIds((prev) => {
         const next = new Set(prev);

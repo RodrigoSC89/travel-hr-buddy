@@ -7,6 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import { addDays, addWeeks, addMonths, addQuarters } from "date-fns";
 
 export type ReportFrequency = "daily" | "weekly" | "monthly" | "quarterly";
@@ -104,7 +105,7 @@ export function useReportSchedulerData() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error fetching report schedules:", error);
+        logger.error("Error fetching report schedules", error as Error);
         return [];
       }
 
@@ -193,7 +194,7 @@ export function useCreateReportSchedule() {
       queryClient.invalidateQueries({ queryKey: ["report-schedules"] });
     },
     onError: (error) => {
-      console.error("Error creating schedule:", error);
+      logger.error("Error creating schedule", error as Error);
       toast.error("Erro ao criar agendamento");
     },
   });
@@ -225,7 +226,7 @@ export function useToggleScheduleActive() {
       queryClient.invalidateQueries({ queryKey: ["report-schedules"] });
     },
     onError: (error) => {
-      console.error("Error toggling schedule:", error);
+      logger.error("Error toggling schedule", error as Error);
       toast.error("Erro ao atualizar agendamento");
     },
   });
@@ -251,7 +252,7 @@ export function useDeleteSchedule() {
       queryClient.invalidateQueries({ queryKey: ["report-schedules"] });
     },
     onError: (error) => {
-      console.error("Error deleting schedule:", error);
+      logger.error("Error deleting schedule", error as Error);
       toast.error("Erro ao remover agendamento");
     },
   });
@@ -286,7 +287,7 @@ export function useRunReportNow() {
       });
     },
     onError: (error) => {
-      console.error("Error running report:", error);
+      logger.error("Error running report", error as Error);
       toast.error("Erro ao gerar relatório");
     },
   });

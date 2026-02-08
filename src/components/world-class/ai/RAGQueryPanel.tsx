@@ -14,6 +14,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 interface RAGResult {
   answer: string;
@@ -74,7 +75,7 @@ export const RAGQueryPanel: React.FC = () => {
       setQuestion("");
       setExpandedResult(0);
     } catch (err) {
-      console.error("RAG query error:", err);
+      logger.error("RAG query error", err as Error);
       toast.error("Erro ao consultar regulamentações");
     } finally {
       setIsQuerying(false);

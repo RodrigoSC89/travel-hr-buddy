@@ -19,6 +19,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { VoyageCopilotClient, type VoyagePlan } from "@/services/operations/voyage-optimizer.service";
+import { logger } from "@/lib/logger";
 
 type AnalysisTab = "route" | "bunker" | "pnl" | "risks";
 
@@ -49,7 +50,7 @@ export function VoyageAICopilotPanel() {
       setResult(data.result);
       toast({ title: "🧠 Planejamento concluído com IA" });
     } catch (err) {
-      console.error(err);
+      logger.error("Voyage planning error", err as Error);
       toast({ title: "Erro no planejamento", variant: "destructive" });
     } finally {
       setIsLoading(false);

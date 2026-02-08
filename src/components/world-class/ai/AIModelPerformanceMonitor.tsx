@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { aiControlTower, type ModelMetrics } from '@/services/ai/ai-control-tower.service';
+import { logger } from '@/lib/logger';
 
 export function AIModelPerformanceMonitor() {
   const [metrics, setMetrics] = useState<ModelMetrics[]>([]);
@@ -29,7 +30,7 @@ export function AIModelPerformanceMonitor() {
       setTotalRequests(data.totalRequests);
       setTotalTokens(data.totalTokens);
     } catch (err) {
-      console.error('Model metrics error:', err);
+      logger.error('Model metrics error', err as Error);
       toast.error('Erro ao carregar métricas de modelos');
     } finally {
       setLoading(false);
