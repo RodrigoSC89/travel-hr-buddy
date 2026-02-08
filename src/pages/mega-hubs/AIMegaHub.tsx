@@ -14,7 +14,7 @@ import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings, Wifi, Download, RefreshCw, Plus } from 'lucide-react';
+import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings, Wifi, Download, RefreshCw, Plus, Users, Bell, Database } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { AIAgentHealthDashboard } from '@/components/world-class';
@@ -37,6 +37,12 @@ const OCRCenterPage = lazy(() => import('@/pages/enterprise/OCRCenterPage'));
 const AIAnalyticsDashboard = lazy(() => import('@/pages/AIAnalyticsDashboard'));
 const AIObservabilityDashboard = lazy(() => import('@/pages/AIObservabilityDashboard'));
 
+// New Phase 3 components
+const AgentMemoryPanel = lazy(() => import('@/components/ai/AgentMemoryPanel'));
+const MultiAgentConsensus = lazy(() => import('@/components/ai/MultiAgentConsensus'));
+const AgentAnalyticsPanel = lazy(() => import('@/components/ai/AgentAnalyticsPanel'));
+const ProactiveMonitoringPanel = lazy(() => import('@/components/ai/ProactiveMonitoringPanel'));
+
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -54,11 +60,15 @@ const tabConfig = [
   { id: 'health', label: 'Agent Health', icon: Activity },
   { id: 'chat', label: 'Chat', icon: MessageSquare },
   { id: 'agents', label: 'Agents', icon: Bot },
+  { id: 'consensus', label: 'Consensus', icon: Users },
+  { id: 'memory', label: 'Memory', icon: Database },
+  { id: 'monitoring', label: 'Monitoring', icon: Bell },
   { id: 'workflows', label: 'Workflows', icon: Zap },
   { id: 'voice', label: 'Voice', icon: Mic },
   { id: 'modules', label: '11 Modules', icon: Cpu },
   { id: 'rag', label: 'RAG', icon: FileText },
   { id: 'ocr', label: 'OCR', icon: FileText },
+  { id: 'agent-analytics', label: 'Agent Analytics', icon: BarChart3 },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'observability', label: 'Observability', icon: Eye },
 ];
@@ -294,6 +304,18 @@ export default function AIMegaHub() {
               <AIAgentDirectory />
               <AutonomousCommandCenter />
             </TabsContent>
+
+            <TabsContent value="consensus" className="mt-0">
+              <MultiAgentConsensus />
+            </TabsContent>
+
+            <TabsContent value="memory" className="mt-0">
+              <AgentMemoryPanel />
+            </TabsContent>
+
+            <TabsContent value="monitoring" className="mt-0">
+              <ProactiveMonitoringPanel />
+            </TabsContent>
             
             <TabsContent value="workflows" className="mt-0">
               <WorkflowCommandCenter />
@@ -313,6 +335,10 @@ export default function AIMegaHub() {
             
             <TabsContent value="ocr" className="mt-0">
               <OCRCenterPage />
+            </TabsContent>
+            
+            <TabsContent value="agent-analytics" className="mt-0">
+              <AgentAnalyticsPanel />
             </TabsContent>
             
             <TabsContent value="analytics" className="mt-0">
