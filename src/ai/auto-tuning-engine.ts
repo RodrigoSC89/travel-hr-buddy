@@ -1,6 +1,7 @@
 /**
  * PATCH 567 - AI Auto-Tuning Engine
  * Continuous learning system that adjusts AI parameters based on real usage
+ * Fixed: Uses ai_feedback_scores (real table) instead of non-existent ai_feedback/action_logs
  */
 
 import { logger } from "@/lib/logger";
@@ -48,7 +49,6 @@ class AutoTuningEngine {
   private processingInterval: NodeJS.Timeout | null = null;
 
   constructor() {
-    // Default configuration
     this.currentConfig = {
       thresholds: {
         confidence_min: 0.7,
@@ -68,9 +68,6 @@ class AutoTuningEngine {
     };
   }
 
-  /**
-   * Start the auto-tuning engine
-   */
   async start() {
     if (this.isRunning) {
       logger.warn("[AutoTuning] Engine already running");
@@ -80,22 +77,16 @@ class AutoTuningEngine {
     this.isRunning = true;
     logger.info("[AutoTuning] Starting auto-tuning engine...");
 
-    // Load saved configuration
     await this.loadConfiguration();
 
-    // Process logs every 6 hours (21600000 ms)
     this.processingInterval = setInterval(
       () => this.processAndTune(),
       21600000
     );
 
-    // Run initial processing
     await this.processAndTune();
   }
 
-  /**
-   * Stop the engine
-   */
   stop() {
     if (this.processingInterval) {
       clearInterval(this.processingInterval);
@@ -105,40 +96,29 @@ class AutoTuningEngine {
     logger.info("[AutoTuning] Engine stopped");
   }
 
-  /**
-   * Process logs and adjust parameters
-   */
   private async processAndTune() {
     logger.info("[AutoTuning] Processing logs and tuning parameters...");
 
     try {
-      // Fetch recent AI feedback logs
       const feedbackMetrics = await this.analyzeFeedbackLogs();
-      
-      // Fetch action logs
-      const actionMetrics = await this.analyzeActionLogs();
 
-      // Combine metrics
       const metrics: TuningMetrics = {
-        total_decisions: feedbackMetrics.total + actionMetrics.total,
-        accepted_decisions: feedbackMetrics.accepted + actionMetrics.accepted,
-        rejected_decisions: feedbackMetrics.rejected + actionMetrics.rejected,
-        avg_confidence: (feedbackMetrics.avg_confidence + actionMetrics.avg_confidence) / 2,
-        avg_response_time: (feedbackMetrics.avg_time + actionMetrics.avg_time) / 2,
+        total_decisions: feedbackMetrics.total,
+        accepted_decisions: feedbackMetrics.accepted,
+        rejected_decisions: feedbackMetrics.rejected,
+        avg_confidence: feedbackMetrics.avg_confidence,
+        avg_response_time: feedbackMetrics.avg_time,
         accuracy_rate: feedbackMetrics.total > 0 
           ? feedbackMetrics.accepted / feedbackMetrics.total 
           : 0.5,
       };
 
-      // Create snapshot before adjustments
       await this.createSnapshot(metrics);
 
-      // Adjust parameters if auto-tuning is enabled
       if (this.currentConfig.rules.auto_adjust_enabled) {
         await this.adjustParameters(metrics);
       }
 
-      // Save updated configuration
       await this.saveConfiguration();
 
       logger.info("[AutoTuning] Tuning completed:", metrics);
@@ -147,9 +127,6 @@ class AutoTuningEngine {
     }
   }
 
-  /**
-   * Analyze AI feedback logs
-   */
   private async analyzeFeedbackLogs(): Promise<{
     total: number;
     accepted: number;
@@ -160,8 +137,9 @@ class AutoTuningEngine {
     try {
       const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
 
-      const { data: feedback, error } = await (supabase as any)
-        .from("ai_feedback")
+      // Use real table: ai_feedback_scores
+      const { data: feedback, error } = await supabase
+        .from("ai_feedback_scores")
         .select("*")
         .gte("created_at", sixHoursAgo);
 
@@ -171,18 +149,19 @@ class AutoTuningEngine {
       }
 
       const total = feedback?.length || 0;
-      const accepted = feedback?.filter((f: any) => f.operator_action === "accepted").length || 0;
-      const rejected = feedback?.filter((f: any) => f.operator_action === "rejected").length || 0;
+      // self_score > 0.7 = accepted, otherwise rejected
+      const accepted = feedback?.filter((f) => (f.self_score || 0) > 0.7).length || 0;
+      const rejected = total - accepted;
       
-      const confidences = feedback?.map((f: any) => f.confidence_score || 0.7) || [0.7];
-      const avg_confidence = confidences.reduce((a: number, b: number) => a + b, 0) / confidences.length;
+      const confidences = feedback?.map((f) => f.self_score || 0.7) || [0.7];
+      const avg_confidence = confidences.reduce((a, b) => a + b, 0) / confidences.length;
 
       return {
         total,
         accepted,
         rejected,
         avg_confidence,
-        avg_time: 1000, // Default
+        avg_time: 1000,
       };
     } catch (error) {
       logger.error("[AutoTuning] Error analyzing feedback:", error);
@@ -190,80 +169,24 @@ class AutoTuningEngine {
     }
   }
 
-  /**
-   * Analyze action logs
-   */
-  private async analyzeActionLogs(): Promise<{
-    total: number;
-    accepted: number;
-    rejected: number;
-    avg_confidence: number;
-    avg_time: number;
-  }> {
-    try {
-      const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
-
-      const { data: actions, error } = await (supabase as any)
-        .from("action_logs")
-        .select("*")
-        .gte("created_at", sixHoursAgo);
-
-      if (error) {
-        logger.error("[AutoTuning] Error fetching actions:", error);
-        return { total: 0, accepted: 0, rejected: 0, avg_confidence: 0.7, avg_time: 1000 };
-      }
-
-      const total = actions?.length || 0;
-      const accepted = actions?.filter((a: any) => a.status === "success").length || 0;
-      const rejected = actions?.filter((a: any) => a.status === "failed").length || 0;
-
-      return {
-        total,
-        accepted,
-        rejected,
-        avg_confidence: 0.75,
-        avg_time: 1200,
-      };
-    } catch (error) {
-      logger.error("[AutoTuning] Error analyzing actions:", error);
-      return { total: 0, accepted: 0, rejected: 0, avg_confidence: 0.7, avg_time: 1000 };
-    }
-  }
-
-  /**
-   * Adjust parameters based on metrics
-   */
   private async adjustParameters(metrics: TuningMetrics) {
     const learningRate = this.currentConfig.rules.learning_rate;
 
-    // Adjust confidence threshold based on accuracy
     if (metrics.accuracy_rate < this.currentConfig.thresholds.accuracy_target) {
-      // Lower confidence threshold to be more permissive
       this.currentConfig.thresholds.confidence_min = Math.max(
         0.5,
         this.currentConfig.thresholds.confidence_min - learningRate * 0.1
       );
-      logger.info(
-        "[AutoTuning] Lowered confidence threshold to",
-        this.currentConfig.thresholds.confidence_min
-      );
     } else if (metrics.accuracy_rate > this.currentConfig.thresholds.accuracy_target + 0.1) {
-      // Raise confidence threshold to be more strict
       this.currentConfig.thresholds.confidence_min = Math.min(
         0.95,
         this.currentConfig.thresholds.confidence_min + learningRate * 0.05
       );
-      logger.info(
-        "[AutoTuning] Raised confidence threshold to",
-        this.currentConfig.thresholds.confidence_min
-      );
     }
 
-    // Adjust weights based on performance
     const feedbackScore = metrics.accuracy_rate;
     const speedScore = Math.max(0, 1 - metrics.avg_response_time / this.currentConfig.thresholds.response_time_max);
     
-    // Rebalance weights towards better performing factors
     if (feedbackScore > speedScore) {
       this.currentConfig.weights.user_feedback = Math.min(
         0.6,
@@ -281,9 +204,6 @@ class AutoTuningEngine {
     });
   }
 
-  /**
-   * Create a snapshot of current configuration and metrics
-   */
   private async createSnapshot(metrics: TuningMetrics) {
     const performanceScore = 
       metrics.accuracy_rate * this.currentConfig.weights.accuracy +
@@ -300,30 +220,23 @@ class AutoTuningEngine {
 
     this.snapshots.push(snapshot);
 
-    // Keep only last 30 snapshots
     if (this.snapshots.length > 30) {
       this.snapshots = this.snapshots.slice(-30);
     }
 
-    // Save to localStorage
     try {
       localStorage.setItem("ai_tuning_snapshots", JSON.stringify(this.snapshots));
-      logger.info(`[AutoTuning] Snapshot created: ${snapshot.id}, Score: ${performanceScore.toFixed(3)}`);
     } catch (error) {
       logger.error("[AutoTuning] Error saving snapshot:", error);
     }
   }
 
-  /**
-   * Rollback to previous configuration
-   */
   async rollback() {
     if (this.snapshots.length < 2) {
       logger.warn("[AutoTuning] No previous snapshot to rollback to");
       return false;
     }
 
-    // Get second-to-last snapshot (last one is current)
     const previousSnapshot = this.snapshots[this.snapshots.length - 2];
     this.currentConfig = { ...previousSnapshot.config };
 
@@ -333,66 +246,47 @@ class AutoTuningEngine {
     return true;
   }
 
-  /**
-   * Load configuration from storage
-   */
   private async loadConfiguration() {
     try {
       const saved = localStorage.getItem("ai_tuning_config");
       if (saved) {
         this.currentConfig = JSON.parse(saved);
-        logger.info("[AutoTuning] Configuration loaded");
       }
 
       const savedSnapshots = localStorage.getItem("ai_tuning_snapshots");
       if (savedSnapshots) {
         this.snapshots = JSON.parse(savedSnapshots);
-        logger.info(`[AutoTuning] Loaded ${this.snapshots.length} snapshots`);
       }
     } catch (error) {
       logger.error("[AutoTuning] Error loading configuration:", error);
     }
   }
 
-  /**
-   * Save configuration to storage
-   */
   private async saveConfiguration() {
     try {
       localStorage.setItem("ai_tuning_config", JSON.stringify(this.currentConfig));
-      logger.info("[AutoTuning] Configuration saved");
     } catch (error) {
       logger.error("[AutoTuning] Error saving configuration:", error);
     }
   }
 
-  /**
-   * Get current configuration
-   */
   getConfig(): AutoTuningConfig {
     return { ...this.currentConfig };
   }
 
-  /**
-   * Get all snapshots
-   */
   getSnapshots(): ModelSnapshot[] {
     return [...this.snapshots];
   }
 
-  /**
-   * Get current metrics
-   */
   async getCurrentMetrics(): Promise<TuningMetrics> {
     const feedbackMetrics = await this.analyzeFeedbackLogs();
-    const actionMetrics = await this.analyzeActionLogs();
 
     return {
-      total_decisions: feedbackMetrics.total + actionMetrics.total,
-      accepted_decisions: feedbackMetrics.accepted + actionMetrics.accepted,
-      rejected_decisions: feedbackMetrics.rejected + actionMetrics.rejected,
-      avg_confidence: (feedbackMetrics.avg_confidence + actionMetrics.avg_confidence) / 2,
-      avg_response_time: (feedbackMetrics.avg_time + actionMetrics.avg_time) / 2,
+      total_decisions: feedbackMetrics.total,
+      accepted_decisions: feedbackMetrics.accepted,
+      rejected_decisions: feedbackMetrics.rejected,
+      avg_confidence: feedbackMetrics.avg_confidence,
+      avg_response_time: feedbackMetrics.avg_time,
       accuracy_rate: feedbackMetrics.total > 0 
         ? feedbackMetrics.accepted / feedbackMetrics.total 
         : 0.5,
@@ -400,5 +294,4 @@ class AutoTuningEngine {
   }
 }
 
-// Export singleton instance
 export const autoTuningEngine = new AutoTuningEngine();

@@ -1,9 +1,11 @@
 /**
  * PATCH 661: Voice Assistant v2 - Service Layer (TypeScript Fixed)
  * Service for voice commands, sessions, and multi-platform support
+ * Fixed: voice_sessions/voice_command_templates/voice_personalities don't exist - use voice_commands + voice_settings + in-memory
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   VoiceSession,
   VoiceCommand,
@@ -16,7 +18,6 @@ import type {
   CommandExecutionResult,
 } from "@/types/voice";
 
-// Browser SpeechRecognition type (varies by browser implementation)
 interface BrowserSpeechRecognition {
   continuous: boolean;
   interimResults: boolean;
@@ -28,6 +29,9 @@ interface BrowserSpeechRecognition {
 }
 
 type SpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
+
+// In-memory session store (voice_sessions table doesn't exist)
+const sessionStore = new Map<string, VoiceSession>();
 
 export class VoiceService {
   private static recognition: BrowserSpeechRecognition | null = null;
@@ -67,47 +71,34 @@ export class VoiceService {
     const sessionId = `voice_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     this.currentSessionId = sessionId;
 
-    const { data, error } = await (supabase as any)
-      .from("voice_sessions")
-      .insert({
-        session_id: sessionId,
-        platform: request.platform,
-        mode: request.mode || "online",
-        language: request.language || "pt-BR",
-        voice_engine: this.isSpeechRecognitionAvailable() ? "web_speech_api" : "fallback",
-        device_info: request.device_info,
-      })
-      .select()
-      .single();
+    // Store session in memory (voice_sessions table doesn't exist)
+    const session: VoiceSession = {
+      id: sessionId,
+      session_id: sessionId,
+      platform: request.platform,
+      mode: request.mode || "online",
+      language: request.language || "pt-BR",
+      voice_engine: this.isSpeechRecognitionAvailable() ? "web_speech_api" : "fallback",
+      device_info: request.device_info,
+      started_at: new Date().toISOString(),
+    } as VoiceSession;
 
-    if (error) throw error;
-    return data as VoiceSession;
+    sessionStore.set(sessionId, session);
+    logger.info("[Voice] Session started:", sessionId);
+    return session;
   }
 
   static async endSession(sessionId: string): Promise<void> {
-    const session = await this.getSession(sessionId);
-    if (!session) return;
-
-    const duration = Math.floor((Date.now() - new Date(session.started_at).getTime()) / 1000);
-
-    const { error } = await (supabase as any)
-      .from("voice_sessions")
-      .update({ ended_at: new Date().toISOString(), duration_seconds: duration })
-      .eq("session_id", sessionId);
-
-    if (error) throw error;
+    const session = sessionStore.get(sessionId);
+    if (session) {
+      sessionStore.delete(sessionId);
+    }
     if (this.currentSessionId === sessionId) this.currentSessionId = null;
+    logger.info("[Voice] Session ended:", sessionId);
   }
 
   static async getSession(sessionId: string): Promise<VoiceSession | null> {
-    const { data, error } = await (supabase as any)
-      .from("voice_sessions")
-      .select("*")
-      .eq("session_id", sessionId)
-      .single();
-
-    if (error) throw error;
-    return data as VoiceSession | null;
+    return sessionStore.get(sessionId) || null;
   }
 
   static getCurrentSessionId(): string | null {
@@ -160,52 +151,85 @@ export class VoiceService {
   }
 
   static async processCommand(request: VoiceCommandRequest): Promise<VoiceCommand> {
-    const { data, error } = await (supabase as any).rpc("process_voice_command", {
-      p_session_id: request.session_id,
-      p_command_text: request.command_text,
-      p_confidence_score: request.confidence_score || 0.0,
-    });
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // voice_commands requires: command_text, intent, user_id
+    const { data, error } = await supabase
+      .from("voice_commands")
+      .insert({
+        command_text: request.command_text,
+        intent: "general",
+        user_id: user?.id || "",
+      })
+      .select()
+      .single();
 
-    if (error) throw error;
-    const command = await this.getCommand(data as string);
-    if (!command) throw new Error("Command not found");
-    return command;
+    if (error) {
+      logger.error("[Voice] Error saving command:", error);
+      throw error;
+    }
+
+    return data as unknown as VoiceCommand;
   }
 
   static async getCommand(id: string): Promise<VoiceCommand | null> {
-    const { data, error } = await (supabase as any).from("voice_commands").select("*").eq("id", id).single();
+    const { data, error } = await supabase
+      .from("voice_commands")
+      .select("*")
+      .eq("id", id)
+      .single();
     if (error) throw error;
-    return data as VoiceCommand | null;
+    return data as unknown as VoiceCommand | null;
   }
 
   static async getCommandHistory(limit = 50): Promise<VoiceCommand[]> {
-    const { data, error } = await (supabase as any).from("voice_commands").select("*").order("created_at", { ascending: false }).limit(limit);
+    const { data, error } = await supabase
+      .from("voice_commands")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
     if (error) throw error;
-    return (data || []) as VoiceCommand[];
+    return (data || []) as unknown as VoiceCommand[];
   }
 
   static async getTemplates(): Promise<VoiceCommandTemplate[]> {
-    const { data, error } = await (supabase as any).from("voice_command_templates").select("*").eq("is_enabled", true).order("popularity_score", { ascending: false });
-    if (error) throw error;
-    return (data || []) as VoiceCommandTemplate[];
+    // voice_command_templates doesn't exist - return defaults
+    return [
+      { id: "1", command_pattern: "status da frota", intent: "fleet_status", description: "Verifica status da frota", response_template: "", requires_online: false, is_enabled: true, popularity_score: 10, language: "pt-BR", created_at: "", updated_at: "" },
+      { id: "2", command_pattern: "criar missão", intent: "create_mission", description: "Cria nova missão", response_template: "", requires_online: true, is_enabled: true, popularity_score: 8, language: "pt-BR", created_at: "", updated_at: "" },
+      { id: "3", command_pattern: "verificar alertas", intent: "check_alerts", description: "Verifica alertas ativos", response_template: "", requires_online: false, is_enabled: true, popularity_score: 7, language: "pt-BR", created_at: "", updated_at: "" },
+    ] as VoiceCommandTemplate[];
   }
 
   static async getPersonalities(): Promise<VoicePersonality[]> {
-    const { data, error } = await (supabase as any).from("voice_personalities").select("*").eq("is_enabled", true).order("display_name");
-    if (error) throw error;
-    return (data || []) as VoicePersonality[];
+    // voice_personalities doesn't exist - return defaults
+    return [
+      { id: "1", name: "nautilus", display_name: "Nautilus", language: "pt-BR", tone: "professional", is_default: true, is_enabled: true, created_at: "" },
+      { id: "2", name: "capitao", display_name: "Capitão", language: "pt-BR", tone: "professional", is_default: false, is_enabled: true, created_at: "" },
+    ] as VoicePersonality[];
   }
 
   static async getSettings(): Promise<VoiceSettings | null> {
-    const { data, error } = await (supabase as any).from("voice_settings").select("*").maybeSingle();
-    if (error) throw error;
-    return data as VoiceSettings | null;
+    // voice_settings exists in schema
+    const { data, error } = await supabase
+      .from("voice_settings")
+      .select("*")
+      .maybeSingle();
+    if (error) {
+      logger.error("[Voice] Error fetching settings:", error);
+      return null;
+    }
+    return data as unknown as VoiceSettings | null;
   }
 
   static async saveSettings(settings: Partial<VoiceSettings>): Promise<VoiceSettings> {
-    const { data, error } = await (supabase as any).from("voice_settings").upsert(settings).select().single();
+    const { data, error } = await supabase
+      .from("voice_settings")
+      .upsert(settings as any)
+      .select()
+      .single();
     if (error) throw error;
-    return data as VoiceSettings;
+    return data as unknown as VoiceSettings;
   }
 
   static async executeCommand(intent: string, entities?: Record<string, unknown>): Promise<CommandExecutionResult> {

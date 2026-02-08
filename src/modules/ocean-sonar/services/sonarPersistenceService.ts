@@ -1,11 +1,12 @@
 /**
  * PATCH 457 - Sonar Data Persistence Service
  * Service for persisting sonar readings and AI predictions to database
+ * Fixed: Removed (supabase as any) - sonar_readings and sonar_ai_predictions exist in schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { BathymetricData, SonarReading } from "./sonarEngine";
+import type { BathymetricData } from "./sonarEngine";
 
 export interface SonarReadingRecord {
   id: string;
@@ -44,9 +45,6 @@ export interface SonarAIPredictionRecord {
 }
 
 class SonarPersistenceService {
-  /**
-   * Save bathymetric scan data to database
-   */
   async saveBathymetricScan(
     data: BathymetricData,
     missionId?: string
@@ -59,9 +57,8 @@ class SonarPersistenceService {
         return { success: false, readingsCount: 0 };
       }
 
-      // Batch insert sonar readings
       const readingsToInsert = data.readings.map((reading) => ({
-        mission_id: missionId,
+        mission_id: missionId || null,
         user_id: user.id,
         location: { lat: reading.latitude, lon: reading.longitude },
         depth: reading.depth,
@@ -78,7 +75,7 @@ class SonarPersistenceService {
         },
       }));
 
-      const { data: insertedReadings, error } = await (supabase as any)
+      const { data: insertedReadings, error } = await supabase
         .from("sonar_readings")
         .insert(readingsToInsert)
         .select();
@@ -96,9 +93,6 @@ class SonarPersistenceService {
     }
   }
 
-  /**
-   * Save AI prediction and analysis
-   */
   async saveAIPrediction(
     recommendation: string,
     safePath: Array<{ lat: number; lon: number }>,
@@ -138,23 +132,17 @@ class SonarPersistenceService {
       }
 
       logger.info("AI prediction saved successfully:", data.id);
-      return data as SonarAIPredictionRecord;
+      return data as unknown as SonarAIPredictionRecord;
     } catch (error) {
       logger.error("Error saving AI prediction:", error);
       return null;
     }
   }
 
-  /**
-   * Get recent sonar readings
-   */
   async getRecentReadings(limit: number = 100): Promise<SonarReadingRecord[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        return [];
-      }
+      if (!user) return [];
 
       const { data, error } = await supabase
         .from("sonar_readings")
@@ -168,23 +156,17 @@ class SonarPersistenceService {
         return [];
       }
 
-      return (data as SonarReadingRecord[]) || [];
+      return (data as unknown as SonarReadingRecord[]) || [];
     } catch (error) {
       logger.error("Error fetching sonar readings:", error);
       return [];
     }
   }
 
-  /**
-   * Get recent AI predictions
-   */
   async getRecentPredictions(limit: number = 20): Promise<SonarAIPredictionRecord[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        return [];
-      }
+      if (!user) return [];
 
       const { data, error } = await supabase
         .from("sonar_ai_predictions")
@@ -198,16 +180,13 @@ class SonarPersistenceService {
         return [];
       }
 
-      return (data as SonarAIPredictionRecord[]) || [];
+      return (data as unknown as SonarAIPredictionRecord[]) || [];
     } catch (error) {
       logger.error("Error fetching AI predictions:", error);
       return [];
     }
   }
 
-  /**
-   * Get sonar statistics
-   */
   async getSonarStats(): Promise<{
     totalReadings: number;
     safeReadings: number;
@@ -220,10 +199,7 @@ class SonarPersistenceService {
   } | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        return null;
-      }
+      if (!user) return null;
 
       const { data: readings, error: readingsError } = await supabase
         .from("sonar_readings")
@@ -240,7 +216,7 @@ class SonarPersistenceService {
         return null;
       }
 
-      const readingsData = (readings as SonarReadingRecord[]) || [];
+      const readingsData = (readings as unknown as SonarReadingRecord[]) || [];
       const depths = readingsData.map((r) => r.depth);
 
       return {
