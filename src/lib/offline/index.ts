@@ -114,19 +114,14 @@ export {
 // ===================================================================
 
 export async function initOfflineSupport() {
-  console.log('🔌 Initializing Nauti One offline support...');
-
   // Register advanced service worker
   if ('serviceWorker' in navigator) {
     try {
-      // Use advanced SW by default
       const swPath = '/sw-advanced.js';
 
       const registration = await navigator.serviceWorker.register(swPath, {
         scope: '/',
       });
-
-      console.log(`✅ Service Worker registered: ${swPath}`);
 
       // Listen for updates
       registration.addEventListener('updatefound', () => {
@@ -134,7 +129,7 @@ export async function initOfflineSupport() {
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              console.log('🆕 New Service Worker available');
+              // New SW available - handled silently
             }
           });
         }
@@ -145,11 +140,7 @@ export async function initOfflineSupport() {
         const { type, ...data } = event.data || {};
 
         switch (type) {
-          case 'SW_ACTIVATED':
-            console.log(`✅ Service Worker activated: ${data.version}`);
-            break;
           case 'BACKGROUND_SYNC':
-            console.log('🔄 Background sync triggered by SW');
             window.dispatchEvent(new CustomEvent('offlineSync', { detail: data }));
             break;
         }
@@ -163,19 +154,16 @@ export async function initOfflineSupport() {
   try {
     const { initNautiOneDB } = await import('./db');
     await initNautiOneDB();
-    console.log('✅ IndexedDB initialized');
   } catch (error) {
     console.error('❌ IndexedDB initialization failed:', error);
   }
 
   // Setup online/offline listeners
   window.addEventListener('online', () => {
-    console.log('🌐 Connection restored');
     window.dispatchEvent(new CustomEvent('connectionChange', { detail: { online: true } }));
   });
 
   window.addEventListener('offline', () => {
-    console.log('📴 Connection lost');
     window.dispatchEvent(new CustomEvent('connectionChange', { detail: { online: false } }));
   });
 
@@ -186,8 +174,6 @@ export async function initOfflineSupport() {
   } catch (error) {
     console.warn('Storage cleanup skipped:', error);
   }
-
-  console.log('✅ Nauti One offline support initialized');
 }
 
 // Utility to communicate with Service Worker

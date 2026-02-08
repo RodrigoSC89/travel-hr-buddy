@@ -341,9 +341,10 @@ export class RouteOptimizer {
         lng: from.lng + (to.lng - from.lng) * fraction,
       };
       
-      // Simulate weather - in production, use real weather API
-      const waveHeight = Math.random() * 4 + 0.5;
-      const windSpeed = Math.random() * 30 + 5;
+      // Deterministic weather simulation based on position and day index
+      const posHash = Math.abs(Math.sin(position.lat * 12.9898 + position.lng * 78.233 + i) * 43758.5453) % 1;
+      const waveHeight = posHash * 4 + 0.5;
+      const windSpeed = ((posHash * 7 + i * 0.3) % 1) * 30 + 5;
       
       let severity: WeatherForecast['severity'];
       if (waveHeight < 2 && windSpeed < 15) severity = 'calm';
@@ -356,9 +357,9 @@ export class RouteOptimizer {
         date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
         waveHeight,
         windSpeed,
-        windDirection: Math.random() * 360,
-        visibility: Math.random() * 10 + 2,
-        precipitation: Math.random() * 20,
+        windDirection: ((posHash * 360 + i * 47) % 360),
+        visibility: ((posHash * 10 + 2) % 12) + 2,
+        precipitation: (posHash * 20) % 20,
         severity,
       });
     }

@@ -226,7 +226,7 @@ export async function initNautiOneDB(): Promise<NautiOneDB> {
   if (!db.isOpen()) {
     await db.open();
   }
-  console.log('✅ NautiOneDB initialized');
+  // DB initialized successfully - no console output needed
   return db;
 }
 

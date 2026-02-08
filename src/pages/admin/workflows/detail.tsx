@@ -1,4 +1,4 @@
-// @ts-nocheck - Complex schema: smart_workflow_steps requires name/step_number/step_type + nullable profile joins
+// @ts-nocheck — smart_workflow_steps schema mismatch: requires name/step_number/step_type + nullable fields
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management

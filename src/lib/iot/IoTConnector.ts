@@ -516,8 +516,8 @@ class IoTConnectorService {
     // Get cached telemetry to maintain consistency
     const cached = this.telemetryCache.get(vesselId);
     
-    // Small random walk from current values for realism
-    const walkAmount = () => (Math.random() - 0.5) * 2;
+    // Small deterministic walk from current values for realism
+    const walkAmount = (seed: number) => Math.sin(Date.now() / 5000 + seed * 2.7) * 2;
     
     const sensorConfigs: Record<string, { base: number; variance: number; unit: string }> = {
       fuel: { base: cached?.fuelLevel || 70, variance: 0.1, unit: '%' },
@@ -530,7 +530,8 @@ class IoTConnectorService {
     };
 
     const config = sensorConfigs[type] || { base: 0, variance: 1, unit: '' };
-    const value = config.base + walkAmount() * config.variance;
+    const sensorSeed = type.charCodeAt(0) + vesselId.charCodeAt(0);
+    const value = config.base + walkAmount(sensorSeed) * config.variance;
 
     return {
       sensorId: `sensor-${type}-${vesselId.slice(0, 8)}`,
@@ -539,9 +540,9 @@ class IoTConnectorService {
       value: Math.round(value * 100) / 100,
       unit: config.unit,
       timestamp: new Date(),
-      quality: 0.95 + Math.random() * 0.05,
+      quality: 0.97,
       source: 'mock',
-      metadata: type === 'gps' ? { lng: (cached?.position.lng || -46.3322) + walkAmount() * 0.001 } : undefined,
+      metadata: type === 'gps' ? { lng: (cached?.position.lng || -46.3322) + walkAmount(sensorSeed + 1) * 0.001 } : undefined,
     };
   }
 
