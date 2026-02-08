@@ -159,6 +159,7 @@ const VoiceAssistantAIPage = lazy(() => import("@/pages/VoiceAssistantAIPage"));
 const PortugueseVoiceAssistantPage = lazy(() => import("@/pages/PortugueseVoiceAssistantPage"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
 const QualityDashboard = lazy(() => import("@/pages/QualityDashboard"));
+const AgentChat = lazy(() => import("@/pages/AIAgents/AgentChat"));
 
 // ============================================
 // INTELIGÊNCIA AVANÇADA
@@ -604,6 +605,7 @@ const AppRoutes = () => (
       <Route path="/maintenance" element={<MaintenanceMegaHub />} />
       <Route path="/maintenance/*" element={<MaintenanceMegaHub />} />
       <Route path="/ai" element={<AIMegaHub />} />
+      <Route path="/ai/agents/:agentId" element={<AgentChat />} />
       <Route path="/ai/*" element={<AIMegaHub />} />
       <Route path="/tracking" element={<TrackingMegaHub />} />
       <Route path="/tracking/*" element={<TrackingMegaHub />} />
