@@ -36,17 +36,9 @@ import { useOperationsCommandData } from "@/hooks/useOperationsCommandData";
 import { useRealActionHandlers } from "@/hooks/useRealActionHandlers";
 import { NewVoyageDialog, CrewScheduleDialog, MaintenanceOrderDialog, FuelReportDialog, ChecklistDialog } from "@/components/operations/QuickActionDialogs";
 
-// Lazy load original components
-const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
-const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
-const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
-const MissionCommandCenter = lazy(() => import("@/pages/MissionCommandCenter"));
-const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
-const MissionControlCenter = lazy(() => import("@/modules/operations/components/MissionControlCenter"));
+// Lazy load components
 const FleetPremiumCommand = lazy(() => import("@/modules/fleet-hub/components/FleetCommandCenter"));
-const AnalyticsDashboard = lazy(() => import("@/modules/analytics/components/AnalyticsDashboard"));
 const OperationsCommandDashboard = lazy(() => import("@/modules/operations-command/components/OperationsCommandDashboard"));
-const VesselContractsAdvanced = lazy(() => import("@/components/premium/VesselContractsAdvanced"));
 const OperationsIntelligenceHub = lazy(() => import("@/components/premium/OperationsIntelligenceHub"));
 
 // NEW Premium Phase 1 Components
@@ -67,18 +59,14 @@ function TabLoadingSkeleton() {
 }
 
 const TABS = [
+  { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📈", description: "Dashboard operacional" },
   { id: "intelligence", label: "Intelligence", icon: Zap, emoji: "🧠", description: "Operations Intelligence Hub", badge: "AI" },
   { id: "command", label: "Comando", icon: Compass, emoji: "🎛️", description: "Centro de Comando Premium" },
   { id: "gantt", label: "Gantt", icon: Activity, emoji: "📊", description: "Gantt interativo com weather overlay", badge: "NEW" },
   { id: "procurement", label: "Procurement", icon: Target, emoji: "🛒", description: "Workflow de aprovação multinível", badge: "NEW" },
   { id: "logistics-ai", label: "Logistics", icon: Package, emoji: "📦", description: "Supply chain com IA preditiva", badge: "AI" },
   { id: "contracts-bimco", label: "Contratos", icon: Navigation, emoji: "📋", description: "BIMCO, Laytime/Demurrage", badge: "NEW" },
-  { id: "overview", label: "Visão Geral", icon: Activity, emoji: "📈", description: "Dashboard operacional" },
-  { id: "missions", label: "Missões", icon: Target, emoji: "🎯", description: "Controle de viagens e missões" },
   { id: "fleetpremium", label: "Frota Premium", icon: Ship, emoji: "🚢", description: "Centro de controle da frota", badge: "PREMIUM" },
-  { id: "maritime", label: "Maritime", icon: Anchor, emoji: "⚓", description: "Tripulação, certificações" },
-  { id: "fleet", label: "Fleet", icon: Ship, emoji: "🚢", description: "Embarcações, manutenção" },
-  { id: "voyage", label: "Voyage", icon: Map, emoji: "🗺️", description: "Planejamento de viagens", badge: "AI" },
 ];
 
 // Onboarding steps
@@ -124,16 +112,18 @@ export default function OperationsCommandHubEnhanced() {
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState({ voyage: false, crew: false, maintenance: false, fuel: false, checklist: false });
 
-  // Get active tab directly from URL - use useMemo to avoid stale closures
+  // Use 'otab' prefix to avoid conflict with parent OpsMegaHub's 'tab' param
   const activeTab = useMemo(() => {
-    const tabFromUrl = searchParams.get("tab");
+    const tabFromUrl = searchParams.get("otab");
     const validTab = TABS.find(t => t.id === tabFromUrl);
     return validTab ? tabFromUrl : "overview";
   }, [searchParams]);
 
-  // Handle tab change by updating URL
+  // Handle tab change using 'otab' param, preserving parent 'tab' param
   const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("otab", value);
+    setSearchParams(newParams);
   };
 
   // Real data from Supabase
@@ -350,23 +340,21 @@ export default function OperationsCommandHubEnhanced() {
 
         {/* Main Tabs */}
         <Tabs value={activeTab || "overview"} onValueChange={handleTabChange} className="space-y-6">
-           <TabsList className="grid w-full grid-cols-7 h-auto p-1">
-             {TABS.slice(0, 7).map((tab) => (
+           <TabsList className="flex w-full overflow-x-auto h-auto p-1 gap-1">
+             {TABS.map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
-                className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="flex items-center gap-2 py-2.5 px-3 whitespace-nowrap data-[state=active]:bg-primary data-[state=active]:text-primary-foreground shrink-0"
               >
-                <div className="flex items-center gap-2">
-                  <tab.icon className="h-5 w-5" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                  <span className="sm:hidden">{tab.emoji}</span>
-                  {tab.badge && (
-                    <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                      {tab.badge}
-                    </Badge>
-                  )}
-                </div>
+                <tab.icon className="h-4 w-4" />
+                <span className="hidden sm:inline text-sm">{tab.label}</span>
+                <span className="sm:hidden">{tab.emoji}</span>
+                {tab.badge && (
+                  <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                    {tab.badge}
+                  </Badge>
+                )}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -548,66 +536,10 @@ export default function OperationsCommandHubEnhanced() {
             </div>
           </TabsContent>
 
-          {/* Missions Control Center - Premium */}
-          <TabsContent value="missions" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <MissionControlCenter />
-            </Suspense>
-          </TabsContent>
-
           {/* Fleet Premium Command Center */}
           <TabsContent value="fleetpremium" className="space-y-4 mt-6">
             <Suspense fallback={<TabLoadingSkeleton />}>
               <FleetPremiumCommand />
-            </Suspense>
-          </TabsContent>
-
-          {/* Analytics Dashboard */}
-          <TabsContent value="analytics" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <AnalyticsDashboard />
-            </Suspense>
-          </TabsContent>
-
-          {/* Maritime Command Tab */}
-          <TabsContent value="maritime" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <MaritimeCommandCenter />
-            </Suspense>
-          </TabsContent>
-
-          {/* Fleet Command Tab */}
-          <TabsContent value="fleet" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <FleetCommandCenter />
-            </Suspense>
-          </TabsContent>
-
-          {/* Voyage Command Tab */}
-          <TabsContent value="voyage" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <VoyageCommandCenter />
-            </Suspense>
-          </TabsContent>
-
-          {/* Mission Command Tab */}
-          <TabsContent value="mission" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <MissionCommandCenter />
-            </Suspense>
-          </TabsContent>
-
-          {/* Logistics Command Tab */}
-          <TabsContent value="logistics" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <LogisticsCommandPage />
-            </Suspense>
-          </TabsContent>
-
-          {/* Vessel Contracts Tab */}
-          <TabsContent value="contracts" className="space-y-4 mt-6">
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <VesselContractsAdvanced />
             </Suspense>
           </TabsContent>
         </Tabs>
