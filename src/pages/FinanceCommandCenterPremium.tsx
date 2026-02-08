@@ -377,11 +377,13 @@ function FinanceReports() {
 
 export default function FinanceCommandCenterPremium() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get("tab") || "voyage-pnl";
+  const currentTab = searchParams.get("ftab") || "voyage-pnl";
   const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("ftab", value);
+    setSearchParams(newParams);
   };
 
   // Real badge data
