@@ -21,11 +21,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Início", icon: LayoutDashboard, path: "/" },
-  { label: "Frota", icon: Ship, path: "/fleet" },
-  { label: "IA", icon: Brain, path: "/nautilus-command" },
-  { label: "Tripulação", icon: Users, path: "/crew" },
-  { label: "Alertas", icon: Bell, path: "/notifications" },
+  { label: "Início", icon: LayoutDashboard, path: "/command" },
+  { label: "Frota", icon: Ship, path: "/ops?tab=fleet" },
+  { label: "IA", icon: Brain, path: "/ai" },
+  { label: "Tripulação", icon: Users, path: "/workbench?section=people" },
+  { label: "Alertas", icon: Bell, path: "/tracking?tab=alerts" },
 ];
 
 export const MobileBottomNav: React.FC = () => {
@@ -36,10 +36,11 @@ export const MobileBottomNav: React.FC = () => {
   if (!isMobile) return null;
 
   const isActive = (path: string) => {
-    if (path === "/") {
-      return location.pathname === "/" || location.pathname.startsWith("/central-comando");
+    const basePath = path.split('?')[0];
+    if (basePath === "/command") {
+      return location.pathname === "/" || location.pathname === "/command" || location.pathname.startsWith("/command/");
     }
-    return location.pathname.startsWith(path);
+    return location.pathname.startsWith(basePath);
   };
 
   return (
