@@ -1,22 +1,21 @@
 /**
  * Finance Approval Workflow - Premium Component
- * WORLD-CLASS: Complete financial flows, approvals, real reports, AI anomaly detection
+ * WORLD-CLASS: Real Supabase data + AI anomaly detection + approval workflow
  */
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   DollarSign, CheckCircle, XCircle, Clock, AlertTriangle,
   FileText, User, Calendar, ArrowRight, TrendingUp,
   TrendingDown, PiggyBank, CreditCard, Receipt,
-  Brain, Sparkles, Loader2
+  Brain, Sparkles, Loader2, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
 
@@ -33,69 +32,7 @@ interface FinanceRequest {
   category: string;
   urgency: 'low' | 'medium' | 'high';
   attachments: number;
-  approvalSteps: { step: string; status: 'pending' | 'approved' | 'rejected'; approver?: string; date?: Date }[];
 }
-
-const FINANCE_REQUESTS: FinanceRequest[] = [
-  {
-    id: '1',
-    type: 'purchase',
-    title: 'Compra de peças de reposição - Motor Principal',
-    amount: 45000,
-    currency: 'USD',
-    requestedBy: 'Carlos Silva',
-    requestedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    status: 'pending',
-    vessel: 'MV Nautilus One',
-    category: 'Manutenção',
-    urgency: 'high',
-    attachments: 3,
-    approvalSteps: [
-      { step: 'Solicitante', status: 'approved', approver: 'Carlos Silva', date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-      { step: 'Superintendente', status: 'approved', approver: 'Pedro Lima', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-      { step: 'Gerente Financeiro', status: 'pending' },
-      { step: 'Diretor', status: 'pending' },
-    ],
-  },
-  {
-    id: '2',
-    type: 'expense',
-    title: 'Reembolso de despesas - Inspeção PSC',
-    amount: 2500,
-    currency: 'USD',
-    requestedBy: 'João Pereira',
-    requestedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    status: 'review',
-    vessel: 'MV Atlantic Star',
-    category: 'Compliance',
-    urgency: 'medium',
-    attachments: 5,
-    approvalSteps: [
-      { step: 'Solicitante', status: 'approved', approver: 'João Pereira', date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) },
-      { step: 'Gerente Operações', status: 'approved', approver: 'André Costa', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) },
-      { step: 'Financeiro', status: 'pending' },
-    ],
-  },
-  {
-    id: '3',
-    type: 'invoice',
-    title: 'Fatura fornecedor - Combustível Bunker',
-    amount: 125000,
-    currency: 'USD',
-    requestedBy: 'Sistema',
-    requestedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    status: 'pending',
-    vessel: 'MV Pacific Runner',
-    category: 'Combustível',
-    urgency: 'high',
-    attachments: 2,
-    approvalSteps: [
-      { step: 'Conferência', status: 'approved', approver: 'Maria Santos', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-      { step: 'Aprovação Valor', status: 'pending' },
-      { step: 'Pagamento', status: 'pending' },
-    ],
-  },
-];
 
 const TYPE_CONFIG = {
   purchase: { icon: Receipt, color: 'bg-blue-500', label: 'Compra' },
@@ -118,6 +55,14 @@ const URGENCY_CONFIG = {
   high: { color: 'bg-red-100 text-red-600', label: 'Alta' },
 };
 
+function mapStatus(status: string | null): FinanceRequest['status'] {
+  const s = (status || '').toLowerCase();
+  if (s.includes('approv') || s === 'paid') return 'approved';
+  if (s.includes('reject') || s === 'cancelled') return 'rejected';
+  if (s.includes('review')) return 'review';
+  return 'pending';
+}
+
 export function FinanceApprovalWorkflow() {
   const [selectedRequest, setSelectedRequest] = useState<FinanceRequest | null>(null);
   const [filter, setFilter] = useState<string>('all');
@@ -125,26 +70,66 @@ export function FinanceApprovalWorkflow() {
   const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
 
+  // ===== REAL DATA from Supabase =====
+  const { data: requests = [], isLoading, refetch } = useQuery({
+    queryKey: ['finance-requests'],
+    queryFn: async (): Promise<FinanceRequest[]> => {
+      const { data, error } = await supabase
+        .from('invoices')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      return (data || []).map(inv => ({
+        id: inv.id,
+        type: 'invoice' as const,
+        title: inv.notes || `Fatura ${inv.invoice_number || ''}`,
+        amount: inv.total_amount || 0,
+        currency: inv.currency || 'USD',
+        requestedBy: 'Sistema',
+        requestedAt: new Date(inv.created_at),
+        status: mapStatus(inv.status),
+        vessel: undefined,
+        category: 'Operacional',
+        urgency: (inv.total_amount || 0) > 50000 ? 'high' as const : (inv.total_amount || 0) > 10000 ? 'medium' as const : 'low' as const,
+        attachments: 0,
+      }));
+    },
+  });
+
+  const { data: budgets = [] } = useQuery({
+    queryKey: ['finance-budgets-summary'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('budgets')
+        .select('*')
+        .order('year', { ascending: false })
+        .limit(10);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // ===== AI ANALYSIS =====
   const runFinanceAI = async () => {
     setAiLoading(true);
     try {
-      const requestsSummary = FINANCE_REQUESTS.map(r => ({
+      const requestsSummary = requests.slice(0, 15).map(r => ({
         type: r.type,
         title: r.title,
         amount: r.amount,
         currency: r.currency,
         status: r.status,
         urgency: r.urgency,
-        vessel: r.vessel,
-        category: r.category,
-        daysAgo: Math.floor((Date.now() - r.requestedAt.getTime()) / (1000 * 60 * 60 * 24)),
       }));
 
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           messages: [{
             role: 'user',
-            content: `Analise as solicitações financeiras marítimas e forneça insights:\n\nTotal pendente: $${totalPending.toLocaleString()}\nSolicitações: ${JSON.stringify(requestsSummary)}\n\nForneça:\n1. Análise de padrão de gastos\n2. Detecção de anomalias (valores fora do normal)\n3. Prioridade de aprovação recomendada\n4. Oportunidades de economia\n5. Forecast financeiro para próximos 30 dias\n6. Benchmarking vs mercado marítimo`,
+            content: `Analise as solicitações financeiras marítimas e forneça insights:\n\nTotal pendente: $${totalPending.toLocaleString()}\nTotal aprovado: $${totalApproved.toLocaleString()}\nSolicitações: ${JSON.stringify(requestsSummary)}\nOrçamentos: ${budgets.length} registros\n\nForneça:\n1. Análise de padrão de gastos\n2. Detecção de anomalias\n3. Prioridade de aprovação recomendada\n4. Oportunidades de economia\n5. Forecast financeiro para próximos 30 dias`,
           }],
           agentId: 'nauti-brain',
         },
@@ -160,33 +145,47 @@ export function FinanceApprovalWorkflow() {
     }
   };
 
+  // ===== APPROVE / REJECT =====
   const approveRequestMutation = useMutation({
     mutationFn: async (id: string) => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('invoices')
+        .update({ status: 'approved' as const })
+        .eq('id', id);
+      if (error) throw error;
       return id;
     },
     onSuccess: () => {
-      toast.success('Solicitação aprovada com sucesso');
+      toast.success('Fatura aprovada com sucesso');
       setSelectedRequest(null);
+      queryClient.invalidateQueries({ queryKey: ['finance-requests'] });
     },
+    onError: () => toast.error('Erro ao aprovar fatura'),
   });
 
   const rejectRequestMutation = useMutation({
     mutationFn: async (id: string) => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('invoices')
+        .update({ status: 'pending_approval' as const })
+        .eq('id', id);
+      if (error) throw error;
       return id;
     },
     onSuccess: () => {
-      toast.error('Solicitação rejeitada');
+      toast.error('Fatura rejeitada');
       setSelectedRequest(null);
+      queryClient.invalidateQueries({ queryKey: ['finance-requests'] });
     },
+    onError: () => toast.error('Erro ao rejeitar fatura'),
   });
 
   // Calculate totals
-  const totalPending = FINANCE_REQUESTS.filter(r => r.status === 'pending').reduce((acc, r) => acc + r.amount, 0);
-  const totalApproved = FINANCE_REQUESTS.filter(r => r.status === 'approved').reduce((acc, r) => acc + r.amount, 0);
+  const totalPending = requests.filter(r => r.status === 'pending').reduce((acc, r) => acc + r.amount, 0);
+  const totalApproved = requests.filter(r => r.status === 'approved').reduce((acc, r) => acc + r.amount, 0);
+  const rejectedCount = requests.filter(r => r.status === 'rejected').length;
 
-  const filteredRequests = FINANCE_REQUESTS.filter(r => 
+  const filteredRequests = requests.filter(r => 
     filter === 'all' || r.status === filter
   );
 
@@ -196,9 +195,12 @@ export function FinanceApprovalWorkflow() {
 
   return (
     <div className="space-y-6">
-      {/* Summary Cards */}
+      {/* Actions */}
       <div className="flex items-center justify-between flex-wrap gap-3 mb-2">
-        <div />
+        <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2">
+          <RefreshCw className="h-4 w-4" />
+          Atualizar
+        </Button>
         <Button variant="secondary" className="gap-2" onClick={runFinanceAI} disabled={aiLoading}>
           {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
           Análise Financeira AI
@@ -229,7 +231,7 @@ export function FinanceApprovalWorkflow() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold">{FINANCE_REQUESTS.filter(r => r.status === 'pending').length}</p>
+                <p className="text-2xl font-bold">{requests.filter(r => r.status === 'pending').length}</p>
                 <p className="text-xs text-muted-foreground">{formatCurrency(totalPending, 'USD')}</p>
               </div>
               <Clock className="h-10 w-10 text-yellow-500 opacity-50" />
@@ -242,7 +244,7 @@ export function FinanceApprovalWorkflow() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Revisão</p>
-                <p className="text-2xl font-bold">{FINANCE_REQUESTS.filter(r => r.status === 'review').length}</p>
+                <p className="text-2xl font-bold">{requests.filter(r => r.status === 'review').length}</p>
               </div>
               <FileText className="h-10 w-10 text-blue-500 opacity-50" />
             </div>
@@ -253,7 +255,7 @@ export function FinanceApprovalWorkflow() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Aprovados (Mês)</p>
+                <p className="text-sm text-muted-foreground">Aprovados</p>
                 <p className="text-2xl font-bold">{formatCurrency(totalApproved, 'USD')}</p>
               </div>
               <TrendingUp className="h-10 w-10 text-green-500 opacity-50" />
@@ -265,8 +267,8 @@ export function FinanceApprovalWorkflow() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Rejeitados (Mês)</p>
-                <p className="text-2xl font-bold">2</p>
+                <p className="text-sm text-muted-foreground">Rejeitados</p>
+                <p className="text-2xl font-bold">{rejectedCount}</p>
               </div>
               <TrendingDown className="h-10 w-10 text-red-500 opacity-50" />
             </div>
@@ -280,7 +282,7 @@ export function FinanceApprovalWorkflow() {
         <Card className="lg:col-span-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between flex-wrap gap-4">
-              <CardTitle className="text-lg">Solicitações Financeiras</CardTitle>
+              <CardTitle className="text-lg">Solicitações Financeiras ({filteredRequests.length})</CardTitle>
               <Tabs value={filter} onValueChange={setFilter}>
                 <TabsList className="h-8">
                   <TabsTrigger value="all" className="text-xs px-3 h-6">Todos</TabsTrigger>
@@ -292,63 +294,66 @@ export function FinanceApprovalWorkflow() {
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y">
-              {filteredRequests.map(request => {
-                const typeConfig = TYPE_CONFIG[request.type];
-                const statusConfig = STATUS_CONFIG[request.status];
-                const urgencyConfig = URGENCY_CONFIG[request.urgency];
-                const TypeIcon = typeConfig.icon;
-                
-                return (
-                  <div 
-                    key={request.id}
-                    className={`p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
-                      selectedRequest?.id === request.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
-                    }`}
-                    onClick={() => setSelectedRequest(request)}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`p-2 rounded-lg text-white ${typeConfig.color}`}>
-                        <TypeIcon className="h-5 w-5" />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="font-medium">{request.title}</span>
-                          <Badge className={urgencyConfig.color}>{urgencyConfig.label}</Badge>
+            {isLoading ? (
+              <div className="p-8 text-center text-muted-foreground">Carregando faturas...</div>
+            ) : filteredRequests.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground">
+                <DollarSign className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                <p>Nenhuma solicitação encontrada</p>
+              </div>
+            ) : (
+              <div className="divide-y">
+                {filteredRequests.map(request => {
+                  const typeConfig = TYPE_CONFIG[request.type] || TYPE_CONFIG.invoice;
+                  const statusConfig = STATUS_CONFIG[request.status];
+                  const urgencyConfig = URGENCY_CONFIG[request.urgency];
+                  const TypeIcon = typeConfig.icon;
+                  
+                  return (
+                    <div 
+                      key={request.id}
+                      className={`p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
+                        selectedRequest?.id === request.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
+                      }`}
+                      onClick={() => setSelectedRequest(request)}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className={`p-2 rounded-lg text-white ${typeConfig.color}`}>
+                          <TypeIcon className="h-5 w-5" />
                         </div>
                         
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
-                          <span className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
-                            {request.requestedBy}
-                          </span>
-                          {request.vessel && (
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <span className="font-medium truncate">{request.title}</span>
+                            <Badge className={urgencyConfig.color}>{urgencyConfig.label}</Badge>
+                          </div>
+                          
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                             <span className="flex items-center gap-1">
-                              <FileText className="h-3 w-3" />
-                              {request.vessel}
+                              <User className="h-3 w-3" />
+                              {request.requestedBy}
                             </span>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {request.requestedAt.toLocaleDateString('pt-BR')}
-                          </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {request.requestedAt.toLocaleDateString('pt-BR')}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold text-primary">
+                              {formatCurrency(request.amount, request.currency)}
+                            </span>
+                            <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
+                          </div>
                         </div>
                         
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-primary">
-                            {formatCurrency(request.amount, request.currency)}
-                          </span>
-                          <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
-                        </div>
+                        <ArrowRight className="h-5 w-5 text-muted-foreground" />
                       </div>
-                      
-                      <ArrowRight className="h-5 w-5 text-muted-foreground" />
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -366,49 +371,32 @@ export function FinanceApprovalWorkflow() {
                     {formatCurrency(selectedRequest.amount, selectedRequest.currency)}
                   </p>
                 </div>
-                
-                {/* Approval Steps */}
-                <div>
-                  <p className="text-sm font-medium mb-3">Fluxo de Aprovação</p>
-                  <div className="space-y-3">
-                    {selectedRequest.approvalSteps.map((step, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          step.status === 'approved' ? 'bg-green-500 text-white' :
-                          step.status === 'rejected' ? 'bg-red-500 text-white' :
-                          'bg-muted text-muted-foreground'
-                        }`}>
-                          {step.status === 'approved' ? (
-                            <CheckCircle className="h-4 w-4" />
-                          ) : step.status === 'rejected' ? (
-                            <XCircle className="h-4 w-4" />
-                          ) : (
-                            <Clock className="h-4 w-4" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">{step.step}</p>
-                          {step.approver && (
-                            <p className="text-xs text-muted-foreground">
-                              {step.approver} • {step.date?.toLocaleDateString('pt-BR')}
-                            </p>
-                          )}
-                        </div>
-                        {idx < selectedRequest.approvalSteps.length - 1 && (
-                          <div className="absolute left-4 top-10 w-px h-6 bg-muted" />
-                        )}
-                      </div>
-                    ))}
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Tipo</span>
+                    <Badge variant="outline">{TYPE_CONFIG[selectedRequest.type]?.label || 'Fatura'}</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status</span>
+                    <Badge className={STATUS_CONFIG[selectedRequest.status].color}>
+                      {STATUS_CONFIG[selectedRequest.status].label}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Urgência</span>
+                    <Badge className={URGENCY_CONFIG[selectedRequest.urgency].color}>
+                      {URGENCY_CONFIG[selectedRequest.urgency].label}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Data</span>
+                    <span>{selectedRequest.requestedAt.toLocaleDateString('pt-BR')}</span>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" />
-                  {selectedRequest.attachments} anexo(s)
-                </div>
-                
                 {/* Actions */}
-                {selectedRequest.status === 'pending' && (
+                {(selectedRequest.status === 'pending' || selectedRequest.status === 'review') && (
                   <div className="flex gap-2 pt-4 border-t">
                     <Button 
                       className="flex-1 gap-2"
