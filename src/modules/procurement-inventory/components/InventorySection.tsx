@@ -10,38 +10,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Package,
-  Plus,
-  Search,
-  Filter,
-  Download,
-  Upload,
-  AlertTriangle,
-  CheckCircle2,
-  Warehouse,
-  BarChart3,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  QrCode,
-  Scan,
-  Clock,
-  Calendar,
-  MapPin,
-  Tag,
-  Box,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  Edit,
-  Trash2,
-  MoreHorizontal,
-  RefreshCw,
-  Brain,
-  Zap,
+  Package, Plus, Search, Filter, Download, Upload, AlertTriangle,
+  CheckCircle2, Warehouse, BarChart3, ArrowUpDown, ArrowUp, ArrowDown,
+  QrCode, Scan, Clock, Calendar, MapPin, Tag, Box, TrendingUp,
+  TrendingDown, Eye, Edit, Trash2, MoreHorizontal, RefreshCw, Brain, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useProcurementData } from "@/hooks/useProcurementData";
 
 interface InventoryItem {
   id: string;
@@ -72,22 +49,6 @@ interface StockMovement {
   reference: string;
 }
 
-const mockInventory: InventoryItem[] = [
-  { id: "1", sku: "FIL-OLE-001", name: "Filtro de óleo hidráulico", category: "Manutenção", quantity: 5, minStock: 10, maxStock: 50, unit: "un", location: "A1-01", lot: "L2024-001", expiryDate: "2025-06-15", lastMovement: "2024-01-15", unitCost: 450, status: "critical" },
-  { id: "2", sku: "VAL-SEG-002", name: "Válvula de segurança DP", category: "DP System", quantity: 3, minStock: 5, maxStock: 15, unit: "un", location: "B2-03", lot: "L2024-002", expiryDate: null, lastMovement: "2024-01-10", unitCost: 6400, status: "low" },
-  { id: "3", sku: "EPI-CAP-003", name: "EPI - Capacetes de segurança", category: "Segurança", quantity: 12, minStock: 20, maxStock: 100, unit: "un", location: "C1-01", lot: "L2023-045", expiryDate: "2026-12-31", lastMovement: "2024-01-18", unitCost: 64, status: "low" },
-  { id: "4", sku: "OLE-LUB-004", name: "Óleo lubrificante 15W40", category: "Consumíveis", quantity: 280, minStock: 100, maxStock: 300, unit: "L", location: "D1-01", lot: "L2024-010", expiryDate: "2025-03-01", lastMovement: "2024-01-20", unitCost: 44.5, status: "ok" },
-  { id: "5", sku: "JUN-VED-005", name: "Juntas de vedação", category: "Manutenção", quantity: 45, minStock: 30, maxStock: 100, unit: "un", location: "A2-05", lot: "L2024-008", expiryDate: null, lastMovement: "2024-01-12", unitCost: 50, status: "ok" },
-  { id: "6", sku: "GRA-ROL-006", name: "Graxa para rolamentos", category: "Consumíveis", quantity: 350, minStock: 50, maxStock: 200, unit: "kg", location: "D2-02", lot: "L2023-089", expiryDate: "2024-08-15", lastMovement: "2024-01-08", unitCost: 28, status: "excess" },
-];
-
-const mockMovements: StockMovement[] = [
-  { id: "1", itemId: "4", itemName: "Óleo lubrificante 15W40", type: "in", quantity: 100, reason: "Recebimento PO-2024-004", user: "Carlos Silva", date: "2024-01-20 14:30", reference: "REC-2024-042" },
-  { id: "2", itemId: "1", itemName: "Filtro de óleo hidráulico", type: "out", quantity: 3, reason: "Consumo manutenção", user: "João Santos", date: "2024-01-15 09:15", reference: "OS-2024-089" },
-  { id: "3", itemId: "3", itemName: "EPI - Capacetes", type: "out", quantity: 5, reason: "Distribuição tripulação", user: "Maria Costa", date: "2024-01-18 11:00", reference: "DIS-2024-015" },
-  { id: "4", itemId: "6", itemName: "Graxa para rolamentos", type: "adjustment", quantity: -10, reason: "Ajuste inventário", user: "Admin", date: "2024-01-08 16:45", reference: "INV-2024-001" },
-];
-
 interface InventorySectionProps {
   searchQuery: string;
 }
@@ -97,12 +58,37 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
   const [showMovement, setShowMovement] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [movementType, setMovementType] = useState<"in" | "out" | "adjustment" | "transfer">("in");
-  const [inventory, setInventory] = useState(mockInventory);
-  const [movements, setMovements] = useState(mockMovements);
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortField, setSortField] = useState<keyof InventoryItem>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  
+  const { items: rawItems, isLoading, updateInventory, refetch: refetchInventory } = useProcurementData();
+  
+  // Map Supabase items to UI format
+  const inventory: InventoryItem[] = rawItems.map((item) => {
+    const pct = item.min_quantity > 0 ? item.quantity / item.min_quantity : 1;
+    const status: "ok" | "low" | "critical" | "excess" = 
+      pct <= 0.5 ? "critical" : pct <= 1 ? "low" : item.quantity > item.max_quantity ? "excess" : "ok";
+    return {
+      id: item.id,
+      sku: item.item_code || "",
+      name: item.name,
+      category: item.category || "Geral",
+      quantity: Number(item.quantity),
+      minStock: Number(item.min_quantity),
+      maxStock: Number(item.max_quantity),
+      unit: item.unit || "un",
+      location: item.location || "",
+      lot: "",
+      expiryDate: null,
+      lastMovement: "",
+      unitCost: Number(item.unit_cost),
+      status,
+    };
+  });
+  
+  const movements: StockMovement[] = [];
 
   // New item form state
   const [newItem, setNewItem] = useState({
@@ -158,71 +144,41 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
     }
   };
 
-  const handleAddItem = () => {
-    const status = newItem.quantity <= newItem.minStock * 0.5 ? "critical" :
-      newItem.quantity <= newItem.minStock ? "low" :
-      newItem.quantity >= newItem.maxStock ? "excess" : "ok";
-
-    const item: InventoryItem = {
-      id: Date.now().toString(),
-      ...newItem,
-      expiryDate: newItem.expiryDate || null,
-      lastMovement: new Date().toISOString().split("T")[0],
-      status,
-    };
-
-    setInventory(prev => [...prev, item]);
-    setShowAddItem(false);
-    setNewItem({
-      sku: "",
-      name: "",
-      category: "",
-      quantity: 0,
-      minStock: 0,
-      maxStock: 0,
-      unit: "",
-      location: "",
-      lot: "",
-      expiryDate: "",
-      unitCost: 0,
-    });
-    toast.success("Item adicionado ao estoque com sucesso!");
+  const handleAddItem = async () => {
+    try {
+      const { error } = await (await import("@/integrations/supabase/client")).supabase
+        .from("inventory_items")
+        .insert({
+          item_code: newItem.sku,
+          name: newItem.name,
+          category: newItem.category,
+          quantity: newItem.quantity,
+          min_quantity: newItem.minStock,
+          max_quantity: newItem.maxStock,
+          unit: newItem.unit,
+          location: newItem.location,
+          unit_cost: newItem.unitCost,
+          status: "active",
+        });
+      if (error) throw error;
+      setShowAddItem(false);
+      setNewItem({ sku: "", name: "", category: "", quantity: 0, minStock: 0, maxStock: 0, unit: "", location: "", lot: "", expiryDate: "", unitCost: 0 });
+      refetchInventory();
+      toast.success("Item adicionado ao estoque com sucesso!");
+    } catch {
+      toast.error("Erro ao adicionar item");
+    }
   };
 
-  const handleMovement = () => {
+  const handleMovement = async () => {
     if (!selectedItem) return;
-
-    const newQuantity = movementType === "in" 
+    const newQuantity = movementType === "in"
       ? selectedItem.quantity + movementData.quantity
-      : movementType === "out" 
+      : movementType === "out"
         ? selectedItem.quantity - movementData.quantity
-        : selectedItem.quantity + movementData.quantity; // adjustment can be + or -
+        : selectedItem.quantity + movementData.quantity;
 
-    // Update inventory
-    setInventory(prev => prev.map(item => {
-      if (item.id === selectedItem.id) {
-        const status = newQuantity <= item.minStock * 0.5 ? "critical" :
-          newQuantity <= item.minStock ? "low" :
-          newQuantity >= item.maxStock ? "excess" : "ok";
-        return { ...item, quantity: newQuantity, status, lastMovement: new Date().toISOString().split("T")[0] };
-      }
-      return item;
-    }));
-
-    // Add movement record
-    const movement: StockMovement = {
-      id: Date.now().toString(),
-      itemId: selectedItem.id,
-      itemName: selectedItem.name,
-      type: movementType,
-      quantity: movementType === "out" ? -movementData.quantity : movementData.quantity,
-      reason: movementData.reason,
-      user: "Usuário Atual",
-      date: new Date().toLocaleString("pt-BR"),
-      reference: movementData.reference,
-    };
-
-    setMovements(prev => [movement, ...prev]);
+    updateInventory.mutate({ id: selectedItem.id, updates: { quantity: newQuantity } as any });
     setShowMovement(false);
     setSelectedItem(null);
     setMovementData({ quantity: 0, reason: "", reference: "" });
