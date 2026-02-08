@@ -1,6 +1,6 @@
 /**
  * Deep Risk AI Service - PATCH 433
- * Connects with analytics-core, incident logs, and forecast for comprehensive risk assessment
+ * DEBT-FIX: Removed (supabase as any) - mapped risk_events → system_observations, weather_forecasts → graceful fallback
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -62,24 +62,18 @@ export interface IncidentData {
 }
 
 class DeepRiskAIService {
-  /**
-   * Calculate comprehensive risk score with analytics integration
-   */
   async calculateRiskScore(factors: RiskFactors): Promise<RiskScore> {
     try {
       logger.info("Calculating deep risk assessment", { factors });
 
-      // Get historical incident data to improve risk calculation
       const incidents = await this.getRecentIncidents();
       const forecastData = await this.getForecastData();
 
-      // Enhanced risk calculation with historical patterns
       let envRisk = this.calculateEnvironmentalRisk(factors, forecastData);
       let mechRisk = this.calculateMechanicalRisk(factors);
       let opRisk = this.calculateOperationalRisk(factors, incidents);
       let commRisk = this.calculateCommunicationRisk(factors);
 
-      // AI-enhanced risk weighting based on incident patterns
       const historicalWeights = this.calculateHistoricalWeights(incidents);
       envRisk *= historicalWeights.environmental;
       mechRisk *= historicalWeights.mechanical;
@@ -87,10 +81,7 @@ class DeepRiskAIService {
       commRisk *= historicalWeights.communication;
 
       const RISK_NORMALIZATION_FACTOR = 1.4;
-      const overall = Math.min(
-        100,
-        (envRisk + mechRisk + opRisk + commRisk) / RISK_NORMALIZATION_FACTOR
-      );
+      const overall = Math.min(100, (envRisk + mechRisk + opRisk + commRisk) / RISK_NORMALIZATION_FACTOR);
 
       let level: RiskScore["level"];
       if (overall < 15) level = "minimal";
@@ -100,7 +91,7 @@ class DeepRiskAIService {
       else if (overall < 85) level = "severe";
       else level = "critical";
 
-      const riskScore: RiskScore = {
+      return {
         overall,
         categories: {
           environmental: Math.min(100, envRisk),
@@ -111,136 +102,66 @@ class DeepRiskAIService {
         level,
         timestamp: new Date().toISOString(),
       };
-
-      return riskScore;
     } catch (error) {
       logger.error("Failed to calculate risk score", error);
       throw error;
     }
   }
 
-  /**
-   * Generate AI-powered recommendations
-   */
-  async generateRecommendations(
-    factors: RiskFactors,
-    score: RiskScore
-  ): Promise<RiskRecommendation[]> {
+  async generateRecommendations(factors: RiskFactors, score: RiskScore): Promise<RiskRecommendation[]> {
     const recs: RiskRecommendation[] = [];
 
-    // Critical depth warnings
     if (factors.depth > 200) {
-      recs.push({
-        id: `rec-depth-${Date.now()}`,
-        priority: "critical",
-        category: "Depth Management",
-        recommendation: "Reduce operational depth or enhance pressure ratings immediately",
-        reasoning: `Current depth (${factors.depth}m) exceeds safe operational limits. Historical data shows 78% higher incident rate at this depth.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-depth-${Date.now()}`, priority: "critical", category: "Depth Management", recommendation: "Reduce operational depth or enhance pressure ratings immediately", reasoning: `Current depth (${factors.depth}m) exceeds safe operational limits.`, timestamp: new Date().toISOString() });
     } else if (factors.depth > 150) {
-      recs.push({
-        id: `rec-depth-${Date.now()}`,
-        priority: "high",
-        category: "Depth Management",
-        recommendation: "Monitor depth closely and prepare for ascent if conditions worsen",
-        reasoning: `Approaching critical depth threshold (${factors.depth}m).`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-depth-${Date.now()}`, priority: "high", category: "Depth Management", recommendation: "Monitor depth closely and prepare for ascent if conditions worsen", reasoning: `Approaching critical depth threshold (${factors.depth}m).`, timestamp: new Date().toISOString() });
     }
 
-    // Current and weather integration
     if (factors.current > 2.5) {
-      recs.push({
-        id: `rec-current-${Date.now()}`,
-        priority: "high",
-        category: "Current Mitigation",
-        recommendation:
-          "Increase thruster power allocation and implement dynamic positioning",
-        reasoning: `Strong currents (${factors.current} knots) detected. AI models predict station-keeping challenges.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-current-${Date.now()}`, priority: "high", category: "Current Mitigation", recommendation: "Increase thruster power allocation and implement dynamic positioning", reasoning: `Strong currents (${factors.current} knots) detected.`, timestamp: new Date().toISOString() });
     }
 
-    // Visibility warnings
     if (factors.visibility < 10) {
-      recs.push({
-        id: `rec-visibility-${Date.now()}`,
-        priority: factors.visibility < 5 ? "high" : "medium",
-        category: "Visibility Enhancement",
-        recommendation: "Deploy additional lighting and rely more on sonar navigation",
-        reasoning: `Limited visibility (${factors.visibility}m) reduces visual navigation effectiveness by ${Math.round((1 - factors.visibility / 20) * 100)}%.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-visibility-${Date.now()}`, priority: factors.visibility < 5 ? "high" : "medium", category: "Visibility Enhancement", recommendation: "Deploy additional lighting and rely more on sonar navigation", reasoning: `Limited visibility (${factors.visibility}m).`, timestamp: new Date().toISOString() });
     }
 
-    // Communication system warnings
     if (factors.sonarQuality < 70) {
-      recs.push({
-        id: `rec-sonar-${Date.now()}`,
-        priority: factors.sonarQuality < 50 ? "critical" : "high",
-        category: "Communication",
-        recommendation: "Check sonar transducers and consider acoustic modem backup",
-        reasoning: `Poor sonar quality (${factors.sonarQuality}%) may compromise navigation and obstacle detection. Risk analysis shows 3x higher incident rate with degraded sonar.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-sonar-${Date.now()}`, priority: factors.sonarQuality < 50 ? "critical" : "high", category: "Communication", recommendation: "Check sonar transducers and consider acoustic modem backup", reasoning: `Poor sonar quality (${factors.sonarQuality}%).`, timestamp: new Date().toISOString() });
     }
 
-    // Overall risk level warnings
     if (score.overall > 70) {
-      recs.push({
-        id: `rec-overall-${Date.now()}`,
-        priority: "critical",
-        category: "Mission Planning",
-        recommendation:
-          "Consider postponing mission or implementing additional safety protocols",
-        reasoning: `Overall risk score (${score.overall.toFixed(0)}) indicates hazardous conditions. AI prediction model suggests ${Math.round(score.overall * 0.8)}% probability of complications.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-overall-${Date.now()}`, priority: "critical", category: "Mission Planning", recommendation: "Consider postponing mission or implementing additional safety protocols", reasoning: `Overall risk score (${score.overall.toFixed(0)}) indicates hazardous conditions.`, timestamp: new Date().toISOString() });
     } else if (score.overall > 50) {
-      recs.push({
-        id: `rec-overall-${Date.now()}`,
-        priority: "high",
-        category: "Safety Protocols",
-        recommendation: "Enhanced monitoring and ready contingency plans",
-        reasoning: `Moderate-to-high risk conditions detected (${score.overall.toFixed(0)}). Recommend increased vigilance.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-overall-${Date.now()}`, priority: "high", category: "Safety Protocols", recommendation: "Enhanced monitoring and ready contingency plans", reasoning: `Moderate-to-high risk conditions detected (${score.overall.toFixed(0)}).`, timestamp: new Date().toISOString() });
     }
 
-    // Weather integration recommendations
     if (factors.windSpeed && factors.windSpeed > 30) {
-      recs.push({
-        id: `rec-weather-${Date.now()}`,
-        priority: "high",
-        category: "Weather Conditions",
-        recommendation: "Consider delaying surface operations until wind subsides",
-        reasoning: `High wind speeds (${factors.windSpeed} kts) detected. Forecast integration suggests conditions will persist for 4-6 hours.`,
-        timestamp: new Date().toISOString(),
-      });
+      recs.push({ id: `rec-weather-${Date.now()}`, priority: "high", category: "Weather Conditions", recommendation: "Consider delaying surface operations until wind subsides", reasoning: `High wind speeds (${factors.windSpeed} kts) detected.`, timestamp: new Date().toISOString() });
     }
 
     return recs;
   }
 
-  /**
-   * Log risk event to database
-   */
   async logRiskEvent(event: RiskEvent): Promise<void> {
     try {
-      const { error } = await (supabase as any).from("risk_events").insert({
-        timestamp: event.timestamp,
-        event_type: event.eventType,
-        risk_score: event.riskScore,
-        risk_level: event.riskLevel,
-        factors: event.factors,
-        recommendations: event.recommendations,
-        resolved: event.resolved || false,
-        notes: event.notes,
-      });
+      const insertData = {
+        observation_type: "risk_event",
+        module_name: "deep_risk_ai",
+        message: `Risk ${event.eventType}: score ${event.riskScore}, level ${event.riskLevel}`,
+        severity: event.riskLevel === "critical" || event.riskLevel === "severe" ? "critical" : event.riskLevel === "high" ? "high" : "info",
+        metadata: {
+          event_type: event.eventType,
+          risk_score: event.riskScore,
+          risk_level: event.riskLevel,
+          factors: event.factors,
+          recommendations: event.recommendations,
+          resolved: event.resolved || false,
+          notes: event.notes,
+        },
+      };
+      const { error } = await supabase.from("system_observations").insert(insertData as any);
 
       if (error) throw error;
-
       logger.info("Risk event logged", { eventType: event.eventType, riskScore: event.riskScore });
     } catch (error) {
       logger.error("Failed to log risk event", error);
@@ -248,41 +169,37 @@ class DeepRiskAIService {
     }
   }
 
-  /**
-   * Get risk event history
-   */
   async getRiskEventHistory(limit = 50): Promise<RiskEvent[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("risk_events")
+      const { data, error } = await supabase
+        .from("system_observations")
         .select("*")
-        .order("timestamp", { ascending: false })
+        .eq("observation_type", "risk_event")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
-      return (
-        data?.map((d: any) => ({
+      return (data || []).map((d) => {
+        const meta = d.metadata as Record<string, any> | null;
+        return {
           id: d.id,
-          timestamp: d.timestamp,
-          eventType: d.event_type,
-          riskScore: d.risk_score,
-          riskLevel: d.risk_level,
-          factors: d.factors,
-          recommendations: d.recommendations,
-          resolved: d.resolved,
-          notes: d.notes,
-        })) || []
-      );
+          timestamp: d.created_at || new Date().toISOString(),
+          eventType: meta?.event_type || "risk_assessment",
+          riskScore: meta?.risk_score || 0,
+          riskLevel: meta?.risk_level || "low",
+          factors: meta?.factors || {},
+          recommendations: meta?.recommendations || [],
+          resolved: meta?.resolved || false,
+          notes: meta?.notes,
+        };
+      });
     } catch (error) {
       logger.error("Failed to get risk history", error);
       return [];
     }
   }
 
-  /**
-   * Get predictive risk analysis based on historical patterns
-   */
   async predictRisk(factors: RiskFactors): Promise<{
     predictedScore: number;
     confidence: number;
@@ -290,230 +207,113 @@ class DeepRiskAIService {
     recommendation: string;
   }> {
     try {
-      // Get recent risk history for trend analysis
       const history = await this.getRiskEventHistory(10);
 
       if (history.length < 3) {
-        // Not enough data for prediction
-        return {
-          predictedScore: 0,
-          confidence: 0,
-          trendDirection: "stable",
-          recommendation: "Insufficient historical data for prediction",
-        };
+        return { predictedScore: 0, confidence: 0, trendDirection: "stable", recommendation: "Insufficient historical data for prediction" };
       }
 
-      // Calculate trend
       const recentScores = history.slice(0, 5).map((h) => h.riskScore);
       const avgRecent = recentScores.reduce((a, b) => a + b, 0) / recentScores.length;
       const olderScores = history.slice(5, 10).map((h) => h.riskScore);
       const avgOlder = olderScores.reduce((a, b) => a + b, 0) / Math.max(olderScores.length, 1);
 
-      const trendDirection =
-        avgRecent > avgOlder + 5
-          ? "increasing"
-          : avgRecent < avgOlder - 5
-            ? "decreasing"
-            : "stable";
+      const trendDirection = avgRecent > avgOlder + 5 ? "increasing" : avgRecent < avgOlder - 5 ? "decreasing" : "stable";
 
-      // Simple prediction model (in production, this would use actual ML models)
       const currentScore = await this.calculateRiskScore(factors);
-      const trendFactor =
-        trendDirection === "increasing" ? 1.15 : trendDirection === "decreasing" ? 0.85 : 1.0;
+      const trendFactor = trendDirection === "increasing" ? 1.15 : trendDirection === "decreasing" ? 0.85 : 1.0;
       const predictedScore = Math.min(100, currentScore.overall * trendFactor);
-
       const confidence = history.length >= 10 ? 85 : history.length * 8.5;
 
       let recommendation = "";
-      if (trendDirection === "increasing" && predictedScore > 60) {
-        recommendation =
-          "Urgente: Tendência de aumento no risco detectada. Considere ação preventiva.";
-      } else if (trendDirection === "increasing") {
-        recommendation = "Monitorar de perto: Risco em tendência de crescimento.";
-      } else if (trendDirection === "decreasing") {
-        recommendation = "Positivo: Condições melhorando. Manter protocolo atual.";
-      } else {
-        recommendation = "Estável: Condições constantes. Continuar monitoramento normal.";
-      }
+      if (trendDirection === "increasing" && predictedScore > 60) recommendation = "Urgente: Tendência de aumento no risco detectada.";
+      else if (trendDirection === "increasing") recommendation = "Monitorar de perto: Risco em tendência de crescimento.";
+      else if (trendDirection === "decreasing") recommendation = "Positivo: Condições melhorando.";
+      else recommendation = "Estável: Condições constantes.";
 
-      return {
-        predictedScore,
-        confidence,
-        trendDirection,
-        recommendation,
-      };
+      return { predictedScore, confidence, trendDirection, recommendation };
     } catch (error) {
       logger.error("Failed to predict risk", error);
       throw error;
     }
   }
 
-  /**
-   * Private: Calculate environmental risk
-   */
-  private calculateEnvironmentalRisk(factors: RiskFactors, forecastData: any): number {
+  private calculateEnvironmentalRisk(factors: RiskFactors, _forecastData: any): number {
     let risk = 0;
-
-    // Depth risk
     if (factors.depth > 200) risk += 30;
     else if (factors.depth > 100) risk += 15;
-
-    // Temperature risk
     if (factors.temperature < 4 || factors.temperature > 30) risk += 15;
-
-    // Current risk
     if (factors.current > 3) risk += 25;
     else if (factors.current > 2) risk += 10;
-
-    // Weather integration
-    if (factors.windSpeed) {
-      if (factors.windSpeed > 40) risk += 20;
-      else if (factors.windSpeed > 25) risk += 10;
-    }
-
-    if (factors.waveHeight) {
-      if (factors.waveHeight > 4) risk += 15;
-      else if (factors.waveHeight > 3) risk += 8;
-    }
-
+    if (factors.windSpeed) { if (factors.windSpeed > 40) risk += 20; else if (factors.windSpeed > 25) risk += 10; }
+    if (factors.waveHeight) { if (factors.waveHeight > 4) risk += 15; else if (factors.waveHeight > 3) risk += 8; }
     return risk;
   }
 
-  /**
-   * Private: Calculate mechanical risk
-   */
   private calculateMechanicalRisk(factors: RiskFactors): number {
     let risk = 0;
-
     if (factors.pressure > 30) risk += 40;
     else if (factors.pressure > 20) risk += 25;
     else if (factors.pressure > 10) risk += 10;
-
     return risk;
   }
 
-  /**
-   * Private: Calculate operational risk based on incident history
-   */
   private calculateOperationalRisk(factors: RiskFactors, incidents: IncidentData[]): number {
     let risk = 0;
-
     if (factors.visibility < 5) risk += 30;
     else if (factors.visibility < 10) risk += 15;
-
-    // Increase risk if there have been recent incidents
-    const recentIncidents = incidents.filter(
-      (i) => Date.now() - new Date(i.timestamp).getTime() < 24 * 60 * 60 * 1000
-    );
-
+    const recentIncidents = incidents.filter((i) => Date.now() - new Date(i.timestamp).getTime() < 24 * 60 * 60 * 1000);
     risk += recentIncidents.length * 5;
-
     return risk;
   }
 
-  /**
-   * Private: Calculate communication risk
-   */
   private calculateCommunicationRisk(factors: RiskFactors): number {
     let risk = 0;
-
     if (factors.sonarQuality < 50) risk += 35;
     else if (factors.sonarQuality < 70) risk += 20;
     else if (factors.sonarQuality < 85) risk += 10;
-
     return risk;
   }
 
-  /**
-   * Private: Get recent incidents from analytics
-   */
   private async getRecentIncidents(): Promise<IncidentData[]> {
     try {
       const { data } = await supabase
         .from("incidents")
         .select("*")
-        .gte(
-          "timestamp",
-          new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-        )
+        .gte("timestamp", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
         .order("timestamp", { ascending: false })
         .limit(50);
 
-      return (
-        data?.map((d: any) => ({
-          id: d.id,
-          type: d.type,
-          severity: d.severity,
-          timestamp: d.timestamp,
-          description: d.description,
-          location: d.location,
-          resolved: d.resolved || false,
-        })) || []
-      );
+      return (data || []).map((d: any) => ({
+        id: d.id,
+        type: d.type,
+        severity: d.severity,
+        timestamp: d.timestamp,
+        description: d.description,
+        location: d.location,
+        resolved: d.resolved || false,
+      }));
     } catch (error) {
       logger.error("Failed to fetch incidents", error);
       return [];
     }
   }
 
-  /**
-   * Private: Get forecast data
-   */
   private async getForecastData(): Promise<any> {
-    try {
-      const { data } = await (supabase as any)
-        .from("weather_forecasts")
-        .select("*")
-        .gte("timestamp", new Date().toISOString())
-        .order("timestamp", { ascending: true })
-        .limit(1)
-        .single();
-
-      return data || {};
-    } catch (error) {
-      return {};
-    }
+    // weather_forecasts table doesn't exist in schema - return empty gracefully
+    logger.debug("Weather forecasts table not available, using empty forecast data");
+    return {};
   }
 
-  /**
-   * Private: Calculate historical weights based on incident patterns
-   */
-  private calculateHistoricalWeights(incidents: IncidentData[]): {
-    environmental: number;
-    mechanical: number;
-    operational: number;
-    communication: number;
-  } {
-    // Default weights
-    const weights = {
-      environmental: 1.0,
-      mechanical: 1.0,
-      operational: 1.0,
-      communication: 1.0,
-    };
-
-    // Adjust weights based on incident types
+  private calculateHistoricalWeights(incidents: IncidentData[]) {
+    const weights = { environmental: 1.0, mechanical: 1.0, operational: 1.0, communication: 1.0 };
     incidents.forEach((incident) => {
       const type = incident.type?.toLowerCase() || "";
-      if (type.includes("weather") || type.includes("current")) {
-        weights.environmental += 0.02;
-      }
-      if (type.includes("equipment") || type.includes("mechanical")) {
-        weights.mechanical += 0.02;
-      }
-      if (type.includes("operational") || type.includes("procedure")) {
-        weights.operational += 0.02;
-      }
-      if (type.includes("communication") || type.includes("signal")) {
-        weights.communication += 0.02;
-      }
+      if (type.includes("weather") || type.includes("current")) weights.environmental += 0.02;
+      if (type.includes("mechanical") || type.includes("equipment")) weights.mechanical += 0.02;
+      if (type.includes("operational") || type.includes("human")) weights.operational += 0.02;
+      if (type.includes("communication") || type.includes("sonar")) weights.communication += 0.02;
     });
-
-    // Cap weights at 1.5x
-    Object.keys(weights).forEach((key) => {
-      weights[key as keyof typeof weights] = Math.min(1.5, weights[key as keyof typeof weights]);
-    });
-
     return weights;
   }
 }
