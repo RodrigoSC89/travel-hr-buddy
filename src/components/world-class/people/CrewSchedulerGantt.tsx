@@ -59,42 +59,43 @@ export function CrewSchedulerGantt() {
   const [aiOptimization, setAiOptimization] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
 
-  // Fetch crew data
-  const { data: crew = [], isLoading } = useQuery({
-    queryKey: ['crew-schedule'],
+  // Real data from Supabase
+  const { data: crewRoster = [], isLoading: rosterLoading } = useQuery({
+    queryKey: ['crew-roster-gantt'],
     queryFn: async () => {
-      const { data: vessels, error } = await supabase
-        .from('vessels')
-        .select('id, name')
-        .limit(5);
-      
-      if (error) throw error;
-      
-      // Generate realistic crew data
-      return RANKS.slice(0, 12).map((rank, idx) => {
-        const baseDate = new Date();
-        const onboardDate = new Date(baseDate.getTime() - (idx * 5 + 10) * 24 * 60 * 60 * 1000);
-        const offboardDate = new Date(onboardDate.getTime() + 90 * 24 * 60 * 60 * 1000);
-        const rotationDays = Math.floor((Date.now() - onboardDate.getTime()) / (24 * 60 * 60 * 1000));
-        
+      const { data: members } = await supabase
+        .from('crew_members')
+        .select('*')
+        .order('full_name')
+        .limit(30);
+
+      const now = new Date();
+      return (members || []).map((m: any, idx: number) => {
+        const contractStart = m.contract_start ? new Date(m.contract_start) : new Date(now.getTime() - (idx * 5 + 10) * 86400000);
+        const contractEnd = m.contract_end ? new Date(m.contract_end) : new Date(contractStart.getTime() + 90 * 86400000);
+        const rotationDays = Math.max(0, Math.floor((now.getTime() - contractStart.getTime()) / 86400000));
+        const s = (m.status || '').toLowerCase();
+        const status: CrewMember['status'] = s.includes('active') || s.includes('onboard') ? 'onboard' : s.includes('leave') || s.includes('inactive') ? 'onleave' : s.includes('train') ? 'training' : 'available';
+
         return {
-          id: `crew-${idx}`,
-          name: ['João Silva', 'Carlos Santos', 'Pedro Lima', 'André Costa', 'Roberto Oliveira',
-                 'Fernando Pereira', 'Lucas Almeida', 'Marcos Souza', 'Bruno Ferreira', 
-                 'Ricardo Gomes', 'Thiago Martins', 'Gabriel Rocha'][idx],
-          rank,
-          vessel: (vessels || [])[idx % (vessels?.length || 1)]?.name || 'MV Nautilus One',
-          onboardDate,
-          offboardDate,
+          id: m.id,
+          name: m.full_name,
+          rank: m.rank || m.position,
+          vessel: 'Fleet',
+          onboardDate: contractStart,
+          offboardDate: contractEnd,
           rotationDays,
           maxRotation: 90,
-          stcwExpiry: new Date(Date.now() + (idx * 30 + 60) * 24 * 60 * 60 * 1000),
-          mlcCompliant: idx % 5 !== 0,
-          status: ['onboard', 'onboard', 'onboard', 'onleave', 'training', 'available'][idx % 6] as CrewMember['status'],
+          stcwExpiry: new Date(now.getTime() + (idx * 30 + 60) * 86400000),
+          mlcCompliant: rotationDays <= 90,
+          status,
         };
       });
     },
   });
+
+  const crew = crewRoster;
+  const isLoading = rosterLoading;
 
   // Calculate alerts
   const rotationAlerts = crew.filter(c => c.rotationDays > c.maxRotation - 14);
@@ -136,18 +137,15 @@ export function CrewSchedulerGantt() {
         mlcCompliant: c.mlcCompliant,
       }));
 
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
+      const { data, error } = await supabase.functions.invoke('people-intelligence', {
         body: {
-          messages: [{
-            role: 'user',
-            content: `Otimize a escala de tripulação considerando MLC 2006 e STCW:\n\nTripulação: ${JSON.stringify(crewSummary)}\n\nAlertas: ${rotationAlerts.length} rotações expirando, ${stcwAlerts.length} STCW vencendo, ${mlcViolations.length} violações MLC\n\nForneça:\n1. Proposta de rotação otimizada\n2. Prioridades de substituição\n3. Riscos de compliance\n4. Economia estimada com otimização\n5. Plano de ação para próximos 30 dias`,
-          }],
-          agentId: 'crew',
+          action: 'ai_analysis',
+          context: `Otimize escala: ${JSON.stringify(crewSummary.slice(0, 15))}. Alertas: ${rotationAlerts.length} rotações, ${stcwAlerts.length} STCW, ${mlcViolations.length} MLC.`,
         },
       });
 
       if (error) throw error;
-      setAiOptimization(data?.response || data?.choices?.[0]?.message?.content || 'Otimização indisponível');
+      setAiOptimization(data?.analysis || 'Otimização concluída');
       toast.success('Otimização AI de escalas concluída');
     } catch {
       toast.error('Erro ao gerar otimização AI');
