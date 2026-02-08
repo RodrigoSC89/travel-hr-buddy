@@ -80,20 +80,20 @@ export class ReflectiveCore {
 
     this.decisionHistory.push(record);
 
-    // Store in database
+    // ai_decision_history not in schema - use ai_decisions table
     try {
-      await (supabase as any).from("ai_decision_history").insert({
-        decision_id: record.id,
-        mission_id: record.missionId,
-        decision_type: record.decisionType,
-        context: record.context,
-        chosen_action: record.chosenAction,
-        alternative_actions: record.alternativeActions,
-        outcome: record.outcome,
-        impact_score: record.impactScore,
-        confidence_at_time: record.confidenceAtTime,
-        actual_performance: record.actualPerformance,
-        timestamp: record.timestamp,
+      await supabase.from("ai_decisions").insert({
+        title: record.decisionType || "Reflective Decision",
+        description: record.chosenAction || "Decision recorded",
+        type: record.decisionType || "operational",
+        confidence: record.confidenceAtTime || 0.5,
+        confidence_level: record.confidenceAtTime > 0.8 ? "high" : record.confidenceAtTime > 0.5 ? "medium" : "low",
+        impact: record.impactScore ? String(record.impactScore) : "unknown",
+        justification_reasoning: JSON.stringify({
+          context: record.context,
+          alternatives: record.alternativeActions,
+        }),
+        status: record.outcome || "pending",
       });
     } catch (error) {
       logger.error("Failed to record decision", error);

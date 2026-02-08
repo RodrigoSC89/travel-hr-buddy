@@ -332,20 +332,23 @@ class CollectiveLoopEngine {
 
   private async recordFeedback(feedback: FeedbackEvent): Promise<void> {
     try {
-      const { data, error } = await (supabase as any)
+      // feedback_events schema: feedback_type, feedback_category, module_name, source are required
+      const { data, error } = await supabase
         .from("feedback_events")
         .insert({
-          event_type: feedback.feedbackType,
-          source_module: feedback.sourceModule,
+          feedback_type: feedback.feedbackType,
           feedback_category: feedback.feedbackCategory,
-          rating: feedback.rating,
-          content: feedback.content,
-          metadata: feedback.metadata,
-          ai_metrics: feedback.aiMetrics,
-          impact_score: feedback.impactScore,
+          module_name: feedback.sourceModule,
+          source: "collective_loop",
+          confidence: feedback.rating ? feedback.rating / 5 : null,
+          metadata: {
+            content: feedback.content,
+            ai_metrics: feedback.aiMetrics,
+            impact_score: feedback.impactScore,
+            ...(feedback.metadata || {})
+          } as unknown as import("@/integrations/supabase/types").Json,
           processed: feedback.processed,
           learning_applied: feedback.learningApplied,
-          timestamp: feedback.timestamp.toISOString()
         })
         .select()
         .single();

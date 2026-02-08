@@ -229,23 +229,23 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
       }
     }
     
-    // Check 2: Verify operations reference valid crew
-    const { data: operations } = await (supabase as any)
-      .from("vessel_operations")
-      .select("id, crew_required")
+    // Check 2: Verify operations reference valid crew (using crew_assignments)
+    const { data: operations } = await supabase
+      .from("crew_assignments")
+      .select("id, crew_member_id")
       .limit(100);
     
     if (operations && operations.length > 0) {
       checks.push({
         name: "Operations Have Crew Requirements",
         passed: true,
-        message: `${operations.length} operations with crew data`,
+        message: `${operations.length} crew assignments with data`,
         severity: "info",
       });
     }
     
     // Check 3: Check for orphaned records
-    const { data: orphanedCrew } = await (supabase as any)
+    const { data: orphanedCrew } = await supabase
       .from("crew_members")
       .select("id")
       .is("organization_id", null);
@@ -312,16 +312,14 @@ export async function logIntegrityIssues(validation: CrossModuleValidation) {
     const failedChecks = result.checks.filter((check) => !check.passed);
     
     for (const issue of failedChecks) {
+      // integrity_logs not in schema - log to console
       try {
-        await (supabase as any)
-          .from("integrity_logs")
-          .insert({
-            timestamp: new Date().toISOString(),
-            module: moduleName,
-            error_type: issue.severity,
-            relation: issue.name,
-            message: issue.message,
-          } as any);
+        logger.warn("Integrity issue detected", {
+          module: moduleName,
+          errorType: issue.severity,
+          relation: issue.name,
+          message: issue.message,
+        });
       } catch (error) {
         logger.error("Error logging integrity issue:", error);
       }

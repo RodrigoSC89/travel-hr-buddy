@@ -1,7 +1,7 @@
 /**
  * Quality Management Real-Time Data Hooks
  * NCR management, CAPA tracking, internal audits, continuous improvement
- * Uses non_conformities, corrective_actions, internal_audits tables
+ * DEBT-FIX: Removed (supabase as any) - all tables exist in schema
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -76,7 +76,7 @@ export function useNonConformities(vesselId?: string, status?: string) {
   return useQuery({
     queryKey: ['non-conformities', vesselId, status],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('non_conformities')
         .select('*')
         .order('created_at', { ascending: false });
@@ -94,7 +94,7 @@ export function useNonConformities(vesselId?: string, status?: string) {
         console.warn('NCR query error:', error.message);
         return [];
       }
-      return (data || []) as NonConformity[];
+      return (data || []) as unknown as NonConformity[];
     },
   });
 }
@@ -103,14 +103,14 @@ export function useNonConformity(ncrId: string) {
   return useQuery({
     queryKey: ['non-conformity', ncrId],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('non_conformities')
         .select('*')
         .eq('id', ncrId)
         .single();
 
       if (error) throw error;
-      return data as NonConformity;
+      return data as unknown as NonConformity;
     },
     enabled: !!ncrId,
   });
@@ -123,12 +123,20 @@ export function useCreateNCR() {
     mutationFn: async (ncr: Partial<NonConformity>) => {
       const ncrNumber = `NCR-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('non_conformities')
         .insert({
-          ...ncr,
           ncr_number: ncrNumber,
+          title: ncr.title || "Untitled NCR",
+          description: ncr.description || "",
+          category: ncr.category || "general",
+          source: ncr.source || "observation",
+          severity: ncr.severity || "minor",
           status: 'open',
+          vessel_id: ncr.vessel_id,
+          root_cause: ncr.root_cause,
+          assigned_to: ncr.assigned_to,
+          due_date: ncr.due_date,
         })
         .select()
         .single();
@@ -140,7 +148,7 @@ export function useCreateNCR() {
       queryClient.invalidateQueries({ queryKey: ['non-conformities'] });
       toast.success('NCR criada com sucesso');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error('Erro ao criar NCR', { description: error.message });
     },
   });
@@ -150,8 +158,8 @@ export function useUpdateNCR() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: Partial<NonConformity> }) => {
-      const { data, error } = await (supabase as any)
+    mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
+      const { data, error } = await supabase
         .from('non_conformities')
         .update(updates)
         .eq('id', id)
@@ -175,7 +183,7 @@ export function useCorrectiveActions(ncrId?: string) {
   return useQuery({
     queryKey: ['corrective-actions', ncrId],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('corrective_actions')
         .select('*')
         .order('due_date', { ascending: true });
@@ -189,7 +197,7 @@ export function useCorrectiveActions(ncrId?: string) {
         console.warn('CAPA query error:', error.message);
         return [];
       }
-      return (data || []) as CorrectiveAction[];
+      return (data || []) as unknown as CorrectiveAction[];
     },
   });
 }
@@ -199,12 +207,15 @@ export function useCreateCorrectiveAction() {
   
   return useMutation({
     mutationFn: async (action: Partial<CorrectiveAction>) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('corrective_actions')
         .insert({
-          ...action,
+          ncr_id: action.ncr_id || null,
+          action_type: action.action_type || "corrective",
+          description: action.description || "",
+          responsible_person: action.responsible || "",
+          due_date: action.due_date || new Date().toISOString(),
           status: 'pending',
-          effectiveness_verified: false,
         })
         .select()
         .single();
@@ -226,7 +237,7 @@ export function useInternalAudits(vesselId?: string) {
   return useQuery({
     queryKey: ['internal-audits', vesselId],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('internal_audits')
         .select('*')
         .order('scheduled_date', { ascending: false });
@@ -240,7 +251,7 @@ export function useInternalAudits(vesselId?: string) {
         console.warn('Internal audits query error:', error.message);
         return [];
       }
-      return (data || []) as InternalAudit[];
+      return (data || []) as unknown as InternalAudit[];
     },
   });
 }
@@ -252,11 +263,15 @@ export function useScheduleAudit() {
     mutationFn: async (audit: Partial<InternalAudit>) => {
       const auditNumber = `AUD-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('internal_audits')
         .insert({
-          ...audit,
           audit_number: auditNumber,
+          vessel_id: audit.vessel_id,
+          department: audit.department || "general",
+          audit_type: audit.audit_type || "routine",
+          auditor_name: audit.auditor_name || "",
+          scheduled_date: audit.scheduled_date || new Date().toISOString(),
           status: 'scheduled',
           findings_count: 0,
         })
@@ -280,7 +295,7 @@ export function useImprovementSuggestions(status?: string) {
   return useQuery({
     queryKey: ['improvement-suggestions', status],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('improvement_suggestions')
         .select('*')
         .order('created_at', { ascending: false });
@@ -294,7 +309,7 @@ export function useImprovementSuggestions(status?: string) {
         console.warn('Suggestions query error:', error.message);
         return [];
       }
-      return (data || []) as ImprovementSuggestion[];
+      return (data || []) as unknown as ImprovementSuggestion[];
     },
   });
 }
@@ -304,11 +319,16 @@ export function useSubmitSuggestion() {
   
   return useMutation({
     mutationFn: async (suggestion: Partial<ImprovementSuggestion>) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('improvement_suggestions')
         .insert({
-          ...suggestion,
+          title: suggestion.title || "Untitled",
+          description: suggestion.description || "",
+          category: suggestion.category || "general",
+          submitted_by: suggestion.submitted_by || "anonymous",
           status: 'submitted',
+          vessel_id: suggestion.vessel_id,
+          estimated_benefit: suggestion.estimated_benefit,
         })
         .select()
         .single();
@@ -330,44 +350,44 @@ export function useQualityDashboardStats() {
   return useQuery({
     queryKey: ['quality-dashboard-stats'],
     queryFn: async () => {
-      const { data: ncrs } = await (supabase as any)
+      const { data: ncrs } = await supabase
         .from('non_conformities')
         .select('id, status, severity, created_at');
 
-      const { data: audits } = await (supabase as any)
+      const { data: audits } = await supabase
         .from('internal_audits')
         .select('id, status, score');
 
-      const { data: actions } = await (supabase as any)
+      const { data: actions } = await supabase
         .from('corrective_actions')
         .select('id, status, due_date');
 
-      const { data: suggestions } = await (supabase as any)
+      const { data: suggestions } = await supabase
         .from('improvement_suggestions')
         .select('id, status');
 
       const now = new Date();
-      const openNCRs = (ncrs || []).filter((n: any) => n.status !== 'closed').length;
-      const criticalNCRs = (ncrs || []).filter((n: any) => n.severity === 'critical' && n.status !== 'closed').length;
+      const openNCRs = (ncrs || []).filter(n => n.status !== 'closed').length;
+      const criticalNCRs = (ncrs || []).filter(n => n.severity === 'critical' && n.status !== 'closed').length;
 
-      const completedAudits = (audits || []).filter((a: any) => a.status === 'completed').length;
-      const auditScores = (audits || []).filter((a: any) => a.score !== null);
+      const completedAudits = (audits || []).filter(a => a.status === 'completed').length;
+      const auditScores = (audits || []).filter(a => a.score !== null);
       const averageAuditScore = auditScores.length > 0
-        ? auditScores.reduce((sum: number, a: any) => sum + (a.score || 0), 0) / auditScores.length
+        ? auditScores.reduce((sum, a) => sum + (a.score || 0), 0) / auditScores.length
         : 0;
 
-      const overdueActions = (actions || []).filter((a: any) => {
-        return a.status !== 'completed' && new Date(a.due_date) < now;
+      const overdueActions = (actions || []).filter(a => {
+        return a.status !== 'completed' && a.due_date && new Date(a.due_date) < now;
       }).length;
 
-      const implementedSuggestions = (suggestions || []).filter((s: any) => s.status === 'implemented').length;
+      const implementedSuggestions = (suggestions || []).filter(s => s.status === 'implemented').length;
 
       return {
         openNCRs,
         criticalNCRs,
         totalNCRs: ncrs?.length || 0,
         completedAudits,
-        scheduledAudits: (audits || []).filter((a: any) => a.status === 'scheduled').length,
+        scheduledAudits: (audits || []).filter(a => a.status === 'scheduled').length,
         averageAuditScore: parseFloat(averageAuditScore.toFixed(1)),
         overdueActions,
         totalActions: actions?.length || 0,
