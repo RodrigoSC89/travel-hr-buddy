@@ -110,7 +110,7 @@ class IndexedDBSync {
     const store = await this.getStore(STORES.SYNC_QUEUE, 'readwrite');
     
     const item: SyncItem = {
-      id: `sync-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      id: `sync-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       operation,
       table,
       data,

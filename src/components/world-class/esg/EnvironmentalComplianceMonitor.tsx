@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -53,7 +54,7 @@ export function EnvironmentalComplianceMonitor() {
 
       setRegulations(regs);
     } catch (err) {
-      console.error('Compliance monitor error:', err);
+      logger.error('Compliance monitor error:', err);
       toast.error('Erro ao carregar dados de compliance');
     } finally {
       setLoading(false);

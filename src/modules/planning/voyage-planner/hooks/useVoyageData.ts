@@ -4,6 +4,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
 import type { VoyageRoute, Port } from '../types';
 
@@ -75,7 +76,7 @@ export function usePorts() {
 
       if (error) {
         // Return empty - no fallback to demo data
-        console.warn('Ports table not accessible:', error.message);
+        logger.warn('Ports table not accessible:', error.message);
         return EMPTY_PORTS;
       }
 

@@ -74,7 +74,7 @@ export class ReflectiveCore {
   async recordDecision(decision: Omit<DecisionRecord, "id" | "timestamp">): Promise<string> {
     const record: DecisionRecord = {
       ...decision,
-      id: `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `decision-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date().toISOString(),
     };
 
@@ -283,7 +283,7 @@ export class ReflectiveCore {
     ) / pattern.decisions.length;
 
     return {
-      id: `insight-error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `insight-error-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       missionId,
       decisionId: pattern.decisions[0].id,
       insightType: "error_pattern",
@@ -311,7 +311,7 @@ export class ReflectiveCore {
     ) / pattern.decisions.length;
 
     return {
-      id: `insight-success-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `insight-success-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       missionId,
       decisionId: pattern.decisions[0].id,
       insightType: "success_pattern",
@@ -339,7 +339,7 @@ export class ReflectiveCore {
     missionId: string
   ): ReflectionInsight {
     return {
-      id: `insight-opportunity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `insight-opportunity-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       missionId,
       decisionId: opportunity.decision.id,
       insightType: "missed_opportunity",

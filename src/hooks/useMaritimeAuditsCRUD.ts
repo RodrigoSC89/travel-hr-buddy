@@ -18,6 +18,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useUniversalExport, type ExportColumn, type ExportFormat } from './useUniversalExport';
@@ -262,7 +263,7 @@ export function useCreateMaritimeAudit() {
       });
     },
     onError: (error: any) => {
-      console.error('Create audit error:', error);
+      logger.error('Create audit error:', error);
       toast.error('Erro ao criar auditoria', {
         description: error.message,
       });
@@ -313,7 +314,7 @@ export function useUpdateMaritimeAudit() {
       });
     },
     onError: (error: any) => {
-      console.error('Update audit error:', error);
+      logger.error('Update audit error:', error);
       toast.error('Erro ao atualizar auditoria', {
         description: error.message,
       });
@@ -348,7 +349,7 @@ export function useDeleteMaritimeAudit() {
       });
     },
     onError: (error: any) => {
-      console.error('Delete audit error:', error);
+      logger.error('Delete audit error:', error);
       toast.error('Erro ao remover auditoria', {
         description: error.message,
       });

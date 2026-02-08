@@ -94,7 +94,7 @@ class RiskInterpreter {
 
       if (distance < 20 && depthDiff < 5) {
         hazards.push({
-          id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: `hazard-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
           type: "obstacle",
           severity: distance < 10 ? "critical" : "high",
           location: {
@@ -117,7 +117,7 @@ class RiskInterpreter {
         
         if (depthDiff > this.CRITICAL_DEPTH_VARIANCE) {
           hazards.push({
-            id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            id: `hazard-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
             type: "dangerous_terrain",
             severity: depthDiff > 100 ? "critical" : "high",
             location: pattern.location,
@@ -134,7 +134,7 @@ class RiskInterpreter {
         const severity = this.assessAnomalySeverity(pattern);
         
         hazards.push({
-          id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: `hazard-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
           type: pattern.type === "object" ? "unknown_object" : "anomaly",
           severity,
           location: pattern.location,
@@ -150,7 +150,7 @@ class RiskInterpreter {
     const lowVisReturns = returns.filter(r => r.noise > 50);
     if (lowVisReturns.length > returns.length * 0.3) {
       hazards.push({
-        id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `hazard-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         type: "low_visibility",
         severity: "medium",
         location: { angle: 0, distance: 0, depth: currentDepth },

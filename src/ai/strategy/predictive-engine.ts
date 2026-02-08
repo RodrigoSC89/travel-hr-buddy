@@ -508,7 +508,7 @@ class PredictiveStrategyEngine {
 
     // Generate resource allocation strategy if not present
     if (!existingTypes.has("resource_allocation") && alternatives.length < 2) {
-      const strategyId = `strategy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const strategyId = `strategy_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
       const successRate = this.learningModel.get("resource_allocation") || 0.7;
       
       alternatives.push({

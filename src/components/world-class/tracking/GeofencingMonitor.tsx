@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -51,7 +52,7 @@ export function GeofencingMonitor() {
       const data = await trackingIntelligence.getDashboardData();
       setPositions(data.positions);
     } catch (err) {
-      console.error('Geofencing error:', err);
+      logger.error('Geofencing error:', err);
       toast.error('Erro ao carregar dados de geofencing');
     } finally {
       setLoading(false);

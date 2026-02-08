@@ -62,7 +62,7 @@ class APMService {
    * Start a new transaction
    */
   startTransaction(name: string, type: APMTransaction['type'] = 'user-action'): string {
-    const id = `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `txn_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     const transaction: APMTransaction = {
       id,
@@ -123,7 +123,7 @@ class APMService {
       return '';
     }
 
-    const spanId = `span_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const spanId = `span_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     transaction.spans.push({
       id: spanId,
@@ -174,7 +174,7 @@ class APMService {
    */
   recordError(error: Error | string, type: string = 'unknown', transactionId?: string, metadata?: Record<string, unknown>) {
     const apmError: APMError = {
-      id: `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `err_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       message: error instanceof Error ? error.message : error,
       stack: error instanceof Error ? error.stack : undefined,
       type,

@@ -128,7 +128,7 @@ export async function queueForSync(
   priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
 ): Promise<string> {
   const database = await initOfflineDB();
-  const id = `${table}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const id = `${table}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
 
   await database.add('pendingSync', {
     id,

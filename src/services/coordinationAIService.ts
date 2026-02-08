@@ -122,7 +122,7 @@ class CoordinationAIService {
   async createTask(task: Partial<CoordinationTask> & { task_name: string; task_type: string }): Promise<CoordinationTask | null> {
     const { data: userData } = await supabase.auth.getUser();
     
-    const commandHash = `task_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const commandHash = `task_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
 
     const { data, error } = await supabase
       .from("ai_commands")

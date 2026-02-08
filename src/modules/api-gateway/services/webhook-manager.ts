@@ -125,7 +125,7 @@ class WebhookManagerService {
   }
 
   private generateId(): string {
-    return `${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    return `${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 }
 

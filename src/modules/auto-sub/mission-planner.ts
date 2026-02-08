@@ -85,7 +85,7 @@ class MissionPlanner {
     const riskLevel = this.assessRisk(area, environmental);
 
     const plan: AutoMissionPlan = {
-      id: `mission-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `mission-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       name: `Autonomous Survey - ${area.name}`,
       area,
       objectives,

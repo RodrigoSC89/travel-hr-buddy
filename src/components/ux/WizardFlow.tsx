@@ -3,6 +3,7 @@
  * Ideal para criação de registros, configurações e processos multi-etapa
  */
 import React, { useState, useCallback } from "react";
+import { logger } from "@/lib/logger";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -104,7 +105,7 @@ export function WizardFlow({
         await onComplete();
         handleClose();
       } catch (error) {
-        console.error("Error completing wizard:", error);
+        logger.error("Error completing wizard:", error);
       } finally {
         setIsCompleting(false);
       }

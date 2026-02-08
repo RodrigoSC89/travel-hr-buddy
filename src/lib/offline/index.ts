@@ -5,6 +5,7 @@
  * PATCH 901: Advanced offline-first with maritime optimizations
  */
 
+import { logger } from '@/lib/logger';
 export { requestQueue } from './request-queue';
 export { offlineSyncManager, initializeSyncManager } from './sync-manager';
 export { 
@@ -146,7 +147,7 @@ export async function initOfflineSupport() {
         }
       });
     } catch (error) {
-      console.error('❌ Service Worker registration failed:', error);
+      logger.error('Service Worker registration failed:', error);
     }
   }
 
@@ -155,7 +156,7 @@ export async function initOfflineSupport() {
     const { initNautiOneDB } = await import('./db');
     await initNautiOneDB();
   } catch (error) {
-    console.error('❌ IndexedDB initialization failed:', error);
+    logger.error('IndexedDB initialization failed:', error);
   }
 
   // Setup online/offline listeners
@@ -172,7 +173,7 @@ export async function initOfflineSupport() {
     const { cleanupStorageIfNeeded } = await import('./optimizations');
     await cleanupStorageIfNeeded(80);
   } catch (error) {
-    console.warn('Storage cleanup skipped:', error);
+    logger.warn('Storage cleanup skipped:', error);
   }
 }
 

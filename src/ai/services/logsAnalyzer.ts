@@ -141,7 +141,7 @@ const detectAnomalies = (logs: (SystemLogRow | any)[]): Anomaly[] => {
   errorPatterns.forEach((group, pattern) => {
     if (group.length >= 3) {
       anomalies.push({
-        id: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `anomaly-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         type: "recurring_failure",
         severity: group.length > 10 ? "high" : "medium",
         description: `Falha recorrente detectada: ${pattern}`,
@@ -279,7 +279,7 @@ const parseRecommendationsResponse = (
     const parsed = JSON.parse(jsonMatch[0]);
     
     return (parsed.recommendations || []).map((rec: any) => ({
-      id: `rec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `rec-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       anomalyId: rec.anomalyId,
       title: rec.title,
       description: rec.description,

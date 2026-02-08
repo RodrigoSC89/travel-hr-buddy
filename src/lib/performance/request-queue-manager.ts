@@ -117,7 +117,7 @@ class RequestQueueManager {
     }
 
     const request: QueuedRequest = {
-      id: `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `req-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       url,
       method: fetchOptions.method || 'GET',
       body: fetchOptions.body as string | undefined,

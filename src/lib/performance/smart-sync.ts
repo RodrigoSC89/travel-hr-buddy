@@ -92,7 +92,7 @@ class SmartSyncManager {
   }
 
   add(item: Omit<SyncItem, 'id' | 'size' | 'retries' | 'createdAt'>): string {
-    const id = `sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `sync_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const size = new Blob([JSON.stringify(item.data)]).size;
     
     const syncItem: SyncItem = {

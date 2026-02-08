@@ -39,7 +39,7 @@ export function useOptimisticUpdate<T>(
       optimisticValue: T,
       asyncOperation: () => Promise<T>
     ): Promise<T | null> => {
-      const updateId = `update-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const updateId = `update-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
       const previousValue = value;
 
       // Store the update for potential rollback

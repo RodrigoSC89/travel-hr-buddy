@@ -65,7 +65,7 @@ class OfflineQueue {
   async add(actionType: string, variables: unknown): Promise<void> {
     const queue = await this.getQueue();
     queue.push({
-      id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       actionType,
       variables,
       timestamp: Date.now(),

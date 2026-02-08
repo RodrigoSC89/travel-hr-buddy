@@ -119,7 +119,7 @@ export function FileUploadDialog({
       try {
         const file = files[i].file;
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+        const fileName = `${Date.now()}-${crypto.randomUUID().slice(0, 9)}.${fileExt}`;
         const filePath = `evidences/${fileName}`;
 
         const { error: uploadError } = await supabase.storage

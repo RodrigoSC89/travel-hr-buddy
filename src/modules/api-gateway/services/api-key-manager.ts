@@ -84,7 +84,7 @@ class ApiKeyManagerService {
   }
 
   private generateId(): string {
-    return `key_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    return `key_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private generateApiKey(): string {

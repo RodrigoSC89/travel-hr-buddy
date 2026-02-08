@@ -91,7 +91,7 @@ class OfflineSyncManager {
   async queueMutation(mutation: Omit<PendingMutation, 'id' | 'timestamp' | 'retryCount'>): Promise<string> {
     await this.initialize();
 
-    const id = `mutation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `mutation-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     const entry: PendingMutation = {
       ...mutation,
       id,

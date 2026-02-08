@@ -148,7 +148,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       setProcessingPayment(true);
 
       // Simulate payment processing (in production, integrate with Stripe/PayPal)
-      const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+      const transactionId = `txn_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
 
       // Update reservation with payment info
       const { error } = await supabase

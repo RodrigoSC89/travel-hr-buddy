@@ -72,7 +72,7 @@ class ResumableUploadService {
   ): Promise<string> {
     await this.initialize();
 
-    const uploadId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const uploadId = `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     const startTime = Date.now();
     let lastBytesUploaded = 0;
     let lastTime = startTime;

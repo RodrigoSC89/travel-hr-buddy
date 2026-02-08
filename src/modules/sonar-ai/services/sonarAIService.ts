@@ -58,7 +58,7 @@ class SonarAIService {
 
       const storedDetection: SonarDetection = {
         ...detection,
-        id: detection.id || `det-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: detection.id || `det-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       };
 
       detectionStore.push(storedDetection);
@@ -82,7 +82,7 @@ class SonarAIService {
 
       const storedScan: SonarScanLog = {
         ...scanLog,
-        id: scanLog.id || `scan-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: scanLog.id || `scan-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       };
 
       scanStore.push(storedScan);

@@ -60,7 +60,7 @@ export class SEVILearningEngine {
   processFeedback(feedback: Omit<FeedbackEntry, 'id' | 'timestamp'>): void {
     const entry: FeedbackEntry = {
       ...feedback,
-      id: `fb_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      id: `fb_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`,
       timestamp: new Date()
     };
 

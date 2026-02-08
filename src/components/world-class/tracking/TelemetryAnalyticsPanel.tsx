@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -48,7 +49,7 @@ export function TelemetryAnalyticsPanel() {
       setInsights(data.insights);
       setAlerts(data.telemetryAlerts);
     } catch (err) {
-      console.error('Telemetry analytics error:', err);
+      logger.error('Telemetry analytics error:', err);
       toast.error('Erro ao carregar dados de telemetria');
     } finally {
       setLoading(false);

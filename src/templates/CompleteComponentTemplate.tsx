@@ -15,6 +15,7 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
+import { logger } from '@/lib/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit, Trash2, Download, RefreshCw, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -180,7 +181,7 @@ export default function CompleteComponentTemplate({
     },
     onError: (error: Error) => {
       toast.error(`Failed to create item: ${error.message}`);
-      console.error('Create error:', error);
+      logger.error('Create error:', error);
     },
   });
 
@@ -201,7 +202,7 @@ export default function CompleteComponentTemplate({
     },
     onError: (error: Error) => {
       toast.error(`Failed to update item: ${error.message}`);
-      console.error('Update error:', error);
+      logger.error('Update error:', error);
     },
   });
 
@@ -221,7 +222,7 @@ export default function CompleteComponentTemplate({
     },
     onError: (error: Error) => {
       toast.error(`Failed to delete item: ${error.message}`);
-      console.error('Delete error:', error);
+      logger.error('Delete error:', error);
     },
   });
 
@@ -289,7 +290,7 @@ export default function CompleteComponentTemplate({
       toast.success('Items exported successfully');
     } catch (error) {
       toast.error('Failed to export items');
-      console.error('Export error:', error);
+      logger.error('Export error:', error);
     }
   }, [items]);
 
