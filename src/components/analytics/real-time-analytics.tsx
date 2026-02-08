@@ -133,22 +133,25 @@ const RealTimeAnalytics = () => {
   });
 
   const generateRandomValue = (title: string): string => {
+    const elapsed = Math.floor(Date.now() / 3000);
+    const wave = Math.sin(elapsed * 0.3);
     switch (title) {
     case "Usuários Ativos":
-      return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
+      return (2800 + Math.floor(wave * 50 + 50)).toLocaleString();
     case "Receita Mensal":
-      return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
+      return `R$ ${(84000 + Math.floor(wave * 1000 + 1000)).toLocaleString()}`;
     case "Transações":
-      return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
+      return (1400 + Math.floor(wave * 50 + 50)).toLocaleString();
     case "Performance":
-      return `${(98 + Math.random() * 2).toFixed(1)}%`;
+      return `${(98 + (wave + 1)).toFixed(1)}%`;
     default:
       return "0";
     }
   };
 
   const generateRandomChange = (): string => {
-    const change = (Math.random() * 20 - 10).toFixed(1);
+    const elapsed = Math.floor(Date.now() / 3000);
+    const change = (Math.sin(elapsed * 0.5) * 10).toFixed(1);
     return `${Number(change) > 0 ? "+" : ""}${change}%`;
   };
 

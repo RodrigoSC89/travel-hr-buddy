@@ -97,10 +97,10 @@ export function TelemetrySensorGrid({ vesselId, className }: TelemetrySensorGrid
           min: getMinForType(type),
           max: getMaxForType(type),
           status,
-          trend: ["up", "down", "stable"][Math.floor(Math.random() * 3)] as Sensor["trend"],
+          trend: (["up", "down", "stable"] as const)[(typeIdx + locIdx) % 3],
           location,
           lastUpdate: new Date().toISOString(),
-          history: Array.from({ length: 10 }, () => baseValue + (Math.random() - 0.5) * 0.3 * baseValue),
+          history: Array.from({ length: 10 }, (_, k) => baseValue + Math.sin(k * 0.8 + typeIdx) * 0.15 * baseValue),
         });
       });
     });

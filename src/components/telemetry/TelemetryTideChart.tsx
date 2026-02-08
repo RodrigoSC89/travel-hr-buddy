@@ -232,8 +232,8 @@ function generateMockTides(): TideExtreme[] {
       time: time.toISOString(),
       type: i % 2 === 0 ? 'high' : 'low',
       height: i % 2 === 0 
-        ? 1.2 + Math.random() * 0.5  // High tide: 1.2-1.7m
-        : 0.3 + Math.random() * 0.3,  // Low tide: 0.3-0.6m
+        ? 1.2 + Math.abs(Math.sin(i * 0.7)) * 0.5  // High tide: 1.2-1.7m
+        : 0.3 + Math.abs(Math.cos(i * 0.9)) * 0.3,  // Low tide: 0.3-0.6m
     });
   }
   

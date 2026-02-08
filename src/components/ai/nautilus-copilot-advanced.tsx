@@ -229,7 +229,8 @@ What would you like assistance with today?`,
       "Your PEOTRAM compliance score is 94.2%. I've detected minor gaps in documentation for safety procedures. I can help generate the missing reports and set up preventive measures."
     ];
     
-    return responses[Math.floor(Math.random() * responses.length)];
+    const inputHash = input.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    return responses[inputHash % responses.length];
   };
 
   const handleSuggestionClick = (suggestion: string) => {

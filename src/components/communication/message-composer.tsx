@@ -268,11 +268,12 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   const toggleEmojiPicker = () => {
     const emojis = ['😀', '👍', '✅', '🚢', '⚓', '🔧', '📋', '⚠️', '🎯', '💡'];
-    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-    setMessageContent(prev => prev + randomEmoji);
+    const emojiIndex = Math.floor(Date.now() / 1000) % emojis.length;
+    const selectedEmoji = emojis[emojiIndex];
+    setMessageContent(prev => prev + selectedEmoji);
     toast({
       title: "Emoji adicionado",
-      description: `${randomEmoji} inserido na mensagem`
+      description: `${selectedEmoji} inserido na mensagem`
     });
   };
 

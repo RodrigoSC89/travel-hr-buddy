@@ -107,20 +107,22 @@ export function FleetMapBox({
       } else {
         // If no positions from API, use external vessels with mock coordinates
         if (externalVessels && externalVessels.length > 0) {
-          const mappedVessels = externalVessels.map((v, i) => ({
+          const mappedVessels = externalVessels.map((v, i) => {
+            const nameHash = (v.name || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+            return {
             vesselId: v.id,
             mmsi: v.mmsi || `710${100000 + i}`,
             name: v.name,
-            latitude: v.latitude || -23.9619 + (Math.random() * 3 - 1.5),
-            longitude: v.longitude || -46.3121 + (Math.random() * 3 - 1.5),
-            speed: v.speed || Math.floor(Math.random() * 15),
-            course: v.course || Math.floor(Math.random() * 360),
-            heading: v.heading || Math.floor(Math.random() * 360),
+            latitude: v.latitude || -23.9619 + ((nameHash % 30 - 15) * 0.1),
+            longitude: v.longitude || -46.3121 + ((nameHash % 30 - 15) * 0.1),
+            speed: v.speed || (nameHash % 15),
+            course: v.course || (nameHash * 7 % 360),
+            heading: v.heading || (nameHash * 11 % 360),
             navStatus: v.status === "active" ? "Under way using engine" : "Moored",
             shipType: v.vessel_type || "Cargo",
             destination: v.current_location || v.destination,
             lastUpdate: new Date().toISOString(),
-          }));
+          }});
           setVessels(mappedVessels);
           setSource("enriched");
         }
@@ -129,12 +131,14 @@ export function FleetMapBox({
       logger.error("Failed to fetch vessels:", err);
       // Fallback to external vessels
       if (externalVessels && externalVessels.length > 0) {
-        const mappedVessels = externalVessels.map((v, i) => ({
+        const mappedVessels = externalVessels.map((v, i) => {
+          const nameHash = (v.name || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+          return {
           vesselId: v.id,
           mmsi: v.mmsi || `710${100000 + i}`,
           name: v.name,
-          latitude: v.latitude || -23.9619 + (Math.random() * 2 - 1),
-          longitude: v.longitude || -46.3121 + (Math.random() * 2 - 1),
+          latitude: v.latitude || -23.9619 + ((nameHash % 20 - 10) * 0.1),
+          longitude: v.longitude || -46.3121 + ((nameHash % 20 - 10) * 0.1),
           speed: v.speed || 0,
           course: v.course || 0,
           heading: v.heading || 0,
@@ -142,7 +146,7 @@ export function FleetMapBox({
           shipType: v.vessel_type || "Cargo",
           destination: v.current_location,
           lastUpdate: new Date().toISOString(),
-        }));
+        }});
         setVessels(mappedVessels);
         setSource("fallback");
       }

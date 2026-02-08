@@ -133,7 +133,7 @@ export function ExportCenter() {
         progress: 100,
         completedAt: new Date(),
         fileUrl: "#",
-        fileSize: `${(Math.random() * 5 + 0.5).toFixed(1)} MB`
+        fileSize: `${(1.5 + (newJob.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) % 40) * 0.1).toFixed(1)} MB`
       } : job
     ));
 

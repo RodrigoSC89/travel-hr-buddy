@@ -170,9 +170,10 @@ export const OptimizationGeneralHub = () => {
   useEffect(() => {
     if (autoOptimization) {
       const interval = setInterval(() => {
-        setMetrics(prev => prev.map(metric => ({
+        const elapsed = Date.now() / 1000;
+        setMetrics(prev => prev.map((metric, i) => ({
           ...metric,
-          value: Math.min(metric.target, metric.value + Math.random() * 2)
+          value: Math.min(metric.target, metric.value + Math.abs(Math.sin(elapsed / 5 + i)) * 0.5)
         })));
       }, 5000);
 

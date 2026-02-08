@@ -156,7 +156,7 @@ export class BackupService {
     const filePath = `/backups/nautilus_backup_${timestamp}.sql.gz`;
     
     const result = await this.createBackupRecord(filePath, "manual", {
-      size_mb: Math.floor(Math.random() * 50) + 10,
+      size_mb: 10 + (new Date().getMinutes() % 50),
       tables_count: 45,
       simulated: true
     });

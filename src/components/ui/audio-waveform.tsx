@@ -51,7 +51,7 @@ export const AudioWaveform: React.FC<AudioWaveformProps> = ({
             isActive ? 'opacity-100' : 'opacity-30'
           )}
           style={{
-            height: isActive ? `${Math.random() * getMaxHeight(index)}%` : '20%',
+            height: isActive ? `${((Math.sin(Date.now() / 200 + index * 1.3) + 1) / 2) * getMaxHeight(index)}%` : '20%',
             animationDelay: getAnimationDelay(index),
             minHeight: '4px',
           }}
@@ -166,7 +166,7 @@ export const CanvasWaveform: React.FC<CanvasWaveformProps> = ({
 
       for (let i = 0; i < 50; i++) {
         const amplitude = (Math.sin(Date.now() / 100 + i * 0.5) * 0.3 + 0.5) * height * 0.4;
-        const y = height / 2 + (Math.random() - 0.5) * amplitude;
+        const y = height / 2 + (Math.sin(Date.now() / 80 + i * 0.8) - 0.5) * amplitude;
 
         if (i === 0) {
           ctx.moveTo(x, y);

@@ -94,9 +94,9 @@ export const WeatherTrendCharts: React.FC<WeatherTrendChartsProps> = ({
       tempMax: day.tempMax,
       tempMin: day.tempMin,
       tempAvg: (day.tempMax + day.tempMin) / 2,
-      rain: day.rainProbability > 50 ? Math.random() * 10 + 2 : Math.random() * 2,
+      rain: day.rainProbability > 50 ? Math.abs(Math.sin(day.tempMax * 0.5)) * 10 + 2 : Math.abs(Math.cos(day.tempMin * 0.3)) * 2,
       rainProb: day.rainProbability,
-      humidity: 60 + Math.random() * 30,
+      humidity: 60 + Math.abs(Math.sin(day.windSpeed * 0.4)) * 30,
       wind: day.windSpeed
     }));
   }, [dailyForecast]);
