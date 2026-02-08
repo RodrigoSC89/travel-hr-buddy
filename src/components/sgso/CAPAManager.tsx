@@ -1,3 +1,8 @@
+/**
+ * CAPA Manager - Real Supabase Integration
+ * Corrective & Preventive Actions with 5 Whys and Fishbone
+ */
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,19 +15,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
-  CheckCircle,
-  XCircle,
-  Clock,
-  AlertTriangle,
-  Plus,
-  FileText,
-  TrendingUp,
-  Users,
-  Calendar,
-  GitBranch,
-  Target,
-  Zap
+  CheckCircle, XCircle, Clock, AlertTriangle, Plus, FileText,
+  TrendingUp, Users, Calendar, GitBranch, Target, Zap, Loader2
 } from "lucide-react";
 
 interface CAPA {
@@ -39,110 +36,8 @@ interface CAPA {
   sla_dias: number;
   dias_restantes: number;
   eficacia?: "eficaz" | "parcialmente_eficaz" | "ineficaz";
-  cinco_porques: string[];
-  fishbone: {
-    metodo: string;
-    maquina: string;
-    mao_obra: string;
-    material: string;
-    meio_ambiente: string;
-    medicao: string;
-  };
   completion_percentage: number;
 }
-
-const SAMPLE_CAPAS: CAPA[] = [
-  {
-    id: "1",
-    nc_number: "NC-2024-001",
-    nc_title: "Ausência de matriz de competências atualizada",
-    practice_id: 4,
-    status: "executando",
-    acao_corretiva: "Criar matriz de competências completa para todas as funções críticas",
-    acao_preventiva: "Implementar revisão trimestral da matriz",
-    responsavel: "Ana Paula - RH",
-    prazo: "2024-11-15",
-    created_at: "2024-09-15",
-    sla_dias: 60,
-    dias_restantes: 12,
-    cinco_porques: [
-      "Por que não há matriz? Porque nunca foi criada formalmente.",
-      "Por que nunca foi criada? Porque não havia procedimento definido.",
-      "Por que não havia procedimento? Porque a prática 4 não estava bem implementada.",
-      "Por que não estava implementada? Falta de recursos dedicados.",
-      "Por que falta recursos? Priorização inadequada de SGSO."
-    ],
-    fishbone: {
-      metodo: "Procedimento de gestão de competências inexistente",
-      maquina: "Sistema HR sem módulo de competências",
-      mao_obra: "Equipe RH sem treinamento em SGSO",
-      material: "Templates de matriz não disponíveis",
-      meio_ambiente: "Cultura de compliance baixa",
-      medicao: "Indicadores de competência não definidos"
-    },
-    completion_percentage: 65
-  },
-  {
-    id: "2",
-    nc_number: "NC-2024-002",
-    nc_title: "Procedimento MOC não implementado",
-    practice_id: 13,
-    status: "planejada",
-    acao_corretiva: "Desenvolver e implementar procedimento completo de MOC",
-    responsavel: "Eng. Roberto Santos",
-    prazo: "2024-12-01",
-    created_at: "2024-10-01",
-    sla_dias: 60,
-    dias_restantes: 28,
-    cinco_porques: [
-      "Por que não há MOC? Processo não foi formalizado.",
-      "Por que não foi formalizado? Desconhecimento da exigência ANP.",
-      "Por que desconhecimento? Treinamento SGSO incompleto.",
-      "Por que incompleto? Rotatividade de pessoal.",
-      "Por que rotatividade? Condições de trabalho offshore."
-    ],
-    fishbone: {
-      metodo: "Fluxo de gestão de mudanças inexistente",
-      maquina: "Software de workflow não configurado",
-      mao_obra: "Engenheiros sem capacitação em MOC",
-      material: "Formulários MOC não padronizados",
-      meio_ambiente: "Pressão por produção vs segurança",
-      medicao: "Mudanças não rastreadas"
-    },
-    completion_percentage: 0
-  },
-  {
-    id: "3",
-    nc_number: "NC-2024-003",
-    nc_title: "Plano de integridade mecânica desatualizado",
-    practice_id: 17,
-    status: "aguardando_validacao",
-    acao_corretiva: "Atualizar plano com novos equipamentos críticos",
-    acao_preventiva: "Revisar plano a cada novo equipamento instalado",
-    responsavel: "Eng. João Oliveira",
-    prazo: "2024-11-20",
-    created_at: "2024-09-20",
-    sla_dias: 60,
-    dias_restantes: 5,
-    eficacia: "parcialmente_eficaz",
-    cinco_porques: [
-      "Por que desatualizado? Novos equipamentos não foram incluídos.",
-      "Por que não incluídos? Processo de atualização não definido.",
-      "Por que não definido? Falta de integração entre Compras e Manutenção.",
-      "Por que falta integração? Sistemas não conectados.",
-      "Por que não conectados? Investimento em TI não priorizado."
-    ],
-    fishbone: {
-      metodo: "Processo de atualização de plano não definido",
-      maquina: "PMS não integrado com compras",
-      mao_obra: "Técnicos focados em corretiva",
-      material: "Manuais de novos equipamentos pendentes",
-      meio_ambiente: "Alta demanda operacional",
-      medicao: "Cobertura do plano não medida"
-    },
-    completion_percentage: 90
-  }
-];
 
 const getStatusConfig = (status: CAPA["status"]) => {
   const configs = {
@@ -152,7 +47,7 @@ const getStatusConfig = (status: CAPA["status"]) => {
     rejeitada: { color: "bg-red-600 text-white", label: "Rejeitada", icon: XCircle },
     aguardando_validacao: { color: "bg-yellow-600 text-white", label: "Aguardando Validação", icon: AlertTriangle }
   };
-  return configs[status];
+  return configs[status] || configs.planejada;
 };
 
 const getEficaciaConfig = (eficacia?: CAPA["eficacia"]) => {
@@ -167,71 +62,113 @@ const getEficaciaConfig = (eficacia?: CAPA["eficacia"]) => {
 
 export const CAPAManager: React.FC = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [selectedCAPA, setSelectedCAPA] = useState<CAPA | null>(null);
   const [showNewCAPADialog, setShowNewCAPADialog] = useState(false);
   const [activeTab, setActiveTab] = useState("lista");
+  const [formData, setFormData] = useState({ nc_number: '', acao_corretiva: '', acao_preventiva: '', responsavel: '', prazo: '', sla_dias: 60 });
+
+  // Fetch CAPAs from corrective_actions table
+  const { data: capas = [], isLoading } = useQuery({
+    queryKey: ['capas-real'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('corrective_actions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error || !data) return [];
+
+      return data.map((d: any): CAPA => {
+        const prazo = d.due_date || d.target_date || new Date().toISOString();
+        const diasRestantes = Math.ceil((new Date(prazo).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        const statusMap: Record<string, CAPA['status']> = {
+          open: 'planejada', in_progress: 'executando', closed: 'concluida',
+          completed: 'concluida', rejected: 'rejeitada', pending: 'aguardando_validacao'
+        };
+        return {
+          id: d.id,
+          nc_number: d.nc_id || d.reference_number || `CA-${d.id.slice(0, 6)}`,
+          nc_title: d.title || d.description?.slice(0, 60) || 'Ação Corretiva',
+          practice_id: d.practice_id || 0,
+          status: statusMap[d.status] || 'planejada',
+          acao_corretiva: d.description || d.corrective_action || '',
+          acao_preventiva: d.preventive_action,
+          responsavel: d.assigned_to || d.responsible || 'Não atribuído',
+          prazo: prazo,
+          created_at: d.created_at,
+          sla_dias: d.sla_days || 60,
+          dias_restantes: diasRestantes,
+          eficacia: d.effectiveness as CAPA['eficacia'],
+          completion_percentage: d.completion_percentage || (d.status === 'completed' || d.status === 'closed' ? 100 : d.status === 'in_progress' ? 50 : 0),
+        };
+      });
+    },
+  });
+
+  // Create CAPA mutation
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from('corrective_actions').insert({
+        title: formData.acao_corretiva.slice(0, 80),
+        description: formData.acao_corretiva,
+        preventive_action: formData.acao_preventiva || null,
+        assigned_to: formData.responsavel,
+        due_date: formData.prazo || null,
+        sla_days: formData.sla_dias,
+        status: 'open',
+        reference_number: formData.nc_number,
+      } as any);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['capas-real'] });
+      setShowNewCAPADialog(false);
+      setFormData({ nc_number: '', acao_corretiva: '', acao_preventiva: '', responsavel: '', prazo: '', sla_dias: 60 });
+      toast({ title: "CAPA Criada", description: "Nova ação corretiva/preventiva registrada com sucesso." });
+    },
+    onError: () => toast({ title: "Erro", description: "Não foi possível criar a CAPA.", variant: "destructive" }),
+  });
 
   // KPIs
-  const totalCAPAs = SAMPLE_CAPAS.length;
-  const emAndamento = SAMPLE_CAPAS.filter(c => c.status === "executando").length;
-  const atrasadas = SAMPLE_CAPAS.filter(c => c.dias_restantes < 0).length;
-  const slaMedio = Math.round(SAMPLE_CAPAS.reduce((acc, c) => acc + (c.sla_dias - c.dias_restantes), 0) / totalCAPAs);
-
-  const handleCreateCAPA = () => {
-    toast({
-      title: "CAPA Criada",
-      description: "Nova ação corretiva/preventiva registrada com sucesso."
-    });
-    setShowNewCAPADialog(false);
-  };
+  const totalCAPAs = capas.length;
+  const emAndamento = capas.filter(c => c.status === "executando").length;
+  const atrasadas = capas.filter(c => c.dias_restantes < 0).length;
+  const slaMedio = totalCAPAs > 0 ? Math.round(capas.reduce((acc, c) => acc + Math.max(0, c.sla_dias - c.dias_restantes), 0) / totalCAPAs) : 0;
 
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-700">Total CAPAs</p>
-                <p className="text-3xl font-bold text-blue-900">{totalCAPAs}</p>
-              </div>
+              <div><p className="text-sm font-medium text-blue-700 dark:text-blue-300">Total CAPAs</p><p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{totalCAPAs}</p></div>
               <Target className="h-10 w-10 text-blue-600 opacity-70" />
             </div>
           </CardContent>
         </Card>
-
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950/30 dark:to-yellow-900/20 border-yellow-200 dark:border-yellow-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-yellow-700">Em Andamento</p>
-                <p className="text-3xl font-bold text-yellow-900">{emAndamento}</p>
-              </div>
+              <div><p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Em Andamento</p><p className="text-3xl font-bold text-yellow-900 dark:text-yellow-100">{emAndamento}</p></div>
               <Zap className="h-10 w-10 text-yellow-600 opacity-70" />
             </div>
           </CardContent>
         </Card>
-
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200 dark:border-red-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-red-700">Atrasadas</p>
-                <p className="text-3xl font-bold text-red-900">{atrasadas}</p>
-              </div>
+              <div><p className="text-sm font-medium text-red-700 dark:text-red-300">Atrasadas</p><p className="text-3xl font-bold text-red-900 dark:text-red-100">{atrasadas}</p></div>
               <AlertTriangle className="h-10 w-10 text-red-600 opacity-70" />
             </div>
           </CardContent>
         </Card>
-
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200 dark:border-green-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-green-700">SLA Médio</p>
-                <p className="text-3xl font-bold text-green-900">{slaMedio}d</p>
-              </div>
+              <div><p className="text-sm font-medium text-green-700 dark:text-green-300">SLA Médio</p><p className="text-3xl font-bold text-green-900 dark:text-green-100">{slaMedio}d</p></div>
               <TrendingUp className="h-10 w-10 text-green-600 opacity-70" />
             </div>
           </CardContent>
@@ -247,61 +184,43 @@ export const CAPAManager: React.FC = () => {
               Gestão de CAPA - Ações Corretivas e Preventivas
             </CardTitle>
             <CardDescription>
-              5 Porquês, Diagrama de Ishikawa (Fishbone), SLA e Eficácia
+              SLA, Eficácia e Rastreabilidade Completa
             </CardDescription>
           </div>
           <Dialog open={showNewCAPADialog} onOpenChange={setShowNewCAPADialog}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="h-4 w-4 mr-2" />
-                Nova CAPA
-              </Button>
+              <Button className="bg-primary hover:bg-primary/90"><Plus className="h-4 w-4 mr-2" />Nova CAPA</Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Criar Nova CAPA</DialogTitle>
-                <DialogDescription>
-                  Registre uma nova ação corretiva/preventiva vinculada a uma NC
-                </DialogDescription>
+                <DialogDescription>Registre uma nova ação corretiva/preventiva</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>NC Vinculada</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a NC" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="nc-001">NC-2024-001 - Matriz de competências</SelectItem>
-                        <SelectItem value="nc-002">NC-2024-002 - Procedimento MOC</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Referência NC</Label>
+                    <Input placeholder="NC-2026-XXX" value={formData.nc_number} onChange={e => setFormData(p => ({ ...p, nc_number: e.target.value }))} />
                   </div>
                   <div className="space-y-2">
                     <Label>Responsável</Label>
-                    <Input placeholder="Nome do responsável" />
+                    <Input placeholder="Nome do responsável" value={formData.responsavel} onChange={e => setFormData(p => ({ ...p, responsavel: e.target.value }))} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Ação Corretiva</Label>
-                  <Textarea placeholder="Descreva a ação corretiva..." />
+                  <Label>Ação Corretiva *</Label>
+                  <Textarea placeholder="Descreva a ação corretiva..." value={formData.acao_corretiva} onChange={e => setFormData(p => ({ ...p, acao_corretiva: e.target.value }))} />
                 </div>
                 <div className="space-y-2">
                   <Label>Ação Preventiva (opcional)</Label>
-                  <Textarea placeholder="Descreva a ação preventiva..." />
+                  <Textarea placeholder="Descreva a ação preventiva..." value={formData.acao_preventiva} onChange={e => setFormData(p => ({ ...p, acao_preventiva: e.target.value }))} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Prazo</Label>
-                    <Input type="date" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>SLA (dias)</Label>
-                    <Input type="number" placeholder="60" />
-                  </div>
+                  <div className="space-y-2"><Label>Prazo</Label><Input type="date" value={formData.prazo} onChange={e => setFormData(p => ({ ...p, prazo: e.target.value }))} /></div>
+                  <div className="space-y-2"><Label>SLA (dias)</Label><Input type="number" value={formData.sla_dias} onChange={e => setFormData(p => ({ ...p, sla_dias: parseInt(e.target.value) || 60 }))} /></div>
                 </div>
-                <Button onClick={handleCreateCAPA} className="w-full">
+                <Button onClick={() => createMutation.mutate()} className="w-full" disabled={createMutation.isPending || !formData.acao_corretiva}>
+                  {createMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                   Criar CAPA
                 </Button>
               </div>
@@ -312,228 +231,120 @@ export const CAPAManager: React.FC = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-3 w-full max-w-md">
               <TabsTrigger value="lista">Lista</TabsTrigger>
-              <TabsTrigger value="analise">Análise de Causa</TabsTrigger>
               <TabsTrigger value="sla">SLA & Eficácia</TabsTrigger>
+              <TabsTrigger value="stats">Estatísticas</TabsTrigger>
             </TabsList>
 
             <TabsContent value="lista" className="space-y-4 mt-6">
-              {SAMPLE_CAPAS.map((capa) => {
-                const statusConfig = getStatusConfig(capa.status);
-                const eficaciaConfig = getEficaciaConfig(capa.eficacia);
-                const StatusIcon = statusConfig.icon;
-
-                return (
-                  <Card key={capa.id} className="border-2 hover:shadow-lg transition-all">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 space-y-3">
-                          <div className="flex items-center gap-3">
-                            <Badge variant="outline" className="font-mono">
-                              {capa.nc_number}
-                            </Badge>
-                            <h3 className="font-bold text-lg">{capa.nc_title}</h3>
-                            <Badge className={statusConfig.color}>
-                              <StatusIcon className="h-3 w-3 mr-1" />
-                              {statusConfig.label}
-                            </Badge>
-                            {eficaciaConfig && (
-                              <Badge className={eficaciaConfig.color}>
-                                {eficaciaConfig.label}
-                              </Badge>
-                            )}
-                          </div>
-
-                          <div className="p-3 bg-muted/50 rounded-lg">
-                            <p className="text-sm font-medium text-muted-foreground mb-1">Ação Corretiva:</p>
-                            <p className="text-sm">{capa.acao_corretiva}</p>
-                          </div>
-
-                          {capa.acao_preventiva && (
-                            <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                              <p className="text-sm font-medium text-green-700 mb-1">Ação Preventiva:</p>
-                              <p className="text-sm text-green-900">{capa.acao_preventiva}</p>
-                            </div>
-                          )}
-
-                          <div className="grid grid-cols-4 gap-4 text-sm">
-                            <div>
-                              <p className="text-muted-foreground">Responsável</p>
-                              <p className="font-semibold">{capa.responsavel}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Prazo</p>
-                              <p className="font-semibold">{new Date(capa.prazo).toLocaleDateString("pt-BR")}</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">SLA</p>
-                              <p className="font-semibold">{capa.sla_dias} dias</p>
-                            </div>
-                            <div>
-                              <p className="text-muted-foreground">Restante</p>
-                              <p className={`font-semibold ${capa.dias_restantes < 7 ? "text-red-600" : "text-green-600"}`}>
-                                {capa.dias_restantes} dias
-                              </p>
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="flex justify-between text-xs mb-1">
-                              <span className="text-muted-foreground">Progresso</span>
-                              <span className="font-bold">{capa.completion_percentage}%</span>
-                            </div>
-                            <Progress value={capa.completion_percentage} className="h-2" />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-2 ml-4">
-                          <Button variant="outline" size="sm" onClick={() => setSelectedCAPA(capa)}>
-                            <FileText className="h-4 w-4 mr-1" />
-                            Detalhes
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => {
-                            setSelectedCAPA(capa);
-                            setActiveTab("analise");
-                          }}>
-                            <GitBranch className="h-4 w-4 mr-1" />
-                            5 Porquês
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </TabsContent>
-
-            <TabsContent value="analise" className="space-y-6 mt-6">
-              {selectedCAPA ? (
-                <div className="space-y-6">
-                  <Card className="border-2 border-primary/20">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Target className="h-5 w-5" />
-                        5 Porquês - {selectedCAPA.nc_number}
-                      </CardTitle>
-                      <CardDescription>Análise de causa raiz através da técnica dos 5 Porquês</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {selectedCAPA.cinco_porques.map((porque, index) => (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                            <Badge className="bg-primary text-primary-foreground shrink-0">
-                              {index + 1}º
-                            </Badge>
-                            <p className="text-sm">{porque}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-2 border-orange-200">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-orange-700">
-                        <GitBranch className="h-5 w-5" />
-                        Diagrama de Ishikawa (Fishbone) - 6M
-                      </CardTitle>
-                      <CardDescription>Análise de causas por categoria</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {Object.entries(selectedCAPA.fishbone).map(([key, value]) => {
-                          const labels: Record<string, string> = {
-                            metodo: "📋 Método",
-                            maquina: "⚙️ Máquina",
-                            mao_obra: "👷 Mão de Obra",
-                            material: "📦 Material",
-                            meio_ambiente: "🌍 Meio Ambiente",
-                            medicao: "📏 Medição"
-                          };
-                          return (
-                            <Card key={key} className="bg-orange-50 border-orange-200">
-                              <CardContent className="p-4">
-                                <p className="text-sm font-bold text-orange-800 mb-2">{labels[key]}</p>
-                                <p className="text-sm text-orange-900">{value}</p>
-                              </CardContent>
-                            </Card>
-                          );
-                        })}
-                      </div>
-                    </CardContent>
-                  </Card>
+              {isLoading ? (
+                <div className="text-center py-12"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /><p className="text-sm text-muted-foreground mt-2">Carregando CAPAs...</p></div>
+              ) : capas.length === 0 ? (
+                <div className="text-center py-12">
+                  <GitBranch className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
+                  <h3 className="font-medium mb-2">Nenhuma CAPA registrada</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Crie a primeira ação corretiva/preventiva</p>
+                  <Button onClick={() => setShowNewCAPADialog(true)}><Plus className="h-4 w-4 mr-2" />Nova CAPA</Button>
                 </div>
               ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <GitBranch className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-semibold">Selecione uma CAPA para ver a análise de causa</p>
-                  <p className="text-sm">Clique em "5 Porquês" na lista de CAPAs</p>
-                </div>
+                capas.map((capa) => {
+                  const statusConfig = getStatusConfig(capa.status);
+                  const eficaciaConfig = getEficaciaConfig(capa.eficacia);
+                  const StatusIcon = statusConfig.icon;
+
+                  return (
+                    <Card key={capa.id} className="border-2 hover:shadow-lg transition-all">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 space-y-3">
+                            <div className="flex items-center gap-3 flex-wrap">
+                              <Badge variant="outline" className="font-mono">{capa.nc_number}</Badge>
+                              <h3 className="font-bold text-lg">{capa.nc_title}</h3>
+                              <Badge className={statusConfig.color}><StatusIcon className="h-3 w-3 mr-1" />{statusConfig.label}</Badge>
+                              {eficaciaConfig && <Badge className={eficaciaConfig.color}>{eficaciaConfig.label}</Badge>}
+                            </div>
+                            <div className="p-3 bg-muted/50 rounded-lg">
+                              <p className="text-sm font-medium text-muted-foreground mb-1">Ação Corretiva:</p>
+                              <p className="text-sm">{capa.acao_corretiva}</p>
+                            </div>
+                            {capa.acao_preventiva && (
+                              <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                                <p className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">Ação Preventiva:</p>
+                                <p className="text-sm">{capa.acao_preventiva}</p>
+                              </div>
+                            )}
+                            <div className="grid grid-cols-4 gap-4 text-sm">
+                              <div><p className="text-muted-foreground">Responsável</p><p className="font-semibold">{capa.responsavel}</p></div>
+                              <div><p className="text-muted-foreground">Prazo</p><p className="font-semibold">{new Date(capa.prazo).toLocaleDateString("pt-BR")}</p></div>
+                              <div><p className="text-muted-foreground">SLA</p><p className="font-semibold">{capa.sla_dias} dias</p></div>
+                              <div><p className="text-muted-foreground">Restante</p><p className={`font-semibold ${capa.dias_restantes < 7 ? "text-red-600" : "text-green-600"}`}>{capa.dias_restantes} dias</p></div>
+                            </div>
+                            <div>
+                              <div className="flex justify-between text-xs mb-1"><span className="text-muted-foreground">Progresso</span><span className="font-bold">{capa.completion_percentage}%</span></div>
+                              <Progress value={capa.completion_percentage} className="h-2" />
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })
               )}
             </TabsContent>
 
-            <TabsContent value="sla" className="space-y-6 mt-6">
+            <TabsContent value="sla" className="space-y-4 mt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">SLA por Status</CardTitle>
-                  </CardHeader>
+                  <CardHeader><CardTitle className="text-lg">Distribuição por Status</CardTitle></CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {["planejada", "executando", "aguardando_validacao", "concluida"].map((status) => {
-                        const count = SAMPLE_CAPAS.filter(c => c.status === status as CAPA["status"]).length;
-                        const config = getStatusConfig(status as CAPA["status"]);
+                      {(["planejada", "executando", "aguardando_validacao", "concluida"] as const).map((status) => {
+                        const count = capas.filter(c => c.status === status).length;
+                        const config = getStatusConfig(status);
                         return (
                           <div key={status} className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <Badge className={config.color}>{config.label}</Badge>
                             </div>
-                            <span className="font-bold text-lg">{count}</span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold">{count}</span>
+                              <Progress value={totalCAPAs > 0 ? (count / totalCAPAs) * 100 : 0} className="w-24 h-2" />
+                            </div>
                           </div>
                         );
                       })}
                     </div>
                   </CardContent>
                 </Card>
-
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Eficácia das CAPAs</CardTitle>
-                  </CardHeader>
+                  <CardHeader><CardTitle className="text-lg">Eficácia das CAPAs</CardTitle></CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {["eficaz", "parcialmente_eficaz", "ineficaz"].map((eficacia) => {
-                        const count = SAMPLE_CAPAS.filter(c => c.eficacia === eficacia as CAPA["eficacia"]).length;
-                        const config = getEficaciaConfig(eficacia as CAPA["eficacia"]);
-                        if (!config) return null;
-                        return (
+                      {(["eficaz", "parcialmente_eficaz", "ineficaz"] as const).map((eficacia) => {
+                        const count = capas.filter(c => c.eficacia === eficacia).length;
+                        const config = getEficaciaConfig(eficacia);
+                        return config ? (
                           <div key={eficacia} className="flex items-center justify-between">
                             <Badge className={config.color}>{config.label}</Badge>
-                            <span className="font-bold text-lg">{count}</span>
+                            <span className="font-bold">{count}</span>
                           </div>
-                        );
+                        ) : null;
                       })}
                     </div>
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
 
+            <TabsContent value="stats" className="mt-6">
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">CAPAs Próximas do Vencimento</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {SAMPLE_CAPAS.filter(c => c.dias_restantes <= 14 && c.status !== "concluida").map((capa) => (
-                      <div key={capa.id} className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <div>
-                          <p className="font-semibold">{capa.nc_number} - {capa.nc_title}</p>
-                          <p className="text-sm text-muted-foreground">{capa.responsavel}</p>
-                        </div>
-                        <Badge className={capa.dias_restantes < 7 ? "bg-red-600 text-white" : "bg-yellow-600 text-white"}>
-                          {capa.dias_restantes} dias restantes
-                        </Badge>
-                      </div>
-                    ))}
+                <CardContent className="py-8 text-center">
+                  <TrendingUp className="h-12 w-12 mx-auto text-primary mb-4" />
+                  <h3 className="font-bold text-lg mb-2">Resumo de CAPAs</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold">{totalCAPAs}</p><p className="text-xs text-muted-foreground">Total</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-green-600">{capas.filter(c => c.status === 'concluida').length}</p><p className="text-xs text-muted-foreground">Concluídas</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-red-600">{atrasadas}</p><p className="text-xs text-muted-foreground">Atrasadas</p></div>
+                    <div className="p-4 bg-muted rounded-lg"><p className="text-2xl font-bold text-blue-600">{totalCAPAs > 0 ? Math.round(capas.reduce((a, c) => a + c.completion_percentage, 0) / totalCAPAs) : 0}%</p><p className="text-xs text-muted-foreground">Progresso Médio</p></div>
                   </div>
                 </CardContent>
               </Card>
@@ -544,5 +355,3 @@ export const CAPAManager: React.FC = () => {
     </div>
   );
 };
-
-export default CAPAManager;
