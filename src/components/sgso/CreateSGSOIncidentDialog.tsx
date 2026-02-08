@@ -20,7 +20,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AlertTriangle, Loader2, MapPin, Ship } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { logger } from '@/lib/logger';
 
 interface CreateSGSOIncidentDialogProps {
@@ -51,6 +51,7 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
   onOpenChange,
   onSuccess,
 }) => {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     vessel_id: "",
     type: "operational",
@@ -88,7 +89,7 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
         setGpsLoading(false);
         toast.success("Localização capturada", { description: coords });
       },
-      (err) => {
+      () => {
         setGpsLoading(false);
         toast.error("Erro ao capturar GPS");
       },
@@ -108,27 +109,21 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const insertData: Record<string, unknown> = {
-        type: formData.type,
-        description: formData.description,
-        severity: formData.severity,
-        status: "open",
-        reported_at: new Date().toISOString(),
-        corrective_action: formData.corrective_action || null,
-        created_by: user?.id || null,
-      };
-
-      // Only add vessel_id if selected
-      if (formData.vessel_id) {
-        insertData.vessel_id = formData.vessel_id;
-      }
-
-      // Use type assertion for sgso_incidents table
-      const { error } = await (supabase as unknown as {
-        from: (table: string) => {
-          insert: (data: Record<string, unknown>) => Promise<{ error: { message: string } | null }>;
-        };
-      }).from("sgso_incidents").insert(insertData);
+      const { error } = await supabase
+        .from("soc_alerts")
+        .insert({
+          title: `Incidente SGSO: ${INCIDENT_TYPES.find(t => t.value === formData.type)?.label || formData.type}`,
+          message: formData.description,
+          severity: formData.severity,
+          alert_type: formData.type,
+          source_module: "sgso-incident",
+          user_id: user?.id || null,
+          metadata: {
+            vessel_id: formData.vessel_id || null,
+            location: formData.location || null,
+            corrective_action: formData.corrective_action || null,
+          },
+        });
 
       if (error) throw error;
 
@@ -136,6 +131,10 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
         description: `Tipo: ${INCIDENT_TYPES.find(t => t.value === formData.type)?.label || formData.type}`,
       });
       
+      // Invalidate incident queries
+      queryClient.invalidateQueries({ queryKey: ["sgso-incidents-list"] });
+      queryClient.invalidateQueries({ queryKey: ["sgso-incidents"] });
+
       // Reset form
       setFormData({
         vessel_id: "",

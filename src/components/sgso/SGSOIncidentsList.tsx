@@ -20,20 +20,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlertTriangle, Search, Filter, RefreshCw, Eye, Ship } from "lucide-react";
+import { AlertTriangle, Search, Filter, RefreshCw, Eye, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface SGSOIncident {
   id: string;
-  vessel_id: string | null;
-  type: string | null;
-  description: string | null;
-  reported_at: string | null;
+  title: string | null;
+  message: string | null;
   severity: string | null;
-  status: string | null;
-  corrective_action: string | null;
+  alert_type: string | null;
+  source_module: string | null;
+  acknowledged_at: string | null;
   created_at: string | null;
+  metadata: Record<string, unknown> | null;
 }
 
 const SEVERITY_COLORS: Record<string, string> = {
@@ -58,7 +58,13 @@ const TYPE_LABELS: Record<string, string> = {
   operational: "Operacional",
   safety: "Segurança",
   equipment: "Equipamento",
+  incident: "Incidente",
 };
+
+function getStatus(incident: SGSOIncident): string {
+  if (incident.acknowledged_at) return "closed";
+  return "open";
+}
 
 export const SGSOIncidentsList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,40 +72,44 @@ export const SGSOIncidentsList: React.FC = () => {
   const [severityFilter, setSeverityFilter] = useState<string>("all");
 
   const { data: incidents, isLoading, refetch } = useQuery({
-    queryKey: ["sgso-incidents", statusFilter, severityFilter],
+    queryKey: ["sgso-incidents-list", statusFilter, severityFilter],
     queryFn: async () => {
-      let query = (supabase as unknown as {
-        from: (table: string) => {
-          select: (columns: string) => {
-            order: (column: string, options: { ascending: boolean }) => Promise<{
-              data: SGSOIncident[] | null;
-              error: { message: string } | null;
-            }>;
-          };
-        };
-      }).from("sgso_incidents").select("*");
-      
-      const { data, error } = await query.order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data || []) as SGSOIncident[];
+      try {
+        const { data, error } = await supabase
+          .from("soc_alerts")
+          .select("id, title, message, severity, alert_type, source_module, acknowledged_at, created_at, metadata")
+          .or("source_module.ilike.%sgso%,source_module.ilike.%incident%,alert_type.ilike.%incident%")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (error) {
+          console.error("Error fetching SGSO incidents:", error.message);
+          return [];
+        }
+        return (data || []) as SGSOIncident[];
+      } catch {
+        return [];
+      }
     },
   });
 
   const filteredIncidents = incidents?.filter((incident) => {
-    const matchesSearch = 
+    const matchesSearch =
       !searchTerm ||
-      incident.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      incident.type?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === "all" || incident.status === statusFilter;
+      incident.message?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      incident.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      incident.alert_type?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const status = getStatus(incident);
+    const matchesStatus = statusFilter === "all" || status === statusFilter;
     const matchesSeverity = severityFilter === "all" || incident.severity === severityFilter;
-    
+
     return matchesSearch && matchesStatus && matchesSeverity;
   });
 
   const stats = {
     total: incidents?.length || 0,
-    open: incidents?.filter(i => i.status === "open").length || 0,
+    open: incidents?.filter(i => !i.acknowledged_at).length || 0,
     critical: incidents?.filter(i => i.severity === "critical").length || 0,
     high: incidents?.filter(i => i.severity === "high").length || 0,
   };
@@ -151,8 +161,6 @@ export const SGSOIncidentsList: React.FC = () => {
             <SelectContent>
               <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="open">Aberto</SelectItem>
-              <SelectItem value="investigating">Investigando</SelectItem>
-              <SelectItem value="resolved">Resolvido</SelectItem>
               <SelectItem value="closed">Fechado</SelectItem>
             </SelectContent>
           </Select>
@@ -174,7 +182,7 @@ export const SGSOIncidentsList: React.FC = () => {
       <CardContent>
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground">
-            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2" />
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
             Carregando incidentes...
           </div>
         ) : filteredIncidents?.length === 0 ? (
@@ -197,44 +205,43 @@ export const SGSOIncidentsList: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredIncidents?.map((incident) => (
-                  <TableRow key={incident.id}>
-                    <TableCell className="whitespace-nowrap">
-                      {incident.reported_at
-                        ? format(new Date(incident.reported_at), "dd/MM/yyyy HH:mm", { locale: ptBR })
-                        : incident.created_at
-                        ? format(new Date(incident.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {TYPE_LABELS[incident.type || ""] || incident.type || "-"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="max-w-[300px] truncate">
-                      {incident.description || "-"}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={SEVERITY_COLORS[incident.severity || "low"]}>
-                        {incident.severity === "critical" ? "Crítica" :
-                         incident.severity === "high" ? "Alta" :
-                         incident.severity === "medium" ? "Média" : "Baixa"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={STATUS_COLORS[incident.status || "open"]}>
-                        {incident.status === "open" ? "Aberto" :
-                         incident.status === "investigating" ? "Investigando" :
-                         incident.status === "resolved" ? "Resolvido" : "Fechado"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="icon">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {filteredIncidents?.map((incident) => {
+                  const status = getStatus(incident);
+                  return (
+                    <TableRow key={incident.id}>
+                      <TableCell className="whitespace-nowrap">
+                        {incident.created_at
+                          ? format(new Date(incident.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })
+                          : "-"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {TYPE_LABELS[incident.alert_type || ""] || incident.alert_type || "-"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="max-w-[300px] truncate">
+                        {incident.message || incident.title || "-"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={SEVERITY_COLORS[incident.severity || "low"]}>
+                          {incident.severity === "critical" ? "Crítica" :
+                           incident.severity === "high" ? "Alta" :
+                           incident.severity === "medium" ? "Média" : "Baixa"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={STATUS_COLORS[status]}>
+                          {status === "open" ? "Aberto" : "Fechado"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
