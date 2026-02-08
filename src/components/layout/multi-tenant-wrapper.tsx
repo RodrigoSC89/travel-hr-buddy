@@ -11,21 +11,22 @@ interface MultiTenantWrapperProps {
 
 export const MultiTenantWrapper: React.FC<MultiTenantWrapperProps> = ({ 
   children, 
-  requiresOrganization = true 
+  requiresOrganization = false // Default to false - don't block pages
 }) => {
   const { currentOrganization, isLoading, error } = useOrganization();
 
-  if (isLoading) {
+  // Only show loading for a brief initial period, not indefinitely
+  if (isLoading && requiresOrganization) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center py-12">
         <LoadingSpinner />
       </div>
     );
   }
 
-  if (error) {
+  if (error && requiresOrganization) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="flex items-center justify-center p-4">
         <Alert variant="destructive" className="max-w-md">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
@@ -36,18 +37,6 @@ export const MultiTenantWrapper: React.FC<MultiTenantWrapperProps> = ({
     );
   }
 
-  if (requiresOrganization && !currentOrganization) {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <Alert className="max-w-md">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            Você precisa estar associado a uma organização para acessar esta página.
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-
+  // Always render children - don't block access
   return <>{children}</>;
 };

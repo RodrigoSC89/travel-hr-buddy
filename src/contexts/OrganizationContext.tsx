@@ -38,11 +38,11 @@ const defaultContextValue: OrganizationContextType = {
   currentOrganization: null,
   currentBranding: null,
   userRole: null,
-  isLoading: true,
+  isLoading: false, // Default to false so pages render when provider is not mounted
   error: null,
   switchOrganization: async () => {},
   updateBranding: async () => {},
-  checkPermission: () => false,
+  checkPermission: () => true, // Default to true when no provider - allow access
   getCurrentOrganizationUsers: async () => [],
   inviteUser: async () => {},
   removeUser: async () => {},
