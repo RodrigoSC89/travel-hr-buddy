@@ -12,6 +12,7 @@
  */
 
 import React, { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -132,7 +133,7 @@ export function EnhancedActionBar({
         });
       }, 2000);
     } catch (error) {
-      console.error(`Action ${action.id} failed:`, error);
+      logger.error(`Action ${action.id} failed`, error as Error);
       toast.error(`Erro ao executar: ${action.label}`);
     } finally {
       setLoadingActions(prev => {

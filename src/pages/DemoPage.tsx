@@ -3,6 +3,7 @@
  * Shows real data from Supabase via SECURITY DEFINER RPC
  */
 import React from 'react';
+import { logger } from '@/lib/logger';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -52,7 +53,7 @@ function useDemoData() {
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_demo_data');
       if (error || !data) {
-        console.error('Demo data error:', error);
+        logger.error('Demo data error', error as Error);
         return null;
       }
       return data as unknown as DemoData;

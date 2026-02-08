@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -102,7 +103,7 @@ export function AIExplainabilityPanel() {
       }
     } catch (error) {
       // ✅ P0: No fallback mock data - show empty state instead
-      console.warn('Failed to load AI decisions:', error);
+      logger.warn('Failed to load AI decisions', error as Error);
       setDecisions([]);
       setSelectedDecision(null);
     } finally {

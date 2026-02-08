@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 const weatherIcons: Record<string, any> = {
   clear: Sun,
@@ -65,7 +66,7 @@ export function WeatherRoutingPanel() {
       setForecast(data.result);
       toast({ title: "🌤️ Análise meteorológica concluída" });
     } catch (err) {
-      console.error(err);
+      logger.error("Weather routing error", err as Error);
       toast({ title: "Erro na análise", variant: "destructive" });
     } finally {
       setIsLoading(false);

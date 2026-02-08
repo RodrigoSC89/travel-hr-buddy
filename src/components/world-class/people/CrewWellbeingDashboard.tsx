@@ -13,6 +13,7 @@ import { Heart, AlertTriangle, RefreshCw, Save, Brain, Clock, Shield, Activity, 
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 const fatigueColors: Record<string, string> = {
   low: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
@@ -73,7 +74,7 @@ export function CrewWellbeingDashboard() {
       setAiAnalysis(data?.response || data?.choices?.[0]?.message?.content || "Análise indisponível");
       toast.success("Análise AI de bem-estar concluída");
     } catch (err) {
-      console.error("AI analysis error:", err);
+      logger.error("AI analysis error", err as Error);
       toast.error("Erro ao gerar análise AI");
     } finally {
       setAiLoading(false);

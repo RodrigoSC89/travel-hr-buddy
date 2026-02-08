@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 interface FuelPrediction {
   predicted_consumption_tons?: number;
@@ -67,7 +68,7 @@ export function useFuelAI() {
 
       return aiResult;
     } catch (err) {
-      console.error('Fuel AI prediction error:', err);
+      logger.error('Fuel AI prediction error', err as Error);
       toast({
         title: 'Erro na Previsão AI',
         description: err instanceof Error ? err.message : 'Erro desconhecido',
@@ -101,7 +102,7 @@ export function useFuelAI() {
       setPriceComparison(aiResult);
       return aiResult;
     } catch (err) {
-      console.error('Fuel AI price comparison error:', err);
+      logger.error('Fuel AI price comparison error', err as Error);
       toast({
         title: 'Erro na Comparação de Preços',
         description: err instanceof Error ? err.message : 'Erro desconhecido',

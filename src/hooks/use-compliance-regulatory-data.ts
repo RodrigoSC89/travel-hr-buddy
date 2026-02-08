@@ -5,6 +5,7 @@
  */
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // Types
 interface ComplianceRequirement {
@@ -70,7 +71,7 @@ export function useComplianceRequirements(vesselId?: string, regulationType?: st
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.warn('Compliance requirements query error:', error.message);
+        logger.warn('Compliance requirements query error: ' + error.message);
         return [] as ComplianceRequirement[];
       }
       
@@ -145,7 +146,7 @@ export function useComplianceAudits(vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Audits query error:', error.message);
+        logger.warn('Audits query error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as ComplianceAudit[];
@@ -205,7 +206,7 @@ export function usePSCInspections(vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('PSC inspections error:', error.message);
+        logger.warn('PSC inspections error: ' + error.message);
         return [];
       }
       return (data || []) as unknown as PSCInspection[];

@@ -15,6 +15,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 type AnalysisType = "equipment_inspection" | "document_ocr" | "damage_assessment" | "safety_check";
 
@@ -80,7 +81,7 @@ export const VisionAIPanel: React.FC = () => {
       setResults(prev => [result, ...prev]);
       toast.success("Análise concluída com sucesso!");
     } catch (err) {
-      console.error("Vision AI error:", err);
+      logger.error("Vision AI error", err as Error);
       toast.error("Erro na análise visual. Tente novamente.");
     } finally {
       setIsAnalyzing(false);

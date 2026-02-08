@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Helmet } from "react-helmet-async";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -291,7 +292,7 @@ export default function ProcurementCommandCenter() {
         supplierScore: avgRating,
       });
     } catch (error) {
-      console.error('Error loading procurement data:', error);
+      logger.error('Error loading procurement data', error as Error);
       setStockItems([]);
       setRecommendations([]);
     } finally {

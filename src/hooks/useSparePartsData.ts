@@ -5,6 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface SparePart {
   id: string;
@@ -55,7 +56,7 @@ export function useSpareParts() {
         .order('name');
 
       if (error) {
-        console.warn('Spare parts query error:', error.message);
+        logger.warn('Spare parts query error: ' + error.message);
         return [];
       }
 
@@ -99,7 +100,7 @@ export function useInventoryStats() {
         .select('quantity, min_quantity, max_quantity, unit_cost, is_critical');
 
       if (error) {
-        console.warn('Inventory stats query error:', error.message);
+        logger.warn('Inventory stats query error: ' + error.message);
         return getEmptyStats();
       }
 

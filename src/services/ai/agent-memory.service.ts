@@ -5,6 +5,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface MemoryEntry {
   id: string;
@@ -50,7 +51,7 @@ class AgentMemoryService {
     }).select('id').single();
 
     if (error) {
-      console.error('Failed to store memory:', error);
+      logger.error('Failed to store memory', error as Error);
       return null;
     }
     return data?.id || null;
@@ -76,7 +77,7 @@ class AgentMemoryService {
     }).select('id').single();
 
     if (error) {
-      console.error('Failed to store event:', error);
+      logger.error('Failed to store event', error as Error);
       return null;
     }
     return data?.id || null;

@@ -6,12 +6,13 @@
  */
 
 import { allowDemoData } from '@/lib/ops-mode';
+import { logger } from '@/lib/logger';
 
 // Verificação de segurança em produção
 if (typeof window !== 'undefined' && import.meta.env.MODE === 'production') {
   const isDemoAllowed = allowDemoData();
   if (!isDemoAllowed) {
-    console.warn('⚠️ DEMO DATA: Este módulo não deve ser usado em produção OPS_REAL');
+    logger.warn('DEMO DATA: Este módulo não deve ser usado em produção OPS_REAL');
   }
 }
 
@@ -90,7 +91,7 @@ export const DEMO_BRANDING = {
  */
 export function getDemoUsage(tenantId: string) {
   if (!allowDemoData()) {
-    console.warn('getDemoUsage chamado fora do modo DEMO');
+    logger.warn('getDemoUsage chamado fora do modo DEMO');
     return null;
   }
 
@@ -120,7 +121,7 @@ export function getDemoUsage(tenantId: string) {
  */
 export function getDemoUser(userId: string, tenantId: string, userEmail?: string, userName?: string) {
   if (!allowDemoData()) {
-    console.warn('getDemoUser chamado fora do modo DEMO');
+    logger.warn('getDemoUser chamado fora do modo DEMO');
     return null;
   }
 

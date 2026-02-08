@@ -2,6 +2,7 @@
  * NAUTI ONE - Bandwidth Optimizations
  * Otimizações para conexões lentas marítimas (0.5-2 Mbps)
  */
+import { logger } from '@/lib/logger';
 
 // ===================================================================
 // 1. IMAGE COMPRESSION & OPTIMIZATION
@@ -523,7 +524,7 @@ export async function cleanupStorageIfNeeded(threshold: number = 80): Promise<vo
     return;
   }
 
-  console.warn(`⚠️ Storage usage at ${quota.percent.toFixed(1)}%, cleaning up...`);
+  logger.warn(`Storage usage at ${quota.percent.toFixed(1)}%, cleaning up...`);
 
   // Clear old caches
   if ('caches' in window) {

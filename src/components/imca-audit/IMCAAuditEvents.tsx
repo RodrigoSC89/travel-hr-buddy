@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -91,7 +92,7 @@ function useDPEvents() {
 
         setEvents(mapped);
       } catch (error) {
-        console.error("Error fetching DP events:", error);
+        logger.error("Error fetching DP events", error as Error);
       } finally {
         setLoading(false);
       }

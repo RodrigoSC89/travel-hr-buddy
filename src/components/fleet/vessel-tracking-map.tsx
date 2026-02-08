@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
+import { logger } from "@/lib/logger";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -77,7 +78,7 @@ const VesselTrackingMap = () => {
           }
         });
       } catch (error) {
-        console.error("Failed to load map:", error);
+        logger.error("Failed to load map", error as Error);
         if (mounted) setIsMapLoading(false);
       }
     };

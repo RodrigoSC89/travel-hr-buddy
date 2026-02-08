@@ -5,6 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface Consultation {
   id: string;
@@ -49,7 +50,7 @@ export function useConsultations() {
         .limit(50);
 
       if (error) {
-        console.warn('Telemedicine consultations query error:', error.message);
+        logger.warn('Telemedicine consultations query error: ' + error.message);
         return [];
       }
 
@@ -137,7 +138,7 @@ export function useTelemedicineStats() {
         .gte('created_at', today.toISOString());
 
       if (error) {
-        console.warn('Telemedicine stats query error:', error.message);
+        logger.warn('Telemedicine stats query error: ' + error.message);
         return getDefaultStats();
       }
 

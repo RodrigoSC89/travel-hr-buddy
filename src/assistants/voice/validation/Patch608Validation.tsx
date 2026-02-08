@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface VoiceCommand {
   command: string;
@@ -111,7 +112,7 @@ export function Patch608Validation() {
       });
 
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("Validation error", error as Error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
       });

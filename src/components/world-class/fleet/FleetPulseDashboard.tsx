@@ -14,6 +14,7 @@ import { Ship, AlertTriangle, CheckCircle, Activity, RefreshCw, Search, Users, W
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 const riskColors: Record<string, string> = {
   low: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
@@ -163,7 +164,7 @@ Forneça:
       setAiAnalysis(content);
       toast({ title: '🧠 Análise Fleet Pulse concluída' });
     } catch (err) {
-      console.error('Fleet AI error:', err);
+      logger.error('Fleet AI error', err as Error);
       toast({ title: 'Erro na análise AI', variant: 'destructive' });
     } finally {
       setAiLoading(false);

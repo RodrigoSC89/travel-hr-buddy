@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -229,7 +230,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
       ]);
 
     } catch (error) {
-      console.error('Error loading financial data:', error);
+      logger.error('Error loading financial data', error as Error);
       toast.error('Erro ao carregar dados financeiros');
     } finally {
       setLoading(false);

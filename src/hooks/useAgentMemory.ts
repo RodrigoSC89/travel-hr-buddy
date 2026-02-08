@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export interface ConversationSummary {
   id: string;
@@ -81,7 +82,7 @@ export function useSaveConversation() {
     ): Promise<string> => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        console.warn("[AgentMemory] User not authenticated, skipping save");
+        logger.warn("[AgentMemory] User not authenticated, skipping save");
         return "";
       }
 
