@@ -44,9 +44,9 @@ serve(async (req: Request): Promise<Response> => {
       );
     }
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openaiApiKey) {
-      console.error('OpenAI API key not configured');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      console.error('LOVABLE_API_KEY not configured');
       return new Response(
         JSON.stringify({ error: 'Configuração de IA não disponível' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -109,14 +109,14 @@ RESPOSTA_CORRETA: [A, B ou C]
 
 Mantenha tudo em português brasileiro, tom profissional e técnico.`;
 
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const openaiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'google/gemini-3-flash-preview',
         messages: [
           {
             role: 'system',
@@ -134,7 +134,19 @@ Mantenha tudo em português brasileiro, tom profissional e técnico.`;
 
     if (!openaiResponse.ok) {
       const errorData = await openaiResponse.text();
-      console.error('OpenAI API error:', errorData);
+      console.error('AI Gateway error:', openaiResponse.status, errorData);
+      if (openaiResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ error: 'Limite de requisições excedido. Tente novamente em alguns segundos.' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (openaiResponse.status === 402) {
+        return new Response(
+          JSON.stringify({ error: 'Créditos insuficientes. Adicione créditos ao workspace.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
       return new Response(
         JSON.stringify({ error: 'Erro ao gerar conteúdo de treinamento' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
