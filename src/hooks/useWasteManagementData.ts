@@ -67,12 +67,8 @@ export function useWasteTanks() {
         });
       }
 
-      // Fallback: return demo data structure if no data
-      return [
-        { id: "demo-1", name: "Tanque de Óleo Usado", type: "oily", capacity: 5000, currentLevel: 3200, unit: "L", status: "warning", lastDischarge: new Date().toISOString().split("T")[0] },
-        { id: "demo-2", name: "Tanque de Esgoto", type: "sewage", capacity: 8000, currentLevel: 2100, unit: "L", status: "ok", lastDischarge: new Date().toISOString().split("T")[0] },
-        { id: "demo-3", name: "Água de Porão", type: "bilge", capacity: 3000, currentLevel: 2800, unit: "L", status: "critical", lastDischarge: new Date().toISOString().split("T")[0] },
-      ];
+      // No sensor data found - return empty array for EmptyState
+      return [];
     },
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

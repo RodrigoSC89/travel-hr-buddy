@@ -1,6 +1,6 @@
 /**
  * Medical Infirmary Data Hook - Full Backend Integration
- * PATCH MEDICAL-2.0 - Using existing tables
+ * PATCH MEDICAL-3.0 - Real Supabase tables: medical_consultations, medical_supplies, medication_dispensations
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -83,66 +83,161 @@ export function useMedicalInfirmaryData() {
     staleTime: 30000,
   });
 
-  // Use simulated data for consultations (table may not exist)
-  const consultationsLoading = false;
-  const consultations: MedicalConsultation[] = [
-    { 
-      id: "1", 
-      patient_id: null, 
-      patient_name: "João Silva", 
-      reason: "Dor de cabeça", 
-      diagnosis: "Cefaleia tensional",
-      treatment: "Dipirona 500mg",
-      doctor_name: "Dr. Costa", 
-      consultation_date: new Date().toISOString(), 
-      status: "completed",
-      notes: null,
-      created_at: new Date().toISOString()
+  // Fetch real consultations from medical_consultations table
+  const { data: consultations = [], isLoading: consultationsLoading } = useQuery({
+    queryKey: ["medical-consultations"],
+    queryFn: async (): Promise<MedicalConsultation[]> => {
+      const { data, error } = await supabase
+        .from("medical_consultations")
+        .select("id, crew_member_id, crew_member_name, consultation_type, chief_complaint, diagnosis, treatment, attending_officer, status, notes, created_at")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      return (data || []).map((c: any) => ({
+        id: c.id,
+        patient_id: c.crew_member_id,
+        patient_name: c.crew_member_name || "Paciente",
+        reason: c.chief_complaint || c.consultation_type || "Consulta",
+        diagnosis: c.diagnosis,
+        treatment: c.treatment,
+        doctor_name: c.attending_officer,
+        consultation_date: c.created_at,
+        status: c.status === "completed" ? "completed" : c.status === "cancelled" ? "cancelled" : c.status === "in_progress" ? "in_progress" : "scheduled",
+        notes: c.notes,
+        created_at: c.created_at,
+      }));
     },
-    { 
-      id: "2", 
-      patient_id: null, 
-      patient_name: "Maria Santos", 
-      reason: "Mal-estar", 
-      diagnosis: null,
-      treatment: null,
-      doctor_name: "Dra. Lima", 
-      consultation_date: new Date().toISOString(), 
-      status: "in_progress",
-      notes: null,
-      created_at: new Date().toISOString()
+    staleTime: 15000,
+  });
+
+  // Fetch real medications from medical_supplies table
+  const { data: medications = [], isLoading: medicationsLoading } = useQuery({
+    queryKey: ["medical-medications"],
+    queryFn: async (): Promise<Medication[]> => {
+      const { data, error } = await supabase
+        .from("medical_supplies")
+        .select("id, name, category, quantity, min_stock, unit, expiry_date, batch_number, location, status, created_at")
+        .order("name", { ascending: true })
+        .limit(200);
+
+      if (error) throw error;
+
+      return (data || []).map((m: any) => {
+        // Determine status based on stock levels and expiry
+        let computedStatus: Medication["status"] = "ok";
+        if (m.expiry_date && new Date(m.expiry_date) < new Date()) {
+          computedStatus = "expired";
+        } else if (m.quantity <= 0) {
+          computedStatus = "critical";
+        } else if (m.min_stock && m.quantity <= m.min_stock) {
+          computedStatus = m.quantity <= m.min_stock * 0.5 ? "critical" : "low";
+        }
+
+        return {
+          id: m.id,
+          name: m.name,
+          active_ingredient: m.category,
+          quantity: m.quantity || 0,
+          min_stock: m.min_stock || 10,
+          unit: m.unit || "un",
+          batch_number: m.batch_number,
+          expiry_date: m.expiry_date,
+          status: m.status || computedStatus,
+          location: m.location,
+          created_at: m.created_at,
+        };
+      });
     },
-  ];
+    staleTime: 15000,
+  });
 
-  // Use simulated data for medications
-  const medicationsLoading = false;
-  const medications: Medication[] = [
-    { id: "1", name: "Dipirona 500mg", active_ingredient: "Dipirona", quantity: 450, min_stock: 100, unit: "cp", batch_number: "LOT-2024-001", expiry_date: "2026-12-31", status: "ok", location: "Armário A1", created_at: new Date().toISOString() },
-    { id: "2", name: "Paracetamol 750mg", active_ingredient: "Paracetamol", quantity: 380, min_stock: 100, unit: "cp", batch_number: "LOT-2024-002", expiry_date: "2026-08-31", status: "ok", location: "Armário A1", created_at: new Date().toISOString() },
-    { id: "3", name: "Omeprazol 20mg", active_ingredient: "Omeprazol", quantity: 120, min_stock: 50, unit: "cp", batch_number: "LOT-2024-003", expiry_date: "2026-10-31", status: "ok", location: "Armário A2", created_at: new Date().toISOString() },
-    { id: "4", name: "Dramin B6", active_ingredient: "Dimenidrinato", quantity: 45, min_stock: 50, unit: "cp", batch_number: "LOT-2024-004", expiry_date: "2026-06-30", status: "low", location: "Armário A2", created_at: new Date().toISOString() },
-    { id: "5", name: "Ciprofloxacino 500mg", active_ingredient: "Ciprofloxacino", quantity: 28, min_stock: 30, unit: "cp", batch_number: "LOT-2024-005", expiry_date: "2026-04-30", status: "critical", location: "Armário B1", created_at: new Date().toISOString() },
-  ];
+  // Fetch exams from crew_certifications with medical types
+  const { data: exams = [], isLoading: examsLoading } = useQuery({
+    queryKey: ["medical-exams"],
+    queryFn: async (): Promise<MedicalExam[]> => {
+      const { data, error } = await supabase
+        .from("crew_certifications")
+        .select("id, crew_member_id, certification_name, certification_type, expiry_date, status, notes, created_at")
+        .or("certification_type.ilike.%medical%,certification_type.ilike.%exam%,certification_type.ilike.%health%,certification_name.ilike.%medical%,certification_name.ilike.%saúde%")
+        .order("expiry_date", { ascending: true })
+        .limit(50);
 
-  // Use simulated data for exams
-  const examsLoading = false;
-  const exams: MedicalExam[] = [
-    { id: "1", crew_member_id: null, crew_member_name: "Carlos Mendes", exam_type: "Exame Admissional", scheduled_date: "2026-02-06", status: "scheduled", result: null, vessel_name: "MV Atlântico Sul", notes: null, created_at: new Date().toISOString() },
-    { id: "2", crew_member_id: null, crew_member_name: "Roberto Alves", exam_type: "Periódico Anual", scheduled_date: "2026-02-08", status: "scheduled", result: null, vessel_name: "MV Horizonte", notes: null, created_at: new Date().toISOString() },
-    { id: "3", crew_member_id: null, crew_member_name: "Paulo Ferreira", exam_type: "Demissional", scheduled_date: "2026-02-10", status: "scheduled", result: null, vessel_name: "MV Oceano", notes: null, created_at: new Date().toISOString() },
-  ];
+      if (error) throw error;
 
-  // Create consultation (simulated)
+      // Get crew member names
+      const crewIds = [...new Set((data || []).map(d => d.crew_member_id).filter(Boolean))];
+      let crewMap: Record<string, { full_name: string; vessel_id: string | null }> = {};
+
+      if (crewIds.length > 0) {
+        const { data: crewData } = await supabase
+          .from("crew_members")
+          .select("id, full_name, vessel_id")
+          .in("id", crewIds);
+
+        (crewData || []).forEach((c: any) => {
+          crewMap[c.id] = { full_name: c.full_name, vessel_id: c.vessel_id };
+        });
+      }
+
+      // Get vessel names
+      const vesselIds = [...new Set(Object.values(crewMap).map(c => c.vessel_id).filter(Boolean))];
+      let vesselMap: Record<string, string> = {};
+
+      if (vesselIds.length > 0) {
+        const { data: vessels } = await supabase
+          .from("vessels")
+          .select("id, name")
+          .in("id", vesselIds as string[]);
+
+        (vessels || []).forEach((v: any) => {
+          vesselMap[v.id] = v.name;
+        });
+      }
+
+      return (data || []).map((e: any) => {
+        const crew = crewMap[e.crew_member_id];
+        return {
+          id: e.id,
+          crew_member_id: e.crew_member_id,
+          crew_member_name: crew?.full_name || "Tripulante",
+          exam_type: e.certification_name || e.certification_type || "Exame Médico",
+          scheduled_date: e.expiry_date || e.created_at,
+          status: e.status === "valid" || e.status === "active" ? "completed" : e.status === "expired" ? "cancelled" : "scheduled",
+          result: e.status === "valid" ? "Apto" : null,
+          vessel_name: crew?.vessel_id ? vesselMap[crew.vessel_id] || null : null,
+          notes: e.notes,
+          created_at: e.created_at,
+        };
+      });
+    },
+    staleTime: 15000,
+  });
+
+  // Create consultation (real Supabase insert)
   const createConsultation = useMutation({
     mutationFn: async (data: Partial<MedicalConsultation>) => {
-      console.log("Creating consultation:", data);
-      return {
-        id: crypto.randomUUID(),
-        ...data,
-        created_at: new Date().toISOString(),
-      };
+      const { data: result, error } = await supabase
+        .from("medical_consultations")
+        .insert({
+          crew_member_name: data.patient_name || "Paciente",
+          consultation_type: "general",
+          chief_complaint: data.reason || "",
+          diagnosis: data.diagnosis,
+          treatment: data.treatment,
+          attending_officer: data.doctor_name,
+          status: data.status || "scheduled",
+          notes: data.notes,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return result;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["medical-consultations"] });
       toast.success("Consulta registrada com sucesso");
     },
     onError: (error) => {
@@ -150,17 +245,45 @@ export function useMedicalInfirmaryData() {
     },
   });
 
-  // Dispense medication (simulated)
+  // Dispense medication (real insert into medication_dispensations)
   const dispenseMedication = useMutation({
     mutationFn: async ({ medicationId, quantity, patientName }: { 
       medicationId: string; 
       quantity: number; 
       patientName: string;
     }) => {
-      console.log(`Dispensing ${quantity} of ${medicationId} to ${patientName}`);
+      // Find medication info
+      const med = medications.find(m => m.id === medicationId);
+
+      const { error: dispenseError } = await supabase
+        .from("medication_dispensations")
+        .insert({
+          supply_id: medicationId,
+          medication_name: med?.name || "Medicamento",
+          quantity_dispensed: quantity,
+          unit: med?.unit || "un",
+          batch_number: med?.batch_number,
+          reason: `Dispensado para ${patientName}`,
+          dispensed_by_name: "Oficial Médico",
+        });
+
+      if (dispenseError) throw dispenseError;
+
+      // Update stock quantity in medical_supplies
+      if (med) {
+        const newQty = Math.max(0, med.quantity - quantity);
+        const { error: updateError } = await supabase
+          .from("medical_supplies")
+          .update({ quantity: newQty })
+          .eq("id", medicationId);
+
+        if (updateError) throw updateError;
+      }
+
       return { success: true };
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["medical-medications"] });
       toast.success("Medicamento dispensado com sucesso");
     },
     onError: (error) => {
@@ -168,18 +291,34 @@ export function useMedicalInfirmaryData() {
     },
   });
 
-  // Schedule exam (simulated)
+  // Schedule exam (create crew_certification entry)
   const scheduleExam = useMutation({
     mutationFn: async (data: Partial<MedicalExam>) => {
-      console.log("Scheduling exam:", data);
-      return {
-        id: crypto.randomUUID(),
-        ...data,
-        created_at: new Date().toISOString(),
+      const insertData: Record<string, unknown> = {
+        certification_name: data.exam_type || "Exame Médico",
+        certification_type: "medical_exam",
+        expiry_date: data.scheduled_date,
+        status: "pending",
+        notes: data.notes,
       };
+      if (data.crew_member_id) {
+        insertData.crew_member_id = data.crew_member_id;
+      }
+      const { data: result, error } = await supabase
+        .from("crew_certifications")
+        .insert(insertData as any)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return result;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["medical-exams"] });
       toast.success("Exame agendado com sucesso");
+    },
+    onError: (error) => {
+      toast.error(`Erro ao agendar exame: ${error.message}`);
     },
   });
 
@@ -193,7 +332,7 @@ export function useMedicalInfirmaryData() {
     lowStockMedications: medications.filter((m) => m.status === "low").length,
     fitnessRate: crewHealth.length > 0 
       ? Math.round((crewHealth.filter((c: any) => c.status === "active").length / crewHealth.length) * 100)
-      : 96.8,
+      : 0,
     totalMedications: medications.length,
     expiringCertificates: medicalCertificates.filter((c: any) => {
       if (!c.expiry_date) return false;

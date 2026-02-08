@@ -67,7 +67,7 @@ export function GamificationSystem() {
               <Avatar className="h-20 w-20 border-4 border-primary">
                 <AvatarImage src="" />
                 <AvatarFallback className="text-2xl bg-primary/20">
-                  {topUser ? topUser.name.split(' ').map(n => n[0]).join('').slice(0, 2) : "?"}
+                  {topUser ? topUser.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2) : "?"}
                 </AvatarFallback>
               </Avatar>
               <div className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-yellow-500">
@@ -174,7 +174,7 @@ export function GamificationSystem() {
                         )}
                       >
                         <div className="w-8 flex justify-center">{getRankBadge(user.rank)}</div>
-                        <Avatar><AvatarFallback>{user.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback></Avatar>
+                        <Avatar><AvatarFallback>{user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}</AvatarFallback></Avatar>
                         <div className="flex-1">
                           <p className="font-medium">{user.name}</p>
                           <p className="text-xs text-muted-foreground">{user.vessel}</p>
