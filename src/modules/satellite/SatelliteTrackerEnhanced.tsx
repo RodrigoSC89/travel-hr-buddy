@@ -139,22 +139,23 @@ export const SatelliteTrackerEnhanced = () => {
 
   const loadCoverageEvents = async () => {
     try {
-      const { data, error } = await (supabase as any)
-        .from("satellite_coverage_events")
+      // satellite_coverage_events not in schema - use satellite_coverage_maps instead
+      const { data, error } = await supabase
+        .from("satellite_coverage_maps")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      setCoverageEvents((data || []).map((e: Record<string, unknown>) => ({
+      setCoverageEvents((data || []).map((e) => ({
         id: String(e.id || ""),
-        satellite_name: String(e.satellite_name || ""),
-        event_type: String(e.event_type || "pass"),
-        max_elevation: Number(e.max_elevation || 0),
-        duration_seconds: Number(e.duration_seconds || 0),
-        start_time: String(e.start_time || new Date().toISOString()),
-        end_time: String(e.end_time || new Date().toISOString()),
-        notified: Boolean(e.notified),
+        satellite_name: String(e.satellite_id || ""),
+        event_type: "pass",
+        max_elevation: e.elevation_angle_degrees || 0,
+        duration_seconds: (e.visibility_duration_minutes || 0) * 60,
+        start_time: String(e.next_pass_at || e.created_at || new Date().toISOString()),
+        end_time: String(e.created_at || new Date().toISOString()),
+        notified: false,
       })));
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -264,14 +265,13 @@ export const SatelliteTrackerEnhanced = () => {
       if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
         const eventType = Math.random() > 0.5 ? "entry" : "exit";
 
-        await (supabase as any).from("satellite_coverage_events").insert({
+        // Coverage events stored in satellite_coverage_maps
+        await supabase.from("satellite_coverage_maps").insert({
           satellite_id: sat.satellite_id,
-          satellite_name: sat.satellite_name,
-          event_type: eventType,
-          max_elevation: sat.elevation,
-          duration_seconds: Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC,
-          start_time: new Date().toISOString(),
-          end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
+          coverage_geojson: { type: "Point", coordinates: [sat.longitude, sat.latitude] },
+          elevation_angle_degrees: sat.elevation,
+          visibility_duration_minutes: Math.floor((Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC) / 60),
+          next_pass_at: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
         });
 
         if (eventType === "entry") {

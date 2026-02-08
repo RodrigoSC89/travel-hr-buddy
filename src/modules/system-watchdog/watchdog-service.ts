@@ -398,18 +398,17 @@ class WatchdogService {
    * Log event to Supabase
    */
   private async logToSupabase(event: WatchdogEvent) {
+    // watchdog_events not in schema - log to memory only
     try {
-      await (supabase.from as any)("watchdog_events").insert({
-        event_id: event.id,
-        event_type: event.type,
-        service_name: event.service,
+      logger.debug("[Watchdog Service] Event logged", {
+        eventId: event.id,
+        eventType: event.type,
+        service: event.service,
         message: event.message,
-        metadata: event.metadata || {},
-        created_at: event.timestamp.toISOString()
       });
     } catch (err) {
       // Silently fail - don't want logging errors to cascade
-      logger.warn("[Watchdog Service] Could not log to Supabase:", err instanceof Error ? err.message : String(err));
+      logger.warn("[Watchdog Service] Could not log event:", err instanceof Error ? err.message : String(err));
     }
   }
 

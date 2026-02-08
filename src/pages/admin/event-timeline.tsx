@@ -16,14 +16,14 @@ export default function EventTimelinePage() {
   const { data: events, isLoading } = useQuery({
     queryKey: ["system-logs"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("system_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);
 
       if (error) throw error;
-      return (data || []) as TimelineEvent[];
+      return (data || []) as unknown as TimelineEvent[];
     },
     refetchInterval: 30000, // Refresh every 30 seconds
   });

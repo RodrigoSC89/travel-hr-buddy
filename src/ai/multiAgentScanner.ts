@@ -290,17 +290,13 @@ class MultiAgentScanner {
    * Log failover event to database
    */
   private async logFailoverEvent(event: FailoverEvent): Promise<void> {
-    try {
-      await (supabase as any).from("agent_failover_log").insert({
-        from_agent_id: event.from_agent_id,
-        to_agent_id: event.to_agent_id,
-        reason: event.reason,
-        timestamp: event.timestamp,
-        success: event.success
-      });
-    } catch (error) {
-      logger.error("Failed to log failover", { error });
-    }
+    // agent_failover_log not in schema - log to memory
+    logger.info("Agent failover logged", {
+      from: event.from_agent_id,
+      to: event.to_agent_id,
+      reason: event.reason,
+      success: event.success,
+    });
   }
 
   /**

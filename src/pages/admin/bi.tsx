@@ -22,13 +22,18 @@ export default function AdminBI() {
   useEffect(() => {
     async function fetchTrendData() {
       try {
-        const { data, error } = await (supabase as any).rpc("jobs_trend_by_month");
+        const { data, error } = await supabase.rpc("jobs_trend_by_month");
         
         if (error) {
           logger.error("Error fetching jobs trend", { error });
           setTrendData([]);
         } else {
-          setTrendData(data || []);
+          // RPC returns { count, month } - map to JobTrendData
+          setTrendData((data || []).map(item => ({
+            month: item.month,
+            total_jobs: item.count,
+            monthLabel: item.month,
+          })));
         }
       } catch (error) {
         logger.error("Error invoking function", { error });

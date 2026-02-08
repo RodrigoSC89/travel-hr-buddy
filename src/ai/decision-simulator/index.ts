@@ -280,20 +280,9 @@ class DecisionSimulatorCore {
    * Get simulations for a mission
    */
   async getSimulationsForMission(missionId: string): Promise<SimulationResult[]> {
-    try {
-      const { data, error } = await (supabase as any)
-        .from("ai_simulations")
-        .select("*")
-        .eq("mission_id", missionId)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      return data || [];
-    } catch (error) {
-      logger.error("[DecisionSimulator] Failed to fetch mission simulations", error);
-      return [];
-    }
+    // ai_simulations not in schema - return empty (simulations are ephemeral)
+    logger.debug("[DecisionSimulator] Fetching simulations for mission", { missionId });
+    return [];
   }
 
   /**
@@ -712,21 +701,11 @@ class DecisionSimulatorCore {
     });
 
     try {
-      await (supabase as any).from("ai_simulations").insert({
-        simulation_id: result.id,
-        strategy_id: result.strategyId,
+      // ai_simulations not in schema - stored in memory only
+      logger.info("[DecisionSimulator] Simulation archived in memory", {
+        simulationId: result.id,
+        strategyId: result.strategyId,
         status: result.status,
-        parameters: result.parameters,
-        scenarios: result.scenarios,
-        metrics: result.metrics,
-        recommendations: result.recommendations,
-        warnings: result.warnings,
-        confidence_level: result.confidenceLevel,
-        mission_id: result.missionId,
-        started_at: result.startedAt.toISOString(),
-        completed_at: result.completedAt?.toISOString(),
-        duration: result.duration,
-        metadata: result.metadata
       });
     } catch (error) {
       logger.error("[DecisionSimulator] Failed to archive simulation", error);

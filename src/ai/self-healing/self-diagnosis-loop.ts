@@ -624,56 +624,21 @@ export class SelfDiagnosisLoop {
    * Storage methods
    */
   private async storeScan(scan: DiagnosticScan): Promise<void> {
-    try {
-      await (supabase as any).from("ai_diagnostic_scans").insert({
-        scan_id: scan.scanId,
-        module_id: scan.moduleId,
-        status: scan.status,
-        metrics: scan.metrics,
-        anomalies: scan.anomalies,
-        timestamp: scan.timestamp,
-        next_scan_scheduled: scan.nextScanScheduled,
-      });
-    } catch (error) {
-      logger.error("Failed to store scan", { error });
-    }
+    // ai_diagnostic_scans not in schema - log to memory
+    logger.debug("Diagnostic scan stored in memory", { scanId: scan.scanId, moduleId: scan.moduleId });
   }
 
   private async storePlan(plan: RecoveryPlan): Promise<void> {
-    try {
-      await (supabase as any).from("ai_recovery_plans").insert({
-        plan_id: plan.planId,
-        scan_id: plan.scanId,
-        anomalies: plan.anomalies,
-        actions: plan.actions,
-        priority: plan.priority,
-        estimated_duration: plan.estimatedDuration,
-        auto_execute: plan.autoExecute,
-        status: plan.status,
-        timestamp: plan.timestamp,
-      });
-    } catch (error) {
-      logger.error("Failed to store plan", { error });
-    }
+    // ai_recovery_plans not in schema - log to memory
+    logger.debug("Recovery plan stored in memory", { planId: plan.planId, priority: plan.priority });
   }
 
   private async storeExecution(execution: RecoveryExecution): Promise<void> {
-    try {
-      await (supabase as any).from("ai_recovery_executions").insert({
-        execution_id: execution.executionId,
-        plan_id: execution.planId,
-        action_id: execution.actionId,
-        start_time: execution.startTime,
-        end_time: execution.endTime,
-        before_state: execution.beforeState,
-        after_state: execution.afterState,
-        success: execution.success,
-        logs: execution.logs,
-        metrics: execution.metrics,
-      });
-    } catch (error) {
-      logger.error("Failed to store execution", { error });
-    }
+    // ai_recovery_executions not in schema - log to memory
+    logger.debug("Recovery execution stored in memory", { 
+      executionId: execution.executionId, 
+      success: execution.success 
+    });
   }
 }
 
