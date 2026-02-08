@@ -135,15 +135,27 @@ export default function ExecutiveKPIDashboard() {
         .select('*')
         .limit(10);
 
-      const vesselStatuses: VesselStatus[] = (vesselsData || []).map(v => ({
-        id: v.id,
-        name: v.name,
-        status: Math.random() > 0.7 ? 'in-port' : 'at-sea',
-        location: 'Atlantic Ocean',
-        nextPort: 'Rotterdam',
-        eta: '3d 12h',
-        fuelLevel: Math.floor(Math.random() * 40) + 60,
-      }));
+      const vesselStatuses: VesselStatus[] = (vesselsData || []).map((v, idx) => {
+        // Deterministic status based on vessel data
+        const statusVal = v.status?.toLowerCase() || '';
+        const vesselStatus: 'at-sea' | 'in-port' | 'maintenance' = 
+          statusVal === 'maintenance' ? 'maintenance' :
+          statusVal === 'in-port' || statusVal === 'docked' ? 'in-port' : 'at-sea';
+        
+        // Deterministic fuel level based on vessel name hash
+        const nameHash = (v.name || '').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        const fuelLevel = 60 + (nameHash % 35);
+        
+        return {
+          id: v.id,
+          name: v.name,
+          status: vesselStatus,
+          location: (v as any).current_location || 'Em trânsito',
+          nextPort: (v as any).next_port || 'A definir',
+          eta: (v as any).eta || `${2 + (idx % 5)}d ${(nameHash % 12) + 1}h`,
+          fuelLevel,
+        };
+      });
       setVessels(vesselStatuses);
 
       const healthyCrew = Array.from(crewMap.values()).filter(c => c.status === 'healthy').length;

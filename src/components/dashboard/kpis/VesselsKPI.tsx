@@ -1,6 +1,6 @@
 /**
  * Vessels KPI Component
- * PATCH 622 - Modularized dashboard metric
+ * Real data from Supabase
  */
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,14 +18,15 @@ export function VesselsKPI() {
 
     const fetchVessels = async () => {
       try {
-        // Simulate fetching vessels data - replace with actual query
-        // const { data, error } = await supabase.from('vessels').select('id', { count: 'exact' });
-        
-        // For now, simulate delay and data
-        await new Promise(resolve => setTimeout(resolve, 600));
+        const { count, error: queryError } = await supabase
+          .from('vessels')
+          .select('*', { count: 'exact', head: true })
+          .in('status', ['active', 'operational']);
+
+        if (queryError) throw queryError;
         
         if (mounted) {
-          setVessels(24); // Example value
+          setVessels(count ?? 0);
           setLoading(false);
         }
       } catch (err) {
@@ -37,10 +38,7 @@ export function VesselsKPI() {
     };
 
     fetchVessels();
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   if (loading) {
@@ -61,14 +59,14 @@ export function VesselsKPI() {
 
   if (error) {
     return (
-      <Card className="border-red-200">
+      <Card className="border-destructive/30">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Embarcações Ativas</p>
-              <p className="text-sm text-red-600">Erro ao carregar</p>
+              <p className="text-sm text-destructive">Erro ao carregar</p>
             </div>
-            <Ship className="h-8 w-8 text-red-300" />
+            <Ship className="h-8 w-8 text-destructive/50" />
           </div>
         </CardContent>
       </Card>
@@ -81,9 +79,9 @@ export function VesselsKPI() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted-foreground">Embarcações Ativas</p>
-            <p className="text-3xl font-bold text-blue-600">{vessels}</p>
+            <p className="text-3xl font-bold text-primary">{vessels}</p>
           </div>
-          <Ship className="h-8 w-8 text-blue-600" />
+          <Ship className="h-8 w-8 text-primary" />
         </div>
       </CardContent>
     </Card>

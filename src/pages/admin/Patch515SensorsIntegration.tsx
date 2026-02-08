@@ -12,10 +12,12 @@ export default function Patch515SensorsIntegration() {
   ]);
 
   useEffect(() => {
+    let tick = 0;
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
+      tick++;
+      setSensors(prev => prev.map((sensor, idx) => ({
         ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * 5,
+        value: sensor.value + Math.sin(tick * 0.3 + idx * 1.5) * 2,
       })));
     }, 2000);
     return () => clearInterval(interval);

@@ -157,11 +157,13 @@ const RecruitmentPipeline: React.FC = () => {
         const insights = typeof result === 'string' 
           ? { strengths: [], concerns: [], recommendation: result }
           : result;
-        setCandidatos(prev => prev.map(c => 
-          c.id === candidato.id 
-            ? { ...c, aiInsights: insights, matchScore: Math.floor(70 + Math.random() * 30) } 
-            : c
-        ));
+        setCandidatos(prev => prev.map(c => {
+          // Deterministic match score based on candidate ID
+          const idHash = (c.id || '').split('').reduce((a: number, ch: string) => a + ch.charCodeAt(0), 0);
+          return c.id === candidato.id 
+            ? { ...c, aiInsights: insights, matchScore: 70 + (idHash % 28) } 
+            : c;
+        }));
       }
     }
     

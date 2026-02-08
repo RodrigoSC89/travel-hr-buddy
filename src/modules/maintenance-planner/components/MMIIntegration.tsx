@@ -67,17 +67,20 @@ export const MMIIntegration: React.FC = () => {
           },
         ]);
       } else {
-        // Transform MMI data to predictions
-        const transformed = (data || []).slice(0, 5).map((job: any) => ({
-          id: job.id,
-          equipment_id: job.component_id || "N/A",
-          equipment_name: job.title || "Unknown Equipment",
-          failure_type: job.status || "General Maintenance",
-          probability: 0.5 + Math.random() * 0.4, // Mock probability
-          predicted_date: new Date(Date.now() + Math.random() * 60 * 24 * 60 * 60 * 1000).toISOString(),
-          recommended_action: job.description || "Schedule maintenance",
-          confidence: 0.6 + Math.random() * 0.3,
-        }));
+        // Transform MMI data to predictions with deterministic values
+        const transformed = (data || []).slice(0, 5).map((job: any, idx: number) => {
+          const idHash = (job.id || '').split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+          return {
+            id: job.id,
+            equipment_id: job.component_id || "N/A",
+            equipment_name: job.title || "Unknown Equipment",
+            failure_type: job.status || "General Maintenance",
+            probability: 0.5 + ((idHash % 40) / 100),
+            predicted_date: new Date(Date.now() + (15 + idx * 10) * 24 * 60 * 60 * 1000).toISOString(),
+            recommended_action: job.description || "Schedule maintenance",
+            confidence: 0.6 + ((idHash % 30) / 100),
+          };
+        });
         setPredictions(transformed);
       }
     } catch (error) {

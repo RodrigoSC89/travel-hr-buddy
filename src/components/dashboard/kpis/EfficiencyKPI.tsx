@@ -1,6 +1,6 @@
 /**
  * Efficiency KPI Component
- * PATCH 622 - Modularized dashboard metric
+ * Real data derived from operational_checklists completion rate
  */
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,14 +18,32 @@ export function EfficiencyKPI() {
 
     const fetchEfficiency = async () => {
       try {
-        // Simulate fetching efficiency data - replace with actual query
-        // const { data, error } = await supabase.from('performance_metrics').select('efficiency').single();
-        
-        // For now, simulate delay and data
-        await new Promise(resolve => setTimeout(resolve, 550));
-        
+        const { count: totalCount } = await supabase
+          .from('operational_checklists')
+          .select('*', { count: 'exact', head: true });
+
+        const { count: completedCount } = await supabase
+          .from('operational_checklists')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'completed');
+
+        const total = totalCount ?? 0;
+        const completed = completedCount ?? 0;
+        const rate = total > 0 ? (completed / total) * 100 : 0;
+
+        // Map rate to grade
+        let grade = "N/A";
+        if (total > 0) {
+          if (rate >= 95) grade = "A+";
+          else if (rate >= 90) grade = "A";
+          else if (rate >= 80) grade = "B+";
+          else if (rate >= 70) grade = "B";
+          else if (rate >= 60) grade = "C";
+          else grade = "D";
+        }
+
         if (mounted) {
-          setEfficiency("A+"); // Example value
+          setEfficiency(grade);
           setLoading(false);
         }
       } catch (err) {
@@ -37,10 +55,7 @@ export function EfficiencyKPI() {
     };
 
     fetchEfficiency();
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   if (loading) {
@@ -61,14 +76,14 @@ export function EfficiencyKPI() {
 
   if (error) {
     return (
-      <Card className="border-red-200">
+      <Card className="border-destructive/30">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Eficiência</p>
-              <p className="text-sm text-red-600">Erro ao carregar</p>
+              <p className="text-sm text-destructive">Erro ao carregar</p>
             </div>
-            <Zap className="h-8 w-8 text-red-300" />
+            <Zap className="h-8 w-8 text-destructive/50" />
           </div>
         </CardContent>
       </Card>
@@ -81,9 +96,9 @@ export function EfficiencyKPI() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted-foreground">Eficiência</p>
-            <p className="text-3xl font-bold text-orange-600">{efficiency}</p>
+            <p className="text-3xl font-bold text-primary">{efficiency}</p>
           </div>
-          <Zap className="h-8 w-8 text-orange-600" />
+          <Zap className="h-8 w-8 text-primary" />
         </div>
       </CardContent>
     </Card>

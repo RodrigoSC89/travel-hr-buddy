@@ -125,10 +125,10 @@ export default function AIJournaling() {
           "Verificar previsão meteorológica para fim de semana"
         ],
         metrics: {
-          fuelConsumed: Math.floor(Math.random() * 50) + 30,
-          distanceTraveled: Math.floor(Math.random() * 100) + 50,
+          fuelConsumed: 55,
+          distanceTraveled: 82,
           crewOnDuty: 12,
-          maintenanceEvents: Math.floor(Math.random() * 3)
+          maintenanceEvents: 1
         },
         generatedAt: new Date().toISOString(),
         aiConfidence: 0.92

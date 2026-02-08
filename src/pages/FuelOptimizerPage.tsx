@@ -185,13 +185,15 @@ const FuelOptimizerPage = () => {
 
   const generateWeatherConditions = (): WeatherCondition => {
     const conditions = ["calm", "moderate", "rough"];
-    const idx = Math.floor(Math.random() * conditions.length);
+    // Deterministic based on current hour
+    const hourIdx = new Date().getHours() % conditions.length;
+    const t = Date.now() / 60000;
     return {
-      condition: conditions[idx],
-      wind_speed_knots: 5 + Math.floor(Math.random() * 25),
-      wave_height_meters: 0.5 + Math.random() * 3,
-      temperature: 18 + Math.random() * 12,
-      visibility_nm: 5 + Math.random() * 10
+      condition: conditions[hourIdx],
+      wind_speed_knots: Math.floor(5 + Math.abs(Math.sin(t * 0.1)) * 25),
+      wave_height_meters: Math.round((0.5 + Math.abs(Math.sin(t * 0.15)) * 3) * 10) / 10,
+      temperature: Math.round((18 + Math.abs(Math.sin(t * 0.08)) * 12) * 10) / 10,
+      visibility_nm: Math.round((5 + Math.abs(Math.cos(t * 0.12)) * 10) * 10) / 10
     };
   };
 

@@ -113,7 +113,7 @@ export default function OCRCenterPage() {
               ...r,
               engines: {
                 ...r.engines,
-                tesseract: { confidence: 85 + Math.random() * 10, time: 1200 },
+                tesseract: { confidence: 89, time: 1200 },
               },
             }
           : r
@@ -129,7 +129,7 @@ export default function OCRCenterPage() {
               ...r,
               engines: {
                 ...r.engines,
-                azure: { confidence: 90 + Math.random() * 8, time: 800 },
+                azure: { confidence: 93, time: 800 },
               },
             }
           : r
@@ -145,7 +145,7 @@ export default function OCRCenterPage() {
               ...r,
               engines: {
                 ...r.engines,
-                google: { confidence: 88 + Math.random() * 10, time: 600 },
+                google: { confidence: 91, time: 600 },
               },
             }
           : r
@@ -160,7 +160,7 @@ export default function OCRCenterPage() {
           ? {
               ...r,
               status: 'completed' as const,
-              consensusConfidence: 94 + Math.random() * 5,
+              consensusConfidence: 96.2,
               consensusText: 'Texto extraído com consenso de múltiplos motores...',
               classification: 'Certificado',
               extractedData: {

@@ -88,8 +88,8 @@ const AIProcessingHub: React.FC = () => {
       progress: cmd.execution_status === "completed" ? 100 : cmd.execution_status === "executing" ? 67 : 0,
       startedAt: cmd.created_at ? new Date(cmd.created_at).toLocaleTimeString("pt-BR") : "-",
       estimatedCompletion: cmd.completed_at ? new Date(cmd.completed_at).toLocaleTimeString("pt-BR") : "-",
-      gpuUsage: cmd.execution_status === "executing" ? Math.floor(60 + Math.random() * 30) : 0,
-      memoryUsage: cmd.execution_status === "executing" ? Math.floor(40 + Math.random() * 40) : 0,
+      gpuUsage: cmd.execution_status === "executing" ? Math.floor(60 + ((cmd.id || '').charCodeAt(0) % 30)) : 0,
+      memoryUsage: cmd.execution_status === "executing" ? Math.floor(40 + ((cmd.id || '').charCodeAt(1) % 40)) : 0,
       dataProcessed: cmd.execution_time_ms ? `${(cmd.execution_time_ms / 1000).toFixed(1)}s` : "0s",
     };
   });
@@ -108,21 +108,23 @@ const AIProcessingHub: React.FC = () => {
   useEffect(() => {
     const generateMetrics = () => {
       const now = new Date();
+      const t = now.getTime() / 10000;
       return {
         time: now.toLocaleTimeString(),
-        gpu: Math.floor(30 + (activeJobs * 15) + Math.random() * 10),
-        memory: Math.floor(20 + (activeJobs * 12) + Math.random() * 15),
-        throughput: Math.floor(totalLogs * 2 + Math.random() * 50)
+        gpu: Math.floor(30 + (activeJobs * 15) + Math.sin(t) * 8),
+        memory: Math.floor(20 + (activeJobs * 12) + Math.cos(t * 1.3) * 10),
+        throughput: Math.floor(totalLogs * 2 + Math.sin(t * 0.7) * 30 + 30)
       };
     };
 
     const initialData = Array.from({ length: 20 }, (_, i) => {
       const time = new Date(Date.now() - (19 - i) * 3000);
+      const t = time.getTime() / 10000;
       return {
         time: time.toLocaleTimeString(),
-        gpu: Math.floor(30 + (activeJobs * 15) + Math.random() * 10),
-        memory: Math.floor(20 + (activeJobs * 12) + Math.random() * 15),
-        throughput: Math.floor(totalLogs * 2 + Math.random() * 50)
+        gpu: Math.floor(30 + (activeJobs * 15) + Math.sin(t) * 8),
+        memory: Math.floor(20 + (activeJobs * 12) + Math.cos(t * 1.3) * 10),
+        throughput: Math.floor(totalLogs * 2 + Math.sin(t * 0.7) * 30 + 30)
       };
     });
     setRealtimeMetrics(initialData);
