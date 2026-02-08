@@ -196,8 +196,8 @@ function AccountsManagement() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("suppliers")
-        .select("id, name, status, rating, category")
-        .order("name");
+        .select("id, company_name, is_active, rating, category")
+        .order("company_name");
       if (error) throw error;
       return data || [];
     },
@@ -280,10 +280,10 @@ function AccountsManagement() {
             <div className="space-y-2">
               {suppliers.slice(0, 8).map((s: any) => (
                 <div key={s.id} className="flex items-center justify-between p-2 border rounded hover:bg-muted/50 transition-colors">
-                  <span className="font-medium text-sm">{s.name}</span>
+                  <span className="font-medium text-sm">{s.company_name || s.trading_name || "Fornecedor"}</span>
                   <div className="flex items-center gap-2">
-                    <Badge variant={s.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                      {s.status || 'N/A'}
+                    <Badge variant={s.is_active ? 'default' : 'secondary'} className="text-xs">
+                      {s.is_active ? 'Ativo' : 'Inativo'}
                     </Badge>
                     {s.rating && <span className="text-xs text-muted-foreground">⭐ {s.rating}</span>}
                   </div>

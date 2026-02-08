@@ -57,8 +57,8 @@ export function useMedicalInfirmaryData() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crew_members")
-        .select("id, name, status, medical_status, medical_expiry")
-        .order("name", { ascending: true });
+        .select("id, full_name, status, medical_status, medical_expiry")
+        .order("full_name", { ascending: true });
       
       if (error) throw error;
       return data || [];
@@ -72,10 +72,7 @@ export function useMedicalInfirmaryData() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("certificates")
-        .select(`
-          *,
-          crew_members:crew_member_id (name)
-        `)
+        .select("*")
         .ilike("certificate_type", "%medical%")
         .order("expiry_date", { ascending: true })
         .limit(100);

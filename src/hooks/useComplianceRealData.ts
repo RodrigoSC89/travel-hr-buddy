@@ -46,22 +46,22 @@ export interface DrillRecord {
 async function fetchThirdParties(): Promise<ThirdParty[]> {
   const { data, error } = await supabase
     .from("suppliers")
-    .select("id, name, cnpj, categories, status, rating, created_at, updated_at")
+    .select("id, company_name, trading_name, category, is_active, rating, created_at, updated_at")
     .limit(50);
 
   if (error || !data?.length) return [];
 
   return data.map((s: any) => ({
     id: s.id,
-    name: s.name || "Terceiro",
-    cnpj: s.cnpj || "",
-    category: Array.isArray(s.categories) ? s.categories[0] : s.categories || "Geral",
-    status: mapThirdPartyStatus(s.status),
+    name: s.company_name || s.trading_name || "Terceiro",
+    cnpj: "",
+    category: s.category || "Geral",
+    status: s.is_active ? "approved" as const : "pending" as const,
     riskLevel: calculateRiskLevel(s.rating),
     lastAudit: s.updated_at || s.created_at,
     nextAudit: calculateNextAudit(s.updated_at || s.created_at),
     documents: Math.floor((s.rating || 3) * 3),
-    pendingDocs: s.status === "pending" ? 2 : 0,
+    pendingDocs: s.is_active ? 0 : 2,
     score: (s.rating || 3) * 20
   }));
 }
