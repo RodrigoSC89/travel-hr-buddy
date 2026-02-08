@@ -349,10 +349,12 @@ export function useUpdateOfflineMaintenanceOrder() {
 // SYNC STATUS & STATS HOOKS (required by OfflineStatusBar, MobileLayout, etc.)
 // ===================================================================
 
+export type SyncStatusType = 'idle' | 'syncing' | 'synced' | 'error' | 'offline';
+
 export function useSyncStatus() {
   const pendingOps = useLiveQuery(() => db.pending_operations.count());
   const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
-  const status: SyncStatusType = isOnline ? (pendingOps ? 'idle' : 'synced') : 'offline';
+  const status: SyncStatusType = !isOnline ? 'offline' : (pendingOps && pendingOps > 0 ? 'idle' : 'synced') as SyncStatusType;
 
   return {
     pendingCount: pendingOps || 0,

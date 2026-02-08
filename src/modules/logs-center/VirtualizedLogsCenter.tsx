@@ -46,14 +46,26 @@ export default function VirtualizedLogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
-        .from("logs")
+      const { data, error } = await supabase
+        .from("access_logs")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(1000); // Increased limit for virtualization demo
 
       if (error) throw error;
-      setLogs(data || []);
+      
+      // Map access_logs to LogEntry format
+      const mapped: LogEntry[] = (data || []).map((row) => ({
+        id: row.id,
+        timestamp: row.timestamp,
+        level: (row.severity === 'error' ? 'error' : row.severity === 'warning' ? 'warn' : 'info') as LogLevel,
+        origin: row.module_accessed || 'system',
+        message: row.action || row.result || '',
+        details: row.details as Record<string, any> | undefined,
+        user_id: row.user_id || undefined,
+        created_at: row.created_at,
+      }));
+      setLogs(mapped);
     } catch (error) {
       logger.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");

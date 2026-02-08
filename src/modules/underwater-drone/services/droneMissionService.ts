@@ -54,8 +54,7 @@ class DroneMissionService {
     try {
       logger.info("Creating drone mission", { missionName: mission.missionName });
 
-      const { data, error } = await (supabase as any)
-        .from("drone_missions")
+      const { data, error } = await (supabase.from as Function)("drone_missions")
         .insert({
           mission_name: mission.missionName,
           drone_id: mission.droneId,

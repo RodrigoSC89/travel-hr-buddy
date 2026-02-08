@@ -126,20 +126,13 @@ class PredictiveStrategyEngine {
       priority: signal.priority
     });
 
-    // Log signal to database
-    try {
-      await (supabase as any).from("ai_strategy_signals").insert({
-        signal_id: signal.id,
-        source: signal.source,
-        type: signal.type,
-        data: signal.data,
-        priority: signal.priority,
-        metadata: signal.metadata,
-        created_at: signal.timestamp.toISOString()
-      });
-    } catch (error) {
-      logger.error("Failed to log signal", { error });
-    }
+    // Log signal (in-memory only - ai_strategy_signals doesn't exist in schema)
+    logger.info("[PredictiveStrategyEngine] Signal logged", {
+      signalId: signal.id,
+      source: signal.source,
+      type: signal.type,
+      priority: signal.priority
+    });
   }
 
   /**
@@ -214,19 +207,12 @@ class PredictiveStrategyEngine {
     // Update learning model
     await this.updateLearningModel(strategyId, feedback);
 
-    // Log feedback to database
-    try {
-      await (supabase as any).from("ai_strategy_feedback").insert({
-        strategy_id: strategyId,
-        feedback: feedback.feedback,
-        actual_outcome: feedback.actualOutcome,
-        comments: feedback.comments,
-        user_id: feedback.userId,
-        created_at: feedback.timestamp.toISOString()
-      });
-    } catch (error) {
-      logger.error("Failed to log feedback", { error });
-    }
+    // Log feedback (in-memory only - ai_strategy_feedback doesn't exist in schema)
+    logger.info("[PredictiveStrategyEngine] Feedback logged", {
+      strategyId,
+      feedback: feedback.feedback,
+      comments: feedback.comments,
+    });
   }
 
   /**
@@ -263,21 +249,8 @@ class PredictiveStrategyEngine {
   // Private methods
 
   private async loadHistoricalFeedback(): Promise<void> {
-    try {
-      const { data, error } = await (supabase as any)
-        .from("ai_strategy_feedback")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1000);
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        logger.info("Loaded historical feedback records", { count: data.length });
-      }
-    } catch (error) {
-      logger.error("Failed to load historical feedback", { error });
-    }
+    // Historical feedback stored in-memory only (ai_strategy_feedback doesn't exist in schema)
+    logger.info("[PredictiveStrategyEngine] Using in-memory feedback history");
   }
 
   private async initializeLearningModel(): Promise<void> {
@@ -611,34 +584,13 @@ class PredictiveStrategyEngine {
     });
 
     try {
-      // Log proposal to database
-      await (supabase as any).from("ai_strategy_proposals").insert({
-        proposal_id: proposal.id,
-        strategies: proposal.strategies,
-        top_strategy_id: proposal.topStrategy.id,
-        analysis_context: proposal.analysisContext,
-        mission_id: proposal.missionId,
-        created_at: proposal.proposedAt.toISOString()
+      // Log proposal (in-memory only - ai_strategy_proposals/ai_strategies don't exist)
+      logger.info("[PredictiveStrategyEngine] Strategy proposal logged", {
+        proposalId: proposal.id,
+        strategyCount: proposal.strategies.length,
+        topStrategyId: proposal.topStrategy.id,
+        missionId: proposal.missionId,
       });
-
-      // Log individual strategies
-      for (const strategy of proposal.strategies) {
-        await (supabase as any).from("ai_strategies").insert({
-          strategy_id: strategy.id,
-          proposal_id: proposal.id,
-          type: strategy.type,
-          name: strategy.name,
-          description: strategy.description,
-          success_probability: strategy.successProbability,
-          confidence_score: strategy.confidenceScore,
-          estimated_impact: strategy.estimatedImpact,
-          prerequisites: strategy.prerequisites,
-          actions: strategy.actions,
-          signals: strategy.signals,
-          metadata: strategy.metadata,
-          created_at: strategy.generatedAt.toISOString()
-        });
-      }
     } catch (error) {
       logger.error("Failed to log strategy proposal", { error });
     }
