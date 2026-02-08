@@ -1384,3 +1384,11 @@ comment = "M139-M150 - Cross-module correlation, predictive alerts, fleet optimi
 [functions.ai-governance]
 verify_jwt = false
 comment = "AI Governance - Model monitoring, decision audit, usage analytics, governance reports"
+
+# ============================================
+# TRACKING & TELEMETRY - World-Class (Phase 4)
+# ============================================
+
+[functions.tracking-intelligence]
+verify_jwt = false
+comment = "Tracking Intelligence - Fleet overview, IoT dashboard, telemetry analysis, geofencing, AI analysis"

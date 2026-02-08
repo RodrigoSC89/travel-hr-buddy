@@ -35,6 +35,9 @@ export { AIUsageAnalyticsPanel } from './ai/AIUsageAnalyticsPanel';
 
 // Tracking
 export { RealTimeTrackingMap } from './tracking/RealTimeTrackingMap';
+export { IoTSensorDashboard } from './tracking/IoTSensorDashboard';
+export { TelemetryAnalyticsPanel } from './tracking/TelemetryAnalyticsPanel';
+export { GeofencingMonitor } from './tracking/GeofencingMonitor';
 
 // People
 export { CrewSchedulerGantt } from './people/CrewSchedulerGantt';
