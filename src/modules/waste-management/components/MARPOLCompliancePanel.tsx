@@ -287,16 +287,16 @@ export default function MARPOLCompliancePanel() {
                         <div>
                           <p className="font-medium capitalize">{record.waste_type || "Resíduo"}</p>
                           <p className="text-sm text-muted-foreground">{record.quantity} {record.unit}</p>
-                          {record.disposal_location && (
+                          {record.disposal_method && (
                             <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                              <MapPin className="h-3 w-3" />{record.disposal_location}
+                              <MapPin className="h-3 w-3" />{record.disposal_method}
                             </p>
                           )}
                         </div>
                         {getActionBadge(record.disposal_method || "")}
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
-                        {format(new Date(record.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                        {format(new Date(record.created_at || new Date()), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                       </p>
                     </div>
                   ))}
