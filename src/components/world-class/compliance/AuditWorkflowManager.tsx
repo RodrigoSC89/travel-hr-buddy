@@ -1,6 +1,6 @@
 /**
  * Audit Workflow Manager - Premium Component
- * WORLD-CLASS: Auditable workflows, evidence attachments, dynamic scorecards, AI analysis
+ * WORLD-CLASS: Real Supabase data + dynamic scorecards + AI analysis
  */
 
 import React, { useState } from 'react';
@@ -8,13 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Shield, CheckCircle, XCircle, Clock, AlertTriangle,
-  FileText, Upload, MessageSquare, User, Calendar,
-  ChevronRight, Plus, Download, Eye, Paperclip,
-  Brain, Sparkles, Loader2
+  FileText, Upload, MessageSquare, ChevronRight, Plus, 
+  Download, Eye, Paperclip, Brain, Sparkles, Loader2, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,8 +27,6 @@ interface AuditItem {
   status: 'pending' | 'compliant' | 'non_compliant' | 'observation' | 'not_applicable';
   evidence: string[];
   comments: string;
-  assignee?: string;
-  dueDate?: Date;
   score: number;
   maxScore: number;
 }
@@ -51,76 +48,105 @@ const STATUS_CONFIG = {
   not_applicable: { color: 'bg-gray-100 text-gray-400', icon: FileText, label: 'N/A' },
 };
 
-// Maritime audit categories based on ISM/ISPS/MLC
-const AUDIT_CATEGORIES: AuditCategory[] = [
-  {
-    id: 'ism-1',
-    name: 'SMS - Safety Management System',
-    standard: 'ISM Code',
-    score: 85,
-    maxScore: 100,
-    items: [
-      { id: '1.1', code: 'ISM-1.1', requirement: 'Política de Segurança e Proteção Ambiental documentada', status: 'compliant', evidence: ['policy.pdf'], comments: 'Política atualizada em Jan/2026', score: 10, maxScore: 10 },
-      { id: '1.2', code: 'ISM-1.2', requirement: 'Responsabilidades e autoridades definidas', status: 'compliant', evidence: ['org_chart.pdf', 'responsibilities.docx'], comments: '', score: 10, maxScore: 10 },
-      { id: '1.3', code: 'ISM-1.3', requirement: 'Pessoa Designada (DPA) nomeada', status: 'compliant', evidence: ['dpa_nomination.pdf'], comments: 'DPA: João Silva', score: 10, maxScore: 10 },
-      { id: '1.4', code: 'ISM-1.4', requirement: 'Recursos e apoio em terra adequados', status: 'observation', evidence: [], comments: 'Necessário atualizar procedimentos de comunicação', score: 7, maxScore: 10 },
-      { id: '1.5', code: 'ISM-1.5', requirement: 'Procedimentos de emergência documentados', status: 'compliant', evidence: ['emergency_proc.pdf'], comments: '', score: 10, maxScore: 10 },
-    ],
-  },
-  {
-    id: 'isps-1',
-    name: 'SSP - Ship Security Plan',
-    standard: 'ISPS Code',
-    score: 92,
-    maxScore: 100,
-    items: [
-      { id: '2.1', code: 'ISPS-2.1', requirement: 'Ship Security Assessment (SSA) atual', status: 'compliant', evidence: ['ssa_2026.pdf'], comments: 'Válido até Dez/2026', score: 10, maxScore: 10 },
-      { id: '2.2', code: 'ISPS-2.2', requirement: 'Ship Security Plan (SSP) aprovado', status: 'compliant', evidence: ['ssp_approved.pdf'], comments: '', score: 10, maxScore: 10 },
-      { id: '2.3', code: 'ISPS-2.3', requirement: 'Ship Security Officer (SSO) treinado', status: 'compliant', evidence: ['sso_cert.pdf'], comments: '', score: 10, maxScore: 10 },
-      { id: '2.4', code: 'ISPS-2.4', requirement: 'Exercícios de segurança realizados', status: 'pending', evidence: [], comments: 'Próximo exercício programado para 15/03', score: 0, maxScore: 10 },
-    ],
-  },
-  {
-    id: 'mlc-1',
-    name: 'MLC 2006 - Maritime Labour',
-    standard: 'MLC 2006',
-    score: 78,
-    maxScore: 100,
-    items: [
-      { id: '3.1', code: 'MLC-1.1', requirement: 'Contrato de Trabalho Marítimo (SEA)', status: 'compliant', evidence: ['sea_template.pdf'], comments: 'Modelo aprovado', score: 10, maxScore: 10 },
-      { id: '3.2', code: 'MLC-1.2', requirement: 'Horas de trabalho/descanso registradas', status: 'observation', evidence: ['rest_hours_log.xlsx'], comments: 'Sistema precisa de automação', score: 7, maxScore: 10 },
-      { id: '3.3', code: 'MLC-1.3', requirement: 'Acomodações conforme padrão', status: 'compliant', evidence: ['cabin_inspection.pdf'], comments: '', score: 10, maxScore: 10 },
-      { id: '3.4', code: 'MLC-1.4', requirement: 'Alimentação e catering adequados', status: 'non_compliant', evidence: [], comments: 'NC: Necessário certificado do cook', score: 0, maxScore: 10 },
-    ],
-  },
-];
+function mapItemStatus(status: string | null): AuditItem['status'] {
+  const s = (status || '').toLowerCase();
+  if (s.includes('compliant') && !s.includes('non')) return 'compliant';
+  if (s.includes('non_compliant') || s.includes('failed')) return 'non_compliant';
+  if (s.includes('observation')) return 'observation';
+  if (s.includes('n/a') || s.includes('not_applicable')) return 'not_applicable';
+  return 'pending';
+}
 
 export function AuditWorkflowManager() {
-  const [selectedCategory, setSelectedCategory] = useState(AUDIT_CATEGORIES[0]);
+  const [selectedCategoryIdx, setSelectedCategoryIdx] = useState(0);
   const [selectedItem, setSelectedItem] = useState<AuditItem | null>(null);
   const [aiAuditReport, setAiAuditReport] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
 
+  // ===== REAL DATA from Supabase =====
+  const { data: categories = [], isLoading, refetch } = useQuery({
+    queryKey: ['audit-compliance-items'],
+    queryFn: async (): Promise<AuditCategory[]> => {
+      const { data, error } = await supabase
+        .from('compliance_items')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      // Group by regulation/item_type
+      const grouped = new Map<string, AuditItem[]>();
+      (data || []).forEach(item => {
+        const key = item.regulation || item.item_type || 'General';
+        if (!grouped.has(key)) grouped.set(key, []);
+        
+        const status = mapItemStatus(item.status);
+        const score = status === 'compliant' ? 10 : status === 'observation' ? 7 : status === 'not_applicable' ? 10 : 0;
+        
+        grouped.get(key)!.push({
+          id: item.id,
+          code: `${(item.regulation || 'GEN').substring(0, 4).toUpperCase()}-${item.id.substring(0, 4)}`,
+          requirement: item.title || item.description || 'Requisito de compliance',
+          status,
+          evidence: item.evidence_urls || [],
+          comments: item.description || '',
+          score,
+          maxScore: 10,
+        });
+      });
+
+      if (grouped.size === 0) {
+        // Provide ISM/ISPS/MLC structure for empty state
+        return [
+          { id: 'ism', name: 'ISM Code - Safety Management', standard: 'ISM Code', items: [], score: 0, maxScore: 100 },
+          { id: 'isps', name: 'ISPS Code - Ship Security', standard: 'ISPS Code', items: [], score: 0, maxScore: 100 },
+          { id: 'mlc', name: 'MLC 2006 - Maritime Labour', standard: 'MLC 2006', items: [], score: 0, maxScore: 100 },
+        ];
+      }
+
+      return Array.from(grouped.entries()).map(([key, items]) => {
+        const totalScore = items.reduce((s, i) => s + i.score, 0);
+        const maxScore = items.reduce((s, i) => s + i.maxScore, 0);
+        return {
+          id: key.toLowerCase().replace(/\s+/g, '-'),
+          name: key,
+          standard: key.includes('ISM') ? 'ISM Code' : key.includes('ISPS') ? 'ISPS Code' : key.includes('MLC') ? 'MLC 2006' : key,
+          items,
+          score: totalScore,
+          maxScore: maxScore || 100,
+        };
+      });
+    },
+  });
+
+  const selectedCategory = categories[selectedCategoryIdx] || categories[0];
+
+  // ===== AI AUDIT ANALYSIS =====
   const runAIAudit = async () => {
     setAiLoading(true);
     try {
-      const auditSummary = AUDIT_CATEGORIES.map(cat => ({
+      const auditSummary = categories.map(cat => ({
         standard: cat.standard,
         name: cat.name,
         score: cat.score,
         maxScore: cat.maxScore,
-        percent: Math.round((cat.score / cat.maxScore) * 100),
+        percent: cat.maxScore > 0 ? Math.round((cat.score / cat.maxScore) * 100) : 0,
         nonCompliant: cat.items.filter(i => i.status === 'non_compliant').length,
         pending: cat.items.filter(i => i.status === 'pending').length,
         observations: cat.items.filter(i => i.status === 'observation').length,
       }));
 
+      const ncList = categories.flatMap(c => 
+        c.items.filter(i => i.status === 'non_compliant').map(i => `- ${i.code}: ${i.requirement}`)
+      ).join('\n');
+
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           messages: [{
             role: 'user',
-            content: `Analise os resultados da auditoria marítima e forneça recomendações:\n\nScore geral: ${overallPercentage}%\n\nCategorias: ${JSON.stringify(auditSummary)}\n\nNão-conformidades ativas:\n${AUDIT_CATEGORIES.flatMap(c => c.items.filter(i => i.status === 'non_compliant').map(i => `- ${i.code}: ${i.requirement}`)).join('\n')}\n\nForneça:\n1. Avaliação geral de compliance\n2. Riscos prioritários (PSC, Flag State)\n3. Plano de ação para não-conformidades\n4. Prazo recomendado para correção\n5. Impacto em inspeções PSC\n6. Comparação com benchmark da indústria`,
+            content: `Analise os resultados da auditoria marítima:\n\nScore geral: ${overallPercentage}%\nCategorias: ${JSON.stringify(auditSummary)}\n\nNão-conformidades:\n${ncList || 'Nenhuma'}\n\nForneça:\n1. Avaliação geral de compliance\n2. Riscos prioritários (PSC, Flag State)\n3. Plano de ação para não-conformidades\n4. Prazo recomendado para correção\n5. Impacto em inspeções PSC`,
           }],
           agentId: 'compliance',
         },
@@ -136,32 +162,27 @@ export function AuditWorkflowManager() {
     }
   };
 
-  // Calculate overall score
-  const totalScore = AUDIT_CATEGORIES.reduce((acc, cat) => acc + cat.score, 0);
-  const totalMaxScore = AUDIT_CATEGORIES.reduce((acc, cat) => acc + cat.maxScore, 0);
-  const overallPercentage = Math.round((totalScore / totalMaxScore) * 100);
-
-  // Update item status
+  // ===== UPDATE STATUS (real) =====
   const updateStatusMutation = useMutation({
     mutationFn: async ({ itemId, status }: { itemId: string; status: AuditItem['status'] }) => {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const { error } = await supabase
+        .from('compliance_items')
+        .update({ status })
+        .eq('id', itemId);
+      if (error) throw error;
       return { itemId, status };
     },
     onSuccess: ({ status }) => {
       toast.success(`Status atualizado para: ${STATUS_CONFIG[status].label}`);
+      queryClient.invalidateQueries({ queryKey: ['audit-compliance-items'] });
     },
+    onError: () => toast.error('Erro ao atualizar status'),
   });
 
-  // Upload evidence
-  const uploadEvidenceMutation = useMutation({
-    mutationFn: async ({ itemId, file }: { itemId: string; file: File }) => {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return { itemId, fileName: file.name };
-    },
-    onSuccess: ({ fileName }) => {
-      toast.success(`Evidência "${fileName}" anexada com sucesso`);
-    },
-  });
+  // Calculate overall score
+  const totalScore = categories.reduce((acc, cat) => acc + cat.score, 0);
+  const totalMaxScore = categories.reduce((acc, cat) => acc + cat.maxScore, 0);
+  const overallPercentage = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -176,38 +197,21 @@ export function AuditWorkflowManager() {
                 <p className="text-sm text-muted-foreground mt-1">
                   {totalScore} / {totalMaxScore} pontos
                 </p>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="mt-3 gap-2"
-                  onClick={runAIAudit}
-                  disabled={aiLoading}
-                >
-                  {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                  Relatório AI de Compliance
-                </Button>
+                <div className="flex gap-2 mt-3">
+                  <Button variant="outline" size="sm" className="gap-2" onClick={() => refetch()}>
+                    <RefreshCw className="h-3 w-3" /> Atualizar
+                  </Button>
+                  <Button variant="secondary" size="sm" className="gap-2" onClick={runAIAudit} disabled={aiLoading}>
+                    {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                    Relatório AI
+                  </Button>
+                </div>
               </div>
               <div className="relative w-24 h-24">
                 <svg className="w-full h-full transform -rotate-90">
-                  <circle
-                    cx="48"
-                    cy="48"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    className="text-muted/30"
-                  />
-                  <circle
-                    cx="48"
-                    cy="48"
-                    r="40"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeDasharray={`${overallPercentage * 2.51} 251`}
-                    className="text-primary"
-                  />
+                  <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="none" className="text-muted/30" />
+                  <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="8" fill="none"
+                    strokeDasharray={`${overallPercentage * 2.51} 251`} className="text-primary" />
                 </svg>
                 <Shield className="absolute inset-0 m-auto h-8 w-8 text-primary" />
               </div>
@@ -215,27 +219,44 @@ export function AuditWorkflowManager() {
           </CardContent>
         </Card>
         
-        {AUDIT_CATEGORIES.map(cat => (
+        {categories.slice(0, 2).map((cat, idx) => (
           <Card 
             key={cat.id}
             className={`cursor-pointer transition-all hover:border-primary/50 ${
-              selectedCategory.id === cat.id ? 'border-primary bg-primary/5' : ''
+              selectedCategoryIdx === idx ? 'border-primary bg-primary/5' : ''
             }`}
-            onClick={() => setSelectedCategory(cat)}
+            onClick={() => setSelectedCategoryIdx(idx)}
           >
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <Badge variant="outline">{cat.standard}</Badge>
                 <span className="text-lg font-bold">
-                  {Math.round((cat.score / cat.maxScore) * 100)}%
+                  {cat.maxScore > 0 ? Math.round((cat.score / cat.maxScore) * 100) : 0}%
                 </span>
               </div>
               <p className="text-sm font-medium mb-2">{cat.name}</p>
-              <Progress value={(cat.score / cat.maxScore) * 100} className="h-2" />
+              <Progress value={cat.maxScore > 0 ? (cat.score / cat.maxScore) * 100 : 0} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-1">{cat.items.length} itens</p>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {/* Additional categories */}
+      {categories.length > 2 && (
+        <div className="flex gap-2 flex-wrap">
+          {categories.slice(2).map((cat, idx) => (
+            <Button
+              key={cat.id}
+              variant={selectedCategoryIdx === idx + 2 ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedCategoryIdx(idx + 2)}
+            >
+              {cat.standard} ({cat.items.length})
+            </Button>
+          ))}
+        </div>
+      )}
 
       {/* AI Audit Report */}
       {aiAuditReport && (
@@ -248,7 +269,9 @@ export function AuditWorkflowManager() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm whitespace-pre-wrap">{aiAuditReport}</p>
+              <ScrollArea className="max-h-[300px]">
+                <p className="text-sm whitespace-pre-wrap">{aiAuditReport}</p>
+              </ScrollArea>
             </CardContent>
           </Card>
         </motion.div>
@@ -261,67 +284,67 @@ export function AuditWorkflowManager() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">{selectedCategory.name}</CardTitle>
-                <CardDescription>{selectedCategory.standard}</CardDescription>
+                <CardTitle className="text-lg">{selectedCategory?.name || 'Compliance'}</CardTitle>
+                <CardDescription>{selectedCategory?.standard} • {selectedCategory?.items.length || 0} itens</CardDescription>
               </div>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Adicionar Item
-              </Button>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y">
-              {selectedCategory.items.map((item) => {
-                const config = STATUS_CONFIG[item.status];
-                const StatusIcon = config.icon;
-                
-                return (
-                  <div 
-                    key={item.id}
-                    className={`p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
-                      selectedItem?.id === item.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
-                    }`}
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`p-2 rounded-lg ${config.color}`}>
-                        <StatusIcon className="h-4 w-4" />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge variant="outline" className="font-mono text-xs">
-                            {item.code}
-                          </Badge>
-                          <span className="font-medium">{item.requirement}</span>
+            {isLoading ? (
+              <div className="p-8 text-center text-muted-foreground">Carregando itens de compliance...</div>
+            ) : !selectedCategory || selectedCategory.items.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground">
+                <Shield className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                <p>Nenhum item de compliance cadastrado</p>
+                <p className="text-xs mt-1">Adicione itens de auditoria para começar</p>
+              </div>
+            ) : (
+              <ScrollArea className="h-[400px]">
+                <div className="divide-y">
+                  {selectedCategory.items.map((item) => {
+                    const config = STATUS_CONFIG[item.status];
+                    const StatusIcon = config.icon;
+                    
+                    return (
+                      <div 
+                        key={item.id}
+                        className={`p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
+                          selectedItem?.id === item.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
+                        }`}
+                        onClick={() => setSelectedItem(item)}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`p-2 rounded-lg ${config.color}`}>
+                            <StatusIcon className="h-4 w-4" />
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="outline" className="font-mono text-xs">{item.code}</Badge>
+                              <span className="font-medium text-sm">{item.requirement}</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              {item.evidence.length > 0 && (
+                                <span className="flex items-center gap-1">
+                                  <Paperclip className="h-3 w-3" />
+                                  {item.evidence.length} evidência(s)
+                                </span>
+                              )}
+                              <span className="flex items-center gap-1">
+                                <span className="font-medium">{item.score}/{item.maxScore}</span> pts
+                              </span>
+                            </div>
+                          </div>
+                          
+                          <ChevronRight className="h-5 w-5 text-muted-foreground" />
                         </div>
-                        
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          {item.evidence.length > 0 && (
-                            <span className="flex items-center gap-1">
-                              <Paperclip className="h-3 w-3" />
-                              {item.evidence.length} evidência(s)
-                            </span>
-                          )}
-                          {item.comments && (
-                            <span className="flex items-center gap-1">
-                              <MessageSquare className="h-3 w-3" />
-                              Comentário
-                            </span>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <span className="font-medium">{item.score}/{item.maxScore}</span> pts
-                          </span>
-                        </div>
                       </div>
-                      
-                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              </ScrollArea>
+            )}
           </CardContent>
         </Card>
 
@@ -358,6 +381,7 @@ export function AuditWorkflowManager() {
                             itemId: selectedItem.id, 
                             status: key as AuditItem['status'] 
                           })}
+                          disabled={updateStatusMutation.isPending}
                         >
                           <Icon className="h-3 w-3" />
                           {config.label}
@@ -374,20 +398,16 @@ export function AuditWorkflowManager() {
                       {selectedItem.evidence.map((file, idx) => (
                         <div key={idx} className="flex items-center gap-2 p-2 bg-muted rounded">
                           <FileText className="h-4 w-4 text-primary" />
-                          <span className="text-sm flex-1">{file}</span>
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
+                          <span className="text-sm flex-1 truncate">{file}</span>
+                          <Button variant="ghost" size="sm"><Eye className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="sm"><Download className="h-4 w-4" /></Button>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <p className="text-sm text-muted-foreground">Nenhuma evidência anexada</p>
                   )}
-                  <Button variant="outline" size="sm" className="mt-2 gap-2">
+                  <Button variant="outline" size="sm" className="mt-2 gap-2" onClick={() => toast.info('Upload de evidência via Document Center')}>
                     <Upload className="h-4 w-4" />
                     Anexar Evidência
                   </Button>
@@ -404,9 +424,7 @@ export function AuditWorkflowManager() {
                 
                 <div className="flex items-center justify-between pt-2 border-t">
                   <span className="text-sm text-muted-foreground">Pontuação</span>
-                  <span className="text-lg font-bold">
-                    {selectedItem.score} / {selectedItem.maxScore}
-                  </span>
+                  <span className="text-lg font-bold">{selectedItem.score} / {selectedItem.maxScore}</span>
                 </div>
               </div>
             ) : (
