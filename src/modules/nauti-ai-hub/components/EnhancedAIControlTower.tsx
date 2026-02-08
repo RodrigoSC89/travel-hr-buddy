@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { format } from 'date-fns';
 
 interface AIAgent {
@@ -108,7 +109,7 @@ export const EnhancedAIControlTower: React.FC = () => {
       ]);
 
     } catch (error) {
-      console.error('Error loading AI data:', error);
+      logger.error('Error loading AI data:', error);
       toast.error('Erro ao carregar dados de IA');
     } finally {
       setLoading(false);

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   Smartphone,
   Tablet,
@@ -174,7 +175,7 @@ export const MobileOptimizationCenter: React.FC = () => {
         }));
       setBehavior(behaviorFromLogs.length > 0 ? behaviorFromLogs : []);
     } catch (error) {
-      console.error("Error fetching optimization data:", error);
+      logger.error("Error fetching optimization data:", error);
       setSessions([]);
       setPerformance([]);
       setBehavior([]);

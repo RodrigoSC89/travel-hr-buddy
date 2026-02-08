@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // ── Types ──────────────────────────────────────────────────────
 export interface ModelMetrics {
@@ -239,7 +240,7 @@ export class AIControlTowerService {
       if (error) throw error;
       return data?.data?.report || null;
     } catch (err) {
-      console.error('Governance report error:', err);
+      logger.error('Governance report error:', err);
       return null;
     }
   }

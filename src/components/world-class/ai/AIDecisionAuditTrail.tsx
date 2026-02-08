@@ -15,6 +15,7 @@ import {
   Eye, ChevronDown, ChevronUp, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { aiControlTower, type DecisionRecord, type BlockchainBlock } from '@/services/ai/ai-control-tower.service';
 
 export function AIDecisionAuditTrail() {
@@ -32,7 +33,7 @@ export function AIDecisionAuditTrail() {
       setDecisions(data.decisions);
       setBlocks(data.blockchainBlocks);
     } catch (err) {
-      console.error('Decision audit error:', err);
+      logger.error('Decision audit error:', err);
       toast.error('Erro ao carregar auditoria de decisões');
     } finally {
       setLoading(false);

@@ -5,6 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface Satellite {
   id: string;
@@ -43,7 +44,7 @@ export function useSatellites() {
         .order('last_updated', { ascending: false });
 
       if (error) {
-        console.error('[useSatellites] Error:', error);
+        logger.error('[useSatellites] Error:', error);
         // Return empty array - no mock data
         return [];
       }

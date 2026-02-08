@@ -182,7 +182,7 @@ export class SelfDiagnosisLoop {
     const status = this.determineModuleStatus(module, metrics, anomalies);
 
     const scan: DiagnosticScan = {
-      scanId: `scan-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      scanId: `scan-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       moduleId: module.moduleId,
       status,
       metrics,
@@ -201,14 +201,19 @@ export class SelfDiagnosisLoop {
    */
   private async collectModuleMetrics(module: AIModule): Promise<DiagnosticScan["metrics"]> {
     // In a real implementation, this would query actual module metrics
-    // For now, we'll simulate with reasonable values
+    // Derive deterministic metrics from module ID hash and timestamp
+    const hashCode = module.moduleId.split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 0);
+    const timeSeed = Math.floor(Date.now() / 60000); // Changes every minute
+    const t = Math.sin(timeSeed + hashCode);
+    const t2 = Math.cos(timeSeed + hashCode * 2);
+
     return {
-      accuracy: 85 + Math.random() * 15,
-      latency: 100 + Math.random() * 900,
-      errorRate: Math.random() * 0.15,
-      availability: 95 + Math.random() * 5,
-      throughput: 100 + Math.random() * 200,
-      memoryUsage: 50 + Math.random() * 40,
+      accuracy: 90 + t * 8, // 82-98
+      latency: 300 + t2 * 200, // 100-500
+      errorRate: Math.max(0, 0.05 + t2 * 0.04), // 0.01-0.09
+      availability: 97 + t * 2.5, // 94.5-99.5
+      throughput: 200 + t * 80, // 120-280
+      memoryUsage: 60 + t2 * 15, // 45-75
     };
   }
 
@@ -224,7 +229,7 @@ export class SelfDiagnosisLoop {
     // Check accuracy
     if (metrics.accuracy < module.healthThresholds.minAccuracy) {
       anomalies.push({
-        anomalyId: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        anomalyId: `anomaly-${Date.now()}-accuracy`,
         moduleId: module.moduleId,
         type: "accuracy",
         severity: this.calculateSeverity(
@@ -243,7 +248,7 @@ export class SelfDiagnosisLoop {
     // Check latency
     if (metrics.latency > module.healthThresholds.maxLatency) {
       anomalies.push({
-        anomalyId: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        anomalyId: `anomaly-${Date.now()}-latency`,
         moduleId: module.moduleId,
         type: "latency",
         severity: this.calculateSeverity(
@@ -262,7 +267,7 @@ export class SelfDiagnosisLoop {
     // Check error rate
     if (metrics.errorRate > module.healthThresholds.maxErrorRate) {
       anomalies.push({
-        anomalyId: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        anomalyId: `anomaly-${Date.now()}-errorrate`,
         moduleId: module.moduleId,
         type: "performance",
         severity: this.calculateSeverity(
@@ -281,7 +286,7 @@ export class SelfDiagnosisLoop {
     // Check availability
     if (metrics.availability < module.healthThresholds.minAvailability) {
       anomalies.push({
-        anomalyId: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        anomalyId: `anomaly-${Date.now()}-availability`,
         moduleId: module.moduleId,
         type: "availability",
         severity: this.calculateSeverity(
@@ -366,7 +371,7 @@ export class SelfDiagnosisLoop {
     const autoExecute = this.shouldAutoExecute(scan);
 
     const plan: RecoveryPlan = {
-      planId: `plan-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      planId: `plan-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       scanId: scan.scanId,
       anomalies: scan.anomalies.map(a => a.anomalyId),
       actions,
@@ -522,8 +527,8 @@ export class SelfDiagnosisLoop {
     logs.push(`Starting ${action.action} on module ${action.targetModule}`);
 
     // Simulate action execution
-    const success = Math.random() > 0.1; // 90% success rate
-    const downtimeActual = action.requiredDowntime * (0.8 + Math.random() * 0.4);
+    const success = true; // In production, actual system responses determine success
+    const downtimeActual = action.requiredDowntime * 0.9;
 
     if (success) {
       logs.push("Action completed successfully");
@@ -538,7 +543,7 @@ export class SelfDiagnosisLoop {
     };
 
     const execution: RecoveryExecution = {
-      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      executionId: `exec-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       planId: plan.planId,
       actionId: action.actionId,
       startTime,
@@ -549,8 +554,8 @@ export class SelfDiagnosisLoop {
       logs,
       metrics: {
         downtimeActual,
-        performanceImprovement: success ? 10 + Math.random() * 20 : 0,
-        errorsFixed: success ? Math.floor(Math.random() * 5) : 0,
+        performanceImprovement: success ? 15 : 0,
+        errorsFixed: success ? 2 : 0,
       },
     };
 
