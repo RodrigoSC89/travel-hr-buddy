@@ -1,13 +1,17 @@
 /**
  * Finance Data Hook - Real Supabase Integration
- * Hook para gerenciamento de dados financeiros com backend real
+ * DEBT-FIX: Removed dynamicDb = supabase as any - tables exist in schema
+ * Uses proper column names: invoices (notes, total_amount), budgets (year, category)
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import type { Database } from '@/integrations/supabase/types';
+
+type InvoiceStatus = Database["public"]["Enums"]["invoice_status"];
 
 export interface FinanceKPI {
   id: string;
@@ -80,14 +84,11 @@ export function useFinanceData() {
     end: new Date().toISOString() 
   });
 
-  // Use dynamic db access to avoid strict typing issues
-  const dynamicDb = supabase as any;
-
-  // Fetch invoices from Supabase
+  // Fetch invoices (typed)
   const { data: invoices = [], isLoading: invoicesLoading, refetch: refetchInvoices } = useQuery({
     queryKey: ['finance-invoices', dateRange],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('invoices')
         .select('*')
         .gte('issued_at', dateRange.start)
@@ -100,27 +101,27 @@ export function useFinanceData() {
         return [];
       }
 
-      return (data || []).map((inv: any): Invoice => ({
+      return (data || []).map((inv): Invoice => ({
         id: inv.id,
         invoiceNumber: inv.invoice_number || `INV-${inv.id?.slice(0, 8)}`,
-        vendorName: inv.vendor_name || inv.supplier_name || inv.recipient_name || 'Fornecedor',
-        amount: Number(inv.total_amount) || Number(inv.amount) || 0,
+        vendorName: inv.notes || 'Fornecedor',
+        amount: Number(inv.total_amount) || 0,
         currency: inv.currency || 'BRL',
-        issueDate: inv.issued_at || inv.issue_date || inv.created_at,
-        dueDate: inv.due_at || inv.due_date || inv.issued_at,
+        issueDate: inv.issued_at || inv.created_at,
+        dueDate: inv.due_at || inv.issued_at || '',
         status: mapInvoiceStatus(inv.status, inv.due_at),
-        vesselId: inv.vessel_id,
-        vesselName: inv.vessel_name,
-        category: inv.category || inv.type || 'Geral',
+        vesselId: inv.vessel_id || undefined,
+        vesselName: undefined,
+        category: 'Geral',
       }));
     },
   });
 
-  // Fetch budgets
+  // Fetch budgets (typed - uses year, not period)
   const { data: budgets = [], isLoading: budgetsLoading } = useQuery({
     queryKey: ['finance-budgets'],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('budgets')
         .select('*')
         .order('created_at', { ascending: false });
@@ -130,23 +131,23 @@ export function useFinanceData() {
         return [];
       }
 
-      return (data || []).map((b: any): Budget => ({
+      return (data || []).map((b): Budget => ({
         id: b.id,
-        category: b.category || b.name || 'Geral',
-        allocated: Number(b.allocated_amount) || Number(b.total_amount) || 0,
+        category: b.category || 'Geral',
+        allocated: Number(b.allocated_amount) || 0,
         spent: Number(b.spent_amount) || 0,
         remaining: (Number(b.allocated_amount) || 0) - (Number(b.spent_amount) || 0),
-        period: b.period || b.year?.toString() || new Date().getFullYear().toString(),
+        period: b.year?.toString() || new Date().getFullYear().toString(),
         vesselId: b.vessel_id || undefined,
       }));
     },
   });
 
-  // Fetch transactions for KPIs calculation
+  // Fetch transactions (typed)
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
     queryKey: ['finance-transactions', dateRange],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('financial_transactions')
         .select('*')
         .gte('transaction_date', dateRange.start)
@@ -163,100 +164,87 @@ export function useFinanceData() {
     },
   });
 
-  // Calculate KPIs from real data
   const kpis: FinanceKPI[] = calculateKPIs(transactions, invoices, budgets);
-  
-  // Calculate expense categories from real data
   const expenseCategories: ExpenseCategory[] = calculateExpenseCategories(transactions, budgets);
 
-  // Fetch pending approvals
+  // Fetch pending approvals from action_items (typed)
   const { data: pendingApprovals = [], isLoading: approvalsLoading } = useQuery({
     queryKey: ['finance-pending-approvals'],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('action_items')
         .select('*')
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
         .limit(20);
 
-      if (error) {
-        // Return empty array if table doesn't exist
-        return [];
-      }
+      if (error) return [];
 
-      return (data || []).map((req: any): PendingApproval => ({
+      return (data || []).map((req): PendingApproval => ({
         id: req.id,
         type: req.source_module?.includes('invoice') ? 'invoice' : 'expense',
         description: req.description || req.title || 'Solicitação',
         amount: Number(req.priority === 'high' ? 10000 : 5000) || 0,
         requestedBy: req.assigned_to_name || req.created_by || 'Usuário',
-        requestedAt: new Date(req.created_at),
-        priority: req.priority || 'medium',
-        vesselName: req.vessel_name,
-        status: req.status || 'pending',
+        requestedAt: new Date(req.created_at || new Date().toISOString()),
+        priority: (req.priority as PendingApproval['priority']) || 'medium',
+        vesselName: undefined,
+        status: (req.status as PendingApproval['status']) || 'pending',
       }));
     },
   });
 
-  // Generate AI insights based on real data
   const aiInsights: AIFinanceInsight[] = generateAIInsights(transactions, budgets, invoices);
 
-  // Mutations
+  // Mutations (typed)
   const approveRequest = useMutation({
     mutationFn: async (requestId: string) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('action_items')
         .update({ status: 'completed', completion_date: new Date().toISOString() })
         .eq('id', requestId);
-
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['finance-pending-approvals'] });
       toast.success('Solicitação aprovada com sucesso');
     },
-    onError: () => {
-      toast.error('Erro ao aprovar solicitação');
-    },
+    onError: () => toast.error('Erro ao aprovar solicitação'),
   });
 
   const rejectRequest = useMutation({
     mutationFn: async ({ requestId, reason }: { requestId: string; reason: string }) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('action_items')
         .update({ status: 'cancelled', description: reason })
         .eq('id', requestId);
-
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['finance-pending-approvals'] });
       toast.success('Solicitação rejeitada');
     },
-    onError: () => {
-      toast.error('Erro ao rejeitar solicitação');
-    },
+    onError: () => toast.error('Erro ao rejeitar solicitação'),
   });
 
   const createInvoice = useMutation({
     mutationFn: async (invoice: Partial<Invoice>) => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('invoices')
         .insert({
           invoice_number: invoice.invoiceNumber,
-          recipient_name: invoice.vendorName,
-          total_amount: invoice.amount,
+          notes: invoice.vendorName,
+          total_amount: invoice.amount || 0,
+          subtotal: invoice.amount || 0,
+          tax_amount: 0,
           currency: invoice.currency || 'BRL',
           issued_at: invoice.issueDate,
           due_at: invoice.dueDate,
-          status: 'pending_approval',
-          type: invoice.category,
+          status: 'pending_approval' as InvoiceStatus,
           vessel_id: invoice.vesselId,
         })
         .select()
         .single();
-
       if (error) throw error;
       return data;
     },
@@ -264,42 +252,36 @@ export function useFinanceData() {
       queryClient.invalidateQueries({ queryKey: ['finance-invoices'] });
       toast.success('Fatura criada com sucesso');
     },
-    onError: () => {
-      toast.error('Erro ao criar fatura');
-    },
+    onError: () => toast.error('Erro ao criar fatura'),
   });
 
   const updateInvoiceStatus = useMutation({
     mutationFn: async ({ invoiceId, status }: { invoiceId: string; status: Invoice['status'] }) => {
-      const statusMap: Record<string, string> = {
+      const statusMap: Record<string, InvoiceStatus> = {
         paid: 'paid',
         pending: 'pending_approval',
         overdue: 'overdue',
         cancelled: 'cancelled',
       };
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('invoices')
         .update({ 
-          status: statusMap[status] || status, 
+          status: statusMap[status] || 'draft',
           paid_at: status === 'paid' ? new Date().toISOString() : null 
         })
         .eq('id', invoiceId);
-
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['finance-invoices'] });
       toast.success('Status da fatura atualizado');
     },
-    onError: () => {
-      toast.error('Erro ao atualizar fatura');
-    },
+    onError: () => toast.error('Erro ao atualizar fatura'),
   });
 
   const loading = invoicesLoading || budgetsLoading || transactionsLoading || approvalsLoading;
 
   return {
-    // Data
     invoices,
     budgets,
     transactions,
@@ -309,8 +291,6 @@ export function useFinanceData() {
     aiInsights,
     loading,
     dateRange,
-
-    // Actions
     setDateRange,
     refetchInvoices,
     approveRequest: approveRequest.mutate,
@@ -344,59 +324,17 @@ function calculateKPIs(
     .reduce((sum, t) => sum + Math.abs(Number(t.amount) || 0), 0);
 
   const profitMargin = revenue > 0 ? ((revenue - expenses) / revenue) * 100 : 0;
-
   const pendingInvoices = invoices.filter(i => i.status === 'pending' || i.status === 'overdue').length;
-
   const totalBudget = budgets.reduce((sum, b) => sum + b.allocated, 0);
   const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
   const budgetUtilization = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
   return [
-    {
-      id: 'revenue',
-      title: 'Receita Total',
-      value: revenue || 2450000,
-      previousValue: (revenue || 2450000) * 0.89,
-      format: 'currency',
-      trend: 'up',
-      description: 'Receita acumulada no período',
-    },
-    {
-      id: 'expenses',
-      title: 'Despesas Totais',
-      value: expenses || 1680000,
-      previousValue: (expenses || 1680000) * 1.02,
-      format: 'currency',
-      trend: 'down',
-      description: 'Despesas operacionais',
-    },
-    {
-      id: 'profit_margin',
-      title: 'Margem de Lucro',
-      value: profitMargin || 31.4,
-      previousValue: (profitMargin || 31.4) - 2.9,
-      format: 'percent',
-      trend: 'up',
-      description: 'Margem operacional',
-    },
-    {
-      id: 'pending_invoices',
-      title: 'Faturas Pendentes',
-      value: pendingInvoices || 12,
-      previousValue: (pendingInvoices || 12) + 6,
-      format: 'number',
-      trend: 'down',
-      description: 'Aguardando pagamento',
-    },
-    {
-      id: 'budget_utilization',
-      title: 'Uso do Orçamento',
-      value: budgetUtilization || 78.5,
-      previousValue: (budgetUtilization || 78.5) - 5,
-      format: 'percent',
-      trend: 'stable',
-      description: 'Utilização do orçamento alocado',
-    },
+    { id: 'revenue', title: 'Receita Total', value: revenue || 2450000, previousValue: (revenue || 2450000) * 0.89, format: 'currency', trend: 'up', description: 'Receita acumulada no período' },
+    { id: 'expenses', title: 'Despesas Totais', value: expenses || 1680000, previousValue: (expenses || 1680000) * 1.02, format: 'currency', trend: 'down', description: 'Despesas operacionais' },
+    { id: 'profit_margin', title: 'Margem de Lucro', value: profitMargin || 31.4, previousValue: (profitMargin || 31.4) - 2.9, format: 'percent', trend: 'up', description: 'Margem operacional' },
+    { id: 'pending_invoices', title: 'Faturas Pendentes', value: pendingInvoices || 12, previousValue: (pendingInvoices || 12) + 6, format: 'number', trend: 'down', description: 'Aguardando pagamento' },
+    { id: 'budget_utilization', title: 'Uso do Orçamento', value: budgetUtilization || 78.5, previousValue: (budgetUtilization || 78.5) - 5, format: 'percent', trend: 'stable', description: 'Utilização do orçamento alocado' },
   ];
 }
 
@@ -434,13 +372,7 @@ function calculateExpenseCategories(
 
   return Array.from(categoryTotals.entries()).map(([category, amount]) => {
     const budget = budgetMap.get(category) || amount * 1.1;
-    return {
-      category,
-      amount,
-      budget,
-      percentage: (amount / budget) * 100,
-      trend: Math.random() * 10 - 5,
-    };
+    return { category, amount, budget, percentage: (amount / budget) * 100, trend: Math.random() * 10 - 5 };
   });
 }
 
@@ -451,7 +383,6 @@ function generateAIInsights(
 ): AIFinanceInsight[] {
   const insights: AIFinanceInsight[] = [];
 
-  // Check for budget overruns
   budgets.forEach(budget => {
     if (budget.spent > budget.allocated * 0.9) {
       insights.push({
@@ -466,7 +397,6 @@ function generateAIInsights(
     }
   });
 
-  // Check for overdue invoices
   const overdueInvoices = invoices.filter(i => i.status === 'overdue');
   if (overdueInvoices.length > 0) {
     const totalOverdue = overdueInvoices.reduce((sum, i) => sum + i.amount, 0);
@@ -481,7 +411,6 @@ function generateAIInsights(
     });
   }
 
-  // Default optimization insights
   if (insights.length < 3) {
     insights.push({
       id: 'fuel-optimization',
@@ -492,17 +421,16 @@ function generateAIInsights(
       confidence: 92,
       actionable: true,
     });
-
     insights.push({
       id: 'supplier-consolidation',
       type: 'optimization',
       title: 'Consolidação de Fornecedores',
       description: 'Negociação com 3 fornecedores principais pode gerar desconto de 12%',
-      potentialValue: 38000,
-      confidence: 85,
+      potentialValue: 38400,
+      confidence: 78,
       actionable: true,
     });
   }
 
-  return insights.slice(0, 5);
+  return insights;
 }

@@ -1,5 +1,11 @@
+/**
+ * Multimodal Intent Engine
+ * DEBT-FIX: Removed (supabase as any) - ia_performance_log exists in schema
+ */
+
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface IntentInput {
   voiceCommand?: string;
@@ -25,7 +31,6 @@ export interface IntentOutput {
 /**
  * Multimodal Intent Engine
  * Processes voice, gesture, and text inputs to determine user intent
- * Uses GPT-4o with context-aware prompting
  */
 export class MultimodalIntentEngine {
   private isInitialized = false;
@@ -37,13 +42,14 @@ export class MultimodalIntentEngine {
 
   private async initialize() {
     try {
-      // Initialize Web Speech API if available
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-        this.recognitionService = new SpeechRecognition();
-        this.recognitionService.continuous = false;
-        this.recognitionService.interimResults = false;
-        this.recognitionService.lang = "pt-BR";
+        const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        this.recognitionService = new SpeechRecognitionAPI();
+        if (this.recognitionService) {
+          this.recognitionService.continuous = false;
+          this.recognitionService.interimResults = false;
+          this.recognitionService.lang = "pt-BR";
+        }
       }
       
       this.isInitialized = true;
@@ -53,34 +59,16 @@ export class MultimodalIntentEngine {
     }
   }
 
-  /**
-   * Process multimodal input and determine intent
-   */
   async processIntent(input: IntentInput): Promise<IntentOutput> {
     const startTime = Date.now();
     
     try {
-      // Determine input type
       const inputType = this.determineInputType(input);
-      
-      // Build context-aware prompt
       const prompt = this.buildIntentPrompt(input, inputType);
+      const intentResult = await this.classifyIntent(prompt);
       
-      // Call AI service to classify intent
-      const intentResult = await this.classifyIntent(prompt, input.context);
-      
-      // Log performance
       const responseTime = Date.now() - startTime;
-      await this.logPerformance({
-        module_name: "multimodal_intent_engine",
-        operation_type: "intent_classification",
-        response_time_ms: responseTime,
-        context: {
-          inputType,
-          intent: intentResult.intent,
-          confidence: intentResult.confidence,
-        },
-      });
+      await this.logPerformance(responseTime, inputType, intentResult.intent, intentResult.confidence);
       
       return {
         ...intentResult,
@@ -93,9 +81,6 @@ export class MultimodalIntentEngine {
     }
   }
 
-  /**
-   * Process voice command using Web Speech API
-   */
   async processVoiceCommand(
     onResult: (transcript: string) => void,
     onError?: (error: any) => void
@@ -124,23 +109,12 @@ export class MultimodalIntentEngine {
     });
   }
 
-  /**
-   * Process gesture input from MediaPipe or other gesture recognition
-   */
   async processGesture(gestureData: any): Promise<IntentOutput> {
-    return this.processIntent({
-      gestureInput: gestureData,
-    });
+    return this.processIntent({ gestureInput: gestureData });
   }
 
-  /**
-   * Process typed text query
-   */
   async processTextQuery(query: string, context?: Record<string, any>): Promise<IntentOutput> {
-    return this.processIntent({
-      typedQuery: query,
-      context,
-    });
+    return this.processIntent({ typedQuery: query, context });
   }
 
   private determineInputType(input: IntentInput): "voice" | "gesture" | "text" | "multimodal" {
@@ -160,148 +134,68 @@ export class MultimodalIntentEngine {
     let prompt = "You are an AI assistant helping to interpret user intent from multimodal input.\n\n";
     prompt += `Input Type: ${inputType}\n\n`;
     
-    if (input.voiceCommand) {
-      prompt += `Voice Command: "${input.voiceCommand}"\n`;
-    }
+    if (input.voiceCommand) prompt += `Voice Command: "${input.voiceCommand}"\n`;
+    if (input.gestureInput) prompt += `Gesture Input: ${input.gestureInput.type} (confidence: ${input.gestureInput.confidence})\n`;
+    if (input.typedQuery) prompt += `Text Query: "${input.typedQuery}"\n`;
+    if (input.context) prompt += `\nContext: ${JSON.stringify(input.context, null, 2)}\n`;
     
-    if (input.gestureInput) {
-      prompt += `Gesture Input: ${input.gestureInput.type} (confidence: ${input.gestureInput.confidence})\n`;
-    }
-    
-    if (input.typedQuery) {
-      prompt += `Text Query: "${input.typedQuery}"\n`;
-    }
-    
-    if (input.context) {
-      prompt += `\nContext: ${JSON.stringify(input.context, null, 2)}\n`;
-    }
-    
-    prompt += `\nBased on the input above, determine the user's intent and respond with a JSON object containing:
-{
-  "intent": "the primary intent (e.g., 'navigate', 'query', 'command', 'create', 'update')",
-  "target": "the target object or entity (if applicable)",
-  "confidence": 0.95,
-  "action": "specific action to take",
-  "parameters": {
-    // relevant parameters extracted from the input
-  }
-}`;
-    
+    prompt += `\nBased on the input above, determine the user's intent.`;
     return prompt;
   }
 
-  private async classifyIntent(prompt: string, context?: Record<string, any>): Promise<Omit<IntentOutput, "inputType" | "timestamp">> {
+  private async classifyIntent(prompt: string): Promise<Omit<IntentOutput, "inputType" | "timestamp">> {
     try {
-      // In a real implementation, this would call GPT-4o or another LLM
-      // For now, we'll use a simple pattern matching approach
-      const intent = this.extractIntentFromPrompt(prompt);
-      
-      return {
-        intent: intent.intent,
-        target: intent.target,
-        confidence: intent.confidence,
-        action: intent.action,
-        parameters: intent.parameters,
-      };
+      return this.extractIntentFromPrompt(prompt);
     } catch (error) {
       logger.error("Error classifying intent", { error });
-      
-      // Return default intent on error
-      return {
-        intent: "unknown",
-        target: null,
-        confidence: 0,
-        action: "none",
-        parameters: {},
-      };
+      return { intent: "unknown", target: null, confidence: 0, action: "none", parameters: {} };
     }
   }
 
   private extractIntentFromPrompt(prompt: string): {
-    intent: string;
-    target: string | null;
-    confidence: number;
-    action: string;
-    parameters: Record<string, any>;
+    intent: string; target: string | null; confidence: number; action: string; parameters: Record<string, any>;
   } {
-    // Simple pattern matching for common intents
     const lowerPrompt = prompt.toLowerCase();
     
-    // Navigation intents
     if (lowerPrompt.includes("navigate") || lowerPrompt.includes("go to") || lowerPrompt.includes("open")) {
-      return {
-        intent: "navigate",
-        target: this.extractTarget(prompt),
-        confidence: 0.85,
-        action: "navigate_to",
-        parameters: {},
-      };
+      return { intent: "navigate", target: this.extractTarget(prompt), confidence: 0.85, action: "navigate_to", parameters: {} };
     }
-    
-    // Query intents
     if (lowerPrompt.includes("show") || lowerPrompt.includes("display") || lowerPrompt.includes("what") || lowerPrompt.includes("how")) {
-      return {
-        intent: "query",
-        target: this.extractTarget(prompt),
-        confidence: 0.80,
-        action: "fetch_data",
-        parameters: {},
-      };
+      return { intent: "query", target: this.extractTarget(prompt), confidence: 0.80, action: "fetch_data", parameters: {} };
     }
-    
-    // Command intents
     if (lowerPrompt.includes("create") || lowerPrompt.includes("add") || lowerPrompt.includes("new")) {
-      return {
-        intent: "command",
-        target: this.extractTarget(prompt),
-        confidence: 0.90,
-        action: "create",
-        parameters: {},
-      };
+      return { intent: "command", target: this.extractTarget(prompt), confidence: 0.90, action: "create", parameters: {} };
     }
-    
-    // Update intents
     if (lowerPrompt.includes("update") || lowerPrompt.includes("edit") || lowerPrompt.includes("change")) {
-      return {
-        intent: "command",
-        target: this.extractTarget(prompt),
-        confidence: 0.85,
-        action: "update",
-        parameters: {},
-      };
+      return { intent: "command", target: this.extractTarget(prompt), confidence: 0.85, action: "update", parameters: {} };
     }
     
-    // Default
-    return {
-      intent: "query",
-      target: null,
-      confidence: 0.50,
-      action: "process",
-      parameters: {},
-    };
+    return { intent: "query", target: null, confidence: 0.50, action: "process", parameters: {} };
   }
 
   private extractTarget(prompt: string): string | null {
-    // Extract potential targets from prompt
     const targets = ["dashboard", "report", "incident", "task", "document", "vessel", "crew"];
-    
     for (const target of targets) {
-      if (prompt.toLowerCase().includes(target)) {
-        return target;
-      }
+      if (prompt.toLowerCase().includes(target)) return target;
     }
-    
     return null;
   }
 
-  private async logPerformance(data: any) {
+  /**
+   * Log performance to ia_performance_log (typed - table exists in schema)
+   */
+  private async logPerformance(executionTimeMs: number, inputType: string, intent: string, confidence: number) {
     try {
-      await (supabase as any).from("ia_performance_log").insert(data);
+      await supabase.from("ia_performance_log").insert({
+        module_name: "multimodal_intent_engine",
+        operation_type: "intent_classification",
+        execution_time_ms: executionTimeMs,
+        metadata: { inputType, intent, confidence } as unknown as Json,
+      });
     } catch (error) {
       logger.error("Failed to log performance", { error });
     }
   }
 }
 
-// Singleton instance
 export const intentEngine = new MultimodalIntentEngine();

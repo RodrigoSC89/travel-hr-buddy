@@ -2,13 +2,12 @@
  * PATCH 231 - Meta-Strategy Engine
  * 
  * Generates alternative strategies and selects the best option based on scoring.
- * Logs all strategy evaluations for audit and learning.
- * 
- * @module ai/metaStrategyEngine
+ * DEBT-FIX: Replaced non-existent meta_strategy_log with ai_audit_logs
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface Strategy {
   id: string;
@@ -40,98 +39,68 @@ export interface StrategySelection {
 class MetaStrategyEngine {
   private strategies: Map<string, Strategy> = new Map();
 
-  /**
-   * Generate multiple strategic alternatives for a given context
-   */
   async generateStrategies(context: StrategyContext): Promise<Strategy[]> {
     logger.info("Generating strategies", { goal: context.goal });
 
     const strategies: Strategy[] = [];
 
-    // Strategy 1: Conservative approach
     strategies.push({
       id: `strat-conservative-${Date.now()}`,
       name: "Conservative Approach",
       description: "Minimize risk with proven methods",
       score: this.calculateScore(context, "conservative"),
       reasoning: "Low risk, proven track record, slower results",
-      parameters: {
-        risk_tolerance: 0.2,
-        innovation_level: 0.3,
-        resource_usage: 0.5
-      },
+      parameters: { risk_tolerance: 0.2, innovation_level: 0.3, resource_usage: 0.5 },
       estimated_impact: 0.6,
       risk_level: "low",
       complexity: 0.4
     });
 
-    // Strategy 2: Balanced approach
     strategies.push({
       id: `strat-balanced-${Date.now() + 1}`,
       name: "Balanced Approach",
       description: "Balance innovation with stability",
       score: this.calculateScore(context, "balanced"),
       reasoning: "Moderate risk, balanced innovation, steady results",
-      parameters: {
-        risk_tolerance: 0.5,
-        innovation_level: 0.6,
-        resource_usage: 0.7
-      },
+      parameters: { risk_tolerance: 0.5, innovation_level: 0.6, resource_usage: 0.7 },
       estimated_impact: 0.75,
       risk_level: "medium",
       complexity: 0.6
     });
 
-    // Strategy 3: Aggressive approach
     strategies.push({
       id: `strat-aggressive-${Date.now() + 2}`,
       name: "Aggressive Approach",
       description: "Maximize impact with innovative methods",
       score: this.calculateScore(context, "aggressive"),
       reasoning: "High risk, high reward, fast results, innovative",
-      parameters: {
-        risk_tolerance: 0.8,
-        innovation_level: 0.9,
-        resource_usage: 0.9
-      },
+      parameters: { risk_tolerance: 0.8, innovation_level: 0.9, resource_usage: 0.9 },
       estimated_impact: 0.9,
       risk_level: "high",
       complexity: 0.8
     });
 
-    // Strategy 4: Resource-optimized
     strategies.push({
       id: `strat-optimized-${Date.now() + 3}`,
       name: "Resource-Optimized",
       description: "Maximize efficiency with minimal resources",
       score: this.calculateScore(context, "optimized"),
       reasoning: "Low resource usage, efficient, moderate impact",
-      parameters: {
-        risk_tolerance: 0.4,
-        innovation_level: 0.5,
-        resource_usage: 0.3
-      },
+      parameters: { risk_tolerance: 0.4, innovation_level: 0.5, resource_usage: 0.3 },
       estimated_impact: 0.65,
       risk_level: "low",
       complexity: 0.5
     });
 
-    // Store in memory
     strategies.forEach(s => this.strategies.set(s.id, s));
-
-    // Log strategy generation
     await this.logStrategyGeneration(context, strategies);
 
     return strategies.sort((a, b) => b.score - a.score);
   }
 
-  /**
-   * Calculate strategy score based on context
-   */
   private calculateScore(context: StrategyContext, approach: string): number {
     let score = 50;
 
-    // Adjust based on priority
     if (context.priority === "critical") {
       if (approach === "aggressive") score += 30;
       if (approach === "balanced") score += 20;
@@ -142,21 +111,15 @@ class MetaStrategyEngine {
       if (approach === "balanced") score += 30;
     }
 
-    // Adjust based on available resources
     if (context.available_resources.length < 3) {
       if (approach === "optimized") score += 20;
       if (approach === "aggressive") score -= 15;
     }
 
-    // Add randomness for variation
     score += Math.random() * 20 - 10;
-
     return Math.max(0, Math.min(100, score));
   }
 
-  /**
-   * Select the best strategy based on scoring
-   */
   async selectBestStrategy(
     strategies: Strategy[],
     context: StrategyContext
@@ -165,7 +128,6 @@ class MetaStrategyEngine {
       throw new Error("No strategies available for selection");
     }
 
-    // Sort by score
     const sorted = [...strategies].sort((a, b) => b.score - a.score);
     const selected = sorted[0];
     const alternatives = sorted.slice(1);
@@ -178,35 +140,29 @@ class MetaStrategyEngine {
     };
 
     logger.info("Selected strategy", { name: selected.name, score: selected.score });
-
-    // Log selection
     await this.logStrategySelection(selection);
 
     return selection;
   }
 
   /**
-   * Log strategy generation to database
+   * Log strategy generation to ai_audit_logs (canonical table)
    */
   private async logStrategyGeneration(
     context: StrategyContext,
     strategies: Strategy[]
   ): Promise<void> {
     try {
-      await (supabase as any).from("meta_strategy_log").insert({
-        event_type: "generation",
-        context: context,
-        strategies: strategies.map(s => ({
-          id: s.id,
-          name: s.name,
-          score: s.score,
-          reasoning: s.reasoning
-        })),
-        selected_strategy_id: null,
-        metadata: {
+      await supabase.from("ai_audit_logs").insert({
+        user_input: `strategy_generation:${context.goal}`,
+        ai_response: strategies.map(s => `${s.name}(${s.score.toFixed(0)})`).join(", "),
+        interaction_type: "meta_strategy_generation",
+        module_name: "meta_strategy_engine",
+        model_parameters: {
+          context,
+          strategies: strategies.map(s => ({ id: s.id, name: s.name, score: s.score })),
           total_generated: strategies.length,
-          timestamp: new Date().toISOString()
-        }
+        } as unknown as Json,
       });
     } catch (error) {
       logger.error("Failed to log generation", { error });
@@ -214,45 +170,41 @@ class MetaStrategyEngine {
   }
 
   /**
-   * Log strategy selection to database
+   * Log strategy selection to ai_audit_logs
    */
   private async logStrategySelection(selection: StrategySelection): Promise<void> {
     try {
-      await (supabase as any).from("meta_strategy_log").insert({
-        event_type: "selection",
-        context: selection.context,
-        strategies: [selection.selected_strategy, ...selection.alternatives].map(s => ({
-          id: s.id,
-          name: s.name,
-          score: s.score
-        })),
-        selected_strategy_id: selection.selected_strategy.id,
-        metadata: {
+      await supabase.from("ai_audit_logs").insert({
+        user_input: `strategy_selection:${selection.context.goal}`,
+        ai_response: selection.selected_strategy.name,
+        interaction_type: "meta_strategy_selection",
+        module_name: "meta_strategy_engine",
+        confidence_score: selection.selected_strategy.score / 100,
+        model_parameters: {
+          selected_id: selection.selected_strategy.id,
           selected_score: selection.selected_strategy.score,
           reasoning: selection.selected_strategy.reasoning,
-          timestamp: selection.timestamp
-        }
+          alternatives_count: selection.alternatives.length,
+        } as unknown as Json,
       });
     } catch (error) {
       logger.error("Failed to log selection", { error });
     }
   }
 
-  /**
-   * Get strategy by ID
-   */
   getStrategy(id: string): Strategy | undefined {
     return this.strategies.get(id);
   }
 
   /**
-   * Get strategy logs from database
+   * Get strategy logs from ai_audit_logs
    */
   async getStrategyLogs(limit: number = 50): Promise<any[]> {
     try {
-      const { data, error } = await (supabase as any)
-        .from("meta_strategy_log")
+      const { data, error } = await supabase
+        .from("ai_audit_logs")
         .select("*")
+        .in("interaction_type", ["meta_strategy_generation", "meta_strategy_selection"])
         .order("created_at", { ascending: false })
         .limit(limit);
 
