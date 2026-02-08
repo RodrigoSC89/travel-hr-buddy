@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Package, 
   AlertTriangle, 
@@ -22,63 +23,55 @@ interface InventoryItem {
   id: string;
   item_code: string;
   name: string;
-  description: string;
-  category: string;
-  current_stock: number;
-  minimum_stock: number;
-  maximum_stock: number;
-  unit_cost: number;
-  total_value: number;
-  status: string;
-  location: string;
+  description: string | null;
+  category: string | null;
+  quantity: number | null;
+  min_quantity: number | null;
+  max_quantity: number | null;
+  unit_cost: number | null;
+  status: string | null;
+  location: string | null;
 }
 
 type BadgeVariant = "default" | "destructive" | "secondary" | "outline";
 
 export const InventoryManagement = () => {
   const { toast } = useToast();
-  const [items, setItems] = useState<InventoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
 
-  useEffect(() => {
-    loadInventoryItems();
-  }, []);
-
-  const loadInventoryItems = async () => {
-    try {
-      setLoading(true);
-      // Use type assertion for table not in generated types
-      const { data, error } = await (supabase as any)
+  const { data: items = [], isLoading: loading, refetch } = useQuery({
+    queryKey: ["inventory-items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from("inventory_items")
         .select("*")
         .order("name");
 
       if (error) throw error;
-      setItems((data as InventoryItem[]) || []);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown error";
-      toast({
-        title: "Error loading inventory",
-        description: message,
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+      return (data || []) as InventoryItem[];
+    },
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error loading inventory",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     }
-  };
+  });
 
   const getLowStockItems = () => {
     return items.filter(item => 
-      item.current_stock <= item.minimum_stock && 
+      (item.quantity ?? 0) <= (item.min_quantity ?? 0) && 
       item.status !== "discontinued"
     );
   };
 
   const getTotalValue = () => {
-    return items.reduce((sum, item) => sum + (item.total_value || 0), 0);
+    return items.reduce((sum, item) => sum + ((item.quantity ?? 0) * (item.unit_cost ?? 0)), 0);
   };
 
   const filteredItems = items.filter(item => {
@@ -89,7 +82,7 @@ export const InventoryManagement = () => {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
     const variants: Record<string, BadgeVariant> = {
       active: "default",
       low_stock: "secondary",
@@ -97,12 +90,13 @@ export const InventoryManagement = () => {
       discontinued: "outline",
       expired: "destructive"
     };
-    return <Badge variant={variants[status] || "default"}>{status.replace("_", " ")}</Badge>;
+    return <Badge variant={variants[status || "active"] || "default"}>{(status || "active").replace("_", " ")}</Badge>;
   };
 
   const getStockIndicator = (item: InventoryItem) => {
-    const percentage = (item.current_stock / item.maximum_stock) * 100;
-    if (percentage <= 25) return <TrendingDown className="h-4 w-4 text-red-500" />;
+    const max = item.max_quantity ?? 1;
+    const percentage = ((item.quantity ?? 0) / max) * 100;
+    if (percentage <= 25) return <TrendingDown className="h-4 w-4 text-destructive" />;
     if (percentage <= 50) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
     return <TrendingUp className="h-4 w-4 text-green-500" />;
   };
@@ -147,7 +141,7 @@ export const InventoryManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {new Set(items.map(i => i.category)).size}
+              {new Set(items.map(i => i.category).filter(Boolean)).size}
             </div>
             <p className="text-xs text-muted-foreground">Different categories</p>
           </CardContent>
@@ -156,9 +150,9 @@ export const InventoryManagement = () => {
 
       {/* Low Stock Alerts */}
       {getLowStockItems().length > 0 && (
-        <Card className="border-orange-300 bg-orange-50">
+        <Card className="border-orange-300 bg-orange-50 dark:bg-orange-950/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-orange-800">
+            <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-400">
               <AlertTriangle className="h-5 w-5" />
               Low Stock Alerts ({getLowStockItems().length})
             </CardTitle>
@@ -166,14 +160,14 @@ export const InventoryManagement = () => {
           <CardContent>
             <div className="space-y-2">
               {getLowStockItems().slice(0, 5).map(item => (
-                <div key={item.id} className="flex items-center justify-between p-2 bg-white rounded">
+                <div key={item.id} className="flex items-center justify-between p-2 bg-background rounded">
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
                     <div className="text-sm text-muted-foreground">{item.item_code}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-medium">
-                      Stock: {item.current_stock} / {item.minimum_stock}
+                      Stock: {item.quantity ?? 0} / {item.min_quantity ?? 0}
                     </div>
                     <Button size="sm" variant="outline" className="mt-1">
                       Reorder
@@ -195,7 +189,7 @@ export const InventoryManagement = () => {
               <CardDescription>Manage your inventory stock levels</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={loadInventoryItems} variant="outline" size="sm">
+              <Button onClick={() => refetch()} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Refresh
               </Button>
@@ -270,17 +264,21 @@ export const InventoryManagement = () => {
                     <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
                       <span>Code: {item.item_code}</span>
                       <span>•</span>
-                      <span className="capitalize">{item.category.replace("_", " ")}</span>
-                      <span>•</span>
-                      <span>{item.location}</span>
+                      <span className="capitalize">{(item.category || "uncategorized").replace("_", " ")}</span>
+                      {item.location && (
+                        <>
+                          <span>•</span>
+                          <span>{item.location}</span>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="text-right space-y-1">
                     <div className="text-sm font-medium">
-                      Stock: {item.current_stock} / {item.minimum_stock}
+                      Stock: {item.quantity ?? 0} / {item.min_quantity ?? 0}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Value: ${item.total_value?.toFixed(2) || "0.00"}
+                      Value: ${((item.quantity ?? 0) * (item.unit_cost ?? 0)).toFixed(2)}
                     </div>
                   </div>
                   <div className="flex gap-2">

@@ -71,7 +71,7 @@ export function useInventoryItems(vesselId?: string, category?: string) {
   return useQuery({
     queryKey: ['inventory-items', vesselId, category],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('inventory_items')
         .select('*')
         .order('name', { ascending: true });

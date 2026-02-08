@@ -191,7 +191,8 @@ const DocumentTemplatesManager = () => {
       const templateCode = `TPL-${Date.now()}`;
       const tags = formData.tags.split(",").map(tag => tag.trim()).filter(tag => tag);
       
-      const { error } = await (supabase as any)
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase
         .from("document_templates")
         .insert({
           name: formData.name,
@@ -199,6 +200,7 @@ const DocumentTemplatesManager = () => {
           category: formData.category,
           content: formData.content,
           tags,
+          user_id: user?.id || "",
         });
 
       if (error) throw error;
@@ -255,7 +257,7 @@ const DocumentTemplatesManager = () => {
 
   const deleteTemplate = async (templateId: string) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("document_templates")
         .delete()
         .eq("id", templateId);
@@ -298,14 +300,12 @@ const DocumentTemplatesManager = () => {
     
     const processingTime = Date.now() - startTime;
     
-    // Log usage (use any cast for untyped table)
-    (supabase as any).from("template_usage_log").insert({
-      template_id: template.id,
-      version_number: template.current_version,
-      output_format: "pdf",
-      variables_used: variables,
-      generation_time_ms: processingTime,
-      success: true
+    // Log usage - fire and forget via access_logs
+    void supabase.from("access_logs").insert({
+      action: "export_pdf",
+      module_accessed: "document_templates",
+      result: "success",
+      severity: "info",
     });
     
     toast({
@@ -342,14 +342,12 @@ const DocumentTemplatesManager = () => {
     
     const processingTime = Date.now() - startTime;
     
-    // Log usage (use any cast for untyped table)
-    (supabase as any).from("template_usage_log").insert({
-      template_id: template.id,
-      version_number: template.current_version,
-      output_format: "docx",
-      variables_used: variables,
-      generation_time_ms: processingTime,
-      success: true
+    // Log usage - fire and forget via access_logs
+    void supabase.from("access_logs").insert({
+      action: "export_docx",
+      module_accessed: "document_templates",
+      result: "success",
+      severity: "info",
     });
     
     toast({

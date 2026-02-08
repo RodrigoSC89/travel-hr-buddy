@@ -50,11 +50,14 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { error } = await (supabase as any).from("sgso_plans").insert([
+      const { error } = await supabase.from("sgso_plans").insert([
         {
-          ...formData,
+          plan_name: formData.title,
+          content: { description: formData.description, start_date: formData.start_date, end_date: formData.end_date },
+          status: formData.status,
+          effective_date: formData.start_date || null,
+          review_date: formData.end_date || null,
           created_by: user.id,
-          owner_id: user.id,
         },
       ]);
 
