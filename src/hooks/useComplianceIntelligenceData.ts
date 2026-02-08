@@ -72,7 +72,7 @@ export function useComplianceIntelligenceData() {
     queryFn: async (): Promise<CertificationData[]> => {
       const { data, error } = await supabase
         .from("certificates")
-        .select("id, certificate_type, issuing_authority, expiry_date, issue_date, status, crew_member_id")
+        .select("id, certificate_type, issuing_authority, expiry_date, issue_date, status, employee_id")
         .order("expiry_date", { ascending: true });
 
       if (error) throw error;
