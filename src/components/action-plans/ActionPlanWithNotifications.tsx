@@ -53,20 +53,25 @@ import {
 interface ActionPlan {
   id: string;
   title: string;
-  description?: string;
-  category: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  responsible_id: string;
-  responsible_name?: string;
-  responsible_email?: string;
-  due_date: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'overdue' | 'escalated';
-  notification_sent: boolean;
-  escalation_sent: boolean;
-  created_at: string;
-  completed_at?: string;
-  vessel_id?: string;
-  vessel_name?: string;
+  description?: string | null;
+  category?: string | null;
+  priority?: string | null;
+  responsible_id?: string | null;
+  responsible_name?: string | null;
+  responsible_email?: string | null;
+  due_date?: string | null;
+  status?: string | null;
+  notification_sent?: boolean | null;
+  escalation_sent?: boolean | null;
+  created_at?: string | null;
+  completed_at?: string | null;
+  vessel_id?: string | null;
+  vessel_name?: string | null;
+  source_module?: string | null;
+  assigned_to?: string | null;
+  assigned_to_name?: string | null;
+  assigned_to_email?: string | null;
+  completion_date?: string | null;
 }
 
 interface NotificationConfig {
@@ -104,7 +109,7 @@ export function ActionPlanWithNotifications({
   const { data: actionPlans, isLoading } = useQuery({
     queryKey: ['action-plans', vesselId, category],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('action_items')
         .select('*')
         .order('due_date', { ascending: true });
@@ -114,8 +119,8 @@ export function ActionPlanWithNotifications({
 
       const { data, error } = await query;
 
-      if (error) return getMockActionPlans();
-      return data?.length ? data : getMockActionPlans();
+      if (error) return [];
+      return data || [];
     },
     staleTime: 30000,
   });
@@ -153,7 +158,7 @@ export function ActionPlanWithNotifications({
   // Complete action mutation
   const completeActionMutation = useMutation({
     mutationFn: async (planId: string) => {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('action_items')
         .update({
           status: 'completed',
@@ -173,9 +178,9 @@ export function ActionPlanWithNotifications({
   // Stats
   const stats = {
     total: actionPlans?.length || 0,
-    pending: actionPlans?.filter((p: ActionPlan) => p.status === 'pending').length || 0,
-    overdue: actionPlans?.filter((p: ActionPlan) => p.status === 'overdue' || new Date(p.due_date) < new Date()).length || 0,
-    completed: actionPlans?.filter((p: ActionPlan) => p.status === 'completed').length || 0,
+    pending: actionPlans?.filter((p: any) => p.status === 'pending').length || 0,
+    overdue: actionPlans?.filter((p: any) => p.status === 'overdue' || (p.due_date && new Date(p.due_date) < new Date())).length || 0,
+    completed: actionPlans?.filter((p: any) => p.status === 'completed').length || 0,
   };
 
   const completionRate = stats.total > 0 ? (stats.completed / stats.total) * 100 : 0;
@@ -312,7 +317,7 @@ export function ActionPlanWithNotifications({
 
       {/* Action Plans List */}
       <div className="space-y-3">
-        {actionPlans?.map((plan: ActionPlan) => (
+        {actionPlans?.map((plan: any) => (
           <Card
             key={plan.id}
             className={`p-4 ${

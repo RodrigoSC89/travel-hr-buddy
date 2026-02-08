@@ -2,22 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { logger } from "@/lib/logger";
-import type { Database } from "@/integrations/supabase/types";
 
 /**
  * PATCH 629: Feature Flag Hook
- * 
- * Hook to check if a feature flag is enabled for the current context.
- * Supports tenant-level, user-level, and global feature flags.
- * 
- * @param key - The feature flag key to check
- * @returns boolean indicating if the feature is enabled
- * 
- * @example
- * const isAINavigationEnabled = useFeatureFlag('ai_navigation');
- * if (isAINavigationEnabled) {
- *   // Show AI navigation features
- * }
+ * DEBT-FIX: Aligned with real schema (flag_name, no user_id/tenant_id)
  */
 export function useFeatureFlag(key: string): boolean {
   const { user } = useAuth();
@@ -26,31 +14,25 @@ export function useFeatureFlag(key: string): boolean {
     queryKey: ["feature-flag", key, user?.id],
     queryFn: async () => {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from("feature_flags")
-          .select("enabled, user_id, tenant_id")
-          .eq("key", key)
-          .order("user_id", { ascending: false, nullsFirst: true })
-          .order("tenant_id", { ascending: false, nullsFirst: true })
-          .limit(5);
+          .select("enabled, flag_name")
+          .eq("flag_name", key)
+          .limit(1);
 
         if (error) {
           logger.warn(`Feature flag lookup error for "${key}":`, { error });
           return false;
         }
 
-        const rows = (data ?? []) as any[];
-        const prioritized = rows.find(r => r.user_id && r.user_id === user?.id)
-          ?? rows.find(r => r.tenant_id)
-          ?? rows.find(r => !r.user_id && !r.tenant_id);
-
-        return prioritized?.enabled ?? false;
+        const row = (data ?? [])[0];
+        return row?.enabled ?? false;
       } catch (error) {
         logger.error(`Feature flag error for "${key}":`, error);
         return false;
       }
     },
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    staleTime: 5 * 60 * 1000,
     enabled: !!key,
   });
 
@@ -59,16 +41,15 @@ export function useFeatureFlag(key: string): boolean {
 
 /**
  * Hook to fetch all feature flags with their status
- * Used in admin panels to manage feature flags
  */
 export function useFeatureFlags() {
   return useQuery({
     queryKey: ["feature-flags"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("feature_flags")
         .select("*")
-        .order("key");
+        .order("flag_name");
 
       if (error) throw error;
       return data;
@@ -79,14 +60,13 @@ export function useFeatureFlags() {
 
 /**
  * Hook to toggle a feature flag
- * Admin-only functionality
  */
 export function useToggleFeatureFlag() {
   return async (key: string, enabled: boolean) => {
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from("feature_flags")
       .update({ enabled, updated_at: new Date().toISOString() })
-      .eq("key", key);
+      .eq("flag_name", key);
 
     if (error) {
       logger.error("Failed to toggle feature flag:", error);

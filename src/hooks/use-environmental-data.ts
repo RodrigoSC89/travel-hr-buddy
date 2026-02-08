@@ -1,7 +1,7 @@
 /**
  * Environmental & Sustainability Real-Time Data Hooks
  * Emissions tracking, CII, decarbonization roadmap, waste management
- * Uses emissions, cii_ratings, waste_records tables with dynamic typing
+ * DEBT-FIX: Removed all (supabase as any) casts - tables exist in schema
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,16 +35,16 @@ interface CIIRating {
   attained_cii: number;
   required_cii: number;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';
-  improvement_plan: any;
+  improvement_plan: unknown;
 }
 
 interface WasteRecord {
   id: string;
   vessel_id: string;
-  waste_type: 'garbage' | 'oily' | 'sewage' | 'ballast_water';
+  waste_type: string;
   quantity: number;
   unit: string;
-  disposal_method: 'port_reception' | 'incineration' | 'treatment' | 'discharge';
+  disposal_method: string;
   disposal_date: string;
   port_code: string | null;
   marpol_annex: string;
@@ -54,7 +54,7 @@ interface WasteRecord {
 interface BallastWaterRecord {
   id: string;
   vessel_id: string;
-  operation_type: 'uptake' | 'discharge' | 'exchange';
+  operation_type: string;
   volume_m3: number;
   location_lat: number;
   location_lng: number;
@@ -73,7 +73,7 @@ export function useEmissionsRecords(vesselId?: string, year?: number) {
   return useQuery({
     queryKey: ['emissions-records', vesselId, year],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('emissions_records')
         .select('*')
         .order('recorded_date', { ascending: false });
@@ -107,10 +107,19 @@ export function useCreateEmissionsRecord() {
         ? (record.co2_tonnes! * 1000000) / (record.cargo_carried_mt * record.distance_nm)
         : 0;
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('emissions_records')
         .insert({
-          ...record,
+          vessel_id: record.vessel_id || '',
+          recorded_date: record.recorded_date || new Date().toISOString().split('T')[0],
+          co2_tonnes: record.co2_tonnes || 0,
+          nox_kg: record.nox_kg || 0,
+          sox_kg: record.sox_kg || 0,
+          pm_kg: record.pm_kg || 0,
+          fuel_consumed_mt: record.fuel_consumed_mt || 0,
+          fuel_type: record.fuel_type || 'HFO',
+          distance_nm: record.distance_nm || 0,
+          cargo_carried_mt: record.cargo_carried_mt || 0,
           carbon_intensity: carbonIntensity,
         })
         .select()
@@ -133,7 +142,7 @@ export function useCIIRatings(vesselId?: string) {
   return useQuery({
     queryKey: ['cii-ratings', vesselId],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('cii_ratings')
         .select('*')
         .order('year', { ascending: false });
@@ -158,7 +167,7 @@ export function useCurrentCII(vesselId: string) {
     queryFn: async () => {
       const currentYear = new Date().getFullYear();
       
-      const { data: emissions } = await (supabase as any)
+      const { data: emissions } = await supabase
         .from('emissions_records')
         .select('co2_tonnes, distance_nm, cargo_carried_mt')
         .eq('vessel_id', vesselId)
@@ -168,9 +177,9 @@ export function useCurrentCII(vesselId: string) {
         return null;
       }
 
-      const totalCO2 = emissions.reduce((sum: number, e: any) => sum + (e.co2_tonnes || 0), 0);
-      const totalDistance = emissions.reduce((sum: number, e: any) => sum + (e.distance_nm || 0), 0);
-      const avgCargo = emissions.reduce((sum: number, e: any) => sum + (e.cargo_carried_mt || 0), 0) / emissions.length;
+      const totalCO2 = emissions.reduce((sum, e) => sum + (e.co2_tonnes || 0), 0);
+      const totalDistance = emissions.reduce((sum, e) => sum + (e.distance_nm || 0), 0);
+      const avgCargo = emissions.reduce((sum, e) => sum + (e.cargo_carried_mt || 0), 0) / emissions.length;
 
       const attainedCII = totalDistance > 0 && avgCargo > 0
         ? (totalCO2 * 1000000) / (totalDistance * avgCargo)
@@ -204,7 +213,7 @@ export function useWasteRecords(vesselId?: string, wasteType?: string) {
   return useQuery({
     queryKey: ['waste-records', vesselId, wasteType],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('waste_records')
         .select('*')
         .order('disposal_date', { ascending: false });
@@ -232,9 +241,17 @@ export function useCreateWasteRecord() {
   
   return useMutation({
     mutationFn: async (record: Partial<WasteRecord>) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('waste_records')
-        .insert(record)
+        .insert({
+          vessel_id: record.vessel_id || '',
+          waste_type: record.waste_type || 'garbage',
+          quantity: record.quantity || 0,
+          unit: record.unit || 'm3',
+          disposal_method: record.disposal_method || 'port_reception',
+          disposal_date: record.disposal_date || new Date().toISOString().split('T')[0],
+          marpol_annex: record.marpol_annex || 'V',
+        })
         .select()
         .single();
 
@@ -255,7 +272,7 @@ export function useBallastWaterRecords(vesselId?: string) {
   return useQuery({
     queryKey: ['ballast-water-records', vesselId],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('ballast_water_records')
         .select('*')
         .order('operation_date', { ascending: false });
@@ -284,41 +301,41 @@ export function useEnvironmentalDashboardStats() {
       const currentYear = new Date().getFullYear();
       const lastYear = currentYear - 1;
 
-      const { data: currentEmissions } = await (supabase as any)
+      const { data: currentEmissions } = await supabase
         .from('emissions_records')
         .select('co2_tonnes, nox_kg, sox_kg')
         .gte('recorded_date', `${currentYear}-01-01`);
 
-      const { data: lastEmissions } = await (supabase as any)
+      const { data: lastEmissions } = await supabase
         .from('emissions_records')
         .select('co2_tonnes')
         .gte('recorded_date', `${lastYear}-01-01`)
         .lte('recorded_date', `${lastYear}-12-31`);
 
-      const { data: waste } = await (supabase as any)
+      const { data: waste } = await supabase
         .from('waste_records')
         .select('waste_type, quantity')
         .gte('disposal_date', `${currentYear}-01-01`);
 
-      const { data: cii } = await (supabase as any)
+      const { data: cii } = await supabase
         .from('cii_ratings')
         .select('rating')
         .eq('year', currentYear);
 
-      const totalCO2 = (currentEmissions || []).reduce((sum: number, e: any) => sum + (e.co2_tonnes || 0), 0);
-      const lastYearCO2 = (lastEmissions || []).reduce((sum: number, e: any) => sum + (e.co2_tonnes || 0), 0) || 1;
+      const totalCO2 = (currentEmissions || []).reduce((sum, e) => sum + (e.co2_tonnes || 0), 0);
+      const lastYearCO2 = (lastEmissions || []).reduce((sum, e) => sum + (e.co2_tonnes || 0), 0) || 1;
       const co2Change = ((totalCO2 - lastYearCO2) / lastYearCO2) * 100;
 
-      const totalNOx = (currentEmissions || []).reduce((sum: number, e: any) => sum + (e.nox_kg || 0), 0);
-      const totalSOx = (currentEmissions || []).reduce((sum: number, e: any) => sum + (e.sox_kg || 0), 0);
-      const totalWaste = (waste || []).reduce((sum: number, w: any) => sum + (w.quantity || 0), 0);
+      const totalNOx = (currentEmissions || []).reduce((sum, e) => sum + (e.nox_kg || 0), 0);
+      const totalSOx = (currentEmissions || []).reduce((sum, e) => sum + (e.sox_kg || 0), 0);
+      const totalWaste = (waste || []).reduce((sum, w) => sum + (w.quantity || 0), 0);
 
       const ciiDistribution = {
-        A: (cii || []).filter((c: any) => c.rating === 'A').length,
-        B: (cii || []).filter((c: any) => c.rating === 'B').length,
-        C: (cii || []).filter((c: any) => c.rating === 'C').length,
-        D: (cii || []).filter((c: any) => c.rating === 'D').length,
-        E: (cii || []).filter((c: any) => c.rating === 'E').length,
+        A: (cii || []).filter((c) => c.rating === 'A').length,
+        B: (cii || []).filter((c) => c.rating === 'B').length,
+        C: (cii || []).filter((c) => c.rating === 'C').length,
+        D: (cii || []).filter((c) => c.rating === 'D').length,
+        E: (cii || []).filter((c) => c.rating === 'E').length,
       };
 
       return {

@@ -39,17 +39,17 @@ import {
 
 interface HistoryEvent {
   id: string;
-  vessel_id: string;
+  vessel_id: string | null;
   vessel_name?: string;
-  event_type: 'maintenance' | 'incident' | 'inspection' | 'modification' | 'crew_change' | 'voyage';
+  event_type: string;
   event_date: string;
   title: string;
-  description?: string;
-  cost?: number;
-  downtime_hours?: number;
-  documents?: Array<{ name: string; url: string }>;
+  description?: string | null;
+  cost?: number | null;
+  downtime_hours?: number | null;
+  documents?: unknown;
   tags?: string[];
-  created_by?: string;
+  created_by?: string | null;
 }
 
 interface VesselTimelineAdvancedProps {
@@ -83,7 +83,7 @@ export function VesselTimelineAdvanced({
   const { data: events, isLoading, refetch } = useQuery({
     queryKey: ['vessel-history', vesselId, dateRange],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('vessel_history')
         .select('*')
         .order('event_date', { ascending: false });
@@ -104,11 +104,10 @@ export function VesselTimelineAdvanced({
       const { data, error } = await query.limit(100);
 
       if (error) {
-        // Return mock data if table doesn't exist
-        return getMockEvents();
+        return [];
       }
 
-      return data?.length ? data : getMockEvents();
+      return data || [];
     },
     staleTime: 30000,
   });
@@ -117,11 +116,11 @@ export function VesselTimelineAdvanced({
   const filteredEvents = useMemo(() => {
     if (!events) return [];
 
-    return events.filter((event: HistoryEvent) => {
+    return events.filter((event: any) => {
       const matchesSearch =
         !searchTerm ||
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        (event.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (event.description || '').toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesType =
         eventTypeFilter === 'all' || event.event_type === eventTypeFilter;
@@ -134,9 +133,9 @@ export function VesselTimelineAdvanced({
   const stats = useMemo(() => {
     if (!filteredEvents.length) return null;
 
-    const totalCost = filteredEvents.reduce((sum: number, e: HistoryEvent) => sum + (e.cost || 0), 0);
-    const totalDowntime = filteredEvents.reduce((sum: number, e: HistoryEvent) => sum + (e.downtime_hours || 0), 0);
-    const incidents = filteredEvents.filter((e: HistoryEvent) => e.event_type === 'incident').length;
+    const totalCost = filteredEvents.reduce((sum: number, e: any) => sum + (e.cost || 0), 0);
+    const totalDowntime = filteredEvents.reduce((sum: number, e: any) => sum + (e.downtime_hours || 0), 0);
+    const incidents = filteredEvents.filter((e: any) => e.event_type === 'incident').length;
 
     return { totalCost, totalDowntime, incidents, total: filteredEvents.length };
   }, [filteredEvents]);
@@ -182,7 +181,7 @@ export function VesselTimelineAdvanced({
   const exportTimeline = () => {
     const csv = [
       ['Data', 'Tipo', 'Título', 'Descrição', 'Custo', 'Downtime (h)'].join(','),
-      ...filteredEvents.map((e: HistoryEvent) =>
+      ...filteredEvents.map((e: any) =>
         [
           new Date(e.event_date).toLocaleDateString('pt-BR'),
           e.event_type,
@@ -323,7 +322,7 @@ export function VesselTimelineAdvanced({
                 <p>Nenhum evento encontrado</p>
               </div>
             ) : (
-              filteredEvents.map((event: HistoryEvent) => (
+              filteredEvents.map((event: any) => (
                 <div
                   key={event.id}
                   className={`relative border-l-4 ${getEventColor(event.event_type)} bg-card rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow`}
@@ -357,9 +356,9 @@ export function VesselTimelineAdvanced({
                       )}
 
                       {/* Tags */}
-                      {event.tags && event.tags.length > 0 && (
+                      {(event.tags as string[] || []).length > 0 && (
                         <div className="flex gap-1 mt-2 flex-wrap">
-                          {event.tags.map((tag, idx) => (
+                          {(event.tags as string[]).map((tag: string, idx: number) => (
                             <Badge key={idx} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
@@ -378,25 +377,29 @@ export function VesselTimelineAdvanced({
                       </div>
 
                       {/* Documents */}
-                      {event.documents && event.documents.length > 0 && (
-                        <div className="flex gap-2 mt-2 flex-wrap">
-                          {event.documents.map((doc, idx) => (
-                            <Badge
-                              key={idx}
-                              variant="outline"
-                              className="text-xs cursor-pointer hover:bg-accent"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (doc.url) window.open(doc.url, '_blank');
-                              }}
-                            >
-                              <FileText className="h-3 w-3 mr-1" />
-                              {doc.name}
-                              <ExternalLink className="h-3 w-3 ml-1" />
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
+                      {(() => {
+                        const docs = event.documents as Array<{name: string; url: string}> | null;
+                        if (!docs || !Array.isArray(docs) || docs.length === 0) return null;
+                        return (
+                          <div className="flex gap-2 mt-2 flex-wrap">
+                            {docs.map((doc: {name: string; url: string}, idx: number) => (
+                              <Badge
+                                key={idx}
+                                variant="outline"
+                                className="text-xs cursor-pointer hover:bg-accent"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (doc.url) window.open(doc.url, '_blank');
+                                }}
+                              >
+                                <FileText className="h-3 w-3 mr-1" />
+                                {doc.name}
+                                <ExternalLink className="h-3 w-3 ml-1" />
+                              </Badge>
+                            ))}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <div className="text-right shrink-0">
