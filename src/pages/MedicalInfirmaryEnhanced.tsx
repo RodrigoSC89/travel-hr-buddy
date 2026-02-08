@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 
 // Lazy load premium components
-const MedicalDashboard = lazy(() => import("@/modules/medical-infirmary/components/MedicalDashboard").catch(() => ({ default: () => <div className="text-center py-12 text-muted-foreground">Dashboard em desenvolvimento</div> })));
+const MedicalDashboard = lazy(() => import("@/modules/medical-infirmary/components/MedicalDashboard").catch(() => ({ default: () => <div className="text-center py-12 text-muted-foreground"><Loader2 className="h-8 w-8 mx-auto mb-2 animate-spin opacity-50" /><p>Módulo de dashboard médico não disponível. Utilize as outras abas.</p></div> })));
 const InfirmaryCommandCenter = lazy(() => import("@/modules/digital-infirmary/components/InfirmaryCommandCenter"));
 
 const healthStats = [

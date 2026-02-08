@@ -103,10 +103,10 @@ export default function PortCallOptimizationV2() {
           port_name: v.destination_port || v.arrival_port || "Porto",
           eta: v.eta || new Date(Date.now() + (idx + 1) * 24 * 60 * 60 * 1000).toISOString(),
           etd: v.etd || new Date(Date.now() + (idx + 2) * 24 * 60 * 60 * 1000).toISOString(),
-          berth: `Berço ${Math.floor(Math.random() * 20) + 1}`,
+          berth: `Berço ${(idx % 20) + 1}`,
           status: v.status === "in_progress" ? "approaching" : "scheduled",
-          waiting_time_hours: Math.random() * 5,
-          jit_score: Math.floor(90 + Math.random() * 10),
+          waiting_time_hours: ((idx * 7 + 3) % 10) / 2,
+          jit_score: 90 + (idx * 3 % 10),
           operations: ["Carga", "Descarga"]
         }));
         setPortCalls(transformed);
@@ -369,9 +369,28 @@ export default function PortCallOptimizationV2() {
               </div>
             </CardV2>
             <CardV2 icon={MapPin} title="Coordenação Portuária" description="Status de berços e agentes" gradient="blue">
-              <div className="text-center py-8 text-muted-foreground">
-                <MapPin className="h-12 w-12 mx-auto mb-4 opacity-30" />
-                <p>Mapa de berços em desenvolvimento</p>
+              <div className="space-y-3">
+                {portCalls.length === 0 ? (
+                  <div className="text-center py-6 text-muted-foreground">
+                    <MapPin className="h-10 w-10 mx-auto mb-2 opacity-30" />
+                    <p className="text-sm">Nenhuma escala para exibir</p>
+                  </div>
+                ) : (
+                  portCalls.map(call => (
+                    <div key={call.id} className="p-3 rounded-lg border bg-muted/30 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Anchor className="h-4 w-4 text-primary" />
+                        <div>
+                          <p className="text-sm font-medium">{call.berth}</p>
+                          <p className="text-xs text-muted-foreground">{call.vessel_name} — {call.port_name}</p>
+                        </div>
+                      </div>
+                      <Badge variant={call.status === "approaching" ? "default" : "secondary"}>
+                        {call.status === "approaching" ? "Ocupado" : "Reservado"}
+                      </Badge>
+                    </div>
+                  ))
+                )}
               </div>
             </CardV2>
           </div>

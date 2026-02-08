@@ -540,7 +540,7 @@ const AIDataLake: React.FC = () => {
                         </div>
                       </div>
                       {pipeline.status === "running" && (
-                        <Progress value={Math.random() * 100} className="h-1" />
+                        <Progress value={65} className="h-1" />
                       )}
                     </div>
                   ))}

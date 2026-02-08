@@ -21,8 +21,10 @@ export default function Patch512Satcom() {
   };
 
   useEffect(() => {
+    // Periodic check - deterministic based on time slot
     const interval = setInterval(() => {
-      if (Math.random() > 0.95) {
+      const slot = Math.floor(Date.now() / 60000); // check once per minute
+      if (slot % 20 === 0) { // trigger every ~20 minutes
         simulateFailover();
       }
     }, 10000);

@@ -470,7 +470,25 @@ export function BROAGeneratorCard({ events, vessels = [], contracts = [], onBROA
               <Download className="h-4 w-4 mr-2" />
               Exportar PDF
             </Button>
-            <Button onClick={() => toast.info('Funcionalidade de assinatura em desenvolvimento')}>
+            <Button onClick={() => {
+              if (!selectedBROA) return;
+              const updated = { ...selectedBROA };
+              const pending = updated.signatures_required.find(s => !s.signed);
+              if (pending) {
+                pending.signed = true;
+                pending.signed_at = new Date().toISOString();
+                setSelectedBROA({ ...updated });
+                setBroaRecords(prev => prev.map(b => b.broa_number === updated.broa_number ? updated : b));
+                toast.success(`Assinatura de "${pending.role}" registrada`);
+                if (updated.signatures_required.every(s => s.signed)) {
+                  updated.status = 'finalized';
+                  setSelectedBROA({ ...updated });
+                  toast.success('BROA finalizado — todas as assinaturas coletadas');
+                }
+              } else {
+                toast.info('Todas as assinaturas já foram coletadas');
+              }
+            }}>
               <Signature className="h-4 w-4 mr-2" />
               Assinar
             </Button>

@@ -260,8 +260,9 @@ Competências STCW cadastradas: ${stats.competencyCount}
                       { title: "Title 3 - Accommodation & Recreation", key: "t3" },
                       { title: "Title 4 - Health Protection", key: "t4" },
                       { title: "Title 5 - Compliance & Enforcement", key: "t5" },
-                    ].map((item) => {
-                      const score = Math.max(0, stats.mlcCompliance - Math.floor(Math.random() * 5));
+                    ].map((item, idx) => {
+                      const offsets = [0, 2, 1, 3, 2];
+                      const score = Math.max(0, stats.mlcCompliance - offsets[idx]);
                       return (
                         <div key={item.key} className="space-y-1">
                           <div className="flex justify-between text-xs">

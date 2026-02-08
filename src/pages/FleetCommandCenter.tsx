@@ -300,14 +300,17 @@ export default function FleetCommandCenter() {
         .limit(50);
       
       // Enriquecer dados com campos de telemetria (fallback para simulados se não houver)
-      const enrichedVessels = (vesselsData || []).map((v: any) => ({
-        ...v,
-        speed: v.current_speed ?? Math.floor(Math.random() * 20),
-        fuel: v.current_fuel_level ?? Math.floor(70 + Math.random() * 30),
-        efficiency: v.efficiency ?? Math.floor(85 + Math.random() * 15),
-        crew_count: v.crew ?? Math.floor(15 + Math.random() * 15),
-        course: v.course ?? Math.floor(Math.random() * 360)
-      }));
+      const enrichedVessels = (vesselsData || []).map((v: any, idx: number) => {
+        const nameHash = (v.name || "v").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+        return {
+          ...v,
+          speed: v.current_speed ?? (nameHash % 20),
+          fuel: v.current_fuel_level ?? (70 + nameHash % 30),
+          efficiency: v.efficiency ?? (85 + nameHash % 15),
+          crew_count: v.crew ?? (15 + nameHash % 15),
+          course: v.course ?? (nameHash * 7 % 360)
+        };
+      });
       setVessels(enrichedVessels);
 
       // Carregar manutenções (typed - table exists)
@@ -342,7 +345,7 @@ export default function FleetCommandCenter() {
         const realFuelTrend = Object.entries(grouped).map(([day, data]) => ({
           day,
           consumption: Math.round(data.consumption / data.count),
-          efficiency: Math.round(90 + Math.random() * 8)
+          efficiency: Math.round(92 + (dayNames.indexOf(day) % 6))
         }));
 
         if (realFuelTrend.length > 0) {

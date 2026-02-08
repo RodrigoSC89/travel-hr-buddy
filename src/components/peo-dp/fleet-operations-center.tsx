@@ -146,7 +146,15 @@ export const FleetOperationsCenter: React.FC = () => {
             </Badge>
           )}
           <Button variant="outline" onClick={() => refetch()}><RefreshCw className="w-4 h-4 mr-2" />Atualizar</Button>
-          <Button onClick={() => toast.info("Relatório será gerado em breve")}><Download className="w-4 h-4 mr-2" />Relatório</Button>
+          <Button onClick={() => {
+            const csvRows = ["Embarcação,Tipo,Status,DP Mode,Velocidade Vento,Altura Onda"].concat(
+              vessels.map(v => `"${v.name}","${v.type}","${v.onlineStatus}","${v.dpMode}","${v.environmental?.windSpeed ?? ''}","${v.environmental?.waveHeight ?? ''}"`)
+            );
+            const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = `fleet-report-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+            toast.success("Relatório CSV exportado");
+          }}><Download className="w-4 h-4 mr-2" />Relatório</Button>
         </div>
       </div>
 
