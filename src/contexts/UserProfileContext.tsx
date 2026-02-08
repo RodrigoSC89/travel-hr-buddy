@@ -157,11 +157,12 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
           setRoleState(userRole);
           
           const roleConfig = roleConfigs[userRole];
+          const profileRecord = profileData as Record<string, unknown>;
           setProfile(prev => ({
             ...prev,
             ...roleConfig,
             role: userRole,
-            displayName: (profileData as any).display_name || roleConfig.displayName || "Usuário"
+            displayName: (typeof profileRecord.display_name === "string" ? profileRecord.display_name : null) || roleConfig.displayName || "Usuário"
           }));
         }
       } catch (error) {
