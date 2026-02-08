@@ -102,8 +102,8 @@ export const MaritimeHRDashboard: React.FC = () => {
     queryKey: ['hr-expiring-certs'],
     queryFn: async () => {
       const { data } = await supabase
-        .from('certificates' as any)
-        .select('id, certificate_type, expiry_date, status, crew_member_id')
+        .from('certificates')
+        .select('id, certificate_type, expiry_date, status, employee_id')
         .order('expiry_date', { ascending: true })
         .limit(20);
       return data || [];

@@ -61,21 +61,21 @@ export function useContractProcurementData() {
       const { data, error } = await supabase
         .from("suppliers")
         .select("*")
-        .order("name");
+        .order("company_name");
 
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
       return data.map((s: any) => ({
         id: s.id,
-        name: s.name || "Sem nome",
+        name: s.company_name || s.trading_name || "Sem nome",
         category: s.category || "Geral",
         country: s.country || "N/A",
         rating: s.rating || 0,
-        totalSpend: s.total_spend || 0,
-        onTimeDelivery: s.on_time_delivery || 0,
-        qualityScore: s.quality_score || 0,
-        status: s.status || "pending",
+        totalSpend: s.total_value || 0,
+        onTimeDelivery: s.lead_time_days ? Math.min(100, Math.round(100 - (s.lead_time_days / 2))) : 85,
+        qualityScore: s.rating ? Math.round(s.rating * 20) : 0,
+        status: s.is_active ? "active" : "inactive",
       }));
     },
   });

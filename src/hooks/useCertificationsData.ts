@@ -20,7 +20,7 @@ export function useCertificationsData() {
     queryFn: async (): Promise<CertificationEntry[]> => {
       const { data, error } = await supabase
         .from("certificates")
-        .select("*, crew_member:crew_members(first_name, last_name)")
+        .select("id, certificate_type, certificate_number, issue_date, expiry_date, status, employee_id")
         .order("expiry_date", { ascending: true })
         .limit(50);
 
@@ -38,13 +38,9 @@ export function useCertificationsData() {
           else if (expiryDate < thirtyDays) status = "expiring";
         }
 
-        const crewName = c.crew_member
-          ? `${(c.crew_member as any).first_name || (c.crew_member as any).name || ""}`.trim()
-          : "Tripulante";
-
         return {
           id: c.id,
-          name: crewName,
+          name: c.employee_id || "Tripulante",
           cert: c.certificate_type || c.certificate_number || "Certificado",
           issue: c.issue_date
             ? new Date(c.issue_date).toLocaleDateString("pt-BR")
