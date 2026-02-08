@@ -91,15 +91,14 @@ export async function handleIncidentReport(
 
   // Persist to Supabase
   try {
-    await (supabase as any).from("incident_reports").insert({
-      id: response.id,
-      timestamp: response.timestamp,
-      module: response.module,
-      type: response.type,
-      severity: response.severity,
-      message: response.message,
-      riskScore: response.riskScore,
-      compliance: response.compliance,
+    await supabase.from("safety_incidents").insert({
+      title: `Incident: ${response.type}`,
+      incident_type: response.type || "operational",
+      severity: response.severity || "medium",
+      status: "open",
+      incident_date: response.timestamp,
+      description: response.message,
+      immediate_actions: JSON.stringify({ riskScore: response.riskScore, compliance: response.compliance }),
     });
   } catch (error) {
     logger.error("Failed to save incident to Supabase", error as Error, { 

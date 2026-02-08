@@ -17,9 +17,8 @@ import { logger } from "@/lib/logger";
 interface Document {
   id: string;
   title: string;
-  content: string;
+  content: string | null;
   created_at: string;
-  generated_by?: string;
 }
 
 export default function DocumentListPage() {
@@ -40,9 +39,9 @@ export default function DocumentListPage() {
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("ai_generated_documents")
-        .select("id, title, content, created_at, generated_by")
+        .select("id, title, content, created_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -70,7 +69,7 @@ export default function DocumentListPage() {
     const filtered = documents.filter(
       (doc) =>
         doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.content.toLowerCase().includes(searchTerm.toLowerCase())
+        (doc.content || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredDocuments(filtered);
   };
@@ -150,7 +149,7 @@ export default function DocumentListPage() {
                         <h3 className="text-lg font-semibold">{doc.title}</h3>
                       </div>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {doc.content.substring(0, 200)}...
+                        {(doc.content || "").substring(0, 200)}...
                       </p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
@@ -162,7 +161,7 @@ export default function DocumentListPage() {
                           </span>
                         </div>
                         <Badge variant="secondary" className="text-xs">
-                          {doc.content.length} caracteres
+                          {(doc.content || "").length} caracteres
                         </Badge>
                       </div>
                     </div>

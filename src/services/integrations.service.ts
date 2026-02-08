@@ -103,14 +103,16 @@ export class IntegrationsService {
     eventType: string,
     payload: Record<string, unknown>
   ): Promise<string> {
-    const { data, error } = await (supabase as any).rpc("dispatch_webhook_event", {
-      p_integration_id: integrationId,
-      p_event_type: eventType,
-      p_payload: payload,
+    const { data, error } = await supabase.functions.invoke("dispatch-webhook", {
+      body: {
+        integration_id: integrationId,
+        event_type: eventType,
+        payload,
+      },
     });
 
     if (error) throw error;
-    return data as any;
+    return data?.id || "";
   }
 
   // OAuth Connections

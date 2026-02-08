@@ -5,52 +5,69 @@ import { Button } from "@/components/ui/button";
 import { Calendar, AlertTriangle, CheckCircle, Clock, Plus, Upload } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { SimulationExercise, SimulationStats } from "@/types/simulation";
+
+interface SimulationExercise {
+  id: string;
+  title: string;
+  exercise_type: string;
+  description: string | null;
+  status: string | null;
+  frequency_days: number | null;
+  last_executed: string | null;
+  next_due: string | null;
+  participants: unknown;
+  scenario: string | null;
+}
 
 export default function SimulationsPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  // Fetch simulation statistics
-  const { data: stats } = useQuery<SimulationStats>({
-    queryKey: ["simulation-stats"],
-    queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .rpc("get_simulation_stats");
-      
-      if (error) throw error;
-      return data as SimulationStats;
-    },
-  });
-
   // Fetch simulation exercises
-  const { data: simulations = [], isLoading } = useQuery<SimulationExercise[]>({
+  const { data: simulations = [], isLoading } = useQuery({
     queryKey: ["simulations", selectedType],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from("simulation_exercises")
         .select("*")
         .order("next_due", { ascending: true });
 
       if (selectedType) {
-        query = query.eq("type", selectedType);
+        query = query.eq("exercise_type", selectedType);
       }
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as SimulationExercise[];
+      return (data || []) as SimulationExercise[];
     },
   });
 
+  // Compute stats from data
+  const stats = {
+    total: simulations.length,
+    completed: simulations.filter(s => s.status === "completed").length,
+    overdue: simulations.filter(s => s.status === "overdue").length,
+    upcoming: simulations.filter(s => {
+      if (!s.next_due) return false;
+      const dueDate = new Date(s.next_due);
+      const thirtyDays = new Date();
+      thirtyDays.setDate(thirtyDays.getDate() + 30);
+      return dueDate <= thirtyDays && s.status !== "completed";
+    }).length,
+    completion_rate: simulations.length > 0 
+      ? (simulations.filter(s => s.status === "completed").length / simulations.length) * 100 
+      : 0,
+  };
+
   const simulationTypes = ["DP", "Blackout", "Abandono", "Incêndio", "Man Overboard", "Spill"];
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
     const variants: Record<string, string> = {
       completed: "bg-green-100 text-green-800",
       overdue: "bg-red-100 text-red-800",
       scheduled: "bg-blue-100 text-blue-800",
       cancelled: "bg-gray-100 text-gray-800",
     };
-    return variants[status] || variants.scheduled;
+    return variants[status || "scheduled"] || variants.scheduled;
   };
 
   return (
@@ -76,7 +93,7 @@ export default function SimulationsPage() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.total || 0}</div>
+            <div className="text-2xl font-bold">{stats.total}</div>
             <p className="text-xs text-muted-foreground">simulações cadastradas</p>
           </CardContent>
         </Card>
@@ -87,9 +104,9 @@ export default function SimulationsPage() {
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats?.completed || 0}</div>
+            <div className="text-2xl font-bold text-green-600">{stats.completed}</div>
             <p className="text-xs text-muted-foreground">
-              {stats?.completion_rate?.toFixed(1) || 0}% de taxa
+              {stats.completion_rate.toFixed(1)}% de taxa
             </p>
           </CardContent>
         </Card>
@@ -100,7 +117,7 @@ export default function SimulationsPage() {
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats?.overdue || 0}</div>
+            <div className="text-2xl font-bold text-red-600">{stats.overdue}</div>
             <p className="text-xs text-muted-foreground">requerem atenção</p>
           </CardContent>
         </Card>
@@ -111,7 +128,7 @@ export default function SimulationsPage() {
             <Clock className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats?.upcoming || 0}</div>
+            <div className="text-2xl font-bold text-blue-600">{stats.upcoming}</div>
             <p className="text-xs text-muted-foreground">nos próximos 30 dias</p>
           </CardContent>
         </Card>
@@ -170,18 +187,21 @@ export default function SimulationsPage() {
                   <div className="flex justify-between items-start">
                     <div className="space-y-2 flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold">{simulation.type}</h3>
+                        <h3 className="font-semibold">{simulation.title}</h3>
                         <Badge className={getStatusBadge(simulation.status)}>
-                          {simulation.status}
+                          {simulation.status || "scheduled"}
                         </Badge>
+                        <Badge variant="outline">{simulation.exercise_type}</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {simulation.normative_reference}
-                      </p>
+                      {simulation.description && (
+                        <p className="text-sm text-muted-foreground">
+                          {simulation.description}
+                        </p>
+                      )}
                       <div className="flex gap-4 text-sm">
-                        {simulation.last_simulation && (
+                        {simulation.last_executed && (
                           <span>
-                            Última: {new Date(simulation.last_simulation).toLocaleDateString("pt-BR")}
+                            Última: {new Date(simulation.last_executed).toLocaleDateString("pt-BR")}
                           </span>
                         )}
                         {simulation.next_due && (
@@ -189,13 +209,10 @@ export default function SimulationsPage() {
                             Próxima: {new Date(simulation.next_due).toLocaleDateString("pt-BR")}
                           </span>
                         )}
-                        <span>Frequência: {simulation.frequency_days} dias</span>
+                        {simulation.frequency_days && (
+                          <span>Frequência: {simulation.frequency_days} dias</span>
+                        )}
                       </div>
-                      {simulation.crew_participants?.length > 0 && (
-                        <p className="text-sm">
-                          Participantes: {simulation.crew_participants.length} tripulantes
-                        </p>
-                      )}
                     </div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">
@@ -207,9 +224,9 @@ export default function SimulationsPage() {
                       </Button>
                     </div>
                   </div>
-                  {simulation.notes && (
+                  {simulation.scenario && (
                     <p className="mt-3 text-sm border-t pt-3 text-muted-foreground">
-                      {simulation.notes}
+                      {simulation.scenario}
                     </p>
                   )}
                 </div>

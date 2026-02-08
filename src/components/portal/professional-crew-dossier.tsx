@@ -276,9 +276,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
     if (!selectedCrewId) return;
 
     try {
-      const { error } = await (supabase as any).rpc("generate_crew_ai_recommendations", {
-        crew_uuid: selectedCrewId
-      } as any);
+      const { error } = await supabase.functions.invoke("generate-crew-recommendations", {
+        body: { crew_id: selectedCrewId }
+      });
 
       if (error) throw error;
 
