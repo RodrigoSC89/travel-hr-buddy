@@ -57,17 +57,40 @@ const AITraining: React.FC = () => {
   const [newContext, setNewContext] = useState('');
   const queryClient = useQueryClient();
 
+  // Get user's organization via membership (must be declared before queries that use it)
+  const { data: orgId } = useQuery({
+    queryKey: ['user-org-id'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      
+      const { data } = await supabase
+        .from('organization_members')
+        .select('organization_id')
+        .eq('user_id', user.id)
+        .limit(1)
+        .maybeSingle();
+      return data?.organization_id || null;
+    },
+    staleTime: 300000,
+  });
+
   // Fetch all training sessions (admin/manager view)
   const { data: sessions = [], isLoading } = useQuery({
-    queryKey: ['ai-training-sessions'],
+    queryKey: ['ai-training-sessions', orgId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('ai_training_sessions')
         .select('id, topic, session_type, status, final_score, duration_minutes, difficulty_level, completed_at, created_at, crew_member_id, content, ai_feedback')
         .order('created_at', { ascending: false });
+      
+      if (orgId) {
+        query = query.eq('organization_id', orgId);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
 
-      // Fetch crew member names for sessions that have crew_member_id
       const crewIds = [...new Set((data || []).map(s => s.crew_member_id).filter((id): id is string => id != null))];
       let crewMap: Record<string, { full_name: string; rank: string }> = {};
       
@@ -86,6 +109,7 @@ const AITraining: React.FC = () => {
         crew_member: s.crew_member_id ? crewMap[s.crew_member_id] || null : null,
       })) as TrainingSession[];
     },
+    enabled: !!orgId,
     staleTime: 15000,
   });
 
@@ -105,26 +129,14 @@ const AITraining: React.FC = () => {
 
   const [selectedCrewId, setSelectedCrewId] = useState('');
 
-  // Get user's organization
-  const { data: orgId } = useQuery({
-    queryKey: ['user-org-id'],
-    queryFn: async () => {
-      // Use first available organization
-      const { data } = await supabase
-        .from('organizations')
-        .select('id')
-        .limit(1)
-        .maybeSingle();
-      return data?.id || null;
-    },
-    staleTime: 300000,
-  });
-
   // Create training session
   const createSession = useMutation({
     mutationFn: async () => {
       if (!newTopic.trim() || !newModule) {
         throw new Error('Preencha o tópico e módulo');
+      }
+      if (!orgId) {
+        throw new Error('Organização não encontrada. Verifique se seu usuário está vinculado a uma organização.');
       }
 
       // Try to generate AI content via edge function
@@ -148,7 +160,7 @@ const AITraining: React.FC = () => {
         .insert({
           topic: newTopic,
           session_type: newModule,
-          organization_id: orgId || '00000000-0000-0000-0000-000000000000',
+          organization_id: orgId,
           crew_member_id: selectedCrewId || null,
           difficulty_level: newDifficulty,
           status: 'in_progress',
