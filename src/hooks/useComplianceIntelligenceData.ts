@@ -107,8 +107,7 @@ export function useComplianceIntelligenceData() {
     queryFn: async (): Promise<AuditAgentData[]> => {
       const { data, error } = await supabase
         .from("agent_registry")
-        .select("id, name, agent_type, status, capabilities, accuracy_score")
-        .eq("agent_type", "audit")
+        .select("id, agent_id, name, status, capabilities, metadata")
         .order("name");
 
       if (error) throw error;
@@ -116,10 +115,10 @@ export function useComplianceIntelligenceData() {
 
       return data.map((a: any) => ({
         id: a.id,
-        name: a.name || "AI Agent",
+        name: a.name || a.agent_id || "AI Agent",
         status: a.status || "standby",
         capabilities: Array.isArray(a.capabilities) ? a.capabilities : [],
-        accuracy: a.accuracy_score || 90,
+        accuracy: (a.metadata as any)?.accuracy_score || 90,
       }));
     },
   });
@@ -153,8 +152,8 @@ export function useComplianceIntelligenceData() {
     queryFn: async (): Promise<NonConformityData[]> => {
       const { data, error } = await supabase
         .from("non_conformities")
-        .select("id, description, category, severity, status, raised_date, closed_date, vessel_id")
-        .order("raised_date", { ascending: false })
+        .select("id, title, description, category, severity, status, created_at, closed_date, vessel_id")
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
@@ -162,11 +161,11 @@ export function useComplianceIntelligenceData() {
 
       return data.map((nc: any) => ({
         id: nc.id,
-        description: nc.description || "Não conformidade",
+        description: nc.title || nc.description || "Não conformidade",
         category: nc.category || "ISM",
         severity: nc.severity || "minor",
         status: nc.status || "open",
-        raisedDate: nc.raised_date || "",
+        raisedDate: nc.created_at || "",
         closedDate: nc.closed_date || null,
         vessel: nc.vessel_id || "N/A",
       }));
