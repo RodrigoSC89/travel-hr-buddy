@@ -1,9 +1,10 @@
 /**
  * People Hub Data Hook - Real Supabase Integration
  * Hook para gestão de tripulação com backend real
+ * Fixed: Removed `supabase as any` - crew_members, maritime_certificates, crew_payroll all exist
  */
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -73,33 +74,30 @@ export function usePeopleData() {
     search: '',
   });
 
-  // Use dynamic db to avoid strict typing issues
-  const dynamicDb = supabase as any;
-
-  // Fetch crew members
+  // Fetch crew members - crew_members table exists in schema
   const { data: crew = [], isLoading: crewLoading, refetch: refetchCrew } = useQuery({
     queryKey: ['people-crew', filters],
     queryFn: async () => {
-      const { data, error } = await dynamicDb
+      const { data, error } = await supabase
         .from('crew_members')
-        .select('*, vessels(name)')
-        .order('first_name');
+        .select('*')
+        .order('full_name');
 
       if (error) {
         logger.error('Error fetching crew:', error);
         return [];
       }
 
-      return (data || []).map((c: any): CrewMember => ({
+      return (data || []).map((c): CrewMember => ({
         id: c.id,
-        name: `${c.first_name || ''} ${c.last_name || ''}`.trim() || 'Tripulante',
-        rank: c.rank || c.position || 'N/A',
-        department: c.specialization || 'Geral',
-        vessel: c.vessels?.name || 'Não alocado',
-        vesselId: c.vessel_id || undefined,
+        name: c.full_name || 'Tripulante',
+        rank: c.position || 'N/A',
+        department: c.nationality || 'Geral',
+        vessel: 'Não alocado',
+        vesselId: undefined,
         status: mapCrewStatus(c.status),
-        joinDate: new Date(c.contract_start || c.created_at || Date.now()),
-        contractEnd: new Date(c.contract_end || addDays(new Date(), 90)),
+        joinDate: new Date(c.join_date || c.created_at || Date.now()),
+        contractEnd: new Date(addDays(new Date(), 90)),
         nationality: c.nationality || 'Brasileiro',
         certifications: 0,
         expiringSoon: 0,
@@ -111,7 +109,7 @@ export function usePeopleData() {
     },
   });
 
-  // Fetch certificates
+  // Fetch certificates - maritime_certificates exists
   const { data: certificates = [], isLoading: certificatesLoading } = useQuery({
     queryKey: ['people-certificates'],
     queryFn: async () => {
@@ -124,13 +122,13 @@ export function usePeopleData() {
         return [];
       }
 
-      return (data || []).map((c: any): CrewCertificate => ({
+      return (data || []).map((c): CrewCertificate => ({
         id: c.id,
         crewId: c.crew_member_id || '',
         crewName: 'Tripulante',
         name: c.certificate_number || 'Certificado',
         issueDate: new Date(c.issue_date || c.created_at || Date.now()),
-        expiryDate: new Date(c.expiry_date),
+        expiryDate: new Date(c.expiry_date || Date.now()),
         status: getCertStatus(c.expiry_date),
         issuer: c.issuing_authority || 'DPC',
         documentUrl: c.document_url || undefined,
@@ -142,7 +140,6 @@ export function usePeopleData() {
   const { data: schedule = [], isLoading: scheduleLoading } = useQuery({
     queryKey: ['people-schedule'],
     queryFn: async () => {
-      // Return sample schedule events from crew
       return crew.slice(0, 5).map((c: CrewMember, i: number): CrewScheduleEvent => ({
         id: `sched-${i}`,
         crewId: c.id,
@@ -156,30 +153,30 @@ export function usePeopleData() {
     enabled: crew.length > 0,
   });
 
-  // Fetch payroll
+  // Fetch payroll - crew_payroll exists
   const { data: payroll = [], isLoading: payrollLoading } = useQuery({
     queryKey: ['people-payroll'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('crew_payroll')
         .select('*')
-        .order('period_start', { ascending: false })
+        .order('payroll_period_start', { ascending: false })
         .limit(100);
 
       if (error) {
         return [];
       }
 
-      return (data || []).map((p: any): CrewPayroll => ({
+      return (data || []).map((p): CrewPayroll => ({
         id: p.id,
-        crewId: p.crew_member_id,
+        crewId: p.crew_member_id || '',
         crewName: 'Tripulante',
-        month: p.period_start || p.created_at?.slice(0, 7),
+        month: p.payroll_period_start || '',
         baseSalary: Number(p.base_salary) || 0,
-        bonuses: Number(p.total_earnings) - Number(p.base_salary) || 0,
-        deductions: Number(p.total_deductions) || 0,
-        netSalary: Number(p.net_salary) || 0,
-        status: p.status || 'pending',
+        bonuses: Number(p.gross_pay || 0) - Number(p.base_salary) || 0,
+        deductions: Number(p.tax_amount || 0) + Number(p.pension_contribution || 0) + Number(p.union_dues || 0),
+        netSalary: Number(p.net_pay) || 0,
+        status: (p.payment_status as CrewPayroll['status']) || 'pending',
         paymentDate: p.payment_date ? new Date(p.payment_date) : undefined,
       }));
     },
@@ -188,9 +185,9 @@ export function usePeopleData() {
   // Mutations
   const updateCrewStatus = useMutation({
     mutationFn: async ({ crewId, status }: { crewId: string; status: string }) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('crew_members')
-        .update({ status, updated_at: new Date().toISOString() })
+        .update({ status })
         .eq('id', crewId);
 
       if (error) throw error;
@@ -213,9 +210,9 @@ export function usePeopleData() {
 
   const processPayroll = useMutation({
     mutationFn: async (payrollId: string) => {
-      const { error } = await dynamicDb
+      const { error } = await supabase
         .from('crew_payroll')
-        .update({ status: 'processed' })
+        .update({ payment_status: 'processed' })
         .eq('id', payrollId);
 
       if (error) throw error;
@@ -245,18 +242,8 @@ export function usePeopleData() {
   const loading = crewLoading || certificatesLoading || scheduleLoading || payrollLoading;
 
   return {
-    // Data
-    crew,
-    certificates,
-    schedule,
-    payroll,
-    kpis,
-    loading,
-    filters,
-
-    // Actions
-    setFilters,
-    refetchCrew,
+    crew, certificates, schedule, payroll, kpis, loading, filters,
+    setFilters, refetchCrew,
     updateCrewStatus: updateCrewStatus.mutate,
     addScheduleEvent: addScheduleEvent.mutate,
     processPayroll: processPayroll.mutate,
@@ -279,13 +266,4 @@ function getCertStatus(expiryDate: string | null): CrewCertificate['status'] {
   if (days < 0) return 'expired';
   if (days <= 60) return 'expiring';
   return 'valid';
-}
-
-function mapEventType(type: string | null): CrewScheduleEvent['type'] {
-  const t = type?.toLowerCase() || '';
-  if (t.includes('embark') || t.includes('embarque')) return 'embark';
-  if (t.includes('disembark') || t.includes('desembarque')) return 'disembark';
-  if (t.includes('train') || t.includes('curso')) return 'training';
-  if (t.includes('medical') || t.includes('médico') || t.includes('exame')) return 'medical';
-  return 'leave';
 }

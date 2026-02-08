@@ -62,7 +62,7 @@ export default function VaultAIComplete() {
 
   const loadDocuments = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("vault_documents")
         .select("*")
         .eq("status", "active")
@@ -70,7 +70,7 @@ export default function VaultAIComplete() {
         .limit(100);
 
       if (error) throw error;
-      setDocuments(data || []);
+      setDocuments((data || []) as unknown as VaultDocument[]);
     } catch (error) {
       logger.error("Error loading documents:", error);
     }
@@ -78,14 +78,14 @@ export default function VaultAIComplete() {
 
   const loadSearchLogs = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("vault_search_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      setSearchLogs(data || []);
+      setSearchLogs((data || []) as unknown as SearchLog[]);
     } catch (error) {
       logger.error("Error loading search logs:", error);
     }
@@ -105,25 +105,20 @@ export default function VaultAIComplete() {
     const startTime = Date.now();
 
     try {
-      // First, generate embedding for the query (in real scenario, use OpenAI API)
-      // For this demo, we'll use a mock embedding and perform text-based search
-      
-      // Simulate vector search with text matching and scoring
       const results = performMockVectorSearch(searchQuery, documents);
-      
       const searchDuration = Date.now() - startTime;
 
       setSearchResults(results);
 
       // Log the search
-      await (supabase as any)
+      await supabase
         .from("vault_search_logs")
         .insert({
           query: searchQuery,
           results_count: results.length,
           search_duration_ms: searchDuration,
-          top_result_id: results[0]?.id,
-          top_similarity_score: results[0]?.similarity_score
+          top_result_id: results[0]?.id || null,
+          top_similarity_score: results[0]?.similarity_score || null,
         });
 
       toast({
@@ -152,22 +147,18 @@ export default function VaultAIComplete() {
       .map(doc => {
         const contentLower = (doc.title + " " + doc.content).toLowerCase();
         
-        // Calculate similarity score based on term matching
         let score = 0;
         queryTerms.forEach(term => {
           const occurrences = (contentLower.match(new RegExp(term, "g")) || []).length;
           score += occurrences * 0.1;
         });
 
-        // Boost score for title matches
         if (doc.title.toLowerCase().includes(queryLower)) {
           score += 0.5;
         }
 
-        // Normalize score to 0-1 range
         score = Math.min(score, 1);
 
-        // Find and highlight excerpt
         const excerpt = extractHighlightedExcerpt(doc.content, queryTerms);
 
         return {
@@ -183,7 +174,6 @@ export default function VaultAIComplete() {
       .filter(result => result.similarity_score >= similarityThreshold)
       .sort((a, b) => b.similarity_score - a.similarity_score);
 
-    // Apply filters
     let filteredResults = results;
     
     if (filterType !== "all") {
@@ -194,7 +184,7 @@ export default function VaultAIComplete() {
       filteredResults = filteredResults.filter(r => r.category === filterCategory);
     }
 
-    return filteredResults.slice(0, 20); // Return top 20 results
+    return filteredResults.slice(0, 20);
   };
 
   const extractHighlightedExcerpt = (content: string, queryTerms: string[]): string => {
@@ -202,7 +192,6 @@ export default function VaultAIComplete() {
     let bestExcerpt = "";
     let bestScore = 0;
 
-    // Find the excerpt with most query term matches
     const words = content.split(" ");
     for (let i = 0; i < words.length - 20; i++) {
       const excerpt = words.slice(i, i + 30).join(" ");
@@ -219,7 +208,6 @@ export default function VaultAIComplete() {
       }
     }
 
-    // Highlight query terms
     let highlighted = bestExcerpt || content.substring(0, maxLength);
     queryTerms.forEach(term => {
       const regex = new RegExp(`(${term})`, "gi");
@@ -254,7 +242,6 @@ export default function VaultAIComplete() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -270,7 +257,6 @@ export default function VaultAIComplete() {
         </Badge>
       </div>
 
-      {/* Search Bar */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -295,7 +281,6 @@ export default function VaultAIComplete() {
             </Button>
           </div>
 
-          {/* Filters */}
           <div className="flex gap-4 items-center">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4" />
@@ -341,7 +326,6 @@ export default function VaultAIComplete() {
         </CardContent>
       </Card>
 
-      {/* Results */}
       <Tabs defaultValue="results">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="results">
@@ -468,7 +452,6 @@ export default function VaultAIComplete() {
                             variant="ghost"
                             onClick={() => {
                               setSearchQuery(log.query);
-                              performVectorSearch();
                             }}
                           >
                             Repetir
@@ -483,48 +466,6 @@ export default function VaultAIComplete() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Total de Documentos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{documents.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Buscas Realizadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{searchLogs.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Última Busca</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm">
-              {searchLogs[0] ? formatDistanceToNow(new Date(searchLogs[0].created_at), { addSuffix: true, locale: ptBR }) : "N/A"}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Tempo Médio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {searchLogs.length > 0 
-                ? Math.round(searchLogs.reduce((sum, log) => sum + log.search_duration_ms, 0) / searchLogs.length) 
-                : 0}ms
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
