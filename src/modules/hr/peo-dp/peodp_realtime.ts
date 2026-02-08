@@ -353,6 +353,6 @@ export class PEORealTime {
    * Generate unique session ID
    */
   private generateSessionId(): string {
-    return `PEODP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `PEODP-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 }

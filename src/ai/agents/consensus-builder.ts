@@ -128,7 +128,7 @@ class StrategicConsensusBuilder {
       await this.initialize();
     }
 
-    const consensusId = `consensus_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const consensusId = `consensus_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
 
     logger.info("[ConsensusBuilder] Building consensus", {
       consensusId,
@@ -615,7 +615,7 @@ class StrategicConsensusBuilder {
     const opposers = votes.filter(v => v.vote === "oppose" || v.vote === "strongly_oppose");
 
     if (supporters.length > 0 && opposers.length > 0) {
-      const disagreementId = `disagreement_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const disagreementId = `disagreement_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
       
       const positions: Record<string, string> = {};
       for (const vote of [...supporters, ...opposers]) {

@@ -97,7 +97,7 @@ class DistributedDecisionCore {
   }
 
   async makeDecision(context: DecisionContext): Promise<Decision> {
-    const decisionId = `dec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const decisionId = `dec_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     
     const applicableRules = await this.findApplicableRules(context);
     

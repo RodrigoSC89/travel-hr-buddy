@@ -92,7 +92,7 @@ class AISessionMemoryService {
     }
 
     // Create new session
-    const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const sessionId = `session-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
     const session: SessionContext = {
       id: sessionId,
       userId,
@@ -125,7 +125,7 @@ class AISessionMemoryService {
     }
 
     const entry: MemoryEntry = {
-      id: `mem-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `mem-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       sessionId: this.currentSessionId,
       type,
       content,

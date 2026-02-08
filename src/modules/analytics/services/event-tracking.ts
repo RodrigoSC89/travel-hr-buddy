@@ -24,7 +24,7 @@ class EventTrackingService {
   }
 
   private generateSessionId(): string {
-    return `session-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    return `session-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private async initializeOrganization() {

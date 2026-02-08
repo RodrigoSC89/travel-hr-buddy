@@ -99,7 +99,7 @@ export function DevOpsPanel() {
 
   const addLog = (level: LogEntry['level'], module: string, message: string) => {
     setLogs(prev => [{
-      id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+      id: `log-${Date.now()}-${crypto.randomUUID().slice(0, 5)}`,
       timestamp: new Date(),
       level,
       module,

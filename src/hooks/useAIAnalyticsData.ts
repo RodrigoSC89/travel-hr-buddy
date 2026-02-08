@@ -4,6 +4,7 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import { startOfDay, subDays, format } from "date-fns";
 
@@ -51,7 +52,7 @@ export function useAIAnalyticsData(period: string = "7d") {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error fetching AI analytics:", error);
+        logger.error("Error fetching AI analytics:", error);
         throw error;
       }
 

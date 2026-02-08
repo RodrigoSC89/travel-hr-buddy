@@ -68,7 +68,7 @@ export class VoiceService {
   }
 
   static async startSession(request: StartSessionRequest): Promise<VoiceSession> {
-    const sessionId = `voice_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const sessionId = `voice_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     this.currentSessionId = sessionId;
 
     // Store session in memory (voice_sessions table doesn't exist)

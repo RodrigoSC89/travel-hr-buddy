@@ -41,7 +41,7 @@ export const offlineDB = {
   ): Promise<T> {
     const enriched = {
       ...data,
-      id: data.id || `${store}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      id: data.id || `${store}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       synced: false,
       lastModified: Date.now(),
     };

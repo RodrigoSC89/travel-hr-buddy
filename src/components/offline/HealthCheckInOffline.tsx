@@ -55,7 +55,7 @@ export function HealthCheckInOffline() {
     mutationFn: async (data) => {
       const checkInData = {
         ...data,
-        id: `checkin-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        id: `checkin-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         created_at: new Date().toISOString(),
       };
       

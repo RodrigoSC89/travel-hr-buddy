@@ -117,7 +117,7 @@ class ContextMesh {
    * Subscribe to context updates
    */
   subscribe(subscription: Omit<ContextSubscription, "id">): string {
-    const id = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `sub_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const fullSubscription: ContextSubscription = { ...subscription, id };
     
     this.subscribers.set(id, fullSubscription);

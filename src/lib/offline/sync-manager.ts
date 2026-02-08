@@ -68,7 +68,7 @@ class OfflineSyncManager {
 
   public queueOperation(operation: "insert" | "update" | "delete", table: string, data: any): string {
     const item: SyncQueueItem = {
-      id: `sync-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `sync-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       operation,
       table,
       data,

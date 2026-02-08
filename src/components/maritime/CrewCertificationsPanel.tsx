@@ -78,7 +78,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
         expiryDate: "2027-01-15",
         status: "valid" as const,
         issuer: "ANTAQ",
-        number: `STCW-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+        number: `STCW-${crypto.randomUUID().slice(0, 9).toUpperCase()}`
       },
       {
         id: `${crew.id}-2`,
@@ -89,7 +89,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
         expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
         status: "expiring" as const,
         issuer: "Maritime Academy",
-        number: `BST-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+        number: `BST-${crypto.randomUUID().slice(0, 9).toUpperCase()}`
       }
     ])
   );

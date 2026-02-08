@@ -345,7 +345,7 @@ class MissionUploadSub {
    */
   private addEvent(partial: Omit<MissionEvent, "id" | "missionId" | "timestamp">): void {
     const event: MissionEvent = {
-      id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `event-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       missionId: this.currentMission?.id || "unknown",
       timestamp: new Date().toISOString(),
       ...partial,

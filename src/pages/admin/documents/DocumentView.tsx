@@ -167,7 +167,7 @@ export default function DocumentViewPage() {
       const userEmail = await fetchUserEmail(user.id);
 
       const comment: DocumentComment = {
-        id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `comment-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         document_id: id,
         user_id: user.id,
         content: newComment.trim(),

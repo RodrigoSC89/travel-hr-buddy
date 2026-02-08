@@ -78,7 +78,7 @@ class DataIntegrity {
    */
   createCheck(table: string, operation: string, data: any): IntegrityCheck {
     const check: IntegrityCheck = {
-      id: `check-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      id: `check-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       table,
       operation,
       checksum: this.config.enableChecksums ? this.generateChecksum(data) : '',

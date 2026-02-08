@@ -165,7 +165,7 @@ export class TacticalResponseEngine {
    */
   private async executeRule(rule: TacticalRule, event: TacticalEvent): Promise<ResponseExecution> {
     const execution: ResponseExecution = {
-      id: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `exec-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       ruleId: rule.id,
       eventId: event.id,
       timestamp: Date.now(),

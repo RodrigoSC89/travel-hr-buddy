@@ -182,7 +182,7 @@ class ConsciousCore {
    * Record a system observation
    */
   async recordObservation(observation: SystemObservation): Promise<void> {
-    const obsId = `obs_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const obsId = `obs_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
     const fullObservation = { ...observation, id: obsId };
     
     this.observations.set(obsId, fullObservation);

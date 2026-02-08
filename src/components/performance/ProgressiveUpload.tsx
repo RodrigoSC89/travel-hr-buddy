@@ -56,7 +56,7 @@ export function ProgressiveUpload({
     const newFiles: UploadFile[] = Array.from(fileList)
       .filter(file => file.size <= maxSize * 1024 * 1024)
       .map(file => ({
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
         file,
         progress: 0,
         status: 'pending' as const,

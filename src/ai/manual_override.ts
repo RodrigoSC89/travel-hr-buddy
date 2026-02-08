@@ -204,7 +204,7 @@ class ManualOverrideSystem {
    * Generate unique override ID
    */
   private generateOverrideId(): string {
-    return `override-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `override-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   /**

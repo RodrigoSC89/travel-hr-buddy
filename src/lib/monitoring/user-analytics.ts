@@ -259,7 +259,7 @@ class UserAnalytics {
    * Generate unique session ID
    */
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    return `session_${Date.now()}_${crypto.randomUUID().slice(0, 9)}`;
   }
 
   /**

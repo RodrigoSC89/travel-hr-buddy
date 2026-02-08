@@ -252,7 +252,7 @@ export class IntegrationsService {
     redirectUri: string,
     scope: string[]
   ): string {
-    const state = Math.random().toString(36).substring(7);
+    const state = crypto.randomUUID().slice(0, 12);
     const scopeStr = scope.join(" ");
 
     const urls: Record<IntegrationProvider, string> = {
@@ -293,7 +293,7 @@ export class IntegrationsService {
 
   static async initiateNotionOAuth(redirectUri: string): Promise<string> {
     const clientId = import.meta.env.VITE_NOTION_CLIENT_ID || "";
-    const state = Math.random().toString(36).substring(7);
+    const state = crypto.randomUUID().slice(0, 12);
     
     return `https://api.notion.com/v1/oauth/authorize?client_id=${clientId}&response_type=code&owner=user&redirect_uri=${redirectUri}&state=${state}`;
   }

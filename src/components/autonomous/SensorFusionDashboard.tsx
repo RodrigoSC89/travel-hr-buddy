@@ -76,7 +76,7 @@ export function SensorFusionDashboard() {
     const sensorType = sensorTypes[Math.floor(Math.random() * sensorTypes.length)];
     
     return {
-      sensorId: `${sensorType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      sensorId: `${sensorType}-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`,
       sensorType,
       source: `${sensorType}-primary`,
       value: 50 + Math.random() * 50,

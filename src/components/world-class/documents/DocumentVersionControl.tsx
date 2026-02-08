@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -95,7 +96,7 @@ export function DocumentVersionControl() {
 
       if (storageError) {
         // Storage bucket might not exist yet — log and continue with DB record only
-        console.warn('Storage upload skipped:', storageError.message);
+        logger.warn('Storage upload skipped:', storageError.message);
       }
       setUploadProgress(60);
 

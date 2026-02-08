@@ -381,7 +381,7 @@ class EvoAIConnector {
   private async saveEvolutionReport(report: EvolutionReport): Promise<void> {
     try {
       // Correlate records with a cycle id
-      const cycleId = (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2));
+      const cycleId = crypto.randomUUID();
 
       const db = supabase.from as Function;
 
@@ -451,7 +451,7 @@ class EvoAIConnector {
       await (supabase.from as Function)("fine_tune_requests")
         .insert({
           module_name: "evo_ai",
-          request_id: (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)),
+          request_id: crypto.randomUUID(),
           trigger_reason: "pattern_deviation_exceeded",
           deviation_percent: await this.calculatePatternDeviation(report.insights),
           training_data: {

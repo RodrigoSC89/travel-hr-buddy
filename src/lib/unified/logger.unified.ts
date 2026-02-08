@@ -86,7 +86,7 @@ class UnifiedLogger {
   }
 
   private generateSessionId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+    return `${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private shouldLog(level: LogLevel): boolean {

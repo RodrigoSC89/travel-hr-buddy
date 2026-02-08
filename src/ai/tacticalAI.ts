@@ -274,7 +274,7 @@ class TacticalAI {
   }
 
   private generateDecisionId(): string {
-    return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `decision-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   private async saveDecision(decision: TacticalDecision): Promise<void> {

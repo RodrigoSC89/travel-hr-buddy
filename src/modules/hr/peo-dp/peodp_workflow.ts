@@ -184,7 +184,7 @@ export class PEOWorkflow {
    * Generate unique action ID
    */
   private generateActionId(): string {
-    return `ACTION-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `ACTION-${Date.now()}-${crypto.randomUUID().slice(0, 9)}`;
   }
 
   /**
