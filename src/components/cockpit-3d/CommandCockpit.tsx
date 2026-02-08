@@ -61,14 +61,26 @@ export function CommandCockpit() {
         .limit(20);
 
       if (vessels) {
-        const vesselMarkers: GlobeMarker[] = vessels.map((v, i) => ({
-          id: v.id,
-          label: v.name,
-          lat: Math.random() * 180 - 90,
-          lng: Math.random() * 360 - 180,
-          type: 'vessel' as const,
-          severity: v.status === 'active' ? 'low' : v.status === 'maintenance' ? 'medium' : 'high',
-        }));
+        const vesselMarkers: GlobeMarker[] = vessels.map((v, i) => {
+          // Deterministic positions based on major global ports
+          const ports = [
+            { lat: -23.95, lng: -46.30 }, // Santos
+            { lat: 51.91, lng: 4.48 },    // Rotterdam
+            { lat: 31.23, lng: 121.47 },  // Shanghai
+            { lat: 1.26, lng: 103.84 },   // Singapore
+            { lat: 29.37, lng: 47.97 },   // Kuwait
+          ];
+          const port = ports[i % ports.length];
+          const seed = v.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+          return {
+            id: v.id,
+            label: v.name,
+            lat: port.lat + (seed % 10) * 0.1,
+            lng: port.lng + ((seed * 7) % 10) * 0.1,
+            type: 'vessel' as const,
+            severity: v.status === 'active' ? 'low' : v.status === 'maintenance' ? 'medium' : 'high',
+          };
+        });
         setMarkers(vesselMarkers);
       }
 

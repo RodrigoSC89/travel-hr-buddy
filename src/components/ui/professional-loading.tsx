@@ -160,15 +160,18 @@ export const ChartSkeleton: React.FC = () => (
   <div className="p-6 rounded-lg border border-border">
     <div className="h-5 w-32 bg-muted rounded mb-6" />
     <div className="h-64 flex items-end justify-around gap-2">
-      {[...Array(7)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ height: "20%" }}
-          animate={{ height: ["20%", `${30 + Math.random() * 50}%`, "20%"] }}
-          transition={{ duration: 2, repeat: Infinity, delay: i * 0.15 }}
-          className="w-full bg-gradient-to-t from-primary/20 to-primary/5 rounded-t"
-        />
-      ))}
+      {[...Array(7)].map((_, i) => {
+        const heights = [45, 70, 35, 80, 50, 65, 40];
+        return (
+          <motion.div
+            key={i}
+            initial={{ height: "20%" }}
+            animate={{ height: ["20%", `${heights[i]}%`, "20%"] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.15 }}
+            className="w-full bg-gradient-to-t from-primary/20 to-primary/5 rounded-t"
+          />
+        );
+      })}
     </div>
   </div>
 );

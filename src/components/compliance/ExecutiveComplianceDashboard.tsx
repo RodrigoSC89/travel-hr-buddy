@@ -160,7 +160,8 @@ const useExecutiveKPIs = () => {
         color: string
       ): ModuleKPI => {
         const stats = calculateModuleScore(id);
-        const previousScore = Math.max(40, Math.min(100, stats.score - Math.floor(Math.random() * 8) + 4));
+        const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+        const previousScore = Math.max(40, Math.min(100, stats.score - (seed % 8) + 4));
         const trend: 'up' | 'down' | 'stable' = stats.score > previousScore ? 'up' : stats.score < previousScore ? 'down' : 'stable';
         
         const getStatus = (s: number): ModuleKPI['status'] => {

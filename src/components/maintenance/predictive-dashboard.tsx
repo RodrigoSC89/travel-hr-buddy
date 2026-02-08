@@ -56,17 +56,20 @@ function useEquipmentData() {
       if (error) throw error;
       
       // Transform to equipment format
-      return (maintenance || []).map(task => ({
-        id: task.id,
-        name: task.title || task.component_name || 'Equipamento',
-        type: 'Motor Diesel',
-        vesselName: 'Embarcação',
-        temperature: 70 + Math.random() * 20,
-        vibration: 3 + Math.random() * 4,
-        pressure: 45 + Math.random() * 15,
-        runningHours: Math.floor(Math.random() * 15000),
-        lastMaintenance: task.completed_date || task.created_at
-      } as EquipmentData));
+      return (maintenance || []).map((task, idx) => {
+        const seed = task.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+        return {
+          id: task.id,
+          name: task.title || task.component_name || 'Equipamento',
+          type: 'Motor Diesel',
+          vesselName: 'Embarcação',
+          temperature: 70 + (seed % 20),
+          vibration: 3 + ((seed * 7) % 40) / 10,
+          pressure: 45 + ((seed * 3) % 15),
+          runningHours: 2000 + (seed % 13000),
+          lastMaintenance: task.completed_date || task.created_at
+        } as EquipmentData;
+      });
     },
     staleTime: 5 * 60 * 1000
   });
@@ -82,11 +85,12 @@ function useHistoricalData(equipmentId: string | null) {
       for (let i = 29; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
+        const seed = equipmentId ? equipmentId.split("").reduce((a, c) => a + c.charCodeAt(0), 0) : 42;
         history.push({
           date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }),
-          temperature: 70 + Math.random() * 15 + (i < 10 ? i * 0.3 : 0),
-          vibration: 4 + Math.random() * 2 + (i < 10 ? i * 0.08 : 0),
-          pressure: 45 + Math.random() * 10
+          temperature: 70 + Math.sin(seed + i * 0.5) * 7 + (i < 10 ? i * 0.3 : 0),
+          vibration: 4 + Math.sin(seed + i * 0.8) * 1 + (i < 10 ? i * 0.08 : 0),
+          pressure: 45 + Math.sin(seed + i * 0.3) * 5
         });
       }
       return history;

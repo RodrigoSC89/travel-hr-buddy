@@ -39,13 +39,16 @@ export default function WellnessProgram() {
       
       if (error) throw error;
       
-      return (data || []).map((crew: any) => ({
-        ...crew,
-        wellnessScore: Math.floor(Math.random() * 30) + 70,
-        fatigueLevel: Math.floor(Math.random() * 3),
-        lastSurvey: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-        mood: ["happy", "neutral", "stressed"][Math.floor(Math.random() * 3)]
-      }));
+      return (data || []).map((crew: any, idx: number) => {
+        const seed = crew.id ? crew.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) : idx * 37;
+        return {
+          ...crew,
+          wellnessScore: 70 + (seed % 30),
+          fatigueLevel: seed % 3,
+          lastSurvey: new Date(Date.now() - (seed % 7) * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          mood: ["happy", "neutral", "stressed"][seed % 3]
+        };
+      });
     }
   });
 
@@ -292,13 +295,16 @@ export default function WellnessProgram() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, idx) => (
-                    <div key={day} className="flex items-center gap-3">
-                      <span className="w-24 text-sm text-muted-foreground">{day}</span>
-                      <Progress value={70 + Math.random() * 20} className="flex-1 h-2" />
-                      <span className="text-sm font-medium">{Math.round(70 + Math.random() * 20)}%</span>
-                    </div>
-                  ))}
+                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, idx) => {
+                    const value = [82, 78, 85, 76, 88, 74, 80][idx];
+                    return (
+                      <div key={day} className="flex items-center gap-3">
+                        <span className="w-24 text-sm text-muted-foreground">{day}</span>
+                        <Progress value={value} className="flex-1 h-2" />
+                        <span className="text-sm font-medium">{value}%</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

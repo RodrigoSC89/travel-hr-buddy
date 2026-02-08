@@ -70,13 +70,14 @@ const SystemOverview = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      const elapsed = Date.now() / 1000;
       setSystemMetrics(prev => ({
         ...prev,
         performance: {
           ...prev.performance,
-          score: Math.max(90, Math.min(100, prev.performance.score + Math.random() * 2 - 1)),
-          memory: Math.max(50, Math.min(85, prev.performance.memory + Math.random() * 4 - 2)),
-          cpu: Math.max(20, Math.min(80, prev.performance.cpu + Math.random() * 6 - 3))
+          score: Math.max(90, Math.min(100, prev.performance.score + Math.sin(elapsed / 10) * 0.5)),
+          memory: Math.max(50, Math.min(85, prev.performance.memory + Math.sin(elapsed / 8) * 1)),
+          cpu: Math.max(20, Math.min(80, prev.performance.cpu + Math.sin(elapsed / 6) * 1.5))
         }
       }));
     }, 5000);

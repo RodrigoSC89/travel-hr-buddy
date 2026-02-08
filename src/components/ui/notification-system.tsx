@@ -142,25 +142,8 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     return "Agora";
   };
 
-  // Simular novas notificações
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (Math.random() > 0.8) { // 20% chance a cada 30s
-        const newNotification: Notification = {
-          id: Date.now().toString(),
-          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as any,
-          title: "Nova Notificação",
-          message: "Esta é uma notificação de exemplo em tempo real",
-          timestamp: new Date(),
-          read: false,
-          priority: ["low", "medium", "high"][Math.floor(Math.random() * 3)] as any
-        };
-        setNotifications(prev => [newNotification, ...prev]);
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Removed random notification generation - real notifications come from Supabase
+  // This prevents UI flickering from random state updates
 
   return (
     <div className={cn("relative", className)}>

@@ -113,11 +113,12 @@ export const IntegrationMonitoring: React.FC = () => {
   useOptimizedPolling({
     id: "integration-monitoring-realtime",
     callback: () => {
+      const elapsed = Date.now() / 1000;
       setRealTimeData(prev => ({
-        activeConnections: Math.max(15, prev.activeConnections + Math.floor(Math.random() * 6 - 3)),
-        requestsPerMinute: Math.max(100, prev.requestsPerMinute + Math.floor(Math.random() * 20 - 10)),
-        averageLatency: Math.max(150, prev.averageLatency + Math.floor(Math.random() * 50 - 25)),
-        errorCount: Math.max(0, prev.errorCount + Math.floor(Math.random() * 3 - 1))
+        activeConnections: Math.max(15, prev.activeConnections + Math.round(Math.sin(elapsed / 10) * 2)),
+        requestsPerMinute: Math.max(100, prev.requestsPerMinute + Math.round(Math.sin(elapsed / 8) * 5)),
+        averageLatency: Math.max(150, prev.averageLatency + Math.round(Math.sin(elapsed / 12) * 10)),
+        errorCount: Math.max(0, prev.errorCount + Math.round(Math.sin(elapsed / 20)))
       }));
     },
     interval: 3000,

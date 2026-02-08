@@ -184,8 +184,8 @@ export const EnhancedDocumentScanner: React.FC = () => {
         fileName: typeof imageFile === "string" ? "camera_capture.jpg" : imageFile.name,
         fileType: "image/jpeg",
         imageUrl: typeof imageFile === "string" ? imageFile : URL.createObjectURL(imageFile),
-        extractedText: `Documento digitalizado com sucesso.\n\nEste é um exemplo de texto extraído via OCR do documento capturado. O sistema conseguiu identificar:\n\n- Texto principal do documento\n- Números e códigos\n- Datas e valores\n- Assinaturas e carimbos\n\nA qualidade da extração foi excelente com ${95 + Math.floor(Math.random() * 5)}% de confiança.`,
-        confidence: 95 + Math.floor(Math.random() * 5),
+        extractedText: `Documento digitalizado com sucesso.\n\nEste é um exemplo de texto extraído via OCR do documento capturado. O sistema conseguiu identificar:\n\n- Texto principal do documento\n- Números e códigos\n- Datas e valores\n- Assinaturas e carimbos\n\nA qualidade da extração foi excelente com 97% de confiança.`,
+        confidence: 97,
         processedAt: new Date(),
         analysis: {
           summary: "Documento oficial digitalizado contendo informações importantes",

@@ -190,44 +190,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
 
     setNotifications(initialNotifications);
 
-    // Simular notificações em tempo real
-    const interval = setInterval(() => {
-      if (Math.random() > 0.8) { // 20% chance de nova notificação
-        const newNotification: Notification = {
-          id: Date.now().toString(),
-          title: "Nova Atualização",
-          description: "Sistema detectou nova atividade nos módulos",
-          type: "info",
-          priority: "low",
-          category: "Sistema",
-          timestamp: new Date(),
-          read: false,
-          actionable: false
-        };
-
-        setNotifications(prev => [newNotification, ...prev]);
-        
-        if (soundEnabled && "Audio" in window) {
-          // Som de notificação simples
-          const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-          
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-          
-          oscillator.frequency.value = 800;
-          oscillator.type = "sine";
-          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-          
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 0.3);
-        }
-      }
-    }, 30000); // A cada 30 segundos
-
-    return () => clearInterval(interval);
+    // Real notifications come from Supabase - no random simulation needed
   }, [soundEnabled]);
 
   const getTypeIcon = (type: string) => {

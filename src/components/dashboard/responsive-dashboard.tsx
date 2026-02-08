@@ -156,11 +156,13 @@ export const ResponsiveDashboard: React.FC = () => {
   ]);
 
   useEffect(() => {
+    let tick = 0;
     const interval = setInterval(() => {
+      tick++;
       setTasks(prevTasks => 
-        prevTasks.map(task => {
-          if (task.status === "in-progress" && Math.random() > 0.8) {
-            const newProgress = Math.min(task.progress + Math.floor(Math.random() * 3), 100);
+        prevTasks.map((task, idx) => {
+          if (task.status === "in-progress" && tick % (4 + idx) === 0) {
+            const newProgress = Math.min(task.progress + 2, 100);
             return {
               ...task,
               progress: newProgress,

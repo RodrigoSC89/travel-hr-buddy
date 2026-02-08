@@ -116,11 +116,13 @@ export const InteractiveDashboard: React.FC = () => {
   ]);
 
   useEffect(() => {
+    let tick = 0;
     const interval = setInterval(() => {
+      tick++;
       setTasks(prevTasks => 
-        prevTasks.map(task => {
-          if (task.status === "in-progress" && Math.random() > 0.7) {
-            const newProgress = Math.min(task.progress + Math.floor(Math.random() * 5), 100);
+        prevTasks.map((task, idx) => {
+          if (task.status === "in-progress" && tick % (3 + idx) === 0) {
+            const newProgress = Math.min(task.progress + 2, 100);
             return {
               ...task,
               progress: newProgress,

@@ -131,17 +131,18 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
 
     // Get relevant responses for this agent
     const responses = AGENT_RESPONSES[agentId] || AGENT_RESPONSES.captain;
-    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    const msgSeed = userMessage.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const selectedResponse = responses[msgSeed % responses.length];
 
     // Generate actions based on response
     const actions: AgentAction[] = [];
-    if (randomResponse.includes("Posso") || randomResponse.includes("Recomendo")) {
+    if (selectedResponse.includes("Posso") || selectedResponse.includes("Recomendo")) {
       actions.push(
         { id: "1", label: "Executar Ação", type: "execute" },
         { id: "2", label: "Simular", type: "simulate" }
       );
     }
-    if (randomResponse.includes("ordem de serviço") || randomResponse.includes("alertas")) {
+    if (selectedResponse.includes("ordem de serviço") || selectedResponse.includes("alertas")) {
       actions.push(
         { id: "3", label: "Aprovar", type: "approve" },
         { id: "4", label: "Rejeitar", type: "reject" }
@@ -151,7 +152,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
     const agentMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "agent",
-      content: randomResponse,
+      content: selectedResponse,
       timestamp: new Date(),
       agentId,
       agentName,
@@ -159,9 +160,9 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
       actions: actions.length > 0 ? actions : undefined,
       executionLog: [
         `Análise iniciada em ${new Date().toLocaleTimeString()}`,
-        `Modelo: Claude Opus 4 | Latência: ${Math.floor(Math.random() * 500 + 800)}ms`,
-        `Tokens: ${Math.floor(Math.random() * 200 + 100)} entrada / ${Math.floor(Math.random() * 300 + 150)} saída`,
-        `Confiança: ${Math.floor(Math.random() * 15 + 85)}%`
+        `Modelo: Claude Opus 4 | Latência: ${950 + (msgSeed % 300)}ms`,
+        `Tokens: ${120 + (msgSeed % 150)} entrada / ${180 + (msgSeed % 200)} saída`,
+        `Confiança: ${87 + (msgSeed % 12)}%`
       ]
     };
 

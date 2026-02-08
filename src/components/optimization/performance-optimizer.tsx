@@ -152,15 +152,16 @@ const PerformanceOptimizer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (autoOptimization) {
+        const elapsed = Date.now() / 1000;
         setSystemMetrics(prev => ({
           ...prev,
           cpu: { 
             ...prev.cpu, 
-            usage: Math.max(20, Math.min(80, prev.cpu.usage + Math.random() * 6 - 3)) 
+            usage: Math.max(20, Math.min(80, prev.cpu.usage + Math.sin(elapsed / 8) * 1.5)) 
           },
           memory: { 
             ...prev.memory, 
-            usage: Math.max(30, Math.min(85, prev.memory.usage + Math.random() * 4 - 2)) 
+            usage: Math.max(30, Math.min(85, prev.memory.usage + Math.sin(elapsed / 12) * 1)) 
           }
         }));
       }

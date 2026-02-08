@@ -57,7 +57,7 @@ const generateSensorData = (): IoTSensor[] => [
     type: "vibration",
     equipmentId: "601.0001.01",
     equipmentName: "Motor Principal BB",
-    value: 2.4 + Math.random() * 0.8,
+    value: 2.8,
     unit: "mm/s",
     minThreshold: 0,
     maxThreshold: 4.5,
@@ -66,7 +66,7 @@ const generateSensorData = (): IoTSensor[] => [
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 2.2 + Math.random() * 0.6
+      value: 2.2 + Math.sin(i * 0.5) * 0.3
     }))
   },
   {
@@ -75,7 +75,7 @@ const generateSensorData = (): IoTSensor[] => [
     type: "temperature",
     equipmentId: "601.0001.01",
     equipmentName: "Motor Principal BB",
-    value: 78 + Math.random() * 8,
+    value: 82,
     unit: "°C",
     minThreshold: 40,
     maxThreshold: 95,
@@ -84,7 +84,7 @@ const generateSensorData = (): IoTSensor[] => [
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 75 + Math.random() * 10
+      value: 75 + Math.sin(i * 0.4) * 5
     }))
   },
   {
@@ -93,16 +93,16 @@ const generateSensorData = (): IoTSensor[] => [
     type: "pressure",
     equipmentId: "603.0004.02",
     equipmentName: "Bomba Hidráulica Popa",
-    value: 185 + Math.random() * 30,
+    value: 200,
     unit: "bar",
     minThreshold: 150,
     maxThreshold: 250,
-    status: Math.random() > 0.7 ? "warning" : "normal",
+    status: "normal",
     trend: "down",
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 195 + Math.random() * 25
+      value: 195 + Math.sin(i * 0.6) * 12
     }))
   },
   {
@@ -111,7 +111,7 @@ const generateSensorData = (): IoTSensor[] => [
     type: "rpm",
     equipmentId: "604.0002.01",
     equipmentName: "Gerador Diesel 1",
-    value: 1500 + Math.random() * 20,
+    value: 1510,
     unit: "RPM",
     minThreshold: 1450,
     maxThreshold: 1550,
@@ -120,7 +120,7 @@ const generateSensorData = (): IoTSensor[] => [
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 1498 + Math.random() * 15
+      value: 1498 + Math.sin(i * 0.3) * 7
     }))
   },
   {
@@ -129,16 +129,16 @@ const generateSensorData = (): IoTSensor[] => [
     type: "vibration",
     equipmentId: "602.0003.01",
     equipmentName: "Thruster de Proa",
-    value: 1.8 + Math.random() * 2.5,
+    value: 2.5,
     unit: "mm/s",
     minThreshold: 0,
     maxThreshold: 4.0,
-    status: Math.random() > 0.6 ? "warning" : "normal",
+    status: "normal",
     trend: "up",
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 1.5 + Math.random() * 2
+      value: 1.5 + Math.sin(i * 0.7) * 1
     }))
   },
   {
@@ -147,16 +147,16 @@ const generateSensorData = (): IoTSensor[] => [
     type: "temperature",
     equipmentId: "601.0001.01",
     equipmentName: "Motor Principal BB",
-    value: 380 + Math.random() * 50,
+    value: 405,
     unit: "°C",
     minThreshold: 300,
     maxThreshold: 450,
-    status: Math.random() > 0.8 ? "critical" : "normal",
+    status: "normal",
     trend: "up",
     lastUpdate: new Date(),
     history: Array.from({ length: 24 }, (_, i) => ({
       timestamp: new Date(Date.now() - (23 - i) * 3600000),
-      value: 370 + Math.random() * 60
+      value: 370 + Math.sin(i * 0.5) * 30
     }))
   }
 ];
@@ -172,9 +172,10 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
     setSensors(generateSensorData());
     
     const interval = setInterval(() => {
-      setSensors(prev => prev.map(sensor => ({
+      const elapsed = Date.now() / 1000;
+      setSensors(prev => prev.map((sensor, idx) => ({
         ...sensor,
-        value: sensor.value + (Math.random() - 0.5) * (sensor.maxThreshold - sensor.minThreshold) * 0.05,
+        value: sensor.value + Math.sin(elapsed / (5 + idx * 2)) * (sensor.maxThreshold - sensor.minThreshold) * 0.01,
         lastUpdate: new Date(),
         status: determineStatus(sensor),
         history: [...sensor.history.slice(1), { timestamp: new Date(), value: sensor.value }]

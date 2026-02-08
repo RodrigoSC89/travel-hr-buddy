@@ -67,12 +67,12 @@ function generateTelemetryData(hours: number = 24): TelemetryReading[] {
     const timestamp = subHours(now, i / 60);
     data.push({
       timestamp: timestamp.toISOString(),
-      temperature: 65 + Math.random() * 20 + Math.sin(i / 30) * 5,
-      pressure: 2.5 + Math.random() * 0.5,
-      rpm: 1200 + Math.random() * 200 + Math.sin(i / 20) * 50,
-      fuelFlow: 45 + Math.random() * 15,
-      vibration: 0.5 + Math.random() * 0.3,
-      humidity: 55 + Math.random() * 20
+      temperature: 65 + Math.sin(i / 30) * 10 + Math.sin(i / 7) * 3,
+      pressure: 2.5 + Math.sin(i / 25) * 0.25,
+      rpm: 1200 + Math.sin(i / 20) * 100 + Math.sin(i / 8) * 30,
+      fuelFlow: 45 + Math.sin(i / 15) * 7,
+      vibration: 0.5 + Math.sin(i / 12) * 0.15,
+      humidity: 55 + Math.sin(i / 18) * 10
     });
   }
   return data;

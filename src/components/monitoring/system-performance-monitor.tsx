@@ -151,10 +151,11 @@ const SystemPerformanceMonitor = () => {
     // Simular atualização dos dados
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Atualizar métricas com valores aleatórios
-    setSystemMetrics(prev => prev.map(metric => ({
+    // Atualizar métricas com variação determinística baseada em tempo
+    const elapsed = Date.now() / 1000;
+    setSystemMetrics(prev => prev.map((metric, idx) => ({
       ...metric,
-      value: Math.max(0, metric.value + (Math.random() - 0.5) * 10)
+      value: Math.max(0, metric.value + Math.sin(elapsed / (10 + idx * 3)) * 2)
     })));
 
     setIsRefreshing(false);

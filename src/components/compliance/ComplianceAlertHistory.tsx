@@ -61,12 +61,12 @@ const generateMockAlerts = (): ComplianceAlertRecord[] => {
   };
 
   for (let i = 0; i < 50; i++) {
-    const module = modules[Math.floor(Math.random() * modules.length)];
-    const type = types[Math.floor(Math.random() * types.length)];
-    const vessel = vessels[Math.floor(Math.random() * vessels.length)];
+    const module = modules[i % modules.length];
+    const type = types[i % types.length];
+    const vessel = vessels[i % vessels.length];
     const titleList = titles[module];
-    const title = titleList[Math.floor(Math.random() * titleList.length)];
-    const daysAgo = Math.floor(Math.random() * 30);
+    const title = titleList[i % titleList.length];
+    const daysAgo = i % 30;
 
     alerts.push({
       id: `alert-${i}`,
@@ -78,9 +78,9 @@ const generateMockAlerts = (): ComplianceAlertRecord[] => {
       vesselId: vessel.id,
       vesselName: vessel.name,
       geofenceName: module === 'geofence' ? 'Port of Rotterdam' : undefined,
-      acknowledged: Math.random() > 0.3,
-      acknowledgedAt: Math.random() > 0.3 ? subDays(new Date(), daysAgo - 1) : undefined,
-      acknowledgedBy: Math.random() > 0.3 ? 'Carlos Silva' : undefined,
+      acknowledged: i % 4 !== 0,
+      acknowledgedAt: i % 4 !== 0 ? subDays(new Date(), daysAgo - 1) : undefined,
+      acknowledgedBy: i % 4 !== 0 ? 'Carlos Silva' : undefined,
     });
   }
 

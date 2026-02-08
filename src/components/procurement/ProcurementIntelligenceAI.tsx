@@ -110,7 +110,7 @@ export function ProcurementIntelligenceAI() {
             itemName: item.name,
             predictedNeed: Math.ceil(item.avgConsumption * 2),
             suggestedOrderDate: orderDate.toISOString().split("T")[0],
-            confidence: 85 + Math.random() * 10,
+            confidence: 85 + (item.id.split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) % 10),
             basedOn: "Consumo histórico + Lead time"
           };
         });

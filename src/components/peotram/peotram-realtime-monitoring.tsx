@@ -169,13 +169,14 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
     if (!autoRefresh) return;
 
     const interval = setInterval(() => {
+      const elapsed = Date.now() / 1000;
       // Simular atualizações de dados em tempo real
-      setVessels(prev => prev.map(vessel => ({
+      setVessels(prev => prev.map((vessel, idx) => ({
         ...vessel,
         lastUpdate: new Date().toISOString(),
         position: {
           ...vessel.position,
-          speed: vessel.position.speed + (Math.random() - 0.5) * 2
+          speed: vessel.position.speed + Math.sin(elapsed / (7 + idx * 2)) * 0.5
         }
       })));
     }, 5000);

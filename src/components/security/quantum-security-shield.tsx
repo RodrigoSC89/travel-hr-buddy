@@ -164,8 +164,8 @@ export const QuantumSecurityShield: React.FC = () => {
     setIsScanning(true);
 
     setTimeout(() => {
-      setDetectionAccuracy(99.85 + Math.random() * 0.15);
-      setResponseTime(0.5 + Math.random() * 0.5);
+      setDetectionAccuracy(99.92);
+      setResponseTime(0.72);
       setIsScanning(false);
 
       toast({
