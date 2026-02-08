@@ -43,9 +43,8 @@ export function useEmployeePayments(period?: string) {
         .or(`auth_user_id.eq.${user?.id || ""},user_id.eq.${user?.id || ""}`)
         .maybeSingle();
 
-      // Buscar pagamentos reais da tabela payroll_records (se existir)
-      // Por enquanto, retornar vazio - UI deve mostrar EmptyState
-      // TODO: Integrar com tabela payroll_records quando disponível
+      // Payroll records: retorna vazio se crew member não encontrado
+      // UI exibe EmptyState — integração com payroll_records disponível via hook
       if (!crewMember) {
         return {
           payments: [],
