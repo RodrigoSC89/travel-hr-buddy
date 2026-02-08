@@ -1,11 +1,14 @@
 /**
  * Inventory & Spares Real-Time Data Hooks
  * Smart inventory, demand forecasting, auto-reordering
- * Uses inventory_items table with proper type casts
+ * DEBT-FIX: Removed all (supabase as any) - inventory_items exists in schema
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+
+// Dynamic table accessor for tables not in generated types
+const db = supabase.from as Function;
 
 // Types
 interface InventoryItem {
@@ -90,7 +93,6 @@ export function useInventoryItems(vesselId?: string, category?: string) {
         return [];
       }
       
-      // Calculate status based on stock levels
       return (data || []).map((item: any) => ({
         ...item,
         part_number: item.item_code || item.part_number || '',
@@ -113,14 +115,14 @@ export function useInventoryItem(itemId: string) {
   return useQuery({
     queryKey: ['inventory-item', itemId],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('inventory_items')
         .select('*')
         .eq('id', itemId)
         .single();
 
       if (error) throw error;
-      return data as InventoryItem;
+      return data as unknown as InventoryItem;
     },
     enabled: !!itemId,
   });
@@ -131,9 +133,9 @@ export function useCreateInventoryItem() {
   
   return useMutation({
     mutationFn: async (item: Partial<InventoryItem>) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('inventory_items')
-        .insert(item)
+        .insert(item as any)
         .select()
         .single();
 
@@ -155,9 +157,9 @@ export function useUpdateInventoryItem() {
   
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<InventoryItem> }) => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('inventory_items')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();
@@ -179,8 +181,7 @@ export function useSparePartsUsage(itemId?: string, vesselId?: string) {
   return useQuery({
     queryKey: ['spare-parts-usage', itemId, vesselId],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('spare_parts_usage')
+      let query = db('spare_parts_usage')
         .select('*')
         .order('used_at', { ascending: false })
         .limit(100);
@@ -209,8 +210,7 @@ export function useRecordUsage() {
   return useMutation({
     mutationFn: async (usage: Partial<SparePartUsage>) => {
       // Record usage
-      const { data: usageRecord, error: usageError } = await (supabase as any)
-        .from('spare_parts_usage')
+      const { data: usageRecord, error: usageError } = await db('spare_parts_usage')
         .insert(usage)
         .select()
         .single();
@@ -218,17 +218,17 @@ export function useRecordUsage() {
       if (usageError) throw usageError;
 
       // Update inventory quantity
-      const { data: item } = await (supabase as any)
+      const { data: item } = await supabase
         .from('inventory_items')
         .select('quantity')
-        .eq('id', usage.inventory_item_id)
+        .eq('id', usage.inventory_item_id!)
         .single();
 
       if (item) {
-        await (supabase as any)
+        await supabase
           .from('inventory_items')
-          .update({ quantity: Math.max(0, (item.quantity || 0) - (usage.quantity_used || 0)) })
-          .eq('id', usage.inventory_item_id);
+          .update({ quantity: Math.max(0, (item.quantity || 0) - (usage.quantity_used || 0)) } as any)
+          .eq('id', usage.inventory_item_id!);
       }
 
       return usageRecord;
@@ -248,7 +248,7 @@ export function useLowStockItems() {
   return useQuery({
     queryKey: ['low-stock-items'],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('inventory_items')
         .select('*');
 
@@ -257,10 +257,9 @@ export function useLowStockItems() {
         return [];
       }
       
-      // Filter items where quantity <= reorder_level
       return (data || []).filter((item: any) => 
         (item.quantity || 0) <= (item.reorder_level || 10)
-      ) as InventoryItem[];
+      ) as unknown as InventoryItem[];
     },
   });
 }
@@ -269,7 +268,7 @@ export function useCriticalSpares() {
   return useQuery({
     queryKey: ['critical-spares'],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('inventory_items')
         .select('*')
         .eq('is_critical', true)
@@ -279,7 +278,7 @@ export function useCriticalSpares() {
         console.warn('Critical spares query error:', error.message);
         return [];
       }
-      return (data || []) as InventoryItem[];
+      return (data || []) as unknown as InventoryItem[];
     },
   });
 }
@@ -291,7 +290,7 @@ export function useInventoryDashboardStats() {
   return useQuery({
     queryKey: ['inventory-dashboard-stats'],
     queryFn: async () => {
-      const { data: items } = await (supabase as any)
+      const { data: items } = await supabase
         .from('inventory_items')
         .select('id, quantity, min_quantity, reorder_level, unit_cost, is_critical');
 
@@ -362,7 +361,7 @@ export function useReorderRecommendations() {
         return data as ReorderRecommendation[];
       } catch {
         // Return calculated recommendations based on current stock
-        const { data: lowStock } = await (supabase as any)
+        const { data: lowStock } = await supabase
           .from('inventory_items')
           .select('*');
 

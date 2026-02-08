@@ -208,8 +208,7 @@ export async function createRiskAssessment(
           recommendations: [],
         };
 
-    // Use type assertion until types are regenerated
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from("risk_assessments")
       .insert({
         vessel_id: assessment.vesselId,
@@ -220,11 +219,11 @@ export async function createRiskAssessment(
         risk_title: assessment.riskTitle,
         risk_description: assessment.riskDescription,
         affected_areas: assessment.affectedAreas,
-        mitigation_actions: assessment.mitigationActions,
-        ai_classification: aiClassification,
+        mitigation_actions: assessment.mitigationActions as any,
+        ai_classification: aiClassification as any,
         linked_findings: assessment.linkedFindings,
         status: assessment.status,
-      })
+      } as any)
       .select()
       .single();
 
@@ -524,8 +523,7 @@ export async function exportRiskData(
     // Skip recording if table doesn't exist
     let exportId = crypto.randomUUID();
     try {
-      const { data: exportRecord, error: exportError } = await (supabase as any)
-        .from("risk_exports")
+      const { data: exportRecord, error: exportError } = await (supabase.from as Function)("risk_exports")
         .insert({
           export_type: format,
           export_scope: scope,

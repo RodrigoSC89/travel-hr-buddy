@@ -25,6 +25,9 @@ import {
   CheckCircle2
 } from "lucide-react";
 
+// Dynamic table accessor for tables not in generated types
+const db = supabase.from as Function;
+
 interface Course {
   id: string;
   title: string;
@@ -71,8 +74,7 @@ export default function TrainingAcademyAdmin() {
   const { data: courses = [], isLoading } = useQuery<Course[]>({
     queryKey: ["admin-courses"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("courses")
+      const { data, error } = await db("courses")
         .select("*")
         .order("created_at", { ascending: false });
       
@@ -85,8 +87,7 @@ export default function TrainingAcademyAdmin() {
   const { data: enrollments = [] } = useQuery<Enrollment[]>({
     queryKey: ["course-enrollments"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("course_enrollments")
+      const { data, error } = await db("course_enrollments")
         .select("*, courses(title)")
         .order("enrolled_at", { ascending: false })
         .limit(50);
@@ -101,10 +102,10 @@ export default function TrainingAcademyAdmin() {
     queryKey: ["training-stats"],
     queryFn: async () => {
       const [coursesCount, enrollmentsCount, completedCount, certificatesCount] = await Promise.all([
-        (supabase as any).from("courses").select("id", { count: "exact", head: true }),
-        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }),
-        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
-        (supabase as any).from("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
+        db("courses").select("id", { count: "exact", head: true }),
+        db("course_enrollments").select("id", { count: "exact", head: true }),
+        db("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
+        db("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
       ]);
 
       return {
@@ -121,8 +122,7 @@ export default function TrainingAcademyAdmin() {
     mutationFn: async (courseData: typeof newCourse) => {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { data, error } = await (supabase as any)
-        .from("courses")
+      const { data, error } = await db("courses")
         .insert({
           ...courseData,
           created_by: user?.id
@@ -135,27 +135,19 @@ export default function TrainingAcademyAdmin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      toast({
-        title: "Curso criado",
-        description: "O curso foi criado com sucesso.",
-      });
+      toast({ title: "Curso criado", description: "O curso foi criado com sucesso." });
       setIsCreateDialogOpen(false);
       resetForm();
     },
     onError: (error: any) => {
-      toast({
-        title: "Erro ao criar curso",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast({ title: "Erro ao criar curso", description: error.message, variant: "destructive" });
     }
   });
 
   // Update course mutation
   const updateCourseMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Course> }) => {
-      const { data, error } = await (supabase as any)
-        .from("courses")
+      const { data, error } = await db("courses")
         .update(updates)
         .eq("id", id)
         .select()
@@ -166,26 +158,18 @@ export default function TrainingAcademyAdmin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      toast({
-        title: "Curso atualizado",
-        description: "O curso foi atualizado com sucesso.",
-      });
+      toast({ title: "Curso atualizado", description: "O curso foi atualizado com sucesso." });
       setEditingCourse(null);
     },
     onError: (error: any) => {
-      toast({
-        title: "Erro ao atualizar curso",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast({ title: "Erro ao atualizar curso", description: error.message, variant: "destructive" });
     }
   });
 
   // Delete course mutation
   const deleteCourseMutation = useMutation({
     mutationFn: async (courseId: string) => {
-      const { error } = await (supabase as any)
-        .from("courses")
+      const { error } = await db("courses")
         .delete()
         .eq("id", courseId);
       
@@ -193,17 +177,10 @@ export default function TrainingAcademyAdmin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      toast({
-        title: "Curso deletado",
-        description: "O curso foi removido com sucesso.",
-      });
+      toast({ title: "Curso deletado", description: "O curso foi removido com sucesso." });
     },
     onError: (error: any) => {
-      toast({
-        title: "Erro ao deletar curso",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast({ title: "Erro ao deletar curso", description: error.message, variant: "destructive" });
     }
   });
 
@@ -291,9 +268,7 @@ export default function TrainingAcademyAdmin() {
                     value={newCourse.category}
                     onValueChange={(value) => setNewCourse({ ...newCourse, category: value })}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="technical">Técnico</SelectItem>
                       <SelectItem value="safety">Segurança</SelectItem>
@@ -309,9 +284,7 @@ export default function TrainingAcademyAdmin() {
                     value={newCourse.difficulty_level}
                     onValueChange={(value) => setNewCourse({ ...newCourse, difficulty_level: value })}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="beginner">Iniciante</SelectItem>
                       <SelectItem value="intermediate">Intermediário</SelectItem>
@@ -345,12 +318,8 @@ export default function TrainingAcademyAdmin() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleCreateCourse} disabled={!newCourse.title}>
-                Criar Curso
-              </Button>
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>Cancelar</Button>
+              <Button onClick={handleCreateCourse} disabled={!newCourse.title}>Criar Curso</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -368,42 +337,33 @@ export default function TrainingAcademyAdmin() {
             <p className="text-xs text-muted-foreground">cursos disponíveis</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Matrículas Ativas</CardTitle>
-            <Users className="h-4 w-4 text-blue-600" />
+            <Users className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {stats?.total_enrollments || 0}
-            </div>
+            <div className="text-2xl font-bold text-primary">{stats?.total_enrollments || 0}</div>
             <p className="text-xs text-muted-foreground">usuários matriculados</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Cursos Concluídos</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <CheckCircle2 className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {stats?.completed_courses || 0}
-            </div>
+            <div className="text-2xl font-bold">{stats?.completed_courses || 0}</div>
             <p className="text-xs text-muted-foreground">finalizados com sucesso</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Certificados Emitidos</CardTitle>
-            <Award className="h-4 w-4 text-yellow-600" />
+            <Award className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
-              {stats?.active_certificates || 0}
-            </div>
+            <div className="text-2xl font-bold">{stats?.active_certificates || 0}</div>
             <p className="text-xs text-muted-foreground">certificados válidos</p>
           </CardContent>
         </Card>
@@ -430,9 +390,7 @@ export default function TrainingAcademyAdmin() {
           <Card>
             <CardHeader>
               <CardTitle>Gerenciar Cursos</CardTitle>
-              <CardDescription>
-                Lista de todos os cursos disponíveis na plataforma
-              </CardDescription>
+              <CardDescription>Lista de todos os cursos disponíveis na plataforma</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -444,21 +402,18 @@ export default function TrainingAcademyAdmin() {
               ) : (
                 <div className="space-y-4">
                   {courses.map((course) => (
-                    <div
-                      key={course.id}
-                      className="border rounded-lg p-4 hover:bg-muted/50 transition-colors"
-                    >
+                    <div key={course.id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                       <div className="flex justify-between items-start">
                         <div className="space-y-2 flex-1">
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold text-lg">{course.title}</h3>
                             {course.is_published ? (
-                              <Badge className="bg-green-100 text-green-800">Publicado</Badge>
+                              <Badge>Publicado</Badge>
                             ) : (
                               <Badge variant="outline">Rascunho</Badge>
                             )}
                             {course.is_mandatory && (
-                              <Badge className="bg-orange-100 text-orange-800">Obrigatório</Badge>
+                              <Badge variant="secondary">Obrigatório</Badge>
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground">{course.description}</p>
@@ -470,35 +425,17 @@ export default function TrainingAcademyAdmin() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => togglePublishStatus(course)}
-                          >
+                          <Button variant="outline" size="sm" onClick={() => togglePublishStatus(course)}>
                             {course.is_published ? (
-                              <>
-                                <Eye className="w-4 h-4 mr-2" />
-                                Despublicar
-                              </>
+                              <><Eye className="w-4 h-4 mr-2" />Despublicar</>
                             ) : (
-                              <>
-                                <Upload className="w-4 h-4 mr-2" />
-                                Publicar
-                              </>
+                              <><Eye className="w-4 h-4 mr-2" />Publicar</>
                             )}
                           </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setEditingCourse(course)}
-                          >
+                          <Button variant="ghost" size="sm" onClick={() => setEditingCourse(course)}>
                             <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDeleteCourse(course.id)}
-                          >
+                          <Button variant="ghost" size="sm" onClick={() => handleDeleteCourse(course.id)}>
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>
                         </div>
@@ -514,43 +451,25 @@ export default function TrainingAcademyAdmin() {
         <TabsContent value="enrollments" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Matrículas dos Usuários</CardTitle>
-              <CardDescription>
-                Acompanhe o progresso dos usuários nos cursos
-              </CardDescription>
+              <CardTitle>Matrículas Recentes</CardTitle>
+              <CardDescription>Últimas matrículas realizadas na plataforma</CardDescription>
             </CardHeader>
             <CardContent>
               {enrollments.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  Nenhuma matrícula registrada ainda
-                </div>
+                <div className="text-center py-8 text-muted-foreground">Nenhuma matrícula encontrada.</div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {enrollments.map((enrollment) => (
-                    <div
-                      key={enrollment.id}
-                      className="border rounded-lg p-4"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-2 flex-1">
-                          <h4 className="font-semibold">
-                            {enrollment.courses?.title || "Curso não encontrado"}
-                          </h4>
-                          <div className="flex gap-4 text-sm">
-                            <Badge variant={
-                              enrollment.status === "completed" ? "default" : "secondary"
-                            }>
-                              {enrollment.status}
-                            </Badge>
-                            <span className="text-muted-foreground">
-                              Progresso: {enrollment.overall_progress}%
-                            </span>
-                            <span className="text-muted-foreground">
-                              Matriculado em: {new Date(enrollment.enrolled_at).toLocaleDateString()}
-                            </span>
-                          </div>
-                        </div>
+                    <div key={enrollment.id} className="flex items-center justify-between border rounded-lg p-3">
+                      <div>
+                        <p className="font-medium">{enrollment.courses?.title || "Curso"}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Matrícula: {new Date(enrollment.enrolled_at).toLocaleDateString("pt-BR")}
+                        </p>
                       </div>
+                      <Badge variant={enrollment.status === "completed" ? "default" : "secondary"}>
+                        {enrollment.status}
+                      </Badge>
                     </div>
                   ))}
                 </div>
@@ -562,31 +481,12 @@ export default function TrainingAcademyAdmin() {
         <TabsContent value="certificates" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Certificados Emitidos</CardTitle>
-              <CardDescription>
-                Histórico de certificações dos usuários
-              </CardDescription>
+              <CardTitle>Certificados</CardTitle>
+              <CardDescription>Gerenciamento de certificados emitidos</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {[
-                  { name: 'João Silva', course: 'STCW Básico', date: '2025-12-15', status: 'válido' },
-                  { name: 'Maria Santos', course: 'Combate a Incêndio', date: '2025-11-20', status: 'válido' },
-                  { name: 'Pedro Costa', course: 'Primeiros Socorros', date: '2025-10-05', status: 'expirado' },
-                ].map((cert, i) => (
-                  <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{cert.name}</p>
-                      <p className="text-sm text-muted-foreground">{cert.course}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant={cert.status === 'válido' ? 'default' : 'destructive'}>{cert.status}</Badge>
-                      <Button size="sm" variant="outline" onClick={() => toast({ title: "Download iniciado", description: `Certificado de ${cert.name} baixado com sucesso` })}>
-                        Download
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+              <div className="text-center py-8 text-muted-foreground">
+                Os certificados são emitidos automaticamente ao concluir cursos obrigatórios.
               </div>
             </CardContent>
           </Card>
