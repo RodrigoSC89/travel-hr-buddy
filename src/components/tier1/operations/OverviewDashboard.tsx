@@ -61,7 +61,7 @@ export default function OverviewDashboard() {
         heading: 275,
         position: { lat: -23.5505, lng: -46.6333 },
         fuelROB: 850,
-        alerts: Math.floor(Math.random() * 3)
+        alerts: (vessel.name?.charCodeAt(0) || 65) % 3
       }));
     }
   });

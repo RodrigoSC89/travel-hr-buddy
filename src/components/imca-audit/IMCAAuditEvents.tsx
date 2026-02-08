@@ -200,7 +200,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
   const handleSubmitToIMCA = (event: DPEvent) => {
     const updatedEvents = events.map(e => 
       e.id === event.id 
-        ? { ...e, imcaSubmitted: true, status: 'submitted_imca' as EventStatus, imcaReference: `IMCA-2024-BR-${Math.floor(Math.random() * 9000) + 1000}` }
+        ? { ...e, imcaSubmitted: true, status: 'submitted_imca' as EventStatus, imcaReference: `IMCA-${new Date().getFullYear()}-BR-${(Date.now() % 9000) + 1000}` }
         : e
     );
     setEvents(updatedEvents);

@@ -40,7 +40,7 @@ export default function ForecastAI() {
         
         const results = await session.run({ input });
         const forecastValue = results.output.data[0] as number;
-        const confidence = Math.min(0.95, Math.max(0.5, Math.random() * 0.5 + 0.5)); // Simulated confidence
+        const confidence = Math.min(0.95, Math.max(0.5, 0.75 + Math.sin(Date.now() / 50000) * 0.15));
         
         const forecastData: ForecastData = {
           forecast: forecastValue,

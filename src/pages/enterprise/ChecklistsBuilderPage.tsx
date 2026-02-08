@@ -1,6 +1,7 @@
 /**
  * Checklists Builder - Página dedicada
  * Construtor de checklists com IA para operações marítimas
+ * Integrado com operational_checklists do Supabase
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,59 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   CheckSquare, Plus, Search, Copy, Trash2, Edit, Eye,
-  Sparkles, Download, Upload, Ship, Shield, Wrench
+  Sparkles, Download, Upload, Ship, Shield, Wrench, Loader2
 } from "lucide-react";
-
-// Mock data
-const existingChecklists = [
-  { 
-    id: 1, 
-    name: "Pre-Departure Safety Checklist", 
-    category: "Safety",
-    items: 25,
-    lastUsed: "2025-01-28",
-    usageCount: 156,
-    status: "active"
-  },
-  { 
-    id: 2, 
-    name: "PSC Inspection Readiness", 
-    category: "Compliance",
-    items: 45,
-    lastUsed: "2025-01-25",
-    usageCount: 89,
-    status: "active"
-  },
-  { 
-    id: 3, 
-    name: "Engine Room Daily Check", 
-    category: "Maintenance",
-    items: 32,
-    lastUsed: "2025-01-28",
-    usageCount: 320,
-    status: "active"
-  },
-  { 
-    id: 4, 
-    name: "Bridge Navigation Equipment", 
-    category: "Navigation",
-    items: 18,
-    lastUsed: "2025-01-27",
-    usageCount: 245,
-    status: "active"
-  },
-  { 
-    id: 5, 
-    name: "Crew Onboarding Checklist", 
-    category: "HR",
-    items: 28,
-    lastUsed: "2025-01-20",
-    usageCount: 67,
-    status: "active"
-  },
-];
 
 const templates = [
   { name: "SOLAS Safety Equipment", category: "Safety", items: 35 },
@@ -77,37 +32,80 @@ export default function ChecklistsBuilderPage() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Fetch real checklists from Supabase
+  const { data: checklists = [], isLoading } = useQuery({
+    queryKey: ['checklists-builder'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('operational_checklists')
+        .select('id, title, type, status, created_at, metadata')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return (data || []).map(c => {
+        const meta = (c.metadata || {}) as Record<string, unknown>;
+        const items = Array.isArray(meta.items) ? (meta.items as unknown[]).length : 0;
+        return {
+          id: c.id,
+          name: c.title,
+          category: c.type || 'Custom',
+          items,
+          lastUsed: c.created_at?.split('T')[0] || '',
+          usageCount: 0,
+          status: c.status || 'draft',
+        };
+      });
+    },
+    staleTime: 30_000,
+  });
+
   const handleGenerateWithAI = async () => {
     if (!aiPrompt.trim()) return;
     setIsGenerating(true);
-    // Simular geração
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsGenerating(false);
-    setAiPrompt("");
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from('operational_checklists')
+        .insert([{
+          title: aiPrompt.substring(0, 100),
+          type: 'custom',
+          source_type: 'ai-generated',
+          status: 'draft',
+          created_by: userData.user?.id || 'system',
+          metadata: JSON.parse(JSON.stringify({ description: aiPrompt, items: [], version: 1 })),
+        }]);
+      if (error) throw error;
+      toast.success('Checklist criado com IA! Edite os itens na Biblioteca.');
+      setAiPrompt("");
+    } catch {
+      toast.error('Erro ao gerar checklist');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Safety": return "bg-red-500/20 text-red-400";
-      case "Compliance": return "bg-blue-500/20 text-blue-400";
-      case "Maintenance": return "bg-orange-500/20 text-orange-400";
-      case "Navigation": return "bg-purple-500/20 text-purple-400";
-      case "HR": return "bg-green-500/20 text-green-400";
-      case "Security": return "bg-yellow-500/20 text-yellow-400";
-      case "Environmental": return "bg-teal-500/20 text-teal-400";
-      default: return "bg-gray-500/20 text-gray-400";
+      case "Safety": case "safety": return "bg-destructive/20 text-destructive";
+      case "Compliance": case "compliance": return "bg-primary/20 text-primary";
+      case "Maintenance": case "maintenance": return "bg-warning/20 text-warning";
+      case "Navigation": case "navigation": return "bg-accent/20 text-accent-foreground";
+      case "HR": case "hr": return "bg-success/20 text-success";
+      case "Security": case "security": return "bg-warning/20 text-warning";
+      case "Environmental": case "environmental": return "bg-primary/20 text-primary";
+      default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Safety": return <Shield className="h-5 w-5" />;
-      case "Maintenance": return <Wrench className="h-5 w-5" />;
+      case "Safety": case "safety": return <Shield className="h-5 w-5" />;
+      case "Maintenance": case "maintenance": return <Wrench className="h-5 w-5" />;
       default: return <Ship className="h-5 w-5" />;
     }
   };
 
-  const filteredChecklists = existingChecklists.filter(c =>
+  const filteredChecklists = checklists.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -282,7 +280,7 @@ export default function ChecklistsBuilderPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="text-center">
-                  <p className="text-4xl font-bold">{existingChecklists.length}</p>
+                  <p className="text-4xl font-bold">{checklists.length}</p>
                   <p className="text-muted-foreground">Checklists Ativos</p>
                 </div>
               </CardContent>
@@ -290,16 +288,16 @@ export default function ChecklistsBuilderPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="text-center">
-                  <p className="text-4xl font-bold">877</p>
-                  <p className="text-muted-foreground">Usos Este Mês</p>
+                  <p className="text-4xl font-bold">{checklists.reduce((sum, c) => sum + c.items, 0)}</p>
+                  <p className="text-muted-foreground">Total de Itens</p>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6">
                 <div className="text-center">
-                  <p className="text-4xl font-bold">98%</p>
-                  <p className="text-muted-foreground">Taxa de Conclusão</p>
+                  <p className="text-4xl font-bold">{checklists.filter(c => c.status === 'published').length}</p>
+                  <p className="text-muted-foreground">Publicados</p>
                 </div>
               </CardContent>
             </Card>

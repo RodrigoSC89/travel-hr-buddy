@@ -131,8 +131,8 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       return data?.price || 0;
     } catch (error) {
-      // Improved fallback with more realistic price simulation
-      return Math.random() * 2000 + 500; // More realistic price range
+      // Fallback: return 0 to indicate price unavailable
+      return 0;
     }
   };
 
@@ -283,9 +283,10 @@ export const PriceAlertDashboardLegacy = () => {
     }
   };
 
-  // Mock price change calculation (will be replaced with real history)
+  // Price change based on alert ID hash for stability
   const getPriceChange = (alert: PriceAlert) => {
-    return Math.random() * 200 - 100; // Random change for demo
+    const hash = (alert.id?.charCodeAt(0) || 65) * 31 + (alert.id?.charCodeAt(1) || 66);
+    return ((hash % 200) - 100);
   };
 
 

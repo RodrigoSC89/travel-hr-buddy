@@ -97,7 +97,7 @@ const CargoManagementPage = () => {
             container_number: `CONT${String(idx + 1).padStart(7, '0')}`,
             size: '40\'',
             type: 'DRY',
-            weight_kg: 25000 + Math.floor(Math.random() * 10000),
+            weight_kg: 25000 + ((idx * 2731) % 10000),
             cargo_description: c.operation_type || 'General Cargo',
             loading_port: 'Origin Port',
             discharge_port: 'Destination Port',

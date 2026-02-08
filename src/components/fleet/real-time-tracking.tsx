@@ -84,25 +84,25 @@ const RealTimeTracking: React.FC = () => {
             lng: v.location?.lng || -46.33 + index * 0.3
           },
           status: statusMap[v.status] || 'sailing',
-          speed: v.speed || 12 + Math.random() * 8,
-          heading: v.heading || Math.floor(Math.random() * 360),
+          speed: v.speed || 12 + (index * 3.7) % 8,
+          heading: v.heading || (index * 47) % 360,
           destination: v.route?.destination || 'Santos',
           eta: v.eta || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
           lastUpdate: v.lastUpdate || new Date().toISOString(),
           weather: {
-            windSpeed: 8 + Math.floor(Math.random() * 12),
-            waveHeight: 0.8 + Math.random() * 2,
-            temperature: 24 + Math.floor(Math.random() * 8),
-            visibility: 10 + Math.floor(Math.random() * 10)
+            windSpeed: 8 + (index * 5) % 12,
+            waveHeight: 0.8 + ((index * 7) % 20) / 10,
+            temperature: 24 + (index * 3) % 8,
+            visibility: 10 + (index * 4) % 10
           },
           fuel: {
-            current: v.fuel?.current || 800 + Math.floor(Math.random() * 400),
+            current: v.fuel?.current || 800 + (index * 137) % 400,
             capacity: v.fuel?.capacity || 1500,
-            consumption: v.fuel?.consumption || 12 + Math.random() * 8
+            consumption: v.fuel?.consumption || 12 + ((index * 29) % 80) / 10
           },
-          crew: v.crew?.onboard || 20 + Math.floor(Math.random() * 8),
+          crew: v.crew?.onboard || 20 + (index * 3) % 8,
           cargo: {
-            current: v.cargo?.current_load || 8000 + Math.floor(Math.random() * 4000),
+            current: v.cargo?.current_load || 8000 + (index * 1337) % 4000,
             capacity: v.cargo?.capacity || 15000
           }
         };
@@ -119,13 +119,14 @@ const RealTimeTracking: React.FC = () => {
   }, [vesselData, queryLoading, selectedVessel]);
 
   const updateVesselPositions = () => {
-    setVessels(prev => prev.map(vessel => ({
+    const t = Date.now() / 10000;
+    setVessels(prev => prev.map((vessel, idx) => ({
       ...vessel,
       coordinates: {
-        lat: vessel.coordinates.lat + (Math.random() - 0.5) * 0.01,
-        lng: vessel.coordinates.lng + (Math.random() - 0.5) * 0.01
+        lat: vessel.coordinates.lat + Math.sin(t + idx * 2.1) * 0.002,
+        lng: vessel.coordinates.lng + Math.cos(t + idx * 1.7) * 0.002
       },
-      speed: vessel.status === "sailing" ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
+      speed: vessel.status === "sailing" ? Math.max(8, vessel.speed + Math.sin(t + idx * 3.3) * 0.5) : 0,
       lastUpdate: new Date().toISOString()
     })));
   };

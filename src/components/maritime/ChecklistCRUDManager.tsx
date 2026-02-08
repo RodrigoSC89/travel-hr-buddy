@@ -120,93 +120,41 @@ export function ChecklistCRUDManager() {
   const loadChecklists = async () => {
     setLoading(true);
     try {
-      // Simulate API call with demo data
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      const demoChecklists: Checklist[] = [
-        {
-          id: '1',
-          title: 'Checklist Pré-Partida SOLAS',
-          description: 'Verificações obrigatórias antes da partida conforme SOLAS',
-          category: 'Navegação',
-          type: 'pre-departure',
-          status: 'published',
-          version: 3,
-          items: [
-            { id: '1-1', text: 'Verificar sistemas de navegação', required: true, checked: false },
-            { id: '1-2', text: 'Testar comunicação VHF', required: true, checked: false },
-            { id: '1-3', text: 'Confirmar condições meteorológicas', required: true, checked: false },
-            { id: '1-4', text: 'Verificar documentação de carga', required: true, checked: false },
-            { id: '1-5', text: 'Inspecionar equipamentos de emergência', required: true, checked: false },
-          ],
-          createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: 'Capitão Silva',
-        },
-        {
-          id: '2',
-          title: 'Inspeção de Segurança ISM',
-          description: 'Checklist de conformidade ISM Code',
-          category: 'Segurança',
-          type: 'safety',
-          status: 'published',
-          version: 2,
-          items: [
-            { id: '2-1', text: 'Verificar extintores de incêndio', required: true, checked: false },
-            { id: '2-2', text: 'Testar alarmes de emergência', required: true, checked: false },
-            { id: '2-3', text: 'Inspecionar coletes salva-vidas', required: true, checked: false },
-          ],
-          createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: 'Oficial de Segurança',
-        },
-        {
-          id: '3',
-          title: 'Manutenção Preventiva - Motor Principal',
-          description: 'Checklist de manutenção mensal do motor',
-          category: 'Manutenção',
-          type: 'maintenance',
-          status: 'draft',
-          version: 1,
-          items: [
-            { id: '3-1', text: 'Verificar nível de óleo', required: true, checked: false },
-            { id: '3-2', text: 'Inspecionar filtros', required: true, checked: false },
-          ],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: 'Chefe de Máquinas',
-        },
-      ];
+      const { data, error } = await supabase
+        .from('operational_checklists')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-      const demoRuns: ChecklistRun[] = [
-        {
-          id: 'run-1',
-          checklistId: '1',
-          checklistTitle: 'Checklist Pré-Partida SOLAS',
-          status: 'completed',
-          progress: 100,
-          completedItems: 5,
-          totalItems: 5,
-          startedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          completedAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          executedBy: 'Imediato Santos',
-          signature: 'Assinado digitalmente',
-        },
-        {
-          id: 'run-2',
-          checklistId: '2',
-          checklistTitle: 'Inspeção de Segurança ISM',
-          status: 'in_progress',
-          progress: 66,
-          completedItems: 2,
-          totalItems: 3,
-          startedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-          executedBy: 'Oficial Costa',
-        },
-      ];
+      if (error) throw error;
 
-      setChecklists(demoChecklists);
-      setRuns(demoRuns);
+      const mapped: Checklist[] = (data || []).map(row => {
+        const meta = (row.metadata || {}) as Record<string, unknown>;
+        const items = Array.isArray(meta.items) ? (meta.items as ChecklistItem[]) : [];
+        return {
+          id: row.id,
+          title: row.title,
+          description: (meta.description as string) || '',
+          category: row.type || 'Segurança',
+          type: (row.source_type === 'pre-departure' ? 'pre-departure' : 
+                 row.type === 'safety' ? 'safety' : 
+                 row.type === 'maintenance' ? 'maintenance' : 
+                 row.type === 'inspection' ? 'inspection' : 
+                 row.type === 'cargo' ? 'cargo' : 'custom') as Checklist['type'],
+          status: (row.status === 'published' ? 'published' : 
+                   row.status === 'archived' ? 'archived' : 'draft') as Checklist['status'],
+          version: (meta.version as number) || 1,
+          items,
+          vesselId: row.vessel_id || undefined,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+          createdBy: row.created_by || 'Sistema',
+        };
+      });
+
+      setChecklists(mapped);
+      // Runs are derived from checklist metadata - no separate table needed
+      setRuns([]);
     } catch (error) {
       toast({
         title: 'Erro ao carregar',
@@ -259,38 +207,44 @@ export function ChecklistCRUDManager() {
 
     setActionLoading('save');
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const metadata = JSON.parse(JSON.stringify({
+        description: formData.description || '',
+        items: formData.items || [],
+        version: selectedChecklist ? (selectedChecklist.version + 1) : 1,
+      }));
 
       if (selectedChecklist) {
-        // Update
-        setChecklists(prev => prev.map(c => 
-          c.id === selectedChecklist.id 
-            ? { 
-                ...c, 
-                ...formData, 
-                version: c.version + 1,
-                updatedAt: new Date().toISOString() 
-              } as Checklist
-            : c
-        ));
+        const { error } = await supabase
+          .from('operational_checklists')
+          .update({
+            title: formData.title!,
+            type: formData.type || 'custom',
+            metadata,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', selectedChecklist.id);
+        
+        if (error) throw error;
         toast({ title: 'Sucesso', description: 'Checklist atualizado com sucesso' });
       } else {
-        // Create
-        const newChecklist: Checklist = {
-          id: `new-${Date.now()}`,
-          ...formData,
-          status: 'draft',
-          version: 1,
-          items: formData.items || [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: 'Usuário Atual',
-        } as Checklist;
-        setChecklists(prev => [newChecklist, ...prev]);
+        const { data: userData } = await supabase.auth.getUser();
+        const { error } = await supabase
+          .from('operational_checklists')
+          .insert([{
+            title: formData.title!,
+            type: formData.type || 'custom',
+            source_type: formData.type || 'custom',
+            status: 'draft',
+            created_by: userData.user?.id || 'system',
+            metadata,
+          }]);
+        
+        if (error) throw error;
         toast({ title: 'Sucesso', description: 'Checklist criado com sucesso' });
       }
 
       setIsFormOpen(false);
+      await loadChecklists();
     } catch (error) {
       toast({ title: 'Erro', description: 'Falha ao salvar checklist', variant: 'destructive' });
     } finally {
@@ -303,7 +257,11 @@ export function ChecklistCRUDManager() {
 
     setActionLoading(id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('operational_checklists')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
       setChecklists(prev => prev.filter(c => c.id !== id));
       toast({ title: 'Sucesso', description: 'Checklist excluído' });
     } catch (error) {
@@ -338,7 +296,11 @@ export function ChecklistCRUDManager() {
   const handlePublish = async (checklist: Checklist) => {
     setActionLoading(checklist.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('operational_checklists')
+        .update({ status: 'published', updated_at: new Date().toISOString() })
+        .eq('id', checklist.id);
+      if (error) throw error;
       setChecklists(prev => prev.map(c => 
         c.id === checklist.id 
           ? { ...c, status: 'published' as const, updatedAt: new Date().toISOString() }
@@ -355,7 +317,11 @@ export function ChecklistCRUDManager() {
   const handleArchive = async (checklist: Checklist) => {
     setActionLoading(checklist.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('operational_checklists')
+        .update({ status: 'archived', updated_at: new Date().toISOString() })
+        .eq('id', checklist.id);
+      if (error) throw error;
       setChecklists(prev => prev.map(c => 
         c.id === checklist.id 
           ? { ...c, status: 'archived' as const, updatedAt: new Date().toISOString() }

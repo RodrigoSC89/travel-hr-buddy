@@ -159,7 +159,7 @@ const SmartTooltipSystem: React.FC = () => {
       const resetTimer = () => {
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
-          if (Math.random() > 0.7) { // 30% de chance
+          if (Date.now() % 10 > 6) { // ~30% de chance determinística
             showAssistant("performance-tip");
           }
         }, 30000); // 30 segundos
