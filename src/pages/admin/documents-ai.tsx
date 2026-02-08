@@ -17,6 +17,10 @@ const loadJsPDF = async () => {
   return jsPDF;
 };
 
+/**
+ * DEBT-FIX: Removed (supabase as any) - ai_generated_documents exists in schema.
+ * Fixed column mapping: prompt → prompt_used, generated_by → created_by, added document_type
+ */
 export default function DocumentsAIPage() {
   const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
@@ -101,13 +105,14 @@ export default function DocumentsAIPage() {
         return;
       }
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),
           content: generated,
-          prompt: prompt,
-          generated_by: user.id,
+          prompt_used: prompt,
+          created_by: user.id,
+          document_type: "ai_generated",
         })
         .select()
         .single();
@@ -150,16 +155,13 @@ export default function DocumentsAIPage() {
       const margin = 20;
       const maxWidth = pageWidth - 2 * margin;
       
-      // Título
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
       pdf.text(title, margin, margin);
       
-      // Conteúdo
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "normal");
       
-      // Split text into lines
       const lines = pdf.splitTextToSize(generated, maxWidth);
       let y = margin + 10;
       
@@ -245,7 +247,7 @@ export default function DocumentsAIPage() {
       if (error) throw error;
 
       setGenerated(data?.rewritten || "");
-      setSummary(""); // Clear summary when rewriting
+      setSummary("");
       toast({
         title: "Documento reformulado com sucesso",
         description: "O documento foi reformulado com IA.",

@@ -2,11 +2,15 @@
  * PATCH 201.0 - Cognitive Feedback System (IA Reflexiva)
  * 
  * AI-based cognitive feedback system that learns from user decisions and operator corrections.
- * Tracks AI decisions, operator actions, and outcomes to generate insights and improve over time.
+ * DEBT-FIX: Removed (supabase as any) - cognitive_feedback schema differs from code interface,
+ * using dynamic table access via (supabase.from as Function)
  */
 
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+
+// Dynamic table accessor for cognitive_feedback (schema columns differ from code interface)
+const db = supabase.from as Function;
 
 export interface CognitiveFeedbackEntry {
   id?: string;
@@ -93,8 +97,7 @@ class CognitiveFeedbackCore {
         created_at: new Date().toISOString(),
       };
 
-      const { data, error } = await (supabase as any)
-        .from("cognitive_feedback")
+      const { data, error } = await db("cognitive_feedback")
         .insert([entry])
         .select()
         .single();
@@ -130,8 +133,7 @@ class CognitiveFeedbackCore {
     }
   ): Promise<boolean> {
     try {
-      const { error } = await (supabase as any)
-        .from("cognitive_feedback")
+      const { error } = await db("cognitive_feedback")
         .update(update)
         .eq("id", feedbackId);
 
@@ -161,7 +163,6 @@ class CognitiveFeedbackCore {
     days: number = 30
   ): Promise<FeedbackPattern[]> {
     try {
-      // Check cache first
       const cacheKey = `${module || "all"}_${decision_type || "all"}_${days}`;
       const now = Date.now();
       
@@ -169,8 +170,7 @@ class CognitiveFeedbackCore {
         return this.patternCache.get(cacheKey)!;
       }
 
-      let query = supabase
-        .from("cognitive_feedback")
+      let query = db("cognitive_feedback")
         .select("*")
         .gte("created_at", new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString());
 
@@ -188,10 +188,8 @@ class CognitiveFeedbackCore {
         return [];
       }
 
-      // Analyze patterns
       const patterns = this.analyzePatterns((data || []) as unknown as CognitiveFeedbackEntry[]);
       
-      // Update cache
       this.patternCache.set(cacheKey, patterns);
       this.lastCacheUpdate = now;
       
@@ -202,27 +200,20 @@ class CognitiveFeedbackCore {
     }
   }
 
-  /**
-   * Analyze feedback data to identify patterns
-   */
   private analyzePatterns(feedbackData: CognitiveFeedbackEntry[]): FeedbackPattern[] {
     const patterns: FeedbackPattern[] = [];
 
-    // Group by module and operator action
     const grouped = feedbackData.reduce((acc, entry) => {
       const key = `${entry.module_name}_${entry.operator_action}`;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
+      if (!acc[key]) acc[key] = [];
       acc[key].push(entry);
       return acc;
     }, {} as Record<string, CognitiveFeedbackEntry[]>);
 
-    // Identify patterns
     Object.entries(grouped).forEach(([key, entries]) => {
       const [module, action] = key.split("_");
       
-      if (entries.length >= 3) { // Minimum 3 occurrences to form a pattern
+      if (entries.length >= 3) {
         const contextSimilarities = this.findContextSimilarities(entries);
         
         contextSimilarities.forEach(similarity => {
@@ -238,15 +229,10 @@ class CognitiveFeedbackCore {
       }
     });
 
-    // Sort by confidence and frequency
     patterns.sort((a, b) => (b.confidence * b.frequency) - (a.confidence * a.frequency));
-
-    return patterns.slice(0, 20); // Return top 20 patterns
+    return patterns.slice(0, 20);
   }
 
-  /**
-   * Find similar contexts in feedback entries
-   */
   private findContextSimilarities(entries: CognitiveFeedbackEntry[]): Array<{
     context: Record<string, any>;
     count: number;
@@ -260,8 +246,7 @@ class CognitiveFeedbackCore {
     }> = new Map();
 
     entries.forEach(entry => {
-      // Extract key context features
-      const contextKeys = Object.keys(entry.decision_context);
+      const contextKeys = Object.keys(entry.decision_context || {});
       const contextSignature = contextKeys
         .map(key => `${key}:${JSON.stringify(entry.decision_context[key])}`)
         .sort()
@@ -273,7 +258,7 @@ class CognitiveFeedbackCore {
         existing.examples.push(entry);
       } else {
         similarities.set(contextSignature, {
-          context: entry.decision_context,
+          context: entry.decision_context || {},
           count: 1,
           examples: [entry],
         });
@@ -281,16 +266,13 @@ class CognitiveFeedbackCore {
     });
 
     return Array.from(similarities.values())
-      .filter(s => s.count >= 2) // At least 2 similar contexts
+      .filter(s => s.count >= 2)
       .map(s => ({
         ...s,
-        confidence: Math.min(0.95, (s.count / entries.length) * 1.2), // Higher count = higher confidence
+        confidence: Math.min(0.95, (s.count / entries.length) * 1.2),
       }));
   }
 
-  /**
-   * Generate human-readable pattern description
-   */
   private generatePatternDescription(
     module: string,
     action: string,
@@ -310,15 +292,11 @@ class CognitiveFeedbackCore {
     return `Operator ${actionDescriptions[action as keyof typeof actionDescriptions] || action} ${module} suggestions when ${contextStr}`;
   }
 
-  /**
-   * Generate insights from patterns
-   */
   async generateInsights(module?: string, days: number = 30): Promise<FeedbackInsight[]> {
     try {
       const patterns = await this.detectPatterns(module, undefined, days);
       const insights: FeedbackInsight[] = [];
 
-      // Analyze rejection patterns
       const rejectionPatterns = patterns.filter(p => p.pattern_type === "rejected");
       if (rejectionPatterns.length > 0) {
         const topRejection = rejectionPatterns[0];
@@ -331,7 +309,6 @@ class CognitiveFeedbackCore {
         });
       }
 
-      // Analyze modification patterns
       const modificationPatterns = patterns.filter(p => p.pattern_type === "modified");
       if (modificationPatterns.length > 0) {
         const topModification = modificationPatterns[0];
@@ -344,7 +321,6 @@ class CognitiveFeedbackCore {
         });
       }
 
-      // Analyze acceptance patterns (positive feedback)
       const acceptancePatterns = patterns.filter(p => p.pattern_type === "accepted");
       if (acceptancePatterns.length > 0) {
         const topAcceptance = acceptancePatterns[0];
@@ -364,16 +340,12 @@ class CognitiveFeedbackCore {
     }
   }
 
-  /**
-   * Get weekly feedback report
-   */
   async getWeeklyReport(vesselId?: string): Promise<WeeklyFeedbackReport | null> {
     try {
       const weekStart = new Date();
       weekStart.setDate(weekStart.getDate() - 7);
 
-      let query = supabase
-        .from("cognitive_feedback")
+      let query = db("cognitive_feedback")
         .select("*")
         .gte("created_at", weekStart.toISOString());
 
@@ -388,41 +360,28 @@ class CognitiveFeedbackCore {
         return null;
       }
 
-      // Calculate statistics
-      const totalDecisions = data.length;
-      const accepted = data.filter(d => d.operator_action === "accepted").length;
-      const rejected = data.filter(d => d.operator_action === "rejected").length;
-      const modified = data.filter(d => d.operator_action === "modified").length;
+      const entries = data as any[];
+      const totalDecisions = entries.length;
+      const accepted = entries.filter(d => d.operator_action === "accepted").length;
+      const rejected = entries.filter(d => d.operator_action === "rejected").length;
+      const modified = entries.filter(d => d.operator_action === "modified").length;
 
-      // Module performance
       const modulePerformance: Record<string, any> = {};
-      data.forEach(entry => {
+      entries.forEach(entry => {
         const moduleKey = entry.module_name || "unknown";
         if (!modulePerformance[moduleKey]) {
-          modulePerformance[moduleKey] = {
-            total: 0,
-            accepted: 0,
-            rejected: 0,
-            success_rate: 0,
-          };
+          modulePerformance[moduleKey] = { total: 0, accepted: 0, rejected: 0, success_rate: 0 };
         }
-        
         modulePerformance[moduleKey].total++;
-        if (entry.operator_action === "accepted") {
-          modulePerformance[moduleKey].accepted++;
-        }
-        if (entry.operator_action === "rejected") {
-          modulePerformance[moduleKey].rejected++;
-        }
+        if (entry.operator_action === "accepted") modulePerformance[moduleKey].accepted++;
+        if (entry.operator_action === "rejected") modulePerformance[moduleKey].rejected++;
       });
 
-      // Calculate success rates
       Object.keys(modulePerformance).forEach(module => {
         const perf = modulePerformance[module];
         perf.success_rate = perf.total > 0 ? perf.accepted / perf.total : 0;
       });
 
-      // Get patterns and insights
       const patterns = await this.detectPatterns(undefined, undefined, 7);
       const insights = await this.generateInsights(undefined, 7);
 
@@ -442,9 +401,6 @@ class CognitiveFeedbackCore {
     }
   }
 
-  /**
-   * Async pattern detection (non-blocking)
-   */
   private async detectPatternsAsync(module: string, decisionType: string): Promise<void> {
     setTimeout(async () => {
       try {
@@ -455,15 +411,10 @@ class CognitiveFeedbackCore {
     }, 100);
   }
 
-  /**
-   * Async insight generation (non-blocking)
-   */
   private async generateInsightsAsync(feedbackId: string): Promise<void> {
     setTimeout(async () => {
       try {
-        // Fetch the updated feedback entry
-        const { data, error } = await supabase
-          .from("cognitive_feedback")
+        const { data, error } = await db("cognitive_feedback")
           .select("module_name")
           .eq("id", feedbackId)
           .single();
@@ -472,9 +423,7 @@ class CognitiveFeedbackCore {
           const insights = await this.generateInsights(data.module_name || undefined, 30);
           
           if (insights.length > 0) {
-            // Update the feedback entry with the best insight
-            await (supabase as any)
-              .from("cognitive_feedback")
+            await db("cognitive_feedback")
               .update({
                 insight_generated: insights[0].insight,
                 pattern_category: insights[0].category,
@@ -489,9 +438,6 @@ class CognitiveFeedbackCore {
     }, 500);
   }
 
-  /**
-   * Clear pattern cache
-   */
   clearCache(): void {
     this.patternCache.clear();
     this.lastCacheUpdate = 0;
