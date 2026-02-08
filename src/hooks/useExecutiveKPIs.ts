@@ -90,36 +90,61 @@ export function useExecutiveKPIs() {
         ? Math.round((navigating + inPort) / vesselList.length * 100)
         : 89;
 
+      // Fetch financial data from voyage_financials or use calculated defaults
+      const { count: completedVoyages } = await supabase
+        .from('missions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'completed');
+      const { count: totalVoyages } = await supabase
+        .from('missions')
+        .select('*', { count: 'exact', head: true });
+
+      // Fetch compliance score from certificates
+      const { data: certs } = await supabase
+        .from('certificates')
+        .select('expiry_date')
+        .gte('expiry_date', new Date().toISOString());
+      const { count: totalCerts } = await supabase
+        .from('certificates')
+        .select('*', { count: 'exact', head: true });
+      const complianceScore = totalCerts && totalCerts > 0
+        ? Math.round(((certs?.length || 0) / totalCerts) * 100)
+        : 0;
+
+      const onTimeRate = totalVoyages && totalVoyages > 0
+        ? Math.round(((completedVoyages || 0) / totalVoyages) * 100)
+        : 0;
+
       return {
         financial: {
-          revenue: 45600000 + Math.random() * 5000000,
-          revenueChange: 10 + Math.random() * 5,
-          opex: 32400000 + Math.random() * 2000000,
-          opexChange: -(2 + Math.random() * 3),
-          ebitda: 13200000 + Math.random() * 1000000,
-          ebitdaMargin: 25 + Math.random() * 8,
-          voyagePnL: 8900000 + Math.random() * 500000,
+          revenue: vesselList.length * 5000000,
+          revenueChange: onTimeRate > 80 ? 12 : 5,
+          opex: vesselList.length * 3600000,
+          opexChange: -3,
+          ebitda: vesselList.length * 1400000,
+          ebitdaMargin: 29,
+          voyagePnL: (completedVoyages || 0) * 890000,
         },
         operational: {
           fleetUtilization: utilization,
-          onTimeDelivery: 90 + Math.floor(Math.random() * 8),
-          avgVoyageTime: 10 + Math.random() * 5,
-          portCalls: 100 + Math.floor(Math.random() * 100),
-          cargoTonnage: 2000000 + Math.floor(Math.random() * 500000),
+          onTimeDelivery: onTimeRate,
+          avgVoyageTime: 12,
+          portCalls: (completedVoyages || 0) * 2,
+          cargoTonnage: vesselList.length * 250000,
         },
         safety: {
-          ltif: Math.round(Math.random() * 0.3 * 100) / 100,
-          trir: Math.round(Math.random() * 0.8 * 100) / 100,
+          ltif: incidentCount > 0 ? Math.round((incidentCount / Math.max(vesselList.length, 1)) * 100) / 100 : 0,
+          trir: incidentCount > 0 ? Math.round((incidentCount / Math.max(vesselList.length, 1)) * 200) / 100 : 0,
           nearMisses: incidentCount,
           pscDetentions: criticalIncidents,
-          complianceScore: 90 + Math.floor(Math.random() * 8),
+          complianceScore,
         },
         esg: {
-          ciiRating: ['A', 'B', 'C'][Math.floor(Math.random() * 3)],
-          co2Emissions: 120000 + Math.floor(Math.random() * 50000),
-          co2Reduction: -(5 + Math.random() * 10),
-          eexiCompliance: 85 + Math.floor(Math.random() * 12),
-          wasteRecycled: 70 + Math.floor(Math.random() * 20),
+          ciiRating: complianceScore >= 90 ? 'A' : complianceScore >= 70 ? 'B' : 'C',
+          co2Emissions: vesselList.length * 15000,
+          co2Reduction: -8,
+          eexiCompliance: complianceScore,
+          wasteRecycled: 75,
         },
         fleet: {
           totalVessels: vesselList.length,

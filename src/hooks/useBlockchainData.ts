@@ -69,7 +69,7 @@ export function useBlockchainTransactions() {
           issuer: record.agent_name || "Sistema",
           status: record.human_override ? "confirmed" : "confirmed",
           blockNumber: record.block_number || index + 1,
-          gasUsed: Math.floor(15000 + Math.random() * 50000),
+          gasUsed: 15000 + (record.block_number || index) * 1000,
           network: "private" as const,
         }));
       }
@@ -93,7 +93,7 @@ export function useBlockchainTransactions() {
           issuer: "Security Auditor",
           status: "confirmed" as const,
           blockNumber: record.block_number,
-          gasUsed: Math.floor(15000 + Math.random() * 50000),
+          gasUsed: 15000 + record.block_number * 1000,
           network: "private" as const,
         }));
       }

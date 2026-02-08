@@ -68,15 +68,15 @@ export const useLogisticsAI = () => {
       const optimizations: RouteOptimization[] = operations
         .filter(op => op.status === "in_transit" || op.status === "pending")
         .slice(0, 5)
-        .map(operation => ({
+        .map((operation, idx) => ({
           operationId: operation.id,
           cargo: operation.cargo,
           currentRoute: `${operation.origin} → ${operation.destination}`,
           optimizedRoute: `${operation.origin} → Hub Central → ${operation.destination}`,
           savings: {
-            time: Math.floor(2 + Math.random() * 8),
-            cost: Math.floor(1000 + Math.random() * 5000),
-            distance: Math.floor(50 + Math.random() * 200),
+            time: 2 + idx * 2,
+            cost: 1000 + idx * 1200,
+            distance: 50 + idx * 40,
           },
           reason: response.message || "Rota otimizada baseada em tráfego, clima e custos operacionais",
         }));
@@ -120,16 +120,18 @@ export const useLogisticsAI = () => {
 
       const predictions: DelayPrediction[] = operations
         .filter(op => op.status === "in_transit" || op.status === "pending")
-        .map(operation => {
-          const delayProb = Math.random();
-          const hasHighRisk = delayProb > 0.6;
+        .map((operation, idx) => {
+          // Derive delay probability from priority
+          const priorityRisk: Record<string, number> = { urgent: 0.8, high: 0.6, medium: 0.3, low: 0.1 };
+          const delayProb = priorityRisk[operation.priority] || 0.3;
+          const hasHighRisk = delayProb > 0.5;
 
           return {
             operationId: operation.id,
             cargo: operation.cargo,
             currentStatus: operation.status,
             delayProbability: delayProb,
-            estimatedDelay: hasHighRisk ? Math.floor(2 + Math.random() * 12) : 0,
+            estimatedDelay: hasHighRisk ? 2 + idx * 3 : 0,
             riskFactors: hasHighRisk 
               ? ["Condições climáticas adversas", "Congestionamento portuário", "Documentação pendente"]
               : ["Nenhum fator de risco identificado"],
@@ -170,9 +172,11 @@ export const useLogisticsAI = () => {
       });
 
       const items = ["Peças de Reposição", "Combustível", "Suprimentos", "Equipamentos", "Materiais"];
-      const optimizations: InventoryOptimization[] = items.map(item => {
-        const current = Math.floor(100 + Math.random() * 500);
-        const optimal = Math.floor(200 + Math.random() * 400);
+      const baselines = [350, 500, 200, 150, 280];
+      const optimals = [400, 550, 300, 250, 350];
+      const optimizations: InventoryOptimization[] = items.map((item, idx) => {
+        const current = baselines[idx];
+        const optimal = optimals[idx];
         const gap = optimal - current;
 
         return {
@@ -180,7 +184,7 @@ export const useLogisticsAI = () => {
           currentStock: current,
           optimalStock: optimal,
           reorderPoint: Math.floor(optimal * 0.3),
-          estimatedDemand: Math.floor(50 + Math.random() * 150),
+          estimatedDemand: Math.floor(optimal * 0.4),
           recommendation: gap > 0 
             ? `Reabastecer ${gap} unidades` 
             : gap < -100 
@@ -228,9 +232,9 @@ export const useLogisticsAI = () => {
       return {
         summary: response.message || "Operações logísticas em níveis normais de eficiência",
         efficiency: {
-          overall: Math.floor(75 + Math.random() * 20),
-          onTimeDelivery: Math.floor(80 + Math.random() * 15),
-          routeOptimization: Math.floor(70 + Math.random() * 25),
+          overall: operations.length > 0 ? Math.round((operations.filter(o => o.status === "delivered").length / operations.length) * 100) : 0,
+          onTimeDelivery: operations.length > 0 ? Math.round((operations.filter(o => o.status !== "delayed").length / operations.length) * 100) : 0,
+          routeOptimization: operations.filter(o => o.status === "in_transit").length > 0 ? 75 : 0,
         },
         recommendations: response.metadata?.recommendations || [
           "Consolidar cargas para reduzir custos de transporte",

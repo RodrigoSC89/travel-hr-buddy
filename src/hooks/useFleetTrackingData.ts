@@ -72,35 +72,48 @@ export function useFleetTracking() {
         return []; // Return empty array - UI should show EmptyState
       }
 
-      return data.map((vessel) => ({
-        id: vessel.id,
-        name: vessel.name || `Embarcação ${vessel.imo_number || vessel.id.slice(0, 6)}`,
-        type: vessel.vessel_type || "Cargo",
-        latitude: -23.0 + Math.random() * 5,
-        longitude: -43.0 + Math.random() * 5,
-        course: Math.floor(Math.random() * 360),
-        speed: Math.random() * 15,
-        status: mapVesselStatus(vessel.status),
-        last_update: new Date().toISOString(),
-        captain: "Capitão",
-        destination: undefined,
-        dpClass: inferDPClass(vessel.vessel_type),
-        dpMode: "Auto DP",
-        asogStatus: "green",
-        operationType: inferOperation(vessel.vessel_type),
-        environmental: {
-          windSpeed: 10 + Math.random() * 20,
-          waveHeight: 0.5 + Math.random() * 2,
-          current: 0.3 + Math.random() * 1.5,
-        },
-        power: {
-          available: 12000 + Math.random() * 20000,
-          consumed: 5000 + Math.random() * 15000,
-        },
-        alerts: Math.floor(Math.random() * 3),
-        crew: 20 + Math.floor(Math.random() * 100),
-        onlineStatus: vessel.status === "operational" ? "online" : "degraded",
-      }));
+      // Use deterministic positions based on vessel index
+      const portPositions = [
+        { lat: -23.96, lng: -46.33 }, // Santos
+        { lat: -22.90, lng: -43.17 }, // Rio
+        { lat: -12.97, lng: -38.51 }, // Salvador
+        { lat: -8.05, lng: -34.88 },  // Recife
+        { lat: -25.43, lng: -49.27 }, // Curitiba coast
+      ];
+
+      return data.map((vessel, idx) => {
+        const basePos = portPositions[idx % portPositions.length];
+        const isMoving = vessel.status === "operational" || vessel.status === "active";
+        return {
+          id: vessel.id,
+          name: vessel.name || `Embarcação ${vessel.imo_number || vessel.id.slice(0, 6)}`,
+          type: vessel.vessel_type || "Cargo",
+          latitude: isMoving ? basePos.lat + idx * 0.5 : basePos.lat,
+          longitude: isMoving ? basePos.lng + idx * 0.5 : basePos.lng,
+          course: isMoving ? (30 + idx * 25) % 360 : 0,
+          speed: isMoving ? 8 + idx * 0.5 : 0,
+          status: mapVesselStatus(vessel.status),
+          last_update: new Date().toISOString(),
+          captain: "Capitão",
+          destination: undefined,
+          dpClass: inferDPClass(vessel.vessel_type),
+          dpMode: "Auto DP",
+          asogStatus: "green",
+          operationType: inferOperation(vessel.vessel_type),
+          environmental: {
+            windSpeed: 12 + idx * 2,
+            waveHeight: 0.8 + idx * 0.3,
+            current: 0.5 + idx * 0.2,
+          },
+          power: {
+            available: 15000 + idx * 3000,
+            consumed: 8000 + idx * 2000,
+          },
+          alerts: 0,
+          crew: 25 + idx * 5,
+          onlineStatus: vessel.status === "operational" ? "online" : "degraded",
+        };
+      });
     },
     staleTime: 1000 * 30,
     refetchOnWindowFocus: false,

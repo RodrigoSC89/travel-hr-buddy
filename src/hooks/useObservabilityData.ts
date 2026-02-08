@@ -194,38 +194,69 @@ export function useObservabilityData() {
         .select("*", { count: "exact", head: true })
         .gte("created_at", today.toISOString());
 
+      // Get AI logs count for error rate calculation
+      const { count: totalLogs } = await supabase
+        .from("ai_logs")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", today.toISOString());
+      const { count: errorLogs } = await supabase
+        .from("ai_logs")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", today.toISOString())
+        .eq("status", "error");
+
       // Calculate from current data
       const healthyServices = serviceHealth.filter((s) => s.status === "operational").length;
       const totalServices = serviceHealth.length || 1;
       const avgLatency = serviceHealth.reduce((acc, s) => acc + s.latencyMs, 0) / totalServices;
+      const errorRate = totalLogs && totalLogs > 0 ? Math.round(((errorLogs || 0) / totalLogs) * 1000) / 10 : 0;
 
       return {
         systemHealth: Math.round((healthyServices / totalServices) * 100),
         activeAlerts: systemMetrics.filter((m) => m.status !== "healthy").length,
         aiDecisionsToday: aiCount || 0,
         avgResponseTime: Math.round(avgLatency),
-        errorRate: 0.1,
-        requestsPerMinute: 125 + Math.floor(Math.random() * 50),
+        errorRate,
+        requestsPerMinute: totalLogs ? Math.round(totalLogs / 1440) : 0, // total logs / minutes in a day
       };
     },
     enabled: !metricsLoading && !servicesLoading,
   });
 
-  // Get timeline data for charts
+  // Get timeline data from ai_logs for the last 24 hours
   const { data: timelineData = [] } = useQuery({
     queryKey: ["observability-timeline"],
     queryFn: async () => {
-      const data = [];
+      const { data: logs } = await supabase
+        .from("ai_logs")
+        .select("created_at, status, response_time_ms")
+        .gte("created_at", subHours(new Date(), 24).toISOString())
+        .order("created_at", { ascending: true });
+
+      // Group by hour
+      const hourlyMap = new Map<string, { requests: number; errors: number; totalLatency: number }>();
       for (let i = 23; i >= 0; i--) {
         const hour = subHours(new Date(), i);
-        data.push({
-          time: format(hour, "HH:mm"),
-          requests: 100 + Math.floor(Math.random() * 100),
-          errors: Math.floor(Math.random() * 5),
-          latency: 30 + Math.floor(Math.random() * 50),
-        });
+        const key = format(hour, "HH:mm");
+        hourlyMap.set(key, { requests: 0, errors: 0, totalLatency: 0 });
       }
-      return data;
+
+      (logs || []).forEach((log) => {
+        const key = format(new Date(log.created_at), "HH:00");
+        const bucket = hourlyMap.get(key);
+        if (bucket) {
+          bucket.requests++;
+          if (log.status === "error") bucket.errors++;
+          bucket.totalLatency += log.response_time_ms || 0;
+        }
+      });
+
+      return Array.from(hourlyMap.entries()).map(([time, data]) => ({
+        time,
+        requests: data.requests,
+        errors: data.errors,
+        latency: data.requests > 0 ? Math.round(data.totalLatency / data.requests) : 0,
+      }));
     },
   });
 
