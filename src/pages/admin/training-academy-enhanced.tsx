@@ -128,7 +128,7 @@ export default function TrainingAcademyEnhanced() {
 
     doc.setFontSize(18);
     doc.setTextColor(0, 51, 102);
-    doc.text(certificate.certificate_type, 148.5, 130, { align: "center" });
+    doc.text(certificate.certification_type, 148.5, 130, { align: "center" });
 
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
@@ -339,7 +339,7 @@ export default function TrainingAcademyEnhanced() {
                           <div className="flex-1 space-y-2">
                             <div className="flex items-center gap-2">
                               <Award className="h-5 w-5 text-yellow-600" />
-                              <h3 className="font-semibold">{cert.certificate_type}</h3>
+                              <h3 className="font-semibold">{cert.certification_type}</h3>
                             </div>
                             <div className="space-y-1 text-sm">
                               <p><strong>Certificado:</strong> {cert.certificate_number || "N/A"}</p>
