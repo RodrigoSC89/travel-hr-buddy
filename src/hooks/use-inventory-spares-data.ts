@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 // Dynamic table accessor for tables not in generated types
 const db = supabase.from as Function;
@@ -89,7 +90,7 @@ export function useInventoryItems(vesselId?: string, category?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Inventory query error:', error.message);
+        logger.warn('Inventory query error:', error.message);
         return [];
       }
       
@@ -196,7 +197,7 @@ export function useSparePartsUsage(itemId?: string, vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Usage query error:', error.message);
+        logger.warn('Usage query error:', error.message);
         return [];
       }
       return (data || []) as SparePartUsage[];
@@ -253,7 +254,7 @@ export function useLowStockItems() {
         .select('*');
 
       if (error) {
-        console.warn('Low stock query error:', error.message);
+        logger.warn('Low stock query error:', error.message);
         return [];
       }
       
@@ -275,7 +276,7 @@ export function useCriticalSpares() {
         .order('quantity', { ascending: true });
 
       if (error) {
-        console.warn('Critical spares query error:', error.message);
+        logger.warn('Critical spares query error:', error.message);
         return [];
       }
       return (data || []) as unknown as InventoryItem[];

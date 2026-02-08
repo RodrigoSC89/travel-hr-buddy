@@ -5,6 +5,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export interface PSCInspection {
   id: string;
@@ -68,7 +69,7 @@ export function usePSCPrediction() {
           created_at: i.created_at,
         })) as PSCInspection[];
       } catch (err) {
-        console.error("[PSC] Error loading inspections:", err);
+        logger.error("[PSC] Error loading inspections:", err);
         throw err;
       }
     },

@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 
 interface RouteAIResult {
   optimal_speed_knots?: number;
@@ -65,7 +66,7 @@ export function useRouteAI() {
 
       return aiResult;
     } catch (err) {
-      console.error('Route AI error:', err);
+      logger.error('Route AI error:', err);
       toast({
         title: 'Erro na Otimização AI',
         description: err instanceof Error ? err.message : 'Erro desconhecido',
@@ -99,7 +100,7 @@ export function useRouteAI() {
       setEfficiency(aiResult);
       return aiResult;
     } catch (err) {
-      console.error('Efficiency AI error:', err);
+      logger.error('Efficiency AI error:', err);
       toast({
         title: 'Erro na Análise de Eficiência',
         description: err instanceof Error ? err.message : 'Erro desconhecido',

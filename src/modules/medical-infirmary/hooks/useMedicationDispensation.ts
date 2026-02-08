@@ -5,6 +5,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export interface MedicationDispensation {
   id: string;
@@ -109,7 +110,7 @@ export function useDispenseMedication() {
       toast.success('Medicamento dispensado com sucesso');
     },
     onError: (error) => {
-      console.error('Dispensation error:', error);
+      logger.error('Dispensation error:', error);
       toast.error('Erro ao dispensar medicamento');
     }
   });

@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 // Types
 interface EmissionsRecord {
@@ -90,7 +91,7 @@ export function useEmissionsRecords(vesselId?: string, year?: number) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Emissions query error:', error.message);
+        logger.warn('Emissions query error:', error.message);
         return [];
       }
       return (data || []) as EmissionsRecord[];
@@ -153,7 +154,7 @@ export function useCIIRatings(vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('CII query error:', error.message);
+        logger.warn('CII query error:', error.message);
         return [];
       }
       return (data || []) as CIIRating[];
@@ -228,7 +229,7 @@ export function useWasteRecords(vesselId?: string, wasteType?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Waste records query error:', error.message);
+        logger.warn('Waste records query error:', error.message);
         return [];
       }
       return (data || []) as WasteRecord[];
@@ -283,7 +284,7 @@ export function useBallastWaterRecords(vesselId?: string) {
 
       const { data, error } = await query;
       if (error) {
-        console.warn('Ballast water query error:', error.message);
+        logger.warn('Ballast water query error:', error.message);
         return [];
       }
       return (data || []) as BallastWaterRecord[];

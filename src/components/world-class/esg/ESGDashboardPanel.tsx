@@ -14,6 +14,7 @@ import {
   ShieldCheck, AlertTriangle, RefreshCw, Download, Sparkles 
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { esgIntelligence, type ESGDashboardData } from '@/services/esg';
 import { useESGWasteAI } from '@/hooks/useESGWasteAI';
 
@@ -29,7 +30,7 @@ export function ESGDashboardPanel() {
       const result = await esgIntelligence.getDashboardData();
       setData(result);
     } catch (err) {
-      console.error('ESG Dashboard error:', err);
+      logger.error('ESG Dashboard error:', err);
       toast.error('Erro ao carregar dados ESG');
     } finally {
       setLoading(false);

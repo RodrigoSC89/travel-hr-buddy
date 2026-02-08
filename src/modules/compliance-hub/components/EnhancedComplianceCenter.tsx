@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -261,7 +262,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
       ]);
 
     } catch (error) {
-      console.error('Error loading compliance data:', error);
+      logger.error('Error loading compliance data:', error);
       toast.error('Erro ao carregar dados de compliance');
     } finally {
       setLoading(false);

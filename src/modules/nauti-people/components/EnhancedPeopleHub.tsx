@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { format, addDays, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -134,7 +135,7 @@ export const EnhancedPeopleHub: React.FC = () => {
       ]);
 
     } catch (error) {
-      console.error('Error loading people data:', error);
+      logger.error('Error loading people data:', error);
       toast.error('Erro ao carregar dados de tripulação');
     } finally {
       setLoading(false);

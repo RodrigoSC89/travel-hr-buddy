@@ -10,6 +10,7 @@
 
 import React from "react";
 import { LucideIcon, AlertTriangle, Trash2, X, Loader2 } from "lucide-react";
+import { logger } from '@/lib/logger';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -99,7 +100,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       onOpenChange(false);
     } catch (error) {
       // Error handling is expected to be done by the caller
-      console.error("Confirmation action failed:", error);
+      logger.error("Confirmation action failed:", error);
     }
   };
 

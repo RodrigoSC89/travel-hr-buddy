@@ -3,6 +3,7 @@
  * Cross-voyage benchmarking and fleet performance analytics
  */
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +38,7 @@ export function FleetIntelligencePanel() {
       setBenchmarks(benchmarkData.sort((a, b) => b.avg_tce - a.avg_tce));
       setAnalytics(analyticsData);
     } catch (err) {
-      console.error(err);
+      logger.error('Fleet intelligence error:', err);
     } finally {
       setIsLoading(false);
     }

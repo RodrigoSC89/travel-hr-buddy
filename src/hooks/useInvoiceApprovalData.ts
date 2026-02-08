@@ -7,6 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export interface InvoiceApprover {
   id: string;
@@ -104,7 +105,7 @@ export function useInvoiceApprovalData() {
         .limit(50);
 
       if (error) {
-        console.error("Error fetching invoices:", error);
+        logger.error("Error fetching invoices:", error);
         throw error;
       }
 
@@ -222,7 +223,7 @@ export function useApproveInvoice() {
       queryClient.invalidateQueries({ queryKey: ["invoice-approval-data"] });
     },
     onError: (error) => {
-      console.error("Error updating invoice:", error);
+      logger.error("Error updating invoice:", error);
       toast.error("Erro ao processar fatura");
     },
   });

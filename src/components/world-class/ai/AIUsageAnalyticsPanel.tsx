@@ -13,6 +13,7 @@ import {
   RefreshCw, TrendingUp, Server, Cpu, Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { aiControlTower, type UsageByService, type UsageByModel } from '@/services/ai/ai-control-tower.service';
 
 export function AIUsageAnalyticsPanel() {
@@ -33,7 +34,7 @@ export function AIUsageAnalyticsPanel() {
       setTotalTokens(data.totalTokens);
       setErrorRate(data.errorRate);
     } catch (err) {
-      console.error('Usage analytics error:', err);
+      logger.error('Usage analytics error:', err);
       toast.error('Erro ao carregar analytics de uso');
     } finally {
       setLoading(false);

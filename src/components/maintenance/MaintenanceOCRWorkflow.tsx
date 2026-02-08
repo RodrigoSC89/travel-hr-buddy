@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   Upload,
   Camera,
@@ -156,7 +157,7 @@ export function MaintenanceOCRWorkflow() {
 
       if (uploadError) {
         // Storage bucket may not exist, proceed with local processing
-        console.warn("Storage upload failed, proceeding with local processing");
+        logger.warn("Storage upload failed, proceeding with local processing");
       }
 
       setProcessingProgress(30);
@@ -221,7 +222,7 @@ Observações: Documento processado`;
         description: `Texto extraído com ${confidence}% de confiança`
       });
     } catch (error) {
-      console.error("OCR Error:", error);
+      logger.error("OCR Error:", error);
       toast({
         title: "Erro no OCR",
         description: "Não foi possível processar o documento. Tente novamente.",

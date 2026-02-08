@@ -73,11 +73,17 @@ export function BudgetForecastingAI() {
     await new Promise(r => setTimeout(r, 2500));
     
     // Simulate AI adjustments
-    setCategories(prev => prev.map(cat => ({
-      ...cat,
-      forecast: cat.forecast + (Math.random() - 0.5) * 20000,
-      aiConfidence: Math.min(99, cat.aiConfidence + Math.floor(Math.random() * 5))
-    })));
+    setCategories(prev => prev.map((cat, idx) => {
+      // Deterministic adjustment based on category index and time
+      const timeFactor = Math.sin(Date.now() / 100000 + idx * 2.5);
+      const adjustment = timeFactor * 15000;
+      const confidenceBoost = Math.abs(Math.floor(timeFactor * 3)) + 1;
+      return {
+        ...cat,
+        forecast: cat.forecast + adjustment,
+        aiConfidence: Math.min(99, cat.aiConfidence + confidenceBoost)
+      };
+    }));
     
     setIsAnalyzing(false);
     toast.success('Análise concluída!', {

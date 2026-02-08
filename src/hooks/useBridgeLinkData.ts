@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export interface BridgeLinkStatus {
   mqtt: "connected" | "disconnected" | "connecting";
@@ -68,7 +69,7 @@ export function useBridgeLinkData() {
         .limit(50);
 
       if (error) {
-        console.error("Error fetching BridgeLink events:", error);
+        logger.error("Error fetching BridgeLink events:", error);
         return [];
       }
 
@@ -96,7 +97,7 @@ export function useBridgeLinkData() {
         .limit(100);
 
       if (error) {
-        console.error("Error fetching sensor readings:", error);
+        logger.error("Error fetching sensor readings:", error);
         return [];
       }
 

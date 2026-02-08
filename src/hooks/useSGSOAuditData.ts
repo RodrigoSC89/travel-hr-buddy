@@ -5,6 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface PracticeResult {
   number: string;
@@ -82,7 +83,7 @@ export function useSGSOAuditData(auditId?: string) {
         .limit(1);
 
       if (auditError) {
-        console.error('[useSGSOAuditData] Error:', auditError);
+        logger.error('[useSGSOAuditData] Error:', auditError);
         return null;
       }
 
@@ -213,7 +214,7 @@ export function useSGSOAudits() {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('[useSGSOAudits] Error:', error);
+        logger.error('[useSGSOAudits] Error:', error);
         throw error;
       }
 
