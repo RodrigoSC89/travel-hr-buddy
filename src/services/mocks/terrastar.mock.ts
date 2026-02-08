@@ -13,7 +13,7 @@ import {
 import { logger } from '@/lib/logger';
 
 // Feature flag - controla se usa mock ou API real
-const USE_MOCK_API = (import.meta as any).env.VITE_USE_MOCK_TERRASTAR !== 'false';
+const USE_MOCK_API = true; // Will be replaced by real Terrastar API integration
 
 /**
  * Gera dados ionosféricos simulados baseados em localização
