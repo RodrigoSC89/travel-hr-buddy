@@ -1392,3 +1392,35 @@ comment = "AI Governance - Model monitoring, decision audit, usage analytics, go
 [functions.tracking-intelligence]
 verify_jwt = false
 comment = "Tracking Intelligence - Fleet overview, IoT dashboard, telemetry analysis, geofencing, AI analysis"
+
+# ============================================
+# COMPLIANCE INTELLIGENCE - World-Class (Phase 5)
+# ============================================
+
+[functions.compliance-intelligence]
+verify_jwt = false
+comment = "Compliance Intelligence - Audit overview, PSC readiness, certificate status, regulatory gaps, AI analysis"
+
+# ============================================
+# DOCUMENT INTELLIGENCE - World-Class (Phase 6)
+# ============================================
+
+[functions.document-intelligence]
+verify_jwt = false
+comment = "Document Intelligence - Document overview, version control, classification, expiration tracking, AI analysis"
+
+# ============================================
+# PEOPLE INTELLIGENCE - World-Class (Phase 7)
+# ============================================
+
+[functions.people-intelligence]
+verify_jwt = false
+comment = "People Intelligence - Crew overview, wellbeing, scheduling, certification matrix, AI analysis"
+
+# ============================================
+# FINANCE INTELLIGENCE - World-Class (Phase 8)
+# ============================================
+
+[functions.finance-intelligence]
+verify_jwt = false
+comment = "Finance Intelligence - Financial overview, approvals, budgets, cost optimization, AI analysis"
