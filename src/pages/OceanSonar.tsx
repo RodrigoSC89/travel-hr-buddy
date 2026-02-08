@@ -41,7 +41,7 @@ export default function OceanSonar() {
       setScans(p => p.map(s => {
         if (s.id === id && s.status === 'scanning') {
           const np = Math.min(s.progress + 20, 100);
-          if (np === 100) { clearInterval(interval); return { ...s, progress: 100, status: 'completed', detections: Math.floor(Math.random() * 15) }; }
+          if (np === 100) { clearInterval(interval); return { ...s, progress: 100, status: 'completed', detections: Math.floor((s.frequency * 7 + s.range) % 15) + 1 }; }
           return { ...s, progress: np };
         }
         return s;

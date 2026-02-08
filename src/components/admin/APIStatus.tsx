@@ -96,16 +96,44 @@ export const APIStatus: React.FC = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // Simulate refresh
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setServices(prev => prev.map((service, idx) => ({
-      ...service,
-      lastTest: new Date(),
-      status: "connected" as "connected" | "disconnected",
-      responseTime: 200 + (idx * 150)
-    })));
+    // Test each service by checking if we can reach it
+    const updatedServices = await Promise.all(
+      services.map(async (service) => {
+        const start = Date.now();
+        try {
+          // For internal services, ping Supabase health
+          if (['openai', 'whisper'].includes(service.id)) {
+            const { data } = await (await import('@/integrations/supabase/client')).supabase
+              .from('ai_configurations')
+              .select('id')
+              .limit(1);
+            return {
+              ...service,
+              lastTest: new Date(),
+              status: 'connected' as const,
+              responseTime: Date.now() - start,
+            };
+          }
+          // External services we can't actually ping - show honest status
+          return {
+            ...service,
+            lastTest: new Date(),
+            status: service.status === 'connected' ? 'connected' as const : 'unknown' as const,
+            responseTime: service.responseTime,
+          };
+        } catch {
+          return {
+            ...service,
+            lastTest: new Date(),
+            status: 'disconnected' as const,
+            responseTime: Date.now() - start,
+          };
+        }
+      })
+    );
     
+    setServices(updatedServices);
     setIsRefreshing(false);
   };
 

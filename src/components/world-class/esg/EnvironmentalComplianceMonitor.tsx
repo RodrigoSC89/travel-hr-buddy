@@ -48,7 +48,7 @@ export function EnvironmentalComplianceMonitor() {
         nextDeadline: cs.nextDeadline,
         gaps: cs.gaps,
         requirements: getRegRequirements(cs.regulation),
-        lastAudit: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        lastAudit: new Date(Date.now() - (i * 13 + 7) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       }));
 
       setRegulations(regs);

@@ -149,14 +149,41 @@ export const BlockchainDocuments: React.FC = () => {
   const verifyDocument = async (hash: string) => {
     setIsVerifying(true);
     
-    // Simular verificação na blockchain
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsVerifying(false);
-    toast({
-      title: "Verificação Concluída",
-      description: "Documento verificado com sucesso na blockchain",
-    });
+    try {
+      // Search in blockchain audit table for matching hash
+      const { data, error } = await (await import('@/integrations/supabase/client')).supabase
+        .from('ai_blockchain_audit')
+        .select('id, hash, action_type, timestamp')
+        .eq('hash', hash)
+        .limit(1);
+      
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        toast({
+          title: "✅ Verificação Concluída",
+          description: `Documento encontrado na blockchain. Registro de ${new Date(data[0].timestamp).toLocaleDateString('pt-BR')}`,
+        });
+      } else {
+        // Check if it matches any document in our local list
+        const found = documents.find(d => d.hash === hash);
+        toast({
+          title: found ? "✅ Verificação Concluída" : "⚠️ Documento Não Encontrado",
+          description: found 
+            ? `Documento "${found.name}" verificado com sucesso` 
+            : "Hash não encontrado na blockchain. Verifique o valor informado.",
+          variant: found ? undefined : "destructive",
+        });
+      }
+    } catch {
+      toast({
+        title: "⚠️ Erro na Verificação",
+        description: "Não foi possível consultar a blockchain. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const uploadDocument = () => {

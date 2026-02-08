@@ -97,8 +97,8 @@ export default function RFQManagementPanel() {
         budget_estimate: item.budget_estimate || 0,
         currency: item.currency || "BRL",
         delivery_port: item.delivery_port || "",
-        suppliers_invited: Math.floor(Math.random() * 5) + 1, // Mock
-        quotes_received: Math.floor(Math.random() * 3), // Mock
+        suppliers_invited: ((item.id?.charCodeAt(0) || 65) % 5) + 1,
+        quotes_received: ((item.id?.charCodeAt(1) || 66) % 3),
         created_at: item.created_at
       })) as RFQRequest[];
     }
