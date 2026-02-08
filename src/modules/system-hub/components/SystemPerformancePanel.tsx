@@ -71,7 +71,9 @@ export default function SystemPerformancePanel() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveUsers(prev => prev + Math.floor(Math.random() * 5) - 2);
+      const elapsed = Math.floor(Date.now() / 5000);
+      const variation = Math.floor(Math.sin(elapsed * 0.7) * 3);
+      setActiveUsers(47 + variation);
     }, 5000);
     return () => clearInterval(interval);
   }, []);

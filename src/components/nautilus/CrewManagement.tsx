@@ -63,18 +63,18 @@ export function CrewManagement() {
           certifications: [
             { 
               name: "STCW", 
-              expiryDate: new Date(Date.now() + Math.random() * 180 * 86400000).toISOString(),
-              status: Math.random() > 0.7 ? "expiring" : "valid" as const
+              expiryDate: new Date(Date.now() + (90 + (c.id || '').split("").reduce((a: number, ch: string) => a + ch.charCodeAt(0), 0) % 90) * 86400000).toISOString(),
+              status: ((c.id || '').charCodeAt(0) % 3 === 0) ? "expiring" : "valid" as const
             },
             { 
               name: "GMDSS", 
-              expiryDate: new Date(Date.now() + Math.random() * 365 * 86400000).toISOString(),
+              expiryDate: new Date(Date.now() + (180 + (c.id || '').split("").reduce((a: number, ch: string) => a + ch.charCodeAt(0), 0) % 185) * 86400000).toISOString(),
               status: "valid" as const
             },
           ],
-          hoursWorked: Math.floor(Math.random() * 12),
-          restHours: Math.floor(Math.random() * 10) + 6,
-          performance: 70 + Math.random() * 30,
+          hoursWorked: 4 + ((c.id || '').charCodeAt(0) % 8),
+          restHours: 6 + ((c.id || '').charCodeAt(1) || 0) % 10,
+          performance: 70 + ((c.id || '').split("").reduce((a: number, ch: string) => a + ch.charCodeAt(0), 0) % 30),
         }));
         setCrew(mappedCrew);
       } else {

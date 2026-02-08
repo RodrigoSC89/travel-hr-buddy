@@ -83,7 +83,7 @@ export const CrewManagementDashboard = () => {
         vessel_assignment: nullToUndefined(member.vessel_id),
         contract_start: member.contract_start || "",
         contract_end: member.contract_end || "",
-        certification_count: Math.floor(Math.random() * 10) + 1,
+        certification_count: 1 + ((member.id || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0) % 10),
         experience_years: member.experience_years || 0,
         nationality: member.nationality || "",
         last_assignment: "MV Atlantic Explorer"

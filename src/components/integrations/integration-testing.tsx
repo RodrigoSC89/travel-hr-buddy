@@ -107,8 +107,8 @@ export const IntegrationTesting: React.FC = () => {
     const newResult: TestResult = {
       id: Date.now().toString(),
       name: `Teste ${endpoints.find(e => e.id === selectedEndpoint)?.name}`,
-      status: Math.random() > 0.3 ? "success" : Math.random() > 0.5 ? "warning" : "error",
-      duration: Math.floor(Math.random() * 1000) + 100,
+      status: "success",
+      duration: 150 + (selectedEndpoint.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 900),
       details: "Teste executado com sucesso",
       response: { status: 200, data: "Test completed" },
       timestamp: new Date().toLocaleString("pt-BR")

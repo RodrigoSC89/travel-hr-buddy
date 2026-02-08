@@ -118,7 +118,8 @@ export async function classifyIncidentWithAI(incident: Incident): Promise<Incide
     }
   }
 
-  const confidence = 0.85 + Math.random() * 0.1; // Simulate 85-95% confidence
+  const descHash = description.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const confidence = 0.85 + (descHash % 10) * 0.01; // Deterministic 85-95% confidence based on description
 
   return {
     category,

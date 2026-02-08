@@ -85,18 +85,20 @@ export function SatelliteOptimizerDashboard() {
   }, [provider]);
 
   const updateConnectivity = async () => {
-    // Simulate connectivity check
+    // Deterministic connectivity based on provider and time
     const qualities = ['excellent', 'good', 'fair', 'poor'] as const;
-    const randomQuality = qualities[Math.floor(Math.random() * 3)]; // Favor better quality
+    const providerHash = provider.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const qualityIndex = Math.min(providerHash % 3, 2); // Favor better quality (0-2)
+    const selectedQuality = qualities[qualityIndex];
     
     setConnectivity({
-      quality: randomQuality,
-      bandwidth: randomQuality === 'excellent' ? 10000 : 
-                 randomQuality === 'good' ? 1500 : 
-                 randomQuality === 'fair' ? 300 : 50,
-      latency: randomQuality === 'excellent' ? 50 : 
-               randomQuality === 'good' ? 200 : 
-               randomQuality === 'fair' ? 500 : 1000,
+      quality: selectedQuality,
+      bandwidth: selectedQuality === 'excellent' ? 10000 : 
+                 selectedQuality === 'good' ? 1500 : 
+                 selectedQuality === 'fair' ? 300 : 50,
+      latency: selectedQuality === 'excellent' ? 50 : 
+               selectedQuality === 'good' ? 200 : 
+               selectedQuality === 'fair' ? 500 : 1000,
     });
   };
 

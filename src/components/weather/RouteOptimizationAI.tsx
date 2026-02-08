@@ -135,10 +135,10 @@ export function RouteOptimizationAI() {
   const weatherForecast: WeatherForecast[] = Array.from({ length: 14 }, (_, i) => ({
     day: i + 1,
     date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
-    windSpeed: 8 + Math.random() * 20,
-    windDirection: Math.random() * 360,
-    waveHeight: 1 + Math.random() * 4,
-    visibility: 5 + Math.random() * 15,
+    windSpeed: 8 + Math.abs(Math.sin(i * 1.3)) * 20,
+    windDirection: (i * 47) % 360,
+    waveHeight: 1 + Math.abs(Math.sin(i * 0.9)) * 4,
+    visibility: 5 + Math.abs(Math.cos(i * 0.7)) * 15,
     condition: i === 5 || i === 6 ? "poor" : i === 10 ? "moderate" : "good"
   }));
 

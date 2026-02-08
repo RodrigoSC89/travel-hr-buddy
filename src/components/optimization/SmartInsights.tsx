@@ -72,7 +72,7 @@ export const SmartInsights: React.FC = () => {
 
       if (data.success && data.insights) {
         setInsights(data.insights.map((insight: any) => ({
-          id: insight.id || Math.random().toString(),
+          id: insight.id || `insight-${Date.now()}-${insight.title?.slice(0,5) || 'x'}`,
           type: insight.priority === "high" ? "warning" : "recommendation",
           title: insight.title,
           description: insight.description,
@@ -184,7 +184,7 @@ export const SmartInsights: React.FC = () => {
           currentValue: metric.value,
           predictedValue: metric.target || metric.value * 1.1,
           trend: metric.value < (metric.target || metric.value * 1.1) ? "up" : "down",
-          confidence: 85 + Math.floor(Math.random() * 10),
+          confidence: 85 + (index * 3) % 10,
           timeFrame: "30 dias",
           unit: metric.unit
         })) || [];

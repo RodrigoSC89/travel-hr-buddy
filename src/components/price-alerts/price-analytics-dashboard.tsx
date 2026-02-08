@@ -151,7 +151,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         .slice(0, 5)
         .map(([name, data]) => ({
           name,
-          savings: Math.floor(Math.random() * 500 + 100), // Estimated
+          savings: 100 + (name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 500),
           frequency: data.count,
         }));
 
@@ -207,8 +207,8 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       date.setDate(date.getDate() - i);
       data.push({
         date: date.toLocaleDateString("pt-BR"),
-        viagens: 800 + Math.random() * 400,
-        hospedagem: 300 + Math.random() * 200,
+        viagens: 800 + Math.abs(Math.sin(i * 0.4)) * 400,
+        hospedagem: 300 + Math.abs(Math.cos(i * 0.3)) * 200,
       });
     }
     return data;
@@ -216,10 +216,10 @@ export const PriceAnalyticsDashboard: React.FC = () => {
 
   const generateMockSavings = () => {
     const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
-    return months.map(month => ({
+    return months.map((month, i) => ({
       month,
-      savings: Math.floor(1000 + Math.random() * 3000),
-      alerts: Math.floor(5 + Math.random() * 15),
+      savings: 1000 + ((i + 1) * 487) % 3000,
+      alerts: 5 + ((i + 1) * 3) % 15,
     }));
   };
 

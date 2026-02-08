@@ -235,16 +235,16 @@ export default function VoyageCommandCenter() {
       origin: originPort,
       destination: destPort,
       waypoints: [],
-      distanceNm: Math.floor(Math.random() * 3000) + 2000,
-      estimatedDays: Math.floor(Math.random() * 15) + 7,
-      fuelConsumption: Math.floor(Math.random() * 2000) + 1500,
+      distanceNm: 2000 + ((originPort.name.length + destPort.name.length) * 137) % 3000,
+      estimatedDays: 7 + ((originPort.name.length * destPort.name.length) % 15),
+      fuelConsumption: 1500 + ((originPort.name.charCodeAt(0) + destPort.name.charCodeAt(0)) * 7) % 2000,
       status: "planned",
       vesselName: newVoyage.vessel || "A definir",
       departureDate: newVoyage.departure || new Date().toISOString().split('T')[0],
       arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       weatherRisk: "medium",
       createdAt: new Date().toISOString().split('T')[0],
-      estimatedCost: Math.floor(Math.random() * 500000) + 200000,
+      estimatedCost: 200000 + ((originPort.name.length + destPort.name.length) * 17389) % 500000,
       aiRecommendations: ["Aguardando análise de IA para otimização de rota"]
     };
 
@@ -289,9 +289,10 @@ export default function VoyageCommandCenter() {
         "Identificamos uma oportunidade de bunker em Durban com preços 8% abaixo da média. Deseja incluir essa escala no planejamento?"
       ];
       
+      const msgHash = aiCopilotInput.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
       setAiMessages(prev => [...prev, { 
         role: "assistant", 
-        content: responses[Math.floor(Math.random() * responses.length)]
+        content: responses[msgHash % responses.length]
       }]);
     }, 1500);
 

@@ -175,9 +175,10 @@ export const OperationalWindowMonitor: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setConditions(prev => prev.map(c => ({
+      const elapsed = Date.now() / 1000;
+      setConditions(prev => prev.map((c, i) => ({
         ...c,
-        value: c.value + (Math.random() - 0.5) * 0.2
+        value: c.value + Math.sin(elapsed / 10 + i * 2) * 0.05
       })));
       setLastUpdate(new Date());
     }, 30000);

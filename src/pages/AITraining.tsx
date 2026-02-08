@@ -664,7 +664,7 @@ function SessionCard({
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    const score = Math.floor(Math.random() * 40) + 60; // Simulate quiz completion
+                    const score = 60 + (Date.now() % 40); // Deterministic quiz score based on completion time
                     onComplete(score);
                   }}
                 >

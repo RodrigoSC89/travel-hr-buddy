@@ -130,14 +130,15 @@ const AIAssistant: React.FC = () => {
         }
       ];
 
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      const msgHash = messages.length + (messages[messages.length - 1]?.content || '').split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+      const selectedResponse = responses[msgHash % responses.length];
       
       const assistantMessage: Message = {
         id: Date.now().toString(),
         type: "assistant",
-        content: randomResponse.content,
+        content: selectedResponse.content,
         timestamp: new Date(),
-        suggestions: randomResponse.suggestions,
+        suggestions: selectedResponse.suggestions,
         actions: [
           { label: "Implementar", action: "implement" },
           { label: "Mais detalhes", action: "details" }
