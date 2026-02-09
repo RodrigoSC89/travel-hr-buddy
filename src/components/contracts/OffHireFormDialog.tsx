@@ -1,6 +1,6 @@
 /**
  * OffHireFormDialog - Formulário para registro de off-hire
- * PATCH: Substituição de toast placeholder por formulário funcional
+ * Com validação Zod
  */
 
 import { useState } from "react";
@@ -11,6 +11,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle, Clock } from "lucide-react";
+import { z } from "zod";
+
+const offHireSchema = z.object({
+  start_date: z.string().min(1, "Data de início é obrigatória"),
+  end_date: z.string().optional().or(z.literal('')),
+  reason: z.string().trim().min(5, "Justificativa deve ter ao menos 5 caracteres").max(2000, "Justificativa muito longa"),
+  reason_type: z.string().min(1, "Tipo de off-hire é obrigatório"),
+  vessel_name: z.string().max(100, "Nome muito longo").optional().or(z.literal('')),
+  notes: z.string().max(1000, "Notas muito longas").optional().or(z.literal('')),
+});
 
 interface OffHireFormData {
   start_date: string;
@@ -30,6 +40,7 @@ interface OffHireFormDialogProps {
 
 export function OffHireFormDialog({ open, onOpenChange, onSubmit }: OffHireFormDialogProps) {
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<OffHireFormData>({
     start_date: '',
     end_date: '',
@@ -39,7 +50,15 @@ export function OffHireFormDialog({ open, onOpenChange, onSubmit }: OffHireFormD
   });
 
   const handleSubmit = async () => {
-    if (!formData.start_date || !formData.reason || !formData.reason_type) {
+    setErrors({});
+    const result = offHireSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const err of result.error.issues) {
+        const key = String(err.path[0] ?? '');
+        if (key) fieldErrors[key] = err.message;
+      }
+      setErrors(fieldErrors);
       return;
     }
 
@@ -87,8 +106,9 @@ export function OffHireFormDialog({ open, onOpenChange, onSubmit }: OffHireFormD
               <Input 
                 type="datetime-local"
                 value={formData.start_date}
-                onChange={(e) => setFormData(prev => ({ ...prev, start_date: e.target.value }))}
+              onChange={(e) => setFormData(prev => ({ ...prev, start_date: e.target.value }))}
               />
+              {errors.start_date && <p className="text-xs text-destructive mt-1">{errors.start_date}</p>}
             </div>
             <div className="space-y-2">
               <Label>Fim do Off-Hire</Label>
@@ -120,6 +140,7 @@ export function OffHireFormDialog({ open, onOpenChange, onSubmit }: OffHireFormD
                 <SelectItem value="other">Outro</SelectItem>
               </SelectContent>
             </Select>
+            {errors.reason_type && <p className="text-xs text-destructive mt-1">{errors.reason_type}</p>}
           </div>
 
           <div className="space-y-2">
@@ -130,6 +151,7 @@ export function OffHireFormDialog({ open, onOpenChange, onSubmit }: OffHireFormD
               value={formData.reason}
               onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
             />
+            {errors.reason && <p className="text-xs text-destructive mt-1">{errors.reason}</p>}
           </div>
 
           <div className="space-y-2">

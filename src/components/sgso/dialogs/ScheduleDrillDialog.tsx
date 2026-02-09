@@ -1,6 +1,6 @@
 /**
  * Schedule Drill Dialog
- * Dialog to schedule emergency drills
+ * Dialog to schedule emergency drills with Zod validation
  */
 
 import React, { useState } from "react";
@@ -30,11 +30,21 @@ import { Clock, CalendarIcon, Users, MapPin, Save } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
+
+const drillSchema = z.object({
+  type: z.string().min(1, "Tipo de simulado é obrigatório"),
+  coordinator: z.string().trim().min(2, "Nome do coordenador deve ter ao menos 2 caracteres").max(100, "Nome muito longo"),
+  location: z.string().max(200, "Local muito longo").optional().or(z.literal('')),
+  participants: z.string().max(1000, "Lista de participantes muito longa").optional().or(z.literal('')),
+  objectives: z.string().max(2000, "Objetivos muito longos").optional().or(z.literal('')),
+  notes: z.string().max(1000, "Notas muito longas").optional().or(z.literal('')),
+});
 
 interface ScheduleDrillDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDrillScheduled?: (drill: any) => void;
+  onDrillScheduled?: (drill: Record<string, unknown>) => void;
 }
 
 const DRILL_TYPES = [
@@ -58,6 +68,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
   onDrillScheduled,
 }) => {
   const [date, setDate] = useState<Date>();
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     type: "",
     time: "10:00",
@@ -75,8 +86,19 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (!date || !formData.type || !formData.coordinator) {
-      toast.error("Preencha todos os campos obrigatórios");
+    setErrors({});
+    if (!date) {
+      setErrors({ date: "Selecione a data do simulado" });
+      return;
+    }
+    const result = drillSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const err of result.error.issues) {
+        const key = String(err.path[0] ?? '');
+        if (key) fieldErrors[key] = err.message;
+      }
+      setErrors(fieldErrors);
       return;
     }
 

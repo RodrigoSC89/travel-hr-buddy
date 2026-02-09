@@ -1,6 +1,5 @@
 /**
- * SGSORiskDialog - Extracted from SgsoDashboard
- * Dialog for registering SGSO risks
+ * SGSORiskDialog - Risk registration with Zod validation
  */
 
 import { useState } from "react";
@@ -19,6 +18,16 @@ import {
 } from "@/components/ui/dialog";
 import { AlertTriangle, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
+
+const riskSchema = z.object({
+  title: z.string().trim().min(3, "Descrição deve ter ao menos 3 caracteres").max(300, "Descrição muito longa"),
+  category: z.string().optional().or(z.literal('')),
+  probability: z.string().min(1, "Probabilidade é obrigatória"),
+  impact: z.string().min(1, "Impacto é obrigatório"),
+  description: z.string().max(2000, "Descrição muito longa").optional().or(z.literal('')),
+  mitigation: z.string().max(2000, "Medidas muito longas").optional().or(z.literal('')),
+});
 
 interface RiskForm {
   title: string;
@@ -46,15 +55,19 @@ const initialForm: RiskForm = {
 
 export function SGSORiskDialog({ open, onOpenChange, triggerClassName }: SGSORiskDialogProps) {
   const [form, setForm] = useState<RiskForm>(initialForm);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const { toast } = useToast();
 
   const handleSubmit = () => {
-    if (!form.title || !form.probability || !form.impact) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
-      });
+    setErrors({});
+    const result = riskSchema.safeParse(form);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const err of result.error.issues) {
+        const key = String(err.path[0] ?? '');
+        if (key) fieldErrors[key] = err.message;
+      }
+      setErrors(fieldErrors);
       return;
     }
     
