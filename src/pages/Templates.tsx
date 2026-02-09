@@ -20,6 +20,7 @@ import {
   Check, X, Loader2, FileDown, Printer
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Template {
@@ -308,8 +309,10 @@ const Templates = () => {
     
     setIsGeneratingAI(true);
     
-    // Simulate AI generation
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const { data, error } = await supabase.functions.invoke('ai-chat', {
+      body: { prompt: `Generate template for: ${newTemplate.name}`, module: 'template-generator' }
+    });
+    if (error) { toast.error("Erro ao gerar template com IA"); setIsGeneratingAI(false); return; }
     
     const generatedContent = `# ${newTemplate.name}
 

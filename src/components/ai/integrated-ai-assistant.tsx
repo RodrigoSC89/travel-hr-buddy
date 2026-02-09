@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -164,8 +165,9 @@ const IntegratedAIAssistant = () => {
     setIsLoading(true);
 
     try {
-      // Simulate AI response with more sophisticated logic
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data: aiData, error: aiError } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: currentMessage, module: 'integrated-assistant' }
+      });
       
       const aiResponse = await generateAIResponse(currentMessage);
       

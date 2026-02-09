@@ -3,6 +3,8 @@
  * Detecção de cláusulas de risco em contratos com IA
  */
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,9 +84,17 @@ export default function RiskClausesPage() {
   const handleAnalyze = async () => {
     if (!contractText.trim()) return;
     setIsAnalyzing(true);
-    await new Promise(resolve => setTimeout(resolve, 2500));
-    setIsAnalyzing(false);
-    setSelectedTab("results");
+    try {
+      const { error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: `Analyze contract risk clauses: ${contractText.substring(0, 500)}`, module: 'risk-clauses' }
+      });
+      if (error) throw error;
+      setSelectedTab("results");
+    } catch (err) {
+      toast.error("Erro na análise de cláusulas");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const getRiskColor = (level: string) => {

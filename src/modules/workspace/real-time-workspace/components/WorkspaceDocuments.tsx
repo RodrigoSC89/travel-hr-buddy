@@ -120,8 +120,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     
     setIsUploading(true);
     try {
-      // Simulate upload
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Upload file
       
       onUpload?.(selectedFile);
       toast({
@@ -156,8 +155,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
   const handleDownload = async (doc: SharedDocument) => {
     setIsDownloading(doc.id);
     try {
-      // Simulate download
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Download file
       
       onDownload?.(doc);
       toast({

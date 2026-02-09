@@ -72,10 +72,17 @@ export default function IntegrationsCenter() {
     }
     
     toast.loading("Enviando mensagem de teste...");
-    
-    // Simulate test
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success("Mensagem de teste enviada para o Slack!");
+    try {
+      const response = await fetch(slackWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: "🧪 Teste de integração Nautilus One" })
+      });
+      if (!response.ok) throw new Error('Webhook failed');
+      toast.success("Mensagem de teste enviada para o Slack!");
+    } catch (err) {
+      toast.error("Falha ao enviar mensagem de teste. Verifique o webhook URL.");
+    }
   };
 
   const handleAddWebhook = () => {
@@ -104,8 +111,13 @@ export default function IntegrationsCenter() {
 
   const handleTestWebhook = async (webhook: WebhookConfig) => {
     toast.loading(`Testando ${webhook.name}...`);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    toast.success(`Webhook ${webhook.name} respondeu com sucesso!`);
+    try {
+      const response = await fetch(webhook.url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ test: true, timestamp: new Date().toISOString() }) });
+      if (!response.ok) throw new Error('Webhook test failed');
+      toast.success(`Webhook ${webhook.name} respondeu com sucesso!`);
+    } catch (err) {
+      toast.error(`Webhook ${webhook.name} falhou. Verifique a URL.`);
+    }
   };
 
   const integrationCards = [

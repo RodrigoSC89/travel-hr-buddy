@@ -1,4 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 // PATCH 549: Lazy load components to prevent bundle bloat and freezing
 const EnhancedPeotramDashboard = lazy(() => import("./enhanced-peotram-dashboard").then(m => ({ default: m.EnhancedPeotramDashboard })));
@@ -235,9 +237,9 @@ export const EnhancedPeotramManager: React.FC = () => {
   ];
 
   const handleSaveAudit = async (auditData: any) => {
-    // Implementar salvamento na API Supabase
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
-    await loadData(); // Recarregar dados
+    const { error } = await supabase.from('peotram_audits').insert(auditData);
+    if (error) { toast.error('Erro ao salvar auditoria'); return; }
+    await loadData();
   };
 
   const handleCompleteAudit = async (auditData: any) => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -158,15 +159,20 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
 
   const runAnalysis = async () => {
     setIsAnalyzing(true);
-    
-    // Simular análise IA
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setIsAnalyzing(false);
-    toast({
-      title: "Análise Concluída",
-      description: "Nova análise preditiva gerada com sucesso",
-    });
+    try {
+      const { error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: 'Run predictive analytics for maritime operations', module: 'predictive-analytics' }
+      });
+      if (error) throw error;
+      toast({
+        title: "Análise Concluída",
+        description: "Nova análise preditiva gerada com sucesso",
+      });
+    } catch (err) {
+      toast({ title: "Erro", description: "Falha na análise preditiva", variant: "destructive" });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const getImpactColor = (impact: string) => {

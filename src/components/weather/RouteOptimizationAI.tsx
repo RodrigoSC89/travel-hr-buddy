@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -162,11 +163,16 @@ export function RouteOptimizationAI() {
   const runOptimization = async () => {
     setIsOptimizing(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: `Optimize maritime route with parameters: ${JSON.stringify(routeOptions.map(r => r.name))}`, module: 'route-optimization' }
+      });
+      if (error) throw error;
       setSelectedRoute(routeOptions[0]);
       toast.success("Otimização concluída!", {
         description: "Rota otimizada calculada com economia de 8% em combustível"
       });
+    } catch (err) {
+      toast.error("Erro na otimização de rota");
     } finally {
       setIsOptimizing(false);
     }

@@ -108,7 +108,6 @@ export function ActionableDashboardWidget({
   const handleAction = async (action: WidgetAction) => {
     setIsActionsLoading(action.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate loading
       action.onClick();
     } finally {
       setIsActionsLoading(null);

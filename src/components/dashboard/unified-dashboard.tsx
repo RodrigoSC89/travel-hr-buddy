@@ -119,7 +119,6 @@ const UnifiedDashboard = () => {
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Atualizar dados com variação determinística
     const elapsed = Date.now() / 1000;

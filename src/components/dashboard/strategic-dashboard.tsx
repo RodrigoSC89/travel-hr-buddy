@@ -248,9 +248,6 @@ const StrategicDashboard: React.FC = () => {
         filters: dashboardFilters
       };
 
-      // Simulate export process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       toast({
         title: "Exportação Concluída",
         description: `Dashboard exportado em formato ${format.toUpperCase()} com sucesso!`,

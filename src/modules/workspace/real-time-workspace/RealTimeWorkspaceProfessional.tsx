@@ -150,8 +150,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      // Simulate refresh
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Refresh workspace data
       
       // Add a system message
       const refreshActivity: WorkspaceActivity = {

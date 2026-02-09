@@ -182,7 +182,6 @@ export default function SystemHub() {
   // Refresh handler
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
     // Deterministic variation using time-based sine wave
     const now = Date.now();

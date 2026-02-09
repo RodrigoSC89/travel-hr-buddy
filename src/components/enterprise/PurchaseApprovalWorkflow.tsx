@@ -160,12 +160,14 @@
  
    const handleApprove = async (request: PurchaseRequest) => {
      setIsProcessing(true);
-     await new Promise(resolve => setTimeout(resolve, 1000));
-     onApprove?.(request.id, approvalComments);
-     toast.success(`Requisição ${request.id} aprovada!`);
-     setIsProcessing(false);
-     setDetailsOpen(false);
-     setApprovalComments("");
+     try {
+       onApprove?.(request.id, approvalComments);
+       toast.success(`Requisição ${request.id} aprovada!`);
+     } finally {
+       setIsProcessing(false);
+       setDetailsOpen(false);
+       setApprovalComments("");
+     }
    };
  
    const handleReject = async (request: PurchaseRequest) => {
@@ -174,12 +176,14 @@
        return;
      }
      setIsProcessing(true);
-     await new Promise(resolve => setTimeout(resolve, 1000));
-     onReject?.(request.id, approvalComments);
-     toast.error(`Requisição ${request.id} rejeitada`);
-     setIsProcessing(false);
-     setDetailsOpen(false);
-     setApprovalComments("");
+     try {
+       onReject?.(request.id, approvalComments);
+       toast.error(`Requisição ${request.id} rejeitada`);
+     } finally {
+       setIsProcessing(false);
+       setDetailsOpen(false);
+       setApprovalComments("");
+     }
    };
  
    const pendingCount = requests.filter(r => r.steps.some(s => s.status === "current")).length;

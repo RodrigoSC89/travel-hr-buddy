@@ -86,8 +86,7 @@ export const EnhancedFinanceCenter: React.FC = () => {
   const loadFinancialData = async () => {
     setLoading(true);
     try {
-      // Simulate API call - in production would fetch from Supabase
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Load financial data
 
       // KPIs
       setKpis([

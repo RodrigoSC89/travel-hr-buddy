@@ -79,8 +79,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
     setIsSubmitting(true);
 
     try {
-      // Simulate API call - in production, save to database
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save maintenance plan
 
       const equipment = equipmentList.find(e => e.id === formData.equipmentId);
       

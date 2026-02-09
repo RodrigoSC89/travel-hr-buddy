@@ -291,9 +291,6 @@ export const EnhancedSettingsHub: React.FC = () => {
         return;
       }
 
-      // Simulate API call to save settings
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       // Log the action for audit trail
       await logSettingsChange("save", settings);
       

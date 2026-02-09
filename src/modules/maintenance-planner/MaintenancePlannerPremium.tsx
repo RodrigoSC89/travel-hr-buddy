@@ -279,7 +279,7 @@ function ReportsContent() {
 
 export default function MaintenancePlannerPremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh handled by React Query invalidation
   };
 
   const handleExport = () => {

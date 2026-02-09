@@ -269,12 +269,9 @@ export function VesselHistoryTimeline() {
 
     setActionLoading('save');
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-
       const vessel = vessels.find(v => v.id === formData.vesselId);
 
       if (selectedEvent) {
-        // Update
         setEvents(prev => prev.map(e => 
           e.id === selectedEvent.id 
             ? { 
@@ -289,7 +286,6 @@ export function VesselHistoryTimeline() {
         ));
         toast({ title: 'Sucesso', description: 'Evento atualizado com sucesso' });
       } else {
-        // Create
         const newEvent: VesselEvent = {
           id: `new-${Date.now()}`,
           ...formData,
@@ -317,7 +313,6 @@ export function VesselHistoryTimeline() {
 
     setActionLoading(id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
       setEvents(prev => prev.filter(e => e.id !== id));
       toast({ title: 'Sucesso', description: 'Evento excluído' });
     } catch (error) {

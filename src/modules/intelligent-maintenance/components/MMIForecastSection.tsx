@@ -71,11 +71,8 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
 🤖 Gerado por IA | ${new Date().toLocaleString('pt-BR')}
       `.trim();
 
-      // Simulate streaming
-      for (let i = 0; i < mockForecast.length; i += 10) {
-        await new Promise(resolve => setTimeout(resolve, 20));
-        setForecast(mockForecast.slice(0, i + 10));
-      }
+      // Set forecast immediately
+      setForecast(mockForecast);
       setForecast(mockForecast);
 
       toast.success("Forecast gerado com sucesso!");
@@ -96,8 +93,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
     setSaving(true);
 
     try {
-      // Simulated save
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save forecast
       toast.success("📦 Forecast salvo com sucesso!");
     } catch (error) {
       logger.error("Error saving forecast", { error, vesselName, systemName });

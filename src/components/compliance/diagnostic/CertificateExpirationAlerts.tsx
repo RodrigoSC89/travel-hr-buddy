@@ -66,7 +66,6 @@ export function CertificateExpirationAlerts() {
   // Enviar alerta manual
   const sendManualAlert = async (certificate: Certificate) => {
     toast.loading('Enviando alerta...', { id: 'sending-alert' });
-    await new Promise(resolve => setTimeout(resolve, 1500));
     sendAlert(certificate);
     toast.success('Alerta enviado com sucesso!', { id: 'sending-alert' });
   };
@@ -82,7 +81,6 @@ export function CertificateExpirationAlerts() {
   // Exportar relatório
   const exportReport = async () => {
     toast.loading('Gerando relatório...', { id: 'export' });
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
     const report = {
       generated_at: new Date().toISOString(),

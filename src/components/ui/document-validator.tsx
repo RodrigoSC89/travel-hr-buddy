@@ -55,8 +55,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     setIsValidating(true);
     
     try {
-      // Simular validação (em produção, seria uma chamada à API)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Validate document fields
       
       const issues: ValidationIssue[] = [];
       let score = 100;
