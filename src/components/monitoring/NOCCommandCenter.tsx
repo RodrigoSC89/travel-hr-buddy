@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,6 +66,7 @@ interface Webhook {
 type ServiceType = "database" | "api" | "auth" | "storage" | "edge" | "realtime";
 
 export function NOCCommandCenter() {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -115,7 +117,7 @@ export function NOCCommandCenter() {
                 Este painel exibe apenas dados reais da tabela system_status.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Monitoramento
             </Button>

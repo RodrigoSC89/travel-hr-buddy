@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -75,6 +76,7 @@ function toDemoSatellite(sat: SatelliteData): DemoSatellite {
 }
 
 export const SatelliteDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedSatellite, setSelectedSatellite] = useState<SatelliteData | null>(null);
   const [activeMainTab, setActiveMainTab] = useState("tracker");
   const [showAICopilot, setShowAICopilot] = useState(true);
@@ -155,7 +157,7 @@ export const SatelliteDashboard: React.FC = () => {
                 Este dashboard exibe apenas dados reais de satélites cadastrados.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Satélites
             </Button>

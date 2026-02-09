@@ -5,6 +5,7 @@
  */
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -74,6 +75,7 @@ const QUICK_ACTIONS: QuickAction[] = [
 ];
 
 export function ComplianceIntegrationHub() {
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<HubView>('overview');
   
   // Real data hooks
@@ -95,7 +97,7 @@ export function ComplianceIntegrationHub() {
             <div className="text-center">
               <AlertTriangle className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Acesse o Fluxo de NCs pelo menu principal</p>
-              <Button variant="link" className="mt-2" onClick={() => window.location.href = '/compliance-roadmap'}>
+              <Button variant="link" className="mt-2" onClick={() => navigate('/compliance-roadmap')}>
                 Ir para Compliance Roadmap
               </Button>
             </div>

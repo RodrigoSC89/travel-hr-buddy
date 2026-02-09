@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -81,6 +82,7 @@ const STEPS = [
 ];
 
 export default function BetaFeedback() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -136,7 +138,7 @@ export default function BetaFeedback() {
             <p className="text-muted-foreground mb-6">
               Sua opinião é extremamente valiosa para nós. Usaremos seus comentários para melhorar o Nautilus One.
             </p>
-            <Button onClick={() => window.location.href = "/"}>
+            <Button onClick={() => navigate("/")}>
               Voltar ao Dashboard
             </Button>
           </CardContent>

@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -41,6 +42,7 @@ import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
 import { useClimateData, DEPARTAMENTOS, DEFAULT_PULSE_QUESTIONS, type ClimateResult, type PulseSurveyQuestion } from '@/hooks/useClimateData';
 
 const ClimateEngagement: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [surveyResponses, setSurveyResponses] = useState<Record<string, number>>({});
@@ -195,7 +197,7 @@ const ClimateEngagement: React.FC = () => {
                 Este dashboard exibe apenas dados reais de pesquisas cadastradas.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/nautilus-people'}>
+            <Button onClick={() => navigate('/nautilus-people')}>
               <Settings className="h-4 w-4 mr-2" />
               Criar Pesquisa
             </Button>

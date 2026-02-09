@@ -3,6 +3,7 @@
  * ✅ P0 CORRIGIDO: Status de integração + dados reais (R02 MITIGADO)
  */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function TrackingDashboard() {
+  const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -144,7 +146,7 @@ export default function TrackingDashboard() {
           <AlertTitle>Sem Embarcações</AlertTitle>
           <AlertDescription className="flex justify-between items-center">
             <span>Adicione embarcações para rastreamento.</span>
-            <Button size="sm" variant="outline" onClick={() => window.location.href = '/vessels'}>
+            <Button size="sm" variant="outline" onClick={() => navigate('/vessels')}>
               <Settings className="h-4 w-4 mr-2" />Configurar
             </Button>
           </AlertDescription>

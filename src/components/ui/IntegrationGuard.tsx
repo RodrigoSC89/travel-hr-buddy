@@ -3,6 +3,7 @@
  * Shows clear demo mode status instead of hiding functionality
  */
 import { AlertTriangle, ExternalLink, Settings, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ export function IntegrationGuard({
   docsUrl,
   children,
 }: IntegrationGuardProps) {
+  const navigate = useNavigate();
   return (
     <div className="space-y-4">
       <Alert className="border-warning/50 bg-warning/5">
@@ -51,7 +53,7 @@ export function IntegrationGuard({
                 </a>
               </Button>
             )}
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/integrations'}>
+            <Button variant="outline" size="sm" onClick={() => navigate('/integrations')}>
               <Settings className="h-3.5 w-3.5 mr-1" />
               Configurar Integração
             </Button>
