@@ -83,7 +83,17 @@ const PublicAPI: React.FC = () => {
             <div className="rounded-lg border bg-card p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium">Uso por Endpoint</h3>
-                <Button variant="outline" size="sm" onClick={() => toast.success("Relatório exportado com sucesso")}>Exportar</Button>
+                <Button variant="outline" size="sm" onClick={() => {
+                  const csv = ['/api/vessels;523', '/api/crew;412', '/api/documents;312'].join('\n');
+                  const blob = new Blob([`Endpoint;Chamadas\n${csv}`], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'api-usage-report.csv';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                  toast.success("Relatório exportado com sucesso");
+                }}>Exportar</Button>
               </div>
               <div className="space-y-3">
                 {[{e: '/api/vessels', c: 523}, {e: '/api/crew', c: 412}, {e: '/api/documents', c: 312}].map(item => (

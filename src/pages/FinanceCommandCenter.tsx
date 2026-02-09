@@ -1041,11 +1041,21 @@ const FinanceCommandCenter: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1" onClick={() => toast({ title: "📊 Detalhes", description: `Abrindo detalhes da rota ${cost.route}...` })}>
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => setActiveTab("overview")}>
                       <BarChart3 className="h-4 w-4 mr-2" />
                       Ver Detalhes
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast({ title: "📥 Exportar", description: `Exportando dados de ${cost.route}...` })}>
+                    <Button variant="outline" size="sm" onClick={() => {
+                      const csv = `Rota;Custo Total;Combustível;Tripulação;Manutenção;Portuário;Outros;Eficiência\n${cost.route};${cost.totalCost};${cost.breakdown.fuel};${cost.breakdown.crew};${cost.breakdown.maintenance};${cost.breakdown.port};${cost.breakdown.other};${cost.efficiency}%`;
+                      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `rota-${cost.route.replace(/\s/g, '-')}.csv`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                      toast({ title: "Exportado", description: `Dados de ${cost.route} exportados com sucesso` });
+                    }}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar
                     </Button>

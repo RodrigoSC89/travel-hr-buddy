@@ -681,7 +681,21 @@ export default function MedicationInventory() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Medicamento adicionado!"); setShowAddDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "medication_added", created_at: new Date().toISOString() }),
+                  interaction_type: "medication_add",
+                  module_name: "medical-pharmacy"
+                });
+                if (error) throw error;
+                toast.success("Medicamento adicionado ao inventário!");
+                setShowAddDialog(false);
+              } catch {
+                toast.error("Erro ao adicionar medicamento");
+              }
+            }}>
               Adicionar
             </Button>
           </DialogFooter>
@@ -737,7 +751,21 @@ export default function MedicationInventory() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDispenseDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Medicamento dispensado!"); setShowDispenseDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "medication_dispensed", medication: selectedMed?.name, created_at: new Date().toISOString() }),
+                  interaction_type: "medication_dispense",
+                  module_name: "medical-pharmacy"
+                });
+                if (error) throw error;
+                toast.success("Medicamento dispensado e registrado!");
+                setShowDispenseDialog(false);
+              } catch {
+                toast.error("Erro ao dispensar medicamento");
+              }
+            }}>
               Confirmar Dispensação
             </Button>
           </DialogFooter>

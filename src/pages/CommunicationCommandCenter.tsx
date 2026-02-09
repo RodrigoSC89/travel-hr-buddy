@@ -238,7 +238,7 @@ const CommunicationCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => toast({ title: "IA Ativada", description: "Assistente de comunicação disponível" })}
+                    onClick={() => setActiveTab("ai")}
                   >
                     <Sparkles className="h-6 w-6 text-purple-500" />
                     <span className="font-medium">Assistente IA</span>

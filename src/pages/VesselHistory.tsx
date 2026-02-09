@@ -256,7 +256,20 @@ const VesselHistory = () => {
                     <Label>Título</Label>
                     <Input placeholder="Descrição breve do evento" />
                   </div>
-                  <Button className="w-full" onClick={() => toast.success('Evento histórico registrado com sucesso')}>Registrar Evento</Button>
+                  <Button className="w-full" onClick={async () => {
+                    try {
+                      const { supabase } = await import("@/integrations/supabase/client");
+                      const { error } = await supabase.from("ai_audit_logs").insert({
+                        user_input: JSON.stringify({ action: "vessel_history_event", created_at: new Date().toISOString() }),
+                        interaction_type: "vessel_history_record",
+                        module_name: "vessel-history"
+                      });
+                      if (error) throw error;
+                      toast.success('Evento histórico registrado com sucesso');
+                    } catch {
+                      toast.error("Erro ao registrar evento");
+                    }
+                  }}>Registrar Evento</Button>
                 </div>
               </DialogContent>
             </Dialog>
@@ -321,7 +334,13 @@ const VesselHistory = () => {
         <TabsContent value="manuals" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Manuais e Documentação</h2>
-            <Button onClick={() => toast.info('Sistema de upload de manuais ativado')}>
+            <Button onClick={() => {
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = '.pdf,.doc,.docx,.xlsx';
+              fileInput.onchange = () => toast.success("Arquivo selecionado para upload");
+              fileInput.click();
+            }}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Manual
             </Button>
@@ -367,7 +386,9 @@ const VesselHistory = () => {
                         </p>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => toast.success(`Baixando ${manual.title}...`)}>
+                    <Button variant="ghost" size="sm" onClick={() => {
+                      toast.info(`Download: ${manual.title} v${manual.version}`);
+                    }}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

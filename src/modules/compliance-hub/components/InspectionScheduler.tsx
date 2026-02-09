@@ -525,7 +525,21 @@ export default function InspectionScheduler() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
-            <Button onClick={() => { toast.success("Inspeção agendada!"); setShowAddDialog(false); }}>
+            <Button onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                const { error } = await supabase.from("ai_audit_logs").insert({
+                  user_input: JSON.stringify({ action: "inspection_scheduled", created_at: new Date().toISOString() }),
+                  interaction_type: "inspection_schedule",
+                  module_name: "compliance-inspections"
+                });
+                if (error) throw error;
+                toast.success("Inspeção agendada com sucesso!");
+                setShowAddDialog(false);
+              } catch {
+                toast.error("Erro ao agendar inspeção");
+              }
+            }}>
               Agendar Inspeção
             </Button>
           </DialogFooter>

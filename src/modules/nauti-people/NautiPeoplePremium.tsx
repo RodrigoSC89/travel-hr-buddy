@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   Users, LayoutDashboard, UserCheck, Calendar, Award,
   Clock, Ship, Bot, FileText, Plus, Briefcase, Heart,
@@ -21,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // People Dashboard
 function PeopleDashboard() {
+  const navigate = useNavigate();
   const [crew, setCrew] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -116,19 +118,19 @@ function PeopleDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Novo tripulante")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/crew-management?action=new")}>
               <UserCheck className="h-4 w-4" />
               Cadastrar Tripulante
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Embarque")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/crew-management?tab=embarkation")}>
               <Ship className="h-4 w-4" />
               Registrar Embarque
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Treinamento")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/training")}>
               <GraduationCap className="h-4 w-4" />
               Agendar Treinamento
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Análise IA")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => navigate("/crew-wellbeing")}>
               <Bot className="h-4 w-4" />
               Análise de Fadiga com IA
             </Button>
@@ -209,7 +211,7 @@ function PeopleDashboard() {
             <div className="text-center py-8 text-muted-foreground">
               <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum tripulante encontrado</p>
-              <Button className="mt-4" onClick={() => toast.success("Novo tripulante")}>
+              <Button className="mt-4" onClick={() => navigate("/crew-management?action=new")}>
                 <Plus className="h-4 w-4 mr-2" />
                 Cadastrar Primeiro Tripulante
               </Button>
