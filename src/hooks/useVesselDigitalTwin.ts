@@ -41,7 +41,7 @@ export interface VesselHistoryEvent {
   title: string;
   description: string | null;
   event_date: string;
-  documents: any;
+  documents: Record<string, unknown>[] | null;
 }
 
 export interface VesselSensor {

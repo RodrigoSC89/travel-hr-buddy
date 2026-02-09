@@ -36,7 +36,7 @@ export interface ProcurementOrder {
   delivery_date: string | null;
   total_amount: number;
   currency: string;
-  items: any;
+  items: Record<string, unknown>[] | null;
   created_at: string;
 }
 
@@ -158,8 +158,7 @@ export function useProcurementData() {
 
   const createOrder = useMutation({
     mutationFn: async (order: Partial<ProcurementOrder>) => {
-      const { data, error } = await supabase
-        .from("procurement_orders")
+      const { data, error } = await (supabase.from as Function)("procurement_orders")
         .insert({
           order_number: `PO-${Date.now().toString().slice(-6)}`,
           order_type: order.order_type || "standard",
