@@ -298,7 +298,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                             <div>
                               <div className="flex items-center gap-2">
                                 <CardTitle className="text-base">{item.equipment}</CardTitle>
-                                <Badge variant={getPriorityColor(item.priority) as any}>
+                                <Badge variant={getPriorityColor(item.priority) as "default" | "destructive" | "outline" | "secondary"}>
                                   {item.priority.toUpperCase()}
                                 </Badge>
                               </div>

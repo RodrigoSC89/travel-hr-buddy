@@ -410,22 +410,22 @@ export const AISuggestionsPanel: React.FC = () => {
                       
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
-                          {(suggestion.action_data as any)?.savings && (
+                          {(suggestion.action_data?.savings as unknown as string) && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
-                              Economia: {(suggestion.action_data as any).savings}
+                              Economia: {(suggestion.action_data.savings as unknown as string)}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.vessel && (
+                          {(suggestion.action_data?.vessel as unknown as string) && (
                             <div className="flex items-center gap-1">
                               <Ship className="w-3 h-3" />
-                              {(suggestion.action_data as any).vessel}
+                              {(suggestion.action_data.vessel as unknown as string)}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.days_overdue && (
+                          {(suggestion.action_data?.days_overdue as unknown as number) && (
                             <div className="flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3" />
-                              {(suggestion.action_data as any).days_overdue} dias em atraso
+                              {(suggestion.action_data.days_overdue as unknown as number)} dias em atraso
                             </div>
                           )}
                         </div>

@@ -101,7 +101,7 @@ export function RealTimeTrackingMap() {
 
           const lastUpdate = new Date(t.recorded_at || t.created_at || Date.now());
           const speed = t.speed_knots || 0;
-          const vessel = t.vessels as any;
+          const vessel = t.vessels as { name?: string; imo_number?: string; status?: string } | null;
 
           unique.push({
             id: t.id,
@@ -111,7 +111,7 @@ export function RealTimeTrackingMap() {
             lng: t.longitude,
             speed,
             course: t.heading || 0,
-            status: mapVesselStatus(vessel?.status, speed),
+            status: mapVesselStatus(vessel?.status || null, speed),
             lastUpdate,
             signalQuality: getSignalQuality(lastUpdate),
             fuelLevel: t.fuel_level ?? undefined,
