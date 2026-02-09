@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import mapboxgl from '@/lib/mapbox-shim';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,7 @@ interface SmartRoutesMapProps {
 }
 
 export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) => {
+  const navigate = useNavigate();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [isMapLoading, setIsMapLoading] = useState(true);
@@ -284,7 +286,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
                 Este mapa exibe apenas rotas reais cadastradas no sistema.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/voyage-planner'}>
+            <Button onClick={() => navigate('/voyage-planner')}>
               <Settings className="h-4 w-4 mr-2" />
               Criar Nova Rota
             </Button>

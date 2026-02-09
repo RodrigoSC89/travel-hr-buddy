@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,7 @@ import {
 import { useFleetTracking, useFleetStats, type VesselLocation, type FleetAlert } from "@/hooks/useFleetTrackingData";
 
 export const FleetOperationsCenter: React.FC = () => {
+  const navigate = useNavigate();
   const { vessels, alerts, isLoading, error, refetch } = useFleetTracking();
   const stats = useFleetStats();
   const [localAlerts, setLocalAlerts] = useState<FleetAlert[]>([]);
@@ -120,7 +122,7 @@ export const FleetOperationsCenter: React.FC = () => {
         title="Nenhuma embarcação cadastrada"
         description="Adicione embarcações ao sistema para visualizar o centro de operações."
         actionLabel="Ir para Frota"
-        onAction={() => window.location.href = "/fleet"}
+        onAction={() => navigate("/fleet")}
       />
     );
   }

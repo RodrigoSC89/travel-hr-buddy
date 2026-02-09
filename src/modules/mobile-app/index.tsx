@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -170,6 +171,7 @@ interface Notification {
 import { useNotificationsData } from "@/hooks/useNotificationsData";
 
 export default function MobileApp() {
+  const navigate = useNavigate();
   const { notifications: rawNotifications } = useNotificationsData();
   const [selectedRole, setSelectedRole] = useState<CrewRole>(crewRoles[0]);
   const [activeView, setActiveView] = useState<string>("home");
@@ -213,7 +215,7 @@ export default function MobileApp() {
             <Bell className="h-4 w-4 mr-2" />
             {unreadCount} novas
           </Badge>
-          <Button variant="outline" onClick={() => window.location.href = '/settings'}>
+          <Button variant="outline" onClick={() => navigate('/settings')}>
             Configurar
           </Button>
         </div>

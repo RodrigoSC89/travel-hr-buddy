@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Download, Smartphone, Wifi, WifiOff, Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ function detectPlatform(): string {
 
 export default function InstallPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isInstalled, isOnline, canInstall, installPWA } = usePWAStatus();
   const platform = detectPlatform();
 
@@ -136,7 +138,7 @@ export default function InstallPage() {
         <Button 
           variant="outline" 
           className="w-full border-white/30 text-white hover:bg-white/10 gap-2"
-          onClick={() => window.location.href = '/'}
+          onClick={() => navigate('/')}
         >
           Continue to App
           <ArrowRight className="h-4 w-4" />

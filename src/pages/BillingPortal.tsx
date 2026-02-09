@@ -3,6 +3,7 @@
  * Invoice history, usage tracking, customer portal integration
  */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,6 +35,7 @@ interface UsageMetric {
 }
 
 export default function BillingPortal() {
+  const navigate = useNavigate();
   const { currentTier, subscriptionEnd, openCustomerPortal, isSubscribed } = useSubscription();
   const [currency, setCurrency] = useState<Currency>('BRL');
   
@@ -177,7 +179,7 @@ export default function BillingPortal() {
                 <span>{formatPrice(29900 * 12 * 0.8, currency)}</span>
               </div>
             </div>
-            <Button variant="outline" className="w-full" onClick={() => window.location.href = '/billing'}>
+            <Button variant="outline" className="w-full" onClick={() => navigate('/billing')}>
               Ver todos os planos
               <ArrowUpRight className="h-4 w-4 ml-2" />
             </Button>

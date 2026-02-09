@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, MessageSquare, Users, Radio } from "lucide-react";
 
 export default function Patch486Communication() {
+  const navigate = useNavigate();
   const [status, setStatus] = React.useState({
     centerActive: true,
     realtimeEnabled: true,
@@ -127,10 +129,10 @@ export default function Patch486Communication() {
       </Card>
 
       <div className="flex gap-4">
-        <Button onClick={() => window.location.href = "/communication-command"}>
+        <Button onClick={() => navigate("/communication-command")}>
           Acessar Communication Center
         </Button>
-        <Button variant="outline" onClick={() => window.location.href = "/admin/patches-506-510/validation"}>
+        <Button variant="outline" onClick={() => navigate("/admin/patches-506-510/validation")}>
           Ver Patches 506-510
         </Button>
       </div>

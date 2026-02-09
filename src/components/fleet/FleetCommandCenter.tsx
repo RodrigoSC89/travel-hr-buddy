@@ -11,6 +11,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,7 @@ interface VesselWithMission extends Vessel {
 }
 
 export const FleetCommandCenter: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -376,7 +378,7 @@ export const FleetCommandCenter: React.FC = () => {
                 <CardTitle>Active Missions</CardTitle>
                 <Button size="sm" onClick={() => {
                   logger.info("Creating new mission");
-                  window.location.href = "/missions/new";
+                  navigate("/missions/new");
                 }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create Mission

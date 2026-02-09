@@ -3,6 +3,7 @@
  * ✅ P0 CORRIGIDO: Status de integração + bloqueio se não configurado (R02 MITIGADO)
  */
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ interface VesselPosition {
 }
 
 export default function GnssLive() {
+  const navigate = useNavigate();
   const { data: integrationStatus, isLoading: statusLoading } = useGNSSIntegrationStatus();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
@@ -91,7 +93,7 @@ export default function GnssLive() {
                 Por segurança, não são exibidas posições simuladas.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Integração
             </Button>

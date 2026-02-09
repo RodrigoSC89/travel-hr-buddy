@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +79,7 @@ interface WebhookConfig {
 }
 
 export function NOCMonitoringCenter() {
+  const navigate = useNavigate();
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [autoRestart, setAutoRestart] = useState(true);
   const [aiAutonomous, setAiAutonomous] = useState(true);
@@ -250,7 +252,7 @@ export function NOCMonitoringCenter() {
                 Este painel exibe apenas dados reais. Configure as integrações para começar.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Monitoramento
             </Button>

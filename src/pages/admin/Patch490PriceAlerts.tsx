@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DollarSign, TrendingUp, Bell, BarChart3 } from "lucide-react";
 
 export default function Patch490PriceAlerts() {
+  const navigate = useNavigate();
   const [stats] = React.useState({
     activeAlerts: 23,
     triggered: 156,
@@ -130,10 +132,10 @@ export default function Patch490PriceAlerts() {
       </Card>
 
       <div className="flex gap-4">
-        <Button onClick={() => window.location.href = "/alerts-command"}>
+        <Button onClick={() => navigate("/alerts-command")}>
           Acessar Price Alerts
         </Button>
-        <Button variant="outline" onClick={() => window.location.href = "/analytics-command"}>
+        <Button variant="outline" onClick={() => navigate("/analytics-command")}>
           Dashboard BI
         </Button>
       </div>

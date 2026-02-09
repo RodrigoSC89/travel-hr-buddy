@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, CheckCircle2, Layout } from "lucide-react";
 
 export default function Patch488Templates() {
+  const navigate = useNavigate();
   const [templates] = React.useState([
     { id: 1, name: "Relatório de Inspeção", category: "Compliance", usageCount: 127 },
     { id: 2, name: "Plano de Manutenção", category: "Maintenance", usageCount: 89 },
@@ -126,10 +128,10 @@ export default function Patch488Templates() {
       </Card>
 
       <div className="flex gap-4">
-        <Button onClick={() => window.location.href = "/document-templates"}>
+        <Button onClick={() => navigate("/document-templates")}>
           Acessar Biblioteca
         </Button>
-        <Button variant="outline" onClick={() => window.location.href = "/documents"}>
+        <Button variant="outline" onClick={() => navigate("/documents")}>
           Editor de Documentos
         </Button>
       </div>

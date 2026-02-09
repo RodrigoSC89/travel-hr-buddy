@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bot, 
@@ -61,6 +62,7 @@ const getModuleColorClass = (color: string) => {
 };
 
 export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalAIButtonProps) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedModule, setSelectedModule] = useState<AIModuleKey>(defaultModule);
   const [chatOpen, setChatOpen] = useState(false);
@@ -260,7 +262,7 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
                 className="w-full justify-start text-muted-foreground"
                 onClick={() => {
                   setIsOpen(false);
-                  window.location.href = '/ai-hub';
+                  navigate('/ai-hub');
                 }}
               >
                 <ChevronUp className="h-4 w-4 mr-2" />

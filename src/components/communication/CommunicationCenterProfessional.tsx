@@ -3,6 +3,7 @@
  * ✅ P0 CORRIGIDO: Dados reais via Supabase (R01 MITIGADO)
  */
 import React, { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -117,6 +118,7 @@ const StatCard: React.FC<{ icon: React.ElementType; label: string; value: number
   );
 
 export const CommunicationCenterProfessional: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("inbox");
   const [searchTerm, setSearchTerm] = useState("");
   const [inboxTab, setInboxTab] = useState("all");
@@ -278,7 +280,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                 Este painel exibe apenas dados reais do banco de dados.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Comunicação
             </Button>
