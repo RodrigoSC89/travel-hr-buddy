@@ -146,27 +146,25 @@ export const FMEADPTrialsIntegration: React.FC = () => {
 
     setIsUploading(true);
     
-    // Simulate file processing
-    setTimeout(() => {
-      const newReport: FMEAReport = {
-        id: `report-${Date.now()}`,
-        vesselName: "Nova Embarcação",
-        reportDate: new Date().toISOString().split("T")[0],
-        reportType: "FMEA",
-        status: "pending",
-        criticalFindings: 0,
-        majorFindings: 0,
-        minorFindings: 0,
-        overallRisk: "low",
-        fileName: file.name
-      };
+    // Process file synchronously (local state)
+    const newReport: FMEAReport = {
+      id: `report-${Date.now()}`,
+      vesselName: "Nova Embarcação",
+      reportDate: new Date().toISOString().split("T")[0],
+      reportType: "FMEA",
+      status: "pending",
+      criticalFindings: 0,
+      majorFindings: 0,
+      minorFindings: 0,
+      overallRisk: "low",
+      fileName: file.name
+    };
 
-      setReports(prev => [newReport, ...prev]);
-      setIsUploading(false);
-      toast.success("Relatório importado com sucesso!", {
-        description: "Análise automática será iniciada."
-      });
-    }, 2000);
+    setReports(prev => [newReport, ...prev]);
+    setIsUploading(false);
+    toast.success("Relatório importado com sucesso!", {
+      description: "Análise automática será iniciada."
+    });
   };
 
   const getRiskBadge = (risk: string) => {

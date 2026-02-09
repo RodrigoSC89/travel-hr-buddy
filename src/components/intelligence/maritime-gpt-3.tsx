@@ -168,12 +168,10 @@ Como posso ajudá-lo hoje?`,
     setInputMessage("");
     setIsProcessing(true);
 
-    // Simulate AI processing with maritime-specific responses
-    setTimeout(() => {
-      const aiResponse = generateMaritimeResponse(message);
-      setMessages(prev => [...prev, aiResponse]);
-      setIsProcessing(false);
-    }, 1500);
+    // Process locally — generateMaritimeResponse uses rule-based matching
+    const aiResponse = generateMaritimeResponse(message);
+    setMessages(prev => [...prev, aiResponse]);
+    setIsProcessing(false);
   };
 
   const generateMaritimeResponse = (query: string): Message => {

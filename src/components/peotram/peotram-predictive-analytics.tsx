@@ -113,15 +113,13 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
 
   const runPredictiveAnalysis = async () => {
     setIsAnalyzing(true);
-    toast.info("Executando análise preditiva com ML...");
+    toast.info("Executando análise preditiva...");
 
-    // Simulate ML analysis
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      toast.success("Análise preditiva concluída!", {
-        description: `${insights.length} insights gerados com confiança média de 81%`
-      });
-    }, 3000);
+    // Analysis runs locally using pre-computed insights
+    setIsAnalyzing(false);
+    toast.success("Análise preditiva concluída!", {
+      description: `${insights.length} insights gerados com confiança média de 81%`
+    });
   };
 
   const getSeverityColor = (severity: "high" | "medium" | "low") => {

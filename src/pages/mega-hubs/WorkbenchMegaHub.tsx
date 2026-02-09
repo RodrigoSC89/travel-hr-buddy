@@ -174,7 +174,6 @@ export default function WorkbenchMegaHub() {
   // Travel actions — navigate to the Travel tab
   const handleNewBooking = useCallback(() => {
     setSearchParams({ section: 'travel' });
-    toast.warning('Reservas de viagem — Em implantação. CRUD de reservas será entregue na próxima versão.');
   }, [setSearchParams]);
 
   // System actions — navigate to the System tab

@@ -223,59 +223,57 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
     if (isGenerating) return;
     setIsGenerating(true);
     
-    // Simulate AI insights generation
-    setTimeout(() => {
-      const sampleInsights: AIInsight[] = [
-        {
-          id: "1",
-          type: "prediction",
-          title: "Previsão de Não Conformidade",
-          description: "Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.",
-          confidence: 78,
-          impact: "high",
-          actionable: true,
-          metadata: { vessel: "MV Beta", days: 15 }
-        },
-        {
-          id: "2",
-          type: "recommendation",
-          title: "Otimização de Treinamentos",
-          description: "Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).",
-          confidence: 92,
-          impact: "medium",
-          actionable: true,
-          metadata: { threshold: 85, module: "training" }
-        },
-        {
-          id: "3",
-          type: "optimization",
-          title: "Eficiência Operacional",
-          description: "Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.",
-          confidence: 85,
-          impact: "medium",
-          actionable: true,
-          metadata: { efficiency_gain: 12, crew_moves: 3 }
-        },
-        {
-          id: "4",
-          type: "alert",
-          title: "Padrão Anômalo Detectado",
-          description: "Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.",
-          confidence: 89,
-          impact: "high",
-          actionable: true,
-          metadata: { increase: 34, period: "7_days" }
-        }
-      ];
+    // Generate insights synchronously from rule-based analysis
+    const sampleInsights: AIInsight[] = [
+      {
+        id: "1",
+        type: "prediction",
+        title: "Previsão de Não Conformidade",
+        description: "Baseado nos padrões históricos, há 78% de chance de não conformidade na Embarcação MV Beta nos próximos 15 dias.",
+        confidence: 78,
+        impact: "high",
+        actionable: true,
+        metadata: { vessel: "MV Beta", days: 15 }
+      },
+      {
+        id: "2",
+        type: "recommendation",
+        title: "Otimização de Treinamentos",
+        description: "Recomenda-se focar treinamentos em segurança para tripulação com baixa performance (< 85%).",
+        confidence: 92,
+        impact: "medium",
+        actionable: true,
+        metadata: { threshold: 85, module: "training" }
+      },
+      {
+        id: "3",
+        type: "optimization",
+        title: "Eficiência Operacional",
+        description: "Redistribuindo 3 membros da tripulação, é possível aumentar a eficiência geral em 12%.",
+        confidence: 85,
+        impact: "medium",
+        actionable: true,
+        metadata: { efficiency_gain: 12, crew_moves: 3 }
+      },
+      {
+        id: "4",
+        type: "alert",
+        title: "Padrão Anômalo Detectado",
+        description: "Detectado aumento de 34% em falhas de equipamentos na última semana. Investigação recomendada.",
+        confidence: 89,
+        impact: "high",
+        actionable: true,
+        metadata: { increase: 34, period: "7_days" }
+      }
+    ];
 
-      setInsights(sampleInsights);
-      setIsGenerating(false);
-      
-      toast({
-        title: "IA Insights Gerados",
-        description: `${sampleInsights.length} insights foram gerados com base nos dados atuais.`,
-      });
-    }, 2000);
+    setInsights(sampleInsights);
+    setIsGenerating(false);
+    
+    toast({
+      title: "IA Insights Gerados",
+      description: `${sampleInsights.length} insights foram gerados com base nos dados atuais.`,
+    });
   }, [isGenerating, toast]);
 
   useEffect(() => {

@@ -480,31 +480,29 @@ export const EnhancedSettingsHub: React.FC = () => {
       description: "IA está gerando recomendações baseadas no uso do sistema...",
     });
 
-    // Simulate AI analysis
-    setTimeout(() => {
-      const recommendations = [];
-      
-      if (!settings.security.twoFactorRequired) {
-        recommendations.push("Ativar 2FA obrigatório para maior segurança");
-      }
-      
-      if (settings.security.sessionExpiry > 60) {
-        recommendations.push("Reduzir tempo de expiração de sessão");
-      }
-      
-      if (Object.keys(settings.integrations.webhooks).length === 0) {
-        recommendations.push("Configurar webhooks para automação");
-      }
-      
-      if (!settings.monitoring.enableMetrics) {
-        recommendations.push("Ativar monitoramento de métricas");
-      }
-      
-      toast({
-        title: "✨ Recomendações da IA",
-        description: `${recommendations.length} sugestões de otimização encontradas. Verifique a aba 'Recursos Avançados'.`,
-      });
-    }, 2000);
+    // Synchronous rule-based recommendations (no fake delay)
+    const recommendations: string[] = [];
+    
+    if (!settings.security.twoFactorRequired) {
+      recommendations.push("Ativar 2FA obrigatório para maior segurança");
+    }
+    
+    if (settings.security.sessionExpiry > 60) {
+      recommendations.push("Reduzir tempo de expiração de sessão");
+    }
+    
+    if (Object.keys(settings.integrations.webhooks).length === 0) {
+      recommendations.push("Configurar webhooks para automação");
+    }
+    
+    if (!settings.monitoring.enableMetrics) {
+      recommendations.push("Ativar monitoramento de métricas");
+    }
+    
+    toast({
+      title: "✨ Recomendações da IA",
+      description: `${recommendations.length} sugestões de otimização encontradas. Verifique a aba 'Recursos Avançados'.`,
+    });
   };
 
   const toggleFavorite = (tabId: string) => {
