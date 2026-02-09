@@ -267,7 +267,7 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | **Performance** | 85/100 | 85/100 | Build otimizado |
 | **Segurança** | 95/100 | 95/100 | localStorage → sessionStorage |
 | **Testes** | 70/100 | 70/100 | @ts-nocheck apenas em testes |
-| **GERAL** | **86/100** | **88/100** | **+2 pontos** |
+| **GERAL** | **86/100** | **89/100** | **+3 pontos** |
 
 ### Histórico de Sprints
 | Sprint | Data | Pontos Ganhos | Ações |
@@ -276,19 +276,20 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 2 | 2026-02-09 | +4 | 27 botões fake → real/honesto, IoT, Maintenance |
 | Sprint 3 | 2026-02-09 | +2 | Type safety services, security localStorage→sessionStorage |
 | Sprint 4 | 2026-02-09 | +2 | Type safety hooks (Operations, Compliance, Fleet, Suppliers, Medical), schema field fixes |
-| **Acumulado** | | **+12** | **80 → 88/100** |
+| Sprint 5 | 2026-02-09 | +1 | Type safety hooks (ComplianceHub, Alerts, Maintenance, UserMgmt, ComplianceReal), schema alignment |
+| **Acumulado** | | **+13** | **80 → 89/100** |
 
 ### Próximos passos para 100/100
-1. **Type Safety (+10)**: Continuar eliminando `any` em hooks restantes (56 arquivos) — ~10 dias
+1. **Type Safety (+5)**: Continuar eliminando `any` em hooks restantes (51 arquivos) — ~8 dias
 2. **CRUD completo (+5)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
-3. **Rotas (+5)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
+3. **Rotas (+3)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
 4. **Performance (+2)**: Code splitting agressivo e virtualização — 2 dias
 
 ---
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→4):** 55  
-**Falhas restantes:** 84  
-**Esforço total de correção restante:** ~18 dias (144 horas)  
-**Prioridade:** Sprint 5 (Type Safety em massa) → Sprint 6 (CRUD) → Sprint 7 (Consolidação)
+**Falhas corrigidas (Sprint 1→5):** 62  
+**Falhas restantes:** 77  
+**Esforço total de correção restante:** ~16 dias (128 horas)  
+**Prioridade:** Sprint 6 (Type Safety em massa) → Sprint 7 (CRUD) → Sprint 8 (Consolidação)

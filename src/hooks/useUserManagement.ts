@@ -116,16 +116,16 @@ export const useUserManagement = () => {
         setUsers(sampleUsers);
       } else {
         // Map to our interface
-        setUsers(data.map((u: any) => ({
-          id: u.id || u.user_id,
-          email: u.email || "email@example.com",
-          role: u.role || "member",
-          status: u.status || "active",
-          full_name: u.full_name || "Usuário",
-          department: u.department,
-          position: u.position,
-          joined_at: u.joined_at || u.created_at,
-          last_active_at: u.last_active_at,
+        setUsers(data.map((u) => ({
+          id: u.id || u.user_id || '',
+          email: "email@example.com",
+          role: (u.role || "member") as OrganizationUser["role"],
+          status: (u.status || "active") as OrganizationUser["status"],
+          full_name: "Usuário",
+          department: undefined,
+          position: undefined,
+          joined_at: u.joined_at || u.created_at || new Date().toISOString(),
+          last_active_at: u.last_active_at ?? undefined,
         })));
       }
     } catch (err) {

@@ -37,9 +37,29 @@ export interface SystemHealth {
   last_updated: string;
 }
 
+interface RawAlert {
+  id: string;
+  severity?: string | null;
+  level?: string | null;
+  category?: string | null;
+  alert_type?: string | null;
+  title?: string | null;
+  message?: string | null;
+  description?: string | null;
+  vessel_id?: string | null;
+  vessel_name?: string | null;
+  priority?: string | null;
+  acknowledged?: boolean | null;
+  resolved?: boolean | null;
+  created_at?: string | null;
+  resolved_at?: string | null;
+  ai_confidence?: number | null;
+  recommended_action?: string | null;
+  impact_assessment?: string | null;
+}
+
 // Map database alert to SmartAlert interface
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapAlertToSmartAlert(alert: any): SmartAlert {
+function mapAlertToSmartAlert(alert: RawAlert): SmartAlert {
   const severityMap: Record<string, SmartAlert['type']> = {
     critical: 'critical',
     high: 'warning',
