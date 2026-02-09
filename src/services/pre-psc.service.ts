@@ -22,9 +22,9 @@ export interface PrePSCInspection {
   total_score?: number;
   conformity_percentage?: number;
   flagged_items?: number;
-  findings?: any[];
-  recommendations?: any[];
-  corrective_actions?: any[];
+  findings?: Record<string, unknown>[];
+  recommendations?: Record<string, unknown>[];
+  corrective_actions?: Record<string, unknown>[];
   signed_by?: string;
   signature_hash?: string;
   signature_date?: string;

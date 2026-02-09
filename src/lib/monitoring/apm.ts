@@ -314,8 +314,8 @@ class APMService {
       // Observe FID
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          this.recordMetric('web-vitals.fid', entry.processingStart - entry.startTime, 'ms');
+        entries.forEach((entry: PerformanceEntry) => {
+          this.recordMetric('web-vitals.fid', (entry as PerformanceEventTiming).processingStart - entry.startTime, 'ms');
         });
       });
       fidObserver.observe({ type: 'first-input', buffered: true });
@@ -323,9 +323,10 @@ class APMService {
       // Observe CLS
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries() as any[]) {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        for (const entry of list.getEntries()) {
+          const layoutEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+          if (!layoutEntry.hadRecentInput) {
+            clsValue += layoutEntry.value || 0;
           }
         }
         this.recordMetric('web-vitals.cls', clsValue, 'score');
@@ -334,10 +335,11 @@ class APMService {
 
       // Observe resource timing
       const resourceObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry: any) => {
-          if (entry.initiatorType === 'fetch' || entry.initiatorType === 'xmlhttprequest') {
-            this.recordMetric('resource.api.duration', entry.duration, 'ms', {
-              url: entry.name.split('?')[0],
+        list.getEntries().forEach((entry: PerformanceEntry) => {
+          const resEntry = entry as PerformanceResourceTiming;
+          if (resEntry.initiatorType === 'fetch' || resEntry.initiatorType === 'xmlhttprequest') {
+            this.recordMetric('resource.api.duration', resEntry.duration, 'ms', {
+              url: resEntry.name.split('?')[0],
             });
           }
         });
@@ -359,7 +361,7 @@ class APMService {
       logger.debug('[APM] Health check:', health);
       
       // Record system metrics
-      const memory = (performance as any).memory;
+      const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
       if (memory) {
         this.recordMetric('system.memory.used', memory.usedJSHeapSize / 1024 / 1024, 'MB');
         this.recordMetric('system.memory.total', memory.totalJSHeapSize / 1024 / 1024, 'MB');
@@ -383,7 +385,7 @@ export const apm = new APMService();
 /**
  * Higher-order function to track async operations
  */
-export function withAPM<T extends (...args: any[]) => Promise<any>>(
+export function withAPM<T extends (...args: unknown[]) => Promise<unknown>>(
   name: string,
   fn: T,
   type: APMTransaction['type'] = 'api-call'

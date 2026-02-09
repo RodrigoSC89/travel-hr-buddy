@@ -57,22 +57,22 @@ class PerformanceMonitor {
    */
   private trackWebVitals(): void {
     // Largest Contentful Paint (LCP)
-    this.observeMetric("largest-contentful-paint", (entry: any) => {
+    this.observeMetric("largest-contentful-paint", (entry: PerformanceEntry) => {
       const metric: WebVitalMetric = {
         name: "LCP",
-        value: entry.renderTime || entry.loadTime,
-        rating: this.rateLCP(entry.renderTime || entry.loadTime),
+        value: (entry as PerformanceEntry & { renderTime?: number; loadTime?: number }).renderTime || (entry as PerformanceEntry & { loadTime?: number }).loadTime || 0,
+        rating: this.rateLCP((entry as PerformanceEntry & { renderTime?: number; loadTime?: number }).renderTime || (entry as PerformanceEntry & { loadTime?: number }).loadTime || 0),
         timestamp: Date.now(),
       };
       this.recordMetric(metric);
     });
 
     // First Input Delay (FID) - using INP as replacement
-    this.observeMetric("first-input", (entry: any) => {
+    this.observeMetric("first-input", (entry: PerformanceEntry) => {
       const metric: WebVitalMetric = {
         name: "FID",
-        value: entry.processingStart - entry.startTime,
-        rating: this.rateFID(entry.processingStart - entry.startTime),
+        value: (entry as PerformanceEventTiming).processingStart - entry.startTime,
+        rating: this.rateFID((entry as PerformanceEventTiming).processingStart - entry.startTime),
         timestamp: Date.now(),
       };
       this.recordMetric(metric);
@@ -80,9 +80,10 @@ class PerformanceMonitor {
 
     // Cumulative Layout Shift (CLS)
     let clsValue = 0;
-    this.observeMetric("layout-shift", (entry: any) => {
-      if (!entry.hadRecentInput) {
-        clsValue += entry.value;
+    this.observeMetric("layout-shift", (entry: PerformanceEntry) => {
+      const layoutEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+      if (!layoutEntry.hadRecentInput) {
+        clsValue += layoutEntry.value || 0;
         const metric: WebVitalMetric = {
           name: "CLS",
           value: clsValue,
@@ -106,7 +107,7 @@ class PerformanceMonitor {
     }
 
     // First Contentful Paint (FCP)
-    this.observeMetric("paint", (entry: any) => {
+    this.observeMetric("paint", (entry: PerformanceEntry) => {
       if (entry.name === "first-contentful-paint") {
         const metric: WebVitalMetric = {
           name: "FCP",
@@ -123,12 +124,13 @@ class PerformanceMonitor {
    * Track resource loading performance
    */
   private trackResources(): void {
-    this.observeMetric("resource", (entry: any) => {
+    this.observeMetric("resource", (entry: PerformanceEntry) => {
+      const resEntry = entry as PerformanceResourceTiming;
       const resource: ResourceTiming = {
-        name: entry.name,
-        duration: entry.duration,
-        size: entry.transferSize || 0,
-        type: entry.initiatorType,
+        name: resEntry.name,
+        duration: resEntry.duration,
+        size: resEntry.transferSize || 0,
+        type: resEntry.initiatorType,
       };
 
       // Log slow resources

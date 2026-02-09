@@ -277,14 +277,14 @@ class MLCInspectionService {
 
     return {
       totalInspections: inspections?.length || 0,
-      draftInspections: inspections?.filter((i: any) => i.status === "draft").length || 0,
-      submittedInspections: inspections?.filter((i: any) => i.status === "submitted").length || 0,
+      draftInspections: inspections?.filter((i: Record<string, unknown>) => i.status === "draft").length || 0,
+      submittedInspections: inspections?.filter((i: Record<string, unknown>) => i.status === "submitted").length || 0,
       averageCompliance: inspections?.length 
-        ? Math.round(inspections.reduce((acc: any, i: any) => acc + (i.compliance_score || 0), 0) / inspections.length)
+        ? Math.round(inspections.reduce((acc: number, i: Record<string, unknown>) => acc + (Number(i.compliance_score) || 0), 0) / inspections.length)
         : 0,
       totalFindings: findings?.length || 0,
-      criticalFindings: findings?.filter((f: any) => f.severity === "critical").length || 0,
-      nonCompliantFindings: findings?.filter((f: any) => !f.compliance).length || 0,
+      criticalFindings: findings?.filter((f: Record<string, unknown>) => f.severity === "critical").length || 0,
+      nonCompliantFindings: findings?.filter((f: Record<string, unknown>) => !f.compliance).length || 0,
     };
   }
 }
