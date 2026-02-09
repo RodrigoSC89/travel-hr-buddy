@@ -267,7 +267,7 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | **Performance** | 85/100 | 85/100 | Build otimizado |
 | **Segurança** | 95/100 | 95/100 | localStorage → sessionStorage |
 | **Testes** | 70/100 | 70/100 | @ts-nocheck apenas em testes |
-| **GERAL** | **86/100** | **90/100** | **+4 pontos** |
+| **GERAL** | **86/100** | **91/100** | **+5 pontos** |
 
 ### Histórico de Sprints
 | Sprint | Data | Pontos Ganhos | Ações |
@@ -278,10 +278,11 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 4 | 2026-02-09 | +2 | Type safety hooks (Operations, Compliance, Fleet, Suppliers, Medical), schema field fixes |
 | Sprint 5 | 2026-02-09 | +1 | Type safety hooks (ComplianceHub, Alerts, Maintenance, UserMgmt, ComplianceReal), schema alignment |
 | Sprint 6 | 2026-02-09 | +1 | Type safety (Inventory, Notifications), schema alignment (inventory_items, drill_evaluations, smart_drills) |
-| **Acumulado** | | **+14** | **80 → 90/100** |
+| Sprint 7 | 2026-02-09 | +1 | Type safety (TrainingAcademy, DashboardRealData, Offline, AcademyDashboard), Json type alignment |
+| **Acumulado** | | **+15** | **80 → 91/100** |
 
 ### Próximos passos para 100/100
-1. **Type Safety (+4)**: Continuar eliminando `any` em hooks restantes (~48 arquivos) — ~7 dias
+1. **Type Safety (+3)**: Continuar eliminando `any` em hooks restantes (~45 arquivos) — ~6 dias
 2. **CRUD completo (+3)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
 3. **Rotas (+2)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
 4. **Performance (+1)**: Code splitting agressivo e virtualização — 2 dias
@@ -290,7 +291,7 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→6):** 69  
-**Falhas restantes:** 70  
-**Esforço total de correção restante:** ~15 dias (120 horas)  
-**Prioridade:** Sprint 7 (Type Safety em massa) → Sprint 8 (CRUD) → Sprint 9 (Consolidação)
+**Falhas corrigidas (Sprint 1→7):** 76  
+**Falhas restantes:** 63  
+**Esforço total de correção restante:** ~14 dias (112 horas)  
+**Prioridade:** Sprint 8 (Type Safety em massa) → Sprint 9 (CRUD) → Sprint 10 (Consolidação)

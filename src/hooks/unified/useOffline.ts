@@ -168,14 +168,14 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
           }
           
           onOfflineQueue?.();
-          return { queued: true } as any;
+          return { queued: true } as TData;
         }
         
         throw error;
       }
     },
     onSuccess: (data, variables) => {
-      if ((data as any)?.queued) return;
+      if (data && typeof data === 'object' && 'queued' in data) return;
       
       setIsQueued(false);
       if (showToasts) {

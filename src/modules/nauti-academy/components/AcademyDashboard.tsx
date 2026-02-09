@@ -1247,7 +1247,7 @@ export default function AcademyDashboard() {
               {selectedCourse?.course_name}
             </DialogTitle>
             <DialogDescription>
-              Módulo {(selectedProgress?.current_module || 0) + 1} de {selectedCourse?.modules?.length || 5}
+              Módulo {(selectedProgress?.current_module || 0) + 1} de {Array.isArray(selectedCourse?.modules) ? selectedCourse.modules.length : 5}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -1257,7 +1257,7 @@ export default function AcademyDashboard() {
                 <BookOpen className="h-12 w-12 mx-auto mb-4 text-primary" />
                 <h3 className="text-lg font-medium mb-2">Conteúdo do Módulo</h3>
                 <p className="text-muted-foreground">
-                  {selectedCourse?.modules?.[selectedProgress?.current_module || 0]?.title || "Módulo em andamento"}
+                  {Array.isArray(selectedCourse?.modules) ? (selectedCourse.modules[selectedProgress?.current_module || 0] as Record<string, unknown>)?.title as string || "Módulo em andamento" : "Módulo em andamento"}
                 </p>
               </div>
             </div>
