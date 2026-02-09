@@ -65,7 +65,7 @@ export function useFuelOptimizerData() {
           actual_consumption: actual,
           savings: Math.round(estimated - actual),
           date: voyage.planned_departure || voyage.actual_departure || new Date().toISOString(),
-          vessel_name: (voyage.vessels as any)?.name,
+          vessel_name: (voyage.vessels as Record<string, unknown> | null)?.name as string | undefined,
           status: voyage.status === "completed" ? "completed" : "in_progress",
         };
       });

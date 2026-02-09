@@ -104,7 +104,7 @@ class ModuleIntegrationService {
 
     try {
       // Dynamic table access requires targeted type assertion on table name
-      const { data, error } = await (supabase.from as any)(table)
+      const { data, error } = await (supabase.from as Function)(table)
         .select("*")
         .limit(query?.limit || 100);
 

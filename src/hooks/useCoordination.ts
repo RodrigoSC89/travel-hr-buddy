@@ -92,17 +92,17 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
         }
 
         if (data) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (data as any[]).forEach((agentData) => {
+          type AgentRow = Record<string, unknown>;
+          (data as AgentRow[]).forEach((agentData) => {
             coordinationEngine.registerAgent({
-              id: agentData.id,
-              name: agentData.name,
+              id: agentData.id as string,
+              name: agentData.name as string,
               type: agentData.type as AgentType,
               state: agentData.state as AgentState,
-              position: agentData.position,
-              battery: agentData.battery,
-              lastUpdate: agentData.last_update || new Date().toISOString(),
-              metadata: agentData.metadata || {}
+              position: agentData.position as Agent["position"],
+              battery: agentData.battery as number | undefined,
+              lastUpdate: (agentData.last_update as string) || new Date().toISOString(),
+              metadata: (agentData.metadata as Record<string, unknown>) || {}
             });
           });
         }

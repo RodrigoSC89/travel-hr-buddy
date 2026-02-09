@@ -91,23 +91,24 @@ export function usePeopleHubData(vesselId?: string) {
         const { data, error } = await query;
         if (error) throw error;
 
-        return (data || []).map((c: any) => ({
+        type CrewRow = Record<string, unknown> & { id: string; vessels?: { name?: string } | null };
+        return (data || []).map((c: CrewRow) => ({
           id: c.id,
-          full_name: c.full_name || `${c.first_name || ""} ${c.last_name || ""}`.trim(),
-          employee_id: c.employee_id || c.seafarer_id,
-          position: c.position || c.rank,
-          rank: c.rank,
-          department: c.department,
-          vessel_id: c.vessel_id,
+          full_name: (c.full_name as string) || `${(c.first_name as string) || ""} ${(c.last_name as string) || ""}`.trim(),
+          employee_id: (c.employee_id as string) || (c.seafarer_id as string),
+          position: (c.position as string) || (c.rank as string),
+          rank: c.rank as string,
+          department: c.department as string,
+          vessel_id: c.vessel_id as string,
           vessel_name: c.vessels?.name,
-          status: c.status || "active",
-          hire_date: c.hire_date || c.embarkation_date,
-          contract_end: c.contract_end_date || c.disembarkation_date,
-          nationality: c.nationality,
-          email: c.email,
-          phone: c.phone,
-          certifications: c.certifications || [],
-          photo_url: c.photo_url || c.avatar_url,
+          status: (c.status as CrewMember["status"]) || "active",
+          hire_date: (c.hire_date as string) || (c.embarkation_date as string),
+          contract_end: (c.contract_end_date as string) || (c.disembarkation_date as string),
+          nationality: c.nationality as string,
+          email: c.email as string,
+          phone: c.phone as string,
+          certifications: (c.certifications as string[]) || [],
+          photo_url: (c.photo_url as string) || (c.avatar_url as string),
         }));
       } catch (error) {
         logger.error("Failed to fetch crew members", error);
@@ -138,21 +139,24 @@ export function usePeopleHubData(vesselId?: string) {
 
         const now = new Date();
 
-        return (data || []).map((t: any) => {
+        return (data || []).map((t) => {
+          const tRow = t as unknown as Record<string, unknown>;
+          const courses = tRow.academy_courses as { course_name?: string } | null;
+          const profiles = tRow.profiles as { full_name?: string } | null;
           let status: Training["status"] = "scheduled";
           if (t.completed_at) status = "completed";
-          else if (t.progress_percent > 0) status = "in_progress";
+          else if (Number(t.progress_percent) > 0) status = "in_progress";
 
           return {
             id: t.id,
-            crew_id: t.user_id,
-            crew_name: t.profiles?.full_name,
-            course_name: t.academy_courses?.course_name || "Curso",
+            crew_id: t.user_id as string,
+            crew_name: profiles?.full_name,
+            course_name: courses?.course_name || "Curso",
             course_type: "mandatory",
-            start_date: t.started_at,
-            end_date: t.completed_at,
+            start_date: t.started_at as string,
+            end_date: t.completed_at as string,
             status,
-            score: t.assessment_scores ? Object.values(t.assessment_scores as any)[0] as number : undefined,
+            score: t.assessment_scores ? Object.values(t.assessment_scores as Record<string, number>)[0] : undefined,
             certificate_url: t.certificate_issued ? "/certificates" : undefined,
           };
         });
@@ -180,14 +184,14 @@ export function usePeopleHubData(vesselId?: string) {
 
         if (error) throw error;
 
-        return (data || []).map((m: any) => ({
+        return (data || []).map((m) => ({
           id: `wellness-${m.id}`,
           crew_id: m.id,
           crew_name: m.full_name,
           date: m.contract_start || new Date().toISOString(),
           type: "checkup" as const,
           status: m.status === "active" ? "fit" as const : "pending" as const,
-          next_checkup: m.contract_end,
+          next_checkup: m.contract_end || undefined,
         }));
       } catch (error) {
         logger.error("Failed to fetch wellness records", error);
@@ -216,20 +220,21 @@ export function usePeopleHubData(vesselId?: string) {
       
       if (!userId) throw new Error("User not authenticated");
 
-      const insertData: Record<string, unknown> = {
-        full_name: data.full_name,
-        position: data.position,
-        rank: data.rank,
-        vessel_id: data.vessel_id,
-        status: "active",
-        nationality: data.nationality,
-        email: data.email,
-        phone: data.phone,
+      const insertData = {
+        full_name: data.full_name || "",
+        position: data.position || "",
+        rank: data.rank || null,
+        vessel_id: data.vessel_id || null,
+        status: "active" as const,
+        nationality: data.nationality || "",
+        email: data.email || null,
+        phone: data.phone || null,
+        employee_id: data.employee_id || "",
       };
 
       const { data: result, error } = await supabase
         .from("crew_members")
-        .insert(insertData as any)
+        .insert([insertData])
         .select()
         .single();
 

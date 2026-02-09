@@ -60,7 +60,7 @@ export function useOKRsData() {
       if (!okrs?.length) return [];
 
       // Fetch key results for all OKRs
-      const okrIds = okrs.map((o: any) => o.id);
+      const okrIds = okrs.map((o) => o.id);
       const { data: keyResults, error: krError } = await supabase
         .from("hr_key_results")
         .select("*")
@@ -70,7 +70,7 @@ export function useOKRsData() {
 
       // Build OKR tree
       const krMap = new Map<string, KeyResult[]>();
-      (keyResults || []).forEach((kr: any) => {
+      (keyResults || []).forEach((kr) => {
         const list = krMap.get(kr.okr_id) || [];
         list.push({
           id: kr.id,
@@ -84,7 +84,7 @@ export function useOKRsData() {
       });
 
       // Map to OKR interface
-      const allOkrs: OKR[] = okrs.map((o: any) => {
+      const allOkrs: OKR[] = okrs.map((o) => {
         const krs = krMap.get(o.id) || [];
         const progress = krs.length > 0
           ? Math.round(krs.reduce((sum, kr) => sum + (kr.target > 0 ? (kr.current / kr.target) * 100 : 0), 0) / krs.length)
@@ -104,12 +104,14 @@ export function useOKRsData() {
       });
 
       // Build tree structure
-      const rootOkrs = allOkrs.filter((o: any) => !o.parent_okr_id);
+      type OKRWithParent = OKR & { parent_okr_id?: string };
+      const rootOkrs = allOkrs.filter((o) => !(o as OKRWithParent).parent_okr_id);
       const childMap = new Map<string, OKR[]>();
-      allOkrs.filter((o: any) => o.parent_okr_id).forEach((o: any) => {
-        const list = childMap.get(o.parent_okr_id) || [];
+      allOkrs.filter((o) => (o as OKRWithParent).parent_okr_id).forEach((o) => {
+        const parentId = (o as OKRWithParent).parent_okr_id!;
+        const list = childMap.get(parentId) || [];
         list.push(o);
-        childMap.set(o.parent_okr_id, list);
+        childMap.set(parentId, list);
       });
 
       return rootOkrs.map(o => ({
@@ -132,7 +134,7 @@ export function useOKRsData() {
           level: data.level,
           quarter: data.quarter,
           organization_id: orgId,
-        } as any)
+        })
         .select()
         .single();
 
@@ -141,7 +143,7 @@ export function useOKRsData() {
       // Insert key results if provided
       if (data.keyResults?.length && okr) {
         const krInserts = data.keyResults.map(kr => ({
-          okr_id: (okr as any).id,
+          okr_id: okr.id,
           title: kr.title,
           target_value: kr.target,
           unit: kr.unit,
@@ -149,7 +151,7 @@ export function useOKRsData() {
 
         const { error: krError } = await supabase
           .from("hr_key_results")
-          .insert(krInserts as any);
+          .insert(krInserts);
 
         if (krError) throw krError;
       }
@@ -170,7 +172,7 @@ export function useOKRsData() {
     mutationFn: async ({ id, ...updates }: { id: string; status?: string; progress?: number }) => {
       const { error } = await supabase
         .from("hr_okrs")
-        .update(updates as any)
+        .update(updates)
         .eq("id", id);
 
       if (error) throw error;
@@ -190,7 +192,7 @@ export function useOKRsData() {
 
       const { error } = await supabase
         .from("hr_key_results")
-        .update(updates as any)
+        .update(updates)
         .eq("id", id);
 
       if (error) throw error;
