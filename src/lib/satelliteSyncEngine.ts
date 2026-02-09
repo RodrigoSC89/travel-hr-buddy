@@ -8,6 +8,9 @@
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 
+// Dynamic table access helper
+const dynamicFrom = supabase.from as Function;
+
 export interface WindyForecastData {
   latitude: number;
   longitude: number;
@@ -83,8 +86,7 @@ class SatelliteSyncEngine {
     }
 
     try {
-      const { error } = await supabase
-        .from(tableName as any)
+      const { error } = await dynamicFrom(tableName)
         .select("id")
         .limit(1);
 
@@ -183,8 +185,7 @@ class SatelliteSyncEngine {
         timestamp: new Date().toISOString(),
       }));
 
-      const { error } = await supabase
-        .from("weather_feed" as any)
+      const { error } = await dynamicFrom("weather_feed")
         .insert(normalizedData);
 
       if (error) throw error;
@@ -246,8 +247,7 @@ class SatelliteSyncEngine {
         timestamp: data.timestamp,
       }));
 
-      const { error } = await supabase
-        .from("satellite_data" as any)
+      const { error } = await dynamicFrom("satellite_data")
         .insert(normalizedData);
 
       if (error) throw error;
@@ -307,8 +307,7 @@ class SatelliteSyncEngine {
         timestamp: data.timestamp,
       }));
 
-      const { error } = await supabase
-        .from("satellite_data" as any)
+      const { error } = await dynamicFrom("satellite_data")
         .insert(normalizedData);
 
       if (error) throw error;
@@ -500,8 +499,7 @@ class SatelliteSyncEngine {
         return this.getMockWeatherData();
       }
 
-      const { data, error } = await supabase
-        .from("weather_feed" as any)
+      const { data, error } = await dynamicFrom("weather_feed")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(100);
@@ -530,8 +528,7 @@ class SatelliteSyncEngine {
         return this.getMockSatelliteData();
       }
 
-      const { data, error } = await supabase
-        .from("satellite_data" as any)
+      const { data, error } = await dynamicFrom("satellite_data")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(100);

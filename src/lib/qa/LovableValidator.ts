@@ -265,8 +265,9 @@ class LovableValidatorClass {
   }
 
   private getMemoryUsage(): number | undefined {
-    if ((performance as any).memory) {
-      return (performance as any).memory.usedJSHeapSize;
+    const perfWithMemory = performance as unknown as { memory?: { usedJSHeapSize: number } };
+    if (perfWithMemory.memory) {
+      return perfWithMemory.memory.usedJSHeapSize;
     }
     return undefined;
   }

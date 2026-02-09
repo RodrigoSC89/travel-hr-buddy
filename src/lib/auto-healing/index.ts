@@ -53,17 +53,17 @@ export function initAutoHealingSystem(options?: {
           detail: {
             type: "error",
             title: "Problema Detectado",
-            description: (event.data as any).description || "O sistema detectou um problema que requer atenção.",
+            description: (event.data as unknown as Record<string, unknown>).description as string || "O sistema detectou um problema que requer atenção.",
           },
         })
       );
-    } else if (event.type === "fix_applied" && (event.data as any).success) {
+    } else if (event.type === "fix_applied" && (event.data as unknown as Record<string, unknown>).success) {
       window.dispatchEvent(
         new CustomEvent("toast:show", {
           detail: {
             type: "success",
             title: "Problema Corrigido",
-            description: (event.data as any).description || "O sistema corrigiu automaticamente um problema.",
+            description: (event.data as unknown as Record<string, unknown>).description as string || "O sistema corrigiu automaticamente um problema.",
           },
         })
       );

@@ -8,7 +8,7 @@ import { logger } from "@/lib/logger";
 import type { MMITask, AIForecast } from "@/types/mmi";
 
 // Dynamic supabase for tables not in schema
-const dynamicDb = supabase as any;
+const dynamicFrom = supabase.from as Function;
 
 interface CreateTaskFromForecastInput {
   forecast: AIForecast;
@@ -54,8 +54,7 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
     }
 
     // Create task
-    const { data: task, error } = await dynamicDb
-      .from("mmi_tasks")
+    const { data: task, error } = await dynamicFrom("mmi_tasks")
       .insert({
         title,
         description,
@@ -92,8 +91,7 @@ export async function fetchTasks(filters?: {
   vessel_id?: string;
 }): Promise<MMITask[]> {
   try {
-    let query = dynamicDb
-      .from("mmi_tasks")
+    let query = dynamicFrom("mmi_tasks")
       .select(`
         *,
         vessel:vessels(id, name)
@@ -131,8 +129,7 @@ export async function updateTaskStatus(
   status: "pendente" | "em_andamento" | "concluido" | "cancelado"
 ): Promise<boolean> {
   try {
-    const { error } = await dynamicDb
-      .from("mmi_tasks")
+    const { error } = await dynamicFrom("mmi_tasks")
       .update({ status, updated_at: new Date().toISOString() })
       .eq("id", taskId);
 
@@ -150,8 +147,7 @@ export async function updateTaskStatus(
  */
 export async function assignTask(taskId: string, userId: string): Promise<boolean> {
   try {
-    const { error } = await dynamicDb
-      .from("mmi_tasks")
+    const { error } = await dynamicFrom("mmi_tasks")
       .update({ assigned_to: userId, updated_at: new Date().toISOString() })
       .eq("id", taskId);
 
@@ -170,8 +166,7 @@ export async function assignTask(taskId: string, userId: string): Promise<boolea
 export async function createWorkOrderFromTask(taskId: string): Promise<{ os_number: string; id: string } | null> {
   try {
     // Fetch the task details
-    const { data: task, error: taskError } = await dynamicDb
-      .from("mmi_tasks")
+    const { data: task, error: taskError } = await dynamicFrom("mmi_tasks")
       .select("*")
       .eq("id", taskId)
       .single();
@@ -181,8 +176,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
     }
 
     // Find or create a corresponding mmi_job
-    const { data: existingJob } = await dynamicDb
-      .from("mmi_jobs")
+    const { data: existingJob } = await dynamicFrom("mmi_jobs")
       .select("id")
       .eq("title", task.title)
       .maybeSingle();
@@ -191,8 +185,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
 
     if (!jobId) {
       // Create a new job
-      const { data: newJob, error: jobError } = await dynamicDb
-        .from("mmi_jobs")
+      const { data: newJob, error: jobError } = await dynamicFrom("mmi_jobs")
         .insert({
           title: task.title,
           status: "pending",
@@ -215,8 +208,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
 
     // Generate OS number (format: OS-YYYYNNNN)
     const year = new Date().getFullYear();
-    const { count } = await dynamicDb
-      .from("mmi_os")
+    const { count } = await dynamicFrom("mmi_os")
       .select("*", { count: "exact", head: true })
       .like("os_number", `OS-${year}%`);
 
@@ -227,8 +219,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
     const { data: { user } } = await supabase.auth.getUser();
 
     // Create work order
-    const { data: workOrder, error: osError } = await dynamicDb
-      .from("mmi_os")
+    const { data: workOrder, error: osError } = await dynamicFrom("mmi_os")
       .insert({
         job_id: jobId,
         os_number: osNumber,
@@ -261,8 +252,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
  */
 export async function deleteTask(taskId: string): Promise<boolean> {
   try {
-    const { error } = await dynamicDb
-      .from("mmi_tasks")
+    const { error } = await dynamicFrom("mmi_tasks")
       .delete()
       .eq("id", taskId);
 

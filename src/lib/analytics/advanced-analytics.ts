@@ -218,9 +218,10 @@ class AdvancedAnalytics {
       // Cumulative Layout Shift
       let clsValue = 0;
       new PerformanceObserver((entryList) => {
-        for (const entry of entryList.getEntries() as any[]) {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        for (const entry of entryList.getEntries()) {
+          const layoutEntry = entry as unknown as { hadRecentInput: boolean; value: number };
+          if (!layoutEntry.hadRecentInput) {
+            clsValue += layoutEntry.value;
           }
         }
         this.trackMetric('CLS', clsValue, 'score');

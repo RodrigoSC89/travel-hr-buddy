@@ -15,6 +15,12 @@
 import { BridgeLink } from "@/core/BridgeLink";
 import { runOpenAI } from "@/ai/engine";
 import { logger } from "@/lib/logger";
+
+// Typed bridge interface for extended events not in BridgeLinkEventType
+const bridge = BridgeLink as unknown as {
+  emit: (event: string, source: string, data: Record<string, unknown>) => void;
+  on: (event: string, callback: (source: string, data: Record<string, unknown>) => void) => void;
+};
 import {
   ModuleContextData,
   SituationalInsight,
@@ -81,7 +87,7 @@ export class SituationalAwarenessCore {
       config: this.observerConfig,
     });
 
-    (BridgeLink as any).emit("situational-awareness:initialized", "SituationalAwareness", {
+    bridge.emit("situational-awareness:initialized", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }
@@ -124,7 +130,7 @@ export class SituationalAwarenessCore {
     });
 
     // Emit event
-    (BridgeLink as any).emit("situational-awareness:context-collected", "SituationalAwareness", {
+    bridge.emit("situational-awareness:context-collected", "SituationalAwareness", {
       source,
       timestamp: context.timestamp,
     });
@@ -167,7 +173,7 @@ export class SituationalAwarenessCore {
       });
 
       // Emit analysis complete event
-      (BridgeLink as any).emit("situational-awareness:analysis-complete", "SituationalAwareness", {
+      bridge.emit("situational-awareness:analysis-complete", "SituationalAwareness", {
         timestamp: Date.now(),
         insights: insights.length,
         alerts: alerts.length,
@@ -385,32 +391,32 @@ Respond in JSON format with an array of insights, each containing: type, severit
    */
   private setupDataSourceListeners(): void {
     // Listen for navigation data
-    (BridgeLink as any).on("navigation:update", (_source: any, data: any) => {
+    bridge.on("navigation:update", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("navigation", "internal", data);
     });
 
     // Listen for weather data
-    (BridgeLink as any).on("weather:update", (_source: any, data: any) => {
+    bridge.on("weather:update", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("weather", "internal", data);
     });
 
     // Listen for failure reports
-    (BridgeLink as any).on("system:failure", (_source: any, data: any) => {
+    bridge.on("system:failure", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("failures", "internal", data);
     });
 
     // Listen for crew updates
-    (BridgeLink as any).on("crew:update", (_source: any, data: any) => {
+    bridge.on("crew:update", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("crew", "internal", data);
     });
 
     // Listen for sensor data
-    (BridgeLink as any).on("sensors:data", (_source: any, data: any) => {
+    bridge.on("sensors:data", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("sensors", "internal", data);
     });
 
     // Listen for mission updates
-    (BridgeLink as any).on("mission:update", (_source: any, data: any) => {
+    bridge.on("mission:update", (_source: string, data: Record<string, unknown>) => {
       this.collectContext("mission", "internal", data);
     });
   }
@@ -487,7 +493,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     }
 
     // Emit log event
-    (BridgeLink as any).emit("situational-awareness:log", "SituationalAwareness", entry);
+    bridge.emit("situational-awareness:log", "SituationalAwareness", entry as unknown as Record<string, unknown>);
 
     // Use logger for output
     if (level === "error") {
@@ -550,7 +556,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     this.logs = [];
     this.isInitialized = false;
     
-    (BridgeLink as any).emit("situational-awareness:cleanup", "SituationalAwareness", {
+    bridge.emit("situational-awareness:cleanup", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }

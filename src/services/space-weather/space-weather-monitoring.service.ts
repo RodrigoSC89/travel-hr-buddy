@@ -303,7 +303,7 @@ export async function planGNSSWindow(
     startDate,
     endDate,
     30,
-    constellations as any
+    constellations as unknown as import('@/types/space-weather.types').CelesTrakGroup[]
   );
   
   if (dopTimeline.length === 0) {

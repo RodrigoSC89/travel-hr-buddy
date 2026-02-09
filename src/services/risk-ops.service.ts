@@ -278,7 +278,7 @@ export class RiskOpsService {
       critical_risks: criticalRisks,
       high_risks: highRisks,
       average_risk_score: Math.round(avgScore * 10) / 10,
-      risks_by_type: risksByType as any,
+      risks_by_type: risksByType as Record<string, number>,
       risks_by_module: risksByModule,
     };
   }

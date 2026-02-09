@@ -288,7 +288,7 @@ export function createValidator<T extends Record<string, any>>(
 
 // Export for debugging
 if (typeof window !== 'undefined') {
-  (window as any).__NAUTILUS_VALIDATOR__ = {
+  (window as unknown as Record<string, unknown>).__NAUTILUS_VALIDATOR__ = {
     validateString,
     validateNumber,
     validateArray,
