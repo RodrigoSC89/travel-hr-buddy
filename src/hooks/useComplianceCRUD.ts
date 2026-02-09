@@ -302,7 +302,7 @@ export function useComplianceCRUD() {
   // ==================== EXPORT ====================
 
   const exportData = async (type: 'audits' | 'ncs' | 'certificates') => {
-    let data: any[] = [];
+    let data: Record<string, unknown>[] = [];
     let filename = '';
 
     switch (type) {
