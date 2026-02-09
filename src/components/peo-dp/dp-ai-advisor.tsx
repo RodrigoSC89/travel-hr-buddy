@@ -250,19 +250,17 @@ export const DPAIAdvisor: React.FC = () => {
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const { answer, references } = findAnswer(input);
-      const assistantMessage: ChatMessage = {
-        id: `msg-${Date.now()}-response`,
-        role: "assistant",
-        content: answer,
-        timestamp: new Date(),
-        references
-      };
-      setMessages(prev => [...prev, assistantMessage]);
-      setIsLoading(false);
-    }, 1500);
+    // Process locally — findAnswer uses rule-based matching
+    const { answer, references } = findAnswer(input);
+    const assistantMessage: ChatMessage = {
+      id: `msg-${Date.now()}-response`,
+      role: "assistant",
+      content: answer,
+      timestamp: new Date(),
+      references
+    };
+    setMessages(prev => [...prev, assistantMessage]);
+    setIsLoading(false);
   };
 
   const handleQuickQuestion = (question: string) => {

@@ -137,8 +137,7 @@ export function SelfEvolvingDashboard() {
   const optimizeDashboard = useCallback(async () => {
     setIsOptimizing(true);
     
-    // Simulate AI processing
-    await new Promise((r) => setTimeout(r, 1500));
+    // Sort and optimize synchronously (no fake delay)
 
     setWidgets((prev) => {
       const optimized = [...prev];

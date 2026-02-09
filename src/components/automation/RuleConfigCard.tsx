@@ -46,7 +46,6 @@ export const RuleConfigCard: React.FC<RuleConfigCardProps> = ({
 
   const handleSave = async () => {
     setIsSaving(true);
-    await new Promise(r => setTimeout(r, 500)); // Simulate API call
     onSave(editData);
     setIsEditing(false);
     setIsSaving(false);

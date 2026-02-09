@@ -95,8 +95,8 @@ export function ContractAnalyticsDashboard() {
 
   const refreshData = async () => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => setLoading(false), 1000);
+    // Data is already reactive via state — just toggle loading
+    setLoading(false);
   };
 
   const exportReport = () => {

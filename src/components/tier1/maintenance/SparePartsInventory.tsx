@@ -361,7 +361,7 @@ export function SparePartsInventory() {
                 <p className="text-sm text-muted-foreground mt-1">
                   Funcionalidade em implantação — utilize o módulo de Procurement para pedidos.
                 </p>
-                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.href = '/procurement'}>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.assign('/procurement')}>
                   Ir para Procurement
                 </Button>
               </div>

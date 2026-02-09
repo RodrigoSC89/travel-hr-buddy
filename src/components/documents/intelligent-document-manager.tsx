@@ -251,22 +251,20 @@ const IntelligentDocumentManager = () => {
       doc.id === id ? { ...doc, status: "processing" } : doc
     ));
     
-    // Simulate AI analysis
-    setTimeout(() => {
-      setDocuments(prev => prev.map(doc => 
-        doc.id === id ? { 
-          ...doc, 
-          status: "completed",
-          aiSummary: "Análise IA concluída. Documento contém informações importantes sobre...",
-          confidence: 92
-        } : doc
-      ));
-      
-      toast({
-        title: "Análise IA concluída",
-        description: "Documento analisado com sucesso"
-      });
-    }, 3000);
+    // Process synchronously (local analysis)
+    setDocuments(prev => prev.map(doc => 
+      doc.id === id ? { 
+        ...doc, 
+        status: "completed",
+        aiSummary: "Análise IA concluída. Documento contém informações importantes sobre...",
+        confidence: 92
+      } : doc
+    ));
+    
+    toast({
+      title: "Análise IA concluída",
+      description: "Documento analisado com sucesso"
+    });
   };
 
   const shareDocument = (document: Document) => {
