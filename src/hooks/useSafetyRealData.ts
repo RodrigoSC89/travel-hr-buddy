@@ -29,7 +29,7 @@ export interface SafetyDrill {
   scenario: string | null;
   scheduled_date: string | null;
   conducted_date: string | null;
-  participants: any;
+  participants: Record<string, unknown> | null;
   score: number | null;
   status: string;
   created_at: string;
