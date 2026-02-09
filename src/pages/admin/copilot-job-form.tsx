@@ -15,13 +15,29 @@ import { useToast } from "@/hooks/use-toast";
 export default function CopilotJobFormPage() {
   const { toast } = useToast();
 
-  const handleJobSubmit = (data: { component: string; description: string }) => {
+  const handleJobSubmit = async (data: { component: string; description: string }) => {
     logger.info("Job submitted:", data);
-    // In a real application, this would call an API to save the job
-    toast({
-      title: "✅ Job criado com sucesso!",
-      description: `Job para ${data.component} foi registrado.`,
-    });
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('action_items').insert({
+        title: `Manutenção: ${data.component}`,
+        description: data.description,
+        source_module: 'copilot-job-form',
+        status: 'pending',
+        priority: 'media',
+      });
+      if (error) throw error;
+      toast({
+        title: "✅ Job criado com sucesso!",
+        description: `Job para ${data.component} foi registrado no banco.`,
+      });
+    } catch (err) {
+      toast({
+        title: "Erro ao criar job",
+        description: "Não foi possível salvar no banco de dados.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -100,15 +116,18 @@ export default function CopilotJobFormPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto text-xs border">
+              <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-xs border">
                 <code>{`import { JobFormWithExamples } from '@/components/copilot';
+import { supabase } from '@/integrations/supabase/client';
 
 function MyMaintenancePage() {
-  const handleJobSubmit = (data) => {
-    // Integrate with your API
-    fetch('/api/jobs', {
-      method: 'POST',
-      body: JSON.stringify(data),
+  const handleJobSubmit = async (data) => {
+    // Persist via Supabase
+    await supabase.from('action_items').insert({
+      title: \`Manutenção: \${data.component}\`,
+      description: data.description,
+      source_module: 'copilot',
+      status: 'pending',
     });
   };
 

@@ -1,9 +1,11 @@
 /**
  * PATCH 100.0 - Webhook Manager Service
+ * Real webhook delivery via fetch to configured URLs
  */
 
 import { Webhook, WebhookLog } from "../types";
 import type { WebhookPayload } from "@/types/webhook.types";
+import { logger } from "@/lib/logger";
 
 class WebhookManagerService {
   private webhooks: Map<string, Webhook> = new Map();
@@ -40,22 +42,41 @@ class WebhookManagerService {
       const startTime = Date.now();
       
       try {
-        // Simulate webhook call (in production, this would be a real HTTP request)
-        await this.simulateWebhookCall(webhook.url, event, payload);
-        
+        // Real HTTP POST to webhook URL
+        const response = await fetch(webhook.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ event, payload, timestamp: new Date().toISOString() }),
+          signal: AbortSignal.timeout(10000),
+        });
+
         const responseTime = Date.now() - startTime;
         webhook.lastTriggered = new Date();
-        webhook.successCount++;
 
-        this.addLog({
-          id: this.generateId(),
-          webhookId: webhook.id,
-          event,
-          status: "success",
-          statusCode: 200,
-          responseTime,
-          timestamp: new Date()
-        });
+        if (response.ok) {
+          webhook.successCount++;
+          this.addLog({
+            id: this.generateId(),
+            webhookId: webhook.id,
+            event,
+            status: "success",
+            statusCode: response.status,
+            responseTime,
+            timestamp: new Date()
+          });
+        } else {
+          webhook.failureCount++;
+          this.addLog({
+            id: this.generateId(),
+            webhookId: webhook.id,
+            event,
+            status: "failure",
+            statusCode: response.status,
+            responseTime,
+            error: `HTTP ${response.status}: ${response.statusText}`,
+            timestamp: new Date()
+          });
+        }
       } catch (error) {
         const responseTime = Date.now() - startTime;
         webhook.failureCount++;
@@ -65,22 +86,14 @@ class WebhookManagerService {
           webhookId: webhook.id,
           event,
           status: "failure",
-          statusCode: 500,
+          statusCode: 0,
           responseTime,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: error instanceof Error ? error.message : "Network error",
           timestamp: new Date()
         });
-      }
-    }
-  }
 
-  private async simulateWebhookCall(_url: string, _event: string, _payload: WebhookPayload): Promise<void> {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 500 + 100));
-    
-    // Simulate occasional failures (10% chance)
-    if (Math.random() < 0.1) {
-      throw new Error("Network timeout");
+        logger.warn(`[Webhook] Failed to deliver to ${webhook.url}:`, error);
+      }
     }
   }
 

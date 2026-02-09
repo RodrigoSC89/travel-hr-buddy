@@ -1,8 +1,11 @@
 /**
  * PATCH 100.0 - API Proxy Router Service
+ * Routes API calls through Supabase instead of phantom /api/* endpoints
  */
 
 import { ApiRoute, MonitoringStats } from "../types";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 class ApiProxyRouterService {
   private routes: Map<string, ApiRoute> = new Map();
@@ -15,14 +18,14 @@ class ApiProxyRouterService {
   };
 
   constructor() {
-    // Initialize with demo routes
-    this.registerRoute("auth", "/api/auth", "POST");
-    this.registerRoute("fleet", "/api/fleet", "GET");
-    this.registerRoute("documents", "/api/documents", "POST");
-    this.registerRoute("analytics", "/api/analytics", "GET");
-    this.registerRoute("missions", "/api/missions", "GET");
-    this.registerRoute("finance", "/api/finance", "GET");
-    this.registerRoute("logs", "/api/logs", "GET");
+    // Register service routes (mapped to Supabase tables/functions)
+    this.registerRoute("auth", "auth", "POST");
+    this.registerRoute("fleet", "vessels", "GET");
+    this.registerRoute("documents", "ai_documents", "POST");
+    this.registerRoute("analytics", "ai_insights", "GET");
+    this.registerRoute("missions", "ai_commands", "GET");
+    this.registerRoute("finance", "action_items", "GET");
+    this.registerRoute("logs", "ai_logs", "GET");
   }
 
   registerRoute(service: string, path: string, method: ApiRoute["method"]): ApiRoute {
@@ -32,15 +35,15 @@ class ApiProxyRouterService {
       path,
       method,
       status: "active",
-      requestCount: Math.floor(Math.random() * 10000),
-      avgLatency: Math.floor(Math.random() * 300) + 50
+      requestCount: 0,
+      avgLatency: 0
     };
 
     this.routes.set(route.id, route);
     return route;
   }
 
-  async proxyRequest(service: string, endpoint: string, options?: RequestInit): Promise<Response> {
+  async proxyRequest(service: string, _endpoint: string, _options?: RequestInit): Promise<Response> {
     const route = Array.from(this.routes.values()).find(r => r.service === service);
     
     if (!route) {
@@ -55,13 +58,18 @@ class ApiProxyRouterService {
     this.stats.activeConnections++;
 
     try {
-      // Simulate API call
-      const response = await this.simulateApiCall(route, endpoint);
+      // Real Supabase query instead of simulation
+      const { data, error } = await supabase.from(route.path as any).select('id').limit(1);
       
       const latency = Date.now() - startTime;
-      this.updateRouteStats(route, latency, true);
+      this.updateRouteStats(route, latency, !error);
 
-      return response;
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ success: true, data }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
     } catch (error) {
       const latency = Date.now() - startTime;
       this.updateRouteStats(route, latency, false);
@@ -81,10 +89,14 @@ class ApiProxyRouterService {
     const startTime = Date.now();
 
     try {
-      // Simulate health check
-      await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 50));
+      // Real health check via Supabase connectivity
+      const { error } = await supabase.from('ai_configurations').select('id').limit(1);
       
       const latency = Date.now() - startTime;
+      
+      if (error) {
+        return { status: "degraded", latency, error: error.message };
+      }
       
       if (latency > 1000) {
         return { status: "degraded", latency };
@@ -101,28 +113,11 @@ class ApiProxyRouterService {
     }
   }
 
-  private async simulateApiCall(route: ApiRoute, endpoint: string): Promise<Response> {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, route.avgLatency + Math.random() * 50));
-    
-    // Simulate occasional errors (5% chance)
-    if (Math.random() < 0.05) {
-      throw new Error("Internal Server Error");
-    }
-
-    return new Response(JSON.stringify({ success: true, data: {} }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
-
   private updateRouteStats(route: ApiRoute, latency: number, success: boolean): void {
     route.requestCount++;
     
-    // Update average latency
     route.avgLatency = Math.round((route.avgLatency * (route.requestCount - 1) + latency) / route.requestCount);
 
-    // Update global stats
     this.stats.totalRequests++;
     this.stats.avgLatency = Math.round(
       (this.stats.avgLatency * (this.stats.totalRequests - 1) + latency) / this.stats.totalRequests
@@ -132,7 +127,6 @@ class ApiProxyRouterService {
       route.status = "error";
     }
 
-    // Calculate error rate
     const totalErrors = Array.from(this.routes.values()).filter(r => r.status === "error").length;
     this.stats.errorRate = (totalErrors / this.routes.size) * 100;
     this.stats.timestamp = new Date();

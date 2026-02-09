@@ -355,9 +355,16 @@ export function SparePartsInventory() {
               <CardDescription>Pending and recent purchase orders</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                Purchase order management coming soon...
-              </p>
+              <div className="text-center py-8">
+                <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground font-medium">Gestão de Ordens de Compra</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Funcionalidade em implantação — utilize o módulo de Procurement para pedidos.
+                </p>
+                <Button variant="outline" size="sm" className="mt-3" onClick={() => window.location.href = '/procurement'}>
+                  Ir para Procurement
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

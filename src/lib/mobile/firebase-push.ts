@@ -260,8 +260,9 @@ class FirebasePushService {
     }
 
     try {
-      // Topic subscription is typically done server-side
-      // Would call: await fetch('/api/fcm/subscribe', { topic, token: this.fcmToken })
+      // Topic subscription managed server-side via Supabase edge function
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase.functions.invoke('fcm-topics', { body: { action: 'subscribe', topic, token: this.fcmToken } });
       
       logger.info("[FCM] Subscribed to topic:", topic);
       return true;
@@ -280,7 +281,8 @@ class FirebasePushService {
     }
 
     try {
-      // Would call: await fetch('/api/fcm/unsubscribe', { topic, token: this.fcmToken })
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase.functions.invoke('fcm-topics', { body: { action: 'unsubscribe', topic, token: this.fcmToken } });
       
       logger.info("[FCM] Unsubscribed from topic:", topic);
       return true;

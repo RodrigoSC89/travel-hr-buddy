@@ -92,11 +92,15 @@ export const AdvancedSettings: React.FC = () => {
   const saveSettings = async () => {
     setIsSaving(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('ai_configurations').upsert({
+        config_key: `user_settings_${user?.id || 'default'}`,
+        config_value: settings as any,
+        description: 'User advanced settings',
+        updated_by: user?.id || null,
+      }, { onConflict: 'config_key' });
       
-      // Here you would typically save to Supabase
-      // await supabase.from('user_settings').upsert({ user_id: user?.id, ...settings });
+      if (error) throw error;
       
       setHasChanges(false);
       toast({

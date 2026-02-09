@@ -11,9 +11,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Sparkles, CheckCircle2, Search, Copy, Save } from "lucide-react";
 
 export default function CopilotJobFormExample() {
-  const handleJobSubmit = (data: { component: string; description: string }) => {
+  const handleJobSubmit = async (data: { component: string; description: string }) => {
     logger.info("Job submitted:", data);
-    // In a real application, this would call an API to save the job
+    // Submit via Supabase
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { error } = await supabase.from('action_items').insert({
+      title: `Manutenção: ${data.component}`,
+      description: data.description,
+      source_module: 'copilot-job-form',
+      status: 'pending',
+      priority: 'media',
+    });
+    if (error) {
+      logger.error("Error saving job:", error);
+    }
   };
 
   return (
