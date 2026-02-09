@@ -280,10 +280,11 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 | Sprint 6 | 2026-02-09 | +1 | Type safety (Inventory, Notifications), schema alignment (inventory_items, drill_evaluations, smart_drills) |
 | Sprint 7 | 2026-02-09 | +1 | Type safety (TrainingAcademy, DashboardRealData, Offline, AcademyDashboard), Json type alignment |
 | Sprint 8 | 2026-02-09 | +1 | Type safety (Emissions, SessionReplay, AIControlTower, Safety), 25+ `any` removidos |
-| **Acumulado** | | **+16** | **80 → 92/100** |
+| Sprint 9 | 2026-02-09 | +1 | Type safety (DPMentor, ChecklistPersistence, OCR, UniversalExport), Json serialization fix |
+| **Acumulado** | | **+17** | **80 → 93/100** |
 
 ### Próximos passos para 100/100
-1. **Type Safety (+2)**: Continuar eliminando `any` em hooks restantes (~40 arquivos) — ~5 dias
+1. **Type Safety (+1)**: Continuar eliminando `any` em hooks restantes (~35 arquivos) — ~4 dias
 2. **CRUD completo (+3)**: ISPS, Drydock, CrewScheduler com persistência real — 3 dias
 3. **Rotas (+2)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) — 3 dias
 4. **Performance (+1)**: Code splitting agressivo e virtualização — 2 dias
@@ -292,8 +293,8 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 
 **FIM DO RELATÓRIO**  
 **Total de falhas originais:** 139  
-**Falhas corrigidas (Sprint 1→8):** 83  
-**Falhas restantes:** 56  
-**Esforço total de correção restante:** ~13 dias (104 horas)  
-**Prioridade:** Sprint 9 (Type Safety em massa) → Sprint 10 (CRUD) → Sprint 11 (Consolidação)
+**Falhas corrigidas (Sprint 1→9):** 90  
+**Falhas restantes:** 49  
+**Esforço total de correção restante:** ~12 dias (96 horas)  
+**Prioridade:** Sprint 10 (Type Safety final) → Sprint 11 (CRUD) → Sprint 12 (Consolidação)
 **Prioridade:** Sprint 8 (Type Safety em massa) → Sprint 9 (CRUD) → Sprint 10 (Consolidação)

@@ -64,7 +64,14 @@ export function useChecklistPersistence(options: UseChecklistPersistenceOptions)
       try {
         const { error } = await supabase
           .from('maritime_checklists')
-          .upsert([checklistData] as any, { onConflict: 'id' });
+          .upsert([{
+            ...checklistData,
+            items: JSON.parse(JSON.stringify(checklistData.items)),
+            workflow: JSON.parse(JSON.stringify(checklistData.workflow)),
+            ai_analysis: checklistData.ai_analysis ? JSON.parse(JSON.stringify(checklistData.ai_analysis)) : null,
+            location: checklistData.location ? JSON.parse(JSON.stringify(checklistData.location)) : null,
+            weather: checklistData.weather ? JSON.parse(JSON.stringify(checklistData.weather)) : null,
+          }], { onConflict: 'id' });
         
         if (error) {
           logger.error('[ChecklistPersistence] Database error, falling back to localStorage', { error: String(error) });
@@ -389,16 +396,17 @@ async function createReviewNotification(checklist: Checklist) {
   }
 }
 
-function transformDbToChecklist(data: any): Checklist {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB row shape varies
+function transformDbToChecklist(data: Record<string, any>): Checklist {
   return {
-    id: data.id,
-    title: data.title,
-    type: data.type,
-    version: data.version || '1.0',
-    description: data.description || '',
+    id: String(data.id || ''),
+    title: String(data.title || ''),
+    type: data.type || 'safety',
+    version: String(data.version || '1.0'),
+    description: String(data.description || ''),
     vessel: {
-      id: data.vessel_id || '',
-      name: data.vessel_name || '',
+      id: String(data.vessel_id || ''),
+      name: String(data.vessel_name || ''),
       type: '',
       imo: '',
       flag: '',
@@ -406,28 +414,28 @@ function transformDbToChecklist(data: any): Checklist {
       operator: ''
     },
     inspector: {
-      id: data.inspector_id || '',
-      name: data.inspector_name || '',
+      id: String(data.inspector_id || ''),
+      name: String(data.inspector_name || ''),
       license: '',
       company: '',
       email: '',
       phone: '',
       certifications: []
     },
-    status: data.status,
-    items: data.items || [],
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
-    completedAt: data.completed_at,
+    status: data.status || 'draft',
+    items: Array.isArray(data.items) ? data.items : [],
+    createdAt: String(data.created_at || ''),
+    updatedAt: String(data.updated_at || ''),
+    completedAt: data.completed_at ? String(data.completed_at) : undefined,
     priority: data.priority || 'medium',
-    scheduledFor: data.scheduled_for,
-    dueDate: data.due_date,
-    estimatedDuration: data.estimated_duration || 60,
-    actualDuration: data.actual_duration,
-    complianceScore: data.compliance_score,
+    scheduledFor: data.scheduled_for ? String(data.scheduled_for) : undefined,
+    dueDate: data.due_date ? String(data.due_date) : undefined,
+    estimatedDuration: Number(data.estimated_duration || 60),
+    actualDuration: data.actual_duration != null ? Number(data.actual_duration) : undefined,
+    complianceScore: data.compliance_score != null ? Number(data.compliance_score) : undefined,
     aiAnalysis: data.ai_analysis,
-    workflow: data.workflow || createDefaultWorkflow(),
-    tags: data.tags || [],
+    workflow: Array.isArray(data.workflow) ? data.workflow : createDefaultWorkflow(),
+    tags: Array.isArray(data.tags) ? data.tags : [],
     location: data.location,
     weather: data.weather,
     template: false,

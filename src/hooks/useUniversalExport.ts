@@ -11,7 +11,7 @@ import { logger } from '@/lib/logger';
 export interface ExportColumn {
   key: string;
   label: string;
-  format?: (value: any) => string;
+  format?: (value: unknown) => string;
 }
 
 export interface ExportOptions {
@@ -27,7 +27,7 @@ export function useUniversalExport<T extends Record<string, any>>() {
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
 
-  const formatValue = (value: any, format?: (v: any) => string): string => {
+  const formatValue = (value: unknown, format?: (v: unknown) => string): string => {
     if (format) return format(value);
     if (value === null || value === undefined) return '';
     if (value instanceof Date) return value.toLocaleDateString('pt-BR');
@@ -79,7 +79,7 @@ export function useUniversalExport<T extends Record<string, any>>() {
 
     try {
       const exportData = data.map(item => {
-        const row: Record<string, any> = {};
+        const row: Record<string, unknown> = {};
         options.columns.forEach(col => {
           row[col.key] = item[col.key];
         });
@@ -112,7 +112,7 @@ export function useUniversalExport<T extends Record<string, any>>() {
       const total = data.length;
       const worksheetData = data.map((item, index) => {
         setExportProgress(Math.round(((index + 1) / total) * 100));
-        const row: Record<string, any> = {};
+        const row: Record<string, unknown> = {};
         options.columns.forEach(col => {
           row[col.label] = formatValue(item[col.key], col.format);
         });
@@ -173,7 +173,7 @@ export function useUniversalExport<T extends Record<string, any>>() {
       });
 
       // Add table
-      (doc as any).autoTable({
+      (doc as unknown as Record<string, Function>).autoTable({
         head: [options.columns.map(col => col.label)],
         body: tableData,
         startY: options.subtitle ? 35 : 28,
