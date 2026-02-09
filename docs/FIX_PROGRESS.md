@@ -4,7 +4,7 @@
 
 | Métrica | Antes | Atual | Meta |
 |---------|-------|-------|------|
-| `as any` em hooks | ~1500 | ~1350 | <500 |
+| `as any` em hooks | ~1500 | ~1200 | <500 |
 | setTimeout fake | ~8 | 3 | 0 |
 | window.location.href (nav) | 15 | 7 | 0 |
 | Ghost API `/api/` | 0 | 0 | ✅ |
@@ -29,7 +29,8 @@
 - ✅ Batch 18: useSystemAlertsData, useFuelOptimizerData, useVoyagePnL, useAuditModules, useSmartMaintenanceData
 - ✅ Batch 19: useCoordination, usePeopleHubData, useOKRsData, useNOCMonitoringData, useVoiceNLU
 - ✅ Batch 20: module-integration.ts (as any → as Function)
-- 🔄 Restantes: ~40 arquivos (lib/, services/, browser APIs legítimas)
+- ✅ Batch 21: ai-feedback-service, integrations.service, mission-control.service, voice.service, messageService, risk-operations-engine
+- 🔄 Restantes: ~30 arquivos (lib/, ai/, modules/, components/)
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real

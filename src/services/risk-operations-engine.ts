@@ -107,7 +107,7 @@ export async function classifyRiskWithAI(
   }
 ): Promise<AIClassification> {
   try {
-    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -195,7 +195,7 @@ Format as JSON:
  */
 export async function createRiskAssessment(
   assessment: Omit<RiskAssessment, 'id' | 'aiClassification'>,
-  findingData?: any
+  findingData?: { type: string; description: string; severity: string; details?: Record<string, unknown> }
 ): Promise<string> {
   try {
     // Get AI classification
@@ -208,8 +208,7 @@ export async function createRiskAssessment(
           recommendations: [],
         };
 
-    const { data, error } = await supabase
-      .from("risk_assessments")
+    const { data, error } = await (supabase.from as Function)("risk_assessments")
       .insert({
         vessel_id: assessment.vesselId,
         module_type: assessment.moduleType,
@@ -219,11 +218,11 @@ export async function createRiskAssessment(
         risk_title: assessment.riskTitle,
         risk_description: assessment.riskDescription,
         affected_areas: assessment.affectedAreas,
-        mitigation_actions: assessment.mitigationActions as any,
-        ai_classification: aiClassification as any,
+        mitigation_actions: assessment.mitigationActions,
+        ai_classification: aiClassification,
         linked_findings: assessment.linkedFindings,
         status: assessment.status,
-      } as any)
+      })
       .select()
       .single();
 
@@ -258,7 +257,7 @@ export async function getConsolidatedRiskScore(vesselId: string): Promise<number
     }
 
     // Calculate weighted average
-    const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
+    const totalScore = data.reduce((sum: number, r: { risk_score: number }) => sum + r.risk_score, 0);
     return Math.round(totalScore / data.length);
   } catch (error) {
     logger.error("Error calculating risk score", error as Error, { vesselId });
@@ -308,7 +307,7 @@ export async function generateRiskHeatmap(
     // Group by vessel and module
     const heatmapData: Map<string, RiskHeatmapPoint> = new Map();
 
-    data?.forEach((risk: any) => {
+    data?.forEach((risk: { vessel_id: string | null; module_type: string; risk_score: number }) => {
       const key = `${risk.vessel_id}-${risk.module_type}`;
       const existing = heatmapData.get(key);
 
@@ -317,9 +316,9 @@ export async function generateRiskHeatmap(
         existing.riskCount += 1;
       } else {
         heatmapData.set(key, {
-          vesselId: risk.vessel_id,
-          region: "Fleet", // Could be enhanced with actual vessel location
-          moduleType: risk.module_type,
+          vesselId: risk.vessel_id || undefined,
+          region: "Fleet",
+          moduleType: (risk.module_type as ModuleType) || "GENERAL",
           riskIntensity: risk.risk_score,
           riskCount: 1,
         });
@@ -390,20 +389,21 @@ export async function calculateRiskTrends(
       };
     }
 
-    const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
+    type RiskRow = { risk_score: number; risk_level: string; risk_title: string };
+    const totalScore = data.reduce((sum: number, r: RiskRow) => sum + r.risk_score, 0);
     const averageRiskScore = totalScore / data.length;
 
-    const criticalRisksCount = data.filter((r: any) => r.risk_level === 'critical').length;
-    const highRisksCount = data.filter((r: any) => r.risk_level === 'high').length;
-    const mediumRisksCount = data.filter((r: any) => r.risk_level === 'medium').length;
-    const lowRisksCount = data.filter((r: any) => r.risk_level === 'low').length;
+    const criticalRisksCount = data.filter((r: RiskRow) => r.risk_level === 'critical').length;
+    const highRisksCount = data.filter((r: RiskRow) => r.risk_level === 'high').length;
+    const mediumRisksCount = data.filter((r: RiskRow) => r.risk_level === 'medium').length;
+    const lowRisksCount = data.filter((r: RiskRow) => r.risk_level === 'low').length;
 
     // Calculate trend direction (simplified)
     const firstHalf = data.slice(0, Math.floor(data.length / 2));
     const secondHalf = data.slice(Math.floor(data.length / 2));
     
-    const firstHalfAvg = firstHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / firstHalf.length;
-    const secondHalfAvg = secondHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / secondHalf.length;
+    const firstHalfAvg = firstHalf.reduce((sum: number, r: RiskRow) => sum + r.risk_score, 0) / firstHalf.length;
+    const secondHalfAvg = secondHalf.reduce((sum: number, r: RiskRow) => sum + r.risk_score, 0) / secondHalf.length;
     
     let trendDirection: 'improving' | 'stable' | 'worsening' = 'stable';
     if (secondHalfAvg < firstHalfAvg - 5) trendDirection = 'improving';
@@ -411,8 +411,8 @@ export async function calculateRiskTrends(
 
     // Extract key issues
     const keyIssues = data
-      .filter((r: any) => r.risk_level === 'critical' || r.risk_level === 'high')
-      .map((r: any) => r.risk_title)
+      .filter((r: RiskRow) => r.risk_level === 'critical' || r.risk_level === 'high')
+      .map((r: RiskRow) => r.risk_title)
       .slice(0, 5);
 
     const trend: RiskTrend = {
@@ -494,7 +494,7 @@ export async function createRiskAlert(
 export async function exportRiskData(
   format: 'PDF' | 'CSV' | 'JSON' | 'EXCEL',
   scope: 'vessel' | 'fleet' | 'module' | 'custom',
-  filters: Record<string, any>,
+  filters: Record<string, unknown>,
   userId: string
 ): Promise<string> {
   try {
@@ -502,15 +502,15 @@ export async function exportRiskData(
     let query = supabase.from("risk_assessments").select("*");
 
     if (filters.vesselId) {
-      query = query.eq("vessel_id", filters.vesselId);
+      query = query.eq("vessel_id", filters.vesselId as string);
     }
 
     if (filters.moduleType) {
-      query = query.eq("module_type", filters.moduleType);
+      query = query.eq("module_type", filters.moduleType as string);
     }
 
     if (filters.riskLevel) {
-      query = query.eq("risk_level", filters.riskLevel);
+      query = query.eq("risk_level", filters.riskLevel as string);
     }
 
     const { data, error } = await query;
