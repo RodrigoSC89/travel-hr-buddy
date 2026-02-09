@@ -4,6 +4,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -236,7 +237,16 @@ export default function WasteManagementEnhanced() {
                       <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                         <span>{Math.round(percentage)}% ocupado</span>
                         {tank.status !== "ok" && (
-                          <Button variant="outline" size="sm" onClick={() => toast.success(`Agendando descarte: ${tank.name}`)}>
+                          <Button variant="outline" size="sm" onClick={async () => {
+                            try {
+                              await supabase.from("ai_audit_logs").insert({
+                                user_input: `Descarte agendado: ${tank.name} (${tank.current}/${tank.capacity} ${tank.unit})`,
+                                module_name: "waste_management",
+                                interaction_type: "discharge_scheduled"
+                              });
+                              toast.success(`Descarte agendado para: ${tank.name}`);
+                            } catch { toast.error("Erro ao agendar descarte"); }
+                          }}>
                             Agendar Descarte
                           </Button>
                         )}

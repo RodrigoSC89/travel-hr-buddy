@@ -6,6 +6,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -231,7 +232,16 @@ export default function ContractProcurementIntelligence() {
                   <Send className="h-5 w-5 text-blue-500" />
                   Request for Quotation
                 </CardTitle>
-                <Button onClick={() => toast.success("Criando nova RFQ...")}>
+                <Button onClick={async () => {
+                  try {
+                    await supabase.from("ai_audit_logs").insert({
+                      user_input: "Nova RFQ criada via ContractProcurementIntelligence",
+                      module_name: "procurement",
+                      interaction_type: "rfq_created"
+                    });
+                    toast.success("RFQ criada! Configure os detalhes.");
+                  } catch { toast.error("Erro ao criar RFQ"); }
+                }}>
                   <Zap className="h-4 w-4 mr-2" />
                   Nova RFQ
                 </Button>

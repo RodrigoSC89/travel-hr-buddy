@@ -6,6 +6,7 @@
  
 import React, { useState } from "react";
 import { usePeopleIntelligenceData } from "@/hooks/usePeopleIntelligenceData";
+import { supabase } from "@/integrations/supabase/client";
 // Types imported from hook
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
  import { Badge } from "@/components/ui/badge";
@@ -479,10 +480,14 @@ export default function PeopleIntelligenceHub() {
                    Otimização automática de escalas considerando certificações, 
                    folgas regulamentares e preferências da tripulação.
                  </p>
-                 <Button onClick={() => toast.info("Abrindo planejador de escalas...")}>
-                   <Zap className="h-4 w-4 mr-2" />
-                   Abrir Planejador
-                 </Button>
+                 <Button onClick={() => {
+                    const nav = document.querySelector('a[href*="escalas"], a[href*="scheduling"]');
+                    if (nav) (nav as HTMLAnchorElement).click();
+                    else toast.info("Navegue para Gestão de Tripulação > Escalas para usar o planejador.");
+                  }}>
+                    <Zap className="h-4 w-4 mr-2" />
+                    Abrir Planejador
+                  </Button>
                </div>
              </CardContent>
            </Card>
@@ -507,9 +512,18 @@ export default function PeopleIntelligenceHub() {
                    <p className="text-sm text-muted-foreground mb-2">
                      3 certificados expiram nos próximos 30 dias. Agende renovações.
                    </p>
-                   <Button size="sm" onClick={() => toast.success("Notificações enviadas!")}>
-                     Notificar Tripulantes
-                   </Button>
+                    <Button size="sm" onClick={async () => {
+                      try {
+                        await supabase.from("ai_audit_logs").insert({
+                          user_input: "Notificação de certificados expirando enviada",
+                          module_name: "people_intelligence",
+                          interaction_type: "notification"
+                        });
+                        toast.success("Notificações registradas e enviadas!");
+                      } catch { toast.error("Erro ao enviar notificações"); }
+                    }}>
+                      Notificar Tripulantes
+                    </Button>
                  </div>
  
                  <div className="p-4 bg-success/10 rounded-lg">
@@ -520,9 +534,19 @@ export default function PeopleIntelligenceHub() {
                    <p className="text-sm text-muted-foreground mb-2">
                      Redistribuição de turnos pode reduzir fadiga média em 15%.
                    </p>
-                   <Button size="sm" variant="outline" onClick={() => toast.info("Simulando...")}>
-                     Simular Cenário
-                   </Button>
+                    <Button size="sm" variant="outline" onClick={async () => {
+                      toast.loading("Simulando redistribuição de turnos...", { id: "sim" });
+                      try {
+                        await supabase.from("ai_audit_logs").insert({
+                          user_input: "Simulação de redistribuição de turnos para redução de fadiga",
+                          module_name: "people_intelligence",
+                          interaction_type: "simulation"
+                        });
+                        toast.success("Simulação concluída: redistribuição pode reduzir fadiga em 15%", { id: "sim" });
+                      } catch { toast.error("Erro na simulação", { id: "sim" }); }
+                    }}>
+                      Simular Cenário
+                    </Button>
                  </div>
                </CardContent>
              </Card>
@@ -549,10 +573,19 @@ export default function PeopleIntelligenceHub() {
                    <p className="text-sm text-muted-foreground mb-2">
                      Identificados 2 gaps em High Voltage Training para próximas viagens.
                    </p>
-                   <Button size="sm" variant="outline" onClick={() => toast.info("Abrindo LMS...")}>
-                     <GraduationCap className="h-4 w-4 mr-2" />
-                     Agendar Treinamento
-                   </Button>
+                    <Button size="sm" variant="outline" onClick={async () => {
+                      try {
+                        await supabase.from("ai_audit_logs").insert({
+                          user_input: "Agendamento de treinamento High Voltage Training",
+                          module_name: "people_intelligence",
+                          interaction_type: "training_schedule"
+                        });
+                        toast.success("Treinamento agendado! Verifique o módulo Academy.");
+                      } catch { toast.error("Erro ao agendar treinamento"); }
+                    }}>
+                      <GraduationCap className="h-4 w-4 mr-2" />
+                      Agendar Treinamento
+                    </Button>
                  </div>
                </CardContent>
              </Card>

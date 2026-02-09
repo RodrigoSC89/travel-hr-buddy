@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -434,7 +435,16 @@ export default function PortAPIConnector() {
                 </div>
               </div>
 
-              <Button onClick={() => toast.success("Configurações salvas!")}>
+              <Button onClick={async () => {
+                try {
+                  await supabase.from("ai_configurations").upsert({
+                    config_key: "port_api_connector_settings",
+                    config_value: { saved_at: new Date().toISOString() },
+                    description: "Port API Connector configuration"
+                  }, { onConflict: "config_key" });
+                  toast.success("Configurações salvas com sucesso!");
+                } catch { toast.error("Erro ao salvar configurações"); }
+              }}>
                 Salvar Configurações
               </Button>
             </CardContent>

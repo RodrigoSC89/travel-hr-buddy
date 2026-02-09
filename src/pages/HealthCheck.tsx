@@ -19,11 +19,11 @@ export default function HealthCheckPage() {
 
   const runCheck = () => {
     setLoading(true);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const result = performHealthCheck();
       setHealth(result);
       setLoading(false);
-    }, 500);
+    });
   };
 
   useEffect(() => {

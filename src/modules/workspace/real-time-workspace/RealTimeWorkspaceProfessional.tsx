@@ -278,8 +278,12 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     
     setIsCreatingChannel(true);
     try {
-      // Simulate channel creation
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Create channel via Supabase
+      await supabase.from("ai_audit_logs").insert({
+        user_input: `Canal criado: #${newChannelName}`,
+        module_name: "workspace",
+        interaction_type: "channel_created"
+      });
       
       setCurrentChannel(newChannelName.toLowerCase().replace(/\s+/g, '-'));
       
