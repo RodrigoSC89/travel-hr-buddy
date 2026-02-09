@@ -16,6 +16,10 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Brain, MessageSquare, Bot, Zap, BarChart3, FileText, Cpu, Activity, Settings, Wifi, Download, Plus, Database } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { AIAgentHealthDashboard } from '@/components/world-class';
@@ -151,9 +155,28 @@ export default function AIMegaHub() {
     toast.success('Dados de IA atualizados');
   }, [queryClient]);
 
-  const handleDeployAgent = useCallback(async () => {
-    toast.warning('Deploy de Agente — Em implantação. Formulário de configuração com nome, capabilities e escopo será entregue em breve.');
+  const [agentDialogOpen, setAgentDialogOpen] = useState(false);
+  const [agentForm, setAgentForm] = useState({ name: '', agent_id: '', capabilities: '' });
+
+  const handleDeployAgent = useCallback(() => {
+    setAgentDialogOpen(true);
   }, []);
+
+  const handleSubmitAgent = useCallback(async () => {
+    if (!agentForm.name || !agentForm.agent_id) { toast.error('Nome e ID do agente são obrigatórios'); return; }
+    const caps = agentForm.capabilities ? agentForm.capabilities.split(',').map(s => s.trim()) : [];
+    const { error } = await supabase.from('agent_registry').insert({
+      name: agentForm.name,
+      agent_id: agentForm.agent_id,
+      capabilities: caps,
+      status: 'active',
+    });
+    if (error) { toast.error('Erro ao criar agente: ' + error.message); return; }
+    toast.success('Agente implantado com sucesso');
+    queryClient.invalidateQueries({ queryKey: ['ai-agents-hub'] });
+    setAgentDialogOpen(false);
+    setAgentForm({ name: '', agent_id: '', capabilities: '' });
+  }, [agentForm, queryClient]);
 
   const handleExportAgents = useCallback(async () => {
     if (agentData.length === 0) {
@@ -421,6 +444,21 @@ export default function AIMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* Deploy Agent Dialog */}
+      <Dialog open={agentDialogOpen} onOpenChange={setAgentDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Deploy AI Agent</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Nome do Agente *</Label><Input value={agentForm.name} onChange={e => setAgentForm(p => ({ ...p, name: e.target.value }))} placeholder="Ex: Risk Analyzer" /></div>
+            <div><Label>Agent ID *</Label><Input value={agentForm.agent_id} onChange={e => setAgentForm(p => ({ ...p, agent_id: e.target.value }))} placeholder="Ex: risk-analyzer-v1" /></div>
+            <div><Label>Capabilities (separar por vírgula)</Label><Input value={agentForm.capabilities} onChange={e => setAgentForm(p => ({ ...p, capabilities: e.target.value }))} placeholder="analysis, prediction, reporting" /></div>
+            <Button className="w-full" onClick={handleSubmitAgent}>Deploy Agent</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

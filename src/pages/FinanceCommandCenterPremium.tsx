@@ -306,16 +306,26 @@ function FinanceReports() {
       title: "DRE Mensal", 
       icon: BarChart3, 
       description: "Demonstrativo de resultados",
-      action: () => {
-        toast.warning("Relatório DRE — Em implantação. Requer integração com dados contábeis reais.");
+      action: async () => {
+        const { data } = await supabase.from("expenses").select("description, amount, date, category, status").order("date", { ascending: false }).limit(200);
+        if (!data || data.length === 0) { toast.info("Sem dados de despesas para gerar DRE"); return; }
+        const csv = ["Descrição;Valor;Data;Categoria;Status", ...data.map((d: any) => `${d.description};${d.amount};${d.date};${d.category || 'N/A'};${d.status}`)].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `dre-mensal-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
+        toast.success("DRE exportado com sucesso");
       }
     },
     { 
       title: "Fluxo de Caixa", 
       icon: TrendingUp,
       description: "Cash flow projetado",
-      action: () => {
-        toast.warning("Fluxo de Caixa — Em implantação. Requer integração com contas a pagar/receber.");
+      action: async () => {
+        const { data } = await supabase.from("expenses").select("amount, date, category, status").order("date", { ascending: false }).limit(200);
+        if (!data || data.length === 0) { toast.info("Sem dados para gerar fluxo de caixa"); return; }
+        const csv = ["Data;Valor;Categoria;Status", ...data.map((d: any) => `${d.date};${d.amount};${d.category || 'N/A'};${d.status}`)].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `cash-flow-${new Date().toISOString().slice(0,7)}.csv`; a.click(); URL.revokeObjectURL(url);
+        toast.success("Fluxo de caixa exportado");
       }
     },
     { 

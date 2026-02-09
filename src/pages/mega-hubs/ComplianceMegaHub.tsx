@@ -10,9 +10,14 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -175,9 +180,29 @@ export default function ComplianceMegaHub() {
     toast.success('Dados de compliance atualizados');
   }, [queryClient]);
 
-  const handleNewAudit = useCallback(async () => {
-    toast.warning('Nova Auditoria — Em implantação. Formulário com tipo, escopo, auditor e embarcação será entregue em breve.');
+  const [auditDialogOpen, setAuditDialogOpen] = useState(false);
+  const [auditForm, setAuditForm] = useState({ audit_type: 'internal', scope: '', vessel_id: '' });
+
+  const handleNewAudit = useCallback(() => {
+    setAuditDialogOpen(true);
   }, []);
+
+  const handleSubmitAudit = useCallback(async () => {
+    if (!auditForm.audit_type) { toast.error('Tipo de auditoria obrigatório'); return; }
+    const auditNumber = `AUD-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`;
+    const { error } = await supabase.from('internal_audits').insert({
+      audit_number: auditNumber,
+      audit_type: auditForm.audit_type,
+      scope: auditForm.scope || null,
+      vessel_id: auditForm.vessel_id || null,
+      status: 'planned',
+    });
+    if (error) { toast.error('Erro ao criar auditoria: ' + error.message); return; }
+    toast.success('Auditoria criada: ' + auditNumber);
+    queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
+    setAuditDialogOpen(false);
+    setAuditForm({ audit_type: 'internal', scope: '', vessel_id: '' });
+  }, [auditForm, queryClient]);
 
   const handleExportCompliance = useCallback(async () => {
     const allData = [...audits.map((a: any) => ({ tipo: 'Auditoria', ...a })), ...nonConformities.map((nc: any) => ({ tipo: 'NC', ...nc }))];
@@ -368,6 +393,31 @@ export default function ComplianceMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* New Audit Dialog */}
+      <Dialog open={auditDialogOpen} onOpenChange={setAuditDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nova Auditoria</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Tipo de Auditoria *</Label>
+              <Select value={auditForm.audit_type} onValueChange={v => setAuditForm(p => ({ ...p, audit_type: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="internal">Interna</SelectItem>
+                  <SelectItem value="external">Externa</SelectItem>
+                  <SelectItem value="flag_state">Flag State</SelectItem>
+                  <SelectItem value="psc">PSC</SelectItem>
+                  <SelectItem value="class">Sociedade Classificadora</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div><Label>Escopo</Label><Input value={auditForm.scope} onChange={e => setAuditForm(p => ({ ...p, scope: e.target.value }))} placeholder="Ex: ISM Code, ISPS, MLC 2006" /></div>
+            <Button className="w-full" onClick={handleSubmitAudit}>Criar Auditoria</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

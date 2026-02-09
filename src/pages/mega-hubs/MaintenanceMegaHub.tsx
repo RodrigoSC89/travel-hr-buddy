@@ -7,9 +7,15 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -120,9 +126,29 @@ export default function MaintenanceMegaHub() {
     toast.success('Dados de manutenção atualizados');
   }, [queryClient]);
 
+  const [woDialogOpen, setWoDialogOpen] = useState(false);
+  const [woForm, setWoForm] = useState({ vessel_id: '', component: '', title: '', description: '', priority: 'medium' });
+
   const handleNewWorkOrder = useCallback(() => {
-    toast.warning('Nova Ordem de Serviço — Em implantação. Formulário completo com embarcação, equipamento e prioridade será entregue em breve.');
+    setWoDialogOpen(true);
   }, []);
+
+  const handleSubmitWorkOrder = useCallback(async () => {
+    if (!woForm.title) { toast.error('Título obrigatório'); return; }
+    const { error } = await supabase.from('maintenance_tasks').insert({
+      title: woForm.title,
+      description: woForm.description || null,
+      component_name: woForm.component || null,
+      priority: woForm.priority,
+      status: 'pending',
+      vessel_id: woForm.vessel_id || null,
+    });
+    if (error) { toast.error('Erro ao criar OS: ' + error.message); return; }
+    toast.success('Ordem de Serviço criada');
+    queryClient.invalidateQueries({ queryKey: ['maintenance-records-hub'] });
+    setWoDialogOpen(false);
+    setWoForm({ vessel_id: '', component: '', title: '', description: '', priority: 'medium' });
+  }, [woForm, queryClient]);
 
   const handleExport = useCallback(async () => {
     exportToCSV(maintenanceRecords, 'maintenance-records');
@@ -313,6 +339,32 @@ export default function MaintenanceMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* Work Order Dialog */}
+      <Dialog open={woDialogOpen} onOpenChange={setWoDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nova Ordem de Serviço</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div><Label>Título *</Label><Input value={woForm.title} onChange={e => setWoForm(p => ({ ...p, title: e.target.value }))} placeholder="Descrição da OS" /></div>
+            <div><Label>Componente</Label><Input value={woForm.component} onChange={e => setWoForm(p => ({ ...p, component: e.target.value }))} placeholder="Ex: Motor Principal" /></div>
+            <div><Label>Descrição</Label><Textarea value={woForm.description} onChange={e => setWoForm(p => ({ ...p, description: e.target.value }))} placeholder="Detalhes da ordem..." /></div>
+            <div><Label>Prioridade</Label>
+              <Select value={woForm.priority} onValueChange={v => setWoForm(p => ({ ...p, priority: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Baixa</SelectItem>
+                  <SelectItem value="medium">Média</SelectItem>
+                  <SelectItem value="high">Alta</SelectItem>
+                  <SelectItem value="critical">Crítica</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button className="w-full" onClick={handleSubmitWorkOrder}>Criar Ordem de Serviço</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
