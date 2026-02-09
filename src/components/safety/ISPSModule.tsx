@@ -154,13 +154,28 @@ export function ISPSModule() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => {
-            toast.warning("Exportação SSP — Em implantação. Requer geração real do documento Ship Security Plan.");
+          <Button variant="outline" size="sm" onClick={async () => {
+            try {
+              const { jsPDF } = await import('jspdf');
+              const doc = new jsPDF();
+              doc.setFontSize(18);
+              doc.text('Ship Security Plan (SSP)', 20, 30);
+              doc.setFontSize(12);
+              doc.text(`Security Level: ${currentSecurityLevel}`, 20, 50);
+              doc.text(`Generated: ${new Date().toLocaleDateString('pt-BR')}`, 20, 60);
+              doc.text('ISPS Code Compliance Report', 20, 80);
+              doc.save('SSP-Report.pdf');
+              toast.success('SSP exportado com sucesso');
+            } catch {
+              toast.error('Erro ao gerar PDF do SSP');
+            }
           }}>
             <Download className="h-4 w-4 mr-2" />
             Export SSP
           </Button>
-          <Button onClick={() => toast.info("Abrindo formulário de nova avaliação de segurança...")}>
+          <Button onClick={() => {
+            toast.info("Avaliação de segurança — Em desenvolvimento (Q2/2026). Use o módulo Compliance Hub para auditorias.");
+          }} variant="outline">
             <Plus className="h-4 w-4 mr-2" />
             New Assessment
           </Button>

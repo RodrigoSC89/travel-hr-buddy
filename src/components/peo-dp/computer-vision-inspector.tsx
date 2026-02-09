@@ -167,8 +167,15 @@ export const ComputerVisionInspector: React.FC = () => {
             multiple
             onChange={handleFileUpload}
           />
-          <Button variant="outline" onClick={() => {
-            toast.warning("Câmera ao Vivo — Em implantação. Requer integração com hardware de inspeção visual.");
+          <Button variant="outline" onClick={async () => {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+              // Stream obtained — in a full implementation, attach to a <video> element
+              stream.getTracks().forEach(t => t.stop()); // release immediately for now
+              toast.success("Câmera acessada com sucesso. Integração de vídeo em desenvolvimento (Q2/2026).");
+            } catch (err: any) {
+              toast.error(`Câmera indisponível: ${err.message || 'Permissão negada'}`);
+            }
           }}>
             <Camera className="w-4 h-4 mr-2" />
             Câmera ao Vivo

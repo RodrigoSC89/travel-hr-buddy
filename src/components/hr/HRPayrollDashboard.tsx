@@ -31,22 +31,19 @@ export function HRPayrollDashboard() {
   const [month, setMonth] = useState('01');
   const [year, setYear] = useState('2026');
 
-  // Use real data if available, fallback to mock
+  // Use real data only — no mock fallback
   const payrollSummary = summary || {
-    totalEmployees: 338,
-    totalGross: 2450000,
-    totalNet: 1820000,
-    totalINSS: 245000,
-    totalIRRF: 185000,
-    totalFGTS: 196000,
-    employeeCount: 338,
+    totalEmployees: 0,
+    totalGross: 0,
+    totalNet: 0,
+    totalINSS: 0,
+    totalIRRF: 0,
+    totalFGTS: 0,
+    employeeCount: 0,
   };
 
-  const anomalies = [
-    { employee: 'João Santos', issue: 'Comissão +340% vs média', severity: 'high' },
-    { employee: 'Maria Silva', issue: 'Banco de horas negativo (-80h)', severity: 'medium' },
-    { employee: 'Carlos Costa', issue: 'Desconto VT > 6%', severity: 'low' },
-  ];
+  // Anomalies will come from real payroll analysis when data exists
+  const anomalies: Array<{ employee: string; issue: string; severity: string }> = [];
 
   const handleCalculate = async () => {
     const referenceMonth = `${year}-${month}`;
