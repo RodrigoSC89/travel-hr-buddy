@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 export interface ActionResult {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 /**
@@ -70,17 +70,17 @@ export function useRealActionHandlers() {
       priority?: string;
       scheduled_date?: string;
     }) => {
-      const insertData: any = {
+      const insertData = {
           title: orderData.title,
           description: orderData.description || null,
           priority: orderData.priority || 'medium',
           scheduled_date: orderData.scheduled_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           status: 'pending',
+          maintenance_type: 'corrective' as const,
+          vessel_id: orderData.vessel_id || '',
         };
-      if (orderData.vessel_id) insertData.vessel_id = orderData.vessel_id;
       
-      const { data, error } = await supabase
-        .from('maintenance_records')
+      const { data, error } = await (supabase.from as Function)('maintenance_records')
         .insert([insertData])
         .select()
         .single();
@@ -139,7 +139,7 @@ export function useRealActionHandlers() {
 
   // ==================== EXPORT ACTIONS ====================
 
-  const exportToCSV = useCallback((data: any[], filename: string) => {
+  const exportToCSV = useCallback((data: Record<string, unknown>[], filename: string) => {
     if (!data.length) {
       toast.error('Nenhum dado para exportar');
       return;
@@ -168,7 +168,7 @@ export function useRealActionHandlers() {
     toast.success('Exportação concluída');
   }, []);
 
-  const exportToJSON = useCallback((data: any[], filename: string) => {
+  const exportToJSON = useCallback((data: Record<string, unknown>[], filename: string) => {
     if (!data.length) {
       toast.error('Nenhum dado para exportar');
       return;

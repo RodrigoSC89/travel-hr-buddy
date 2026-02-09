@@ -82,8 +82,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
 
     const loadAgentsFromSupabase = async () => {
       try {
-        const { data, error } = await supabase
-          .from("coordination_agents" as any)
+        const { data, error } = await (supabase.from as Function)("coordination_agents")
           .select("*")
           .order("created_at", { ascending: false });
 
@@ -93,7 +92,8 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
         }
 
         if (data) {
-          data.forEach((agentData: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (data as any[]).forEach((agentData) => {
             coordinationEngine.registerAgent({
               id: agentData.id,
               name: agentData.name,
@@ -174,8 +174,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     // Persist to Supabase if enabled
     if (enableSupabase) {
       try {
-        const { error } = await supabase
-          .from("coordination_agents" as any)
+        const { error } = await (supabase.from as Function)("coordination_agents")
           .upsert({
             id: fullAgent.id,
             name: fullAgent.name,
@@ -216,8 +215,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     // Persist to Supabase if enabled
     if (enableSupabase) {
       try {
-        const { error } = await supabase
-          .from("coordination_agents" as any)
+        const { error } = await (supabase.from as Function)("coordination_agents")
           .update({
             ...updates,
             last_update: new Date().toISOString()
@@ -249,8 +247,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     // Remove from Supabase if enabled
     if (enableSupabase) {
       try {
-        const { error } = await supabase
-          .from("coordination_agents" as any)
+        const { error } = await (supabase.from as Function)("coordination_agents")
           .delete()
           .eq("id", agentId);
 
@@ -289,7 +286,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
       // Log to Supabase if enabled
       if (enableSupabase && newActions.length > 0) {
         try {
-          await supabase.from("coordination_logs" as any).insert(
+          await (supabase.from as Function)("coordination_logs").insert(
             newActions.map(action => ({
               agent_id: action.agentId,
               action: action.action,
