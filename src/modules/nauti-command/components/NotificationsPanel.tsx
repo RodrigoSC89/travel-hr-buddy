@@ -195,7 +195,10 @@ export function NotificationsPanel({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs"
-                              onClick={() => toast.success(`Notificação: ${notification.title}`, { description: notification.description })}
+                              onClick={() => {
+                                onMarkAllRead();
+                                toast.info(notification.title, { description: notification.description, duration: 6000 });
+                              }}
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Ver

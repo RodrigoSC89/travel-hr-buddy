@@ -273,7 +273,19 @@ export default function MedicalInfirmaryEnhanced() {
                               className={`h-2 ${med.status === "critical" ? "[&>div]:bg-destructive" : med.status === "low" ? "[&>div]:bg-amber-500" : ""}`}
                             />
                           </div>
-                          <Button variant="outline" size="sm" onClick={() => toast.success(`Pedido de reposição: ${med.name}`)}>
+                          <Button variant="outline" size="sm" onClick={async () => {
+                            try {
+                              const { supabase } = await import("@/integrations/supabase/client");
+                              await supabase.from("ai_audit_logs").insert({
+                                user_input: `Reposição solicitada: ${med.name} (qtd atual: ${med.quantity})`,
+                                interaction_type: "medication_restock",
+                                module_name: "medical-infirmary"
+                              });
+                              toast.success(`Pedido de reposição registrado: ${med.name}`);
+                            } catch {
+                              toast.error("Erro ao registrar pedido de reposição");
+                            }
+                          }}>
                             Repor
                           </Button>
                         </div>

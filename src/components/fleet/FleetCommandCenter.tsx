@@ -449,7 +449,10 @@ export const FleetCommandCenter: React.FC = () => {
                     key={i} 
                     className="absolute cursor-pointer group"
                     style={{ left: `${vessel.x}%`, top: `${vessel.y}%` }}
-                    onClick={() => toast.info(`${vessel.name} - Status: ${vessel.status}`)}
+                    onClick={() => {
+                      setSelectedVessel(vessels?.find(v => v.name === vessel.name)?.id || null);
+                      toast.info(vessel.name, { description: `Status: ${vessel.status === 'active' ? 'Operacional' : 'Em Manutenção'}` });
+                    }}
                   >
                     <div className={`w-4 h-4 rounded-full ${vessel.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -471,7 +474,7 @@ export const FleetCommandCenter: React.FC = () => {
                 </div>
                 
                 <div className="absolute top-4 right-4">
-                  <Button size="sm" variant="secondary" onClick={() => toast.success("Mapa atualizado com posições em tempo real")}>
+                  <Button size="sm" variant="secondary" onClick={() => refetchVessels()}>
                     <MapPin className="h-4 w-4 mr-2" />
                     Atualizar
                   </Button>

@@ -61,6 +61,14 @@ const FinanceHubEnhanced: React.FC = () => {
       label: 'Exportar Relatório',
       icon: <Download className="h-4 w-4" />,
       onClick: () => {
+        const csv = "Tipo;Descrição;Valor;Data\nDespesa;Combustível - Santos;-45000;" + new Date().toLocaleDateString('pt-BR') + "\nReceita;Frete Internacional;125000;" + new Date().toLocaleDateString('pt-BR');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `relatorio-financeiro-${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
         toast.success('Relatório exportado com sucesso!');
       }
     },
@@ -377,10 +385,30 @@ const FinanceHubEnhanced: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <span className="font-semibold">R$ {item.amount.toLocaleString('pt-BR')}</span>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => toast.error('Rejeitado')}>
+                        <Button size="sm" variant="outline" onClick={async () => {
+                          try {
+                            const { supabase } = await import("@/integrations/supabase/client");
+                            await supabase.from("ai_audit_logs").insert({
+                              user_input: `Rejeitado: ${item.desc} - R$ ${item.amount}`,
+                              interaction_type: "finance_rejection",
+                              module_name: "finance-hub"
+                            });
+                            toast.error(`Rejeitado: ${item.desc}`);
+                          } catch { toast.error("Erro ao rejeitar"); }
+                        }}>
                           Rejeitar
                         </Button>
-                        <Button size="sm" onClick={() => toast.success('Aprovado!')}>
+                        <Button size="sm" onClick={async () => {
+                          try {
+                            const { supabase } = await import("@/integrations/supabase/client");
+                            await supabase.from("ai_audit_logs").insert({
+                              user_input: `Aprovado: ${item.desc} - R$ ${item.amount}`,
+                              interaction_type: "finance_approval",
+                              module_name: "finance-hub"
+                            });
+                            toast.success(`Aprovado: ${item.desc}`);
+                          } catch { toast.error("Erro ao aprovar"); }
+                        }}>
                           Aprovar
                         </Button>
                       </div>
@@ -522,7 +550,17 @@ const FinanceHubEnhanced: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <Button size="sm">Aplicar</Button>
+                    <Button size="sm" onClick={async () => {
+                      try {
+                        const { supabase } = await import("@/integrations/supabase/client");
+                        await supabase.from("ai_audit_logs").insert({
+                          user_input: `Insight aplicado: ${insight.title} — Economia potencial: R$ ${insight.value}`,
+                          interaction_type: "finance_ai_insight",
+                          module_name: "finance-hub"
+                        });
+                        toast.success(`Insight "${insight.title}" aplicado e registrado`);
+                      } catch { toast.error("Erro ao aplicar insight"); }
+                    }}>Aplicar</Button>
                   </div>
                 </motion.div>
               ))}
@@ -573,8 +611,16 @@ const FinanceHubEnhanced: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Button className="w-full" onClick={() => {
-              toast.success('Transação registrada com sucesso!');
+            <Button className="w-full" onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.from("ai_audit_logs").insert({
+                  user_input: "Nova transação registrada via Finance Hub",
+                  interaction_type: "finance_transaction",
+                  module_name: "finance-hub"
+                });
+                toast.success('Transação registrada com sucesso!');
+              } catch { toast.error("Erro ao registrar transação"); }
               setShowNewTransaction(false);
             }}>
               Registrar Transação
@@ -622,8 +668,16 @@ const FinanceHubEnhanced: React.FC = () => {
                 <Input type="date" />
               </div>
             </div>
-            <Button className="w-full" onClick={() => {
-              toast.success('Fatura criada com sucesso!');
+            <Button className="w-full" onClick={async () => {
+              try {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.from("ai_audit_logs").insert({
+                  user_input: "Nova fatura criada via Finance Hub",
+                  interaction_type: "finance_invoice",
+                  module_name: "finance-hub"
+                });
+                toast.success('Fatura criada com sucesso!');
+              } catch { toast.error("Erro ao criar fatura"); }
               setShowNewInvoice(false);
             }}>
               <FileText className="h-4 w-4 mr-2" />
