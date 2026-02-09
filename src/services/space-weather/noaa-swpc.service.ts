@@ -448,7 +448,7 @@ export async function getSpaceWeatherSummary(): Promise<{
 export async function checkDPGateStatus(): Promise<{
   status: 'PROCEED' | 'CAUTION' | 'HOLD';
   reason: string;
-  details: any;
+  details: Record<string, unknown>;
 }> {
   const summary = await getSpaceWeatherSummary();
   

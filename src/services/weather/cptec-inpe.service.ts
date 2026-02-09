@@ -41,7 +41,7 @@ export interface CPTECData {
   atualizacao?: string;
   previsoes?: PrevisaoCPTEC[];
   ondas?: PrevisaoOndas[];
-  capitais?: any[];
+  capitais?: Array<Record<string, unknown>>;
   error?: string;
 }
 

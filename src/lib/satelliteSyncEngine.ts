@@ -18,7 +18,7 @@ export interface WindyForecastData {
   wind_speed: number;
   wind_direction: number;
   visibility: number;
-  forecast: any;
+  forecast: Record<string, unknown>;
 }
 
 export interface AISData {
@@ -36,7 +36,7 @@ export interface SatelliteTelemetry {
   source: "NOAA" | "Starlink";
   latitude: number;
   longitude: number;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -50,7 +50,7 @@ export interface SyncStatus {
 
 class SatelliteSyncEngine {
   private syncInterval: NodeJS.Timeout | null = null;
-  private cacheStorage: Map<string, any> = new Map();
+  private cacheStorage: Map<string, { data: unknown; timestamp: number }> = new Map();
   private syncStatus: Map<string, SyncStatus> = new Map();
   private readonly CACHE_TTL = 300000; // 5 minutes
   private readonly SYNC_INTERVAL = 60000; // 1 minute
@@ -428,7 +428,7 @@ class SatelliteSyncEngine {
   /**
    * Get data from cache
    */
-  private getFromCache(key: string): any {
+  private getFromCache(key: string): unknown {
     const cached = this.cacheStorage.get(key);
     if (!cached) return null;
 
@@ -446,7 +446,7 @@ class SatelliteSyncEngine {
   /**
    * Set data in cache
    */
-  private setCache(key: string, data: any): void {
+  private setCache(key: string, data: unknown): void {
     this.cacheStorage.set(key, {
       data,
       timestamp: Date.now(),
@@ -490,7 +490,7 @@ class SatelliteSyncEngine {
   /**
    * Get latest weather data - with graceful fallback
    */
-  async getLatestWeatherData(): Promise<any[]> {
+  async getLatestWeatherData(): Promise<Record<string, unknown>[]> {
     try {
       // Check if table exists
       const tableExists = await this.checkTableExists("weather_feed");
@@ -519,7 +519,7 @@ class SatelliteSyncEngine {
   /**
    * Get latest satellite data - with graceful fallback
    */
-  async getLatestSatelliteData(): Promise<any[]> {
+  async getLatestSatelliteData(): Promise<Record<string, unknown>[]> {
     try {
       // Check if table exists
       const tableExists = await this.checkTableExists("satellite_data");
@@ -548,7 +548,7 @@ class SatelliteSyncEngine {
   /**
    * Get mock weather data for demonstration
    */
-  private getMockWeatherData(): any[] {
+  private getMockWeatherData(): Record<string, unknown>[] {
     return [
       {
         id: "mock-weather-1",
@@ -580,7 +580,7 @@ class SatelliteSyncEngine {
   /**
    * Get mock satellite data for demonstration
    */
-  private getMockSatelliteData(): any[] {
+  private getMockSatelliteData(): Record<string, unknown>[] {
     return [
       {
         id: "mock-sat-1",
