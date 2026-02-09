@@ -286,31 +286,33 @@ export default function EnhancedWasteManagement() {
     return alerts;
   };
 
+  const [activeTab, setActiveTab] = useState("dashboard");
+
   const quickActions = [
     {
       id: "new-discharge",
       label: "Registrar Descarte",
       icon: <Plus className="h-4 w-4" />,
-      onClick: () => toast.info("Abrindo formulário de descarte..."),
+      onClick: () => setActiveTab("garbage"),
       variant: "default" as const,
     },
     {
       id: "oil-record",
       label: "Oil Record Book",
       icon: <FileText className="h-4 w-4" />,
-      onClick: () => toast.info("Abrindo Oil Record Book..."),
+      onClick: () => setActiveTab("oil-record"),
     },
     {
       id: "garbage-record",
       label: "Garbage Record Book",
       icon: <Trash2 className="h-4 w-4" />,
-      onClick: () => toast.info("Abrindo Garbage Record Book..."),
+      onClick: () => setActiveTab("garbage-record"),
     },
     {
       id: "compliance-check",
       label: "Check MARPOL",
       icon: <ShieldCheck className="h-4 w-4" />,
-      onClick: () => toast.success("Verificação de conformidade iniciada"),
+      onClick: () => setActiveTab("reports"),
       variant: "success" as const,
     },
   ];
@@ -377,7 +379,7 @@ export default function EnhancedWasteManagement() {
         {/* Quick Actions */}
         <QuickActionsBar actions={quickActions} />
 
-        <Tabs defaultValue="dashboard" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full max-w-4xl grid-cols-7">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />

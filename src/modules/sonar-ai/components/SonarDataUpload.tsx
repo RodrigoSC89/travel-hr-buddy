@@ -38,12 +38,8 @@ export function SonarDataUpload() {
       // Read file content
       const content = await file.text();
       
-      // Simulate streaming with progress
-      const intervals = 20;
-      for (let i = 0; i <= intervals; i++) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setProgress((i / intervals) * 100);
-      }
+      // Parse file with progress tracking
+      setProgress(30);
 
       // Parse data based on type
       let parsedData;

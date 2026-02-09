@@ -78,17 +78,15 @@ export default function ConnectivityPanel() {
     setIsRefreshing(true);
     toast({ title: "Atualizando...", description: "Verificando status de conectividade" });
     
-    // Simular atualização
-    await new Promise(r => setTimeout(r, 2000));
-    
-    setVessels(prev => prev.map(v => ({
-      ...v,
-      lastSync: new Date(),
-      signalStrength: v.status === "online" ? Math.min(100, v.signalStrength + Math.floor(Math.random() * 10)) : v.signalStrength
-    })));
-    
-    setIsRefreshing(false);
-    toast({ title: "Atualizado", description: "Status de conectividade atualizado" });
+    try {
+      // Real refetch from Supabase hook
+      await refetch();
+      toast({ title: "Atualizado", description: "Status de conectividade atualizado" });
+    } catch (err) {
+      toast({ title: "Erro", description: "Falha ao atualizar conectividade" });
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const handleForceSync = async (vesselId: string) => {
@@ -97,23 +95,28 @@ export default function ConnectivityPanel() {
     
     toast({ title: "Sincronizando...", description: `Forçando sync com ${vessel.name}` });
     
-    await new Promise(r => setTimeout(r, 1500));
-    
-    setVessels(prev => prev.map(v => 
-      v.id === vesselId ? { ...v, pendingSync: 0, lastSync: new Date() } : v
-    ));
-    
-    const newEvent: SyncEvent = {
-      id: Date.now().toString(),
-      type: "sync",
-      module: "Manual",
-      status: "success",
-      timestamp: new Date(),
-      size: Math.random() * 5
-    };
-    setSyncEvents(prev => [newEvent, ...prev]);
-    
-    toast({ title: "Sincronizado", description: `${vessel.name} sincronizado com sucesso` });
+    try {
+      // Real refetch triggers data update
+      await refetch();
+      
+      setVessels(prev => prev.map(v => 
+        v.id === vesselId ? { ...v, pendingSync: 0, lastSync: new Date() } : v
+      ));
+      
+      const newEvent: SyncEvent = {
+        id: Date.now().toString(),
+        type: "sync",
+        module: "Manual",
+        status: "success",
+        timestamp: new Date(),
+        size: 0
+      };
+      setSyncEvents(prev => [newEvent, ...prev]);
+      
+      toast({ title: "Sincronizado", description: `${vessel.name} sincronizado com sucesso` });
+    } catch (err) {
+      toast({ title: "Erro", description: "Falha na sincronização" });
+    }
   };
 
   const handleAICheck = async (vesselId: string) => {

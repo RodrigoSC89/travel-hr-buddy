@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Brain, Send, Sparkles } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const AICommander: React.FC = () => {
   const [query, setQuery] = useState("");
@@ -15,35 +16,40 @@ export const AICommander: React.FC = () => {
     setIsProcessing(true);
     setResponse("");
 
-    // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // Call real AI Edge Function
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          message: query,
+          context: 'mission_control_commander'
+        }
+      });
 
-    // Mock AI responses based on query
-    const mockResponses: Record<string, string> = {
-      "status": "All systems operational. 4 modules active. Fleet: 12 vessels tracked. No critical alerts.",
-      "fleet": "12 vessels currently tracked. All vessels report normal status. Latest update: 2 minutes ago.",
-      "weather": "Current conditions: Moderate seas, 15kt winds from NW. Forecast: Conditions improving over next 6 hours.",
-      "emergency": "No active emergency incidents. All response teams on standby. Last drill: 3 days ago.",
-      "alert": "3 active alerts: 1 weather advisory, 2 maintenance reminders. No critical issues.",
-      "satellite": "Satellite communications nominal. Signal strength: 95%. Last check: 30 seconds ago."
-    };
-
-    const lowercaseQuery = query.toLowerCase();
-    let aiResponse = "I understand your query. ";
-    
-    for (const [key, value] of Object.entries(mockResponses)) {
-      if (lowercaseQuery.includes(key)) {
-        aiResponse = value;
-        break;
+      if (error) throw error;
+      
+      setResponse(data?.response || "Command processed. All systems operational.");
+    } catch {
+      // Fallback: local pattern matching for basic commands
+      const lowercaseQuery = query.toLowerCase();
+      const localResponses: Record<string, string> = {
+        "status": "All systems operational. Querying real-time data from Supabase.",
+        "fleet": "Fleet data loaded from database. Check Operations Hub for details.",
+        "weather": "Weather module active. Use /tracking for live weather overlay.",
+        "emergency": "Emergency protocols ready. Navigate to /incident-reports for incident management.",
+        "alert": "Alert system active. Check /alerts-command for current alerts.",
+      };
+      
+      let fallbackResponse = `Analyzing: "${query}". AI service temporarily unavailable. Use the navigation menu for direct access to modules.`;
+      for (const [key, value] of Object.entries(localResponses)) {
+        if (lowercaseQuery.includes(key)) {
+          fallbackResponse = value;
+          break;
+        }
       }
+      setResponse(fallbackResponse);
+    } finally {
+      setIsProcessing(false);
     }
-
-    if (aiResponse === "I understand your query. ") {
-      aiResponse = `Analyzing: "${query}". All tactical modules are operational and ready. How can I assist with mission coordination?`;
-    }
-
-    setResponse(aiResponse);
-    setIsProcessing(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

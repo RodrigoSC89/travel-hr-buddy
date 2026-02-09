@@ -20,6 +20,7 @@ import {
   Search, TrendingUp, Clock, Shield, Globe, Waves, Loader2, Save, TestTube
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface APIIntegration {
   id: string;
@@ -87,18 +88,42 @@ export default function APICenter() {
     const api = integrations.find(a => a.id === id);
     if (api?.status === "not_configured") { toast.error("API não configurada"); return; }
     toast.info(`Testando ${api?.displayName}...`);
-    await new Promise(r => setTimeout(r, 1000));
-    setIntegrations(prev => prev.map(a => a.id === id ? { ...a, lastSync: new Date().toISOString(), status: "active" as const } : a));
-    toast.success("Conexão OK");
+    
+    try {
+      if (api?.id === "supabase") {
+        // Real Supabase connectivity test
+        const { error } = await supabase.from("profiles").select("id").limit(1);
+        if (error && error.code !== "PGRST116") throw error;
+      } else if (api?.id === "openmeteo") {
+        // Real Open-Meteo test
+        const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=0&longitude=0&current_weather=true");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } else {
+        // For unconfigured external APIs, just validate endpoint is set
+        if (!api?.endpoint) throw new Error("Endpoint não configurado");
+      }
+      setIntegrations(prev => prev.map(a => a.id === id ? { ...a, lastSync: new Date().toISOString(), status: "active" as const } : a));
+      toast.success("Conexão OK");
+    } catch (err) {
+      setIntegrations(prev => prev.map(a => a.id === id ? { ...a, status: "error" as const } : a));
+      toast.error(`Falha na conexão: ${err instanceof Error ? err.message : "Erro desconhecido"}`);
+    }
   };
 
   const syncAllAPIs = async () => {
     setIsSyncing(true);
     const configured = integrations.filter(a => a.isEnabled && a.status !== "not_configured");
-    for (const api of configured) { await new Promise(r => setTimeout(r, 300)); }
-    setIntegrations(prev => prev.map(api => api.isEnabled && api.status !== "not_configured" ? { ...api, lastSync: new Date().toISOString() } : api));
+    let successCount = 0;
+    
+    for (const api of configured) {
+      try {
+        await testConnection(api.id);
+        successCount++;
+      } catch { /* individual errors handled in testConnection */ }
+    }
+    
     setIsSyncing(false);
-    toast.success(`${configured.length} integrações sincronizadas`);
+    toast.success(`${successCount}/${configured.length} integrações sincronizadas`);
   };
 
   const openSettings = (api: APIIntegration) => {

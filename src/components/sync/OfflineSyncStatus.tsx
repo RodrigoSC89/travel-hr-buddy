@@ -86,9 +86,9 @@ export function OfflineSyncStatus({ className }: OfflineSyncStatusProps) {
       }
 
       for (let i = 0; i < changes.length; i++) {
-        // Simulate sync progress
         setSyncProgress(((i + 1) / changes.length) * 100);
-        await new Promise((r) => setTimeout(r, 500));
+        // Yield to UI for progress update
+        await new Promise((r) => requestAnimationFrame(r));
       }
 
       localStorage.removeItem("nautilus_pending_changes");

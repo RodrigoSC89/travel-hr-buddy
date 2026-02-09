@@ -213,7 +213,7 @@ export default function MobileApp() {
             <Bell className="h-4 w-4 mr-2" />
             {unreadCount} novas
           </Badge>
-          <Button variant="outline" onClick={() => toast.info("Configurações do app")}>
+          <Button variant="outline" onClick={() => window.location.href = '/settings'}>
             Configurar
           </Button>
         </div>

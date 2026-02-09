@@ -76,9 +76,6 @@ export const PeotramComplianceChecker: React.FC = () => {
   const loadComplianceData = async () => {
     setIsLoading(true);
     try {
-      // Simular carregamento de dados
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       setComplianceItems(getMockComplianceItems());
       setComplianceReport(getMockComplianceReport());
     } catch (error) {

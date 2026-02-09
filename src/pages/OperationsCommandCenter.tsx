@@ -524,30 +524,51 @@ export default function OperationsCommandCenter() {
     if (!selectedInsight) return;
     setIsProcessingInsight(true);
     
-    // Update insight status
-    setInsights(prev => prev.map(i => 
-      i.id === selectedInsight.id ? { ...i, status: "in_progress" } : i
-    ));
-    
-    await new Promise(r => setTimeout(r, 1000));
-    toast({ title: "✅ Análise Iniciada", description: `Análise do insight "${selectedInsight.title}" em andamento.` });
-    setIsAnalyzeDialogOpen(false);
-    setIsProcessingInsight(false);
+    try {
+      // Persist analysis to Supabase
+      const { error } = await supabase.from("ai_audit_logs").insert({
+        user_input: JSON.stringify({ insightId: selectedInsight.id, type: "analysis", notes: analysisNotes }),
+        ai_response: `Análise do insight: ${selectedInsight.title}`,
+        interaction_type: "insight_analysis",
+        module_name: "operations_command"
+      });
+      if (error) throw error;
+      
+      setInsights(prev => prev.map(i => 
+        i.id === selectedInsight.id ? { ...i, status: "in_progress" } : i
+      ));
+      toast({ title: "✅ Análise Registrada", description: `Análise do insight "${selectedInsight.title}" salva e em andamento.` });
+      setIsAnalyzeDialogOpen(false);
+    } catch (err) {
+      toast({ title: "Erro", description: "Falha ao registrar análise.", variant: "destructive" });
+    } finally {
+      setIsProcessingInsight(false);
+    }
   };
 
   const submitImplementation = async () => {
     if (!selectedInsight) return;
     setIsProcessingInsight(true);
     
-    // Update insight status
-    setInsights(prev => prev.map(i => 
-      i.id === selectedInsight.id ? { ...i, status: "completed" } : i
-    ));
-    
-    await new Promise(r => setTimeout(r, 1000));
-    toast({ title: "🚀 Implementação Iniciada", description: `Implementação do insight "${selectedInsight.title}" em execução.` });
-    setIsImplementDialogOpen(false);
-    setIsProcessingInsight(false);
+    try {
+      const { error } = await supabase.from("ai_audit_logs").insert({
+        user_input: JSON.stringify({ insightId: selectedInsight.id, type: "implementation", plan: implementationPlan }),
+        ai_response: `Implementação do insight: ${selectedInsight.title}`,
+        interaction_type: "insight_implementation",
+        module_name: "operations_command"
+      });
+      if (error) throw error;
+      
+      setInsights(prev => prev.map(i => 
+        i.id === selectedInsight.id ? { ...i, status: "completed" } : i
+      ));
+      toast({ title: "🚀 Implementação Registrada", description: `Plano de implementação de "${selectedInsight.title}" salvo.` });
+      setIsImplementDialogOpen(false);
+    } catch (err) {
+      toast({ title: "Erro", description: "Falha ao registrar implementação.", variant: "destructive" });
+    } finally {
+      setIsProcessingInsight(false);
+    }
   };
 
   if (isLoading) {

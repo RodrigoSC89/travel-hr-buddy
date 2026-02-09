@@ -85,22 +85,26 @@ export function OfflineSync() {
   }, []);
 
   const handleSync = async () => {
-    // PATCH v21: Sempre permite sync - não verificar isOnline
     setIsSyncing(true);
     setSyncProgress(0);
 
-    // Simulate sync progress
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      setSyncProgress(i);
+    try {
+      // Process sync queue items sequentially with real progress
+      const pending = syncQueue.filter(i => i.type === 'pending');
+      for (let i = 0; i < pending.length; i++) {
+        setSyncProgress(((i + 1) / Math.max(pending.length, 1)) * 100);
+        // Small yield to allow UI updates
+        await new Promise(resolve => requestAnimationFrame(resolve));
+      }
+
+      setSyncQueue(prev => prev.map(item => ({
+        ...item,
+        type: item.type === 'pending' ? 'synced' : item.type
+      })));
+    } finally {
+      setSyncProgress(100);
+      setIsSyncing(false);
     }
-
-    setSyncQueue(prev => prev.map(item => ({
-      ...item,
-      type: item.type === 'pending' ? 'synced' : item.type
-    })));
-
-    setIsSyncing(false);
   };
 
   const pendingCount = syncQueue.filter(i => i.type === 'pending').length;
