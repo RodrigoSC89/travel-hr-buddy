@@ -220,23 +220,24 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ═══════════════════════════════════════════════════════════
-  // H. 🏆 WORLD-CLASS - Diferenciais Competitivos
+  // H. 🏆 WORLD-CLASS - Atalhos para Diferenciais (cross-refs para hubs canônicos)
+  // Nota: Estes são atalhos rápidos — as funcionalidades vivem nos mega-hubs acima.
   // ═══════════════════════════════════════════════════════════
   {
-    title: "🏆 World-Class",
+    title: "🏆 Destaques",
     defaultOpen: false,
     items: [
-      { label: "Fleet Pulse", path: "/fleet-pulse", icon: Activity, emoji: "💓", badge: "NEW" },
-      { label: "Voyage Simulator", path: "/voyage-simulator", icon: Map, emoji: "🎮", badge: "AI" },
-      { label: "Crew Wellbeing", path: "/crew-wellbeing", icon: Heart, emoji: "❤️", badge: "AI" },
-      { label: "PSC Readiness", path: "/psc-readiness", icon: Shield, emoji: "🛡️", badge: "AI" },
+      { label: "Fleet Pulse", path: "/ops?tab=fleet", icon: Activity, emoji: "💓", badge: "OPS" },
+      { label: "Voyage Simulator", path: "/ops?tab=voyage", icon: Map, emoji: "🎮", badge: "OPS" },
+      { label: "Crew Wellbeing", path: "/workbench?section=people", icon: Heart, emoji: "❤️", badge: "PEOPLE" },
+      { label: "PSC Readiness", path: "/compliance?tab=hub", icon: Shield, emoji: "🛡️", badge: "COMP" },
       { label: "STCW/MLC Center", path: "/stcw-mlc", icon: Award, emoji: "📜", badge: "LIVE" },
-      { label: "Predictive Maint.", path: "/predictive-maintenance", icon: Brain, emoji: "🔮", badge: "AI+ML" },
-      { label: "Route Optimizer", path: "/route-optimizer", icon: Compass, emoji: "🧭" },
-      { label: "Digital Twin 3D", path: "/advanced/digital-twin-3d", icon: Cpu, emoji: "🎮", badge: "3D" },
-      { label: "Bunker Optimizer", path: "/advanced/bunker-optimization", icon: Fuel, emoji: "⛽", badge: "AI" },
-      { label: "Weather Intel", path: "/advanced/weather-intelligence", icon: Cloud, emoji: "🌤️", badge: "AI" },
-      { label: "Carbon Tracker", path: "/sustainability-score", icon: Leaf, emoji: "🌱", badge: "ESG" },
+      { label: "Predictive Maint.", path: "/maintenance?tab=predictive", icon: Brain, emoji: "🔮", badge: "MAINT" },
+      { label: "Route Optimizer", path: "/ops?tab=voyage", icon: Compass, emoji: "🧭", badge: "OPS" },
+      { label: "Digital Twin 3D", path: "/maintenance?tab=digital-twin", icon: Cpu, emoji: "🎮", badge: "MAINT" },
+      { label: "Bunker Optimizer", path: "/maintenance?tab=fuel", icon: Fuel, emoji: "⛽", badge: "MAINT" },
+      { label: "Weather Intel", path: "/tracking?tab=weather", icon: Cloud, emoji: "🌤️", badge: "TRACK" },
+      { label: "Carbon Tracker", path: "/maintenance?tab=esg", icon: Leaf, emoji: "🌱", badge: "MAINT" },
       { label: "Nauti Academy", path: "/nautilus-academy", icon: GraduationCap, emoji: "🎓" },
     ],
   },

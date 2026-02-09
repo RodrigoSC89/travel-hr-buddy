@@ -432,10 +432,11 @@ export function HRTrainingLMS() {
                   <p className="text-sm font-medium mt-1">Veloz</p>
                   <p className="text-xs text-muted-foreground">3 cursos/mês</p>
                 </div>
-                <div className="p-4 bg-muted rounded-lg opacity-50">
+                <div className="p-4 bg-muted rounded-lg opacity-50 relative">
                   <div className="text-2xl">🏆</div>
                   <p className="text-sm font-medium mt-1">Master</p>
-                  <p className="text-xs text-muted-foreground">Em breve</p>
+                  <p className="text-xs text-muted-foreground">50+ cursos</p>
+                  <span className="absolute top-1 right-1 text-[9px] bg-muted-foreground/20 text-muted-foreground px-1.5 py-0.5 rounded">Requer gamification backend</span>
                 </div>
               </div>
             </CardContent>
