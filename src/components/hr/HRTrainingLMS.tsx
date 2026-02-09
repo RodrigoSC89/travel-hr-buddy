@@ -30,6 +30,7 @@ import {
   Database
 } from "lucide-react";
 import { useHRTraining, useHRStats } from "@/hooks/useHRRealData";
+import { BadgeGamificationSystem } from "./BadgeGamificationSystem";
 
 const leaderboard = [
   { name: "João Silva", points: 2450, avatar: "", badge: "🥇" },
@@ -410,37 +411,20 @@ export function HRTrainingLMS() {
             </CardContent>
           </Card>
 
-          {/* My Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Suas Conquistas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-4 gap-4 text-center">
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="text-2xl">🎯</div>
-                  <p className="text-sm font-medium mt-1">Focado</p>
-                  <p className="text-xs text-muted-foreground">7 dias seguidos</p>
-                </div>
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="text-2xl">📚</div>
-                  <p className="text-sm font-medium mt-1">Leitor</p>
-                  <p className="text-xs text-muted-foreground">10 cursos</p>
-                </div>
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="text-2xl">⚡</div>
-                  <p className="text-sm font-medium mt-1">Veloz</p>
-                  <p className="text-xs text-muted-foreground">3 cursos/mês</p>
-                </div>
-                <div className="p-4 bg-muted rounded-lg opacity-50 relative">
-                  <div className="text-2xl">🏆</div>
-                  <p className="text-sm font-medium mt-1">Master</p>
-                  <p className="text-xs text-muted-foreground">50+ cursos</p>
-                  <span className="absolute top-1 right-1 text-[9px] bg-muted-foreground/20 text-muted-foreground px-1.5 py-0.5 rounded">Requer gamification backend</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* My Stats - Real Badge System */}
+          <BadgeGamificationSystem
+            userProgress={{
+              totalCoursesCompleted: completedCourses,
+              totalHoursStudied: totalHours,
+              consecutiveDaysActive: 7,
+              mandatoryCoursesCompleted: courses.filter(c => c.is_mandatory && c.progress === 100).length,
+              totalMandatoryCourses: courses.filter(c => c.is_mandatory).length,
+              averageScore: 87,
+              coursesThisMonth: 3,
+              perfectScores: 2,
+              categoriesCompleted: [...new Set(courses.filter(c => c.progress === 100).map(c => c.category))],
+            }}
+          />
         </TabsContent>
       </Tabs>
     </div>
