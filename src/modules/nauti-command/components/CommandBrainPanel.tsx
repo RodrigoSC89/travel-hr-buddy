@@ -142,7 +142,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico de conversas", { description: `${messages.length} mensagens nesta sessão. Use o botão de download para exportar.` })}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info(`${messages.length} mensagens nesta sessão`, { description: "Clique no ícone de download para exportar o histórico completo.", duration: 4000 })}>
               <History className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>

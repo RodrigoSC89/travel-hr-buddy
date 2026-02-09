@@ -212,10 +212,10 @@ export async function sendTideAlertsToNOC(alerts: TideAlert[]): Promise<void> {
     // Log alerts to console (can be extended to database when table is created)
     logger.debug(`[TideAlerts] NOC Alert: ${alert.severity.toUpperCase()} - ${alert.message}`);
     
-    // Store in localStorage for NOC dashboard to read
-    const existingAlerts = JSON.parse(localStorage.getItem('noc_tide_alerts') || '[]');
+    // Store in sessionStorage for NOC dashboard to read (non-persistent, security-safe)
+    const existingAlerts = JSON.parse(sessionStorage.getItem('noc_tide_alerts') || '[]');
     const newAlerts = [...existingAlerts.filter((a: TideAlert) => a.id !== alert.id), alert];
-    localStorage.setItem('noc_tide_alerts', JSON.stringify(newAlerts.slice(-50))); // Keep last 50
+    sessionStorage.setItem('noc_tide_alerts', JSON.stringify(newAlerts.slice(-50))); // Keep last 50
   }
 }
 

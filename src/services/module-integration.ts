@@ -14,15 +14,15 @@ type TableName = keyof Database["public"]["Tables"];
 export interface ModuleAction {
   module: string;
   action: string;
-  payload?: Record<string, any>;
-  callback?: (result: any) => void;
+  payload?: Record<string, unknown>;
+  callback?: (result: unknown) => void;
 }
 
 export interface IntegrationEvent {
   type: string;
   source: string;
   target?: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -38,7 +38,7 @@ const MODULE_TABLE_MAP: Record<string, TableName> = {
 
 class ModuleIntegrationService {
   private listeners: Map<string, Set<(event: IntegrationEvent) => void>> = new Map();
-  private actionHandlers: Map<string, (payload: any) => Promise<any>> = new Map();
+  private actionHandlers: Map<string, (payload: Record<string, unknown>) => Promise<unknown>> = new Map();
 
   constructor() {
     this.registerDefaultHandlers();
@@ -46,12 +46,15 @@ class ModuleIntegrationService {
 
   private registerDefaultHandlers() {
     this.registerAction("navigate", async (payload) => {
-      if (payload.path) window.location.href = payload.path;
+      const path = payload.path as string | undefined;
+      if (path) window.location.href = path;
       return { success: true };
     });
 
     this.registerAction("notify", async (payload) => {
-      const { title, message, type = "info" } = payload;
+      const title = payload.title as string | undefined;
+      const message = payload.message as string | undefined;
+      const type = (payload.type as string) || "info";
       if (type === "error") toast.error(title || message);
       else if (type === "success") toast.success(title || message);
       else toast(title || message);
@@ -59,12 +62,12 @@ class ModuleIntegrationService {
     });
 
     this.registerAction("refresh", async (payload) => {
-      this.emit({ type: "refresh", source: "integration-service", target: payload.module, data: payload, timestamp: new Date() });
+      this.emit({ type: "refresh", source: "integration-service", target: payload.module as string | undefined, data: payload, timestamp: new Date() });
       return { success: true };
     });
   }
 
-  registerAction(name: string, handler: (payload: any) => Promise<any>) {
+  registerAction(name: string, handler: (payload: Record<string, unknown>) => Promise<unknown>) {
     this.actionHandlers.set(name, handler);
   }
 
@@ -78,10 +81,10 @@ class ModuleIntegrationService {
     try {
       const result = await handler({ ...action.payload, module: action.module });
       if (action.callback) action.callback(result);
-      return result;
+      return (result as Record<string, unknown>) ?? { success: true };
     } catch (error) {
       logger.error(`Error executing action ${action.action}`, { error });
-      return { success: false, error };
+      return { success: false, error: String(error) };
     }
   }
 

@@ -16,7 +16,7 @@ function loadAudits(): Array<{ id: string; user_id: string; report_data: IMCAAud
   } catch { return []; }
 }
 
-function saveAuditsToStorage(audits: any[]): void {
+function saveAuditsToStorage(audits: Array<{ id: string; user_id: string; report_data: IMCAAuditReport; created_at: string; updated_at: string }>): void {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(audits)); } catch {}
 }
 
