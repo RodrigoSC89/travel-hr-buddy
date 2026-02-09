@@ -355,7 +355,7 @@ class UnitConverter {
   ): { value: number; unit: string; formatted: string } {
     try {
       // Determine target unit based on user preference
-      let targetUnit: any;
+      let targetUnit: DistanceUnit | TemperatureUnit | VolumeUnit;
       let convertedValue: number;
       
       if (unit === "km" || unit === "mi") {

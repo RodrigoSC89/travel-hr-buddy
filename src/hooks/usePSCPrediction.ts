@@ -97,7 +97,7 @@ export function usePSCPrediction() {
       queryClient.invalidateQueries({ queryKey: ["psc-inspections"] });
       toast({ title: "✅ Inspeção PSC agendada", description: "Gere um briefing AI para preparação completa" });
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast({ title: "Erro ao agendar inspeção", description: err?.message || "Tente novamente", variant: "destructive" });
     },
   });
@@ -135,7 +135,7 @@ export function usePSCPrediction() {
       queryClient.invalidateQueries({ queryKey: ["psc-inspections"] });
       toast({ title: "🧠 Briefing AI gerado", description: "Análise de risco e preparação prontas" });
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       const msg = err?.message || "";
       if (msg.includes("429") || msg.includes("rate")) {
         toast({ title: "Rate limit", description: "Aguarde alguns segundos e tente novamente", variant: "destructive" });

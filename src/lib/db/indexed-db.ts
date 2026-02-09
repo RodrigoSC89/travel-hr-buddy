@@ -143,7 +143,7 @@ export const offlineDB = {
   async queueAction(
     action: 'insert' | 'update' | 'delete',
     table: string,
-    data: any,
+    data: unknown,
     priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
   ): Promise<string> {
     return indexedDBSync.queueOperation(action, table, data, priority);

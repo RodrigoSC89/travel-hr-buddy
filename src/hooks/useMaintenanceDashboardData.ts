@@ -35,8 +35,8 @@ export interface Equipment {
   predictedFailure?: string;
 }
 
-function mapMaintenanceToWorkOrder(record: any, vessels: any[]): WorkOrder {
-  const vessel = vessels.find(v => v.id === record.vessel_id);
+function mapMaintenanceToWorkOrder(record: Record<string, unknown>, vessels: Record<string, unknown>[]): WorkOrder {
+  const vessel = vessels.find(v => v.id === record.vessel_id) as Record<string, unknown> | undefined;
   const typeMap: Record<string, WorkOrder["type"]> = {
     preventive: "preventive",
     corrective: "corrective",
@@ -59,22 +59,22 @@ function mapMaintenanceToWorkOrder(record: any, vessels: any[]): WorkOrder {
   };
 
   return {
-    id: record.id?.slice(0, 8)?.toUpperCase() || record.id,
-    title: record.title || record.description || record.maintenance_type || "Manutenção",
-    type: typeMap[record.maintenance_type] || "corrective",
-    priority: priorityMap[record.priority] || "medium",
-    status: statusMap[record.status] || "open",
-    equipment: record.location || "Equipamento",
-    vessel: vessel?.name || "N/A",
-    assignedTo: record.assigned_technician || "Não atribuído",
-    dueDate: record.scheduled_date || record.created_at?.slice(0, 10) || "",
-    estimatedHours: record.estimated_duration || 8,
-    completedHours: record.status === "completed" ? (record.actual_duration || record.estimated_duration) : undefined,
-    description: record.description || "",
+    id: String(record.id || '').slice(0, 8)?.toUpperCase() || String(record.id),
+    title: String(record.title || record.description || record.maintenance_type || "Manutenção"),
+    type: typeMap[String(record.maintenance_type)] || "corrective",
+    priority: priorityMap[String(record.priority)] || "medium",
+    status: statusMap[String(record.status)] || "open",
+    equipment: String(record.location || "Equipamento"),
+    vessel: String(vessel?.name || "N/A"),
+    assignedTo: String(record.assigned_technician || "Não atribuído"),
+    dueDate: String(record.scheduled_date || String(record.created_at || '').slice(0, 10) || ""),
+    estimatedHours: Number(record.estimated_duration) || 8,
+    completedHours: record.status === "completed" ? (Number(record.actual_duration) || Number(record.estimated_duration)) : undefined,
+    description: String(record.description || ""),
   };
 }
 
-function deriveEquipmentFromVessels(vessels: any[], maintenanceRecords: any[]): Equipment[] {
+function deriveEquipmentFromVessels(vessels: Record<string, unknown>[], maintenanceRecords: Record<string, unknown>[]): Equipment[] {
   const equipmentTypes = [
     { name: "Motor Principal", type: "Propulsão", healthBase: 88 },
     { name: "Gerador", type: "Geração", healthBase: 82 },
@@ -86,20 +86,20 @@ function deriveEquipmentFromVessels(vessels: any[], maintenanceRecords: any[]): 
   return vessels.slice(0, 5).map((vessel, i) => {
     const eq = equipmentTypes[i % equipmentTypes.length];
     // Derive health variation from maintenance record count for this vessel
-    const vesselRecords = maintenanceRecords.filter((r: any) => r.vessel_id === vessel.id);
-    const openIssues = vesselRecords.filter((r: any) => r.status !== "completed" && r.status !== "cancelled").length;
+    const vesselRecords = maintenanceRecords.filter((r) => r.vessel_id === vessel.id);
+    const openIssues = vesselRecords.filter((r) => r.status !== "completed" && r.status !== "cancelled").length;
     const healthPenalty = Math.min(openIssues * 5, 30);
     const healthScore = Math.max(30, Math.min(100, eq.healthBase - healthPenalty));
 
     // Find last completed maintenance date
-    const completedRecords = vesselRecords.filter((r: any) => r.status === "completed").sort((a: any, b: any) =>
-      new Date(b.completed_date || b.created_at).getTime() - new Date(a.completed_date || a.created_at).getTime()
+    const completedRecords = vesselRecords.filter((r) => r.status === "completed").sort((a, b) =>
+      new Date(String(b.completed_date || b.created_at)).getTime() - new Date(String(a.completed_date || a.created_at)).getTime()
     );
     const lastMaintDate = completedRecords[0]?.completed_date || completedRecords[0]?.created_at;
 
     // Find next scheduled maintenance
-    const scheduledRecords = vesselRecords.filter((r: any) => r.status === "scheduled" && r.scheduled_date).sort((a: any, b: any) =>
-      new Date(a.scheduled_date).getTime() - new Date(b.scheduled_date).getTime()
+    const scheduledRecords = vesselRecords.filter((r) => r.status === "scheduled" && r.scheduled_date).sort((a, b) =>
+      new Date(String(a.scheduled_date)).getTime() - new Date(String(b.scheduled_date)).getTime()
     );
     const nextMaintDate = scheduledRecords[0]?.scheduled_date;
 
@@ -107,11 +107,11 @@ function deriveEquipmentFromVessels(vessels: any[], maintenanceRecords: any[]): 
       id: `EQ-${String(i + 1).padStart(3, "0")}`,
       name: `${eq.name} - ${vessel.name}`,
       type: eq.type,
-      vessel: vessel.name,
+      vessel: String(vessel.name),
       status: healthScore >= 80 ? "operational" : healthScore >= 60 ? "degraded" : "critical",
       healthScore,
-      lastMaintenance: lastMaintDate ? new Date(lastMaintDate).toISOString().slice(0, 10) : "N/A",
-      nextMaintenance: nextMaintDate ? new Date(nextMaintDate).toISOString().slice(0, 10) : "N/A",
+      lastMaintenance: lastMaintDate ? new Date(String(lastMaintDate)).toISOString().slice(0, 10) : "N/A",
+      nextMaintenance: nextMaintDate ? new Date(String(nextMaintDate)).toISOString().slice(0, 10) : "N/A",
       runningHours: 3000 + i * 2000,
       predictedFailure: healthScore < 60 
         ? new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10) 

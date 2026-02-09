@@ -33,7 +33,7 @@ export interface AIResponse {
 export interface AIMemoryEntry {
   id: string;
   type: "context" | "preference" | "interaction" | "insight";
-  content: any;
+  content: unknown;
   importance: number;
   createdAt: Date;
   expiresAt?: Date;
@@ -46,7 +46,7 @@ export interface AIDecision {
   confidence: number;
   impact: "low" | "medium" | "high";
   status: "pending" | "approved" | "rejected" | "executed";
-  actionPayload?: any;
+  actionPayload?: unknown;
 }
 
 // =====================================
@@ -236,7 +236,7 @@ export function useAIMemory(namespace: string = "default") {
         ...entry,
         score: typeof entry.content === "string" 
           ? query.toLowerCase().split(" ").filter(w => 
-              entry.content.toLowerCase().includes(w)
+              (entry.content as string).toLowerCase().includes(w)
             ).length * entry.importance
           : entry.importance
       }))

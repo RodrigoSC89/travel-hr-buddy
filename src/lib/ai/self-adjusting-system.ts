@@ -38,7 +38,7 @@ class SelfAdjustingSystem {
     memoryPressure: 'low'
   };
   private preloadedModules: Set<string> = new Set();
-  private cachedData: Map<string, { data: any; expiry: number }> = new Map();
+  private cachedData: Map<string, { data: unknown; expiry: number }> = new Map();
 
   /**
    * Record module usage

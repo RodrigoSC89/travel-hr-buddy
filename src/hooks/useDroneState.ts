@@ -63,7 +63,8 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
         }
 
         if (data) {
-          data.forEach((droneData: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table
+          (data as any[]).forEach((droneData) => {
             droneCommandService.registerMockDrone({
               id: droneData.id,
               name: droneData.name,

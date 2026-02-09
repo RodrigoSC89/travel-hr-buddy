@@ -13,7 +13,7 @@ interface AISuggestion {
   priority: "low" | "medium" | "high";
   action?: {
     type: string;
-    payload: any;
+    payload: unknown;
   };
 }
 

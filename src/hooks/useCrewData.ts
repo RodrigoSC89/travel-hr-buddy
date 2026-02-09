@@ -268,16 +268,17 @@ export function useCrewTrainingCompliance() {
 }
 
 // Transform functions
-function transformCrewMember(row: any, index: number = 0): CrewMemberData {
-  const alertLevel = row.status === 'active' ? 'green' : 
-                     row.status === 'on_leave' ? 'yellow' : 'red';
-  const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+function transformCrewMember(row: Record<string, unknown>, index: number = 0): CrewMemberData {
+  const status = String(row.status || 'active');
+  const alertLevel = status === 'active' ? 'green' : 
+                     status === 'on_leave' ? 'yellow' : 'red';
+  const nameHash = String(row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
   
   return {
-    id: row.id,
-    name: row.full_name || 'Tripulante',
-    position: row.rank || 'Marinheiro',
-    rank: row.rank,
+    id: String(row.id),
+    name: String(row.full_name || 'Tripulante'),
+    position: String(row.rank || 'Marinheiro'),
+    rank: String(row.rank || ''),
     fatigueLevel: 20 + (nameHash % 40),
     performanceScore: 80 + (nameHash % 20),
     hoursWorked: 8,
@@ -287,7 +288,7 @@ function transformCrewMember(row: any, index: number = 0): CrewMemberData {
     achievements: [],
     trainingProgress: [],
     alertLevel: alertLevel as 'green' | 'yellow' | 'red',
-    status: (row.status || 'active') as CrewMemberData['status']
+    status: (status || 'active') as CrewMemberData['status']
   };
 }
 
@@ -312,14 +313,14 @@ function generateTrainingProgress(crewId: string, index: number = 0): TrainingMo
   ];
 }
 
-function generateWellnessData(row: any, index: number): CrewWellnessData {
+function generateWellnessData(row: Record<string, unknown>, index: number): CrewWellnessData {
   const isAtRisk = index % 4 === 2;
-  const nameHash = (row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
+  const nameHash = String(row.full_name || "").split("").reduce((acc: number, ch: string) => acc + ch.charCodeAt(0), 0);
   
   return {
-    id: row.id,
-    name: row.full_name || 'Tripulante',
-    role: row.rank || 'Marinheiro',
+    id: String(row.id),
+    name: String(row.full_name || 'Tripulante'),
+    role: String(row.rank || 'Marinheiro'),
     heartRate: isAtRisk ? 92 : 68 + (nameHash % 15),
     heartRateStatus: isAtRisk ? 'elevated' : 'normal',
     hrv: isAtRisk ? 32 : 45 + (nameHash % 15),
@@ -332,21 +333,21 @@ function generateWellnessData(row: any, index: number): CrewWellnessData {
     fatigueScore: isAtRisk ? 72 : 15 + (nameHash % 30),
     mentalState: isAtRisk ? 'concern' : 'good',
     alerts: isAtRisk ? [
-      { id: `alert-${row.id}`, type: 'fatigue', severity: 'high', message: 'Fadiga elevada detectada', recommendation: 'Reduzir carga de trabalho', timestamp: new Date().toISOString() }
+      { id: `alert-${String(row.id)}`, type: 'fatigue', severity: 'high', message: 'Fadiga elevada detectada', recommendation: 'Reduzir carga de trabalho', timestamp: new Date().toISOString() }
     ] : [],
     lastSync: new Date().toISOString()
   };
 }
 
-function generateEmotionalState(row: any, index: number): CrewEmotionalState {
+function generateEmotionalState(row: Record<string, unknown>, index: number): CrewEmotionalState {
   const emotions: CrewEmotionalState['primaryEmotion'][] = ['happy', 'neutral', 'stressed', 'frustrated'];
   const risks: CrewEmotionalState['riskLevel'][] = ['low', 'low', 'medium', 'high'];
   const trends: CrewEmotionalState['trend'][] = ['stable', 'improving', 'stable', 'declining'];
   
   return {
-    id: row.id,
-    name: row.full_name || 'Tripulante',
-    role: row.rank || 'Marinheiro',
+    id: String(row.id),
+    name: String(row.full_name || 'Tripulante'),
+    role: String(row.rank || 'Marinheiro'),
     primaryEmotion: emotions[index % emotions.length],
     emotionIntensity: 60 + (index * 13) % 30,
     trend: trends[index % trends.length],

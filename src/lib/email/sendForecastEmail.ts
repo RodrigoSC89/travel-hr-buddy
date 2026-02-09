@@ -16,7 +16,7 @@ export interface ResendEmailOptions {
 export interface ResendEmailResult {
   success: boolean;
   data?: { id: string };
-  error?: any;
+  error?: unknown;
 }
 
 /**

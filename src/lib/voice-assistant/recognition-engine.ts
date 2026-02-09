@@ -17,27 +17,39 @@ const DEFAULT_CONFIG: VoiceAssistantConfig = {
 /**
  * Check if browser supports Web Speech API
  */
-export function isBrowserSupported(): boolean {
-  return !!(
-    typeof window !== "undefined" &&
-    ((window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition)
-  );
+/* eslint-disable @typescript-eslint/no-explicit-any -- Web Speech API vendor-prefixed */
+
+interface SpeechRecognitionResultEvent {
+  results: { length: number; [index: number]: { [index: number]: { transcript: string; confidence: number } } };
 }
 
-/**
- * Get SpeechRecognition constructor
- */
-function getSpeechRecognition(): any {
-  if (typeof window === "undefined") return null;
-  return (
-    (window as any).SpeechRecognition ||
-    (window as any).webkitSpeechRecognition
-  );
+interface SpeechRecognitionLike {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  maxAlternatives: number;
+  onstart: ((this: SpeechRecognitionLike) => void) | null;
+  onend: ((this: SpeechRecognitionLike) => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+  onresult: ((event: SpeechRecognitionResultEvent) => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
 }
+
+export function isBrowserSupported(): boolean {
+  if (typeof window === "undefined") return false;
+  return !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+}
+
+function getSpeechRecognitionCtor(): (new () => SpeechRecognitionLike) | null {
+  if (typeof window === "undefined") return null;
+  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export class VoiceRecognitionEngine {
-  private recognition: any;
+  private recognition: SpeechRecognitionLike | null = null;
   private isListening: boolean = false;
   private commandHistory: VoiceRecognitionResult[] = [];
   private config: VoiceAssistantConfig;
@@ -57,9 +69,9 @@ export class VoiceRecognitionEngine {
       return;
     }
 
-    const SpeechRecognition = getSpeechRecognition();
-    this.recognition = new SpeechRecognition();
-    this.recognition.lang = this.config.language;
+    const Ctor = getSpeechRecognitionCtor();
+    if (!Ctor) return;
+    this.recognition = new Ctor();
     this.recognition.continuous = this.config.continuous;
     this.recognition.interimResults = this.config.interimResults;
     this.recognition.maxAlternatives = this.config.maxAlternatives;
@@ -83,12 +95,12 @@ export class VoiceRecognitionEngine {
       logger.info("Voice recognition ended");
     };
 
-    this.recognition.onerror = (event: any) => {
+    this.recognition.onerror = (event: { error: string }) => {
       logger.warn("Voice recognition error", { error: event.error });
       this.isListening = false;
     };
 
-    this.recognition.onresult = (event: any) => {
+    this.recognition.onresult = (event: SpeechRecognitionResultEvent) => {
       this.handleResult(event);
     };
   }
@@ -96,7 +108,7 @@ export class VoiceRecognitionEngine {
   /**
    * Handle recognition result
    */
-  private handleResult(event: any): void {
+  private handleResult(event: SpeechRecognitionResultEvent): void {
     const results = event.results;
     const lastResult = results[results.length - 1];
     const transcript = lastResult[0].transcript.trim();

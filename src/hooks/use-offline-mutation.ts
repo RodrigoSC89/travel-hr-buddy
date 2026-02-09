@@ -10,15 +10,15 @@ interface OfflineMutationOptions<TVariables> {
   /** Action type for the sync queue */
   actionType: string;
   /** The mutation function */
-  mutationFn: (variables: TVariables) => Promise<any>;
+  mutationFn: (variables: TVariables) => Promise<unknown>;
   /** Whether to show toast notifications */
   showToasts?: boolean;
   /** Message when action is queued */
   queuedMessage?: string;
   /** Called on success */
-  onSuccess?: (data: any, variables: TVariables) => void;
+  onSuccess?: (data: unknown, variables: TVariables) => void;
   /** Called on error */
-  onError?: (error: any, variables: TVariables) => void;
+  onError?: (error: unknown, variables: TVariables) => void;
 }
 
 export function useOfflineMutation<TVariables = unknown>(
@@ -72,7 +72,7 @@ export function useOfflineMutation<TVariables = unknown>(
     },
     onSuccess: (data, variables) => {
       // Don't call onSuccess for queued actions
-      if (data?.queued) return;
+      if ((data as Record<string, unknown>)?.queued) return;
       
       if (onSuccess) {
         onSuccess(data, variables);

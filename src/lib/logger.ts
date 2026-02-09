@@ -18,20 +18,20 @@ const getSentryDsn = (): string | undefined => {
 };
 
 interface LogContext {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
  * Type guard to safely handle error objects
  */
-function isError(error: any): error is Error {
+function isError(error: unknown): error is Error {
   return error instanceof Error;
 }
 
 /**
  * Safely extract error message from unknown error type
  */
-function getErrorMessage(error: any): string {
+function getErrorMessage(error: unknown): string {
   if (isError(error)) {
     return error.message;
   }
@@ -103,7 +103,7 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureException?: (err: Error, opts: Record<string, unknown>) => void } | undefined;
         if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
           Sentry.captureException(error, { 
             extra: { message, ...(context || {}) },
@@ -122,7 +122,7 @@ export const logger = {
   /**
    * Log caught errors with proper type handling
    */
-  logCaughtError: (message: string, error: any, context?: LogContext) => {
+  logCaughtError: (message: string, error: unknown, context?: LogContext) => {
     const errorMessage = getErrorMessage(error);
     const fullContext = {
       ...context,
@@ -140,7 +140,7 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as unknown as Record<string, unknown>).Sentry as { captureException?: (err: Error, opts: Record<string, unknown>) => void } | undefined;
         if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
           Sentry.captureException(error, { 
             extra: { message, ...context },
@@ -159,7 +159,7 @@ export const logger = {
   /**
    * Log table (development only)
    */
-  table: (data: any) => {
+  table: (data: unknown) => {
     if (isDevelopment) {
       console.table(data);
     }
