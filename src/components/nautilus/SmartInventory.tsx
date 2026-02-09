@@ -102,8 +102,21 @@ export function SmartInventory() {
     { id: "8", name: "Cabo de Aço 12mm", category: "Cabos", currentStock: 500, minStock: 200, maxStock: 1000, unit: "m", lastRestocked: "2024-10-01", predictedDaysLeft: 120, trend: "up" },
   ];
 
-  const handleRequestRestock = (itemId: string, itemName: string) => {
-    toast.success(`Solicitação de reposição enviada para: ${itemName}`);
+  const handleRequestRestock = async (itemId: string, itemName: string) => {
+    try {
+      const { error } = await supabase.from('action_items').insert({
+        title: `Reposição: ${itemName}`,
+        description: `Solicitação automática de reposição para item: ${itemName} (ID: ${itemId})`,
+        status: 'pending',
+        priority: 'high',
+        source_module: 'smart-inventory',
+        source_reference_id: itemId,
+      });
+      if (error) throw error;
+      toast.success(`Solicitação de reposição criada para: ${itemName}`);
+    } catch {
+      toast.error("Erro ao criar solicitação de reposição");
+    }
   };
 
   const categories = ["all", ...new Set(items.map(i => i.category))];

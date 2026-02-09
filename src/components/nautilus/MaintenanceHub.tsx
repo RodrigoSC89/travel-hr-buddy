@@ -171,7 +171,20 @@ export function MaintenanceHub() {
   ];
 
   const handleScheduleMaintenance = async (componentId: string, componentName: string) => {
-    toast.success(`Manutenção agendada para ${componentName}`);
+    try {
+      const { error } = await supabase.from('action_items').insert({
+        title: `Manutenção: ${componentName}`,
+        description: `Manutenção preventiva agendada para componente: ${componentName}`,
+        status: 'pending',
+        priority: 'medium',
+        source_module: 'maintenance-hub',
+        source_reference_id: componentId,
+      });
+      if (error) throw error;
+      toast.success(`Manutenção agendada para ${componentName}`);
+    } catch {
+      toast.error("Erro ao agendar manutenção");
+    }
   };
 
   const getPriorityColor = (priority: MaintenanceTask["priority"]) => {
