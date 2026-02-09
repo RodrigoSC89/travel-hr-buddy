@@ -141,7 +141,7 @@ export class TrackingIntelligenceService {
     const vesselMap = new Map<string, VesselTrackingPosition>();
     for (const t of tracking) {
       if (!t.vessel_id || vesselMap.has(t.vessel_id)) continue;
-      const vessel = (vessels || []).find((v: any) => v.id === t.vessel_id);
+      const vessel = (vessels || []).find((v: { id?: string }) => v.id === t.vessel_id);
       vesselMap.set(t.vessel_id, {
         id: t.id,
         vesselId: t.vessel_id,
@@ -168,17 +168,17 @@ export class TrackingIntelligenceService {
       .order('updated_at', { ascending: false })
       .limit(100);
 
-    return (data || []).map((s: any) => ({
-      id: s.id,
-      sensorId: s.sensor_id,
-      sensorType: s.sensor_type,
-      status: s.status,
-      currentValue: s.current_value,
-      unit: s.unit,
-      location: s.location,
-      vesselId: s.vessel_id,
-      lastReadingAt: s.last_reading_at,
-      thresholds: s.thresholds,
+    return (data || []).map((s): IoTSensor => ({
+      id: String(s.id),
+      sensorId: String(s.sensor_id),
+      sensorType: String(s.sensor_type),
+      status: s.status as string | null,
+      currentValue: s.current_value as number | null,
+      unit: s.unit as string | null,
+      location: s.location as string | null,
+      vesselId: s.vessel_id as string | null,
+      lastReadingAt: s.last_reading_at as string | null,
+      thresholds: s.thresholds as Record<string, number> | null,
     }));
   }
 
@@ -189,16 +189,16 @@ export class TrackingIntelligenceService {
       .order('created_at', { ascending: false })
       .limit(50);
 
-    return (data || []).map((a: any) => ({
-      id: a.id,
-      sensorId: a.sensor_id,
-      alertType: a.alert_type,
-      severity: a.severity,
-      message: a.message,
-      recommendedAction: a.recommended_action,
-      acknowledged: a.acknowledged,
-      resolved: a.resolved,
-      createdAt: a.created_at,
+    return (data || []).map((a): IoTAlert => ({
+      id: String(a.id),
+      sensorId: String(a.sensor_id),
+      alertType: String(a.alert_type),
+      severity: String(a.severity),
+      message: String(a.message),
+      recommendedAction: null,
+      acknowledged: a.acknowledged_at !== null,
+      resolved: a.resolved_at !== null,
+      createdAt: String(a.created_at),
     }));
   }
 
@@ -209,15 +209,15 @@ export class TrackingIntelligenceService {
       .order('created_at', { ascending: false })
       .limit(50);
 
-    return (data || []).map((a: any) => ({
-      id: a.id,
-      sensorId: a.sensor_id,
-      alertType: a.alert_type,
-      severity: a.severity,
-      message: a.message,
-      acknowledged: a.acknowledged,
-      resolved: a.resolved,
-      createdAt: a.created_at,
+    return (data || []).map((a): TelemetryAlert => ({
+      id: String(a.id),
+      sensorId: String(a.sensor_id),
+      alertType: String(a.alert_type),
+      severity: String(a.severity),
+      message: String(a.message),
+      acknowledged: Boolean(a.acknowledged),
+      resolved: Boolean(a.resolved),
+      createdAt: String(a.created_at),
     }));
   }
 
@@ -228,18 +228,18 @@ export class TrackingIntelligenceService {
       .order('created_at', { ascending: false })
       .limit(30);
 
-    return (data || []).map((i: any) => ({
-      id: i.id,
-      title: i.title,
-      description: i.description,
-      insightType: i.insight_type,
-      sensorId: i.sensor_id,
-      confidence: i.confidence,
-      priority: i.priority,
-      predictedIssue: i.predicted_issue,
-      recommendedAction: i.recommended_action,
-      status: i.status,
-      createdAt: i.created_at,
+    return (data || []).map((i): TelemetryInsight => ({
+      id: String(i.id),
+      title: String(i.title),
+      description: String(i.description),
+      insightType: String(i.insight_type),
+      sensorId: i.sensor_id ? String(i.sensor_id) : null,
+      confidence: i.confidence != null ? Number(i.confidence) : null,
+      priority: i.priority != null ? Number(i.priority) : null,
+      predictedIssue: i.predicted_issue as string | null,
+      recommendedAction: i.recommended_action as string | null,
+      status: String(i.status),
+      createdAt: String(i.created_at),
     }));
   }
 

@@ -161,7 +161,7 @@ export class InstanceControllerService {
   }
 
   private static getMainInstanceId(): string {
-    return localStorage.getItem("instance_id") || "main-instance";
+    return sessionStorage.getItem("instance_id") || "main-instance";
   }
 }
 

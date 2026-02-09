@@ -485,9 +485,10 @@
                    </div>
                  </div>
  
-                 <Button className="w-full" onClick={() => toast.success("Iniciando sessão VR...")}>
+                 <Button className="w-full" onClick={() => toast.info("Sessão VR — Em implantação. Requer integração com hardware VR compatível (Oculus/HTC Vive).", { duration: 5000 })}>
                    <PlayCircle className="h-4 w-4 mr-2" />
                    Iniciar Sessão VR
+                   <Badge variant="outline" className="ml-2 text-[10px]">Em implantação</Badge>
                  </Button>
                </CardContent>
              </Card>

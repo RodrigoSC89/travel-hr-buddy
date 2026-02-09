@@ -151,7 +151,7 @@ export class CognitiveCloneService {
   }
 
   private static getInstanceId(): string {
-    return localStorage.getItem("instance_id") || "main-instance";
+    return sessionStorage.getItem("instance_id") || "main-instance";
   }
 
   private static getCurrentCapabilities(): string[] {
@@ -165,11 +165,11 @@ export class CognitiveCloneService {
   }
 
   private static async saveSnapshot(snapshot: CloneSnapshot): Promise<void> {
-    localStorage.setItem(`snapshot_${snapshot.configurationId}`, JSON.stringify(snapshot));
+    sessionStorage.setItem(`snapshot_${snapshot.configurationId}`, JSON.stringify(snapshot));
   }
 
   private static async registerClone(config: CloneConfiguration): Promise<void> {
-    localStorage.setItem(`clone_${config.id}`, JSON.stringify(config));
+    sessionStorage.setItem(`clone_${config.id}`, JSON.stringify(config));
   }
 
   private static async persistCloneData(config: CloneConfiguration): Promise<void> {
@@ -181,7 +181,7 @@ export class CognitiveCloneService {
       llmConfig: config.llmConfig,
     };
 
-    localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
+    sessionStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
   }
 }
 
