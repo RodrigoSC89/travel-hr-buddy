@@ -94,19 +94,29 @@ export function useInventoryItems(vesselId?: string, category?: string) {
         return [];
       }
       
-      return (data || []).map((item: any) => ({
-        ...item,
-        part_number: item.item_code || item.part_number || '',
+      return (data || []).map((item) => ({
+        id: item.id,
+        vessel_id: item.vessel_id,
+        part_number: item.item_code || '',
+        name: item.name,
+        description: item.description || '',
+        category: item.category || '',
+        location: item.location || '',
+        unit: item.unit || 'un',
         min_stock_level: item.min_quantity || 5,
         max_stock_level: item.max_quantity || 100,
-        reorder_point: item.reorder_level || 10,
+        reorder_point: item.min_quantity || 10,
         quantity: item.quantity || 0,
         unit_cost: item.unit_cost || 0,
-        is_critical: item.is_critical || false,
-        status: (item.quantity || 0) <= 0 ? 'out_of_stock' :
-                (item.quantity || 0) <= (item.reorder_level || 10) ? 'low_stock' :
-                (item.quantity || 0) >= (item.max_quantity || 100) ? 'overstocked' : 'in_stock',
         total_value: (item.quantity || 0) * (item.unit_cost || 0),
+        supplier_id: null,
+        last_ordered: null,
+        last_used: null,
+        is_critical: item.is_critical || false,
+        status: (item.quantity || 0) <= 0 ? 'out_of_stock' as const :
+                (item.quantity || 0) <= (item.min_quantity || 10) ? 'low_stock' as const :
+                'in_stock' as const,
+        created_at: item.created_at,
       })) as InventoryItem[];
     },
   });
@@ -134,9 +144,23 @@ export function useCreateInventoryItem() {
   
   return useMutation({
     mutationFn: async (item: Partial<InventoryItem>) => {
+      const insertData = {
+        item_code: item.part_number || `ITEM-${Date.now()}`,
+        name: item.name || 'Novo Item',
+        description: item.description,
+        category: item.category,
+        location: item.location,
+        quantity: item.quantity,
+        unit: item.unit,
+        min_quantity: item.min_stock_level,
+        max_quantity: item.max_stock_level,
+        unit_cost: item.unit_cost,
+        is_critical: item.is_critical,
+        vessel_id: item.vessel_id,
+      };
       const { data, error } = await supabase
         .from('inventory_items')
-        .insert(item as any)
+        .insert(insertData)
         .select()
         .single();
 
@@ -147,7 +171,7 @@ export function useCreateInventoryItem() {
       queryClient.invalidateQueries({ queryKey: ['inventory-items'] });
       toast.success('Item adicionado ao inventário');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error('Erro ao adicionar item', { description: error.message });
     },
   });
@@ -158,9 +182,18 @@ export function useUpdateInventoryItem() {
   
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<InventoryItem> }) => {
+      const dbUpdates: Record<string, unknown> = {};
+      if (updates.name !== undefined) dbUpdates.name = updates.name;
+      if (updates.description !== undefined) dbUpdates.description = updates.description;
+      if (updates.category !== undefined) dbUpdates.category = updates.category;
+      if (updates.quantity !== undefined) dbUpdates.quantity = updates.quantity;
+      if (updates.unit_cost !== undefined) dbUpdates.unit_cost = updates.unit_cost;
+      if (updates.is_critical !== undefined) dbUpdates.is_critical = updates.is_critical;
+      if (updates.location !== undefined) dbUpdates.location = updates.location;
+
       const { data, error } = await supabase
         .from('inventory_items')
-        .update(updates as any)
+        .update(dbUpdates)
         .eq('id', id)
         .select()
         .single();
@@ -228,7 +261,7 @@ export function useRecordUsage() {
       if (item) {
         await supabase
           .from('inventory_items')
-          .update({ quantity: Math.max(0, (item.quantity || 0) - (usage.quantity_used || 0)) } as any)
+          .update({ quantity: Math.max(0, (item.quantity || 0) - (usage.quantity_used || 0)) })
           .eq('id', usage.inventory_item_id!);
       }
 
@@ -258,8 +291,8 @@ export function useLowStockItems() {
         return [];
       }
       
-      return (data || []).filter((item: any) => 
-        (item.quantity || 0) <= (item.reorder_level || 10)
+      return (data || []).filter((item) => 
+        (item.quantity || 0) <= (item.min_quantity || 10)
       ) as unknown as InventoryItem[];
     },
   });
@@ -293,16 +326,16 @@ export function useInventoryDashboardStats() {
     queryFn: async () => {
       const { data: items } = await supabase
         .from('inventory_items')
-        .select('id, quantity, min_quantity, reorder_level, unit_cost, is_critical');
+        .select('id, quantity, min_quantity, unit_cost, is_critical');
 
       if (!items) return null;
 
       const totalItems = items.length;
-      const totalValue = items.reduce((sum: number, i: any) => sum + ((i.quantity || 0) * (i.unit_cost || 0)), 0);
-      const lowStockItems = items.filter((i: any) => (i.quantity || 0) <= (i.reorder_level || 10)).length;
-      const outOfStockItems = items.filter((i: any) => (i.quantity || 0) === 0).length;
-      const criticalItems = items.filter((i: any) => i.is_critical).length;
-      const criticalLowStock = items.filter((i: any) => i.is_critical && (i.quantity || 0) <= (i.reorder_level || 10)).length;
+      const totalValue = items.reduce((sum: number, i) => sum + ((i.quantity || 0) * (i.unit_cost || 0)), 0);
+      const lowStockItems = items.filter((i) => (i.quantity || 0) <= (i.min_quantity || 10)).length;
+      const outOfStockItems = items.filter((i) => (i.quantity || 0) === 0).length;
+      const criticalItems = items.filter((i) => i.is_critical).length;
+      const criticalLowStock = items.filter((i) => i.is_critical && (i.quantity || 0) <= (i.min_quantity || 10)).length;
 
       return {
         totalItems,
@@ -367,8 +400,8 @@ export function useReorderRecommendations() {
           .select('*');
 
         return (lowStock || [])
-          .filter((item: any) => (item.quantity || 0) <= 10)
-          .map((item: any) => ({
+          .filter((item) => (item.quantity || 0) <= 10)
+          .map((item) => ({
             id: item.id,
             inventory_item_id: item.id,
             item_name: item.name,
