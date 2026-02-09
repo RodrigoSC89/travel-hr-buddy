@@ -174,10 +174,11 @@ export function ISPSModule() {
             Export SSP
           </Button>
           <Button onClick={() => {
-            toast.info("Avaliação de segurança — Em desenvolvimento (Q2/2026). Use o módulo Compliance Hub para auditorias.");
-          }} variant="outline">
+            toast.info("Avaliação de segurança — Em implantação (Q2/2026). Use o módulo Compliance Hub para auditorias.", { duration: 5000 });
+          }} variant="outline" title="Em implantação — Q2/2026">
             <Plus className="h-4 w-4 mr-2" />
             New Assessment
+            <Badge variant="outline" className="ml-2 text-[10px]">Q2/2026</Badge>
           </Button>
         </div>
       </div>
@@ -389,7 +390,7 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Assessments</CardTitle>
-                <Button size="sm" onClick={() => toast.info("Abrindo formulário de nova avaliação...")}>
+                <Button size="sm" onClick={() => toast.info("Formulário de avaliação ISPS — Em implantação (Q2/2026). Consulte o Compliance Hub para auditorias.", { duration: 5000 })}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Avaliação
                 </Button>
@@ -432,7 +433,7 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Drills</CardTitle>
-                <Button size="sm" onClick={() => toast.info("Abrindo agenda de drills de segurança...")}>
+                <Button size="sm" onClick={() => toast.info("Agendamento de drills ISPS — Em implantação (Q2/2026).", { duration: 5000 })}>
                   <Plus className="h-4 w-4 mr-2" />
                   Agendar Drill
                 </Button>
@@ -455,7 +456,7 @@ export function ISPSModule() {
                           </div>
                           <p className="text-sm mt-2">{drill.notes}</p>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => toast.info(`Abrindo relatório do drill "${drill.type}"...`)}>
+                        <Button variant="outline" size="sm" onClick={() => toast.info(`Relatório do drill "${drill.type}" — Exportação em implantação (Q2/2026).`, { duration: 5000 })}>
                           Ver Relatório
                         </Button>
                       </div>

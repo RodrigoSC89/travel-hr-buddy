@@ -410,16 +410,12 @@ export const PeotramEmergencyResponse: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="resources" className="space-y-4">
-          <div className="text-center p-8">
+          <div className="text-center p-8 border border-dashed rounded-lg">
             <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">Recursos de Emergência</h3>
             <p className="text-muted-foreground mb-4">
-              Gerencie equipamentos e recursos disponíveis para emergências
+              🚧 Em implantação — Será integrado ao inventário do módulo de manutenção (Q2/2026)
             </p>
-            <Button onClick={() => toast.info("Módulo de Recursos de Emergência", { description: "Cadastro de equipamentos de emergência será integrado ao inventário do módulo de manutenção." })}>
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar Recurso
-            </Button>
           </div>
         </TabsContent>
       </Tabs>

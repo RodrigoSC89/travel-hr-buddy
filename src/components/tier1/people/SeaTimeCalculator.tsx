@@ -455,9 +455,12 @@ export function SeaTimeCalculator() {
               <CardDescription>STCW certificate requirements and eligibility status</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                Detailed certificate eligibility matrix coming soon...
-              </p>
+              <div className="text-center py-8 border border-dashed rounded-lg">
+                <Award className="h-10 w-10 mx-auto mb-3 opacity-40" />
+                <p className="text-muted-foreground font-medium">Matriz de Elegibilidade de Certificados</p>
+                <p className="text-xs text-muted-foreground mt-1">🚧 Em implantação — Previsão: Q2/2026</p>
+                <p className="text-xs text-muted-foreground mt-1">Consulte a aba "Sea Time" para cálculos de tempo embarcado.</p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

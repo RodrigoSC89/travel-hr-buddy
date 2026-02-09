@@ -431,10 +431,11 @@ export default function CrewScheduler() {
             </TabsContent>
 
             <TabsContent value="calendar">
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-muted-foreground border border-dashed rounded-lg">
                 <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p className="font-medium">Calendário de Rotações</p>
-                <p className="text-sm">Visualização em calendário em desenvolvimento</p>
+                <p className="text-sm">🚧 Em implantação — Previsão: Q2/2026</p>
+                <p className="text-xs mt-2">Use a aba "Rotações" para gerenciar escalas atuais.</p>
               </div>
             </TabsContent>
 
