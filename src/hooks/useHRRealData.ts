@@ -151,7 +151,7 @@ export function useHREmployees() {
         phone: member.phone,
         status: member.status,
         vessel_id: member.vessel_id,
-        vessel_name: (member.vessels as any)?.name || undefined,
+        vessel_name: (member.vessels as Record<string, unknown> | null)?.name as string || undefined,
         join_date: member.join_date,
         contract_start: member.contract_start,
         contract_end: member.contract_end,
@@ -250,7 +250,7 @@ export function useHRStats() {
 export function useHRPayroll(referenceMonth?: string) {
   return useQuery({
     queryKey: ['hr-payroll-real', referenceMonth],
-    queryFn: async (): Promise<{ records: HRPayrollRecord[], summary: any }> => {
+    queryFn: async (): Promise<{ records: HRPayrollRecord[], summary: Record<string, number> }> => {
       let query = supabase
         .from('crew_payroll')
         .select(`
@@ -280,7 +280,7 @@ export function useHRPayroll(referenceMonth?: string) {
       const records = (data || []).map(record => ({
         id: record.id,
         crew_member_id: record.crew_member_id || '',
-        crew_member_name: (record.crew_members as any)?.full_name || 'Unknown',
+        crew_member_name: (record.crew_members as Record<string, unknown> | null)?.full_name as string || 'Unknown',
         base_salary: record.base_salary,
         gross_pay: record.gross_pay,
         net_pay: record.net_pay,
@@ -335,7 +335,7 @@ export function useHRVacations() {
       return (data || []).map(vacation => ({
         id: vacation.id,
         crew_member_id: vacation.employee_id || '',
-        crew_member_name: (vacation.hr_employees as any)?.full_name || 'Unknown',
+        crew_member_name: (vacation.hr_employees as Record<string, unknown> | null)?.full_name as string || 'Unknown',
         start_date: vacation.start_date || '',
         end_date: vacation.end_date || '',
         days: vacation.days_requested || 0,
@@ -391,7 +391,7 @@ export function useHRCertifications(crewMemberId?: string) {
         return {
           id: cert.id,
           crew_member_id: cert.crew_member_id,
-          crew_member_name: (cert.crew_members as any)?.full_name || 'Unknown',
+          crew_member_name: (cert.crew_members as Record<string, unknown> | null)?.full_name as string || 'Unknown',
           name: cert.certification_name || cert.certification_type,
           type: cert.certification_type,
           issue_date: cert.issue_date,
@@ -488,7 +488,7 @@ export function useHRTrainingRecords() {
       return (data || []).map(record => ({
         id: record.id,
         crew_member_id: record.crew_member_id,
-        crew_member_name: (record.crew_members as any)?.full_name || 'Unknown',
+        crew_member_name: (record.crew_members as Record<string, unknown> | null)?.full_name as string || 'Unknown',
         course_name: record.training_name,
         course_type: record.training_type,
         start_date: record.start_date,
@@ -610,8 +610,7 @@ export function useHRPerformanceReviews() {
   return useQuery({
     queryKey: ['hr-performance-reviews-real'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('crew_performance_reviews')
+      const { data, error } = await (supabase.from as Function)('crew_performance_reviews')
         .select(`
           id,
           crew_member_id,
@@ -624,14 +623,15 @@ export function useHRPerformanceReviews() {
 
       if (error) throw error;
 
-      return (data || []).map((review: any) => ({
-        id: review.id,
-        crew_member_id: review.crew_member_id,
+      type ReviewRow = Record<string, unknown> & { crew_members?: { full_name?: string; position?: string } | null };
+      return ((data || []) as ReviewRow[]).map((review) => ({
+        id: String(review.id),
+        crew_member_id: String(review.crew_member_id),
         crew_member_name: review.crew_members?.full_name || 'Unknown',
         crew_member_position: review.crew_members?.position || 'Unknown',
-        review_date: review.review_date,
-        overall_score: review.overall_score,
-        status: review.status,
+        review_date: String(review.review_date),
+        overall_score: Number(review.overall_score),
+        status: String(review.status || 'pending'),
       }));
     },
   });

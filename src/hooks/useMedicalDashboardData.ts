@@ -39,17 +39,22 @@ export interface Medication {
   controlled: boolean;
 }
 
-function mapCrewToMedical(member: any, vessels: any[], certificates: any[]): CrewMedical {
+type CrewRow = Record<string, unknown>;
+type VesselRow = { id: string; name: string };
+type CertificateRow = Record<string, unknown>;
+
+function mapCrewToMedical(member: CrewRow, vessels: VesselRow[], certificates: CertificateRow[]): CrewMedical {
   const vessel = vessels.find(v => v.id === member.vessel_id);
-  const crewCerts = certificates.filter((c: any) => c.holder_name === member.full_name || c.vessel_id === member.vessel_id);
+  const crewCerts = certificates.filter((c) => c.holder_name === member.full_name || c.vessel_id === member.vessel_id);
   
   const now = new Date();
-  const certMappings = crewCerts.map((cert: any) => {
-    const expiry = new Date(cert.expiry_date);
+  const certMappings = crewCerts.map((cert) => {
+    const expiryStr = String(cert.expiry_date || "");
+    const expiry = new Date(expiryStr);
     const daysUntilExpiry = (expiry.getTime() - now.getTime()) / 86400000;
     return {
-      name: cert.certificate_type || cert.name || "Certificado",
-      expiry: cert.expiry_date?.slice(0, 10) || "",
+      name: String(cert.certificate_type || cert.name || "Certificado"),
+      expiry: expiryStr.slice(0, 10),
       status: (daysUntilExpiry < 0 ? "expired" : daysUntilExpiry < 90 ? "expiring" : "valid") as "valid" | "expiring" | "expired",
     };
   });
@@ -68,9 +73,9 @@ function mapCrewToMedical(member: any, vessels: any[], certificates: any[]): Cre
     member.status === "active" || member.status === "onboard" ? "fit" : "pending";
 
   return {
-    id: member.id,
-    name: member.full_name || "N/A",
-    rank: member.rank || member.position || "Marinheiro",
+    id: String(member.id),
+    name: String(member.full_name || "N/A"),
+    rank: String(member.rank || member.position || "Marinheiro"),
     vessel: vessel?.name || "N/A",
     medicalStatus,
     lastCheckup: new Date(now.getTime() - 90 * 86400000).toISOString().slice(0, 10),
