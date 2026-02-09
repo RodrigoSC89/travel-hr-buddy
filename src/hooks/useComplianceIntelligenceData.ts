@@ -113,12 +113,12 @@ export function useComplianceIntelligenceData() {
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((a: any) => ({
-        id: a.id,
-        name: a.name || a.agent_id || "AI Agent",
-        status: a.status || "standby",
+      return data.map((a: Record<string, unknown>) => ({
+        id: a.id as string,
+        name: (a.name as string) || (a.agent_id as string) || "AI Agent",
+        status: (a.status as string) || "standby",
         capabilities: Array.isArray(a.capabilities) ? a.capabilities : [],
-        accuracy: (a.metadata as any)?.accuracy_score || 90,
+        accuracy: ((a.metadata as Record<string, unknown>)?.accuracy_score as number) || 90,
       }));
     },
   });

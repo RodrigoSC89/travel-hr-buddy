@@ -74,10 +74,9 @@ export function usePEOTRAMVoice() {
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
   
   const startListening = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const win = window as any;
+    const win = window as unknown as Record<string, unknown>;
     const SpeechRecognitionAPI: SpeechRecognitionConstructor | undefined = 
-      win.SpeechRecognition || win.webkitSpeechRecognition;
+      (win.SpeechRecognition || win.webkitSpeechRecognition) as SpeechRecognitionConstructor | undefined;
     
     if (!SpeechRecognitionAPI) {
       toast.error('Speech recognition não suportado neste navegador');

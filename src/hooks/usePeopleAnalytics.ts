@@ -189,7 +189,8 @@ export function usePayrollStats() {
       // Payroll by department
       const deptTotals: Record<string, number> = {};
       currentMonthData.forEach(p => {
-        const dept = (p.hr_employees as any)?.department || 'Outros';
+        const empJoin = p.hr_employees as Record<string, unknown> | null;
+        const dept = (empJoin?.department as string) || 'Outros';
         deptTotals[dept] = (deptTotals[dept] || 0) + (p.gross_salary || 0);
       });
 

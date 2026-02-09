@@ -125,30 +125,30 @@ async function createSupplier(supplier: Partial<Supplier>): Promise<Supplier> {
   if (error) throw error;
   
   // Transform DB response to Supplier interface
-  const s = data as any;
+  const s = data as Record<string, unknown>;
   return {
-    id: s.id,
-    name: s.company_name || "Fornecedor",
-    cnpj: s.tax_id || "",
-    category: s.category || ["Geral"],
-    status: mapSupplierStatus(s.status),
-    rating: s.rating || 0,
-    deliveryRate: s.on_time_delivery || 90,
-    avgLeadTime: s.lead_time_days || 7,
+    id: s.id as string,
+    name: (s.company_name as string) || "Fornecedor",
+    cnpj: (s.tax_id as string) || "",
+    category: (s.category as string[]) || ["Geral"],
+    status: mapSupplierStatus(s.status as string | null),
+    rating: (s.rating as number) || 0,
+    deliveryRate: (s.on_time_delivery as number) || 90,
+    avgLeadTime: (s.lead_time_days as number) || 7,
     totalOrders: 0,
     totalValue: 0,
     contact: {
-      name: s.contact_person || "",
-      email: s.email || "",
-      phone: s.phone || ""
+      name: (s.contact_person as string) || "",
+      email: (s.email as string) || "",
+      phone: (s.phone as string) || ""
     },
     address: {
-      city: s.city || "",
-      state: s.state || "",
-      country: s.country || "Brasil"
+      city: (s.city as string) || "",
+      state: (s.state as string) || "",
+      country: (s.country as string) || "Brasil"
     },
-    paymentTerms: s.payment_terms || "30 dias",
-    createdAt: s.created_at,
+    paymentTerms: (s.payment_terms as string) || "30 dias",
+    createdAt: s.created_at as string,
     lastOrderDate: "",
     qualityScore: 85,
     priceCompetitiveness: 80
@@ -156,7 +156,7 @@ async function createSupplier(supplier: Partial<Supplier>): Promise<Supplier> {
 }
 
 async function updateSupplier(id: string, updates: Partial<Supplier>): Promise<Supplier> {
-  const updatePayload: Record<string, any> = {};
+  const updatePayload: Record<string, unknown> = {};
   if (updates.name) updatePayload.company_name = updates.name;
   if (updates.status) updatePayload.status = updates.status;
   if (updates.rating) updatePayload.rating = updates.rating;
@@ -173,30 +173,30 @@ async function updateSupplier(id: string, updates: Partial<Supplier>): Promise<S
 
   if (error) throw error;
   
-  const s = data as any;
+  const s = data as Record<string, unknown>;
   return {
-    id: s.id,
-    name: s.company_name || "Fornecedor",
-    cnpj: s.tax_id || "",
-    category: s.category || ["Geral"],
-    status: mapSupplierStatus(s.status),
-    rating: s.rating || 0,
-    deliveryRate: s.on_time_delivery || 90,
-    avgLeadTime: s.lead_time_days || 7,
+    id: s.id as string,
+    name: (s.company_name as string) || "Fornecedor",
+    cnpj: (s.tax_id as string) || "",
+    category: (s.category as string[]) || ["Geral"],
+    status: mapSupplierStatus(s.status as string | null),
+    rating: (s.rating as number) || 0,
+    deliveryRate: (s.on_time_delivery as number) || 90,
+    avgLeadTime: (s.lead_time_days as number) || 7,
     totalOrders: 0,
     totalValue: 0,
     contact: {
-      name: s.contact_person || "",
-      email: s.email || "",
-      phone: s.phone || ""
+      name: (s.contact_person as string) || "",
+      email: (s.email as string) || "",
+      phone: (s.phone as string) || ""
     },
     address: {
-      city: s.city || "",
-      state: s.state || "",
-      country: s.country || "Brasil"
+      city: (s.city as string) || "",
+      state: (s.state as string) || "",
+      country: (s.country as string) || "Brasil"
     },
-    paymentTerms: s.payment_terms || "30 dias",
-    createdAt: s.created_at,
+    paymentTerms: (s.payment_terms as string) || "30 dias",
+    createdAt: s.created_at as string,
     lastOrderDate: "",
     qualityScore: 85,
     priceCompetitiveness: 80

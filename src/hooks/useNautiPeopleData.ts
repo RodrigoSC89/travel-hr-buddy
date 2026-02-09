@@ -73,19 +73,19 @@ export function useNautiPeopleData() {
       if (!actionItems?.length) return [];
 
       return actionItems.map(item => {
-        const comments = item.comments as any || {};
+        const comments = (item.comments as Record<string, unknown>) || {};
         return {
           id: item.id,
           titulo: item.title,
-          departamento: comments.departamento || "Operações",
-          unidade: comments.unidade || "Escritório Central",
-          tipo: comments.tipo || "CLT",
+          departamento: (comments.departamento as string) || "Operações",
+          unidade: (comments.unidade as string) || "Escritório Central",
+          tipo: (comments.tipo as string) || "CLT",
           status: item.status === "completed" ? "fechada" : item.status === "in_progress" ? "em_andamento" : "aberta",
-          prioridade: (item.priority as any) || "media",
-          salarioMin: comments.salario_min,
-          salarioMax: comments.salario_max,
+          prioridade: ((item.priority as string) || "media") as "alta" | "baixa" | "critica" | "media",
+          salarioMin: comments.salario_min as number | undefined,
+          salarioMax: comments.salario_max as number | undefined,
           descricao: item.description || "",
-          requisitos: comments.requisitos || [],
+          requisitos: (comments.requisitos as string[]) || [],
           dataCriacao: item.created_at || "",
           dataLimite: item.due_date || undefined,
           responsavel: item.assigned_to_name || undefined,

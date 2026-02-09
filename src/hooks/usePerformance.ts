@@ -234,20 +234,18 @@ export function useOptimizedEventListener<K extends keyof WindowEventMap>(
   useEffect(() => {
     if (!enabled) return;
 
-    let optimizedHandler: (event: WindowEventMap[K]) => void = (event: WindowEventMap[K]) => savedHandler.current(event);
+    let optimizedHandler: (...args: unknown[]) => unknown = (...args: unknown[]) => savedHandler.current(args[0] as WindowEventMap[K]);
 
     if (throttleMs) {
-      const throttledFn = throttle(optimizedHandler as any, throttleMs);
-      optimizedHandler = throttledFn as any;
+      optimizedHandler = throttle(optimizedHandler, throttleMs);
     } else if (debounceMs) {
-      const debouncedFn = debounce(optimizedHandler as any, debounceMs);
-      optimizedHandler = debouncedFn as any;
+      optimizedHandler = debounce(optimizedHandler, debounceMs);
     }
 
-    window.addEventListener(eventName, optimizedHandler as any);
+    window.addEventListener(eventName, optimizedHandler as EventListener);
 
     return () => {
-      window.removeEventListener(eventName, optimizedHandler as any);
+      window.removeEventListener(eventName, optimizedHandler as EventListener);
     };
   }, [eventName, throttleMs, debounceMs, enabled]);
 }
@@ -370,7 +368,7 @@ export function useFirstInputDelay(): number | null {
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fidEntry = entry as any;
+        const fidEntry = entry as PerformanceEventTiming;
         setFid(fidEntry.processingStart - fidEntry.startTime);
       }
     });
