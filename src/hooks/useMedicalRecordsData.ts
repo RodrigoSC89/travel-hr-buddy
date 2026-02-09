@@ -107,7 +107,7 @@ export function useMedicalHistory(crewId?: string) {
 
       return (data || []).map((record): MedicalEvent => {
         // Extrair eventos do medical_history JSON se disponível
-        const history = record.medical_history as any;
+        const _history = record.medical_history as Record<string, unknown> | null;
         
         return {
           id: record.id,
@@ -141,16 +141,17 @@ export function useActiveMedications(crewId?: string) {
       const medications: ActiveMedication[] = [];
       
       (data || []).forEach((record, idx) => {
-        const history = record.medical_history as any;
+        const history = record.medical_history as Record<string, unknown> | null;
         if (history?.medications) {
-          history.medications.forEach((med: any) => {
+          type MedRow = Record<string, unknown>;
+          (history.medications as MedRow[]).forEach((med: MedRow) => {
             medications.push({
               id: `${record.id}-${idx}`,
-              name: med.name || "Medicação",
-              dosage: med.dosage || "N/A",
-              frequency: med.frequency || "1x ao dia",
-              startDate: new Date(med.start_date || record.created_at || Date.now()),
-              endDate: med.end_date ? new Date(med.end_date) : undefined,
+              name: (med.name as string) || "Medicação",
+              dosage: (med.dosage as string) || "N/A",
+              frequency: (med.frequency as string) || "1x ao dia",
+              startDate: new Date((med.start_date as string) || record.created_at || Date.now()),
+              endDate: med.end_date ? new Date(med.end_date as string) : undefined,
               prescribedBy: "Médico de Bordo",
               status: "active",
             });

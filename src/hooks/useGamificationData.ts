@@ -18,15 +18,18 @@ export function useGamificationData() {
 
       const crewList = crew || [];
       const certList = certs || [];
-      const vesselMap = new Map((vessels || []).map((v: any) => [v.id, v.name]));
+      type VesselRow = { id: string; name: string };
+      const vesselMap = new Map((vessels || []).map((v: VesselRow) => [v.id, v.name]));
 
+      type CrewRow = typeof crewList[number];
+      type CertRow = typeof certList[number];
       // Generate leaderboard from crew data - use crew_member_id (which maps to crew_members.id)
       const leaderboard = crewList
-        .map((c: any, i: number) => {
+        .map((c: CrewRow, i: number) => {
           const crewCerts = certList.filter(
-            (cert: any) => cert.crew_member_id === c.id
+            (cert: CertRow) => cert.crew_member_id === c.id
           );
-          const validCerts = crewCerts.filter((cert: any) => cert.status === "valid" || cert.status === "active");
+          const validCerts = crewCerts.filter((cert: CertRow) => cert.status === "valid" || cert.status === "active");
           const points = 1000 + validCerts.length * 500 + crewCerts.length * 200 + (crewList.length - i) * 100;
           return {
             rank: 0,
@@ -43,7 +46,7 @@ export function useGamificationData() {
 
       // Generate badges based on cert data
       const totalCerts = certList.length;
-      const validCerts = certList.filter((c: any) => c.status === "valid" || c.status === "active").length;
+      const validCerts = certList.filter((c) => c.status === "valid" || c.status === "active").length;
       const badges = [
         { id: "1", name: "Safety Champion", description: "100 dias sem incidentes", earned: validCerts >= 5, rarity: "legendary" as const },
         { id: "2", name: "Compliance Master", description: "Todas auditorias aprovadas", earned: validCerts >= 3, rarity: "epic" as const },

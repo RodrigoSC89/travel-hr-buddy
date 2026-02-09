@@ -49,24 +49,27 @@ export function useCrewTrainingData() {
         .select("*")
         .eq("user_id", user.id);
 
-      const progressMap = new Map<string, any>();
-      (progressData || []).forEach((p: any) => {
-        progressMap.set(p.course_id, p);
+      type ProgressRow = Record<string, unknown>;
+      const progressMap = new Map<string, ProgressRow>();
+      (progressData || []).forEach((p: ProgressRow) => {
+        progressMap.set(p.course_id as string, p);
       });
 
-      const courses: Course[] = (allCourses || []).map((c: any) => {
-        const progress = progressMap.get(c.id);
+      type CourseRow = Record<string, unknown>;
+      const courses: Course[] = (allCourses || []).map((c: CourseRow) => {
+        const progress = progressMap.get(c.id as string);
+        const meta = c.metadata as Record<string, unknown> | null;
         return {
-          id: c.id,
-          title: c.course_name || "Curso",
+          id: c.id as string,
+          title: (c.course_name as string) || "Curso",
           category: extractCategory(c.metadata),
-          duration: `${c.duration_hours || 0} horas`,
-          progress: progress?.progress_percent || 0,
+          duration: `${(c.duration_hours as number) || 0} horas`,
+          progress: (progress?.progress_percent as number) || 0,
           status: mapProgressToStatus(progress),
-          mandatory: c.metadata?.mandatory === true,
-          deadline: c.metadata?.deadline || undefined,
+          mandatory: meta?.mandatory === true,
+          deadline: (meta?.deadline as string) || undefined,
           certificate: c.certificate_template !== null,
-          rating: c.metadata?.rating || undefined,
+          rating: (meta?.rating as number) || undefined,
         };
       });
 
@@ -108,22 +111,25 @@ export function useCrewTrainingData() {
   };
 }
 
-function extractCategory(metadata: any): string {
+function extractCategory(metadata: unknown): string {
   if (!metadata) return "Geral";
+  let parsed: Record<string, unknown>;
   if (typeof metadata === "string") {
     try {
-      metadata = JSON.parse(metadata);
+      parsed = JSON.parse(metadata);
     } catch {
       return "Geral";
     }
+  } else {
+    parsed = metadata as Record<string, unknown>;
   }
-  return metadata?.category || "Geral";
+  return (parsed?.category as string) || "Geral";
 }
 
-function mapProgressToStatus(progress: any): Course["status"] {
+function mapProgressToStatus(progress: Record<string, unknown> | undefined): Course["status"] {
   if (!progress) return "not_started";
-  if (progress.status === "completed" || progress.progress_percent >= 100) return "completed";
-  if (progress.progress_percent > 0) return "in_progress";
+  if (progress.status === "completed" || (progress.progress_percent as number) >= 100) return "completed";
+  if ((progress.progress_percent as number) > 0) return "in_progress";
   return "not_started";
 }
 

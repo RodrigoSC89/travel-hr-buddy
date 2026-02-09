@@ -43,9 +43,10 @@ export function useCrewWellbeing() {
         .order("calculated_at", { ascending: false });
 
       // Build scores: use existing or calculate
-      return (crew || []).map((c: any) => {
-        const existing = (existingScores || []).find((s: any) => s.crew_member_id === c.id);
-        const vessel = (vessels || []).find((v: any) => v.id === c.vessel_id);
+      type CrewRow = typeof crew extends (infer R)[] | null ? R : never;
+      return (crew || []).map((c: CrewRow) => {
+        const existing = (existingScores || []).find((s) => s.crew_member_id === c.id);
+        const vessel = (vessels || []).find((v) => v.id === c.vessel_id);
 
         // Calculate time onboard using contract_start
         const daysOnboard = c.contract_start
@@ -94,7 +95,7 @@ export function useCrewWellbeing() {
           id: crypto.randomUUID(),
           crew_member_id: c.id,
           crew_name: c.full_name,
-          crew_rank: c.rank,
+          crew_rank: c.rank || undefined,
           vessel_name: vessel?.name,
           overall_score: overall,
           rest_hours_score: restScore,
