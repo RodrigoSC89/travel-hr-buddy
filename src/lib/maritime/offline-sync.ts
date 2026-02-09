@@ -341,9 +341,6 @@ class SyncManager {
           // This would call Supabase with the pending operations
           logger.debug('[Sync] Processing:', { table: item.table, operation: item.operation });
 
-          // Simulate sync delay based on connection
-          await new Promise(resolve => setTimeout(resolve, quality.isMaritime ? 500 : 100));
-
           await removeSyncedItem(item.id);
           synced++;
         } catch (error) {

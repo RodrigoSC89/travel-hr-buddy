@@ -166,7 +166,6 @@ export function InsightsPanel() {
 
   const loadData = async () => {
     setIsAnalyzing(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
     const crew = generateCrewAnalysis();
     setCrewData(crew);
     setInsights(generateInsights(crew));

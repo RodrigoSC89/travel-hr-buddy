@@ -78,8 +78,6 @@ export function ScheduledExportsDialog({ open, onOpenChange, templates }: Schedu
     setIsSubmitting(true);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const template = templates.find(t => t.id === newSchedule.templateId);
       const recipientList = newSchedule.recipients.split(',').map(r => r.trim()).filter(Boolean);
       

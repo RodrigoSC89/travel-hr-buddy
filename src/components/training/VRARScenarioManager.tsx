@@ -310,8 +310,6 @@ export function VRARScenarioManager() {
   const handleCreate = async () => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      
       const newScenario: Scenario = {
         id: `scn-${Date.now()}`,
         title: formData.title,

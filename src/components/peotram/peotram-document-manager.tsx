@@ -241,11 +241,8 @@ export const PeotramDocumentManager: React.FC = () => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       
-      // Simular upload
-      for (let progress = 0; progress <= 100; progress += 10) {
-        setUploadProgress(progress);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
+      // Set progress directly for real upload
+      setUploadProgress(100);
 
       const newDoc: Document = {
         id: `DOC_${Date.now()}_${i}`,

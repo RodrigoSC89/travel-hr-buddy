@@ -108,7 +108,7 @@ class EdgeAICore {
   }
 
   private async executeInference(model: EdgeModel, request: InferenceRequest): Promise<EdgeAIOutput> {
-    await new Promise((resolve) => setTimeout(resolve, Math.random() * model.inferenceTimeMs));
+    // Direct inference execution (no artificial delay)
 
     switch (request.task) {
     case "route_optimization": return this.simulateRouteOptimization(request.input as RouteOptimizationInput);

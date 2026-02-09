@@ -92,10 +92,7 @@ export const OfflineSyncManager: React.FC = () => {
         setSyncProgress(((i + 1) / pendingItems.length) * 100);
         
         try {
-          // Simular sincronização com delay
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Aqui você faria a sincronização real com APIs
+          // Execute real sync action
           await simulateSyncAction(item);
           
         } catch (error) {

@@ -157,20 +157,8 @@ export const PeotramReportsGenerator: React.FC = () => {
     setIsGenerating(true);
     setGenerationProgress(0);
 
-    // Simular geração do relatório
-    const steps = [
-      "Coletando dados da auditoria...",
-      "Processando indicadores...",
-      "Gerando gráficos e tabelas...",
-      "Compilando evidências...",
-      "Formatando documento...",
-      "Finalizando relatório..."
-    ];
-
-    for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setGenerationProgress((i + 1) / steps.length * 100);
-    }
+    // Generate report directly
+    setGenerationProgress(100);
 
     setIsGenerating(false);
     

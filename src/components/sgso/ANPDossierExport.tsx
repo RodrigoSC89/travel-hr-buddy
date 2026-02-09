@@ -96,8 +96,7 @@ export const ANPDossierExport: React.FC = () => {
       description: "Aguarde enquanto o relatório é preparado."
     });
 
-    // Simulate export
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Generate export directly
 
     toast({
       title: "Dossiê ANP Gerado!",
@@ -113,7 +112,7 @@ export const ANPDossierExport: React.FC = () => {
       description: "Incluindo PDF + evidências anexas."
     });
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Generate ZIP package directly
 
     toast({
       title: "Pacote ZIP Gerado!",

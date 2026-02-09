@@ -175,7 +175,6 @@ export const EnhancedDocumentScanner: React.FC = () => {
 
       for (const { step, message } of progressSteps) {
         setScanProgress(step);
-        await new Promise(resolve => setTimeout(resolve, 800));
       }
 
       // Simular resultado OCR

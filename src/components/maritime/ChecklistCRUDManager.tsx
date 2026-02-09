@@ -274,7 +274,6 @@ export function ChecklistCRUDManager() {
   const handleDuplicate = async (checklist: Checklist) => {
     setActionLoading(checklist.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
       const duplicate: Checklist = {
         ...checklist,
         id: `dup-${Date.now()}`,
@@ -365,8 +364,6 @@ export function ChecklistCRUDManager() {
 
     setActionLoading('complete');
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       const newRun: ChecklistRun = {
         id: `run-${Date.now()}`,
         checklistId: selectedChecklist.id,
@@ -399,7 +396,6 @@ export function ChecklistCRUDManager() {
 
     setActionLoading('sign');
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
       setRuns(prev => prev.map(r => 
         r.id === activeRun.id 
           ? { ...r, signature: `Assinado em ${new Date().toLocaleString('pt-BR')}` }
