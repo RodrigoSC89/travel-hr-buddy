@@ -50,7 +50,7 @@ function generatePosition(vesselId: string, index: number): { lat: number; lon: 
   return { lat: baseLat + index * 0.3, lon: baseLon - index * 0.5 };
 }
 
-function mapVesselToPosition(vessel: any, index: number): VesselPosition {
+function mapVesselToPosition(vessel: Record<string, unknown>, index: number): VesselPosition {
   const statusMap: Record<string, VesselPosition["status"]> = {
     navigating: "underway",
     "in-port": "moored",
@@ -69,31 +69,32 @@ function mapVesselToPosition(vessel: any, index: number): VesselPosition {
     active: "running",
   };
 
-  const position = generatePosition(vessel.id, index);
-  const speed = statusMap[vessel.status] === "underway" ? 8 + (index * 2.5) % 8 : 0;
-  const course = statusMap[vessel.status] === "underway" ? (index * 73) % 360 : 0;
+  const position = generatePosition(vessel.id as string, index);
+  const vesselStatus = vessel.status as string;
+  const speed = statusMap[vesselStatus] === "underway" ? 8 + (index * 2.5) % 8 : 0;
+  const course = statusMap[vesselStatus] === "underway" ? (index * 73) % 360 : 0;
 
   return {
-    id: vessel.id,
-    name: vessel.name,
-    imo: vessel.imo_number || `IMO${9000000 + index}`,
+    id: vessel.id as string,
+    name: vessel.name as string,
+    imo: (vessel.imo_number as string) || `IMO${9000000 + index}`,
     mmsi: `${200000000 + index}`,
-    type: vessel.type || "Cargo",
-    status: statusMap[vessel.status] || "moored",
+    type: (vessel.type as string) || "Cargo",
+    status: statusMap[vesselStatus] || "moored",
     position,
     course,
     speed: parseFloat(speed.toFixed(1)),
-    destination: vessel.port_of_registry || "Porto de Santos",
-    eta: statusMap[vessel.status] === "underway" 
+    destination: (vessel.port_of_registry as string) || "Porto de Santos",
+    eta: statusMap[vesselStatus] === "underway" 
       ? new Date(Date.now() + (24 + index * 6) * 3600000).toISOString().slice(0, 16).replace("T", " ")
       : "-",
     lastUpdate: new Date(Date.now() - index * 300000).toISOString().slice(0, 16).replace("T", " "),
     fuelLevel: 40 + (index * 13) % 55,
-    engineStatus: engineMap[vessel.status] || "idle",
+    engineStatus: engineMap[vesselStatus] || "idle",
   };
 }
 
-function mapAlertToTrackingAlert(alert: any, vessels: any[]): TrackingAlert {
+function mapAlertToTrackingAlert(alert: Record<string, unknown>, vessels: Record<string, unknown>[]): TrackingAlert {
   const vessel = vessels.find(v => v.id === alert.sensor_id);
   const typeMap: Record<string, TrackingAlert["type"]> = {
     geofence: "geofence",
@@ -111,12 +112,12 @@ function mapAlertToTrackingAlert(alert: any, vessels: any[]): TrackingAlert {
   };
 
   return {
-    id: alert.id,
-    type: typeMap[alert.alert_type] || "ais",
-    severity: severityMap[alert.severity] || "info",
-    vessel: vessel?.name || "N/A",
-    message: alert.message || alert.description || "Alerta detectado",
-    timestamp: alert.created_at?.slice(0, 16).replace("T", " ") || "",
+    id: alert.id as string,
+    type: typeMap[alert.alert_type as string] || "ais",
+    severity: severityMap[alert.severity as string] || "info",
+    vessel: (vessel?.name as string) || "N/A",
+    message: (alert.message as string) || (alert.description as string) || "Alerta detectado",
+    timestamp: (alert.created_at as string)?.slice(0, 16).replace("T", " ") || "",
     acknowledged: alert.status === "acknowledged" || alert.status === "resolved",
   };
 }

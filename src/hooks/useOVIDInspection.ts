@@ -52,39 +52,37 @@ export function useOVIDInspection(inspectionId?: string) {
   const loadInspection = useCallback(async (id: string) => {
     setIsLoading(true);
     try {
-      // Use type assertion to bypass missing types
-      const { data: inspData, error: inspError } = await (supabase
-        .from('ovid_inspections' as any)
+      // Use dynamic table access for tables not yet in generated types
+      const { data: inspData, error: inspError } = await (supabase.from as Function)('ovid_inspections')
         .select('*')
         .eq('id', id)
-        .single() as any);
+        .single();
 
       if (inspError) throw inspError;
       setInspection(inspData as OVIDInspection);
 
-      const { data: ansData, error: ansError } = await (supabase
-        .from('ovid_answers' as any)
+      const { data: ansData, error: ansError } = await (supabase.from as Function)('ovid_answers')
         .select('*')
-        .eq('inspection_id', id) as any);
+        .eq('inspection_id', id);
 
       if (ansError) throw ansError;
       
+      type AnswerRow = Record<string, unknown>;
       const answersMap: Record<string, OVIDAnswer> = {};
-      (ansData || []).forEach((ans: any) => {
-        answersMap[ans.question_id] = {
-          question_id: ans.question_id,
-          chapter_id: ans.chapter_id,
-          answer: ans.answer,
-          observation: ans.observation || '',
+      (ansData || []).forEach((ans: AnswerRow) => {
+        answersMap[ans.question_id as string] = {
+          question_id: ans.question_id as string,
+          chapter_id: ans.chapter_id as string,
+          answer: ans.answer as OVIDAnswer['answer'],
+          observation: (ans.observation as string) || '',
         };
       });
       setAnswers(answersMap);
 
       // Load photos
-      const { data: photoData } = await (supabase
-        .from('ovid_evidence_photos' as any)
+      const { data: photoData } = await (supabase.from as Function)('ovid_evidence_photos')
         .select('*')
-        .eq('inspection_id', id) as any);
+        .eq('inspection_id', id);
       
       setPhotos((photoData || []) as OVIDPhoto[]);
     } catch (error) {
@@ -111,15 +109,14 @@ export function useOVIDInspection(inspectionId?: string) {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) throw new Error('User not authenticated');
 
-      const { data: newInsp, error } = await (supabase
-        .from('ovid_inspections' as any)
+      const { data: newInsp, error } = await (supabase.from as Function)('ovid_inspections')
         .insert({
           ...data,
           user_id: user.user.id,
           status: 'in_progress',
         })
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       setInspection(newInsp as OVIDInspection);
@@ -155,9 +152,8 @@ export function useOVIDInspection(inspectionId?: string) {
           observation: ans.observation,
         }));
 
-        const { error } = await (supabase
-          .from('ovid_answers' as any)
-          .upsert(updates, { onConflict: 'inspection_id,question_id' }) as any);
+        const { error } = await (supabase.from as Function)('ovid_answers')
+          .upsert(updates, { onConflict: 'inspection_id,question_id' });
 
         if (error) throw error;
         
@@ -168,15 +164,14 @@ export function useOVIDInspection(inspectionId?: string) {
         const answered = compliant + nonCompliant + notApplicable;
         const score = answered > 0 ? Math.round(((compliant + notApplicable) / answered) * 100) : 0;
 
-        await (supabase
-          .from('ovid_inspections' as any)
+        await (supabase.from as Function)('ovid_inspections')
           .update({
             compliant_count: compliant,
             non_compliant_count: nonCompliant,
             not_applicable_count: notApplicable,
             compliance_score: score,
           })
-          .eq('id', inspection.id) as any);
+          .eq('id', inspection.id);
 
         setPendingUpdates({});
       } catch (error) {
@@ -194,13 +189,12 @@ export function useOVIDInspection(inspectionId?: string) {
     if (!inspection?.id) return false;
     
     try {
-      const { error } = await (supabase
-        .from('ovid_inspections' as any)
+      const { error } = await (supabase.from as Function)('ovid_inspections')
         .update({
           status: 'completed',
           completed_at: new Date().toISOString(),
         })
-        .eq('id', inspection.id) as any);
+        .eq('id', inspection.id);
 
       if (error) throw error;
       setInspection(prev => prev ? { ...prev, status: 'completed' } : null);
@@ -216,11 +210,10 @@ export function useOVIDInspection(inspectionId?: string) {
   // Load inspection history
   const loadHistory = useCallback(async (): Promise<OVIDInspection[]> => {
     try {
-      const { data, error } = await (supabase
-        .from('ovid_inspections' as any)
+      const { data, error } = await (supabase.from as Function)('ovid_inspections')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(50) as any);
+        .limit(50);
 
       if (error) throw error;
       return (data || []) as OVIDInspection[];
@@ -246,14 +239,13 @@ export function useOVIDInspection(inspectionId?: string) {
 
       if (uploadError) throw uploadError;
 
-      const { error: dbError } = await (supabase
-        .from('ovid_evidence_photos' as any)
+      const { error: dbError } = await (supabase.from as Function)('ovid_evidence_photos')
         .insert({
           inspection_id: inspection.id,
           question_id: questionId,
           file_path: filePath,
           file_name: file.name,
-        }) as any);
+        });
 
       if (dbError) throw dbError;
       

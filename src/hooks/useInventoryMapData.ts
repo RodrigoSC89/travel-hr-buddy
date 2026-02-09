@@ -57,29 +57,31 @@ export function useInventoryMapData() {
       if (maintError) throw maintError;
 
       // Map vessels to inventory locations
-      const locations: InventoryLocation[] = (vessels || []).map((v: any, index: number) => {
-        // Calculate item stats
+      type VesselRow = Record<string, unknown>;
+      type MaintRow = Record<string, unknown>;
+      
+      const locations: InventoryLocation[] = (vessels || []).map((v: VesselRow, index: number) => {
         const vesselItems = (maintenanceRecords || []).filter(
-          (m: any) => m.vessel_id === v.id
+          (m: MaintRow) => m.vessel_id === v.id
         );
         
-        const criticalItems = vesselItems.filter((m: any) => m.priority === "critical").length;
-        const lowStockItems = vesselItems.filter((m: any) => m.status === "pending").length;
+        const criticalItems = vesselItems.filter((m: MaintRow) => m.priority === "critical").length;
+        const lowStockItems = vesselItems.filter((m: MaintRow) => m.status === "pending").length;
 
         return {
-          id: v.id,
-          name: v.name || `Embarcação ${index + 1}`,
+          id: v.id as string,
+          name: (v.name as string) || `Embarcação ${index + 1}`,
           type: "vessel" as const,
           location: {
             lat: -23.9 + (index * 0.5),
             lng: -46.3 + (index * 0.2),
-            city: v.port_of_registry || "Santos",
+            city: (v.port_of_registry as string) || "Santos",
           },
           itemCount: vesselItems.length,
           criticalItems,
           lowStockItems,
           expiringItems: 0,
-          totalValue: vesselItems.reduce((sum: number, m: any) => sum + (m.cost_estimate || 0), 0),
+          totalValue: vesselItems.reduce((sum: number, m: MaintRow) => sum + ((m.cost_estimate as number) || 0), 0),
         };
       });
 
@@ -109,11 +111,11 @@ export function useInventoryMapData() {
       });
 
       // Map maintenance records to inventory items
-      const items: InventoryItem[] = (maintenanceRecords || []).slice(0, 20).map((m: any, index: number) => {
-        const vessel = (vessels || []).find((v: any) => v.id === m.vessel_id);
+      const items: InventoryItem[] = (maintenanceRecords || []).slice(0, 20).map((m: MaintRow, index: number) => {
+        const vessel = (vessels || []).find((v: VesselRow) => v.id === m.vessel_id);
         // Derive quantity from maintenance priority (critical = low stock)
         const priorityStock: Record<string, number> = { critical: 2, high: 8, medium: 15, low: 25 };
-        const quantity = priorityStock[m.priority] || 10;
+        const quantity = priorityStock[m.priority as string] || 10;
         const minStock = 5;
         const maxStock = 50;
         
@@ -123,19 +125,19 @@ export function useInventoryMapData() {
         else if (quantity > maxStock) status = "excess";
 
         return {
-          id: m.id,
-          name: m.title || m.component || `Item ${index + 1}`,
-          sku: `SKU-${m.id.substring(0, 8).toUpperCase()}`,
-          category: m.maintenance_type || "Geral",
+          id: m.id as string,
+          name: (m.title as string) || (m.component as string) || `Item ${index + 1}`,
+          sku: `SKU-${(m.id as string).substring(0, 8).toUpperCase()}`,
+          category: (m.maintenance_type as string) || "Geral",
           quantity,
           minStock,
           maxStock,
-          location: vessel?.name || "Base Santos",
-          locationType: vessel ? "vessel" : "warehouse",
+          location: (vessel?.name as string) || "Base Santos",
+          locationType: vessel ? "vessel" as const : "warehouse" as const,
           leadTime: m.priority === "critical" ? 3 : m.priority === "high" ? 7 : 14,
-          unitCost: m.cost_estimate || 500,
+          unitCost: (m.cost_estimate as number) || 500,
           status,
-          lastMovement: new Date(m.updated_at || m.created_at),
+          lastMovement: new Date((m.updated_at as string) || (m.created_at as string)),
           predictedRunout: status === "critical" || status === "low" 
             ? new Date(Date.now() + quantity * 24 * 60 * 60 * 1000)
             : undefined,

@@ -57,7 +57,7 @@ export function useSGSOMaturity() {
 
       // Map audit data to maturity format using metadata field
       const audit = audits[0];
-      const practices = (audit.metadata as any)?.practices || [];
+      const practices = ((audit.metadata as Record<string, unknown>)?.practices as Record<string, unknown>[]) || [];
       
       if (practices.length === 0) {
         const overallMaturity = Math.round(
@@ -66,14 +66,15 @@ export function useSGSOMaturity() {
         return { data: DEFAULT_PRACTICES, overallMaturity };
       }
 
-      const maturityData: MaturityData[] = practices.map((item: any, index: number) => ({
+      type PracticeRow = Record<string, unknown>;
+      const maturityData: MaturityData[] = practices.map((item: PracticeRow, index: number) => ({
         practiceId: `PG-${String(index + 1).padStart(2, '0')}`,
-        practiceName: item.name || DEFAULT_PRACTICES[index]?.practiceName || 'Unknown',
-        currentLevel: item.score ? Math.ceil(item.score / 20) : 3,
+        practiceName: (item.name as string) || DEFAULT_PRACTICES[index]?.practiceName || 'Unknown',
+        currentLevel: item.score ? Math.ceil((item.score as number) / 20) : 3,
         targetLevel: 5,
-        pdcaPhase: determinePDCAPhase(item.score || 60),
-        trend: item.trend || 'stable',
-        lastAuditScore: item.score || 60
+        pdcaPhase: determinePDCAPhase((item.score as number) || 60),
+        trend: (item.trend as MaturityData['trend']) || 'stable',
+        lastAuditScore: (item.score as number) || 60
       }));
 
       const overallMaturity = Math.round(

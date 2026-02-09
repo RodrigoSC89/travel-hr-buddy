@@ -70,21 +70,23 @@ export function useMaintenancePredictions() {
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((item: any) => {
+      type PredictionRow = Record<string, unknown>;
+      return data.map((item: PredictionRow) => {
         const daysUntil = item.predicted_failure_date
-          ? Math.ceil((new Date(item.predicted_failure_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+          ? Math.ceil((new Date(item.predicted_failure_date as string).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
           : 90;
+        const vessels = item.vessels as Record<string, unknown> | null;
 
         return {
-          componentId: item.equipment_id,
-          componentName: item.equipment_name,
-          vesselName: item.vessels?.name || "N/A",
-          failureProbability: item.failure_probability,
-          predictedFailureDate: item.predicted_failure_date || new Date().toISOString(),
+          componentId: item.equipment_id as string,
+          componentName: item.equipment_name as string,
+          vesselName: (vessels?.name as string) || "N/A",
+          failureProbability: item.failure_probability as number,
+          predictedFailureDate: (item.predicted_failure_date as string) || new Date().toISOString(),
           daysUntilFailure: Math.max(0, daysUntil),
-          riskLevel: item.failure_probability > 0.8 ? "critical" : item.failure_probability > 0.6 ? "high" : item.failure_probability > 0.4 ? "medium" : "low",
-          recommendedAction: item.recommended_action || "Monitorar regularmente",
-          confidence: item.confidence || 0.75,
+          riskLevel: (item.failure_probability as number) > 0.8 ? "critical" : (item.failure_probability as number) > 0.6 ? "high" : (item.failure_probability as number) > 0.4 ? "medium" : "low",
+          recommendedAction: (item.recommended_action as string) || "Monitorar regularmente",
+          confidence: (item.confidence as number) || 0.75,
           historicalData: {
             lastMaintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
             totalHours: 5000,
@@ -119,25 +121,27 @@ export function useMaintenanceAlerts() {
 
         if (!predictions) return [];
 
-        return predictions.map((p: any) => ({
-          id: p.id,
+        type PRow = Record<string, unknown>;
+        return predictions.map((p: PRow) => ({
+          id: p.id as string,
           type: "predictive" as const,
-          severity: p.failure_probability > 0.8 ? "critical" : p.failure_probability > 0.6 ? "warning" : "info",
-          message: p.recommended_action || `Atenção: ${p.equipment_name} requer verificação`,
-          component: p.equipment_name,
-          vessel: p.vessels?.name || "N/A",
-          createdAt: new Date(p.created_at)
+          severity: ((p.failure_probability as number) > 0.8 ? "critical" : (p.failure_probability as number) > 0.6 ? "warning" : "info") as MaintenanceAlert["severity"],
+          message: (p.recommended_action as string) || `Atenção: ${p.equipment_name} requer verificação`,
+          component: p.equipment_name as string,
+          vessel: ((p.vessels as Record<string, unknown>)?.name as string) || "N/A",
+          createdAt: new Date(p.created_at as string)
         }));
       }
 
-      return (data || []).map((alert: any) => ({
-        id: alert.id,
-        type: alert.alert_type || "predictive",
-        severity: alert.severity || "info",
-        message: alert.message || alert.description,
-        component: alert.component_name || "Sistema",
-        vessel: alert.vessel_name || "N/A",
-        createdAt: new Date(alert.created_at)
+      type AlertRow = Record<string, unknown>;
+      return (data || []).map((alert: AlertRow) => ({
+        id: alert.id as string,
+        type: (alert.alert_type as MaintenanceAlert["type"]) || "predictive",
+        severity: (alert.severity as MaintenanceAlert["severity"]) || "info",
+        message: (alert.message as string) || (alert.description as string),
+        component: (alert.component_name as string) || "Sistema",
+        vessel: (alert.vessel_name as string) || "N/A",
+        createdAt: new Date(alert.created_at as string)
       }));
     },
     staleTime: 1000 * 60 * 2,
@@ -162,17 +166,18 @@ export function usePredictiveMetrics() {
         return [];
       }
 
-      return insights.map((insight: any) => {
-        const metadata = typeof insight.metadata === 'object' ? insight.metadata : {};
+      type InsightRow = Record<string, unknown>;
+      return insights.map((insight: InsightRow) => {
+        const metadata = typeof insight.metadata === 'object' && insight.metadata !== null ? insight.metadata as Record<string, unknown> : {};
         return {
-          id: insight.id,
-          name: insight.title,
-          currentValue: metadata.currentValue || 0,
-          predictedValue: metadata.predictedValue || 0,
-          trend: metadata.trend || "stable",
-          confidence: insight.confidence * 100 || 75,
-          timeFrame: metadata.timeFrame || "30 dias",
-          unit: metadata.unit || "%"
+          id: insight.id as string,
+          name: insight.title as string,
+          currentValue: (metadata.currentValue as number) || 0,
+          predictedValue: (metadata.predictedValue as number) || 0,
+          trend: (metadata.trend as PredictiveMetric["trend"]) || "stable",
+          confidence: ((insight.confidence as number) * 100) || 75,
+          timeFrame: (metadata.timeFrame as string) || "30 dias",
+          unit: (metadata.unit as string) || "%"
         };
       });
     },
@@ -205,9 +210,10 @@ export function useFuelConsumption() {
         .limit(50);
 
       if (error) throw error;
-      return (data || []).map((item: any) => ({
+      type FuelRow = Record<string, unknown>;
+      return (data || []).map((item: FuelRow) => ({
         ...item,
-        vessel_name: item.vessels?.name || "N/A"
+        vessel_name: ((item.vessels as Record<string, unknown>)?.name as string) || "N/A"
       }));
     },
     staleTime: 1000 * 60 * 5,
