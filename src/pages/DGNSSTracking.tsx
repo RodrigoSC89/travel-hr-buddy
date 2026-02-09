@@ -3,6 +3,7 @@
  * ✅ P0 CORRIGIDO: Bloqueio se não configurado (R02 MITIGADO)
  */
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DGNSSTracking() {
+  const navigate = useNavigate();
   const { data: integrationStatus, isLoading: statusLoading } = useGNSSIntegrationStatus();
 
   const { data: vessels, isLoading: vesselsLoading } = useQuery({
@@ -66,7 +68,7 @@ export default function DGNSSTracking() {
                 Por segurança, não são exibidas posições simuladas. Configure a integração real.
               </AlertDescription>
             </Alert>
-            <Button onClick={() => window.location.href = '/settings/integrations'}>
+            <Button onClick={() => navigate('/settings/integrations')}>
               <Settings className="h-4 w-4 mr-2" />
               Configurar Integração DGNSS
             </Button>

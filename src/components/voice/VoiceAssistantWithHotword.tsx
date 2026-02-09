@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mic, MicOff, X, Volume2, Bot, Sparkles, Wifi, WifiOff, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,6 +52,7 @@ export function VoiceAssistantWithHotword({
   className,
   onCommand,
 }: VoiceAssistantWithHotwordProps) {
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const [isListeningForHotword, setIsListeningForHotword] = useState(false);
   const [isListeningForCommand, setIsListeningForCommand] = useState(false);
@@ -314,31 +316,31 @@ export function VoiceAssistantWithHotword({
 
     // Local navigation commands (fast response)
     if (lowerCommand.includes('dashboard') || lowerCommand.includes('painel')) {
-      window.location.href = '/dashboard';
+      navigate('/dashboard');
       return 'Navegando para o dashboard principal.';
     }
     if (lowerCommand.includes('tripulação') || lowerCommand.includes('crew')) {
-      window.location.href = '/crew';
+      navigate('/crew');
       return 'Abrindo gestão de tripulação.';
     }
     if (lowerCommand.includes('clima') || lowerCommand.includes('weather') || lowerCommand.includes('tempo')) {
-      window.location.href = '/weather-command';
+      navigate('/weather-command');
       return 'Abrindo Weather Command.';
     }
     if (lowerCommand.includes('peotram') || lowerCommand.includes('auditoria')) {
-      window.location.href = '/peotram-ai';
+      navigate('/peotram-ai');
       return 'Abrindo módulo PEOTRAM AI.';
     }
     if (lowerCommand.includes('gmud') || lowerCommand.includes('mudança')) {
-      window.location.href = '/gmud-workflow';
+      navigate('/gmud-workflow');
       return 'Abrindo workflow GMUD.';
     }
     if (lowerCommand.includes('digital twin') || lowerCommand.includes('gêmeo')) {
-      window.location.href = '/digital-twin';
+      navigate('/digital-twin');
       return 'Abrindo Digital Twin Engine.';
     }
     if (lowerCommand.includes('manutenção') || lowerCommand.includes('maintenance')) {
-      window.location.href = '/maintenance';
+      navigate('/maintenance');
       return 'Abrindo módulo de manutenção.';
     }
 
