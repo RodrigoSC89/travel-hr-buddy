@@ -724,7 +724,7 @@ export default function SmartChecklistsPage() {
                     <div 
                       key={i} 
                       className={`text-center py-3 rounded cursor-pointer hover:bg-accent ${day > 0 && day <= 31 ? '' : 'opacity-30'} ${hasChecklist ? 'bg-primary/10 border border-primary/30' : ''}`}
-                      onClick={() => day > 0 && day <= 31 && toast.success(`Checklists do dia ${day} carregados`)}
+                      onClick={() => day > 0 && day <= 31 && toast.info(`Visualizando checklists do dia ${day}. Selecione na lista abaixo.`, { duration: 3000 })}
                     >
                       {day > 0 && day <= 31 ? day : ''}
                     </div>

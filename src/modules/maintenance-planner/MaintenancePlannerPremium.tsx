@@ -118,15 +118,21 @@ function MaintenanceDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Nova ordem criada")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={async () => {
+              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Nova Ordem de Serviço", status: "pending", priority: "medium" });
+              if (error) { toast.error("Erro ao criar ordem: " + error.message); } else { toast.success("Ordem de serviço criada!"); window.location.reload(); }
+            }}>
               <Wrench className="h-4 w-4" />
               Nova Ordem de Serviço
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Inspeção agendada")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={async () => {
+              const { error } = await supabase.from("maintenance_tasks").insert({ title: "Inspeção Agendada", status: "scheduled", priority: "medium", task_type: "inspection" });
+              if (error) { toast.error("Erro ao agendar: " + error.message); } else { toast.success("Inspeção agendada!"); window.location.reload(); }
+            }}>
               <Calendar className="h-4 w-4" />
               Agendar Inspeção
             </Button>
-            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.success("Análise iniciada")}>
+            <Button className="w-full justify-start gap-2" variant="outline" onClick={() => toast.info("Análise preditiva disponível via edge function 'predictive-maintenance-ai'. Selecione um equipamento.", { duration: 4000 })}>
               <Bot className="h-4 w-4" />
               Análise Preditiva com IA
             </Button>
@@ -180,7 +186,10 @@ function MaintenanceDashboard() {
             <div className="text-center py-8 text-muted-foreground">
               <Wrench className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma tarefa encontrada</p>
-              <Button className="mt-4" onClick={() => toast.success("Nova tarefa")}>
+              <Button className="mt-4" onClick={async () => {
+                const { error } = await supabase.from("maintenance_tasks").insert({ title: "Primeira Tarefa", status: "pending", priority: "medium" });
+                if (error) { toast.error("Erro: " + error.message); } else { toast.success("Tarefa criada!"); window.location.reload(); }
+              }}>
                 <Plus className="h-4 w-4 mr-2" />
                 Criar Primeira Tarefa
               </Button>

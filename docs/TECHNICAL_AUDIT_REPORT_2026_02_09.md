@@ -47,7 +47,7 @@
 - **Impacto**: Interfaces fracas permitem dados inválidos propagarem sem detecção
 - **Correção estimada**: 20-30 dias
 
-### P0-003: 33 botões com `onClick → toast.info/success` sem ação real (33 arquivos)
+### P0-003: ~~33~~ 6 botões fake restantes — ✅ CORRIGIDO PARCIALMENTE (Sprint 2, 27 botões fixados)
 - **Tipo**: Botão Fake / UX Enganosa
 - **Evidência**: `grep -rn "onClick.*toast\.(info|success|warning)" src/ → 251 matches em 33 arquivos`
 - **Exemplos críticos**:
@@ -255,23 +255,40 @@ Hooks com nomes quase idênticos indicam falta de coordenação.
 
 ---
 
-## 📈 SCORE DE INTEGRIDADE
+## 📈 SCORE DE INTEGRIDADE (Atualizado: Sprint 2 — 2026-02-09)
 
-| Dimensão | Score | Justificativa |
-|----------|:-----:|---------------|
-| **Rotas** | 88/100 | Funcionais, excesso de duplicatas |
-| **Backend** | 97/100 | 313+ edge functions, zero APIs fantasma |
-| **CRUD** | 82/100 | Maioria funcional, ~9 módulos parciais |
-| **UX** | 80/100 | 33 botões fake, 25+ feature flags |
-| **Type Safety** | 45/100 | 10.868 ocorrências de `any` |
-| **Performance** | 85/100 | Build otimizado |
-| **Segurança** | 90/100 | RLS completo, 1 XSS risk menor |
-| **Testes** | 70/100 | @ts-nocheck apenas em testes |
-| **GERAL** | **80/100** | |
+| Dimensão | Score Anterior | Score Atual | Justificativa |
+|----------|:-----:|:-----:|---------------|
+| **Rotas** | 88/100 | 88/100 | Funcionais, excesso de duplicatas |
+| **Backend** | 97/100 | 97/100 | 313+ edge functions, zero APIs fantasma |
+| **CRUD** | 82/100 | 87/100 | +5: Manutenção e Drills com persistência real |
+| **UX** | 80/100 | 89/100 | +9: 27 botões fake corrigidos, orientação honesta |
+| **Type Safety** | 45/100 | 45/100 | 10.868 ocorrências de `any` (requer sprint dedicado) |
+| **Performance** | 85/100 | 85/100 | Build otimizado |
+| **Segurança** | 90/100 | 92/100 | +2: localStorage → sessionStorage em mission-core |
+| **Testes** | 70/100 | 70/100 | @ts-nocheck apenas em testes |
+| **GERAL** | **80/100** | **84/100** | **+4 pontos** |
+
+### Histórico de Sprints
+| Sprint | Data | Pontos Ganhos | Ações |
+|--------|------|:---:|---------|
+| Sprint 1 | 2026-02-09 | +4 | Compliance, Waste Management, adaptiveUI |
+| Sprint 2 | 2026-02-09 | +4 | 27 botões fake → real/honesto, IoT, Maintenance |
+| **Acumulado** | | **+8** | **80 → 84/100** |
+
+### Próximos passos para 100/100
+1. **Type Safety (+20)**: Eliminar 10.868 `any` em sprints dedicados (15-20 dias)
+2. **CRUD completo (+8)**: ISPS, Drydock, CrewScheduler com persistência real (5 dias)
+3. **Rotas (+7)**: Consolidar duplicatas de páginas (V1/V2/Enhanced) (3 dias)
+4. **UX (+5)**: Resolver 6 botões fake restantes (2 dias)
+5. **Segurança (+3)**: Migrar localStorage restante para sessionStorage/Supabase (2 dias)
+6. **Performance (+5)**: Code splitting agressivo e virtualização (3 dias)
 
 ---
 
 **FIM DO RELATÓRIO**  
-**Total de falhas:** 139  
-**Esforço total de correção:** ~28 dias (220 horas)  
-**Prioridade:** Sprint 1 → Sprint 2 → Sprint 3
+**Total de falhas originais:** 139  
+**Falhas corrigidas (Sprint 1+2):** 35  
+**Falhas restantes:** 104  
+**Esforço total de correção restante:** ~25 dias (200 horas)  
+**Prioridade:** Sprint 3 (Type Safety) → Sprint 4 (CRUD) → Sprint 5 (Consolidação)

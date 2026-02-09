@@ -255,22 +255,25 @@ export const EmployeePaymentsHistory: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.success("Abrindo demonstrativos...")}>
+        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Demonstrativos de pagamento — Em implantação. Consulte o RH para obter seus holerites.", { duration: 5000 })}>
           <div className="flex flex-col items-center gap-2">
             <FileText className="h-6 w-6" />
             <span>Ver Demonstrativos</span>
+            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.success("Abrindo informe de rendimentos...")}>
+        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Informe de rendimentos — Em implantação. Solicite ao departamento financeiro.", { duration: 5000 })}>
           <div className="flex flex-col items-center gap-2">
             <DollarSign className="h-6 w-6" />
             <span>Informe de Rendimentos</span>
+            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
-        <Button variant="outline" className="h-auto p-4" onClick={() => toast.success("Abrindo férias e benefícios...")}>
+        <Button variant="outline" className="h-auto p-4" onClick={() => toast.info("Férias e benefícios — Em implantação. Consulte o People Hub para gestão de férias.", { duration: 5000 })}>
           <div className="flex flex-col items-center gap-2">
             <Calendar className="h-6 w-6" />
             <span>Férias e Benefícios</span>
+            <Badge variant="outline" className="text-xs">Em implantação</Badge>
           </div>
         </Button>
       </div>

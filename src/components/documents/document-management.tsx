@@ -645,7 +645,11 @@ export const DocumentManagement: React.FC = () => {
                       <Badge variant={doc.status === "expired" ? "destructive" : doc.status === "critical" ? "destructive" : doc.status === "warning" ? "secondary" : "default"}>
                         {doc.days < 0 ? `Vencido há ${Math.abs(doc.days)} dias` : `${doc.days} dias restantes`}
                       </Badge>
-                      <Button size="sm" variant="outline" onClick={() => sonnerToast.success(`Notificação enviada para renovação de: ${doc.name}`)}>
+                      <Button size="sm" variant="outline" onClick={async () => {
+                        const { supabase: sb } = await import("@/integrations/supabase/client");
+                        const { error } = await sb.from("action_items").insert({ title: `Renovar: ${doc.name}`, description: `Documento ${doc.name} vence em ${doc.expiry}. Necessita renovação.`, source_module: "document-management", status: "pending", priority: doc.status === "expired" ? "high" : "medium" });
+                        if (error) { sonnerToast.error("Erro ao criar notificação: " + error.message); } else { sonnerToast.success(`Tarefa de renovação criada para: ${doc.name}`); }
+                      }}>
                         Notificar
                       </Button>
                     </div>
