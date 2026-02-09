@@ -1,6 +1,6 @@
-# 🔘 BUTTON AUDIT REPORT — NAUTI ONE v10
-**Date:** 2026-02-08
-**Status:** ✅ PASS
+# 🔘 BUTTON AUDIT REPORT — NAUTI ONE v10.1
+**Date:** 2026-02-09
+**Status:** 🔧 IN PROGRESS — 14/541 corrigidos (3 arquivos críticos)
 
 ---
 
