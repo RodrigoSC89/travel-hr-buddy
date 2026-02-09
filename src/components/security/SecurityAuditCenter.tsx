@@ -169,10 +169,20 @@ export function SecurityAuditCenter() {
   };
 
   const exportReport = () => {
-    toast.info("Gerando relatório de segurança...");
-    setTimeout(() => {
-      toast.success("Relatório exportado!");
-    }, 2000);
+    const rows = [
+      "Timestamp;Severidade;Evento;Detalhes",
+      ...(auditLogs || []).map((l: any) =>
+        `${l.created_at};${l.severity || "info"};${l.action};${JSON.stringify(l.details || {}).replace(/;/g, ",")}`
+      )
+    ];
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `security-audit-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Relatório de segurança exportado!");
   };
 
   const getSeverityColor = (severity: string) => {

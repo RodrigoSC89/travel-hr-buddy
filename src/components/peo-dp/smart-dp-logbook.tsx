@@ -177,7 +177,20 @@ export const SmartDPLogbook: React.FC = () => {
   };
 
   const handleExportPDF = () => {
-    toast.success("Exportando logbook para PDF...");
+    const csvRows = [
+      "Timestamp;Tipo;Categoria;Descrição;Operador;Modo DP;Severidade;Reconhecido",
+      ...entries.map(e =>
+        `${e.timestamp};${eventTypeConfig[e.eventType]?.label || e.eventType};${e.category};${e.description};${e.operator};${e.dpMode};${e.severity};${e.acknowledged ? "Sim" : "Não"}`
+      )
+    ];
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dp-logbook-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Logbook exportado com sucesso!");
   };
 
   const getSeverityBadge = (severity: string) => {

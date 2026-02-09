@@ -338,8 +338,18 @@ export default function PortCallOptimizationV2() {
             onRefresh={() => { loadPortCalls(); toast.success("Dados atualizados"); }}
             loading={loading}
             actions={[
-              { label: "Otimizar ETA", icon: Brain, onClick: (item) => toast.success(`Otimizando ETA para ${item.vessel_name}`) },
-              { label: "Port Clearance", icon: CheckCircle, onClick: (item) => toast.info("Gerando documentação") },
+              { label: "Otimizar ETA", icon: Brain, onClick: (item) => {
+                supabase.from('action_items').insert({ title: `Otimizar ETA: ${item.vessel_name}`, status: 'pending', priority: 'high', source_module: 'port-call-optimization' }).then(({ error }) => {
+                  if (!error) toast.success(`Otimização de ETA iniciada para ${item.vessel_name}`);
+                  else toast.error("Erro ao criar item");
+                });
+              }},
+              { label: "Port Clearance", icon: CheckCircle, onClick: (item) => {
+                supabase.from('action_items').insert({ title: `Port Clearance: ${item.vessel_name}`, description: 'Documentação de liberação portuária', status: 'pending', priority: 'medium', source_module: 'port-call-optimization' }).then(({ error }) => {
+                  if (!error) toast.success("Documentação de Port Clearance criada");
+                  else toast.error("Erro ao gerar documentação");
+                });
+              }},
             ]}
           />
         </TabsContent>

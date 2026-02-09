@@ -195,10 +195,18 @@ export const ResponsiveDashboard: React.FC = () => {
         <Button 
           className="hover-scale w-full sm:w-auto"
           onClick={() => {
-            toast.info("Gerando relatório...");
-            setTimeout(() => {
-              toast.success("Relatório gerado com sucesso!");
-            }, 1000);
+            const csvRows = [
+              "Métrica;Valor;Variação",
+              ...quickStats.map((s: any) => `${s.title};${s.value};${s.change}%`)
+            ];
+            const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `relatorio-dashboard-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            toast.success("Relatório exportado!");
           }}
         >
           <Calendar className="mr-2 h-4 w-4" />

@@ -277,7 +277,20 @@ export function GarbageRecordBookComplete() {
   };
 
   const handleExportPDF = () => {
-    toast.success("Gerando PDF do Garbage Record Book...");
+    const csvRows = [
+      "Nº;Data;Hora;Categoria;Quantidade;Unidade;Método;Local;Oficial;Verificado",
+      ...entries.map(e =>
+        `${e.entry_number};${e.date};${e.time};${e.category_name};${e.estimated_quantity};${e.unit};${e.disposal_method};${e.disposal_location};${e.officer_name};${e.master_verified ? "Sim" : "Não"}`
+      )
+    ];
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `garbage-record-book-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Garbage Record Book exportado!");
   };
 
   const getDisposalIcon = (method: string) => {

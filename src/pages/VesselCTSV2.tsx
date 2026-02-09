@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { PageLayoutV2, CardV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -113,8 +114,21 @@ export default function VesselCTSV2() {
             onRefresh={() => toast.success("Dados atualizados")}
             loading={loading}
             actions={[
-              { label: "Verificar STCW", icon: Brain, onClick: (item) => toast.success(`Verificando certificados de ${item.name}`) },
-              { label: "Gerar Relatório", icon: FileCheck, onClick: (item) => toast.info("Gerando relatório") },
+              { label: "Verificar STCW", icon: Brain, onClick: (item) => {
+                supabase.from('action_items').insert({ title: `Verificação STCW: ${item.name}`, description: `Verificar conformidade de certificados STCW do tripulante ${item.name}`, status: 'pending', priority: 'high', source_module: 'vessel-cts' }).then(({ error }) => {
+                  if (!error) toast.success(`Verificação STCW criada para ${item.name}`);
+                  else toast.error("Erro ao criar verificação");
+                });
+              }},
+              { label: "Gerar Relatório", icon: FileCheck, onClick: (item) => {
+                const csv = `Nome;Rank;Compliance\n${item.name};${item.rank || ""};${item.compliance_status || ""}`;
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url;
+                a.download = `relatorio-${item.name?.replace(/\s/g, '-')}.csv`;
+                a.click(); URL.revokeObjectURL(url);
+                toast.success("Relatório gerado!");
+              }},
             ]}
             filters={[
               { key: "compliance_status", label: "Status", options: [
