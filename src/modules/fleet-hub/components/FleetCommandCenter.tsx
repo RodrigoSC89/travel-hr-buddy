@@ -3,7 +3,7 @@
  * Dashboard unificado para gestão completa da frota marítima
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -40,6 +40,7 @@ import {
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion } from 'framer-motion';
+import { FleetMapBox } from '@/components/fleet/FleetMapBox';
 
 interface Vessel {
   id: string;
@@ -604,22 +605,32 @@ export function FleetCommandCenter() {
 
         {/* Map Tab */}
         <TabsContent value="map" className="mt-6">
-          <Card className="h-[500px]">
-            <CardContent className="p-0 h-full flex items-center justify-center bg-muted/20">
-              <div className="text-center">
-                <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium">Mapa da Frota</h3>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Visualização em tempo real com integração AIS será exibida aqui.
-                  Posições atualizadas a cada 5 minutos.
-                </p>
-                <Button className="mt-4">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Carregar Mapa
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <FleetMapBox
+            vessels={filteredVessels.map(v => ({
+              id: v.id,
+              mmsi: v.imo || '',
+              name: v.name,
+              latitude: v.position.lat,
+              longitude: v.position.lng,
+              speed: v.speed,
+              course: v.heading,
+              heading: v.heading,
+              navStatus: v.status === 'operational' ? 'Under way using engine' : 'Moored',
+              shipType: v.type,
+              destination: v.destination,
+              lastUpdate: new Date().toISOString(),
+              status: v.status,
+              vessel_type: v.type,
+              current_location: v.destination,
+            }))}
+            onSelectVessel={(vessel) => {
+              const found = fleetVessels.find(fv => fv.id === vessel.id || fv.name === vessel.name);
+              if (found) setSelectedVessel(found);
+            }}
+            selectedVessel={selectedVessel ? { id: selectedVessel.id, name: selectedVessel.name } : null}
+            height="600px"
+            showList={true}
+          />
         </TabsContent>
 
         {/* AI Tab */}
