@@ -7,14 +7,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+import type { Json } from "@/integrations/supabase/types";
+
 export interface AIAgent {
   id: string;
   agent_id: string;
   name: string;
   status: string;
-  capabilities: any;
+  capabilities: Json;
   last_heartbeat: string | null;
-  metadata: any;
+  metadata: Json | null;
   created_at: string;
 }
 
@@ -49,8 +51,8 @@ export interface AIWorkflow {
   name: string;
   description: string | null;
   status: string;
-  steps: any;
-  trigger_conditions: any;
+  steps: Json;
+  trigger_conditions: Json;
   created_at: string;
 }
 
@@ -107,7 +109,7 @@ export function useAIControlTowerData() {
 
   // AI workflows (simulated since table may not exist)
   const workflowsLoading = false;
-  const workflows: any[] = [];
+  const workflows: AIWorkflow[] = [];
 
   // Fetch AI insights
   const { data: insights = [], isLoading: insightsLoading } = useQuery({
@@ -181,7 +183,7 @@ export function useAIControlTowerData() {
 
   // Update AI configuration
   const updateConfiguration = useMutation({
-    mutationFn: async ({ key, value }: { key: string; value: any }) => {
+    mutationFn: async ({ key, value }: { key: string; value: Json }) => {
       const { error } = await supabase
         .from("ai_configurations")
         .upsert({ 
@@ -201,19 +203,19 @@ export function useAIControlTowerData() {
   // Calculate AI metrics
   const aiMetrics = {
     totalAgents: agents.length,
-    activeAgents: agents.filter((a: any) => a.status === "active" || a.status === "online").length,
-    pendingDecisions: decisions.filter((d: any) => d.status === "pending").length,
-    approvedDecisions: decisions.filter((d: any) => d.status === "approved").length,
-    rejectedDecisions: decisions.filter((d: any) => d.status === "rejected").length,
+    activeAgents: agents.filter(a => a.status === "active" || a.status === "online").length,
+    pendingDecisions: decisions.filter(d => d.status === "pending").length,
+    approvedDecisions: decisions.filter(d => d.status === "approved").length,
+    rejectedDecisions: decisions.filter(d => d.status === "rejected").length,
     avgConfidence: decisions.length > 0 
-      ? Math.round(decisions.reduce((sum: number, d: any) => sum + (d.confidence || 0), 0) / decisions.length) 
+      ? Math.round(decisions.reduce((sum, d) => sum + (d.confidence || 0), 0) / decisions.length) 
       : 0,
     totalInteractions: auditLogs.length,
     avgResponseTime: auditLogs.length > 0
-      ? Math.round(auditLogs.reduce((sum: number, l: any) => sum + (l.response_time_ms || 0), 0) / auditLogs.length)
+      ? Math.round(auditLogs.reduce((sum, l) => sum + (l.response_time_ms || 0), 0) / auditLogs.length)
       : 0,
-    activeWorkflows: workflows.filter((w: any) => w.status === "active").length,
-    actionableInsights: insights.filter((i: any) => i.actionable && i.status === "pending").length,
+    activeWorkflows: workflows.filter(w => w.status === "active").length,
+    actionableInsights: insights.filter(i => i.actionable && i.status === "pending").length,
   };
 
   return {

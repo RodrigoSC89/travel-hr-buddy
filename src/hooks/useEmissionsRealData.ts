@@ -56,7 +56,8 @@ export function useEmissionsRealData() {
       if (fuelErr) throw fuelErr;
 
       // Transform emissions to UI format
-      const records: EmissionRecord[] = (emissions || []).map((e: any) => {
+      interface EmissionRow { id: string; vessel_id: string | null; fuel_consumed_mt: number | null; co2_tonnes: number | null; distance_nm: number | null; cargo_carried_mt: number | null; voyage_id: string | null; recorded_date: string | null; fuel_type: string | null; created_at: string; vessels: { name: string } | null; }
+      const records: EmissionRecord[] = ((emissions || []) as EmissionRow[]).map((e) => {
         const fuelConsumed = e.fuel_consumed_mt || 0;
         const co2 = e.co2_tonnes || fuelConsumed * 3.114;
         const distance = e.distance_nm || 0;

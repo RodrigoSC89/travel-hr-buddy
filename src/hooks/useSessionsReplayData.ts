@@ -41,29 +41,32 @@ export function useSessionsReplayData() {
       if (error) throw error;
 
       // Get user profiles for names
-      const userIds = [...new Set((activeSessions || []).map((s: any) => s.user_id))];
+      const userIds = [...new Set((activeSessions || []).map(s => s.user_id))];
       
       const { data: profiles } = await supabase
         .from("profiles")
         .select("id, full_name, email")
         .in("id", userIds);
 
-      const profileMap = new Map<string, any>();
-      (profiles || []).forEach((p: any) => {
+      interface ProfileRow { id: string; full_name: string | null; email: string | null; }
+      const profileMap = new Map<string, ProfileRow>();
+      ((profiles || []) as ProfileRow[]).forEach((p) => {
         profileMap.set(p.id, p);
       });
 
-      const replaySessions: ReplaySession[] = (activeSessions || []).map((s: any) => {
+      const replaySessions: ReplaySession[] = (activeSessions || []).map((s) => {
         const profile = profileMap.get(s.user_id);
-        const deviceInfo = s.device_info || {};
+        const deviceInfo = (typeof s.device_info === 'object' && s.device_info !== null && !Array.isArray(s.device_info))
+          ? (s.device_info as Record<string, unknown>)
+          : {};
         
         // Parse device info
         let device = "Desktop";
         let browser = "Chrome";
         
         if (typeof deviceInfo === "object") {
-          device = deviceInfo.device_type || deviceInfo.platform || "Desktop";
-          browser = deviceInfo.browser || deviceInfo.user_agent?.split(" ")[0] || "Chrome";
+          device = String(deviceInfo.device_type || deviceInfo.platform || "Desktop");
+          browser = String(deviceInfo.browser || "Chrome");
         }
 
         const startTime = new Date(s.created_at);
