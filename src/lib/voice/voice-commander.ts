@@ -126,8 +126,8 @@ const MODULE_MAPPINGS: Record<string, string> = {
 };
 
 export class VoiceCommander {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private recognition: any = null;
+  // Web Speech API recognition instance (browser-specific)
+  private recognition: { start: () => void; stop: () => void; continuous: boolean; interimResults: boolean; lang: string; onresult: ((e: SpeechRecognitionEvent) => void) | null; onend: (() => void) | null; onerror: ((e: SpeechRecognitionErrorEvent) => void) | null } | null = null;
   private synthesis: SpeechSynthesis;
   private isListening = false;
   private context: VoiceContext;
@@ -141,8 +141,7 @@ export class VoiceCommander {
   }
 
   private initRecognition() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (!SpeechRecognitionAPI) {
       logger.warn('Speech recognition not supported');
@@ -154,8 +153,7 @@ export class VoiceCommander {
     this.recognition.interimResults = true;
     this.recognition.lang = this.context.language === 'pt' ? 'pt-BR' : 'en-US';
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.recognition.onresult = (event: any) => {
+    this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       const last = event.results.length - 1;
       const transcript = event.results[last][0].transcript;
       const confidence = event.results[last][0].confidence;
@@ -170,8 +168,7 @@ export class VoiceCommander {
       this.onListeningChange?.(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.recognition.onerror = (event: any) => {
+    this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       logger.error('Speech recognition error', { error: event.error });
       this.isListening = false;
       this.onListeningChange?.(false);

@@ -46,7 +46,7 @@ export interface SyncMessage {
   source_vessel_id: string;
   target_vessel_id?: string; // If null, broadcast to all
   message_type: "alert" | "log" | "status" | "coordination";
-  payload: any;
+  payload: unknown;
   timestamp: string;
   signature?: string; // For authentication
 }

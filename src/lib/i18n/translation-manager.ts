@@ -522,15 +522,15 @@ class TranslationManager {
   // Get translation by key path (e.g., "common.save")
   t(key: string, params?: Record<string, string | number>): string {
     const keys = key.split('.');
-    let value: any = translations[this.currentLanguage];
+    let value: unknown = translations[this.currentLanguage] as unknown;
 
     for (const k of keys) {
-      value = value?.[k];
+      value = (value as Record<string, unknown>)?.[k];
       if (value === undefined) {
         // Try fallback language
-        value = translations[this.config.fallbackLanguage];
+        value = translations[this.config.fallbackLanguage] as unknown;
         for (const fallbackKey of keys) {
-          value = value?.[fallbackKey];
+          value = (value as Record<string, unknown>)?.[fallbackKey];
           if (value === undefined) break;
         }
         break;

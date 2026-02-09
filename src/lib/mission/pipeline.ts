@@ -17,13 +17,13 @@ export interface MissionStep {
   type: MissionStepType;
   description?: string;
   status: MissionStepStatus;
-  params?: Record<string, any>;
+  params?: Record<string, unknown>;
   dependencies?: string[]; // Step IDs that must complete first
   retryCount?: number;
   maxRetries?: number;
   timeout?: number; // milliseconds
-  onSuccess?: (result: any) => void;
-  onFailure?: (error: any) => void;
+  onSuccess?: (result: unknown) => void;
+  onFailure?: (error: unknown) => void;
 }
 
 export interface Mission {
@@ -240,7 +240,7 @@ export class MissionPipeline {
   private async executeStep(
     mission: Mission, 
     step: MissionStep
-  ): Promise<{ success: boolean; result?: any; error?: any }> {
+  ): Promise<{ success: boolean; result?: unknown; error?: unknown }> {
     try {
       // Simulate step execution based on type
       await new Promise(resolve => setTimeout(resolve, step.timeout || 1000));
@@ -321,9 +321,9 @@ export class MissionPipeline {
     // Send move commands to drones if applicable
     if (step.params?.droneId && step.params?.target) {
       await droneCommandService.sendCommand(
-        step.params.droneId,
+        String(step.params.droneId),
         "move" as DroneCommand,
-        { target: step.params.target }
+        { target: step.params.target as string }
       );
     }
 
@@ -353,7 +353,7 @@ export class MissionPipeline {
    */
   private async executeWaitStep(mission: Mission, step: MissionStep) {
     logger.info(`Executing wait step: ${step.name}`);
-    const duration = step.params?.duration || 1000;
+    const duration = Number(step.params?.duration) || 1000;
     await new Promise(resolve => setTimeout(resolve, duration));
     return { success: true, result: { waited: duration } };
   }

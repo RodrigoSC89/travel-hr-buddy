@@ -7,8 +7,8 @@ import { logger } from '@/lib/logger';
  * com tratamento automático de erros de carregamento.
  */
 export function safeLazyImport(
-  importFn: () => Promise<{ default: ComponentType<any> }>
-): FC<any> {
+  importFn: () => Promise<{ default: ComponentType<Record<string, unknown>> }>
+): FC<Record<string, unknown>> {
   const LazyComponent = lazy(async () => {
     try {
       const module = await importFn();
@@ -21,7 +21,7 @@ export function safeLazyImport(
     }
   });
 
-  return (props: any) => createElement(
+  return (props: Record<string, unknown>) => createElement(
     Suspense,
     { fallback: createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
     createElement(LazyComponent, props)
