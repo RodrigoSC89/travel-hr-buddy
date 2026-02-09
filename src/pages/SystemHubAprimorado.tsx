@@ -64,18 +64,25 @@ const apiUsage = {
 export default function SystemHubAprimorado() {
   const [settings, setSettings] = React.useState(systemSettings);
 
-  const handleToggle = (id: string) => {
+  const handleToggle = async (id: string) => {
     setSettings(prev => prev.map(s => 
       s.id === id ? { ...s, enabled: !s.enabled } : s
     ));
-    toast.success("Configuração atualizada");
+    // Persist to ai_configurations
+    const { supabase } = await import("@/integrations/supabase/client");
+    await supabase.from("ai_configurations").upsert({
+      config_key: `system_setting_${id}`,
+      config_value: JSON.stringify({ enabled: !settings.find(s => s.id === id)?.enabled }),
+      description: `System setting: ${id}`,
+    }, { onConflict: "config_key" });
+    toast.success("Configuração atualizada e salva");
   };
 
   const handleConnect = (integration: typeof integrations[0]) => {
     if (integration.status === "connected") {
       toast.info(`${integration.name} já está conectado`);
     } else {
-      toast.success(`Conectando ${integration.name}...`);
+      toast.info(`${integration.name} requer configuração manual. Configure as credenciais na seção de integrações.`);
     }
   };
 

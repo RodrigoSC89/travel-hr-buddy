@@ -50,8 +50,12 @@ export const SecurityDashboard: React.FC = () => {
   const runSecurityScan = async () => {
     setIsScanning(true);
     try {
-      // Simulate security scan
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Load real session and access log data for security assessment
+      const { supabase } = await import("@/integrations/supabase/client");
+      const [{ count: sessionCount }, { count: logCount }] = await Promise.all([
+        supabase.from("active_sessions").select("*", { count: "exact", head: true }),
+        supabase.from("access_logs").select("*", { count: "exact", head: true }).eq("severity", "critical"),
+      ]);
       
       const mockChecks: SecurityCheck[] = [
         {

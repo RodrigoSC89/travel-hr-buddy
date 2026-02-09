@@ -135,13 +135,29 @@ export function CentralizedDocumentRepository() {
 
   // Simular busca OCR
   const handleOCRSearch = async () => {
+    if (!searchTerm.trim()) {
+      toast.info("Digite um termo para buscar via OCR");
+      return;
+    }
     setIsSearching(true);
     toast.loading('Buscando com OCR em todos os documentos...', { id: 'ocr-search' });
     
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSearching(false);
-    toast.success(`Encontrado em ${filteredDocuments.length} documentos (${searchTime}ms)`, { id: 'ocr-search' });
+    try {
+      // Search in ai_documents OCR text
+      const { data } = await supabase
+        .from("ai_documents")
+        .select("id, file_name, ocr_text")
+        .ilike("ocr_text", `%${searchTerm}%`)
+        .limit(20);
+      
+      const ocrCount = data?.length || 0;
+      const totalResults = filteredDocuments.length + ocrCount;
+      toast.success(`Encontrado em ${totalResults} documentos (${ocrCount} via OCR)`, { id: 'ocr-search' });
+    } catch {
+      toast.success(`Encontrado em ${filteredDocuments.length} documentos`, { id: 'ocr-search' });
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const getStatusBadge = (status: Document['status']) => {
