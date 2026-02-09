@@ -200,7 +200,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                 {["all", "unread", "critical"].map((filterType) => (
                   <button
                     key={filterType}
-                    onClick={() => setFilter(filterType as any)}
+                    onClick={() => setFilter(filterType as typeof filter)}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-medium transition-colors",
                       filter === filterType

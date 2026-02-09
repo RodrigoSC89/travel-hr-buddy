@@ -8,17 +8,7 @@ import { Camera, Upload, X, Loader2, Save, FileText, Mic, Image } from 'lucide-r
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
-
-interface SpeechRecognitionInstance {
-  start: () => void;
-  stop: () => void;
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  onresult: ((event: { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[] }) => void) | null;
-  onerror: ((event: Record<string, unknown>) => void) | null;
-  onend: (() => void) | null;
-}
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from '@/types/speech-recognition';
 
 interface PhotoCaptureModalProps {
   isOpen: boolean;
@@ -322,15 +312,14 @@ export const ObservationModal: React.FC<ObservationModalProps> = ({
 
   // Initialize speech recognition
   useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const win = window as unknown as Record<string, unknown>;
-      const SpeechRecognitionClass = (win.SpeechRecognition || win.webkitSpeechRecognition) as { new(): SpeechRecognitionInstance };
+    const SpeechRecognitionClass = getSpeechRecognitionAPI();
+    if (SpeechRecognitionClass) {
       recognitionRef.current = new SpeechRecognitionClass();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[] }) => {
+      recognitionRef.current.onresult = (event) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {

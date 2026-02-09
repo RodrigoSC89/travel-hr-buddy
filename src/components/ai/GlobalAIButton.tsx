@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { getSpeechRecognitionAPI, type SpeechRecognitionInstance } from '@/types/speech-recognition';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -68,13 +69,11 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
   const [chatOpen, setChatOpen] = useState(false);
   const [quickInput, setQuickInput] = useState('');
   const [isListening, setIsListening] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   // Voice recognition handler
   const handleVoiceInput = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     
     if (!SpeechRecognitionAPI) {
       toast.error("Reconhecimento de voz não suportado neste navegador");
@@ -97,15 +96,13 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
       toast.info("🎤 Ouvindo... Fale sua pergunta");
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onresult = (event: any) => {
+    recognitionRef.current.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
       setQuickInput(transcript);
       toast.success(`Capturado: "${transcript}"`);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onerror = (event: any) => {
+    recognitionRef.current.onerror = (event) => {
       logger.error('Speech recognition error:', event.error);
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");

@@ -293,9 +293,9 @@ export function VoyageSimulatorPanel() {
     staleTime: 60000,
   });
 
-  const updateScenario = (index: number, field: keyof VoyageScenario, value: any) => {
+  const updateScenario = (index: number, field: keyof VoyageScenario, value: string | number | boolean) => {
     const updated = [...scenarios];
-    (updated[index] as any)[field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setScenarios(updated);
   };
 
