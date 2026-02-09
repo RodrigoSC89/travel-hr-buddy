@@ -17,7 +17,7 @@ export interface AuditEntry {
   details: string;
   severity: "info" | "warning" | "critical";
   ipAddress: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AIInsight {
@@ -60,18 +60,21 @@ export function useAuditTrailRealData() {
 
       if (error) throw error;
 
-      return (data || []).map(log => ({
-        id: log.id,
-        timestamp: new Date(log.timestamp),
-        userId: log.user_id || "system",
-        userName: (log.details as any)?.user_name || "Sistema",
-        action: log.action || "VIEW",
-        module: log.module_accessed || "Sistema",
-        details: (log.details as any)?.description || `${log.action} em ${log.module_accessed}`,
-        severity: mapSeverity(log.severity),
-        ipAddress: String(log.ip_address || "0.0.0.0"),
-        metadata: log.details as Record<string, any>,
-      }));
+      return (data || []).map(log => {
+        const details = log.details as Record<string, unknown> | null;
+        return {
+          id: log.id,
+          timestamp: new Date(log.timestamp),
+          userId: log.user_id || "system",
+          userName: (details?.user_name as string) || "Sistema",
+          action: log.action || "VIEW",
+          module: log.module_accessed || "Sistema",
+          details: (details?.description as string) || `${log.action} em ${log.module_accessed}`,
+          severity: mapSeverity(log.severity),
+          ipAddress: String(log.ip_address || "0.0.0.0"),
+          metadata: details as Record<string, unknown> | undefined,
+        };
+      });
     },
     staleTime: 10000,
     refetchInterval: 30000,
@@ -95,7 +98,7 @@ export function useAuditTrailRealData() {
         title: anomaly.description || "Anomalia detectada",
         description: anomaly.recommendation || "Análise de padrão de acesso",
         confidence: Math.round((anomaly.confidence || 0.8) * 100),
-        affectedEntries: (anomaly.evidence as any)?.affected_count || 1,
+        affectedEntries: (anomaly.evidence as Record<string, unknown> | null)?.affected_count as number || 1,
         timestamp: new Date(anomaly.created_at),
       }));
     },
@@ -110,11 +113,12 @@ export function useAuditTrailRealData() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "access_logs" },
         (payload) => {
+          const realtimeDetails = payload.new.details as Record<string, unknown> | null;
           const newEntry: AuditEntry = {
             id: payload.new.id,
             timestamp: new Date(payload.new.timestamp),
             userId: payload.new.user_id || "system",
-            userName: (payload.new.details as any)?.user_name || "Sistema",
+            userName: (realtimeDetails?.user_name as string) || "Sistema",
             action: payload.new.action || "VIEW",
             module: payload.new.module_accessed || "Sistema",
             details: `${payload.new.action} - ${payload.new.result}`,

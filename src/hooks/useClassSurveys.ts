@@ -67,7 +67,8 @@ export function useClassSurveys() {
           .select('id, name, imo_number')
           .in('id', vesselIds);
 
-        (vessels || []).forEach((v: any) => {
+        type VesselRow = { id: string; name: string; imo_number?: string };
+        (vessels as VesselRow[] || []).forEach((v) => {
           vesselMap[v.id] = { name: v.name, imo: v.imo_number || '' };
         });
       }
@@ -82,18 +83,21 @@ export function useClassSurveys() {
           .select('id, name')
           .in('id', csIds);
 
-        (societies || []).forEach((cs: any) => {
+        type CSRow = { id: string; name: string };
+        (societies as CSRow[] || []).forEach((cs) => {
           csMap[cs.id] = cs.name;
         });
       }
 
       const now = new Date();
 
-      return surveys.map((s: any) => {
-        const vessel = vesselMap[s.vessel_id] || { name: 'Embarcação', imo: '' };
-        const csName = csMap[s.classification_society_id] || 'DNV';
+      type SurveyRow = Record<string, unknown>;
+      return (surveys as SurveyRow[]).map((s) => {
+        const vessel = vesselMap[String(s.vessel_id)] || { name: 'Embarcação', imo: '' };
+        const csName = csMap[String(s.classification_society_id)] || 'DNV';
         const findings = Array.isArray(s.findings) ? s.findings : [];
-        const criticalFindings = findings.filter((f: any) => f?.severity === 'critical' || f?.priority === 'critical').length;
+        type FindingItem = Record<string, unknown>;
+        const criticalFindings = (findings as FindingItem[]).filter((f) => f?.severity === 'critical' || f?.priority === 'critical').length;
 
         // Determine status
         let status: ClassSurvey['status'] = 'Scheduled';
@@ -103,28 +107,28 @@ export function useClassSurveys() {
           status = 'In Progress';
         } else if (s.status === 'pending') {
           status = 'Pending';
-        } else if (s.due_date && new Date(s.due_date) < now && !s.completed_date) {
+        } else if (s.due_date && new Date(String(s.due_date)) < now && !s.completed_date) {
           status = 'Overdue';
         }
 
         return {
-          id: s.id,
-          vessel_id: s.vessel_id,
+          id: String(s.id),
+          vessel_id: String(s.vessel_id),
           vessel_name: vessel.name,
           vessel_imo: vessel.imo,
           survey_type: (s.survey_type as ClassSurvey['survey_type']) || 'Annual',
           classification_society: mapCSName(csName),
           status,
-          scheduled_date: s.due_date || s.window_start || s.created_at,
-          completed_date: s.completed_date || undefined,
+          scheduled_date: String(s.due_date || s.window_start || s.created_at),
+          completed_date: s.completed_date ? String(s.completed_date) : undefined,
           findings_count: findings.length,
           critical_findings: criticalFindings,
-          inspector: s.surveyor_name || undefined,
-          location: s.survey_location || undefined,
-          certificates: s.certificates_issued || [],
-          next_due_date: s.window_end || undefined,
-          created_at: s.created_at,
-          updated_at: s.updated_at,
+          inspector: s.surveyor_name ? String(s.surveyor_name) : undefined,
+          location: s.survey_location ? String(s.survey_location) : undefined,
+          certificates: (s.certificates_issued as string[]) || [],
+          next_due_date: s.window_end ? String(s.window_end) : undefined,
+          created_at: String(s.created_at),
+          updated_at: String(s.updated_at),
         };
       });
     },
@@ -158,8 +162,7 @@ export function useCreateClassSurvey() {
 
   return useMutation({
     mutationFn: async (input: CreateSurveyInput) => {
-      const { data, error } = await supabase
-        .from('class_surveys')
+      const { data, error } = await (supabase.from as Function)('class_surveys')
         .insert({
           vessel_id: input.vessel_id,
           survey_type: input.survey_type,
@@ -168,7 +171,7 @@ export function useCreateClassSurvey() {
           certificates_issued: input.certificates || [],
           status: 'scheduled',
           survey_name: `${input.survey_type} Survey`,
-        } as any)
+        })
         .select()
         .single();
 
@@ -208,9 +211,8 @@ export function useUpdateSurveyStatus() {
         updates.completed_date = new Date().toISOString().split('T')[0];
       }
 
-      const { error } = await supabase
-        .from('class_surveys')
-        .update(updates as any)
+      const { error } = await (supabase.from as Function)('class_surveys')
+        .update(updates)
         .eq('id', surveyId);
 
       if (error) throw error;

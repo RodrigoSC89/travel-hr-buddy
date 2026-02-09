@@ -11,7 +11,7 @@ export interface ScenarioPreset {
   name: string;
   description: string;
   category: "maintenance" | "compliance" | "crew" | "weather" | "emergency";
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   lastUsed?: Date;
   usageCount: number;
 }
@@ -95,15 +95,18 @@ export function useScenarioSimulatorData() {
         ];
       }
 
-      return data.map(preset => ({
-        id: preset.id,
-        name: (preset.content as any)?.name || "Cenário",
-        description: (preset.content as any)?.description || "",
-        category: (preset.content as any)?.category || "maintenance",
-        parameters: (preset.content as any)?.parameters || {},
-        lastUsed: preset.updated_at ? new Date(preset.updated_at) : undefined,
-        usageCount: (preset.content as any)?.usage_count || 0,
-      }));
+      return data.map(preset => {
+        const content = preset.content as Record<string, unknown> | null;
+        return {
+          id: preset.id,
+          name: (content?.name as string) || "Cenário",
+          description: (content?.description as string) || "",
+          category: (content?.category as ScenarioPreset["category"]) || "maintenance",
+          parameters: (content?.parameters as Record<string, unknown>) || {},
+          lastUsed: preset.updated_at ? new Date(preset.updated_at) : undefined,
+          usageCount: (content?.usage_count as number) || 0,
+        };
+      });
     },
     staleTime: 60000,
   });
@@ -121,31 +124,35 @@ export function useScenarioSimulatorData() {
 
       if (error) throw error;
 
-      return (data || []).map(decision => ({
-        id: decision.id,
-        scenarioId: (decision.action_payload as any)?.scenario_id || "unknown",
-        scenarioName: decision.title,
-        status: decision.status === "executed" ? "completed" : decision.status === "pending" ? "running" : "failed",
-        startedAt: new Date(decision.created_at),
-        completedAt: decision.executed_at ? new Date(decision.executed_at) : undefined,
-        results: {
-          riskScore: decision.confidence * 100,
-          recommendations: (decision.justification_risks as any[]) || [],
-          impacts: [],
-          estimatedCost: (decision.action_payload as any)?.estimated_cost,
-          timeToResolve: (decision.action_payload as any)?.time_to_resolve,
-        },
-      }));
+      return (data || []).map(decision => {
+        const actionPayload = decision.action_payload as Record<string, unknown> | null;
+        const justificationRisks = decision.justification_risks as string[] | null;
+        return {
+          id: decision.id,
+          scenarioId: (actionPayload?.scenario_id as string) || "unknown",
+          scenarioName: decision.title,
+          status: decision.status === "executed" ? "completed" as const : decision.status === "pending" ? "running" as const : "failed" as const,
+          startedAt: new Date(decision.created_at),
+          completedAt: decision.executed_at ? new Date(decision.executed_at) : undefined,
+          results: {
+            riskScore: decision.confidence * 100,
+            recommendations: justificationRisks || [],
+            impacts: [],
+            estimatedCost: actionPayload?.estimated_cost as number | undefined,
+            timeToResolve: actionPayload?.time_to_resolve as number | undefined,
+          },
+        };
+      });
     },
     staleTime: 30000,
   });
 
   // Run simulation mutation
   const runSimulation = useMutation({
-    mutationFn: async (params: { presetId: string; parameters: Record<string, any> }) => {
+    mutationFn: async (params: { presetId: string; parameters: Record<string, unknown> }) => {
       const preset = presets.find(p => p.id === params.presetId);
       
-      const { error } = await supabase.from("ai_decisions").insert({
+      const { error } = await (supabase.from as Function)("ai_decisions").insert({
         type: "simulation",
         title: preset?.name || "Simulação",
         description: preset?.description || "Simulação de cenário",
