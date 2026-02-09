@@ -4,6 +4,17 @@
  * Focus on critical elements 4 (Execução Operacional) and 6 (Gestão de Risco)
  */
 
+interface SpeechRecognitionInstance {
+  start: () => void;
+  stop: () => void;
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null;
+  onerror: ((event: Record<string, unknown>) => void) | null;
+  onend: (() => void) | null;
+}
+
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -70,21 +81,22 @@ export function PeotramVoiceChat() {
   const [transcript, setTranscript] = useState("");
   const [useElevenLabs, setUseElevenLabs] = useState(true); // ElevenLabs por padrão
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
+      const win = window as unknown as Record<string, unknown>;
+      const SpeechRecognitionCtor = (win.webkitSpeechRecognition || win.SpeechRecognition) as { new(): SpeechRecognitionInstance };
+      recognitionRef.current = new SpeechRecognitionCtor();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => {
         const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
+          .map((result) => result[0].transcript)
           .join('');
         setTranscript(transcript);
       };
@@ -96,7 +108,7 @@ export function PeotramVoiceChat() {
         }
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (event: Record<string, unknown>) => {
         logger.error('Speech recognition error:', event.error);
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");

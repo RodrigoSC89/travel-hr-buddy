@@ -482,7 +482,7 @@ export const SGSOAuditTrail: React.FC = () => {
       </Card>
 
       {/* Category Tabs */}
-      <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as any)}>
+      <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as typeof activeCategory)}>
         <TabsList className="grid grid-cols-3 w-full">
           <TabsTrigger value="leadership" className="gap-2">
             <Shield className="h-4 w-4" />
@@ -578,7 +578,7 @@ export const SGSOAuditTrail: React.FC = () => {
                                 <label className="text-sm font-medium mb-2 block">Conformidade:</label>
                                 <Select
                                   value={checklistResponses[item.id]?.conformity || ''}
-                                  onValueChange={(v) => handleConformityChange(item.id, v as any)}
+                                  onValueChange={(v) => handleConformityChange(item.id, v as "sim" | "parcial" | "nao" | "na")}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Selecione..." />

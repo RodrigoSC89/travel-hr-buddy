@@ -95,7 +95,7 @@ export const ChatInterface = () => {
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
         };
-        setCurrentUser(userProfile as any);
+        setCurrentUser(userProfile as unknown as typeof currentUser);
         await loadConversations();
         await loadAllUsers();
       }
@@ -164,8 +164,8 @@ export const ChatInterface = () => {
       if (error) throw error;
 
       const conversationsWithDetails = await Promise.all(
-        (data || []).map(async (conv: any) => {
-          const typedConv = conv as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: any }> };
+        (data || []).map(async (conv) => {
+          const typedConv = conv as unknown as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: Record<string, unknown> }> };
           // Carregar última mensagem
           const { data: lastMessage } = await supabase
             .from("messages")
@@ -179,7 +179,7 @@ export const ChatInterface = () => {
                 email
               )
             `)
-            .eq("conversation_id", conv.id)
+            .eq("conversation_id", typedConv.id)
             .order("created_at", { ascending: false })
             .limit(1)
             .single();
@@ -198,21 +198,21 @@ export const ChatInterface = () => {
             )`);
 
           return {
-            ...conv,
-            participants: conv.conversation_participants.map((p: { user_id: string; profiles: UserProfile }) => ({
+            ...typedConv,
+            participants: typedConv.conversation_participants.map((p: { user_id: string; profiles: Record<string, unknown> }) => ({
               user_id: p.user_id,
               user: p.profiles
             })),
             last_message: lastMessage ? {
               ...lastMessage,
-              sender: lastMessage.profiles
+              sender: (lastMessage as unknown as { profiles?: Record<string, unknown> }).profiles
             } : undefined,
             unread_count: count || 0
           };
         })
       );
 
-      setConversations(conversationsWithDetails);
+      setConversations(conversationsWithDetails as unknown as typeof conversations);
     } catch (error) {
       toast({
         title: "Erro",
@@ -243,19 +243,22 @@ export const ChatInterface = () => {
 
       if (error) throw error;
 
-      const messagesWithSender = (data || []).map((msg: any) => ({
-        id: msg.id,
-        content: msg.content,
-        sender_id: msg.sender_id,
-        created_at: msg.created_at,
-        is_read: msg.is_read,
-        sender: msg.profiles ? {
-          full_name: msg.profiles.full_name || msg.profiles.email?.split("@")[0] || "User",
-          email: msg.profiles.email || ""
-        } : undefined
-      }));
+      const messagesWithSender = (data || []).map((msg) => {
+        const typedMsg = msg as unknown as { id: string; content: string; sender_id: string; created_at: string; is_read?: boolean; profiles?: { full_name?: string; email?: string } };
+        return {
+          id: typedMsg.id,
+          content: typedMsg.content,
+          sender_id: typedMsg.sender_id,
+          created_at: typedMsg.created_at,
+          is_read: typedMsg.is_read,
+          sender: typedMsg.profiles ? {
+            full_name: typedMsg.profiles.full_name || typedMsg.profiles.email?.split("@")[0] || "User",
+            email: typedMsg.profiles.email || ""
+          } : undefined
+        };
+      });
 
-      setMessages(messagesWithSender as any);
+      setMessages(messagesWithSender as unknown as typeof messages);
 
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
@@ -275,7 +278,7 @@ export const ChatInterface = () => {
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
         };
-        setCurrentUser(userProfile as any);
+        setCurrentUser(userProfile as unknown as typeof currentUser);
         await loadConversations();
         await loadAllUsers();
       }
@@ -352,7 +355,7 @@ export const ChatInterface = () => {
             .single();
 
           if (newMessage) {
-            const profiles = (newMessage as any).profiles;
+            const profiles = (newMessage as unknown as { profiles?: { full_name?: string; email?: string } }).profiles;
             const messageWithSender = {
               id: newMessage.id,
               content: newMessage.content,
@@ -363,7 +366,7 @@ export const ChatInterface = () => {
                 email: profiles.email || ""
               } : undefined
             };
-            setMessages(prev => [...prev, messageWithSender as any]);
+            setMessages(prev => [...prev, messageWithSender as unknown as (typeof prev)[number]]);
           }
         }
       )
@@ -384,7 +387,7 @@ export const ChatInterface = () => {
           sender_id: currentUser.id,
           content: newMessage.trim(),
           conversation_id: selectedConversation
-        } as any);
+        } as never);
 
       if (error) throw error;
 
@@ -446,8 +449,8 @@ export const ChatInterface = () => {
       const { error: participantsError } = await supabase
         .from("conversation_participants")
         .insert([
-          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as any,
-          { conversation_id: newConv.id, user_id: userId } as any
+          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as never,
+          { conversation_id: newConv.id, user_id: userId } as never
         ]);
 
       if (participantsError) throw participantsError;
