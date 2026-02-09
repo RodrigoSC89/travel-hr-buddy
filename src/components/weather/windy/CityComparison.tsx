@@ -161,8 +161,8 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
   const handleRefresh = async () => {
     setIsRefreshing(true);
     setCityData(new Map());
-    // Force re-fetch by clearing data
-    setTimeout(() => setIsRefreshing(false), 1000);
+    // Data will re-fetch via useEffect when cityData is cleared
+    setIsRefreshing(false);
   };
 
   return (

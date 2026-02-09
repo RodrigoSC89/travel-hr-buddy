@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, Ship, Activity, AlertTriangle, CheckCircle,
   TrendingUp, Clock, Calendar, Users, Wrench, Shield, DollarSign,
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function CentralComandoPremium() {
+  const navigate = useNavigate();
   const [vessels, setVessels] = useState<any[]>([]);
   const [crew, setCrew] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -318,7 +320,7 @@ export default function CentralComandoPremium() {
                   key={link.name} 
                   variant="outline" 
                   className="h-20 flex-col gap-2"
-                  onClick={() => window.location.href = link.href}
+                  onClick={() => navigate(link.href)}
                 >
                   <link.icon className="h-6 w-6" />
                   <span>{link.name}</span>

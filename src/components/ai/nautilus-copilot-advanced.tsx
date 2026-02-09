@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,6 +57,7 @@ interface CopilotCapability {
 }
 
 const NautilusCopilotAdvanced: React.FC = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -276,7 +278,7 @@ What would you like assistance with today?`,
       title: "🔧 Agendar Manutenção",
       description: "Abrindo sistema de agendamento de manutenção preventiva"
     });
-    window.location.href = "/maintenance-planner";
+    navigate("/maintenance-planner");
   };
 
   const handleGenerateReport = () => {
@@ -284,7 +286,7 @@ What would you like assistance with today?`,
       title: "📄 Gerar Relatório",
       description: "Iniciando geração de relatório operacional"
     });
-    window.location.href = "/admin/reports";
+    navigate("/admin/reports");
   };
 
   const handleCrewPlanning = () => {
@@ -292,7 +294,7 @@ What would you like assistance with today?`,
       title: "👥 Planejamento de Tripulação",
       description: "Abrindo ferramenta de planejamento e escalas de tripulação"
     });
-    window.location.href = "/crew";
+    navigate("/crew");
   };
 
   return (

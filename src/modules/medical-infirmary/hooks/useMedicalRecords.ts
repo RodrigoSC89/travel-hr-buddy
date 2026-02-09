@@ -1,11 +1,12 @@
 /**
- * Hook for Medical Records - uses existing useMedicalData with enhancements
+ * Hook for Medical Records - uses Supabase for persistence
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { MedicalRecord } from '../types';
 import { useMedicalRecords as useBaseMedicalRecords } from './useMedicalData';
+import { supabase } from '@/integrations/supabase/client';
 
 export function useMedicalRecordsDB() {
   const queryClient = useQueryClient();
@@ -13,11 +14,18 @@ export function useMedicalRecordsDB() {
 
   const createRecord = useMutation({
     mutationFn: async (record: Omit<MedicalRecord, 'id'>) => {
-      // Store locally for now - full DB integration pending table schema update
-      const newRecord = { ...record, id: crypto.randomUUID() };
-      const existing = JSON.parse(localStorage.getItem('medical_records') || '[]');
-      localStorage.setItem('medical_records', JSON.stringify([...existing, newRecord]));
-      return newRecord;
+      const { data, error } = await supabase
+        .from('medical_records')
+        .insert({
+          crew_member_id: record.crewMemberId,
+          crew_member_name: record.crewMemberName,
+          notes: record.notes || '',
+          status: record.status || 'monitoring',
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medical-records'] });
@@ -28,10 +36,19 @@ export function useMedicalRecordsDB() {
 
   const updateRecord = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<MedicalRecord> & { id: string }) => {
-      const existing = JSON.parse(localStorage.getItem('medical_records') || '[]');
-      const updated = existing.map((r: MedicalRecord) => r.id === id ? { ...r, ...updates } : r);
-      localStorage.setItem('medical_records', JSON.stringify(updated));
-      return { id, ...updates };
+      const updateData: Record<string, unknown> = {};
+      if (updates.notes !== undefined) updateData.notes = updates.notes;
+      if (updates.status !== undefined) updateData.status = updates.status;
+      if (updates.crewMemberName !== undefined) updateData.crew_member_name = updates.crewMemberName;
+      
+      const { data, error } = await supabase
+        .from('medical_records')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medical-records'] });

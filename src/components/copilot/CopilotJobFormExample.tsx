@@ -133,12 +133,12 @@ export default function CopilotJobFormExample() {
               <code>{`import JobFormWithExamples from '@/components/copilot/JobFormWithExamples';
 
 function MyMaintenancePage() {
-  const handleJobSubmit = (data) => {
-    // Integrate with your API
-    fetch('/api/jobs', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  const handleJobSubmit = async (data) => {
+    // Integrate with Supabase
+    const { error } = await supabase
+      .from('maintenance_tasks')
+      .insert(data);
+    if (error) console.error(error);
   };
 
   return (

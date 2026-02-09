@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,7 @@ interface CrewMember {
 }
 
 export const MaritimeHRDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const { toast } = useToast();
@@ -144,7 +146,7 @@ export const MaritimeHRDashboard: React.FC = () => {
   };
 
   const handlePlanRotation = () => {
-    window.location.href = "/crew/rotations";
+    navigate("/crew/rotations");
   };
 
   if (isLoading) {
