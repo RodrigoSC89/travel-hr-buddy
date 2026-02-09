@@ -122,7 +122,7 @@ const EnhancedWasteManagement = lazy(() => import("@/pages/WasteManagementPremiu
 const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
 const SystemHubAprimorado = lazy(() => import("@/pages/SystemHubAprimorado"));
 const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
-const WasteManagementEnhanced = lazy(() => import("@/pages/WasteManagementEnhanced"));
+// WasteManagementEnhanced removed — consolidated into WasteManagementPremium
 const SatcomDashboardEnhanced = lazy(() => import("@/pages/SatcomDashboardEnhanced"));
 
 // ============================================
@@ -315,7 +315,7 @@ const STCWMLCCompliance = lazy(() => import("@/pages/STCWMLCCompliance"));
 // ============================================
 const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
 const ESGEmissionsPage = lazy(() => import("@/pages/ESGEmissionsPremium"));
-const WasteManagementPage = lazy(() => import("@/pages/WasteManagementPage"));
+// WasteManagementPage removed — consolidated into WasteManagementPremium
 
 // ============================================
 // SOLAS/ISPS/ISM TRAINING (dedicated page)
