@@ -29,10 +29,10 @@ interface ComplianceAudit {
   audit_type: string;
   auditor_name: string;
   audit_date: string;
-  findings: any[];
+  findings: Record<string, unknown>[];
   overall_score: number;
   status: 'scheduled' | 'in_progress' | 'completed';
-  corrective_actions: any[];
+  corrective_actions: Record<string, unknown>[];
 }
 
 interface RegulatoryUpdate {
@@ -43,7 +43,7 @@ interface RegulatoryUpdate {
   effective_date: string;
   impact_level: 'low' | 'medium' | 'high' | 'critical';
   source_url: string;
-  ai_impact_analysis: any;
+  ai_impact_analysis: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -53,7 +53,7 @@ interface PSCInspection {
   port_code: string;
   inspection_date: string;
   inspector_name: string;
-  deficiencies: any[];
+  deficiencies: Record<string, unknown>[];
   detention: boolean;
   status: 'scheduled' | 'completed' | 'closed';
 }
@@ -261,7 +261,7 @@ export function useComplianceDashboardStats() {
 // ============================================
 export function useComplianceAI() {
   return useMutation({
-    mutationFn: async (query: { question: string; context?: any }) => {
+    mutationFn: async (query: { question: string; context?: Record<string, unknown> }) => {
       const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: { 
           action: 'ask_compliance',

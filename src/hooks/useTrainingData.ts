@@ -75,11 +75,11 @@ export function useTrainingData(userId?: string) {
         is_published: course.is_published || false,
         passing_score: course.passing_score || 70,
         modules: Array.isArray(course.modules) 
-          ? (course.modules as any[]).map((m: any, idx: number) => ({
-              id: m.id || `module-${idx}`,
-              title: m.title || `Módulo ${idx + 1}`,
-              description: m.description || "",
-              duration_minutes: m.duration || 60,
+          ? (course.modules as Record<string, unknown>[]).map((m, idx) => ({
+              id: (m.id as string) || `module-${idx}`,
+              title: (m.title as string) || `Módulo ${idx + 1}`,
+              description: (m.description as string) || "",
+              duration_minutes: (m.duration as number) || 60,
               order: idx + 1,
             }))
           : [],
@@ -114,12 +114,12 @@ export function useTrainingData(userId?: string) {
         id: progress.id,
         userId: progress.user_id || "",
         courseId: progress.course_id || "",
-        courseName: (progress.academy_courses as any)?.course_name || "Curso",
+        courseName: (progress.academy_courses as Record<string, unknown> | null)?.course_name as string || "Curso",
         progress: progress.progress_percent || 0,
         status: mapProgressStatus(progress.status),
         startedAt: progress.started_at ? new Date(progress.started_at) : null,
         completedAt: progress.completed_at ? new Date(progress.completed_at) : null,
-        score: (progress.assessment_scores as any)?.final_score || null,
+        score: (progress.assessment_scores as Record<string, unknown> | null)?.final_score as number | null || null,
         certificateIssued: progress.certificate_issued || false,
       }));
     },
@@ -184,7 +184,7 @@ export function useTrainingData(userId?: string) {
       progress: number;
       moduleId?: number;
     }) => {
-      const updates: Record<string, any> = {
+      const updates: Record<string, unknown> = {
         progress_percent: progress,
         updated_at: new Date().toISOString(),
       };
