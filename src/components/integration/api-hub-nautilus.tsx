@@ -293,8 +293,8 @@ export const APIHubNautilus: React.FC = () => {
 
   const handleDownloadExamples = (endpointName: string) => {
     const examples = {
-      "Get Vessel Position": `// Exemplo: ${endpointName}\nconst response = await fetch('/api/v1/vessels/{id}/position');\nconst data = await response.json();`,
-      "Get Weather Forecast": `// Exemplo: ${endpointName}\nconst response = await fetch('/api/v1/weather/forecast?lat=-23.5&lon=-46.6');\nconst data = await response.json();`,
+      "Get Vessel Position": `// Exemplo: ${endpointName}\nimport { supabase } from '@/integrations/supabase/client';\nconst { data } = await supabase.from('vessels').select('*').eq('id', vesselId);`,
+      "Get Weather Forecast": `// Exemplo: ${endpointName}\nimport { supabase } from '@/integrations/supabase/client';\nconst { data } = await supabase.functions.invoke('weather-forecast', { body: { lat: -23.5, lon: -46.6 } });`,
     };
     const content = examples[endpointName as keyof typeof examples] || `// Exemplo de uso da API: ${endpointName}`;
     const blob = new Blob([content], { type: "text/plain" });
@@ -331,13 +331,22 @@ export const APIHubNautilus: React.FC = () => {
       title: "🧪 Testando Integração",
       description: `Verificando conexão com ${integrationName}...`
     });
-    // Simula teste de conexão
-    setTimeout(() => {
+    try {
+      // Real connectivity check via Supabase ping
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('ai_configurations').select('id').limit(1);
+      if (error) throw error;
       toast({
         title: "✅ Conexão OK",
-        description: `${integrationName} está funcionando corretamente`
+        description: `${integrationName} — conectividade de banco verificada com sucesso`
       });
-    }, 1500);
+    } catch {
+      toast({
+        title: "⚠️ Erro de Conexão",
+        description: `Não foi possível verificar ${integrationName}. Verifique as credenciais.`,
+        variant: "destructive"
+      });
+    }
   };
 
   const handleDownloadSDK = (sdkName: string) => {

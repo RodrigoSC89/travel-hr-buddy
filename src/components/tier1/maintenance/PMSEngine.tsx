@@ -310,9 +310,13 @@ export function PMSEngine() {
               <CardDescription>Visual calendar view of scheduled maintenance</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                Interactive maintenance calendar coming soon...
-              </p>
+              <div className="text-center py-8">
+                <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground font-medium">Calendário de Manutenção</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Funcionalidade em implantação — consulte a aba de tarefas acima para planejamento.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

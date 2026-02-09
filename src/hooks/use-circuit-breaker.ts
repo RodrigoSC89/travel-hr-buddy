@@ -7,7 +7,7 @@
  * @example
  * const { execute, metrics, isOpen } = useCircuitBreaker('gemini');
  * 
- * const result = await execute(() => fetch('/api/gemini'));
+ * const result = await execute(() => supabase.functions.invoke('ai-chat', { body: { prompt } }));
  */
 
 import { useState, useEffect, useCallback } from 'react';

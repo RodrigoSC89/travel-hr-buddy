@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from '@/lib/logger';
 
 // Example 1: Basic usage with hardcoded trend data
@@ -23,7 +24,7 @@ export function BasicExample() {
   );
 }
 
-// Example 2: Integration with API data
+// Example 2: Integration with Supabase real data
 export function ApiExample() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
   const [loading, setLoading] = useState(true);
@@ -31,10 +32,31 @@ export function ApiExample() {
   useEffect(() => {
     async function fetchTrendData() {
       try {
-        // Replace with your actual API endpoint
-        const response = await fetch("/api/jobs/trend");
-        const data = await response.json();
-        setTrendData(data);
+        const { data, error } = await supabase
+          .from('action_items')
+          .select('created_at')
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        // Aggregate by month
+        const monthlyMap = new Map<string, number>();
+        (data || []).forEach(item => {
+          const month = item.created_at?.substring(0, 7) || '';
+          if (month) {
+            monthlyMap.set(month, (monthlyMap.get(month) || 0) + 1);
+          }
+        });
+
+        const trend = Array.from(monthlyMap.entries())
+          .map(([date, jobs]) => ({ date, jobs }))
+          .slice(-6);
+
+        setTrendData(trend.length > 0 ? trend : [
+          { date: "2025-08", jobs: 0 },
+          { date: "2025-09", jobs: 0 },
+          { date: "2025-10", jobs: 0 },
+        ]);
       } catch (error) {
         logger.error("Error fetching trend data:", error);
         setTrendData([]);
@@ -62,14 +84,21 @@ export function FullBIDashboard() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
 
   useEffect(() => {
-    // Simulate fetching trend data
-    const mockTrend = [
-      { date: "2025-07", jobs: 38 },
-      { date: "2025-08", jobs: 45 },
-      { date: "2025-09", jobs: 52 },
-      { date: "2025-10", jobs: 48 },
-    ];
-    setTrendData(mockTrend);
+    async function loadTrend() {
+      const { data } = await supabase
+        .from('action_items')
+        .select('created_at')
+        .order('created_at', { ascending: true });
+
+      const monthlyMap = new Map<string, number>();
+      (data || []).forEach(item => {
+        const month = item.created_at?.substring(0, 7) || '';
+        if (month) monthlyMap.set(month, (monthlyMap.get(month) || 0) + 1);
+      });
+
+      setTrendData(Array.from(monthlyMap.entries()).map(([date, jobs]) => ({ date, jobs })).slice(-6));
+    }
+    void loadTrend();
   }, []);
 
   return (
@@ -80,10 +109,7 @@ export function FullBIDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Current jobs by component */}
             <DashboardJobs />
-            
-            {/* AI forecast for next 2 months */}
             <JobsForecastReport trend={trendData} />
           </div>
         </CardContent>
@@ -99,13 +125,18 @@ export function RefreshableExample() {
 
   useEffect(() => {
     async function loadTrend() {
-      // Simulate API call
-      const data = [
-        { date: "2025-08", jobs: 45 },
-        { date: "2025-09", jobs: 52 },
-        { date: "2025-10", jobs: 38 },
-      ];
-      setTrendData(data);
+      const { data } = await supabase
+        .from('action_items')
+        .select('created_at')
+        .order('created_at', { ascending: true });
+
+      const monthlyMap = new Map<string, number>();
+      (data || []).forEach(item => {
+        const month = item.created_at?.substring(0, 7) || '';
+        if (month) monthlyMap.set(month, (monthlyMap.get(month) || 0) + 1);
+      });
+
+      setTrendData(Array.from(monthlyMap.entries()).map(([date, jobs]) => ({ date, jobs })).slice(-6));
     }
     void loadTrend();
   }, [refreshKey]);
@@ -120,7 +151,7 @@ export function RefreshableExample() {
         <h1 className="text-2xl font-bold">Jobs Forecast</h1>
         <button
           onClick={handleRefresh}
-          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
         >
           🔄 Refresh Trend Data
         </button>
@@ -141,7 +172,6 @@ export function IntegrateInExistingPage() {
 
   return (
     <div className="space-y-6">
-      {/* Your existing page content */}
       <Card>
         <CardHeader>
           <CardTitle>Jobs Overview</CardTitle>
@@ -151,7 +181,6 @@ export function IntegrateInExistingPage() {
         </CardContent>
       </Card>
 
-      {/* Toggle forecast section */}
       <div className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -162,7 +191,6 @@ export function IntegrateInExistingPage() {
         <label htmlFor="show-forecast">Show AI Forecast</label>
       </div>
 
-      {/* Conditionally render forecast */}
       {showForecast && <JobsForecastReport trend={trendData} />}
     </div>
   );
@@ -174,24 +202,19 @@ export function RealtimeExample() {
 
   useEffect(() => {
     async function fetchFromSupabase() {
-      // Example: Fetch from your Supabase database
-      // const { data } = await supabase
-      //   .from('job_trends')
-      //   .select('*')
-      //   .order('date', { ascending: false })
-      //   .limit(6);
+      const { data } = await supabase
+        .from('action_items')
+        .select('created_at')
+        .order('created_at', { ascending: true })
+        .limit(500);
       
-      // For demonstration, using mock data
-      const mockData = [
-        { date: "2025-05", jobs: 38 },
-        { date: "2025-06", jobs: 42 },
-        { date: "2025-07", jobs: 45 },
-        { date: "2025-08", jobs: 51 },
-        { date: "2025-09", jobs: 48 },
-        { date: "2025-10", jobs: 55 },
-      ];
-      
-      setTrendData(mockData);
+      const monthlyMap = new Map<string, number>();
+      (data || []).forEach(item => {
+        const month = item.created_at?.substring(0, 7) || '';
+        if (month) monthlyMap.set(month, (monthlyMap.get(month) || 0) + 1);
+      });
+
+      setTrendData(Array.from(monthlyMap.entries()).map(([date, jobs]) => ({ date, jobs })).slice(-6));
     }
 
     void fetchFromSupabase();

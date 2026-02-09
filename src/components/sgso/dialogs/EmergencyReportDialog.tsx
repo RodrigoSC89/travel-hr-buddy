@@ -81,8 +81,39 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
   const handleExportPDF = async () => {
     setIsGenerating(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success("Relatório PDF gerado com sucesso!");
+      // Generate real text report for download
+      const content = [
+        `RELATÓRIO DE EMERGÊNCIAS E SIMULADOS`,
+        `==========================================`,
+        `Período: ${reportPeriod}`,
+        `Gerado em: ${new Date().toLocaleString('pt-BR')}`,
+        ``,
+        `RESUMO:`,
+        `- Planos Totais: ${REPORT_DATA.summary.totalPlans}`,
+        `- Planos Ativos: ${REPORT_DATA.summary.activePlans}`,
+        `- Conformidade: ${REPORT_DATA.summary.complianceRate}%`,
+        ``,
+        `SIMULADOS:`,
+        `- Realizados: ${REPORT_DATA.drills.completed}`,
+        `- Agendados: ${REPORT_DATA.drills.scheduled}`,
+        `- Tempo Médio: ${REPORT_DATA.drills.avgResponseTime}`,
+        `- Taxa de Sucesso: ${REPORT_DATA.drills.successRate}%`,
+        ``,
+        `POR TIPO:`,
+        ...REPORT_DATA.byType.map(t => `- ${t.type}: ${t.count} simulados (último: ${t.lastDrill})`),
+        ``,
+        `ÚLTIMOS SIMULADOS:`,
+        ...REPORT_DATA.recentDrills.map(d => `- ${d.date} | ${d.type} | ${d.result} | ${d.time}`),
+      ].join('\n');
+
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio-emergencias-${reportPeriod}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Relatório exportado com sucesso!");
     } catch (error) {
       toast.error("Erro ao gerar relatório");
     } finally {
