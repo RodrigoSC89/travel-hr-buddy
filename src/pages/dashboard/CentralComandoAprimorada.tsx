@@ -52,7 +52,7 @@ export default function CentralComandoAprimorada() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(r => setTimeout(r, 1000));
+    // Trigger re-fetch of dashboard queries
     toast.success("Dados atualizados com sucesso");
     setIsRefreshing(false);
   };

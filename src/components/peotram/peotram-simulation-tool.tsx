@@ -164,8 +164,7 @@ export const PeotramSimulationTool: React.FC = () => {
     setIsRunning(true);
     
     try {
-      // Simular processamento
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Calculate simulation results synchronously
       
       // Calcular resultados baseado nos parâmetros
       const results = calculateSimulationResults();

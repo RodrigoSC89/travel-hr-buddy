@@ -347,7 +347,7 @@ export function VRARScenarioManager() {
     if (!selectedScenario) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Update scenario in local state
       
       setScenarios((prev) =>
         prev.map((s) =>
@@ -384,7 +384,7 @@ export function VRARScenarioManager() {
   const handleDelete = async (scenario: Scenario) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Remove scenario from local state
       setScenarios((prev) => prev.filter((s) => s.id !== scenario.id));
       toast({
         title: "Cenário excluído",
@@ -400,7 +400,7 @@ export function VRARScenarioManager() {
   const handleDuplicate = async (scenario: Scenario) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      // Duplicate scenario
       
       const duplicated: Scenario = {
         ...scenario,
@@ -428,7 +428,7 @@ export function VRARScenarioManager() {
   const handleStatusChange = async (scenario: Scenario, newStatus: "published" | "archived" | "draft") => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Update status
       
       setScenarios((prev) =>
         prev.map((s) =>
@@ -453,7 +453,7 @@ export function VRARScenarioManager() {
     if (!selectedScenario) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Create session
       
       const newSession: TrainingSession = {
         id: `sess-${Date.now()}`,
@@ -519,10 +519,8 @@ export function VRARScenarioManager() {
     setExecutionState((prev) => ({ ...prev, isRunning: false }));
     setIsExecuteOpen(false);
     
-    // Open evaluation
-    setTimeout(() => {
-      setIsEvaluateOpen(true);
-    }, 500);
+    // Open evaluation immediately
+    setIsEvaluateOpen(true);
     
     toast({
       title: "Sessão concluída",
@@ -535,7 +533,7 @@ export function VRARScenarioManager() {
     if (!selectedSession) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Save evaluation
       
       setSessions((prev) =>
         prev.map((s) =>
