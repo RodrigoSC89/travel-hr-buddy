@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { SGSOHistoryTable, SGSOActionPlan } from "@/components/sgso/SGSOHistoryTable";
 import { ArrowLeft, RefreshCw, History, Shield, Info } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const SGSOHistoryPage: React.FC = () => {
   const { vesselId } = useParams<{ vesselId: string }>();
@@ -33,14 +34,40 @@ const SGSOHistoryPage: React.FC = () => {
         setLoading(true);
       }
 
-      const response = await fetch(`/api/sgso/history/${encodeURIComponent(vesselId)}`);
-      const result = await response.json();
+      const { data, error: dbError } = await supabase
+        .from("action_items")
+        .select("*")
+        .eq("vessel_id", vesselId)
+        .order("created_at", { ascending: false });
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Erro ao buscar histórico");
-      }
+      if (dbError) throw dbError;
 
-      setActionPlans(result.data || []);
+      const mapped: SGSOActionPlan[] = (data || []).map((item: any) => ({
+        id: item.id,
+        incident_id: item.source_reference_id || item.id,
+        vessel_id: vesselId!,
+        correction_action: item.description || null,
+        prevention_action: null,
+        recommendation_action: null,
+        status: (item.status === "completed" || item.status === "done") ? "resolvido" 
+              : item.status === "in_progress" ? "em_andamento" 
+              : "aberto",
+        approved_by: null,
+        approved_at: item.completion_date || null,
+        created_at: item.created_at || new Date().toISOString(),
+        updated_at: item.updated_at || new Date().toISOString(),
+        incident: {
+          id: item.source_reference_id || item.id,
+          title: item.title,
+          incident_date: item.created_at || new Date().toISOString(),
+          severity: item.priority || "medium",
+          sgso_category: item.source_module || null,
+          sgso_risk_level: null,
+          description: item.description || null,
+        },
+      }));
+
+      setActionPlans(mapped);
 
       if (showRefreshToast) {
         toast({

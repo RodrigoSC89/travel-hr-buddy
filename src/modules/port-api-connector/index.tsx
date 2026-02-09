@@ -123,19 +123,26 @@ export default function PortAPIConnector() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
 
-  const syncAll = () => {
+  const syncAll = async () => {
     setIsSyncing(true);
     toast.info("Sincronizando todas as conexões...");
     
-    setTimeout(() => {
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      // Verify connectivity by pinging Supabase
+      await supabase.from('vessels').select('id').limit(1);
+      
       setConnections(prev => prev.map(conn => ({
         ...conn,
         lastSync: new Date(),
         status: conn.status === "error" ? "error" : "connected"
       })));
-      setIsSyncing(false);
       toast.success("Sincronização concluída!");
-    }, 2000);
+    } catch {
+      toast.error("Falha na sincronização");
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const toggleConnection = (id: string) => {

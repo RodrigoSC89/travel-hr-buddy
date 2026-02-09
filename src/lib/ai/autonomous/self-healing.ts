@@ -193,15 +193,10 @@ export class SelfHealingSystem {
    * Check API health
    */
   private async checkAPIHealth(): Promise<HealthIssue | null> {
-    const start = Date.now();
-    
     try {
-      // Simple ping to check connectivity
-      const response = await fetch('/api/health', { 
-        method: 'GET',
-        signal: AbortSignal.timeout(5000),
-      }).catch(() => null);
-
+      const { supabase } = await import('@/integrations/supabase/client');
+      const start = Date.now();
+      const { error: pingError } = await supabase.from('vessels').select('id').limit(1);
       const latency = Date.now() - start;
       this.health.apiLatency = latency;
 
@@ -217,19 +212,19 @@ export class SelfHealingSystem {
         };
       }
 
-      if (response && !response.ok) {
+      if (pingError) {
         return {
           id: `api-error-${Date.now()}`,
           type: 'api-timeout',
           severity: 'high',
           module: 'api',
-          description: `API retornou status ${response.status}`,
+          description: `API retornou erro: ${pingError.message}`,
           detectedAt: new Date(),
           autoRepaired: false,
         };
       }
     } catch {
-      // Expected for non-existent endpoint
+      // Connectivity issue handled gracefully
     }
 
     return null;

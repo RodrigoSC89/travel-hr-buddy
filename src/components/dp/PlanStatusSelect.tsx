@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
 
 interface Incident {
   id: string;
@@ -27,19 +28,12 @@ export function PlanStatusSelect({ incident, onUpdate }: PlanStatusSelectProps) 
     setLoading(true);
 
     try {
-      const response = await fetch("/api/dp-incidents/update-status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: incident.id, status: newStatus }),
-      });
+      const { error } = await supabase
+        .from("incident_reports")
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq("id", incident.id);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao atualizar status");
-      }
+      if (error) throw error;
 
       toast.success("Status atualizado com sucesso!");
       

@@ -204,29 +204,21 @@ export async function executeWithFallback(
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         try {
-          // This is a placeholder - actual implementation would be in edge function
-          // In browser context, we call the edge function
-          const response = await fetch('/api/ai-gateway', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+          // Call Supabase Edge Function for AI gateway
+          const { data: responseData, error: fnError } = await (await import('@/integrations/supabase/client')).supabase.functions.invoke('ai-chat', {
+            body: {
               provider: provider.name,
               model: options.preferredModel || provider.model,
               messages: request.messages,
               maxTokens: request.maxTokens,
               temperature: request.temperature
-            }),
-            signal: controller.signal
+            }
           });
 
+          if (fnError) throw new Error(`${provider.name} error: ${fnError.message}`);
+          const data = responseData;
+
           clearTimeout(timeoutId);
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`${provider.name} error: ${response.status} - ${errorText}`);
-          }
-
-          const data = await response.json();
           
           return {
             content: data.content || data.choices?.[0]?.message?.content || '',

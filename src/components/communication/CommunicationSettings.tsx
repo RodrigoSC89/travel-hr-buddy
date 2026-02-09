@@ -64,12 +64,22 @@ export const CommunicationSettings: React.FC = () => {
     );
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { error } = await supabase.from('ai_configurations').upsert({
+        config_key: 'communication_settings',
+        config_value: { preferences, globalSettings } as any,
+        description: 'Communication notification preferences',
+      }, { onConflict: 'config_key' });
+      if (error) throw error;
       toast.success("Configurações salvas!", { description: "Suas preferências foram atualizadas" });
-    }, 1000);
+    } catch {
+      toast.error("Erro ao salvar configurações");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const resetToDefaults = () => {

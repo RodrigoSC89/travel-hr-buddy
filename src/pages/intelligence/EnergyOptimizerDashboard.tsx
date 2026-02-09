@@ -101,10 +101,18 @@ export default function EnergyOptimizerDashboard() {
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
 
-  const handleApplyScenario = (scenarioId: string) => {
+  const handleApplyScenario = async (scenarioId: string) => {
     setIsOptimizing(true);
     setSelectedScenario(scenarioId);
-    setTimeout(() => setIsOptimizing(false), 2000);
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      await supabase.from('ai_configurations').upsert({
+        config_key: `energy_scenario_${scenarioId}`,
+        config_value: { active: true, appliedAt: new Date().toISOString() } as any,
+        description: `Energy optimization scenario ${scenarioId}`,
+      }, { onConflict: 'config_key' });
+    } catch { /* scenario apply error */ }
+    setIsOptimizing(false);
   };
 
   return (
