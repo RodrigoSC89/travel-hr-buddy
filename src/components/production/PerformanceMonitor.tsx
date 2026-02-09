@@ -46,7 +46,7 @@ export function PerformanceMonitor() {
 
     // Memory monitoring
     const memoryInterval = setInterval(() => {
-      const mem = (performance as any).memory;
+      const mem = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       if (mem) {
         setMetrics(prev => ({
           ...prev,
@@ -61,7 +61,7 @@ export function PerformanceMonitor() {
 
     // Connection monitoring
     const updateConnection = () => {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown as { connection?: { effectiveType: string; downlink: number; rtt: number; addEventListener: (e: string, cb: () => void) => void } }).connection;
       if (conn) {
         setMetrics(prev => ({
           ...prev,
@@ -75,13 +75,13 @@ export function PerformanceMonitor() {
     };
 
     updateConnection();
-    (navigator as any).connection?.addEventListener('change', updateConnection);
+    (navigator as unknown as { connection?: { addEventListener: (e: string, cb: () => void) => void } }).connection?.addEventListener('change', updateConnection);
 
     // Battery monitoring
     const initBattery = async () => {
       if ('getBattery' in navigator) {
         try {
-          const battery = await (navigator as any).getBattery();
+          const battery = await (navigator as unknown as { getBattery: () => Promise<{ level: number; charging: boolean; addEventListener: (e: string, cb: () => void) => void }> }).getBattery();
           const updateBattery = () => {
             setMetrics(prev => ({
               ...prev,

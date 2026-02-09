@@ -84,7 +84,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 
   // Check role requirements if specified
   if (requiredRoles.length > 0) {
-    const userRole = (user as any).user_metadata?.role || "user";
+    const userRole = (user as unknown as { user_metadata?: { role?: string } }).user_metadata?.role || "user";
     const hasRequiredRole = requiredRoles.includes(userRole);
 
     if (!hasRequiredRole) {
@@ -131,7 +131,7 @@ export const useAuthGuard = () => {
   
   const hasRole = (roles: string[]): boolean => {
     if (!user) return false;
-    const userRole = (user as any).user_metadata?.role || "user";
+    const userRole = (user as unknown as { user_metadata?: { role?: string } }).user_metadata?.role || "user";
     return roles.includes(userRole);
   };
 

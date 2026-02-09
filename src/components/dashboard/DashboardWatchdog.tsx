@@ -48,7 +48,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
   const checkFrozenUI = useCallback(() => {
     // Check if there are any pending animations or transitions
     const hasActiveAnimations = document.getAnimations().length > 0;
-    const lastInteraction = (window as any).__lastInteractionTime || Date.now();
+    const lastInteraction = (window as unknown as Record<string, unknown>).__lastInteractionTime as number || Date.now();
     const timeSinceInteraction = Date.now() - lastInteraction;
     
     // UI is frozen if no animations and no interactions for 30s
@@ -145,7 +145,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
       }, 2000);
       
       // Store timeout ID for cleanup if needed
-      (window as any).__watchdogTimeout = recheckTimeout;
+      (window as unknown as Record<string, unknown>).__watchdogTimeout = recheckTimeout;
 
     } catch (error) {
       logger.error("[Watchdog] Auto-heal error:", error);
@@ -177,7 +177,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
   useEffect(() => {
     // Track user interactions
     const updateInteractionTime = () => {
-      (window as any).__lastInteractionTime = Date.now();
+      (window as unknown as Record<string, unknown>).__lastInteractionTime = Date.now();
     };
 
     window.addEventListener("click", updateInteractionTime);
@@ -187,9 +187,10 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
     return () => {
       
       // Clear any pending timeouts
-      if ((window as any).__watchdogTimeout) {
-        clearTimeout((window as any).__watchdogTimeout);
-        delete (window as any).__watchdogTimeout;
+      const win = window as unknown as Record<string, unknown>;
+      if (win.__watchdogTimeout) {
+        clearTimeout(win.__watchdogTimeout as ReturnType<typeof setTimeout>);
+        delete win.__watchdogTimeout;
       }
       
       window.removeEventListener("click", updateInteractionTime);

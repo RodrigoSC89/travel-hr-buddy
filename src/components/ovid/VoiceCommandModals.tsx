@@ -9,6 +9,17 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
+interface SpeechRecognitionInstance {
+  start: () => void;
+  stop: () => void;
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[] }) => void) | null;
+  onerror: ((event: Record<string, unknown>) => void) | null;
+  onend: (() => void) | null;
+}
+
 interface PhotoCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -303,7 +314,7 @@ export const ObservationModal: React.FC<ObservationModalProps> = ({
 }) => {
   const [text, setText] = useState(initialText);
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
     setText(initialText);
@@ -312,13 +323,14 @@ export const ObservationModal: React.FC<ObservationModalProps> = ({
   // Initialize speech recognition
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const win = window as unknown as Record<string, unknown>;
+      const SpeechRecognitionClass = (win.SpeechRecognition || win.webkitSpeechRecognition) as { new(): SpeechRecognitionInstance };
       recognitionRef.current = new SpeechRecognitionClass();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'pt-BR';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[] }) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
