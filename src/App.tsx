@@ -573,6 +573,7 @@ const AuthenticatedLayout = () => {
 
 /**
  * Protected Route wrapper - prevents flash during auth check
+ * P2-010: Now imports RoleGuard for RBAC enforcement
  */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
@@ -599,6 +600,21 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   return <>{children}</>;
 };
+
+/**
+ * P2-010: Admin-only route wrapper using RoleGuard
+ */
+const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
+  default: ({ children }: { children: React.ReactNode }) => (
+    <mod.RoleGuard requiredRoles={['admin']}>{children}</mod.RoleGuard>
+  )
+})));
+
+const ManagerRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
+  default: ({ children }: { children: React.ReactNode }) => (
+    <mod.RoleGuard minRole="manager">{children}</mod.RoleGuard>
+  )
+})));
 
 // Rotas internas
 const AppRoutes = () => (
@@ -651,7 +667,6 @@ const AppRoutes = () => (
       <Route path="/noc-monitoring" element={<NOCMonitoring />} />
       <Route path="/health-monitor" element={<HealthMonitor />} />
       <Route path="/soc" element={<SOCPage />} />
-      <Route path="/soc-dashboard" element={<SOCPage />} />
       
       {/* ============================================ */}
       {/* OPERAÇÕES MARÍTIMAS */}
@@ -707,7 +722,6 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/nauti-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<AICommandCenter />} />
-      <Route path="/ai-command" element={<AICommandCenter />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
       <Route path="/revolutionary-features" element={<RevolutionaryFeaturesPage />} />
@@ -724,7 +738,6 @@ const AppRoutes = () => (
       
       {/* AI Modules Hub - 11 Complete AI Modules */}
       <Route path="/ai-modules" element={<AIModulesHubPage />} />
-      <Route path="/ai-modules-hub" element={<AIModulesHubPage />} />
       <Route path="/ai/voyage-logistics" element={<VoyageLogisticsAIPage />} />
       <Route path="/ai/safety-incident" element={<SafetyIncidentAIPage />} />
       <Route path="/ai/inventory-spares" element={<InventorySparesAIPage />} />
@@ -1011,38 +1024,36 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
       {/* ============================================ */}
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin" element={<Suspense fallback={<Loader />}><AdminRoute><Admin /></AdminRoute></Suspense>} />
+      <Route path="/admin/dashboard" element={<Suspense fallback={<Loader />}><AdminRoute><AdminDashboard /></AdminRoute></Suspense>} />
       
-      {/* ADMIN DOCUMENTS - Full CRUD flow */}
-      <Route path="/admin/documents" element={<AdminDocumentList />} />
-      <Route path="/admin/documents/ai" element={<AdminAIEditor />} />
-      <Route path="/admin/documents/ai/templates" element={<AdminAITemplates />} />
-      <Route path="/admin/documents/view/:id" element={<AdminDocumentView />} />
-      <Route path="/admin/documents/history/:id" element={<AdminDocumentHistory />} />
-      <Route path="/admin/documents/editor/:id" element={<AdminDocumentEditorDemo />} />
-      <Route path="/admin/documents/collaborate/:id" element={<AdminCollaborativeEditor />} />
+      {/* ADMIN DOCUMENTS - Full CRUD flow (RBAC protected) */}
+      <Route path="/admin/documents" element={<Suspense fallback={<Loader />}><AdminRoute><AdminDocumentList /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/ai" element={<Suspense fallback={<Loader />}><AdminRoute><AdminAIEditor /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/ai/templates" element={<Suspense fallback={<Loader />}><AdminRoute><AdminAITemplates /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/view/:id" element={<Suspense fallback={<Loader />}><AdminRoute><AdminDocumentView /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/history/:id" element={<Suspense fallback={<Loader />}><AdminRoute><AdminDocumentHistory /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/editor/:id" element={<Suspense fallback={<Loader />}><AdminRoute><AdminDocumentEditorDemo /></AdminRoute></Suspense>} />
+      <Route path="/admin/documents/collaborate/:id" element={<Suspense fallback={<Loader />}><AdminRoute><AdminCollaborativeEditor /></AdminRoute></Suspense>} />
       
-      {/* ADMIN TEMPLATES */}
-      <Route path="/admin/templates" element={<AdminTemplates />} />
-      <Route path="/admin/templates/edit/:id" element={<AdminTemplateEdit />} />
+      {/* ADMIN TEMPLATES (RBAC protected) */}
+      <Route path="/admin/templates" element={<Suspense fallback={<Loader />}><AdminRoute><AdminTemplates /></AdminRoute></Suspense>} />
+      <Route path="/admin/templates/edit/:id" element={<Suspense fallback={<Loader />}><AdminRoute><AdminTemplateEdit /></AdminRoute></Suspense>} />
       
-      {/* ADMIN SGSO */}
-      <Route path="/admin/sgso" element={<AdminSGSO />} />
-      <Route path="/admin/sgso/history/:vesselId" element={<AdminSGSOHistory />} />
+      {/* ADMIN SGSO (RBAC protected) */}
+      <Route path="/admin/sgso" element={<Suspense fallback={<Loader />}><AdminRoute><AdminSGSO /></AdminRoute></Suspense>} />
+      <Route path="/admin/sgso/history/:vesselId" element={<Suspense fallback={<Loader />}><AdminRoute><AdminSGSOHistory /></AdminRoute></Suspense>} />
       
-      {/* ADMIN ASSISTANT & REPORTS */}
-      <Route path="/admin/assistant" element={<AdminAssistant />} />
-      <Route path="/admin/assistant/logs" element={<AdminAssistantLogs />} />
-      <Route path="/admin/reports/assistant" element={<AdminReportsAssistant />} />
-      <Route path="/admin/reports/logs" element={<AdminReportsLogs />} />
-      <Route path="/admin/reports/restore-analytics" element={<AdminReportsRestoreAnalytics />} />
+      {/* ADMIN ASSISTANT & REPORTS (RBAC protected) */}
+      <Route path="/admin/assistant" element={<Suspense fallback={<Loader />}><AdminRoute><AdminAssistant /></AdminRoute></Suspense>} />
+      <Route path="/admin/assistant/logs" element={<Suspense fallback={<Loader />}><AdminRoute><AdminAssistantLogs /></AdminRoute></Suspense>} />
+      <Route path="/admin/reports/assistant" element={<Suspense fallback={<Loader />}><AdminRoute><AdminReportsAssistant /></AdminRoute></Suspense>} />
+      <Route path="/admin/reports/logs" element={<Suspense fallback={<Loader />}><AdminRoute><AdminReportsLogs /></AdminRoute></Suspense>} />
+      <Route path="/admin/reports/restore-analytics" element={<Suspense fallback={<Loader />}><AdminRoute><AdminReportsRestoreAnalytics /></AdminRoute></Suspense>} />
       
-      {/* ADMIN COLLABORATION */}
-      <Route path="/admin/collaboration" element={<AdminCollaboration />} />
-      
-      {/* ADMIN CHECKLISTS - alias */}
-      <Route path="/admin/checklists" element={<MaritimeCommandCenter />} />
+      {/* ADMIN COLLABORATION & CHECKLISTS (RBAC protected) */}
+      <Route path="/admin/collaboration" element={<Suspense fallback={<Loader />}><AdminRoute><AdminCollaboration /></AdminRoute></Suspense>} />
+      <Route path="/admin/checklists" element={<Suspense fallback={<Loader />}><AdminRoute><MaritimeCommandCenter /></AdminRoute></Suspense>} />
       
       <Route path="/dashboard" element={<CentralComando />} />
       <Route path="/executive-dashboard" element={<CentralComando />} />

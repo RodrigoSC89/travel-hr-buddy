@@ -8,6 +8,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+// P2-005: data-testid instrumentation applied
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

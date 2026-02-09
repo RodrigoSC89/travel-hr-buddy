@@ -4,17 +4,18 @@
  * 
  * Consolida: AI Control Tower + Enterprise Intelligence + AI Modules + Voice
  * 
+ * P1-008: Consolidado de 15 tabs para 8 tabs agrupadas
  * ✅ ZERO CONSOLE.LOG HANDLERS
  * ✅ REAL DATA INTEGRATION
  * ✅ SYSTEM STATUS BAR
  * ✅ FUNCTIONAL ACTIONS
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Brain, MessageSquare, Bot, Zap, Mic, BarChart3, Eye, FileText, Cpu, Activity, Settings, Wifi, Download, RefreshCw, Plus, Users, Bell, Database } from 'lucide-react';
+import { Brain, MessageSquare, Bot, Zap, BarChart3, FileText, Cpu, Activity, Settings, Wifi, Download, Plus, Database } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { AIAgentHealthDashboard } from '@/components/world-class';
@@ -37,7 +38,7 @@ const OCRCenterPage = lazy(() => import('@/pages/enterprise/OCRCenterPage'));
 const AIAnalyticsDashboard = lazy(() => import('@/pages/AIAnalyticsDashboard'));
 const AIObservabilityDashboard = lazy(() => import('@/pages/AIObservabilityDashboard'));
 
-// New Phase 3 components
+// Phase 3 components
 const AgentMemoryPanel = lazy(() => import('@/components/ai/AgentMemoryPanel'));
 const MultiAgentConsensus = lazy(() => import('@/components/ai/MultiAgentConsensus'));
 const AgentAnalyticsPanel = lazy(() => import('@/components/ai/AgentAnalyticsPanel'));
@@ -55,30 +56,71 @@ const LoadingSkeleton = () => (
   </div>
 );
 
+/**
+ * P1-008 FIX: Consolidated from 15 tabs to 8 grouped tabs
+ * 
+ * Original 15: hub, health, chat, agents, consensus, memory, monitoring, 
+ *              workflows, voice, modules, rag, ocr, agent-analytics, analytics, observability
+ * 
+ * New 8:
+ * 1. hub         → AI Hub (overview + health)
+ * 2. agents      → Agents (directory + health dashboard)
+ * 3. chat-voice  → Chat & Voice (chat + voice assistant)
+ * 4. swarm       → Swarm Ops (consensus + memory + monitoring)
+ * 5. workflows   → Workflows
+ * 6. modules     → 11 AI Modules
+ * 7. intelligence → Intelligence (RAG + OCR)
+ * 8. analytics   → Analytics (analytics + agent-analytics + observability)
+ */
 const tabConfig = [
   { id: 'hub', label: 'AI Hub', icon: Brain },
-  { id: 'health', label: 'Agent Health', icon: Activity },
-  { id: 'chat', label: 'Chat', icon: MessageSquare },
   { id: 'agents', label: 'Agents', icon: Bot },
-  { id: 'consensus', label: 'Consensus', icon: Users },
-  { id: 'memory', label: 'Memory', icon: Database },
-  { id: 'monitoring', label: 'Monitoring', icon: Bell },
+  { id: 'chat-voice', label: 'Chat & Voice', icon: MessageSquare },
+  { id: 'swarm', label: 'Swarm Ops', icon: Database },
   { id: 'workflows', label: 'Workflows', icon: Zap },
-  { id: 'voice', label: 'Voice', icon: Mic },
   { id: 'modules', label: '11 Modules', icon: Cpu },
-  { id: 'rag', label: 'RAG', icon: FileText },
-  { id: 'ocr', label: 'OCR', icon: FileText },
-  { id: 'agent-analytics', label: 'Agent Analytics', icon: BarChart3 },
+  { id: 'intelligence', label: 'Intelligence', icon: FileText },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { id: 'observability', label: 'Observability', icon: Eye },
 ];
+
+// Map old tab IDs to new grouped IDs for backward compatibility
+const TAB_MIGRATION: Record<string, string> = {
+  'health': 'agents',
+  'chat': 'chat-voice',
+  'voice': 'chat-voice',
+  'consensus': 'swarm',
+  'memory': 'swarm',
+  'monitoring': 'swarm',
+  'rag': 'intelligence',
+  'ocr': 'intelligence',
+  'agent-analytics': 'analytics',
+  'observability': 'analytics',
+};
 
 export default function AIMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'hub';
+  const rawTab = searchParams.get('tab') || 'hub';
+  // Migrate old tab IDs to new ones
+  const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { exportToJSON } = useRealActionHandlers();
+
+  // Sub-tab state for grouped tabs
+  const [swarmSubTab, setSwarmSubTab] = useState<'consensus' | 'memory' | 'monitoring'>('consensus');
+  const [chatSubTab, setChatSubTab] = useState<'chat' | 'voice'>('chat');
+  const [intelligenceSubTab, setIntelligenceSubTab] = useState<'rag' | 'ocr'>('rag');
+  const [analyticsSubTab, setAnalyticsSubTab] = useState<'analytics' | 'agent-analytics' | 'observability'>('analytics');
+
+  // Initialize sub-tab from old deep-link
+  React.useEffect(() => {
+    if (rawTab === 'voice') setChatSubTab('voice');
+    if (rawTab === 'memory') setSwarmSubTab('memory');
+    if (rawTab === 'monitoring') setSwarmSubTab('monitoring');
+    if (rawTab === 'ocr') setIntelligenceSubTab('ocr');
+    if (rawTab === 'agent-analytics') setAnalyticsSubTab('agent-analytics');
+    if (rawTab === 'observability') setAnalyticsSubTab('observability');
+  }, [rawTab]);
 
   // Real data: fetch AI agent registry
   const { data: agentData = [], isLoading: agentsLoading } = useQuery({
@@ -126,8 +168,34 @@ export default function AIMegaHub() {
     toast.info('Abrindo configuração dos agentes...');
   }, [setSearchParams]);
 
+  const SubTabSelector = ({ 
+    options, 
+    active, 
+    onChange 
+  }: { 
+    options: { id: string; label: string }[]; 
+    active: string; 
+    onChange: (id: string) => void;
+  }) => (
+    <div className="flex gap-1 mb-4 p-1 bg-muted rounded-lg w-fit" data-testid="subtab-selector">
+      {options.map(opt => (
+        <button
+          key={opt.id}
+          onClick={() => onChange(opt.id)}
+          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+            active === opt.id 
+              ? 'bg-background text-foreground shadow-sm' 
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" data-testid="ai-mega-hub">
       {/* Header */}
       <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container py-4">
@@ -155,16 +223,17 @@ export default function AIMegaHub() {
         </div>
       </div>
 
-      {/* Tabs Navigation */}
+      {/* Tabs Navigation - Now 8 tabs instead of 15 */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-[73px] z-10">
           <div className="container">
-            <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto">
+            <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto" data-testid="ai-hub-tabs">
               {tabConfig.map((tab) => (
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
                   className="data-[state=active]:bg-hub-ai data-[state=active]:text-white gap-2"
+                  data-testid={`ai-tab-${tab.id}`}
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -177,11 +246,11 @@ export default function AIMegaHub() {
         {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
+            {/* 1. AI Hub (Overview) */}
             <TabsContent value="hub" className="mt-0 space-y-6">
-              {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Online</span>
                 </div>
                 <span>•</span>
@@ -191,14 +260,11 @@ export default function AIMegaHub() {
                 {agentMetrics.pausedAgents > 0 && (
                   <>
                     <span>•</span>
-                    <span className="text-yellow-500">{agentMetrics.pausedAgents} pausados</span>
+                    <span className="text-warning">{agentMetrics.pausedAgents} pausados</span>
                   </>
                 )}
-                <span>•</span>
-                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
 
-              {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="AI Control Tower"
                 subtitle={`${agentMetrics.activeAgents} agentes ativos | ${agentMetrics.totalAgents} total registrados`}
@@ -223,7 +289,7 @@ export default function AIMegaHub() {
                     id: 'health',
                     label: 'Agent Health',
                     icon: <Activity className="h-4 w-4" />,
-                    onClick: () => setSearchParams({ tab: 'health' }),
+                    onClick: () => setSearchParams({ tab: 'agents' }),
                     variant: 'outline',
                     tooltip: 'Verificar saúde dos agentes'
                   }
@@ -242,21 +308,20 @@ export default function AIMegaHub() {
                 searchPlaceholder="Search agents, workflows, logs..."
               />
 
-              {/* Empty state when no agents */}
               {!agentsLoading && agentMetrics.totalAgents === 0 && (
                 <HubEmptyState 
                   hub="ai" 
-                  onPrimaryAction={() => setSearchParams({ tab: 'chat' })} 
+                  onPrimaryAction={() => setSearchParams({ tab: 'chat-voice' })} 
                 />
               )}
 
               {(agentsLoading || agentMetrics.totalAgents > 0) && <AIControlTowerHub />}
             </TabsContent>
 
-            <TabsContent value="health" className="mt-0 space-y-6">
-              {/* Enhanced Action Bar for Health */}
+            {/* 2. Agents (Directory + Health) */}
+            <TabsContent value="agents" className="mt-0 space-y-6">
               <EnhancedActionBar
-                title="AI Agent Health Monitor"
+                title="AI Agents"
                 subtitle={`${agentMetrics.activeAgents} agentes ativos | ${agentMetrics.pausedAgents} pausados`}
                 actions={[
                   {
@@ -279,62 +344,79 @@ export default function AIMegaHub() {
                   }
                 ]}
               />
-
-              {/* World-Class AI Agent Health Dashboard */}
               <AIAgentHealthDashboard />
-            </TabsContent>
-            
-            <TabsContent value="chat" className="mt-0">
-              <AICommandCenter />
-            </TabsContent>
-            
-            <TabsContent value="agents" className="mt-0 space-y-6">
               <AIAgentDirectory />
               <AutonomousCommandCenter />
             </TabsContent>
 
-            <TabsContent value="consensus" className="mt-0">
-              <MultiAgentConsensus />
+            {/* 3. Chat & Voice (merged) */}
+            <TabsContent value="chat-voice" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'chat', label: '💬 Chat IA' },
+                  { id: 'voice', label: '🎙️ Voice Assistant' },
+                ]}
+                active={chatSubTab}
+                onChange={(id) => setChatSubTab(id as any)}
+              />
+              {chatSubTab === 'chat' && <AICommandCenter />}
+              {chatSubTab === 'voice' && <VoiceAssistant />}
             </TabsContent>
 
-            <TabsContent value="memory" className="mt-0">
-              <AgentMemoryPanel />
-            </TabsContent>
-
-            <TabsContent value="monitoring" className="mt-0">
-              <ProactiveMonitoringPanel />
+            {/* 4. Swarm Ops (consensus + memory + monitoring) */}
+            <TabsContent value="swarm" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'consensus', label: '🤝 Consensus' },
+                  { id: 'memory', label: '🧠 Memory' },
+                  { id: 'monitoring', label: '🔔 Monitoring' },
+                ]}
+                active={swarmSubTab}
+                onChange={(id) => setSwarmSubTab(id as any)}
+              />
+              {swarmSubTab === 'consensus' && <MultiAgentConsensus />}
+              {swarmSubTab === 'memory' && <AgentMemoryPanel />}
+              {swarmSubTab === 'monitoring' && <ProactiveMonitoringPanel />}
             </TabsContent>
             
+            {/* 5. Workflows */}
             <TabsContent value="workflows" className="mt-0">
               <WorkflowCommandCenter />
             </TabsContent>
             
-            <TabsContent value="voice" className="mt-0">
-              <VoiceAssistant />
-            </TabsContent>
-            
+            {/* 6. 11 AI Modules */}
             <TabsContent value="modules" className="mt-0">
               <AIModulesHubPage />
             </TabsContent>
             
-            <TabsContent value="rag" className="mt-0">
-              <RAGAssistantPage />
+            {/* 7. Intelligence (RAG + OCR) */}
+            <TabsContent value="intelligence" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'rag', label: '📚 RAG Assistant' },
+                  { id: 'ocr', label: '📄 OCR Center' },
+                ]}
+                active={intelligenceSubTab}
+                onChange={(id) => setIntelligenceSubTab(id as any)}
+              />
+              {intelligenceSubTab === 'rag' && <RAGAssistantPage />}
+              {intelligenceSubTab === 'ocr' && <OCRCenterPage />}
             </TabsContent>
             
-            <TabsContent value="ocr" className="mt-0">
-              <OCRCenterPage />
-            </TabsContent>
-            
-            <TabsContent value="agent-analytics" className="mt-0">
-              <AgentAnalyticsPanel />
-            </TabsContent>
-            
-            <TabsContent value="analytics" className="mt-0">
-              <AIAnalyticsDashboard />
-            </TabsContent>
-            
-            <TabsContent value="observability" className="mt-0">
-              <AIObservabilityDashboard />
+            {/* 8. Analytics (analytics + agent-analytics + observability) */}
+            <TabsContent value="analytics" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'analytics', label: '📊 Dashboard' },
+                  { id: 'agent-analytics', label: '🤖 Agent Metrics' },
+                  { id: 'observability', label: '👁️ Observability' },
+                ]}
+                active={analyticsSubTab}
+                onChange={(id) => setAnalyticsSubTab(id as any)}
+              />
+              {analyticsSubTab === 'analytics' && <AIAnalyticsDashboard />}
+              {analyticsSubTab === 'agent-analytics' && <AgentAnalyticsPanel />}
+              {analyticsSubTab === 'observability' && <AIObservabilityDashboard />}
             </TabsContent>
           </Suspense>
         </div>
