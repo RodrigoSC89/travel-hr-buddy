@@ -51,6 +51,7 @@ import {
   FileX
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DocumentVersionHistory } from "./DocumentVersionHistory";
 
 interface WorkflowDocument {
   id: string;
@@ -665,16 +666,7 @@ export default function DocumentWorkflow() {
                   </TabsContent>
 
                   <TabsContent value="history">
-                    <div className="flex items-center justify-center h-[300px] text-muted-foreground">
-                      <div className="text-center space-y-2">
-                        <History className="h-12 w-12 mx-auto opacity-50" />
-                        <p className="font-medium">Histórico de Versões</p>
-                        <p className="text-sm text-muted-foreground/70">
-                          Comparação visual e rollback requerem integração com backend de versionamento (diff engine).
-                        </p>
-                        <span className="inline-block text-[10px] bg-muted px-2 py-1 rounded">Dependência: storage versioning API</span>
-                      </div>
-                    </div>
+                    <DocumentVersionHistory documentTitle={selectedDoc.title} />
                   </TabsContent>
                 </Tabs>
               </CardContent>

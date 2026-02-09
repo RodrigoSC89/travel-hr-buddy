@@ -122,19 +122,19 @@ const REVOLUTIONARY_FEATURES = [
     name: "Quantum Computing",
     icon: Atom,
     status: "roadmap",
-    progress: 15,
+    progress: 0,
     color: "from-purple-500 to-pink-600",
-    description: "Otimização quântica para problemas de complexidade exponencial",
-    stats: { eta: "2030", speedup: "1000x", precision: "∞" },
+    description: "Otimização quântica — requer hardware quântico (IBM Q / AWS Braket). Não disponível.",
+    stats: { status: "N/A", hardware: "Pendente", previsão: "Indeterminada" },
     component: "quantum"
   }
 ];
 
 const getStatusBadge = (status: string) => {
-  const variants: Record<string, { variant: "default" | "secondary" | "outline"; label: string }> = {
+  const variants: Record<string, { variant: "default" | "secondary" | "outline" | "destructive"; label: string }> = {
     active: { variant: "default", label: "Ativo" },
     beta: { variant: "secondary", label: "Beta" },
-    roadmap: { variant: "outline", label: "Roadmap" }
+    roadmap: { variant: "outline", label: "Indisponível" }
   };
   return variants[status] || variants.active;
 };
@@ -164,11 +164,14 @@ export function RevolutionaryFeaturesHub() {
         return (
           <Card className="p-8 text-center border-dashed">
             <Atom className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
-            <Badge variant="outline" className="mb-3">Roadmap Futuro</Badge>
-            <h3 className="text-xl font-bold mb-2">Tecnologia em Pesquisa</h3>
-            <p className="text-muted-foreground text-sm">
-              Este módulo está em fase de pesquisa e não possui funcionalidade implementada. 
-              Acompanhe o roadmap para atualizações.
+            <Badge variant="outline" className="mb-3">Indisponível</Badge>
+            <h3 className="text-xl font-bold mb-2">Hardware Não Conectado</h3>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto">
+              Esta funcionalidade requer integração com hardware quântico (IBM Quantum, AWS Braket ou similar). 
+              Nenhum provedor está configurado neste ambiente.
+            </p>
+            <p className="text-xs text-muted-foreground/60 mt-3">
+              Para habilitar, configure a conexão via System → Integrações → Quantum Providers.
             </p>
           </Card>
         );
@@ -191,7 +194,7 @@ export function RevolutionaryFeaturesHub() {
           <Sparkles className="h-8 w-8 text-warning" />
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          9 tecnologias disruptivas que transformam o Nautilus One no sistema marítimo mais avançado do mundo
+          8 tecnologias de ponta implementadas e 1 módulo pendente de hardware externo (Quantum Computing)
         </p>
       </motion.div>
 

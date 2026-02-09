@@ -30,6 +30,7 @@ import {
   Map,
   Anchor
 } from "lucide-react";
+import { BathymetricVisualization } from "./components/BathymetricVisualization";
 
 interface SubseaAsset {
   id: string;
@@ -370,22 +371,9 @@ const SubseaOperations: React.FC = () => {
           </Card>
         </TabsContent>
 
-        {/* Map Tab */}
+        {/* Map Tab - Functional Bathymetric Visualization */}
         <TabsContent value="map" className="mt-6">
-          <Card className="bg-card/50 backdrop-blur border-border/50">
-            <CardContent className="p-8">
-              <div className="aspect-video bg-gradient-to-b from-blue-900/20 to-blue-950/40 rounded-lg flex items-center justify-center border border-cyan-500/20">
-               <div className="text-center space-y-3">
-                  <Map className="h-16 w-16 text-cyan-400/30 mx-auto" />
-                  <p className="text-muted-foreground font-medium">Mapa Batimétrico 3D</p>
-                  <p className="text-sm text-muted-foreground/70">
-                    Requer integração com biblioteca WebGL de renderização 3D (ex: Cesium, Mapbox GL).
-                  </p>
-                  <Badge variant="outline" className="text-xs">Dependência externa pendente</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <BathymetricVisualization />
         </TabsContent>
       </Tabs>
     </div>
