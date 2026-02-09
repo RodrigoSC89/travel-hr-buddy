@@ -272,7 +272,7 @@ function generateLocalWorkflow(description: string, category: string): Partial<W
   return {
     name: description.slice(0, 50) || "Novo Workflow",
     description: description,
-    category: category as any,
+    category: category as "compliance" | "custom" | "finance" | "hr" | "maintenance" | "marketing" | "operations",
     status: "draft",
     priority: "medium",
     steps: defaultSteps,

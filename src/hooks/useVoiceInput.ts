@@ -38,8 +38,8 @@ interface VoiceSpeechRecognitionInstance {
 // Get the SpeechRecognition constructor
 function getSpeechRecognition(): (new () => VoiceSpeechRecognitionInstance) | null {
   if (typeof window === 'undefined') return null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
+  const win = window as Window & { SpeechRecognition?: new () => VoiceSpeechRecognitionInstance; webkitSpeechRecognition?: new () => VoiceSpeechRecognitionInstance };
+  return win.SpeechRecognition || win.webkitSpeechRecognition || null;
 }
 
 interface UseVoiceInputOptions {

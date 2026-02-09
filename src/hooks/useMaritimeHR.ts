@@ -57,8 +57,8 @@ export function useCrewMembers() {
         name: crew.full_name || 'Unknown',
         rank: crew.rank || 'Unknown',
         nationality: crew.nationality || 'Unknown',
-        vessel: (crew.vessels as any)?.name,
-        status: (crew.status as any) || 'available',
+        vessel: ((crew.vessels as Record<string, unknown> | null)?.name as string) ?? undefined,
+        status: ((crew.status as string) || 'available') as 'available' | 'medical_leave' | 'on_leave' | 'onboard' | 'training',
         email: crew.email || undefined,
         phone: crew.phone || undefined
       }));

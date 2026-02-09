@@ -157,7 +157,7 @@ export function useCrewManagementData() {
         name: member.full_name || "Tripulante",
         rank: member.rank || member.position || "Não definido",
         nationality: member.nationality || "Brasileiro",
-        vessel: (member.vessels as any)?.name || undefined,
+        vessel: ((member.vessels as Record<string, unknown> | null)?.name as string) || undefined,
         vesselId: member.vessel_id || undefined,
         status: mapCrewStatus(member.status),
         contract: {
@@ -175,7 +175,7 @@ export function useCrewManagementData() {
           email: member.email || "",
           phone: member.phone || "",
           emergency_contact: typeof member.emergency_contact === 'object' 
-            ? (member.emergency_contact as any)?.phone || "" 
+            ? ((member.emergency_contact as Record<string, unknown>)?.phone as string) || "" 
             : "",
         },
         performance: {

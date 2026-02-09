@@ -45,8 +45,7 @@ export function useAIPEOTRAM(vesselId?: string) {
     queryKey: ['peotram-evidences', vesselId],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
-          .from('peotram_evidences' as any)
+        const { data, error } = await (supabase.from as Function)('peotram_evidences')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(100);
@@ -81,7 +80,7 @@ export function useAIPEOTRAM(vesselId?: string) {
 
       // Salvar no banco (ignora erros se tabela não existe)
       try {
-        await supabase.from('peotram_evidences' as any).insert({
+        await (supabase.from as Function)('peotram_evidences').insert({
           element_id: request.elementId,
           item_id: request.itemId,
           content: data.evidence?.content,
@@ -183,8 +182,9 @@ export function useAIPEOTRAM(vesselId?: string) {
   // Speech recognition
   const startListening = useCallback(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      const recognition = new SpeechRecognition();
+      const win = window as unknown as Record<string, unknown>;
+      const SpeechRecognitionCtor = (win.webkitSpeechRecognition || win.SpeechRecognition) as { new(): { lang: string; continuous: boolean; interimResults: boolean; onstart: (() => void) | null; onend: (() => void) | null; onresult: ((event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => void) | null; start(): void } };
+      const recognition = new SpeechRecognitionCtor();
       recognition.lang = 'pt-BR';
       recognition.continuous = false;
       recognition.interimResults = false;
@@ -192,7 +192,7 @@ export function useAIPEOTRAM(vesselId?: string) {
       recognition.onstart = () => setIsListening(true);
       recognition.onend = () => setIsListening(false);
 
-      recognition.onresult = async (event: any) => {
+      recognition.onresult = async (event) => {
         const transcript = event.results[0][0].transcript;
         const response = await sendVoiceMessage(transcript);
         speakResponse(response);

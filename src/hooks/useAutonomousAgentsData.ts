@@ -106,8 +106,8 @@ export function useAutonomousAgentsData() {
           status: action.human_override ? "cancelled" : "completed",
           confidence: action.confidence || 0.85,
           timestamp: new Date(action.timestamp),
-          result: (action.result as any)?.message || "Executado",
-          parameters: action.parameters as Record<string, any> || undefined,
+          result: ((action.result as Record<string, unknown>)?.message as string) || "Executado",
+          parameters: action.parameters as Record<string, unknown> || undefined,
         });
       });
 

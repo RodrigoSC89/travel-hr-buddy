@@ -243,9 +243,8 @@ export function useMaintenanceCommandData(vesselId?: string) {
         created_by: userData?.user?.id,
       };
 
-      const { data: result, error } = await supabase
-        .from("maintenance_tasks")
-        .insert(insertData as any)
+      const { data: result, error } = await (supabase.from as Function)("maintenance_tasks")
+        .insert(insertData)
         .select()
         .single();
 

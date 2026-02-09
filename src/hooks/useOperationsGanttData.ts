@@ -73,7 +73,7 @@ export function useVoyageEvents() {
 
       // Map voyage plans
       (voyages || []).forEach(v => {
-        const vessel = v.vessels as any;
+        const vessel = v.vessels as Record<string, unknown> | null;
         const startDate = v.departure_date ? new Date(v.departure_date) : today;
         const endDate = v.arrival_date ? new Date(v.arrival_date) : addDays(startDate, 7);
 
@@ -81,7 +81,7 @@ export function useVoyageEvents() {
           id: v.id,
           type: 'voyage',
           vesselId: v.vessel_id || '',
-          vesselName: vessel?.name || 'Embarcação',
+          vesselName: (vessel?.name as string) || 'Embarcação',
           title: `${v.origin_port || 'Origem'} → ${v.destination_port || 'Destino'}`,
           startDate,
           endDate,
@@ -96,7 +96,7 @@ export function useVoyageEvents() {
 
       // Map maintenance tasks
       (maintenance || []).forEach(m => {
-        const vessel = m.vessels as any;
+        const vessel = m.vessels as Record<string, unknown> | null;
         const startDate = m.scheduled_date ? new Date(m.scheduled_date) : today;
         const endDate = m.completed_date ? new Date(m.completed_date) : addDays(startDate, 2);
 
@@ -104,7 +104,7 @@ export function useVoyageEvents() {
           id: m.id,
           type: 'maintenance',
           vesselId: m.vessel_id || '',
-          vesselName: vessel?.name || 'Embarcação',
+          vesselName: (vessel?.name as string) || 'Embarcação',
           title: m.title || 'Manutenção Programada',
           startDate,
           endDate,
@@ -114,7 +114,7 @@ export function useVoyageEvents() {
 
       // Map drydock events
       (drydocks || []).forEach(d => {
-        const vessel = d.vessels as any;
+        const vessel = d.vessels as Record<string, unknown> | null;
         const startDate = d.planned_start_date ? new Date(d.planned_start_date) : today;
         const endDate = d.planned_end_date ? new Date(d.planned_end_date) : addDays(startDate, 15);
 
@@ -122,7 +122,7 @@ export function useVoyageEvents() {
           id: d.id,
           type: 'drydock',
           vesselId: d.vessel_id || '',
-          vesselName: vessel?.name || 'Embarcação',
+          vesselName: (vessel?.name as string) || 'Embarcação',
           title: `Drydock - ${d.shipyard_name || 'Estaleiro'}`,
           startDate,
           endDate,

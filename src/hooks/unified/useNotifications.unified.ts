@@ -286,20 +286,20 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          const n = payload.new as any;
+          const n = payload.new as Record<string, unknown>;
           const newNotification: Notification = {
-            id: n.id,
-            persistentId: n.id,
-            title: n.title,
-            message: n.message,
-            type: normalizeType(n.type),
-            priority: normalizePriority(n.priority),
-            category: normalizeCategory(n.category),
+            id: n.id as string,
+            persistentId: n.id as string,
+            title: n.title as string,
+            message: n.message as string,
+            type: normalizeType(n.type as string),
+            priority: normalizePriority(n.priority as string),
+            category: normalizeCategory(n.category as string),
             read: false,
-            timestamp: new Date(n.created_at),
-            createdAt: n.created_at,
-            actionUrl: n.action_url,
-            actionLabel: n.action_label,
+            timestamp: new Date(n.created_at as string),
+            createdAt: n.created_at as string,
+            actionUrl: n.action_url as string | undefined,
+            actionLabel: n.action_label as string | undefined,
           };
 
           setNotifications(prev => [newNotification, ...prev].slice(0, maxNotifications));
