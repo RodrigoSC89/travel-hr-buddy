@@ -153,11 +153,9 @@ export default function NOC() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsRefreshing(true);
-      setTimeout(() => {
-        setMetrics(generateMetrics());
-        setLastRefresh(new Date());
-        setIsRefreshing(false);
-      }, 500);
+      setMetrics(generateMetrics());
+      setLastRefresh(new Date());
+      setIsRefreshing(false);
     }, 5000);
 
     return () => clearInterval(interval);

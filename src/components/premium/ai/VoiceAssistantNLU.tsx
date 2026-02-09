@@ -97,18 +97,38 @@ export default function VoiceAssistantNLU() {
   }, [isListening]);
 
   const handleStartListening = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      toast.error("Reconhecimento de voz não suportado neste navegador. Use Chrome ou Edge.");
+      return;
+    }
+
     setIsListening(true);
     setTranscript("");
     toast.info("Ouvindo... Fale seu comando");
-    
-    // Simulate voice recognition after 3 seconds
-    setTimeout(() => {
-      setTranscript("Qual o status de manutenção da frota?");
-      setTimeout(() => {
-        handleProcessCommand("Qual o status de manutenção da frota?");
-        setIsListening(false);
-      }, 1000);
-    }, 3000);
+
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event: any) => {
+      const text = event.results[0][0].transcript;
+      setTranscript(text);
+      handleProcessCommand(text);
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      toast.error(`Erro no reconhecimento: ${event.error}`);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   const handleStopListening = () => {
@@ -128,11 +148,17 @@ export default function VoiceAssistantNLU() {
     };
     
     setCommands(prev => [newCommand, ...prev]);
-    setIsSpeaking(true);
     toast.success("Comando processado com sucesso");
-    
-    // Simulate TTS
-    setTimeout(() => setIsSpeaking(false), 4000);
+
+    // Use real TTS if available
+    if ('speechSynthesis' in window) {
+      setIsSpeaking(true);
+      const utterance = new SpeechSynthesisUtterance(newCommand.response);
+      utterance.lang = 'pt-BR';
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+    }
   };
 
   return (

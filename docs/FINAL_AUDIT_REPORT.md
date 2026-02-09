@@ -72,3 +72,10 @@
 | `src/pages/FinanceCommandCenterPremium.tsx` | DRE e Cash Flow exportam CSV real da tabela `expenses` |
 | `src/pages/DrydockManagement.tsx` | Relatório exporta CSV real de `drydock_events` |
 | `src/pages/DeepRiskAI.tsx` | Análise de risco com cálculo local (probability × impact) |
+| `src/components/premium/ai/VoiceAssistantNLU.tsx` | Web Speech API real (SpeechRecognition + SpeechSynthesis) |
+| `src/modules/travel-command/components/FlightBookingPanel.tsx` | setTimeout fake removido, busca honesta |
+| `src/components/safety/ISPSModule.tsx` | Export SSP gera PDF real (jsPDF) |
+| `src/pages/NOC.tsx` | setTimeout fake no auto-refresh removido |
+| `src/components/hr/HRPayrollDashboard.tsx` | Mock fallback zerado (sem dados fictícios) |
+| `src/components/peo-dp/computer-vision-inspector.tsx` | Câmera usa navigator.mediaDevices real |
+| `src/core/interop/protocolAdapter.ts` | setTimeout(50ms) fake removido |

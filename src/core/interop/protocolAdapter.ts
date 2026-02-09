@@ -489,8 +489,6 @@ function determineRouteDestination(protocol: ProtocolType, data: unknown): strin
 }
 
 async function simulateRouteToHandler(destination: string, data: unknown): Promise<unknown> {
-  // Simulate processing delay
-  await new Promise(resolve => setTimeout(resolve, 50));
   
   return {
     status: "accepted",
