@@ -23,7 +23,7 @@ export interface Message {
   user_id?: string;
   content: string;
   message_type?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at?: string;
   user?: {
@@ -65,7 +65,7 @@ class MessageService {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return (data || []).map((ch: any) => ({
+      return (data || []).map((ch: Record<string, unknown>) => ({
         ...ch,
         channel_type: ch.channel_type || "public",
         is_private: ch.is_private || false,
@@ -127,24 +127,24 @@ class MessageService {
   /**
    * Normalize message to handle different database schemas
    */
-  private normalizeMessage(msg: any): Message {
+  private normalizeMessage(msg: Record<string, unknown>): Message {
     return {
-      id: msg.id,
-      channel_id: msg.channel_id,
-      user_id: msg.user_id || msg.sender_id,
-      content: msg.content || msg.message_content || msg.message_text || "",
-      message_type: msg.message_type,
-      metadata: msg.metadata,
-      created_at: msg.created_at,
-      updated_at: msg.updated_at || msg.edited_at,
-      user: msg.user,
+      id: String(msg.id || ""),
+      channel_id: String(msg.channel_id || ""),
+      user_id: String(msg.user_id || msg.sender_id || ""),
+      content: String(msg.content || msg.message_content || msg.message_text || ""),
+      message_type: msg.message_type as string | undefined,
+      metadata: msg.metadata as Record<string, unknown> | undefined,
+      created_at: String(msg.created_at || ""),
+      updated_at: String(msg.updated_at || msg.edited_at || ""),
+      user: msg.user as Message["user"],
     };
   }
 
   /**
    * Send a message to a channel
    */
-  async sendMessage(channelId: string, content: string, metadata?: Record<string, any>): Promise<Message | null> {
+  async sendMessage(channelId: string, content: string, metadata?: Record<string, string | number | boolean>): Promise<Message | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
@@ -153,31 +153,31 @@ class MessageService {
       }
 
       // Try with primary column names first, fallback to alternatives
-      const messageData: any = {
+      const messageData = {
         channel_id: channelId,
-        user_id: user.id,
-        content,
-        message_type: "text",
+        sender_id: user.id,
+        message_content: content,
+        message_type: "text" as const,
       };
 
-      if (metadata) {
-        messageData.metadata = metadata;
-      }
+      const insertData = metadata 
+        ? { ...messageData, metadata } 
+        : messageData;
 
       let { data, error } = await supabase
         .from("channel_messages")
-        .insert(messageData)
+        .insert([insertData])
         .select("*, user:profiles(email, full_name)")
         .single();
 
-      // If failed with content column, try alternative names
-      if (error && error.message?.includes("content")) {
+      if (error && error.message?.includes("message_content")) {
         const altMessageData = {
-          ...messageData,
+          channel_id: channelId,
+          sender_id: user.id,
           message_content: content,
           message_text: content,
+          message_type: "text" as const,
         };
-        delete altMessageData.content;
 
         const retry = await supabase
           .from("channel_messages")
@@ -227,12 +227,14 @@ class MessageService {
         .single();
 
       if (error) throw error;
-      return data ? ({
+      if (!data) return null;
+      const row = data as Record<string, unknown>;
+      return {
         ...data,
-        channel_type: (data as any).channel_type || "public",
-        is_private: (data as any).is_private || false,
-        organization_id: (data as any).organization_id ?? undefined,
-      } as Channel) : null;
+        channel_type: (row.channel_type as string) || "public",
+        is_private: (row.is_private as boolean) || false,
+        organization_id: (row.organization_id as string) ?? undefined,
+      } as Channel;
     } catch (error) {
       logger.error("Error creating channel", error as Error, { name, channelType });
       throw error;
@@ -255,12 +257,14 @@ class MessageService {
         .single();
 
       if (error) throw error;
-      return data ? ({
+      if (!data) return null;
+      const row = data as Record<string, unknown>;
+      return {
         ...data,
-        channel_type: (data as any).channel_type || "public",
-        is_private: (data as any).is_private || false,
-        organization_id: (data as any).organization_id ?? undefined,
-      } as Channel) : null;
+        channel_type: (row.channel_type as string) || "public",
+        is_private: (row.is_private as boolean) || false,
+        organization_id: (row.organization_id as string) ?? undefined,
+      } as Channel;
     } catch (error) {
       logger.error("Error updating channel", error as Error, { channelId, updates: Object.keys(updates) });
       throw error;
@@ -349,20 +353,17 @@ class MessageService {
     );
 
     // Subscribe to new messages (optionally filtered by channel)
-    const messageFilter: any = {
-      event: "INSERT",
-      schema: "public",
-      table: "channel_messages",
-    };
+      const messageConfig = {
+        event: "INSERT" as const,
+        schema: "public" as const,
+        table: "channel_messages" as const,
+        ...(channelId ? { filter: `channel_id=eq.${channelId}` } : {}),
+      };
 
-    if (channelId) {
-      messageFilter.filter = `channel_id=eq.${channelId}`;
-    }
-
-    this.realtimeChannel.on("postgres_changes", messageFilter, (payload) => {
+      this.realtimeChannel.on("postgres_changes", messageConfig, (payload) => {
       logger.debug("New message detected via realtime", { channelId });
       if (payload.new) {
-        this.messageCallbacks.forEach((callback) => callback(payload.new as Message));
+        this.messageCallbacks.forEach((callback) => callback(payload.new as unknown as Message));
       }
     });
 

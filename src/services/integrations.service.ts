@@ -24,7 +24,7 @@ export class IntegrationsService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as WebhookIntegration[];
   }
 
   static async getIntegration(id: string): Promise<WebhookIntegration | null> {
@@ -35,20 +35,19 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data as any;
+    return data as unknown as WebhookIntegration;
   }
 
   static async createIntegration(
     integration: Partial<WebhookIntegration>
   ): Promise<WebhookIntegration> {
-    const { data, error } = await supabase
-      .from("webhook_integrations")
-      .insert(integration as any)
+    const { data, error } = await (supabase.from as Function)("webhook_integrations")
+      .insert(integration)
       .select()
       .single();
 
     if (error) throw error;
-    return data as any;
+    return data as WebhookIntegration;
   }
 
   static async updateIntegration(
@@ -63,7 +62,7 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data as any;
+    return data as unknown as WebhookIntegration;
   }
 
   static async deleteIntegration(id: string): Promise<void> {
@@ -95,7 +94,7 @@ export class IntegrationsService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as WebhookEvent[];
   }
 
   static async dispatchWebhookEvent(
@@ -123,7 +122,7 @@ export class IntegrationsService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as OAuthConnection[];
   }
 
   static async getOAuthConnection(
@@ -136,20 +135,19 @@ export class IntegrationsService {
       .maybeSingle();
 
     if (error) throw error;
-    return data as any;
+    return data as unknown as OAuthConnection;
   }
 
   static async saveOAuthConnection(
     connection: Partial<OAuthConnection>
   ): Promise<OAuthConnection> {
-    const { data, error } = await supabase
-      .from("oauth_connections")
-      .upsert(connection as any)
+    const { data, error } = await (supabase.from as Function)("oauth_connections")
+      .upsert(connection)
       .select()
       .single();
 
     if (error) throw error;
-    return data as any;
+    return data as OAuthConnection;
   }
 
   static async disconnectOAuth(provider: IntegrationProvider): Promise<void> {
@@ -182,7 +180,7 @@ export class IntegrationsService {
       .order("display_name");
 
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as IntegrationPlugin[];
   }
 
   static async getEnabledPlugins(): Promise<IntegrationPlugin[]> {
@@ -193,7 +191,7 @@ export class IntegrationsService {
       .order("display_name");
 
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as IntegrationPlugin[];
   }
 
   static async togglePlugin(id: string, enabled: boolean): Promise<void> {
@@ -214,11 +212,11 @@ export class IntegrationsService {
       .limit(limit);
 
     if (error) throw error;
-    return (data || []) as any;
+    return (data || []) as unknown as IntegrationLog[];
   }
 
   static async createLog(log: Partial<IntegrationLog>): Promise<void> {
-    const { error } = await supabase.from("integration_logs").insert(log as any);
+    const { error } = await (supabase.from as Function)("integration_logs").insert(log);
     if (error) throw error;
   }
 
@@ -391,13 +389,12 @@ export class IntegrationsService {
 
   // PATCH 385: Modular Plugin System
   static async installPlugin(plugin: Partial<IntegrationPlugin>): Promise<IntegrationPlugin> {
-    const { data, error } = await supabase
-      .from("integration_plugins")
+    const { data, error } = await (supabase.from as Function)("integration_plugins")
       .insert({
         ...plugin,
         is_enabled: true,
         version: plugin.version || "1.0.0",
-      } as any)
+      })
       .select()
       .single();
 
@@ -409,7 +406,7 @@ export class IntegrationsService {
       context: { plugin_id: data.id },
     });
 
-    return data as any;
+    return data as IntegrationPlugin;
   }
 
   static async uninstallPlugin(pluginId: string): Promise<void> {
@@ -466,7 +463,7 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data as any;
+    return data as unknown as IntegrationPlugin;
   }
 
   static validatePluginConfig(
@@ -487,7 +484,7 @@ export class IntegrationsService {
     pluginId: string,
     action: string,
     params?: Record<string, unknown>
-  ): Promise<any> {
+  ): Promise<{ success: boolean; result: string }> {
     const plugin = await this.getPluginById(pluginId);
     if (!plugin || !plugin.is_enabled) {
       throw new Error("Plugin not available");
@@ -504,7 +501,7 @@ export class IntegrationsService {
   }
 
   // PATCH 385: Integration Status Dashboard
-  static async getIntegrationStatusPanel(): Promise<any> {
+  static async getIntegrationStatusPanel(): Promise<Record<string, unknown>> {
     const stats = await this.getDashboardStats();
     const connections = await this.getOAuthConnections();
     const plugins = await this.getPlugins();
@@ -512,11 +509,11 @@ export class IntegrationsService {
     const oauthStatus = connections.reduce((acc, conn) => {
       acc[conn.provider] = {
         connected: conn.status === "connected",
-        last_sync: conn.last_sync_at,
-        expires_at: conn.expires_at,
+        last_sync: conn.last_sync_at ?? null,
+        expires_at: conn.expires_at ?? null,
       };
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, { connected: boolean; last_sync: string | null; expires_at: string | null }>);
 
     const pluginStatus = plugins.map(p => ({
       id: p.id,
@@ -547,7 +544,7 @@ export class IntegrationsService {
   }
 
   // PATCH 385: Metrics and Monitoring
-  static async getIntegrationMetrics(days = 7): Promise<any> {
+  static async getIntegrationMetrics(days = 7): Promise<Record<string, unknown>> {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
@@ -583,8 +580,8 @@ export class IntegrationsService {
 
     return {
       total_events: events?.length || 0,
-      success_count: events?.filter((e: any) => e.status === "success").length || 0,
-      failure_count: events?.filter((e: any) => e.status === "failed").length || 0,
+      success_count: events?.filter((e) => e.status === "success").length || 0,
+      failure_count: events?.filter((e) => e.status === "failed").length || 0,
       by_day: Array.from(eventsByDay.entries()).map(([day, stats]) => ({
         date: day,
         ...stats,

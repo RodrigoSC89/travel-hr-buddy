@@ -73,7 +73,7 @@ export interface MissionStatus {
   agents_deployed: number;
   systems_active: number;
   last_update: string;
-  critical_events: any[];
+  critical_events: MissionLog[];
 }
 
 export interface MissionLog {
@@ -93,8 +93,8 @@ export interface MissionReport {
   status: MissionStatus;
   agents: MissionAgent[];
   logs: MissionLog[];
-  performance_metrics: any;
-  resource_utilization: any;
+  performance_metrics: Record<string, unknown>;
+  resource_utilization: Record<string, unknown>;
   generated_at: string;
 }
 
@@ -152,15 +152,14 @@ export class MissionControlService {
   static async createMission(mission: Partial<Mission>): Promise<Mission> {
     const missionId = `mission_${Date.now()}_${crypto.randomUUID().slice(0, 7)}`;
     
-    const { data, error } = await supabase
-      .from("missions")
+    const { data, error } = await (supabase.from as Function)("missions")
       .insert({
         mission_id: missionId,
         ...mission,
         status: mission.status || "planning",
         priority: mission.priority || "normal",
         progress_percentage: 0,
-      } as any)
+      })
       .select()
       .single();
 
@@ -184,13 +183,12 @@ export class MissionControlService {
     missionId: string,
     updates: Partial<Mission>
   ): Promise<Mission> {
-    const { data, error } = await supabase
-      .from("missions")
+    const { data, error } = await (supabase.from as Function)("missions")
       .update({
         ...updates,
-        metadata: updates.metadata as any,
+        metadata: updates.metadata,
         updated_at: new Date().toISOString(),
-      } as any)
+      })
       .eq("mission_id", missionId)
       .select()
       .single();
@@ -216,7 +214,7 @@ export class MissionControlService {
     status: string,
     progressPercentage?: number
   ): Promise<void> {
-    const updates: any = { status };
+    const updates: Record<string, unknown> = { status };
     
     if (progressPercentage !== undefined) {
       updates.progress_percentage = progressPercentage;
@@ -270,11 +268,11 @@ export class MissionControlService {
     const mission = await this.getMission(missionId);
     if (!mission) throw new Error("Mission not found");
 
-    const resources = (mission.resources || []).map((r: any) =>
-      r.resource_id === resourceId ? { ...r, status: "released" } : r
+    const resources = (mission.resources || []).map((r: ResourceAllocation) =>
+      r.resource_id === resourceId ? { ...r, status: "released" as const } : r
     );
 
-    await this.updateMission(missionId, { resources: resources as any });
+    await this.updateMission(missionId, { resources });
 
     await this.logMissionEvent(
       missionId,
@@ -420,7 +418,7 @@ export class MissionControlService {
 
   static subscribeToMissionUpdates(
     missionId: string,
-    callback: (payload: any) => void
+    callback: (payload: Record<string, unknown>) => void
   ) {
     return supabase
       .channel(`mission:${missionId}`)
@@ -445,14 +443,14 @@ export class MissionControlService {
     data?: Record<string, unknown>
   ): Promise<void> {
     try {
-      await supabase.from("mission_logs").insert({
+      await (supabase.from as Function)("mission_logs").insert({
         mission_id: missionId,
         log_type: logType,
         message,
-        data: data as any,
+        data: data,
         timestamp: new Date().toISOString(),
         created_at: new Date().toISOString(),
-      } as any);
+      });
     } catch (error) {
       logger.error("Failed to log mission event", error as Error, { missionId, logType });
     }

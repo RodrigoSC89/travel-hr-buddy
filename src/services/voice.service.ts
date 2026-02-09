@@ -111,7 +111,7 @@ export class VoiceService {
   ): Promise<void> {
     if (!this.recognition) throw new Error("Speech recognition not available");
 
-    this.recognition.onresult = (event: any) => {
+    this.recognition.onresult = (event: { results: SpeechRecognitionResultList }) => {
       const result = event.results[0];
       onResult({
         transcript: result[0].transcript,
@@ -120,7 +120,7 @@ export class VoiceService {
       });
     };
 
-    this.recognition.onerror = (event: any) => {
+    this.recognition.onerror = (event: { error: string }) => {
       if (onError) onError(new Error(event.error));
     };
 
@@ -223,9 +223,8 @@ export class VoiceService {
   }
 
   static async saveSettings(settings: Partial<VoiceSettings>): Promise<VoiceSettings> {
-    const { data, error } = await supabase
-      .from("voice_settings")
-      .upsert(settings as any)
+    const { data, error } = await (supabase.from as Function)("voice_settings")
+      .upsert(settings)
       .select()
       .single();
     if (error) throw error;

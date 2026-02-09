@@ -6,9 +6,9 @@ export interface AIFeedbackScore {
   id?: string;
   user_id?: string | null;
   command_type: string;
-  command_data: Record<string, any>;
+  command_data: Record<string, unknown>;
   self_score: number;
-  feedback_data?: Record<string, any>;
+  feedback_data?: Record<string, unknown>;
   improvements?: string[];
   created_at?: string;
 }
@@ -27,14 +27,14 @@ export class AIFeedbackService {
 
       const { error } = await supabase
         .from("ai_feedback_scores")
-        .insert({
+        .insert([{
           user_id: user.id,
           command_type: feedback.command_type,
-          command_data: feedback.command_data,
+          command_data: feedback.command_data as unknown as import("@/integrations/supabase/types").Json,
           self_score: feedback.self_score,
-          feedback_data: feedback.feedback_data || {},
+          feedback_data: (feedback.feedback_data || {}) as unknown as import("@/integrations/supabase/types").Json,
           improvements: feedback.improvements || []
-        });
+        }]);
 
       if (error) {
         Logger.error("Error recording AI feedback score", error, "AIFeedbackService");
@@ -73,10 +73,10 @@ export class AIFeedbackService {
         id: d.id,
         user_id: d.user_id || undefined,
         command_type: d.command_type,
-        command_data: (d.command_data as any) || {},
+        command_data: (d.command_data as Record<string, unknown>) || {},
         self_score: d.self_score,
-        feedback_data: (d.feedback_data as any) || {},
-        improvements: (d.improvements as any) || [],
+        feedback_data: (d.feedback_data as Record<string, unknown>) || {},
+        improvements: (d.improvements as unknown as string[]) || [],
         created_at: d.created_at
       }));
     } catch (error) {
@@ -127,10 +127,10 @@ export class AIFeedbackService {
         id: d.id,
         user_id: d.user_id || undefined,
         command_type: d.command_type,
-        command_data: (d.command_data as any) || {},
+        command_data: (d.command_data as Record<string, unknown>) || {},
         self_score: d.self_score,
-        feedback_data: (d.feedback_data as any) || {},
-        improvements: (d.improvements as any) || [],
+        feedback_data: (d.feedback_data as Record<string, unknown>) || {},
+        improvements: (d.improvements as unknown as string[]) || [],
         created_at: d.created_at
       }));
     } catch (error) {
