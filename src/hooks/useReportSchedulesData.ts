@@ -42,8 +42,7 @@ export function useReportSchedulesData() {
     queryKey: ["report-schedules"],
     queryFn: async () => {
       // Try to fetch from report_schedules table if it exists
-      const { data, error } = await supabase
-        .from("report_schedules" as any)
+      const { data, error } = await (supabase.from as Function)("report_schedules")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(20);
@@ -57,27 +56,28 @@ export function useReportSchedulesData() {
         };
       }
 
-      const schedules: ScheduledReport[] = (data as any[]).map((d) => ({
-        id: d.id,
-        template_id: d.template_id || "",
-        template_name: d.template_name || d.name || "",
-        name: d.name || "",
-        description: d.description,
-        report_type: d.report_type || "compliance",
-        frequency: d.frequency || "monthly",
-        day_of_week: d.day_of_week,
-        day_of_month: d.day_of_month,
-        time_of_day: d.time_of_day,
-        recipients: d.recipients || [],
-        format: d.format || "pdf",
-        parameters: d.parameters || {},
-        is_active: d.is_active ?? true,
-        last_run_at: d.last_run_at,
-        next_run_at: d.next_run_at,
-        created_by: d.created_by,
-        created_at: d.created_at,
-        updated_at: d.updated_at,
-        last_status: d.last_status,
+      type ScheduleRow = Record<string, unknown>;
+      const schedules: ScheduledReport[] = ((data || []) as ScheduleRow[]).map((d) => ({
+        id: d.id as string,
+        template_id: (d.template_id as string) || "",
+        template_name: (d.template_name as string) || (d.name as string) || "",
+        name: (d.name as string) || "",
+        description: (d.description as string | null) ?? null,
+        report_type: (d.report_type as ScheduledReport["report_type"]) || "compliance",
+        frequency: (d.frequency as string) || "monthly",
+        day_of_week: (d.day_of_week as number | null) ?? null,
+        day_of_month: (d.day_of_month as number | null) ?? null,
+        time_of_day: (d.time_of_day as string | null) ?? null,
+        recipients: (d.recipients as string[]) || [],
+        format: (d.format as string) || "pdf",
+        parameters: (d.parameters as Record<string, unknown>) || {},
+        is_active: (d.is_active as boolean) ?? true,
+        last_run_at: (d.last_run_at as string | null) ?? null,
+        next_run_at: (d.next_run_at as string | null) ?? null,
+        created_by: (d.created_by as string | null) ?? null,
+        created_at: (d.created_at as string) || "",
+        updated_at: (d.updated_at as string) || "",
+        last_status: d.last_status as ScheduledReport["last_status"],
       }));
 
       return {
