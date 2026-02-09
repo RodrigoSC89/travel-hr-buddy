@@ -302,7 +302,25 @@ export default function TransactionsManager() {
   };
 
   const handleExport = () => {
-    toast.success("Exportando transações...");
+    const data = filteredTransactions || [];
+    if (data.length === 0) {
+      toast.error("Nenhuma transação para exportar");
+      return;
+    }
+    const csvRows = [
+      "Data;Descrição;Tipo;Categoria;Valor;Status;Método Pagamento",
+      ...data.map((t: Transaction) =>
+        `${t.transaction_date};${t.description};${t.transaction_type};${t.category};${t.amount};${t.status};${t.payment_method || ""}`
+      )
+    ];
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `transacoes-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Transações exportadas com sucesso!");
   };
 
   return (
