@@ -99,7 +99,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
   const loadComplianceData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Load compliance data
 
       // Compliance Scores
       setComplianceScores([

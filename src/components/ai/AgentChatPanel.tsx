@@ -126,8 +126,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
     const thinkingLog = `[${new Date().toLocaleTimeString()}] Processando: "${userMessage.substring(0, 50)}..."`;
     setExecutionLogs(prev => [...prev, thinkingLog]);
 
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Process agent response
 
     // Get relevant responses for this agent
     const responses = AGENT_RESPONSES[agentId] || AGENT_RESPONSES.captain;

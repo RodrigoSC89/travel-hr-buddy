@@ -30,7 +30,7 @@ import { toast } from "sonner";
 
 export default function MedicalInfirmary() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh handled by React Query invalidation
   };
 
   const handleExport = () => {

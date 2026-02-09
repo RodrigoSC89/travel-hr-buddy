@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar, FileText, TrendingUp, Users, DollarSign, AlertCircle, Download, Filter, RefreshCw } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdvancedReportsSystem = () => {
   const { toast } = useToast();
@@ -50,8 +51,10 @@ const AdvancedReportsSystem = () => {
   const generateReport = async () => {
     setIsGenerating(true);
     try {
-      // Simular geração de relatório
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: `Generate ${selectedReport} report for period ${selectedPeriod}`, module: 'reports' }
+      });
+      if (error) throw error;
       toast({
         title: "Relatório Gerado",
         description: "O relatório foi gerado com sucesso!",
@@ -70,7 +73,6 @@ const AdvancedReportsSystem = () => {
   const exportReport = async (format: string) => {
     setIsExporting(true);
     try {
-      // Simulate export process with data preparation
       const reportData = {
         type: selectedReport,
         period: selectedPeriod,
@@ -80,15 +82,19 @@ const AdvancedReportsSystem = () => {
             departmentData
       };
 
-      // Simulate export delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `report-${selectedReport}-${new Date().toISOString().split('T')[0]}.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+
       toast({
         title: "Exportação Concluída",
         description: `Relatório exportado em formato ${format.toUpperCase()} com sucesso!`,
       });
 
-      // In a real implementation, this would trigger a file download
     } catch (error) {
       toast({
         title: "Erro na Exportação",

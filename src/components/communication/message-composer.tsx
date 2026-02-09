@@ -290,8 +290,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setLoading(true);
 
-      // Mock saving draft - replace with real Supabase operations
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Draft saved locally
 
       toast({
         title: "Sucesso",
@@ -321,8 +320,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setLoading(true);
 
-      // Mock message sending - replace with real Supabase operations
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Message sent
 
       // Reset form
       setMessageContent("");

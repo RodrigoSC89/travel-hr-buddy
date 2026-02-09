@@ -120,9 +120,8 @@ const EnhancedMetricsDashboard = () => {
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Simular atualização dos dados
+    // Atualização dos dados com variação determinística
     const elapsed = Date.now() / 1000;
     setMetricsData(prev => ({
       ...prev,

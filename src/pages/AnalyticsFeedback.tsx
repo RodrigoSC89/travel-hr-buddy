@@ -115,8 +115,7 @@ export default function AnalyticsFeedback() {
     }
 
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Submit NPS feedback
     
     toast.success('Obrigado pelo seu feedback!');
     setNpsScore(null);
@@ -131,7 +130,7 @@ export default function AnalyticsFeedback() {
     }
 
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Submit feedback
     
     toast.success(
       feedbackType === 'bug' 

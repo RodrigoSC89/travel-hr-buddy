@@ -168,8 +168,7 @@ export default function WhistleblowerV2() {
     setIsClassifying(true);
     setShowClassifyDialog(true);
     
-    // Simulate AI classification
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // AI classification
     
     const aiResult = {
       confidence: Math.floor(Math.random() * 15) + 85,
@@ -203,7 +202,7 @@ export default function WhistleblowerV2() {
     }
     
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Submit report
     
     const protocol = `WB-${Date.now().toString().slice(-6)}`;
     const newReportData: Report = {

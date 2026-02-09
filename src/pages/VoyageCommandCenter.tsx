@@ -200,7 +200,7 @@ export default function VoyageCommandCenter() {
     setIsOptimizing(true);
     toast.info("Otimizando rota com IA...");
     
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Route optimization
     
     setVoyages(prev => prev.map(v => 
       v.id === voyageId 

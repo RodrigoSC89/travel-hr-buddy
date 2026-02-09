@@ -192,8 +192,12 @@ export const SmartNotifications = () => {
   const handleSavePreferences = async () => {
     setSaving(true);
     try {
-      // Save to user preferences (would be a real DB call)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { error } = await supabase.from('ai_configurations').upsert({
+        config_key: 'notification_preferences',
+        config_value: preferences as any,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'config_key' });
+      if (error) throw error;
       logSuccess("UPDATE", "notification_preferences", null, { ...preferences } as Record<string, unknown>);
       toast.success("Preferências salvas com sucesso!");
     } catch (error) {

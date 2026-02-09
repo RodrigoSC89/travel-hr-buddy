@@ -186,7 +186,7 @@ export default function SecurityCenter() {
     setLoading(true);
     toast.info("Executando varredura de segurança...");
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Security scan
 
     setRiskScore(Math.floor(Math.random() * 10) + 85);
     toast.success("Varredura concluída");

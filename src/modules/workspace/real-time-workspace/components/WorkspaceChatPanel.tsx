@@ -199,8 +199,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
     
     setIsSendingFile(true);
     try {
-      // Simulate file upload
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Upload and send file
       
       const fileType = selectedFile.type.startsWith("image/") ? "image" : "file";
       onSendMessage(

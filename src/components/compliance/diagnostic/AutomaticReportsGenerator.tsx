@@ -102,8 +102,7 @@ export function AutomaticReportsGenerator() {
     setGenerating(template.id);
     toast.loading(`Gerando ${template.name}...`, { id: 'generating' });
     
-    // Simular geração
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Generate report data
     
     // Criar dados do relatório
     const reportData = {

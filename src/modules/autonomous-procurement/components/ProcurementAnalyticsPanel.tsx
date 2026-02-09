@@ -129,7 +129,7 @@ export default function ProcurementAnalyticsPanel() {
 
   const handleRunAnalysis = async () => {
     setIsAnalyzing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Analysis complete
     setIsAnalyzing(false);
     toast({
       title: "🧠 Análise Concluída",

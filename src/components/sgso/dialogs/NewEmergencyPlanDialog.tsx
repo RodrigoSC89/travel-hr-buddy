@@ -81,9 +81,6 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const newPlan = {
         id: Date.now().toString(),
         ...formData,

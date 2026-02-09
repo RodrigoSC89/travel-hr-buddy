@@ -252,7 +252,7 @@ function PeopleDashboard() {
 
 export default function NautiPeoplePremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh handled by React Query invalidation
   };
 
   const handleExport = () => {

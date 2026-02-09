@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import { format } from 'date-fns';
 
@@ -79,30 +80,35 @@ export const EnhancedAIControlTower: React.FC = () => {
   const loadAIData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 600));
+      // Load agents from agent_registry
+      const { data: agentData } = await supabase.from('agent_registry').select('*').limit(10);
+      if (agentData?.length) {
+        setAgents(agentData.map((a: any) => ({
+          id: a.id, name: a.name, type: a.capabilities?.type || 'General',
+          status: a.status === 'active' ? 'active' : 'idle',
+          tasksCompleted: a.metadata?.tasks_completed || 0, accuracy: a.metadata?.accuracy || 90,
+          lastActive: new Date(a.last_heartbeat || a.updated_at), description: a.metadata?.description || ''
+        })));
+      }
 
-      setAgents([
-        { id: '1', name: 'Agente de Manutenção Preditiva', type: 'Predictive', status: 'active', tasksCompleted: 1247, accuracy: 94.2, lastActive: new Date(), description: 'Análise preditiva de equipamentos' },
-        { id: '2', name: 'Agente de Otimização de Rotas', type: 'Optimization', status: 'processing', tasksCompleted: 892, accuracy: 89.7, lastActive: new Date(), description: 'Otimização de rotas e consumo' },
-        { id: '3', name: 'Agente de Compliance', type: 'Audit', status: 'active', tasksCompleted: 2341, accuracy: 97.1, lastActive: new Date(), description: 'Verificação automática de conformidade' },
-        { id: '4', name: 'Agente de Segurança', type: 'Security', status: 'idle', tasksCompleted: 567, accuracy: 91.5, lastActive: new Date(), description: 'Monitoramento de anomalias' },
-        { id: '5', name: 'Agente Financeiro', type: 'Finance', status: 'active', tasksCompleted: 1823, accuracy: 92.8, lastActive: new Date(), description: 'Análise e previsão financeira' },
-        { id: '6', name: 'Agente de Tripulação', type: 'HR', status: 'active', tasksCompleted: 445, accuracy: 88.3, lastActive: new Date(), description: 'Gestão inteligente de tripulação' },
-      ]);
+      // Load insights from ai_insights
+      const { data: insightData } = await supabase.from('ai_insights').select('*').order('created_at', { ascending: false }).limit(10);
+      if (insightData?.length) {
+        setInsights(insightData.map((i: any) => ({
+          id: i.id, type: i.category as any, module: i.related_module || '',
+          title: i.title, description: i.description, confidence: i.confidence * 100,
+          potentialImpact: i.impact_value || '', actionable: i.actionable, timestamp: new Date(i.created_at)
+        })));
+      }
 
-      setInsights([
-        { id: '1', type: 'optimization', module: 'Combustível', title: 'Oportunidade de economia de combustível', description: 'Otimização de velocidade pode reduzir consumo em 12% no trajeto atual', confidence: 92, potentialImpact: 'Economia de $45,000/mês', actionable: true, timestamp: new Date() },
-        { id: '2', type: 'prediction', module: 'Manutenção', title: 'Falha prevista em equipamento', description: 'Motor auxiliar #2 apresenta sinais de desgaste anormal', confidence: 87, potentialImpact: 'Evitar parada não programada', actionable: true, timestamp: new Date() },
-        { id: '3', type: 'alert', module: 'Compliance', title: 'Certificado expirando', description: '3 certificados expiram nos próximos 30 dias', confidence: 100, potentialImpact: 'Risco de não conformidade', actionable: true, timestamp: new Date() },
-        { id: '4', type: 'recommendation', module: 'Tripulação', title: 'Sugestão de escala otimizada', description: 'Nova distribuição de escalas pode melhorar satisfação em 15%', confidence: 78, potentialImpact: 'Melhoria no bem-estar', actionable: true, timestamp: new Date() },
-      ]);
-
-      setMetrics([
-        { label: 'Taxa de Adoção IA', value: 78, unit: '%', trend: 'up', change: 12 },
-        { label: 'Precisão Média', value: 92.4, unit: '%', trend: 'up', change: 3.2 },
-        { label: 'Insights Gerados/Dia', value: 47, unit: '', trend: 'up', change: 15 },
-        { label: 'Tempo Médio de Resposta', value: 1.2, unit: 's', trend: 'down', change: -25 },
-      ]);
+      // Load metrics
+      const { data: metricsData } = await supabase.from('ai_behavior_snapshots').select('*').order('created_at', { ascending: false }).limit(4);
+      if (metricsData?.length) {
+        setMetrics(metricsData.map((m: any) => ({
+          label: m.module_name, value: (m.accuracy_score || 0) * 100, unit: '%',
+          trend: 'up' as const, change: m.learning_rate || 0
+        })));
+      }
 
       setChatMessages([
         { id: '1', role: 'assistant', content: 'Olá! Sou o assistente IA do Nautilus One. Como posso ajudá-lo hoje?', timestamp: new Date() }
@@ -131,7 +137,7 @@ export const EnhancedAIControlTower: React.FC = () => {
     setIsProcessing(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data: aiResult } = await supabase.functions.invoke('ai-chat', { body: { prompt: chatInput, module: 'ai-control-tower' } });
 
       const responses: Record<string, string> = {
         default: `Analisei sua solicitação sobre "${chatInput}". Com base nos dados disponíveis, posso ajudar com análises preditivas, otimização de operações, conformidade regulatória e muito mais. Seja mais específico sobre o que você precisa.`,

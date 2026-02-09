@@ -79,7 +79,7 @@ export const EnhancedOperationsCenter: React.FC = () => {
   const loadOperationsData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 600));
+      // Load operations data
 
       setVessels([
         {

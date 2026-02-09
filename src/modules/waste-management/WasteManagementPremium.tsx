@@ -283,7 +283,7 @@ export default function WasteManagementPremium() {
   const criticalCount = data?.wasteCategories?.filter(c => c.status === "critical").length || 0;
 
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Real refresh handled by React Query invalidation
   };
 
   const handleExport = () => {

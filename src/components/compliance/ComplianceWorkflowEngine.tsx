@@ -352,7 +352,7 @@ export function ComplianceWorkflowEngine() {
   const handleSchedule = async () => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      
       
       const template = templates.find((t) => t.id === scheduleForm.template_id);
       const newAudit: AuditRun = {
@@ -403,7 +403,7 @@ export function ComplianceWorkflowEngine() {
     if (!selectedAudit) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      
       
       const auditFindings = findings.filter((f) => f.audit_id === selectedAudit.id);
       const score = 100 - auditFindings.length * 5;
@@ -438,7 +438,7 @@ export function ComplianceWorkflowEngine() {
     if (!selectedAudit) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      
       
       const newFinding: Finding = {
         id: `find-${Date.now()}`,
@@ -469,7 +469,7 @@ export function ComplianceWorkflowEngine() {
   const handleUpdateFindingStatus = async (finding: Finding, newStatus: Finding["status"]) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      
       
       setFindings((prev) =>
         prev.map((f) =>
@@ -508,7 +508,7 @@ export function ComplianceWorkflowEngine() {
     if (!selectedFinding) return;
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
+      
       
       setFindings((prev) =>
         prev.map((f) =>

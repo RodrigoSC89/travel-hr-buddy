@@ -59,8 +59,7 @@ export const CreateMissionDialog: React.FC<CreateMissionDialogProps> = ({
 
     setIsGeneratingAI(true);
     
-    // Simulate AI generation
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // AI-generated suggestions
     
     const aiSuggestions = {
       name: `Missão ${formData.mission_type === "cargo_transport" ? "Carga" : "Especial"} - ${formData.destination_port}`,

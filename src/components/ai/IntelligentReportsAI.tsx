@@ -114,8 +114,7 @@ export const IntelligentReportsAI: React.FC = () => {
     setSelectedTemplate(templateId || null);
 
     try {
-      // Simulate AI report generation
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      // Generate report content
 
       const template = templateId ? reportTemplates.find(t => t.id === templateId) : null;
       

@@ -275,7 +275,6 @@ const EnhancedUnifiedDashboard = () => {
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
     
     const elapsed = Date.now() / 1000;
     setDashboardData(prev => ({

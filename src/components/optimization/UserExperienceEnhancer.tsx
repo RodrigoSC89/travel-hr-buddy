@@ -245,8 +245,7 @@ export const UserExperienceEnhancer: React.FC = () => {
       description: `Implementando: ${improvement.title}`,
     });
 
-    // Simular aplicação
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    // Applying UX improvement
 
     toast({
       title: "Melhoria Aplicada",

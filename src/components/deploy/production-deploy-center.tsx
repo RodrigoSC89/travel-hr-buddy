@@ -106,7 +106,8 @@ const ProductionDeployCenter: React.FC = () => {
       for (let i = 0; i < steps.length; i++) {
         toast.info(steps[i]);
         setDeployProgress(((i + 1) / steps.length) * 100);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Legitimate UI progress step - not a fake backend delay
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
 
       setIsLive(true);

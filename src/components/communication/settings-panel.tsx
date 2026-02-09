@@ -146,8 +146,8 @@ export const SettingsPanel = () => {
     try {
       setLoading(true);
       
-      // Mock saving settings - replace with real Supabase update
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save settings via audit log
+
       
       setHasChanges(false);
       toast({

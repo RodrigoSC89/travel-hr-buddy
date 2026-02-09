@@ -143,8 +143,7 @@ export const AdvancedAIAssistant = () => {
       }
     };
 
-    // Simular delay de processamento IA
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // AI response via deterministic lookup
 
     const messageKey = userMessage.toLowerCase().includes("análise") ? "análise" :
       userMessage.toLowerCase().includes("processo") ? "processo" : "default";
