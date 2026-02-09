@@ -5,6 +5,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import type { Json } from "@/integrations/supabase/types";
+
+interface AuditMetadata {
+  title?: string;
+  audit_type?: string;
+  vessel_name?: string;
+  status?: string;
+  auditor_name?: string;
+  scope?: string[];
+  findings_count?: number;
+  observations_count?: number;
+}
 
 export interface AuditSchedule {
   id: string;
@@ -19,11 +31,15 @@ export interface AuditSchedule {
   observations?: number;
 }
 
+function parseMetadata(raw: Json | null): AuditMetadata {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  return raw as unknown as AuditMetadata;
+}
+
 export function useAuditSchedules(vesselId?: string) {
   return useQuery({
     queryKey: ["audit-schedules", vesselId],
     queryFn: async (): Promise<AuditSchedule[]> => {
-      // Usar audit_log como fonte de auditorias
       const { data, error } = await supabase
         .from("audit_log")
         .select("*")
@@ -34,7 +50,7 @@ export function useAuditSchedules(vesselId?: string) {
       if (error) throw error;
 
       return (data || []).map((log) => {
-        const metadata = log.metadata as any || {};
+        const metadata = parseMetadata(log.metadata);
         
         return {
           id: log.id,
@@ -85,7 +101,7 @@ export function useCreateAudit() {
             status: audit.status,
             auditor_name: audit.auditor,
             scope: audit.scope,
-          },
+          } as unknown as Json,
         })
         .select()
         .single();

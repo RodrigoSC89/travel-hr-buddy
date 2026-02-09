@@ -5,6 +5,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type ExpenseRow = Database["public"]["Tables"]["expenses"]["Row"];
 
 export interface Payment {
   id: string;
@@ -53,7 +56,6 @@ export function usePayrollData(selectedPeriod: string = "all") {
       const baseSalary = contract?.base_salary || 0;
 
       // Fetch from expenses (using expenses as payment records)
-      // expenses table columns: date, amount, category, description, status
       const { data: expenses, error } = await supabase
         .from("expenses")
         .select("*")
@@ -62,13 +64,13 @@ export function usePayrollData(selectedPeriod: string = "all") {
 
       if (error) throw error;
 
-      const payments: Payment[] = (expenses || []).map((e: any) => ({
+      const payments: Payment[] = (expenses || []).map((e: ExpenseRow) => ({
         id: e.id,
         type: mapCategoryToType(e.category),
         description: e.description || e.category || "Pagamento",
         amount: e.amount || 0,
         date: e.date || e.created_at,
-        status: e.status === "approved" ? "paid" : e.status === "pending" ? "pending" : "processing",
+        status: e.status === "approved" ? "paid" as const : e.status === "pending" ? "pending" as const : "processing" as const,
         reference: undefined,
       }));
 

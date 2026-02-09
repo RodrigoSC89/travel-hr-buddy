@@ -5,6 +5,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface AuditPackage {
   id: string;
@@ -26,36 +27,51 @@ export interface DocumentItem {
   vessel?: string;
 }
 
+interface FindingItem {
+  status?: string;
+  description?: string;
+}
+
+function parseFindings(raw: string | null): FindingItem[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 // Hook para pacotes de auditoria
 export function useAuditPackages() {
   return useQuery({
     queryKey: ["audit-packages"],
     queryFn: async (): Promise<AuditPackage[]> => {
-      // Buscar do sgso_audits ou audits table
       const { data, error } = await supabase
         .from("sgso_audits")
-        .select("id, audit_type, status, scope, findings, created_at, updated_at")
+        .select("id, audit_type, status, findings, created_at, updated_at")
         .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       if (!data || data.length === 0) return [];
 
-      return data.map((audit: any) => {
-        const findings = Array.isArray(audit.findings) ? audit.findings : [];
-        const completeness = findings.length > 0 
-          ? Math.round((findings.filter((f: any) => f.status === 'resolved').length / findings.length) * 100)
+      return data.map((audit) => {
+        const findings = parseFindings(audit.findings);
+        const resolvedCount = findings.filter(f => f.status === 'resolved').length;
+        const completeness = findings.length > 0
+          ? Math.round((resolvedCount / findings.length) * 100)
           : 100;
 
         return {
           id: audit.id,
-          name: `Auditoria ${audit.audit_type || 'SGSO'} - ${new Date(audit.created_at).toLocaleDateString('pt-BR')}`,
+          name: `Auditoria ${audit.audit_type || 'SGSO'} - ${new Date(audit.created_at || Date.now()).toLocaleDateString('pt-BR')}`,
           type: (audit.audit_type?.toUpperCase() || 'ISM') as AuditPackage['type'],
           status: audit.status === 'completed' ? 'ready' : audit.status === 'in_progress' ? 'generating' : 'pending',
           completeness,
           documents: findings.length || 0,
-          lastGenerated: new Date(audit.updated_at || audit.created_at),
-          missingItems: findings.filter((f: any) => f.status === 'open').map((f: any) => f.description || 'Item pendente')
+          lastGenerated: new Date(audit.updated_at || audit.created_at || Date.now()),
+          missingItems: findings.filter(f => f.status === 'open').map(f => f.description || 'Item pendente')
         };
       });
     },
@@ -70,14 +86,7 @@ export function useAuditDocuments() {
     queryFn: async (): Promise<DocumentItem[]> => {
       const { data, error } = await supabase
         .from("maritime_certificates")
-        .select(`
-          id,
-          certificate_type,
-          certificate_number,
-          expiry_date,
-          status,
-          vessels:vessel_id (name)
-        `)
+        .select("id, certificate_number, expiry_date, status, issuing_authority")
         .order("expiry_date", { ascending: true })
         .limit(20);
 
@@ -87,7 +96,7 @@ export function useAuditDocuments() {
       const now = Date.now();
       const thirtyDays = 30 * 24 * 60 * 60 * 1000;
 
-      return data.map((cert: any) => {
+      return data.map((cert) => {
         const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : undefined;
         let status: DocumentItem['status'] = 'valid';
         
@@ -101,11 +110,11 @@ export function useAuditDocuments() {
 
         return {
           id: cert.id,
-          name: cert.certificate_type || 'Certificado',
-          category: getCertificateCategory(cert.certificate_type),
+          name: cert.certificate_number || cert.issuing_authority || 'Certificado',
+          category: getCertificateCategory(cert.issuing_authority),
           status,
           expiryDate,
-          vessel: cert.vessels?.name
+          vessel: undefined
         };
       });
     },
