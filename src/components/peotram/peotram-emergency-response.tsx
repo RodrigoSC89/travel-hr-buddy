@@ -178,7 +178,9 @@ export const PeotramEmergencyResponse: React.FC = () => {
         </div>
         
         <div className="flex gap-2">
-          <Button variant="destructive">
+          <Button variant="destructive" onClick={() => {
+            toast.error("🚨 ALARME GERAL ACIONADO!", { description: "Todos os postos de emergência devem ser ocupados imediatamente.", duration: 10000 });
+          }}>
             <Siren className="w-4 h-4 mr-2" />
             Alarme Geral
           </Button>
@@ -238,7 +240,21 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   <Button variant="outline" onClick={() => setIsNewIncidentOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button variant="destructive" onClick={() => setIsNewIncidentOpen(false)}>
+                  <Button variant="destructive" onClick={() => {
+                    const newIncident: EmergencyIncident = {
+                      id: `INC${String(incidents.length + 1).padStart(3, '0')}`,
+                      type: "security",
+                      severity: "medium",
+                      status: "active",
+                      location: "A definir",
+                      description: "Incidente reportado via formulário",
+                      reportedBy: "Operador",
+                      reportedAt: new Date().toISOString()
+                    };
+                    setIncidents(prev => [newIncident, ...prev]);
+                    setIsNewIncidentOpen(false);
+                    toast.success("Incidente reportado com sucesso", { description: `ID: ${newIncident.id}` });
+                  }}>
                     Reportar Emergência
                   </Button>
                 </div>
@@ -294,13 +310,22 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                      toast.info(`Comunicação sobre ${incident.id}`, { description: `Enviando alerta para todos os contatos sobre: ${incident.description}` });
+                    }}>
                       <Radio className="w-3 h-3 mr-1" />
                       Comunicar
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                      setIncidents(prev => prev.map(inc => 
+                        inc.id === incident.id 
+                          ? { ...inc, status: inc.status === "active" ? "contained" : "resolved", respondedAt: new Date().toISOString() }
+                          : inc
+                      ));
+                      toast.success(`${incident.id} atualizado para ${incident.status === "active" ? "contido" : "resolvido"}`);
+                    }}>
                       <Activity className="w-3 h-3 mr-1" />
-                      Atualizar
+                      {incident.status === "active" ? "Conter" : "Resolver"}
                     </Button>
                   </div>
                 </CardContent>
@@ -331,10 +356,14 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                      toast.info(procedure.title, { description: `Passos: ${procedure.steps.length} | Recursos: ${procedure.resources.join(', ')}`, duration: 8000 });
+                    }}>
                       Ver Detalhes
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                      toast.success(`Procedimento "${procedure.title}" iniciado`, { description: `Passo 1: ${procedure.steps[0]}` });
+                    }}>
                       Iniciar Procedimento
                     </Button>
                   </div>
@@ -367,7 +396,10 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   }>
                     {contact.priority}
                   </Badge>
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full" onClick={() => {
+                    window.open(`tel:${contact.phone.replace(/\D/g, '')}`, '_self');
+                    toast.info(`Ligando para ${contact.name}...`, { description: contact.phone });
+                  }}>
                     <Phone className="w-3 h-3 mr-1" />
                     Ligar
                   </Button>
@@ -384,7 +416,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               Gerencie equipamentos e recursos disponíveis para emergências
             </p>
-            <Button onClick={() => toast.success("Recurso adicionado!", { description: "Novo equipamento de emergência cadastrado" })}>
+            <Button onClick={() => toast.info("Módulo de Recursos de Emergência", { description: "Cadastro de equipamentos de emergência será integrado ao inventário do módulo de manutenção." })}>
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Recurso
             </Button>

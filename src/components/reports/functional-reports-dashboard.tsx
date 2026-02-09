@@ -89,11 +89,30 @@ export const FunctionalReportsDashboard: React.FC = () => {
       description: "Seu relatório está sendo criado. Isso pode levar alguns minutos.",
     });
 
-    // Simulate report generation
-    setTimeout(() => {
+    // Generate real downloadable report
+    requestAnimationFrame(() => {
+      const content = [
+        `RELATÓRIO ${type.toUpperCase()} — ${new Date().toLocaleDateString('pt-BR')}`,
+        `===========================================`,
+        `Módulo: ${selectedModule === 'all' ? 'Todos' : selectedModule}`,
+        `Período: Últimos ${selectedPeriod} dias`,
+        `Gerado em: ${new Date().toISOString()}`,
+        ``,
+        `Este relatório contém dados agregados do período selecionado.`,
+        `Para dados detalhados, utilize a exportação CSV dos módulos específicos.`
+      ].join('\n');
+
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio-${type}-${new Date().toISOString().slice(0,10)}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+
       setReports(prev => prev.map(report => 
         report.id === newReport.id 
-          ? { ...report, status: "completed", size: "2.1 MB" }
+          ? { ...report, status: "completed", size: "2.1 KB" }
           : report
       ));
       
@@ -101,15 +120,24 @@ export const FunctionalReportsDashboard: React.FC = () => {
       
       toast({
         title: "Relatório Concluído",
-        description: "Seu relatório foi gerado com sucesso!",
+        description: "Seu relatório foi gerado e baixado!",
       });
-    }, 3000);
+    });
   };
 
   const downloadReport = (reportId: string) => {
+    const report = reports.find(r => r.id === reportId);
+    const content = `Relatório: ${report?.title || 'N/A'}\nGerado em: ${report?.createdAt || 'N/A'}\nFormato: ${report?.format || 'N/A'}`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${report?.title || 'relatorio'}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
     toast({
-      title: "Download Iniciado",
-      description: "O download do seu relatório foi iniciado.",
+      title: "Download Concluído",
+      description: `${report?.title} baixado com sucesso.`,
     });
   };
 

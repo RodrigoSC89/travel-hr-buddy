@@ -238,14 +238,21 @@ const VesselCTS = () => {
         <TabsContent value="cts" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificados Técnicos da Embarcação</h2>
-            <Button onClick={() => {
-              toast.loading('Preparando formulário...', { id: 'new-cts' });
-              setTimeout(() => {
-                toast.success('Formulário de novo CTS aberto', { 
-                  id: 'new-cts',
-                  description: 'Preencha os dados do certificado técnico' 
+            <Button onClick={async () => {
+              try {
+                const { error } = await supabase.from('cts_records').insert({
+                  cts_number: `CTS-${Date.now().toString(36).toUpperCase()}`,
+                  flag_state: 'Brasil',
+                  issue_date: new Date().toISOString().slice(0, 10),
+                  expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+                  status: 'pending'
                 });
-              }, 500);
+                if (error) throw error;
+                toast.success('Novo CTS criado. Edite os detalhes.');
+                loadData();
+              } catch {
+                toast.error('Erro ao criar CTS');
+              }
             }}>
               <Plus className="h-4 w-4 mr-2" />
               Novo CTS
@@ -284,7 +291,10 @@ const VesselCTS = () => {
                           </span>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" onClick={() => toast.success(`CTS ${cts.cts_number}`, { description: `Flag: ${cts.flag_state} | Status: ${cts.status}` })}>
+                      <Button variant="outline" size="sm" onClick={() => toast.info(`Detalhes CTS ${cts.cts_number}`, {
+                        description: `Bandeira: ${cts.flag_state || 'N/A'} | Classificadora: ${cts.classification_society || 'N/A'} | Status: ${cts.status || 'N/A'} | Emissão: ${cts.issue_date ? new Date(cts.issue_date).toLocaleDateString('pt-BR') : 'N/A'} | Vencimento: ${cts.expiry_date ? new Date(cts.expiry_date).toLocaleDateString('pt-BR') : 'N/A'}`,
+                        duration: 10000
+                      })}>
                         <FileText className="h-4 w-4 mr-2" />
                         Detalhes
                       </Button>
@@ -300,14 +310,22 @@ const VesselCTS = () => {
         <TabsContent value="certifications" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificações da Tripulação</h2>
-            <Button onClick={() => {
-              toast.loading('Preparando formulário...', { id: 'new-cert' });
-              setTimeout(() => {
-                toast.success('Formulário de nova certificação aberto', { 
-                  id: 'new-cert',
-                  description: 'Preencha os dados da certificação' 
+            <Button onClick={async () => {
+              try {
+                const { error } = await supabase.from('crew_certifications').insert({
+                  certification_name: 'Nova Certificação',
+                  certification_type: 'STCW',
+                  crew_member_id: '00000000-0000-0000-0000-000000000000',
+                  issue_date: new Date().toISOString().slice(0, 10),
+                  issuing_authority: 'A definir',
+                  status: 'pending'
                 });
-              }, 500);
+                if (error) throw error;
+                toast.success('Nova certificação criada. Edite os detalhes.');
+                loadData();
+              } catch {
+                toast.error('Erro ao criar certificação');
+              }
             }}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Certificação

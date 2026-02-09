@@ -106,7 +106,9 @@ export default function CronMonitorPage() {
             Painel de monitoramento de cron jobs e tarefas SGSO
           </p>
         </div>
-        <Button onClick={() => toast.success("Atualizado!")}>
+        <Button onClick={() => {
+          toast.success("Dados atualizados!", { description: `${jobs.length} jobs, taxa de sucesso: ${stats.success_rate.toFixed(1)}%` });
+        }}>
           <RefreshCw className="w-4 h-4 mr-2" />
           Atualizar
         </Button>

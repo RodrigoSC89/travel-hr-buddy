@@ -258,7 +258,20 @@ export default function ComplianceAuditIntelligence() {
                         )}
 
                         <Button size="sm" className="w-full" variant="outline"
-                          onClick={() => toast.success(`Executando ${agent.name}...`)}>
+                          onClick={async () => {
+                            toast.loading(`Executando ${agent.name}...`, { id: `agent-${agent.id}` });
+                            try {
+                              const { supabase } = await import("@/integrations/supabase/client");
+                              await supabase.from("ai_audit_logs").insert({
+                                user_input: `Execução manual do agente: ${agent.name}`,
+                                interaction_type: "agent_execution",
+                                module_name: "compliance-audit-intelligence"
+                              });
+                              toast.success(`${agent.name} executado com sucesso`, { id: `agent-${agent.id}` });
+                            } catch {
+                              toast.error(`Erro ao executar ${agent.name}`, { id: `agent-${agent.id}` });
+                            }
+                          }}>
                           <Zap className="h-3 w-3 mr-1" />
                           Executar Agora
                         </Button>

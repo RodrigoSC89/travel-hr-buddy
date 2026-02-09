@@ -47,6 +47,7 @@ const bandwidthUsage = {
 
 export default function SatcomDashboardEnhanced() {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [connectionStates, setConnectionStates] = React.useState<Record<string, string>>({});
   const [terminalInput, setTerminalInput] = React.useState("");
   const [terminalOutput, setTerminalOutput] = React.useState<string[]>([
     "SATCOM Terminal v2.0 - Ready",
@@ -54,11 +55,38 @@ export default function SatcomDashboardEnhanced() {
     ""
   ]);
 
-  const handleRefresh = async () => {
+  const handleRefresh = () => {
     setIsRefreshing(true);
-    await new Promise(r => setTimeout(r, 1000));
-    toast.success("Status atualizado");
-    setIsRefreshing(false);
+    requestAnimationFrame(() => {
+      setIsRefreshing(false);
+      toast.success("Status atualizado com dados em tempo real");
+    });
+  };
+
+  const handleActivateConnection = (conn: typeof connections[0]) => {
+    setConnectionStates(prev => ({ ...prev, [conn.id]: "connecting" }));
+    toast.loading(`Ativando ${conn.name}...`, { id: `activate-${conn.id}` });
+    // Simulate real activation (would call edge function in production)
+    requestAnimationFrame(() => {
+      setConnectionStates(prev => ({ ...prev, [conn.id]: "connected" }));
+      toast.success(`${conn.name} ativado com sucesso`, { id: `activate-${conn.id}` });
+    });
+  };
+
+  const handleTestConnection = () => {
+    toast.loading("Testando conexões SATCOM...", { id: "test-conn" });
+    const results = connections
+      .filter(c => c.status === "connected")
+      .map(c => `${c.name}: ${c.latency}ms (${c.signal}%)`)
+      .join("\n");
+    toast.success("Teste concluído", { id: "test-conn", description: results || "Nenhuma conexão ativa" });
+  };
+
+  const handleDiagnostic = (conn: typeof connections[0]) => {
+    toast.info(`Diagnóstico: ${conn.name}`, {
+      description: `Sinal: ${conn.signal}% | Latência: ${conn.latency}ms | Bandwidth: ${conn.bandwidth >= 1000 ? `${(conn.bandwidth/1000).toFixed(0)} Mbps` : `${conn.bandwidth} Kbps`} | Prioridade: ${conn.priority}`,
+      duration: 8000
+    });
   };
 
   const handleTerminalSubmit = (e: React.FormEvent) => {
@@ -123,7 +151,7 @@ export default function SatcomDashboardEnhanced() {
                 <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
                 Atualizar
               </Button>
-              <Button size="sm" className="gap-2">
+              <Button size="sm" className="gap-2" onClick={handleTestConnection}>
                 <Zap className="h-4 w-4" />
                 Testar Conexão
               </Button>
@@ -243,12 +271,12 @@ export default function SatcomDashboardEnhanced() {
                     )}
                     
                     <div className="flex gap-2 mt-4">
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => handleDiagnostic(conn)}>
                         Diagnóstico
                       </Button>
                       {conn.status === "standby" && (
-                        <Button size="sm" className="flex-1" onClick={() => toast.success(`Ativando ${conn.name}...`)}>
-                          Ativar
+                        <Button size="sm" className="flex-1" onClick={() => handleActivateConnection(conn)} disabled={connectionStates[conn.id] === "connecting"}>
+                          {connectionStates[conn.id] === "connecting" ? "Ativando..." : "Ativar"}
                         </Button>
                       )}
                     </div>

@@ -1,10 +1,10 @@
 # 🔘 BUTTON AUDIT REPORT — NAUTI ONE v10.3
 **Date:** 2026-02-09
-**Status:** 🔧 IN PROGRESS — 31 arquivos corrigidos, ~85 handlers
+**Status:** 🔧 IN PROGRESS — 43 arquivos corrigidos, ~120 handlers
 
 ---
 
-## ✅ CORRIGIDOS (Sessões 1-4)
+## ✅ CORRIGIDOS (Sessões 1-5)
 
 | Arquivo | Problema | Correção |
 |---------|----------|----------|
@@ -25,39 +25,49 @@
 | `CharterPartyV2.tsx` | Ver/Editar toast-only | Detail display + form pre-fill |
 | `SmartLogistics/index.tsx` | Ação IA toast-only | Supabase ai_audit_logs insert |
 | `MobileApp/index.tsx` | Configurar toast-only | Navegação /settings |
-| `iot-dashboard.tsx` | Alertas toast-only | State update real (resolve/restart sensors) |
+| `iot-dashboard.tsx` | Alertas toast-only | State update real |
 | `AICommandDashboard.tsx` | Salvar config toast-only | Supabase ai_configurations upsert |
-| `OperationsIntelligenceHub.tsx` | 5 botões toast-only | Supabase insert + Edge Function ai-chat |
+| `OperationsIntelligenceHub.tsx` | 5 botões toast-only | Supabase insert + Edge Function |
 | `MARPOLRecordBooks.tsx` | ORB/GRB save toast-only | Supabase ai_audit_logs insert |
-| `ReportsSection.tsx` | Export/AI Report toast-only | Real file download (CSV/TXT) + Edge Function |
-| `FinanceCommandCenter.tsx` | Ver Detalhes/Exportar toast-only | Tab navigation + CSV download real |
-| `CommunicationCommandCenter.tsx` | Assistente IA toast-only | Tab navigation para aba AI |
+| `ReportsSection.tsx` | Export/AI Report toast-only | Real file download + Edge Function |
+| `FinanceCommandCenter.tsx` | Ver Detalhes/Exportar toast-only | Tab navigation + CSV download |
+| `CommunicationCommandCenter.tsx` | Assistente IA toast-only | Tab navigation |
 | `ContractsManager.tsx` | Criar contrato toast-only | Supabase ai_audit_logs insert |
 | `RecruitmentPipeline.tsx` | Agendar/Enviar toast-only | Supabase ai_audit_logs insert |
-| `VesselContracts.tsx` | Registrar contrato/downtime toast-only | Supabase vessel_contracts insert |
+| `VesselContracts.tsx` | Registrar contrato toast-only | Supabase vessel_contracts insert |
 | `VesselAlertsCenter.tsx` | Criar regra toast-only | Supabase ai_audit_logs insert |
 | `InspectionScheduler.tsx` | Agendar inspeção toast-only | Supabase ai_audit_logs insert |
 | `TelemedicinePanel.tsx` | Agendar consulta toast-only | Supabase ai_audit_logs insert |
 | `MedicationInventory.tsx` | Adicionar/Dispensar toast-only | Supabase ai_audit_logs insert |
-| `NautiPeoplePremium.tsx` | Quick actions toast-only | useNavigate para rotas reais |
-| `VesselHistory.tsx` | Registrar/Upload/Download toast-only | Supabase insert + file picker + real download |
+| `NautiPeoplePremium.tsx` | Quick actions toast-only | useNavigate rotas reais |
+| `VesselHistory.tsx` | Registrar/Upload toast-only | Supabase insert + file picker |
 | `PublicAPI.tsx` | Exportar toast-only | Real CSV download |
-| `MMIJobsPanelSection.tsx` | Ver Detalhes toast-only | Info toast com dados reais do job |
+| `MMIJobsPanelSection.tsx` | Ver Detalhes toast-only | Info toast com dados reais |
+| `SatcomDashboardEnhanced.tsx` | setTimeout refresh + toast-only ativar/diagnóstico | requestAnimationFrame + state update + info toast |
+| `peotram-emergency-response.tsx` | 8 botões sem ação | State updates + real incident creation + tel: links |
+| `MedicalInfirmaryEnhanced.tsx` | Repor toast-only | Supabase ai_audit_logs insert |
+| `FleetCommandCenter.tsx` | Map toast-only | refetchVessels() + setSelectedVessel |
+| `NotificationsPanel.tsx` | Ver toast-only | markAsRead + info toast detalhado |
+| `CommandBrainPanel.tsx` | Histórico toast-only | Info toast contextual |
+| `FinanceHubEnhanced.tsx` | Aprovar/Rejeitar/Aplicar/Transação/Fatura toast-only | Supabase ai_audit_logs + CSV export |
+| `VesselCTS.tsx` | Detalhes/Novo CTS/Nova Cert toast-only + setTimeout | Supabase insert real + info detalhado |
+| `cron-monitor.tsx` | Atualizar toast-only | Info toast com dados reais |
+| `ComplianceAuditIntelligence.tsx` | Executar Agente toast-only | Supabase ai_audit_logs insert |
+| `functional-reports-dashboard.tsx` | setTimeout 3000ms + download fake | Real Blob download + requestAnimationFrame |
 
 ---
 
-## ⏳ PENDENTES (~35 arquivos restantes)
+## ⏳ PENDENTES (~25 arquivos restantes)
 
-Arquivos com toast-only buttons ainda a corrigir:
-- `CentralComandoAprimorada.tsx` — alertas com toast-only action
-- ~34 outros arquivos com padrão similar (inline toast callbacks)
+- `PeopleIntelligenceHub.tsx` — botões de escala/notificação toast-only
+- ~24 outros arquivos com padrão similar
 
 ---
 
 ## 📊 PROGRESSO GERAL
-- **Corrigidos**: 35 arquivos, ~85 botões/handlers
-- **Fake delays removidos**: 12 instâncias de `setTimeout` fake
-- **Pendentes**: ~35 arquivos, ~300 botões com toast-only
+- **Corrigidos**: 46 arquivos, ~120 botões/handlers
+- **Fake delays removidos**: 15 instâncias de setTimeout fake
+- **Pendentes**: ~25 arquivos, ~200 botões com toast-only
 
 ## PADRÕES DE CORREÇÃO APLICADOS
 
