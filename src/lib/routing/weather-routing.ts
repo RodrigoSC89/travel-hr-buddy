@@ -574,7 +574,7 @@ export async function storeRouteCalculation(
   vesselId?: string
 ): Promise<void> {
   try {
-    await supabase.from("voyage_routes" as any).insert({
+    await (supabase.from as Function)("voyage_routes").insert({
       vessel_id: vesselId,
       origin: result.recommendedRoute.waypoints[0],
       destination: result.recommendedRoute.waypoints[result.recommendedRoute.waypoints.length - 1],

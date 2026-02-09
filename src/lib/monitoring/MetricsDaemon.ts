@@ -85,8 +85,9 @@ class MetricsDaemon {
   }
 
   private getMemoryUsage(): number {
-    if ((performance as any).memory) {
-      return Math.round((performance as any).memory.usedJSHeapSize / 1024 / 1024);
+    const perfWithMemory = performance as Performance & { memory?: { usedJSHeapSize: number } };
+    if (perfWithMemory.memory) {
+      return Math.round(perfWithMemory.memory.usedJSHeapSize / 1024 / 1024);
     }
     return 0;
   }

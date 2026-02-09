@@ -109,9 +109,8 @@ export async function createDocument(
     status: 'draft',
   } as Record<string, unknown>;
 
-  const { data: doc, error } = await supabase
-    .from('document_registry')
-    .insert(insertData as any)
+  const { data: doc, error } = await (supabase.from as Function)('document_registry')
+    .insert(insertData)
     .select()
     .single();
 
@@ -210,7 +209,8 @@ export async function createNewVersion(
     .eq('id', documentId);
 
   // Create new version
-  const newVersion = (current as any).version + 1;
+  const currentRecord = current as Record<string, unknown>;
+  const newVersion = (Number(currentRecord.version) || 0) + 1;
   const { data: newDoc, error: createError } = await supabase
     .from('document_registry')
     .insert({
@@ -235,10 +235,10 @@ export async function createNewVersion(
   // Record version history
   await supabase.from('document_versions').insert({
     document_id: documentId,
-    version: (current as any).version,
-    file_path: (current as any).file_path,
-    file_size: (current as any).file_size,
-    checksum: (current as any).checksum,
+    version: Number(currentRecord.version) || 0,
+    file_path: currentRecord.file_path as string,
+    file_size: currentRecord.file_size as number,
+    checksum: currentRecord.checksum as string,
     change_summary: changeSummary,
     changed_by: userId,
     document_snapshot: current,
@@ -269,7 +269,7 @@ export async function submitForApproval(
   // Create approval steps
   const steps = approvalSteps.map((step, index) => ({
     document_id: documentId,
-    version: (doc as any).version,
+    version: Number((doc as Record<string, unknown>).version) || 0,
     step_order: index + 1,
     step_name: step.step_name,
     required_role: step.required_role,
@@ -315,7 +315,7 @@ export async function processApproval(
 
   const { error } = await supabase
     .from('document_approvals')
-    .update(updateData as any)
+    .update(updateData)
     .eq('id', approvalId);
 
   if (error) {
@@ -379,7 +379,7 @@ export async function acknowledgeDocument(
 
   const { error } = await supabase
     .from('document_distribution')
-    .update(updateData as any)
+    .update(updateData)
     .eq('id', distributionId);
 
   if (error) {

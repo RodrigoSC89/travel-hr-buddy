@@ -37,7 +37,7 @@ class NFCService {
   private isScanning: boolean = false;
   private scanCallback: NFCCallback | null = null;
   private errorCallback: NFCErrorCallback | null = null;
-  private ndefReader: any = null;
+  private ndefReader: unknown = null;
 
   constructor() {
     this.isNative = Capacitor.isNativePlatform();
@@ -95,12 +95,13 @@ class NFCService {
     try {
       // Web NFC API
       if ("NDEFReader" in window) {
-        const NDEFReader = (window as any).NDEFReader;
-        this.ndefReader = new NDEFReader();
+        const NDEFReaderCtor = (window as Window & { NDEFReader?: new () => Record<string, unknown> }).NDEFReader!;
+        this.ndefReader = new NDEFReaderCtor();
         
-        await this.ndefReader.scan();
+        await (this.ndefReader as Record<string, Function>).scan();
         
-        this.ndefReader.addEventListener("reading", ({ message, serialNumber }: any) => {
+        (this.ndefReader as EventTarget).addEventListener("reading", (evt: Event) => {
+          const { message, serialNumber } = evt as Event & { message: unknown; serialNumber: string };
           const tag = this.parseWebNFCTag(serialNumber, message);
           logger.info("[NFC] Tag read:", tag);
           if (this.scanCallback) {
@@ -108,7 +109,7 @@ class NFCService {
           }
         });
 
-        this.ndefReader.addEventListener("readingerror", () => {
+        (this.ndefReader as EventTarget).addEventListener("readingerror", () => {
           const error = new Error("Erro ao ler tag NFC");
           logger.error("[NFC] Read error");
           if (this.errorCallback) {
@@ -169,8 +170,8 @@ class NFCService {
     try {
       // Web NFC API
       if ("NDEFReader" in window) {
-        const NDEFReader = (window as any).NDEFReader;
-        const writer = new NDEFReader();
+        const NDEFReaderCtor = (window as Window & { NDEFReader?: new () => Record<string, Function> }).NDEFReader!;
+        const writer = new NDEFReaderCtor();
         
         const records = data.map((record) => {
           if (record.type === "text") {
@@ -198,11 +199,12 @@ class NFCService {
   /**
    * Parse Web NFC tag to our interface
    */
-  private parseWebNFCTag(serialNumber: string, message: any): NFCTag {
+  private parseWebNFCTag(serialNumber: string, message: unknown): NFCTag {
     const records: NFCRecord[] = [];
+    const msg = message as { records?: Array<{ encoding?: string; data?: BufferSource; recordType?: string; lang?: string }> } | null;
 
-    if (message && message.records) {
-      for (const record of message.records) {
+    if (msg && msg.records) {
+      for (const record of msg.records) {
         const decoder = new TextDecoder(record.encoding || "utf-8");
         let payload = "";
         

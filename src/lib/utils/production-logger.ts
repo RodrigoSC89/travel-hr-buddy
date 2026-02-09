@@ -130,8 +130,8 @@ class ProductionLogger {
     this.sendToRemote(entry);
 
     // Send to Sentry if available
-    if (typeof window !== "undefined" && (window as any).Sentry && error instanceof Error) {
-      (window as any).Sentry.captureException(error, { extra: context });
+    if (typeof window !== "undefined" && (window as Window & { Sentry?: { captureException: (err: Error, opts: Record<string, unknown>) => void } }).Sentry && error instanceof Error) {
+      (window as Window & { Sentry?: { captureException: (err: Error, opts: Record<string, unknown>) => void } }).Sentry!.captureException(error, { extra: context });
     }
   }
 

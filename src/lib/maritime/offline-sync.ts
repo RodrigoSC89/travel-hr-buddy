@@ -6,6 +6,13 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { logger } from '@/lib/logger';
 
+interface NetworkInfo {
+  effectiveType?: string;
+  downlink?: number;
+  rtt?: number;
+  saveData?: boolean;
+}
+
 interface NautiDBSchema extends DBSchema {
   pendingSync: {
     key: string;
@@ -13,7 +20,7 @@ interface NautiDBSchema extends DBSchema {
       id: string;
       table: string;
       operation: 'insert' | 'update' | 'delete';
-      data: Record<string, any>;
+      data: Record<string, unknown>;
       timestamp: number;
       retries: number;
       priority: 'critical' | 'high' | 'normal' | 'low';
@@ -24,7 +31,7 @@ interface NautiDBSchema extends DBSchema {
     key: string;
     value: {
       key: string;
-      data: any;
+      data: unknown;
       expiresAt: number;
       fetchedAt: number;
       etag?: string;
@@ -81,11 +88,11 @@ export interface ConnectionQuality {
 }
 
 export function detectConnectionQuality(): ConnectionQuality {
-  const nav = navigator as any;
+  const nav = navigator as Navigator & { connection?: NetworkInfo; mozConnection?: NetworkInfo; webkitConnection?: NetworkInfo };
   const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
   const quality: ConnectionQuality = {
-    effectiveType: connection?.effectiveType || 'unknown',
+    effectiveType: (connection?.effectiveType as ConnectionQuality['effectiveType']) || 'unknown',
     downlink: connection?.downlink || 10,
     rtt: connection?.rtt || 100,
     saveData: connection?.saveData || false,
@@ -124,7 +131,7 @@ export function getAdaptiveTimeout(quality: ConnectionQuality): number {
 export async function queueForSync(
   table: string,
   operation: 'insert' | 'update' | 'delete',
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
 ): Promise<string> {
   const database = await initOfflineDB();
@@ -185,7 +192,7 @@ export async function incrementRetryCount(id: string): Promise<void> {
  */
 export async function cacheData(
   key: string,
-  data: any,
+  data: unknown,
   ttlMs: number = 3600000, // 1 hour default
   etag?: string
 ): Promise<void> {
@@ -209,10 +216,10 @@ export async function getCachedData<T>(key: string): Promise<{ data: T; etag?: s
   if (!cached) return null;
   if (cached.expiresAt < Date.now()) {
     // Expired but return stale data with flag for stale-while-revalidate
-    return { data: cached.data, etag: cached.etag };
+    return { data: cached.data as T, etag: cached.etag };
   }
 
-  return { data: cached.data, etag: cached.etag };
+  return { data: cached.data as T, etag: cached.etag };
 }
 
 /**
@@ -257,7 +264,7 @@ export async function updateSyncTime(table: string, syncTime: number): Promise<v
 /**
  * Compress data for transmission (using native compression when available)
  */
-export async function compressData(data: any): Promise<ArrayBuffer> {
+export async function compressData(data: unknown): Promise<ArrayBuffer> {
   const jsonString = JSON.stringify(data);
   const encoder = new TextEncoder();
   const uint8Array = encoder.encode(jsonString);

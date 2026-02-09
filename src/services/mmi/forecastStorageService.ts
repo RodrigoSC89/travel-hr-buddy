@@ -24,10 +24,8 @@ export async function saveForecast(input: SaveForecastInput) {
   try {
     const supabase = createClient();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const client = supabase as any;
-    const { data, error } = await client
-      .from("mmi_forecasts")
+    const fromFn = supabase.from as Function;
+    const { data, error } = await fromFn("mmi_forecasts")
       .insert({
         vessel_id: input.vessel_id,
         vessel_name: input.vessel_name,
