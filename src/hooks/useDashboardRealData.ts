@@ -139,8 +139,8 @@ async function fetchCrewStats(): Promise<CrewStats> {
   if (error) throw error;
 
   const total = crew?.length || 0;
-  const active = crew?.filter((c: any) => c.status === "active" || c.status === "onboard").length || 0;
-  const onLeave = crew?.filter((c: any) => c.status === "on_leave" || c.status === "vacation").length || 0;
+  const active = crew?.filter(c => c.status === "active" || c.status === "onboard").length || 0;
+  const onLeave = crew?.filter(c => c.status === "on_leave" || c.status === "vacation").length || 0;
 
   // Certificados expirando em 30 dias
   const thirtyDaysFromNow = new Date();
@@ -554,7 +554,7 @@ export function useRealtimeProcesses() {
       ]);
 
       const processes = [
-        ...(voyages.data?.map((v: any) => ({
+        ...(voyages.data?.map(v => ({
           id: v.id,
           name: v.voyage_number || "Viagem em andamento",
           type: "voyage",
@@ -563,7 +563,7 @@ export function useRealtimeProcesses() {
           startTime: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
           vessel: v.vessel_id
         })) || []),
-        ...(maintenance.data?.map((m: any) => ({
+        ...(maintenance.data?.map(m => ({
           id: m.id,
           name: m.description || "Manutenção",
           type: "maintenance",
@@ -572,7 +572,7 @@ export function useRealtimeProcesses() {
           startTime: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
           vessel: m.vessel_id
         })) || []),
-        ...(shipments.data?.map((s: any) => ({
+        ...(shipments.data?.map(s => ({
           id: s.id,
           name: s.tracking_number || "Carga",
           type: "logistics",

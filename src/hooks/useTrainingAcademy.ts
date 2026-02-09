@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { logger } from '@/lib/logger';
+import type { Json } from "@/integrations/supabase/types";
 
 export interface Course {
   id: string;
@@ -11,14 +12,14 @@ export interface Course {
   duration_hours: number | null;
   instructor_id: string | null;
   is_published: boolean | null;
-  modules: any | null;
-  assessments: any | null;
+  modules: Json | null;
+  assessments: Json | null;
   passing_score: number | null;
   certificate_template: string | null;
   created_at: string | null;
   updated_at: string | null;
   organization_id: string | null;
-  metadata: any | null;
+  metadata: Json | null;
   // UI computed
   category?: string;
   level?: string;
@@ -35,13 +36,13 @@ export interface CourseProgress {
   progress_percent: number | null;
   current_module: number | null;
   completed_modules: number[] | null;
-  assessment_scores: any | null;
+  assessment_scores: Json | null;
   certificate_issued: boolean | null;
   started_at: string | null;
   completed_at: string | null;
   created_at: string | null;
   updated_at: string | null;
-  metadata: any | null;
+  metadata: Json | null;
 }
 
 export interface CrewMember {
@@ -101,14 +102,16 @@ export const useTrainingAcademy = () => {
       if (error) throw error;
 
       const mappedCourses: Course[] = (data || []).map((c) => {
-        const meta = c.metadata as Record<string, any> | null;
+        const meta = (typeof c.metadata === 'object' && c.metadata !== null && !Array.isArray(c.metadata))
+          ? (c.metadata as Record<string, unknown>)
+          : null;
         return {
           ...c,
-          category: meta?.category || "Geral",
-          level: meta?.level || "intermediate",
-          enrolledCount: meta?.enrolledCount || 0,
-          rating: meta?.rating || 4.0,
-          tags: meta?.tags || ["marítimo", "segurança"],
+          category: String(meta?.category || "Geral"),
+          level: String(meta?.level || "intermediate"),
+          enrolledCount: Number(meta?.enrolledCount || 0),
+          rating: Number(meta?.rating || 4.0),
+          tags: Array.isArray(meta?.tags) ? (meta.tags as string[]) : ["marítimo", "segurança"],
         };
       });
 
@@ -149,7 +152,8 @@ export const useTrainingAcademy = () => {
 
       if (error) throw error;
 
-      const mappedCrew: CrewMember[] = (data || []).map((c: any, idx: number) => ({
+      interface CrewRow { id: string; name?: string | null; full_name?: string | null; position?: string | null; rank?: string | null; department?: string | null; updated_at?: string | null; created_at?: string | null; }
+      const mappedCrew: CrewMember[] = (data as CrewRow[] || []).map((c) => ({
         id: c.id,
         name: c.name || c.full_name || "Tripulante",
         position: c.position || c.rank || "Marinheiro",
