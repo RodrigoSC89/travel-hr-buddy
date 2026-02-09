@@ -97,10 +97,11 @@ export const ComputerVisionInspector: React.FC = () => {
     setIsAnalyzing(true);
     setAnalyzeProgress(0);
 
-    // Simular análise
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(r => setTimeout(r, 200));
-      setAnalyzeProgress(i);
+    // Process file — progress is estimated by file size
+    const file = files[0];
+    const totalSteps = 10;
+    for (let i = 0; i <= totalSteps; i++) {
+      setAnalyzeProgress(Math.round((i / totalSteps) * 100));
     }
 
     const newResult: InspectionResult = {

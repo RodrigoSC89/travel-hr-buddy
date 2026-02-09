@@ -196,8 +196,7 @@ export class TravelAPIClient {
   private static async searchSkyscanner(
     params: FlightSearchParams
   ): Promise<FlightResult[]> {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real Skyscanner API call
 
     return [
       {
@@ -227,7 +226,7 @@ export class TravelAPIClient {
   private static async searchGoogleFlights(
     params: FlightSearchParams
   ): Promise<FlightResult[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real Google Flights API call
 
     return [
       {
@@ -255,7 +254,7 @@ export class TravelAPIClient {
   private static async searchBrazilianAirlines(
     params: FlightSearchParams
   ): Promise<FlightResult[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real airline API call
 
     return [
       {
@@ -302,7 +301,7 @@ export class TravelAPIClient {
   private static async searchBooking(
     params: HotelSearchParams
   ): Promise<HotelResult[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real Booking.com API call
 
     return [
       {
@@ -323,7 +322,7 @@ export class TravelAPIClient {
   private static async searchHoteisCom(
     params: HotelSearchParams
   ): Promise<HotelResult[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real Hoteis.com API call
 
     return [
       {
@@ -344,7 +343,7 @@ export class TravelAPIClient {
   private static async searchAirbnb(
     params: HotelSearchParams
   ): Promise<HotelResult[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real Airbnb API call
 
     return [
       {
@@ -394,8 +393,7 @@ export class METARParser {
   }
 
   private static async fetchRawMETAR(station: string): Promise<string> {
-    // Simulate API call to METAR service
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real METAR API (e.g., AVWX or NOAA)
 
     // Example METAR
     return `${station} 031200Z 27015KT 9999 FEW030 BKN100 22/18 Q1015 NOSIG`;
@@ -479,8 +477,7 @@ export class PortStateClient {
   }
 
   private static async fetchIMOData(imo: string): Promise<PortStateData> {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real IMO/Equasis API call
 
     return {
       imo,
@@ -553,8 +550,7 @@ export class NewsScrapingService {
     query: string,
     categories?: NewsItem['category'][]
   ): Promise<NewsItem[]> {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // TODO: Replace with real maritime news API
 
     const allNews: NewsItem[] = [
       {
