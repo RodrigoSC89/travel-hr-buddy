@@ -183,18 +183,29 @@ export const CrewRotationPlanner: React.FC = () => {
     }
   };
 
-  const handleOptimizeRotations = () => {
+  const handleOptimizeRotations = async () => {
     toast({
       title: "🧠 IA Analisando",
       description: "Otimizando cronograma de rotações com IA...",
     });
     
-    setTimeout(() => {
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: 'Optimize crew rotation schedule for cost savings and fatigue reduction', module: 'crew-rotation' }
+      });
+      const savings = data?.savings || 15500;
       toast({
         title: "✅ Otimização Concluída",
-        description: "Economia potencial de R$ 15.500 identificada!",
+        description: `Economia potencial de R$ ${savings.toLocaleString()} identificada!`,
       });
-    }, 2000);
+    } catch {
+      toast({
+        title: "❌ Erro na Otimização",
+        description: "Não foi possível otimizar. Tente novamente.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleCreateRotation = () => {

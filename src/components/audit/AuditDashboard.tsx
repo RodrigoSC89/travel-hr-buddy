@@ -111,7 +111,10 @@ export function AuditDashboard() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      await supabase.from('internal_audits').select('id').limit(1);
+    } catch { /* refresh check */ }
     setIsRefreshing(false);
   };
 

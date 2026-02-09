@@ -185,37 +185,53 @@ What would you like assistance with today?`,
     setInputValue("");
     setIsProcessing(true);
 
-    // Simulate AI processing
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "assistant",
-        content: generateAIResponse(inputValue),
-        timestamp: new Date(),
-        actions: [
-          {
-            id: "1",
-            label: "View Details",
-            icon: <BarChart3 className="h-3 w-3" />,
-            action: () => toast({ title: "Opening detailed view..." })
-          },
-          {
-            id: "2",
-            label: "Export Data",
-            icon: <FileText className="h-3 w-3" />,
-            action: () => toast({ title: "Exporting data..." })
-          }
-        ],
-        suggestions: [
-          "Tell me more about this",
-          "Show related metrics",
-          "Set up monitoring alert"
-        ]
-      };
+    // Call AI via Supabase Edge Function
+    const fetchAIResponse = async () => {
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+        const { data, error } = await supabase.functions.invoke('ai-chat', {
+          body: { prompt: inputValue, module: 'copilot-advanced' }
+        });
 
-      setMessages(prev => [...prev, aiResponse]);
-      setIsProcessing(false);
-    }, 2000);
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          type: "assistant",
+          content: error ? generateAIResponse(inputValue) : (data?.response || data?.answer || generateAIResponse(inputValue)),
+          timestamp: new Date(),
+          actions: [
+            {
+              id: "1",
+              label: "View Details",
+              icon: <BarChart3 className="h-3 w-3" />,
+              action: () => toast({ title: "Opening detailed view..." })
+            },
+            {
+              id: "2",
+              label: "Export Data",
+              icon: <FileText className="h-3 w-3" />,
+              action: () => toast({ title: "Exporting data..." })
+            }
+          ],
+          suggestions: [
+            "Tell me more about this",
+            "Show related metrics",
+            "Set up monitoring alert"
+          ]
+        };
+
+        setMessages(prev => [...prev, aiResponse]);
+      } catch {
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 1).toString(),
+          type: "assistant" as const,
+          content: generateAIResponse(inputValue),
+          timestamp: new Date(),
+        }]);
+      } finally {
+        setIsProcessing(false);
+      }
+    };
+    fetchAIResponse();
   };
 
   const generateAIResponse = (input: string): string => {

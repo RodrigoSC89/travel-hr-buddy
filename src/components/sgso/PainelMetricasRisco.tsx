@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
 import {
   BarChart, 
   Bar, 
@@ -36,16 +37,32 @@ export function PainelMetricasRisco() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/admin/metrics")
-      .then((res) => res.json())
-      .then((data: MetricData[]) => {
-        setDados(data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchMetrics = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("internal_audits")
+          .select("id, vessel_name, findings, audit_date")
+          .order("audit_date", { ascending: false })
+          .limit(200);
+
+        if (error) throw error;
+
+        const mapped: MetricData[] = (data || []).map((d: any) => ({
+          auditoria_id: d.id,
+          nome_navio: d.vessel_name || "N/A",
+          falhas_criticas: Array.isArray(d.findings)
+            ? (d.findings as any[]).filter((f: any) => f?.severity === "critical").length
+            : 0,
+          data_auditoria: d.audit_date || "",
+        }));
+        setDados(mapped);
+      } catch (error) {
         logger.error("Erro ao buscar métricas:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchMetrics();
   }, []);
 
   // Get unique vessel names for filter

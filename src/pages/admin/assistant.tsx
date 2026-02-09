@@ -60,16 +60,8 @@ export default function AssistantPage() {
       });
 
       if (error) {
-        logger.warn("Supabase function error, falling back to API route:", error);
-        // Fall back to Next.js API route
-        const res = await fetch("/api/assistant-query", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question }),
-        });
-        const apiData = await res.json();
-        if (!res.ok) throw new Error(apiData.error);
-        setMessages((prev) => [...prev, { role: "assistant", content: apiData.answer || "" }]);
+        logger.warn("Supabase function error:", error);
+        throw new Error(error.message || "Falha ao processar solicitação");
       } else {
         setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
       }

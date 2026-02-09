@@ -161,24 +161,17 @@ export default function PromptPanel() {
     setResponse('');
     
     try {
-      // Note: This endpoint is illustrative - actual API integration would need proper authentication
-      const res = await fetch('/api/prompt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: currentPrompt.id,
-          title: currentPrompt.title,
-          prompt: currentPrompt.prompt
-        })
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          prompt: currentPrompt.prompt,
+          module: 'admin-prompt-panel',
+          context: { id: currentPrompt.id, title: currentPrompt.title }
+        }
       });
       
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
+      if (error) throw new Error(error.message);
       
-      const data = await res.json();
       setResponse(JSON.stringify(data, null, 2));
       toast.success('Prompt enviado com sucesso!');
     } catch (error) {

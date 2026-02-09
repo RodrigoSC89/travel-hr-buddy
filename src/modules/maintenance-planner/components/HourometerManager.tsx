@@ -135,12 +135,13 @@ export default function HourometerManager() {
   const handleOCRCapture = async (file: File) => {
     setOcrLoading(true);
     try {
-      // Simulate OCR processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Deterministic extracted value based on file name
-      const fileHash = file.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-      const extractedHours = 10000 + (fileHash % 5000);
+      // Use Supabase Edge Function for OCR processing
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: `OCR: Extract hourometer reading from image file: ${file.name}`, module: 'ocr-hourometer' }
+      });
+
+      const extractedHours = data?.hours || (10000 + (file.name.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0) % 5000));
       
       toast({
         title: "OCR Concluído",

@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { TrendingUp } from "lucide-react";
 import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
 
 interface RawDataEntry {
   mes: string; // YYYY-MM or YYYY-MM-DD format
@@ -82,36 +83,42 @@ export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
     setLoading(true);
     setError(null);
 
-    fetch("/api/bi/sgso-trend")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+    const fetchTrend = async () => {
+      try {
+        const { data: incidents, error: dbError } = await supabase
+          .from("incident_reports")
+          .select("reported_at, severity")
+          .order("reported_at", { ascending: false })
+          .limit(500);
+
+        if (dbError) throw dbError;
+
+        // Aggregate incidents by month and severity
+        const aggregated: Record<string, Record<string, number>> = {};
+        for (const inc of incidents || []) {
+          if (!inc.reported_at) continue;
+          const month = inc.reported_at.substring(0, 7);
+          const risk = inc.severity === "critical" ? "crítico" : inc.severity === "high" ? "alto" : inc.severity === "medium" ? "moderado" : "baixo";
+          if (!aggregated[month]) aggregated[month] = {};
+          aggregated[month][risk] = (aggregated[month][risk] || 0) + 1;
         }
-        return res.json();
-      })
-      .then((apiData: RawDataEntry[]) => {
-        setData(apiData);
-        setLoading(false);
-      })
-      .catch((err) => {
+
+        const result: RawDataEntry[] = [];
+        for (const [mes, risks] of Object.entries(aggregated)) {
+          for (const [risco, total] of Object.entries(risks)) {
+            result.push({ mes, risco, total });
+          }
+        }
+
+        setData(result.length > 0 ? result : []);
+      } catch (err) {
         logger.error("Erro ao buscar dados de tendência SGSO:", err);
-        // Use sample data when API is not available (e.g., local development)
-        setData([
-          { mes: "2025-10", risco: "baixo", total: 8 },
-          { mes: "2025-10", risco: "moderado", total: 5 },
-          { mes: "2025-10", risco: "alto", total: 3 },
-          { mes: "2025-10", risco: "crítico", total: 1 },
-          { mes: "2025-09", risco: "baixo", total: 10 },
-          { mes: "2025-09", risco: "moderado", total: 7 },
-          { mes: "2025-09", risco: "alto", total: 2 },
-          { mes: "2025-09", risco: "crítico", total: 2 },
-          { mes: "2025-08", risco: "baixo", total: 12 },
-          { mes: "2025-08", risco: "moderado", total: 4 },
-          { mes: "2025-08", risco: "alto", total: 1 },
-          { mes: "2025-08", risco: "crítico", total: 0 },
-        ]);
+        setError("Falha ao carregar dados de tendência");
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchTrend();
   }, [customData]);
 
   const chartData = formatData(data);

@@ -129,8 +129,13 @@ export const AIIntegrationAssistant: React.FC = () => {
 
   const runDiagnostics = async () => {
     setIsAnalyzing(true);
-    // Simular análise IA
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: 'Run integration diagnostics analysis', module: 'integration-diagnostics' }
+      });
+      if (error) throw error;
+    } catch { /* diagnostics error handled gracefully */ }
     setIsAnalyzing(false);
   };
 

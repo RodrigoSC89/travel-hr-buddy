@@ -202,25 +202,28 @@ async function executeOperation(op: PendingOperation): Promise<{
   error?: string;
 }> {
   try {
-    // This would integrate with Supabase
-    // For now, simulate the operation
-    const response = await fetch(`/api/${op.table}`, {
-      method: op.type === "delete" ? "DELETE" : op.type === "insert" ? "POST" : "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(op.data),
-    });
-
-    if (response.status === 409) {
-      // Conflict
-      const serverData = await response.json();
-      return { success: false, conflict: true, serverData };
+    const { supabase } = await import("@/integrations/supabase/client");
+    
+    if (op.type === "insert") {
+      const { error } = await supabase.from(op.table as any).insert(op.data as any);
+      if (error) {
+        if (error.code === "23505") return { success: false, conflict: true, serverData: null };
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } else if (op.type === "update") {
+      const data = op.data as any;
+      const { error } = await supabase.from(op.table as any).update(data).eq("id", data.id);
+      if (error) return { success: false, error: error.message };
+      return { success: true };
+    } else if (op.type === "delete") {
+      const data = op.data as any;
+      const { error } = await supabase.from(op.table as any).delete().eq("id", data.id);
+      if (error) return { success: false, error: error.message };
+      return { success: true };
     }
-
-    if (!response.ok) {
-      return { success: false, error: `HTTP ${response.status}` };
-    }
-
-    return { success: true };
+    
+    return { success: false, error: "Unknown operation type" };
   } catch (error) {
     return { success: false, error: String(error) };
   }

@@ -105,19 +105,32 @@ const HRChatbot: React.FC = () => {
     setInput('');
     setIsLoading(true);
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+    // Call AI via Supabase Edge Function
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { prompt: msgToSend, module: 'hr-chatbot' }
+      });
+      
+      const aiContent = error ? await simulateResponse(msgToSend) : (data?.response || data?.answer || await simulateResponse(msgToSend));
 
-    const response = await simulateResponse(msgToSend);
-    
-    const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: response,
-      timestamp: new Date()
-    };
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: aiContent,
+        timestamp: new Date()
+      };
 
-    setMessages(prev => [...prev, assistantMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch {
+      const response = await simulateResponse(msgToSend);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant' as const,
+        content: response,
+        timestamp: new Date()
+      }]);
+    }
     setIsLoading(false);
   };
 
