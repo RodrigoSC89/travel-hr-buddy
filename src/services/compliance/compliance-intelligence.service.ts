@@ -8,12 +8,29 @@ import { logger } from "@/lib/logger";
 
 export type ComplianceAction = "audit_overview" | "psc_readiness" | "certificate_status" | "compliance_gaps" | "ai_analysis";
 
+export interface InspectionRecord {
+  id: string;
+  date: string;
+  type: string;
+  result: string;
+  deficiencies?: number;
+  vessel?: string;
+}
+
+export interface CertificateRenewal {
+  id: string;
+  name: string;
+  expiryDate: string;
+  holder?: string;
+  type?: string;
+}
+
 export interface ComplianceOverview {
   totalAudits: number;
   pendingNonConformities: number;
   closedNonConformities: number;
   ncClosureRate: number;
-  recentInspections: any[];
+  recentInspections: InspectionRecord[];
   auditsByType: Record<string, number>;
 }
 
@@ -23,7 +40,7 @@ export interface PSCReadiness {
   detentionRate: number;
   totalDeficiencies: number;
   avgDeficienciesPerInspection: number;
-  recentInspections: any[];
+  recentInspections: InspectionRecord[];
   riskLevel: string;
 }
 
@@ -34,7 +51,7 @@ export interface CertificateStatus {
   expiring60Days: number;
   valid: number;
   complianceRate: number;
-  urgentRenewals: any[];
+  urgentRenewals: CertificateRenewal[];
 }
 
 export class ComplianceIntelligenceService {
@@ -77,7 +94,7 @@ export class ComplianceIntelligenceService {
     }
   }
 
-  async getComplianceGaps(): Promise<any> {
+  async getComplianceGaps(): Promise<Record<string, unknown>> {
     try {
       const { data, error } = await supabase.functions.invoke("compliance-intelligence", {
         body: { action: "compliance_gaps" },
@@ -90,7 +107,7 @@ export class ComplianceIntelligenceService {
     }
   }
 
-  async runAIAnalysis(): Promise<{ analysis: string; summary: any }> {
+  async runAIAnalysis(): Promise<{ analysis: string; summary: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("compliance-intelligence", {
         body: { action: "ai_analysis" },

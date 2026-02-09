@@ -50,7 +50,7 @@ export interface CertificationMatrix {
   valid: number;
   complianceRate: number;
   byCertType: Record<string, number>;
-  urgentRenewals: any[];
+  urgentRenewals: Array<{ id: string; name: string; expiryDate: string; holder?: string }>;
   stcwCompliance: number;
 }
 
@@ -107,7 +107,7 @@ export class PeopleIntelligenceService {
     }
   }
 
-  async runAIAnalysis(): Promise<{ analysis: string; summary: any }> {
+  async runAIAnalysis(): Promise<{ analysis: string; summary: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("people-intelligence", {
         body: { action: "ai_analysis" },

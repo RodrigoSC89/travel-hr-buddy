@@ -50,10 +50,10 @@ interface PEODPPlan {
   vessel_id: string;
   dp_class: string;
   operation_type: string;
-  crew_composition: any;
-  training_requirements: any;
-  maintenance_schedule: any;
-  emergency_procedures: any;
+  crew_composition: Record<string, unknown>;
+  training_requirements: Record<string, unknown>;
+  maintenance_schedule: Record<string, unknown>;
+  emergency_procedures: Record<string, unknown>;
   status: "draft" | "active" | "under_review" | "archived";
 }
 
@@ -172,19 +172,24 @@ export class PEODPInferenceService {
       .eq("assignment_status", "active");
 
     const totalCrew = assignments?.length || 0;
-    const dpCertified = assignments?.filter((a: any) => 
-      a.crew?.certifications?.includes("DP")
-    ).length || 0;
+    const getCrewField = (a: Record<string, unknown>, field: string): unknown => {
+      const crew = a.crew as Record<string, unknown> | null;
+      return crew?.[field];
+    };
+    const dpCertified = assignments?.filter((a) => {
+      const certs = getCrewField(a as Record<string, unknown>, 'certifications');
+      return Array.isArray(certs) && certs.includes("DP");
+    }).length || 0;
 
     const avgExperience = assignments && assignments.length > 0
-      ? assignments.reduce((sum: number, a: any) => 
-        sum + (a.crew?.years_experience || 0), 0
+      ? assignments.reduce((sum: number, a) => 
+        sum + (Number(getCrewField(a as Record<string, unknown>, 'years_experience')) || 0), 0
       ) / assignments.length
       : 0;
 
     // Check for expiring certifications
-    const expiringCerts = assignments?.filter((a: any) => {
-      const expiryDate = new Date(a.crew?.cert_expiry_date || "");
+    const expiringCerts = assignments?.filter((a) => {
+      const expiryDate = new Date(String(getCrewField(a as Record<string, unknown>, 'cert_expiry_date') || ""));
       const threeMonthsFromNow = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
       return expiryDate < threeMonthsFromNow;
     }).length || 0;
@@ -210,7 +215,7 @@ export class PEODPInferenceService {
       .single();
 
     if (error || !data) return null;
-    return data as any as PEODPPlan;
+    return data as unknown as PEODPPlan;
   }
 
   /**
@@ -435,17 +440,16 @@ export class PEODPInferenceService {
     try {
       const { data: userData } = await supabase.auth.getUser();
       
-      await supabase
-        .from("dp_inference_logs" as any)
+      await (supabase.from as Function)("dp_inference_logs")
         .insert({
           plan_id: null,
           inference_type: "peodp_recommendations",
-          input_data: { vesselId } as any,
-          output_data: { recommendations_count: recommendations.length } as any,
+          input_data: JSON.parse(JSON.stringify({ vesselId })),
+          output_data: JSON.parse(JSON.stringify({ recommendations_count: recommendations.length })),
           confidence_score: null,
           processing_time_ms: null,
           model_version: "1.0.0"
-        } as any);
+        });
     } catch (error) {
       logger.error("Failed to log inference", error as Error, { vesselId });
     }
@@ -454,12 +458,11 @@ export class PEODPInferenceService {
   /**
    * Get inference history for a vessel
    */
-  static async getInferenceHistory(
+   static async getInferenceHistory(
     vesselId: string,
     limit: number = 20
-  ): Promise<any[]> {
-    const { data, error } = await supabase
-      .from("dp_inference_logs" as any)
+  ): Promise<Record<string, unknown>[]> {
+    const { data, error } = await (supabase.from as Function)("dp_inference_logs")
       .select("*")
       .eq("vessel_id", vesselId)
       .order("timestamp", { ascending: false })
@@ -470,18 +473,15 @@ export class PEODPInferenceService {
       return [];
     }
 
-    return data || [];
+    return (data as Record<string, unknown>[]) || [];
   }
 
   /**
    * Create or update PEO-DP plan
    */
   static async savePEODPPlan(plan: Partial<PEODPPlan>): Promise<PEODPPlan> {
-    const { data, error } = await supabase
-      .from("peodp_plans" as any)
-      .upsert({
-        ...(plan as any)
-      } as any)
+    const { data, error } = await (supabase.from as Function)("peodp_plans")
+      .upsert(JSON.parse(JSON.stringify(plan)))
       .select()
       .single();
 
@@ -489,6 +489,6 @@ export class PEODPInferenceService {
       throw new Error(`Failed to save PEO-DP plan: ${error.message}`);
     }
 
-    return data as any as PEODPPlan;
+    return data as unknown as PEODPPlan;
   }
 }

@@ -45,7 +45,7 @@ class AgentMemoryService {
     
     const { data, error } = await supabase.from('ai_memory').insert({
       memory_type: memoryType,
-      content: content as any,
+      content: JSON.parse(JSON.stringify(content)),
       importance,
       user_id: user?.user?.id || null,
     }).select('id').single();
@@ -70,7 +70,7 @@ class AgentMemoryService {
 
     const { data, error } = await supabase.from('ai_memory_events').insert({
       event_type: eventType,
-      event_data: eventData as any,
+      event_data: JSON.parse(JSON.stringify(eventData)),
       context,
       confidence,
       user_id: user?.user?.id || null,

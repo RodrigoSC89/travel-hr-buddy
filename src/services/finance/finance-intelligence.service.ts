@@ -75,7 +75,7 @@ export class FinanceIntelligenceService {
     }
   }
 
-  async getBudgetAnalysis(): Promise<{ budgets: BudgetAnalysis[]; summary: any }> {
+  async getBudgetAnalysis(): Promise<{ budgets: BudgetAnalysis[]; summary: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("finance-intelligence", {
         body: { action: "budget_analysis" },
@@ -88,7 +88,7 @@ export class FinanceIntelligenceService {
     }
   }
 
-  async getCostOptimization(): Promise<any> {
+  async getCostOptimization(): Promise<Record<string, unknown>> {
     try {
       const { data, error } = await supabase.functions.invoke("finance-intelligence", {
         body: { action: "cost_optimization" },
@@ -101,7 +101,7 @@ export class FinanceIntelligenceService {
     }
   }
 
-  async runAIAnalysis(): Promise<{ analysis: string; summary: any }> {
+  async runAIAnalysis(): Promise<{ analysis: string; summary: Record<string, unknown> }> {
     try {
       const { data, error } = await supabase.functions.invoke("finance-intelligence", {
         body: { action: "ai_analysis" },
