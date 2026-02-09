@@ -45,14 +45,15 @@ export function useFleetMonitorData() {
       });
 
       const result: VesselMetrics[] = (vessels || []).map(vessel => {
-        const loc = vessel.current_location && typeof vessel.current_location === 'object'
+        const locObj = vessel.current_location as Record<string, unknown> | null;
+        const loc = locObj && typeof locObj === 'object'
           ? {
-              lat: (vessel.current_location as any).lat || -23.5505,
-              lon: (vessel.current_location as any).lon || -46.6333
+              lat: Number(locObj.lat) || -23.5505,
+              lon: Number(locObj.lon) || -46.6333
             }
           : typeof vessel.current_location === 'string'
             ? (() => {
-                try { const p = JSON.parse(vessel.current_location); return { lat: p.lat || -23.5505, lon: p.lon || -46.6333 }; } catch { return { lat: -23.5505, lon: -46.6333 }; }
+                try { const p = JSON.parse(vessel.current_location as string); return { lat: p.lat || -23.5505, lon: p.lon || -46.6333 }; } catch { return { lat: -23.5505, lon: -46.6333 }; }
               })()
             : { lat: -23.5505, lon: -46.6333 };
 

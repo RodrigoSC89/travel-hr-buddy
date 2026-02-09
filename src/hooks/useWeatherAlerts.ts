@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 
 export interface WeatherAlert {
   id: string;
@@ -164,12 +165,12 @@ export function useWeatherAlerts(options?: {
           severity: alert.severity,
           title: alert.title,
           description: alert.description,
-          location: alert.location as any,
+          location: alert.location as unknown as Json,
           affected_vessels: alert.affected_vessels,
           valid_from: alert.valid_from,
           valid_until: alert.valid_until,
           source: alert.source,
-          raw_data: alert.raw_data as any,
+          raw_data: alert.raw_data as unknown as Json,
           acknowledged: false,
         }])
         .select()

@@ -22,7 +22,8 @@
 - ✅ Batch 11: useCrewTrainingData, useMedicalRecordsData, useGamificationData, useCrewWellbeing, useComplianceCRUD
 - ✅ Batch 12: useNotificationsCenterData, useMaintenanceHistoryRealData, useDrydockScheduleData, useVoyageSimulator, use-audit-log
 - ✅ Batch 13: useAccessLogsRealData, usePMSData, useHRDashboardData, useReportSchedulesData, useRouteMapData
-- 🔄 Restantes: ~106 arquivos em src/hooks
+- ✅ Batch 14: useVesselHistoryData, useMoodDashboardData, useNotificationsData, useWeatherAlerts, useFleetMonitorData
+- 🔄 Restantes: ~96 arquivos em src/hooks
 
 ### P0-02: setTimeout fake → 0
 - ✅ advanced-integrations-hub: setTimeout → Supabase health check real
