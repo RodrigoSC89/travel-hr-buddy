@@ -95,7 +95,7 @@ export function useMedicalInfirmaryData() {
 
       if (error) throw error;
 
-      return (data || []).map((c: any) => ({
+      return (data || []).map((c): MedicalConsultation => ({
         id: c.id,
         patient_id: c.crew_member_id,
         patient_name: c.crew_member_name || "Paciente",
@@ -103,10 +103,10 @@ export function useMedicalInfirmaryData() {
         diagnosis: c.diagnosis,
         treatment: c.treatment,
         doctor_name: c.attending_officer,
-        consultation_date: c.created_at,
+        consultation_date: c.created_at || new Date().toISOString(),
         status: c.status === "completed" ? "completed" : c.status === "cancelled" ? "cancelled" : c.status === "in_progress" ? "in_progress" : "scheduled",
         notes: c.notes,
-        created_at: c.created_at,
+        created_at: c.created_at || new Date().toISOString(),
       }));
     },
     staleTime: 15000,
@@ -124,29 +124,30 @@ export function useMedicalInfirmaryData() {
 
       if (error) throw error;
 
-      return (data || []).map((m: any) => {
+      return (data || []).map((m): Medication => {
+        const qty = m.quantity ?? 0;
         // Determine status based on stock levels and expiry
         let computedStatus: Medication["status"] = "ok";
         if (m.expiry_date && new Date(m.expiry_date) < new Date()) {
           computedStatus = "expired";
-        } else if (m.quantity <= 0) {
+        } else if (qty <= 0) {
           computedStatus = "critical";
-        } else if (m.min_stock && m.quantity <= m.min_stock) {
-          computedStatus = m.quantity <= m.min_stock * 0.5 ? "critical" : "low";
+        } else if (m.min_stock && qty <= m.min_stock) {
+          computedStatus = qty <= m.min_stock * 0.5 ? "critical" : "low";
         }
 
         return {
           id: m.id,
           name: m.name,
           active_ingredient: m.category,
-          quantity: m.quantity || 0,
+          quantity: qty,
           min_stock: m.min_stock || 10,
           unit: m.unit || "un",
           batch_number: m.batch_number,
           expiry_date: m.expiry_date,
-          status: m.status || computedStatus,
+          status: (m.status as Medication["status"]) || computedStatus,
           location: m.location,
-          created_at: m.created_at,
+          created_at: m.created_at || new Date().toISOString(),
         };
       });
     },
@@ -176,7 +177,7 @@ export function useMedicalInfirmaryData() {
           .select("id, full_name, vessel_id")
           .in("id", crewIds);
 
-        (crewData || []).forEach((c: any) => {
+        (crewData || []).forEach((c) => {
           crewMap[c.id] = { full_name: c.full_name, vessel_id: c.vessel_id };
         });
       }
@@ -191,12 +192,12 @@ export function useMedicalInfirmaryData() {
           .select("id, name")
           .in("id", vesselIds as string[]);
 
-        (vessels || []).forEach((v: any) => {
+        (vessels || []).forEach((v) => {
           vesselMap[v.id] = v.name;
         });
       }
 
-      return (data || []).map((e: any) => {
+      return (data || []).map((e) => {
         const crew = crewMap[e.crew_member_id];
         return {
           id: e.id,
@@ -304,9 +305,8 @@ export function useMedicalInfirmaryData() {
       if (data.crew_member_id) {
         insertData.crew_member_id = data.crew_member_id;
       }
-      const { data: result, error } = await supabase
-        .from("crew_certifications")
-        .insert(insertData as any)
+      const { data: result, error } = await (supabase.from as Function)("crew_certifications")
+        .insert(insertData)
         .select()
         .single();
 
@@ -325,16 +325,16 @@ export function useMedicalInfirmaryData() {
   // Calculate health metrics
   const healthMetrics = {
     totalCrew: crewHealth.length,
-    fitForService: crewHealth.filter((c: any) => c.status === "active").length,
+    fitForService: crewHealth.filter((c) => c.status === "active").length,
     consultationsThisMonth: consultations.length,
     pendingExams: exams.filter((e) => e.status === "scheduled").length,
     criticalMedications: medications.filter((m) => m.status === "critical").length,
     lowStockMedications: medications.filter((m) => m.status === "low").length,
     fitnessRate: crewHealth.length > 0 
-      ? Math.round((crewHealth.filter((c: any) => c.status === "active").length / crewHealth.length) * 100)
+      ? Math.round((crewHealth.filter((c) => c.status === "active").length / crewHealth.length) * 100)
       : 0,
     totalMedications: medications.length,
-    expiringCertificates: medicalCertificates.filter((c: any) => {
+    expiringCertificates: medicalCertificates.filter((c) => {
       if (!c.expiry_date) return false;
       const expiry = new Date(c.expiry_date);
       const thirtyDaysFromNow = new Date();

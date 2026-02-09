@@ -48,7 +48,7 @@ export function useVessels() {
         id: vessel.id,
         name: vessel.name || 'Unknown',
         imo: vessel.imo_number || '',
-        type: (vessel.vessel_type as any) || 'general_cargo',
+        type: (vessel.vessel_type as Vessel['type']) || 'general_cargo',
         flag: vessel.flag || 'Unknown',
         status: mapVesselStatus(vessel.status),
         location: {
@@ -92,7 +92,7 @@ export function useLogisticsOperations(vesselId?: string) {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map((op: any) => ({
+      return (data || []).map((op) => ({
         id: op.id,
         vesselId: op.vessel_id || '',
         type: mapOperationType(op.operation_type),
