@@ -87,7 +87,7 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
       // Save metadata to database
       const { data: userData } = await supabase.auth.getUser();
       
-      await supabase.from('audit_evidence').insert({
+      await (supabase.from as Function)('audit_evidence').insert({
         audit_id: auditId,
         file_name: file.name,
         file_type: file.type,
@@ -99,7 +99,7 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
           originalName: file.name,
           uploadedAt: new Date().toISOString()
         }
-      } as any);
+      });
 
       // Update state
       setFiles(prev => prev.map(f => 
@@ -183,7 +183,7 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
       input.type = 'file';
       input.multiple = true;
       input.accept = allowedTypes.join(',');
-      input.onchange = handleFileSelect as any;
+      input.onchange = handleFileSelect as unknown as (this: GlobalEventHandlers, ev: Event) => void;
       fileInputRef.current = input;
     }
     fileInputRef.current.click();
@@ -396,17 +396,17 @@ export function useAuditEvidence(options: UseAuditEvidenceOptions) {
 
       if (error) throw error;
 
-      const evidenceFiles: EvidenceFile[] = (data || []).map((item: any) => ({
+      const evidenceFiles: EvidenceFile[] = (data || []).map((item) => ({
         id: item.id,
         name: item.file_name,
-        type: (item.metadata?.evidenceType as EvidenceFile['type']) || 'document',
+        type: ((item.metadata as Record<string, unknown> | null)?.evidenceType as EvidenceFile['type']) || 'document',
         size: item.file_size || 0,
         url: item.file_path ? 
           supabase.storage.from('audit-evidence').getPublicUrl(item.file_path).data.publicUrl : 
           undefined,
         status: 'uploaded' as const,
         progress: 100,
-        metadata: item.metadata
+        metadata: item.metadata as Record<string, unknown> | undefined
       }));
 
       setFiles(evidenceFiles);

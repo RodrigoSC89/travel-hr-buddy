@@ -51,11 +51,12 @@ async function fetchProcesses(): Promise<Process[]> {
   const processes: Process[] = [];
 
   // Converter maintenance para processos
-  maintenance?.forEach((m: any) => {
-    const startDate = m.scheduled_date ? new Date(m.scheduled_date) : new Date();
+  type MaintenanceRow = Record<string, unknown> & { vessels?: { name?: string } | null };
+  (maintenance as MaintenanceRow[] | null)?.forEach((m) => {
+    const startDate = m.scheduled_date ? new Date(String(m.scheduled_date)) : new Date();
     processes.push({
-      id: m.id,
-      name: m.title || "Manutenção",
+      id: String(m.id),
+      name: String(m.title || "Manutenção"),
       type: "maintenance",
       status: m.status === "in_progress" ? "running" : m.status === "scheduled" ? "paused" : "completed",
       progress: m.status === "completed" ? 100 : m.status === "in_progress" ? 50 : 0,
@@ -65,11 +66,12 @@ async function fetchProcesses(): Promise<Process[]> {
   });
 
   // Converter voyages para processos
-  voyages?.forEach((v: any) => {
-    const startDate = v.start_date ? new Date(v.start_date) : new Date();
+  type VoyageRow = Record<string, unknown> & { vessels?: { name?: string } | null };
+  (voyages as VoyageRow[] | null)?.forEach((v) => {
+    const startDate = v.start_date ? new Date(String(v.start_date)) : new Date();
     processes.push({
-      id: v.id,
-      name: `Viagem ${v.voyage_number || v.id.slice(0, 8)}`,
+      id: String(v.id),
+      name: `Viagem ${String(v.voyage_number || String(v.id).slice(0, 8))}`,
       type: "voyage",
       status: v.status === "active" || v.status === "in_progress" ? "running" : "paused",
       progress: v.status === "active" ? 67 : 30,
