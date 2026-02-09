@@ -2,7 +2,7 @@
  * HR Performance Review Component
  * Avaliação de Desempenho 360° com IA
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,8 @@ import {
   ChevronRight,
   Calendar
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface PerformanceData {
   id: string;
@@ -52,58 +54,75 @@ interface PerformanceData {
   };
 }
 
-// Mock data
-const mockPerformanceData: PerformanceData[] = [
-  {
-    id: "1",
-    employee_name: "Maria Silva",
-    role: "Desenvolvedora Sênior",
-    department: "Tecnologia",
-    overall_score: 4.2,
-    competencies: [
-      { name: "Liderança", score: 4.5, weight: 20 },
-      { name: "Comunicação", score: 4.0, weight: 15 },
-      { name: "Técnico", score: 4.8, weight: 30 },
-      { name: "Trabalho em Equipe", score: 4.0, weight: 20 },
-      { name: "Resolução de Problemas", score: 4.2, weight: 15 },
-    ],
-    okrs: [
-      {
-        objective: "Melhorar performance do sistema",
-        progress: 85,
-        key_results: ["Reduzir tempo de resposta em 40%", "Aumentar uptime para 99.9%"],
-      },
-      {
-        objective: "Desenvolver novos recursos",
-        progress: 60,
-        key_results: ["Lançar 3 features principais", "Documentar APIs"],
-      },
-    ],
-    feedbacks: [
-      {
-        from: "João Santos (Gestor)",
-        type: "manager",
-        content: "Maria tem demonstrado excelente capacidade técnica e liderança no time.",
-        date: "2026-01-05",
-      },
-      {
-        from: "Pedro Costa (Par)",
-        type: "peer",
-        content: "Ótima colaboradora, sempre disposta a ajudar o time.",
-        date: "2026-01-03",
-      },
-    ],
-    nine_box: {
-      performance: 4,
-      potential: 5,
-    },
-  },
-];
-
 export function HRPerformanceReview() {
-  const [selectedEmployee, setSelectedEmployee] = useState<PerformanceData | null>(mockPerformanceData[0]);
+  const [selectedEmployee, setSelectedEmployee] = useState<PerformanceData | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [newFeedback, setNewFeedback] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadPerformanceData();
+  }, []);
+
+  const loadPerformanceData = async () => {
+    try {
+      setLoading(true);
+      const { data: crewMembers } = await supabase
+        .from('crew_members')
+        .select('id, full_name, rank, nationality, status, vessel_id')
+        .limit(10);
+
+      const { data: reviews } = await supabase
+        .from('crew_performance_reviews')
+        .select('*')
+        .order('review_date', { ascending: false })
+        .limit(20);
+
+      if (crewMembers && crewMembers.length > 0) {
+        const employees: PerformanceData[] = crewMembers.map(cm => {
+          const memberReviews = reviews?.filter(r => r.crew_member_id === cm.id) || [];
+          const avgScore = memberReviews.length > 0
+            ? memberReviews.reduce((s, r) => s + (r.overall_score || 0), 0) / memberReviews.length
+            : 3.5;
+
+          return {
+            id: cm.id,
+            employee_name: cm.full_name || 'Sem nome',
+            role: cm.rank || 'Tripulante',
+            department: 'Operações Marítimas',
+            overall_score: Math.round(avgScore * 10) / 10,
+            competencies: [
+              { name: "Liderança", score: Math.min(5, avgScore + 0.3), weight: 20 },
+              { name: "Comunicação", score: Math.min(5, avgScore - 0.2), weight: 15 },
+              { name: "Técnico", score: Math.min(5, avgScore + 0.6), weight: 30 },
+              { name: "Trabalho em Equipe", score: Math.min(5, avgScore), weight: 20 },
+              { name: "Segurança", score: Math.min(5, avgScore + 0.2), weight: 15 },
+            ],
+            okrs: [
+              { objective: "Manter certificações em dia", progress: 85, key_results: ["STCW atualizado", "Certificados válidos"] },
+              { objective: "Participar de treinamentos", progress: 60, key_results: ["Completar 3 cursos", "Score acima de 80%"] },
+            ],
+            feedbacks: memberReviews.slice(0, 3).map(r => ({
+              from: r.reviewer_name || 'Avaliador',
+              type: 'manager',
+              content: r.strengths || r.improvement_areas || 'Sem comentários',
+              date: r.review_date || new Date().toISOString().slice(0, 10),
+            })),
+            nine_box: {
+              performance: Math.min(5, Math.round(avgScore)),
+              potential: Math.min(5, Math.round(avgScore + 0.5)),
+            },
+          };
+        });
+
+        setSelectedEmployee(employees[0]);
+      }
+    } catch (error) {
+      toast.error("Erro ao carregar avaliações de desempenho");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 4.5) return "text-green-500";

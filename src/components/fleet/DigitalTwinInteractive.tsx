@@ -571,7 +571,22 @@ export function DigitalTwinInteractive() {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg">Histórico de Eventos</CardTitle>
-                        <Button size="sm" variant="outline" className="gap-2">
+                        <Button size="sm" variant="outline" className="gap-2" onClick={() => {
+                          const logs = [
+                            "Hora;Evento;Tipo",
+                            "10:30;Atualização de posição;info",
+                            "10:15;Alerta de temperatura resolvido;success",
+                            "09:45;Alerta de temperatura do motor;warning",
+                            "08:00;Motor principal iniciado;info"
+                          ];
+                          const blob = new Blob(['\uFEFF' + logs.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `digital-twin-events-${new Date().toISOString().slice(0,10)}.csv`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                        }}>
                           <Download className="h-4 w-4" />
                           Exportar
                         </Button>
