@@ -39,7 +39,7 @@ const PreSIREInspection: FC = () => {
   ];
 
   // Use real data for recent inspections or fallback to computed from audits
-  const recentInspections = sireAudits?.slice(0, 5).map(audit => ({
+  const recentInspections = sireAudits?.slice(0, 5).map((audit: { vessel_name?: string; audit_date: string; compliance_score?: number; status: string; id: string }) => ({
     vessel: audit.vessel_name || 'Embarcação',
     date: audit.audit_date,
     score: audit.compliance_score || 0,
@@ -228,7 +228,9 @@ const PreSIREInspection: FC = () => {
               >
                 {(inspections) => (
                   <div className="space-y-4">
-                    {inspections.map((inspection, index) => (
+                    {inspections.map((inspection: { id?: string; vessel?: string; date?: string; score?: number; status?: string }, index: number) => {
+                      const inspScore = inspection.score ?? 0;
+                      return (
                       <div key={inspection.id || index} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-4">
                           <Ship className="h-8 w-8 text-muted-foreground" />
@@ -238,8 +240,8 @@ const PreSIREInspection: FC = () => {
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <Badge variant={inspection.score >= 90 ? 'default' : 'secondary'}>
-                            Score: {inspection.score}%
+                          <Badge variant={inspScore >= 90 ? 'default' : 'secondary'}>
+                            Score: {inspScore}%
                           </Badge>
                           <Badge variant={inspection.status === 'approved' || inspection.status === 'completed' ? 'default' : 'outline'}>
                             {inspection.status}
@@ -247,7 +249,7 @@ const PreSIREInspection: FC = () => {
                           <Button variant="ghost" size="sm">View Report</Button>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 )}
               </DataStateWrapper>

@@ -89,7 +89,7 @@ export interface MaritimeAudit {
   next_audit_date?: string;
   created_at: string;
   updated_at: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CreateAuditInput {
@@ -124,13 +124,13 @@ export function useMaritimeAudits(auditType: AuditType) {
     queryFn: async () => {
       // For specialized tables
       if (['peotram', 'pre-ovid', 'psc', 'sgso'].includes(auditType)) {
-        const { data, error } = await supabase
-          .from(tableName as any)
+        const { data, error } = await (supabase.from as Function)(tableName)
+          .select('*')
           .select('*')
           .order('created_at', { ascending: false });
         
         if (error) throw error;
-        return (data || []).map(normalizeAuditData);
+        return (data || []).map((item: Record<string, unknown>) => normalizeAuditData(item));
       }
       
       // For MLC inspections
@@ -141,10 +141,10 @@ export function useMaritimeAudits(auditType: AuditType) {
           .order('created_at', { ascending: false });
         
         if (error) throw error;
-        return (data || []).map((item: any) => ({
+        return (data || []).map((item: Record<string, unknown>) => ({
           ...normalizeAuditData(item),
           audit_type: 'pre-mlc' as AuditType,
-          audit_date: item.inspection_date || item.audit_date,
+          audit_date: (item.inspection_date as string) || (item.audit_date as string),
         }));
       }
       
@@ -156,7 +156,7 @@ export function useMaritimeAudits(auditType: AuditType) {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return (data || []).map((item: any) => ({
+      return (data || []).map((item: Record<string, unknown>) => ({
         ...normalizeAuditData(item),
         audit_type: auditType,
       }));
@@ -176,9 +176,9 @@ export function useMaritimeAudit(auditType: AuditType, auditId: string) {
     queryFn: async () => {
       if (!auditId) return null;
       
-      const { data, error } = await supabase
-        .from(tableName as any)
+      const { data, error } = await (supabase.from as Function)(tableName)
         .select('*')
+        .eq('id', auditId)
         .eq('id', auditId)
         .single();
       
@@ -201,7 +201,7 @@ export function useCreateMaritimeAudit() {
       const label = AUDIT_LABELS[input.audit_type];
       
       // Build insert data based on table structure
-      const insertData: Record<string, any> = {
+      const insertData: Record<string, unknown> = {
         status: input.status || 'draft',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -246,9 +246,9 @@ export function useCreateMaritimeAudit() {
         insertData.audit_number = `${input.audit_type.toUpperCase()}-${Date.now()}`;
       }
       
-      const { data, error } = await supabase
-        .from(tableName as any)
+      const { data, error } = await (supabase.from as Function)(tableName)
         .insert(insertData)
+        .select()
         .select()
         .single();
       
@@ -262,7 +262,7 @@ export function useCreateMaritimeAudit() {
         description: 'Nova auditoria registrada com sucesso',
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       logger.error('Create audit error:', error);
       toast.error('Erro ao criar auditoria', {
         description: error.message,
@@ -283,7 +283,7 @@ export function useUpdateMaritimeAudit() {
       const tableName = AUDIT_TABLE_MAP[auditType];
       const label = AUDIT_LABELS[auditType];
       
-      const updateData: Record<string, any> = {
+      const updateData: Record<string, unknown> = {
         updated_at: new Date().toISOString(),
       };
       
@@ -296,9 +296,9 @@ export function useUpdateMaritimeAudit() {
       if (input.notes) updateData.notes = input.notes;
       if (input.next_audit_date) updateData.next_audit_date = input.next_audit_date;
       
-      const { data, error } = await supabase
-        .from(tableName as any)
+      const { data, error } = await (supabase.from as Function)(tableName)
         .update(updateData)
+        .eq('id', input.id)
         .eq('id', input.id)
         .select()
         .single();
@@ -313,7 +313,7 @@ export function useUpdateMaritimeAudit() {
         description: 'Auditoria atualizada com sucesso',
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       logger.error('Update audit error:', error);
       toast.error('Erro ao atualizar auditoria', {
         description: error.message,
@@ -333,8 +333,7 @@ export function useDeleteMaritimeAudit() {
       const tableName = AUDIT_TABLE_MAP[auditType];
       const label = AUDIT_LABELS[auditType];
       
-      const { error } = await supabase
-        .from(tableName as any)
+      const { error } = await (supabase.from as Function)(tableName)
         .delete()
         .eq('id', auditId);
       
@@ -348,7 +347,7 @@ export function useDeleteMaritimeAudit() {
         description: 'Auditoria removida com sucesso',
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       logger.error('Delete audit error:', error);
       toast.error('Erro ao remover auditoria', {
         description: error.message,
@@ -413,23 +412,26 @@ export function useAllMaritimeAudits() {
       
       const allAudits: MaritimeAudit[] = [];
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- normalizing heterogeneous audit table schemas
+      type AuditRow = Record<string, any>;
+      
       // Normalize and combine all audit data
       if (internalAudits.data) {
-        allAudits.push(...internalAudits.data.map((a: any) => ({
+        allAudits.push(...(internalAudits.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: (a.audit_type?.toLowerCase().replace('_', '-') || 'ism') as AuditType,
         })));
       }
       
       if (peotramAudits.data) {
-        allAudits.push(...peotramAudits.data.map((a: any) => ({
+        allAudits.push(...(peotramAudits.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: 'peotram' as AuditType,
         })));
       }
       
       if (preovidAudits.data) {
-        allAudits.push(...preovidAudits.data.map((a: any) => ({
+        allAudits.push(...(preovidAudits.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: 'pre-ovid' as AuditType,
           auditor_name: a.inspector_name,
@@ -437,7 +439,7 @@ export function useAllMaritimeAudits() {
       }
       
       if (pscInspections.data) {
-        allAudits.push(...pscInspections.data.map((a: any) => ({
+        allAudits.push(...(pscInspections.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: 'psc' as AuditType,
           audit_date: a.inspection_date,
@@ -447,14 +449,14 @@ export function useAllMaritimeAudits() {
       }
       
       if (sgsoAudits.data) {
-        allAudits.push(...sgsoAudits.data.map((a: any) => ({
+        allAudits.push(...(sgsoAudits.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: 'sgso' as AuditType,
         })));
       }
       
       if (mlcInspections.data) {
-        allAudits.push(...mlcInspections.data.map((a: any) => ({
+        allAudits.push(...(mlcInspections.data as AuditRow[]).map((a) => ({
           ...normalizeAuditData(a),
           audit_type: 'pre-mlc' as AuditType,
           audit_date: a.inspection_date,
@@ -523,27 +525,27 @@ export function useMaritimeAuditKPIs() {
 }
 
 // Helper to normalize data from different table structures
-function normalizeAuditData(data: any): MaritimeAudit {
+function normalizeAuditData(data: Record<string, unknown>): MaritimeAudit {
   return {
-    id: data.id,
-    audit_type: data.audit_type as AuditType || 'sgso',
-    vessel_id: data.vessel_id,
-    vessel_name: data.vessel_name,
-    vessel_imo: data.vessel_imo,
-    audit_date: data.audit_date || data.inspection_date || data.created_at?.split('T')[0],
-    status: data.status || 'draft',
-    compliance_score: data.compliance_score || data.overall_score || data.risk_score,
-    auditor_name: data.auditor_name || data.inspector_name,
-    inspector_name: data.inspector_name,
-    port_location: data.port_location || data.port_name || data.shore_location,
-    non_conformities_count: data.non_conformities_count || data.non_compliant_count || data.deficiencies_count || 0,
-    findings: data.findings,
-    recommendations: data.recommendations,
-    notes: data.notes,
-    next_audit_date: data.next_audit_date,
-    created_at: data.created_at,
-    updated_at: data.updated_at,
-    metadata: data.metadata,
+    id: data.id as string,
+    audit_type: (data.audit_type as AuditType) || 'sgso',
+    vessel_id: data.vessel_id as string | undefined,
+    vessel_name: data.vessel_name as string | undefined,
+    vessel_imo: data.vessel_imo as string | undefined,
+    audit_date: (data.audit_date as string) || (data.inspection_date as string) || (data.created_at as string)?.split('T')[0],
+    status: (data.status as MaritimeAudit['status']) || 'draft',
+    compliance_score: (data.compliance_score as number) || (data.overall_score as number) || (data.risk_score as number),
+    auditor_name: (data.auditor_name as string) || (data.inspector_name as string),
+    inspector_name: data.inspector_name as string | undefined,
+    port_location: (data.port_location as string) || (data.port_name as string) || (data.shore_location as string),
+    non_conformities_count: (data.non_conformities_count as number) || (data.non_compliant_count as number) || (data.deficiencies_count as number) || 0,
+    findings: data.findings as string | undefined,
+    recommendations: data.recommendations as string | undefined,
+    notes: data.notes as string | undefined,
+    next_audit_date: data.next_audit_date as string | undefined,
+    created_at: data.created_at as string,
+    updated_at: data.updated_at as string,
+    metadata: data.metadata as Record<string, unknown> | undefined,
   };
 }
 

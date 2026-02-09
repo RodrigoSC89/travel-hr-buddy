@@ -56,14 +56,14 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
         }
 
         if (data) {
-          data.forEach((missionData: any) => {
+          data.forEach((missionData: Record<string, unknown>) => {
             missionPipeline.createMission({
-              id: missionData.id,
-              name: missionData.name,
-              description: missionData.description,
-              steps: missionData.steps || [],
-              agents: missionData.agents,
-              metadata: missionData.metadata
+              id: missionData.id as string,
+              name: missionData.name as string,
+              description: missionData.description as string,
+              steps: (missionData.steps as MissionStep[]) || [],
+              agents: missionData.agents as string[] | undefined,
+              metadata: missionData.metadata as Record<string, unknown> | undefined
             });
           });
         }
@@ -82,8 +82,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
     // Persist to Supabase if enabled
     if (enableSupabase) {
       try {
-        const { error } = await supabase
-          .from("missions")
+        const { error } = await (supabase.from as Function)("missions")
           .insert({
             id: mission.id,
             name: mission.name,
@@ -95,7 +94,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
               agents: mission.agents,
               metadata: mission.metadata
             }
-          } as any);
+          });
 
         if (error) {
           logger.error("Error saving mission to Supabase:", error);

@@ -48,8 +48,8 @@ export function usePredictiveMaintenance() {
         description: `${data.predictions?.length || 0} equipamentos analisados`,
       });
       return data;
-    } catch (err: any) {
-      const msg = err?.message || "Erro na análise preditiva";
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Erro na análise preditiva";
       toast.error("Erro na análise preditiva", { description: msg });
       return null;
     } finally {
