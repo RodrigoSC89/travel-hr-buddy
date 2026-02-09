@@ -157,11 +157,11 @@ export class BlockchainComplianceLedger {
     let blockchainTimestamp = '';
 
     // Try localStorage first (main storage for demo)
-    const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]');
-    const record = records.find((r: any) => r.evidenceId === evidence.id);
+    const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
+    const record = records.find((r) => r.evidenceId === evidence.id);
     if (record) {
-      storedHash = record.hash.replace('0x', '');
-      blockchainTimestamp = record.timestamp;
+      storedHash = String(record.hash).replace('0x', '');
+      blockchainTimestamp = String(record.timestamp);
     }
 
     return {
@@ -246,10 +246,10 @@ export class BlockchainComplianceLedger {
     const hashes: string[] = [];
 
     for (const id of evidenceIds) {
-      const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]');
-      const record = records.find((r: any) => r.evidenceId === id);
+      const records = JSON.parse(localStorage.getItem('compliance_ledger') || '[]') as Array<Record<string, unknown>>;
+      const record = records.find((r) => r.evidenceId === id);
       if (record) {
-        hashes.push(record.hash);
+        hashes.push(String(record.hash));
       }
     }
 

@@ -115,10 +115,10 @@ export interface OpenMeteoResponse {
 }
 
 // Cache for API responses
-const cache = new Map<string, { data: any; timestamp: number }>();
+const cache = new Map<string, { data: unknown; timestamp: number }>();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
-function getCacheKey(endpoint: string, params: Record<string, any>): string {
+function getCacheKey(endpoint: string, params: Record<string, string | number | boolean>): string {
   return `${endpoint}_${JSON.stringify(params)}`;
 }
 
@@ -131,7 +131,7 @@ function getCachedData<T>(key: string): T | null {
   return null;
 }
 
-function setCachedData(key: string, data: any): void {
+function setCachedData(key: string, data: unknown): void {
   cache.set(key, { data, timestamp: Date.now() });
 }
 

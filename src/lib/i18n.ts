@@ -9,13 +9,13 @@ import { logger } from "@/lib/logger";
 
 type Locale = "en" | "pt" | "es";
 
-interface Translations {
-  [key: string]: any;
+interface TranslationNode {
+  [key: string]: string | TranslationNode;
 }
 
 class I18nSystem {
   private currentLocale: Locale = "en";
-  private translations: Record<Locale, Translations> = {
+  private translations: Record<Locale, TranslationNode> = {
     en: {},
     pt: {},
     es: {},
@@ -105,7 +105,7 @@ class I18nSystem {
    */
   translate(key: string, params?: Record<string, string | number>): string {
     const keys = key.split(".");
-    let value: any = this.translations[this.currentLocale];
+    let value: string | TranslationNode = this.translations[this.currentLocale];
 
     // Navigate through nested object
     for (const k of keys) {
@@ -114,8 +114,8 @@ class I18nSystem {
       } else {
         // Fallback to English if key not found
         logger.warn(`Translation key not found: ${key} in locale ${this.currentLocale}`);
-        value = this.getFromLocale("en", key);
-        break;
+        const fallback = this.getFromLocale("en", key);
+        return this.applyParams(fallback, params);
       }
     }
 
@@ -124,14 +124,16 @@ class I18nSystem {
       return key;
     }
 
-    // Replace parameters
-    if (params) {
-      Object.entries(params).forEach(([param, val]) => {
-        value = value.replace(new RegExp(`{${param}}`, "g"), String(val));
-      });
-    }
+    return this.applyParams(value, params);
+  }
 
-    return value;
+  private applyParams(value: string, params?: Record<string, string | number>): string {
+    if (!params) return value;
+    let result = value;
+    Object.entries(params).forEach(([param, val]) => {
+      result = result.replace(new RegExp(`{${param}}`, "g"), String(val));
+    });
+    return result;
   }
 
   /**
@@ -139,7 +141,7 @@ class I18nSystem {
    */
   private getFromLocale(locale: Locale, key: string): string {
     const keys = key.split(".");
-    let value: any = this.translations[locale];
+    let value: string | TranslationNode = this.translations[locale];
 
     for (const k of keys) {
       if (value && typeof value === "object" && k in value) {
@@ -205,5 +207,5 @@ if (typeof window !== "undefined") {
   });
 }
 
-export type { Locale, Translations };
+export type { Locale, TranslationNode as Translations };
 export default i18n;
