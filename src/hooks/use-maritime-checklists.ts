@@ -301,6 +301,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Transform data to match our Checklist interface
       const typedData = (data ?? []) as ChecklistQueryResult[];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transformedChecklists: Checklist[] = typedData.map((item: any) => ({
         id: item.id,
         title: item.title,
@@ -326,6 +327,7 @@ export const useMaritimeChecklists = (userId: string) => {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status as Checklist["status"]) ?? "draft",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         items: (item.checklist_items ?? []).map((checklistItem: any) => ({
           id: checklistItem.id,
           title: checklistItem.title,
@@ -395,6 +397,7 @@ export const useMaritimeChecklists = (userId: string) => {
       }
 
       const transformed = records
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((record: any) => transformTemplateRecord(record))
         .filter((template): template is ChecklistTemplate => Boolean(template));
 

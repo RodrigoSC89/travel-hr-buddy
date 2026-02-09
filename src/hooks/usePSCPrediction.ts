@@ -15,12 +15,12 @@ export interface PSCInspection {
   country: string;
   inspection_date?: string;
   detention_risk_score: number;
-  predicted_deficiencies: any[];
-  actual_deficiencies: any[];
+  predicted_deficiencies: string[];
+  actual_deficiencies: string[];
   was_detained: boolean;
   status: string;
   ai_briefing?: string;
-  preparation_checklist: any[];
+  preparation_checklist: string[];
   notes?: string;
   created_at: string;
 }
@@ -42,15 +42,16 @@ export function usePSCPrediction() {
 
         // Fetch vessel names for mapping
         let vesselMap: Record<string, string> = {};
-        const vesselIds = [...new Set((data || []).map((i: any) => i.vessel_id).filter(Boolean))] as string[];
+        const vesselIds = [...new Set((data || []).map((i: Record<string, unknown>) => i.vessel_id).filter(Boolean))] as string[];
         if (vesselIds.length > 0) {
           const { data: vessels } = await supabase.from("vessels").select("id, name").in("id", vesselIds);
-          vesselMap = (vessels || []).reduce((acc: Record<string, string>, v: any) => {
+          vesselMap = (vessels || []).reduce((acc: Record<string, string>, v) => {
             acc[v.id] = v.name;
             return acc;
           }, {});
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (data || []).map((i: any) => ({
           id: i.id,
           vessel_id: i.vessel_id,

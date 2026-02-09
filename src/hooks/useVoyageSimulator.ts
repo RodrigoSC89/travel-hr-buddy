@@ -26,7 +26,7 @@ export interface SimulationResult {
   estimated_profit?: number;
   estimated_fuel_cost?: number;
   estimated_duration_hours?: number;
-  risk_factors: any[];
+  risk_factors: string[];
   status: string;
   created_at: string;
 }
@@ -44,6 +44,7 @@ export function useVoyageSimulator() {
         .order("created_at", { ascending: false })
         .limit(20);
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (data || []).map((d: any) => ({
         ...d,
         scenarios: Array.isArray(d.scenarios) ? d.scenarios : [],

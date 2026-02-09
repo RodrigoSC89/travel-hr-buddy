@@ -1,6 +1,6 @@
 /**
  * HR Employee Modal - Create/Edit Employee
- * Modal para criar ou editar colaboradores
+ * Modal para criar ou editar colaboradores com validação Zod
  */
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -11,6 +11,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Save, X } from 'lucide-react';
 import { useCreateHREmployee, useUpdateHREmployee, type HREmployee, type CreateEmployeeInput } from '@/hooks/useHREmployees';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const employeeSchema = z.object({
+  full_name: z.string().trim().min(2, "Nome deve ter ao menos 2 caracteres").max(100, "Nome deve ter no máximo 100 caracteres"),
+  email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+  phone: z.string().max(20, "Telefone muito longo").optional().or(z.literal('')),
+  cpf: z.string().max(14, "CPF inválido").optional().or(z.literal('')),
+  position: z.string().max(100, "Cargo muito longo").optional().or(z.literal('')),
+  department: z.string().max(50, "Departamento muito longo").optional().or(z.literal('')),
+  hire_date: z.string().optional(),
+  contract_type: z.string().optional(),
+  base_salary: z.number().min(0, "Salário não pode ser negativo").optional(),
+  status: z.string().optional(),
+});
 
 interface HREmployeeModalProps {
   open: boolean;
@@ -37,6 +51,8 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
     base_salary: undefined,
     status: 'active',
   });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const isEditing = !!employee;
   const isLoading = createEmployee.isPending || updateEmployee.isPending;
@@ -69,11 +85,23 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
         status: 'active',
       });
     }
+    setErrors({});
   }, [employee, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
     
+    const result = employeeSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) fieldErrors[String(issue.path[0])] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     try {
       if (isEditing && employee) {
         await updateEmployee.mutateAsync({ id: employee.id, ...formData });
@@ -88,7 +116,11 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
 
   const handleChange = (field: keyof CreateEmployeeInput, value: string | number | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
+
+  const FieldError = ({ field }: { field: string }) => 
+    errors[field] ? <p className="text-xs text-destructive mt-1">{errors[field]}</p> : null;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -110,7 +142,9 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
                 onChange={(e) => handleChange('full_name', e.target.value)}
                 placeholder="Digite o nome completo"
                 required
+                maxLength={100}
               />
+              <FieldError field="full_name" />
             </div>
 
             {/* Email */}
@@ -123,7 +157,9 @@ export function HREmployeeModal({ open, onClose, employee }: HREmployeeModalProp
                 onChange={(e) => handleChange('email', e.target.value)}
                 placeholder="email@empresa.com"
                 required
+                maxLength={255}
               />
+              <FieldError field="email" />
             </div>
 
             {/* Telefone */}

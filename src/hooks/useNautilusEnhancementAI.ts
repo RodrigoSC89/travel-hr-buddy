@@ -24,7 +24,7 @@ export type EnhancementType =
   | 'logistics_optimize'
   | 'port_integration';
 
-interface EnhancementResponse<T = any> {
+interface EnhancementResponse<T = unknown> {
   success: boolean;
   response: T;
   type: EnhancementType;
@@ -87,40 +87,40 @@ export function useNautilusEnhancementAI() {
   const analyzeWorkflow = useCallback((nodes: any[], edges: any[], prompt?: string) => 
     invoke('workflow_analyze', prompt, { nodes, edges }), [invoke]);
 
-  const optimizeWorkflow = useCallback((nodes: any[], edges: any[]) => 
+  const optimizeWorkflow = useCallback((nodes: Record<string, unknown>[], edges: Record<string, unknown>[]) => 
     invoke('workflow_optimize', 'Otimize este workflow', { nodes, edges }), [invoke]);
 
-  const optimizeCalendar = useCallback((events: any[]) => 
+  const optimizeCalendar = useCallback((events: Record<string, unknown>[]) => 
     invoke('calendar_optimize', 'Otimize este calendário', { events }), [invoke]);
 
-  const generateJournal = useCallback((vesselData: any, date?: string) => 
+  const generateJournal = useCallback((vesselData: Record<string, unknown>, date?: string) => 
     invoke('journaling_generate', `Gere o journal do dia ${date || new Date().toISOString().split('T')[0]}`, { vessel: vesselData }), [invoke]);
 
-  const analyzeAudit = useCallback((entries: any[]) => 
+  const analyzeAudit = useCallback((entries: Record<string, unknown>[]) => 
     invoke('audit_analyze', 'Analise estes logs de auditoria', { entries }), [invoke]);
 
-  const planVoyage = useCallback((origin: string, destination: string, vessel: any, constraints?: any) => 
+  const planVoyage = useCallback((origin: string, destination: string, vessel: Record<string, unknown>, constraints?: Record<string, unknown>) => 
     invoke('voyage_plan', `Planeje viagem de ${origin} para ${destination}`, { origin, destination, vessel, constraints }), [invoke]);
 
-  const analyzeRouteCost = useCallback((route: any, vessel: any) => 
+  const analyzeRouteCost = useCallback((route: Record<string, unknown>, vessel: Record<string, unknown>) => 
     invoke('route_cost_analyze', 'Analise custos desta rota', { route, vessel }), [invoke]);
 
-  const checkResourceAvailability = useCallback((resources: any[], timeframe?: string) => 
+  const checkResourceAvailability = useCallback((resources: Record<string, unknown>[], timeframe?: string) => 
     invoke('resource_availability', 'Verifique disponibilidade de recursos', { resources, timeframe }), [invoke]);
 
-  const getEmergencyGuidance = useCallback((emergencyType: string, context?: any) => 
+  const getEmergencyGuidance = useCallback((emergencyType: string, context?: Record<string, unknown>) => 
     invoke('emergency_guidance', `Orientação para emergência: ${emergencyType}`, { emergencyType, ...context }), [invoke]);
 
-  const simulateTraining = useCallback((scenarioType: string, participants?: any[]) => 
+  const simulateTraining = useCallback((scenarioType: string, participants?: Record<string, unknown>[]) => 
     invoke('training_simulate', `Simule cenário: ${scenarioType}`, { scenarioType, participants }), [invoke]);
 
-  const analyzeWellbeing = useCallback((crewData: any[]) => 
+  const analyzeWellbeing = useCallback((crewData: Record<string, unknown>[]) => 
     invoke('wellbeing_analyze', 'Analise bem-estar da tripulação', { crew: crewData }), [invoke]);
 
   const checkConnectivity = useCallback((vesselId: string) => 
     invoke('connectivity_status', 'Status de conectividade', { vesselId }), [invoke]);
 
-  const optimizeLogistics = useCallback((bases: any[], cargo: any) => 
+  const optimizeLogistics = useCallback((bases: Record<string, unknown>[], cargo: Record<string, unknown>) => 
     invoke('logistics_optimize', 'Otimize logística multi-base', { bases, cargo }), [invoke]);
 
   const integratePort = useCallback((portCode: string, vesselId: string) => 
