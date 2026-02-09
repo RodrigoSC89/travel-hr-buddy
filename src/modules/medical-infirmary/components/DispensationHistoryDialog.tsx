@@ -2,6 +2,7 @@
  * Dispensation History Dialog - View medication dispensation logs
  */
 import React from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +43,24 @@ export function DispensationHistoryDialog({
   isLoading,
 }: DispensationHistoryDialogProps) {
   const handleExport = () => {
-    toast.success("Exportando histórico de dispensações...");
+    if (records.length === 0) {
+      toast.info("Nenhum registro para exportar");
+      return;
+    }
+    const csvRows = [
+      "Data;Medicamento;Quantidade;Unidade;Paciente;Responsável;Motivo;Lote",
+      ...records.map(r =>
+        `${new Date(r.created_at).toLocaleDateString("pt-BR")};${r.medication_name};${r.quantity_dispensed};${r.unit};${r.dispensed_to};${r.dispensed_by};${r.reason};${r.batch_number || ""}`
+      )
+    ];
+    const blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dispensacoes-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Histórico de dispensações exportado!");
   };
 
   return (
@@ -125,5 +143,3 @@ export function DispensationHistoryDialog({
     </Dialog>
   );
 }
-
-import { toast } from "sonner";

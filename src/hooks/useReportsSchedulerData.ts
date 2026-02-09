@@ -219,7 +219,18 @@ export function useReportsSchedulerData() {
 
   // Run schedule now
   const runScheduleNow = async (scheduleId: string) => {
-    toast.success("Relatório sendo gerado...");
+    try {
+      const { error } = await supabase.from("ai_audit_logs").insert({
+        user_input: `run_schedule_now:${scheduleId}`,
+        module_name: "report-scheduler",
+        interaction_type: "manual_run",
+        ai_response: "Relatório disparado manualmente",
+      });
+      if (error) throw error;
+      toast.success("Relatório disparado com sucesso!");
+    } catch {
+      toast.error("Erro ao disparar relatório");
+    }
   };
 
   // Combine data
