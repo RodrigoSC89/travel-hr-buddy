@@ -167,7 +167,7 @@ export function HotelReservationPanel() {
 
   const handleSearch = async () => {
     setIsSearching(true);
-    await new Promise(r => setTimeout(r, 1500));
+    // Direct filter - data is already loaded locally
     setIsSearching(false);
     setShowResults(true);
     toast.success("Hotéis encontrados", {

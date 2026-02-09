@@ -143,10 +143,7 @@ export function UserRegistrationForm() {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call for user registration
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // In a real app, this would:
+      // TODO: Integrate with facial recognition API
       // 1. Send photos to facial recognition API
       // 2. Generate biometric template
       // 3. Store user in database with access credentials

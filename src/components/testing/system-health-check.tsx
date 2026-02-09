@@ -94,8 +94,6 @@ export const SystemHealthCheck: React.FC = () => {
       check: async () => {
         const start = Date.now();
         try {
-          // Simular verificação de performance
-          await new Promise(resolve => setTimeout(resolve, 100));
           const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
           const status: "passing" | "failing" | "warning" = loadTime < 3000 ? "passing" : loadTime < 5000 ? "warning" : "failing";
           return {

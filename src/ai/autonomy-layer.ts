@@ -420,8 +420,7 @@ class AutonomyLayer {
       new CustomEvent("module-restart", { detail: { module: moduleName } })
     );
 
-    // Wait for restart
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Module restart dispatched via custom event
   }
 
   /**

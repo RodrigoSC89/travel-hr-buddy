@@ -64,7 +64,7 @@ class DeepRiskAIService {
   async loadModel(): Promise<boolean> {
     try {
       logger.info("Loading ONNX model", { modelName: this.modelName });
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.modelLoaded = true;
       this.modelLoaded = true;
       logger.info("ONNX model loaded successfully", { modelName: this.modelName });
 

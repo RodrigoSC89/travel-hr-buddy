@@ -104,62 +104,18 @@ export default function OCRCenterPage() {
       prev.map(r => r.id === id ? { ...r, status: 'processing' as const } : r)
     );
 
-    // Simulate Tesseract
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setResults(prev =>
-      prev.map(r =>
-        r.id === id
-          ? {
-              ...r,
-              engines: {
-                ...r.engines,
-                tesseract: { confidence: 89, time: 1200 },
-              },
-            }
-          : r
-      )
-    );
-
-    // Simulate Azure
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setResults(prev =>
-      prev.map(r =>
-        r.id === id
-          ? {
-              ...r,
-              engines: {
-                ...r.engines,
-                azure: { confidence: 93, time: 800 },
-              },
-            }
-          : r
-      )
-    );
-
-    // Simulate Google
-    await new Promise(resolve => setTimeout(resolve, 600));
-    setResults(prev =>
-      prev.map(r =>
-        r.id === id
-          ? {
-              ...r,
-              engines: {
-                ...r.engines,
-                google: { confidence: 91, time: 600 },
-              },
-            }
-          : r
-      )
-    );
-
-    // Complete with consensus
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Process all engines at once (no artificial delays)
     setResults(prev =>
       prev.map(r =>
         r.id === id
           ? {
               ...r,
               status: 'completed' as const,
+              engines: {
+                tesseract: { confidence: 89, time: 1200 },
+                azure: { confidence: 93, time: 800 },
+                google: { confidence: 91, time: 600 },
+              },
               consensusConfidence: 96.2,
               consensusText: 'Texto extraído com consenso de múltiplos motores...',
               classification: 'Certificado',

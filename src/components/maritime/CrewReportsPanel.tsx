@@ -58,9 +58,6 @@ export const CrewReportsPanel: React.FC<CrewReportsPanelProps> = ({ crewMembers,
   const handleGenerateReport = async () => {
     setIsGenerating(true);
     
-    // Simulate report generation
-    await new Promise(r => setTimeout(r, 2000));
-    
     const report = {
       id: `report-${Date.now()}`,
       type: selectedReport,

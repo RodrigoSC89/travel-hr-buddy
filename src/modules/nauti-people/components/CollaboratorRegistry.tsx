@@ -107,8 +107,6 @@ const CollaboratorRegistry: React.FC = () => {
     input.onchange = async (e: Event) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
-        // Simula processamento
-        await new Promise(resolve => setTimeout(resolve, 1500));
         toast.success(`Arquivo "${file.name}" importado com sucesso! 15 colaboradores adicionados.`);
       }
       setIsLoading(false);
@@ -118,7 +116,6 @@ const CollaboratorRegistry: React.FC = () => {
 
   const handleExport = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Gera CSV
     const headers = ['Nome', 'Email', 'Telefone', 'Cargo', 'Departamento', 'Unidade', 'Status', 'Data Admissão'];
@@ -145,7 +142,6 @@ const CollaboratorRegistry: React.FC = () => {
     }
 
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
 
     const novoColab: Colaborador = {
       id: Date.now().toString(),

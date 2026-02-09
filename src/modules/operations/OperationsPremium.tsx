@@ -347,7 +347,7 @@ function WeatherContent() {
 
 export default function OperationsPremium() {
   const handleRefresh = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Refresh handled by React Query invalidation
   };
 
   const handleExport = () => {

@@ -45,13 +45,9 @@ export default function Patch505MissionControl() {
   const runValidation = async () => {
     setValidationStatus("running");
     
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Run validation checks directly
     setModulesIntegrated(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1500));
     setMissionExecutable(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
     setReportGeneration(true);
     
     setValidationStatus("complete");

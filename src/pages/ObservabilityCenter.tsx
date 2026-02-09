@@ -120,7 +120,8 @@ export default function ObservabilityCenter() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const score = getAverageScore();
+    if (score !== null) setPerformanceScore(score);
     setIsRefreshing(false);
     toast({
       title: "Dados atualizados",

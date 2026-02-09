@@ -165,8 +165,7 @@ export const AutomatedReportsManager = () => {
           }
         );
 
-        // Simulate processing
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Process response
 
         if (response.ok) {
           const data = await response.json();
@@ -179,7 +178,6 @@ export const AutomatedReportsManager = () => {
           });
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, 1500));
         toast.success('Relatório gerado com sucesso!', {
           description: `Enviado para ${report.recipients.length} destinatário(s).`
         });

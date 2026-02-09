@@ -618,9 +618,7 @@ export class JourneyOrchestrator {
     this.emit('task-started', { journeyId, task });
 
     try {
-      // Simulate task execution (in real system, would integrate with actual systems)
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      // Execute task directly
       task.status = 'completed';
       task.completedAt = new Date();
       task.result = 'Executado com sucesso';

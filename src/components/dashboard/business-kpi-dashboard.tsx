@@ -18,6 +18,7 @@ import {
   ArrowDownRight
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 
 interface KPIMetric {
   id: string;
@@ -68,9 +69,15 @@ export const BusinessKPIDashboard: React.FC = () => {
     loadingRef.current = true;
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Load real data from Supabase
+      const { data: vesselData } = await supabase
+        .from('vessels')
+        .select('id, status')
+        .limit(100);
       
+      const activeVessels = vesselData?.filter(v => v.status === 'active').length || 0;
+      const totalVessels = vesselData?.length || 0;
+
       const mockMetrics: BusinessMetrics = {
         revenue: {
           current: 2450000,

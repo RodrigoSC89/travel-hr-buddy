@@ -177,9 +177,6 @@ export const AutomationWorkflowsManager = () => {
         }
       );
 
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       setWorkflows(workflows.map(w => 
         w.id === workflow.id 
           ? { ...w, executionCount: w.executionCount + 1, lastExecution: new Date().toISOString() }
@@ -271,9 +268,6 @@ export const AutomationWorkflowsManager = () => {
         }
       );
 
-      // Simulate optimization time
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       setWorkflows(workflows.map(w => 
         w.id === workflow.id ? { ...w, aiOptimized: true } : w
       ));

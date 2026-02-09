@@ -82,8 +82,6 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
 
     setIsSubmitting(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const newDrill = {
         id: Date.now().toString(),
         ...formData,

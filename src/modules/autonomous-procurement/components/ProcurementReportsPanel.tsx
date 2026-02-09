@@ -155,9 +155,6 @@ export default function ProcurementReportsPanel() {
   const handleGenerateReport = async () => {
     setIsGenerating(true);
     
-    // Simulate report generation
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
     const newReport: Report = {
       id: Date.now().toString(),
       name: `${reportConfig.type === "procurement" ? "Relatório de Procurement" : 

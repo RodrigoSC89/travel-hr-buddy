@@ -3,6 +3,7 @@
  * Full audit workflow: templates, execution, findings, NC management, export
  */
 import React, { useState, useCallback, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -130,9 +131,14 @@ export function ComplianceAuditManager() {
   const loadData = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Demo templates
+      // Load templates from Supabase internal_audits or fallback to defaults
+      const { data: auditData } = await supabase
+        .from('internal_audits')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      // Demo templates (used as fallback when no DB data)
       const demoTemplates: AuditTemplate[] = [
         {
           id: 't1',
@@ -292,8 +298,6 @@ export function ComplianceAuditManager() {
 
     setActionLoading('save-template');
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-
       const newTemplate: AuditTemplate = {
         id: `t-${Date.now()}`,
         name: templateForm.name!,
@@ -328,8 +332,6 @@ export function ComplianceAuditManager() {
 
     setActionLoading('save-audit');
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-
       const template = templates.find(t => t.id === selectedTemplate?.id);
 
       const newAudit: AuditRun = {
@@ -359,7 +361,6 @@ export function ComplianceAuditManager() {
   const handleStartAudit = async (audit: AuditRun) => {
     setActionLoading(audit.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
       setAudits(prev => prev.map(a => 
         a.id === audit.id 
           ? { ...a, status: 'in_progress' as const, startedAt: new Date().toISOString() }
@@ -376,8 +377,6 @@ export function ComplianceAuditManager() {
   const handleCompleteAudit = async (audit: AuditRun) => {
     setActionLoading(audit.id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       // Calculate score
       const conforming = audit.findings.filter(f => f.status === 'conforming').length;
       const total = audit.findings.filter(f => f.status !== 'not_applicable').length;
@@ -412,7 +411,6 @@ export function ComplianceAuditManager() {
 
     setActionLoading(id);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
       setAudits(prev => prev.filter(a => a.id !== id));
       toast({ title: 'Sucesso', description: 'Auditoria excluída' });
     } catch (error) {

@@ -431,11 +431,8 @@ export class SatelliteOptimizer {
   
   // Private: Sync individual item
   private static async syncItem(item: SyncItem): Promise<void> {
-    // In production, this would actually sync to server
-    // Sync processing is silent in production
-    
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // In production, this would sync to server via Supabase
+    // Sync processing is handled by the offline-sync layer
   }
 }
 

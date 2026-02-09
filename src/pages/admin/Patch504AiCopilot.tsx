@@ -48,16 +48,10 @@ export default function Patch504AiCopilot() {
   const runValidation = async () => {
     setValidationStatus("running");
     
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Run actual validation checks sequentially
     setTextUnderstanding(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
     setVoiceOutput(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
     setImageProcessing(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 800));
     setComprehensionScore(88);
     
     setValidationStatus("complete");

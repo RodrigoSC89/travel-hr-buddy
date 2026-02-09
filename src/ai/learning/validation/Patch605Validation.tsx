@@ -34,9 +34,8 @@ export function Patch605Validation() {
     for (let i = 1; i <= iterations; i++) {
       setCurrentIteration(i);
       
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const isPositive = Math.random() > 0.3;
+      // Use deterministic data based on iteration index
+      const isPositive = i % 3 !== 0; // deterministic pattern
       const event: LearningEvent = {
         iteration: i,
         decision: `Decision-${i}: ${getRandomDecision()}`,

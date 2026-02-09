@@ -302,8 +302,7 @@ export class CoordinationEngine {
    * Simulate AI recommendation (for testing)
    */
   async simulateAIRecommendation(agentId: string): Promise<AIRecommendation> {
-    // Simulate AI processing delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // Direct AI recommendation (no artificial delay)
 
     const agent = this.getAgent(agentId);
     if (!agent) {

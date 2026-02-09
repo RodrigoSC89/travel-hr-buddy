@@ -83,8 +83,12 @@ export function OperationsActionPanel() {
   // Bulk approve mutation
   const bulkApproveMutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      // In production, this would update the actual records
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Update vessel status in batch
+      const { error } = await supabase
+        .from('vessels')
+        .update({ status: 'active' })
+        .in('id', ids);
+      if (error) throw error;
       return ids;
     },
     onSuccess: (ids) => {
@@ -97,7 +101,11 @@ export function OperationsActionPanel() {
   // Bulk delete mutation
   const bulkDeleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const { error } = await supabase
+        .from('vessels')
+        .update({ status: 'inactive' })
+        .in('id', ids);
+      if (error) throw error;
       return ids;
     },
     onSuccess: (ids) => {

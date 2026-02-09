@@ -13,12 +13,7 @@ export const useButtonHandlers = () => {
    */
   const generateReport = () => {
     logger.info("[DP Intelligence] Generating DP positioning report...");
-    toast.loading("Gerando relatório DP...", { id: "dp-report" });
-    
-    // Simulate report generation
-    setTimeout(() => {
-      toast.success("Relatório DP gerado com sucesso!", { id: "dp-report" });
-    }, 1500);
+    toast.success("Relatório DP gerado com sucesso!", { id: "dp-report" });
   };
 
   /**
@@ -26,11 +21,7 @@ export const useButtonHandlers = () => {
    */
   const syncDPLogs = () => {
     logger.info("[DP Intelligence] Synchronizing DP logs...");
-    toast.loading("Sincronizando dados de Posicionamento Dinâmico...", { id: "dp-sync" });
-    
-    setTimeout(() => {
-      toast.success("Dados de DP sincronizados com sucesso!", { id: "dp-sync" });
-    }, 1000);
+    toast.success("Dados de DP sincronizados com sucesso!", { id: "dp-sync" });
   };
 
   /**
@@ -81,11 +72,7 @@ export const useButtonHandlers = () => {
    */
   const resetIndicators = () => {
     logger.info("[Control Hub] Resetting indicators to default values...");
-    toast.info("Resetando indicadores para valores padrão...");
-    
-    setTimeout(() => {
-      toast.success("Indicadores resetados com sucesso!");
-    }, 500);
+    toast.success("Indicadores resetados com sucesso!");
   };
 
   /**
@@ -93,11 +80,7 @@ export const useButtonHandlers = () => {
    */
   const applyMitigation = () => {
     logger.info("[FMEA Expert] Applying mitigation actions...");
-    toast.loading("Aplicando ações de mitigação FMEA...", { id: "fmea-mitigation" });
-    
-    setTimeout(() => {
-      toast.success("Ações de mitigação FMEA aplicadas! Redundâncias do sistema de propulsão verificadas.", { id: "fmea-mitigation" });
-    }, 2000);
+    toast.success("Ações de mitigação FMEA aplicadas! Redundâncias do sistema de propulsão verificadas.", { id: "fmea-mitigation" });
   };
 
   /**
@@ -125,8 +108,6 @@ export const useButtonHandlers = () => {
     try {
       if (callback) {
         await callback();
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 1000));
       }
       toast.success(`${itemName} salvo com sucesso!`, { id: `save-${itemName}` });
     } catch (error) {
@@ -139,11 +120,7 @@ export const useButtonHandlers = () => {
    */
   const handleDownload = (fileName: string) => {
     logger.info(`[Download] Downloading ${fileName}`);
-    toast.loading(`Preparando download de ${fileName}...`, { id: `download-${fileName}` });
-    
-    setTimeout(() => {
-      toast.success(`Download de ${fileName} iniciado!`, { id: `download-${fileName}` });
-    }, 1000);
+    toast.success(`Download de ${fileName} iniciado!`, { id: `download-${fileName}` });
   };
 
   /**
@@ -155,8 +132,6 @@ export const useButtonHandlers = () => {
     try {
       if (callback) {
         await callback();
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 1500));
       }
       toast.success(`${formName} enviado com sucesso!`, { id: `submit-${formName}` });
     } catch (error) {
@@ -169,11 +144,7 @@ export const useButtonHandlers = () => {
    */
   const handleAnalyze = (analysisType: string) => {
     logger.info(`[AI Analysis] Starting ${analysisType}`);
-    toast.loading(`Analisando ${analysisType}...`, { id: `analyze-${analysisType}` });
-    
-    setTimeout(() => {
-      toast.success(`Análise de ${analysisType} concluída!`, { id: `analyze-${analysisType}` });
-    }, 2000);
+    toast.success(`Análise de ${analysisType} concluída!`, { id: `analyze-${analysisType}` });
   };
 
   /**
@@ -181,11 +152,7 @@ export const useButtonHandlers = () => {
    */
   const handleSync = (dataType: string) => {
     logger.info(`[Sync] Synchronizing ${dataType}`);
-    toast.loading(`Sincronizando ${dataType}...`, { id: `sync-${dataType}` });
-    
-    setTimeout(() => {
-      toast.success(`${dataType} sincronizado com sucesso!`, { id: `sync-${dataType}` });
-    }, 1500);
+    toast.success(`${dataType} sincronizado com sucesso!`, { id: `sync-${dataType}` });
   };
 
   /**
@@ -193,11 +160,7 @@ export const useButtonHandlers = () => {
    */
   const handleRefresh = (moduleName: string) => {
     logger.info(`[Refresh] Refreshing ${moduleName}`);
-    toast.loading(`Atualizando ${moduleName}...`, { id: `refresh-${moduleName}` });
-    
-    setTimeout(() => {
-      toast.success(`${moduleName} atualizado!`, { id: `refresh-${moduleName}` });
-    }, 800);
+    toast.success(`${moduleName} atualizado!`, { id: `refresh-${moduleName}` });
   };
 
   /**
@@ -217,8 +180,6 @@ export const useButtonHandlers = () => {
     try {
       if (callback) {
         await callback();
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 1000));
       }
       toast.success(`${itemName} removido com sucesso!`, { id: `delete-${itemName}` });
     } catch (error) {

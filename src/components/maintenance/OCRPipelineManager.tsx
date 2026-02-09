@@ -159,9 +159,7 @@ export function OCRPipelineManager() {
       });
 
       if (error) {
-        // Fallback: simulate OCR if edge function not available
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
+        // Fallback: generate basic OCR placeholder when edge function not available
         const extractedText = `DOCUMENTO EXTRAÍDO VIA OCR\nData: ${new Date().toLocaleDateString('pt-BR')}\nArquivo: ${doc.fileName}\n\n[Texto extraído automaticamente]`;
         const confidence = 92;
 

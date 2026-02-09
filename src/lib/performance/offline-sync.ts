@@ -207,9 +207,7 @@ class OfflineSyncManager {
       detail: op,
     });
     window.dispatchEvent(event);
-    
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // Event dispatched for external handling
   }
 
   // Cache data locally

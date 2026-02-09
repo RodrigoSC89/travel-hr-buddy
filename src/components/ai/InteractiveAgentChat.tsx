@@ -219,8 +219,7 @@ export function InteractiveAgentChat() {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate AI response
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // Generate response directly
 
     // Generate contextual response with actions
     const response = generateAgentResponse(inputValue, selectedAgent);
